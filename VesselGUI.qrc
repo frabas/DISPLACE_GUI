@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/cheese.jpg</file>
+        <file>images/map.bmp</file>
+        <file>images/map_ggmap_port_balticonly.jpeg</file>
+    </qresource>
+</RCC>

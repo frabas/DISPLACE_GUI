@@ -59,120 +59,120 @@ release-install: FORCE
 release-uninstall: FORCE
 	$(MAKE) -f $(MAKEFILE).Release uninstall
 
-Makefile: ibm_vessels_gui.pro ../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/win32-g++/qmake.conf ../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/spec_pre.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/qdevice.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/device_config.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/common/shell-win32.conf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/qconfig.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axbase.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axbase_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axcontainer.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axcontainer_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axserver.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axserver_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_bluetooth.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_clucene_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_concurrent.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_concurrent_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_core.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_core_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_declarative.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_declarative_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_designer.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_designer_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_designercomponents_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_enginio.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_enginio_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_gui.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_gui_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_help.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_help_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimedia.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimedia_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimediawidgets.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_network.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_network_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_nfc.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_nfc_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_opengl.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_opengl_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_openglextensions.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_openglextensions_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_platformsupport_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_positioning.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_positioning_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_printsupport.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_printsupport_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qml.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qml_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qmldevtools_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qmltest.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qmltest_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quick.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quick_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quickparticles_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quickwidgets.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_script.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_script_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_scripttools.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_scripttools_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sensors.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sensors_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_serialport.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_serialport_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sql.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sql_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_svg.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_svg_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_testlib.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_testlib_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_uitools.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_uitools_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkit.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkit_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkitwidgets.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_websockets.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_websockets_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_widgets.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_widgets_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_winextras.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_winextras_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xml.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xml_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xmlpatterns.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qt_functions.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qt_config.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/qt_config.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/win32-g++/qmake.conf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/spec_post.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/exclusive_builds.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/default_pre.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/default_pre.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/resolve_config.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/exclusive_builds_post.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/default_post.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qml_debug.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/declarative_debug.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/rtti.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/precompile_header.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/warn_on.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qt.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/resources.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/moc.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/opengl.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/uic.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/windows.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/testcase_targets.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/exceptions.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/yacc.prf \
-		../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/lex.prf \
+Makefile: ibm_vessels_gui.pro C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/win32-g++/qmake.conf C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/spec_pre.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/qdevice.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/device_config.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/common/shell-win32.conf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/qconfig.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axbase.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axbase_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axcontainer.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axcontainer_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axserver.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_axserver_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_bluetooth.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_bluetooth_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_bootstrap_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_clucene_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_concurrent.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_concurrent_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_core.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_core_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_declarative.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_declarative_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_designer.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_designer_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_designercomponents_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_enginio.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_enginio_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_gui.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_gui_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_help.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_help_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimedia.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimedia_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimediawidgets.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_network.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_network_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_nfc.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_nfc_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_opengl.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_opengl_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_openglextensions.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_platformsupport_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_positioning.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_positioning_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_printsupport.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_printsupport_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qml.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qml_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qmltest.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qmltest_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quick.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quick_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quickwidgets.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_script.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_script_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_scripttools.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_scripttools_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sensors.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sensors_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_serialport.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_serialport_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sql.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_sql_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_svg.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_svg_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_testlib.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_testlib_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_uitools.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_uitools_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkit.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkit_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkitwidgets.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_websockets.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_websockets_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_widgets.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_widgets_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_winextras.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_winextras_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xml.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xml_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qt_functions.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qt_config.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/qt_config.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/win32-g++/qmake.conf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/spec_post.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/exclusive_builds.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/default_pre.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/default_pre.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/resolve_config.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/exclusive_builds_post.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/default_post.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qml_debug.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/declarative_debug.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/rtti.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/precompile_header.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/warn_on.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/qt.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/resources.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/moc.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/opengl.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/uic.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/win32/windows.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/testcase_targets.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/exceptions.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/yacc.prf \
+		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/mkspecs/features/lex.prf \
 		ibm_vessels_gui.pro \
 		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/lib/qtmaind.prl \
 		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/lib/Qt5Cored.prl \
@@ -182,120 +182,120 @@ Makefile: ibm_vessels_gui.pro ../../../Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-
 		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/lib/libEGLd.prl \
 		C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/lib/libGLESv2d.prl
 	$(QMAKE) -spec win32-g++ CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ibm_vessels_gui.pro
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\spec_pre.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\qdevice.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\device_config.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\common\shell-win32.conf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\qconfig.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axbase.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axbase_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axcontainer.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axcontainer_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axserver.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axserver_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_bluetooth.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_bluetooth_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_bootstrap_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_clucene_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_concurrent.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_concurrent_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_core.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_core_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_declarative.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_declarative_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_designer.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_designer_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_designercomponents_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_enginio.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_enginio_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_gui.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_gui_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_help.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_help_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimedia.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimedia_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimediawidgets.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimediawidgets_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_network.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_network_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_nfc.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_nfc_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_opengl.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_opengl_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_openglextensions.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_openglextensions_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_platformsupport_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_positioning.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_positioning_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_printsupport.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_printsupport_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qml.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qml_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qmldevtools_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qmltest.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qmltest_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quick.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quick_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quickparticles_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quickwidgets.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quickwidgets_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_script.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_script_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_scripttools.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_scripttools_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sensors.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sensors_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_serialport.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_serialport_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sql.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sql_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_svg.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_svg_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_testlib.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_testlib_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_uitools.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_uitools_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkit.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkit_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkitwidgets.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkitwidgets_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_websockets.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_websockets_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_widgets.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_widgets_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_winextras.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_winextras_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xml.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xml_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xmlpatterns.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xmlpatterns_private.pri:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qt_functions.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qt_config.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\qt_config.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\win32-g++\qmake.conf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\spec_post.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\exclusive_builds.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\default_pre.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\default_pre.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\resolve_config.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\exclusive_builds_post.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\default_post.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qml_debug.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\declarative_debug.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\rtti.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\precompile_header.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\warn_on.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qt.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\resources.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\moc.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\opengl.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\uic.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\windows.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\testcase_targets.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\exceptions.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\yacc.prf:
-..\..\..\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\lex.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\spec_pre.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\qdevice.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\device_config.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\common\shell-win32.conf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\qconfig.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axbase.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axbase_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axcontainer.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axcontainer_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axserver.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_axserver_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_bluetooth.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_bluetooth_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_bootstrap_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_clucene_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_concurrent.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_concurrent_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_core.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_core_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_declarative.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_declarative_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_designer.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_designer_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_designercomponents_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_enginio.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_enginio_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_gui.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_gui_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_help.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_help_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimedia.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimedia_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimediawidgets.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_multimediawidgets_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_network.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_network_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_nfc.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_nfc_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_opengl.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_opengl_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_openglextensions.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_openglextensions_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_platformsupport_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_positioning.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_positioning_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_printsupport.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_printsupport_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qml.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qml_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qmldevtools_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qmltest.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qmltest_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quick.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quick_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quickparticles_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quickwidgets.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_quickwidgets_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_script.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_script_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_scripttools.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_scripttools_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sensors.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sensors_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_serialport.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_serialport_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sql.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_sql_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_svg.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_svg_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_testlib.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_testlib_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_uitools.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_uitools_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkit.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkit_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkitwidgets.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_webkitwidgets_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_websockets.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_websockets_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_widgets.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_widgets_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_winextras.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_winextras_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xml.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xml_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xmlpatterns.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\modules\qt_lib_xmlpatterns_private.pri:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qt_functions.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qt_config.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\qt_config.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\win32-g++\qmake.conf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\spec_post.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\exclusive_builds.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\default_pre.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\default_pre.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\resolve_config.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\exclusive_builds_post.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\default_post.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qml_debug.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\declarative_debug.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\rtti.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\precompile_header.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\warn_on.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\qt.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\resources.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\moc.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\opengl.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\uic.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\win32\windows.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\testcase_targets.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\exceptions.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\yacc.prf:
+C:\Qt\qt-5.3.1-x64-mingw482r4-sjlj\qt-5.3.1-x64-mingw482r4-sjlj\mkspecs\features\lex.prf:
 ibm_vessels_gui.pro:
 C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/lib/qtmaind.prl:
 C:/Qt/qt-5.3.1-x64-mingw482r4-sjlj/qt-5.3.1-x64-mingw482r4-sjlj/lib/Qt5Cored.prl:

@@ -190,7 +190,8 @@ void SimplifyThePreviousMap(
     std::vector<int>& relevant_nodes,
     std::map<vertex_t, weight_t>& min_distance,
     string namesimu,
-    string a_graph_name)
+    string a_graph_name,
+    string inputfolder)
 {
     std::cout << "size before: " << previous.size()  << std::endl;
 
@@ -230,7 +231,7 @@ void SimplifyThePreviousMap(
     stringstream out;
     out << source;
     string source_s = out.str();
-    std::string filename="../DISPLACE_input/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
+    std::string filename="./"+inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
     a_previous_map.open(filename.c_str());
     a_previous_map << " key " << " value " << std::endl;
 
@@ -255,7 +256,7 @@ void SimplifyThePreviousMap(
 
 
     std::ofstream a_min_distance;
-    std::string filename2="../DISPLACE_input/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
+    std::string filename2="./"+inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
     a_min_distance.open(filename2.c_str());
     a_min_distance << " key " << " value " << std::endl;
 

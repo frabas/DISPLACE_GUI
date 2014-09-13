@@ -1,0 +1,4 @@
+.DS_Store
+debug/
+release/
+*.pro.user*

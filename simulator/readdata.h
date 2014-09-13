@@ -63,7 +63,9 @@ void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<d
                            vector<double>& nbfpingspertrips,
                            vector<double>& resttime_par1s, vector<double>& resttime_par2s,
                            vector<double>& av_trip_duration,
-                           string folder_name_parameterization, string inputfolder, int selected_vessels_only);
+                           string folder_name_parameterization,
+                           string inputfolder,
+                           int selected_vessels_only);
 void read_ships_features(  vector<string>& shipids,
                            vector<double>& vmaxs,
                            vector<double>& vcruises,
@@ -96,6 +98,7 @@ int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter, multimap<i
 void read_fuel_prices_per_vsize(map<string, double>& fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 // metier specific
+map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_sel_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_dis_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
@@ -109,22 +112,23 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
 multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
 
 
+
 // pop specific
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder); // beta per pop fro a given szgroup
 multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
-multimap<int, double> read_init_maturity_per_szgroup(string folder_name_parameterization, string inputfolder,string biolsce);
-multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_parameterization, string inputfolder,string biolsce);
-multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameterization, string inputfolder,string biolsce);
+multimap<int, double> read_init_maturity_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
+multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
+multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder,string biolsce);
-multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_parameterization,string inputfolder, string biolsce);
-multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder,string str_rand_avai_file);
+multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
+multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
+multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
 multimap<int, double> read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization,string inputfolder, string str_rand_avai_file);
-vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization,string inputfolder, string biolsce);
-vector< vector<double> > read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization,string inputfolder,  string biolsce);
+multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
+vector< vector<double> > read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
-vector<double> read_param_sr(int a_pop,  string folder_name_parameterization,string inputfolder,  string biolsce);
+vector<double> read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce);
 vector<double> read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name_parameterization, string inputfolder);
 vector<double> read_initial_tac(int a_pop,  string folder_name_parameterization, string inputfolder);
 map<int, int> read_tac_percent_simulated(string folder_name_parameterization, string inputfolder);

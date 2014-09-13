@@ -174,7 +174,7 @@ void fill_from_oth_land (istream& in, map<int, double>& oth_land);
 void fill_from_relative_stability (istream& in, map<string, double>& relative_stability);
 void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
 
-// TO DO: make a template abstraction of the following methods:
+
 void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& infos);
 void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double>& infos);
 void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& infos);
@@ -184,7 +184,6 @@ void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map);
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map);
 void fill_map_from_specifications_s_d (istream& in, map<string, double>& a_map);
 
-// TO DO: make a template abstraction of the following methods:
 vector<double> find_entries_s_d (multimap<string, double>& infos, string str);
 vector<int> find_entries_s_i (multimap<string, int>& infos, string vid);
 vector<double> find_entries_i_d (multimap<int, double>& infos, int intg);
@@ -199,7 +198,6 @@ template <typename T, size_t N> T* end(T (&pArray)[N]);
 vector<double> scale_a_vector_to_1(vector<double> a_vector);
 
 
-// TO DO: make a template abstraction of the following methods:
 void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput);
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput);
 void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, string namefolderinput);

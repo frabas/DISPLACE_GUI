@@ -1,12 +1,14 @@
 TEMPLATE=app
-QT       += core gui network
+QT += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
 INCLUDEPATH+=../QMapControl/src/
-LIBS+=-L. -lqmapcontrol
+LIBS+=-L.. -lqmapcontrol
+
+DESTDIR = ../
 
 macx {
     CONFIG -= app_bundle

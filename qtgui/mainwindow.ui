@@ -14,9 +14,9 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
     <item>
-     <widget class="QFrame" name="mapFrame">
+     <widget class="qmapcontrol::MapControl" name="mapWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
@@ -123,6 +123,14 @@
    <widget class="QWidget" name="dockWidgetContents_3"/>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>qmapcontrol::MapControl</class>
+   <extends>QWidget</extends>
+   <header>mapcontrol.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

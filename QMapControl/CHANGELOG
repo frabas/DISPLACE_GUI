@@ -1,0 +1,119 @@
+0.9.7.2 (2014-08-5)
+=====
+- FIXED (BUG #14) - Failed fetches will never try again due to logic error
+- FIXED - Crash in NetworkManager when loading lots of images and then aborting too quickly
+
+0.9.7.1 (2014-07-29)
+=====
+- FIXED (Patch#8) - Deadlock in network requests when aborting connections (Thanks to Jon Schewe)
+
+0.9.7.0 (2014-07-13)
+=====
+- ADDED: Proxy username and password support added to addProxy() method
+- REMOVED: Prompt username/password prompt when proxy requires authentication
+- FIXED (BUG #13) - update-loop when requesting a tile and server returns a non-image
+- FIXED (BUG #12) - updated user agent which prevent OpenStreetMaps from working
+- FIXED (BUG #8) - fixed memory leak in Line::addPoint()
+- NEW: Added Qt5 support (Thank you to Jon Schewe and Stevokm for patches)
+
+
+0.9.6.2 (2014-02-15)
+=====
+- FIXED: Restored Zooming via Mouse wheel to be enabled by default
+- FIXED: Zooming with Mouse Wheel now ignores the Horizontal axis
+- FIXED (BUG #11) - removed isVisble() within paint method which prevented rendering qmapcontrol to pixmaps
+
+0.9.6.1 (2013-10-06)
+=====
+- ADDED: Cleanup support when calling Layer::removeGeometry() and Layer::clearGeometries()
+- ADDED: Added helper function Layer::getGeometries()
+- ADDED: LineString takes ownership of points and cleans up child Geometries automatically
+- FIXED: Removed unnecessary debug output from MapNetwork::requestFinished
+- FIXED: Removed the GCC Warnings
+- FIXED: CityMap Sample .pro file missing src files
+- FIXED: MapControl constructor correctly initialises QWidget for use with QtDesigner
+- ADDED: easy access to viewport RectF via MapControl::getViewPort()
+- ADDED: helper method to determine if geometry is visible in viewport
+
+0.9.6.0 (2013-10-02)
+=====
+- FIXED: Deadlock in MapNetwork::requestFinished() prevent tiles from loading
+
+2013-09-19
+- FIXED: threading issues and only allow one thread to check the load queue at a time
+- ADDED: Unified Google map adapter, supports vector maps (default), satellite, terrain, hybrid & raster
+- REMOVED: removed googlesatmapadapter (replaced with unified class)
+- FIXED: WMSMapAdapter, auto-fill required parameters unless overridden
+- FIXED: Fixed various potentials for crashes throughout
+- FIXED: Fixed potentials for memory leaks caused by unnecessary pointers
+- FIXED: Cleaned up various member variable names
+- FIXED: Corrected bug where cached images were stored but never used
+- NEW: Added Ability to Dynamically set Proxy Settings without needing to re-initialize QMapControl
+- NEW: Added ability to Dynamically set off-line/cache directory without needing to re-initialize QMapControl
+- NEW: Added Setting to specify the age of a cached image, if expired, replaces with a newer copy from server
+- FIXED: Correct bug where resizing a layer wouldn't redraw
+- NEW: function to see query a layer to see if it contains a geometry
+- FIXED: Prevent adding duplicate geometry to layer, leaving byhind artifacts when removing
+- REMOVED: QAsserts, replaced with logging
+- FIXED: fixed infinite zoom loop in LayerManager::setViewAndZoomIn()
+- NEW: Support adding and removing layers cleanly
+- NEW: Added a configuration item to limit view port to a bounding box, that is, prevent scrolling/zooming outside a specified region
+- NEW: Ability to dynamically change host address of a MapAdapter (i.e. for use with mirror/backup servers)
+- NEW: Ability to disable mouse wheel scroll zooming
+- FIXED: fixed issue preventing drawing when zooming in or out in some scenarios
+- FIXED: support for port numbers, other than port 80
+- NEW: Dynamically change the pixmap image of a point already on a map
+
+2010-09-15
+- Whole project is now a dynamic linked library
+- The project structure was updated caused by the dll approach
+- Zooming in maps via mousewheel was added
+
+2010-07-19
+- Added new ArrowPoint which renders as an arrowhead at a specified (and updateable) heading, providing orientation information for a Point on the map.
+- Made the map-center crosshairs optional via MapControl::showCrosshairs().
+- Cleaned up CirclePoint code, and added antialiasing hints to the rendering of it and ArrowPoint.
+- Added tile prefetching by default on Maemo 5 and Symbian targets. This may improve performance on those platforms, but no formal testing has yet been done.
+- Slayed some compiler warnings and typos, as well as some miscellaneous bugs
+
+0.9.5.2 (2009-07-29)
+=====
+- The new EmptyMapAdapter allows it to just display and navigate through an defined image and not to load map tiles. See new sample application.
+
+2009-04-19
+----------
+- new class FixedImageOverlay for drawing an image overlay onto a map, whose upper left and lower 
+  right corners lay always on the given coordinates. Inheritance is not perfect here: 
+  the methods setBaselevel, setMaxsize and setMinsize have no effect for this class.
+
+2009-02-28
+-----------
+- Fixed bug which didn't painted the zoomed image correct after the QMapControl widget was resized 
+
+2008-10-28
+----------
+- New MapControl slot: resize(QSize) which resizes layers to the given size. So you can connect a widget's resize event to this slot. (See sample "Mapviewer").
+
+2008-10-09
+----------
+- New MapControl-signal: viewChanged(coordinate, zoom) which emits the current center coordinate and zoom level after an view update (Thanks to Lorenzo)
+
+2008-09-28
+----------
+- New layer-method clearGeometries() to remove all Geometry objects of a layer
+
+0.9.5.1
+=======
+- Minor changes: limiting zoom not to exceed min and max borders
+- showScale caused crash if zoom was out of range
+
+0.9.5
+=====
+- new method "enablePersistentCache()" allows to store map tiles
+- new method "showScale(bool)" allows to display the scale of the current map
+
+0.9.4
+=====
+- removed "get" prefixes from ancessor functions, to improve Qt-like design
+- renamed event "geometryClickEvent()" to "geometryClicked()"
+- renamed event "draggedRect()" to "boxDragged()"

@@ -16,16 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    /*
-    map = new qmapcontrol::MapControl(QSize(100, 100));
-//    map->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-
+    map = new qmapcontrol::MapControl(ui->mapWidget);
 
     QHBoxLayout *layout = new QHBoxLayout;
-    ui->mapFrame->setLayout(layout);
+    ui->mapWidget->setLayout(layout);
     layout->addWidget(map);
-*/
-    map = ui->mapWidget;
+
+    ui->mapWidget->setWidget(map);
 
     map->showScale(false);
 

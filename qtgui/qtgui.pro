@@ -17,10 +17,12 @@ macx {
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    wrapperwidget.cpp
 
 FORMS += \
     mainwindow.ui
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    wrapperwidget.h

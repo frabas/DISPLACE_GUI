@@ -319,6 +319,8 @@ namespace qmapcontrol
         MapControl& operator= ( const MapControl& rhs );
         MapControl ( const MapControl& old );
 
+        void init(QSize size);
+
     protected:
         void paintEvent ( QPaintEvent* evnt );
         void mousePressEvent ( QMouseEvent* evnt );

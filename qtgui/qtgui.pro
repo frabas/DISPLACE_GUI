@@ -12,8 +12,12 @@ DESTDIR = ../
 
 macx {
     CONFIG -= app_bundle
+    ICON = icons/displace.icns
 }
 
+win32 {
+    RC_FILE = qtgui.rc
+}
 
 SOURCES += \
     main.cpp \
@@ -28,3 +32,9 @@ HEADERS += \
     mainwindow.h \
     wrapperwidget.h \
     objecttreemodel.h
+
+RESOURCES += \
+    qtgui.qrc
+
+OTHER_FILES += \
+    qtgui.rc

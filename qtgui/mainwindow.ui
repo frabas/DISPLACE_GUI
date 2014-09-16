@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Displace</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3">
@@ -42,6 +42,13 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu_Model">
+    <property name="title">
+     <string>&amp;Model</string>
+    </property>
+    <addaction name="action_Load"/>
+   </widget>
+   <addaction name="menu_Model"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="objectMapView">
@@ -189,6 +196,10 @@
        <property name="text">
         <string>Start</string>
        </property>
+       <property name="icon">
+        <iconset resource="qtgui.qrc">
+         <normaloff>:/icons/start.png</normaloff>:/icons/start.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -196,18 +207,47 @@
        <property name="text">
         <string>Pause</string>
        </property>
+       <property name="icon">
+        <iconset resource="qtgui.qrc">
+         <normaloff>:/icons/pause.png</normaloff>:/icons/pause.png</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_5">
        <property name="text">
-        <string>Reinit</string>
+        <string>Stop</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qtgui.qrc">
+         <normaloff>:/icons/stop.png</normaloff>:/icons/stop.png</iconset>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
   </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Load"/>
+  </widget>
+  <action name="action_Load">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Load...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -217,6 +257,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="qtgui.qrc"/>
+ </resources>
  <connections/>
 </ui>

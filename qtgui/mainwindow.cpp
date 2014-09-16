@@ -6,13 +6,18 @@
 #include <maplayer.h>
 #include <osmmapadapter.h>
 #include <wmsmapadapter.h>
+#include <objecttreemodel.h>
 
 #include <QBoxLayout>
 #include <QTextEdit>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    map(0),
+    mapadapter(0),
+    mainlayer(0),
+    treemodel(new ObjectTreeModel())
 {
     ui->setupUi(this);
 
@@ -39,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // add Layer to the MapControl
     map->addLayer(mainlayer);
+
+
+    /* Tree model setup */
+    ui->treeView->setModel(treemodel);
 }
 
 MainWindow::~MainWindow()

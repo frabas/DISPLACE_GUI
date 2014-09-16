@@ -13,6 +13,8 @@ class MapAdapter;
 class MapLayer;
 }
 
+class ObjectTreeModel;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -27,6 +29,9 @@ private:
     qmapcontrol::MapControl *map;
     qmapcontrol::MapAdapter *mapadapter;
     qmapcontrol::MapLayer *mainlayer;
+
+    // tree model adapter
+    ObjectTreeModel *treemodel;
 };
 
 #endif // MAINWINDOW_H

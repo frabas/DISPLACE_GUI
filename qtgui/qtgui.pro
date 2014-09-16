@@ -18,11 +18,13 @@ macx {
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    wrapperwidget.cpp
+    wrapperwidget.cpp \
+    objecttreemodel.cpp
 
 FORMS += \
     mainwindow.ui
 
 HEADERS += \
     mainwindow.h \
-    wrapperwidget.h
+    wrapperwidget.h \
+    objecttreemodel.h

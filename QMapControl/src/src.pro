@@ -37,7 +37,8 @@ HEADERS += curve.h \
            fixedimageoverlay.h \
            emptymapadapter.h \
            arrowpoint.h \
-           qmapcontrol_global.h
+           qmapcontrol_global.h \
+    openseamapadapter.h
 SOURCES += curve.cpp \
            geometry.cpp \
            imagemanager.cpp \
@@ -61,4 +62,5 @@ SOURCES += curve.cpp \
            openaerialmapadapter.cpp \
            fixedimageoverlay.cpp \
            arrowpoint.cpp \
-           emptymapadapter.cpp
+           emptymapadapter.cpp \
+    openseamapadapter.cpp

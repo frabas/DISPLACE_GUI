@@ -28,7 +28,9 @@ private:
 
     qmapcontrol::MapControl *map;
     qmapcontrol::MapAdapter *mapadapter;
+    qmapcontrol::MapAdapter *seamarkadapter;
     qmapcontrol::MapLayer *mainlayer;
+    qmapcontrol::MapLayer *seamarklayer;
 
     // tree model adapter
     ObjectTreeModel *treemodel;

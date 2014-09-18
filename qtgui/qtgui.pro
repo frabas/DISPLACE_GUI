@@ -6,9 +6,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = displacegui
 
 INCLUDEPATH+=../QMapControl/src/
-LIBS+=-L.. -lqmapcontrol
 
 DESTDIR = ../
+QMAPCONTROL_LIB=qmapcontrol
 
 macx {
     CONFIG -= app_bundle
@@ -17,7 +17,10 @@ macx {
 
 win32 {
     RC_FILE = qtgui.rc
+    QMAPCONTROL_LIB=qmapcontrol0
 }
+
+LIBS+=-L.. -l$$QMAPCONTROL_LIB
 
 SOURCES += \
     main.cpp \

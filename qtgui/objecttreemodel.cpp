@@ -7,6 +7,8 @@ ObjectTreeModel::ObjectTreeModel(QObject *parent) :
 
 int ObjectTreeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
+
     // all levels have just one column, for now.
     return 1;
 }
@@ -14,7 +16,7 @@ int ObjectTreeModel::columnCount(const QModelIndex &parent) const
 int ObjectTreeModel::rowCount(const QModelIndex &parent) const
 {
     if (isRootLevel(parent)) { // Categories level
-        return LastCategory;
+        return LastCategory-1;  // category starts from 1!
     } else if (isCategoryLevel(parent)) {
         return parent.row() + 3;
     }
@@ -27,28 +29,16 @@ QModelIndex ObjectTreeModel::parent(const QModelIndex &child) const
     if (isRootLevel(child) || isCategoryLevel(child))
         return QModelIndex();
 
-    return createIndex(0, 0, child.internalId() << 4);
+    return createIndex(0, 0, idWithCat(0, parCatFromId(child.internalId())));
 }
 
 QModelIndex ObjectTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (isRootLevel(parent)) {
-        quint64 id;
-        switch (row) {
-        case Layers:
-            id = LayersId;
-            break;
-        case Vessels:
-            id = VesselsId;
-            break;
-        case Nodes:
-            id = NodesId;
-            break;
-        }
-
+        quint64 id = idWithCat(0, (Categories)(row+1));
         return createIndex(row, column, id);
     } else if (isCategoryLevel(parent)) {
-        quint64 id = (parent.internalId() >> 4) | row;
+        quint64 id = idWithParCat(row, catFromId(parent.internalId()));
         return createIndex (row, column, id);
     }
 
@@ -61,24 +51,26 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (isCategoryLevel(index)) {
-        switch (index.internalId()) {
-        case LayersId:
+        quintptr cat = catFromId(index.internalId());
+
+        switch (cat) {
+        case Layers:
             return QString(tr("Layers"));
-        case VesselsId:
+        case Vessels:
             return QString(tr("Vessels"));
-        case NodesId:
+        case Nodes:
             return QString(tr("Nodes"));
         }
 
         return QVariant();
     } else if(isObjectLevel(index)) {
-        quint64 type = (index.internalId() << 4) & MaskId;
+        quint64 type = parCatFromId(index.internalId());
         switch (type) {
-        case LayersId:
+        case Layers:
             return QString(tr("Layer %1")).arg(index.row());
-        case VesselsId:
+        case Vessels:
             return QString(tr("Vessel %1")).arg(index.row());
-        case NodesId:
+        case Nodes:
             return QString(tr("Node %1")).arg(index.row());
         }
     }

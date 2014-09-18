@@ -8,18 +8,13 @@ class ObjectTreeModel : public QAbstractItemModel
     Q_OBJECT
 
     enum Categories {
-        Layers = 0, Vessels, Nodes,
+        Layers = 1, Vessels, Nodes,
         LastCategory
     };
 
-    enum CategoriesId {
-        LayersId  = 0x1000000000000000,
-        VesselsId = 0x2000000000000000,
-        NodesId   = 0x4000000000000000,
-
-        ObjTypeId = 0x0f00000000000000,
-        MaskId    = 0xf000000000000000
-    };
+#define CATPOS 28
+#define PARCATPOS 24
+#define CATMASK 0x0f
 
 public:
     explicit ObjectTreeModel(QObject *parent = 0);
@@ -43,11 +38,24 @@ protected:
     }
 
     bool isCategoryLevel (const QModelIndex &level) const {
-        return level.isValid() && (level.internalId() & MaskId) != 0;
+        return level.isValid() && catFromId(level.internalId()) != 0;
     }
 
     bool isObjectLevel (const QModelIndex &level) const {
-        return level.isValid() && (level.internalId() & MaskId) == 0;
+        return level.isValid() && parCatFromId(level.internalId()) != 0;
+    }
+
+    Categories catFromId(quintptr id) const {
+        return (Categories)((id >> CATPOS) & CATMASK);
+    }
+    Categories parCatFromId(quintptr id) const {
+        return (Categories)((id >> PARCATPOS) & CATMASK);
+    }
+    quintptr idWithCat(quintptr id, Categories cat) const {
+        return (id & ~(CATMASK << CATPOS)) | (cat << CATPOS);
+    }
+    quintptr idWithParCat(quintptr id, Categories parcat) const {
+        return (id & ~(CATMASK << PARCATPOS)) | (parcat << PARCATPOS);
     }
 };
 

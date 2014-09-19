@@ -110,18 +110,20 @@ namespace qmapcontrol
          * @return the layer with the given name
          */
         Layer* layer ( const QString& layername ) const;
+        Layer *layerAt (int index) const;
 
         //! returns the names of all layers
         /*!
          * @return returns a QList with the names of all layers
          */
-        QList<QString> layers() const;
+        QStringList layers() const;
 
         //! returns the number of existing layers
         /*!
          * @return returns the number of existing layers
          */
         int numberOfLayers() const;
+        QString layerNameAt(int idx) const;
 
         //! returns the coordinate of the center of the map
         /*!

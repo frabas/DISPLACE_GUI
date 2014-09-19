@@ -92,14 +92,24 @@ namespace qmapcontrol
         return layermanager->layer(layername);
     }
 
-    QList<QString> MapControl::layers() const
+    Layer *MapControl::layerAt(int index) const
+    {
+        return layermanager->layer(index);
+    }
+
+    QStringList MapControl::layers() const
     {
         return layermanager->layers();
     }
 
     int MapControl::numberOfLayers() const
     {
-        return layermanager->layers().size();
+        return layermanager->layersCount();
+    }
+
+    QString MapControl::layerNameAt(int idx) const
+    {
+        return layermanager->layerNameAt(idx);
     }
 
     void MapControl::followGeometry(const Geometry* geom) const

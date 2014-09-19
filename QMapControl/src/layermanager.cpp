@@ -65,6 +65,16 @@ namespace qmapcontrol
         return mylayers.at(0) ? mylayers.at(0) : 0;
     }
 
+    Layer *LayerManager::layer(int index) const
+    {
+        if ( index >= mylayers.count() )
+        {
+            qDebug() << "LayerManager::layer(" << index << ") - No layer present";
+            return 0;
+        }
+        return mylayers.at(index) ? mylayers.at(index) : 0;
+    }
+
     Layer* LayerManager::layer(const QString& layername) const
     {
         QListIterator<Layer*> layerit(mylayers);
@@ -77,17 +87,20 @@ namespace qmapcontrol
         return 0;
     }
 
-    QList<QString> LayerManager::layers() const
+    QStringList LayerManager::layers() const
     {
-        QList<QString> keys;
-        QListIterator<Layer*> layerit(mylayers);
-        while (layerit.hasNext())
-        {
-            keys.append(layerit.next()->layername());
-        }
-        return keys;
+        return mLayersNames;
     }
 
+    int LayerManager::layersCount() const
+    {
+        return mLayersNames.count();
+    }
+
+    QString LayerManager::layerNameAt(int idx) const
+    {
+        return mLayersNames.at(idx);
+    }
 
     void LayerManager::scrollView(const QPoint& point)
     {
@@ -262,6 +275,7 @@ namespace qmapcontrol
     void LayerManager::addLayer(Layer* layer)
     {
         mylayers.append(layer);
+        mLayersNames.append(layer->layername());
 
         layer->setSize(size);
 

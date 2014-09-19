@@ -84,12 +84,15 @@ namespace qmapcontrol
          * @return the base layer
          */
         Layer* layer() const;
+        Layer* layer(int index) const;
 
         //! returns the names of all layers
         /*!
          * @return returns a QList with the names of all layers
          */
-        QList<QString> layers() const;
+        QStringList layers() const;
+        int layersCount() const;
+        QString layerNameAt(int idx) const;
 
         //! sets the middle of the map to the given coordinate
         /*!
@@ -234,6 +237,7 @@ namespace qmapcontrol
         QPixmap zoomImage;
 
         QList<Layer*>	mylayers;
+        QStringList mLayersNames;
 
         QPoint mapmiddle_px; // projection-display coordinates
         QPointF mapmiddle; // world coordinate

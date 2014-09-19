@@ -14,6 +14,9 @@ class MapLayer;
 }
 
 class ObjectTreeModel;
+class DisplaceModel;
+
+#define MAX_MODELS 2
 
 class MainWindow : public QMainWindow
 {
@@ -26,6 +29,11 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    // Data model
+    DisplaceModel *models[MAX_MODELS];
+
+    // Geospatial objects
+
     qmapcontrol::MapControl *map;
     qmapcontrol::MapAdapter *mapadapter;
     qmapcontrol::MapAdapter *seamarkadapter;
@@ -34,6 +42,8 @@ private:
 
     // tree model adapter
     ObjectTreeModel *treemodel;
+
+    static const int maxModels;
 };
 
 #endif // MAINWINDOW_H

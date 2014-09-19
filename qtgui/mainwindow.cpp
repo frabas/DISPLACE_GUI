@@ -10,15 +10,21 @@
 #include <QBoxLayout>
 #include <QTextEdit>
 
+const int MainWindow::maxModels = MAX_MODELS;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    models(),
     map(0),
     mapadapter(0),
     mainlayer(0),
     treemodel(new ObjectTreeModel())
 {
     ui->setupUi(this);
+
+    for (int i = 0; i < maxModels; ++i)
+        models[i] = 0;
 
     map = new qmapcontrol::MapControl(ui->mapWidget);
 

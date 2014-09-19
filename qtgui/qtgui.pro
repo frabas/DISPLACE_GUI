@@ -26,7 +26,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     wrapperwidget.cpp \
-    objecttreemodel.cpp
+    objecttreemodel.cpp \
+    displacemodel.cpp
 
 FORMS += \
     mainwindow.ui
@@ -34,7 +35,8 @@ FORMS += \
 HEADERS += \
     mainwindow.h \
     wrapperwidget.h \
-    objecttreemodel.h
+    objecttreemodel.h \
+    displacemodel.h
 
 RESOURCES += \
     qtgui.qrc

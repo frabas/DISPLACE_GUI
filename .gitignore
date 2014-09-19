@@ -4,3 +4,4 @@ release/
 *.pro.user*
 simulator/*.o
 /build
+/install

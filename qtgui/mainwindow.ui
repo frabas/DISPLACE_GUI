@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -75,6 +75,9 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <item>
+      <widget class="QComboBox" name="modelSelector"/>
+     </item>
      <item>
       <widget class="QTreeView" name="treeView">
        <property name="headerHidden">

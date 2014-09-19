@@ -3,6 +3,12 @@
 
 #include <QAbstractItemModel>
 
+class DisplaceModel;
+
+namespace qmapcontrol {
+class MapControl;
+}
+
 class ObjectTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -17,18 +23,25 @@ class ObjectTreeModel : public QAbstractItemModel
 #define CATMASK 0x0f
 
 public:
-    explicit ObjectTreeModel(QObject *parent = 0);
+    explicit ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model = 0, QObject *parent = 0);
 
     int columnCount(const QModelIndex &parent) const;
     int rowCount(const QModelIndex &parent) const;
     QModelIndex parent(const QModelIndex &child) const;
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags ( const QModelIndex & index ) const;
+    bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+
+    void setCurrentModel (DisplaceModel *model);
 
 signals:
 
 public slots:
 
+private:
+    qmapcontrol::MapControl *mMapControl;
+    DisplaceModel *mModel;
 
 protected:
     // helper functions

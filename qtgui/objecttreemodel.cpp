@@ -1,7 +1,10 @@
 #include "objecttreemodel.h"
+#include <mapcontrol.h>
 
-ObjectTreeModel::ObjectTreeModel(QObject *parent) :
-    QAbstractItemModel(parent)
+ObjectTreeModel::ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model, QObject *parent) :
+    QAbstractItemModel(parent),
+    mMapControl(map),
+    mModel (model)
 {
 }
 
@@ -9,8 +12,21 @@ int ObjectTreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
+    if (isCategoryLevel(parent)) {
+        Categories cat = catFromId(parent.internalId());
+
+        if (cat != Layers && mModel == 0)
+            return 0;
+
+        switch (cat) {
+        case Layers:
+            return 2;
+        default:
+            return 2;
+        }
+    }
     // all levels have just one column, for now.
-    return 1;
+    return 2;
 }
 
 int ObjectTreeModel::rowCount(const QModelIndex &parent) const
@@ -18,7 +34,17 @@ int ObjectTreeModel::rowCount(const QModelIndex &parent) const
     if (isRootLevel(parent)) { // Categories level
         return LastCategory-1;  // category starts from 1!
     } else if (isCategoryLevel(parent)) {
-        return parent.row() + 3;
+        Categories cat = catFromId(parent.internalId());
+
+        if (cat != Layers && mModel == 0)
+            return 0;
+
+        switch (cat) {
+        case Layers:
+            return mMapControl->numberOfLayers();
+        default:
+            return 4;
+        }
     }
 
     return 0;
@@ -47,11 +73,14 @@ QModelIndex ObjectTreeModel::index(int row, int column, const QModelIndex &paren
 
 QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
 {
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
     if (isCategoryLevel(index)) {
+        if (role != Qt::DisplayRole)
+            return QVariant();
+
         quintptr cat = catFromId(index.internalId());
+
+        if (index.column() != 0)
+        return QVariant();
 
         switch (cat) {
         case Layers:
@@ -67,13 +96,54 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
         quint64 type = parCatFromId(index.internalId());
         switch (type) {
         case Layers:
-            return QString(tr("Layer %1")).arg(index.row());
+            switch (index.column()) {
+            case 0:
+                if (role != Qt::DisplayRole)
+                    return QVariant();
+                return QString(mMapControl->layerNameAt(index.row()));
+            case 1:
+                if (role == Qt::CheckStateRole)
+                    return QVariant(mMapControl->layerAt(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
+                return QVariant();
+            }
         case Vessels:
-            return QString(tr("Vessel %1")).arg(index.row());
+            if (index.column() != 0 && role == Qt::DisplayRole)
+                return QString(tr("Vessel %1")).arg(index.row());
+            return QVariant();
         case Nodes:
-            return QString(tr("Node %1")).arg(index.row());
+            if (index.column() != 0 && role == Qt::DisplayRole)
+                return QString(tr("Node %1")).arg(index.row());
+            return QVariant();
         }
     }
 
     return QVariant();
+}
+
+Qt::ItemFlags ObjectTreeModel::flags(const QModelIndex &index) const
+{
+    if(isObjectLevel(index) && index.column() == 1)
+        return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
+    return QAbstractItemModel::flags(index);
+}
+
+bool ObjectTreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(isObjectLevel(index) && index.column() == 1 && role == Qt::CheckStateRole) {
+        if (value.toInt() == 0) {
+            mMapControl->layerAt(index.row())->setVisible(false);
+        } else {
+            mMapControl->layerAt(index.row())->setVisible(true);
+        }
+        emit dataChanged(index, index);
+        return true;
+    }
+    return false;
+}
+
+void ObjectTreeModel::setCurrentModel(DisplaceModel *model)
+{
+    beginResetModel();
+    mModel = model;
+    endResetModel();
 }

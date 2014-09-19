@@ -264,6 +264,11 @@ namespace qmapcontrol
         return net->loadQueueSize();
     }
 
+    void ImageManager::setLoadingPixmap(const QPixmap &pixmap)
+    {
+        loadingPixmap = pixmap;
+    }
+
     void qmapcontrol::ImageManager::fetchFailed(const QString &url)
     {
         qDebug() << "ImageManager::fetchFailed" << url;

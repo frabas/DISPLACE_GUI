@@ -294,6 +294,7 @@ namespace qmapcontrol
          */
         bool isGeometryVisible( Geometry * geometry);
 
+        void setLoadingPixmap (const QPixmap &pixmap);
     private:
         LayerManager* layermanager;
         QPoint screen_middle; // middle of the widget (half size)

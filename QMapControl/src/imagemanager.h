@@ -112,6 +112,11 @@ namespace qmapcontrol
          */
         int loadQueueSize() const;
 
+        /*!
+         * \brief setLoadingPixmap sets the pixmap displayed when a tile is not yet loaded
+         * \param pixmap the pixmap to display
+         */
+        void setLoadingPixmap (const QPixmap &pixmap);
     private:
         ImageManager(QObject* parent = 0);
         ImageManager(const ImageManager&);

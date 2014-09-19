@@ -605,4 +605,9 @@ namespace qmapcontrol
 
        return getViewport().contains( geometry->boundingBox() );
    }
+
+   void MapControl::setLoadingPixmap(const QPixmap &pixmap)
+   {
+       ImageManager::instance()->setLoadingPixmap(pixmap);
+   }
 }

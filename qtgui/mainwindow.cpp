@@ -28,6 +28,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map = new qmapcontrol::MapControl(ui->mapWidget);
 
+    QPixmap pixmap;
+    pixmap.fill( Qt::white );
+    map->setLoadingPixmap(pixmap);
+
     QHBoxLayout *layout = new QHBoxLayout;
     ui->mapWidget->setLayout(layout);
     layout->addWidget(map);

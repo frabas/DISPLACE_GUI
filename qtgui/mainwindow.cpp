@@ -89,6 +89,8 @@ void MainWindow::on_action_Load_triggered()
 
     QDir d (dir);
     QStringList parts = d.dirName().split("_");
+    d.cdUp();
+
     if (parts.count() < 2) {
         // fails.
         QMessageBox::warning(this, tr("Name not valid"),

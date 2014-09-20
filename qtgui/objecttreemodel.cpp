@@ -1,4 +1,6 @@
 #include "objecttreemodel.h"
+
+#include <displacemodel.h>
 #include <mapcontrol.h>
 
 ObjectTreeModel::ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model, QObject *parent) :
@@ -42,6 +44,8 @@ int ObjectTreeModel::rowCount(const QModelIndex &parent) const
         switch (cat) {
         case Layers:
             return mMapControl->numberOfLayers();
+        case Vessels:
+            return mModel->getShipCount();
         default:
             return 4;
         }
@@ -107,8 +111,8 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
                 return QVariant();
             }
         case Vessels:
-            if (index.column() != 0 && role == Qt::DisplayRole)
-                return QString(tr("Vessel %1")).arg(index.row());
+            if (index.column() == 0 && role == Qt::DisplayRole)
+                return QString(mModel->getShipId(index.row()));
             return QVariant();
         case Nodes:
             if (index.column() != 0 && role == Qt::DisplayRole)

@@ -26,6 +26,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_action_Load_triggered();
+    void on_modelSelector_currentIndexChanged(int index);
+
+protected:
+    void updateModelList();
+
 private:
     Ui::MainWindow *ui;
 

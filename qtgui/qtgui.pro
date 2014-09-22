@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
-INCLUDEPATH+=../QMapControl/src/ ../simulator
+INCLUDEPATH+=../include/ ../QMapControl/src/ ../simulator
 
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol
@@ -20,17 +20,11 @@ win32 {
     QMAPCONTROL_LIB=qmapcontrol0
 }
 
-LIBS+=-L.. -l$$QMAPCONTROL_LIB
+LIBS+=-L.. -ldisplacecommons -l$$QMAPCONTROL_LIB
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    ../simulator/readdata.cpp \
-    ../simulator/myutils.cpp \
-    ../simulator/Population.cpp \
-    ../simulator/Node.cpp \
-    ../simulator/Tac.cpp \
-    ../simulator/myRutils.cpp \
     wrapperwidget.cpp \
     objecttreemodel.cpp \
     displacemodel.cpp \
@@ -41,12 +35,6 @@ FORMS += \
 
 HEADERS += \
     mainwindow.h \
-    ../simulator/readdata.h \
-    ../simulator/myutils.h \
-    ../simulator/Population.h \
-    ../simulator/Node.h \
-    ../simulator/Tac.h \
-    ../simulator/myRutils.h \
     wrapperwidget.h \
     objecttreemodel.h \
     displacemodel.h \

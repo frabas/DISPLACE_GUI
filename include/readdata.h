@@ -18,62 +18,56 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-
-
-
 #include"myutils.h"
 #include"Population.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-
 using namespace std;
 
 void open_file_error(string filename);
 
 void read_config_file (string folder_name_parameterization,
-                       string inputfolder,
-                       int& a_int_line2,
-                       vector<int>& a_vector_line4,
-                       vector<double>& a_vector_line6,
-                       vector<double>& a_vector_line8,
-                       vector<double>& a_vector_line10
-                      );
-
-void read_scenario_config_file (
-    string folder_name_parameterization,
-    string inputfolder,
-    string namefolderoutput,
-    vector<string>& dyn_alloc_sce,
-    vector<string>& dyn_pop_sce,
-    string& biolsce,
-    int& a_graph,
-    int& nrow_coord,
-    int& nrow_graph,
-    int& a_port,
-    double& graph_res
+string inputfolder,
+int& a_int_line2,
+vector<int>& a_vector_line4,
+vector<double>& a_vector_line6,
+vector<double>& a_vector_line8,
+vector<double>& a_vector_line10
 );
 
+void read_scenario_config_file (
+string folder_name_parameterization,
+string inputfolder,
+string namefolderoutput,
+vector<string>& dyn_alloc_sce,
+vector<string>& dyn_pop_sce,
+string& biolsce,
+int& a_graph,
+int& nrow_coord,
+int& nrow_graph,
+int& a_port,
+double& graph_res
+);
 
 // vessel specific
 void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
-                           vector<double>& fuelcons, vector<double>& lengths, vector<double>& KWs,
-                           vector<double>& carrycapacities, vector<double>& tankcapacities,
-                           vector<double>& nbfpingspertrips,
-                           vector<double>& resttime_par1s, vector<double>& resttime_par2s,
-                           vector<double>& av_trip_duration,
-                           string folder_name_parameterization,
-                           string inputfolder,
-                           int selected_vessels_only);
+vector<double>& fuelcons, vector<double>& lengths, vector<double>& KWs,
+vector<double>& carrycapacities, vector<double>& tankcapacities,
+vector<double>& nbfpingspertrips,
+vector<double>& resttime_par1s, vector<double>& resttime_par2s,
+vector<double>& av_trip_duration,
+string folder_name_parameterization,
+string inputfolder,
+int selected_vessels_only);
 void read_ships_features(  vector<string>& shipids,
-                           vector<double>& vmaxs,
-                           vector<double>& vcruises,
-                           vector<double>& lane_ids,
-                           string folder_name_parameterization,
-                           string inputfolder
-                        );
-
+vector<double>& vmaxs,
+vector<double>& vcruises,
+vector<double>& lane_ids,
+string folder_name_parameterization,
+string inputfolder
+);
 
 multimap<string, int> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, int> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
@@ -88,8 +82,6 @@ multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vess
 multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-
-
 
 // harbour specific
 multimap<int, string> read_harbour_names(string folder_name_parameterization, string inputfolder);
@@ -111,10 +103,9 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
 // benthos specific
 multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
 
-
-
 // pop specific
-multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder); // beta per pop fro a given szgroup
+								 // beta per pop fro a given szgroup
+multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, double> read_init_maturity_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
@@ -153,5 +144,3 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
 void write_SMS_OP_F_in_file(ofstream& SMS_F_in, vector<Population* >& populations, vector<int> stock_numbers);
 void read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
-
-

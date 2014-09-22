@@ -18,8 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-
-
 #include<string>
 #include <iomanip>
 #include <fstream>
@@ -32,66 +30,69 @@
 #define dout 0 && cout
 #endif
 
-
 Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,double> _relative_stability_key)
 {
 
-    cout << "create tac "  << endl;
+	cout << "create tac "  << endl;
 
-    percent_for_simulated_vessels=_percent_for_simulated_vessels;
-    relative_stability_key=_relative_stability_key; // % share per string country
-    ts_tac.push_back(init_tac);
-    current_tac=init_tac;
+	percent_for_simulated_vessels=_percent_for_simulated_vessels;
+								 // % share per string country
+	relative_stability_key=_relative_stability_key;
+	ts_tac.push_back(init_tac);
+	current_tac=init_tac;
 }
 
 
 Tac::Tac()
 {
-    //ctor
+	//ctor
 }
+
 
 Tac::~Tac()
 {
-    //dtor
+	//dtor
 }
+
 
 Tac::Tac(const Tac& other)
 {
-    //copy ctor
+	//copy ctor
 }
-
 
 
 double Tac::get_percent_for_simulated_vessels() const
 {
-    return(percent_for_simulated_vessels);
+	return(percent_for_simulated_vessels);
 }
+
 
 map<string,double> Tac::get_relative_stability_key() const
 {
-    return(relative_stability_key);
+	return(relative_stability_key);
 }
 
 
 vector<double> Tac::get_ts_tac() const
 {
-    return(ts_tac);
+	return(ts_tac);
 }
+
 
 double Tac:: get_current_tac() const
 {
-    return(current_tac);
+	return(current_tac);
 }
+
 
 void Tac:: add_tac_y_plus_1(double a_tac)
 {
-    current_tac=ts_tac.at(ts_tac.size()-1);
-    ts_tac.push_back(a_tac);
-   cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl;
-    for(int i=0; i<ts_tac.size(); i++){
-       cout << "tac: " << ts_tac.at(i) << endl;
-    }
+	current_tac=ts_tac.at(ts_tac.size()-1);
+	ts_tac.push_back(a_tac);
+	cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl;
+	for(int i=0; i<ts_tac.size(); i++)
+	{
+		cout << "tac: " << ts_tac.at(i) << endl;
+	}
 
 }
-
-

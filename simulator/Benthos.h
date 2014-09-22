@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-
 #ifndef BENTHOS_H
 #define BENTHOS_H
 
@@ -31,19 +30,20 @@
 
 class Benthos
 {
-    public:
-        Benthos(int marine_landscape,
-                vector<Node* > nodes,
-                vector<double> tot_biomass);
-        virtual ~Benthos();
-        int get_marine_landscape() const;
-        vector<Node* > get_list_nodes() const;
-        vector<double> get_tot_biomass() const;
-    protected:
-    private:
-          int marine_landscape;
-          vector<Node* > list_nodes;  // area distribution
-          vector<double> tot_biomass; // total biomass per functional group
+	public:
+		Benthos(int marine_landscape,
+			vector<Node* > nodes,
+			vector<double> tot_biomass);
+		virtual ~Benthos();
+		int get_marine_landscape() const;
+		vector<Node* > get_list_nodes() const;
+		vector<double> get_tot_biomass() const;
+	protected:
+	private:
+		int marine_landscape;
+								 // area distribution
+		vector<Node* > list_nodes;
+								 // total biomass per functional group
+		vector<double> tot_biomass;
 };
-
-#endif // BENTHOS_H
+#endif							 // BENTHOS_H

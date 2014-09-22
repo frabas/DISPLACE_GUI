@@ -18,12 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-
-
-
 #ifndef __MYUTILS_H
 #define __MYUTILS_H (1)
-
 
 #include<vector>
 #include<deque>
@@ -43,9 +39,7 @@
 
 #define PI 3.14159265
 
-
 using namespace std;
-
 
 //---------------------------------------//
 // general util.
@@ -56,36 +50,35 @@ void remove_dups(vector<int>& seq);
 void print( vector <string> & v );
 void print_d( vector <double> & v );
 
-
 struct splitX
 {
-    enum empties_t { empties_ok, no_empties };
+	enum empties_t { empties_ok, no_empties };
 };
 
 template <typename Container>
 Container& split(
-    Container&                            result,
-    const typename Container::value_type& s,
-    const typename Container::value_type& delimiters,
-    splitX::empties_t                      empties = splitX::empties_ok )
+Container&                            result,
+const typename Container::value_type& s,
+const typename Container::value_type& delimiters,
+splitX::empties_t                      empties = splitX::empties_ok )
 {
-    result.clear();
-    size_t current;
-    size_t next = -1;
-    do
-    {
-        if (empties == splitX::no_empties)
-        {
-            next = s.find_first_not_of( delimiters, next + 1 );
-            if (next == Container::value_type::npos) break;
-            next -= 1;
-        }
-        current = next + 1;
-        next = s.find( delimiters, current );
-        result.push_back( s.substr( current, next - current ) );
-    }
-    while (next != Container::value_type::npos);
-    return result;
+	result.clear();
+	size_t current;
+	size_t next = -1;
+	do
+	{
+		if (empties == splitX::no_empties)
+		{
+			next = s.find_first_not_of( delimiters, next + 1 );
+			if (next == Container::value_type::npos) break;
+			next -= 1;
+		}
+		current = next + 1;
+		next = s.find( delimiters, current );
+		result.push_back( s.substr( current, next - current ) );
+	}
+	while (next != Container::value_type::npos);
+	return result;
 }
 
 
@@ -93,63 +86,60 @@ Container& split(
 // graph related (Dijkstra, etc.)
 //---------------------------------------//
 
-
 //simple graph type definition headers>>
 typedef int vertex_t;
-typedef int weight_t; // 'integer' instead of 'double' to speedup c++
+typedef int weight_t;			 // 'integer' instead of 'double' to speedup c++
 
 struct edge
 {
-    vertex_t target;
-    weight_t weight;
-    edge(vertex_t arg_target, weight_t arg_weight)
-        : target(arg_target), weight(arg_weight) { }
+	vertex_t target;
+	weight_t weight;
+	edge(vertex_t arg_target, weight_t arg_weight)
+		: target(arg_target), weight(arg_weight) { }
 };
 
 typedef std::map<vertex_t, std::list<edge> > adjacency_map_t;
 
 void DijkstraComputePaths(vertex_t source,
-                          adjacency_map_t& adjacency_map,
-                          std::map<vertex_t, weight_t>& min_distance,
-                          std::map<vertex_t, vertex_t>& previous,
-                          std::vector<int> relevant_nodes);
+adjacency_map_t& adjacency_map,
+std::map<vertex_t, weight_t>& min_distance,
+std::map<vertex_t, vertex_t>& previous,
+std::vector<int> relevant_nodes);
 
 std::list<vertex_t> DijkstraGetShortestPathTo(
-    vertex_t target, std::map<vertex_t, vertex_t>& previous);
+vertex_t target, std::map<vertex_t, vertex_t>& previous);
 
 void SimplifyThePreviousMap(
-    int source,
-    std::map<vertex_t, vertex_t>& previous,
-    std::vector<int>& relevant_nodes,
-    std::map<vertex_t, weight_t>& min_distance,
-    string namesimu,
-    string a_graph_name,
-    string inputfolder);
+int source,
+std::map<vertex_t, vertex_t>& previous,
+std::vector<int>& relevant_nodes,
+std::map<vertex_t, weight_t>& min_distance,
+string namesimu,
+string a_graph_name,
+string inputfolder);
 
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
 vector<double> compute_distance_fgrounds(vector <int>& idx_path_shop,
-        deque <map<vertex_t, vertex_t> >& path_shop,
-        deque <map<vertex_t, weight_t> >& min_distance_shop,
-        int from,
-        vector<int> grounds);
-
+deque <map<vertex_t, vertex_t> >& path_shop,
+deque <map<vertex_t, weight_t> >& min_distance_shop,
+int from,
+vector<int> grounds);
 
 //---------------------------------------//
 // data input
 //---------------------------------------//
 
-
 void fill_from_coord (istream& in, vector<double>& graph_coord_x,
-                      vector<double> & graph_coord_y,
-                      vector<int>& graph_coord_harbour, int nrow);
+vector<double> & graph_coord_y,
+vector<int>& graph_coord_harbour, int nrow);
 void fill_from_graph (istream& in, vector<int>& graph_idx_dep,
-                      vector<int> & graph_idx_arr,
-                      vector<int>& graph_dist_km, int nrow);
+vector<int> & graph_idx_arr,
+vector<int>& graph_dist_km, int nrow);
 void fill_from_code_area (istream& in, vector<int>& graph_point_code_area,
-                          int nrow);
+int nrow);
 void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
-                          int nrow);
+int nrow);
 void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
 void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
 void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);
@@ -158,22 +148,21 @@ void fill_in_initial_tac (istream& in, vector<double>& initial_tac);
 void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max);
 void fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
 void fill_from_vessels_specifications (istream& in, vector<string>& names,
-                                       vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths,  vector<double>& KWs,
-                                       vector<double>& carrycapacities, vector<double>& tankcapacities,
-                                       vector<double>& nbfpingspertrips,
-                                       vector<double>& resttime_par1s,vector<double>& resttime_par2s,
-                                       vector<double>& av_trip_duration);
+vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths,  vector<double>& KWs,
+vector<double>& carrycapacities, vector<double>& tankcapacities,
+vector<double>& nbfpingspertrips,
+vector<double>& resttime_par1s,vector<double>& resttime_par2s,
+vector<double>& av_trip_duration);
 void fill_from_ships_specifications (istream& in, vector<string>& names,
-                                       vector<double>& vmaxs,
-                                        vector<double>& vcruises,
-                                         vector<double>& lane_ids);
+vector<double>& vmaxs,
+vector<double>& vcruises,
+vector<double>& lane_ids);
 
 void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
 void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);
 void fill_from_oth_land (istream& in, map<int, double>& oth_land);
 void fill_from_relative_stability (istream& in, map<string, double>& relative_stability);
 void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
-
 
 void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& infos);
 void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double>& infos);
@@ -191,12 +180,9 @@ vector<int> find_entries_i_i (multimap<int, int>& infos, int intg);
 vector<string> find_entries_i_s (multimap<int, string>& infos, int intg);
 void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval);
 
-
 template <typename T, size_t N> T* end(T (&pArray)[N]);
 
-
 vector<double> scale_a_vector_to_1(vector<double> a_vector);
-
 
 void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput);
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput);
@@ -209,7 +195,5 @@ void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, str
 //}
 
 double decode_the_tree(string& tree, vector<string>& direction,
-                       map<string, int>& external_states, map<string, int>& internal_states);
-
-
+map<string, int>& external_states, map<string, int>& internal_states);
 #endif

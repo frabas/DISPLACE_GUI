@@ -7,6 +7,10 @@ INCLUDEPATH=../include
 
 LIBS+= -L../ -ldisplacecommons
 
+macx {
+    CONFIG -= app_bundle
+}
+
 SOURCES=Benthos.cpp \
         Harbour.cpp \
         Metier.cpp \

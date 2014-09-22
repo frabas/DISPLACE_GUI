@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
-INCLUDEPATH+=../include/ ../QMapControl/src/ ../simulator
+INCLUDEPATH+=../include/ ../QMapControl/src/
 
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol

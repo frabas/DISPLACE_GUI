@@ -1,3 +1,3 @@
 TEMPLATE=subdirs
 CONFIG+=ordered
-SUBDIRS+=simulator QMapControl qtgui
+SUBDIRS+=commons simulator QMapControl qtgui

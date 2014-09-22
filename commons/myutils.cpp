@@ -667,16 +667,15 @@ void fill_from_ships_specifications (istream& in, vector<string>& names,
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids)
 {
-
     string name;
-    while(!getline(in, name, '|').eof())
+    while(!std::getline(in, name, '|').eof())
     {
         string vmax;
         string vcruise;
         string lane_id;
-        getline(in, vmax, '|');
-        getline(in, vcruise, '|');
-        getline(in, lane_id);
+        std::getline(in, vmax, '|');
+        std::getline(in, vcruise, '|');
+        std::getline(in, lane_id);
         names.push_back(name);
         vmaxs.push_back(strtod(vmax.c_str(),0));
         vcruises.push_back(strtod(vcruise.c_str(),0));

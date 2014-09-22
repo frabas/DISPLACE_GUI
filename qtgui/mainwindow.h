@@ -34,12 +34,15 @@ public:
 private slots:
     void simulatorLogging(QString);
     void simulatorProcessStateChanged (QProcess::ProcessState);
+    void updateModelState();
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
-
     void on_cmdStop_clicked();
+
+signals:
+    void modelStateChanged();
 
 protected:
     void updateModelList();

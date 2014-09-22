@@ -72,6 +72,11 @@ bool Simulator::forceStop()
     return true;
 }
 
+QProcess::ProcessState Simulator::processState() const
+{
+    return mSimulation ? mSimulation->state() : QProcess::NotRunning;
+}
+
 void Simulator::error(QProcess::ProcessError error)
 {
     emit log(QString("Process error: %1").arg(mSimulation->errorString()));

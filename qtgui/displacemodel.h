@@ -16,6 +16,7 @@ public:
     // Getter
     QString name() const { return mName; }
     QString basepath() const { return mBasePath; }
+    bool isModelLoaded() const { return !mName.isEmpty(); }
 
     int getShipCount() const;
     QString getShipId(int idx) const;

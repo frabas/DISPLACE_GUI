@@ -16,6 +16,7 @@ public:
     bool start(QString name, QString folder);
     bool isRunning();
     bool forceStop();
+    QProcess::ProcessState processState() const;
 
 signals:
     void log(QString);

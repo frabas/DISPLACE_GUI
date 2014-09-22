@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < maxModels; ++i)
         models[i] = 0;
 
+    connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
+
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
@@ -116,10 +118,10 @@ void MainWindow::on_action_Load_triggered()
         models[0] = new DisplaceModel();
         models[0]->load(d.absolutePath(), parts.at(1));
 
-        updateModelList();
-        ui->modelSelector->setCurrentIndex(0);
-//        treemodel->setCurrentModel(models[0]);
-        // TODO: emit signals to sync all the parts of the gui
+//        updateModelList();
+//        ui->modelSelector->setCurrentIndex(0);
+
+        emit modelStateChanged();
     }
 }
 
@@ -136,9 +138,21 @@ void MainWindow::simulatorLogging(QString msg)
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
 {
-    ui->cmdStart->setEnabled(state == QProcess::NotRunning);
-    ui->cmdPause->setEnabled(false);
-    ui->cmdStop->setEnabled(state == QProcess::Running);
+    if (models[0] != 0) {
+        ui->cmdStart->setEnabled(state == QProcess::NotRunning);
+        ui->cmdPause->setEnabled(false);
+        ui->cmdStop->setEnabled(state == QProcess::Running);
+    } else {
+        ui->cmdStart->setEnabled(false);
+        ui->cmdPause->setEnabled(false);
+        ui->cmdStop->setEnabled(false);
+    }
+}
+
+void MainWindow::updateModelState()
+{
+    simulatorProcessStateChanged(mSimulation->processState());
+    updateModelList();
 }
 
 void MainWindow::updateModelList()

@@ -262,17 +262,17 @@ int main(int argc, char* argv[])
 	an_output_folder= pathoutput+"/DISPLACE_outputs";
 
     status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if(!status) 	{
-        cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
+    if(status < 0) 	{
+        cerr << "could not create directory" << an_output_folder << ": " << strerror(errno) << endl;
         return -1;
     }
 
 	a_basic_output_folder= pathoutput+"/DISPLACE_outputs/"+namefolderinput;
     status = mkpath(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-    if(!status)
+    if(status < 0)
     {
-        cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
+        cerr << "could not create directory" << a_basic_output_folder << ": " << strerror(errno) << endl;
         return -1;
     }
 
@@ -281,7 +281,7 @@ int main(int argc, char* argv[])
     status = mkpath(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	if(status < 0)
 	{
-		cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
+        cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
 		return -1;
 	}
 #endif

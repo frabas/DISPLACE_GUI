@@ -30,9 +30,17 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <err.h>
 #include <errno.h>
 #include <string.h>
+
+#ifdef __WIN32
+
+/* on mingw/windows there's no such function, so ignore permission */
+static int __cdecl mkdir(const char *const path, int permissions) {
+    return mkdir(path);
+}
+
+#endif
 
 /* Code taken directly from mkdir(1).
 
@@ -42,10 +50,10 @@
 int mkpath(const char * const path, int perms)
 {
 	struct stat sb;
-	char *slash;
+    char *slash;
 	int done = 0;
 
-	slash = path;
+    slash = (char *)path;
 
 	while (!done) {
 		slash += strspn(slash, "/");
@@ -57,11 +65,9 @@ int mkpath(const char * const path, int perms)
 		if (stat(path, &sb)) {
             if (errno != ENOENT || (mkdir(path, perms) &&
 			    errno != EEXIST)) {
-				warn("%s", path);
 				return (-1);
 			}
 		} else if (!S_ISDIR(sb.st_mode)) {
-			warnx("%s: %s", path, strerror(ENOTDIR));
 			return (-1);
 		}
 

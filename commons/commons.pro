@@ -11,7 +11,7 @@ SOURCES= \
     Node.cpp \
     Tac.cpp \
     myRutils.cpp \
-    mkpath.c
+    mkpath.cpp
 
 HEADERS= \
     ../include/readdata.h \

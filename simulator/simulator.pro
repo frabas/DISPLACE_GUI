@@ -1,17 +1,15 @@
 CONFIG -= qt
+TARGET=displace
+TEMPLATE=app
+
 DESTDIR = ../
+INCLUDEPATH=../include
+
+LIBS+= -L../ -ldisplacecommons
 
 SOURCES=Benthos.cpp \
         Harbour.cpp \
         Metier.cpp \
-        Node.cpp \
-        Population.cpp \
         Ship.cpp \
-        Tac.cpp \
         Vessel.cpp \
-        main.cpp \
-        myRutils.cpp \
-        myutils.cpp \
-        readdata.cpp
-
-TARGET=displace
+        main.cpp

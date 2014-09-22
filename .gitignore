@@ -5,3 +5,4 @@ release/
 simulator/*.o
 /build
 /install
+*~

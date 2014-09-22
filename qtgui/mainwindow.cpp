@@ -8,6 +8,7 @@
 #include <osmmapadapter.h>
 #include <objecttreemodel.h>
 #include <openseamapadapter.h>
+#include <simulator.h>
 
 #include <QBoxLayout>
 #include <QTextEdit>
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     models(),
+    mSimulation(0),
     map(0),
     mapadapter(0),
     mainlayer(0),
@@ -31,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     for (int i = 0; i < maxModels; ++i)
         models[i] = 0;
+
+    mSimulation = new Simulator();
+    connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
 
     map = new qmapcontrol::MapControl(ui->mapWidget);
 
@@ -121,6 +126,12 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     treemodel->setCurrentModel(models[ui->modelSelector->itemData(index).toInt()]);
 }
 
+void MainWindow::simulatorLogging(QString msg)
+{
+    ui->console->appendPlainText(msg);
+    ui->console->appendPlainText("\n");
+}
+
 void MainWindow::updateModelList()
 {
     int n = ui->modelSelector->currentData().toInt();
@@ -138,4 +149,11 @@ void MainWindow::updateModelList()
     }
 
     ui->modelSelector->setCurrentIndex(sel);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    if (!mSimulation->isRunning() && models[0] != 0) {
+        mSimulation->start(models[0]->name(), models[0]->basepath());
+    }
 }

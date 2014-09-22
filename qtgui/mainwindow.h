@@ -15,6 +15,7 @@ class MapLayer;
 
 class ObjectTreeModel;
 class DisplaceModel;
+class Simulator;
 
 #define MAX_MODELS 2
 
@@ -29,6 +30,9 @@ public:
 private slots:
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
+    void simulatorLogging(QString);
+
+    void on_pushButton_3_clicked();
 
 protected:
     void updateModelList();
@@ -38,6 +42,7 @@ private:
 
     // Data model
     DisplaceModel *models[MAX_MODELS];
+    Simulator *mSimulation;
 
     // Geospatial objects
 

@@ -15,6 +15,7 @@ public:
 
     // Getter
     QString name() const { return mName; }
+    QString basepath() const { return mBasePath; }
 
     int getShipCount() const;
     QString getShipId(int idx) const;

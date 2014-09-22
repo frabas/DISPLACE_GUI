@@ -2,10 +2,16 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.1-2014091901"
+#define MyAppVersion "0.1-2014092201"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
+
+; to debug:
+;#define Build "debug"
+;#define QT_DEBUG "d"
+#define Build "release"
+#define QT_DEBUG ""
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -34,10 +40,10 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: build\release\displacegui.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\release\displace.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\release\qmapcontrol0.dll; DestDir: {app}; Flags: ignoreversion
-Source: build\release\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\qmapcontrol0.dll; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: C:\lib\vcredist_x86.exe; DestDir: {tmp}
 ;Source: C:\Qt\5.3\mingw48_32\bin\mingwm10.dll; DestDir: {app}
@@ -46,13 +52,13 @@ Source: C:\Qt\5.3\mingw482_32\bin\icuin52.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\icuuc52.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\icudt52.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\libgcc_s_dw2-1.dll; DestDir: {app}
-Source: c:\mingw\bin\libstdc++-6.dll; DestDir: {app}
-Source: C:\MinGW\OpenSSL-Win32\libeay32.dll; DestDir: {app}
-Source: C:\MinGW\OpenSSL-Win32\libssl32.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Core.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Gui.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Widgets.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Network.dll; DestDir: {app}
+Source: c:\Qt\5.3\mingw482_32\bin\libstdc++-6.dll; DestDir: {app}
+;Source: C:\MinGW\OpenSSL-Win32\libeay32.dll; DestDir: {app}
+;Source: C:\MinGW\OpenSSL-Win32\libssl32.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

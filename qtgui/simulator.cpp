@@ -42,7 +42,7 @@ bool Simulator::start(QString name, QString folder)
     connect(mSimulation, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
     connect(mSimulation, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
     connect(mSimulation, SIGNAL(started()), this, SLOT(started()));
-    connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(stateChanged(QProcess::ProcessState)));
+    connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), SIGNAL(processStateChanged(QProcess::ProcessState)));
 
     qDebug() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
@@ -61,6 +61,15 @@ bool Simulator::start(QString name, QString folder)
 bool Simulator::isRunning()
 {
     return mSimulation != 0 && mSimulation->state() == QProcess::Running;
+}
+
+bool Simulator::forceStop()
+{
+    if (mSimulation == 0)
+        return false;
+
+    mSimulation->kill();
+    return true;
 }
 
 void Simulator::error(QProcess::ProcessError error)
@@ -93,9 +102,3 @@ void Simulator::started()
 {
 
 }
-
-void Simulator::stateChanged(QProcess::ProcessState)
-{
-
-}
-

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QProcess>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,9 @@ class ObjectTreeModel;
 class DisplaceModel;
 class Simulator;
 
+QT_BEGIN_NAMESPACE
+QT_END_NAMESPACE
+
 #define MAX_MODELS 2
 
 class MainWindow : public QMainWindow
@@ -28,14 +32,18 @@ public:
     ~MainWindow();
 
 private slots:
+    void simulatorLogging(QString);
+    void simulatorProcessStateChanged (QProcess::ProcessState);
+
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
-    void simulatorLogging(QString);
+    void on_cmdStart_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_cmdStop_clicked();
 
 protected:
     void updateModelList();
+    void closeEvent ( QCloseEvent * event );
 
 private:
     Ui::MainWindow *ui;

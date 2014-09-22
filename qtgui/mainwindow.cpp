@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
+    connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
+    simulatorProcessStateChanged(QProcess::NotRunning);
 
     map = new qmapcontrol::MapControl(ui->mapWidget);
 
@@ -132,6 +134,13 @@ void MainWindow::simulatorLogging(QString msg)
     ui->console->appendPlainText("\n");
 }
 
+void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
+{
+    ui->cmdStart->setEnabled(state == QProcess::NotRunning);
+    ui->cmdPause->setEnabled(false);
+    ui->cmdStop->setEnabled(state == QProcess::Running);
+}
+
 void MainWindow::updateModelList()
 {
     int n = ui->modelSelector->currentData().toInt();
@@ -151,9 +160,34 @@ void MainWindow::updateModelList()
     ui->modelSelector->setCurrentIndex(sel);
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (mSimulation->isRunning()) {
+        int res = QMessageBox::question(this, tr("Simulation running"),
+                              tr("A simulation process is running. Closing the app will force close it. Do you want to proceed?"),
+                              QMessageBox::No, QMessageBox::Yes);
+
+        if (res == QMessageBox::Yes) {
+            mSimulation->forceStop();
+            event->accept();
+        } else {
+            event->ignore();
+        }
+    } else {
+        event->accept();
+    }
+}
+
+void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
         mSimulation->start(models[0]->name(), models[0]->basepath());
+    }
+}
+
+void MainWindow::on_cmdStop_clicked()
+{
+    if (mSimulation && mSimulation->isRunning()) {
+        mSimulation->forceStop();
     }
 }

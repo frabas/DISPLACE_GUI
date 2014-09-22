@@ -15,9 +15,11 @@ public:
 
     bool start(QString name, QString folder);
     bool isRunning();
+    bool forceStop();
 
 signals:
     void log(QString);
+    void processStateChanged(QProcess::ProcessState);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -25,7 +27,6 @@ private slots:
     void readyReadStandardError();
     void readyReadStandardOutput();
     void started();
-    void stateChanged(QProcess::ProcessState);
 
 private:
     QProcess *mSimulation;

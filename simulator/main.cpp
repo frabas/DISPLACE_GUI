@@ -80,6 +80,7 @@
 #include <cmath>
 #include <cstring>
 #include <errno.h>
+#include <mkpath.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -243,7 +244,7 @@ int main(int argc, char* argv[])
 	string a_basic_output_folder;
 	string namefolder;
 
-	#ifdef _WIN32
+#ifdef _WIN32
 	pathoutput="C:";			 // windows
 	an_output_folder= pathoutput+"/DISPLACE_outputs";
 	mkdir(an_output_folder.c_str());
@@ -252,27 +253,38 @@ int main(int argc, char* argv[])
 	// create a specific output directory for this simu
 	namefolder= pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
 	mkdir(namefolder.c_str());
-	#else
+#else
+
 	// not Windows eg Linux on HPC DTU
 	int status;
 	string home=getenv("HOME");
 	pathoutput=home+"/ibm_vessels";
 	an_output_folder= pathoutput+"/DISPLACE_outputs";
-	status = mkdir(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	if(!status) cerr << "could not create directory" << an_output_folder << endl;
+
+    status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if(!status) 	{
+        cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
+        return -1;
+    }
+
 	a_basic_output_folder= pathoutput+"/DISPLACE_outputs/"+namefolderinput;
-	status = mkdir(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	if(!status) cerr << "could not create directory" << a_basic_output_folder << endl;
+    status = mkpath(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+    if(!status)
+    {
+        cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
+        return -1;
+    }
+
 	// create a specific output directory for this simu
 	namefolder= pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
-
-	status = mkdir(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    status = mkpath(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	if(status < 0)
 	{
 		cerr << "could not create directory" << namefolder << ": " << strerror(errno) << endl;
 		return -1;
 	}
-	#endif
+#endif
 
 	// get the name of the input directory for this simu
 	string folder_name_parameterization= namefolderinput;

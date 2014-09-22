@@ -10,7 +10,8 @@ SOURCES= \
     Population.cpp \
     Node.cpp \
     Tac.cpp \
-    myRutils.cpp
+    myRutils.cpp \
+    mkpath.c
 
 HEADERS= \
     ../include/readdata.h \
@@ -18,4 +19,5 @@ HEADERS= \
     ../include/Population.h \
     ../include/Node.h \
     ../include/Tac.h \
-    ../include/myRutils.h
+    ../include/myRutils.h \
+    ../include/mkpath.h

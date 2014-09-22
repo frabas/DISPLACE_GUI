@@ -37,21 +37,22 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 Source: build\release\displacegui.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\release\displace.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\release\qmapcontrol0.dll; DestDir: {app}; Flags: ignoreversion
+Source: build\release\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: C:\lib\vcredist_x86.exe; DestDir: {tmp}
-;Source: C:\Qt\5.2.1\mingw48_32\bin\mingwm10.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\libwinpthread-1.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\icuin51.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\icuuc51.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\icudt51.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\libgcc_s_dw2-1.dll; DestDir: {app}
+;Source: C:\Qt\5.3\mingw48_32\bin\mingwm10.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\libwinpthread-1.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\icuin52.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\icuuc52.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\icudt52.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\libgcc_s_dw2-1.dll; DestDir: {app}
 Source: c:\mingw\bin\libstdc++-6.dll; DestDir: {app}
 Source: C:\MinGW\OpenSSL-Win32\libeay32.dll; DestDir: {app}
 Source: C:\MinGW\OpenSSL-Win32\libssl32.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\Qt5Core.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\Qt5Gui.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\Qt5Widgets.dll; DestDir: {app}
-Source: C:\Qt\5.2.1\mingw48_32\bin\Qt5Network.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Core.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Gui.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Widgets.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\bin\Qt5Network.dll; DestDir: {app}
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

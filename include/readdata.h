@@ -29,7 +29,7 @@ using namespace std;
 std::string getLastErrorMessage();
 void open_file_error(string filename);
 
-void read_config_file (string folder_name_parameterization,
+int read_config_file (string folder_name_parameterization,
 string inputfolder,
 int& a_int_line2,
 vector<int>& a_vector_line4,

@@ -41,29 +41,31 @@ void open_file_error(string filename)
 {
     error_msg = "error opening file " + filename;
     cout << error_msg << "\n";
+
+    exit(-1);
 }
 
 /**
 read the settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-void read_config_file (string folder_name_parameterization,
-string inputfolder,
-int& a_int_line2,
-vector<int>& a_vector_line4,
-vector<double>& a_vector_line6,
-vector<double>& a_vector_line8,
-vector<double>& a_vector_line10)
+int read_config_file (string folder_name_parameterization,
+    string inputfolder,
+    int& a_int_line2,
+    vector<int>& a_vector_line4,
+    vector<double>& a_vector_line6,
+    vector<double>& a_vector_line8,
+    vector<double>& a_vector_line10)
 {
 
-	string filename=  "../"+inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
+    string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
 
 	ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
 	{
 		open_file_error(filename);
-		//return 1;
+        return -1;
 	}
 
 	string line;
@@ -114,6 +116,8 @@ vector<double>& a_vector_line10)
 
 	}
 	cout << "read config file...OK" << endl << flush;
+
+    return 0;
 }
 
 
@@ -228,7 +232,7 @@ vector <int> read_tsteps_quarters(string folder_name_parameterization, string in
 
 	vector<int> tsteps_quarters;
 
-	string filename=  "../"+inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_quarters_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_quarters_2009_2015.dat";
 	ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
@@ -267,7 +271,7 @@ vector <int> read_tsteps_semesters(string folder_name_parameterization, string i
 
 	vector<int> tsteps_semesters;
 
-	string filename=  "../"+inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_semesters_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_semesters_2009_2015.dat";
 	ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
@@ -305,7 +309,7 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 
 	vector<int> tsteps_months;
 
-	string filename=  "../"+inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_months_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_months_2009_2015.dat";
 	ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
@@ -343,7 +347,7 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 
 	vector<int> tsteps_years;
 
-	string filename=  "../"+inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_years_2009_2015.dat";
+    string filename=  inputfolder+"/simusspe_"+folder_name_parameterization+"/tstep_years_2009_2015.dat";
 	ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
@@ -396,12 +400,12 @@ int selected_vessels_only)
 	string filename;
 	if(selected_vessels_only==1)
 	{
-		filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_"+a_quarter+"_subset.dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_"+a_quarter+"_subset.dat";
 	}
 	else
 	{
 
-		filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_"+a_quarter+".dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_features_"+a_quarter+".dat";
 	}
 	ifstream vessels_features;
 	vessels_features.open(filename.c_str());
@@ -492,7 +496,7 @@ string inputfolder
 )
 {
 
-	string filename=  "../"+inputfolder+"/shipsspe_"+folder_name_parameterization+"/shipsspe_features.dat";
+    string filename=  inputfolder+"/shipsspe_"+folder_name_parameterization+"/shipsspe_features.dat";
 
 	ifstream ships_features;
 	ships_features.open(filename.c_str());
@@ -512,7 +516,7 @@ multimap<int, string> read_harbour_names(string folder_name_parameterization, st
 {
 
 	//input data,
-	string filename=  "../"+inputfolder+"/harboursspe_"+folder_name_parameterization+"/names_harbours.dat";
+    string filename=  inputfolder+"/harboursspe_"+folder_name_parameterization+"/names_harbours.dat";
 	ifstream harbour_names_file;
 	harbour_names_file.open(filename.c_str());
 	if(harbour_names_file.fail())
@@ -548,7 +552,7 @@ string folder_name_parameterization, string inputfolder)
 	out << i;
 
 	//input data, harbour characteristics
-	string filename=  "../"+inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+".dat";
+    string filename=  inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+".dat";
 	ifstream fish_prices_per_harbour;
 	fish_prices_per_harbour.open(filename.c_str());
 	if(fish_prices_per_harbour.fail())
@@ -581,7 +585,7 @@ void read_fuel_prices_per_vsize(map<string, double>& fuel_prices_per_vsize,
 string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/fuel_price_per_vessel_size.dat";
 	ifstream file_fuel_prices_per_vsize;
 	file_fuel_prices_per_vsize.open(filename.c_str());
 	if(file_fuel_prices_per_vsize.fail())
@@ -600,8 +604,8 @@ string folder_name_parameterization, string inputfolder)
 
 
 int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter,
-multimap<int, double>& prices_per_harbour_each_species_per_cat,
-string folder_name_parameterization, string inputfolder)
+    multimap<int, double>& prices_per_harbour_each_species_per_cat,
+    string folder_name_parameterization, string inputfolder)
 {
 
 	// casting sp into a string
@@ -609,7 +613,7 @@ string folder_name_parameterization, string inputfolder)
 	out << i;
 
 	//input data, harbour characteristics
-	string filename=  "../"+inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_each_species_per_cat.dat";
+    string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_each_species_per_cat.dat";
 	ifstream fish_prices_per_harbour;
 	fish_prices_per_harbour.open(filename.c_str());
 	if(fish_prices_per_harbour.fail())
@@ -642,7 +646,7 @@ multimap<string, int> read_fgrounds(string a_quarter, string folder_name_paramet
 {
 
 	//input data, vessel characteristics: fishing grounds
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
 	ifstream vessels_fgrounds;
 	vessels_fgrounds.open(filename.c_str());
 	if(vessels_fgrounds.fail())
@@ -672,7 +676,7 @@ multimap<string, int> read_harbours(string a_quarter, string folder_name_paramet
 {
 
 	//input data, vessel characteristics: specfic-harbour list
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_harbours_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_harbours_"+a_quarter+".dat";
 	ifstream vessels_harbours;
 	vessels_harbours.open(filename.c_str());
 	if(vessels_harbours.fail())
@@ -702,7 +706,7 @@ multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name
 {
 
 	//input data, vessel characteristics: frequency for fgrounds
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
 	ifstream vessels_freq_fgrounds;
 	vessels_freq_fgrounds.open(filename.c_str());
 	if(vessels_freq_fgrounds.fail())
@@ -732,7 +736,7 @@ multimap<string, double> read_freq_harbours(string a_quarter, string folder_name
 {
 
 	//input data, vessel characteristics: frequency for harbours
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_harbours_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_harbours_"+a_quarter+".dat";
 	ifstream vessels_freq_harbours;
 	vessels_freq_harbours.open(filename.c_str());
 	if(vessels_freq_harbours.fail())
@@ -762,7 +766,7 @@ multimap<string, double> read_vessels_betas(string a_semester, string folder_nam
 {
 
 	//input data, vessel catching power/skipping effect i.e. the vessel betas
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
 	ifstream vesselsspe_betas_file;
 	vesselsspe_betas_file.open(filename.c_str());
 	if(vesselsspe_betas_file.fail())
@@ -795,11 +799,11 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
 	string filename;
 	if(folder_name_parameterization=="final")
 	{
-		filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_betas_"+a_semester+".dat";
 	}
 	else
 	{
-		filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_percent_tacs_per_pop_"+a_semester+".dat";
+        filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_percent_tacs_per_pop_"+a_semester+".dat";
 	}
 	ifstream vesselsspe_tacs_file;
 	vesselsspe_tacs_file.open(filename.c_str());
@@ -830,7 +834,7 @@ multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, stri
 {
 
 	//input data, vessel characteristics: possible metiers for this vessel
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_possible_metiers_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_possible_metiers_"+a_quarter+".dat";
 	ifstream vessels_possible_metiers;
 	vessels_possible_metiers.open(filename.c_str());
 	if(vessels_possible_metiers.fail())
@@ -865,7 +869,7 @@ multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vess
 {
 
 	// frequence on ground of possible metiers for this vessels
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_freq_possible_metiers_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_freq_possible_metiers_"+a_quarter+".dat";
 	ifstream vessels_freq_possible_metiers;
 	vessels_freq_possible_metiers.open(filename.c_str());
 	if(vessels_freq_possible_metiers.fail())
@@ -900,7 +904,7 @@ multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vess
 {
 
 	// frequence on ground of possible metiers for this vessels
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_cpue_per_stk_on_nodes_"+a_quarter+".dat";
 	ifstream vessels_cpue_per_stk_on_nodes;
 	vessels_cpue_per_stk_on_nodes.open(filename.c_str());
 	if(vessels_cpue_per_stk_on_nodes.fail())
@@ -935,7 +939,7 @@ multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string
 {
 
 	// frequence on ground of possible metiers for this vessels
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gshape_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gshape_cpue_per_stk_on_nodes_"+a_quarter+".dat";
 	ifstream vessels_gshape_cpue_per_stk_on_nodes;
 	vessels_gshape_cpue_per_stk_on_nodes.open(filename.c_str());
 	if(vessels_gshape_cpue_per_stk_on_nodes.fail())
@@ -970,7 +974,7 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
 {
 
 	// frequence on ground of possible metiers for this vessels
-	string filename=  "../"+inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gscale_cpue_per_stk_on_nodes_"+a_quarter+".dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/" + a_vessel +"_gscale_cpue_per_stk_on_nodes_"+a_quarter+".dat";
 	ifstream vessels_gscale_cpue_per_stk_on_nodes;
 	vessels_gscale_cpue_per_stk_on_nodes.open(filename.c_str());
 	if(vessels_gscale_cpue_per_stk_on_nodes.fail())
@@ -1005,7 +1009,7 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
 multimap<int, double> read_sel_ogives(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_selectivity_ogives.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_selectivity_ogives.dat";
 
 	ifstream metier_selectivity_ogives;
 	metier_selectivity_ogives.open(filename.c_str());
@@ -1030,7 +1034,7 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
 	out << a_met;
 	string a_met_s = out.str();
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/"+a_met_s+"loss_after_one_passage_per_landscape_per_func_group.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/"+a_met_s+"loss_after_one_passage_per_landscape_per_func_group.dat";
 
 	ifstream metiers_loss_after_one_passage_per_landscape_per_func_group;
 	metiers_loss_after_one_passage_per_landscape_per_func_group.open(filename.c_str());
@@ -1051,7 +1055,7 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
 map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/combined_met_types.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/combined_met_types.dat";
 
 	ifstream metier_types;
 	metier_types.open(filename.c_str());
@@ -1072,7 +1076,7 @@ map<int, int> read_metiers_types(string folder_name_parameterization, string inp
 map<int, double> read_gear_widths_param_a(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_gear_widths_param_a.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_gear_widths_param_a.dat";
 
 	ifstream metier_gear_widths_param_a;
 	metier_gear_widths_param_a.open(filename.c_str());
@@ -1093,7 +1097,7 @@ map<int, double> read_gear_widths_param_a(string folder_name_parameterization, s
 map<int, double> read_gear_widths_param_b(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_gear_widths_param_b.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_gear_widths_param_b.dat";
 
 	ifstream metier_gear_widths_param_b;
 	metier_gear_widths_param_b.open(filename.c_str());
@@ -1114,7 +1118,7 @@ map<int, double> read_gear_widths_param_b(string folder_name_parameterization, s
 map<int, string> read_gear_widths_model_type(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_gear_widths_model_type.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_gear_widths_model_type.dat";
 
 	ifstream metier_gear_widths_model_type;
 	metier_gear_widths_model_type.open(filename.c_str());
@@ -1135,7 +1139,7 @@ map<int, string> read_gear_widths_model_type(string folder_name_parameterization
 multimap<int, double> read_dis_ogives(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_discards_ogives.dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_discards_ogives.dat";
 
 	ifstream metier_discards_ogives;
 	metier_discards_ogives.open(filename.c_str());
@@ -1155,7 +1159,7 @@ multimap<int, double> read_dis_ogives(string folder_name_parameterization, strin
 multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_betas_"+a_semester+".dat";
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_betas_"+a_semester+".dat";
 
 	ifstream metierspe_betas_file;
 	metierspe_betas_file.open(filename.c_str());
@@ -1176,7 +1180,7 @@ multimap<int, double> read_metiers_betas(string a_semester, string folder_name_p
 multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/benthosspe_"+folder_name_parameterization+"/estimates_biomass_per_cell_per_funcgr_per_landscape.dat";
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/estimates_biomass_per_cell_per_funcgr_per_landscape.dat";
 
 	ifstream file_estimates_biomass_per_cell;
 	file_estimates_biomass_per_cell.open(filename.c_str());
@@ -1197,7 +1201,7 @@ multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(s
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/avai"+szgroup+"_betas_"+a_semester+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/avai"+szgroup+"_betas_"+a_semester+".dat";
 
 	//input data, pop characteristics: e.g. avai0_betas i.e. betas per pop for szgroup 0
 	ifstream avai_betas_file;
@@ -1219,7 +1223,7 @@ multimap<int, double> read_avai_betas(string a_semester, string szgroup, string 
 multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/init_pops_per_szgroup_biolsce"+biolsce+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_pops_per_szgroup_biolsce"+biolsce+".dat";
 
 	//input data, pop characteristics: initial N
 	ifstream file_init_pops_per_szgroup;
@@ -1252,7 +1256,7 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
 multimap<int, double> read_init_maturity_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/init_maturity_per_szgroup_biolsce"+biolsce+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_maturity_per_szgroup_biolsce"+biolsce+".dat";
 
 	//input data, pop characteristics: maturity_at_szgroup
 	ifstream file_init_maturity_per_szgroup;
@@ -1283,7 +1287,7 @@ multimap<int, double> read_init_maturity_per_szgroup(string folder_name_paramete
 multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/init_fecundity_per_szgroup_biolsce"+biolsce+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_fecundity_per_szgroup_biolsce"+biolsce+".dat";
 
 	//input data, pop characteristics: maturity_at_szgroup
 	ifstream file_init_fecundity_per_szgroup;
@@ -1314,7 +1318,7 @@ multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_paramet
 multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/init_weight_per_szgroup_biolsce"+biolsce+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_weight_per_szgroup_biolsce"+biolsce+".dat";
 
 	//input data, pop characteristics: weight_at_szgroup
 	ifstream file_init_weight_per_szgroup;
@@ -1345,7 +1349,7 @@ multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameteri
 multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/comcat_per_szgroup_done_by_hand.dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/comcat_per_szgroup_done_by_hand.dat";
 
 	//input data, pop characteristics: weight_at_szgroup
 	ifstream file_comcat_per_szgroup;
@@ -1376,7 +1380,7 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
 multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/init_M_per_szgroup_biolsce"+biolsce+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_M_per_szgroup_biolsce"+biolsce+".dat";
 
 	//input data, pop characteristics: weight_at_szgroup
 	ifstream file_init_M_per_szgroup;
@@ -1407,7 +1411,7 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
 multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/init_proprecru_per_szgroup_biolsce"+biolsce+".dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_proprecru_per_szgroup_biolsce"+biolsce+".dat";
 
 	//input data, pop characteristics: weight_at_szgroup
 	ifstream file_init_proprecru_per_szgroup;
@@ -1441,11 +1445,11 @@ multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_n
 	string filename;
 	if(str_rand_avai_file=="baseline")
 	{
-		filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_"+a_semester+".dat";
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_"+a_semester+".dat";
 	}
 	else
 	{
-		filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_"+a_semester+".dat";
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/"+"lst_idx_nodes_per_pop_"+a_semester+".dat";
 		// filename=  "popsspe_"+folder_name_parameterization+"/stochast_avai/"+"lst_idx_nodes_per_pop_"+a_semester+"_"+str_rand_avai_file+".dat";
 	}
 
@@ -1481,7 +1485,7 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
 {
 
 	string filename;
-	filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/"+"the_selected_szgroups.dat";
+    filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/"+"the_selected_szgroups.dat";
 
 	//input data, pop characteristics: lst idx nodes with presence
 	ifstream file_the_selected_szgroups;
@@ -1512,7 +1516,7 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
 map<int, int> read_tac_percent_simulated(string folder_name_parameterization, string inputfolder)
 {
 
-	string filename=  "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/percent_landings_from_simulated_vessels.dat";
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/percent_landings_from_simulated_vessels.dat";
 
 	//input data, pop characteristics: weight_at_szgroup
 	ifstream file_tac_percent_simulated;
@@ -1544,12 +1548,12 @@ map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, stri
 	string filename;
 	if(folder_name_parameterization=="final")
 	{
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_oth_land_per_month_per_node_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_oth_land_per_month_per_node_"+a_semester+".dat";
 	}
 	else
 	{
 		//=> NEW_VERSION: replaced by:
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_semester+".dat";
 	}
 
 	ifstream file_oth_land;
@@ -1586,12 +1590,12 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
 	string filename;
 	if(folder_name_parameterization=="final")
 	{
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
 	}
 	else
 	{
 		//=> NEW_VERSION: replaced by:
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
 	}
 
 	ifstream file_relative_stability;
@@ -1630,11 +1634,11 @@ string str_rand_avai_file)
 	string filename;
 	if(str_rand_avai_file=="baseline")
 	{
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+".dat";
 	}
 	else
 	{
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+".dat";
 	}
 
 	ifstream file_avai_szgroup_nodes_with_pop;
@@ -1676,11 +1680,11 @@ string str_rand_avai_file)
 	string filename;
 	if(str_rand_avai_file=="baseline")
 	{
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+".dat";
 	}
 	else
 	{
-		filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+".dat";
 	}
 
 	ifstream file_avai_szgroup_nodes_with_pop;
@@ -1716,7 +1720,7 @@ vector< vector<double> > read_percent_szgroup_per_age_matrix(int a_pop, int nbsz
 	out << a_pop;
 	string a_pop_s = out.str();
 
-	string filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_percent_szgroup_per_age_biolsce"+biolsce+".dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_percent_szgroup_per_age_biolsce"+biolsce+".dat";
 
 	ifstream file_percent_szgroup_per_age_matrix;
 	file_percent_szgroup_per_age_matrix.open(filename.c_str());
@@ -1740,7 +1744,7 @@ vector< vector<double> > read_percent_age_per_szgroup_matrix(int a_pop, int nbsz
 	out << a_pop;
 	string a_pop_s = out.str();
 
-	string filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_percent_age_per_szgroup_biolsce"+biolsce+".dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_percent_age_per_szgroup_biolsce"+biolsce+".dat";
 
 	ifstream file_percent_age_per_szgroup_matrix;
 	file_percent_age_per_szgroup_matrix.open(filename.c_str());
@@ -1764,7 +1768,7 @@ vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup,
 	out << a_pop;
 	string a_pop_s = out.str();
 
-	string filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_size_transition_matrix_biolsce"+biolsce+".dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_size_transition_matrix_biolsce"+biolsce+".dat";
 
 	ifstream file_size_transition_matrix;
 	file_size_transition_matrix.open(filename.c_str());
@@ -1788,7 +1792,7 @@ vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, s
 	out << a_pop;
 	string a_pop_s = out.str();
 
-	string filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_SSB_R_parameters_biolsce"+biolsce+".dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_SSB_R_parameters_biolsce"+biolsce+".dat";
 
 	ifstream file_param_sr;
 	file_param_sr.open(filename.c_str());
@@ -1812,7 +1816,7 @@ vector<double>  read_initial_tac(int a_pop,  string folder_name_parameterization
 	out << a_pop;
 	string a_pop_s = out.str();
 
-	string filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_initial_tac.dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_initial_tac.dat";
 
 	ifstream file_initial_tac;
 	file_initial_tac.open(filename.c_str());
@@ -1836,7 +1840,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 	out << a_pop;
 	string a_pop_s = out.str();
 
-	string filename = "../"+inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent.dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent.dat";
 
 	ifstream file_fbar_ages_min_max;
 	file_fbar_ages_min_max.open(filename.c_str());
@@ -1861,7 +1865,7 @@ map<int, int> read_maps_previous(int source, string namesimu,  string inputfolde
 	stringstream out;
 	out << source;
 	string source_s = out.str();
-	string filename="../"+inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
+    string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
 
 	ifstream file_previous;
 	file_previous.open(filename.c_str());
@@ -1899,7 +1903,7 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 	stringstream out;
 	out << source;
 	string source_s = out.str();
-	string filename="../"+inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
+    string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
 
 	ifstream file_min_distance;
 	file_min_distance.open(filename.c_str());
@@ -1925,7 +1929,7 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
 {
 
-	string filename = "../"+inputfolder+"/graphsspe/nodes_in_polygons_"+a_graph+"_"+a_quarter+".dat";
+    string filename = inputfolder+"/graphsspe/nodes_in_polygons_"+a_graph+"_"+a_quarter+".dat";
 
 	ifstream file_nodes_in_polygons;
 	file_nodes_in_polygons.open(filename.c_str());

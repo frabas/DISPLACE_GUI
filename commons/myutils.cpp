@@ -220,7 +220,7 @@ string inputfolder)
 	stringstream out;
 	out << source;
 	string source_s = out.str();
-	std::string filename="../"+inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
+    std::string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
 	a_previous_map.open(filename.c_str());
 	a_previous_map << " key " << " value " << std::endl;
 
@@ -242,7 +242,7 @@ string inputfolder)
 	a_previous_map.close();
 
 	std::ofstream a_min_distance;
-	std::string filename2="../"+inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
+    std::string filename2= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
 	a_min_distance.open(filename2.c_str());
 	a_min_distance << " key " << " value " << std::endl;
 

@@ -309,7 +309,7 @@ int main(int argc, char* argv[])
 	vector <double> calib_cpue_multiplier;
 	read_config_file (
 		folder_name_parameterization,
-		inputfolder,
+        "../"+inputfolder,
 		nbpops,
 		implicit_pops,
 		calib_oth_landings,
@@ -729,7 +729,7 @@ int main(int argc, char* argv[])
 	cout << endl;
 
 	// read harbour specific files
-	multimap<int, string> harbour_names = read_harbour_names(folder_name_parameterization,  inputfolder);
+    multimap<int, string> harbour_names = read_harbour_names(folder_name_parameterization, "../"+inputfolder);
 
 	// creation of a vector of nodes from coord
 	// and check with the coord in input.
@@ -759,7 +759,7 @@ int main(int argc, char* argv[])
 			{
 				cout << "load prices for port " << a_name << " which is point " << a_point << endl;
 				//int er = read_prices_per_harbour(a_point, a_quarter, prices, folder_name_parameterization);
-				int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 								 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
 				cout << "....OK" << endl;
 			}
@@ -767,7 +767,7 @@ int main(int argc, char* argv[])
 			{
 				cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
 				//int er = read_prices_per_harbour(a_port, "quarter1", prices, folder_name_parameterization); // delete later on when final parameterisation
-				int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 
 			}
 
@@ -775,11 +775,11 @@ int main(int argc, char* argv[])
 			if (!binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
 				"fuelprice_plus20percent"))
 			{
-				read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
+                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, "../"+inputfolder);
 			}
 			else
 			{
-				read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
+                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, "../"+inputfolder);
 
 				map<string,double>::iterator pos;
 				for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -842,7 +842,7 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 
 	// read estimates
-	multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
+    multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  "../"+inputfolder);
 
 	// 2. sort and unique
 	sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
@@ -941,30 +941,30 @@ int main(int argc, char* argv[])
 
 	// read the pop-specific betas related to the availability
 								 // szgroup0
-	multimap<int, double> avai0_betas = read_avai_betas(a_semester, "0", folder_name_parameterization, inputfolder);
+    multimap<int, double> avai0_betas = read_avai_betas(a_semester, "0", folder_name_parameterization, "../"+inputfolder);
 								 // szgroup2
-	multimap<int, double> avai2_betas = read_avai_betas(a_semester, "2", folder_name_parameterization, inputfolder);
+    multimap<int, double> avai2_betas = read_avai_betas(a_semester, "2", folder_name_parameterization, "../"+inputfolder);
 								 // szgroup3
-	multimap<int, double> avai3_betas = read_avai_betas(a_semester, "3", folder_name_parameterization, inputfolder);
+    multimap<int, double> avai3_betas = read_avai_betas(a_semester, "3", folder_name_parameterization, "../"+inputfolder);
 								 // szgroup5
-	multimap<int, double> avai5_betas = read_avai_betas(a_semester, "5", folder_name_parameterization, inputfolder);
+    multimap<int, double> avai5_betas = read_avai_betas(a_semester, "5", folder_name_parameterization,"../"+ inputfolder);
 								 // szgroup7
-	multimap<int, double> avai7_betas = read_avai_betas(a_semester, "7", folder_name_parameterization, inputfolder);
+    multimap<int, double> avai7_betas = read_avai_betas(a_semester, "7", folder_name_parameterization, "../"+inputfolder);
 
 	// read other stuffs...
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
-	multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
-	multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
-	multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
-	multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
-	multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization, inputfolder);
-	multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
-	multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
-	multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
-	multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
+    multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
+    multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, "../"+inputfolder);
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
 
-	map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, inputfolder);
+    map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, "../"+inputfolder);
 
 	// creation of a vector of populations
 	vector <Population* > populations(nbpops);
@@ -1084,26 +1084,26 @@ int main(int argc, char* argv[])
 			init_proprecru_per_szgroup.push_back(pos->second);
 
 		// input data, avai per szgroup on nodes and presence of the pop
-		multimap<int, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
-		multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
+        multimap<int, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
+        multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
 
 		// input data, read a other landings per node for this species
-		map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder);
-		map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, inputfolder);
+        map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, sp, folder_name_parameterization, "../"+inputfolder);
+        map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, "../"+inputfolder);
 
 		// input data, growth transition, percent_szgroup_per_age_matrix
-		vector< vector<double> > growth_transition_matrix= read_growth_transition_matrix(sp, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
-		vector< vector<double> > percent_szgroup_per_age_matrix= read_percent_szgroup_per_age_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
-		vector< vector<double> > percent_age_per_szgroup_matrix= read_percent_age_per_szgroup_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
+        vector< vector<double> > growth_transition_matrix= read_growth_transition_matrix(sp, NBSZGROUP, folder_name_parameterization, "../"+inputfolder, biolsce);
+        vector< vector<double> > percent_szgroup_per_age_matrix= read_percent_szgroup_per_age_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, "../"+inputfolder, biolsce);
+        vector< vector<double> > percent_age_per_szgroup_matrix= read_percent_age_per_szgroup_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, "../"+inputfolder, biolsce);
 
 		// input data, parameter for stock-recruitment relationship
-		vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
+        vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, "../"+inputfolder, biolsce);
 
 		// input data, fbar ages
-		vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder);
+        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, "../"+inputfolder);
 
 		// input data, initial tac
-		vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
+        vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, "../"+inputfolder);
 		double tac_percent_simulated_this_pop= tac_percent_simulated[sp];
 		double landings_so_far=0;
 
@@ -1279,13 +1279,13 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 
 	//input data, metier characteristics: selectivty ogives, beta per pop
-	multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder);
-	multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, inputfolder);
-	multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
-	map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
-	map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, inputfolder);
-	map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, inputfolder);
-	map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
+    multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
+    map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, "../"+inputfolder);
+    map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, "../"+inputfolder);
+    map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, "../"+inputfolder);
+    map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, "../"+inputfolder);
 
 	// get the name of the metiers
 	// copy only unique elements of sel_ogives into name_metiers
@@ -1312,7 +1312,7 @@ int main(int argc, char* argv[])
 		double gear_width_a                        = metiers_gear_widths_param_a[ i ];
 		double gear_width_b                        = metiers_gear_widths_param_b[ i ];
 		string gear_width_model                    = metiers_gear_widths_model_type[ i ];
-		multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, inputfolder);
+        multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, "../"+inputfolder);
 
 		metiers[i] =  new Metier(metier_name,
 			metier_type,
@@ -1356,7 +1356,7 @@ int main(int argc, char* argv[])
 	vector<double> vmaxs;
 	vector<double> vcruises;
 	vector<double> lane_ids;
-	read_ships_features(shipids, vmaxs, vcruises, lane_ids, folder_name_parameterization, inputfolder);
+    read_ships_features(shipids, vmaxs, vcruises, lane_ids, folder_name_parameterization, "../"+inputfolder);
 
 	// init the ship lanes (just fake examples as a matter of proof here...)
 	double the_lats1[] =		 // y
@@ -1442,17 +1442,17 @@ int main(int argc, char* argv[])
 	read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
 		resttime_par1s, resttime_par2s, av_trip_duration,
-		folder_name_parameterization, inputfolder, selected_vessels_only);
+        folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
 
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
-	multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-	multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
 
-	multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-	multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
-	multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-	multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
+    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization,"../"+ inputfolder);
 
 	// debug
 	if(fgrounds.size() != freq_fgrounds.size())
@@ -1469,7 +1469,7 @@ int main(int argc, char* argv[])
 	}
 
 	// read nodes in polygons for area-based management
-	multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
+    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, "../"+inputfolder);
 
 	// check
 	//for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -1501,12 +1501,12 @@ int main(int argc, char* argv[])
 		cout<<"create vessel " << i << endl;
 		// read vessel and quarter specific multimap
 		// quarter specific to capture a piece of seasonality in the fishnig activity
-		possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-		freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
+        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
 
 		//cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
-		gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
-		gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
+        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
 
 		// debug
 		if(possible_metiers.size() != freq_possible_metiers.size())
@@ -1962,14 +1962,14 @@ int main(int argc, char* argv[])
 	//...so we need one object 'previous' for each potential departure i.e. each
 	// harbour and each fishing ground nodes.
 	cout << "the following loading procedure will fail if any NA within the files..." << endl;
-	multimap<string, int> node_fgrounds_Q1 = read_fgrounds("quarter1", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_fgrounds_Q2 = read_fgrounds("quarter2", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_fgrounds_Q3 = read_fgrounds("quarter3", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_fgrounds_Q4 = read_fgrounds("quarter4", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_harbours_Q1 = read_harbours("quarter1", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_harbours_Q2 = read_harbours("quarter2", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_harbours_Q3 = read_harbours("quarter3", folder_name_parameterization, inputfolder);
-	multimap<string, int> node_harbours_Q4 = read_harbours("quarter4", folder_name_parameterization, inputfolder);
+    multimap<string, int> node_fgrounds_Q1 = read_fgrounds("quarter1", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_fgrounds_Q2 = read_fgrounds("quarter2", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_fgrounds_Q3 = read_fgrounds("quarter3", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_fgrounds_Q4 = read_fgrounds("quarter4", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_harbours_Q1 = read_harbours("quarter1", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_harbours_Q2 = read_harbours("quarter2", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_harbours_Q3 = read_harbours("quarter3", folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> node_harbours_Q4 = read_harbours("quarter4", folder_name_parameterization, "../"+inputfolder);
 
 	// get all possible node_harbours (for all quarters, caution!)
 	// from the multimap
@@ -2107,10 +2107,10 @@ int main(int argc, char* argv[])
 
 				dout << "existing paths for the node: "<< relevant_nodes.at(i) << endl;
 								 // these maps come from SimplifyThePreviousMap()
-				previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
 				dout << ":: "<<  endl;
 								 // these maps come from SimplifyThePreviousMap()
-				min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
 
 			}
 			else
@@ -2125,13 +2125,13 @@ int main(int argc, char* argv[])
 								 // 'previous' is not modified but a new 'previous' is exported into a file here....
 				SimplifyThePreviousMap(relevant_nodes.at(i), previous,
 					relevant_nodes, min_distance,
-					namefolderinput, inputfolder, a_graph_name);
+                    namefolderinput, "../"+inputfolder, a_graph_name);
 				min_distance.clear();
 				previous.clear();
 								 // these maps come from SimplifyThePreviousMap()
-				previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
 								 // these maps come from SimplifyThePreviousMap()
-				min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
 
 			}
 
@@ -2345,10 +2345,10 @@ int main(int argc, char* argv[])
 	ofstream SMS_F_in;
 
 	// read list of tsteps with discrete events
-	vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, inputfolder);
-	vector <int> tsteps_semesters = read_tsteps_semesters( folder_name_parameterization, inputfolder);
-	vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization, inputfolder);
-	vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, inputfolder);
+    vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, "../"+inputfolder);
+    vector <int> tsteps_semesters = read_tsteps_semesters( folder_name_parameterization, "../"+inputfolder);
+    vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization,"../"+inputfolder);
+    vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, "../"+inputfolder);
 	int count_quarters=1;
 
 	// get a vector v filled in with 1 to n
@@ -3182,25 +3182,25 @@ int main(int argc, char* argv[])
 			read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
 				carrycapacities, tankcapacities, nbfpingspertrips,
 				resttime_par1s, resttime_par2s, av_trip_duration,
-				folder_name_parameterization, inputfolder, selected_vessels_only);
+                folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
 
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
 			// also quarter specific but semester specific for the betas because of the survey design they are comning from...
-			fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-			harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
-			freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-			freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
-			vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
-			vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
+            fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
+            freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
+            vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
+            vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
 			dout << "re-read data...OK" << endl;
 
 								 // LOOP OVER VESSELS
 			for (unsigned int v=0; v<vessels.size(); v++)
 			{
-				possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-				freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-				gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-				gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
+                possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
+                freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
+                gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
+                gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
 				spe_fgrounds = find_entries_s_i(fgrounds, vesselids.at(v));
 				spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
 				spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids.at(v));
@@ -3226,7 +3226,7 @@ int main(int argc, char* argv[])
 				vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
 
 				// re-read nodes in polygons for area-based management
-				nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
+                nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization,"../"+ inputfolder);
 
 				vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
 				vessels.at(v)->set_spe_harbours(spe_harbours);
@@ -3374,7 +3374,7 @@ int main(int argc, char* argv[])
 			}					 // end a_vesselid
 
 			// RE-read for metiers
-			metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
+            metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
 			for (int m=0; m<metiers.size(); m++)
 			{
 				// casting m into a string
@@ -3453,12 +3453,12 @@ int main(int argc, char* argv[])
 					out << i;
 
 					// read a new spatial_availability
-					multimap<int,double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
-					multimap<int,double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
+                    multimap<int,double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, "../"+inputfolder,  str_rand_avai_file);
+                    multimap<int,double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, "../"+inputfolder,  str_rand_avai_file);
 					populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 					// read a other landings per node for this species
-					map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder);
+                    map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, i, folder_name_parameterization,"../"+ inputfolder);
 					populations.at(i)->set_oth_land(oth_land);
 
 					//then, re-set the list_nodes and the pop_names_on_node
@@ -3498,7 +3498,7 @@ int main(int argc, char* argv[])
 					}
 
 					// re-read presence node for this semester
-					multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
+                    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
 
 					// finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in do_catch)
 					// 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)

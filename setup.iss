@@ -59,6 +59,7 @@ Source: C:\Qt\5.3\mingw482_32\bin\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}
+Source: C:\Qt\5.3\mingw482_32\plugins\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

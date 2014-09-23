@@ -31,7 +31,8 @@ SOURCES += \
     simulator.cpp \
     objects/objecttreeentity.cpp \
     objects/layerentity.cpp \
-    objects/harbourentity.cpp
+    objects/harbourentity.cpp \
+    scenario.cpp
 
 FORMS += \
     mainwindow.ui
@@ -44,7 +45,9 @@ HEADERS += \
     simulator.h \
     objects/objecttreeentity.h \
     objects/layerentity.h \
-    objects/harbourentity.h
+    objects/harbourentity.h \
+    scenario.h \
+    exceptions.h
 
 RESOURCES += \
     qtgui.qrc

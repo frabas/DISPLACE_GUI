@@ -41,6 +41,10 @@ private slots:
     void on_cmdStart_clicked();
     void on_cmdStop_clicked();
 
+    void on_actionScenario_triggered();
+
+    void on_actionSave_triggered();
+
 signals:
     void modelStateChanged();
 

@@ -39,15 +39,25 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
     <property name="title">
      <string>&amp;Model</string>
     </property>
-    <addaction name="action_Load"/>
+    <addaction name="actionScenario"/>
    </widget>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Load"/>
+    <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -227,6 +237,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_Load"/>
+   <addaction name="actionSave"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
@@ -235,6 +246,29 @@
    </property>
    <property name="text">
     <string>&amp;Load...</string>
+   </property>
+  </action>
+  <action name="actionScenario">
+   <property name="text">
+    <string>Scenario...</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save...</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
    </property>
   </action>
  </widget>

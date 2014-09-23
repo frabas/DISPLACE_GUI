@@ -116,7 +116,7 @@ void MainWindow::on_action_Load_triggered()
         // load the model named x
 
         models[0] = new DisplaceModel();
-        models[0]->load(d.absolutePath(), parts.at(1));
+        models[0]->load(d.absolutePath(), parts.at(1), "baseline");
 
 //        updateModelList();
 //        ui->modelSelector->setCurrentIndex(0);
@@ -203,5 +203,23 @@ void MainWindow::on_cmdStop_clicked()
 {
     if (mSimulation && mSimulation->isRunning()) {
         mSimulation->forceStop();
+    }
+}
+
+void MainWindow::on_actionScenario_triggered()
+{
+
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    if (models[0] && models[0]->save()) {
+        QMessageBox::information(this, tr("Model saved"),
+                                 QString(tr("The model %1 has been saved successfully.")).arg(models[0]->name()));
+        return;
+    } else {
+        QMessageBox::warning(this, tr("Load failed"),
+                             tr("There was an error saving the model."));
+        return;
     }
 }

@@ -1,4 +1,5 @@
 #include "displacemodel.h"
+#include <exceptions.h>
 
 #include <qdebug.h>
 
@@ -16,7 +17,13 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
 
     /* Load files ... */
 
-    mScenario = Scenario::readFromFile(mName, mBasePath, mOutputName);
+    try {
+        mScenario = Scenario::readFromFile(mName, mBasePath, mOutputName);
+
+    } catch (DisplaceException &ex) {
+        mLastError = ex.what();
+        return false;
+    }
 
     return true;
 }

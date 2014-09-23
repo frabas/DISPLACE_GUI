@@ -133,9 +133,9 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     int nrow_graph;
     double graph_res;
 
-    if (!read_scenario_config_file (
-        modelname.toStdString(),
+    if (read_scenario_config_file (        
         path.toStdString(),
+        modelname.toStdString(),
         outputname.toStdString(),
         dyn_alloc_sce,
         dyn_pop_sce,
@@ -145,9 +145,10 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
         nrow_graph,
         a_port,
         graph_res
-        ))
-
-        throw DisplaceException(QString(QObject::tr("Cannot load scenario file: %1")).arg(strerror(errno)));
+        ) < 0)
+        throw DisplaceException(QString(QObject::tr("Cannot load scenario file: %1 - %2"))
+                                .arg(::getLastErrorMessage().c_str())
+                                .arg(strerror(errno)));
 
     Scenario s;
 

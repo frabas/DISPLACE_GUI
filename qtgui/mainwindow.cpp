@@ -10,6 +10,8 @@
 #include <openseamapadapter.h>
 #include <simulator.h>
 
+#include <scenariodialog.h>
+
 #include <QBoxLayout>
 #include <QTextEdit>
 #include <QSettings>
@@ -23,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     models(),
+    currentModel(0),
+    currentModelIdx(0),
     mSimulation(0),
     map(0),
     mapadapter(0),
@@ -115,11 +119,14 @@ void MainWindow::on_action_Load_triggered()
 
         // load the model named x
 
-        models[0] = new DisplaceModel();
-        models[0]->load(d.absolutePath(), parts.at(1), "baseline");
+        DisplaceModel *m = new DisplaceModel();
 
-//        updateModelList();
-//        ui->modelSelector->setCurrentIndex(0);
+        if (!m->load(d.absolutePath(), parts.at(1), "baseline")) {
+            QMessageBox::warning(this, tr("Load failed."),
+                                 QString(tr("Error loading model %1: %2")).arg(parts.at(1)).arg(m->getLastError()));
+            return;
+        }
+        models[0] = m;
 
         emit modelStateChanged();
     }
@@ -127,7 +134,12 @@ void MainWindow::on_action_Load_triggered()
 
 void MainWindow::on_modelSelector_currentIndexChanged(int index)
 {
-    treemodel->setCurrentModel(models[ui->modelSelector->itemData(index).toInt()]);
+    currentModelIdx = ui->modelSelector->itemData(index).toInt();
+    if (currentModelIdx >= 0)
+        currentModel = models[currentModelIdx];
+    else
+        currentModel = 0;
+    treemodel->setCurrentModel(currentModel);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -208,7 +220,13 @@ void MainWindow::on_cmdStop_clicked()
 
 void MainWindow::on_actionScenario_triggered()
 {
-
+    if (currentModel) {
+        Scenario d = currentModel->scenario();
+        ScenarioDialog dlg (d, this);
+        if (dlg.exec() == QDialog::Accepted) {
+            currentModel->setScenario(dlg.getScenario());
+        }
+    }
 }
 
 void MainWindow::on_actionSave_triggered()

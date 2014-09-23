@@ -29,6 +29,10 @@ public:
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
 
+    //
+
+    QString getLastError() const { return mLastError; }
+
 protected:
 
 
@@ -40,6 +44,10 @@ private:
     Scenario mScenario;
 
     QList<Harbour> mHarbours;
+
+    // ---
+
+    QString mLastError;
 };
 
 #endif // DISPLACEMODEL_H

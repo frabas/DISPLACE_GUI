@@ -57,6 +57,8 @@ private:
 
     // Data model
     DisplaceModel *models[MAX_MODELS];
+    DisplaceModel *currentModel;
+    int currentModelIdx;
     Simulator *mSimulation;
 
     // Geospatial objects

@@ -1,5 +1,4 @@
 #include "displacemodel.h"
-#include <objects/Ships.h>
 
 #include <qdebug.h>
 
@@ -14,17 +13,15 @@ bool DisplaceModel::load(QString path, QString modelname)
     mName = modelname;
     mBasePath = path;
 
-    mShips = Ship::readFromFile(mName, mBasePath);
-
     return true;
 }
 
-int DisplaceModel::getShipCount() const
+int DisplaceModel::getHarboursCount() const
 {
-    return mShips.size();
+    return mHarbours.size();
 }
 
-QString DisplaceModel::getShipId(int idx) const
+QString DisplaceModel::getHarbourId(int idx) const
 {
-    return mShips.at(idx).name();
+    return QString(mHarbours.at(idx).get_name().c_str());
 }

@@ -28,10 +28,10 @@ SOURCES += \
     wrapperwidget.cpp \
     objecttreemodel.cpp \
     displacemodel.cpp \
-    objects/Ships.cpp \
     simulator.cpp \
     objects/objecttreeentity.cpp \
-    objects/layerentity.cpp
+    objects/layerentity.cpp \
+    objects/harbourentity.cpp
 
 FORMS += \
     mainwindow.ui
@@ -41,10 +41,10 @@ HEADERS += \
     wrapperwidget.h \
     objecttreemodel.h \
     displacemodel.h \
-    objects/Ships.h \
     simulator.h \
     objects/objecttreeentity.h \
-    objects/layerentity.h
+    objects/layerentity.h \
+    objects/harbourentity.h
 
 RESOURCES += \
     qtgui.qrc

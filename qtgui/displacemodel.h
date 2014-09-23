@@ -1,10 +1,10 @@
 #ifndef DISPLACEMODEL_H
 #define DISPLACEMODEL_H
 
+#include <Harbour.h>
+
 #include <QString>
 #include <QList>
-
-class Ship;
 
 class DisplaceModel
 {
@@ -18,14 +18,17 @@ public:
     QString basepath() const { return mBasePath; }
     bool isModelLoaded() const { return !mName.isEmpty(); }
 
-    int getShipCount() const;
-    QString getShipId(int idx) const;
+    int getHarboursCount() const;
+    QString getHarbourId(int idx) const;
+
+protected:
+
 
 private:
     QString mName;
     QString mBasePath;
 
-    QList<Ship> mShips;
+    QList<Harbour> mHarbours;
 };
 
 #endif // DISPLACEMODEL_H

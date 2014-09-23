@@ -27,13 +27,18 @@
 #define MAPCONTROL_H
 
 #include "qmapcontrol_global.h"
-#include "layermanager.h"
 #include "layer.h"
+#include "layermanager.h"
 #include "mapadapter.h"
 #include "geometry.h"
 #include "imagemanager.h"
 
 #include <QWidget>
+
+QT_BEGIN_NAMESPACE
+class QPainter;
+QT_END_NAMESPACE
+
 
 //! QMapControl namespace
 namespace qmapcontrol

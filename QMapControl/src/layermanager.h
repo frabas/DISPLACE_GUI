@@ -31,9 +31,15 @@
 #include <QMap>
 #include <QListIterator>
 #include <QRectF>
+#include <QPixmap>
 #include "layer.h"
 #include "mapadapter.h"
 #include "mapcontrol.h"
+
+QT_BEGIN_NAMESPACE
+class QMouseEvent;
+class QPainter;
+QT_END_NAMESPACE
 
 namespace qmapcontrol
 {

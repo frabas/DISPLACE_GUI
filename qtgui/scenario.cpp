@@ -15,6 +15,14 @@ QStringList Scenario::getDyn_alloc_sce() const
     return dyn_alloc_sce;
 }
 
+std::vector<string> Scenario::getDyn_alloc_sce_asVector() const
+{
+    std::vector<string> vec;
+    foreach (QString s, dyn_alloc_sce)
+        vec.push_back(s.toStdString());
+    return vec;
+}
+
 void Scenario::setDyn_alloc_sce(const QStringList &value)
 {
     dyn_alloc_sce = value;
@@ -23,6 +31,14 @@ void Scenario::setDyn_alloc_sce(const QStringList &value)
 QStringList Scenario::getDyn_pop_sce() const
 {
     return dyn_pop_sce;
+}
+
+std::vector<string> Scenario::getDyn_pop_sce_asVector() const
+{
+    std::vector<string> vec;
+    foreach (QString s, dyn_pop_sce)
+        vec.push_back(s.toStdString());
+    return vec;
 }
 
 void Scenario::setDyn_pop_sce(const QStringList &value)

@@ -21,8 +21,12 @@ public:
     Scenario();
 
     QStringList getDyn_alloc_sce() const;
+    std::vector<std::string> getDyn_alloc_sce_asVector() const;
+
     void setDyn_alloc_sce(const QStringList &value);
     QStringList getDyn_pop_sce() const;
+    std::vector<std::string> getDyn_pop_sce_asVector() const;
+
     void setDyn_pop_sce(const QStringList &value);
     QString getBiolsce() const;
     void setBiolsce(const QString &value);

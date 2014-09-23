@@ -88,21 +88,6 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
 
         return QVariant(entityNames[index.row()]);
     } else if(!isRootLevel(index)) {
-        /*
-        quint64 type = parCatFromId(index.internalId());
-        switch (type) {
-        case Layers:
-        case Vessels:
-            if (index.column() == 0 && role == Qt::DisplayRole)
-                return QString(mModel->getShipId(index.row()));
-            return QVariant();
-        case Nodes:
-            if (index.column() != 0 && role == Qt::DisplayRole)
-                return QString(tr("Node %1")).arg(index.row());
-            return QVariant();
-        }
-        */
-
         return entity(index)->data(index, role);
     }
 
@@ -140,7 +125,12 @@ void ObjectTreeModel::setCurrentModel(DisplaceModel *model)
 
 QModelIndex ObjectTreeModel::createCategoryEntity(int row, int column, Category cat) const
 {
-    return createIndex(row, column, entityTemplates[row]);
+    return createIndex(row, column, entityTemplates[cat]);
+}
+
+QModelIndex ObjectTreeModel::createCategoryEntityFromChild(ObjectTreeModel::Category cat) const
+{
+    return createIndex(cat, 0, entityTemplates[cat]);
 }
 
 QModelIndex ObjectTreeModel::createEntity(int row, int column, objecttree::ObjectTreeEntity *entity) const

@@ -19,7 +19,7 @@ LayerEntity::~LayerEntity()
 QModelIndex LayerEntity::parent(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return model->createCategoryEntity(0, 0, ObjectTreeModel::Layers);
+    return model->createCategoryEntityFromChild(ObjectTreeModel::Layers);
 }
 
 QModelIndex LayerEntity::index(int row, int column, const QModelIndex &parent) const
@@ -66,7 +66,6 @@ QVariant LayerEntity::data(const QModelIndex &index, int role) const
 Qt::ItemFlags LayerEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
 {
     if (mLayerEntityIndex != -1 && index.column() == 1) {
-        qDebug() << "Index at " << index << " is user checkable";
         return defFlags | Qt::ItemIsUserCheckable;
     }
 

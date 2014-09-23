@@ -2,7 +2,9 @@
 #define DISPLACEMODEL_H
 
 #include <scenario.h>
+#include <config.h>
 
+#include <Node.h>
 #include <Harbour.h>
 
 #include <QString>
@@ -34,7 +36,7 @@ public:
     QString getLastError() const { return mLastError; }
 
 protected:
-
+    bool loadNodes();
 
 private:
     QString mName;
@@ -42,9 +44,10 @@ private:
     QString mOutputName;
 
     Scenario mScenario;
+    Config mConfig;
 
-    QList<Harbour> mHarbours;
-
+    QList<Harbour *> mHarbours;
+    QList<Node *> mNodes;
     // ---
 
     QString mLastError;

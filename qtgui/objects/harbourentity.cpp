@@ -15,7 +15,7 @@ HarbourEntity::HarbourEntity(ObjectTreeModel *_model, int id)
 QModelIndex HarbourEntity::parent(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return model->createCategoryEntity(0, 0, ObjectTreeModel::Harbours);
+    return model->createCategoryEntityFromChild(ObjectTreeModel::Harbours);
 }
 
 QModelIndex HarbourEntity::index(int row, int column, const QModelIndex &parent) const
@@ -41,8 +41,9 @@ int HarbourEntity::columnCount() const
 
 QVariant HarbourEntity::data(const QModelIndex &index, int role) const
 {
-    if (mHarbourId == -1 && model->getModel() != 0 && role == Qt::DisplayRole)
-        return model->getModel()->getHarbourId(index.row());
+    if (mHarbourId != -1 && model->getModel() != 0 && role == Qt::DisplayRole && index.column() == 0) {
+        return model->getModel()->getHarbourId(mHarbourId);
+    }
 
     return QVariant();
 }

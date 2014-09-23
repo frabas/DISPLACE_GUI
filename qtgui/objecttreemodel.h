@@ -40,6 +40,7 @@ public:
 
     // For use from ObjectTreeEntities
     QModelIndex createCategoryEntity(int row, int column, Category cat) const;
+    QModelIndex createCategoryEntityFromChild (Category cat) const;
     QModelIndex createEntity (int row, int column, objecttree::ObjectTreeEntity *entity) const;
 
     DisplaceModel *getModel() const { return mModel; }
@@ -61,7 +62,9 @@ protected:
     }
 
     bool isCategoryLevel (const QModelIndex &level) const { // level.internalId() > 0 && level.internalId() < LastCategory
-        return level.isValid() && (level.internalPointer() == 0 || level.internalPointer() == entityTemplates[level.row()]);
+        return level.isValid() &&
+                (level.row() < entityTemplates.size() &&
+                     level.internalPointer() == entityTemplates[level.row()]);
     }
 
     objecttree::ObjectTreeEntity *entity (const QModelIndex &index) const;

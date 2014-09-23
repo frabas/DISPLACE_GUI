@@ -1,13 +1,38 @@
 #include "objecttreemodel.h"
 
+#include <objects/objecttreeentity.h>
+#include <objects/layerentity.h>
+
 #include <displacemodel.h>
 #include <mapcontrol.h>
+
+QList<objecttree::ObjectTreeEntity *> ObjectTreeModel::entityTemplates;
+QString ObjectTreeModel::entityNames[] = {
+    QT_TR_NOOP_UTF8("Layers"),
+    QT_TR_NOOP_UTF8("Output Layers"),
+    QT_TR_NOOP_UTF8("Nodes"),
+    QT_TR_NOOP_UTF8("Harbours"),
+    QT_TR_NOOP_UTF8("Vessels"),
+    QT_TR_NOOP_UTF8("Populations"),
+    QT_TR_NOOP_UTF8("Benthos"),
+};
 
 ObjectTreeModel::ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model, QObject *parent) :
     QAbstractItemModel(parent),
     mMapControl(map),
     mModel (model)
 {
+    if (entityTemplates.size() == 0) {
+        // Registers all entity templaes
+        entityTemplates.reserve(LastCategory);
+
+        for (int i = 0; i < LastCategory; ++i)
+            entityTemplates.push_back(0);
+
+        entityTemplates[Layers] = new objecttree::LayerEntity(this);
+
+        qDebug() << "initialized EntityTemplates: " << entityTemplates.size();
+    }
 }
 
 int ObjectTreeModel::columnCount(const QModelIndex &parent) const
@@ -15,43 +40,22 @@ int ObjectTreeModel::columnCount(const QModelIndex &parent) const
     Q_UNUSED(parent);
 
     if (isCategoryLevel(parent)) {
-        Categories cat = catFromId(parent.internalId());
-
-        if (cat != Layers && mModel == 0)
-            return 0;
-
-        switch (cat) {
-        case Layers:
-            return 2;
-        default:
-            return 2;
-        }
     }
-    // all levels have just one column, for now.
+
     return 2;
 }
 
 int ObjectTreeModel::rowCount(const QModelIndex &parent) const
 {
     if (isRootLevel(parent)) { // Categories level
-        return LastCategory-1;  // category starts from 1!
+        return LastCategory;
     } else if (isCategoryLevel(parent)) {
-        Categories cat = catFromId(parent.internalId());
-
-        if (cat != Layers && mModel == 0)
-            return 0;
-
-        switch (cat) {
-        case Layers:
-            return mMapControl->numberOfLayers();
-        case Vessels:
-            return mModel->getShipCount();
-        default:
-            return 4;
-        }
+        if (entityTemplates[parent.row()])
+            return entityTemplates[parent.row()]->rowCount();
+        return 0;
+    } else {
+        return entity(parent)->rowCount();
     }
-
-    return 0;
 }
 
 QModelIndex ObjectTreeModel::parent(const QModelIndex &child) const
@@ -59,20 +63,18 @@ QModelIndex ObjectTreeModel::parent(const QModelIndex &child) const
     if (isRootLevel(child) || isCategoryLevel(child))
         return QModelIndex();
 
-    return createIndex(0, 0, idWithCat(0, parCatFromId(child.internalId())));
+    return entity(child)->parent(child);
 }
 
 QModelIndex ObjectTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (isRootLevel(parent)) {
-        quint64 id = idWithCat(0, (Categories)(row+1));
-        return createIndex(row, column, id);
+        return createCategoryEntity(row, column, (Category)row);
     } else if (isCategoryLevel(parent)) {
-        quint64 id = idWithParCat(row, catFromId(parent.internalId()));
-        return createIndex (row, column, id);
+        return entityTemplates[parent.row()]->index(row, column, parent);
+    } else {
+        return entity(parent)->index(row, column, parent);
     }
-
-    return QModelIndex();
 }
 
 QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
@@ -81,35 +83,15 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
         if (role != Qt::DisplayRole)
             return QVariant();
 
-        quintptr cat = catFromId(index.internalId());
-
         if (index.column() != 0)
-        return QVariant();
+          return QVariant();
 
-        switch (cat) {
-        case Layers:
-            return QString(tr("Layers"));
-        case Vessels:
-            return QString(tr("Vessels"));
-        case Nodes:
-            return QString(tr("Nodes"));
-        }
-
-        return QVariant();
-    } else if(isObjectLevel(index)) {
+        return QVariant(entityNames[index.row()]);
+    } else if(!isRootLevel(index)) {
+        /*
         quint64 type = parCatFromId(index.internalId());
         switch (type) {
         case Layers:
-            switch (index.column()) {
-            case 0:
-                if (role != Qt::DisplayRole)
-                    return QVariant();
-                return QString(mMapControl->layerNameAt(index.row()));
-            case 1:
-                if (role == Qt::CheckStateRole)
-                    return QVariant(mMapControl->layerAt(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
-                return QVariant();
-            }
         case Vessels:
             if (index.column() == 0 && role == Qt::DisplayRole)
                 return QString(mModel->getShipId(index.row()));
@@ -119,6 +101,9 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
                 return QString(tr("Node %1")).arg(index.row());
             return QVariant();
         }
+        */
+
+        return entity(index)->data(index, role);
     }
 
     return QVariant();
@@ -126,21 +111,22 @@ QVariant ObjectTreeModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags ObjectTreeModel::flags(const QModelIndex &index) const
 {
-    if(isObjectLevel(index) && index.column() == 1)
-        return QAbstractItemModel::flags(index) | Qt::ItemIsUserCheckable;
+    if (!isCategoryLevel(index) && !isRootLevel(index))
+        return entity(index)->flags(QAbstractItemModel::flags(index), index);
+
     return QAbstractItemModel::flags(index);
+
 }
 
 bool ObjectTreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(isObjectLevel(index) && index.column() == 1 && role == Qt::CheckStateRole) {
-        if (value.toInt() == 0) {
-            mMapControl->layerAt(index.row())->setVisible(false);
-        } else {
-            mMapControl->layerAt(index.row())->setVisible(true);
+    qDebug() << "ObjData " << index << value << role;
+
+    if (!isCategoryLevel(index) && !isRootLevel(index)) {
+        if (entity(index)->setData(index, value, role)) {
+            emit dataChanged(index, index);
+            return true;
         }
-        emit dataChanged(index, index);
-        return true;
     }
     return false;
 }
@@ -150,4 +136,19 @@ void ObjectTreeModel::setCurrentModel(DisplaceModel *model)
     beginResetModel();
     mModel = model;
     endResetModel();
+}
+
+QModelIndex ObjectTreeModel::createCategoryEntity(int row, int column, Category cat) const
+{
+    return createIndex(row, column, entityTemplates[row]);
+}
+
+QModelIndex ObjectTreeModel::createEntity(int row, int column, objecttree::ObjectTreeEntity *entity) const
+{
+    return createIndex(row, column, entity);
+}
+
+objecttree::ObjectTreeEntity *ObjectTreeModel::entity(const QModelIndex &index) const
+{
+    return (objecttree::ObjectTreeEntity*)index.internalPointer();
 }

@@ -29,7 +29,9 @@ SOURCES += \
     objecttreemodel.cpp \
     displacemodel.cpp \
     objects/Ships.cpp \
-    simulator.cpp
+    simulator.cpp \
+    objects/objecttreeentity.cpp \
+    objects/layerentity.cpp
 
 FORMS += \
     mainwindow.ui
@@ -40,7 +42,9 @@ HEADERS += \
     objecttreemodel.h \
     displacemodel.h \
     objects/Ships.h \
-    simulator.h
+    simulator.h \
+    objects/objecttreeentity.h \
+    objects/layerentity.h
 
 RESOURCES += \
     qtgui.qrc

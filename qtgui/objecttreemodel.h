@@ -2,6 +2,7 @@
 #define OBJECTTREEMODEL_H
 
 #include <QAbstractItemModel>
+#include <QList>
 
 class DisplaceModel;
 
@@ -9,20 +10,22 @@ namespace qmapcontrol {
 class MapControl;
 }
 
+namespace objecttree {
+class ObjectTreeEntity;
+}
+
 class ObjectTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    enum Categories {
-        Layers = 1, Vessels, Nodes,
+public:
+    enum Category {
+        Layers = 0,
+        OutputLayers,
+        Nodes, Harbours, Vessels, Populations, Benthos,
         LastCategory
     };
 
-#define CATPOS 28
-#define PARCATPOS 24
-#define CATMASK 0x0f
-
-public:
     explicit ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model = 0, QObject *parent = 0);
 
     int columnCount(const QModelIndex &parent) const;
@@ -34,6 +37,13 @@ public:
     bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
 
     void setCurrentModel (DisplaceModel *model);
+
+    // For use from ObjectTreeEntities
+    QModelIndex createCategoryEntity(int row, int column, Category cat) const;
+    QModelIndex createEntity (int row, int column, objecttree::ObjectTreeEntity *entity) const;
+
+    DisplaceModel *getModel() const { return mModel; }
+    qmapcontrol::MapControl *getMapControl() const { return mMapControl; }
 
 signals:
 
@@ -50,26 +60,14 @@ protected:
         return !level.isValid();
     }
 
-    bool isCategoryLevel (const QModelIndex &level) const {
-        return level.isValid() && catFromId(level.internalId()) != 0;
+    bool isCategoryLevel (const QModelIndex &level) const { // level.internalId() > 0 && level.internalId() < LastCategory
+        return level.isValid() && (level.internalPointer() == 0 || level.internalPointer() == entityTemplates[level.row()]);
     }
 
-    bool isObjectLevel (const QModelIndex &level) const {
-        return level.isValid() && parCatFromId(level.internalId()) != 0;
-    }
+    objecttree::ObjectTreeEntity *entity (const QModelIndex &index) const;
 
-    Categories catFromId(quintptr id) const {
-        return (Categories)((id >> CATPOS) & CATMASK);
-    }
-    Categories parCatFromId(quintptr id) const {
-        return (Categories)((id >> PARCATPOS) & CATMASK);
-    }
-    quintptr idWithCat(quintptr id, Categories cat) const {
-        return (id & ~(CATMASK << CATPOS)) | (cat << CATPOS);
-    }
-    quintptr idWithParCat(quintptr id, Categories parcat) const {
-        return (id & ~(CATMASK << PARCATPOS)) | (parcat << PARCATPOS);
-    }
+    static QList<objecttree::ObjectTreeEntity *> entityTemplates;
+    static QString entityNames[];
 };
 
 #endif // OBJECTTREEMODEL_H

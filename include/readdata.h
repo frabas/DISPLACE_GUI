@@ -37,19 +37,18 @@ vector<double>& a_vector_line8,
 vector<double>& a_vector_line10
 );
 
-void read_scenario_config_file (
-string folder_name_parameterization,
-string inputfolder,
-string namefolderoutput,
-vector<string>& dyn_alloc_sce,
-vector<string>& dyn_pop_sce,
-string& biolsce,
-int& a_graph,
-int& nrow_coord,
-int& nrow_graph,
-int& a_port,
-double& graph_res
-);
+int read_scenario_config_file(
+    string folder_name_parameterization,
+    string inputfolder,
+    string namefolderoutput,
+    vector<string>& dyn_alloc_sce,
+    vector<string>& dyn_pop_sce,
+    string& biolsce,
+    int& a_graph,
+    int& nrow_coord,
+    int& nrow_graph,
+    int& a_port,
+    double& graph_res );
 
 // vessel specific
 void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,

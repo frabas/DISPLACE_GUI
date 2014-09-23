@@ -318,8 +318,8 @@ int main(int argc, char* argv[])
 		);
 
 	read_scenario_config_file (
-		folder_name_parameterization,
-		inputfolder,
+        folder_name_parameterization,
+        "../"+inputfolder,
 		namefolderoutput,
 		dyn_alloc_sce,
 		dyn_pop_sce,

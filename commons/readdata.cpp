@@ -119,29 +119,27 @@ vector<double>& a_vector_line10)
 read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-void read_scenario_config_file (
-string folder_name_parameterization,
-string inputfolder,
-string namefolderoutput,
-vector<string>& dyn_alloc_sce,
-vector<string>& dyn_pop_sce,
-string& biolsce,
-int& a_graph,
-int& nrow_coord,
-int& nrow_graph,
-int& a_port,
-double& graph_res
-)
+int read_scenario_config_file (
+    string folder_name_parameterization,
+    string inputfolder,
+    string namefolderoutput,
+    vector<string>& dyn_alloc_sce,
+    vector<string>& dyn_pop_sce,
+    string& biolsce,
+    int& a_graph,
+    int& nrow_coord,
+    int& nrow_graph,
+    int& a_port,
+    double& graph_res )
 {
-
-	string filename=  "../"+inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
+    string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
 
 	ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
 	{
 		open_file_error(filename);
-		//return 1;
+        return -1;
 	}
 
 	string line;
@@ -219,6 +217,7 @@ double& graph_res
 	}
 	cout << "read config file...OK" << endl << flush;
 
+    return 0;
 }
 
 

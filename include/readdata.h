@@ -26,6 +26,7 @@
 
 using namespace std;
 
+std::string getLastErrorMessage();
 void open_file_error(string filename);
 
 void read_config_file (string folder_name_parameterization,

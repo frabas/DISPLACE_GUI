@@ -35,11 +35,13 @@ prints file opening error message.
 @param filename, ...
 */
 
+static std::string error_msg;
+
 void open_file_error(string filename)
 {
-	cout << "error opening file " << filename <<"\n";
+    error_msg = "error opening file " + filename;
+    cout << error_msg << "\n";
 }
-
 
 /**
 read the settings for the siums given the case study
@@ -2146,4 +2148,10 @@ vector<int> some_max_nb_ages)
 	}
 	cout << "set Ns at szgroup from the SMS outcomes...OK" << endl << flush;
 
+}
+
+
+string getLastErrorMessage()
+{
+    return error_msg;
 }

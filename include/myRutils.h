@@ -45,7 +45,7 @@ double rlnorm(double meanlog, double sdlog);
 // distance between two points in long lat
 inline double dist (double x1, double y1, double x2, double y2)
 {
-	double p = 180/PI;
+    double p = 180/M_PI;
 	double Rearth = 6371.0;
 	double res = Rearth * acos(sin(y1/p)*sin(y2/p) + (cos(y1/p) * cos(y2/p)*cos(x1/p - x2/p)));
 	return(res);
@@ -55,7 +55,7 @@ inline double dist (double x1, double y1, double x2, double y2)
 // bearing between two points in long lat
 inline double bearing (double x1, double y1, double x2, double y2)
 {
-	double p = 180/PI;
+    double p = 180/M_PI;
 	double res = atan2(   sin((x2/p)-(x1/p))*cos(y2/p), cos(y1/p)*sin(y2/p)-sin(y1/p)*cos(y2/p)*cos((x2/p)-(x1/p)) );
 	return(res*p);
 }
@@ -65,7 +65,7 @@ inline double bearing (double x1, double y1, double x2, double y2)
 inline vector<double> destB (double x1, double y1, double angleAB, double distkm)
 {
 	vector<double> res(2);
-	double p = 180/PI;
+    double p = 180/M_PI;
 	double Rearth = 6371.0;
 								 // LAT
 	res[1] =  asin((sin(y1/p)*cos(distkm/Rearth)) + (cos(y1/p)*sin(distkm/Rearth)*cos(angleAB/p))) ;

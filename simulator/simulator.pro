@@ -11,9 +11,4 @@ macx {
     CONFIG -= app_bundle
 }
 
-SOURCES=Benthos.cpp \
-        Harbour.cpp \
-        Metier.cpp \
-        Ship.cpp \
-        Vessel.cpp \
-        main.cpp
+SOURCES= main.cpp

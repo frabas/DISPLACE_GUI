@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.1-2014092201"
+#define MyAppVersion "0.1.1-2014092401"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -42,7 +42,7 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 [Files]
 Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\qmapcontrol0.dll; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\QMapControl\QMapControl\src\QMapControl\lib\qmapcontrol1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: C:\lib\vcredist_x86.exe; DestDir: {tmp}

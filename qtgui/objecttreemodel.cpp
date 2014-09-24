@@ -6,7 +6,7 @@
 #include <objects/nodeentity.h>
 
 #include <displacemodel.h>
-#include <mapcontrol.h>
+#include <QMapControl/QMapControl.h>
 
 QList<objecttree::ObjectTreeEntity *> ObjectTreeModel::entityTemplates;
 QString ObjectTreeModel::entityNames[] = {
@@ -19,7 +19,7 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Benthos"),
 };
 
-ObjectTreeModel::ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model, QObject *parent) :
+ObjectTreeModel::ObjectTreeModel(qmapcontrol::QMapControl *map, DisplaceModel *model, QObject *parent) :
     QAbstractItemModel(parent),
     mMapControl(map),
     mModel (model)

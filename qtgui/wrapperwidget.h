@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace qmapcontrol {
-class MapControl;
+class QMapControl;
 }
 
 class WrapperWidget : public QWidget
@@ -13,7 +13,7 @@ class WrapperWidget : public QWidget
 public:
     explicit WrapperWidget(QWidget *parent = 0);
 
-    void setWidget(qmapcontrol::MapControl *w) {
+    void setWidget(qmapcontrol::QMapControl *w) {
         widget = w;
     }
 
@@ -25,7 +25,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    qmapcontrol::MapControl *widget;
+    qmapcontrol::QMapControl *widget;
 };
 
 #endif // WRAPPERWIDGET_H

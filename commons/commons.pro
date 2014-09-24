@@ -30,4 +30,5 @@ HEADERS= \
     ../include/Vessel.h \
     ../include/Metier.h \
     ../include/myRutils.h \
-    ../include/mkpath.h
+    ../include/mkpath.h \
+    ../include/m_constants.h

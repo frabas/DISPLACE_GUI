@@ -4,15 +4,17 @@
 #include <QMainWindow>
 #include <QProcess>
 
+#include <memory>
+
 namespace Ui {
 class MainWindow;
 }
 
 namespace qmapcontrol {
-class MapControl;
+class QMapControl;
 class MapAdapter;
-class MapLayer;
-class GeometryLayer;
+class LayerMapAdapter;
+class LayerGeometry;
 }
 
 class ObjectTreeModel;
@@ -63,13 +65,13 @@ private:
     Simulator *mSimulation;
 
     // Geospatial objects
-
-    qmapcontrol::MapControl *map;
-    qmapcontrol::MapAdapter *mapadapter;
-    qmapcontrol::MapAdapter *seamarkadapter;
-    qmapcontrol::MapLayer *mainlayer;
-    qmapcontrol::MapLayer *seamarklayer;
-    qmapcontrol::GeometryLayer *entitylayer;
+    //std::shared_ptr<qmapcontrol::QMapControl> map;
+    qmapcontrol::QMapControl *map;
+    std::shared_ptr<qmapcontrol::MapAdapter> mapadapter;
+    std::shared_ptr<qmapcontrol::MapAdapter> seamarkadapter;
+    std::shared_ptr<qmapcontrol::LayerMapAdapter> mainlayer;
+    std::shared_ptr<qmapcontrol::LayerMapAdapter> seamarklayer;
+    std::shared_ptr<qmapcontrol::LayerGeometry> entitylayer;
 
     // tree model adapter
     ObjectTreeModel *treemodel;

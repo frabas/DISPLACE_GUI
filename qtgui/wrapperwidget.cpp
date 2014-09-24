@@ -1,6 +1,6 @@
 #include "wrapperwidget.h"
 
-#include <mapcontrol.h>
+#include <QMapControl/QMapControl.h>
 #include <QResizeEvent>
 
 WrapperWidget::WrapperWidget(QWidget *parent) :

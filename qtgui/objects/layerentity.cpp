@@ -1,7 +1,8 @@
 #include <objects/LayerEntity.h>
 
 #include <objecttreemodel.h>
-#include <mapcontrol.h>
+#include <QMapControl/QMapControl.h>
+#include <QMapControl/Layer.h>
 
 namespace objecttree {
 
@@ -33,7 +34,7 @@ QModelIndex LayerEntity::index(int row, int column, const QModelIndex &parent) c
 int LayerEntity::rowCount() const
 {
     if (mLayerEntityIndex == -1)
-        return model->getMapControl()->numberOfLayers();
+        return model->getMapControl()->getLayers().size();
 
     return 0;
 }
@@ -52,10 +53,10 @@ QVariant LayerEntity::data(const QModelIndex &index, int role) const
         case 0:
             if (role != Qt::DisplayRole)
                 return QVariant();
-            return QString(model->getMapControl()->layerNameAt(index.row()));
+            return QString::fromStdString(model->getMapControl()->getLayers().at(index.row())->getName());
         case 1:
             if (role == Qt::CheckStateRole)
-                return QVariant(model->getMapControl()->layerAt(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
+                return QVariant(model->getMapControl()->getLayers().at(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
             return QVariant();
         }
     }
@@ -78,9 +79,9 @@ bool LayerEntity::setData(const QModelIndex &index, const QVariant &value, int r
 
     if(index.column() == 1 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
-            model->getMapControl()->layerAt(index.row())->setVisible(false);
+            model->getMapControl()->getLayers().at(index.row())->setVisible(false);
         } else {
-            model->getMapControl()->layerAt(index.row())->setVisible(true);
+            model->getMapControl()->getLayers().at(index.row())->setVisible(true);
         }
         return true;
     }

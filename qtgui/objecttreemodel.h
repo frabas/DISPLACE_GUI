@@ -7,7 +7,7 @@
 class DisplaceModel;
 
 namespace qmapcontrol {
-class MapControl;
+class QMapControl;
 }
 
 namespace objecttree {
@@ -26,7 +26,7 @@ public:
         LastCategory
     };
 
-    explicit ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *model = 0, QObject *parent = 0);
+    explicit ObjectTreeModel(qmapcontrol::QMapControl *map, DisplaceModel *model = 0, QObject *parent = 0);
 
     int columnCount(const QModelIndex &parent) const;
     int rowCount(const QModelIndex &parent) const;
@@ -44,14 +44,14 @@ public:
     QModelIndex createEntity (int row, int column, objecttree::ObjectTreeEntity *entity) const;
 
     DisplaceModel *getModel() const { return mModel; }
-    qmapcontrol::MapControl *getMapControl() const { return mMapControl; }
+    qmapcontrol::QMapControl *getMapControl() const { return mMapControl; }
 
 signals:
 
 public slots:
 
 private:
-    qmapcontrol::MapControl *mMapControl;
+    qmapcontrol::QMapControl *mMapControl;
     DisplaceModel *mModel;
 
 protected:

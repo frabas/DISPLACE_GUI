@@ -19,6 +19,7 @@
 // --------------------------------------------------------------------------
 
 #include <string>
+#include <m_constants.h>
 
 using namespace std;
 

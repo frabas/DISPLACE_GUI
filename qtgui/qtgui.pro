@@ -1,14 +1,22 @@
 TEMPLATE=app
 QT += core gui network
+CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
-INCLUDEPATH+=../include/ ../QMapControl/src/
+INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/
 
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol
+
+CONFIG(debug,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrold
+}
+CONFIG(release,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrol
+}
 
 macx {
     CONFIG -= app_bundle
@@ -17,10 +25,10 @@ macx {
 
 win32 {
     RC_FILE = qtgui.rc
-    QMAPCONTROL_LIB=qmapcontrol0
+    QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 }
 
-LIBS+=-L.. -ldisplacecommons -l$$QMAPCONTROL_LIB
+LIBS+=-L.. -ldisplacecommons -L..\QMapControl\QMapControl\src\QMapControl\lib -l$$QMAPCONTROL_LIB
 
 SOURCES += \
     main.cpp \

@@ -7,11 +7,12 @@
 #include <QMapControl/Layer.h>
 #include <QMapControl/MapAdapterOSM.h>
 #include <objecttreemodel.h>
-//#include <QMapControl/MapAdapterOpenSea.h>
+#include <QMapControl/MapAdapterOpenSeaMap.h>
 #include <simulator.h>
 #include <QMapControl/LayerGeometry.h>
 #include <QMapControl/GeometryPointCircle.h>
 #include <QMapControl/LayerMapAdapter.h>
+#include <QMapControl/ImageManager.h>
 
 #include <scenariodialog.h>
 
@@ -48,12 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
     simulatorProcessStateChanged(QProcess::NotRunning);
 
-   // map = std::shared_ptr<qmapcontrol::QMapControl>(new qmapcontrol::QMapControl(ui->mapWidget));
     map = new qmapcontrol::QMapControl(ui->mapWidget);
 
     QPixmap pixmap;
     pixmap.fill( Qt::white );
-//    map->setLoadingPixmap(pixmap);
+    qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
 
     QHBoxLayout *layout = new QHBoxLayout;
     ui->mapWidget->setLayout(layout);
@@ -61,24 +61,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mapWidget->setWidget(map);
 
-//    map->showScale(false);
-
-    //seamarkadapter = new qmapcontrol::OpenSeaMapAdapter();
-
     // create mapadapter, for mainlayer and overlay
     mapadapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
+    seamarkadapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOpenSeaMap());
 
     // create a layer with the mapadapter and type MapLayer
     mainlayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mapadapter));
-    //seamarklayer = new qmapcontrol::MapLayer("Seamark", seamarkadapter);
+    seamarklayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", seamarkadapter));
     entitylayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
 
     // add Layer to the MapControl
     map->addLayer(mainlayer);
-   // map->addLayer(seamarklayer);
+    map->addLayer(seamarklayer);
     map->addLayer(entitylayer);
 
-   // map->setView(QPointF(11.54105,54.49299));
+    map->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
     map->setZoom(10);
 
     /* Tree model setup */

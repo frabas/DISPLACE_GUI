@@ -33,7 +33,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer;
-
+    std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer;
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

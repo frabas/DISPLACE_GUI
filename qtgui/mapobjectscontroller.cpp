@@ -24,10 +24,12 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
     mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
+    mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
 
     // add Layer to the MapControl
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
+    mMap->addLayer(mGraphLayer);
     mMap->addLayer(mEntityLayer);
 
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
@@ -50,7 +52,7 @@ void MapObjectsController::updateMapObjects(DisplaceModel *model)
         NodeMapObject *obj = new NodeMapObject(nd);
         mNodeObjects.append(obj);
 
-        mEntityLayer->addGeometry(obj->getGeometryEntity());
+        mGraphLayer->addGeometry(obj->getGeometryEntity());
     }
 
 }

@@ -1,4 +1,4 @@
-#include <objects/LayerEntity.h>
+#include <objects/layerentity.h>
 
 #include <objecttreemodel.h>
 #include <QMapControl/QMapControl.h>

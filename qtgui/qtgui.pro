@@ -28,7 +28,7 @@ win32 {
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 }
 
-LIBS+=-L.. -ldisplacecommons -L..\QMapControl\QMapControl\src\QMapControl\lib -l$$QMAPCONTROL_LIB
+LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
 
 SOURCES += \
     main.cpp \

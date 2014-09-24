@@ -10,6 +10,8 @@
 #include <QString>
 #include <QList>
 
+class HarbourMapObject;
+
 class DisplaceModel
 {
 public:
@@ -24,11 +26,11 @@ public:
     QString outputName() const { return mOutputName; }
     bool isModelLoaded() const { return !mName.isEmpty(); }
 
+    const QList<Harbour *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
     int getNodesCount() const;
     QString getNodeId(int idx) const;
-
 
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);

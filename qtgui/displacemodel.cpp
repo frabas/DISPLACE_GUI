@@ -1,6 +1,8 @@
 #include "displacemodel.h"
 #include <exceptions.h>
 
+#include <mapobjects/harbourmapobject.h>
+
 #include <readdata.h>
 #include <qdebug.h>
 

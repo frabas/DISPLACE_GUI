@@ -2,19 +2,15 @@
 #include "ui_mainwindow.h"
 
 #include "displacemodel.h"
-
-#include <QMapControl/QMapControl.h>
-#include <QMapControl/Layer.h>
-#include <QMapControl/MapAdapterOSM.h>
+#include <mapobjectscontroller.h>
 #include <objecttreemodel.h>
-#include <QMapControl/MapAdapterOpenSeaMap.h>
 #include <simulator.h>
-#include <QMapControl/LayerGeometry.h>
-#include <QMapControl/GeometryPointCircle.h>
-#include <QMapControl/LayerMapAdapter.h>
-#include <QMapControl/ImageManager.h>
 
 #include <scenariodialog.h>
+
+#include <QMapControl/QMapControl.h>
+#include <QMapControl/ImageManager.h>
+
 
 #include <QBoxLayout>
 #include <QTextEdit>
@@ -32,9 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     currentModel(0),
     currentModelIdx(0),
     mSimulation(0),
+    mMapController(0),
     map(0),
-    mapadapter(0),
-    mainlayer(0),
     treemodel(0)
 {
     ui->setupUi(this);
@@ -50,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     simulatorProcessStateChanged(QProcess::NotRunning);
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
+    mMapController = new MapObjectsController(map);
 
     QPixmap pixmap;
     pixmap.fill( Qt::white );
@@ -60,23 +56,6 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(map);
 
     ui->mapWidget->setWidget(map);
-
-    // create mapadapter, for mainlayer and overlay
-    mapadapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
-    seamarkadapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOpenSeaMap());
-
-    // create a layer with the mapadapter and type MapLayer
-    mainlayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mapadapter));
-    seamarklayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", seamarkadapter));
-    entitylayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
-
-    // add Layer to the MapControl
-    map->addLayer(mainlayer);
-    map->addLayer(seamarklayer);
-    map->addLayer(entitylayer);
-
-    map->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
-    map->setZoom(10);
 
     /* Tree model setup */
     treemodel = new ObjectTreeModel(map);
@@ -127,6 +106,8 @@ void MainWindow::on_action_Load_triggered()
                                  QString(tr("Error loading model %1: %2")).arg(parts.at(1)).arg(m->getLastError()));
             return;
         }
+
+        mMapController->updateMapObjects(m);
         models[0] = m;
 
         emit modelStateChanged();

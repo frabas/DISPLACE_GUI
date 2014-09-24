@@ -12,14 +12,12 @@ class MainWindow;
 
 namespace qmapcontrol {
 class QMapControl;
-class MapAdapter;
-class LayerMapAdapter;
-class LayerGeometry;
 }
 
 class ObjectTreeModel;
 class DisplaceModel;
 class Simulator;
+class MapObjectsController;
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -43,9 +41,7 @@ private slots:
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
     void on_cmdStop_clicked();
-
     void on_actionScenario_triggered();
-
     void on_actionSave_triggered();
 
 signals:
@@ -63,15 +59,11 @@ private:
     DisplaceModel *currentModel;
     int currentModelIdx;
     Simulator *mSimulation;
+    MapObjectsController *mMapController;
 
     // Geospatial objects
     //std::shared_ptr<qmapcontrol::QMapControl> map;
     qmapcontrol::QMapControl *map;
-    std::shared_ptr<qmapcontrol::MapAdapter> mapadapter;
-    std::shared_ptr<qmapcontrol::MapAdapter> seamarkadapter;
-    std::shared_ptr<qmapcontrol::LayerMapAdapter> mainlayer;
-    std::shared_ptr<qmapcontrol::LayerMapAdapter> seamarklayer;
-    std::shared_ptr<qmapcontrol::LayerGeometry> entitylayer;
 
     // tree model adapter
     ObjectTreeModel *treemodel;

@@ -43,7 +43,10 @@ SOURCES += \
     scenario.cpp \
     scenariodialog.cpp \
     config.cpp \
-    objects/nodeentity.cpp
+    objects/nodeentity.cpp \
+    mapobjects/harbourmapobject.cpp \
+    mapobjects/mapobject.cpp \
+    mapobjectscontroller.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -62,7 +65,10 @@ HEADERS += \
     exceptions.h \
     scenariodialog.h \
     config.h \
-    objects/nodeentity.h
+    objects/nodeentity.h \
+    mapobjects/harbourmapobject.h \
+    mapobjects/mapobject.h \
+    mapobjectscontroller.h
 
 RESOURCES += \
     qtgui.qrc

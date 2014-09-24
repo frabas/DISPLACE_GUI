@@ -9,6 +9,8 @@
 #include <objecttreemodel.h>
 #include <openseamapadapter.h>
 #include <simulator.h>
+#include <geometrylayer.h>
+#include <circlepoint.h>
 
 #include <scenariodialog.h>
 
@@ -66,13 +68,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // create a layer with the mapadapter and type MapLayer
     mainlayer = new qmapcontrol::MapLayer("OpenStreetMap", mapadapter);
-
     seamarklayer = new qmapcontrol::MapLayer("Seamark", seamarkadapter);
-
+    entitylayer = new qmapcontrol::GeometryLayer("Entities", mapadapter);
 
     // add Layer to the MapControl
     map->addLayer(mainlayer);
     map->addLayer(seamarklayer);
+    map->addLayer(entitylayer);
 
     map->setView(QPointF(11.54105,54.49299));
     map->setZoom(10);

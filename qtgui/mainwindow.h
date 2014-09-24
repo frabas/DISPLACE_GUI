@@ -12,6 +12,7 @@ namespace qmapcontrol {
 class MapControl;
 class MapAdapter;
 class MapLayer;
+class GeometryLayer;
 }
 
 class ObjectTreeModel;
@@ -68,6 +69,7 @@ private:
     qmapcontrol::MapAdapter *seamarkadapter;
     qmapcontrol::MapLayer *mainlayer;
     qmapcontrol::MapLayer *seamarklayer;
+    qmapcontrol::GeometryLayer *entitylayer;
 
     // tree model adapter
     ObjectTreeModel *treemodel;

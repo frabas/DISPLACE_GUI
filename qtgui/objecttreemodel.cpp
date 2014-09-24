@@ -41,10 +41,7 @@ int ObjectTreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    if (isCategoryLevel(parent)) {
-    }
-
-    return 2;
+    return 1;
 }
 
 int ObjectTreeModel::rowCount(const QModelIndex &parent) const
@@ -107,8 +104,6 @@ Qt::ItemFlags ObjectTreeModel::flags(const QModelIndex &index) const
 
 bool ObjectTreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qDebug() << "ObjData " << index << value << role;
-
     if (!isCategoryLevel(index) && !isRootLevel(index)) {
         if (entity(index)->setData(index, value, role)) {
             emit dataChanged(index, index);

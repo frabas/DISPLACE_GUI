@@ -41,43 +41,26 @@ int LayerEntity::rowCount() const
 
 int LayerEntity::columnCount() const
 {
-    return 2;
+    return 1;
 }
 
 QVariant LayerEntity::data(const QModelIndex &index, int role) const
 {
-    if (mLayerEntityIndex == -1) {
-        // boh?
-    } else {
-        switch (index.column()) {
-        case 0:
-            if (role != Qt::DisplayRole)
-                return QVariant();
-            return QString::fromStdString(model->getMapControl()->getLayers().at(index.row())->getName());
-        case 1:
-            if (role == Qt::CheckStateRole)
-                return QVariant(model->getMapControl()->getLayers().at(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
-            return QVariant();
-        }
-    }
-
+    if (role == Qt::DisplayRole)
+        return QString::fromStdString(model->getMapControl()->getLayers().at(index.row())->getName());
+    if (role == Qt::CheckStateRole)
+        return QVariant(model->getMapControl()->getLayers().at(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
     return QVariant();
 }
 
 Qt::ItemFlags LayerEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
 {
-    if (mLayerEntityIndex != -1 && index.column() == 1) {
-        return defFlags | Qt::ItemIsUserCheckable;
-    }
-
-    return defFlags;
+    return defFlags | Qt::ItemIsUserCheckable;
 }
 
 bool LayerEntity::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qDebug() << "SetData " << index << value << role;
-
-    if(index.column() == 1 && role == Qt::CheckStateRole) {
+    if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
             model->getMapControl()->getLayers().at(index.row())->setVisible(false);
         } else {

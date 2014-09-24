@@ -13,6 +13,10 @@ public:
     LayerEntity(ObjectTreeModel *_model, int LayerEntity_idx = -1);
     virtual ~LayerEntity();
 
+    virtual ObjectTreeModel::Category getCategory() const {
+        return ObjectTreeModel::Layers;
+    }
+
     virtual QModelIndex parent (const QModelIndex &parent) const;
     virtual QModelIndex index (int row, int column, const QModelIndex &parent) const;
     virtual int rowCount() const;

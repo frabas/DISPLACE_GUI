@@ -4,13 +4,14 @@
 #include "displacemodel.h"
 #include <mapobjectscontroller.h>
 #include <objecttreemodel.h>
+#include <objects/harbourentity.h>
+#include <objects/nodeentity.h>
 #include <simulator.h>
 
 #include <scenariodialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
-
 
 #include <QBoxLayout>
 #include <QTextEdit>
@@ -186,6 +187,23 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
+void MainWindow::centerMap(const qmapcontrol::PointWorldCoord &pt)
+{
+    map->setMapFocusPointAnimated(pt, 5, std::chrono::milliseconds(100));
+}
+
+void MainWindow::centerMapOnHarbourId(int id)
+{
+    Harbour *h = currentModel->getHarboursList()[id];
+    centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
+}
+
+void MainWindow::centerMapOnNodeId(int id)
+{
+    Node *h = currentModel->getNodesList()[id];
+    centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
+}
+
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
@@ -220,6 +238,25 @@ void MainWindow::on_actionSave_triggered()
     } else {
         QMessageBox::warning(this, tr("Load failed"),
                              tr("There was an error saving the model."));
+        return;
+    }
+}
+
+void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
+{
+    if (!treemodel->isObject(index))
+        return;
+
+    ObjectTreeModel::Category cat = treemodel->getCategory(index);
+    switch (cat) {
+    case ObjectTreeModel::Harbours:
+        centerMapOnHarbourId((reinterpret_cast<objecttree::HarbourEntity *>(treemodel->entity(index)))->getHarbourId());
+        break;
+    case ObjectTreeModel::Nodes:
+        centerMapOnNodeId((reinterpret_cast<objecttree::NodeEntity *>(treemodel->entity(index)))->getNodeId());
+        break;
+
+    default:    // nothing to do
         return;
     }
 }

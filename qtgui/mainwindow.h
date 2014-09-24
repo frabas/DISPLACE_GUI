@@ -12,6 +12,7 @@ class MainWindow;
 
 namespace qmapcontrol {
 class QMapControl;
+class PointWorldCoord;
 }
 
 class ObjectTreeModel;
@@ -43,6 +44,7 @@ private slots:
     void on_cmdStop_clicked();
     void on_actionScenario_triggered();
     void on_actionSave_triggered();
+    void on_treeView_doubleClicked(const QModelIndex &index);
 
 signals:
     void modelStateChanged();
@@ -50,6 +52,10 @@ signals:
 protected:
     void updateModelList();
     void closeEvent ( QCloseEvent * event );
+
+    void centerMap(const qmapcontrol::PointWorldCoord &pt);
+    void centerMapOnHarbourId (int id);
+    void centerMapOnNodeId (int id);
 
 private:
     Ui::MainWindow *ui;

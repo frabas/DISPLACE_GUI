@@ -46,6 +46,10 @@ public:
     DisplaceModel *getModel() const { return mModel; }
     qmapcontrol::QMapControl *getMapControl() const { return mMapControl; }
 
+    bool isObject(QModelIndex index) const;
+    Category getCategory (QModelIndex index) const;
+    objecttree::ObjectTreeEntity *entity (const QModelIndex &index) const;
+
 signals:
 
 public slots:
@@ -66,8 +70,6 @@ protected:
                 (level.row() < entityTemplates.size() &&
                      level.internalPointer() == entityTemplates[level.row()]);
     }
-
-    objecttree::ObjectTreeEntity *entity (const QModelIndex &index) const;
 
     static QList<objecttree::ObjectTreeEntity *> entityTemplates;
     static QString entityNames[];

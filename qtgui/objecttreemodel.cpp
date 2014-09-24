@@ -135,6 +135,16 @@ QModelIndex ObjectTreeModel::createEntity(int row, int column, objecttree::Objec
     return createIndex(row, column, entity);
 }
 
+bool ObjectTreeModel::isObject(QModelIndex index) const
+{
+    return (!isRootLevel(index) && !isCategoryLevel(index));
+}
+
+ObjectTreeModel::Category ObjectTreeModel::getCategory(QModelIndex index) const
+{
+    return entity(index)->getCategory();
+}
+
 objecttree::ObjectTreeEntity *ObjectTreeModel::entity(const QModelIndex &index) const
 {
     return (objecttree::ObjectTreeEntity*)index.internalPointer();

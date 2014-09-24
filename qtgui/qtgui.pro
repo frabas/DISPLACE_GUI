@@ -34,7 +34,8 @@ SOURCES += \
     objects/harbourentity.cpp \
     scenario.cpp \
     scenariodialog.cpp \
-    config.cpp
+    config.cpp \
+    objects/nodeentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -52,7 +53,8 @@ HEADERS += \
     scenario.h \
     exceptions.h \
     scenariodialog.h \
-    config.h
+    config.h \
+    objects/nodeentity.h
 
 RESOURCES += \
     qtgui.qrc

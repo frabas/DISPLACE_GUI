@@ -51,6 +51,16 @@ QString DisplaceModel::getHarbourId(int idx) const
     return QString::fromStdString(mHarbours.at(idx)->get_name());
 }
 
+int DisplaceModel::getNodesCount() const
+{
+    return mNodes.size();
+}
+
+QString DisplaceModel::getNodeId(int idx) const
+{
+    return QString::fromStdString(mNodes.at(idx)->get_name());
+}
+
 Scenario DisplaceModel::scenario() const
 {
     return mScenario;

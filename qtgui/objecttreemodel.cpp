@@ -3,6 +3,7 @@
 #include <objects/objecttreeentity.h>
 #include <objects/layerentity.h>
 #include <objects/harbourentity.h>
+#include <objects/nodeentity.h>
 
 #include <displacemodel.h>
 #include <mapcontrol.h>
@@ -32,6 +33,7 @@ ObjectTreeModel::ObjectTreeModel(qmapcontrol::MapControl *map, DisplaceModel *mo
 
         entityTemplates[Layers] = new objecttree::LayerEntity(this);
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
+        entityTemplates[Nodes] = new objecttree::NodeEntity(this);
     }
 }
 

@@ -26,6 +26,8 @@ public:
 
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
+    int getNodesCount() const;
+    QString getNodeId(int idx) const;
 
 
     Scenario scenario() const;

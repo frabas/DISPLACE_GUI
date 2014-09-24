@@ -21,8 +21,9 @@ public:
     virtual int rowCount() const = 0;
     virtual int columnCount() const = 0;
     virtual QVariant data(const QModelIndex &index, int role) const = 0;
-    virtual Qt::ItemFlags flags(Qt::ItemFlags defFlags, const QModelIndex &index) const = 0;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role) = 0;
+
+    virtual Qt::ItemFlags flags(Qt::ItemFlags defFlags, const QModelIndex &index) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 };
 
 }

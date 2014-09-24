@@ -55,6 +55,7 @@ QVariant LayerEntity::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags LayerEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     return defFlags | Qt::ItemIsUserCheckable;
 }
 

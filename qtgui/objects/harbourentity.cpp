@@ -50,11 +50,16 @@ QVariant HarbourEntity::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags HarbourEntity::flags(Qt::ItemFlags defflags, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     return defflags;
 }
 
 bool HarbourEntity::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    Q_UNUSED(index);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
+
     return false;   // item is not editable
 }
 

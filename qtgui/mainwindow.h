@@ -56,6 +56,7 @@ protected:
     void centerMap(const qmapcontrol::PointWorldCoord &pt);
     void centerMapOnHarbourId (int id);
     void centerMapOnNodeId (int id);
+    void centerMapOnVesselId (int id);
 
 private:
     Ui::MainWindow *ui;

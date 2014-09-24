@@ -6,11 +6,10 @@
 
 #include <Node.h>
 #include <Harbour.h>
+#include <Vessel.h>
 
 #include <QString>
 #include <QList>
-
-class HarbourMapObject;
 
 class DisplaceModel
 {
@@ -34,6 +33,10 @@ public:
     int getNodesCount() const;
     QString getNodeId(int idx) const;
 
+    const QList<Vessel *> &getVesselList() const { return mVessels; }
+    int getVesselCount() const;
+    QString getVesselId(int idx) const;
+
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
 
@@ -43,6 +46,7 @@ public:
 
 protected:
     bool loadNodes();
+    bool loadVessels();
 
 private:
     QString mName;
@@ -54,6 +58,7 @@ private:
 
     QList<Harbour *> mHarbours;
     QList<Node *> mNodes;
+    QList<Vessel *> mVessels;
     // ---
 
     QString mLastError;

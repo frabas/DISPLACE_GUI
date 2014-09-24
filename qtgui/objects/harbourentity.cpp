@@ -2,7 +2,6 @@
 
 #include <objecttreemodel.h>
 #include <displacemodel.h>
-#include <QMapControl/QMapControl.h>
 
 namespace objecttree {
 

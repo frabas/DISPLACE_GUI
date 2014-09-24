@@ -25,6 +25,7 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         mConfig = Config::readFromFile(mName, mBasePath, mOutputName);
 
         loadNodes();
+        loadVessels();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
         return false;
@@ -61,6 +62,16 @@ int DisplaceModel::getNodesCount() const
 QString DisplaceModel::getNodeId(int idx) const
 {
     return QString::fromStdString(mNodes.at(idx)->get_name());
+}
+
+int DisplaceModel::getVesselCount() const
+{
+    return mVessels.size();
+}
+
+QString DisplaceModel::getVesselId(int idx) const
+{
+    return QString::fromStdString(mVessels.at(idx)->get_name());
 }
 
 Scenario DisplaceModel::scenario() const
@@ -170,7 +181,7 @@ bool DisplaceModel::loadNodes()
             {
 
                 cout << "load prices for port " << a_name << " which is point " << a_point << endl;
-                //int er = read_prices_per_harbour(a_point, a_quarter, prices, folder_name_parameterization);
+                //int er = read_prices_per_harbour(a_point, a_quarter, prices, mName.toStdString());
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mName.toStdString(), mBasePath.toStdString());
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 cout << "....OK" << endl;
@@ -179,7 +190,7 @@ bool DisplaceModel::loadNodes()
             {
 
                 cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
-                //int er = read_prices_per_harbour(a_port, "quarter1", prices, folder_name_parameterization); // delete later on when final parameterisation
+                //int er = read_prices_per_harbour(a_port, "quarter1", prices, mName.toStdString()); // delete later on when final parameterisation
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mName.toStdString(), mBasePath.toStdString());
 
             }
@@ -256,5 +267,353 @@ bool DisplaceModel::loadNodes()
     */
 
     return true;
+}
+
+bool DisplaceModel::loadVessels()
+{
+    int nrow_coord = mScenario.getNrow_coord();
+    int a_port = mScenario.getA_port();
+    vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
+    int nbpops = mConfig.getNbpops();
+    string a_quarter= "quarter1";// start quarter
+    string a_semester= "semester1";
+
+    int selected_vessels_only = 0;
+    string a_graph_name="a_graph";
+
+    stringstream graphnum;
+    graphnum << mScenario.getGraph();
+    a_graph_name=a_graph_name+graphnum.str();
+
+    // read general vessel features
+    // (quarter specific, mainly because of the gamma parameters)
+    vector<string> vesselids;
+    vector<double> speeds;
+    vector<double> fuelcons;
+    vector<double> lengths;
+    vector<double> KWs;
+    vector<double> carrycapacities;
+    vector<double> tankcapacities;
+    vector<double> nbfpingspertrips;
+    vector<double> resttime_par1s;
+    vector<double> resttime_par2s;
+    vector<double> av_trip_duration;
+    read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
+        carrycapacities, tankcapacities, nbfpingspertrips,
+        resttime_par1s, resttime_par2s, av_trip_duration,
+        mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+
+    // read the more complex objects (i.e. when several info for a same vessel)...
+    // also quarter specific but semester specific for the betas because of the survey design they are comning from...
+    multimap<string, int> fgrounds = read_fgrounds(a_quarter, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> harbours = read_harbours(a_quarter, mName.toStdString(), mBasePath.toStdString());
+
+    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mName.toStdString(), mBasePath.toStdString());
+
+    // debug
+    if(fgrounds.size() != freq_fgrounds.size())
+    {
+        cout<< "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << endl;
+        int tmp;
+        cin >> tmp;				 // pause
+    }
+    if(harbours.size() != freq_harbours.size())
+    {
+        cout<< "please correct .dat files so that harbours and freq_harbours have same size!!!" << endl;
+        int tmp;
+        cin >> tmp;				 // pause
+    }
+
+    // read nodes in polygons for area-based management
+    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mName.toStdString(), mBasePath.toStdString());
+
+    // check
+    //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+    //{
+    //    cout << " a polygon node is " << pos->second << endl;
+    //}
+    //cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
+
+    //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
+    // and check the start coord
+    multimap<int, int> possible_metiers;
+    multimap<int, double> freq_possible_metiers;
+    multimap<int, double> gshape_cpue_per_stk_on_nodes;
+    multimap<int, double> gscale_cpue_per_stk_on_nodes;
+    vector<int> spe_fgrounds;
+    vector<int> spe_harbours;
+    vector<double> spe_freq_fgrounds;
+    vector<double> spe_freq_harbours;
+    vector<double> spe_vessel_betas_per_pop;
+    vector<double> spe_percent_tac_per_pop;
+
+                                 //here
+    vector <Vessel*> vessels(vesselids.size());
+    for (int i=0; i<vesselids.size(); i++)
+        //vector <Vessel*> vessels(7); //here
+        //vesselids.erase (vesselids.begin());
+        //for (int i=0; i<7; i++)
+    {
+        cout<<"create vessel " << i << endl;
+        // read vessel and quarter specific multimap
+        // quarter specific to capture a piece of seasonality in the fishnig activity
+        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+
+        //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString());
+        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+
+        // debug
+        if(possible_metiers.size() != freq_possible_metiers.size())
+        {
+            cout<< "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
+                << "for the vessel " << vesselids[i] << endl;
+            int tmp;
+            cin >> tmp;			 // pause
+        }
+
+        // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
+        // for creating the vessel object, search into the multimaps
+        spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
+        spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_harbours = find_entries_s_i(harbours, vesselids[i]);
+        spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
+        spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
+        spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
+
+        // choose a departure (node) harbour for this vessel according to the observed frequency in data
+        int start_harbour;
+        if(!spe_harbours.empty())
+        {
+                                 // need to convert in array, see myRutils.cpp
+            vector<int> one_harbour = do_sample(1, spe_harbours.size(), &spe_harbours[0], &spe_freq_harbours[0]);
+            start_harbour= one_harbour[0];
+        }
+        else
+        {
+            // if missing info for a given vessel for this quarter
+            cout << "no specified harbour in this quarter for this vessel..." << endl;
+                                 // CAUTION: LIKE A MAGIC NUMBER HERE!!!
+            start_harbour=find_entries_s_i(harbours, vesselids[0])[0];
+            spe_harbours.push_back(start_harbour);
+            spe_freq_harbours.push_back(1);
+            cout << "then take node: " << start_harbour << endl;
+        }
+
+        Vessel * v = new Vessel(mNodes.at(start_harbour),
+            i,
+            vesselids[i],
+            nbpops,
+            NBSZGROUP,
+            spe_harbours,
+            spe_fgrounds,
+            spe_freq_harbours,
+            spe_freq_fgrounds,
+            spe_vessel_betas_per_pop,
+            spe_percent_tac_per_pop,
+            possible_metiers,
+            freq_possible_metiers,
+            speeds[i],
+            fuelcons[i],
+            lengths[i],
+            KWs[i],
+            carrycapacities[i],
+            tankcapacities[i],
+            nbfpingspertrips[i],
+            resttime_par1s[i],
+            resttime_par2s[i],
+            av_trip_duration[i]);
+        mVessels.push_back(v);
+
+        // some useful setters...
+        // will also be useful when change of YEAR-QUARTER
+        v->set_spe_fgrounds(spe_fgrounds);
+        v->set_spe_harbours(spe_harbours);
+        v->set_spe_freq_fgrounds(spe_freq_fgrounds);
+        v->set_spe_freq_harbours(spe_freq_harbours);
+        v->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
+        v->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
+        v->set_spe_possible_metiers(possible_metiers);
+        v->set_spe_freq_possible_metiers(freq_possible_metiers);
+
+        // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
+                                 // dyn sce.
+        if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_10percent"))
+        {
+                                 // a decrease by 10%...
+            v->set_speed(  v->get_speed()*0.9   );
+                                 // corresponds to a decrease by 30% in fuelcons
+            v->set_fuelcons( v->get_fuelcons()*0.7 );
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+                                 // dyn sce.
+        if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_20percent"))
+        {
+                                 // a decrease by 20%...
+            v->set_speed(  v->get_speed()*0.8   );
+                                 // corresponds to a decrease by 48.8% in fuelcons
+            v->set_fuelcons( v->get_fuelcons()*0.512 );
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+                                 // dyn sce.
+        if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_30percent"))
+        {
+                                 // a decrease by 30%...
+            v->set_speed(  v->get_speed()*0.7   );
+                                 // corresponds to a decrease by 65.7% in fuelcons
+            v->set_fuelcons( v->get_fuelcons()*0.343 );
+            // cubic law  c=v^3, see Ronen 1982
+            // e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
+        }
+
+        // a particular setters for the CPUE STUFF...
+        // for implicit pops or "out of range" fishing: create cpue_nodes_species
+        // a vector of vector (with dims [relative index of fishing ground nodes;  pops])
+        // we use a vector of vector instead of a multimap in order to speed up the simulation
+        // by avoiding a (costly) call to find_entries_i_d() in the do_catch() method
+        vector<int> gshape_name_nodes_with_cpue;
+        for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
+            iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
+        {
+            gshape_name_nodes_with_cpue.push_back (iter->first);
+        }
+
+        // init cpue_nodes_species for this vessel
+        int nbnodes=gshape_name_nodes_with_cpue.size();
+                                 // init the vector of vector with Os
+        mVessels.at(i)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
+                                 // init the vector of vector with Os
+        mVessels.at(i)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
+        for (int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
+        {
+                                 // look into the multimap...
+            vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+                                 // look into the multimap...
+            vector<double> gscale_cpue_species = find_entries_i_d (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            if(!gshape_cpue_species.empty())
+            {
+                                 // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
+                mVessels.at(i)->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
+                                 // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
+                mVessels.at(i)->set_gscale_cpue_nodes_species(n, gscale_cpue_species);
+            }
+        }
+
+        // need to compute expected cpue (averaged over node but cumulated over species)
+        // for this particular vessel, in order to scale the prior guess (see below)
+        double expected_cpue=0;
+        vector <vector<double> > gshape_cpue_nodes_species = mVessels.at(i)->get_gshape_cpue_nodes_species();
+        vector <vector<double> > gscale_cpue_nodes_species = mVessels.at(i)->get_gscale_cpue_nodes_species();
+        vector <int> fgrounds= mVessels.at(i)->get_fgrounds();
+        vector <double> expected_cpue_this_pop (nbpops);
+        for(int pop = 0; pop < nbpops; pop++)
+        {
+
+            vector<double> cpue_per_fground (fgrounds.size());
+                                 // init
+            expected_cpue_this_pop.at(pop)=0;
+
+            // compute cpue on nodes
+            for(int f = 0; f < fgrounds.size(); f++)
+            {
+                                 // look into the vector of vector....
+                double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
+                                 // look into the vector of vector....
+                double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
+                cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
+                //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
+            }
+            // compute the average cpue for this pop across all nodes
+            for(int f = 0; f < fgrounds.size(); f++)
+            {
+                expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
+            }
+                                 // do the mean
+            if(expected_cpue_this_pop.at(pop)!=0) expected_cpue_this_pop.at(pop)= expected_cpue_this_pop.at(pop)/fgrounds.size();
+
+                                 // sum over pop
+            expected_cpue+= expected_cpue_this_pop.at(pop);
+        }
+
+        // init at 0 cumcatch and cumeffort per trip,
+        // init at best guest the experiencedcpue_fgrounds
+        vector<double > freq_fgrounds= mVessels.at(i)->get_freq_fgrounds();
+        vector<double > init_for_fgrounds(fgrounds.size());
+        vector<double > cumeffort_fgrounds= init_for_fgrounds;
+        vector<double > cumcatch_fgrounds= init_for_fgrounds;
+        vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
+        vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
+        vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+        vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+        for(int f = 0; f < fgrounds.size(); f++)
+        {
+            cumcatch_fgrounds[f] = 0;
+            cumeffort_fgrounds[f] = 0;
+            experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
+            // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
+            // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
+            // second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
+            // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
+
+            // init the ones per pop
+            for(int pop = 0; pop < nbpops; pop++)
+            {
+                                 // init
+                cumcatch_fgrounds_per_pop[f][pop] = 0;
+                experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
+            }
+        }
+        // per total...
+        mVessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
+        mVessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
+        mVessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
+        mVessels.at(i)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
+                                 // compute for the first time, to get freq_experiencedcpue_fgrounds...
+        mVessels.at(i)->compute_experiencedcpue_fgrounds();
+        // ...or per pop
+        mVessels.at(i)->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
+        mVessels.at(i)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
+        mVessels.at(i)->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
+                                 // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
+        mVessels.at(i)->compute_experiencedcpue_fgrounds_per_pop();
+
+        // note that, at the start of the simu, freq of visit will be equivalent to freq_fgrounds
+        // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...
+        // the expected_cpue is to scale to the encountered cpue i.e. freq of visit will decrease if experienced cpue < expected cpue
+        // and vice versa...
+
+        // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
+
+
+//TODO: check this!
+#if 0
+        for (unsigned int sp=0; sp<populations.size(); sp++)
+        {
+            mVessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 0.0);
+        }
+#endif
+
+        // check
+        cout << "create vessel " << v->get_idx()  << " " << v->get_name() << " " << v->get_nationality() <<" on "
+            << v->get_loc()->get_idx_node() << " with coordinates "
+            << v->get_loc()->get_x() << " " << v->get_loc()->get_y() << endl;
+        //   << " and metier " << v->get_metier()->get_name() <<  endl;
+        //vector<double> a_ogive = v->get_metier()->get_selectivity_ogive() ;
+        //cout << "with selectivity ogive " << endl;
+        //for (int i=0; i<a_ogive.size(); i++)
+        //{
+        //    cout  << " " << a_ogive[i] << " " ;
+        //}
+        //cout << endl; // well...nothing there because a metier is still not assigned at this stage...
+    }
+
+    return false;
 }
 

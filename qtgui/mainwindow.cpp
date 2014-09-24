@@ -6,6 +6,7 @@
 #include <objecttreemodel.h>
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
+#include <objects/vesselentity.h>
 #include <simulator.h>
 
 #include <scenariodialog.h>
@@ -204,6 +205,12 @@ void MainWindow::centerMapOnNodeId(int id)
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
 
+void MainWindow::centerMapOnVesselId(int id)
+{
+    Vessel *h = currentModel->getVesselList()[id];
+    centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
+}
+
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
@@ -249,11 +256,17 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
     ObjectTreeModel::Category cat = treemodel->getCategory(index);
     switch (cat) {
+
     case ObjectTreeModel::Harbours:
         centerMapOnHarbourId((reinterpret_cast<objecttree::HarbourEntity *>(treemodel->entity(index)))->getHarbourId());
         break;
+
     case ObjectTreeModel::Nodes:
         centerMapOnNodeId((reinterpret_cast<objecttree::NodeEntity *>(treemodel->entity(index)))->getNodeId());
+        break;
+
+    case ObjectTreeModel::Vessels:
+        centerMapOnVesselId((reinterpret_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
         break;
 
     default:    // nothing to do

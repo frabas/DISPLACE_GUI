@@ -2,6 +2,7 @@
 
 #include <displacemodel.h>
 #include <mapobjects/harbourmapobject.h>
+#include <mapobjects/nodemapobject.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/MapAdapterOSM.h>
@@ -43,4 +44,13 @@ void MapObjectsController::updateMapObjects(DisplaceModel *model)
 
         mEntityLayer->addGeometry(obj->getGeometryEntity());
     }
+
+    const QList<Node *> &nodes = model->getNodesList();
+    foreach (Node *nd, nodes) {
+        NodeMapObject *obj = new NodeMapObject(nd);
+        mNodeObjects.append(obj);
+
+        mEntityLayer->addGeometry(obj->getGeometryEntity());
+    }
+
 }

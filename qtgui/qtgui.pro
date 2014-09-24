@@ -46,7 +46,8 @@ SOURCES += \
     objects/nodeentity.cpp \
     mapobjects/harbourmapobject.cpp \
     mapobjects/mapobject.cpp \
-    mapobjectscontroller.cpp
+    mapobjectscontroller.cpp \
+    mapobjects/nodemapobject.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -68,7 +69,8 @@ HEADERS += \
     objects/nodeentity.h \
     mapobjects/harbourmapobject.h \
     mapobjects/mapobject.h \
-    mapobjectscontroller.h
+    mapobjectscontroller.h \
+    mapobjects/nodemapobject.h
 
 RESOURCES += \
     qtgui.qrc

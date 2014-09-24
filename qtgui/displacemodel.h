@@ -29,6 +29,8 @@ public:
     const QList<Harbour *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
+
+    const QList<Node *> &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
 

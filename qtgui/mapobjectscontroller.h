@@ -14,6 +14,7 @@ class LayerGeometry;
 
 class DisplaceModel;
 class HarbourMapObject;
+class NodeMapObject;
 
 class MapObjectsController
 {
@@ -25,6 +26,7 @@ public:
 private:
     qmapcontrol::QMapControl *mMap;
     QList<HarbourMapObject *> mHarbourObjects;
+    QList<NodeMapObject *> mNodeObjects;
 
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;

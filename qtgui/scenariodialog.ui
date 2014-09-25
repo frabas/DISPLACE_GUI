@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>325</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,14 +37,14 @@
    <item row="5" column="1">
     <widget class="QSpinBox" name="nrowgraph">
      <property name="maximum">
-      <number>100000</number>
+      <number>1000000</number>
      </property>
     </widget>
    </item>
    <item row="4" column="1">
     <widget class="QSpinBox" name="nrowcoord">
      <property name="maximum">
-      <number>100000</number>
+      <number>1000000</number>
      </property>
     </widget>
    </item>

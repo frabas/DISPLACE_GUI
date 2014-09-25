@@ -22,6 +22,7 @@ class VesselMapObject : public MapObject
     public:
         VesselGraphics (Vessel *vessel);
 
+        void updated();
     protected:
         virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 //        void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
@@ -34,9 +35,11 @@ public:
         return mGeometry;
     }
 
+    void vesselUpdated();
+
 private:
     Vessel *mVessel;
-    std::shared_ptr<qmapcontrol::GeometryPointShapeScaled> mGeometry;
+    std::shared_ptr<VesselGraphics> mGeometry;
 
 };
 

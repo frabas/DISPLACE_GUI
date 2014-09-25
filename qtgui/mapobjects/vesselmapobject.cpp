@@ -10,7 +10,12 @@
 VesselMapObject::VesselMapObject(Vessel *vessel)
     : mVessel(vessel)
 {
-    mGeometry = std::shared_ptr<qmapcontrol::GeometryPointShapeScaled> (new VesselGraphics(mVessel));
+    mGeometry = std::shared_ptr<VesselGraphics> (new VesselGraphics(mVessel));
+}
+
+void VesselMapObject::vesselUpdated()
+{
+    mGeometry->updated();
 }
 
 
@@ -18,13 +23,18 @@ QBrush *VesselMapObject::VesselGraphics::color = 0;
 QBrush *VesselMapObject::VesselGraphics::altColor = 0;
 
 VesselMapObject::VesselGraphics::VesselGraphics(Vessel *vessel)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->get_x(), vessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->get_x(), vessel->get_y()), QSizeF(20.0, 40.0), 10, 8, 17),
       mVessel(vessel)
 {
     if (color == 0)
         color = new QBrush(Qt::darkYellow);
     if (altColor == 0)
         altColor = new QBrush(Qt::red);
+}
+
+void VesselMapObject::VesselGraphics::updated()
+{
+    emit positionChanged(this);
 }
 
 void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)

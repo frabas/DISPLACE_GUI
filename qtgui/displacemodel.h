@@ -36,6 +36,7 @@ public:
     const QList<Vessel *> &getVesselList() const { return mVessels; }
     int getVesselCount() const;
     QString getVesselId(int idx) const;
+    void updateVessel (int idx,float x, float y, float course, float fuel, int state );
 
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);

@@ -24,6 +24,8 @@ public:
 
     void updateMapObjects(DisplaceModel *model);
 
+    void updateVesselPosition (int idx);
+
 private:
     qmapcontrol::QMapControl *mMap;
     QList<HarbourMapObject *> mHarbourObjects;

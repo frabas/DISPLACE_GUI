@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QProcess>
 
+#include <Vessel.h>
+#include <memory>
+
 /** \brief An ongoing simulation process
  *
  */
@@ -22,6 +25,7 @@ signals:
     void log(QString);
     void processStateChanged(QProcess::ProcessState);
     void simulationStepChanged(int);
+    void vesselMoved (int idx, float x, float y, float course, float fuel, int state);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -34,6 +38,7 @@ private:
     QProcess *mSimulation;
 
     bool processCodedLine(QString line);
+    void parseUpdateVessel(QString line);
 };
 
 #endif // SIMULATOR_H

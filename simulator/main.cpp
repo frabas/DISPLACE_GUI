@@ -3846,6 +3846,17 @@ int main(int argc, char* argv[])
 					<< vessels[ index_v ]->get_state() << " " <<  endl;
 			}
 
+            if (use_gui && tstep < 8641) {
+                cout << "=V" << tstep << ","
+                    << vessels[ index_v ]->get_idx() << ","
+                    << vessels[ index_v ]->get_tstep_dep() << ","
+                    << setprecision(6) << fixed << vessels[ index_v ]->get_x() << ","
+                    << setprecision(6) << fixed << vessels[ index_v ]->get_y() << ","
+                    << setprecision(2) << fixed << vessels[ index_v ]->get_course() << ","
+                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << ","
+                    << vessels[ index_v ]->get_state() <<  endl;
+            }
+
 			// realtime gnuplot
 			if(use_gnuplot)
 			{

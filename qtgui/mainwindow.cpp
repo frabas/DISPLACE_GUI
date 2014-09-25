@@ -45,6 +45,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
+
+    connect (mSimulation, SIGNAL(vesselMoved(int,float,float,float,float,int)),
+             this, SLOT(vesselMoved(int,float,float,float,float,int)));
+
     simulatorProcessStateChanged(QProcess::NotRunning);
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
@@ -157,6 +161,12 @@ void MainWindow::simulatorProcessStepChanged(int step)
     } else {
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
+}
+
+void MainWindow::vesselMoved(int idx, float x, float y, float course, float fuel, int state)
+{
+    models[0]->updateVessel (idx, x, y, course, fuel, state);
+    mMapController->updateVesselPosition(idx);
 }
 
 void MainWindow::updateModelState()

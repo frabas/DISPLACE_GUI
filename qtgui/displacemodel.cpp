@@ -74,6 +74,15 @@ QString DisplaceModel::getVesselId(int idx) const
     return QString::fromStdString(mVessels.at(idx)->get_name());
 }
 
+void DisplaceModel::updateVessel(int idx, float x, float y, float course, float fuel, int state)
+{
+    Vessel *v = mVessels.at(idx);
+    v->set_xy(x,y);
+    v->set_course(course);
+    v->set_cumfuelcons(fuel);
+    v->set_state(state);
+}
+
 Scenario DisplaceModel::scenario() const
 {
     return mScenario;

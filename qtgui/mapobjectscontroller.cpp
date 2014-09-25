@@ -64,3 +64,8 @@ void MapObjectsController::updateMapObjects(DisplaceModel *model)
         mEntityLayer->addGeometry(obj->getGeometryEntity());
     }
 }
+
+void MapObjectsController::updateVesselPosition(int idx)
+{
+    mVesselObjects.at(idx)->vesselUpdated();
+}

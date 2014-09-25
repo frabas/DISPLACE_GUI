@@ -32,7 +32,7 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back("-o");
     arguments.push_back("1"); // Changeme
     arguments.push_back("-e");
-    arguments.push_back("0"); // Changeme
+    arguments.push_back("1"); // Changeme       // export vmslike
     arguments.push_back("-v");
     arguments.push_back("0"); // Changeme
     arguments.push_back("--without-gnuplot");
@@ -121,9 +121,27 @@ bool Simulator::processCodedLine(QString line)
     case 'S':
         emit simulationStepChanged(line.mid(2).toInt());
         break;
+
+    case 'V':
+        parseUpdateVessel(line.mid(2));
+        break;
+
     default:
         return false;
     }
 
     return true;
+}
+
+void Simulator::parseUpdateVessel(QString line)
+{
+    QStringList fields = line.split(",");
+    int id = fields[1].toInt();
+    float x = fields[3].toFloat();
+    float y = fields[4].toFloat();
+    float course = fields[5].toFloat();
+    float fuel = fields[6].toFloat();
+    int state = fields[7].toInt();
+
+    emit vesselMoved(id, x, y, course, fuel, state);
 }

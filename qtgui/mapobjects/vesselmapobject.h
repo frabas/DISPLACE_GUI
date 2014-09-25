@@ -22,7 +22,9 @@ class VesselMapObject : public MapObject
     public:
         VesselGraphics (Vessel *vessel);
 
-        void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
+    protected:
+        virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+//        void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
     };
 
 public:

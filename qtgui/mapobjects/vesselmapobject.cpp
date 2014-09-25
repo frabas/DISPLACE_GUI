@@ -2,6 +2,7 @@
 
 #include <QMapControl/Point.h>
 #include <QMapControl/Projection.h>
+#include <m_constants.h>
 
 #include <QPainter>
 #include <QDebug>
@@ -17,7 +18,7 @@ QBrush *VesselMapObject::VesselGraphics::color = 0;
 QBrush *VesselMapObject::VesselGraphics::altColor = 0;
 
 VesselMapObject::VesselGraphics::VesselGraphics(Vessel *vessel)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->get_x(), vessel->get_y()), QSizeF(20.0, 40.0), 14),
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->get_x(), vessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
       mVessel(vessel)
 {
     if (color == 0)
@@ -26,49 +27,18 @@ VesselMapObject::VesselGraphics::VesselGraphics(Vessel *vessel)
         altColor = new QBrush(Qt::red);
 }
 
-void VesselMapObject::VesselGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &backbuffer_rect_coord, const int &controller_zoom)
+void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
-    // Check the geometry is visible.
-    if(isVisible(controller_zoom)) {
-        // Check if the bounding boxes intersect.
-        const qmapcontrol::RectWorldCoord pixmap_rect_coord(boundingBox(controller_zoom));
-        if(backbuffer_rect_coord.rawRect().intersects(pixmap_rect_coord.rawRect()))
-        {
-            // Calculate the pixmap rect to draw within.
-            const qmapcontrol::RectWorldPx pixmap_rect_px(qmapcontrol::projection::get().toPointWorldPx(pixmap_rect_coord.topLeftCoord(), controller_zoom),
-                                                          qmapcontrol::projection::get().toPointWorldPx(pixmap_rect_coord.bottomRightCoord(), controller_zoom));
+    Q_UNUSED(rect);
 
-            // Translate to center point with required rotation.
-            painter.translate(pixmap_rect_px.centerPx().rawPoint());
+    painter.rotate(mVessel->get_course() / M_PI * 180.0);
 
-            painter.rotate(mVessel->get_course());
+    painter.setBrush(*color);
+    painter.drawEllipse(-10, -20, 20, 40);
 
-            // Draw the shape
+    // Ears
+    painter.setBrush(mVessel->get_state() == 3 ? *color : *altColor);
+    painter.drawEllipse(-6, -12, 16, 16);
 
-            painter.setBrush(*color);
-            painter.drawEllipse(-10, -20, 20, 40);
-
-            // Ears
-            painter.setBrush(mVessel->get_state() == 3 ? *color : *altColor);
-            painter.drawEllipse(-6, -12, 16, 16);
-
-            // Un-translate.
-            painter.rotate(-mVessel->get_course());
-            painter.translate(-pixmap_rect_px.centerPx().rawPoint());
-
-            // Do we have a meta-data value and should we display it at this zoom?
-            if(controller_zoom >= m_metadata_displayed_zoom_minimum && metadata(m_metadata_displayed_key).isNull() == false)
-            {
-                /// @todo calculate correct alignment for metadata displayed offset.
-
-                // Draw the text next to the point with an offset.
-                painter.drawText(pixmap_rect_px.rawRect().topRight() +
-                                 qmapcontrol::PointPx(m_metadata_displayed_alignment_offset_px,
-                                                      -m_metadata_displayed_alignment_offset_px).rawPoint(),
-                                 metadata(m_metadata_displayed_key).toString());
-            }
-        }
-    }
-
+    painter.rotate(-mVessel->get_course() / M_PI * 180.0);
 }
-

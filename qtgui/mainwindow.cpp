@@ -129,12 +129,21 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     else
         currentModel = 0;
     treemodel->setCurrentModel(currentModel);
+
+    bool e = (currentModelIdx == 0);
+    ui->play_bk->setEnabled(e);
+    ui->play_fbk->setEnabled(e);
+    ui->play_ffwd->setEnabled(e);
+    ui->play_first->setEnabled(e);
+    ui->play_fwd->setEnabled(e);
+    ui->play_last->setEnabled(e);
+    ui->play_stop->setEnabled(e);
 }
 
 void MainWindow::simulatorLogging(QString msg)
 {
     ui->console->appendPlainText(msg);
-    ui->console->appendPlainText("\n");
+//    ui->console->appendPlainText("\n");
 }
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
@@ -180,7 +189,7 @@ void MainWindow::updateModelList()
     int n = ui->modelSelector->currentData().toInt();
     ui->modelSelector->clear();
 
-    int sel;
+    int sel = -1;
     for (int i = 0; i < MAX_MODELS; ++i) {
         if (models[i] != 0) {
             ui->modelSelector->addItem(

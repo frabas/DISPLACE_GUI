@@ -40,8 +40,13 @@ int VesselEntity::columnCount() const
 
 QVariant VesselEntity::data(const QModelIndex &index, int role) const
 {
-    if (mVesselId != -1 && model->getModel() != 0 && role == Qt::DisplayRole && index.column() == 0) {
-        return model->getModel()->getVesselId(mVesselId);
+    if (mVesselId != -1 && model->getModel() != 0 && index.column() == 0) {
+        if (role == Qt::DisplayRole)
+            return model->getModel()->getVesselId(mVesselId);
+        if (role == Qt::ToolTipRole) {
+            Vessel *v = model->getModel()->getVesselList()[mVesselId];
+            return QString("%1 %2").arg(v->get_y()).arg(v->get_x());
+        }
     }
 
     return QVariant();

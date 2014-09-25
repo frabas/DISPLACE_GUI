@@ -137,7 +137,6 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->play_first->setEnabled(e);
     ui->play_fwd->setEnabled(e);
     ui->play_last->setEnabled(e);
-    ui->play_stop->setEnabled(e);
 }
 
 void MainWindow::simulatorLogging(QString msg)

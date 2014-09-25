@@ -3,6 +3,7 @@
 #include <displacemodel.h>
 #include <mapobjects/harbourmapobject.h>
 #include <mapobjects/nodemapobject.h>
+#include <mapobjects/vesselmapobject.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/MapAdapterOSM.h>
@@ -55,4 +56,11 @@ void MapObjectsController::updateMapObjects(DisplaceModel *model)
         mGraphLayer->addGeometry(obj->getGeometryEntity());
     }
 
+    const QList<Vessel *> &vessels = model->getVesselList();
+    foreach (Vessel *vsl, vessels) {
+        VesselMapObject *obj = new VesselMapObject(vsl);
+        mVesselObjects.append(obj);
+
+        mEntityLayer->addGeometry(obj->getGeometryEntity());
+    }
 }

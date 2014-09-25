@@ -21,6 +21,7 @@ public:
 signals:
     void log(QString);
     void processStateChanged(QProcess::ProcessState);
+    void simulationStepChanged(int);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -31,6 +32,8 @@ private slots:
 
 private:
     QProcess *mSimulation;
+
+    bool processCodedLine(QString line);
 };
 
 #endif // SIMULATOR_H

@@ -123,6 +123,8 @@ FILE *pipe3;
 FILE *pipe4;
 #endif
 
+bool use_gui = false;
+
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
@@ -160,6 +162,8 @@ int main(int argc, char* argv[])
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -o 0 -e 1 -v 0 --with-gnuplot    // create the path shop
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -o 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because need much more computation time...
 
+    // --use-gui => emits machine parsable data to stdout
+
 	int optind=1;
 	// decode arguments
 	while ((optind < argc) && (argv[optind][0]=='-'))
@@ -170,6 +174,11 @@ int main(int argc, char* argv[])
 			optind++;
 			use_gnuplot=true;
 		}
+        else if (sw=="--use-gui")
+        {
+            optind++;
+            use_gui = true;
+        }
 		else if (sw=="-i")
 		{
 			optind++;
@@ -2401,6 +2410,10 @@ int main(int argc, char* argv[])
 		dout << endl;
 		dout << endl;
 		dout << "---------------" << endl;
+
+        if (use_gui)
+            cout << "=S" << tstep << endl;      /* use gui */
+
 		cout << "tstep " << tstep << endl;
 		dout << "---------------" << endl;
 

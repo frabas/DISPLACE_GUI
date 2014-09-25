@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
+    connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
     simulatorProcessStateChanged(QProcess::NotRunning);
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
@@ -138,10 +139,23 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
         ui->cmdStart->setEnabled(state == QProcess::NotRunning);
         ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(state == QProcess::Running);
+
+        if (state != QProcess::Running)
+            simulatorProcessStepChanged(-1);
     } else {
         ui->cmdStart->setEnabled(false);
         ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(false);
+        simulatorProcessStepChanged(-1);
+    }
+}
+
+void MainWindow::simulatorProcessStepChanged(int step)
+{
+    if (step != -1) {
+        ui->info_simstep->setText(QString(tr("Simulation step: %1")).arg(step));
+    } else {
+        ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
 }
 

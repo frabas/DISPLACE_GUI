@@ -36,6 +36,7 @@ public:
 private slots:
     void simulatorLogging(QString);
     void simulatorProcessStateChanged (QProcess::ProcessState);
+    void simulatorProcessStepChanged (int step);
     void updateModelState();
 
     void on_action_Load_triggered();

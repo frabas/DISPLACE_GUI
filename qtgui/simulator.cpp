@@ -36,6 +36,7 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back("-v");
     arguments.push_back("0"); // Changeme
     arguments.push_back("--without-gnuplot");
+    arguments.push_back("--use-gui");
 
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
@@ -97,13 +98,32 @@ void Simulator::readyReadStandardError()
 
 void Simulator::readyReadStandardOutput()
 {
-    QByteArray data = mSimulation->readAllStandardOutput();
+    char buf[1024];
 
-    QString msg(data.constData());
-    emit log(msg);
+    while (mSimulation->readLine(buf, sizeof(buf)) > 0) {
+        QString line (buf);
+        if (!processCodedLine(line))
+            emit log(line);
+    }
 }
 
 void Simulator::started()
 {
 
+}
+
+bool Simulator::processCodedLine(QString line)
+{
+    if (!line.startsWith("="))
+        return false;
+
+    switch(line.at(1).toLatin1()) {
+    case 'S':
+        emit simulationStepChanged(line.mid(2).toInt());
+        break;
+    default:
+        return false;
+    }
+
+    return true;
 }

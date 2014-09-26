@@ -26,6 +26,7 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
 
         loadNodes();
         loadVessels();
+        initBenthos();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
         return false;
@@ -81,6 +82,11 @@ void DisplaceModel::updateVessel(int idx, float x, float y, float course, float 
     v->set_course(course);
     v->set_cumfuelcons(fuel);
     v->set_state(state);
+}
+
+int DisplaceModel::getBenthosCount() const
+{
+    return mBenthos.size();
 }
 
 Scenario DisplaceModel::scenario() const
@@ -626,3 +632,28 @@ bool DisplaceModel::loadVessels()
     return false;
 }
 
+bool DisplaceModel::initBenthos()
+{
+    QList<int> ids;
+
+    foreach (Node *nd, mNodes) {
+        int bm = nd->get_marine_landscape();
+        Benthos *benthos = 0;
+
+        QMap<int, Benthos *>::iterator it = mBenthosInfo.find(bm);
+        if (it == mBenthosInfo.end()) {
+            benthos = new Benthos (bm);
+            ids.push_back(bm);
+            mBenthosInfo.insert(bm, benthos);
+        } else {
+            benthos = it.value();
+        }
+
+        benthos->appendNode (nd);
+    }
+
+    qSort(ids);
+    foreach (int id, ids) {
+        mBenthos.push_back(mBenthosInfo[id]);
+    }
+}

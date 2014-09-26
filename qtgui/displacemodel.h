@@ -7,9 +7,11 @@
 #include <Node.h>
 #include <Harbour.h>
 #include <Vessel.h>
+#include <modelobjects/benthos.h>
 
 #include <QString>
 #include <QList>
+#include <QMap>
 
 class DisplaceModel
 {
@@ -38,6 +40,10 @@ public:
     QString getVesselId(int idx) const;
     void updateVessel (int idx,float x, float y, float course, float fuel, int state );
 
+    const QList<Benthos*> &getBenthosList() const { return mBenthos; }
+    int getBenthosCount() const;
+
+
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
 
@@ -48,6 +54,7 @@ public:
 protected:
     bool loadNodes();
     bool loadVessels();
+    bool initBenthos();
 
 private:
     QString mName;
@@ -60,6 +67,9 @@ private:
     QList<Harbour *> mHarbours;
     QList<Node *> mNodes;
     QList<Vessel *> mVessels;
+    QList<Benthos *> mBenthos;
+    QMap<int, Benthos *> mBenthosInfo;
+
     // ---
 
     QString mLastError;

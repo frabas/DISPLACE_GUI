@@ -5,6 +5,7 @@
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
+#include <objects/benthosentity.h>
 
 #include <displacemodel.h>
 #include <QMapControl/QMapControl.h>
@@ -36,6 +37,7 @@ ObjectTreeModel::ObjectTreeModel(qmapcontrol::QMapControl *map, DisplaceModel *m
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
         entityTemplates[Nodes] = new objecttree::NodeEntity(this);
         entityTemplates[Vessels] = new objecttree::VesselEntity(this);
+        entityTemplates[Benthos] = new objecttree::BenthosEntity(this);
     }
 }
 

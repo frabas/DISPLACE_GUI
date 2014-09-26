@@ -10,7 +10,7 @@ NodeMapObject::NodeMapObject(Node *node)
                                                                           )
                                                                       ));
 
-   int l = mNode->get_marine_landscape();
-   QColor c = QColor(((l / 100) % 10) * 25, ((l / 10) % 10) * 25, (l % 10 )* 25);
+   int l = (mNode->get_marine_landscape() * 0x1000000) / 1000;
+   QColor c = QColor(QRgb(l & 0x00ffffff));
    mGeometry->setBrush(c);
 }

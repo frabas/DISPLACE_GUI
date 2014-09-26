@@ -32,3 +32,5 @@ For Simulator, follow these tips:
     so define the output path of the simulator project to be
         (projectdir)/build/release/simulator
 
+- Due to conflicting libraries, Simulator will be linked statically to minGW64.
+

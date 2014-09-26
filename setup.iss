@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.1.1-2014092401"
+#define MyAppVersion "0.2.0"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -60,6 +60,7 @@ Source: C:\Qt\5.3\mingw482_32\bin\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\plugins\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms
+Source: C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin\libgcc_s_seh-1.dll; DestDir: {app}
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

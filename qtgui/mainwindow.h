@@ -48,6 +48,8 @@ private slots:
     void on_actionSave_triggered();
     void on_treeView_doubleClicked(const QModelIndex &index);
 
+    void on_saveConsoleButton_clicked();
+
 signals:
     void modelStateChanged();
 

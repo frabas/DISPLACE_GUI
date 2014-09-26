@@ -20,6 +20,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDir>
+#include <QFile>
+#include <QTextStream>
 
 const int MainWindow::maxModels = MAX_MODELS;
 
@@ -303,5 +305,25 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
     default:    // nothing to do
         return;
+    }
+}
+
+void MainWindow::on_saveConsoleButton_clicked()
+{
+    QString path = QFileDialog::getSaveFileName(this,
+                                                tr("Save Console output"),
+                                                QString(), QString(tr("Text files (*.txt);;All files (*.*)")));
+
+    if (!path.isEmpty()) {
+        QFile file (path);
+        if (!file.open(QFile::WriteOnly)) {
+            QMessageBox::warning(this, tr("Save failed"),
+                                 QString(tr("Cannot save file: %1")).arg(file.errorString()));
+            return;
+        }
+
+        QTextStream strm(&file);
+        strm << ui->console->toPlainText();
+        file.close();
     }
 }

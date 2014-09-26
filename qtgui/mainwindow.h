@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <outputfileparser.h>
+
 #include <QMainWindow>
 #include <QProcess>
 
@@ -39,6 +41,7 @@ private slots:
     void simulatorProcessStepChanged (int step);
     void vesselMoved (int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();
+    void updateOutputFile (QString);
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
@@ -63,6 +66,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+
+    OutputFileParser mOutputFileParser;
 
     // Data model
     DisplaceModel *models[MAX_MODELS];

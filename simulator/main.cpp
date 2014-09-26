@@ -123,7 +123,25 @@ FILE *pipe3;
 FILE *pipe4;
 #endif
 
+#define MAXPATH 1024
+
+std::string cwd;
+char buf[MAXPATH];
 bool use_gui = false;
+
+/* GUI Protocol
+ *
+ * All cout strings that begins by the control character "=", will be treated as GUI protocol strings.
+ * These will be sent only if --use-gui command line option is present.
+ * The control character will be followed by a 1 character command code. Then the argument of the command will
+ * follow.
+ * These are the commands:
+ *
+ * =Snnnn       Simulation Step nnnn (int) has been performed
+ * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by commas:
+ *                   id,x,y,course,fuel,state
+ * =Upath       Output file has been updated. path is the absolute path of the file.
+ */
 
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
@@ -229,6 +247,9 @@ int main(int argc, char* argv[])
 				<< argv[optind] << endl;
 		optind++;
 	}
+
+    cwd = std::string(getcwd(buf, MAXPATH));
+
 	cout << " nbsteps " << nbsteps
 		<< " namefolderinput " << namefolderinput <<" " << read_preexisting_paths << endl;
 
@@ -2280,6 +2301,7 @@ int main(int argc, char* argv[])
 	ofstream vmslike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
 	vmslike.open(filename.c_str());
+    std::string vmslike_filename = filename;
 
 	ofstream loglike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
@@ -2397,6 +2419,12 @@ int main(int argc, char* argv[])
 	{
 		nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
 	}
+    popnodes_start.flush();
+
+    // signals the gui that the filename has been updated.
+    if (use_gui) {
+        std::cout << "=U" << vmslike_filename;
+    }
 
 	//----------------------//
 	//----------------------//

@@ -126,6 +126,10 @@ bool Simulator::processCodedLine(QString line)
         parseUpdateVessel(line.mid(2));
         break;
 
+    case 'U':
+        emit outputFileUpdated(line.mid(2));
+        break;
+
     default:
         return false;
     }

@@ -49,7 +49,10 @@ SOURCES += \
     mapobjectscontroller.cpp \
     mapobjects/nodemapobject.cpp \
     objects/vesselentity.cpp \
-    mapobjects/vesselmapobject.cpp
+    mapobjects/vesselmapobject.cpp \
+    objects/benthosentity.cpp \
+    modelobjects/benthos.cpp \
+    outputfileparser.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -74,7 +77,10 @@ HEADERS += \
     mapobjectscontroller.h \
     mapobjects/nodemapobject.h \
     objects/vesselentity.h \
-    mapobjects/vesselmapobject.h
+    mapobjects/vesselmapobject.h \
+    objects/benthosentity.h \
+    modelobjects/benthos.h \
+    outputfileparser.h
 
 RESOURCES += \
     qtgui.qrc

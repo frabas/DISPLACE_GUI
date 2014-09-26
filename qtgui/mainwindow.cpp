@@ -28,6 +28,7 @@ const int MainWindow::maxModels = MAX_MODELS;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    mOutputFileParser(this),
     models(),
     currentModel(0),
     currentModelIdx(0),
@@ -50,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (mSimulation, SIGNAL(vesselMoved(int,float,float,float,float,int)),
              this, SLOT(vesselMoved(int,float,float,float,float,int)));
+    connect (mSimulation, SIGNAL(outputFileUpdated(QString)), this, SLOT(updateOutputFile(QString)));
 
     simulatorProcessStateChanged(QProcess::NotRunning);
 
@@ -183,6 +185,11 @@ void MainWindow::updateModelState()
 {
     simulatorProcessStateChanged(mSimulation->processState());
     updateModelList();
+}
+
+void MainWindow::updateOutputFile(QString path)
+{
+    mOutputFileParser.parse(path);
 }
 
 void MainWindow::updateModelList()

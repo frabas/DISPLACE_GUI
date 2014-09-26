@@ -32,43 +32,43 @@
 class Population
 {
 	public:
-		Population(int name,
-			double _avai0_beta,
-			double _avai2_beta,
-			double _avai3_beta,
-			double _avai5_beta,
-			double _avai7_beta,
-			vector<int> selected_szgroups,
-			vector<double> init_tot_N_at_szgroup,
-			vector<double> init_fecundity_at_szgroup,
-			vector<double> init_weight_at_szgroup,
-			vector<int> init_comcat_at_szgroup,
-			vector<double> init_maturity_at_szgroup,
-			vector<double> init_M_at_szgroup,
-			vector<double> init_proprecru_at_szgroup,
-			vector<double> param_sr,
-			multimap<int,int> lst_idx_nodes_per_pop,
-			multimap<int,double> full_spatial_availability,
-			map<int,double> oth_land,
-			map<string,double> relative_stability_key,
-			vector< vector<double> > percent_szgroup_per_age_matrix,
-			vector< vector<double> > percent_age_perszgroup_matrix,
-			vector< vector<double> > growth_transition_matrix,
-			vector<Node* > nodes,
-			vector<double> fbar_ages_min_max,
-			vector<double> init_tac,
-			double tac_percent_simulated,
-			double landings_so_far,
-			double a_calib_cpue_multiplier,
-			double a_calib_weight_at_szgroup);
+        Population(int name,
+            double _avai0_beta,
+            double _avai2_beta,
+            double _avai3_beta,
+            double _avai5_beta,
+            double _avai7_beta,
+            const vector<int> &selected_szgroups,
+            const vector<double> &init_tot_N_at_szgroup,
+            const vector<double> &init_fecundity_at_szgroup,
+            vector<double> init_weight_at_szgroup,
+            const vector<int> &init_comcat_at_szgroup,
+            const vector<double> &init_maturity_at_szgroup,
+            vector<double> init_M_at_szgroup,
+            const vector<double> &init_proprecru_at_szgroup,
+            const vector<double> &param_sr,
+            const multimap<int,int> &lst_idx_nodes_per_pop,
+            const multimap<int,double> &full_spatial_availability,
+            const map<int,double> &oth_land,
+            const map<string,double> &relative_stability_key,
+            const vector< vector<double> > &percent_szgroup_per_age_matrix,
+            const vector< vector<double> > &percent_age_perszgroup_matrix,
+            const vector< vector<double> > &growth_transition_matrix,
+            const vector<Node* > &nodes,
+            const vector<double> &fbar_ages_min_max,
+            const vector<double> &init_tac,
+            double tac_percent_simulated,
+            double landings_so_far,
+            double a_calib_cpue_multiplier,
+            double a_calib_weight_at_szgroup);
 
 		Population();
 		virtual ~Population();
 								 // Copy constructor
 		Population(const Population& other);
 		int get_name() const;
-		vector<Node* > get_list_nodes() const;
-		vector<int> get_selected_szgroups() const;
+        const vector<Node *> &get_list_nodes() const;
+        const vector<int> &get_selected_szgroups() const;
 		double get_avai0_beta() const;
 		double get_avai2_beta() const;
 		double get_avai3_beta() const;
@@ -122,7 +122,7 @@ class Population
 		void set_tot_W_at_age(vector <double> _W_at_age);
 		void set_maturity_at_szgroup(vector <double> _maturity_at_szgroup);
 		void set_fecundity_at_szgroup(vector <double> _fecundity_at_szgroup);
-		void set_weight_at_szgroup(vector <double> _weight_at_szgroup);
+        void set_weight_at_szgroup(const vector<double> &_weight_at_szgroup);
 		void set_comcat_at_szgroup(vector <int> _comcat_at_szgroup);
 		void set_M_at_szgroup(vector <double> _M_at_szgroup);
 		void set_proprecru_at_szgroup(vector <double> _proprecru_at_szgroup);

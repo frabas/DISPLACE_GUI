@@ -36,25 +36,25 @@ double _avai2_beta,
 double _avai3_beta,
 double _avai5_beta,
 double _avai7_beta,
-vector<int> _selected_szgroups,
-vector<double> init_tot_N_at_szgroup,
-vector<double> init_fecundity_at_szgroup,
+const vector<int> &_selected_szgroups,
+const vector<double> &init_tot_N_at_szgroup,
+const vector<double> &init_fecundity_at_szgroup,
 vector<double> init_weight_at_szgroup,
-vector<int> init_comcat_at_szgroup,
-vector<double> init_maturity_at_szgroup,
+const vector<int> &init_comcat_at_szgroup,
+const vector<double> &init_maturity_at_szgroup,
 vector<double> init_M_at_szgroup,
-vector<double> init_proprecru_at_szgroup,
-vector<double> _param_sr,
-multimap<int,int> lst_idx_nodes_per_pop,
-multimap<int,double> _full_spatial_availability,
-map<int,double> _oth_land,
-map<string,double> relative_stability_key,
-vector< vector<double> > _percent_szgroup_per_age_matrix,
-vector< vector<double> > _percent_age_per_szgroup_matrix,
-vector< vector<double> > _growth_transition_matrix,
-vector<Node* > nodes,
-vector<double> _fbar_ages_min_max,
-vector<double> init_tac,
+const vector<double> &init_proprecru_at_szgroup,
+const vector<double> &_param_sr,
+const multimap<int, int> &lst_idx_nodes_per_pop,
+const multimap<int, double> &_full_spatial_availability,
+const map<int, double> &_oth_land,
+const map<string, double> &relative_stability_key,
+const vector<vector<double> > &_percent_szgroup_per_age_matrix,
+const vector<vector<double> > &_percent_age_per_szgroup_matrix,
+const vector<vector<double> > &_growth_transition_matrix,
+const vector<Node *> &nodes,
+const vector<double> &_fbar_ages_min_max,
+const vector<double> &init_tac,
 double tac_percent_simulated,
 double landings_so_far,
 double a_calib_cpue_multiplier,
@@ -265,13 +265,13 @@ int Population::get_name() const
 }
 
 
-vector<Node* > Population::get_list_nodes() const
+const vector<Node* > &Population::get_list_nodes() const
 {
 	return(list_nodes);
 }
 
 
-vector<int> Population::get_selected_szgroups() const
+const vector<int> &Population::get_selected_szgroups() const
 {
 	return(selected_szgroups);
 }
@@ -603,7 +603,7 @@ void Population::set_fecundity_at_szgroup(vector<double> _fecundity_at_szgroup)
 }
 
 
-void Population::set_weight_at_szgroup(vector<double> _weight_at_szgroup)
+void Population::set_weight_at_szgroup(const vector<double> &_weight_at_szgroup)
 {
 
 	for(unsigned int sz =0; sz<_weight_at_szgroup.size(); sz++)

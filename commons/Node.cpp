@@ -55,9 +55,9 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 }
 
 
-Node::Node(int idx, vector<double> graph_coord_x, vector<double> graph_coord_y,
-vector<int> graph_coord_harbour, vector<int>graph_point_code_area,
-vector<int>graph_point_marine_landscape, int nbpops, int nbszgroups)
+Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
+    const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
+    const vector<int> &graph_point_marine_landscape, int nbpops, int nbszgroups)
 {
 	idx_node= idx;
 	x=graph_coord_x[idx];

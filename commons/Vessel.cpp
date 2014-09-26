@@ -83,11 +83,11 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 
 //Vessel::Vessel(boost::shared_ptr<Node> p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
 Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
-vector<int> _harbours, vector<int> _fgrounds,
-vector<double> _freq_harbours, vector<double> _freq_fgrounds,
-vector<double> _vessel_betas_per_pop,
-vector<double> _percent_tac_per_pop,
-multimap <int, int> _possible_metiers, multimap <int, double> _freq_possible_metiers,
+const vector<int> &_harbours, const vector<int> &_fgrounds,
+const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds,
+const vector<double> &_vessel_betas_per_pop,
+const vector<double> &_percent_tac_per_pop,
+const multimap<int, int> &_possible_metiers, const multimap<int, double> &_freq_possible_metiers,
 double a_speed, double a_fuelcons, double a_length, double a_KW,
 double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
 double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration)
@@ -305,31 +305,31 @@ string Vessel::get_nationality () const
 }
 
 
-vector<int> Vessel::get_harbours () const
+const vector<int> &Vessel::get_harbours() const
 {
 	return(harbours);
 }
 
 
-vector<int> Vessel::get_fgrounds () const
+const vector<int> &Vessel::get_fgrounds() const
 {
 	return(fgrounds);
 }
 
 
-vector<double> Vessel::get_freq_harbours () const
+const vector<double> &Vessel::get_freq_harbours() const
 {
 	return(freq_harbours);
 }
 
 
-vector<double> Vessel::get_freq_fgrounds () const
+const vector<double> &Vessel::get_freq_fgrounds() const
 {
 	return(freq_fgrounds);
 }
 
 
-vector<double> Vessel::get_cumcatch_fgrounds () const
+const vector<double> &Vessel::get_cumcatch_fgrounds() const
 {
 	return(cumcatch_fgrounds);
 }
@@ -341,67 +341,67 @@ int Vessel::get_previous_harbour_idx () const
 }
 
 
-vector<vector<double> > Vessel::get_cumcatch_fgrounds_per_pop () const
+const vector<vector<double> > &Vessel::get_cumcatch_fgrounds_per_pop() const
 {
 	return(cumcatch_fgrounds_per_pop);
 }
 
 
-vector<double> Vessel::get_cumeffort_fgrounds () const
+const vector<double> &Vessel::get_cumeffort_fgrounds() const
 {
 	return(cumeffort_fgrounds);
 }
 
 
-vector<double> Vessel::get_experiencedcpue_fgrounds()const
+const vector<double> &Vessel::get_experiencedcpue_fgrounds()const
 {
 	return(experiencedcpue_fgrounds);
 }
 
 
-vector<vector<double> > Vessel::get_experiencedcpue_fgrounds_per_pop()const
+const vector<vector<double> > &Vessel::get_experiencedcpue_fgrounds_per_pop()const
 {
 	return(experiencedcpue_fgrounds_per_pop);
 }
 
 
-vector<double> Vessel::get_freq_experiencedcpue_fgrounds()const
+const vector<double> &Vessel::get_freq_experiencedcpue_fgrounds()const
 {
 	return(freq_experiencedcpue_fgrounds);
 }
 
 
-vector<vector<double> > Vessel::get_freq_experiencedcpue_fgrounds_per_pop()const
+const vector<vector<double> > &Vessel::get_freq_experiencedcpue_fgrounds_per_pop()const
 {
 	return(freq_experiencedcpue_fgrounds_per_pop);
 }
 
 
-vector<double> Vessel::get_vessel_betas_per_pop () const
+const vector<double> &Vessel::get_vessel_betas_per_pop() const
 {
 	return(vessel_betas_per_pop);
 }
 
 
-vector<double> Vessel::get_percent_tac_per_pop () const
+const vector<double> &Vessel::get_percent_tac_per_pop () const
 {
 	return(percent_tac_per_pop);
 }
 
 
-multimap<int, int> Vessel::get_possible_metiers () const
+const multimap<int, int> &Vessel::get_possible_metiers() const
 {
 	return(possible_metiers);
 }
 
 
-multimap<int, double> Vessel::get_freq_possible_metiers () const
+const multimap<int, double> &Vessel::get_freq_possible_metiers() const
 {
 	return(freq_possible_metiers);
 }
 
 
-list<vertex_t> Vessel::get_roadmap () const
+const list<vertex_t> &Vessel::get_roadmap() const
 {
 	return(roadmap);
 }
@@ -539,7 +539,7 @@ double Vessel::get_av_trip_duration () const
 }
 
 
-vector <int> Vessel::get_idx_used_metiers_this_trip ()
+const vector<int> &Vessel::get_idx_used_metiers_this_trip()
 {
 	return(idx_used_metiers_this_trip);
 }
@@ -557,20 +557,20 @@ double Vessel::get_cumsteaming () const
 }
 
 
-vector < vector<double> > Vessel::get_catch_pop_at_szgroup() const
+const vector<vector<double> > &Vessel::get_catch_pop_at_szgroup() const
 {
 	return(catch_pop_at_szgroup);
 }
 
 
-vector < vector<double> > Vessel::get_gshape_cpue_nodes_species() const
+const vector<vector<double> > &Vessel::get_gshape_cpue_nodes_species() const
 {
 	return(gshape_cpue_nodes_species);
 
 }
 
 
-vector < vector<double> > Vessel::get_gscale_cpue_nodes_species() const
+const vector<vector<double> > &Vessel::get_gscale_cpue_nodes_species() const
 {
 	return(gscale_cpue_nodes_species);
 
@@ -613,37 +613,37 @@ string Vessel::get_decision_tree_for_choose_port () const
 }
 
 
-vector <string> Vessel::get_reading_direction_go_fishing () const
+const vector <string> &Vessel::get_reading_direction_go_fishing () const
 {
 	return(reading_direction_go_fishing);
 }
 
 
-vector <string> Vessel::get_reading_direction_choose_ground () const
+const vector<string> &Vessel::get_reading_direction_choose_ground() const
 {
 	return(reading_direction_choose_ground);
 }
 
 
-vector <string> Vessel::get_reading_direction_start_fishing () const
+const vector<string> &Vessel::get_reading_direction_start_fishing() const
 {
 	return(reading_direction_start_fishing);
 }
 
 
-vector <string> Vessel::get_reading_direction_change_ground () const
+const vector<string> &Vessel::get_reading_direction_change_ground() const
 {
 	return(reading_direction_change_ground);
 }
 
 
-vector <string> Vessel::get_reading_direction_stop_fishing () const
+const vector<string> &Vessel::get_reading_direction_stop_fishing() const
 {
 	return(reading_direction_stop_fishing);
 }
 
 
-vector <string> Vessel::get_reading_direction_choose_port () const
+const vector<string> &Vessel::get_reading_direction_choose_port() const
 {
 	return(reading_direction_choose_port);
 }

@@ -37,11 +37,11 @@ class Node
 		/**  constructor */
 		Node ();
 		Node (int idx_node, double xval, double yval, int _harbour, int _code_area, int _marine_landscape, int nbpops, int nbszgroups);
-		Node (int idx_node, vector<double> graph_coord_x, vector<double> graph_coord_y,
-			vector<int> graph_coord_harbour,
-			vector<int> graph_point_code_area,
-			vector<int> graph_marine_landscape,
-			int nbpops,  int nbszgroups);
+        Node (int idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
+            const vector<int> &graph_coord_harbour,
+            const vector<int> &graph_point_code_area,
+            const vector<int> &graph_marine_landscape,
+            int nbpops,  int nbszgroups);
 
 		/**  destructor */
 		~Node();

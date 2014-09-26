@@ -28,8 +28,8 @@
 #include "Benthos.h"
 
 Benthos::Benthos(int _marine_landscape,
-vector<Node* > _nodes,
-vector<double> _tot_biomass)
+const vector<Node *> &_nodes,
+const vector<double> &_tot_biomass)
 {
 	marine_landscape =_marine_landscape;
 	tot_biomass    =_tot_biomass;
@@ -73,13 +73,13 @@ int Benthos::get_marine_landscape() const
 }
 
 
-vector<double> Benthos::get_tot_biomass() const
+const vector<double> &Benthos::get_tot_biomass() const
 {
 	return(tot_biomass);
 }
 
 
-vector<Node* > Benthos::get_list_nodes() const
+const vector<Node *> &Benthos::get_list_nodes() const
 {
 	return(list_nodes);
 }

@@ -32,12 +32,12 @@ class Benthos
 {
 	public:
 		Benthos(int marine_landscape,
-			vector<Node* > nodes,
-			vector<double> tot_biomass);
+            const vector<Node* > &nodes,
+            const vector<double> &tot_biomass);
 		virtual ~Benthos();
 		int get_marine_landscape() const;
-		vector<Node* > get_list_nodes() const;
-		vector<double> get_tot_biomass() const;
+        const vector<Node* > &get_list_nodes() const;
+        const vector<double> &get_tot_biomass() const;
 	protected:
 	private:
 		int marine_landscape;

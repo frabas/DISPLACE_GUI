@@ -107,10 +107,10 @@ class Vessel
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name);
 		Vessel(Node* a_location, int idx_vessel, string name);
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name, int nbpops, int nbszgroups, vector<int> harbours, vector<int> fgrounds,
-		Vessel(Node* a_location, int idx_vessel, string name, int nbpops, int nbszgroups, vector<int> harbours, vector<int> fgrounds,
-			vector<double> freq_harbours, vector<double> freq_fgrounds, vector<double> vessel_betas_per_pop,
-			vector<double> percent_tac_per_pop,
-			multimap <int, int> possible_metiers, multimap <int, double> freq_possible_metiers,
+        Vessel(Node* a_location, int idx_vessel, string name, int nbpops, int nbszgroups, const vector<int> &harbours, const vector<int> &fgrounds,
+            const vector<double> &freq_harbours, const vector<double> &freq_fgrounds, const vector<double> &vessel_betas_per_pop,
+            const vector<double> &percent_tac_per_pop,
+            const multimap <int, int> &possible_metiers, const multimap <int, double> &freq_possible_metiers,
 			double speed, double fuelcons, double length, double KW,
 			double  carrycapacity, double tankcapacity, double nbfpingspertrip,
 			double resttime_par1, double resttime_par2, double av_trip_duration);
@@ -133,23 +133,23 @@ class Vessel
 		double get_KW () const;
 		string get_length_class () const;
 		string get_nationality () const;
-		vector<int> get_harbours () const;
-		vector<int> get_fgrounds () const;
-		vector<double> get_freq_harbours () const;
-		vector<double> get_freq_fgrounds () const;
-		vector<double> get_cumcatch_fgrounds () const;
-		vector<vector<double> > get_cumcatch_fgrounds_per_pop () const;
-		vector<double> get_cumeffort_fgrounds () const;
-		vector<double> get_experiencedcpue_fgrounds () const;
-		vector<vector<double> > get_experiencedcpue_fgrounds_per_pop () const;
-		vector<double> get_freq_experiencedcpue_fgrounds () const;
-		vector<vector<double> > get_freq_experiencedcpue_fgrounds_per_pop () const;
-		vector<double> get_vessel_betas_per_pop () const;
-		vector<double> get_percent_tac_per_pop () const;
-		vector<int> get_idx_used_metiers_this_trip ();
-		multimap<int,int> get_possible_metiers () const;
-		multimap<int,double> get_freq_possible_metiers () const;
-		list<vertex_t> get_roadmap () const;
+        const vector<int> &get_harbours () const;
+        const vector<int> &get_fgrounds () const;
+        const vector<double> &get_freq_harbours () const;
+        const vector<double> &get_freq_fgrounds () const;
+        const vector<double> &get_cumcatch_fgrounds () const;
+        const vector<vector<double> > &get_cumcatch_fgrounds_per_pop () const;
+        const vector<double> &get_cumeffort_fgrounds () const;
+        const vector<double> &get_experiencedcpue_fgrounds () const;
+        const vector<vector<double> > &get_experiencedcpue_fgrounds_per_pop () const;
+        const vector<double> &get_freq_experiencedcpue_fgrounds () const;
+        const vector<vector<double> > &get_freq_experiencedcpue_fgrounds_per_pop () const;
+        const vector<double> &get_vessel_betas_per_pop () const;
+        const vector<double> &get_percent_tac_per_pop () const;
+        const vector<int> &get_idx_used_metiers_this_trip ();
+        const multimap<int,int> &get_possible_metiers () const;
+        const multimap<int,double> &get_freq_possible_metiers () const;
+        const list<vertex_t> &get_roadmap () const;
 		bool get_inharbour() const;
 		bool get_inactive() const;
 		bool get_natio() const;
@@ -174,9 +174,9 @@ class Vessel
 		double get_resttime_par2() const;
 		double get_av_trip_duration() const;
 		double get_cumcatches() const;
-		vector<vector<double> > get_gshape_cpue_nodes_species() const;
-		vector<vector<double> > get_gscale_cpue_nodes_species() const;
-		vector < vector<double> > get_catch_pop_at_szgroup() const;
+        const vector<vector<double> > &get_gshape_cpue_nodes_species() const;
+        const vector<vector<double> > &get_gscale_cpue_nodes_species() const;
+        const vector < vector<double> > &get_catch_pop_at_szgroup() const;
 		int read_message() const;
 		int get_previous_harbour_idx() const;
 		string get_decision_tree_for_go_fishing() const;
@@ -185,12 +185,12 @@ class Vessel
 		string get_decision_tree_for_change_ground() const;
 		string get_decision_tree_for_stop_fishing() const;
 		string get_decision_tree_for_choose_port() const;
-		vector<string> get_reading_direction_go_fishing() const;
-		vector<string> get_reading_direction_choose_ground() const;
-		vector<string> get_reading_direction_start_fishing() const;
-		vector<string> get_reading_direction_change_ground() const;
-		vector<string> get_reading_direction_stop_fishing() const;
-		vector<string> get_reading_direction_choose_port() const;
+        const vector<string> &get_reading_direction_go_fishing() const;
+        const vector<string> &get_reading_direction_choose_ground() const;
+        const vector<string> &get_reading_direction_start_fishing() const;
+        const vector<string> &get_reading_direction_change_ground() const;
+        const vector<string> &get_reading_direction_stop_fishing() const;
+        const vector<string> &get_reading_direction_choose_port() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
 		void set_speed (double val);

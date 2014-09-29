@@ -2423,7 +2423,7 @@ int main(int argc, char* argv[])
 
     // signals the gui that the filename has been updated.
     if (use_gui) {
-        std::cout << "=U" << vmslike_filename;
+        std::cout << "=U" << vmslike_filename << endl;
     }
 
 	//----------------------//

@@ -3,6 +3,8 @@
 #include <QCoreApplication>
 #include <QApplication>
 
+#include <QMapControl/ImageManager.h>
+
 int main (int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("Studiofuga");
@@ -10,10 +12,17 @@ int main (int argc, char *argv[])
     QCoreApplication::setApplicationName("displace");
 
     QApplication app(argc, argv);
-
     MainWindow mw;
 
     mw.show();
+
+#ifndef WIN32
+    QString path = QDir::homePath() + "/.displace/cache";
+#else
+#endif
+
+    QDir cachepath(path);
+    qmapcontrol::ImageManager::get().enablePersistentCache(std::chrono::minutes(24*60), cachepath);
 
     return app.exec();
 }

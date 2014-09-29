@@ -28,7 +28,7 @@ signals:
     void log(QString);
     void processStateChanged(QProcess::ProcessState);
     void simulationStepChanged(int);
-    void vesselMoved (int idx, float x, float y, float course, float fuel, int state);
+    void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
     void outputFileUpdated(QString);
 
 private slots:
@@ -41,6 +41,7 @@ private slots:
 private:
     QProcess *mSimulation;
     int mSimSteps;
+    int mLastStep;
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QString line);

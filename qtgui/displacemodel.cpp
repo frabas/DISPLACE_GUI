@@ -1,5 +1,6 @@
 #include "displacemodel.h"
 #include <exceptions.h>
+#include <dbhelper.h>
 
 #include <mapobjects/harbourmapobject.h>
 
@@ -7,6 +8,8 @@
 #include <qdebug.h>
 
 DisplaceModel::DisplaceModel()
+    : mDb(0),
+      mLive(false)
 {
 }
 
@@ -31,6 +34,45 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         mLastError = ex.what();
         return false;
     }
+
+    mLive = true;
+    return true;
+}
+
+bool DisplaceModel::loadDatabase(QString path)
+{
+    if (mLive || mDb != 0)
+        return false;
+
+    mDb = new DbHelper;
+    if (!mDb->attachDb(path))
+        return false;
+
+    return true;
+}
+
+/** Link a database to a opened "live" simulation
+ *
+ * Note: when this is called, the live simulation has been already loaded so
+ * Vessel names, harbours and other objects are still known.
+ *
+ */
+bool DisplaceModel::linkDatabase(QString path)
+{
+    if (!mLive || mDb != 0)
+        return false;
+
+    mDb = new DbHelper;
+    if (!mDb->attachDb(path))
+        return false;
+
+    /* Load the vessel name table */
+    mDb->beginTransaction();
+    mDb->removeAllVesselsDetails();
+    for (int i = 0; i< mVessels.size(); ++i) {
+        mDb->addVesselDetails(i, mVessels.at(i));
+    }
+    mDb->endTransaction();
 
     return true;
 }
@@ -75,13 +117,17 @@ QString DisplaceModel::getVesselId(int idx) const
     return QString::fromStdString(mVessels.at(idx)->get_name());
 }
 
-void DisplaceModel::updateVessel(int idx, float x, float y, float course, float fuel, int state)
+void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float course, float fuel, int state)
 {
     Vessel *v = mVessels.at(idx);
     v->set_xy(x,y);
     v->set_course(course);
     v->set_cumfuelcons(fuel);
     v->set_state(state);
+
+    if (mDb) {
+        mDb->addVesselPosition(tstep, idx, v);
+    }
 }
 
 int DisplaceModel::getBenthosCount() const

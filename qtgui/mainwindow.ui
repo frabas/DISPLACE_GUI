@@ -53,6 +53,9 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Load"/>
+    <addaction name="actionLoad_results"/>
+    <addaction name="actionImport_results"/>
+    <addaction name="action_Link_database"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -398,12 +401,15 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_Load"/>
+   <addaction name="actionLoad_results"/>
+   <addaction name="actionImport_results"/>
+   <addaction name="action_Link_database"/>
    <addaction name="actionSave"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
     <iconset resource="qtgui.qrc">
-     <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+     <normaloff>:/icons/loadsim.png</normaloff>:/icons/loadsim.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Load...</string>
@@ -430,6 +436,33 @@
    </property>
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionLoad_results">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load results...</string>
+   </property>
+  </action>
+  <action name="actionImport_results">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/database.png</normaloff>:/icons/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import results...</string>
+   </property>
+  </action>
+  <action name="action_Link_database">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/link.png</normaloff>:/icons/link.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Link database...</string>
    </property>
   </action>
  </widget>

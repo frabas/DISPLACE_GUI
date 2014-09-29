@@ -39,7 +39,7 @@ private slots:
     void simulatorLogging(QString);
     void simulatorProcessStateChanged (QProcess::ProcessState);
     void simulatorProcessStepChanged (int step);
-    void vesselMoved (int idx, float x, float y, float course, float fuel, int state);
+    void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();
     void updateOutputFile (QString);
 
@@ -52,6 +52,10 @@ private slots:
     void on_treeView_doubleClicked(const QModelIndex &index);
     void on_saveConsoleButton_clicked();
     void on_cmdSetup_clicked();
+    void on_action_Link_database_triggered();
+    void on_actionImport_results_triggered();
+
+    void on_actionLoad_results_triggered();
 
 signals:
     void modelStateChanged();
@@ -78,12 +82,14 @@ private:
     MapObjectsController *mMapController;
 
     // Geospatial objects
-    //std::shared_ptr<qmapcontrol::QMapControl> map;
     qmapcontrol::QMapControl *map;
 
     // tree model adapter
     ObjectTreeModel *treemodel;
 
+    static const QString dbSuffix;
+    static const QString dbFilter;
+    static const QString dbLastDirKey;
     static const int maxModels;
 };
 

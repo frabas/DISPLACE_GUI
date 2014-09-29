@@ -17,6 +17,11 @@
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map)
 {
+    /*
+    for (int i = 0; i < MAX_MODELS; ++i) {
+        mHarbourObjects[i] = QList<HarbourMapObject *>
+    }*/
+
     // create mapadapter, for mainlayer and overlay
     mMainMapAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
     mSeamarkAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOpenSeaMap());
@@ -38,12 +43,12 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
 
 }
 
-void MapObjectsController::updateMapObjects(DisplaceModel *model)
+void MapObjectsController::updateMapObjects(int model_n, DisplaceModel *model)
 {
     const QList<Harbour *> &harbours = model->getHarboursList();
     foreach (Harbour *h, harbours) {
         HarbourMapObject *obj = new HarbourMapObject(h);
-        mHarbourObjects.append(obj);
+        mHarbourObjects[model_n].append(obj);
 
         mEntityLayer->addGeometry(obj->getGeometryEntity());
     }
@@ -51,7 +56,7 @@ void MapObjectsController::updateMapObjects(DisplaceModel *model)
     const QList<Node *> &nodes = model->getNodesList();
     foreach (Node *nd, nodes) {
         NodeMapObject *obj = new NodeMapObject(nd);
-        mNodeObjects.append(obj);
+        mNodeObjects[model_n].append(obj);
 
         mGraphLayer->addGeometry(obj->getGeometryEntity());
     }
@@ -59,13 +64,13 @@ void MapObjectsController::updateMapObjects(DisplaceModel *model)
     const QList<Vessel *> &vessels = model->getVesselList();
     foreach (Vessel *vsl, vessels) {
         VesselMapObject *obj = new VesselMapObject(vsl);
-        mVesselObjects.append(obj);
+        mVesselObjects[model_n].append(obj);
 
         mEntityLayer->addGeometry(obj->getGeometryEntity());
     }
 }
 
-void MapObjectsController::updateVesselPosition(int idx)
+void MapObjectsController::updateVesselPosition(int model, int idx)
 {
-    mVesselObjects.at(idx)->vesselUpdated();
+    mVesselObjects[model].at(idx)->vesselUpdated();
 }

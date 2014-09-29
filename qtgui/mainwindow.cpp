@@ -25,6 +25,9 @@
 #include <QTextStream>
 
 const int MainWindow::maxModels = MAX_MODELS;
+const QString MainWindow::dbSuffix = ".db";
+const QString MainWindow::dbFilter = QT_TR_NOOP("Displace Database files (*.db);;All files (*.*)") ;
+const QString MainWindow::dbLastDirKey = "db_lastdir";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,8 +43,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for (int i = 0; i < maxModels; ++i)
+    for (int i = 0; i < maxModels; ++i) {
         models[i] = 0;
+    }
 
     connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
 
@@ -50,8 +54,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
 
-    connect (mSimulation, SIGNAL(vesselMoved(int,float,float,float,float,int)),
-             this, SLOT(vesselMoved(int,float,float,float,float,int)));
+    connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
+             this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString)), this, SLOT(updateOutputFile(QString)));
 
     simulatorProcessStateChanged(QProcess::NotRunning);
@@ -119,7 +123,8 @@ void MainWindow::on_action_Load_triggered()
             return;
         }
 
-        mMapController->updateMapObjects(m);
+        mMapController->updateMapObjects(0, m);
+        ui->modelSelector->setCurrentIndex(0);
         models[0] = m;
 
         emit modelStateChanged();
@@ -176,10 +181,10 @@ void MainWindow::simulatorProcessStepChanged(int step)
     }
 }
 
-void MainWindow::vesselMoved(int idx, float x, float y, float course, float fuel, int state)
+void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, float fuel, int state)
 {
-    models[0]->updateVessel (idx, x, y, course, fuel, state);
-    mMapController->updateVesselPosition(idx);
+    models[0]->updateVessel (step, idx, x, y, course, fuel, state);
+    mMapController->updateVesselPosition(0, idx);
 }
 
 void MainWindow::updateModelState()
@@ -344,4 +349,76 @@ void MainWindow::on_cmdSetup_clicked()
     if (dlg.exec() == QDialog::Accepted) {
         mSimulation->setSimSteps(dlg.getSimulationSteps());
     }
+}
+
+void MainWindow::on_action_Link_database_triggered()
+{
+    QSettings sets;
+    QString dbname =  QFileDialog::getOpenFileName(this, tr("Link database"),
+                                         sets.value(dbLastDirKey).toString(), dbFilter);
+
+    if (!dbname.isEmpty()) {
+        QFileInfo info (dbname);
+        if (info.suffix().isEmpty()) {
+            dbname += dbSuffix;
+            info = QFileInfo(dbname);
+        }
+
+        if (!models[0]->linkDatabase(dbname)) {
+            QMessageBox::warning(this, tr("Link database failed"),
+                                 QString(tr("Cannot link this database.")));
+            return;
+        }
+
+        sets.setValue(dbLastDirKey, info.absoluteFilePath());
+    }
+}
+
+void MainWindow::on_actionImport_results_triggered()
+{
+}
+
+void MainWindow::on_actionLoad_results_triggered()
+{
+    QSettings sets;
+    QString dbname =  QFileDialog::getOpenFileName(this, tr("Load Results file"),
+                                         sets.value(dbLastDirKey).toString(), dbFilter);
+
+    if (!dbname.isEmpty()) {
+        int i;
+        for (i = 1; i < MAX_MODELS; ++i) {
+            if (models[i] == 0)
+                break;
+        }
+
+        if (i == MAX_MODELS) {
+            QMessageBox::warning(this, tr("Load database failed"),
+                                 tr("We cannot load more database."));
+            return;
+        }
+        QFileInfo info (dbname);
+        if (info.suffix().isEmpty()) {
+            dbname += dbSuffix;
+            info = QFileInfo(dbname);
+        }
+
+        DisplaceModel *newmodel = new DisplaceModel();
+
+        if (!newmodel->loadDatabase(dbname)) {
+            QMessageBox::warning(this, tr("Database Load failed"),
+                                 QString(tr("Cannot load this database.")));
+            return;
+        }
+
+        sets.setValue(dbLastDirKey, info.absoluteFilePath());
+
+        delete models[i];
+        models[i] = newmodel;
+
+        mMapController->updateMapObjects(i,models[i]);
+        ui->modelSelector->setCurrentIndex(i);
+
+        emit modelStateChanged();
+    }
+
 }

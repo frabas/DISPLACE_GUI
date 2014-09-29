@@ -15,5 +15,8 @@
         <file>icons/stepbk.png</file>
         <file>icons/stepfwd.png</file>
         <file>icons/setup.png</file>
+        <file>icons/database.png</file>
+        <file>icons/loadsim.png</file>
+        <file>icons/link.png</file>
     </qresource>
 </RCC>

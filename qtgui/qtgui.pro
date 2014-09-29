@@ -1,5 +1,5 @@
 TEMPLATE=app
-QT += core gui network
+QT += core gui network sql
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -53,7 +53,8 @@ SOURCES += \
     objects/benthosentity.cpp \
     modelobjects/benthos.cpp \
     outputfileparser.cpp \
-    simulationsetupdialog.cpp
+    simulationsetupdialog.cpp \
+    dbhelper.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -83,7 +84,8 @@ HEADERS += \
     objects/benthosentity.h \
     modelobjects/benthos.h \
     outputfileparser.h \
-    simulationsetupdialog.h
+    simulationsetupdialog.h \
+    dbhelper.h
 
 RESOURCES += \
     qtgui.qrc

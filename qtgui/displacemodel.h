@@ -13,12 +13,16 @@
 #include <QList>
 #include <QMap>
 
+class DbHelper;
+
 class DisplaceModel
 {
 public:
     DisplaceModel();
 
     bool load (QString path, QString modelname, QString outputname);
+    bool loadDatabase (QString path);
+    bool linkDatabase (QString path);
     bool save();
 
     // Getter
@@ -38,7 +42,7 @@ public:
     const QList<Vessel *> &getVesselList() const { return mVessels; }
     int getVesselCount() const;
     QString getVesselId(int idx) const;
-    void updateVessel (int idx,float x, float y, float course, float fuel, int state );
+    void updateVessel (int tstep, int idx, float x, float y, float course, float fuel, int state );
 
     const QList<Benthos*> &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
@@ -57,10 +61,12 @@ protected:
     bool initBenthos();
 
 private:
+    DbHelper *mDb;
     QString mName;
     QString mBasePath;
     QString mOutputName;
 
+    bool mLive;
     Scenario mScenario;
     Config mConfig;
 

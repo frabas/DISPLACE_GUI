@@ -4,6 +4,7 @@
 #include <QList>
 
 #include <memory>
+#include <mainwindow.h>
 
 namespace qmapcontrol {
 class QMapControl;
@@ -22,15 +23,15 @@ class MapObjectsController
 public:
     MapObjectsController(qmapcontrol::QMapControl *map);
 
-    void updateMapObjects(DisplaceModel *model);
+    void updateMapObjects(int model_n, DisplaceModel *model);
 
-    void updateVesselPosition (int idx);
+    void updateVesselPosition (int model, int idx);
 
 private:
     qmapcontrol::QMapControl *mMap;
-    QList<HarbourMapObject *> mHarbourObjects;
-    QList<NodeMapObject *> mNodeObjects;
-    QList<VesselMapObject *> mVesselObjects;
+    QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];
+    QList<NodeMapObject *> mNodeObjects[MAX_MODELS];
+    QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
 
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;

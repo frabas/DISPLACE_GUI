@@ -5,7 +5,8 @@
 
 Simulator::Simulator()
     : mSimulation(0),
-      mSimSteps(8761)
+      mSimSteps(8761),
+      mLastStep(-1)
 {
 }
 
@@ -130,7 +131,8 @@ bool Simulator::processCodedLine(QString line)
 
     switch(line.at(1).toLatin1()) {
     case 'S':
-        emit simulationStepChanged(line.mid(2).toInt());
+        mLastStep = line.mid(2).toInt();
+        emit simulationStepChanged(mLastStep);
         break;
 
     case 'V':
@@ -158,5 +160,5 @@ void Simulator::parseUpdateVessel(QString line)
     float fuel = fields[6].toFloat();
     int state = fields[7].toInt();
 
-    emit vesselMoved(id, x, y, course, fuel, state);
+    emit vesselMoved(mLastStep, id, x, y, course, fuel, state);
 }

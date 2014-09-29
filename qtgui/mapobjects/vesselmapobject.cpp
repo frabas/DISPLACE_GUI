@@ -43,7 +43,7 @@ void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcon
 {
     Q_UNUSED(rect);
 
-    painter.rotate(mVessel->get_course() / M_PI * 180.0);
+    painter.rotate(-mVessel->get_course() / M_PI * 180.0);
 
     painter.setBrush(*color);
     painter.drawEllipse(-10, -20, 20, 40);
@@ -52,5 +52,5 @@ void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcon
     painter.setBrush(mVessel->get_state() == 3 ? *color : *altColor);
     painter.drawEllipse(-6, -12, 16, 16);
 
-    painter.rotate(-mVessel->get_course() / M_PI * 180.0);
+    painter.rotate(mVessel->get_course() / M_PI * 180.0);
 }

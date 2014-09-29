@@ -8,5 +8,12 @@
         <file>icons/start.png</file>
         <file>icons/stop.png</file>
         <file>icons/harbour.png</file>
+        <file>icons/fastfwd.png</file>
+        <file>icons/fastrev.png</file>
+        <file>icons/first.png</file>
+        <file>icons/last.png</file>
+        <file>icons/stepbk.png</file>
+        <file>icons/stepfwd.png</file>
+        <file>icons/setup.png</file>
     </qresource>
 </RCC>

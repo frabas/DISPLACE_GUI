@@ -52,11 +52,13 @@ SOURCES += \
     mapobjects/vesselmapobject.cpp \
     objects/benthosentity.cpp \
     modelobjects/benthos.cpp \
-    outputfileparser.cpp
+    outputfileparser.cpp \
+    simulationsetupdialog.cpp
 
 FORMS += \
     mainwindow.ui \
-    scenariodialog.ui
+    scenariodialog.ui \
+    simulationsetupdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -80,7 +82,8 @@ HEADERS += \
     mapobjects/vesselmapobject.h \
     objects/benthosentity.h \
     modelobjects/benthos.h \
-    outputfileparser.h
+    outputfileparser.h \
+    simulationsetupdialog.h
 
 RESOURCES += \
     qtgui.qrc

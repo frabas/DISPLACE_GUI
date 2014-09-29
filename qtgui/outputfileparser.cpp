@@ -1,6 +1,7 @@
 #include "outputfileparser.h"
 
 #include <displacemodel.h>
+#include <mainwindow.h>
 
 #include <QFile>
 #include <QFileInfo>
@@ -22,7 +23,7 @@ void OutputFileParser::parse(QString path, DisplaceModel *model)
     if (name.startsWith("vmslike_")) {
         qDebug() << "Parsing " << path << " as population node start";
 
-        parsePopStart(file, model);
+        parsePopStart(&file, model);
     }
 }
 
@@ -32,24 +33,23 @@ void OutputFileParser::parse(QString path, DisplaceModel *model)
  * nodeid x y population1 population2 ...
  * see Node::export_popnodes for details
  */
-void OutputFileParser::parsePopStart(QFile file, DisplaceModel *model)
+void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
 {
-    if (!file.open(QFile::ReadOnly)) {
-        QMessageBox::warning(mOwner, tr("Error loading output file"),
-                             QString(tr("The file %1 cannot be read: %2"))
-                             .arg(file.fileName())
-                             .arg(file.errorString()));
+    if (!file->open(QFile::ReadOnly)) {
+        QMessageBox::warning(mOwner, QObject::tr("Error loading output file"),
+                             QString(QObject::tr("The file %1 cannot be read: %2"))
+                             .arg(file->fileName())
+                             .arg(file->errorString()));
         return;
     }
-    QTextStream strm (&file);
+    QTextStream strm (file);
 
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ");
         int id = fields[0].toInt();
 
-
-        //TODO: check if this is ok.
+//TODO: check if this is ok.
         for (int i = 3 ; i < fields.size(); ++i)
             model->getNodesList()[id]->set_benthos_tot_biomass(i, fields[i].toDouble());
     }

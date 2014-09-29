@@ -4,7 +4,8 @@
 #include <QDebug>
 
 Simulator::Simulator()
-    : mSimulation(0)
+    : mSimulation(0),
+      mSimSteps(8761)
 {
 }
 
@@ -26,7 +27,7 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back("-s");
     arguments.push_back("simu2"); // Changeme
     arguments.push_back("-i");
-    arguments.push_back("8761"); // Changeme
+    arguments.push_back(QString("%1").arg(mSimSteps)); // Changeme
     arguments.push_back("-p");
     arguments.push_back("1"); // Changeme
     arguments.push_back("-o");
@@ -111,6 +112,16 @@ void Simulator::started()
 {
 
 }
+int Simulator::getSimSteps() const
+{
+    return mSimSteps;
+}
+
+void Simulator::setSimSteps(int value)
+{
+    mSimSteps = value;
+}
+
 
 bool Simulator::processCodedLine(QString line)
 {

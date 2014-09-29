@@ -10,6 +10,7 @@
 #include <simulator.h>
 
 #include <scenariodialog.h>
+#include <simulationsetupdialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -189,7 +190,7 @@ void MainWindow::updateModelState()
 
 void MainWindow::updateOutputFile(QString path)
 {
-    mOutputFileParser.parse(path);
+    mOutputFileParser.parse(path, models[0]);
 }
 
 void MainWindow::updateModelList()
@@ -332,5 +333,15 @@ void MainWindow::on_saveConsoleButton_clicked()
         QTextStream strm(&file);
         strm << ui->console->toPlainText();
         file.close();
+    }
+}
+
+void MainWindow::on_cmdSetup_clicked()
+{
+    SimulationSetupDialog dlg(this);
+
+    dlg.setSimulationSteps(mSimulation->getSimSteps());
+    if (dlg.exec() == QDialog::Accepted) {
+        mSimulation->setSimSteps(dlg.getSimulationSteps());
     }
 }

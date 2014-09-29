@@ -2,8 +2,10 @@
 #define OUTPUTFILEPARSER_H
 
 #include <QString>
+#include <QFile>
 
 class MainWindow;
+class DisplaceModel;
 
 class OutputFileParser
 {
@@ -11,10 +13,10 @@ class OutputFileParser
 public:
     OutputFileParser(MainWindow *owner);
 
-    void parse (QString path);
+    void parse (QString path, DisplaceModel *model);
 
 protected:
-    void parsePopStart(QFile file);
+    void parsePopStart(QFile *file, DisplaceModel *model);
 };
 
 #endif // OUTPUTFILEPARSER_H

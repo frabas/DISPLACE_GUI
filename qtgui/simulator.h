@@ -21,6 +21,9 @@ public:
     bool forceStop();
     QProcess::ProcessState processState() const;
 
+    int getSimSteps() const;
+    void setSimSteps(int value);
+
 signals:
     void log(QString);
     void processStateChanged(QProcess::ProcessState);
@@ -37,6 +40,7 @@ private slots:
 
 private:
     QProcess *mSimulation;
+    int mSimSteps;
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QString line);

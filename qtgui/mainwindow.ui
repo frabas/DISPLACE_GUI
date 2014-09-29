@@ -246,6 +246,17 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="cmdSetup">
+       <property name="text">
+        <string>Setup</string>
+       </property>
+       <property name="icon">
+        <iconset resource="qtgui.qrc">
+         <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -286,6 +297,18 @@
         <string>Playback</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <property name="spacing">
          <number>0</number>
         </property>
@@ -294,12 +317,20 @@
           <property name="text">
            <string>...</string>
           </property>
+          <property name="icon">
+           <iconset resource="qtgui.qrc">
+            <normaloff>:/icons/last.png</normaloff>:/icons/last.png</iconset>
+          </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QToolButton" name="play_first">
           <property name="text">
            <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qtgui.qrc">
+            <normaloff>:/icons/first.png</normaloff>:/icons/first.png</iconset>
           </property>
          </widget>
         </item>
@@ -308,12 +339,20 @@
           <property name="text">
            <string>...</string>
           </property>
+          <property name="icon">
+           <iconset resource="qtgui.qrc">
+            <normaloff>:/icons/fastfwd.png</normaloff>:/icons/fastfwd.png</iconset>
+          </property>
          </widget>
         </item>
         <item row="0" column="2">
          <widget class="QToolButton" name="play_fwd">
           <property name="text">
            <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qtgui.qrc">
+            <normaloff>:/icons/stepfwd.png</normaloff>:/icons/stepfwd.png</iconset>
           </property>
          </widget>
         </item>
@@ -322,6 +361,10 @@
           <property name="text">
            <string>...</string>
           </property>
+          <property name="icon">
+           <iconset resource="qtgui.qrc">
+            <normaloff>:/icons/fastrev.png</normaloff>:/icons/fastrev.png</iconset>
+          </property>
          </widget>
         </item>
         <item row="0" column="1">
@@ -329,7 +372,14 @@
           <property name="text">
            <string>...</string>
           </property>
+          <property name="icon">
+           <iconset resource="qtgui.qrc">
+            <normaloff>:/icons/stepbk.png</normaloff>:/icons/stepbk.png</iconset>
+          </property>
          </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineEdit"/>
         </item>
        </layout>
       </widget>

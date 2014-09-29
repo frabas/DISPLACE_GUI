@@ -48,6 +48,9 @@ bool DisplaceModel::loadDatabase(QString path)
     if (!mDb->attachDb(path))
         return false;
 
+    loadNodesFromDb();
+    loadVesselsFromDb();
+
     return true;
 }
 
@@ -66,12 +69,22 @@ bool DisplaceModel::linkDatabase(QString path)
     if (!mDb->attachDb(path))
         return false;
 
-    /* Load the vessel name table */
+    /* start a transaction to speedup insertion */
     mDb->beginTransaction();
+
+    /* load nodes */
+    mDb->removeAllNodesDetails();
+    for (int i = 0; i < mNodes.size(); ++i) {
+        mDb->addNodesDetails(i, mNodes.at(i));
+    }
+
+    /* load vessels */
     mDb->removeAllVesselsDetails();
     for (int i = 0; i< mVessels.size(); ++i) {
         mDb->addVesselDetails(i, mVessels.at(i));
     }
+
+    /* end: commit transaction */
     mDb->endTransaction();
 
     return true;
@@ -702,4 +715,21 @@ bool DisplaceModel::initBenthos()
     foreach (int id, ids) {
         mBenthos.push_back(mBenthosInfo[id]);
     }
+}
+
+bool DisplaceModel::loadNodesFromDb()
+{
+    mNodes.clear();
+    if (!mDb->loadNodes(mNodes))
+        return false;
+    return true;
+}
+
+bool DisplaceModel::loadVesselsFromDb()
+{
+    mVessels.clear();
+    if (!mDb->loadVessels(mNodes, mVessels))
+        return false;
+
+    return true;
 }

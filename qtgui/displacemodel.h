@@ -60,6 +60,9 @@ protected:
     bool loadVessels();
     bool initBenthos();
 
+    bool loadNodesFromDb();
+    bool loadVesselsFromDb();
+
 private:
     DbHelper *mDb;
     QString mName;

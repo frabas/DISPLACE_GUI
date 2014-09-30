@@ -2,6 +2,8 @@
 
 #include <QMapControl/Point.h>
 #include <QMapControl/Projection.h>
+#include <QMapControl/LayerGeometry.h>
+
 #include <m_constants.h>
 
 #include <QPainter>
@@ -15,7 +17,9 @@ VesselMapObject::VesselMapObject(Vessel *vessel)
 
 void VesselMapObject::vesselUpdated()
 {
-    mGeometry->updated();
+    mGeometry->layer()->removeGeometry(mGeometry);
+    mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->get_x(), mVessel->get_y()));
+    mGeometry->layer()->addGeometry(mGeometry);
 }
 
 

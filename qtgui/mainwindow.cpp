@@ -63,6 +63,8 @@ MainWindow::MainWindow(QWidget *parent) :
     map = new qmapcontrol::QMapControl(ui->mapWidget);
     mMapController = new MapObjectsController(map);
 
+    connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
+
     QPixmap pixmap;
     pixmap.fill( Qt::white );
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
@@ -215,6 +217,11 @@ void MainWindow::updateModelState()
 void MainWindow::updateOutputFile(QString path)
 {
     mOutputFileParser.parse(path.trimmed(), models[0]);
+}
+
+void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
+{
+    statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
 }
 
 void MainWindow::updateModelList()

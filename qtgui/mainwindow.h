@@ -7,6 +7,9 @@
 #include <QProcess>
 
 #include <memory>
+#include <QMapControl/Point.h>
+
+using namespace qmapcontrol;
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +45,7 @@ private slots:
     void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();
     void updateOutputFile (QString);
+    void mapFocusPointChanged(PointWorldCoord);
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);

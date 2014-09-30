@@ -52,7 +52,7 @@ bool DisplaceModel::loadDatabase(QString path)
     loadVesselsFromDb();
 
     mLastStep = mDb->getLastKnownStep();
-    mCurrentStep = 0;
+    setCurrentStep(0);
     return true;
 }
 

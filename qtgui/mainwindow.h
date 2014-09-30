@@ -62,6 +62,11 @@ private slots:
     void on_play_step_valueChanged(int step);
     void on_play_fwd_clicked();
     void on_play_bk_clicked();
+    void on_play_fbk_clicked();
+    void on_play_ffwd_clicked();
+    void on_play_first_clicked();
+    void on_play_last_clicked();
+    void on_play_auto_clicked();
 
 signals:
     void modelStateChanged();

@@ -471,3 +471,28 @@ void MainWindow::on_play_bk_clicked()
 {
     ui->play_step->setValue(currentModel->getCurrentStep() - 1);
 }
+
+void MainWindow::on_play_fbk_clicked()
+{
+     ui->play_step->setValue(currentModel->getCurrentStep() - 50);
+}
+
+void MainWindow::on_play_ffwd_clicked()
+{
+     ui->play_step->setValue(currentModel->getCurrentStep() + 50);
+}
+
+void MainWindow::on_play_first_clicked()
+{
+     ui->play_step->setValue(0);
+}
+
+void MainWindow::on_play_last_clicked()
+{
+     ui->play_step->setValue(currentModel->getLastStep());
+}
+
+void MainWindow::on_play_auto_clicked()
+{
+
+}

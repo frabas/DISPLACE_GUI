@@ -154,12 +154,21 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->play_fwd->setEnabled(e);
     ui->play_last->setEnabled(e);
     ui->play_step->setEnabled(e);
+    if (!e || currentModel == 0) {
+        ui->play_step->setValue(0);
+    } else {
+        int last = currentModel->getLastStep();
+        ui->play_step->setValue(currentModel->getCurrentStep());
+        ui->play_step->setMinimum(0);
+        ui->play_step->setMaximum(last);
+
+        ui->play_step->setSuffix(QString(tr("/%1")).arg(last));
+    }
 }
 
 void MainWindow::simulatorLogging(QString msg)
 {
     ui->console->appendPlainText(msg);
-//    ui->console->appendPlainText("\n");
 }
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
@@ -431,4 +440,21 @@ void MainWindow::on_actionLoad_results_triggered()
         emit modelStateChanged();
     }
 
+}
+
+void MainWindow::on_play_step_valueChanged(int step)
+{
+    if (currentModelIdx > 0) {
+        currentModel->setCurrentStep(step);
+    }
+}
+
+void MainWindow::on_play_fwd_clicked()
+{
+    ui->play_step->setValue(currentModel->getCurrentStep() + 1);
+}
+
+void MainWindow::on_play_bk_clicked()
+{
+    ui->play_step->setValue(currentModel->getCurrentStep() - 1);
 }

@@ -200,6 +200,15 @@ QString DbHelper::getMetadata(QString key)
     return QString();
 }
 
+int DbHelper::getLastKnownStep()
+{
+    QSqlQuery q;
+    q.exec("SELECT MAX(tstep) FROM " + TBL_VESSELS_POS);
+    if (q.next())
+        return q.value(0).toInt();
+    return -1;
+}
+
 bool DbHelper::checkMetadataTable()
 {
     if (!mDb.tables().contains(TBL_META)) {
@@ -290,7 +299,10 @@ VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *d
     : QObject(),
       mHelper(helper),
       mDb(QSqlDatabase::cloneDatabase(*db, "inserter")),
-      mVesselInsertionQuery(0)
+      mVesselInsertionQuery(0),
+      mFlushCount(10000),
+      mCounter(0),
+      mLastStep(-1)
 {
     mVesselInsertionQuery = new QSqlQuery;
     mVesselInsertionQuery->prepare(
@@ -304,9 +316,12 @@ VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *d
 void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double fuel, int state)
 {
     /* if it's a new step, commits the insertion and restart */
-    if (mLastStep != step) {
+    ++mCounter;
+
+    if (mCounter >= mFlushCount) {
         mHelper->endTransaction();
         mHelper->beginTransaction();
+        mCounter = 0;
     }
 
     /* if there's no transaction ongoing, start it */

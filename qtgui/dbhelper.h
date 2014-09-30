@@ -62,6 +62,7 @@ public:
     void setMetadata (QString key, QString value);
     QString getMetadata (QString key);
 
+    int getLastKnownStep();
 signals:
     void postVesselInsertion (int step, int idx , double x, double y, double fuel, int state);
     void flush();

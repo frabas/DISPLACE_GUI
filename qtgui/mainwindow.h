@@ -54,8 +54,10 @@ private slots:
     void on_cmdSetup_clicked();
     void on_action_Link_database_triggered();
     void on_actionImport_results_triggered();
-
     void on_actionLoad_results_triggered();
+    void on_play_step_valueChanged(int step);
+    void on_play_fwd_clicked();
+    void on_play_bk_clicked();
 
 signals:
     void modelStateChanged();

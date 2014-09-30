@@ -51,6 +51,8 @@ bool DisplaceModel::loadDatabase(QString path)
     loadNodesFromDb();
     loadVesselsFromDb();
 
+    mLastStep = mDb->getLastKnownStep();
+    mCurrentStep = 0;
     return true;
 }
 
@@ -162,6 +164,11 @@ Scenario DisplaceModel::scenario() const
 void DisplaceModel::setScenario(const Scenario &scenario)
 {
     mScenario = scenario;
+}
+
+void DisplaceModel::setCurrentStep(int step)
+{
+
 }
 
 

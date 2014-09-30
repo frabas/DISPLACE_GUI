@@ -54,6 +54,10 @@ public:
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
 
+    void setCurrentStep(int step);
+    int getCurrentStep() const { return mCurrentStep; }
+    int getLastStep() const { return mLastStep; }
+
     //
 
     QString getLastError() const { return mLastError; }
@@ -72,6 +76,7 @@ private:
     QString mBasePath;
     QString mOutputName;
 
+    int mCurrentStep, mLastStep;
     bool mLive;
     Scenario mScenario;
     Config mConfig;

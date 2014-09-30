@@ -70,7 +70,7 @@ public:
 
     QString getLastError() const { return mLastError; }
 
-    void commitNodesStatsFromSimu();
+    void commitNodesStatsFromSimu(int tstep);
 protected:
     bool loadNodes();
     bool loadVessels();

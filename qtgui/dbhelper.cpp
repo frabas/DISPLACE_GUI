@@ -76,10 +76,14 @@ void DbHelper::addNodesStats(int tstep, const QList<Node *> &nodes)
 {
     QSqlQuery q;
 
+    bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
-              + "(nodeid,tstep,cumftime,tot_bio,imp_bio,imp_bio_sz) "
+              + "(nodeid,tstep,cumftime,tot_bio,imp_pop,imp_pop_sz) "
               + "VALUES (?,?,?,?,?,?)");
 
+    DB_ASSERT(r,q);
+
+    beginTransaction();
     foreach (Node *n, nodes) {
         q.addBindValue(n->get_idx_node());
         q.addBindValue(tstep);
@@ -90,8 +94,10 @@ void DbHelper::addNodesStats(int tstep, const QList<Node *> &nodes)
         q.addBindValue("");
 
         // TODO: update when fields will be available.
-        q.exec();
+        bool res = q.exec();
+        DB_ASSERT(res, q);
     }
+    endTransaction();
 }
 
 void DbHelper::removeAllVesselsDetails()

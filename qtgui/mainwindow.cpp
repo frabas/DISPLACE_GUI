@@ -203,7 +203,7 @@ void MainWindow::simulatorProcessStepChanged(int step)
     if (step != -1) {
         ui->info_simstep->setText(QString(tr("Simulation step: %1")).arg(step));
 
-        models[0]->commitNodesStatsFromSimu();
+        models[0]->commitNodesStatsFromSimu(step);
     } else {
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }

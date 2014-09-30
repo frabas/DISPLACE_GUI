@@ -10,6 +10,7 @@
 DisplaceModel::DisplaceModel()
     : mDb(0),
       mLastStats(-1),
+      mNodesStatsDirty(false),
       mLive(false)
 {
 }
@@ -80,9 +81,6 @@ bool DisplaceModel::linkDatabase(QString path)
     for (int i = 0; i < mNodes.size(); ++i) {
         mDb->addNodesDetails(i, mNodes.at(i));
     }
-    for (int i = 0; i < mHarbours.size(); ++i) {
-        mDb->addNodesDetails(i, mHarbours.at(i));
-    }
 
     /* load vessels */
     mDb->removeAllVesselsDetails();
@@ -139,10 +137,8 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
     int start = fields[2].toInt();
     int num = fields[3].toInt();
 
-    qDebug() << "updates: " << fields.size() << start << num << mLastStats << mNodesStatsDirty  << fields[4].toInt();
-
     if (mLastStats != tstep && mNodesStatsDirty) {
-        commitNodesStatsFromSimu();
+        commitNodesStatsFromSimu(tstep);
     }
 
     mLastStats = tstep;
@@ -155,7 +151,7 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
     }
 }
 
-void DisplaceModel::commitNodesStatsFromSimu()
+void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
     if (mDb && mNodesStatsDirty)
         mDb->addNodesStats(mLastStats, mNodes);
@@ -357,10 +353,7 @@ bool DisplaceModel::loadNodes()
                                        init_fuelprices
                                        );
             mHarbours.push_back(h);
-            /*
-            cout << "Harbour " <<  nodes[i]->get_name() << " " <<
-                    nodes[i]->get_x() << " " << nodes[i]->get_y() << " " <<
-                    nodes[i]->get_is_harbour()<< " " <<endl;*/
+            mNodes.push_back(h);
         }
         else
         {
@@ -374,9 +367,6 @@ bool DisplaceModel::loadNodes()
                                     NBSZGROUP);
 
             mNodes.push_back(n);
-            /*
-            dout <<  nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
-                  << " " << nodes[i]->get_code_area() << endl;*/
 
         }
     }

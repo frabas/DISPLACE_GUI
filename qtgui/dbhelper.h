@@ -54,6 +54,7 @@ public:
 
     bool loadNodes(QList<Node *> &nodes);
     bool loadVessels(const QList<Node *> &nodes, QList<Vessel *> &vessels);
+    bool updateVesselsToStep(int steps, QList<Vessel *> &vessels);
 
     void beginTransaction();
     void endTransaction();

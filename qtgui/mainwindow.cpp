@@ -123,7 +123,7 @@ void MainWindow::on_action_Load_triggered()
             return;
         }
 
-        mMapController->updateMapObjects(0, m);
+        mMapController->createMapObjectsFromModel(0, m);
         ui->modelSelector->setCurrentIndex(0);
         models[0] = m;
 
@@ -234,6 +234,11 @@ void MainWindow::updateModelList()
     }
 
     ui->modelSelector->setCurrentIndex(sel);
+}
+
+void MainWindow::updateAllDisplayObjects()
+{
+    mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -434,7 +439,7 @@ void MainWindow::on_actionLoad_results_triggered()
         delete models[i];
         models[i] = newmodel;
 
-        mMapController->updateMapObjects(i,models[i]);
+        mMapController->createMapObjectsFromModel(i,models[i]);
         ui->modelSelector->setCurrentIndex(i);
 
         emit modelStateChanged();
@@ -446,6 +451,7 @@ void MainWindow::on_play_step_valueChanged(int step)
 {
     if (currentModelIdx > 0) {
         currentModel->setCurrentStep(step);
+        updateAllDisplayObjects();
     }
 }
 

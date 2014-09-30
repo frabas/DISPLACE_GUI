@@ -160,6 +160,36 @@ bool DbHelper::loadVessels(const QList<Node *> &nodes, QList<Vessel *> &vessels)
     return true;
 }
 
+bool DbHelper::updateVesselsToStep(int steps, QList<Vessel *> &vessels)
+{
+    QSqlQuery q;
+    q.prepare("SELECT vesselid,x,y,fuel,state,cumcatches,timeatsea,reason_to_go_back FROM " + TBL_VESSELS_POS
+              + " WHERE tstep=?");
+    q.addBindValue(steps);
+
+    q.exec();
+
+    while (q.next()) {
+        int idx = q.value(0).toInt();
+        double x = q.value(1).toDouble();
+        double y = q.value(2).toDouble();
+        double fuel = q.value(3).toInt();
+        int state = q.value(4).toDouble();
+        double cum = q.value(5).toDouble();
+        double tim = q.value(6).toDouble();
+        int r = q.value(7).toInt();
+
+        Vessel *v = vessels.at(idx);
+        v->set_xy(x,y);
+        v->set_fuelcons(fuel);
+        v->set_state(state);
+        v->set_cumcatches(cum);
+        v->set_timeatsea(tim);
+        v->set_reason_to_go_back(r);
+    }
+    return true;
+}
+
 void DbHelper::beginTransaction()
 {
     mDb.transaction();

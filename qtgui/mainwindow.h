@@ -64,6 +64,7 @@ signals:
 
 protected:
     void updateModelList();
+    void updateAllDisplayObjects();
     void closeEvent ( QCloseEvent * event );
 
     void centerMap(const qmapcontrol::PointWorldCoord &pt);

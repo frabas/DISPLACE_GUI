@@ -23,7 +23,8 @@ class MapObjectsController
 public:
     MapObjectsController(qmapcontrol::QMapControl *map);
 
-    void updateMapObjects(int model_n, DisplaceModel *model);
+    void createMapObjectsFromModel(int model_n, DisplaceModel *model);
+    void updateMapObjectsFromModel(int model_n, DisplaceModel *model);
 
     void updateVesselPosition (int model, int idx);
 

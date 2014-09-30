@@ -38,7 +38,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
 
 }
 
-void MapObjectsController::updateMapObjects(int model_n, DisplaceModel *model)
+void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
     const QList<Harbour *> &harbours = model->getHarboursList();
     foreach (Harbour *h, harbours) {
@@ -63,6 +63,15 @@ void MapObjectsController::updateMapObjects(int model_n, DisplaceModel *model)
 
         mEntityLayer->addGeometry(obj->getGeometryEntity());
     }
+}
+
+void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel *model)
+{
+    const QList<Vessel *> &vessels = model->getVesselList();
+    foreach (Vessel *vsl, vessels) {
+        updateVesselPosition(model_n, vsl->get_idx());
+    }
+
 }
 
 void MapObjectsController::updateVesselPosition(int model, int idx)

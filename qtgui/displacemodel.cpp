@@ -168,7 +168,10 @@ void DisplaceModel::setScenario(const Scenario &scenario)
 
 void DisplaceModel::setCurrentStep(int step)
 {
-
+    mCurrentStep = step;
+    if (mDb) {
+        mDb->updateVesselsToStep(mCurrentStep, mVessels);
+    }
 }
 
 

@@ -42,6 +42,14 @@ public:
     int getNodesCount() const;
     QString getNodeId(int idx) const;
 
+    /** \brief receive a Stats update for nodes from the Simulator
+     *
+     * The string passed has the following format:
+     *    stat,tstep,first,number,data
+     *
+     * */
+    void updateNodesStatFromSimu(QString);
+
     const QList<Vessel *> &getVesselList() const { return mVessels; }
     int getVesselCount() const;
     QString getVesselId(int idx) const;
@@ -62,6 +70,7 @@ public:
 
     QString getLastError() const { return mLastError; }
 
+    void commitNodesStatsFromSimu();
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -77,6 +86,9 @@ private:
     QString mOutputName;
 
     int mCurrentStep, mLastStep;
+    int mLastStats;
+    bool mNodesStatsDirty;
+
     bool mLive;
     Scenario mScenario;
     Config mConfig;

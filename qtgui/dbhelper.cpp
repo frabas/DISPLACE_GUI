@@ -12,6 +12,7 @@ const int DbHelper::VERSION = 1;
 
 const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
+const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -41,6 +42,7 @@ bool DbHelper::attachDb(QString file)
     // check tables
     checkMetadataTable();
     checkNodesTable(mVersion);
+    checkNodesStats(mVersion);
     checkVesselsPosTable(mVersion);
     checkVesselsTable(mVersion);
 
@@ -70,6 +72,28 @@ void DbHelper::removeAllNodesDetails()
     DB_ASSERT(res,q);
 }
 
+void DbHelper::addNodesStats(int tstep, const QList<Node *> &nodes)
+{
+    QSqlQuery q;
+
+    q.prepare("INSERT INTO " + TBL_NODES_STATS
+              + "(nodeid,tstep,cumftime,tot_bio,imp_bio,imp_bio_sz) "
+              + "VALUES (?,?,?,?,?,?)");
+
+    foreach (Node *n, nodes) {
+        q.addBindValue(n->get_idx_node());
+        q.addBindValue(tstep);
+        q.addBindValue(n->get_cumftime());
+
+        q.addBindValue("");
+        q.addBindValue("");
+        q.addBindValue("");
+
+        // TODO: update when fields will be available.
+        q.exec();
+    }
+}
+
 void DbHelper::removeAllVesselsDetails()
 {
     QSqlQuery q;
@@ -88,7 +112,7 @@ void DbHelper::addNodesDetails(int idx, Node *node)
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
-    q.addBindValue(idx);
+    q.addBindValue(node->get_idx_node());
     q.addBindValue(node->get_x());
     q.addBindValue(node->get_y());
     q.addBindValue(node->get_harbour());
@@ -297,6 +321,32 @@ bool DbHelper::checkNodesTable(int version)
     }
 
     return true;
+}
+
+bool DbHelper::checkNodesStats(int version)
+{
+    if (!mDb.tables().contains(TBL_NODES_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_NODES_STATS + "("
+               + "nodeid INTEGER,"
+               + "tstep INTEGER,"
+               + "cumftime REAL,"
+               + "tot_bio TEXT,"
+               + "imp_pop TEXT,"
+               + "imp_pop_sz TEXT"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (version < 2) {
+
+    }
+
+    return true;
+
 }
 
 bool DbHelper::checkVesselsPosTable(int version)

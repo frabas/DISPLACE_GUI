@@ -48,6 +48,8 @@ public:
     void addNodesDetails(int idx, Node *node);
     void removeAllNodesDetails();
 
+    void addNodesStats (int tstep, const QList<Node *> &nodes);
+
     void addVesselPosition (int step, int idx, Vessel *vessel);
     void removeAllVesselsDetails();
     void addVesselDetails (int idx, Vessel *vessel);
@@ -71,6 +73,7 @@ signals:
 protected:
     bool checkMetadataTable();
     bool checkNodesTable(int version);
+    bool checkNodesStats(int version);
     bool checkVesselsTable(int version);
     bool checkVesselsPosTable(int version);
 
@@ -85,6 +88,7 @@ private:
 
     static const QString TBL_META;
     static const QString TBL_NODES;
+    static const QString TBL_NODES_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
 

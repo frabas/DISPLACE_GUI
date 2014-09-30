@@ -30,6 +30,7 @@ signals:
     void simulationStepChanged(int);
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
     void outputFileUpdated(QString);
+    void nodesStatsUpdate(QString);
 
 private slots:
     void error(QProcess::ProcessError);

@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
+    connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString)), this, SLOT(updateOutputFile(QString)));
 
     simulatorProcessStateChanged(QProcess::NotRunning);
@@ -201,9 +202,16 @@ void MainWindow::simulatorProcessStepChanged(int step)
 {
     if (step != -1) {
         ui->info_simstep->setText(QString(tr("Simulation step: %1")).arg(step));
+
+        models[0]->commitNodesStatsFromSimu();
     } else {
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
+}
+
+void MainWindow::simulatorNodeStatsUpdate(QString data)
+{
+    models[0]->updateNodesStatFromSimu(data);
 }
 
 void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, float fuel, int state)

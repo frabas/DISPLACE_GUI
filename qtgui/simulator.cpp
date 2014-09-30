@@ -100,7 +100,7 @@ void Simulator::readyReadStandardError()
 
 void Simulator::readyReadStandardOutput()
 {
-    char buf[1024];
+    char buf[65536];
 
     while (mSimulation->readLine(buf, sizeof(buf)) > 0) {
         QString line (buf);
@@ -141,6 +141,10 @@ bool Simulator::processCodedLine(QString line)
 
     case 'U':
         emit outputFileUpdated(line.mid(2));
+        break;
+
+    case 'N':
+        emit nodesStatsUpdate(line.mid(2));
         break;
 
     default:

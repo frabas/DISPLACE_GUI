@@ -42,6 +42,8 @@ private slots:
     void simulatorLogging(QString);
     void simulatorProcessStateChanged (QProcess::ProcessState);
     void simulatorProcessStepChanged (int step);
+    void simulatorNodeStatsUpdate(QString);
+
     void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();
     void updateOutputFile (QString);

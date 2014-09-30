@@ -9,6 +9,7 @@
 
 DisplaceModel::DisplaceModel()
     : mDb(0),
+      mLastStats(-1),
       mLive(false)
 {
 }
@@ -79,6 +80,9 @@ bool DisplaceModel::linkDatabase(QString path)
     for (int i = 0; i < mNodes.size(); ++i) {
         mDb->addNodesDetails(i, mNodes.at(i));
     }
+    for (int i = 0; i < mHarbours.size(); ++i) {
+        mDb->addNodesDetails(i, mHarbours.at(i));
+    }
 
     /* load vessels */
     mDb->removeAllVesselsDetails();
@@ -126,6 +130,37 @@ int DisplaceModel::getNodesCount() const
 QString DisplaceModel::getNodeId(int idx) const
 {
     return QString::fromStdString(mNodes.at(idx)->get_name());
+}
+
+void DisplaceModel::updateNodesStatFromSimu(QString data)
+{
+    QStringList fields = data.split(",");
+    int tstep = fields[1].toInt();
+    int start = fields[2].toInt();
+    int num = fields[3].toInt();
+
+    qDebug() << "updates: " << fields.size() << start << num << mLastStats << mNodesStatsDirty  << fields[4].toInt();
+
+    if (mLastStats != tstep && mNodesStatsDirty) {
+        commitNodesStatsFromSimu();
+    }
+
+    mLastStats = tstep;
+    mNodesStatsDirty = true;
+
+    if (fields[0] == "cumftime") {
+        for (int i = 0; i < num; ++i) {
+            mNodes.at(start + i)->set_cumftime(fields[4+i].toDouble());
+        }
+    }
+}
+
+void DisplaceModel::commitNodesStatsFromSimu()
+{
+    if (mDb && mNodesStatsDirty)
+        mDb->addNodesStats(mLastStats, mNodes);
+
+    mNodesStatsDirty = false;
 }
 
 int DisplaceModel::getVesselCount() const

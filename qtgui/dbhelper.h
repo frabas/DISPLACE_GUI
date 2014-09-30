@@ -70,20 +70,25 @@ signals:
 
 protected:
     bool checkMetadataTable();
-    bool checkNodesTable();
-    bool checkVesselsTable();
-    bool checkVesselsPosTable();
+    bool checkNodesTable(int version);
+    bool checkVesselsTable(int version);
+    bool checkVesselsPosTable(int version);
 
 private:
     bool mOngoingTransaction;
 
     VesselPositionInserter *mInserter;
     QThread *mInsertThread;
+    int mVersion;
+
+    static const int VERSION;
 
     static const QString TBL_META;
     static const QString TBL_NODES;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
+
+    static const QString META_VERSION;
 };
 
 #endif // DBHELPER_H

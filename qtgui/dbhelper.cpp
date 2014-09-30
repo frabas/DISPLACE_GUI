@@ -8,18 +8,22 @@
 #include <QSqlError>
 #include <QDebug>
 
+const int DbHelper::VERSION = 1;
+
 const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
+
+const QString DbHelper::META_VERSION = "version";
 
 #define DB_ASSERT(x,q) Q_ASSERT_X((x), __FUNCTION__, (q).lastError().text().toStdString().c_str());
 
 
 DbHelper::DbHelper()
     : mDb(),
-      mOngoingTransaction(false)
- //     mLastStep(-1)
+      mOngoingTransaction(false),
+      mVersion(-1)
 {
     mInsertThread = new QThread();
 }
@@ -36,9 +40,12 @@ bool DbHelper::attachDb(QString file)
     // prepare helpers query
     // check tables
     checkMetadataTable();
-    checkNodesTable();
-    checkVesselsPosTable();
-    checkVesselsTable();
+    checkNodesTable(mVersion);
+    checkVesselsPosTable(mVersion);
+    checkVesselsTable(mVersion);
+
+    /* update ended here */
+    mVersion = VERSION;
 
     mInserter = new VesselPositionInserter(this, &mDb);
 
@@ -253,12 +260,19 @@ bool DbHelper::checkMetadataTable()
                );
 
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    } else {
+        bool ok;
+        mVersion = getMetadata(META_VERSION).toInt(&ok);
+        if (!ok)
+            mVersion = 0;
     }
+
+    setMetadata(META_VERSION, QString("%1").arg(VERSION));
 
     return true;
 }
 
-bool DbHelper::checkNodesTable()
+bool DbHelper::checkNodesTable(int version)
 {
     if (!mDb.tables().contains(TBL_NODES)) {
         QSqlQuery q;
@@ -278,10 +292,14 @@ bool DbHelper::checkNodesTable()
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
+    if (version < 2) {
+
+    }
+
     return true;
 }
 
-bool DbHelper::checkVesselsPosTable()
+bool DbHelper::checkVesselsPosTable(int version)
 {
     if (!mDb.tables().contains(TBL_VESSELS_POS)) {
         QSqlQuery q;
@@ -304,10 +322,14 @@ bool DbHelper::checkVesselsPosTable()
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
+    if (version < 2) {
+
+    }
+
     return true;
 }
 
-bool DbHelper::checkVesselsTable()
+bool DbHelper::checkVesselsTable(int version)
 {
     bool r;
     if (!mDb.tables().contains(TBL_VESSELS)) {
@@ -323,8 +345,11 @@ bool DbHelper::checkVesselsTable()
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
-    return true;
+    if (version < 2) {
 
+    }
+
+    return true;
 }
 
 

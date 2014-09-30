@@ -50,7 +50,9 @@ void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
         int id = fields[0].toInt();
 
 //TODO: check if this is ok.
+        /*
         for (int i = 3 ; i < fields.size(); ++i)
             model->getNodesList()[id]->set_benthos_tot_biomass(i, fields[i].toDouble());
+            */
     }
 }

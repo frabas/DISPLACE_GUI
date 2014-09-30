@@ -17,11 +17,6 @@
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map)
 {
-    /*
-    for (int i = 0; i < MAX_MODELS; ++i) {
-        mHarbourObjects[i] = QList<HarbourMapObject *>
-    }*/
-
     // create mapadapter, for mainlayer and overlay
     mMainMapAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
     mSeamarkAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOpenSeaMap());
@@ -73,4 +68,18 @@ void MapObjectsController::updateMapObjects(int model_n, DisplaceModel *model)
 void MapObjectsController::updateVesselPosition(int model, int idx)
 {
     mVesselObjects[model].at(idx)->vesselUpdated();
+}
+
+void MapObjectsController::setModelVisibility(int model, MapObjectsController::Visibility visibility)
+{
+    bool visible = (visibility == Visible);
+    foreach (HarbourMapObject *h, mHarbourObjects[model]) {
+        h->getGeometryEntity()->setVisible(visible);
+    }
+    foreach (NodeMapObject *n, mNodeObjects[model]) {
+        n->getGeometryEntity()->setVisible(visible);
+    }
+    foreach (VesselMapObject *v, mVesselObjects[model]) {
+        v->getGeometryEntity()->setVisible(visible);
+    }
 }

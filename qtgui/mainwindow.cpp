@@ -133,6 +133,10 @@ void MainWindow::on_action_Load_triggered()
 
 void MainWindow::on_modelSelector_currentIndexChanged(int index)
 {
+    if (currentModelIdx != -1) {
+        mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Invisible);
+    }
+
     currentModelIdx = ui->modelSelector->itemData(index).toInt();
     if (currentModelIdx >= 0)
         currentModel = models[currentModelIdx];
@@ -140,13 +144,16 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         currentModel = 0;
     treemodel->setCurrentModel(currentModel);
 
-    bool e = (currentModelIdx == 0);
+    mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
+
+    bool e = (currentModelIdx != 0);
     ui->play_bk->setEnabled(e);
     ui->play_fbk->setEnabled(e);
     ui->play_ffwd->setEnabled(e);
     ui->play_first->setEnabled(e);
     ui->play_fwd->setEnabled(e);
     ui->play_last->setEnabled(e);
+    ui->play_step->setEnabled(e);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -195,7 +202,7 @@ void MainWindow::updateModelState()
 
 void MainWindow::updateOutputFile(QString path)
 {
-    mOutputFileParser.parse(path, models[0]);
+    mOutputFileParser.parse(path.trimmed(), models[0]);
 }
 
 void MainWindow::updateModelList()

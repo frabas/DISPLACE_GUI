@@ -27,6 +27,12 @@ public:
 
     void updateVesselPosition (int model, int idx);
 
+    enum Visibility { Visible, Invisible };
+    /** \brief Sets the visibility of the model objects
+     * \param model index of the model
+     * \param visibility visibility status
+     * */
+    void setModelVisibility(int model, Visibility visibility);
 private:
     qmapcontrol::QMapControl *mMap;
     QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];

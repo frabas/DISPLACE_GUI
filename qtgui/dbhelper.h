@@ -29,7 +29,7 @@ public:
     explicit VesselPositionInserter(DbHelper *helper, QSqlDatabase *db);
 
 public slots:
-    void addVesselPosition (int step, int idx , double x, double y, double fuel, int state);
+    void addVesselPosition (int step, int idx , double x, double y, double course, double fuel, int state);
     void flush();
 };
 
@@ -65,7 +65,7 @@ public:
 
     int getLastKnownStep();
 signals:
-    void postVesselInsertion (int step, int idx , double x, double y, double fuel, int state);
+    void postVesselInsertion (int step, int idx , double x, double y, double course, double fuel, int state);
     void flush();
 
 protected:

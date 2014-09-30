@@ -42,7 +42,7 @@ bool DbHelper::attachDb(QString file)
 
     mInserter = new VesselPositionInserter(this, &mDb);
 
-    connect (this, SIGNAL(postVesselInsertion(int,int,double,double,double,int)), mInserter, SLOT(addVesselPosition(int,int,double,double,double,int)));
+    connect (this, SIGNAL(postVesselInsertion(int,int,double,double,double,double,int)), mInserter, SLOT(addVesselPosition(int,int,double,double,double,double,int)));
     connect (this, SIGNAL(flush()), mInserter, SLOT(flush()));
 
     mInserter->moveToThread(mInsertThread);
@@ -53,7 +53,7 @@ bool DbHelper::attachDb(QString file)
 
 void DbHelper::addVesselPosition(int step, int idx, Vessel *vessel)
 {
-    emit postVesselInsertion(step, idx, vessel->get_x(), vessel->get_y(), vessel->get_fuelcons(), vessel->get_state());
+    emit postVesselInsertion(step, idx, vessel->get_x(), vessel->get_y(), vessel->get_course(), vessel->get_fuelcons(), vessel->get_state());
 }
 
 void DbHelper::removeAllNodesDetails()
@@ -163,7 +163,7 @@ bool DbHelper::loadVessels(const QList<Node *> &nodes, QList<Vessel *> &vessels)
 bool DbHelper::updateVesselsToStep(int steps, QList<Vessel *> &vessels)
 {
     QSqlQuery q;
-    q.prepare("SELECT vesselid,x,y,fuel,state,cumcatches,timeatsea,reason_to_go_back FROM " + TBL_VESSELS_POS
+    q.prepare("SELECT vesselid,x,y,fuel,state,cumcatches,timeatsea,reason_to_go_back,course FROM " + TBL_VESSELS_POS
               + " WHERE tstep=?");
     q.addBindValue(steps);
 
@@ -178,6 +178,7 @@ bool DbHelper::updateVesselsToStep(int steps, QList<Vessel *> &vessels)
         double cum = q.value(5).toDouble();
         double tim = q.value(6).toDouble();
         int r = q.value(7).toInt();
+        double course = q.value(8).toDouble();
 
         Vessel *v = vessels.at(idx);
         v->set_xy(x,y);
@@ -186,6 +187,7 @@ bool DbHelper::updateVesselsToStep(int steps, QList<Vessel *> &vessels)
         v->set_cumcatches(cum);
         v->set_timeatsea(tim);
         v->set_reason_to_go_back(r);
+        v->set_course(course);
     }
     return true;
 }
@@ -290,6 +292,7 @@ bool DbHelper::checkVesselsPosTable()
                + "tstep INTEGER,"
                + "x REAL,"
                + "y REAL,"
+               + "course REAL,"
                + "fuel REAL,"
                + "state INTEGER,"
                + "cumcatches REAL,"
@@ -337,13 +340,13 @@ VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *d
     mVesselInsertionQuery = new QSqlQuery;
     mVesselInsertionQuery->prepare(
                 "INSERT INTO " + DbHelper::TBL_VESSELS_POS
-                + "(vesselid,tstep,x,y,fuel,state) VALUES (?,?,?,?,?,?)"
+                + "(vesselid,tstep,x,y,course,fuel,state) VALUES (?,?,?,?,?,?,?)"
                 );
 
     mDb.open();
 }
 
-void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double fuel, int state)
+void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double course,double fuel, int state)
 {
     /* if it's a new step, commits the insertion and restart */
     ++mCounter;
@@ -365,6 +368,7 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
     mVesselInsertionQuery->addBindValue(step);
     mVesselInsertionQuery->addBindValue(x);
     mVesselInsertionQuery->addBindValue(y);
+    mVesselInsertionQuery->addBindValue(course);
     mVesselInsertionQuery->addBindValue(fuel);
     mVesselInsertionQuery->addBindValue(state);
 

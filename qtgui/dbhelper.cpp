@@ -8,9 +8,13 @@
 #include <QSqlError>
 #include <QDebug>
 
+const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
+
+#define DB_ASSERT(x,q) Q_ASSERT_X((x), __FUNCTION__, (q).lastError().text().toStdString().c_str());
+
 
 DbHelper::DbHelper()
     : mDb(),
@@ -31,6 +35,7 @@ bool DbHelper::attachDb(QString file)
 
     // prepare helpers query
     // check tables
+    checkMetadataTable();
     checkNodesTable();
     checkVesselsPosTable();
     checkVesselsTable();
@@ -54,14 +59,14 @@ void DbHelper::removeAllNodesDetails()
 {
     QSqlQuery q;
     bool res = q.exec("DELETE FROM " + TBL_NODES);
-    Q_ASSERT(res);
+    DB_ASSERT(res,q);
 }
 
 void DbHelper::removeAllVesselsDetails()
 {
     QSqlQuery q;
     bool res = q.exec("DELETE FROM " + TBL_VESSELS);
-    Q_ASSERT(res);
+    DB_ASSERT(res,q);
 }
 
 void DbHelper::addNodesDetails(int idx, Node *node)
@@ -166,9 +171,49 @@ void DbHelper::endTransaction()
     mOngoingTransaction = false;
 }
 
+void DbHelper::setMetadata(QString key, QString value)
+{
+    QSqlQuery q;
+    q.prepare("INSERT OR REPLACE INTO " +TBL_META
+              + "(key,value) VALUES(?,?)");
+
+    q.addBindValue(key);
+    q.addBindValue(value);
+    bool res = q.exec();
+    DB_ASSERT(res,q);
+}
+
+QString DbHelper::getMetadata(QString key)
+{
+    QSqlQuery q;
+    q.prepare("SELECT value FROM " + TBL_META + " WHERE key=?");
+    q.addBindValue(key);
+    q.exec();
+    if (q.next())
+        return q.value(0).toString();
+    return QString();
+}
+
+bool DbHelper::checkMetadataTable()
+{
+    if (!mDb.tables().contains(TBL_META)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_META + "("
+               + "key VARCHAR(16) PRIMARY KEY,"
+               + "value VARCHAR(16)"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    return true;
+}
+
 bool DbHelper::checkNodesTable()
 {
-    if (!mDb.tables().contains(TBL_VESSELS_POS)) {
+    if (!mDb.tables().contains(TBL_NODES)) {
         QSqlQuery q;
         bool r =
         q.exec("CREATE TABLE " + TBL_NODES + "("

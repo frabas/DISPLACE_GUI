@@ -55,10 +55,14 @@ public:
     void beginTransaction();
     void endTransaction();
 
+    void setMetadata (QString key, QString value);
+    QString getMetadata (QString key);
+
 signals:
     void postVesselInsertion (int step, int idx , double x, double y, double fuel, int state);
 
 protected:
+    bool checkMetadataTable();
     bool checkNodesTable();
     bool checkVesselsTable();
     bool checkVesselsPosTable();
@@ -69,6 +73,7 @@ private:
     VesselPositionInserter *mInserter;
     QThread *mInsertThread;
 
+    static const QString TBL_META;
     static const QString TBL_NODES;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;

@@ -100,6 +100,12 @@ bool DisplaceModel::save()
     return true;
 }
 
+void DisplaceModel::simulationEnded()
+{
+    if (mDb)
+        mDb->flushBuffers();
+}
+
 int DisplaceModel::getHarboursCount() const
 {
     return mHarbours.size();

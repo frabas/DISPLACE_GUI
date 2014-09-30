@@ -22,12 +22,15 @@ class VesselPositionInserter : public QObject {
     QSqlDatabase mDb;
     QSqlQuery *mVesselInsertionQuery;
 
+    int mFlushCount;
+    int mCounter;
     int mLastStep;
 public:
     explicit VesselPositionInserter(DbHelper *helper, QSqlDatabase *db);
 
 public slots:
     void addVesselPosition (int step, int idx , double x, double y, double fuel, int state);
+    void flush();
 };
 
 class DbHelper : public QObject
@@ -54,12 +57,14 @@ public:
 
     void beginTransaction();
     void endTransaction();
+    void flushBuffers();
 
     void setMetadata (QString key, QString value);
     QString getMetadata (QString key);
 
 signals:
     void postVesselInsertion (int step, int idx , double x, double y, double fuel, int state);
+    void flush();
 
 protected:
     bool checkMetadataTable();

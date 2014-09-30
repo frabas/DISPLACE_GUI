@@ -43,6 +43,7 @@ bool DbHelper::attachDb(QString file)
     mInserter = new VesselPositionInserter(this, &mDb);
 
     connect (this, SIGNAL(postVesselInsertion(int,int,double,double,double,int)), mInserter, SLOT(addVesselPosition(int,int,double,double,double,int)));
+    connect (this, SIGNAL(flush()), mInserter, SLOT(flush()));
 
     mInserter->moveToThread(mInsertThread);
     mInsertThread->start();
@@ -169,6 +170,11 @@ void DbHelper::endTransaction()
 {
     mDb.commit();
     mOngoingTransaction = false;
+}
+
+void DbHelper::flushBuffers()
+{
+    emit flush();
 }
 
 void DbHelper::setMetadata(QString key, QString value)
@@ -319,4 +325,10 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
 
     if (!mVesselInsertionQuery->exec())
         qDebug() << mVesselInsertionQuery->lastError();
+}
+
+void VesselPositionInserter::flush()
+{
+    mHelper->endTransaction();
+    mCounter = 0;
 }

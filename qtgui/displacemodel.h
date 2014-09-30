@@ -25,6 +25,9 @@ public:
     bool linkDatabase (QString path);
     bool save();
 
+    /** \brief Signals the simulation has ended. Flush all buffers */
+    void simulationEnded();
+
     // Getter
     QString name() const { return mName; }
     QString basepath() const { return mBasePath; }

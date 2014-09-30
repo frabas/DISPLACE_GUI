@@ -171,6 +171,9 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
 
         if (state != QProcess::Running)
             simulatorProcessStepChanged(-1);
+
+        if (state == QProcess::NotRunning)
+            models[0]->simulationEnded();
     } else {
         ui->cmdStart->setEnabled(false);
         ui->cmdPause->setEnabled(false);

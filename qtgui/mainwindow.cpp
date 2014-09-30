@@ -43,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings set;
+    restoreGeometry(set.value("mainGeometry").toByteArray());
+    restoreState(set.value("mainState").toByteArray());
+
     for (int i = 0; i < maxModels; ++i) {
         models[i] = 0;
     }
@@ -263,6 +267,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
     } else {
         event->accept();
+    }
+
+    if (event->isAccepted()) {
+        QSettings sets;
+        sets.setValue("mainGeometry", saveGeometry());
+        sets.setValue("mainState", saveState());
     }
 }
 

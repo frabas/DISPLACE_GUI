@@ -276,7 +276,12 @@ vector<double> Node::get_impact_on_pops ()
 
 void Node::set_vid (int val)
 {
-	vid.push_back(val);
+    vid.push_back(val);
+}
+
+void Node::set_cumftime(int tot)
+{
+    cumftime = tot;
 }
 
 

@@ -82,6 +82,7 @@ class Node
 		void set_avai_pops_at_selected_szgroup(int name_pop, vector<double> val);
 		void set_impact_on_pops(int name_pop, double val);
 		void set_vid(int val);
+        void set_cumftime(int tot);
 		void add_to_cumftime(int delta_time);
 		void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);

@@ -141,6 +141,10 @@ bool use_gui = false;
  * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by commas:
  *                   id,x,y,course,fuel,state
  * =Upath       Output file has been updated. path is the absolute path of the file.
+ * =Ndata       Nodes stats update: format
+ *                  stat,tstep,first,number,data...
+ *              stat can be:
+ *                  cumftime
  */
 
 /**---------------------------------------------------------------**/
@@ -3162,6 +3166,21 @@ int main(int argc, char* argv[])
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
 			}
+            if (use_gui) {
+                size_t l = 0;
+                while (l < nodes.size()) {
+                    size_t nn = std::min ((size_t)100, nodes.size() - l);
+
+                    cout << "=Ncumftime," << tstep << "," << l << "," << nn /*<< "," << nodes.size()*/ ;
+                    for (size_t n=0; n<nn; n++)
+                    {
+                        cout <<"," << nodes.at(l + n)->get_cumftime();
+    //                    nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
+                    }
+                    cout << endl;
+                    l += nn;
+                }
+            }
 
 			//...and export the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)

@@ -2354,6 +2354,7 @@ int main(int argc, char* argv[])
 	ofstream popnodes_cumftime;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumftime_"+namesimu+".dat";
 	popnodes_cumftime.open(filename.c_str());
+    std::string popnodes_cumftime_filename = filename;
 
 	ofstream benthosnodes;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
@@ -3167,6 +3168,7 @@ int main(int argc, char* argv[])
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
 			}
             if (use_gui) {
+#if 0 // removed. Just pass an "update file" command
                 size_t l = 0;
                 while (l < nodes.size()) {
                     size_t nn = std::min ((size_t)100, nodes.size() - l);
@@ -3180,6 +3182,10 @@ int main(int argc, char* argv[])
                     cout << endl;
                     l += nn;
                 }
+#endif
+
+                cout << "=U" << popnodes_cumftime_filename << endl;
+                popnodes_end.flush();
             }
 
 			//...and export the benthos biomasses on node

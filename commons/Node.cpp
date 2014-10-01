@@ -52,6 +52,8 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 		is_harbour=false;
 	}
 
+    m_nbpops = nbpops;
+    m_nszgrp = nbszgroups;
 }
 
 

@@ -101,6 +101,8 @@ class Node
 		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
 		void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
+        int get_nbpops() const { return m_nbpops; }
+        int get_nszgroups() const { return m_nszgrp; }
 	protected:
 	private:
 		int idx_node;
@@ -124,5 +126,7 @@ class Node
 								 // possibly per functional group
 		vector<double> benthos_tot_biomass;
 
+        int m_nbpops;
+        int m_nszgrp;
 };
 #endif							 // NODE_H

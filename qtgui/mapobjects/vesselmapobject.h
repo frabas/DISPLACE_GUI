@@ -2,8 +2,9 @@
 #define VESSELMAPOBJECT_H
 
 #include <mapobjects/mapobject.h>
+#include <modelobjects/vesseldata.h>
+
 #include <QMapControl/GeometryPointShapeScaled.h>
-#include <Vessel.h>
 
 #include <QBrush>
 
@@ -18,18 +19,17 @@ class VesselMapObject : public MapObject
         static QBrush *color;
         static QBrush *altColor;
 
-        Vessel *mVessel;
+        VesselData *mVessel;
     public:
-        VesselGraphics (Vessel *vessel);
+        VesselGraphics (VesselData *vessel);
 
         void updated();
     protected:
         virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
-//        void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
     };
 
 public:
-    VesselMapObject(Vessel *vessel);
+    VesselMapObject(VesselData *vessel);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
@@ -38,7 +38,7 @@ public:
     void vesselUpdated();
 
 private:
-    Vessel *mVessel;
+    VesselData *mVessel;
     std::shared_ptr<VesselGraphics> mGeometry;
 
 };

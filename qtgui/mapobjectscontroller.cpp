@@ -48,16 +48,16 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
         mEntityLayer->addGeometry(obj->getGeometryEntity());
     }
 
-    const QList<Node *> &nodes = model->getNodesList();
-    foreach (Node *nd, nodes) {
+    const QList<NodeData *> &nodes = model->getNodesList();
+    foreach (NodeData *nd, nodes) {
         NodeMapObject *obj = new NodeMapObject(nd);
         mNodeObjects[model_n].append(obj);
 
         mGraphLayer->addGeometry(obj->getGeometryEntity());
     }
 
-    const QList<Vessel *> &vessels = model->getVesselList();
-    foreach (Vessel *vsl, vessels) {
+    const QList<VesselData *> &vessels = model->getVesselList();
+    foreach (VesselData *vsl, vessels) {
         VesselMapObject *obj = new VesselMapObject(vsl);
         mVesselObjects[model_n].append(obj);
 
@@ -67,9 +67,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
 void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-    const QList<Vessel *> &vessels = model->getVesselList();
-    foreach (Vessel *vsl, vessels) {
-        updateVesselPosition(model_n, vsl->get_idx());
+    const QList<VesselData *> &vessels = model->getVesselList();
+    foreach (VesselData *vsl, vessels) {
+        updateVesselPosition(model_n, vsl->mVessel->get_idx());
     }
 
 }

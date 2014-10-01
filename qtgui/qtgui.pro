@@ -54,7 +54,9 @@ SOURCES += \
     modelobjects/benthos.cpp \
     outputfileparser.cpp \
     simulationsetupdialog.cpp \
-    dbhelper.cpp
+    dbhelper.cpp \
+    modelobjects/nodedata.cpp \
+    modelobjects/vesseldata.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -85,7 +87,9 @@ HEADERS += \
     modelobjects/benthos.h \
     outputfileparser.h \
     simulationsetupdialog.h \
-    dbhelper.h
+    dbhelper.h \
+    modelobjects/nodedata.h \
+    modelobjects/vesseldata.h
 
 RESOURCES += \
     qtgui.qrc

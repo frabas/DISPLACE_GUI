@@ -4,10 +4,10 @@
 #include <scenario.h>
 #include <config.h>
 
-#include <Node.h>
-#include <Harbour.h>
-#include <Vessel.h>
+#include <modelobjects/nodedata.h>
+#include <modelobjects/vesseldata.h>
 #include <modelobjects/benthos.h>
+#include <Harbour.h>
 
 #include <QString>
 #include <QList>
@@ -38,7 +38,7 @@ public:
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
 
-    const QList<Node *> &getNodesList() const { return mNodes; }
+    const QList<NodeData *> &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
 
@@ -50,7 +50,7 @@ public:
      * */
     void updateNodesStatFromSimu(QString);
 
-    const QList<Vessel *> &getVesselList() const { return mVessels; }
+    const QList<VesselData *> &getVesselList() const { return mVessels; }
     int getVesselCount() const;
     QString getVesselId(int idx) const;
     void updateVessel (int tstep, int idx, float x, float y, float course, float fuel, int state );
@@ -94,8 +94,8 @@ private:
     Config mConfig;
 
     QList<Harbour *> mHarbours;
-    QList<Node *> mNodes;
-    QList<Vessel *> mVessels;
+    QList<NodeData *> mNodes;
+    QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
     QMap<int, Benthos *> mBenthosInfo;
 

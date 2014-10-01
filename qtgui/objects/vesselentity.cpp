@@ -44,8 +44,8 @@ QVariant VesselEntity::data(const QModelIndex &index, int role) const
         if (role == Qt::DisplayRole)
             return model->getModel()->getVesselId(mVesselId);
         if (role == Qt::ToolTipRole) {
-            Vessel *v = model->getModel()->getVesselList()[mVesselId];
-            return QString("%1 %2").arg(v->get_y()).arg(v->get_x());
+            VesselData *v = model->getModel()->getVesselList()[mVesselId];
+            return QString("%1 %2").arg(v->mVessel->get_y()).arg(v->mVessel->get_x());
         }
     }
 

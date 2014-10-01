@@ -6,12 +6,12 @@ Benthos::Benthos(int id)
 {
 }
 
-void Benthos::setNodes(const QList<Node *> &nodes)
+void Benthos::setNodes(const QList<NodeData *> &nodes)
 {
     mNodes = nodes;
 }
 
-void Benthos::appendNode(Node *node)
+void Benthos::appendNode(NodeData *node)
 {
     mNodes.append(node);
 }

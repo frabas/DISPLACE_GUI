@@ -4,21 +4,21 @@
 #include <QMap>
 #include <QString>
 
-class Node;
+class NodeData;
 
 class Benthos
 {
     int mBenthosId;
-    QList<Node *> mNodes;
+    QList<NodeData *> mNodes;
 
 public:
     explicit Benthos(int id);
 
     int getId() const { return mBenthosId; }
-    const QList<Node *> getNodes() const { return mNodes; }
+    const QList<NodeData *> getNodes() const { return mNodes; }
 
-    void setNodes(const QList<Node *> &nodes);
-    void appendNode (Node *node);
+    void setNodes(const QList<NodeData *> &nodes);
+    void appendNode (NodeData *node);
 };
 
 #endif // BENTHOS_H

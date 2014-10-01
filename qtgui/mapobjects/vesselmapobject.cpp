@@ -9,7 +9,7 @@
 #include <QPainter>
 #include <QDebug>
 
-VesselMapObject::VesselMapObject(Vessel *vessel)
+VesselMapObject::VesselMapObject(VesselData *vessel)
     : mVessel(vessel)
 {
     mGeometry = std::shared_ptr<VesselGraphics> (new VesselGraphics(mVessel));
@@ -18,7 +18,7 @@ VesselMapObject::VesselMapObject(Vessel *vessel)
 void VesselMapObject::vesselUpdated()
 {
     mGeometry->layer()->removeGeometry(mGeometry);
-    mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->get_x(), mVessel->get_y()));
+    mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
     mGeometry->layer()->addGeometry(mGeometry);
 }
 
@@ -26,8 +26,8 @@ void VesselMapObject::vesselUpdated()
 QBrush *VesselMapObject::VesselGraphics::color = 0;
 QBrush *VesselMapObject::VesselGraphics::altColor = 0;
 
-VesselMapObject::VesselGraphics::VesselGraphics(Vessel *vessel)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->get_x(), vessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
+VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
       mVessel(vessel)
 {
     if (color == 0)
@@ -38,7 +38,7 @@ VesselMapObject::VesselGraphics::VesselGraphics(Vessel *vessel)
 
 void VesselMapObject::VesselGraphics::updated()
 {
-    setCoord(qmapcontrol::PointWorldCoord(mVessel->get_x(), mVessel->get_y()));
+    setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
     emit positionChanged(this);
     emit requestRedraw();
 }
@@ -47,14 +47,14 @@ void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcon
 {
     Q_UNUSED(rect);
 
-    painter.rotate(mVessel->get_course());
+    painter.rotate(mVessel->mVessel->get_course());
 
     painter.setBrush(*color);
     painter.drawEllipse(-10, -20, 20, 40);
 
     // Ears
-    painter.setBrush(mVessel->get_state() == 3 ? *color : *altColor);
+    painter.setBrush(mVessel->mVessel->get_state() == 3 ? *color : *altColor);
     painter.drawEllipse(-6, -12, 12, 24);
 
-    painter.rotate(-mVessel->get_course());
+    painter.rotate(-mVessel->mVessel->get_course());
 }

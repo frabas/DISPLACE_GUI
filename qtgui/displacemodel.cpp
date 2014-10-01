@@ -166,16 +166,16 @@ int DisplaceModel::getVesselCount() const
 
 QString DisplaceModel::getVesselId(int idx) const
 {
-    return QString::fromStdString(mVessels.at(idx)->get_name());
+    return QString::fromStdString(mVessels.at(idx)->mVessel->get_name());
 }
 
 void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float course, float fuel, int state)
 {
-    Vessel *v = mVessels.at(idx);
-    v->set_xy(x,y);
-    v->set_course(course);
-    v->set_cumfuelcons(fuel);
-    v->set_state(state);
+    VesselData *v = mVessels.at(idx);
+    v->mVessel->set_xy(x,y);
+    v->mVessel->set_course(course);
+    v->mVessel->set_cumfuelcons(fuel);
+    v->mVessel->set_state(state);
 
     if (mDb) {
         mDb->addVesselPosition(tstep, idx, v);
@@ -352,19 +352,21 @@ bool DisplaceModel::loadNodes()
                                        fishprices_each_species_per_cat,
                                        init_fuelprices
                                        );
+            NodeData *n = new NodeData(h);
             mHarbours.push_back(h);
-            mNodes.push_back(h);
+            mNodes.push_back(n);
         }
         else
         {
-            Node *n = new Node(i,
-                                    graph_coord_x[i],
-                                    graph_coord_y[i],
-                                    graph_coord_harbour[i],
-                                    graph_point_code_area[i],
-                                    graph_point_code_landscape[i],
-                                    nbpops,
-                                    NBSZGROUP);
+            Node * nd = new Node(i,
+                                 graph_coord_x[i],
+                                 graph_coord_y[i],
+                                 graph_coord_harbour[i],
+                                 graph_point_code_area[i],
+                                 graph_point_code_landscape[i],
+                                 nbpops,
+                                 NBSZGROUP);
+            NodeData *n = new NodeData(nd);
 
             mNodes.push_back(n);
 
@@ -519,7 +521,7 @@ bool DisplaceModel::loadVessels()
             cout << "then take node: " << start_harbour << endl;
         }
 
-        Vessel * v = new Vessel(mNodes.at(start_harbour),
+        Vessel * v = new Vessel(mNodes.at(start_harbour)->mNode,
             i,
             vesselids[i],
             nbpops,
@@ -542,7 +544,8 @@ bool DisplaceModel::loadVessels()
             resttime_par1s[i],
             resttime_par2s[i],
             av_trip_duration[i]);
-        mVessels.push_back(v);
+        VesselData *vd = new VesselData(v);
+        mVessels.push_back(vd);
 
         // some useful setters...
         // will also be useful when change of YEAR-QUARTER
@@ -602,9 +605,9 @@ bool DisplaceModel::loadVessels()
         // init cpue_nodes_species for this vessel
         int nbnodes=gshape_name_nodes_with_cpue.size();
                                  // init the vector of vector with Os
-        mVessels.at(i)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
+        mVessels.at(i)->mVessel->init_gshape_cpue_nodes_species(nbnodes, nbpops);
                                  // init the vector of vector with Os
-        mVessels.at(i)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
+        mVessels.at(i)->mVessel->init_gscale_cpue_nodes_species(nbnodes, nbpops);
         for (int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
         {
                                  // look into the multimap...
@@ -614,18 +617,18 @@ bool DisplaceModel::loadVessels()
             if(!gshape_cpue_species.empty())
             {
                                  // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
-                mVessels.at(i)->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
+                mVessels.at(i)->mVessel->set_gshape_cpue_nodes_species(n, gshape_cpue_species);
                                  // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
-                mVessels.at(i)->set_gscale_cpue_nodes_species(n, gscale_cpue_species);
+                mVessels.at(i)->mVessel->set_gscale_cpue_nodes_species(n, gscale_cpue_species);
             }
         }
 
         // need to compute expected cpue (averaged over node but cumulated over species)
         // for this particular vessel, in order to scale the prior guess (see below)
         double expected_cpue=0;
-        vector <vector<double> > gshape_cpue_nodes_species = mVessels.at(i)->get_gshape_cpue_nodes_species();
-        vector <vector<double> > gscale_cpue_nodes_species = mVessels.at(i)->get_gscale_cpue_nodes_species();
-        vector <int> fgrounds= mVessels.at(i)->get_fgrounds();
+        vector <vector<double> > gshape_cpue_nodes_species = mVessels.at(i)->mVessel->get_gshape_cpue_nodes_species();
+        vector <vector<double> > gscale_cpue_nodes_species = mVessels.at(i)->mVessel->get_gscale_cpue_nodes_species();
+        vector <int> fgrounds= mVessels.at(i)->mVessel->get_fgrounds();
         vector <double> expected_cpue_this_pop (nbpops);
         for(int pop = 0; pop < nbpops; pop++)
         {
@@ -658,7 +661,7 @@ bool DisplaceModel::loadVessels()
 
         // init at 0 cumcatch and cumeffort per trip,
         // init at best guest the experiencedcpue_fgrounds
-        vector<double > freq_fgrounds= mVessels.at(i)->get_freq_fgrounds();
+        vector<double > freq_fgrounds= mVessels.at(i)->mVessel->get_freq_fgrounds();
         vector<double > init_for_fgrounds(fgrounds.size());
         vector<double > cumeffort_fgrounds= init_for_fgrounds;
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
@@ -686,18 +689,18 @@ bool DisplaceModel::loadVessels()
             }
         }
         // per total...
-        mVessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
-        mVessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
-        mVessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
-        mVessels.at(i)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
+        mVessels.at(i)->mVessel->set_cumcatch_fgrounds(cumcatch_fgrounds);
+        mVessels.at(i)->mVessel->set_cumeffort_fgrounds(cumeffort_fgrounds);
+        mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
+        mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
                                  // compute for the first time, to get freq_experiencedcpue_fgrounds...
-        mVessels.at(i)->compute_experiencedcpue_fgrounds();
+        mVessels.at(i)->mVessel->compute_experiencedcpue_fgrounds();
         // ...or per pop
-        mVessels.at(i)->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
-        mVessels.at(i)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
-        mVessels.at(i)->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
+        mVessels.at(i)->mVessel->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
+        mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
+        mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
                                  // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
-        mVessels.at(i)->compute_experiencedcpue_fgrounds_per_pop();
+        mVessels.at(i)->mVessel->compute_experiencedcpue_fgrounds_per_pop();
 
         // note that, at the start of the simu, freq of visit will be equivalent to freq_fgrounds
         // and then freq of visit will be updated (via the bayes rule) trip after trip from this initial freqency...
@@ -736,7 +739,7 @@ bool DisplaceModel::initBenthos()
 {
     QList<int> ids;
 
-    foreach (Node *nd, mNodes) {
+    foreach (NodeData *nd, mNodes) {
         int bm = nd->get_marine_landscape();
         Benthos *benthos = 0;
 

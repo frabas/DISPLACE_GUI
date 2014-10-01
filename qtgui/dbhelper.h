@@ -9,8 +9,8 @@ QT_BEGIN_NAMESPACE
 class QSqlQuery;
 QT_END_NAMESPACE
 
-class Node;
-class Vessel;
+class NodeData;
+class VesselData;
 class DbHelper;
 
 class VesselPositionInserter : public QObject {
@@ -45,18 +45,18 @@ public:
 
     bool attachDb(QString file);
 
-    void addNodesDetails(int idx, Node *node);
+    void addNodesDetails(int idx, NodeData *node);
     void removeAllNodesDetails();
 
-    void addNodesStats (int tstep, const QList<Node *> &nodes);
+    void addNodesStats (int tstep, const QList<NodeData *> &nodes);
 
-    void addVesselPosition (int step, int idx, Vessel *vessel);
+    void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
-    void addVesselDetails (int idx, Vessel *vessel);
+    void addVesselDetails (int idx, VesselData *vessel);
 
-    bool loadNodes(QList<Node *> &nodes);
-    bool loadVessels(const QList<Node *> &nodes, QList<Vessel *> &vessels);
-    bool updateVesselsToStep(int steps, QList<Vessel *> &vessels);
+    bool loadNodes(QList<NodeData *> &nodes);
+    bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
+    bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
 
     void beginTransaction();
     void endTransaction();

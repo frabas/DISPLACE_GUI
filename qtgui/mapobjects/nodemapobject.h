@@ -3,20 +3,20 @@
 
 #include <mapobjects/mapobject.h>
 #include <QMapControl/GeometryPointCircle.h>
-#include <Node.h>
+#include <modelobjects/nodedata.h>
 
 
 class NodeMapObject : public MapObject
 {
 public:
-    NodeMapObject(Node *node);
+    NodeMapObject(NodeData *node);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
     }
 
 private:
-    Node *mNode;
+    NodeData *mNode;
     std::shared_ptr<qmapcontrol::GeometryPointCircle> mGeometry;
 
 };

@@ -1,6 +1,6 @@
 #include "nodemapobject.h"
 
-NodeMapObject::NodeMapObject(Node *node)
+NodeMapObject::NodeMapObject(NodeData *node)
     : mNode(node),
      mGeometry()
 {

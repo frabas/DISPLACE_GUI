@@ -297,14 +297,14 @@ void MainWindow::centerMapOnHarbourId(int id)
 
 void MainWindow::centerMapOnNodeId(int id)
 {
-    Node *h = currentModel->getNodesList()[id];
+    NodeData *h = currentModel->getNodesList()[id];
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
 
 void MainWindow::centerMapOnVesselId(int id)
 {
-    Vessel *h = currentModel->getVesselList()[id];
-    centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
+    VesselData *h = currentModel->getVesselList()[id];
+    centerMap(qmapcontrol::PointWorldCoord(h->mVessel->get_x(), h->mVessel->get_y()));
 }
 
 void MainWindow::on_cmdStart_clicked()

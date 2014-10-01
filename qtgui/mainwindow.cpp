@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString)), this, SLOT(updateOutputFile(QString)));
+    connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
 
     simulatorProcessStateChanged(QProcess::NotRunning);
 
@@ -229,6 +230,11 @@ void MainWindow::updateModelState()
 }
 
 void MainWindow::updateOutputFile(QString path)
+{
+    models[0]->parseOutputStatsFile(path.trimmed());
+}
+
+void MainWindow::updateOutputFile(QString path, int)
 {
     models[0]->parseOutputStatsFile(path.trimmed());
 }

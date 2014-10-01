@@ -30,6 +30,7 @@ signals:
     void simulationStepChanged(int);
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
     void outputFileUpdated(QString);
+    void outputFileUpdated(QString, int);
     void nodesStatsUpdate(QString);
 
 private slots:
@@ -45,7 +46,7 @@ private:
     int mLastStep;
 
     bool processCodedLine(QString line);
-    void parseUpdateVessel(QString line);
+    void parseUpdateVessel(QStringList fields);
 };
 
 #endif // SIMULATOR_H

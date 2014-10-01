@@ -18,6 +18,7 @@ DisplaceModel::DisplaceModel()
     mOutputFileParser->moveToThread(mParserThread);
 
     connect(this, SIGNAL(parseOutput(QString)), mOutputFileParser, SLOT(parse(QString)));
+    connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
 }
 

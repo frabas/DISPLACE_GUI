@@ -17,6 +17,11 @@ OutputFileParser::OutputFileParser(DisplaceModel *model, QObject *parent)
 
 void OutputFileParser::parse(QString path)
 {
+    parse(path, -1);
+}
+
+void OutputFileParser::parse(QString path, int tstep)
+{
     QFile file (path);
     QFileInfo info (file);
 
@@ -26,7 +31,7 @@ void OutputFileParser::parse(QString path)
 
         parsePopStart(&file, mModel);
     } else if (name.startsWith("popnodes_cumftime_")) {
-        qDebug() << "Parsiung " << path << " as population cum_ftime";
+        qDebug() << "Parsing " << path << " as population cum_ftime";
     }
 }
 

@@ -47,6 +47,7 @@ private slots:
     void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();
     void updateOutputFile (QString);
+    void updateOutputFile (QString,int);
     void mapFocusPointChanged(PointWorldCoord);
 
     void errorImportingStatsFile(QString);

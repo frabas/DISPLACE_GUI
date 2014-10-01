@@ -77,6 +77,9 @@ public:
     void parseOutputStatsFile (QString file) {
         emit parseOutput(file);
     }
+    void parseOutputStatsFile (QString file, int tstep) {
+        emit parseOutput(file, tstep);
+    }
 
     void commitNodesStatsFromSimu(int tstep);
 protected:
@@ -89,6 +92,7 @@ protected:
 
 signals:
     void parseOutput(QString);
+    void parseOutput(QString, int);
     void errorParsingStatsFile(QString);
 
 private:

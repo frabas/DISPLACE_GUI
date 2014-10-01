@@ -129,18 +129,23 @@ bool Simulator::processCodedLine(QString line)
     if (!line.startsWith("="))
         return false;
 
+    QStringList args = line.trimmed().mid(2).split(",");
+
     switch(line.at(1).toLatin1()) {
     case 'S':
-        mLastStep = line.mid(2).toInt();
+        mLastStep = args[0].toInt();
         emit simulationStepChanged(mLastStep);
         break;
 
     case 'V':
-        parseUpdateVessel(line.mid(2));
+        parseUpdateVessel(args);
         break;
 
     case 'U':
-        emit outputFileUpdated(line.mid(2));
+        if (args.size() > 1)
+            emit outputFileUpdated(args[0], args[1].toInt());
+        else
+            emit outputFileUpdated(args[0]);
         break;
 
     case 'N':
@@ -154,9 +159,8 @@ bool Simulator::processCodedLine(QString line)
     return true;
 }
 
-void Simulator::parseUpdateVessel(QString line)
+void Simulator::parseUpdateVessel(QStringList fields)
 {
-    QStringList fields = line.split(",");
     int id = fields[1].toInt();
     float x = fields[3].toFloat();
     float y = fields[4].toFloat();

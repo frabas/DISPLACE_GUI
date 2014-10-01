@@ -18,6 +18,7 @@ public:
 
 public slots:
     void parse (QString path);
+    void parse (QString path, int tstep);
 
 signals:
     void error(QString);

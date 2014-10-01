@@ -18,5 +18,9 @@
         <file>icons/database.png</file>
         <file>icons/loadsim.png</file>
         <file>icons/link.png</file>
+        <file>icons/compass.png</file>
+        <file>icons/geometry.png</file>
+        <file>icons/graph.png</file>
+        <file>icons/OpenSeaMap.png</file>
     </qresource>
 </RCC>

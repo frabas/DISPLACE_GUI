@@ -12,6 +12,8 @@ QT_END_NAMESPACE
 class NodeData;
 class VesselData;
 class DbHelper;
+class Config;
+class Scenario;
 
 class VesselPositionInserter : public QObject {
     Q_OBJECT
@@ -53,6 +55,11 @@ public:
     void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
     void addVesselDetails (int idx, VesselData *vessel);
+
+    bool loadConfig(Config &);
+    bool saveConfig (const Config &);
+    bool loadScenario (Scenario &);
+    bool saveScenario (const Scenario &);
 
     bool loadNodes(QList<NodeData *> &nodes);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);

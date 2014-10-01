@@ -1,5 +1,8 @@
 #include "dbhelper.h"
 
+#include <config.h>
+#include <scenario.h>
+
 #include <modelobjects/nodedata.h>
 #include <modelobjects/vesseldata.h>
 
@@ -144,6 +147,100 @@ void DbHelper::addVesselDetails(int idx, VesselData *vessel)
     q.addBindValue(vessel->mVessel->get_loc()->get_idx_node());
     res = q.exec();
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
+}
+
+bool DbHelper::loadConfig(Config &cfg)
+{
+    cfg.setNbpops(getMetadata("config::nbpops").toInt());
+
+    QList<int> ipops;
+    QStringList lsi = getMetadata("config::ipops").split(" ");
+    foreach (QString i, lsi) {
+        ipops.push_back(i.toInt());
+    }
+    cfg.setImplicit_pops(ipops);
+
+    QList<double> vl;
+    lsi = getMetadata("config::calib_oth_landings").split(" ");
+    foreach (QString i, lsi) {
+        vl.push_back(i.toDouble());
+    }
+    cfg.setCalib_oth_landings(vl);
+
+    vl.clear();
+    lsi = getMetadata("config::calib_weight_at_szgroup").split(" ");
+    foreach (QString i, lsi) {
+        vl.push_back(i.toDouble());
+    }
+    cfg.setCalib_weight_at_szgroup(vl);
+
+    vl.clear();
+    lsi = getMetadata("config::calib_cpue_multi").split(" ");
+    foreach (QString i, lsi) {
+        vl.push_back(i.toDouble());
+    }
+    cfg.setCalib_cpue_multiplier(vl);
+
+    return true;
+}
+
+bool DbHelper::saveConfig(const Config &cfg)
+{
+    setMetadata("config::nbpops", QString::number(cfg.getNbpops()));
+
+    QStringList str;
+    QList<int> il = cfg.implicit_pops();
+    foreach (int i, il)
+        str.push_back(QString::number(i));
+    setMetadata("config::ipops", str.join(" "));
+
+    str.clear();
+    QList<double> dl = cfg.calib_oth_landings();
+    foreach (double d, dl)
+        str.push_back(QString::number(d));
+    setMetadata("config::calib_oth_landings", str.join(" "));
+
+    str.clear();
+    dl = cfg.calib_weight_at_szgroup();
+    foreach (double d, dl)
+        str.push_back(QString::number(d));
+    setMetadata("config::calib_weight_at_szgroup", str.join(" "));
+
+    str.clear();
+    dl = cfg.calib_cpue_multiplier();
+    foreach (double d, dl)
+        str.push_back(QString::number(d));
+    setMetadata("config::calib_cpue_multi", str.join(" "));
+
+    return true;
+}
+
+bool DbHelper::loadScenario(Scenario &sce)
+{
+    sce.setGraph(getMetadata("sce::graph").toInt());
+    sce.setNrow_graph(getMetadata("sce::nrow_graph").toInt());
+    sce.setNrow_coord(getMetadata("sce::nrow_coord").toInt());
+    sce.setA_port(getMetadata("sce::aport").toInt());
+    sce.setGraph_res(getMetadata("sce::graph_res").toDouble());
+    sce.setDyn_alloc_sce(getMetadata("sce::dyn_alloc_sce").split(" "));
+    sce.setDyn_pop_sce(getMetadata("sce::dyn_pop_sce").split(" "));
+    sce.setBiolsce(getMetadata("sce::biol_sce"));
+
+    return true;
+}
+
+bool DbHelper::saveScenario(const Scenario &sce)
+{
+    setMetadata("sce::graph", QString::number(sce.getGraph()));
+    setMetadata("sce::nrow_graph", QString::number(sce.getNrow_graph()));
+    setMetadata("sce::nrow_coord", QString::number(sce.getNrow_coord()));
+    setMetadata("sce::aport", QString::number(sce.getA_port()));
+    setMetadata("sce::graph_res", QString::number(sce.getGraph_res()));
+    setMetadata("sce::dyn_alloc_sce", sce.getDyn_alloc_sce().join(" "));
+    setMetadata("sce::dyn_pop_sce", sce.getDyn_pop_sce().join(" "));
+    setMetadata("sce::biol_sce", sce.getBiolsce());
+
+    return true;
 }
 
 bool DbHelper::loadNodes(QList<NodeData *> &nodes)

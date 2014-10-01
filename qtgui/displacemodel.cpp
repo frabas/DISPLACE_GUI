@@ -57,6 +57,12 @@ bool DisplaceModel::loadDatabase(QString path)
     if (!mDb->attachDb(path))
         return false;
 
+    mName = mDb->getMetadata("name");
+    mBasePath = mDb->getMetadata("basepath");
+    mOutputName = mDb->getMetadata("output");
+
+    mDb->loadConfig(mConfig);
+    mDb->loadScenario(mScenario);
     loadNodesFromDb();
     loadVesselsFromDb();
 
@@ -82,6 +88,13 @@ bool DisplaceModel::linkDatabase(QString path)
 
     /* start a transaction to speedup insertion */
     mDb->beginTransaction();
+
+    mDb->setMetadata("name", mName);
+    mDb->setMetadata("basepath", mBasePath);
+    mDb->setMetadata("output", mOutputName);
+
+    mDb->saveConfig(mConfig);
+    mDb->saveScenario(mScenario);
 
     /* load nodes */
     mDb->removeAllNodesDetails();
@@ -202,6 +215,8 @@ Scenario DisplaceModel::scenario() const
 void DisplaceModel::setScenario(const Scenario &scenario)
 {
     mScenario = scenario;
+    if (mDb)
+        mDb->saveScenario(mScenario);
 }
 
 void DisplaceModel::setCurrentStep(int step)

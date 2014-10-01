@@ -95,4 +95,5 @@ RESOURCES += \
     qtgui.qrc
 
 OTHER_FILES += \
-    qtgui.rc
+    qtgui.rc \
+    ../docs/output_fileformats.txt

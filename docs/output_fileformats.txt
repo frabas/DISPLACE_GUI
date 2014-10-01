@@ -1,0 +1,39 @@
+Formats of output files
+=======================
+
+
+Path: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/
+
+vmslike_simu2.dat
+-----------------
+
+Written by: main()
+See: simulator/main.cpp
+Content: Position of each vessel, if state != 3
+
+Format:
+tstep name tstep_dep x y course cum_fuel state
+
+popnodes_start_*.dat
+--------------------
+
+Written by: Node::export_popnodes()
+See: commons/Node.cpp
+Content:
+
+
+Format:
+tstep / node / long / lat / tot N sp0 / tot N sp1 /...
+
+
+
+popnodes_cumftime
+--------------------
+
+Written by: Node::export_popnodes()
+See: commons/Node.cpp
+Content:
+
+Format:
+tstep   node   long    lat    cumftime
+

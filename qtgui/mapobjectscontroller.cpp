@@ -79,6 +79,13 @@ void MapObjectsController::updateVesselPosition(int model, int idx)
     mVesselObjects[model].at(idx)->vesselUpdated();
 }
 
+void MapObjectsController::updateNodes(int model)
+{
+    foreach (NodeMapObject *obj, mNodeObjects[model]) {
+        obj->getGeometryEntity()->requestRedraw();
+    }
+}
+
 void MapObjectsController::setModelVisibility(int model, MapObjectsController::Visibility visibility)
 {
     bool visible = (visibility == Visible);

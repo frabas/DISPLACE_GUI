@@ -16,6 +16,8 @@
 #include <QMap>
 #include <QThread>
 
+#include <QDebug>
+
 class DbHelper;
 
 class DisplaceModel : public QObject
@@ -70,16 +72,23 @@ public:
     int getCurrentStep() const { return mCurrentStep; }
     int getLastStep() const { return mLastStep; }
 
+
+    /* Interesting pop access functions */
+
+    const QList<int> &getInterestingPops() const { return mInterestingPop; }
+
+    /** \brief insert the pop into the list of interest for pops */
+    void setInterestingPop(int n);
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingPop(int n);
+    bool isInterestingPop(int n);
+
     //
 
     QString getLastError() const { return mLastError; }
 
-    void parseOutputStatsFile (QString file) {
-        emit parseOutput(file);
-    }
-    void parseOutputStatsFile (QString file, int tstep) {
-        emit parseOutput(file, tstep);
-    }
+    void parseOutputStatsFile (QString file, int tstep);
 
     void commitNodesStatsFromSimu(int tstep);
 protected:
@@ -91,8 +100,8 @@ protected:
     bool loadVesselsFromDb();
 
 signals:
-    void parseOutput(QString);
     void parseOutput(QString, int);
+    void outputParsed();
     void errorParsingStatsFile(QString);
 
 private:
@@ -108,6 +117,8 @@ private:
     bool mLive;
     Scenario mScenario;
     Config mConfig;
+
+    QList<int> mInterestingPop;
 
     QList<Harbour *> mHarbours;
     QList<NodeData *> mNodes;

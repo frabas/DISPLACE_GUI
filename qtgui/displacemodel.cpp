@@ -16,10 +16,16 @@ DisplaceModel::DisplaceModel()
       mParserThread(new QThread(this))
 {
     mOutputFileParser->moveToThread(mParserThread);
+    mParserThread->start();
 
-    connect(this, SIGNAL(parseOutput(QString)), mOutputFileParser, SLOT(parse(QString)));
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
+    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+
+    /* Add some sample interesting pop */
+    setInterestingPop(3);
+    setInterestingPop(7);
+    setInterestingPop(10);
 }
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)
@@ -227,6 +233,26 @@ void DisplaceModel::setCurrentStep(int step)
     }
 }
 
+void DisplaceModel::setInterestingPop(int n)
+{
+    if (!mInterestingPop.contains(n))
+        mInterestingPop.append(n);
+}
+
+void DisplaceModel::remInterestingPop(int n)
+{
+    mInterestingPop.removeAll(n);
+}
+
+bool DisplaceModel::isInterestingPop(int n)
+{
+    return mInterestingPop.contains(n);
+}
+
+void DisplaceModel::parseOutputStatsFile(QString file, int tstep)
+{
+    emit parseOutput(file, tstep);
+}
 
 /* Warn: copy and pasted from simulator's main.cpp */
 #define NBSZGROUP 14
@@ -374,7 +400,7 @@ bool DisplaceModel::loadNodes()
                                        fishprices_each_species_per_cat,
                                        init_fuelprices
                                        );
-            NodeData *n = new NodeData(h);
+            NodeData *n = new NodeData(h, this);
             mHarbours.push_back(h);
             mNodes.push_back(n);
         }
@@ -388,7 +414,7 @@ bool DisplaceModel::loadNodes()
                                  graph_point_code_landscape[i],
                                  nbpops,
                                  NBSZGROUP);
-            NodeData *n = new NodeData(nd);
+            NodeData *n = new NodeData(nd, this);
 
             mNodes.push_back(n);
 
@@ -786,7 +812,7 @@ bool DisplaceModel::initBenthos()
 bool DisplaceModel::loadNodesFromDb()
 {
     mNodes.clear();
-    if (!mDb->loadNodes(mNodes))
+    if (!mDb->loadNodes(mNodes, this))
         return false;
     return true;
 }

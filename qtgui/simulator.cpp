@@ -142,10 +142,7 @@ bool Simulator::processCodedLine(QString line)
         break;
 
     case 'U':
-        if (args.size() > 1)
-            emit outputFileUpdated(args[0], args[1].toInt());
-        else
-            emit outputFileUpdated(args[0]);
+        emit outputFileUpdated(args[0], args[1].toInt());
         break;
 
     case 'N':

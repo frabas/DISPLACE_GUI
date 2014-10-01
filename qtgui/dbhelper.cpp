@@ -243,7 +243,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     return true;
 }
 
-bool DbHelper::loadNodes(QList<NodeData *> &nodes)
+bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
 {
     QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,nbpops,szgroup FROM " + TBL_NODES + " ORDER BY _id");
     if (!q.exec()) {
@@ -262,7 +262,7 @@ bool DbHelper::loadNodes(QList<NodeData *> &nodes)
         int szgroup = 0;
 
         Node *nd = new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup);
-        NodeData*n = new NodeData(nd);
+        NodeData*n = new NodeData(nd, model);
 
         while (nodes.size() < idx+1)
             nodes.push_back(0);

@@ -60,7 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
-    connect (mSimulation, SIGNAL(outputFileUpdated(QString)), this, SLOT(updateOutputFile(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
 
     simulatorProcessStateChanged(QProcess::NotRunning);
@@ -132,6 +131,7 @@ void MainWindow::on_action_Load_triggered()
 
         /* Connect model */
         connect (m, SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
+        connect (m, SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
 
         mMapController->createMapObjectsFromModel(0, m);
         ui->modelSelector->setCurrentIndex(0);
@@ -229,14 +229,14 @@ void MainWindow::updateModelState()
     updateModelList();
 }
 
-void MainWindow::updateOutputFile(QString path)
+void MainWindow::updateOutputFile(QString path, int n)
 {
-    models[0]->parseOutputStatsFile(path.trimmed());
+    models[0]->parseOutputStatsFile(path.trimmed(), n);
 }
 
-void MainWindow::updateOutputFile(QString path, int)
+void MainWindow::outputUpdated()
 {
-    models[0]->parseOutputStatsFile(path.trimmed());
+    mMapController->updateNodes(0);
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)

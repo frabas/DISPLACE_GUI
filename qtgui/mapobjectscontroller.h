@@ -28,6 +28,8 @@ public:
 
     void updateVesselPosition (int model, int idx);
 
+    void updateNodes(int model);
+
     enum Visibility { Visible, Invisible };
     /** \brief Sets the visibility of the model objects
      * \param model index of the model

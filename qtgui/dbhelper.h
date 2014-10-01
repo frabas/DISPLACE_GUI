@@ -9,6 +9,7 @@ QT_BEGIN_NAMESPACE
 class QSqlQuery;
 QT_END_NAMESPACE
 
+class DisplaceModel;
 class NodeData;
 class VesselData;
 class DbHelper;
@@ -61,7 +62,7 @@ public:
     bool loadScenario (Scenario &);
     bool saveScenario (const Scenario &);
 
-    bool loadNodes(QList<NodeData *> &nodes);
+    bool loadNodes(QList<NodeData *> &nodes, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
 

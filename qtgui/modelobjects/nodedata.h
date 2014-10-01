@@ -3,13 +3,20 @@
 
 #include <Node.h>
 
+class DisplaceModel;
+
+/** \brief an extension class for Node
+ *
+ * */
 class NodeData
 {
 public:
     Node *mNode;    /* This is crap. But we have no other choice */
 
-    explicit NodeData(Node *nd);
+    explicit NodeData(Node *nd, DisplaceModel *model);
+    virtual ~NodeData();
 
+    /* Proxy functions to avoid change too much code */
     int get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
     int get_code_area() const { return mNode->get_code_area(); }
@@ -21,7 +28,16 @@ public:
     int get_cumftime() const { return mNode->get_cumftime(); }
     void set_cumftime(int i) { mNode->set_cumftime(i); }
 
+    /* Extending functions */
+
+    DisplaceModel *getModel() const { return mModel; }
+
+    void setPop(int pop, double v);
+    double getPop(int pop) const ;
 private:
+    DisplaceModel *mModel;
+    double *mPop;
+
 };
 
 #endif // NODEDATA_H

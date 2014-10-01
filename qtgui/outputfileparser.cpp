@@ -9,12 +9,13 @@
 
 #include <QMessageBox>
 
-OutputFileParser::OutputFileParser(MainWindow *win)
-    : mOwner(win)
+OutputFileParser::OutputFileParser(DisplaceModel *model, QObject *parent)
+    : QObject(parent),
+      mModel(model)
 {
 }
 
-void OutputFileParser::parse(QString path, DisplaceModel *model)
+void OutputFileParser::parse(QString path)
 {
     QFile file (path);
     QFileInfo info (file);
@@ -23,7 +24,9 @@ void OutputFileParser::parse(QString path, DisplaceModel *model)
     if (name.startsWith("vmslike_")) {
         qDebug() << "Parsing " << path << " as population node start";
 
-        parsePopStart(&file, model);
+        parsePopStart(&file, mModel);
+    } else if (name.startsWith("popnodes_cumftime_")) {
+        qDebug() << "Parsiung " << path << " as population cum_ftime";
     }
 }
 
@@ -36,10 +39,9 @@ void OutputFileParser::parse(QString path, DisplaceModel *model)
 void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
 {
     if (!file->open(QFile::ReadOnly)) {
-        QMessageBox::warning(mOwner, QObject::tr("Error loading output file"),
-                             QString(QObject::tr("The file %1 cannot be read: %2"))
-                             .arg(file->fileName())
-                             .arg(file->errorString()));
+        emit error(QString(QObject::tr("The file %1 cannot be read: %2"))
+                   .arg(file->fileName())
+                   .arg(file->errorString()));
         return;
     }
     QTextStream strm (file);

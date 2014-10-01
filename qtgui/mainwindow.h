@@ -49,6 +49,8 @@ private slots:
     void updateOutputFile (QString);
     void mapFocusPointChanged(PointWorldCoord);
 
+    void errorImportingStatsFile(QString);
+
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
@@ -85,8 +87,6 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-
-    OutputFileParser mOutputFileParser;
 
     // Data model
     DisplaceModel *models[MAX_MODELS];

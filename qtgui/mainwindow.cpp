@@ -32,7 +32,6 @@ const QString MainWindow::dbLastDirKey = "db_lastdir";
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    mOutputFileParser(this),
     models(),
     currentModel(0),
     currentModelIdx(0),
@@ -129,6 +128,9 @@ void MainWindow::on_action_Load_triggered()
                                  QString(tr("Error loading model %1: %2")).arg(parts.at(1)).arg(m->getLastError()));
             return;
         }
+
+        /* Connect model */
+        connect (m, SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
 
         mMapController->createMapObjectsFromModel(0, m);
         ui->modelSelector->setCurrentIndex(0);
@@ -228,12 +230,18 @@ void MainWindow::updateModelState()
 
 void MainWindow::updateOutputFile(QString path)
 {
-    mOutputFileParser.parse(path.trimmed(), models[0]);
+    models[0]->parseOutputStatsFile(path.trimmed());
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
     statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+}
+
+void MainWindow::errorImportingStatsFile(QString msg)
+{
+    QMessageBox::warning(this, tr("Error importing stats file"),
+                         msg);
 }
 
 void MainWindow::updateModelList()

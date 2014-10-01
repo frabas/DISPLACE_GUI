@@ -8,15 +8,19 @@
 #include <modelobjects/vesseldata.h>
 #include <modelobjects/benthos.h>
 #include <Harbour.h>
+#include <outputfileparser.h>
 
+#include <QObject>
 #include <QString>
 #include <QList>
 #include <QMap>
+#include <QThread>
 
 class DbHelper;
 
-class DisplaceModel
+class DisplaceModel : public QObject
 {
+    Q_OBJECT
 public:
     DisplaceModel();
 
@@ -70,6 +74,10 @@ public:
 
     QString getLastError() const { return mLastError; }
 
+    void parseOutputStatsFile (QString file) {
+        emit parseOutput(file);
+    }
+
     void commitNodesStatsFromSimu(int tstep);
 protected:
     bool loadNodes();
@@ -78,6 +86,10 @@ protected:
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
+
+signals:
+    void parseOutput(QString);
+    void errorParsingStatsFile(QString);
 
 private:
     DbHelper *mDb;
@@ -99,7 +111,10 @@ private:
     QList<Benthos *> mBenthos;
     QMap<int, Benthos *> mBenthosInfo;
 
-    // ---
+    // --- Working objects
+
+    OutputFileParser *mOutputFileParser;
+    QThread *mParserThread;
 
     QString mLastError;
 };

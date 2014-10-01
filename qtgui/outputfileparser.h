@@ -1,19 +1,26 @@
 #ifndef OUTPUTFILEPARSER_H
 #define OUTPUTFILEPARSER_H
 
+#include <QObject>
 #include <QString>
 #include <QFile>
 
-class MainWindow;
 class DisplaceModel;
 
-class OutputFileParser
+class OutputFileParser : public QObject
 {
-    MainWindow *mOwner;
-public:
-    OutputFileParser(MainWindow *owner);
+    Q_OBJECT
 
-    void parse (QString path, DisplaceModel *model);
+    DisplaceModel *mModel;
+
+public:
+    explicit OutputFileParser(DisplaceModel *model, QObject *parent = 0);
+
+public slots:
+    void parse (QString path);
+
+signals:
+    void error(QString);
 
 protected:
     void parsePopStart(QFile *file, DisplaceModel *model);

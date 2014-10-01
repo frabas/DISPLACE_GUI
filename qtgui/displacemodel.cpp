@@ -11,8 +11,14 @@ DisplaceModel::DisplaceModel()
     : mDb(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
-      mLive(false)
+      mLive(false),
+      mOutputFileParser(new OutputFileParser(this)),
+      mParserThread(new QThread(this))
 {
+    mOutputFileParser->moveToThread(mParserThread);
+
+    connect(this, SIGNAL(parseOutput(QString)), mOutputFileParser, SLOT(parse(QString)));
+    connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
 }
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)

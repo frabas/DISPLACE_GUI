@@ -3,6 +3,8 @@
 
 #include <Node.h>
 
+#include <QList>
+
 class DisplaceModel;
 
 /** \brief an extension class for Node
@@ -32,11 +34,18 @@ public:
 
     DisplaceModel *getModel() const { return mModel; }
 
+    int getPopCount() const;
     void setPop(int pop, double v);
+    void setPop(QList<double> v, double tot);
     double getPop(int pop) const ;
+    double getPopTot () const {
+        return mPopTot;
+    }
+
 private:
     DisplaceModel *mModel;
     double *mPop;
+    double mPopTot;
 
 };
 

@@ -156,6 +156,16 @@ QString DisplaceModel::getNodeId(int idx) const
     return QString::fromStdString(mNodes.at(idx)->get_name());
 }
 
+void DisplaceModel::checkStatsCollection(int tstep)
+{
+    if (mLastStats != tstep && mNodesStatsDirty) {
+        commitNodesStatsFromSimu(tstep);
+    }
+
+    mLastStats = tstep;
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::updateNodesStatFromSimu(QString data)
 {
     QStringList fields = data.split(",");
@@ -163,12 +173,7 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
     int start = fields[2].toInt();
     int num = fields[3].toInt();
 
-    if (mLastStats != tstep && mNodesStatsDirty) {
-        commitNodesStatsFromSimu(tstep);
-    }
-
-    mLastStats = tstep;
-    mNodesStatsDirty = true;
+    checkStatsCollection(tstep);
 
     if (fields[0] == "cumftime") {
         for (int i = 0; i < num; ++i) {
@@ -184,6 +189,20 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 
     mNodesStatsDirty = false;
 }
+
+void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, double tot)
+{
+    checkStatsCollection(tstep);
+    mNodes.at(node_idx)->setPop(stats, tot);
+}
+
+void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->set_cumftime(cumftime);
+}
+
+
 
 int DisplaceModel::getVesselCount() const
 {

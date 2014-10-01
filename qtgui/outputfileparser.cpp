@@ -50,15 +50,23 @@ void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
     }
     QTextStream strm (file);
 
+    QList<double> data;
+    data.reserve(model->getNBPops());
+    for (int i = 0; i < model->getNBPops(); ++i)
+        data.push_back(0.0);
+
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ");
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
         int id = fields[1].toInt();
 
-        // TODO: change this, stats must be collected.
-        for (int i = 4 ; i < fields.size(); ++i) {
-            model->getNodesList()[id]->setPop(i-4, fields[i].toDouble());
+        int i;
+        for (i = 4 ; i < fields.size()-1; ++i) {
+            data[i-4] = fields[i].toDouble();
         }
+        double tot = fields[i].toDouble();
+
+        model->collectNodePopStats(0, id, data, tot);
     }
 }
 
@@ -74,9 +82,13 @@ void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *m
 
     while (!strm.atEnd()) {
         QString line = strm.readLine();
-        QStringList fields = line.split(" ");
-        int id = fields[0].toInt();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[0].toInt();
 
-        // TODO complete
+        if (step == tstep) {
+            int id = fields[1].toInt();
+            model->collectPopCumftime (tstep, id, fields[4].toDouble());
+        }
+
     }
 }

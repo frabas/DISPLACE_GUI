@@ -40,6 +40,10 @@ public:
     QString outputName() const { return mOutputName; }
     bool isModelLoaded() const { return !mName.isEmpty(); }
 
+    int getNBPops() const {
+        return mConfig.getNbpops();
+    }
+
     const QList<Harbour *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
@@ -91,6 +95,11 @@ public:
     void parseOutputStatsFile (QString file, int tstep);
 
     void commitNodesStatsFromSimu(int tstep);
+
+    // Stats collecting. Must store data to db
+    void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, double tot);
+    void collectPopCumftime(int step, int node_idx, double cumftime);
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -98,6 +107,8 @@ protected:
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
+
+    void checkStatsCollection(int tstep);
 
 signals:
     void parseOutput(QString, int);

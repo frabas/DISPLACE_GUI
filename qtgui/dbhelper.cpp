@@ -5,6 +5,7 @@
 
 #include <modelobjects/nodedata.h>
 #include <modelobjects/vesseldata.h>
+#include <displacemodel.h>
 
 #include <QStringList>
 #include <QSqlQuery>
@@ -16,6 +17,7 @@ const int DbHelper::VERSION = 1;
 const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
+const QString DbHelper::TBL_POPS_STATS = "PopsStats";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -77,28 +79,37 @@ void DbHelper::removeAllNodesDetails()
 
 void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 {
-    QSqlQuery q;
+    QSqlQuery q, sq;
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
-              + "(nodeid,tstep,cumftime,tot_bio,imp_pop,imp_pop_sz) "
-              + "VALUES (?,?,?,?,?,?)");
+              + "(nodeid,tstep,cumftime,totpop) "
+              + "VALUES (?,?,?,?)");
 
     DB_ASSERT(r,q);
+
+    r = sq.prepare("INSERT INTO " + TBL_POPS_STATS
+        + "(statid,popid,value) VALUES(?,?,?)");
+    DB_ASSERT(r,sq);
 
     beginTransaction();
     foreach (NodeData *n, nodes) {
         q.addBindValue(n->get_idx_node());
         q.addBindValue(tstep);
         q.addBindValue(n->get_cumftime());
+        q.addBindValue(n->getPopTot());
 
-        q.addBindValue("");
-        q.addBindValue("");
-        q.addBindValue("");
-
-        // TODO: update when fields will be available.
         bool res = q.exec();
         DB_ASSERT(res, q);
+
+        for (int i = 0; i < n->getPopCount(); ++i) {
+            sq.addBindValue(q.lastInsertId());
+            sq.addBindValue(i);
+            sq.addBindValue(n->getPop(i));
+
+            res = sq.exec();
+            DB_ASSERT(res,sq);
+        }
     }
     endTransaction();
 }
@@ -412,9 +423,7 @@ bool DbHelper::checkNodesTable(int version)
                + "y REAL,"
                + "harbour INTEGER,"
                + "areacode INTEGER,"
-               + "landscape INTEGER,"
-               + "nbpops INTEGER,"
-               + "szgroup INTEGER"
+               + "landscape INTEGER"
                + ");"
                );
 
@@ -434,17 +443,34 @@ bool DbHelper::checkNodesStats(int version)
         QSqlQuery q;
         bool r =
         q.exec("CREATE TABLE " + TBL_NODES_STATS + "("
+               + "statid INTEGER PRIMARY KEY AUTOINCREMENT,"
                + "nodeid INTEGER,"
                + "tstep INTEGER,"
                + "cumftime REAL,"
-               + "tot_bio TEXT,"
-               + "imp_pop TEXT,"
-               + "imp_pop_sz TEXT"
+               + "totpop REAL"
                + ");"
                );
 
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+
+        q.exec("CREATE INDEX Idx" + TBL_NODES_STATS + " ON " + TBL_NODES_STATS + "(nodeid)");
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
+
+    if (!mDb.tables().contains(TBL_POPS_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_POPS_STATS + "("
+               + "statid INTEGER,"
+               + "popid INTEGER,"
+               + "value REAL"
+               + ");");
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+
+        q.exec("CREATE INDEX Idx" + TBL_POPS_STATS + " ON " + TBL_POPS_STATS + "(statid)");
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
 
     if (version < 2) {
 

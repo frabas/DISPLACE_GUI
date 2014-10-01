@@ -29,11 +29,8 @@ void NodeMapObject::NodeGraphics::drawShape(QPainter &painter, const qmapcontrol
 {
     Q_UNUSED(rect);
 
-    double tot = 0.0;
+    double tot = mNode->getPopTot();
     const QList<int> & ilist =mNode->getModel()->getInterestingPops();
-    foreach (int x, ilist) {
-        tot += mNode->getPop(x);
-    }
 
     if (tot > 1e-3) {
         double inc = 0.0;
@@ -41,7 +38,7 @@ void NodeMapObject::NodeGraphics::drawShape(QPainter &painter, const qmapcontrol
         for (int i = 0; i < ilist.size(); ++i) {
             v = mNode->getPop(ilist[i]) / tot;
             painter.setBrush(colors[i]);
-            painter.drawPie(0, 0, PIE_W, PIE_H, inc, (v * 360.0));
+            painter.drawPie(0, 0, PIE_W, PIE_H, inc, (v * 360.0 * 16.0));
             inc += v;
         }
     }

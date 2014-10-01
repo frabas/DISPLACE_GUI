@@ -97,6 +97,7 @@ private:
     static const QString TBL_META;
     static const QString TBL_NODES;
     static const QString TBL_NODES_STATS;
+    static const QString TBL_POPS_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
 

@@ -154,12 +154,6 @@ void guiSendUpdateCommand (const std::string &filename, int tstep)
         std::cout << "=U" << filename << "," << tstep << endl;
 }
 
-void guiSendUpdateCommand (const std::string &filename)
-{
-    if (use_gui)
-        std::cout << "=U" << filename << endl;
-}
-
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
@@ -2351,6 +2345,7 @@ int main(int argc, char* argv[])
 	ofstream popnodes_start;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_start_"+namesimu+".dat";
 	popnodes_start.open(filename.c_str());
+    std::string popnodes_start_filename = filename;
 
 	ofstream popnodes_end;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
@@ -2440,7 +2435,7 @@ int main(int argc, char* argv[])
     popnodes_start.flush();
 
     // signals the gui that the filename has been updated.
-    guiSendUpdateCommand(vmslike_filename);
+    guiSendUpdateCommand(popnodes_start_filename, 0);
 
 	//----------------------//
 	//----------------------//

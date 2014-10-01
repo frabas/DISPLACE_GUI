@@ -140,12 +140,25 @@ bool use_gui = false;
  * =Snnnn       Simulation Step nnnn (int) has been performed
  * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by commas:
  *                   id,x,y,course,fuel,state
- * =Upath       Output file has been updated. path is the absolute path of the file.
+ * =Upath[,tstep]       Output file has been updated. path is the absolute path of the file.
+ *                  optionally: includes the current sim step
  * =Ndata       Nodes stats update: format
  *                  stat,tstep,first,number,data...
  *              stat can be:
  *                  cumftime
  */
+
+void guiSendUpdateCommand (const std::string &filename, int tstep)
+{
+    if (use_gui)
+        std::cout << "=U" << filename << "," << tstep << endl;
+}
+
+void guiSendUpdateCommand (const std::string &filename)
+{
+    if (use_gui)
+        std::cout << "=U" << filename << endl;
+}
 
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
@@ -2427,9 +2440,7 @@ int main(int argc, char* argv[])
     popnodes_start.flush();
 
     // signals the gui that the filename has been updated.
-    if (use_gui) {
-        std::cout << "=U" << vmslike_filename << endl;
-    }
+    guiSendUpdateCommand(vmslike_filename);
 
 	//----------------------//
 	//----------------------//
@@ -3184,8 +3195,8 @@ int main(int argc, char* argv[])
                 }
 #endif
 
-                cout << "=U" << popnodes_cumftime_filename << endl;
                 popnodes_end.flush();
+                guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
             }
 
 			//...and export the benthos biomasses on node

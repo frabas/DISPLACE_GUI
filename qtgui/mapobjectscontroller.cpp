@@ -15,7 +15,9 @@
 #include <QMapControl/ImageManager.h>
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
-    : mMap(map)
+    : mMap(map),
+      mLayers(MAX_MODELS, LayerList(LayerMax)),
+      mOutputLayers(MAX_MODELS, LayerList(OutLayerMax))
 {
     // create mapadapter, for mainlayer and overlay
     mMainMapAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
@@ -24,22 +26,25 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     // create a layer with the mapadapter and type MapLayer
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
-    mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
-    mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
 
-    // add Layer to the MapControl
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
-    mMap->addLayer(mGraphLayer);
-    mMap->addLayer(mEntityLayer);
 
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
     mMap->setZoom(10);
-
 }
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
+    addStandardLayer(model_n, LayerMain, mMainLayer);
+    addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
+
+    std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
+    std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
+
+    addStandardLayer(model_n, LayerEntities, mEntityLayer);
+    addStandardLayer(model_n, LayerGraph, mGraphLayer);
+
     const QList<Harbour *> &harbours = model->getHarboursList();
     foreach (Harbour *h, harbours) {
         HarbourMapObject *obj = new HarbourMapObject(h);
@@ -98,4 +103,17 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     foreach (VesselMapObject *v, mVesselObjects[model]) {
         v->getGeometryEntity()->setVisible(visible);
     }
+}
+
+void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
+{
+    if (layer != mMainLayer && layer != mSeamarkLayer)
+        mMap->addLayer(layer);
+    mLayers[model].layers[id] = layer;
+}
+
+void MapObjectsController::addOutputLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
+{
+    mMap->addLayer(layer);
+    mOutputLayers[model].layers[id] = layer;
 }

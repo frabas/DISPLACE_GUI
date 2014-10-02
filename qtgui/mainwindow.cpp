@@ -417,8 +417,8 @@ void MainWindow::on_cmdSetup_clicked()
 void MainWindow::on_action_Link_database_triggered()
 {
     QSettings sets;
-    QString dbname =  QFileDialog::getOpenFileName(this, tr("Link database"),
-                                         sets.value(dbLastDirKey).toString(), dbFilter);
+    QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
+                                         sets.value(dbLastDirKey).toString(), dbFilter,0, QFileDialog::DontConfirmOverwrite);
 
     if (!dbname.isEmpty()) {
         QFileInfo info (dbname);

@@ -2325,10 +2325,12 @@ int main(int argc, char* argv[])
 	ofstream popdyn_N;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
 	popdyn_N.open(filename.c_str());
+    std::string popdyn_N_filename = filename;
 
 	ofstream popdyn_F;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_F_"+namesimu+".dat";
 	popdyn_F.open(filename.c_str());
+    std::string popdyn_F_filename = filename;
 
 	ofstream popdyn_annual_indic;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_annual_indic_"+namesimu+".dat";
@@ -2426,6 +2428,9 @@ int main(int argc, char* argv[])
 		}
 		popdyn_N << " " <<  endl;
 	}
+
+    popdyn_N.flush();
+    guiSendUpdateCommand(popdyn_F_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
 	if(namefolderinput!="fake") for (int n=0; n<nodes.size(); n++)
@@ -3206,7 +3211,12 @@ int main(int argc, char* argv[])
 				nodes.at(n)->recover_benthos_tot_biomass_per_funcgroup();
 			}
 
-		}
+            /* Flush and updates all statistics */
+            popdyn_F.flush();
+            guiSendUpdateCommand(popdyn_F_filename, tstep);
+            popdyn_N.flush();
+            guiSendUpdateCommand(popdyn_N_filename, tstep);
+        }
 		dout << "END: POP MODEL TASKS----------" << endl;
 
 		dout << "RE-READ DATA----------" << endl;

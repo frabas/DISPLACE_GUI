@@ -256,10 +256,10 @@ bool DbHelper::saveScenario(const Scenario &sce)
 
 bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,nbpops,szgroup FROM " + TBL_NODES + " ORDER BY _id");
-    if (!q.exec()) {
-        return false;
-    }
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape FROM " + TBL_NODES + " ORDER BY _id");
+    bool res = q.exec();
+
+    DB_ASSERT(res,q);
 
     while (q.next()) {
         int idx = q.value(0).toInt();

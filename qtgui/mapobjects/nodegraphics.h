@@ -27,4 +27,13 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
+class NodeWithCumFTimeGraphics : public NodeGraphics {
+public:
+    NodeWithCumFTimeGraphics(NodeData *node)
+        : NodeGraphics(node) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
 #endif // NODEGRAPHICS_H

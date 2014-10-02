@@ -19,6 +19,11 @@ NodeMapObject::NodeMapObject(Role role, NodeData *node)
                     new NodeWithPopStatsGraphics(mNode));
         break;
 
+    case GraphNodeWithCumFTimeRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithCumFTimeGraphics(mNode));
+        break;
+
     }
 
 }

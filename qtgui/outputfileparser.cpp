@@ -87,7 +87,8 @@ void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *m
 
         if (step == tstep) {
             int id = fields[1].toInt();
-            model->collectPopCumftime (tstep, id, fields[4].toDouble());
+            double cumftime = fields[4].toDouble();
+            model->collectPopCumftime (tstep, id, cumftime);
         }
 
     }

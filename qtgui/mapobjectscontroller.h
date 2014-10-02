@@ -62,6 +62,7 @@ public:
     };
     enum OutLayerIds {
         OutLayerPopStats = 0,
+        OutLayerCumFTime,
 
         OutLayerMax
     };

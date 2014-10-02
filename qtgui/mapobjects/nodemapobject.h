@@ -14,7 +14,8 @@ class NodeMapObject : public MapObject
 public:
     enum Role {
         GraphNodeRole,
-        GraphNodeWithPopStatsRole
+        GraphNodeWithPopStatsRole,
+        GraphNodeWithCumFTimeRole,
     };
 
     NodeMapObject(Role role, NodeData *node);

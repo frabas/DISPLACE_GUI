@@ -43,3 +43,15 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         }
     }
 }
+
+
+void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(c);
+
+    int d = mNode->get_cumftime() * PIE_W / 10;
+
+    painter.drawRect(-d/2, -d/2, d, d);
+}

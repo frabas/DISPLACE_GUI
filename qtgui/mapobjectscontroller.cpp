@@ -49,6 +49,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Pop Stats"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
 
+    std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Cum F Time"));
+    addOutputLayer(model_n, OutLayerCumFTime, cumftimelayer);
+
     const QList<Harbour *> &harbours = model->getHarboursList();
     foreach (Harbour *h, harbours) {
         HarbourMapObject *obj = new HarbourMapObject(h);
@@ -66,7 +69,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
         /* add here other roles */
         obj = new NodeMapObject(NodeMapObject::GraphNodeWithPopStatsRole, nd);
+        mNodeObjects[model_n].append(obj);
         popstatslayer->addGeometry(obj->getGeometryEntity());
+
+        obj = new NodeMapObject(NodeMapObject::GraphNodeWithCumFTimeRole, nd);
+        mNodeObjects[model_n].append(obj);
+        cumftimelayer->addGeometry(obj->getGeometryEntity());
     }
 
     const QList<VesselData *> &vessels = model->getVesselList();

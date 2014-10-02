@@ -17,7 +17,7 @@ const int DbHelper::VERSION = 1;
 const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
-const QString DbHelper::TBL_POPS_STATS = "PopsStats";
+const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -88,7 +88,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
     DB_ASSERT(r,q);
 
-    r = sq.prepare("INSERT INTO " + TBL_POPS_STATS
+    r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
         + "(statid,popid,value) VALUES(?,?,?)");
     DB_ASSERT(r,sq);
 
@@ -102,8 +102,10 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
         bool res = q.exec();
         DB_ASSERT(res, q);
 
+        int statid = q.lastInsertId().toInt();
+
         for (int i = 0; i < n->getPopCount(); ++i) {
-            sq.addBindValue(q.lastInsertId());
+            sq.addBindValue(statid);
             sq.addBindValue(i);
             sq.addBindValue(n->getPop(i));
 
@@ -339,6 +341,29 @@ bool DbHelper::updateVesselsToStep(int steps, QList<VesselData *> &vessels)
     return true;
 }
 
+bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
+{
+    QSqlQuery q;
+    bool res =
+    q.prepare("SELECT nodeid,popid,value FROM " + TBL_NODES_STATS
+              + " INNER JOIN " + TBL_POPNODES_STATS + " ON "
+              + TBL_NODES_STATS + ".statid = " + TBL_POPNODES_STATS + ".statid "
+              + "WHERE tstep=?");
+    DB_ASSERT(res,q);
+
+    q.addBindValue(step);
+    res = q.exec();
+    while (q.next()) {
+        int nid = q.value(0).toInt();
+        int pid = q.value(1).toInt();
+        double val = q.value(2).toDouble();
+
+        nodes.at(nid)->setPop(pid,val);
+    }
+
+    return true;
+}
+
 void DbHelper::beginTransaction()
 {
     mDb.transaction();
@@ -457,17 +482,17 @@ bool DbHelper::checkNodesStats(int version)
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
-    if (!mDb.tables().contains(TBL_POPS_STATS)) {
+    if (!mDb.tables().contains(TBL_POPNODES_STATS)) {
         QSqlQuery q;
         bool r =
-        q.exec("CREATE TABLE " + TBL_POPS_STATS + "("
+        q.exec("CREATE TABLE " + TBL_POPNODES_STATS + "("
                + "statid INTEGER,"
                + "popid INTEGER,"
                + "value REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
-        q.exec("CREATE INDEX Idx" + TBL_POPS_STATS + " ON " + TBL_POPS_STATS + "(statid)");
+        q.exec("CREATE INDEX Idx" + TBL_POPNODES_STATS + " ON " + TBL_POPNODES_STATS + "(statid)");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 

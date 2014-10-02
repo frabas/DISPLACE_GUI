@@ -249,6 +249,8 @@ void DisplaceModel::setCurrentStep(int step)
     mCurrentStep = step;
     if (mDb) {
         mDb->updateVesselsToStep(mCurrentStep, mVessels);
+        mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
+        /* TODO: Update here all other entries */
     }
 }
 

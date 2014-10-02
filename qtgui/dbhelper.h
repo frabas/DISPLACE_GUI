@@ -65,6 +65,7 @@ public:
     bool loadNodes(QList<NodeData *> &nodes, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
+    bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
 
     void beginTransaction();
     void endTransaction();

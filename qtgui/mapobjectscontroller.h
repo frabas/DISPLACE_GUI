@@ -61,7 +61,7 @@ public:
         LayerMax
     };
     enum OutLayerIds {
-        OutLayerPops = 0,
+        OutLayerPopStats = 0,
 
         OutLayerMax
     };
@@ -90,12 +90,14 @@ public:
     void setModelVisibility(int model, Visibility visibility);
     void setLayerVisibility (int model, LayerIds layer, bool visibility);
     bool isLayerVisible (int model, LayerIds layer);
+    void setOutLayerVisibility (int model, OutLayerIds layer, bool visibility);
+    bool isOutLayerVisible (int model, OutLayerIds layer);
 
     bool isModelActive (int model) const;
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
-    void addOutputLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
+    void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
 
 private:
     qmapcontrol::QMapControl *mMap;

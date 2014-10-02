@@ -2,6 +2,7 @@
 
 #include <objects/objecttreeentity.h>
 #include <objects/layerentity.h>
+#include <objects/outputlayerentity.h>
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
@@ -35,6 +36,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, QObject *parent) :
             entityTemplates.push_back(0);
 
         entityTemplates[Layers] = new objecttree::LayerEntity(this);
+        entityTemplates[OutputLayers] = new objecttree::OutputLayerEntity(this);
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
         entityTemplates[Nodes] = new objecttree::NodeEntity(this);
         entityTemplates[Vessels] = new objecttree::VesselEntity(this);

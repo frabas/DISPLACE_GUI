@@ -56,7 +56,9 @@ SOURCES += \
     simulationsetupdialog.cpp \
     dbhelper.cpp \
     modelobjects/nodedata.cpp \
-    modelobjects/vesseldata.cpp
+    modelobjects/vesseldata.cpp \
+    mapobjects/nodegraphics.cpp \
+    objects/outputlayerentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -89,7 +91,9 @@ HEADERS += \
     simulationsetupdialog.h \
     dbhelper.h \
     modelobjects/nodedata.h \
-    modelobjects/vesseldata.h
+    modelobjects/vesseldata.h \
+    mapobjects/nodegraphics.h \
+    objects/outputlayerentity.h
 
 RESOURCES += \
     qtgui.qrc

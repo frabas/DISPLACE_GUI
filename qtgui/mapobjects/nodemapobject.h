@@ -3,10 +3,7 @@
 
 #include <mapobjects/mapobject.h>
 #include <modelobjects/nodedata.h>
-
-#include <QMapControl/GeometryPointShapeScaled.h>
-
-#include <QBrush>
+#include <mapobjects/nodegraphics.h>
 
 namespace qmapcontrol {
     class RectWorldCoord;
@@ -14,21 +11,13 @@ namespace qmapcontrol {
 
 class NodeMapObject : public MapObject
 {
-
-    class NodeGraphics : public qmapcontrol::GeometryPointShapeScaled {
-        static const Qt::GlobalColor colors[];
-        QColor c;
-
-        NodeData *mNode;
-    public:
-        NodeGraphics (NodeData *node);
-    protected:
-        virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+public:
+    enum Role {
+        GraphNodeRole,
+        GraphNodeWithPopStatsRole
     };
 
-
-public:
-    NodeMapObject(NodeData *node);
+    NodeMapObject(Role role, NodeData *node);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;

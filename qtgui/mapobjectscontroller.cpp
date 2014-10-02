@@ -46,6 +46,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerEntities, mEntityLayer);
     addStandardLayer(model_n, LayerGraph, mGraphLayer);
 
+    std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Pop Stats"));
+    addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
+
     const QList<Harbour *> &harbours = model->getHarboursList();
     foreach (Harbour *h, harbours) {
         HarbourMapObject *obj = new HarbourMapObject(h);
@@ -56,10 +59,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<NodeData *> &nodes = model->getNodesList();
     foreach (NodeData *nd, nodes) {
-        NodeMapObject *obj = new NodeMapObject(nd);
+        NodeMapObject *obj = new NodeMapObject(NodeMapObject::GraphNodeRole, nd);
         mNodeObjects[model_n].append(obj);
 
         mGraphLayer->addGeometry(obj->getGeometryEntity());
+
+        /* add here other roles */
+        obj = new NodeMapObject(NodeMapObject::GraphNodeWithPopStatsRole, nd);
+        popstatslayer->addGeometry(obj->getGeometryEntity());
     }
 
     const QList<VesselData *> &vessels = model->getVesselList();
@@ -120,6 +127,18 @@ bool MapObjectsController::isLayerVisible(int model, MapObjectsController::Layer
     return mModelVisibility[model] && mLayers[model].isVisible(layer);
 }
 
+void MapObjectsController::setOutLayerVisibility(int model, MapObjectsController::OutLayerIds layer, bool visibility)
+{
+    mOutputLayers[model].setVisible(layer, visibility);
+    if (isModelActive(model))
+        mOutputLayers[model].layers[layer]->setVisible(visibility);
+}
+
+bool MapObjectsController::isOutLayerVisible(int model, OutLayerIds layer)
+{
+    return mModelVisibility[model] && mOutputLayers[model].isVisible(layer);
+}
+
 bool MapObjectsController::isModelActive(int model) const
 {
     return mModelVisibility[model];
@@ -132,7 +151,7 @@ void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_
     mLayers[model].layers[id] = layer;
 }
 
-void MapObjectsController::addOutputLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
+void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer)
 {
     mMap->addLayer(layer);
     mOutputLayers[model].layers[id] = layer;

@@ -16,8 +16,9 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
-      mLayers(MAX_MODELS, LayerList(LayerMax)),
-      mOutputLayers(MAX_MODELS, LayerList(OutLayerMax))
+      mModelVisibility(MAX_MODELS, false),
+      mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
+      mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax))
 {
     // create mapadapter, for mainlayer and overlay
     mMainMapAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
@@ -94,6 +95,8 @@ void MapObjectsController::updateNodes(int model)
 void MapObjectsController::setModelVisibility(int model, MapObjectsController::Visibility visibility)
 {
     bool visible = (visibility == Visible);
+    mModelVisibility[model] = visible;
+
     foreach (HarbourMapObject *h, mHarbourObjects[model]) {
         h->getGeometryEntity()->setVisible(visible);
     }
@@ -103,6 +106,23 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     foreach (VesselMapObject *v, mVesselObjects[model]) {
         v->getGeometryEntity()->setVisible(visible);
     }
+}
+
+void MapObjectsController::setLayerVisibility(int model, MapObjectsController::LayerIds layer, bool visibility)
+{
+    mLayers[model].setVisible(layer, visibility);
+    if (isModelActive(model))
+        mLayers[model].layers[layer]->setVisible(visibility);
+}
+
+bool MapObjectsController::isLayerVisible(int model, MapObjectsController::LayerIds layer)
+{
+    return mModelVisibility[model] && mLayers[model].isVisible(layer);
+}
+
+bool MapObjectsController::isModelActive(int model) const
+{
+    return mModelVisibility[model];
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)

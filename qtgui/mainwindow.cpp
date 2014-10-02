@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mapWidget->setWidget(map);
 
     /* Tree model setup */
-    treemodel = new ObjectTreeModel(map);
+    treemodel = new ObjectTreeModel(mMapController);
     ui->treeView->setModel(treemodel);
 }
 
@@ -152,7 +152,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         currentModel = models[currentModelIdx];
     else
         currentModel = 0;
-    treemodel->setCurrentModel(currentModel);
+    treemodel->setCurrentModel(currentModelIdx, currentModel);
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
 

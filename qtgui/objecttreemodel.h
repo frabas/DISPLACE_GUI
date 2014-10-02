@@ -5,10 +5,7 @@
 #include <QList>
 
 class DisplaceModel;
-
-namespace qmapcontrol {
-class QMapControl;
-}
+class MapObjectsController;
 
 namespace objecttree {
 class ObjectTreeEntity;
@@ -26,7 +23,7 @@ public:
         LastCategory
     };
 
-    explicit ObjectTreeModel(qmapcontrol::QMapControl *map, DisplaceModel *model = 0, QObject *parent = 0);
+    explicit ObjectTreeModel(MapObjectsController *map, QObject *parent = 0);
 
     int columnCount(const QModelIndex &parent) const;
     int rowCount(const QModelIndex &parent) const;
@@ -36,15 +33,15 @@ public:
     Qt::ItemFlags flags ( const QModelIndex & index ) const;
     bool setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
 
-    void setCurrentModel (DisplaceModel *model);
+    void setCurrentModel (int idx, DisplaceModel *model);
+    int getModelIdx() const { return mModelIdx; }
+    DisplaceModel *getModel() const { return mModel; }
+    MapObjectsController *getMapControl() const { return mMapControl; }
 
     // For use from ObjectTreeEntities
     QModelIndex createCategoryEntity(int row, int column, Category cat) const;
     QModelIndex createCategoryEntityFromChild (Category cat) const;
     QModelIndex createEntity (int row, int column, objecttree::ObjectTreeEntity *entity) const;
-
-    DisplaceModel *getModel() const { return mModel; }
-    qmapcontrol::QMapControl *getMapControl() const { return mMapControl; }
 
     bool isObject(QModelIndex index) const;
     Category getCategory (QModelIndex index) const;
@@ -55,8 +52,9 @@ signals:
 public slots:
 
 private:
-    qmapcontrol::QMapControl *mMapControl;
+    MapObjectsController *mMapControl;
     DisplaceModel *mModel;
+    int mModelIdx;
 
 protected:
     // helper functions

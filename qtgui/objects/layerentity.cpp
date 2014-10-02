@@ -1,8 +1,7 @@
 #include <objects/layerentity.h>
 
 #include <objecttreemodel.h>
-#include <QMapControl/QMapControl.h>
-#include <QMapControl/Layer.h>
+#include <mapobjectscontroller.h>
 
 namespace objecttree {
 
@@ -33,8 +32,8 @@ QModelIndex LayerEntity::index(int row, int column, const QModelIndex &parent) c
 
 int LayerEntity::rowCount() const
 {
-    if (mLayerEntityIndex == -1)
-        return model->getMapControl()->getLayers().size();
+    if (mLayerEntityIndex == -1 && model->getModelIdx() != -1)
+        return model->getMapControl()->getStandardLayerList(model->getModelIdx())->getCount();
 
     return 0;
 }
@@ -47,9 +46,9 @@ int LayerEntity::columnCount() const
 QVariant LayerEntity::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DisplayRole)
-        return QString::fromStdString(model->getMapControl()->getLayers().at(index.row())->getName());
+        return model->getMapControl()->getStandardLayerList(model->getModelIdx())->getName(index.row()); //->getLayers().at(index.row())->getName());
     if (role == Qt::CheckStateRole)
-        return QVariant(model->getMapControl()->getLayers().at(index.row())->isVisible() ? Qt::Checked : Qt::Unchecked);
+        return QVariant(model->getMapControl()->isLayerVisible(model->getModelIdx(), (MapObjectsController::LayerIds) index.row()) ? Qt::Checked : Qt::Unchecked);
     return QVariant();
 }
 
@@ -63,9 +62,9 @@ bool LayerEntity::setData(const QModelIndex &index, const QVariant &value, int r
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
-            model->getMapControl()->getLayers().at(index.row())->setVisible(false);
+            model->getMapControl()->setLayerVisibility(model->getModelIdx(), (MapObjectsController::LayerIds)index.row(), false);
         } else {
-            model->getMapControl()->getLayers().at(index.row())->setVisible(true);
+            model->getMapControl()->setLayerVisibility(model->getModelIdx(), (MapObjectsController::LayerIds)index.row(), true);
         }
         return true;
     }

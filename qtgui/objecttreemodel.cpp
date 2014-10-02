@@ -21,10 +21,11 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Benthos"),
 };
 
-ObjectTreeModel::ObjectTreeModel(qmapcontrol::QMapControl *map, DisplaceModel *model, QObject *parent) :
+ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, QObject *parent) :
     QAbstractItemModel(parent),
     mMapControl(map),
-    mModel (model)
+    mModel (0),
+    mModelIdx(-1)
 {
     if (entityTemplates.size() == 0) {
         // Registers all entity templaes
@@ -117,10 +118,11 @@ bool ObjectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
     return false;
 }
 
-void ObjectTreeModel::setCurrentModel(DisplaceModel *model)
+void ObjectTreeModel::setCurrentModel(int idx, DisplaceModel *model)
 {
     beginResetModel();
     mModel = model;
+    mModelIdx = idx;
     endResetModel();
 }
 

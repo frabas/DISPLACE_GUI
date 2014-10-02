@@ -7,10 +7,11 @@
 #include <memory>
 #include <mainwindow.h>
 
+#include <QMapControl/Layer.h>
+
 namespace qmapcontrol {
 class QMapControl;
 class MapAdapter;
-class Layer;
 class LayerMapAdapter;
 class LayerGeometry;
 }
@@ -22,20 +23,34 @@ class VesselMapObject;
 
 class MapObjectsController
 {
-    static const int MaxLayers = 32;
-
+public:
     class LayerList {
     public:
-        LayerList()
-            : LayerList(MaxLayers) {}
+        virtual int getCount() const = 0;
+        virtual QString getName(int idx) const = 0;
+    };
 
-        explicit LayerList (int sz) {
+private:
+    static const int MaxLayers = 32;
+
+    class LayerListImpl : public LayerList {
+    public:
+        LayerListImpl()
+            : LayerListImpl(MaxLayers) {}
+
+        explicit LayerListImpl (int sz) {
             layers.fill(std::shared_ptr<qmapcontrol::Layer>(), sz);
             visibility.fill(false, sz);
         }
 
         QVector<std::shared_ptr<qmapcontrol::Layer> > layers;
         QVector<bool> visibility;
+
+        virtual int getCount() const { return layers.size(); }
+        virtual QString getName(int idx) const { return QString::fromStdString(layers[idx]->getName()); }
+        virtual bool isVisible(int idx) const { return layers[idx]->isVisible(); }
+
+        virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
     };
 
 public:
@@ -60,11 +75,11 @@ public:
 
     void updateNodes(int model);
 
-    const LayerList &getStandardLayerList(int model) const {
-        return mLayers[model];
+    LayerList *getStandardLayerList(int model) {
+        return &mLayers[model];
     }
-    const LayerList &getOutputLayerList(int model) const {
-        return mOutputLayers[model];
+    LayerList *getOutputLayerList(int model) {
+        return &mOutputLayers[model];
     }
 
     enum Visibility { Visible, Invisible };
@@ -73,6 +88,10 @@ public:
      * \param visibility visibility status
      * */
     void setModelVisibility(int model, Visibility visibility);
+    void setLayerVisibility (int model, LayerIds layer, bool visibility);
+    bool isLayerVisible (int model, LayerIds layer);
+
+    bool isModelActive (int model) const;
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
@@ -89,8 +108,9 @@ private:
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
 
-    QVector<LayerList> mLayers;
-    QVector<LayerList> mOutputLayers;
+    QVector<bool> mModelVisibility;
+    QVector<LayerListImpl> mLayers;
+    QVector<LayerListImpl> mOutputLayers;
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

@@ -46,6 +46,7 @@
     <property name="title">
      <string>&amp;Model</string>
     </property>
+    <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
    </widget>
    <widget class="QMenu" name="menu_File">
@@ -56,12 +57,21 @@
     <addaction name="actionLoad_results"/>
     <addaction name="actionImport_results"/>
     <addaction name="action_Link_database"/>
+    <addaction name="actionImport_Shapefile"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menu_Editor">
+    <property name="title">
+     <string>&amp;Editor</string>
+    </property>
+    <addaction name="actionGraph"/>
+    <addaction name="actionAdd_Polygon"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
+   <addaction name="menu_Editor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="objectMapView">
@@ -485,7 +495,11 @@
    <addaction name="actionLoad_results"/>
    <addaction name="actionImport_results"/>
    <addaction name="action_Link_database"/>
+   <addaction name="actionImport_Shapefile"/>
    <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionGraph"/>
+   <addaction name="actionAdd_Polygon"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
@@ -544,6 +558,38 @@
    </property>
    <property name="text">
     <string>&amp;Link database...</string>
+   </property>
+  </action>
+  <action name="actionConfiguration">
+   <property name="text">
+    <string>Configuration...</string>
+   </property>
+  </action>
+  <action name="actionGraph">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/graph.png</normaloff>:/icons/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>Graph...</string>
+   </property>
+  </action>
+  <action name="actionAdd_Polygon">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/geometry.png</normaloff>:/icons/geometry.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Polygon</string>
+   </property>
+  </action>
+  <action name="actionImport_Shapefile">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/compass.png</normaloff>:/icons/compass.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import Shapefile...</string>
    </property>
   </action>
  </widget>

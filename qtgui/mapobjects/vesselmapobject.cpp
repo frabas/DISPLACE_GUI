@@ -1,0 +1,60 @@
+#include "vesselmapobject.h"
+
+#include <QMapControl/Point.h>
+#include <QMapControl/Projection.h>
+#include <QMapControl/LayerGeometry.h>
+
+#include <m_constants.h>
+
+#include <QPainter>
+#include <QDebug>
+
+VesselMapObject::VesselMapObject(VesselData *vessel)
+    : mVessel(vessel)
+{
+    mGeometry = std::shared_ptr<VesselGraphics> (new VesselGraphics(mVessel));
+}
+
+void VesselMapObject::vesselUpdated()
+{
+    mGeometry->layer()->removeGeometry(mGeometry);
+    mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
+    mGeometry->layer()->addGeometry(mGeometry);
+}
+
+
+QBrush *VesselMapObject::VesselGraphics::color = 0;
+QBrush *VesselMapObject::VesselGraphics::altColor = 0;
+
+VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
+      mVessel(vessel)
+{
+    if (color == 0)
+        color = new QBrush(Qt::darkYellow);
+    if (altColor == 0)
+        altColor = new QBrush(Qt::red);
+}
+
+void VesselMapObject::VesselGraphics::updated()
+{
+    setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
+    emit positionChanged(this);
+    emit requestRedraw();
+}
+
+void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.rotate(mVessel->mVessel->get_course());
+
+    painter.setBrush(*color);
+    painter.drawEllipse(-10, -20, 20, 40);
+
+    // Ears
+    painter.setBrush(mVessel->mVessel->get_state() == 3 ? *color : *altColor);
+    painter.drawEllipse(-6, -12, 12, 24);
+
+    painter.rotate(-mVessel->mVessel->get_course());
+}

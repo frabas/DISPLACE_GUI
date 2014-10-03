@@ -1,6 +1,21 @@
-GCCPATH=C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin
-CXX=$(GCCPATH)/x86_64-w64-mingw32-g++
-LD=ld
+CONFIG -= qt
+TARGET=displace
+TEMPLATE=app
+
+DESTDIR = ../
+INCLUDEPATH=../include
+
+LIBS+=
+
+macx {
+    CONFIG -= app_bundle
+}
+
+win32 {
+    #PATH+=C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin
+    QMAKE_CXX = x86_64-w64-mingw32-g++
+    QMAKE_LFLAGS = -static
+}
 
 SOURCES= main.cpp \
     ../commons/readdata.cpp \
@@ -32,11 +47,5 @@ HEADERS= \
     ../include/mkpath.h \
     ../include/m_constants.h
 
-LIBS=
-CPPFLAGS=-O2
-LDFLAGS=
-
-OBJS=$(SOURCES:.cpp=.o)
-
-displace: ${OBJS}
-        $(LD) -o $@ ${LDFLAGS} $^
+OTHER_FILES += \
+    Makefile

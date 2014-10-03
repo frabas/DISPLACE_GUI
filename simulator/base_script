@@ -4,7 +4,7 @@
 #PBS -N fba_ibm_vessels
 
 #PBS -q hpc
-#PBS -l walltime=4:00:00
+#PBS -l walltime=6:00:00
 #PBS -l vmem=6GB
 
 #PBS -M fba@aqua.dtu.dk

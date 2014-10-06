@@ -434,7 +434,7 @@ void MainWindow::on_action_Link_database_triggered()
             return;
         }
 
-        sets.setValue(dbLastDirKey, info.absoluteFilePath());
+        sets.setValue(dbLastDirKey, info.absolutePath());
     }
 }
 
@@ -474,7 +474,7 @@ void MainWindow::on_actionLoad_results_triggered()
             return;
         }
 
-        sets.setValue(dbLastDirKey, info.absoluteFilePath());
+        sets.setValue(dbLastDirKey, info.absolutePath());
 
         delete models[i];
         models[i] = newmodel;

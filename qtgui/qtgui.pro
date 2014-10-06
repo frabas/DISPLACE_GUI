@@ -1,5 +1,5 @@
 TEMPLATE=app
-QT += core gui network sql
+QT += core gui network sql xml
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -58,12 +58,15 @@ SOURCES += \
     modelobjects/nodedata.cpp \
     modelobjects/vesseldata.cpp \
     mapobjects/nodegraphics.cpp \
-    objects/outputlayerentity.cpp
+    objects/outputlayerentity.cpp \
+    editpalettedialog.cpp \
+    palettemanager.cpp
 
 FORMS += \
     mainwindow.ui \
     scenariodialog.ui \
-    simulationsetupdialog.ui
+    simulationsetupdialog.ui \
+    editpalettedialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -93,7 +96,9 @@ HEADERS += \
     modelobjects/nodedata.h \
     modelobjects/vesseldata.h \
     mapobjects/nodegraphics.h \
-    objects/outputlayerentity.h
+    objects/outputlayerentity.h \
+    editpalettedialog.h \
+    palettemanager.h
 
 RESOURCES += \
     qtgui.qrc

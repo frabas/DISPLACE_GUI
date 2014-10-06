@@ -7,6 +7,7 @@
 #include <modelobjects/nodedata.h>
 #include <modelobjects/vesseldata.h>
 #include <modelobjects/benthos.h>
+#include <modelobjects/populationdata.h>
 #include <Harbour.h>
 #include <outputfileparser.h>
 
@@ -15,6 +16,8 @@
 #include <QList>
 #include <QMap>
 #include <QThread>
+
+#include <memory>
 
 #include <QDebug>
 
@@ -68,6 +71,8 @@ public:
     const QList<Benthos*> &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
+    int getPopulationsCount() const { return mPopulations.size(); }
+    std::shared_ptr<PopulationData> getPopulations(int idx) const { return mPopulations[idx]; }
 
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
@@ -100,10 +105,15 @@ public:
     void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, double tot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
 
+    void collectPopdynN(int step, int popid, double value);
+
+
+    static const int numPopulations;
 protected:
     bool loadNodes();
     bool loadVessels();
     bool initBenthos();
+    bool initPopulations();
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
@@ -135,6 +145,7 @@ private:
     QList<NodeData *> mNodes;
     QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
+    QVector<std::shared_ptr<PopulationData> > mPopulations;
     QMap<int, Benthos *> mBenthosInfo;
 
     // --- Working objects

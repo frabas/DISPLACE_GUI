@@ -239,7 +239,32 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QCustomPlot" name="widget" native="true"/>
+             <widget class="QCustomPlot" name="plotHarbours" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabStatsPopulations">
+           <attribute name="title">
+            <string>Populations</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QCustomPlot" name="plotPopulations" native="true"/>
             </item>
            </layout>
           </widget>

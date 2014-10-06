@@ -61,7 +61,9 @@ SOURCES += \
     objects/outputlayerentity.cpp \
     editpalettedialog.cpp \
     palettemanager.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    statscontroller.cpp \
+    modelobjects/populationdata.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -100,7 +102,9 @@ HEADERS += \
     objects/outputlayerentity.h \
     editpalettedialog.h \
     palettemanager.h \
-    qcustomplot.h
+    qcustomplot.h \
+    statscontroller.h \
+    modelobjects/populationdata.h
 
 RESOURCES += \
     qtgui.qrc

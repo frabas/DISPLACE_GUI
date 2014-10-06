@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <outputfileparser.h>
+#include <statscontroller.h>
 
 #include <QMainWindow>
 #include <QProcess>
@@ -72,7 +73,6 @@ private slots:
     void on_play_first_clicked();
     void on_play_last_clicked();
     void on_play_auto_clicked();
-
     void on_actionPalettes_triggered();
 
 signals:
@@ -97,6 +97,7 @@ private:
     int currentModelIdx;
     Simulator *mSimulation;
     MapObjectsController *mMapController;
+    StatsController *mStatsController;
 
     // Geospatial objects
     qmapcontrol::QMapControl *map;

@@ -80,6 +80,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mapWidget->setWidget(map);
 
+    /* Stats windows setup */
+
+    mStatsController = new StatsController(this);
+    mStatsController->setPopulationPlot(ui->plotPopulations);
+
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController);
     ui->treeView->setModel(treemodel);
@@ -238,6 +243,7 @@ void MainWindow::updateOutputFile(QString path, int n)
 void MainWindow::outputUpdated()
 {
     mMapController->updateNodes(0);
+    mStatsController->updateStats(models[0]);
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)

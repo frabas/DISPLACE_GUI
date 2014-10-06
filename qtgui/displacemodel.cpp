@@ -7,6 +7,8 @@
 #include <readdata.h>
 #include <qdebug.h>
 
+const int DisplaceModel::numPopulations = 31;
+
 DisplaceModel::DisplaceModel()
     : mDb(0),
       mLastStats(-1),
@@ -26,6 +28,8 @@ DisplaceModel::DisplaceModel()
     setInterestingPop(3);
     setInterestingPop(7);
     setInterestingPop(10);
+
+    initPopulations();
 }
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)
@@ -45,6 +49,7 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         loadNodes();
         loadVessels();
         initBenthos();
+        initPopulations();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
         return false;
@@ -71,6 +76,7 @@ bool DisplaceModel::loadDatabase(QString path)
     mDb->loadScenario(mScenario);
     loadNodesFromDb();
     loadVesselsFromDb();
+    initPopulations();
 
     mLastStep = mDb->getLastKnownStep();
     setCurrentStep(0);
@@ -184,8 +190,9 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
-    if (mDb && mNodesStatsDirty)
+    if (mDb && mNodesStatsDirty) {
         mDb->addNodesStats(mLastStats, mNodes);
+    }
 
     mNodesStatsDirty = false;
 }
@@ -202,7 +209,11 @@ void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
     mNodes.at(node_idx)->set_cumftime(cumftime);
 }
 
-
+void DisplaceModel::collectPopdynN(int step, int popid, double value)
+{
+    checkStatsCollection(step);
+    mPopulations[popid]->setAggregate(value);
+}
 
 int DisplaceModel::getVesselCount() const
 {
@@ -828,6 +839,16 @@ bool DisplaceModel::initBenthos()
     foreach (int id, ids) {
         mBenthos.push_back(mBenthosInfo[id]);
     }
+}
+
+bool DisplaceModel::initPopulations()
+{
+    mPopulations.clear();
+    mPopulations.reserve(numPopulations);
+    for (int i = 0; i < numPopulations; ++i) {
+        mPopulations.push_back(std::shared_ptr<PopulationData>(new PopulationData()));
+    }
+    return true;
 }
 
 bool DisplaceModel::loadNodesFromDb()

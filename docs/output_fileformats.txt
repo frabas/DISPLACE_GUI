@@ -25,7 +25,20 @@ Content:
 Format:
 tstep / node / long / lat / tot N sp0 / tot N sp1 /...
 
+popdyn_*.dat
+------------
 
+Written by: Population::export_popdyn_N
+See: commons/Population.cpp
+Content: Aggregate number of populations. all for tstep=0, some selected for others. Number in thousands.
+
+Format:
+tstep name total_for_groups[0..n]
+
+
+
+popdyn_F_*.dat
+--------------
 
 popnodes_cumftime
 --------------------

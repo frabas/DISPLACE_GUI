@@ -1,5 +1,5 @@
 TEMPLATE=app
-QT += core gui network sql xml
+QT += core gui network sql xml printsupport
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -60,7 +60,8 @@ SOURCES += \
     mapobjects/nodegraphics.cpp \
     objects/outputlayerentity.cpp \
     editpalettedialog.cpp \
-    palettemanager.cpp
+    palettemanager.cpp \
+    qcustomplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -98,7 +99,8 @@ HEADERS += \
     mapobjects/nodegraphics.h \
     objects/outputlayerentity.h \
     editpalettedialog.h \
-    palettemanager.h
+    palettemanager.h \
+    qcustomplot.h
 
 RESOURCES += \
     qtgui.qrc

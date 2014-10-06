@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <mainwindow.h>
+#include <palettemanager.h>
 
 #include <QMapControl/Layer.h>
 
@@ -96,6 +97,10 @@ public:
 
     bool isModelActive (int model) const;
 
+    const Palette &getPalette(int model, int n) const {
+        return mPaletteManager[model]->palette(n);
+    }
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
@@ -105,6 +110,7 @@ private:
     QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];
     QList<NodeMapObject *> mNodeObjects[MAX_MODELS];
     QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
+    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
 
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;

@@ -105,7 +105,7 @@ bool Palette::saveToFile(QIODevice *device)
 {
     QDomDocument doc;
     QDomElement root = doc.createElement("palette");
-    root.setAttribute("type", "prelude 2.0");
+    root.setAttribute("type", "displace");
     root.setAttribute("name", m_name);
     root.setAttribute("role", static_cast<int>(mRole));
     root.setAttribute("min", m_min);
@@ -159,14 +159,14 @@ void PaletteManager::addPalette(const Palette &palette)
     m_list.push_back(v);
 }
 
-Palette PaletteManager::palette(int n) const
+const Palette &PaletteManager::palette(int n) const
 {
     if (n < m_list.size())
         return *(m_list[n].get());
     return Palette();
 }
 
-Palette PaletteManager::palette(const QString &n) const
+const Palette &PaletteManager::palette(const QString &n) const
 {
     PaletteMapContainer::const_iterator it = m_map.find(n);
     if (it != m_map.end()) {

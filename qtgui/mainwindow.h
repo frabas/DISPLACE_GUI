@@ -73,6 +73,8 @@ private slots:
     void on_play_last_clicked();
     void on_play_auto_clicked();
 
+    void on_actionPalettes_triggered();
+
 signals:
     void modelStateChanged();
 

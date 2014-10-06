@@ -20,6 +20,8 @@ public:
     explicit EditPaletteDialog(QWidget *parent = 0);
     ~EditPaletteDialog();
 
+    void showSpecials(bool visible = true);
+
     void linkPalette (Palette *palette);
 
 signals:

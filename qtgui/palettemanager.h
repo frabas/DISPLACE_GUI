@@ -93,8 +93,8 @@ public:
     ~PaletteManager();
 
     void addPalette(const Palette &view);
-    Palette palette(int n) const;
-    Palette palette(const QString &n) const;
+    const Palette &palette(int n) const;
+    const Palette &palette(const QString &n) const;
 
     int paletteCount() const;
 

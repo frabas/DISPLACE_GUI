@@ -16,6 +16,7 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
+      mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax))
@@ -37,6 +38,12 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
+    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
+    QFile pf(":/palettes/iso1996_2.p2c");
+    Palette p;
+    p.loadFromFile(&pf);
+    mPaletteManager[model_n]->addPalette(p);
+
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 

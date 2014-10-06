@@ -8,6 +8,7 @@
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
 #include <simulator.h>
+#include <editpalettedialog.h>
 
 #include <scenariodialog.h>
 #include <simulationsetupdialog.h>
@@ -527,4 +528,13 @@ void MainWindow::on_play_last_clicked()
 void MainWindow::on_play_auto_clicked()
 {
 
+}
+
+void MainWindow::on_actionPalettes_triggered()
+{
+    EditPaletteDialog dlg;
+    Palette pal = mMapController->getPalette(currentModelIdx, 0);
+    dlg.linkPalette(&pal);
+    dlg.showSpecials(false);
+    dlg.exec();
 }

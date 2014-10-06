@@ -43,12 +43,12 @@ public:
             if (role != Qt::DisplayRole) return QVariant::Invalid;
             if (index.row() == 0)       // first row
                 return QString(tr("Less than"));
-            return QString ("%1 dB").arg(mPalette->getMin() + (index.row()-1) * mPalette->getStep());
+            return QString::number(mPalette->getMin() + (index.row()-1) * mPalette->getStep());
         case 1:
             if (role != Qt::DisplayRole) return QVariant::Invalid;
             if (index.row() == mPalette->colorCount()-1)
                 return QString(tr("More than"));
-            return QString ("%1 dB").arg(mPalette->getMin() + index.row() * mPalette->getStep());
+            return QString::number(mPalette->getMin() + index.row() * mPalette->getStep());
         case 2:
             if (role != Qt::BackgroundColorRole && role != Qt::ForegroundRole) {
                 return QVariant::Invalid;
@@ -139,6 +139,11 @@ EditPaletteDialog::EditPaletteDialog(QWidget *parent)
 EditPaletteDialog::~EditPaletteDialog()
 {
     delete ui;
+}
+
+void EditPaletteDialog::showSpecials(bool visible)
+{
+    ui->specialPalette->setVisible(visible);
 }
 
 void EditPaletteDialog::linkPalette(Palette *palette)

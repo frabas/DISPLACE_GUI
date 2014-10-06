@@ -48,6 +48,7 @@
     </property>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
+    <addaction name="actionPalettes"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -590,6 +591,11 @@
    </property>
    <property name="text">
     <string>Import Shapefile...</string>
+   </property>
+  </action>
+  <action name="actionPalettes">
+   <property name="text">
+    <string>Palettes...</string>
    </property>
   </action>
  </widget>

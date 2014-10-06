@@ -55,7 +55,11 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QDoubleSpinBox" name="maxVal"/>
+      <widget class="QDoubleSpinBox" name="maxVal">
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item row="2" column="3">
       <widget class="QDoubleSpinBox" name="step">

@@ -2,6 +2,8 @@
 
 #include <displacemodel.h>
 #include <mapobjects/nodegraphics.h>
+#include <mapobjectscontroller.h>
+#include <palettemanager.h>
 
 #define PIE_W 40.0
 #define PIE_H 40.0
@@ -10,9 +12,10 @@ const Qt::GlobalColor NodeGraphics::colors[] = {
     Qt::red, Qt::blue, Qt::yellow, Qt::black, Qt::white, Qt::green
 };
 
-NodeGraphics::NodeGraphics(NodeData *node)
+NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller)
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(PIE_W, PIE_H), 11, 7, 17),
-      mNode(node)
+      mNode(node),
+      mController(controller)
 {
     int l = (mNode->get_marine_landscape() * 0x1000000) / 1000;
     c = QColor(QRgb(l & 0x00ffffff));
@@ -49,7 +52,7 @@ void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(c);
+    painter.setBrush(mController->getPalette(0,0).color(mNode->get_cumftime()));
 
     int d = mNode->get_cumftime() * PIE_W / 10;
 

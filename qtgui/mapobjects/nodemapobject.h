@@ -9,8 +9,11 @@ namespace qmapcontrol {
     class RectWorldCoord;
 }
 
+class MapObjectsController;
+
 class NodeMapObject : public MapObject
 {
+    MapObjectsController *mController;
 public:
     enum Role {
         GraphNodeRole,
@@ -18,7 +21,7 @@ public:
         GraphNodeWithCumFTimeRole,
     };
 
-    NodeMapObject(Role role, NodeData *node);
+    NodeMapObject(MapObjectsController *controller, Role role, NodeData *node);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;

@@ -34,7 +34,7 @@ public:
     void setColor (int i, const QColor &col) { m_palette[i] = col; }
     void addColor (const QColor &col) { m_palette.push_back(col); }
 
-    QColor color(int i) const { return m_palette[i]; }
+    QColor colorForIndex(int i) const { return m_palette[i]; }
     QColor color(float val) const {
         int idx = static_cast<int>(std::floor( (val - m_min) / getStep()) );
         if (idx < 0) idx = 0;

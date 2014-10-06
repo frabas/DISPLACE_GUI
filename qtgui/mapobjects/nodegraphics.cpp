@@ -74,7 +74,7 @@ void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,0).color(mNode->get_cumftime()));
+    painter.setBrush(mController->getPalette(mModelIndex,0).color((float)mNode->get_cumftime()));
 
 //    int d = mNode->get_cumftime() * PIE_W / 10;
 //    painter.drawRect(-d/2, -d/2, d, d);

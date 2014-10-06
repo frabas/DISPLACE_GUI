@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<palette role="0" type="prelude 2.0" min="35" name="ISO 1996/2" max="80">
+<palette role="0" type="displace" min="100" name="ISO 1996/2" max="2000">
 <color rgb="195,255,134"/>
 <color rgb="0,238,0"/>
 <color rgb="0,181,91"/>

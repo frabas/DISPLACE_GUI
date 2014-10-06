@@ -69,17 +69,17 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<NodeData *> &nodes = model->getNodesList();
     foreach (NodeData *nd, nodes) {
-        NodeMapObject *obj = new NodeMapObject(this, NodeMapObject::GraphNodeRole, nd);
+        NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
         mNodeObjects[model_n].append(obj);
 
         mGraphLayer->addGeometry(obj->getGeometryEntity());
 
         /* add here other roles */
-        obj = new NodeMapObject(this, NodeMapObject::GraphNodeWithPopStatsRole, nd);
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
         mNodeObjects[model_n].append(obj);
         popstatslayer->addGeometry(obj->getGeometryEntity());
 
-        obj = new NodeMapObject(this, NodeMapObject::GraphNodeWithCumFTimeRole, nd);
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
         mNodeObjects[model_n].append(obj);
         cumftimelayer->addGeometry(obj->getGeometryEntity());
     }

@@ -21,7 +21,7 @@ public:
         GraphNodeWithCumFTimeRole,
     };
 
-    NodeMapObject(MapObjectsController *controller, Role role, NodeData *node);
+    NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;

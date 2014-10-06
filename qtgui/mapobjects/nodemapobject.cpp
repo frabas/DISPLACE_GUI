@@ -3,7 +3,7 @@
 #include <displacemodel.h>
 #include <mapobjects/nodegraphics.h>
 
-NodeMapObject::NodeMapObject(MapObjectsController *controller, Role role, NodeData *node)
+NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node)
     : mNode(node),
       mController(controller),
       mGeometry()
@@ -12,17 +12,17 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, Role role, NodeDa
 
     case GraphNodeRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeGraphics(mNode, mController));
+                    new NodeGraphics(mNode, mController, indx));
         break;
 
     case GraphNodeWithPopStatsRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithPopStatsGraphics(mNode, mController));
+                    new NodeWithPopStatsGraphics(mNode, mController, indx));
         break;
 
     case GraphNodeWithCumFTimeRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithCumFTimeGraphics(mNode, mController));
+                    new NodeWithCumFTimeGraphics(mNode, mController, indx));
         break;
 
     }

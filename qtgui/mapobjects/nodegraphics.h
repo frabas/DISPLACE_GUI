@@ -15,8 +15,10 @@ protected:
 
     NodeData *mNode;
     MapObjectsController *mController;
+    int mModelIndex;
+    QSizeF mGrid;
 public:
-    NodeGraphics (NodeData *node, MapObjectsController *controller);
+    NodeGraphics (NodeData *node, MapObjectsController *controller, int indx);
 
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
@@ -24,16 +26,16 @@ protected:
 
 class NodeWithPopStatsGraphics : public NodeGraphics {
 public:
-    NodeWithPopStatsGraphics(NodeData *node, MapObjectsController *controller)
-        : NodeGraphics(node, controller) {}
+    NodeWithPopStatsGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
 class NodeWithCumFTimeGraphics : public NodeGraphics {
 public:
-    NodeWithCumFTimeGraphics(NodeData *node, MapObjectsController *controller)
-        : NodeGraphics(node, controller) {}
+    NodeWithCumFTimeGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
 
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);

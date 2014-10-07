@@ -18,6 +18,7 @@ const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
+const QString DbHelper::TBL_POP_STATS = "popStats";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -50,6 +51,7 @@ bool DbHelper::attachDb(QString file)
     checkNodesStats(mVersion);
     checkVesselsPosTable(mVersion);
     checkVesselsTable(mVersion);
+    checkStatsTable(mVersion);
 
     /* update ended here */
     mVersion = VERSION;
@@ -92,7 +94,6 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
         + "(statid,popid,value) VALUES(?,?,?)");
     DB_ASSERT(r,sq);
 
-    beginTransaction();
     foreach (NodeData *n, nodes) {
         q.addBindValue(n->get_idx_node());
         q.addBindValue(tstep);
@@ -113,7 +114,28 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
             DB_ASSERT(res,sq);
         }
     }
-    endTransaction();
+}
+
+void DbHelper::addPopStats(int tstep, const QVector<std::shared_ptr<PopulationData> > &pops)
+{
+    QSqlQuery q;
+
+    bool r =
+    q.prepare("INSERT INTO " + TBL_POP_STATS
+              + "(tstep,popid,N,F) "
+              + "VALUES (?,?,?,?)");
+
+    DB_ASSERT(r,q);
+
+    foreach (std::shared_ptr<PopulationData> p, pops) {
+        q.addBindValue(tstep);
+        q.addBindValue(p->getId());
+        q.addBindValue(p->getAggregate());
+        q.addBindValue(p->getMortality());
+
+        bool res = q.exec();
+        DB_ASSERT(res, q);
+    }
 }
 
 void DbHelper::removeAllVesselsDetails()
@@ -522,6 +544,30 @@ bool DbHelper::checkVesselsPosTable(int version)
                + "cumcatches REAL,"
                + "timeatsea REAL,"
                + "reason_to_go_back INTEGER"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (version < 2) {
+
+    }
+
+    return true;
+}
+
+bool DbHelper::checkStatsTable(int version)
+{
+    if (!mDb.tables().contains(TBL_POP_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_POP_STATS + "("
+               + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "popid INTEGER,"
+               + "N REAL,"
+               + "F REAL"
                + ");"
                );
 

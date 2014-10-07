@@ -98,6 +98,20 @@ void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *m
 
 void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model)
 {
+    QTextStream strm (file);
+
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[0].toInt();
+
+        if (step == tstep) {
+            int id = fields[1].toInt();
+            for (int i = 2; i < fields.size(); ++i) {
+                model->collectPopdynF(tstep, id, fields[i].toDouble());
+            }
+        }
+    }
 
 }
 

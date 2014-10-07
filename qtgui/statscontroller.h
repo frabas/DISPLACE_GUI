@@ -13,6 +13,7 @@ class StatsController : public QObject
     /* Populations stuff */
     QCustomPlot *mPlotPopulations;
     QCPBars *mPlotPopulationsBar;
+    QCPBars *mPlotPopulationsBar2;
 
     DisplaceModel *mLastModel;
 public:

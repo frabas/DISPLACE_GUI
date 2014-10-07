@@ -5,6 +5,8 @@
 #include <QSqlDatabase>
 #include <QThread>
 
+#include <memory>
+
 QT_BEGIN_NAMESPACE
 class QSqlQuery;
 QT_END_NAMESPACE
@@ -12,6 +14,7 @@ QT_END_NAMESPACE
 class DisplaceModel;
 class NodeData;
 class VesselData;
+class PopulationData;
 class DbHelper;
 class Config;
 class Scenario;
@@ -52,6 +55,7 @@ public:
     void removeAllNodesDetails();
 
     void addNodesStats (int tstep, const QList<NodeData *> &nodes);
+    void addPopStats(int tstep, const QVector<std::shared_ptr<PopulationData> > &pops);
 
     void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
@@ -85,6 +89,7 @@ protected:
     bool checkNodesStats(int version);
     bool checkVesselsTable(int version);
     bool checkVesselsPosTable(int version);
+    bool checkStatsTable (int version);
 
 private:
     bool mOngoingTransaction;
@@ -99,6 +104,7 @@ private:
     static const QString TBL_NODES;
     static const QString TBL_NODES_STATS;
     static const QString TBL_POPNODES_STATS;
+    static const QString TBL_POP_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
 

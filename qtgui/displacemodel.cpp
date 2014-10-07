@@ -191,7 +191,10 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
 void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
     if (mDb && mNodesStatsDirty) {
+        mDb->beginTransaction();
         mDb->addNodesStats(mLastStats, mNodes);
+        mDb->addPopStats(mLastStats, mPopulations);
+        mDb->endTransaction();
     }
 
     mNodesStatsDirty = false;
@@ -213,6 +216,12 @@ void DisplaceModel::collectPopdynN(int step, int popid, double value)
 {
     checkStatsCollection(step);
     mPopulations[popid]->setAggregate(value);
+}
+
+void DisplaceModel::collectPopdynF(int step, int popid, double value)
+{
+    checkStatsCollection(step);
+    mPopulations[popid]->setMortality(value);
 }
 
 int DisplaceModel::getVesselCount() const
@@ -839,6 +848,8 @@ bool DisplaceModel::initBenthos()
     foreach (int id, ids) {
         mBenthos.push_back(mBenthosInfo[id]);
     }
+
+    return true;
 }
 
 bool DisplaceModel::initPopulations()
@@ -846,7 +857,7 @@ bool DisplaceModel::initPopulations()
     mPopulations.clear();
     mPopulations.reserve(numPopulations);
     for (int i = 0; i < numPopulations; ++i) {
-        mPopulations.push_back(std::shared_ptr<PopulationData>(new PopulationData()));
+        mPopulations.push_back(std::shared_ptr<PopulationData>(new PopulationData(i)));
     }
     return true;
 }

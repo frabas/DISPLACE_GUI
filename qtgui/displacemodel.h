@@ -106,6 +106,7 @@ public:
     void collectPopCumftime(int step, int node_idx, double cumftime);
 
     void collectPopdynN(int step, int popid, double value);
+    void collectPopdynF(int step, int popid, double value);
 
 
     static const int numPopulations;

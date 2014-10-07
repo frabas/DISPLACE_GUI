@@ -6,6 +6,7 @@
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
+#include <objects/populationentity.h>
 #include <objects/benthosentity.h>
 
 #include <displacemodel.h>
@@ -22,9 +23,10 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Benthos"),
 };
 
-ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, QObject *parent) :
+ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent) :
     QAbstractItemModel(parent),
     mMapControl(map),
+    mStatsController(stats),
     mModel (0),
     mModelIdx(-1)
 {
@@ -40,6 +42,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, QObject *parent) :
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
         entityTemplates[Nodes] = new objecttree::NodeEntity(this);
         entityTemplates[Vessels] = new objecttree::VesselEntity(this);
+        entityTemplates[Populations] = new objecttree::PopulationEntity(this);
         entityTemplates[Benthos] = new objecttree::BenthosEntity(this);
     }
 }

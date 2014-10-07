@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mStatsController->setPopulationPlot(ui->plotPopulations);
 
     /* Tree model setup */
-    treemodel = new ObjectTreeModel(mMapController);
+    treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
 }
 

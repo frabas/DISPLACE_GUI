@@ -25,23 +25,32 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mPlotPopulations) {
         QVector<double> keyData;
         QVector<double> valueData;
+        QVector<QString> labels;
 
+        int cntr = 0;
         for (int i = 0; i < model->getPopulationsCount(); ++i) {
-            std::shared_ptr<PopulationData> pop = model->getPopulations(i);
+            if (model->isInterestingPop(i)) {
+                std::shared_ptr<PopulationData> pop = model->getPopulations(i);
 
-            keyData << i;
+                keyData << cntr++;
+                labels << QString::number(i);
 
-            switch (mSelectedPopStat) {
-            case Aggregate:
-                valueData << pop->getAggregate();
-                break;
-            case Mortality:
-                valueData << pop->getMortality();
-                break;
+                switch (mSelectedPopStat) {
+                case Aggregate:
+                    valueData << pop->getAggregate();
+                    break;
+                case Mortality:
+                    valueData << pop->getMortality();
+                    break;
+                }
             }
         }
 
         mPlotPopulationsBar->setData(keyData, valueData);
+        mPlotPopulations->xAxis->setAutoTicks(false);
+        mPlotPopulations->xAxis->setAutoTickLabels(false);
+        mPlotPopulations->xAxis->setTickVector(keyData);
+        mPlotPopulations->xAxis->setTickVectorLabels(labels);
         mPlotPopulations->rescaleAxes();
         mPlotPopulations->replot();
     }

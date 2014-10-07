@@ -63,7 +63,8 @@ SOURCES += \
     palettemanager.cpp \
     qcustomplot.cpp \
     statscontroller.cpp \
-    modelobjects/populationdata.cpp
+    modelobjects/populationdata.cpp \
+    objects/populationentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -104,7 +105,8 @@ HEADERS += \
     palettemanager.h \
     qcustomplot.h \
     statscontroller.h \
-    modelobjects/populationdata.h
+    modelobjects/populationdata.h \
+    objects/populationentity.h
 
 RESOURCES += \
     qtgui.qrc

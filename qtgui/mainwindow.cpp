@@ -279,6 +279,7 @@ void MainWindow::updateModelList()
 void MainWindow::updateAllDisplayObjects()
 {
     mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel);
+    mStatsController->updateStats(currentModel);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

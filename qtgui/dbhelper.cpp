@@ -386,6 +386,32 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
     return true;
 }
 
+bool DbHelper::updateStatsForPopsToStep(int step, QVector<std::shared_ptr<PopulationData> > &population)
+{
+    //select * FROM popStats p1 where ( select count(*) from popStats p2 where p2.tstep < p1.tstep and p2.popid = p1.popid ) and tstep <
+    QSqlQuery q;
+    bool res =
+    q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " T1 WHERE "
+              + "( SELECT COUNT(*) FROM " + TBL_POP_STATS + " T2 WHERE T2.tstep < T1.tstep AND T2.popid = T1.popid )"
+              + " AND tstep <= ?");
+    DB_ASSERT(res,q);
+
+    q.addBindValue(step);
+
+    res = q.exec();
+    while (q.next()) {
+        int pid = q.value(1).toInt();
+        double n = q.value(2).toDouble();
+        double f = q.value(3).toDouble();
+
+        population.at(pid)->setAggregate(n);
+        population.at(pid)->setMortality(f);
+    }
+
+    return true;
+
+}
+
 void DbHelper::beginTransaction()
 {
     mDb.transaction();

@@ -33,7 +33,7 @@ QModelIndex PopulationEntity::index(int row, int column, const QModelIndex &pare
 
 int PopulationEntity::rowCount() const
 {
-    if (mPopulationIndex == -1 && model->getModelIdx() != -1)
+    if (mPopulationIndex == -1 && model->getModel() != 0 && model->getModelIdx() != -1)
         return model->getModel()->getPopulationsCount();
 
     return 0;

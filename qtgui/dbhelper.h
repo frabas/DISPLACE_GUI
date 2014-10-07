@@ -68,8 +68,11 @@ public:
 
     bool loadNodes(QList<NodeData *> &nodes, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
+
+    /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
     bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
+    bool updateStatsForPopsToStep(int step, QVector<std::shared_ptr<PopulationData> > &population);
 
     void beginTransaction();
     void endTransaction();

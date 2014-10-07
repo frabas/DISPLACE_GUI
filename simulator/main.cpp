@@ -128,6 +128,7 @@ FILE *pipe4;
 std::string cwd;
 char buf[MAXPATH];
 bool use_gui = false;
+bool gui_move_vessels = true;
 
 /* GUI Protocol
  *
@@ -147,6 +148,13 @@ bool use_gui = false;
  *              stat can be:
  *                  cumftime
  */
+
+/* Command line arguments
+ *
+ * --use-gui                Enables the GUI protocol through stdout
+ * --no-gui-move-vessels    Disables sending the Vessel position update command (=V) when using GUI
+ *
+ * */
 
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
@@ -207,6 +215,10 @@ int main(int argc, char* argv[])
         {
             optind++;
             use_gui = true;
+        }
+        else if (sw == "--no-gui-move-vessels") {
+            optind ++;
+            gui_move_vessels = false;
         }
 		else if (sw=="-i")
 		{
@@ -3915,7 +3927,7 @@ int main(int argc, char* argv[])
 					<< vessels[ index_v ]->get_state() << " " <<  endl;
 			}
 
-            if (use_gui && tstep < 8641) {
+            if (use_gui && gui_move_vessels && tstep < 8641) {
                 cout << "=V" << tstep << ","
                     << vessels[ index_v ]->get_idx() << ","
                     << vessels[ index_v ]->get_tstep_dep() << ","

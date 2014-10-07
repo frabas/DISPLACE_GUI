@@ -16,6 +16,9 @@ CONFIG(debug,release|debug) {
 }
 CONFIG(release,release|debug) {
     QMAPCONTROL_LIB=qmapcontrol
+
+# For use with callgrind
+#    QMAKE_CXXFLAGS += -g -O2
 }
 
 macx {

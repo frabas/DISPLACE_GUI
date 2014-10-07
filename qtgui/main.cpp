@@ -19,6 +19,7 @@ int main (int argc, char *argv[])
 #ifndef WIN32
     QString path = QDir::homePath() + "/.displace/cache";
 #else
+    QString path = QDir::homePath() + "/.displace/cache";
 #endif
 
     QDir cachepath(path);

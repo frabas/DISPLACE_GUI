@@ -75,6 +75,8 @@ private slots:
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
 
+    void on_popStatSelector_currentIndexChanged(int index);
+
 signals:
     void modelStateChanged();
 

@@ -544,3 +544,8 @@ void MainWindow::on_actionPalettes_triggered()
     dlg.showSpecials(false);
     dlg.exec();
 }
+
+void MainWindow::on_popStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setPopulationStat((StatsController::PopulationStat)index);
+}

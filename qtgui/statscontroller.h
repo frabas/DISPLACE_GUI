@@ -9,13 +9,6 @@ class DisplaceModel;
 class StatsController : public QObject
 {
     Q_OBJECT
-
-    /* Populations stuff */
-    QCustomPlot *mPlotPopulations;
-    QCPBars *mPlotPopulationsBar;
-    QCPBars *mPlotPopulationsBar2;
-
-    DisplaceModel *mLastModel;
 public:
     explicit StatsController(QObject *parent = 0);
 
@@ -23,9 +16,21 @@ public:
 
     void updateStats(DisplaceModel *model);
 
+    enum PopulationStat { Aggregate, Mortality };
+    void setPopulationStat(PopulationStat stat);
+    PopulationStat getPopulationStat() const { return mSelectedPopStat; }
+
     /* == */
 
     void initPlots();
+
+private:
+    /* Populations stuff */
+    QCustomPlot *mPlotPopulations;
+    QCPBars *mPlotPopulationsBar;
+    PopulationStat mSelectedPopStat;
+
+    DisplaceModel *mLastModel;
 };
 
 #endif // STATSCONTROLLER_H

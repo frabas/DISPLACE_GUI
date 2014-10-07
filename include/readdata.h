@@ -53,11 +53,18 @@ int read_scenario_config_file(
 
 // vessel specific
 void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
-vector<double>& fuelcons, vector<double>& lengths, vector<double>& KWs,
-vector<double>& carrycapacities, vector<double>& tankcapacities,
+vector<double>& fuelcons,
+                           vector<double>& lengths,
+                           vector<double>& KWs,
+                           vector<double>& carrycapacities,
+                           vector<double>& tankcapacities,
 vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s, vector<double>& resttime_par2s,
-vector<double>& av_trip_duration,
+vector<double>& resttime_par1s,
+vector<double>& resttime_par2s,vector<double>& av_trip_duration,
+vector<double>& mult_fuelcons_when_steaming,
+                           vector<double>& mult_fuelcons_when_fishing,
+                           vector<double>& mult_fuelcons_when_returning,
+                           vector<double>& mult_fuelcons_when_inactive,
 string folder_name_parameterization,
 string inputfolder,
 int selected_vessels_only);

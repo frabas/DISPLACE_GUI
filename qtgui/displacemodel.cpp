@@ -505,10 +505,17 @@ bool DisplaceModel::loadVessels()
     vector<double> resttime_par1s;
     vector<double> resttime_par2s;
     vector<double> av_trip_duration;
+    vector<double> mult_fuelcons_when_steaming;
+    vector<double> mult_fuelcons_when_fishing;
+    vector<double> mult_fuelcons_when_returning;
+    vector<double> mult_fuelcons_when_inactive;
     read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
-        carrycapacities, tankcapacities, nbfpingspertrips,
-        resttime_par1s, resttime_par2s, av_trip_duration,
-        mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+                          carrycapacities, tankcapacities, nbfpingspertrips,
+                          resttime_par1s, resttime_par2s, av_trip_duration,
+                          mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
+                          mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
+                          mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
@@ -633,7 +640,13 @@ bool DisplaceModel::loadVessels()
             nbfpingspertrips[i],
             resttime_par1s[i],
             resttime_par2s[i],
-            av_trip_duration[i]);
+            av_trip_duration[i],
+            mult_fuelcons_when_steaming[i],
+            mult_fuelcons_when_fishing[i],
+            mult_fuelcons_when_returning[i],
+            mult_fuelcons_when_inactive[i]
+            );
+
         VesselData *vd = new VesselData(v);
         mVessels.push_back(vd);
 

@@ -106,14 +106,6 @@ using namespace std;
 #define SEL_NBSZGROUP 5			 // according to the R glm on cpue (see R code)
 #define NBAGE 11				 // nb age classes max
 #define PING_RATE 1				 // tstep=> 1 hour
-								 // a multiplier, [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_STEAMING 1
-								 // a multiplier [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_FISHING 1.1
-								 // a multiplier [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_RETURNING 1.1
-								 // a multiplier [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_INACTIVE 0.2
 #define PI 3.14159265
 
 // global variables
@@ -1492,9 +1484,15 @@ int main(int argc, char* argv[])
 	vector<double> resttime_par1s;
 	vector<double> resttime_par2s;
 	vector<double> av_trip_duration;
+	vector<double> mult_fuelcons_when_steaming;
+    vector<double> mult_fuelcons_when_fishing;
+    vector<double> mult_fuelcons_when_returning;
+    vector<double> mult_fuelcons_when_inactive;	
 	read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
 		resttime_par1s, resttime_par2s, av_trip_duration,
+		mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
+		mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
         folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
 
 	// read the more complex objects (i.e. when several info for a same vessel)...
@@ -1620,7 +1618,12 @@ int main(int argc, char* argv[])
 			nbfpingspertrips[i],
 			resttime_par1s[i],
 			resttime_par2s[i],
-			av_trip_duration[i]);
+			av_trip_duration[i],
+			mult_fuelcons_when_steaming[i],
+			mult_fuelcons_when_fishing[i],
+			mult_fuelcons_when_returning[i],
+			mult_fuelcons_when_inactive[i]
+			);
 
 		// some useful setters...
 		// will also be useful when change of YEAR-QUARTER
@@ -2505,12 +2508,12 @@ int main(int argc, char* argv[])
 
 			if(tstep==0)
 			{
-				filename="../displace_hpc_sh/sms_fba/op_n.in";
+				filename="../displace_hpc_sh/op_n.in";				
 				SMS_N_in.open(filename.c_str());
 				write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 				SMS_N_in.close();
 
-				filename="../displace_hpc_sh/sms_fba/op_f.in";
+                filename="../displace_hpc_sh/op_f.in";
 				SMS_F_in.open(filename.c_str());
 				SMS_F_in << "# data by quarter, area, species and age"<< endl;
 
@@ -2906,9 +2909,9 @@ int main(int argc, char* argv[])
 
 						// change for the SMS folder where the SMS files are lying.
 						#ifdef WINDOWS
-						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\DISPLACE_input\\sms_fba");
+						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh/");
 						#else
-						string aFolder = "~/ibm_vessels/displace_hpc_sh/sms_fba/";
+						string aFolder = "~/ibm_vessels/displace_hpc_sh/";
 						chdir (aFolder.c_str());
 						#endif
 
@@ -2921,7 +2924,7 @@ int main(int argc, char* argv[])
 
 						// the system command line
 						#ifdef WINDOWS
-						system("\"C:\\Users\\fbas\\Documents\\GitHub\\DISPLACE_input\\sms_fba\\op -maxfn 0 -nohess");
+						system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\op -maxfn 0 -nohess");
 						#else
 
 						system("~/ibm_vessels/displace_hpc_sh/op -maxfn 0 -nohess");
@@ -3153,13 +3156,13 @@ int main(int argc, char* argv[])
 						{
 
 							ofstream SMS_N_in;
-							filename="../DISPLACE_input/SMS_FBA/OP_N.in";
+							filename="../displace_hpc_sh/op_n.in";
 							SMS_N_in.open(filename.c_str(), ios::trunc);
 							write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 							SMS_N_in.close();
 
 							ofstream SMS_F_in;
-							filename="../DISPLACE_input/SMS_FBA/OP_F.in";
+							filename="../displace_hpc_sh/op_f.in";
 							SMS_F_in.open(filename.c_str(), ios::trunc);
 
 						}
@@ -3272,10 +3275,19 @@ int main(int argc, char* argv[])
 			resttime_par1s.clear();
 			resttime_par2s.clear();
 			av_trip_duration.clear();
+			mult_fuelcons_when_steaming.clear();
+            mult_fuelcons_when_fishing.clear();
+            mult_fuelcons_when_returning.clear();
+            mult_fuelcons_when_inactive.clear();
+
 			// then, re-read...
 			read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
 				carrycapacities, tankcapacities, nbfpingspertrips,
 				resttime_par1s, resttime_par2s, av_trip_duration,
+				mult_fuelcons_when_steaming,
+				mult_fuelcons_when_fishing,
+				mult_fuelcons_when_returning,
+				mult_fuelcons_when_inactive,
                 folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
 
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
@@ -3839,13 +3851,13 @@ int main(int argc, char* argv[])
 								if(vessels[ index_v ]->get_metier()->get_metier_type()==1)
 								{
 									//trawling (type 1)
-									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_FISHING;
+									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_fishing();
 									dout << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl;
 								}
 								else
 								{
 									// gillnetting, seining (type 2)
-									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_INACTIVE;
+									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_inactive();
 									dout << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl;
 								}
 								vessels[ index_v ]->set_cumfuelcons(cumfuelcons);

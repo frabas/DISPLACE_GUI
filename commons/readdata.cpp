@@ -392,6 +392,10 @@ vector<double>& nbfpingspertrips,
 vector<double>& resttime_par1s,
 vector<double>& resttime_par2s,
 vector<double>& av_trip_duration,
+                           vector<double>& mult_fuelcons_when_steaming,
+                           vector<double>& mult_fuelcons_when_fishing,
+                           vector<double>& mult_fuelcons_when_returning,
+                           vector<double>& mult_fuelcons_when_inactive,
 string folder_name_parameterization,
 string inputfolder,
 int selected_vessels_only)
@@ -417,7 +421,9 @@ int selected_vessels_only)
 
 	fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, KWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
-		resttime_par1s, resttime_par2s, av_trip_duration);
+                                     resttime_par1s, resttime_par2s, av_trip_duration,
+                                     mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
+                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive);
 	vessels_features.close();
 
 	// check inputs
@@ -2073,7 +2079,7 @@ vector<int> some_max_nb_ages)
 			double val;
 			while(linestream >> val)
 			{
-				a_vector_line2.push_back(val);
+				a_vector_line2.push_back(val*some_units.at(0));
 			}
 		}
 
@@ -2082,7 +2088,7 @@ vector<int> some_max_nb_ages)
 			double val;
 			while(linestream >> val)
 			{
-				a_vector_line3.push_back(val);
+                a_vector_line3.push_back(val*some_units.at(1));
 			}
 		}
 		if(counter==4)
@@ -2090,7 +2096,7 @@ vector<int> some_max_nb_ages)
 			double val;
 			while(linestream >> val)
 			{
-				a_vector_line4.push_back(val);
+				a_vector_line4.push_back(val*some_units.at(2));
 			}
 		}
 	}
@@ -2117,12 +2123,9 @@ vector<int> some_max_nb_ages)
 	{
 
 		vector<double> tot_N_at_age;
-								 // cod - 10
-		if(i==0) tot_N_at_age=a_vector_line2;
-								 // herring - 3
-		if(i==1) tot_N_at_age=a_vector_line3;
-								 // sprat - 7
-		if(i==2) tot_N_at_age=a_vector_line4;
+		if(i==0) tot_N_at_age=a_vector_line2 ; // cod - 10
+        if(i==1) tot_N_at_age=a_vector_line3 ; // herring - 3
+        if(i==2) tot_N_at_age=a_vector_line4 ; // sprat - 7
 
 		populations.at( stock_numbers.at(i) )->set_tot_N_at_age(tot_N_at_age);
 
@@ -2136,7 +2139,7 @@ vector<int> some_max_nb_ages)
 		{
 			for(int sz=0; sz<N_at_szgroup.size(); sz++)
 			{
-				N_at_szgroup[sz]+=percent_age_per_szgroup_matrix[sz][a] *tot_N_at_age[a] *some_units.at(i);
+				N_at_szgroup[sz]+=percent_age_per_szgroup_matrix[sz][a] *tot_N_at_age[a];
 
 				if(i==0)
 				{

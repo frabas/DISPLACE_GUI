@@ -150,7 +150,11 @@ vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths,  vect
 vector<double>& carrycapacities, vector<double>& tankcapacities,
 vector<double>& nbfpingspertrips,
 vector<double>& resttime_par1s,vector<double>& resttime_par2s,
-vector<double>& av_trip_duration);
+vector<double>& av_trip_duration,
+                                       vector<double>& mult_fuelcons_when_steaming,
+                                       vector<double>& mult_fuelcons_when_fishing,
+                                       vector<double>& mult_fuelcons_when_returning,
+                                       vector<double>& mult_fuelcons_when_inactive);
 void fill_from_ships_specifications (istream& in, vector<string>& names,
 vector<double>& vmaxs,
 vector<double>& vcruises,

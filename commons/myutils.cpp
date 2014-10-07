@@ -584,7 +584,11 @@ vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vecto
 vector<double>& carrycapacities, vector<double>& tankcapacities,
 vector<double>& nbfpingspertrips,
 vector<double>& resttime_par1s,vector<double>& resttime_par2s,
-vector<double>& av_trip_duration)
+                                       vector<double>& av_trip_duration,
+                                       vector<double>& mult_fuelcons_when_steaming,
+                                       vector<double>& mult_fuelcons_when_fishing,
+                                       vector<double>& mult_fuelcons_when_returning,
+                                       vector<double>& mult_fuelcons_when_inactive)
 {
 
 	string name;
@@ -600,6 +604,10 @@ vector<double>& av_trip_duration)
 		string par1;
 		string par2;
 		string tripdur;
+        string fuelconssteaming;
+        string fuelconsfishing;
+        string fuelconsreturning;
+        string fuelconsinactive;
 		getline(in, speed, '|');
 		getline(in, fuelconso,'|');
 		getline(in, length,'|');
@@ -609,7 +617,11 @@ vector<double>& av_trip_duration)
 		getline(in, nbpings,'|');
 		getline(in, par1,'|');
 		getline(in, par2,'|');
-		getline(in, tripdur);
+        getline(in, tripdur,'|');
+        getline(in, fuelconssteaming,'|');
+        getline(in, fuelconsfishing,'|');
+        getline(in, fuelconsreturning,'|');
+        getline(in, fuelconsinactive);		
 		names.push_back(name);
 		speeds.push_back(strtod(speed.c_str(),0));
 		fuelcons.push_back(strtod(fuelconso.c_str(),0));
@@ -621,6 +633,10 @@ vector<double>& av_trip_duration)
 		resttime_par1s.push_back(strtod(par1.c_str(),0));
 		resttime_par2s.push_back(strtod(par2.c_str(),0));
 		av_trip_duration.push_back(strtod(tripdur.c_str(),0));
+		mult_fuelcons_when_steaming.push_back(strtod(fuelconssteaming.c_str(),0));
+        mult_fuelcons_when_fishing.push_back(strtod(fuelconsfishing.c_str(),0));
+        mult_fuelcons_when_returning.push_back(strtod(fuelconsreturning.c_str(),0));
+        mult_fuelcons_when_inactive.push_back(strtod(fuelconsinactive.c_str(),0));		
 	}
 	dout << "read and set up the general features of each vessel...OK" << endl << flush;
 

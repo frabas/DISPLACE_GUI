@@ -2047,11 +2047,12 @@ vector<int> stock_numbers)
 void read_SMS_OP_N_out_file(vector<Population* >& populations,
 vector<int> stock_numbers,
 vector<int> some_units,
-vector<int> some_max_nb_ages)
+vector<int> some_max_nb_ages,
+string namesimu)
 {
 
 	// read the input file
-	string filename=  "op_n.out";
+	string filename=  namesimu+"/op_n.out";
 
 	ifstream in;
 	in.open(filename.c_str());

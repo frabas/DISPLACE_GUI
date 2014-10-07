@@ -150,4 +150,5 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
 // SMS
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
 void write_SMS_OP_F_in_file(ofstream& SMS_F_in, vector<Population* >& populations, vector<int> stock_numbers);
-void read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
+void read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages, string namesimu);
+ 

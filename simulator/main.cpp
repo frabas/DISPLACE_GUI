@@ -2508,12 +2508,12 @@ int main(int argc, char* argv[])
 
 			if(tstep==0)
 			{
-				filename="../displace_hpc_sh/op_n.in";				
+				filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
 				SMS_N_in.open(filename.c_str());
 				write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 				SMS_N_in.close();
 
-                filename="../displace_hpc_sh/op_f.in";
+				filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
 				SMS_F_in.open(filename.c_str());
 				SMS_F_in << "# data by quarter, area, species and age"<< endl;
 
@@ -2911,8 +2911,11 @@ int main(int argc, char* argv[])
 						#ifdef WINDOWS
 						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh/");
 						#else
-						string aFolder = "~/ibm_vessels/displace_hpc_sh/";
-						chdir (aFolder.c_str());
+						string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+namesimu;
+                        if (chdir(aFolder.c_str()) == -1) {
+                          cout << "chdir failed!!" << endl;
+                          // note that we cannot use ~/ibm_vessels in chdir!!!
+                        }						
 						#endif
 
 						// check
@@ -2926,8 +2929,8 @@ int main(int argc, char* argv[])
 						#ifdef WINDOWS
 						system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\op -maxfn 0 -nohess");
 						#else
-
-						system("~/ibm_vessels/displace_hpc_sh/op -maxfn 0 -nohess");
+						string a_command = "~/ibm_vessels/displace_hpc_sh/"+namesimu+"/op -maxfn 0 -nohess";
+                        system(a_command.c_str());						
 						#endif
 						cout << "SMS done" << endl;
 
@@ -2937,19 +2940,24 @@ int main(int argc, char* argv[])
 						cout << "pble calling a system command" << endl;
 						exit (EXIT_FAILURE);
 					}
+
+                    // return back to the initial path
+                    string aFolder2 = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh";
+                        if (chdir(aFolder2.c_str()) == -1) {
+                          cout << "chdir failed!!" << endl;
+                          // note that we cannot use ~/ibm_vessels in chdir!!!
+                        }
+					
 					// read .out SMS files and fill in
-					read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages);
-
-					// return back to the initial path
-					chdir (cCurrentPath);
-
+					read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages, namesimu);
+					
 					// check
 					if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
 					{
 						return 1;
 					}
-					printf ("The current working directory is %s \n", cCurrentPath);
-
+					cout << "The current working directory is " << cCurrentPath << endl;
+					
 					// check for cod
 					vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
 					cout << "after" << endl;
@@ -3156,13 +3164,13 @@ int main(int argc, char* argv[])
 						{
 
 							ofstream SMS_N_in;
-							filename="../displace_hpc_sh/op_n.in";
+							filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
 							SMS_N_in.open(filename.c_str(), ios::trunc);
 							write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 							SMS_N_in.close();
 
 							ofstream SMS_F_in;
-							filename="../displace_hpc_sh/op_f.in";
+							filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
 							SMS_F_in.open(filename.c_str(), ios::trunc);
 
 						}

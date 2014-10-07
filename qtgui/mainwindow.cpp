@@ -416,8 +416,15 @@ void MainWindow::on_cmdSetup_clicked()
     SimulationSetupDialog dlg(this);
 
     dlg.setSimulationSteps(mSimulation->getSimSteps());
+    dlg.setSimulationName(mSimulation->getSimulationName());
+    dlg.setSimulationOutputName(mSimulation->getOutputName());
+    dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
+
     if (dlg.exec() == QDialog::Accepted) {
         mSimulation->setSimSteps(dlg.getSimulationSteps());
+        mSimulation->setSimulationName(dlg.getSimulationName());
+        mSimulation->setOutputName(dlg.getSimulationOutputName());
+        mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
     }
 }
 

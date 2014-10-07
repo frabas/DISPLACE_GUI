@@ -24,6 +24,15 @@ public:
     int getSimSteps() const;
     void setSimSteps(int value);
 
+    bool getMoveVesselOption() const;
+    void setMoveVesselOption(bool value);
+
+    QString getOutputName() const;
+    void setOutputName(const QString &value);
+
+    QString getSimulationName() const;
+    void setSimulationName(const QString &value);
+
 signals:
     void log(QString);
     void processStateChanged(QProcess::ProcessState);
@@ -43,6 +52,9 @@ private:
     QProcess *mSimulation;
     int mSimSteps;
     int mLastStep;
+    QString mOutputName;
+    QString mSimuName;
+    bool mMoveVesselOption;
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);

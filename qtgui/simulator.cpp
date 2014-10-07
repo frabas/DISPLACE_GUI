@@ -6,7 +6,10 @@
 Simulator::Simulator()
     : mSimulation(0),
       mSimSteps(8761),
-      mLastStep(-1)
+      mLastStep(-1),
+      mOutputName("baseline"),
+      mSimuName("simu2"),
+      mMoveVesselOption(true)
 {
 }
 
@@ -24,11 +27,11 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back(name);
 
     arguments.push_back("-f2");
-    arguments.push_back("baseline"); // Changeme
+    arguments.push_back(mOutputName);
     arguments.push_back("-s");
-    arguments.push_back("simu2"); // Changeme
+    arguments.push_back(mSimuName);
     arguments.push_back("-i");
-    arguments.push_back(QString("%1").arg(mSimSteps)); // Changeme
+    arguments.push_back(QString::number(mSimSteps));
     arguments.push_back("-p");
     arguments.push_back("1"); // Changeme
     arguments.push_back("-o");
@@ -39,6 +42,9 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back("0"); // Changeme
     arguments.push_back("--without-gnuplot");
     arguments.push_back("--use-gui");
+
+    if (!mMoveVesselOption)
+        arguments.push_back("--no-gui-move-vessels");
 
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
@@ -113,6 +119,36 @@ void Simulator::started()
 {
 
 }
+QString Simulator::getSimulationName() const
+{
+    return mSimuName;
+}
+
+void Simulator::setSimulationName(const QString &value)
+{
+    mSimuName = value;
+}
+
+QString Simulator::getOutputName() const
+{
+    return mOutputName;
+}
+
+void Simulator::setOutputName(const QString &value)
+{
+    mOutputName = value;
+}
+
+bool Simulator::getMoveVesselOption() const
+{
+    return mMoveVesselOption;
+}
+
+void Simulator::setMoveVesselOption(bool value)
+{
+    mMoveVesselOption = value;
+}
+
 int Simulator::getSimSteps() const
 {
     return mSimSteps;

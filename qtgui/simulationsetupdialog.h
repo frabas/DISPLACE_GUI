@@ -18,6 +18,14 @@ public:
     void setSimulationSteps(int steps);
     int getSimulationSteps() const;
 
+    void setSimulationOutputName(QString name);
+    QString getSimulationOutputName() const;
+
+    void setSimulationName(QString name);
+    QString getSimulationName() const;
+
+    void setMoveVesselsOption(bool x);
+    bool getMoveVesselsOption() const;
 private:
     Ui::SimulationSetupDialog *ui;
 };

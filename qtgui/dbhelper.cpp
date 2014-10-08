@@ -7,6 +7,8 @@
 #include <modelobjects/vesseldata.h>
 #include <displacemodel.h>
 
+#include <profiler.h>
+
 #include <QStringList>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -91,7 +93,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
     DB_ASSERT(r,q);
 
     r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
-        + "(statid,popid,value) VALUES(?,?,?)");
+        + "(statid,tstep,nodeid,popid,value) VALUES(?,?,?,?,?)");
     DB_ASSERT(r,sq);
 
     foreach (NodeData *n, nodes) {
@@ -107,6 +109,8 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
         for (int i = 0; i < n->getPopCount(); ++i) {
             sq.addBindValue(statid);
+            sq.addBindValue(tstep);
+            sq.addBindValue(n->get_idx_node());
             sq.addBindValue(i);
             sq.addBindValue(n->getPop(i));
 
@@ -367,10 +371,8 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
 {
     QSqlQuery q;
     bool res =
-    q.prepare("SELECT nodeid,popid,value FROM " + TBL_NODES_STATS
-              + " INNER JOIN " + TBL_POPNODES_STATS + " ON "
-              + TBL_NODES_STATS + ".statid = " + TBL_POPNODES_STATS + ".statid "
-              + "WHERE tstep=?");
+    q.prepare ("SELECT nodeid,popid,value FROM " + TBL_POPNODES_STATS
+               + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
     q.addBindValue(step);
@@ -382,7 +384,6 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
 
         nodes.at(nid)->setPop(pid,val);
     }
-
     return true;
 }
 
@@ -535,6 +536,8 @@ bool DbHelper::checkNodesStats(int version)
         bool r =
         q.exec("CREATE TABLE " + TBL_POPNODES_STATS + "("
                + "statid INTEGER,"
+               + "tstep INTEGER,"
+               + "nodeid INTEGER,"
                + "popid INTEGER,"
                + "value REAL"
                + ");");

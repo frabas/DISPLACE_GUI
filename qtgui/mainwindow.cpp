@@ -161,6 +161,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     treemodel->setCurrentModel(currentModelIdx, currentModel);
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
+    mStatsController->updateStats(currentModel);
 
     bool e = (currentModelIdx != 0);
     ui->play_bk->setEnabled(e);

@@ -9,6 +9,7 @@
 #include <modelobjects/benthos.h>
 #include <modelobjects/populationdata.h>
 #include <Harbour.h>
+#include <historicaldatacollector.h>
 #include <outputfileparser.h>
 
 #include <QObject>
@@ -27,6 +28,10 @@ class DisplaceModel : public QObject
 {
     Q_OBJECT
 public:
+    typedef QVector<PopulationData> PopulationStat;
+    typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
+
+
     DisplaceModel();
 
     bool load (QString path, QString modelname, QString outputname);
@@ -71,8 +76,18 @@ public:
     const QList<Benthos*> &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
-    int getPopulationsCount() const { return mPopulations.size(); }
-    std::shared_ptr<PopulationData> getPopulations(int idx) const { return mPopulations[idx]; }
+    int getPopulationsCount() const { return numPopulations; }
+    const PopulationData &getPopulationsAtStep (int step, int idx) const {
+        return mStatsPopulations.getValue(step).at(idx);
+    }
+    int getPopulationsValuesCount() const {
+        return mStatsPopulations.getUniqueValuesCount();
+    }
+    PopulationStatContainer::Container::const_iterator getPopulationsFirstValue() const {
+        return mStatsPopulations.getFirst();
+    }
+
+    const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
@@ -118,6 +133,7 @@ protected:
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
+    bool loadHistoricalStatsFromDb();
 
     void checkStatsCollection(int tstep);
 
@@ -146,7 +162,9 @@ private:
     QList<NodeData *> mNodes;
     QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
-    QVector<std::shared_ptr<PopulationData> > mPopulations;
+
+    PopulationStatContainer mStatsPopulations;
+    PopulationStat mStatsPopulationsCollected;
     QMap<int, Benthos *> mBenthosInfo;
 
     // --- Working objects

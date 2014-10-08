@@ -111,7 +111,8 @@ HEADERS += \
     statscontroller.h \
     modelobjects/populationdata.h \
     objects/populationentity.h \
-    profiler.h
+    profiler.h \
+    historicaldatacollector.h
 
 RESOURCES += \
     qtgui.qrc

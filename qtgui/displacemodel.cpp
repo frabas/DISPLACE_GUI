@@ -76,6 +76,7 @@ bool DisplaceModel::loadDatabase(QString path)
     mDb->loadScenario(mScenario);
     loadNodesFromDb();
     loadVesselsFromDb();
+    loadHistoricalStatsFromDb();
     initPopulations();
 
     mLastStep = mDb->getLastKnownStep();
@@ -193,7 +194,8 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
     if (mDb && mNodesStatsDirty) {
         mDb->beginTransaction();
         mDb->addNodesStats(mLastStats, mNodes);
-        mDb->addPopStats(mLastStats, mPopulations);
+        mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+        mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
         mDb->endTransaction();
     }
 
@@ -215,13 +217,13 @@ void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
 void DisplaceModel::collectPopdynN(int step, int popid, double value)
 {
     checkStatsCollection(step);
-    mPopulations[popid]->setAggregate(value);
+    mStatsPopulationsCollected[popid].setAggregate(value);
 }
 
 void DisplaceModel::collectPopdynF(int step, int popid, double value)
 {
     checkStatsCollection(step);
-    mPopulations[popid]->setMortality(value);
+    mStatsPopulationsCollected[popid].setMortality(value);
 }
 
 int DisplaceModel::getVesselCount() const
@@ -270,7 +272,9 @@ void DisplaceModel::setCurrentStep(int step)
     if (mDb) {
         mDb->updateVesselsToStep(mCurrentStep, mVessels);
         mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
-        mDb->updateStatsForPopsToStep(mCurrentStep, mPopulations);
+
+        // re-loading Historical data is not needed!
+
         /* TODO: Update here all other entries */
     }
 }
@@ -868,10 +872,9 @@ bool DisplaceModel::initBenthos()
 
 bool DisplaceModel::initPopulations()
 {
-    mPopulations.clear();
-    mPopulations.reserve(numPopulations);
+    mStatsPopulationsCollected.clear();
     for (int i = 0; i < numPopulations; ++i) {
-        mPopulations.push_back(std::shared_ptr<PopulationData>(new PopulationData(i)));
+        mStatsPopulationsCollected.push_back(PopulationData(i));
     }
     return true;
 }
@@ -889,6 +892,24 @@ bool DisplaceModel::loadVesselsFromDb()
     mVessels.clear();
     if (!mDb->loadVessels(mNodes, mVessels))
         return false;
+
+    return true;
+}
+
+bool DisplaceModel::loadHistoricalStatsFromDb()
+{
+    QList<QVector<PopulationData> > dtl;
+    QList<int> steps;
+    mDb->loadHistoricalStatsForPops(steps,dtl);
+
+    qDebug() << Q_FUNC_INFO << dtl.size() << steps;
+
+    int i = 0;
+    foreach (const QVector<PopulationData> &dt, dtl) {
+        int tstep = steps[i];
+        mStatsPopulations.insertValue(tstep, dt);
+        ++i;
+    }
 
     return true;
 }

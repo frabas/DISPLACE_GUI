@@ -55,7 +55,7 @@ public:
     void removeAllNodesDetails();
 
     void addNodesStats (int tstep, const QList<NodeData *> &nodes);
-    void addPopStats(int tstep, const QVector<std::shared_ptr<PopulationData> > &pops);
+    void addPopStats(int tstep, const QVector<PopulationData> &pops);
 
     void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
@@ -72,7 +72,7 @@ public:
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
     bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
-    bool updateStatsForPopsToStep(int step, QVector<std::shared_ptr<PopulationData> > &population);
+    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
 
     void beginTransaction();
     void endTransaction();

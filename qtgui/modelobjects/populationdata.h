@@ -8,7 +8,11 @@ class PopulationData
     double mortality;
 
 public:
+    PopulationData()
+        : id(-1), aggregate(0.0), mortality(0.0) { }
+
     explicit PopulationData(int _id);
+    PopulationData(const PopulationData&p);
 
     int getId() const;
 

@@ -27,7 +27,6 @@ public:
 private:
     /* Populations stuff */
     QCustomPlot *mPlotPopulations;
-    QCPBars *mPlotPopulationsBar;
     PopulationStat mSelectedPopStat;
 
     DisplaceModel *mLastModel;

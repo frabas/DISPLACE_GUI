@@ -120,7 +120,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
     }
 }
 
-void DbHelper::addPopStats(int tstep, const QVector<std::shared_ptr<PopulationData> > &pops)
+void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
 {
     QSqlQuery q;
 
@@ -131,11 +131,11 @@ void DbHelper::addPopStats(int tstep, const QVector<std::shared_ptr<PopulationDa
 
     DB_ASSERT(r,q);
 
-    foreach (std::shared_ptr<PopulationData> p, pops) {
+    foreach (const PopulationData &p, pops) {
         q.addBindValue(tstep);
-        q.addBindValue(p->getId());
-        q.addBindValue(p->getAggregate());
-        q.addBindValue(p->getMortality());
+        q.addBindValue(p.getId());
+        q.addBindValue(p.getAggregate());
+        q.addBindValue(p.getMortality());
 
         bool res = q.exec();
         DB_ASSERT(res, q);
@@ -387,26 +387,43 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
     return true;
 }
 
-bool DbHelper::updateStatsForPopsToStep(int step, QVector<std::shared_ptr<PopulationData> > &population)
+bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population)
 {
-    //select * FROM popStats p1 where ( select count(*) from popStats p2 where p2.tstep < p1.tstep and p2.popid = p1.popid ) and tstep <
     QSqlQuery q;
-    bool res =
-    q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " T1 WHERE "
-              + "( SELECT COUNT(*) FROM " + TBL_POP_STATS + " T2 WHERE T2.tstep < T1.tstep AND T2.popid = T1.popid )"
-              + " AND tstep <= ?");
+    bool res = q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " ORDER BY tstep");
     DB_ASSERT(res,q);
 
-    q.addBindValue(step);
+
+    int last_tstep = -1;
+    population.clear();
 
     res = q.exec();
+    QVector<PopulationData> v;
     while (q.next()) {
+        int tstep = q.value(0).toInt();
+
+        if (last_tstep != tstep && last_tstep != -1) {
+            steps.push_back(last_tstep);
+            population.push_back(v);
+        }
+        last_tstep = tstep;
+
         int pid = q.value(1).toInt();
         double n = q.value(2).toDouble();
         double f = q.value(3).toDouble();
 
-        population.at(pid)->setAggregate(n);
-        population.at(pid)->setMortality(f);
+        for (int i = v.size(); i <= pid; ++i) {
+            PopulationData p(i);
+            v.push_back(p);
+        }
+
+        v[pid].setAggregate(n);
+        v[pid].setMortality(f);
+    }
+
+    if (last_tstep != -1) {
+        population.push_back(v);
+        steps.push_back(last_tstep);
     }
 
     return true;

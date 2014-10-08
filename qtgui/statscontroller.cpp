@@ -4,7 +4,7 @@
 
 StatsController::StatsController(QObject *parent)
     : QObject(parent),
-      mPlotPopulations(0), mPlotPopulationsBar(0),
+      mPlotPopulations(0),
       mLastModel(0)
 {
 }
@@ -12,9 +12,6 @@ StatsController::StatsController(QObject *parent)
 void StatsController::setPopulationPlot(QCustomPlot *plot)
 {
     mPlotPopulations = plot;
-    mPlotPopulationsBar = new QCPBars(mPlotPopulations->xAxis, mPlotPopulations->yAxis);
-
-    mPlotPopulations->addPlottable(mPlotPopulationsBar);
 }
 
 void StatsController::updateStats(DisplaceModel *model)
@@ -23,34 +20,36 @@ void StatsController::updateStats(DisplaceModel *model)
         return;
 
     if (mPlotPopulations) {
-        QVector<double> keyData;
-        QVector<double> valueData;
-        QVector<QString> labels;
+        mPlotPopulations->clearGraphs();
 
-        int cntr = 0;
-        for (int i = 0; i < model->getPopulationsCount(); ++i) {
-            if (model->isInterestingPop(i)) {
-                std::shared_ptr<PopulationData> pop = model->getPopulations(i);
+        const QList<int> &ipl = model->getInterestingPops();
+        foreach (int ip, ipl) {
+            QVector<double> keyData;
+            QVector<double> valueData;
 
-                keyData << cntr++;
-                labels << QString::number(i);
+            QCPGraph *graph = mPlotPopulations->addGraph();
+
+            int n = model->getPopulationsValuesCount();
+            DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
+            for (int i = 0; i <n; ++i) {
+                keyData << it.key();
 
                 switch (mSelectedPopStat) {
                 case Aggregate:
-                    valueData << pop->getAggregate();
+                    valueData << it.value().at(ip).getAggregate();
                     break;
                 case Mortality:
-                    valueData << pop->getMortality();
+                    valueData << it.value().at(ip).getMortality();
                     break;
                 }
+
+                ++it;
             }
+
+            qDebug() << "stats" << ip << keyData << valueData;
+            graph->setData(keyData, valueData);
         }
 
-        mPlotPopulationsBar->setData(keyData, valueData);
-        mPlotPopulations->xAxis->setAutoTicks(false);
-        mPlotPopulations->xAxis->setAutoTickLabels(false);
-        mPlotPopulations->xAxis->setTickVector(keyData);
-        mPlotPopulations->xAxis->setTickVectorLabels(labels);
         mPlotPopulations->rescaleAxes();
         mPlotPopulations->replot();
     }

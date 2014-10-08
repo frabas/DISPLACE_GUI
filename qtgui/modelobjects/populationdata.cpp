@@ -7,6 +7,14 @@ PopulationData::PopulationData(int _id)
 {
 }
 
+PopulationData::PopulationData(const PopulationData &p)
+    : id(p.id),
+      aggregate(p.aggregate),
+      mortality(p.mortality)
+{
+
+}
+
 int PopulationData::getId() const
 {
     return id;

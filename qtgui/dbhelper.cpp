@@ -302,8 +302,8 @@ bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
         int areacode = q.value(4).toInt();
         int landscape = q.value(5).toInt();
 
-        int nbpops = 0; // not used!
-        int szgroup = 0;
+        int nbpops = model->getNBPops();
+        int szgroup = model->getSzGrupsCount();
 
         Node *nd = new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup);
         NodeData*n = new NodeData(nd, model);
@@ -388,6 +388,9 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
         double val = q.value(2).toDouble();
 
         nodes.at(nid)->setPop(pid,val);
+
+        if (val > 1 && nid == 321)
+            qDebug() << nid << pid << val;
     }
     return true;
 }

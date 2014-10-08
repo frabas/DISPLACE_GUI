@@ -64,11 +64,11 @@ bool PopulationEntity::setData(const QModelIndex &index, const QVariant &value, 
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
             model->getModel()->remInterestingPop(index.row());
-            model->getStatsController()->updateStats(model->getModel());
         } else {
             model->getModel()->setInterestingPop(index.row());
-            model->getStatsController()->updateStats(model->getModel());
         }
+        model->getStatsController()->updateStats(model->getModel());
+        model->getMapControl()->updateNodes(model->getModelIdx());
         return true;
     }
     return false;

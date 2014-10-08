@@ -7,6 +7,8 @@
 
 #include <QObject>
 
+#define NBSZGROUP 14
+
 const QList<int> &Config::implicit_pops() const
 {
     return m_implicit_pops;
@@ -56,6 +58,17 @@ void Config::setNbpops(int value)
 {
     nbpops = value;
 }
+
+int Config::getSzGroups() const
+{
+    return szGroups;
+}
+
+void Config::setSzGroups(int value)
+{
+    szGroups = value;
+}
+
 Config::Config()
 {
 }
@@ -70,6 +83,8 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     Q_UNUSED(outputname);
 
     Config config;
+
+    config.szGroups = NBSZGROUP;
 
     std::vector <int> implicit_pops;
     std::vector <double> calib_oth_landings;

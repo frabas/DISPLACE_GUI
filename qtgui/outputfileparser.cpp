@@ -69,9 +69,11 @@ void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         int id = fields[1].toInt();
 
+        bool ok;
         int i;
-        for (i = 4 ; i < fields.size()-1; ++i) {
-            data[i-4] = fields[i].toDouble();
+        for (i = 5 ; i < fields.size()-1; ++i) {
+            data[i-5] = fields[i].toDouble(&ok);
+            Q_ASSERT(ok);
         }
         double tot = fields[i].toDouble();
 

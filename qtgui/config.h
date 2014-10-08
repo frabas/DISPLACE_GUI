@@ -7,6 +7,7 @@
 class Config
 {
     int nbpops;
+    int szGroups;
 
     QList <int> m_implicit_pops;
     QList <double> m_calib_oth_landings;
@@ -30,6 +31,8 @@ public:
     void setCalib_weight_at_szgroup(const QList<double> &calib_weight_at_szgroup);
     const QList<double> &calib_cpue_multiplier() const;
     void setCalib_cpue_multiplier(const QList<double> &calib_cpue_multiplier);
+    int getSzGroups() const;
+    void setSzGroups(int value);
 };
 
 #endif // CONFIG_H

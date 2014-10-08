@@ -8,6 +8,8 @@ NodeData::NodeData(Node *nd, DisplaceModel *model)
       mPop(nd ? new double[nd->get_nbpops()] : 0),
       mPopTot(0)
 {
+    for (int i = 0; i < nd->get_nbpops(); ++i)
+        mPop[i] = 0.0;
 }
 
 NodeData::~NodeData()
@@ -22,7 +24,7 @@ int NodeData::getPopCount() const
 
 void NodeData::setPop(int pop, double v)
 {
-    if (mPop && pop < mNode->get_nbpops() && pop > 0)
+    if (pop < mNode->get_nbpops() && pop > 0)
         mPop[pop] = v;
 }
 
@@ -36,7 +38,7 @@ void NodeData::setPop(QList<double> v, double tot)
 
 double NodeData::getPop(int pop) const
 {
-    if (mPop && pop < mNode->get_nbpops() && pop > 0)
+    if (pop < mNode->get_nbpops() && pop >= 0)
         return mPop[pop];
 
     return -1;

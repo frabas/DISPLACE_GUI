@@ -54,8 +54,16 @@ void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &
 void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);
-    double tot = mNode->getPopTot();
+    double tot = 0.0f;
     const QList<int> & ilist = mNode->getModel()->getInterestingPops();
+
+    for (int i = 0; i < ilist.size(); ++i)
+        tot += mNode->getPop(ilist[i]);
+
+    if (mNode->get_idx_node() == 321) {
+        for (int i = 0; i < ilist.size(); ++i)
+            qDebug() << "=" << ilist[i] << mNode->getPop(ilist[i]);
+    }
 
     if (tot > 1e-3) {
         double inc = 0.0;
@@ -63,9 +71,15 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         for (int i = 0; i < ilist.size(); ++i) {
             v = mNode->getPop(ilist[i]) / tot * 360.0 * 16.0;
             painter.setBrush(colors[i]);
-            painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v));
+            painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v ));
+            if (mNode->get_idx_node() == 321)
+                qDebug() << i << v << inc;
             inc += v;
         }
+    } else {
+        painter.setBrush(Qt::transparent);
+        painter.setPen(c);
+        painter.drawEllipse(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H);
     }
 }
 

@@ -51,6 +51,9 @@ public:
     int getNBPops() const {
         return mConfig.getNbpops();
     }
+    int getSzGrupsCount() const {
+        return mConfig.getSzGroups();
+    }
 
     const QList<Harbour *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;

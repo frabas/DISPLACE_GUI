@@ -31,6 +31,7 @@ win32 {
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 }
 
+DEFINES += PROFILE
 LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
 
 SOURCES += \
@@ -109,7 +110,8 @@ HEADERS += \
     qcustomplot.h \
     statscontroller.h \
     modelobjects/populationdata.h \
-    objects/populationentity.h
+    objects/populationentity.h \
+    profiler.h
 
 RESOURCES += \
     qtgui.qrc

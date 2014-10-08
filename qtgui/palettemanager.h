@@ -18,6 +18,7 @@ public:
 
     Palette();
     explicit Palette(Role role, const QString &name);
+    Palette(const Palette &);
     ~Palette();
 
     // Role
@@ -95,6 +96,7 @@ public:
     void addPalette(const Palette &view);
     const Palette &palette(int n) const;
     const Palette &palette(const QString &n) const;
+    void setPalette(int n, const Palette &palette);
 
     int paletteCount() const;
 

@@ -53,7 +53,7 @@ public:
             if (role != Qt::BackgroundColorRole && role != Qt::ForegroundRole) {
                 return QVariant::Invalid;
             }
-            return QVariant (mPalette->color(index.row()));
+            return QVariant (mPalette->colorForIndex(index.row()));
         }
         return QVariant::Invalid;
     }

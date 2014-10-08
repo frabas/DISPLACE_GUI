@@ -550,7 +550,11 @@ void MainWindow::on_actionPalettes_triggered()
     Palette pal = mMapController->getPalette(currentModelIdx, 0);
     dlg.linkPalette(&pal);
     dlg.showSpecials(false);
-    dlg.exec();
+    if (dlg.exec() == QDialog::Accepted) {
+        mMapController->setPalette(currentModelIdx, 0, pal);
+
+        mMapController->forceRedraw();
+    }
 }
 
 void MainWindow::on_popStatSelector_currentIndexChanged(int index)

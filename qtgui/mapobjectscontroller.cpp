@@ -159,6 +159,16 @@ bool MapObjectsController::isModelActive(int model) const
     return mModelVisibility[model];
 }
 
+void MapObjectsController::setPalette(int model, int n, const Palette &palette)
+{
+    mPaletteManager[model]->setPalette(n, palette);
+}
+
+void MapObjectsController::forceRedraw()
+{
+    mMap->requestRedraw();
+}
+
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
 {
     if (layer != mMainLayer && layer != mSeamarkLayer)

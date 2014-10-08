@@ -100,6 +100,9 @@ public:
     const Palette &getPalette(int model, int n) const {
         return mPaletteManager[model]->palette(n);
     }
+    void setPalette (int model, int n, const Palette &palette);
+
+    void forceRedraw();
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);

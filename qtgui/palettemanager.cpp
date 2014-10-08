@@ -14,6 +14,14 @@ Palette::Palette(Role role, const QString &name)
 {
 }
 
+Palette::Palette(const Palette &p)
+    : m_name(p.m_name),
+      m_palette(p.m_palette),
+      mSpecials(p.mSpecials),
+      m_min(p.m_min), m_max(p.m_max)
+{
+}
+
 Palette::~Palette()
 {
 }
@@ -173,6 +181,13 @@ const Palette &PaletteManager::palette(const QString &n) const
         return *(*it);
     }
     return Palette();
+}
+
+void PaletteManager::setPalette(int n, const Palette &palette)
+{
+    m_list[n] = std::shared_ptr<Palette> (new Palette(palette));
+    m_map.remove(palette.name());
+    m_map.insert(palette.name(), m_list[n]);
 }
 
 int PaletteManager::paletteCount() const

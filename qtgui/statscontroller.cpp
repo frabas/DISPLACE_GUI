@@ -1,6 +1,7 @@
 #include "statscontroller.h"
 #include <displacemodel.h>
 #include <QVector>
+#include <QtAlgorithms>
 
 StatsController::StatsController(QObject *parent)
     : QObject(parent),
@@ -15,6 +16,7 @@ StatsController::StatsController(QObject *parent)
 void StatsController::setPopulationPlot(QCustomPlot *plot)
 {
     mPlotPopulations = plot;
+    mPlotPopulations->legend->setVisible(true);
 }
 
 void StatsController::updateStats(DisplaceModel *model)
@@ -25,13 +27,16 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mPlotPopulations) {
         mPlotPopulations->clearGraphs();
 
-        const QList<int> &ipl = model->getInterestingPops();
+        QList<int> ipl = model->getInterestingPops();
+        qSort(ipl);
+
         foreach (int ip, ipl) {
             QVector<double> keyData;
             QVector<double> valueData;
 
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(QPen(mPalette.colorForIndex(ip % mPalette.colorCount())));
+            graph->setName(QString(QObject::tr("Population %1")).arg(ip));
 
             int n = model->getPopulationsValuesCount();
             DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();

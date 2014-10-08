@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <qcustomplot.h>
+#include <palettemanager.h>
 
 class DisplaceModel;
 
@@ -25,6 +26,8 @@ public:
     void initPlots();
 
 private:
+    Palette mPalette;
+
     /* Populations stuff */
     QCustomPlot *mPlotPopulations;
     PopulationStat mSelectedPopStat;

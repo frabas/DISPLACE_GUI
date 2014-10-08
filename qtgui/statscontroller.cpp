@@ -4,9 +4,12 @@
 
 StatsController::StatsController(QObject *parent)
     : QObject(parent),
+      mPalette(),
       mPlotPopulations(0),
       mLastModel(0)
 {
+    QFile file (":/palettes/iso1996_2.p2c");
+    mPalette.loadFromFile(&file);
 }
 
 void StatsController::setPopulationPlot(QCustomPlot *plot)
@@ -28,6 +31,7 @@ void StatsController::updateStats(DisplaceModel *model)
             QVector<double> valueData;
 
             QCPGraph *graph = mPlotPopulations->addGraph();
+            graph->setPen(QPen(mPalette.colorForIndex(ip % mPalette.colorCount())));
 
             int n = model->getPopulationsValuesCount();
             DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
@@ -46,7 +50,6 @@ void StatsController::updateStats(DisplaceModel *model)
                 ++it;
             }
 
-            qDebug() << "stats" << ip << keyData << valueData;
             graph->setData(keyData, valueData);
         }
 

@@ -50,6 +50,7 @@ public:
     DbHelper();
 
     bool attachDb(QString file);
+    QString lastDbError() const;
 
     void addNodesDetails(int idx, NodeData *node);
     void removeAllNodesDetails();

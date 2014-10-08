@@ -432,6 +432,9 @@ void MainWindow::on_cmdSetup_clicked()
 
 void MainWindow::on_action_Link_database_triggered()
 {
+    if (models[0] == 0)
+        return;
+
     QSettings sets;
     QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
                                          sets.value(dbLastDirKey).toString(), dbFilter,0, QFileDialog::DontConfirmOverwrite);
@@ -445,7 +448,8 @@ void MainWindow::on_action_Link_database_triggered()
 
         if (!models[0]->linkDatabase(dbname)) {
             QMessageBox::warning(this, tr("Link database failed"),
-                                 QString(tr("Cannot link this database.")));
+                                 QString(tr("Cannot link database file %1: %2"))
+                                 .arg(dbname).arg(models[0]->getLastError()));
             return;
         }
 

@@ -69,6 +69,11 @@ bool DbHelper::attachDb(QString file)
     return true;
 }
 
+QString DbHelper::lastDbError() const
+{
+    return mDb.lastError().text();
+}
+
 void DbHelper::addVesselPosition(int step, int idx, VesselData *vessel)
 {
     emit postVesselInsertion(step, idx, vessel->mVessel->get_x(), vessel->mVessel->get_y(), vessel->mVessel->get_course(), vessel->mVessel->get_fuelcons(), vessel->mVessel->get_state());

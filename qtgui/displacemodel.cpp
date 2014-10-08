@@ -96,8 +96,10 @@ bool DisplaceModel::linkDatabase(QString path)
         return false;
 
     mDb = new DbHelper;
-    if (!mDb->attachDb(path))
+    if (!mDb->attachDb(path)) {
+        mLastError = mDb->lastDbError();
         return false;
+    }
 
     /* start a transaction to speedup insertion */
     mDb->beginTransaction();

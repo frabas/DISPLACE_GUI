@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QThread>
+#include <QMutex>
 
 #include <memory>
 
@@ -96,8 +97,9 @@ protected:
     bool checkStatsTable (int version);
 
 private:
-    bool mOngoingTransaction;
+    int mOngoingTransactionsCount;
 
+    QMutex mMutex;
     VesselPositionInserter *mInserter;
     QThread *mInsertThread;
     int mVersion;

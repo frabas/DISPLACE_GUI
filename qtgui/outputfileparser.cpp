@@ -22,6 +22,8 @@ void OutputFileParser::parse(QString path, int tstep)
 
     QString name = info.fileName();
 
+    mModel->startCollectingStats();
+
     if (!file.open(QFile::ReadOnly)) {
         emit error(QString(QObject::tr("The file %1 cannot be read: %2"))
                    .arg(file.fileName())
@@ -45,6 +47,8 @@ void OutputFileParser::parse(QString path, int tstep)
 
         qDebug() << "File isn't recognized: " << path;
     }
+
+    mModel->endCollectingStats();
 
     emit parseCompleted();
 }
@@ -90,10 +94,10 @@ void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *m
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         int step = fields[0].toInt();
 
-        if (step == tstep) {
+        if (step == tstep || tstep == -1) {
             int id = fields[1].toInt();
             double cumftime = fields[4].toDouble();
-            model->collectPopCumftime (tstep, id, cumftime);
+            model->collectPopCumftime (step, id, cumftime);
         }
     }
 }
@@ -107,10 +111,10 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         int step = fields[0].toInt();
 
-        if (step == tstep) {
+        if (step == tstep || tstep == -1) {
             int id = fields[1].toInt();
             for (int i = 2; i < fields.size(); ++i) {
-                model->collectPopdynF(tstep, id, fields[i].toDouble());
+                model->collectPopdynF(step, id, fields[i].toDouble());
             }
         }
     }
@@ -126,11 +130,14 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         int step = fields[0].toInt();
 
-        if (step == tstep) {
+        if (step == tstep || tstep == -1) {
             int id = fields[1].toInt();
+            double tot = 0;
             for (int i = 2; i < fields.size(); ++i) {
-                model->collectPopdynN(tstep, id, fields[i].toDouble());
+                tot += fields[i].toDouble();
             }
+            qDebug() << "dyN" << step << id << tot;
+            model->collectPopdynN(step, id, tot);
         }
     }
 }

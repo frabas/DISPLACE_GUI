@@ -459,6 +459,20 @@ void MainWindow::on_action_Link_database_triggered()
 
 void MainWindow::on_actionImport_results_triggered()
 {
+    if (currentModelIdx == 0 || currentModel == 0)
+        return;
+
+    QSettings sets;
+    QString name =  QFileDialog::getOpenFileName(this, tr("Import data result file"),
+                                         sets.value("import_last").toString());
+
+    if (!name.isEmpty()) {
+        QFileInfo info (name);
+
+        currentModel->parseOutputStatsFile(name, -1);
+
+        sets.setValue("import_last", info.absolutePath());
+    }
 }
 
 void MainWindow::on_actionLoad_results_triggered()

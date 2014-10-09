@@ -31,7 +31,7 @@ const QString DbHelper::META_VERSION = "version";
 
 DbHelper::DbHelper()
     : mDb(),
-      mOngoingTransaction(false),
+      mOngoingTransactionsCount(0),
       mVersion(-1)
 {
     mInsertThread = new QThread();
@@ -388,9 +388,6 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
         double val = q.value(2).toDouble();
 
         nodes.at(nid)->setPop(pid,val);
-
-        if (val > 1 && nid == 321)
-            qDebug() << nid << pid << val;
     }
     return true;
 }
@@ -440,14 +437,27 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 
 void DbHelper::beginTransaction()
 {
-    mDb.transaction();
-    mOngoingTransaction = true;
+    QMutexLocker locker(&mMutex);
+    if (mOngoingTransactionsCount == 0) {
+        mDb.transaction();
+        qDebug() << "transaction";
+    }
+    ++mOngoingTransactionsCount;
+    qDebug()  << "beign transaction: " << mOngoingTransactionsCount;
+
 }
 
 void DbHelper::endTransaction()
 {
-    mDb.commit();
-    mOngoingTransaction = false;
+    QMutexLocker locker(&mMutex);
+    --mOngoingTransactionsCount;
+    qDebug() << "end transaction "<< mOngoingTransactionsCount;
+    if (mOngoingTransactionsCount < 0)
+        mOngoingTransactionsCount = 0;
+    if (mOngoingTransactionsCount == 0) {
+        qDebug() << "committing";
+        mDb.commit();
+    }
 }
 
 void DbHelper::flushBuffers()
@@ -689,9 +699,7 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
     }
 
     /* if there's no transaction ongoing, start it */
-    if (!mHelper->mOngoingTransaction) {
-        mHelper->beginTransaction();
-    }
+    mHelper->beginTransaction();
 
     mLastStep = step;
 

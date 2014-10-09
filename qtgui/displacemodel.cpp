@@ -206,6 +206,18 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
     mNodesStatsDirty = false;
 }
 
+void DisplaceModel::startCollectingStats()
+{
+    if (mDb)
+        mDb->beginTransaction();
+}
+
+void DisplaceModel::endCollectingStats()
+{
+    if (mDb)
+        mDb->endTransaction();
+}
+
 void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, double tot)
 {
     checkStatsCollection(tstep);

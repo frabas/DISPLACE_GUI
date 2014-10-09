@@ -6,6 +6,8 @@
 
 #include <readdata.h>
 #include <qdebug.h>
+#include <QtAlgorithms>
+
 
 const int DisplaceModel::numPopulations = 31;
 
@@ -285,6 +287,7 @@ void DisplaceModel::setInterestingPop(int n)
 {
     if (!mInterestingPop.contains(n))
         mInterestingPop.append(n);
+        qSort(mInterestingPop);
 }
 
 void DisplaceModel::remInterestingPop(int n)

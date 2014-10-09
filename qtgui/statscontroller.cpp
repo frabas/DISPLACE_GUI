@@ -28,14 +28,13 @@ void StatsController::updateStats(DisplaceModel *model)
         mPlotPopulations->clearGraphs();
 
         QList<int> ipl = model->getInterestingPops();
-        qSort(ipl);
 
         foreach (int ip, ipl) {
             QVector<double> keyData;
             QVector<double> valueData;
 
             QCPGraph *graph = mPlotPopulations->addGraph();
-            graph->setPen(QPen(mPalette.colorForIndex(ip % mPalette.colorCount())));
+            graph->setPen(QPen(mPalette.colorForIndexMod(ip % mPalette.colorCount())));
             graph->setName(QString(QObject::tr("Population %1")).arg(ip));
 
             int n = model->getPopulationsValuesCount();

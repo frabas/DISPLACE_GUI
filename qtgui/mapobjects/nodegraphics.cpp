@@ -51,25 +51,19 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
     double tot = 0.0f;
-    const QList<int> & ilist = mNode->getModel()->getInterestingPops();
+
+    QList<int> ilist = mNode->getModel()->getInterestingPops();
 
     for (int i = 0; i < ilist.size(); ++i)
         tot += mNode->getPop(ilist[i]);
-
-    if (mNode->get_idx_node() == 321) {
-        for (int i = 0; i < ilist.size(); ++i)
-            qDebug() << "=" << ilist[i] << mNode->getPop(ilist[i]);
-    }
 
     if (tot > 1e-3) {
         double inc = 0.0;
         double v;
         for (int i = 0; i < ilist.size(); ++i) {
             v = mNode->getPop(ilist[i]) / tot * 360.0 * 16.0;
-            painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndex(i));
+            painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
             painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v ));
-            if (mNode->get_idx_node() == 321)
-                qDebug() << i << v << inc;
             inc += v;
         }
     } else {

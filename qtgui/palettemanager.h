@@ -40,6 +40,8 @@ public:
     void addColor (const QColor &col) { m_palette.push_back(col); }
 
     QColor colorForIndex(int i) const { return m_palette[i]; }
+    QColor colorForIndexMod(int i) const { return m_palette[i % m_palette.size()]; }
+
     QColor color(float val) const {
         int idx = static_cast<int>(std::floor( (val - m_min) / getStep()) );
         if (idx < 0) idx = 0;

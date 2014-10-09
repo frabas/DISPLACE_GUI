@@ -219,7 +219,7 @@
         <item>
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">

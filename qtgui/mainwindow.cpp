@@ -12,6 +12,7 @@
 
 #include <scenariodialog.h>
 #include <simulationsetupdialog.h>
+#include <graphinteractioncontroller.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -62,6 +63,10 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
+
+    /* Setup graph controller */
+    new GraphInteractionController(ui->plotHarbours, this);
+    new GraphInteractionController(ui->plotPopulations, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning);
 

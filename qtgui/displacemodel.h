@@ -156,6 +156,7 @@ private:
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;
+    bool mPopStatsDirty;
 
     bool mLive;
     Scenario mScenario;

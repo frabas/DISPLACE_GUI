@@ -15,6 +15,7 @@ DisplaceModel::DisplaceModel()
     : mDb(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
+      mPopStatsDirty(false),
       mLive(false),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))
@@ -174,7 +175,6 @@ void DisplaceModel::checkStatsCollection(int tstep)
     }
 
     mLastStats = tstep;
-    mNodesStatsDirty = true;
 }
 
 void DisplaceModel::updateNodesStatFromSimu(QString data)
@@ -190,20 +190,29 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
         for (int i = 0; i < num; ++i) {
             mNodes.at(start + i)->set_cumftime(fields[4+i].toDouble());
         }
+        mNodesStatsDirty = true;
     }
 }
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
-    if (mDb && mNodesStatsDirty) {
+    if (mDb) {
         mDb->beginTransaction();
-        mDb->addNodesStats(mLastStats, mNodes);
-        mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
-        mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+        if (mNodesStatsDirty) {
+            qDebug() << "updating nodes";
+            mDb->addNodesStats(mLastStats, mNodes);
+            mNodesStatsDirty = false;
+        }
+
+        if (mPopStatsDirty) {
+            qDebug() << "updating pops";
+            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+            mPopStatsDirty = false;
+        }
         mDb->endTransaction();
     }
 
-    mNodesStatsDirty = false;
 }
 
 void DisplaceModel::startCollectingStats()
@@ -222,24 +231,28 @@ void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<dou
 {
     checkStatsCollection(tstep);
     mNodes.at(node_idx)->setPop(stats, tot);
+    mNodesStatsDirty = true;
 }
 
 void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->set_cumftime(cumftime);
+    mNodesStatsDirty = true;
 }
 
 void DisplaceModel::collectPopdynN(int step, int popid, double value)
 {
     checkStatsCollection(step);
     mStatsPopulationsCollected[popid].setAggregate(value);
+    mPopStatsDirty = true;
 }
 
 void DisplaceModel::collectPopdynF(int step, int popid, double value)
 {
     checkStatsCollection(step);
     mStatsPopulationsCollected[popid].setMortality(value);
+    mPopStatsDirty = true;
 }
 
 int DisplaceModel::getVesselCount() const

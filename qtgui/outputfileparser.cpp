@@ -136,7 +136,6 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
             for (int i = 2; i < fields.size(); ++i) {
                 tot += fields[i].toDouble();
             }
-            qDebug() << "dyN" << step << id << tot;
             model->collectPopdynN(step, id, tot);
         }
     }

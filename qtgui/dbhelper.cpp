@@ -156,6 +156,7 @@ void DbHelper::removeAllVesselsDetails()
 
 void DbHelper::addNodesDetails(int idx, NodeData *node)
 {
+    Q_UNUSED(idx);
     bool res;
     QSqlQuery q;
 
@@ -440,22 +441,17 @@ void DbHelper::beginTransaction()
     QMutexLocker locker(&mMutex);
     if (mOngoingTransactionsCount == 0) {
         mDb.transaction();
-        qDebug() << "transaction";
     }
     ++mOngoingTransactionsCount;
-    qDebug()  << "beign transaction: " << mOngoingTransactionsCount;
-
 }
 
 void DbHelper::endTransaction()
 {
     QMutexLocker locker(&mMutex);
     --mOngoingTransactionsCount;
-    qDebug() << "end transaction "<< mOngoingTransactionsCount;
     if (mOngoingTransactionsCount < 0)
         mOngoingTransactionsCount = 0;
     if (mOngoingTransactionsCount == 0) {
-        qDebug() << "committing";
         mDb.commit();
     }
 }

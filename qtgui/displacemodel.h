@@ -101,7 +101,6 @@ public:
 
 
     /* Interesting pop access functions */
-
     const QList<int> &getInterestingPops() const { return mInterestingPop; }
 
     /** \brief insert the pop into the list of interest for pops */
@@ -110,6 +109,17 @@ public:
     /** \brief remove the pop from the list of interest for pops */
     void remInterestingPop(int n);
     bool isInterestingPop(int n);
+
+    /* Interesting harbours - see pop */
+    const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
+
+    /** \brief insert the pop into the list of interest for pops */
+    void setInterestingHarb(int n);
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingHarb(int n);
+    bool isInterestingHarb(int n);
+
 
     //
 
@@ -163,6 +173,7 @@ private:
     Config mConfig;
 
     QList<int> mInterestingPop;
+    QList<int> mInterestingHarb;
 
     QList<Harbour *> mHarbours;
     QList<NodeData *> mNodes;

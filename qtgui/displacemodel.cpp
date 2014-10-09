@@ -325,6 +325,23 @@ bool DisplaceModel::isInterestingPop(int n)
     return mInterestingPop.contains(n);
 }
 
+void DisplaceModel::setInterestingHarb(int n)
+{
+    if (!mInterestingHarb.contains(n))
+        mInterestingHarb.append(n);
+        qSort(mInterestingHarb);
+}
+
+void DisplaceModel::remInterestingHarb(int n)
+{
+    mInterestingHarb.removeAll(n);
+}
+
+bool DisplaceModel::isInterestingHarb(int n)
+{
+    return mInterestingHarb.contains(n);
+}
+
 void DisplaceModel::parseOutputStatsFile(QString file, int tstep)
 {
     emit parseOutput(file, tstep);

@@ -9,10 +9,6 @@
 #define PIE_W 40.0
 #define PIE_H 40.0
 
-const Qt::GlobalColor NodeGraphics::colors[] = {
-    Qt::red, Qt::blue, Qt::yellow, Qt::black, Qt::white, Qt::green
-};
-
 NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int indx)
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(PIE_W, PIE_H), 11, 7, 17),
       mNode(node),
@@ -70,7 +66,7 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         double v;
         for (int i = 0; i < ilist.size(); ++i) {
             v = mNode->getPop(ilist[i]) / tot * 360.0 * 16.0;
-            painter.setBrush(colors[i]);
+            painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndex(i));
             painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v ));
             if (mNode->get_idx_node() == 321)
                 qDebug() << i << v << inc;
@@ -88,7 +84,7 @@ void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,0).color((float)mNode->get_cumftime()));
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumftime()));
 
 //    int d = mNode->get_cumftime() * PIE_W / 10;
 //    painter.drawRect(-d/2, -d/2, d, d);

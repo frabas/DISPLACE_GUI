@@ -42,7 +42,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     QFile pf(":/palettes/iso1996_2.p2c");
     Palette p;
     p.loadFromFile(&pf);
-    mPaletteManager[model_n]->addPalette(p);
+
+    for (int i = 0; i < (int)LastRole; ++i)
+        mPaletteManager[model_n]->setPalette((PaletteRole)i, p);
 
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
@@ -159,7 +161,7 @@ bool MapObjectsController::isModelActive(int model) const
     return mModelVisibility[model];
 }
 
-void MapObjectsController::setPalette(int model, int n, const Palette &palette)
+void MapObjectsController::setPalette(int model, PaletteRole n, const Palette &palette)
 {
     mPaletteManager[model]->setPalette(n, palette);
 }

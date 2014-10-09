@@ -46,9 +46,16 @@
     <property name="title">
      <string>&amp;Model</string>
     </property>
+    <widget class="QMenu" name="menuPalettes">
+     <property name="title">
+      <string>Palettes</string>
+     </property>
+     <addaction name="actionPalettes"/>
+     <addaction name="actionPopulations"/>
+    </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
-    <addaction name="actionPalettes"/>
+    <addaction name="menuPalettes"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -657,7 +664,12 @@
   </action>
   <action name="actionPalettes">
    <property name="text">
-    <string>Palettes...</string>
+    <string>Values...</string>
+   </property>
+  </action>
+  <action name="actionPopulations">
+   <property name="text">
+    <string>Populations...</string>
    </property>
   </action>
  </widget>

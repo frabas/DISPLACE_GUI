@@ -551,12 +551,22 @@ void MainWindow::on_play_auto_clicked()
 
 void MainWindow::on_actionPalettes_triggered()
 {
+    showPaletteDialog(ValueRole);
+}
+
+void MainWindow::on_actionPopulations_triggered()
+{
+    showPaletteDialog(PopulationRole);
+}
+
+void MainWindow::showPaletteDialog (PaletteRole role)
+{
     EditPaletteDialog dlg;
-    Palette pal = mMapController->getPalette(currentModelIdx, 0);
+    Palette pal = mMapController->getPalette(currentModelIdx, role);
     dlg.linkPalette(&pal);
     dlg.showSpecials(false);
     if (dlg.exec() == QDialog::Accepted) {
-        mMapController->setPalette(currentModelIdx, 0, pal);
+        mMapController->setPalette(currentModelIdx, role, pal);
 
         mMapController->forceRedraw();
     }

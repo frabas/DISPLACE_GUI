@@ -75,6 +75,7 @@ private slots:
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
     void on_popStatSelector_currentIndexChanged(int index);
+    void on_actionPopulations_triggered();
 
 signals:
     void modelStateChanged();
@@ -88,6 +89,8 @@ protected:
     void centerMapOnHarbourId (int id);
     void centerMapOnNodeId (int id);
     void centerMapOnVesselId (int id);
+
+    void showPaletteDialog(PaletteRole role);
 
 private:
     Ui::MainWindow *ui;

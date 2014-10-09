@@ -10,7 +10,6 @@ class MapObjectsController;
 
 class NodeGraphics : public qmapcontrol::GeometryPointShapeScaled {
 protected:
-    static const Qt::GlobalColor colors[];
     QColor c;
 
     NodeData *mNode;

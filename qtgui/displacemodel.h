@@ -8,6 +8,7 @@
 #include <modelobjects/vesseldata.h>
 #include <modelobjects/benthos.h>
 #include <modelobjects/populationdata.h>
+#include <modelobjects/nationdata.h>
 #include <Harbour.h>
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
@@ -92,8 +93,15 @@ public:
 
     const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
+    const QList<NationData> &getNationsList() const { return mNations; }
+    const NationData &getNation(int idx) const { return mNations.at(idx); }
+
+    /* Scenario and configuration */
+
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
+
+    /* Live Simulation data */
 
     void setCurrentStep(int step);
     int getCurrentStep() const { return mCurrentStep; }
@@ -145,6 +153,7 @@ protected:
     bool loadVessels();
     bool initBenthos();
     bool initPopulations();
+    bool initNations();
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
@@ -179,6 +188,7 @@ private:
     QList<NodeData *> mNodes;
     QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
+    QList<NationData> mNations;
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;

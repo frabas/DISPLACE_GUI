@@ -53,6 +53,7 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         loadVessels();
         initBenthos();
         initPopulations();
+        initNations();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
         return false;
@@ -81,6 +82,7 @@ bool DisplaceModel::loadDatabase(QString path)
     loadVesselsFromDb();
     loadHistoricalStatsFromDb();
     initPopulations();
+    initNations();
 
     mLastStep = mDb->getLastKnownStep();
     setCurrentStep(0);
@@ -923,6 +925,30 @@ bool DisplaceModel::initPopulations()
     for (int i = 0; i < numPopulations; ++i) {
         mStatsPopulationsCollected.push_back(PopulationData(i));
     }
+    return true;
+}
+
+bool DisplaceModel::initNations()
+{
+    // nations are read from vessels.
+    QMultiMap<QString, VesselData *> nationSet;
+    foreach (VesselData *vessel, mVessels) {
+        nationSet.insertMulti(QString::fromStdString(vessel->mVessel->get_nationality()), vessel);
+    }
+
+    mNations.clear();
+    QList<QString> nationsName = nationSet.uniqueKeys();
+    for (int i = 0; i < nationsName.size(); ++i) {
+        NationData data;
+        data.setName(nationsName[i]);
+
+        QList<VesselData *>vessels = nationSet.values(nationsName[i]);
+        foreach (VesselData *vessel, vessels) {
+            vessel->setNationality(i);
+        }
+        mNations.push_back(data);
+    }
+
     return true;
 }
 

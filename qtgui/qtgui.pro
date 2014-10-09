@@ -69,7 +69,8 @@ SOURCES += \
     statscontroller.cpp \
     modelobjects/populationdata.cpp \
     objects/populationentity.cpp \
-    graphinteractioncontroller.cpp
+    graphinteractioncontroller.cpp \
+    modelobjects/nationdata.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -114,7 +115,8 @@ HEADERS += \
     objects/populationentity.h \
     profiler.h \
     historicaldatacollector.h \
-    graphinteractioncontroller.h
+    graphinteractioncontroller.h \
+    modelobjects/nationdata.h
 
 RESOURCES += \
     qtgui.qrc

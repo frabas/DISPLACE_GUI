@@ -14,6 +14,7 @@ QT_END_NAMESPACE
 
 class DisplaceModel;
 class NodeData;
+class Harbour;
 class VesselData;
 class PopulationData;
 class DbHelper;
@@ -68,7 +69,7 @@ public:
     bool loadScenario (Scenario &);
     bool saveScenario (const Scenario &);
 
-    bool loadNodes(QList<NodeData *> &nodes, DisplaceModel *model);
+    bool loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
 
     /* Update datas for step */

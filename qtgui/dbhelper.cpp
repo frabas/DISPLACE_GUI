@@ -5,6 +5,8 @@
 
 #include <modelobjects/nodedata.h>
 #include <modelobjects/vesseldata.h>
+#include <Harbour.h>
+
 #include <displacemodel.h>
 
 #include <profiler.h>
@@ -161,8 +163,8 @@ void DbHelper::addNodesDetails(int idx, NodeData *node)
     QSqlQuery q;
 
     res = q.prepare("INSERT INTO " + TBL_NODES
-                + "(_id,x,y,harbour,areacode,landscape) "
-                + "VALUES (?,?,?,?,?,?)");
+                + "(_id,x,y,harbour,areacode,landscape,name) "
+                + "VALUES (?,?,?,?,?,?,?)");
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
@@ -172,6 +174,12 @@ void DbHelper::addNodesDetails(int idx, NodeData *node)
     q.addBindValue(node->get_harbour());
     q.addBindValue(node->get_code_area());
     q.addBindValue(node->get_marine_landscape());
+    if (node->get_harbour()) {
+        q.addBindValue(QString::fromStdString(node->get_name()));
+    } else {
+        q.addBindValue(QVariant());
+    }
+
 
     res = q.exec();
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
@@ -288,9 +296,9 @@ bool DbHelper::saveScenario(const Scenario &sce)
     return true;
 }
 
-bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
+bool DbHelper::loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape FROM " + TBL_NODES + " ORDER BY _id");
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,name FROM " + TBL_NODES + " ORDER BY _id");
     bool res = q.exec();
 
     DB_ASSERT(res,q);
@@ -305,14 +313,26 @@ bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
 
         int nbpops = model->getNBPops();
         int szgroup = model->getSzGrupsCount();
+        QString name = q.value(6).toString();
 
-        Node *nd = new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup);
+        /* TODO: a,b */
+        multimap<int,double> a;
+        map<string,double> b;
+        Node *nd;
+        Harbour *h;
+        if (harbour) {
+            nd = h = new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, szgroup, name.toStdString(),a,b);
+        } else {
+            nd = new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup);
+        }
         NodeData*n = new NodeData(nd, model);
 
         while (nodes.size() < idx+1)
             nodes.push_back(0);
 
         nodes[idx] = n;
+        if (n->get_harbour())
+            harbours.push_back(h);
     }
 
     return true;
@@ -528,7 +548,8 @@ bool DbHelper::checkNodesTable(int version)
                + "y REAL,"
                + "harbour INTEGER,"
                + "areacode INTEGER,"
-               + "landscape INTEGER"
+               + "landscape INTEGER,"
+               + "name VARCHAR(32)"
                + ");"
                );
 

@@ -929,7 +929,7 @@ bool DisplaceModel::initPopulations()
 bool DisplaceModel::loadNodesFromDb()
 {
     mNodes.clear();
-    if (!mDb->loadNodes(mNodes, this))
+    if (!mDb->loadNodes(mNodes,mHarbours, this))
         return false;
     return true;
 }

@@ -579,7 +579,7 @@ void MainWindow::on_play_auto_clicked()
     if (en) {
         mPlayTimer.stop();
     } else {
-        mPlayTimer.setInterval(500);
+        mPlayTimer.setInterval(20);
         mPlayTimer.setSingleShot(false);
         mPlayTimer.start();
     }

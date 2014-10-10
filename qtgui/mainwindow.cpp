@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
+    connect (&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -176,6 +177,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->play_fwd->setEnabled(e);
     ui->play_last->setEnabled(e);
     ui->play_step->setEnabled(e);
+    ui->play_auto->setEnabled(e);
     if (!e || currentModel == 0) {
         ui->play_step->setValue(0);
     } else {
@@ -261,6 +263,14 @@ void MainWindow::errorImportingStatsFile(QString msg)
 {
     QMessageBox::warning(this, tr("Error importing stats file"),
                          msg);
+}
+
+void MainWindow::playTimerTimeout()
+{
+    if (currentModel->getCurrentStep() < currentModel->getLastStep())
+        on_play_fwd_clicked();
+    else
+        on_play_auto_clicked();
 }
 
 void MainWindow::updateModelList()
@@ -565,7 +575,23 @@ void MainWindow::on_play_last_clicked()
 
 void MainWindow::on_play_auto_clicked()
 {
+    bool en = mPlayTimer.isActive();
+    if (en) {
+        mPlayTimer.stop();
+    } else {
+        mPlayTimer.setInterval(500);
+        mPlayTimer.setSingleShot(false);
+        mPlayTimer.start();
+    }
 
+    //ui->play_auto->setIcon();
+    ui->play_bk->setEnabled(en);
+    ui->play_fbk->setEnabled(en);
+    ui->play_ffwd->setEnabled(en);
+    ui->play_first->setEnabled(en);
+    ui->play_fwd->setEnabled(en);
+    ui->play_last->setEnabled(en);
+    ui->play_step->setEnabled(en);
 }
 
 void MainWindow::on_actionPalettes_triggered()

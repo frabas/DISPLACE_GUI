@@ -6,6 +6,7 @@
 
 #include <QMainWindow>
 #include <QProcess>
+#include <QTimer>
 
 #include <memory>
 #include <QMapControl/Point.h>
@@ -52,6 +53,8 @@ private slots:
     void mapFocusPointChanged(PointWorldCoord);
 
     void errorImportingStatsFile(QString);
+
+    void playTimerTimeout();
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
@@ -108,6 +111,8 @@ private:
 
     // tree model adapter
     ObjectTreeModel *treemodel;
+
+    QTimer mPlayTimer;
 
     static const QString dbSuffix;
     static const QString dbFilter;

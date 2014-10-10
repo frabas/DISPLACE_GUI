@@ -312,6 +312,20 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="nationsTab">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/places.png</normaloff>:/icons/places.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Nations</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <item>
+             <widget class="QCustomPlot" name="plotNations" native="true"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>

@@ -19,6 +19,18 @@ void StatsController::setPopulationPlot(QCustomPlot *plot)
     mPlotPopulations->legend->setVisible(true);
 }
 
+void StatsController::setHarboursPlot(QCustomPlot *plot)
+{
+    mPlotHarbours = plot;
+    mPlotHarbours->legend->setVisible(true);
+}
+
+void StatsController::setNationsPlot(QCustomPlot *plot)
+{
+    mPlotNations = plot;
+    mPlotNations->legend->setVisible(true);
+}
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)

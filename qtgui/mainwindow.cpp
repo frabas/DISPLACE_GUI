@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Setup graph controller */
     new GraphInteractionController(ui->plotHarbours, this);
     new GraphInteractionController(ui->plotPopulations, this);
+    new GraphInteractionController(ui->plotNations, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning);
 
@@ -90,6 +91,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mStatsController = new StatsController(this);
     mStatsController->setPopulationPlot(ui->plotPopulations);
+    mStatsController->setHarboursPlot(ui->plotHarbours);
+    mStatsController->setNationsPlot(ui->plotNations);
 
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);

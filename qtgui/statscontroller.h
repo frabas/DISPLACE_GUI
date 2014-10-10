@@ -14,6 +14,8 @@ public:
     explicit StatsController(QObject *parent = 0);
 
     void setPopulationPlot(QCustomPlot *plot);
+    void setHarboursPlot(QCustomPlot *plot);
+    void setNationsPlot(QCustomPlot *plot);
 
     void updateStats(DisplaceModel *model);
 
@@ -31,6 +33,12 @@ private:
     /* Populations stuff */
     QCustomPlot *mPlotPopulations;
     PopulationStat mSelectedPopStat;
+
+    /* Harbour stuff */
+    QCustomPlot *mPlotHarbours;
+
+    /* Nations */
+    QCustomPlot *mPlotNations;
 
     DisplaceModel *mLastModel;
 };

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QThread>
+#include <QMutex>
 
 #include <memory>
 
@@ -13,6 +14,7 @@ QT_END_NAMESPACE
 
 class DisplaceModel;
 class NodeData;
+class Harbour;
 class VesselData;
 class PopulationData;
 class DbHelper;
@@ -48,6 +50,7 @@ class DbHelper : public QObject
     QSqlDatabase mDb;
 public:
     DbHelper();
+    ~DbHelper();
 
     bool attachDb(QString file);
     QString lastDbError() const;
@@ -67,7 +70,7 @@ public:
     bool loadScenario (Scenario &);
     bool saveScenario (const Scenario &);
 
-    bool loadNodes(QList<NodeData *> &nodes, DisplaceModel *model);
+    bool loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
 
     /* Update datas for step */
@@ -77,6 +80,7 @@ public:
 
     void beginTransaction();
     void endTransaction();
+    void forceEndTransaction();
     void flushBuffers();
 
     void setMetadata (QString key, QString value);
@@ -96,8 +100,9 @@ protected:
     bool checkStatsTable (int version);
 
 private:
-    bool mOngoingTransaction;
+    int mOngoingTransactionsCount;
 
+    QMutex mMutex;
     VesselPositionInserter *mInserter;
     QThread *mInsertThread;
     int mVersion;

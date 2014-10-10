@@ -63,7 +63,7 @@ Source: C:\Qt\5.3\mingw482_32\bin\Qt5Sql{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5Xml{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\bin\Qt5PrintSupport{#QT_DEBUG}.dll; DestDir: {app}
 Source: C:\Qt\5.3\mingw482_32\plugins\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms
-Source: C:\Qt\5.3\mingw482_32\plugins\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\platforms
+Source: C:\Qt\5.3\mingw482_32\plugins\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\sqldrivers
 Source: C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin\libgcc_s_seh-1.dll; DestDir: {app}
 
 [Icons]

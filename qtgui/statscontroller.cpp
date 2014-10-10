@@ -19,23 +19,42 @@ void StatsController::setPopulationPlot(QCustomPlot *plot)
     mPlotPopulations->legend->setVisible(true);
 }
 
+void StatsController::setHarboursPlot(QCustomPlot *plot)
+{
+    mPlotHarbours = plot;
+    mPlotHarbours->legend->setVisible(true);
+}
+
+void StatsController::setNationsPlot(QCustomPlot *plot)
+{
+    mPlotNations = plot;
+    mPlotNations->legend->setVisible(true);
+}
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)
         return;
 
     if (mPlotPopulations) {
+        static const QPen pen(QColor(0,0,255,200));
         mPlotPopulations->clearGraphs();
 
         QList<int> ipl = model->getInterestingPops();
-        qSort(ipl);
 
+        int cnt, t = ipl.size();
         foreach (int ip, ipl) {
             QVector<double> keyData;
             QVector<double> valueData;
 
             QCPGraph *graph = mPlotPopulations->addGraph();
-            graph->setPen(QPen(mPalette.colorForIndex(ip % mPalette.colorCount())));
+            graph->setPen(pen);
+            graph->setLineStyle(QCPGraph::lsLine);
+            QColor col = mPalette.colorForIndexMod(ip % mPalette.colorCount());
+            //col.setAlpha((t > 1 ? 255/(t-1)*cnt : 255));
+            col.setAlpha(128);
+            graph->setBrush(QBrush(col));
+            ++cnt;
             graph->setName(QString(QObject::tr("Population %1")).arg(ip));
 
             int n = model->getPopulationsValuesCount();

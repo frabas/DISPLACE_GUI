@@ -1,20 +1,20 @@
-#ifndef POPULATIONENTITY_H
-#define POPULATIONENTITY_H
+#ifndef NATIONENTITY_H
+#define NATIONENTITY_H
 
 #include <objects/objecttreeentity.h>
 
 namespace objecttree {
 
-class PopulationEntity : public ObjectTreeEntity
+class NationEntity : public ObjectTreeEntity
 {
-    int mPopulationIndex;
+    int mNationIndex;
 
 public:
-    PopulationEntity(ObjectTreeModel *_model, int idx = -1);
-    virtual ~PopulationEntity();
+    NationEntity(ObjectTreeModel *_model, int idx = -1);
+    virtual ~NationEntity();
 
     virtual ObjectTreeModel::Category getCategory() const {
-        return ObjectTreeModel::Populations;
+        return ObjectTreeModel::Nations;
     }
 
     virtual QModelIndex parent (const QModelIndex &parent) const;
@@ -28,4 +28,4 @@ public:
 
 }
 
-#endif // POPULATIONENTITY_H
+#endif // NATIONENTITY_H

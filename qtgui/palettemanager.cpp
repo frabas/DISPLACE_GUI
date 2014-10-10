@@ -4,11 +4,11 @@
 #include <QDebug>
 
 Palette::Palette()
-    : mRole(StandardRole), m_name(""), m_palette()
+    : mRole(ValueRole), m_name(""), m_palette()
 {
 }
 
-Palette::Palette(Role role, const QString &name)
+Palette::Palette(PaletteRole role, const QString &name)
     : mRole(role), m_name(name),
       m_palette()
 {
@@ -61,7 +61,7 @@ bool Palette::loadFromFile(QIODevice *device)
     bool ok;
     QDomElement root = doc.documentElement();
     QString n = root.attribute("name");
-    Role r = static_cast<Role> (root.attribute("role").toInt(&ok));
+    PaletteRole r = static_cast<PaletteRole> (root.attribute("role").toInt(&ok));
     if (!ok) return false;
 
     double m = root.attribute("min").toFloat(&ok);
@@ -152,6 +152,8 @@ bool Palette::saveToFile(QIODevice *device)
 
 PaletteManager::PaletteManager()
 {
+    for (int i = 0; i < LastRole; ++i)
+        m_list.append(std::shared_ptr<Palette>());
 }
 
 PaletteManager::~PaletteManager()
@@ -159,31 +161,21 @@ PaletteManager::~PaletteManager()
 
 }
 
-void PaletteManager::addPalette(const Palette &palette)
+const Palette &PaletteManager::palette(PaletteRole n) const
 {
-    std::shared_ptr<Palette> v (new Palette(palette));
-
-    m_map.insert(palette.name(), v);
-    m_list.push_back(v);
+    return *(m_list[(int)n].get());
 }
 
-const Palette &PaletteManager::palette(int n) const
-{
-    if (n < m_list.size())
-        return *(m_list[n].get());
-    return Palette();
-}
-
-const Palette &PaletteManager::palette(const QString &n) const
+std::shared_ptr<Palette> PaletteManager::palette(const QString &n) const
 {
     PaletteMapContainer::const_iterator it = m_map.find(n);
     if (it != m_map.end()) {
-        return *(*it);
+        return (*it);
     }
-    return Palette();
+    return std::shared_ptr<Palette>();
 }
 
-void PaletteManager::setPalette(int n, const Palette &palette)
+void PaletteManager::setPalette(PaletteRole n, const Palette &palette)
 {
     m_list[n] = std::shared_ptr<Palette> (new Palette(palette));
     m_map.remove(palette.name());

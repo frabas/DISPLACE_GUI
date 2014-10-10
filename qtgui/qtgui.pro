@@ -68,7 +68,10 @@ SOURCES += \
     qcustomplot.cpp \
     statscontroller.cpp \
     modelobjects/populationdata.cpp \
-    objects/populationentity.cpp
+    objects/populationentity.cpp \
+    graphinteractioncontroller.cpp \
+    modelobjects/nationdata.cpp \
+    objects/nationentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -112,7 +115,10 @@ HEADERS += \
     modelobjects/populationdata.h \
     objects/populationentity.h \
     profiler.h \
-    historicaldatacollector.h
+    historicaldatacollector.h \
+    graphinteractioncontroller.h \
+    modelobjects/nationdata.h \
+    objects/nationentity.h
 
 RESOURCES += \
     qtgui.qrc

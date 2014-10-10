@@ -5,10 +5,15 @@
 
 class VesselData
 {
+    int mNationality;
 public:
     Vessel *mVessel; /* This is crap too. */
 
     VesselData(Vessel *vessel = 0);
+
+    int getNationality() const;
+    void setNationality(int value);
+
 private:
 };
 

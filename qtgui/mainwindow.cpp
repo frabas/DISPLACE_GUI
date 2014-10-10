@@ -12,6 +12,7 @@
 
 #include <scenariodialog.h>
 #include <simulationsetupdialog.h>
+#include <graphinteractioncontroller.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -52,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
+    connect (&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -62,6 +64,11 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
+
+    /* Setup graph controller */
+    new GraphInteractionController(ui->plotHarbours, this);
+    new GraphInteractionController(ui->plotPopulations, this);
+    new GraphInteractionController(ui->plotNations, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning);
 
@@ -84,6 +91,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mStatsController = new StatsController(this);
     mStatsController->setPopulationPlot(ui->plotPopulations);
+    mStatsController->setHarboursPlot(ui->plotHarbours);
+    mStatsController->setNationsPlot(ui->plotNations);
 
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
@@ -171,6 +180,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->play_fwd->setEnabled(e);
     ui->play_last->setEnabled(e);
     ui->play_step->setEnabled(e);
+    ui->play_auto->setEnabled(e);
     if (!e || currentModel == 0) {
         ui->play_step->setValue(0);
     } else {
@@ -256,6 +266,14 @@ void MainWindow::errorImportingStatsFile(QString msg)
 {
     QMessageBox::warning(this, tr("Error importing stats file"),
                          msg);
+}
+
+void MainWindow::playTimerTimeout()
+{
+    if (currentModel->getCurrentStep() < currentModel->getLastStep())
+        on_play_fwd_clicked();
+    else
+        on_play_auto_clicked();
 }
 
 void MainWindow::updateModelList()
@@ -459,6 +477,20 @@ void MainWindow::on_action_Link_database_triggered()
 
 void MainWindow::on_actionImport_results_triggered()
 {
+    if (currentModelIdx == 0 || currentModel == 0)
+        return;
+
+    QSettings sets;
+    QString name =  QFileDialog::getOpenFileName(this, tr("Import data result file"),
+                                         sets.value("import_last").toString());
+
+    if (!name.isEmpty()) {
+        QFileInfo info (name);
+
+        currentModel->parseOutputStatsFile(name, -1);
+
+        sets.setValue("import_last", info.absolutePath());
+    }
 }
 
 void MainWindow::on_actionLoad_results_triggered()
@@ -546,17 +578,43 @@ void MainWindow::on_play_last_clicked()
 
 void MainWindow::on_play_auto_clicked()
 {
+    bool en = mPlayTimer.isActive();
+    if (en) {
+        mPlayTimer.stop();
+    } else {
+        mPlayTimer.setInterval(20);
+        mPlayTimer.setSingleShot(false);
+        mPlayTimer.start();
+    }
 
+    //ui->play_auto->setIcon();
+    ui->play_bk->setEnabled(en);
+    ui->play_fbk->setEnabled(en);
+    ui->play_ffwd->setEnabled(en);
+    ui->play_first->setEnabled(en);
+    ui->play_fwd->setEnabled(en);
+    ui->play_last->setEnabled(en);
+    ui->play_step->setEnabled(en);
 }
 
 void MainWindow::on_actionPalettes_triggered()
 {
+    showPaletteDialog(ValueRole);
+}
+
+void MainWindow::on_actionPopulations_triggered()
+{
+    showPaletteDialog(PopulationRole);
+}
+
+void MainWindow::showPaletteDialog (PaletteRole role)
+{
     EditPaletteDialog dlg;
-    Palette pal = mMapController->getPalette(currentModelIdx, 0);
+    Palette pal = mMapController->getPalette(currentModelIdx, role);
     dlg.linkPalette(&pal);
     dlg.showSpecials(false);
     if (dlg.exec() == QDialog::Accepted) {
-        mMapController->setPalette(currentModelIdx, 0, pal);
+        mMapController->setPalette(currentModelIdx, role, pal);
 
         mMapController->forceRedraw();
     }

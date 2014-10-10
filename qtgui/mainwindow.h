@@ -6,6 +6,7 @@
 
 #include <QMainWindow>
 #include <QProcess>
+#include <QTimer>
 
 #include <memory>
 #include <QMapControl/Point.h>
@@ -53,6 +54,8 @@ private slots:
 
     void errorImportingStatsFile(QString);
 
+    void playTimerTimeout();
+
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
@@ -75,6 +78,7 @@ private slots:
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
     void on_popStatSelector_currentIndexChanged(int index);
+    void on_actionPopulations_triggered();
 
 signals:
     void modelStateChanged();
@@ -88,6 +92,8 @@ protected:
     void centerMapOnHarbourId (int id);
     void centerMapOnNodeId (int id);
     void centerMapOnVesselId (int id);
+
+    void showPaletteDialog(PaletteRole role);
 
 private:
     Ui::MainWindow *ui;
@@ -105,6 +111,8 @@ private:
 
     // tree model adapter
     ObjectTreeModel *treemodel;
+
+    QTimer mPlayTimer;
 
     static const QString dbSuffix;
     static const QString dbFilter;

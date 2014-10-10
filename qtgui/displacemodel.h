@@ -8,6 +8,7 @@
 #include <modelobjects/vesseldata.h>
 #include <modelobjects/benthos.h>
 #include <modelobjects/populationdata.h>
+#include <modelobjects/nationdata.h>
 #include <Harbour.h>
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
@@ -92,8 +93,15 @@ public:
 
     const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
+    const QList<NationData> &getNationsList() const { return mNations; }
+    const NationData &getNation(int idx) const { return mNations.at(idx); }
+
+    /* Scenario and configuration */
+
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
+
+    /* Live Simulation data */
 
     void setCurrentStep(int step);
     int getCurrentStep() const { return mCurrentStep; }
@@ -101,7 +109,6 @@ public:
 
 
     /* Interesting pop access functions */
-
     const QList<int> &getInterestingPops() const { return mInterestingPop; }
 
     /** \brief insert the pop into the list of interest for pops */
@@ -110,6 +117,17 @@ public:
     /** \brief remove the pop from the list of interest for pops */
     void remInterestingPop(int n);
     bool isInterestingPop(int n);
+
+    /* Interesting harbours - see pop */
+    const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
+
+    /** \brief insert the pop into the list of interest for pops */
+    void setInterestingHarb(int n);
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingHarb(int n);
+    bool isInterestingHarb(int n);
+
 
     //
 
@@ -120,6 +138,8 @@ public:
     void commitNodesStatsFromSimu(int tstep);
 
     // Stats collecting. Must store data to db
+    void startCollectingStats();
+    void endCollectingStats();
     void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, double tot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
 
@@ -133,6 +153,7 @@ protected:
     bool loadVessels();
     bool initBenthos();
     bool initPopulations();
+    bool initNations();
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
@@ -154,17 +175,20 @@ private:
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;
+    bool mPopStatsDirty;
 
     bool mLive;
     Scenario mScenario;
     Config mConfig;
 
     QList<int> mInterestingPop;
+    QList<int> mInterestingHarb;
 
     QList<Harbour *> mHarbours;
     QList<NodeData *> mNodes;
     QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
+    QList<NationData> mNations;
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;

@@ -97,10 +97,10 @@ public:
 
     bool isModelActive (int model) const;
 
-    const Palette &getPalette(int model, int n) const {
+    const Palette &getPalette(int model, PaletteRole n) const {
         return mPaletteManager[model]->palette(n);
     }
-    void setPalette (int model, int n, const Palette &palette);
+    void setPalette (int model, PaletteRole n, const Palette &palette);
 
     void forceRedraw();
 

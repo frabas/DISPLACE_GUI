@@ -10,20 +10,24 @@
 #include <cmath>
 #include <memory>
 
+enum PaletteRole {
+    ValueRole = 0, PopulationRole,
+
+    LastRole
+};
+
+
 class Palette {
 public:
-    enum Role {
-        StandardRole
-    };
 
     Palette();
-    explicit Palette(Role role, const QString &name);
+    explicit Palette(PaletteRole role, const QString &name);
     Palette(const Palette &);
     ~Palette();
 
     // Role
-    Role role() const { return mRole; }
-    void setRole (Role r) { mRole = r; }
+    PaletteRole role() const { return mRole; }
+    void setRole (PaletteRole r) { mRole = r; }
 
     // Name
     void setName (const QString &n) { m_name = n; }
@@ -36,6 +40,8 @@ public:
     void addColor (const QColor &col) { m_palette.push_back(col); }
 
     QColor colorForIndex(int i) const { return m_palette[i]; }
+    QColor colorForIndexMod(int i) const { return m_palette[i % m_palette.size()]; }
+
     QColor color(float val) const {
         int idx = static_cast<int>(std::floor( (val - m_min) / getStep()) );
         if (idx < 0) idx = 0;
@@ -79,7 +85,7 @@ public:
     bool saveToFile (QIODevice *device);
 
 protected:
-    Role mRole;
+    PaletteRole mRole;
     QString m_name;
     QVector<QColor> m_palette;
     QVector<QColor> mSpecials;
@@ -93,10 +99,9 @@ public:
     PaletteManager();
     ~PaletteManager();
 
-    void addPalette(const Palette &view);
-    const Palette &palette(int n) const;
-    const Palette &palette(const QString &n) const;
-    void setPalette(int n, const Palette &palette);
+    const Palette &palette(PaletteRole) const;
+    std::shared_ptr<Palette> palette(const QString &n) const;
+    void setPalette(PaletteRole n, const Palette &palette);
 
     int paletteCount() const;
 

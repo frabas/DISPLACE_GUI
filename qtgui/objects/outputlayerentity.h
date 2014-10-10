@@ -15,7 +15,7 @@ public:
     virtual ~OutputLayerEntity();
 
     virtual ObjectTreeModel::Category getCategory() const {
-        return ObjectTreeModel::Layers;
+        return ObjectTreeModel::OutputLayers;
     }
 
     virtual QModelIndex parent (const QModelIndex &parent) const;

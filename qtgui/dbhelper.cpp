@@ -39,6 +39,11 @@ DbHelper::DbHelper()
     mInsertThread = new QThread();
 }
 
+DbHelper::~DbHelper()
+{
+    mDb.commit();
+}
+
 bool DbHelper::attachDb(QString file)
 {
     mDb = QSqlDatabase::addDatabase("QSQLITE");
@@ -469,11 +474,19 @@ void DbHelper::endTransaction()
 {
     QMutexLocker locker(&mMutex);
     --mOngoingTransactionsCount;
+
     if (mOngoingTransactionsCount < 0)
         mOngoingTransactionsCount = 0;
     if (mOngoingTransactionsCount == 0) {
         mDb.commit();
     }
+}
+
+void DbHelper::forceEndTransaction()
+{
+    QMutexLocker locker(&mMutex);
+    mOngoingTransactionsCount = 0;
+    mDb.commit();
 }
 
 void DbHelper::flushBuffers()
@@ -706,9 +719,6 @@ VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *d
 
 void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double course,double fuel, int state)
 {
-    /* if it's a new step, commits the insertion and restart */
-    ++mCounter;
-
     if (mCounter >= mFlushCount) {
         mHelper->endTransaction();
         mHelper->beginTransaction();
@@ -716,7 +726,11 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
     }
 
     /* if there's no transaction ongoing, start it */
-    mHelper->beginTransaction();
+    if (mCounter == 0)
+        mHelper->beginTransaction();
+
+    /* if it's a new step, commits the insertion and restart */
+    ++mCounter;
 
     mLastStep = step;
 
@@ -734,6 +748,6 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
 
 void VesselPositionInserter::flush()
 {
-    mHelper->endTransaction();
+    mHelper->forceEndTransaction();
     mCounter = 0;
 }

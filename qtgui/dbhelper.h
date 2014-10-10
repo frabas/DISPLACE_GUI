@@ -50,6 +50,7 @@ class DbHelper : public QObject
     QSqlDatabase mDb;
 public:
     DbHelper();
+    ~DbHelper();
 
     bool attachDb(QString file);
     QString lastDbError() const;
@@ -79,6 +80,7 @@ public:
 
     void beginTransaction();
     void endTransaction();
+    void forceEndTransaction();
     void flushBuffers();
 
     void setMetadata (QString key, QString value);

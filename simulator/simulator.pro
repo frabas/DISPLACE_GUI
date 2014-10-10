@@ -14,6 +14,7 @@ macx {
 win32 {
     #PATH+=C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin
     QMAKE_CXX = x86_64-w64-mingw32-g++
+    QMAKE_LINK = x86_64-w64-mingw32-g++
     QMAKE_LFLAGS = -static
 }
 

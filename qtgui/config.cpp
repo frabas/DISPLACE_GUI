@@ -6,6 +6,8 @@
 #include <vector>
 
 #include <QObject>
+#include <QFile>
+#include <QTextStream>
 
 #define NBSZGROUP 14
 
@@ -75,6 +77,37 @@ Config::Config()
 
 bool Config::save(QString path, QString modelname, QString outputname)
 {
+    QString realpath = path + "/simusspe_" + modelname +"/config.dat";
+    QFile file (realpath);
+
+    if (!file.open(QFile::WriteOnly))
+        return false;
+
+    QTextStream stream (&file);
+
+    stream << "# nbpops \n" << nbpops << endl;
+
+    stream <<"# implicit stocks\n";
+    foreach (int a, m_implicit_pops)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# calib the other landings per stock \n";
+    foreach (double a, m_calib_oth_landings)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# calib weight-at-szgroup per stock \n";
+    foreach (double a, m_calib_weight_at_szgroup)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# calib the cpue multiplier per stock \n";
+    foreach (double a, m_calib_cpue_multiplier)
+        stream << a << " ";
+    stream << endl;
+
+    file.close();
     return true;
 }
 

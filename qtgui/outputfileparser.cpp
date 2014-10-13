@@ -112,10 +112,16 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
         int step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            QVector<double> pop(model->getSzGrupsCount());
             int id = fields[1].toInt();
+
+            double tot = 0;
             for (int i = 2; i < fields.size(); ++i) {
-                model->collectPopdynF(step, id, fields[i].toDouble());
+                double v = fields[i].toDouble();
+                tot += v;
+                pop.push_back(v);
             }
+            model->collectPopdynF(step, id, pop, tot);
         }
     }
 
@@ -131,12 +137,16 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
         int step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            QVector<double> pop(model->getSzGrupsCount());
             int id = fields[1].toInt();
+
             double tot = 0;
             for (int i = 2; i < fields.size(); ++i) {
-                tot += fields[i].toDouble();
+                double v = fields[i].toDouble();
+                tot += v;
+                pop.push_back(v);
             }
-            model->collectPopdynN(step, id, tot);
+            model->collectPopdynN(step, id, pop, tot);
         }
     }
 }

@@ -2,41 +2,62 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(0.0),
-      mortality(0.0)
+      aggregate(), mortality(),
+      totAggregate(0.0),
+      totMortality(0.0)
 {
 }
 
 PopulationData::PopulationData(const PopulationData &p)
     : id(p.id),
-      aggregate(p.aggregate),
-      mortality(p.mortality)
+      aggregate(p.aggregate), mortality(p.mortality),
+      totAggregate(p.totAggregate),
+      totMortality(p.totMortality)
 {
 
 }
 
+const QVector<double> &PopulationData::getAggregate() const
+{
+    return aggregate;
+}
+
+void PopulationData::setAggregate(const QVector<double> &value)
+{
+    aggregate = value;
+}
+
+const QVector<double> &PopulationData::getMortality() const
+{
+    return mortality;
+}
+
+void PopulationData::setMortality(const QVector<double> &value)
+{
+    mortality = value;
+}
 int PopulationData::getId() const
 {
     return id;
 }
 
-double PopulationData::getMortality() const
+double PopulationData::getMortalityTot() const
 {
-    return mortality;
+    return totMortality;
 }
 
-void PopulationData::setMortality(double value)
+void PopulationData::setMortalityTot(double value)
 {
-    mortality = value;
+    totMortality = value;
 }
 
-double PopulationData::getAggregate() const
+double PopulationData::getAggregateTot() const
 {
-    return aggregate;
+    return totAggregate;
 }
 
-void PopulationData::setAggregate(double value)
+void PopulationData::setAggregateTot(double value)
 {
-    aggregate = value;
+    totAggregate = value;
 }
 

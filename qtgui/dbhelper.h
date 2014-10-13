@@ -114,6 +114,8 @@ private:
     static const QString TBL_NODES_STATS;
     static const QString TBL_POPNODES_STATS;
     static const QString TBL_POP_STATS;
+    static const QString TBL_POPF_STATS;
+    static const QString TBL_POPN_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
 

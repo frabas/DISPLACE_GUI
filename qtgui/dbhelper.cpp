@@ -23,6 +23,8 @@ const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
 const QString DbHelper::TBL_POP_STATS = "popStats";
+const QString DbHelper::TBL_POPF_STATS = "popStatsN";
+const QString DbHelper::TBL_POPN_STATS = "popStatsF";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -134,23 +136,54 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
 void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
 {
-    QSqlQuery q;
+    QSqlQuery q,qf,qn;
 
     bool r =
     q.prepare("INSERT INTO " + TBL_POP_STATS
               + "(tstep,popid,N,F) "
               + "VALUES (?,?,?,?)");
-
     DB_ASSERT(r,q);
+
+    r =
+    qf.prepare("INSERT INTO " + TBL_POPF_STATS
+              + "(tstep,popid,szgroup,F) "
+              + "VALUES (?,?,?,?)");
+    DB_ASSERT(r,qf);
+
+    r =
+    qn.prepare("INSERT INTO " + TBL_POPN_STATS
+              + "(tstep,popid,szgroup,F) "
+              + "VALUES (?,?,?,?)");
+    DB_ASSERT(r,qn);
+
 
     foreach (const PopulationData &p, pops) {
         q.addBindValue(tstep);
         q.addBindValue(p.getId());
-        q.addBindValue(p.getAggregate());
-        q.addBindValue(p.getMortality());
+        q.addBindValue(p.getAggregateTot());
+        q.addBindValue(p.getMortalityTot());
 
         bool res = q.exec();
         DB_ASSERT(res, q);
+
+        int n = p.getAggregate().size();
+        for (int i = 0; i < n; ++i) {
+            qn.addBindValue(tstep);
+            qn.addBindValue(p.getId());
+            qn.addBindValue(i);
+            qn.addBindValue(p.getAggregate().at(i));
+            res = qn.exec();
+            DB_ASSERT(res,qn);
+        }
+        n = p.getMortality().size();
+        for (int i = 0; i < n; ++i) {
+            qf.addBindValue(tstep);
+            qf.addBindValue(p.getId());
+            qf.addBindValue(i);
+            qf.addBindValue(p.getMortality().at(i));
+            res = qf.exec();
+            DB_ASSERT(res,qf);
+        }
     }
 }
 
@@ -424,6 +457,11 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
     bool res = q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " ORDER BY tstep");
     DB_ASSERT(res,q);
 
+    QSqlQuery qn,qf;
+    res = qn.prepare("SELECT szgroup,N FROM " + TBL_POPN_STATS + "WHERE tstep=? AND popid=?");
+    DB_ASSERT(res,q);
+    res = qf.prepare("SELECT szgroup,F FROM " + TBL_POPF_STATS + "WHERE tstep=? AND popid=?");
+    DB_ASSERT(res,q);
 
     int last_tstep = -1;
     population.clear();
@@ -448,8 +486,41 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
             v.push_back(p);
         }
 
-        v[pid].setAggregate(n);
-        v[pid].setMortality(f);
+        /* Load size groups */
+
+        qn.addBindValue(tstep);
+        qn.addBindValue(pid);
+
+        qf.addBindValue(tstep);
+        qf.addBindValue(pid);
+
+        qn.exec();
+        qf.exec();
+
+        QVector<double> nv;
+        while (qn.next()) {
+            int sz = qn.value(0).toInt();
+            double v = qn.value(0).toDouble();
+
+            while (nv.size() <= sz)
+                nv.push_back(0);
+            nv[sz] = v;
+        }
+
+        QVector<double> fv;
+        while (qf.next()) {
+            int sz = qf.value(0).toInt();
+            double v = qf.value(0).toDouble();
+
+            while (fv.size() <= sz)
+                fv.push_back(0);
+            fv[sz] = v;
+        }
+
+        v[pid].setAggregate(nv);
+        v[pid].setMortality(fv);
+        v[pid].setAggregateTot(n);
+        v[pid].setMortalityTot(f);
     }
 
     if (last_tstep != -1) {
@@ -662,6 +733,34 @@ bool DbHelper::checkStatsTable(int version)
                + "popid INTEGER,"
                + "N REAL,"
                + "F REAL"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+    if (!mDb.tables().contains(TBL_POPF_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_POPF_STATS + "("
+               + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "popid INTEGER,"
+               + "szgroup INTEGER,"
+               + "F REAL"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+    if (!mDb.tables().contains(TBL_POPN_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_POPN_STATS + "("
+               + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "popid INTEGER,"
+               + "szgroup INTEGER,"
+               + "N REAL,"
                + ");"
                );
 

@@ -243,17 +243,19 @@ void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
     mNodesStatsDirty = true;
 }
 
-void DisplaceModel::collectPopdynN(int step, int popid, double value)
+void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setAggregate(value);
+    mStatsPopulationsCollected[popid].setAggregate(pops);
+    mStatsPopulationsCollected[popid].setAggregateTot(value);
     mPopStatsDirty = true;
 }
 
-void DisplaceModel::collectPopdynF(int step, int popid, double value)
+void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setMortality(value);
+    mStatsPopulationsCollected[popid].setMortality(pops);
+    mStatsPopulationsCollected[popid].setMortalityTot(value);
     mPopStatsDirty = true;
 }
 

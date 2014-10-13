@@ -143,8 +143,8 @@ public:
     void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, double tot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
 
-    void collectPopdynN(int step, int popid, double value);
-    void collectPopdynF(int step, int popid, double value);
+    void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
+    void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
 
     static const int numPopulations;

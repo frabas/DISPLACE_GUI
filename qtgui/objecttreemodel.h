@@ -21,7 +21,7 @@ public:
         Layers = 0,
         OutputLayers,
         Nodes, Harbours, Vessels, Populations, Benthos,
-        Nations,
+        Nations, SizeGroups,
         LastCategory
     };
 

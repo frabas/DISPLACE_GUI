@@ -9,6 +9,7 @@
 #include <objects/populationentity.h>
 #include <objects/benthosentity.h>
 #include <objects/nationentity.h>
+#include <objects/szgroupentity.h>
 
 #include <displacemodel.h>
 #include <QMapControl/QMapControl.h>
@@ -23,6 +24,7 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Populations"),
     QT_TR_NOOP_UTF8("Benthos"),
     QT_TR_NOOP_UTF8("Nations"),
+    QT_TR_NOOP_UTF8("Size Groups"),
 };
 
 ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent) :
@@ -47,6 +49,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         entityTemplates[Populations] = new objecttree::PopulationEntity(this);
         entityTemplates[Benthos] = new objecttree::BenthosEntity(this);
         entityTemplates[Nations] = new objecttree::NationEntity(this);
+        entityTemplates[SizeGroups] = new objecttree::SzGroupEntity(this);
     }
 }
 

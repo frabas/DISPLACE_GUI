@@ -60,14 +60,15 @@ void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcon
 
     // Ears
     switch (mVessel->mVessel->get_state()) {
-    case 3:
-        painter.setBrush(*statHarbour);
-        break;
-    case 2:
+    case 1:
         painter.setBrush(*statFishing);
         break;
-    default:
+    case 2:
         painter.setBrush(*statSteaming);
+        break;
+    default:
+    case 3:
+        painter.setBrush(*statHarbour);
         break;
     }
 

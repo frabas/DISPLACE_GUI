@@ -24,6 +24,8 @@ void OutputFileParser::parse(QString path, int tstep)
 
     mModel->startCollectingStats();
 
+    qDebug() << "Parsing Output file: " << path ;
+
     if (!file.open(QFile::ReadOnly)) {
         emit error(QString(QObject::tr("The file %1 cannot be read: %2"))
                    .arg(file.fileName())
@@ -32,12 +34,8 @@ void OutputFileParser::parse(QString path, int tstep)
     }
 
     if (name.startsWith("popnodes_start_")) {
-        qDebug() << "Parsing " << path << " as population node start";
-
         parsePopStart(&file, mModel);
     } else if (name.startsWith("popnodes_cumftime_")) {
-        qDebug() << "Parsing " << path << " as population cum_ftime";
-
         parsePopCumftime(&file, tstep, mModel);
     } else if (name.startsWith("popdyn_F_")) {
         parsePopdynF(&file, tstep, mModel);
@@ -119,7 +117,8 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
             for (int i = 2; i < fields.size(); ++i) {
                 double v = fields[i].toDouble();
                 tot += v;
-                pop.push_back(v);
+                pop[i-2] = v;
+//                pop.push_back(v);
             }
             model->collectPopdynF(step, id, pop, tot);
         }
@@ -144,7 +143,8 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
             for (int i = 2; i < fields.size(); ++i) {
                 double v = fields[i].toDouble();
                 tot += v;
-                pop.push_back(v);
+                pop[i-2] = v;
+//                pop.push_back(v);
             }
             model->collectPopdynN(step, id, pop, tot);
         }

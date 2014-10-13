@@ -60,7 +60,7 @@ QVariant SzGroupEntity::data(const QModelIndex &index, int role) const
         if (index.row() == 0) {
             return QString(QObject::tr("Total"));
         }
-        return QString(QObject::tr("Size Group #%1")).arg(index.row() - 1);
+        return QString(QObject::tr("Size Group #%1")).arg(index.row());
     }
 
     if (role == Qt::CheckStateRole) {

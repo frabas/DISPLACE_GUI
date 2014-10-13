@@ -204,13 +204,11 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
     if (mDb) {
         mDb->beginTransaction();
         if (mNodesStatsDirty) {
-            qDebug() << "updating nodes";
             mDb->addNodesStats(mLastStats, mNodes);
             mNodesStatsDirty = false;
         }
 
         if (mPopStatsDirty) {
-            qDebug() << "updating pops";
             mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
             mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
             mPopStatsDirty = false;

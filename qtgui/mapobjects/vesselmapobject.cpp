@@ -24,7 +24,9 @@ void VesselMapObject::vesselUpdated()
 
 
 QBrush *VesselMapObject::VesselGraphics::color = 0;
-QBrush *VesselMapObject::VesselGraphics::altColor = 0;
+QBrush *VesselMapObject::VesselGraphics::statFishing= 0;
+QBrush *VesselMapObject::VesselGraphics::statHarbour = 0;
+QBrush *VesselMapObject::VesselGraphics::statSteaming = 0;
 
 VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
@@ -32,8 +34,12 @@ VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
 {
     if (color == 0)
         color = new QBrush(Qt::darkYellow);
-    if (altColor == 0)
-        altColor = new QBrush(Qt::red);
+    if (statHarbour == 0)
+        statHarbour = new QBrush(Qt::green);
+    if (statFishing == 0)
+        statFishing = new QBrush(Qt::red);
+    if (statSteaming == 0)
+        statSteaming = new QBrush(Qt::black);
 }
 
 void VesselMapObject::VesselGraphics::updated()
@@ -53,7 +59,18 @@ void VesselMapObject::VesselGraphics::drawShape(QPainter &painter, const qmapcon
     painter.drawEllipse(-10, -20, 20, 40);
 
     // Ears
-    painter.setBrush(mVessel->mVessel->get_state() == 3 ? *color : *altColor);
+    switch (mVessel->mVessel->get_state()) {
+    case 3:
+        painter.setBrush(*statHarbour);
+        break;
+    case 2:
+        painter.setBrush(*statFishing);
+        break;
+    default:
+        painter.setBrush(*statSteaming);
+        break;
+    }
+
     painter.drawEllipse(-6, -12, 12, 24);
 
     painter.rotate(-mVessel->mVessel->get_course());

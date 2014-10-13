@@ -41,40 +41,60 @@ void StatsController::updateStats(DisplaceModel *model)
         mPlotPopulations->clearGraphs();
 
         QList<int> ipl = model->getInterestingPops();
+        QList<int> szpl = model->getInterestingSizes();
+        bool showtotal = model->isInterestingSizeTotal();
+        int nsz = szpl.size() + (showtotal ? 1 : 0);
 
         int cnt, t = ipl.size();
+        int palcnt = 0;
         foreach (int ip, ipl) {
-            QVector<double> keyData;
-            QVector<double> valueData;
 
-            QCPGraph *graph = mPlotPopulations->addGraph();
-            graph->setPen(pen);
-            graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = mPalette.colorForIndexMod(ip % mPalette.colorCount());
-            //col.setAlpha((t > 1 ? 255/(t-1)*cnt : 255));
-            col.setAlpha(128);
-            graph->setBrush(QBrush(col));
-            ++cnt;
-            graph->setName(QString(QObject::tr("Population %1")).arg(ip));
+            for (int isz = 0; isz < nsz; ++isz) {
+                QVector<double> keyData;
+                QVector<double> valueData;
 
-            int n = model->getPopulationsValuesCount();
-            DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
-            for (int i = 0; i <n; ++i) {
-                keyData << it.key();
+                QCPGraph *graph = mPlotPopulations->addGraph();
+                graph->setPen(pen);
+                graph->setLineStyle(QCPGraph::lsLine);
+                QColor col = mPalette.colorForIndexMod(palcnt % mPalette.colorCount());
 
-                switch (mSelectedPopStat) {
-                case Aggregate:
-                    valueData << it.value().at(ip).getAggregate();
-                    break;
-                case Mortality:
-                    valueData << it.value().at(ip).getMortality();
-                    break;
+                col.setAlpha(128);
+                graph->setBrush(QBrush(col));
+                ++cnt;
+
+                if (isz < szpl.size()) {        // is a siz group
+                    graph->setName(QString(QObject::tr("Pop %1 SzGrp %2")).arg(ip).arg(szpl[isz]+1));
+                } else {
+                    graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ip));
                 }
 
-                ++it;
-            }
+                int n = model->getPopulationsValuesCount();
+                DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
+                for (int i = 0; i <n; ++i) {
+                    keyData << it.key();
 
-            graph->setData(keyData, valueData);
+                    switch (mSelectedPopStat) {
+                    case Aggregate:
+                        if (isz < szpl.size())
+                            valueData << it.value().at(ip).getAggregate()[szpl[isz]];
+                        else
+                            valueData << it.value().at(ip).getAggregateTot();
+                        break;
+                    case Mortality:
+                        if (isz < szpl.size())
+                            valueData << it.value().at(ip).getMortality()[szpl[isz]];
+                        else
+                            valueData << it.value().at(ip).getMortalityTot();
+                        break;
+                    }
+
+                    ++it;
+                }
+
+                graph->setData(keyData, valueData);
+
+                ++palcnt;
+            }
         }
 
         mPlotPopulations->rescaleAxes();

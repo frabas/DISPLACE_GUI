@@ -23,8 +23,8 @@ const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
 const QString DbHelper::TBL_POP_STATS = "popStats";
-const QString DbHelper::TBL_POPF_STATS = "popStatsN";
-const QString DbHelper::TBL_POPN_STATS = "popStatsF";
+const QString DbHelper::TBL_POPN_STATS = "popStatsN";
+const QString DbHelper::TBL_POPF_STATS = "popStatsF";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -152,7 +152,7 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
 
     r =
     qn.prepare("INSERT INTO " + TBL_POPN_STATS
-              + "(tstep,popid,szgroup,F) "
+              + "(tstep,popid,szgroup,N) "
               + "VALUES (?,?,?,?)");
     DB_ASSERT(r,qn);
 
@@ -243,6 +243,7 @@ void DbHelper::addVesselDetails(int idx, VesselData *vessel)
 bool DbHelper::loadConfig(Config &cfg)
 {
     cfg.setNbpops(getMetadata("config::nbpops").toInt());
+    cfg.setSzGroups(getMetadata("config::szgroups").toInt());
 
     QList<int> ipops;
     QStringList lsi = getMetadata("config::ipops").split(" ");
@@ -278,6 +279,7 @@ bool DbHelper::loadConfig(Config &cfg)
 bool DbHelper::saveConfig(const Config &cfg)
 {
     setMetadata("config::nbpops", QString::number(cfg.getNbpops()));
+    setMetadata("config::szgroups", QString::number(cfg.getSzGroups()));
 
     QStringList str;
     QList<int> il = cfg.implicit_pops();
@@ -458,10 +460,10 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
     DB_ASSERT(res,q);
 
     QSqlQuery qn,qf;
-    res = qn.prepare("SELECT szgroup,N FROM " + TBL_POPN_STATS + "WHERE tstep=? AND popid=?");
-    DB_ASSERT(res,q);
-    res = qf.prepare("SELECT szgroup,F FROM " + TBL_POPF_STATS + "WHERE tstep=? AND popid=?");
-    DB_ASSERT(res,q);
+    res = qn.prepare("SELECT szgroup,N FROM " + TBL_POPN_STATS + " WHERE tstep=? AND popid=?");
+    DB_ASSERT(res,qn);
+    res = qf.prepare("SELECT szgroup,F FROM " + TBL_POPF_STATS + " WHERE tstep=? AND popid=?");
+    DB_ASSERT(res,qf);
 
     int last_tstep = -1;
     population.clear();

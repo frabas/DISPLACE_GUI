@@ -80,7 +80,7 @@ public:
     const QList<Benthos*> &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
-    int getPopulationsCount() const { return numPopulations; }
+    int getPopulationsCount() const;
     const PopulationData &getPopulationsAtStep (int step, int idx) const {
         return mStatsPopulations.getValue(step).at(idx);
     }
@@ -117,6 +117,7 @@ public:
     /** \brief remove the pop from the list of interest for pops */
     void remInterestingPop(int n);
     bool isInterestingPop(int n);
+    void clearInterestingPop();
 
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
@@ -160,8 +161,6 @@ public:
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
-
-    static const int numPopulations;
 protected:
     bool loadNodes();
     bool loadVessels();

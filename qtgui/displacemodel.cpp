@@ -9,8 +9,6 @@
 #include <QtAlgorithms>
 
 
-const int DisplaceModel::numPopulations = 31;
-
 DisplaceModel::DisplaceModel()
     : mDb(0),
       mLastStats(-1),
@@ -29,11 +27,6 @@ DisplaceModel::DisplaceModel()
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
     connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
-
-    /* Add some sample interesting pop */
-    setInterestingPop(3);
-    setInterestingPop(7);
-    setInterestingPop(10);
 
     initPopulations();
 }
@@ -288,6 +281,11 @@ int DisplaceModel::getBenthosCount() const
     return mBenthos.size();
 }
 
+int DisplaceModel::getPopulationsCount() const
+{
+    return mConfig.getNbpops();
+}
+
 Scenario DisplaceModel::scenario() const
 {
     return mScenario;
@@ -328,6 +326,11 @@ void DisplaceModel::remInterestingPop(int n)
 bool DisplaceModel::isInterestingPop(int n)
 {
     return mInterestingPop.contains(n);
+}
+
+void DisplaceModel::clearInterestingPop()
+{
+    mInterestingPop.clear();
 }
 
 void DisplaceModel::setInterestingSize(int n)
@@ -942,9 +945,23 @@ bool DisplaceModel::initBenthos()
 bool DisplaceModel::initPopulations()
 {
     mStatsPopulationsCollected.clear();
-    for (int i = 0; i < numPopulations; ++i) {
+    for (int i = 0; i < getPopulationsCount(); ++i) {
         mStatsPopulationsCollected.push_back(PopulationData(i));
     }
+
+    QList<int> imp = mConfig.implicit_pops();
+    qSort(imp);
+
+    clearInterestingPop();
+    int c = 0;
+    for (int i = 0; i < imp.size(); ++i) {
+        while (c < imp[i]) {
+            setInterestingPop(c);
+            ++c;
+        }
+        ++c;
+    }
+
     return true;
 }
 

@@ -11,6 +11,7 @@
 #include <editpalettedialog.h>
 
 #include <scenariodialog.h>
+#include <configdialog.h>
 #include <simulationsetupdialog.h>
 #include <graphinteractioncontroller.h>
 
@@ -373,6 +374,24 @@ void MainWindow::on_actionScenario_triggered()
     }
 }
 
+void MainWindow::on_actionConfiguration_triggered()
+{
+    if (currentModel) {
+        Config c = currentModel->config();
+        ConfigDialog dlg (this);
+        dlg.set(c);
+        if (dlg.exec() == QDialog::Accepted) {
+            if (!dlg.get(c)) {
+                QMessageBox::warning(this, tr("Configuration failed"),
+                                     tr("An error occurred while parsing configuration. Please check carefully the entered data."));
+                return;
+            }
+
+            currentModel->setConfig(c);
+        }
+    }
+}
+
 void MainWindow::on_actionSave_triggered()
 {
     if (models[0] && models[0]->save()) {
@@ -624,3 +643,4 @@ void MainWindow::on_popStatSelector_currentIndexChanged(int index)
 {
     mStatsController->setPopulationStat((StatsController::PopulationStat)index);
 }
+

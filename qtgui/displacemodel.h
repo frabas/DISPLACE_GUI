@@ -101,6 +101,9 @@ public:
     Scenario scenario() const;
     void setScenario(const Scenario &scenario);
 
+    Config config() const;
+    void setConfig(const Config &config);
+
     /* Live Simulation data */
 
     void setCurrentStep(int step);

@@ -80,6 +80,8 @@ private slots:
     void on_popStatSelector_currentIndexChanged(int index);
     void on_actionPopulations_triggered();
 
+    void on_actionConfiguration_triggered();
+
 signals:
     void modelStateChanged();
 

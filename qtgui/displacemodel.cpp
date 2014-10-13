@@ -298,6 +298,18 @@ void DisplaceModel::setScenario(const Scenario &scenario)
         mDb->saveScenario(mScenario);
 }
 
+Config DisplaceModel::config() const
+{
+    return mConfig;
+}
+
+void DisplaceModel::setConfig(const Config &config)
+{
+    mConfig = config;
+    if (mDb)
+        mDb->saveConfig(mConfig);
+}
+
 void DisplaceModel::setCurrentStep(int step)
 {
     mCurrentStep = step;

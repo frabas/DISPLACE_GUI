@@ -72,13 +72,15 @@ SOURCES += \
     graphinteractioncontroller.cpp \
     modelobjects/nationdata.cpp \
     objects/nationentity.cpp \
-    objects/szgroupentity.cpp
+    objects/szgroupentity.cpp \
+    configdialog.cpp
 
 FORMS += \
     mainwindow.ui \
     scenariodialog.ui \
     simulationsetupdialog.ui \
-    editpalettedialog.ui
+    editpalettedialog.ui \
+    configdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -120,7 +122,8 @@ HEADERS += \
     graphinteractioncontroller.h \
     modelobjects/nationdata.h \
     objects/nationentity.h \
-    objects/szgroupentity.h
+    objects/szgroupentity.h \
+    configdialog.h
 
 RESOURCES += \
     qtgui.qrc

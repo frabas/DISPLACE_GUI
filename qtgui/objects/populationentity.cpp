@@ -4,6 +4,10 @@
 #include <mapobjectscontroller.h>
 #include <displacemodel.h>
 
+// ENABLE sub-trees by uncommenting the following line
+
+//#define ENABLE_POP_SZGROUPS
+
 namespace objecttree {
 
 PopulationEntity::PopulationEntity(ObjectTreeModel *_model, int idx)
@@ -31,7 +35,11 @@ QModelIndex PopulationEntity::index(int row, int column, const QModelIndex &pare
     if (mPopulationIndex == -1) {
         entity = new PopulationEntity(model, row);
     } else {
+#ifdef ENABLE_POP_SZGROUPS
         entity = new PopulationEntityWithGroup(model, this, row);
+#else
+        return QModelIndex();
+#endif
     }
 
     return model->createEntity(row, column, entity);
@@ -42,8 +50,11 @@ int PopulationEntity::rowCount() const
     if (model->getModel() != 0 && model->getModelIdx() != -1) {
         if (mPopulationIndex == -1)
             return model->getModel()->getPopulationsCount();
-        else
+        else {
+#ifdef ENABLE_POP_SZGROUPS
             return model->getModel()->getSzGrupsCount()+1;
+#endif
+        }
     }
 
     return 0;

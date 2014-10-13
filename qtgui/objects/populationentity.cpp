@@ -27,14 +27,24 @@ QModelIndex PopulationEntity::index(int row, int column, const QModelIndex &pare
 {
     Q_UNUSED(parent);
 
-    ObjectTreeEntity * entity = new PopulationEntity(model, row);
+    ObjectTreeEntity * entity;
+    if (mPopulationIndex == -1) {
+        entity = new PopulationEntity(model, row);
+    } else {
+        entity = new PopulationEntityWithGroup(model, this, row);
+    }
+
     return model->createEntity(row, column, entity);
 }
 
 int PopulationEntity::rowCount() const
 {
-    if (mPopulationIndex == -1 && model->getModel() != 0 && model->getModelIdx() != -1)
-        return model->getModel()->getPopulationsCount();
+    if (model->getModel() != 0 && model->getModelIdx() != -1) {
+        if (mPopulationIndex == -1)
+            return model->getModel()->getPopulationsCount();
+        else
+            return model->getModel()->getSzGrupsCount()+1;
+    }
 
     return 0;
 }
@@ -73,5 +83,68 @@ bool PopulationEntity::setData(const QModelIndex &index, const QVariant &value, 
     }
     return false;
 }
+
+QModelIndex PopulationEntity::makeIndex()
+{
+    return model->createEntity(mPopulationIndex, 0, this);
+}
+
+PopulationEntityWithGroup::PopulationEntityWithGroup(ObjectTreeModel *_model, const PopulationEntity *parent, int idx)
+    : ObjectTreeEntity(_model),
+      mParent(const_cast<PopulationEntity *>(parent)),
+      mGroupIndex(idx)
+{
+}
+
+PopulationEntityWithGroup::~PopulationEntityWithGroup()
+{
+}
+
+QModelIndex PopulationEntityWithGroup::parent(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return mParent->makeIndex();
+}
+
+QModelIndex PopulationEntityWithGroup::index(int row, int column, const QModelIndex &parent) const
+{
+    return QModelIndex();
+}
+
+int PopulationEntityWithGroup::rowCount() const
+{
+    return 0;
+}
+
+int PopulationEntityWithGroup::columnCount() const
+{
+    return 1;
+}
+
+QVariant PopulationEntityWithGroup::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::DisplayRole) {
+        if (index.row() == 0) {
+            return QString(QObject::tr("Total"));
+        }
+        return QString(QObject::tr("Size Group #%1")).arg(index.row()-1);
+    }
+    if (role == Qt::CheckStateRole)
+        return Qt::Unchecked;
+//        return QVariant(model->getModel()->isInterestingPop(index.row()) ? Qt::Checked : Qt::Unchecked);
+    return QVariant();
+}
+
+Qt::ItemFlags PopulationEntityWithGroup::flags(Qt::ItemFlags defflags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defflags | Qt::ItemIsUserCheckable;
+}
+
+bool PopulationEntityWithGroup::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    return false;
+}
+
 
 }

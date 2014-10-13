@@ -24,6 +24,30 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(Qt::ItemFlags defflags, const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+    QModelIndex makeIndex();
+};
+
+class PopulationEntityWithGroup : public ObjectTreeEntity {
+
+    PopulationEntity *mParent;
+    int mGroupIndex;
+
+public:
+    PopulationEntityWithGroup(ObjectTreeModel *_model, const PopulationEntity *parent, int idx = -1);
+    virtual ~PopulationEntityWithGroup();
+
+    virtual ObjectTreeModel::Category getCategory() const {
+        return ObjectTreeModel::Populations;
+    }
+
+    virtual QModelIndex parent (const QModelIndex &parent) const;
+    virtual QModelIndex index (int row, int column, const QModelIndex &parent) const;
+    virtual int rowCount() const;
+    virtual int columnCount() const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual Qt::ItemFlags flags(Qt::ItemFlags defflags, const QModelIndex &index) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 };
 
 }

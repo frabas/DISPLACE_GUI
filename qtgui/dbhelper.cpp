@@ -502,7 +502,7 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
         QVector<double> nv;
         while (qn.next()) {
             int sz = qn.value(0).toInt();
-            double v = qn.value(0).toDouble();
+            double v = qn.value(1).toDouble();
 
             while (nv.size() <= sz)
                 nv.push_back(0);
@@ -512,7 +512,7 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
         QVector<double> fv;
         while (qf.next()) {
             int sz = qf.value(0).toInt();
-            double v = qf.value(0).toDouble();
+            double v = qf.value(1).toDouble();
 
             while (fv.size() <= sz)
                 fv.push_back(0);

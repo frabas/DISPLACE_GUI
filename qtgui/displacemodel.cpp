@@ -17,6 +17,9 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mLive(false),
+      mInterestingPop(),
+      mInterestingSizeTotal(true),
+      mInterestingSizes(),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))
 {
@@ -327,6 +330,23 @@ void DisplaceModel::remInterestingPop(int n)
 bool DisplaceModel::isInterestingPop(int n)
 {
     return mInterestingPop.contains(n);
+}
+
+void DisplaceModel::setInterestingSize(int n)
+{
+    if (!mInterestingSizes.contains(n))
+        mInterestingSizes.append(n);
+    qSort(mInterestingSizes);
+}
+
+void DisplaceModel::remInterestingSize(int n)
+{
+    mInterestingSizes.removeAll(n);
+}
+
+bool DisplaceModel::isInterestingSize(int n)
+{
+    return mInterestingSizes.contains(n);
 }
 
 void DisplaceModel::setInterestingHarb(int n)

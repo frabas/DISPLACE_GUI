@@ -64,9 +64,11 @@ QVariant SzGroupEntity::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::CheckStateRole) {
+        if (index.row() == 0) {
+            return QVariant(model->getModel()->isInterestingSizeTotal() ? Qt::Checked : Qt::Unchecked);
+        }
         // Note: index.row() == 0 means ALL
-        return Qt::Unchecked;
-        //return QVariant(model->getModel()->isInterestingPop(index.row()) ? Qt::Checked : Qt::Unchecked);
+        return QVariant(model->getModel()->isInterestingSize(index.row()-1) ? Qt::Checked : Qt::Unchecked);
     }
 
     return QVariant();
@@ -80,17 +82,22 @@ Qt::ItemFlags SzGroupEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &in
 
 bool SzGroupEntity::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    /*
     if(index.column() == 0 && role == Qt::CheckStateRole) {
-        if (value.toInt() == 0) {
-            model->getModel()->remInterestingPop(index.row());
+
+        if (index.row() == 0) {
+            model->getModel()->setInterestingSizeTotal(value.toInt() != 0);
         } else {
-            model->getModel()->setInterestingPop(index.row());
+            if (value.toInt() == 0) {
+                model->getModel()->remInterestingSize(index.row() - 1);
+            } else {
+                model->getModel()->setInterestingSize(index.row() - 1);
+            }
         }
+
         model->getStatsController()->updateStats(model->getModel());
         model->getMapControl()->updateNodes(model->getModelIdx());
         return true;
-    }*/
+    }
     return false;
 }
 

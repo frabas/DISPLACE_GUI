@@ -760,7 +760,7 @@ bool DbHelper::checkStatsTable(int version)
                + "tstep INTEGER,"
                + "popid INTEGER,"
                + "szgroup INTEGER,"
-               + "N REAL,"
+               + "N REAL"
                + ");"
                );
 

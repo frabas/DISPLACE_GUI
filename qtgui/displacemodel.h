@@ -118,6 +118,20 @@ public:
     void remInterestingPop(int n);
     bool isInterestingPop(int n);
 
+    /* Interesting pop access functions */
+    bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
+    void setInterestingSizeTotal(bool b) { mInterestingSizeTotal = b; }
+
+    const QList<int> &getInterestingSizes() const { return mInterestingSizes; }
+
+    /** \brief insert the pop into the list of interest for pops */
+    void setInterestingSize(int n);
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingSize(int n);
+    bool isInterestingSize(int n);
+
+
     /* Interesting harbours - see pop */
     const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
 
@@ -182,6 +196,8 @@ private:
     Config mConfig;
 
     QList<int> mInterestingPop;
+    bool mInterestingSizeTotal;
+    QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
 
     QList<Harbour *> mHarbours;

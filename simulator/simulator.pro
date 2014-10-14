@@ -18,6 +18,11 @@ win32 {
     QMAKE_LFLAGS = -static
 }
 
+CONFIG(debug,debug|release) {
+    DEFINES += DEBUG
+}
+
+
 SOURCES= main.cpp \
     ../commons/readdata.cpp \
     ../commons/myutils.cpp \

@@ -130,6 +130,7 @@ bool gui_move_vessels = true;
 #ifdef PROFILE
 AverageProfiler mLoopProfile;
 AverageProfiler mVesselLoopProfile;
+AverageProfiler mPopExportProfile;
 Profiler mLoadProfile;
 double mLoadNodesProfileResult;
 double mLoadVesselProfileResult;
@@ -2428,6 +2429,7 @@ int main(int argc, char* argv[])
 	ofstream popnodes_impact;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
 	popnodes_impact.open(filename.c_str());
+    std::string popnodes_impact_filename = filename;
 
 	ofstream popnodes_impact_per_szgroup;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
@@ -3257,17 +3259,20 @@ int main(int argc, char* argv[])
 				}
 			}
 
-            // EXPORT populations statistics
+            // EXPORT populations statistics - Monthly
+
+#ifdef PROFILE
+            mPopExportProfile.start();
+#endif
 
 			//...and export the cumulated effort on nodes (a cumul from t=0)
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
+                for (unsigned int pop = 0; pop < nbpops; ++pop) {
+                    nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, pop);
+                }
 			}
-            if (use_gui) {
-                popnodes_end.flush();
-                guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
-            }
 
 			//...and export the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)
@@ -3282,10 +3287,19 @@ int main(int argc, char* argv[])
 			}
 
             /* Flush and updates all statistics */
-            popdyn_F.flush();
-            guiSendUpdateCommand(popdyn_F_filename, tstep);
-            popdyn_N.flush();
-            guiSendUpdateCommand(popdyn_N_filename, tstep);
+            if (use_gui) {
+                popnodes_end.flush();
+                guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
+                popnodes_impact.flush();
+                guiSendUpdateCommand(popnodes_impact_filename, tstep);
+                popdyn_F.flush();
+                guiSendUpdateCommand(popdyn_F_filename, tstep);
+                popdyn_N.flush();
+                guiSendUpdateCommand(popdyn_N_filename, tstep);
+            }
+#ifdef PROFILE
+            mPopExportProfile.elapsed_ms();
+#endif
         }
 		dout << "END: POP MODEL TASKS----------" << endl;
 
@@ -4075,6 +4089,7 @@ int main(int argc, char* argv[])
     cout << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
     cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
     cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
+    cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
 #endif
 
 	// close all....

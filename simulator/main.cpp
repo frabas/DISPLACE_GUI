@@ -97,6 +97,11 @@
 #include "readdata.h"
 #include "myutils.h"
 
+#ifdef DEBUG
+#define PROFILE
+#include <profiler.h>
+#endif
+
 #define NAUTIC 1.852			 // 1 nautical mile=1.852 km
 #define PI 3.14159265
 
@@ -121,6 +126,16 @@ std::string cwd;
 char buf[MAXPATH];
 bool use_gui = false;
 bool gui_move_vessels = true;
+
+#ifdef PROFILE
+AverageProfiler mLoopProfile;
+AverageProfiler mVesselLoopProfile;
+Profiler mLoadProfile;
+double mLoadNodesProfileResult;
+double mLoadVesselProfileResult;
+double mLoadPopulationProfileResult;
+double mLoadGraphProfileResult;
+#endif
 
 /* GUI Protocol
  *
@@ -706,6 +721,10 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
 
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
 	// check the class Node
 	Node node (1, 1.0, 1.0, 0, 0, 0, nbpops, 5);
 	dout << "is the node at 1,1? "
@@ -880,6 +899,10 @@ int main(int argc, char* argv[])
 		nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops,SEL_NBSZGROUP);
 	}
 
+#ifdef PROFILE
+    mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
 	dout << " BENTHOS-RELATED STUFFS    " << endl;
@@ -983,6 +1006,11 @@ int main(int argc, char* argv[])
 	dout << " POPULATION-RELATED STUFFS " << endl;
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
+
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
 
 	// read the pop-specific betas related to the availability
 								 // szgroup0
@@ -1243,6 +1271,12 @@ int main(int argc, char* argv[])
 		}						 // end implicit pop
 	}							 // end pop
 
+#ifdef PROFILE
+    mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
+
+
 	/*
 	// check on the node side
 	cout << "check on the node side e.g. for node 2579: " << endl;
@@ -1470,6 +1504,11 @@ int main(int argc, char* argv[])
 	dout << " VESSEL-RELATED STUFFS     " << endl;
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
+
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
 
 	// read general vessel features
 	// (quarter specific, mainly because of the gamma parameters)
@@ -1854,6 +1893,12 @@ int main(int argc, char* argv[])
 
 	*/
 
+
+#ifdef PROFILE
+    mLoadVesselProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
+
 	/*  dout << "---------------------------" << endl;
 		dout << "---------------------------" << endl;
 		dout << " SERIALISATION             " << endl;
@@ -2009,6 +2054,12 @@ int main(int argc, char* argv[])
 	dout << " BUILD A PATHS_SHOP        " << endl;
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
+
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
+
 
 	// the idea is to avoid using DijkstraGetShortestPathTo() dynamically
 	// in order to save a lot of time computation...
@@ -2201,6 +2252,12 @@ int main(int argc, char* argv[])
 			previous.clear();
 
 		}
+
+#ifdef PROFILE
+    mLoadGraphProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
+
 
 		// check by using it:
 		// retrieve the object 'previous' specific to a given origin node
@@ -2466,6 +2523,10 @@ int main(int argc, char* argv[])
 	//----------------------//
 	for (int tstep =0; tstep < nbsteps; ++tstep)
 	{
+#ifdef PROFILE
+        mLoopProfile.start();
+#endif
+
 		dout << endl;
 		dout << endl;
 		dout << "---------------" << endl;
@@ -3196,28 +3257,14 @@ int main(int argc, char* argv[])
 				}
 			}
 
+            // EXPORT populations statistics
+
 			//...and export the cumulated effort on nodes (a cumul from t=0)
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
 			}
             if (use_gui) {
-#if 0 // removed. Just pass an "update file" command
-                size_t l = 0;
-                while (l < nodes.size()) {
-                    size_t nn = std::min ((size_t)100, nodes.size() - l);
-
-                    cout << "=Ncumftime," << tstep << "," << l << "," << nn /*<< "," << nodes.size()*/ ;
-                    for (size_t n=0; n<nn; n++)
-                    {
-                        cout <<"," << nodes.at(l + n)->get_cumftime();
-    //                    nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
-                    }
-                    cout << endl;
-                    l += nn;
-                }
-#endif
-
                 popnodes_end.flush();
                 guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
             }
@@ -3697,6 +3744,10 @@ int main(int argc, char* argv[])
 		///------------------------------///
 		///------------------------------///
 								 // LOOP OVER VESSELS
+#ifdef PROFILE
+        mVesselLoopProfile.start();
+#endif
+
 		for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
 		{
 
@@ -3968,6 +4019,10 @@ int main(int argc, char* argv[])
 
 		}
 
+#ifdef PROFILE
+        mVesselLoopProfile.elapsed_ms();
+#endif
+
 		// move the ships along the ship lanes
 		for(int s=0; s<ships.size(); s++)
 		{
@@ -4005,7 +4060,22 @@ int main(int argc, char* argv[])
 		}
 		#endif
 
+#ifdef PROFILE
+        mLoopProfile.elapsed_ms();
+        if ((mLoopProfile.runs() % 500) == 0)
+            cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
+#endif
 	}							 // end FOR LOOP OVER TIME
+
+#ifdef PROFILE
+    cout << "*** Profilers statistics ***";
+    cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
+    cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
+    cout << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";
+    cout << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
+    cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
+    cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
+#endif
 
 	// close all....
 	vmslike.close();

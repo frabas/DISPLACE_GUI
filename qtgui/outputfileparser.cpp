@@ -33,8 +33,8 @@ void OutputFileParser::parse(QString path, int tstep)
         return;
     }
 
-    if (name.startsWith("popnodes_start_")) {
-        parsePopStart(&file, mModel);
+    if (name.startsWith("popnodes_start_") || name.startsWith("popnodes_inc_")) {
+        parsePopStart(&file, tstep, mModel);
     } else if (name.startsWith("popnodes_cumftime_")) {
         parsePopCumftime(&file, tstep, mModel);
     } else if (name.startsWith("popnodes_impact_")) {
@@ -59,10 +59,11 @@ void OutputFileParser::parse(QString path, int tstep)
  * nodeid x y population1 population2 ...
  * see Node::export_popnodes for details
  */
-void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
+void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *model)
 {
     QTextStream strm (file);
 
+    QList<double> dataW;
     QList<double> data;
     data.reserve(model->getNBPops());
     for (int i = 0; i < model->getNBPops(); ++i)
@@ -71,17 +72,24 @@ void OutputFileParser::parsePopStart(QFile *file, DisplaceModel *model)
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int id = fields[1].toInt();
+        int step = fields[0].toInt();
 
-        bool ok;
-        int i;
-        for (i = 4 ; i < fields.size()-1; ++i) {
-            data[i-4] = fields[i].toDouble(&ok);
-            Q_ASSERT(ok);
+        if (tstep == -1 || step == tstep) {
+            int id = fields[1].toInt();
+
+            bool ok;
+            int i;
+            for (i = 4 ; i < fields.size()-2; i+=2) {
+                data[i-4] = fields[i].toDouble(&ok);
+                Q_ASSERT(ok);
+                dataW[i-4] = fields[i+1].toDouble(&ok);
+                Q_ASSERT(ok);
+            }
+            double tot = fields[fields.size() - 2].toDouble();
+            double wtot = fields[fields.size() - 1].toDouble();
+
+            model->collectNodePopStats(tstep, id, data, dataW, tot, wtot);
         }
-        double tot = fields[i].toDouble();
-
-        model->collectNodePopStats(0, id, data, tot);
     }
 }
 

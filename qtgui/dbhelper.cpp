@@ -100,13 +100,13 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
-              + "(nodeid,tstep,cumftime,totpop) "
-              + "VALUES (?,?,?,?)");
+              + "(nodeid,tstep,cumftime,totpop,totpopw) "
+              + "VALUES (?,?,?,?,?)");
 
     DB_ASSERT(r,q);
 
     r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
-        + "(statid,tstep,nodeid,popid,pop,impact) VALUES(?,?,?,?,?,?)");
+        + "(statid,tstep,nodeid,popid,pop,popw,impact) VALUES(?,?,?,?,?,?,?)");
     DB_ASSERT(r,sq);
 
     foreach (NodeData *n, nodes) {
@@ -114,6 +114,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
         q.addBindValue(tstep);
         q.addBindValue(n->get_cumftime());
         q.addBindValue(n->getPopTot());
+        q.addBindValue(n->getPopWTot());
 
         bool res = q.exec();
         DB_ASSERT(res, q);
@@ -126,6 +127,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
             sq.addBindValue(n->get_idx_node());
             sq.addBindValue(i);
             sq.addBindValue(n->getPop(i));
+            sq.addBindValue(n->getPopW(i));
             sq.addBindValue(n->getImpact(i));
 
             res = sq.exec();
@@ -650,13 +652,11 @@ bool DbHelper::checkNodesStats(int version)
                + "nodeid INTEGER,"
                + "tstep INTEGER,"
                + "cumftime REAL,"
-               + "totpop REAL"
+               + "totpop REAL,"
+               + "totpopw REAL"
                + ");"
                );
 
-        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
-
-        q.exec("CREATE INDEX Idx" + TBL_NODES_STATS + " ON " + TBL_NODES_STATS + "(nodeid)");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
@@ -669,11 +669,9 @@ bool DbHelper::checkNodesStats(int version)
                + "nodeid INTEGER,"
                + "popid INTEGER,"
                + "pop REAL,"
+               + "popw REAL,"
                + "impact REAL"
                + ");");
-        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
-
-        q.exec("CREATE INDEX Idx" + TBL_POPNODES_STATS + " ON " + TBL_POPNODES_STATS + "(statid)");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 

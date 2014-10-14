@@ -224,10 +224,12 @@ void DisplaceModel::endCollectingStats()
         mDb->endTransaction();
 }
 
-void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, double tot)
+void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, const QList<double> &stats_w, double tot, double wtot)
 {
     checkStatsCollection(tstep);
     mNodes.at(node_idx)->setPop(stats, tot);
+    mNodes.at(node_idx)->setPopW(stats_w, wtot);
+
     mNodesStatsDirty = true;
 }
 

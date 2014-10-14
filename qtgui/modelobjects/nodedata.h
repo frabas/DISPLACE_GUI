@@ -42,6 +42,12 @@ public:
         return mPopTot;
     }
 
+    void setPopW(QList<double> v, double tot);
+    double getPopW(int pop) const ;
+    double getPopWTot () const {
+        return mPopWTot;
+    }
+
     void setImpact(int pop, double impact);
     double getImpact(int pop) const {
         return mImpact[pop];
@@ -51,6 +57,8 @@ private:
     DisplaceModel *mModel;
     double *mPop;
     double mPopTot;
+    double *mPopW;
+    double mPopWTot;
 
     double *mImpact;
 };

@@ -158,7 +158,7 @@ public:
     // Stats collecting. Must store data to db
     void startCollectingStats();
     void endCollectingStats();
-    void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, double tot);
+    void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, const QList<double> &stats_w, double tot, double wtot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
 

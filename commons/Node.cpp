@@ -717,10 +717,11 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 	popnodes << tstep << " " << this->get_idx_node() << " "<<
 		" " << this->get_x() << " " << this->get_y();
 
-	double totN_this_pop;
+    double totN_this_pop, totW_this_pop;
 	for(int name_pop = 0; name_pop < Ns_pops_at_szgroup.size(); name_pop++)
 	{
 		totN_this_pop=0;		 // re-init
+        totW_this_pop= 0.0;
 		multimap<int,double>::iterator lower_init_we = weight_at_szgroup.lower_bound(name_pop);
 		multimap<int,double>::iterator upper_init_we = weight_at_szgroup.upper_bound(name_pop);
 		vector<double> weight_at_szgroup;
@@ -729,9 +730,10 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 
 		for(int sz = 0; sz < Ns_pops_at_szgroup[name_pop].size(); sz++)
 		{
-			totN_this_pop+= Ns_pops_at_szgroup[name_pop] [sz] * weight_at_szgroup.at(sz);
-		}
-		popnodes << " " << totN_this_pop;
+            totN_this_pop+= Ns_pops_at_szgroup[name_pop] [sz];
+            totW_this_pop+= Ns_pops_at_szgroup[name_pop] [sz] * weight_at_szgroup.at(sz);
+        }
+        popnodes << " " << totN_this_pop << totW_this_pop;
 	}
 
 	popnodes << " " <<  endl;

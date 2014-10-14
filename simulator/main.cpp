@@ -2422,9 +2422,15 @@ int main(int argc, char* argv[])
 	popnodes_start.open(filename.c_str());
     std::string popnodes_start_filename = filename;
 
+    ofstream popnodes_inc;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_inc_"+namesimu+".dat";
+    popnodes_inc.open(filename.c_str());
+    std::string popnodes_inc_filename = filename;
+
 	ofstream popnodes_end;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
 	popnodes_end.open(filename.c_str());
+    std::string popnodes_end_filename = filename;
 
 	ofstream popnodes_impact;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
@@ -3256,10 +3262,14 @@ int main(int argc, char* argv[])
 				for (unsigned int n=0; n<nodes.size(); n++)
 				{
 					nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
-				}
+                    if (use_gui) {
+                        popnodes_end.flush();
+                        guiSendUpdateCommand(popnodes_end_filename, tstep);
+                    }
+                }
 			}
 
-            // EXPORT populations statistics - Monthly
+            // EXPORT: populations statistics - Monthly
 
 #ifdef PROFILE
             mPopExportProfile.start();
@@ -3269,6 +3279,7 @@ int main(int argc, char* argv[])
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
+                nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
                 for (unsigned int pop = 0; pop < nbpops; ++pop) {
                     nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, pop);
                 }
@@ -3288,12 +3299,18 @@ int main(int argc, char* argv[])
 
             /* Flush and updates all statistics */
             if (use_gui) {
-                popnodes_end.flush();
+                popnodes_cumftime.flush();
                 guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
+
                 popnodes_impact.flush();
                 guiSendUpdateCommand(popnodes_impact_filename, tstep);
+
+                popnodes_inc.flush();
+                guiSendUpdateCommand(popnodes_inc_filename, tstep);
+
                 popdyn_F.flush();
                 guiSendUpdateCommand(popdyn_F_filename, tstep);
+
                 popdyn_N.flush();
                 guiSendUpdateCommand(popdyn_N_filename, tstep);
             }

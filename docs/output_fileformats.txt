@@ -18,8 +18,12 @@ Written by: Node::export_popnodes()
 See: commons/Node.cpp
 Content:
 Format:
-tstep / node / long / lat / tot N sp0 / tot N sp1 /...
+tstep / node / long / lat / tot N sp0 / tot W sp0/ tot N sp1 / tot W sp1...
 Collected Fields:
+
+* popnodes_inc_*.dat
+--------------------
+See popnodes_start_*.dat
 
 * popnodes_impact_*.dat
 -----------------------

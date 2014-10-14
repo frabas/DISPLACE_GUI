@@ -83,6 +83,11 @@ public:
     void forceEndTransaction();
     void flushBuffers();
 
+    /* Creates all indexes on db - to be called at the end of simulation */
+    void createIndexes();
+
+    /* Metadata */
+
     void setMetadata (QString key, QString value);
     QString getMetadata (QString key);
 
@@ -98,6 +103,8 @@ protected:
     bool checkVesselsTable(int version);
     bool checkVesselsPosTable(int version);
     bool checkStatsTable (int version);
+
+    void createIndexOnTstepForTable(QString table);
 
 private:
     int mOngoingTransactionsCount;

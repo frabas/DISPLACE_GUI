@@ -567,6 +567,21 @@ void DbHelper::flushBuffers()
     emit flush();
 }
 
+void DbHelper::createIndexes()
+{
+    qDebug() << "Create Indexes";
+    createIndexOnTstepForTable(TBL_POPNODES_STATS);
+    createIndexOnTstepForTable(TBL_VESSELS_POS);
+}
+
+void DbHelper::createIndexOnTstepForTable(QString table)
+{
+    QSqlQuery q;
+    bool res = q.exec("CREATE INDEX idx_" + table + " ON " + table + "(tstep)");
+
+    DB_ASSERT(res,q);
+}
+
 void DbHelper::setMetadata(QString key, QString value)
 {
     QSqlQuery q;

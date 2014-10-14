@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
-    connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
+    connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState,QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState,QProcess::ProcessState)));
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
 
     connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new GraphInteractionController(ui->plotPopulations, this);
     new GraphInteractionController(ui->plotNations, this);
 
-    simulatorProcessStateChanged(QProcess::NotRunning);
+    simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
     mMapController = new MapObjectsController(map);
@@ -206,18 +206,19 @@ void MainWindow::simulatorLogging(QString msg)
     ui->console->appendPlainText(msg);
 }
 
-void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
+void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate)
 {
     if (models[0] != 0) {
-        ui->cmdStart->setEnabled(state == QProcess::NotRunning);
+        ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
         ui->cmdPause->setEnabled(false);
-        ui->cmdStop->setEnabled(state == QProcess::Running);
+        ui->cmdStop->setEnabled(newstate == QProcess::Running);
 
-        if (state != QProcess::Running)
+        if (newstate != QProcess::Running)
             simulatorProcessStepChanged(-1);
 
-        if (state == QProcess::NotRunning)
+        if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
             models[0]->simulationEnded();
+        }
     } else {
         ui->cmdStart->setEnabled(false);
         ui->cmdPause->setEnabled(false);
@@ -250,7 +251,7 @@ void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, 
 
 void MainWindow::updateModelState()
 {
-    simulatorProcessStateChanged(mSimulation->processState());
+    simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
     updateModelList();
 }
 

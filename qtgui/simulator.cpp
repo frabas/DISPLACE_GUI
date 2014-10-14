@@ -9,7 +9,8 @@ Simulator::Simulator()
       mLastStep(-1),
       mOutputName("baseline"),
       mSimuName("simu2"),
-      mMoveVesselOption(true)
+      mMoveVesselOption(true),
+      mProcessState(QProcess::NotRunning)
 {
 }
 
@@ -51,7 +52,7 @@ bool Simulator::start(QString name, QString folder)
     connect(mSimulation, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
     connect(mSimulation, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
     connect(mSimulation, SIGNAL(started()), this, SLOT(started()));
-    connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), SIGNAL(processStateChanged(QProcess::ProcessState)));
+    connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
     qDebug() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
@@ -88,12 +89,15 @@ QProcess::ProcessState Simulator::processState() const
 
 void Simulator::error(QProcess::ProcessError error)
 {
+    Q_UNUSED(error);
     emit log(QString("Process error: %1").arg(mSimulation->errorString()));
 }
 
-void Simulator::finished(int, QProcess::ExitStatus)
+void Simulator::finished(int code, QProcess::ExitStatus status)
 {
-
+    emit log(QString("Process exited %1 with exit status %2")
+             .arg(status == QProcess::NormalExit ? "normally" : "by crash")
+             .arg(code));
 }
 
 void Simulator::readyReadStandardError()
@@ -117,8 +121,17 @@ void Simulator::readyReadStandardOutput()
 
 void Simulator::started()
 {
-
+    emit log(QString("Process started"));
 }
+
+void Simulator::subprocessStateChanged(QProcess::ProcessState state)
+{
+    QProcess::ProcessState oldstate = mProcessState;
+    mProcessState = state;
+
+    emit processStateChanged(oldstate, mProcessState);
+}
+
 QString Simulator::getSimulationName() const
 {
     return mSimuName;

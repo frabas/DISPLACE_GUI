@@ -35,7 +35,7 @@ public:
 
 signals:
     void log(QString);
-    void processStateChanged(QProcess::ProcessState);
+    void processStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate);
     void simulationStepChanged(int);
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
     void outputFileUpdated(QString, int);
@@ -47,6 +47,7 @@ private slots:
     void readyReadStandardError();
     void readyReadStandardOutput();
     void started();
+    void subprocessStateChanged(QProcess::ProcessState);
 
 private:
     QProcess *mSimulation;
@@ -55,6 +56,7 @@ private:
     QString mOutputName;
     QString mSimuName;
     bool mMoveVesselOption;
+    QProcess::ProcessState mProcessState;
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);

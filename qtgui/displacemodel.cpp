@@ -3,6 +3,7 @@
 #include <dbhelper.h>
 
 #include <mapobjects/harbourmapobject.h>
+#include <profiler.h>
 
 #include <readdata.h>
 #include <qdebug.h>
@@ -140,8 +141,10 @@ bool DisplaceModel::save()
 
 void DisplaceModel::simulationEnded()
 {
-    if (mDb)
+    if (mDb) {
         mDb->flushBuffers();
+        mDb->createIndexes();
+    }
 }
 
 int DisplaceModel::getHarboursCount() const

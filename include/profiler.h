@@ -37,6 +37,12 @@ public:
 #endif
     }
 
+    void start() {
+#ifdef PROFILE
+        clock_gettime(CLOCK_REALTIME, &mstart);
+#endif
+    }
+
 };
 
 class AverageProfiler {

@@ -4099,7 +4099,7 @@ int main(int argc, char* argv[])
 	}							 // end FOR LOOP OVER TIME
 
 #ifdef PROFILE
-    cout << "*** Profilers statistics ***";
+    cout << "*** Profilers statistics ***\n";
     cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
     cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
     cout << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";

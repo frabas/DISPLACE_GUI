@@ -733,7 +733,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
             totN_this_pop+= Ns_pops_at_szgroup[name_pop] [sz];
             totW_this_pop+= Ns_pops_at_szgroup[name_pop] [sz] * weight_at_szgroup.at(sz);
         }
-        popnodes << " " << totN_this_pop << totW_this_pop;
+        popnodes << " " << totN_this_pop << " " << totW_this_pop;
 	}
 
 	popnodes << " " <<  endl;

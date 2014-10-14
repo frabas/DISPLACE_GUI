@@ -15,9 +15,15 @@ class NodeMapObject : public MapObject
 {
     MapObjectsController *mController;
 public:
+    /* Note to developers: When adding "Roles", add a proper creation case into Constructor.
+     * Also check MapObjectsController::createMapObjectsFromModel for proper layer creation.
+     * And MapObjectsController should define a proper Output Layer type (OutLayerId)
+     *
+     * */
     enum Role {
         GraphNodeRole,
         GraphNodeWithPopStatsRole,
+        GraphNodeWithBiomass,
         GraphNodeWithCumFTimeRole,
         GraphNodeWithPopImpact,
     };

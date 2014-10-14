@@ -63,6 +63,7 @@ public:
     };
     enum OutLayerIds {
         OutLayerPopStats = 0,
+        OutLayerBiomass,
         OutLayerPopImpact,
         OutLayerCumFTime,
 

@@ -20,6 +20,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Population, mNode, mController, indx));
         break;
 
+    case GraphNodeWithBiomass:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Biomass, mNode, mController, indx));
+        break;
+
     case GraphNodeWithPopImpact:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Impact, mNode, mController, indx));

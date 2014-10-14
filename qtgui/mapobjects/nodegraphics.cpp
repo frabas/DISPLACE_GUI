@@ -65,9 +65,14 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
             case Population:
                 v = mNode->getPop(ilist[i]);
                 break;
+            case Biomass:
+                v = mNode->getPopW(ilist[i]);
+                break;
             case Impact:
                 v = mNode->getImpact(ilist[i]);
                 break;
+            default:
+                Q_ASSERT(false);    /* Prevents this from happening */
             }
 
             v = v / tot * 360.0 * 16.0;

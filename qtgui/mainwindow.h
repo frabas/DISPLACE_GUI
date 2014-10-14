@@ -30,7 +30,7 @@ class MapObjectsController;
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
-#define MAX_MODELS 2
+#define MAX_MODELS 4
 
 class MainWindow : public QMainWindow
 {

@@ -27,8 +27,6 @@ DisplaceModel::DisplaceModel()
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
     connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
-
-    initPopulations();
 }
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)

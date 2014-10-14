@@ -54,27 +54,15 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 
     QList<int> ilist = mNode->getModel()->getInterestingPops();
 
-    for (int i = 0; i < ilist.size(); ++i)
-        tot += mNode->getPop(ilist[i]);
+    for (int i = 0; i < ilist.size(); ++i) {
+        tot += getValueForPop(ilist[i]);
+    }
 
     if (tot > 1e-3) {
         double inc = 0.0;
         double v;
         for (int i = 0; i < ilist.size(); ++i) {
-            switch (mType) {
-            case Population:
-                v = mNode->getPop(ilist[i]);
-                break;
-            case Biomass:
-                v = mNode->getPopW(ilist[i]);
-                break;
-            case Impact:
-                v = mNode->getImpact(ilist[i]);
-                break;
-            default:
-                Q_ASSERT(false);    /* Prevents this from happening */
-            }
-
+            v = getValueForPop(ilist[i]);
             v = v / tot * 360.0 * 16.0;
             painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
             painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v ));
@@ -85,6 +73,23 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         painter.setPen(c);
         painter.drawEllipse(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H);
     }
+}
+
+double NodeWithPopStatsGraphics::getValueForPop(int pop) const
+{
+    switch (mType) {
+    case Population:
+        return mNode->getPop(pop);
+    case Biomass:
+        return mNode->getPopW(pop);
+        break;
+    case Impact:
+        return mNode->getImpact(pop);
+        break;
+    default:
+        Q_ASSERT(false);    /* Prevents this from happening */
+    }
+
 }
 
 

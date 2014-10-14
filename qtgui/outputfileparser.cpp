@@ -66,8 +66,10 @@ void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *mode
     QList<double> dataW;
     QList<double> data;
     data.reserve(model->getNBPops());
-    for (int i = 0; i < model->getNBPops(); ++i)
+    for (int i = 0; i < model->getNBPops(); ++i) {
         data.push_back(0.0);
+        dataW.push_back(0.0);
+    }
 
     while (!strm.atEnd()) {
         QString line = strm.readLine();
@@ -79,14 +81,16 @@ void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *mode
 
             bool ok;
             int i;
-            for (i = 4 ; i < fields.size()-2; i+=2) {
-                data[i-4] = fields[i].toDouble(&ok);
+
+            // NOTE: TODO: tot and wtot aren't used.
+            double tot = 0.0;
+            double wtot = 0.0;
+            for (i = 4 ; i < fields.size(); i+=2) {
+                data[(i-4) / 2] = fields[i].toDouble(&ok);
                 Q_ASSERT(ok);
-                dataW[i-4] = fields[i+1].toDouble(&ok);
+                dataW[(i-4) / 2] = fields[i+1].toDouble(&ok);
                 Q_ASSERT(ok);
             }
-            double tot = fields[fields.size() - 2].toDouble();
-            double wtot = fields[fields.size() - 1].toDouble();
 
             model->collectNodePopStats(tstep, id, data, dataW, tot, wtot);
         }

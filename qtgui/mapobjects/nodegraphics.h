@@ -36,6 +36,8 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 
     Type getType() const { return mType; }
+    double getValueForPop(int pop) const;
+
 private:
     Type mType;
 };

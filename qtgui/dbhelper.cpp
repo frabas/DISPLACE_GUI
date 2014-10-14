@@ -424,8 +424,23 @@ bool DbHelper::updateVesselsToStep(int steps, QList<VesselData *> &vessels)
 bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
 {
     QSqlQuery q;
-    bool res =
-    q.prepare ("SELECT nodeid,popid,pop,impact FROM " + TBL_POPNODES_STATS
+    bool res = q.prepare("SELECT nodeid,cumftime,totpop,totpopw FROM " + TBL_NODES_STATS + " WHERE tstep=?");
+    DB_ASSERT(res,q);
+
+    q.addBindValue(step);
+    res = q.exec();
+    while (q.next()) {
+        int nid = q.value(0).toInt();
+        double cum = q.value(1).toDouble();
+        double tot = q.value(2).toDouble();
+        double totw = q.value(3).toDouble();
+
+        nodes.at(nid)->set_cumftime(cum);
+        nodes.at(nid)->setPopTot(tot);
+        nodes.at(nid)->setPopWTot(totw);
+    }
+
+    q.prepare ("SELECT nodeid,popid,pop,popw,impact FROM " + TBL_POPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -435,9 +450,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
         int nid = q.value(0).toInt();
         int pid = q.value(1).toInt();
         double val = q.value(2).toDouble();
-        double impact = q.value(3).toDouble();
+        double valw = q.value(3).toDouble();
+        double impact = q.value(4).toDouble();
 
         nodes.at(nid)->setPop(pid,val);
+        nodes.at(nid)->setPopW(pid,valw);
         nodes.at(nid)->setImpact(pid,impact);
     }
     return true;
@@ -548,8 +565,11 @@ void DbHelper::flushBuffers()
 void DbHelper::createIndexes()
 {
     qDebug() << "Create Indexes";
+    Profiler pr;
+    createIndexOnTstepForTable(TBL_NODES_STATS);
     createIndexOnTstepForTable(TBL_POPNODES_STATS);
     createIndexOnTstepForTable(TBL_VESSELS_POS);
+    qDebug() << "Indexes created in " << pr.elapsed_ms() << " ms";
 }
 
 void DbHelper::createIndexOnTstepForTable(QString table)

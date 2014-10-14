@@ -41,6 +41,11 @@ void NodeData::setPop(int pop, double v)
         mPop[pop] = v;
 }
 
+void NodeData::setPopTot(double tot)
+{
+    mPopTot = tot;
+}
+
 void NodeData::setPop(QList<double> v, double tot)
 {
     for (int i=0; i < v.size() && i < mNode->get_nbpops(); ++i) {
@@ -55,6 +60,17 @@ double NodeData::getPop(int pop) const
         return mPop[pop];
 
     return -1;
+}
+
+void NodeData::setPopW(int pop, double val)
+{
+    if (pop < mNode->get_nbpops() && pop > 0)
+        mPopW[pop] = val;
+}
+
+void NodeData::setPopWTot(double tot)
+{
+    mPopWTot = tot;
 }
 
 void NodeData::setPopW(QList<double> v, double tot)

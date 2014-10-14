@@ -4,49 +4,49 @@ Formats of output files
 
 Path: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/
 
-vmslike_simu2.dat
------------------
-
+* vmslike_simu2.dat
+-------------------
 Written by: main()
 See: simulator/main.cpp
 Content: Position of each vessel, if state != 3
-
 Format:
 tstep name tstep_dep x y course cum_fuel state
 
-popnodes_start_*.dat
---------------------
-
+* popnodes_start_*.dat
+----------------------
 Written by: Node::export_popnodes()
 See: commons/Node.cpp
 Content:
-
-
 Format:
 tstep / node / long / lat / tot N sp0 / tot N sp1 /...
+Collected Fields:
 
-popdyn_*.dat
-------------
+* popnodes_impact_*.dat
+-----------------------
+Written by: Node::export_popnodes_impact()
+See: commons/Node.cpp
+Content:
+Format:
+pop / tstep / node_idx / long / lat / impact_on_pop
+Collected Fields: (0,1,2,)5
 
+* popdyn_*.dat
+--------------
 Written by: Population::export_popdyn_N
 See: commons/Population.cpp
 Content: Aggregate number of populations. all for tstep=0, some selected for others. Number in thousands.
-
 Format:
 tstep name total_for_groups[0..n]
 
+* popdyn_F_*.dat
+----------------
+See popdyn_*.dat
 
-
-popdyn_F_*.dat
---------------
-
-popnodes_cumftime
+* popnodes_cumftime
 --------------------
-
 Written by: Node::export_popnodes()
 See: commons/Node.cpp
 Content:
-
 Format:
 tstep   node   long    lat    cumftime
 

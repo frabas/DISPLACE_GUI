@@ -5,16 +5,24 @@
 NodeData::NodeData(Node *nd, DisplaceModel *model)
     : mNode (nd),
       mModel(model),
-      mPop(nd ? new double[nd->get_nbpops()] : 0),
+      mPop(0),
       mPopTot(0)
 {
-    for (int i = 0; i < nd->get_nbpops(); ++i)
-        mPop[i] = 0.0;
+    if (nd) {
+        int N = nd->get_nbpops();
+        mPop = new double[N] ;
+        mImpact = new double[N];
+        for (int i = 0; i < N; ++i) {
+            mPop[i] = 0.0;
+            mImpact[i] = 0.0;
+        }
+    }
 }
 
 NodeData::~NodeData()
 {
     delete []mPop;
+    delete []mImpact;
 }
 
 int NodeData::getPopCount() const
@@ -42,5 +50,11 @@ double NodeData::getPop(int pop) const
         return mPop[pop];
 
     return -1;
+}
+
+void NodeData::setImpact(int pop, double impact)
+{
+    if (pop < mNode->get_nbpops() && pop >= 0)
+        mImpact[pop] = impact;
 }
 

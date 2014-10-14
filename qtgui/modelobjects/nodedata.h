@@ -42,11 +42,17 @@ public:
         return mPopTot;
     }
 
+    void setImpact(int pop, double impact);
+    double getImpact(int pop) const {
+        return mImpact[pop];
+    }
+
 private:
     DisplaceModel *mModel;
     double *mPop;
     double mPopTot;
 
+    double *mImpact;
 };
 
 #endif // NODEDATA_H

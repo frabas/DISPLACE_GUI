@@ -160,6 +160,7 @@ public:
     void endCollectingStats();
     void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, double tot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
+    void collectPopImpact(int step, int node_idx, int popid, double impact);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);

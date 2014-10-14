@@ -238,6 +238,13 @@ void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopImpact(int step, int node_idx, int popid, double impact)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setImpact(popid, impact);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);

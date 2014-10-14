@@ -106,7 +106,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
     DB_ASSERT(r,q);
 
     r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
-        + "(statid,tstep,nodeid,popid,value) VALUES(?,?,?,?,?)");
+        + "(statid,tstep,nodeid,popid,pop,impact) VALUES(?,?,?,?,?,?)");
     DB_ASSERT(r,sq);
 
     foreach (NodeData *n, nodes) {
@@ -126,6 +126,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
             sq.addBindValue(n->get_idx_node());
             sq.addBindValue(i);
             sq.addBindValue(n->getPop(i));
+            sq.addBindValue(n->getImpact(i));
 
             res = sq.exec();
             DB_ASSERT(res,sq);
@@ -422,7 +423,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
 {
     QSqlQuery q;
     bool res =
-    q.prepare ("SELECT nodeid,popid,value FROM " + TBL_POPNODES_STATS
+    q.prepare ("SELECT nodeid,popid,pop,impact FROM " + TBL_POPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -432,8 +433,10 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
         int nid = q.value(0).toInt();
         int pid = q.value(1).toInt();
         double val = q.value(2).toDouble();
+        double impact = q.value(3).toDouble();
 
         nodes.at(nid)->setPop(pid,val);
+        nodes.at(nid)->setImpact(pid,impact);
     }
     return true;
 }
@@ -665,7 +668,8 @@ bool DbHelper::checkNodesStats(int version)
                + "tstep INTEGER,"
                + "nodeid INTEGER,"
                + "popid INTEGER,"
-               + "value REAL"
+               + "pop REAL,"
+               + "impact REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
 

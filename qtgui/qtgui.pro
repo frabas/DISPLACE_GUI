@@ -117,7 +117,7 @@ HEADERS += \
     statscontroller.h \
     modelobjects/populationdata.h \
     objects/populationentity.h \
-    profiler.h \
+    ../include/profiler.h \
     historicaldatacollector.h \
     graphinteractioncontroller.h \
     modelobjects/nationdata.h \

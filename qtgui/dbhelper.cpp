@@ -22,9 +22,8 @@ const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
-const QString DbHelper::TBL_POP_STATS = "popStats";
-const QString DbHelper::TBL_POPN_STATS = "popStatsN";
-const QString DbHelper::TBL_POPF_STATS = "popStatsF";
+const QString DbHelper::TBL_POP_STATS = "PopStats";
+const QString DbHelper::TBL_POPSZ_STATS = "PopStatsSz";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -136,7 +135,7 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
 void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
 {
-    QSqlQuery q,qf,qn;
+    QSqlQuery q,qn;
 
     bool r =
     q.prepare("INSERT INTO " + TBL_POP_STATS
@@ -145,15 +144,9 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
     DB_ASSERT(r,q);
 
     r =
-    qf.prepare("INSERT INTO " + TBL_POPF_STATS
-              + "(tstep,popid,szgroup,F) "
-              + "VALUES (?,?,?,?)");
-    DB_ASSERT(r,qf);
-
-    r =
-    qn.prepare("INSERT INTO " + TBL_POPN_STATS
-              + "(tstep,popid,szgroup,N) "
-              + "VALUES (?,?,?,?)");
+    qn.prepare("INSERT INTO " + TBL_POPSZ_STATS
+              + "(tstep,popid,szgroup,N,F) "
+              + "VALUES (?,?,?,?,?)");
     DB_ASSERT(r,qn);
 
 
@@ -172,17 +165,9 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
             qn.addBindValue(p.getId());
             qn.addBindValue(i);
             qn.addBindValue(p.getAggregate().at(i));
+            qn.addBindValue(p.getMortality().at(i));
             res = qn.exec();
             DB_ASSERT(res,qn);
-        }
-        n = p.getMortality().size();
-        for (int i = 0; i < n; ++i) {
-            qf.addBindValue(tstep);
-            qf.addBindValue(p.getId());
-            qf.addBindValue(i);
-            qf.addBindValue(p.getMortality().at(i));
-            res = qf.exec();
-            DB_ASSERT(res,qf);
         }
     }
 }
@@ -459,11 +444,9 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
     bool res = q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " ORDER BY tstep");
     DB_ASSERT(res,q);
 
-    QSqlQuery qn,qf;
-    res = qn.prepare("SELECT szgroup,N FROM " + TBL_POPN_STATS + " WHERE tstep=? AND popid=?");
+    QSqlQuery qn;
+    res = qn.prepare("SELECT szgroup,N,F FROM " + TBL_POPSZ_STATS + " WHERE tstep=? AND popid=?");
     DB_ASSERT(res,qn);
-    res = qf.prepare("SELECT szgroup,F FROM " + TBL_POPF_STATS + " WHERE tstep=? AND popid=?");
-    DB_ASSERT(res,qf);
 
     int last_tstep = -1;
     population.clear();
@@ -493,13 +476,10 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
         qn.addBindValue(tstep);
         qn.addBindValue(pid);
 
-        qf.addBindValue(tstep);
-        qf.addBindValue(pid);
-
         qn.exec();
-        qf.exec();
 
         QVector<double> nv;
+        QVector<double> fv;
         while (qn.next()) {
             int sz = qn.value(0).toInt();
             double v = qn.value(1).toDouble();
@@ -507,13 +487,6 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
             while (nv.size() <= sz)
                 nv.push_back(0);
             nv[sz] = v;
-        }
-
-        QVector<double> fv;
-        while (qf.next()) {
-            int sz = qf.value(0).toInt();
-            double v = qf.value(1).toDouble();
-
             while (fv.size() <= sz)
                 fv.push_back(0);
             fv[sz] = v;
@@ -755,29 +728,16 @@ bool DbHelper::checkStatsTable(int version)
 
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
-    if (!mDb.tables().contains(TBL_POPF_STATS)) {
+    if (!mDb.tables().contains(TBL_POPSZ_STATS)) {
         QSqlQuery q;
         bool r =
-        q.exec("CREATE TABLE " + TBL_POPF_STATS + "("
+        q.exec("CREATE TABLE " + TBL_POPSZ_STATS + "("
                + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
                + "tstep INTEGER,"
                + "popid INTEGER,"
                + "szgroup INTEGER,"
+               + "N REAL,"
                + "F REAL"
-               + ");"
-               );
-
-        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
-    }
-    if (!mDb.tables().contains(TBL_POPN_STATS)) {
-        QSqlQuery q;
-        bool r =
-        q.exec("CREATE TABLE " + TBL_POPN_STATS + "("
-               + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
-               + "tstep INTEGER,"
-               + "popid INTEGER,"
-               + "szgroup INTEGER,"
-               + "N REAL"
                + ");"
                );
 

@@ -131,4 +131,6 @@ RESOURCES += \
 OTHER_FILES += \
     qtgui.rc \
     ../docs/output_fileformats.txt \
-    palettes/iso1996_2.p2c
+    palettes/iso1996_2.p2c \
+    ../docs/database.txt \
+    ../docs/dbstruct.sh

@@ -559,6 +559,13 @@
           </property>
          </spacer>
         </item>
+        <item row="2" column="5">
+         <widget class="QToolButton" name="play_params">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>

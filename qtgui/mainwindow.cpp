@@ -26,11 +26,17 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#include <QInputDialog>
 
 const int MainWindow::maxModels = MAX_MODELS;
 const QString MainWindow::dbSuffix = ".db";
 const QString MainWindow::dbFilter = QT_TR_NOOP("Displace Database files (*.db);;All files (*.*)") ;
 const QString MainWindow::dbLastDirKey = "db_lastdir";
+const int MainWindow::playTimerDefault = 20;
+
+const int MainWindow::playTimerRates[] = {
+    50, 40, 25, 20, 15, 10, 5, 2, 1
+};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,7 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mSimulation(0),
     mMapController(0),
     map(0),
-    treemodel(0)
+    treemodel(0),
+    mPlayTimerInterval(playTimerDefault)
 {
     ui->setupUi(this);
 
@@ -601,7 +608,7 @@ void MainWindow::on_play_auto_clicked()
     if (en) {
         mPlayTimer.stop();
     } else {
-        mPlayTimer.setInterval(20);
+        mPlayTimer.setInterval(mPlayTimerInterval);
         mPlayTimer.setSingleShot(false);
         mPlayTimer.start();
     }
@@ -644,3 +651,26 @@ void MainWindow::on_popStatSelector_currentIndexChanged(int index)
     mStatsController->setPopulationStat((StatsController::PopulationStat)index);
 }
 
+
+void MainWindow::on_play_params_clicked()
+{
+    bool ok;
+    QStringList rates;
+    for (size_t i = 0; i < sizeof(playTimerRates) / sizeof(playTimerRates[0]); ++i) {
+        rates << QString::number(playTimerRates[i]);
+    }
+    int current = rates.size();
+    rates << QString::number(1000 / mPlayTimerInterval);
+
+    QString value = QInputDialog::getItem(this, tr("Autoplay frame rate"), tr("Frame rate, in fps"), rates, current, true, &ok);
+    if (ok) {
+        int n = value.toInt(&ok);
+        if (ok) {
+            mPlayTimerInterval = 1000 / n;
+            mPlayTimer.setInterval(mPlayTimerInterval);
+        } else {
+            QMessageBox::warning(this, tr("Invalid value"), tr("The value selected is not valid"));
+            return;
+        }
+    }
+}

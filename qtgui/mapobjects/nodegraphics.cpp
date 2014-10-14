@@ -58,6 +58,8 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         tot += getValueForPop(ilist[i]);
     }
 
+    int RADIUS = PIE_W / LastType * (LastType - mType);
+
     if (tot > 1e-3) {
         double inc = 0.0;
         double v;
@@ -65,13 +67,13 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
             v = getValueForPop(ilist[i]);
             v = v / tot * 360.0 * 16.0;
             painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
-            painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v ));
+            painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (v ));
             inc += v;
         }
     } else {
-        painter.setBrush(Qt::transparent);
+        painter.setBrush(c);
         painter.setPen(c);
-        painter.drawEllipse(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H);
+        painter.drawEllipse(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
     }
 }
 

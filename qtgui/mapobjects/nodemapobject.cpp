@@ -17,7 +17,12 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
     case GraphNodeWithPopStatsRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithPopStatsGraphics(mNode, mController, indx));
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Population, mNode, mController, indx));
+        break;
+
+    case GraphNodeWithPopImpact:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Impact, mNode, mController, indx));
         break;
 
     case GraphNodeWithCumFTimeRole:
@@ -25,6 +30,9 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithCumFTimeGraphics(mNode, mController, indx));
         break;
 
+    default:
+        Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
+        break;
     }
 
 }

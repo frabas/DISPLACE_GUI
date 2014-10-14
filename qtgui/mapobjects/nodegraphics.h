@@ -25,10 +25,19 @@ protected:
 
 class NodeWithPopStatsGraphics : public NodeGraphics {
 public:
-    NodeWithPopStatsGraphics(NodeData *node, MapObjectsController *controller, int indx)
-        : NodeGraphics(node, controller, indx) {}
+    enum Type { Population, Impact };
+
+    NodeWithPopStatsGraphics(Type type, NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx),
+          mType(type)
+    {}
+
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+
+    Type getType() const { return mType; }
+private:
+    Type mType;
 };
 
 class NodeWithCumFTimeGraphics : public NodeGraphics {

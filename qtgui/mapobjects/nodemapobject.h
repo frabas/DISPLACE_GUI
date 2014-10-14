@@ -19,6 +19,7 @@ public:
         GraphNodeRole,
         GraphNodeWithPopStatsRole,
         GraphNodeWithCumFTimeRole,
+        GraphNodeWithPopImpact,
     };
 
     NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node);

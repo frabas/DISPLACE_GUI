@@ -61,7 +61,16 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         double inc = 0.0;
         double v;
         for (int i = 0; i < ilist.size(); ++i) {
-            v = mNode->getPop(ilist[i]) / tot * 360.0 * 16.0;
+            switch (mType) {
+            case Population:
+                v = mNode->getPop(ilist[i]);
+                break;
+            case Impact:
+                v = mNode->getImpact(ilist[i]);
+                break;
+            }
+
+            v = v / tot * 360.0 * 16.0;
             painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
             painter.drawPie(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H, inc, (v ));
             inc += v;

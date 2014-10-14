@@ -58,6 +58,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Pop Stats"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
 
+    std::shared_ptr<qmapcontrol::LayerGeometry> impactlayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Impact"));
+    addOutputLayer(model_n, OutLayerPopImpact, impactlayer);
+
     std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Cum F Time"));
     addOutputLayer(model_n, OutLayerCumFTime, cumftimelayer);
 
@@ -84,6 +87,10 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
         obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
         mNodeObjects[model_n].append(obj);
         cumftimelayer->addGeometry(obj->getGeometryEntity());
+
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
+        mNodeObjects[model_n].append(obj);
+        impactlayer->addGeometry(obj->getGeometryEntity());
     }
 
     const QList<VesselData *> &vessels = model->getVesselList();

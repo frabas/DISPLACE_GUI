@@ -58,22 +58,36 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         tot += getValueForPop(ilist[i]);
     }
 
-    int RADIUS = PIE_W / LastType * (LastType - mType);
+    int RADIUS = mGrid.width() / LastType * (LastType - mType);
 
-    if (tot > 1e-3) {
-        double inc = 0.0;
-        double v;
-        for (int i = 0; i < ilist.size(); ++i) {
-            v = getValueForPop(ilist[i]);
-            v = v / tot * 360.0 * 16.0;
-            painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
-            painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (v ));
-            inc += v;
+    if (ilist.size() > 1) {
+        if (tot > 1e-3) {
+            double inc = 0.0;
+            double v;
+            for (int i = 0; i < ilist.size(); ++i) {
+                v = getValueForPop(ilist[i]);
+                v = v / tot * 360.0 * 16.0;
+                painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
+                painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (v ));
+                inc += v;
+            }
+        } else {
+            /* Don't display "zero" values
+            painter.setBrush(Qt::transparent);
+            painter.setPen(c);
+            painter.drawEllipse(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+            */
         }
-    } else {
-        painter.setBrush(c);
+    } else if (ilist.size() == 1) {
+        double v = getValueForPop(ilist[0]);
+        painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(v));
+        painter.drawRect(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+    } else {        // nothing to display.
+        /*
+        painter.setBrush(Qt::transparent);
         painter.setPen(c);
         painter.drawEllipse(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS);
+        */
     }
 }
 
@@ -100,9 +114,5 @@ void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumftime()));
-
-//    int d = mNode->get_cumftime() * PIE_W / 10;
-//    painter.drawRect(-d/2, -d/2, d, d);
-
     painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
 }

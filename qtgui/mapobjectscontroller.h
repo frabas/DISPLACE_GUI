@@ -83,6 +83,8 @@ public:
 
     MapObjectsController(qmapcontrol::QMapControl *map);
 
+    qmapcontrol::QMapControl *mapWidget() const { return mMap; }
+
     void createMapObjectsFromModel(int model_n, DisplaceModel *model);
     void updateMapObjectsFromModel(int model_n, DisplaceModel *model);
 
@@ -117,7 +119,8 @@ public:
 
     void forceRedraw();
 
-    void setDetailsText(const PointWorldCoord &point, QString text);
+    void showDetailsWidget(const PointWorldCoord &point, QWidget *widget);
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
@@ -137,8 +140,6 @@ private:
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
     std::shared_ptr<qmapcontrol::LayerGeometry> mWidgetLayer;
-    QTextEdit *mDetailsWidget;
-    std::shared_ptr<qmapcontrol::GeometryWidget> mDetailsWidgetContainer;
 
     QVector<bool> mModelVisibility;
     QVector<LayerListImpl> mLayers;

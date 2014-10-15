@@ -33,19 +33,12 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
     mWidgetLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Details"));
 
-    mDetailsWidget = new QTextEdit(mMap);
-    mDetailsWidgetContainer = std::shared_ptr<qmapcontrol::GeometryWidget>(new qmapcontrol::GeometryWidget(PointWorldCoord(0.0, 0.0), mDetailsWidget));
-    mDetailsWidgetContainer->setAlignmentType(GeometryPoint::AlignmentType::TopLeft);
-    mDetailsWidgetContainer->setVisible(false);
-
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
     mMap->addLayer(mWidgetLayer);
 
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
     mMap->setZoom(10);
-
-    mWidgetLayer->addGeometry(mDetailsWidgetContainer);
 
     connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));
 }
@@ -199,11 +192,13 @@ void MapObjectsController::forceRedraw()
     mMap->requestRedraw();
 }
 
-void MapObjectsController::setDetailsText(const qmapcontrol::PointWorldCoord &point, QString text)
+void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidget *widget)
 {
-    mDetailsWidget->setHtml(text);
-    mDetailsWidgetContainer->setCoord(point);
+    std::shared_ptr<qmapcontrol::GeometryWidget>  mDetailsWidgetContainer = std::shared_ptr<qmapcontrol::GeometryWidget>(new qmapcontrol::GeometryWidget(point, widget));
+    mDetailsWidgetContainer->setAlignmentType(GeometryPoint::AlignmentType::BottomLeft);
     mDetailsWidgetContainer->setVisible(true);
+
+    mWidgetLayer->addGeometry(mDetailsWidgetContainer);
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)

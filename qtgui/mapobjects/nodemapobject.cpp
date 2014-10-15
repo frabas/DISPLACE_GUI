@@ -3,6 +3,9 @@
 #include <displacemodel.h>
 #include <mapobjectscontroller.h>
 #include <mapobjects/nodegraphics.h>
+#include <QMapControl/QMapControl.h>
+
+#include <QTextEdit>
 
 NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node)
     : mController(controller),
@@ -46,15 +49,16 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
 bool NodeMapObject::clicked()
 {
-    qDebug()  << "Clicked: " << mGeometry->coord().rawPoint() << mNode->get_x() << mNode->get_y();
-    mController->setDetailsText(mGeometry->coord(),
-                QString("<b>Name</b>: %1<br/>"
+    QTextEdit *ed = new QTextEdit(mController->mapWidget());
+    ed->setHtml(QString("<b>Name</b>: %1<br/>"
                         "<b>Coords: </b>%2 %3<br/>"
                         )
                                 .arg(QString::fromStdString(mNode->get_name()))
                                 .arg(mNode->get_y())
-                                .arg(mNode->get_x())
-                                );
+                                .arg(mNode->get_x()));
+
+    mController->showDetailsWidget(mGeometry->coord(),
+                                ed);
 
     return true;
 }

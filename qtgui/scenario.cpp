@@ -7,6 +7,14 @@
 
 
 Scenario::Scenario()
+    : dyn_alloc_sce(),
+      dyn_pop_sce(),
+      biolsce(),
+      graph(0),
+      nrow_coord(0),
+      nrow_graph(0),
+      a_port(0),
+      graph_res(10)
 {
 }
 
@@ -147,7 +155,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     int a_port;
     int nrow_coord;
     int nrow_graph;
-    double graph_res;
+    double graph_res = 0.0;
 
     if (read_scenario_config_file (        
         path.toStdString(),
@@ -181,7 +189,8 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setGraph(a_graph);
     s.setNrow_coord(nrow_coord);
     s.setNrow_graph(nrow_graph);
-    s.setGraph_res(graph_res);
+    if (graph_res > 1e-3)
+        s.setGraph_res(graph_res);
     s.setA_port(a_port);
 
     return s;

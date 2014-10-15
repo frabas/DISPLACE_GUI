@@ -139,6 +139,10 @@ protected slots:
     void geometryClicked(const Geometry *);
     void widgetClosed(QObject *);
 
+public slots:
+    void signalAppIsClosing();
+    void removeAllWidgets();
+
 private:
     qmapcontrol::QMapControl *mMap;
     QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];
@@ -155,6 +159,8 @@ private:
     QVector<bool> mModelVisibility;
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
+
+    bool mClosing;
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

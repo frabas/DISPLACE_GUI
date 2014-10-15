@@ -22,7 +22,8 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
-      mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax))
+      mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
+      mClosing(false)
 {
     // create mapadapter, for mainlayer and overlay
     mMainMapAdapter = std::shared_ptr<qmapcontrol::MapAdapter> (new qmapcontrol::MapAdapterOSM());
@@ -222,13 +223,26 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
 {
     MapObject *object = reinterpret_cast<MapObject *>(geometry->ancillaryData());
 
-    object->clicked();
+    if (object)
+        object->clicked();
 }
 
 void MapObjectsController::widgetClosed(QObject *widget)
 {
     WidgetUserData *obj = reinterpret_cast<WidgetUserData*>(widget->userData(0));
     if (obj) {
-        mWidgetLayer->removeGeometry(obj->widget());
+        mWidgetLayer->removeGeometry(obj->widget(), mClosing);
+    }
+}
+
+void MapObjectsController::signalAppIsClosing()
+{
+    mClosing = true;
+}
+
+void MapObjectsController::removeAllWidgets()
+{
+    foreach (const auto &wid, mWidgetLayer->getGeometryWidgets()) {
+        mWidgetLayer->removeGeometry(wid, true);
     }
 }

@@ -681,3 +681,8 @@ void MainWindow::on_play_params_clicked()
         }
     }
 }
+
+void MainWindow::on_actionQuit_triggered()
+{
+    close();
+}

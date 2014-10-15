@@ -82,6 +82,8 @@ private slots:
     void on_actionConfiguration_triggered();
     void on_play_params_clicked();
 
+    void on_actionQuit_triggered();
+
 signals:
     void modelStateChanged();
 

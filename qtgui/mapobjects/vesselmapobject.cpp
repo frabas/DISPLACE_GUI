@@ -29,7 +29,7 @@ QBrush *VesselMapObject::VesselGraphics::statHarbour = 0;
 QBrush *VesselMapObject::VesselGraphics::statSteaming = 0;
 
 VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 7, 17),
       mVessel(vessel)
 {
     if (color == 0)
@@ -40,6 +40,8 @@ VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
         statFishing = new QBrush(Qt::red);
     if (statSteaming == 0)
         statSteaming = new QBrush(Qt::black);
+
+    setNonlinearZoomFactor(0.9);
 }
 
 void VesselMapObject::VesselGraphics::updated()

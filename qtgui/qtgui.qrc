@@ -24,5 +24,7 @@
         <file>icons/OpenSeaMap.png</file>
         <file>palettes/iso1996_2.p2c</file>
         <file>icons/places.png</file>
+        <file>backgrounds/callout.png</file>
+        <file>icons/close.png</file>
     </qresource>
 </RCC>

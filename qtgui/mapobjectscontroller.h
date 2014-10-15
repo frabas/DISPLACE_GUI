@@ -1,6 +1,7 @@
 ﻿#ifndef MAPOBJECTSCONTROLLER_H
 #define MAPOBJECTSCONTROLLER_H
 
+#include <QObject>
 #include <QList>
 #include <QVector>
 
@@ -9,26 +10,58 @@
 #include <palettemanager.h>
 
 #include <QMapControl/Layer.h>
+#include <QMapControl/Geometry.h>
 
 namespace qmapcontrol {
 class QMapControl;
 class MapAdapter;
 class LayerMapAdapter;
 class LayerGeometry;
+class GeometryWidget;
 }
 
 class DisplaceModel;
+class MapObject;
 class HarbourMapObject;
 class NodeMapObject;
 class VesselMapObject;
 
-class MapObjectsController
+QT_BEGIN_NAMESPACE
+class QTextEdit;
+QT_END_NAMESPACE
+
+using qmapcontrol::Geometry;
+
+class MapObjectsController : public QObject
 {
+    Q_OBJECT
+
 public:
     class LayerList {
     public:
         virtual int getCount() const = 0;
         virtual QString getName(int idx) const = 0;
+    };
+
+    class WidgetUserData : public QObjectUserData {
+    private:
+        std::shared_ptr<qmapcontrol::GeometryWidget> mWidget;
+    public:
+        WidgetUserData(std::shared_ptr<qmapcontrol::GeometryWidget> w)
+            : QObjectUserData(), mWidget(w) {}
+
+        std::shared_ptr<qmapcontrol::GeometryWidget> widget() const { return mWidget; }
+    };
+
+    class WidgetAncillaryData : public qmapcontrol::Geometry::AncillaryData {
+    private:
+        MapObject *mObject;
+    public:
+        explicit WidgetAncillaryData(MapObject *object)
+            : mObject(object) {
+        }
+
+        MapObject *object() const { return mObject; }
     };
 
 private:
@@ -72,6 +105,8 @@ public:
 
     MapObjectsController(qmapcontrol::QMapControl *map);
 
+    qmapcontrol::QMapControl *mapWidget() const { return mMap; }
+
     void createMapObjectsFromModel(int model_n, DisplaceModel *model);
     void updateMapObjectsFromModel(int model_n, DisplaceModel *model);
 
@@ -106,9 +141,19 @@ public:
 
     void forceRedraw();
 
+    void showDetailsWidget(const PointWorldCoord &point, QWidget *widget);
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
+
+protected slots:
+    void geometryClicked(const Geometry *);
+    void widgetClosed(QObject *);
+
+public slots:
+    void signalAppIsClosing();
+    void removeAllWidgets();
 
 private:
     qmapcontrol::QMapControl *mMap;
@@ -121,10 +166,13 @@ private:
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
+    std::shared_ptr<qmapcontrol::LayerGeometry> mWidgetLayer;
 
     QVector<bool> mModelVisibility;
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
+
+    bool mClosing;
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

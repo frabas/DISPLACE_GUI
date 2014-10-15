@@ -198,6 +198,10 @@ void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidg
     mDetailsWidgetContainer->setAlignmentType(GeometryPoint::AlignmentType::BottomLeft);
     mDetailsWidgetContainer->setVisible(true);
 
+    widget->setUserData(0, new WidgetUserData(mDetailsWidgetContainer));
+    widget->setAttribute(Qt::WA_DeleteOnClose);
+    connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(widgetClosed(QObject*)));
+
     mWidgetLayer->addGeometry(mDetailsWidgetContainer);
 }
 
@@ -219,4 +223,12 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
     MapObject *object = reinterpret_cast<MapObject *>(geometry->ancillaryData());
 
     object->clicked();
+}
+
+void MapObjectsController::widgetClosed(QObject *widget)
+{
+    WidgetUserData *obj = reinterpret_cast<WidgetUserData*>(widget->userData(0));
+    if (obj) {
+        mWidgetLayer->removeGeometry(obj->widget());
+    }
 }

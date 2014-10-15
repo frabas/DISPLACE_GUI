@@ -42,6 +42,16 @@ public:
         virtual QString getName(int idx) const = 0;
     };
 
+    class WidgetUserData : public QObjectUserData {
+    private:
+        std::shared_ptr<qmapcontrol::GeometryWidget> mWidget;
+    public:
+        WidgetUserData(std::shared_ptr<qmapcontrol::GeometryWidget> w)
+            : QObjectUserData(), mWidget(w) {}
+
+        std::shared_ptr<qmapcontrol::GeometryWidget> widget() const { return mWidget; }
+    };
+
 private:
     static const int MaxLayers = 32;
 
@@ -127,6 +137,7 @@ protected:
 
 protected slots:
     void geometryClicked(const Geometry *);
+    void widgetClosed(QObject *);
 
 private:
     qmapcontrol::QMapControl *mMap;

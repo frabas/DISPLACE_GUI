@@ -73,14 +73,16 @@ SOURCES += \
     modelobjects/nationdata.cpp \
     objects/nationentity.cpp \
     objects/szgroupentity.cpp \
-    configdialog.cpp
+    configdialog.cpp \
+    mapobjects/nodedetailswidget.cpp
 
 FORMS += \
     mainwindow.ui \
     scenariodialog.ui \
     simulationsetupdialog.ui \
     editpalettedialog.ui \
-    configdialog.ui
+    configdialog.ui \
+    mapobjects/nodedetailswidget.ui
 
 HEADERS += \
     mainwindow.h \
@@ -123,7 +125,8 @@ HEADERS += \
     modelobjects/nationdata.h \
     objects/nationentity.h \
     objects/szgroupentity.h \
-    configdialog.h
+    configdialog.h \
+    mapobjects/nodedetailswidget.h
 
 RESOURCES += \
     qtgui.qrc

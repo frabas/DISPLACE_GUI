@@ -5,7 +5,7 @@
 #include <mapobjects/nodegraphics.h>
 #include <QMapControl/QMapControl.h>
 
-#include <QTextEdit>
+#include <mapobjects/nodedetailswidget.h>
 
 NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node)
     : mController(controller),
@@ -49,8 +49,8 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
 bool NodeMapObject::clicked()
 {
-    QTextEdit *ed = new QTextEdit(mController->mapWidget());
-    ed->setHtml(QString("<b>Name</b>: %1<br/>"
+    NodeDetailsWidget *w = new NodeDetailsWidget(mController->mapWidget());
+    w->setText(QString("<b>Name</b>: %1<br/>"
                         "<b>Coords: </b>%2 %3<br/>"
                         )
                                 .arg(QString::fromStdString(mNode->get_name()))
@@ -58,7 +58,7 @@ bool NodeMapObject::clicked()
                                 .arg(mNode->get_x()));
 
     mController->showDetailsWidget(mGeometry->coord(),
-                                ed);
+                                w);
 
     return true;
 }

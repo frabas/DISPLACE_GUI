@@ -6,6 +6,10 @@
 #include <vector>
 
 #include <QObject>
+#include <QFile>
+#include <QTextStream>
+
+#define NBSZGROUP 14
 
 const QList<int> &Config::implicit_pops() const
 {
@@ -56,12 +60,54 @@ void Config::setNbpops(int value)
 {
     nbpops = value;
 }
+
+int Config::getSzGroups() const
+{
+    return szGroups;
+}
+
+void Config::setSzGroups(int value)
+{
+    szGroups = value;
+}
+
 Config::Config()
 {
 }
 
 bool Config::save(QString path, QString modelname, QString outputname)
 {
+    QString realpath = path + "/simusspe_" + modelname +"/config.dat";
+    QFile file (realpath);
+
+    if (!file.open(QFile::WriteOnly))
+        return false;
+
+    QTextStream stream (&file);
+
+    stream << "# nbpops \n" << nbpops << endl;
+
+    stream <<"# implicit stocks\n";
+    foreach (int a, m_implicit_pops)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# calib the other landings per stock \n";
+    foreach (double a, m_calib_oth_landings)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# calib weight-at-szgroup per stock \n";
+    foreach (double a, m_calib_weight_at_szgroup)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# calib the cpue multiplier per stock \n";
+    foreach (double a, m_calib_cpue_multiplier)
+        stream << a << " ";
+    stream << endl;
+
+    file.close();
     return true;
 }
 
@@ -70,6 +116,8 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     Q_UNUSED(outputname);
 
     Config config;
+
+    config.szGroups = NBSZGROUP;
 
     std::vector <int> implicit_pops;
     std::vector <double> calib_oth_landings;

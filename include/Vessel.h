@@ -78,6 +78,7 @@ class Vessel
 		double speed, fuelcons, length, KW, tankcapacity, carrycapacity, nbfpingspertrip, resttime_par1, resttime_par2, av_trip_duration;
 								 // dynamic
 		double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, cumcatches, reason_to_go_back;
+		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 		string length_class, nationality;
 		int message;
 		int state;
@@ -113,7 +114,10 @@ class Vessel
             const multimap <int, int> &possible_metiers, const multimap <int, double> &freq_possible_metiers,
 			double speed, double fuelcons, double length, double KW,
 			double  carrycapacity, double tankcapacity, double nbfpingspertrip,
-			double resttime_par1, double resttime_par2, double av_trip_duration);
+			double resttime_par1, double resttime_par2, double av_trip_duration,
+           	double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
+           	double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive
+           	);			
 		Vessel();
 		~Vessel();
 
@@ -173,6 +177,10 @@ class Vessel
 		double get_resttime_par1() const;
 		double get_resttime_par2() const;
 		double get_av_trip_duration() const;
+		double get_mult_fuelcons_when_steaming() const;
+    	double get_mult_fuelcons_when_fishing() const;
+	    double get_mult_fuelcons_when_returning() const;
+	    double get_mult_fuelcons_when_inactive() const;		
 		double get_cumcatches() const;
         const vector<vector<double> > &get_gshape_cpue_nodes_species() const;
         const vector<vector<double> > &get_gscale_cpue_nodes_species() const;

@@ -14,7 +14,7 @@
    <string>DISPLACE</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="3">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
     <item>
      <widget class="WrapperWidget" name="mapWidget" native="true">
       <property name="sizePolicy">
@@ -46,8 +46,16 @@
     <property name="title">
      <string>&amp;Model</string>
     </property>
+    <widget class="QMenu" name="menuPalettes">
+     <property name="title">
+      <string>Palettes</string>
+     </property>
+     <addaction name="actionPalettes"/>
+     <addaction name="actionPopulations"/>
+    </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
+    <addaction name="menuPalettes"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -238,7 +246,83 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QTableView" name="statsTableHarbours"/>
+             <widget class="QCustomPlot" name="plotHarbours" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabStatsPopulations">
+           <attribute name="title">
+            <string>Populations</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QComboBox" name="popStatSelector">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Number at size</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Fishing mortality</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QCustomPlot" name="plotPopulations" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="nationsTab">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/places.png</normaloff>:/icons/places.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Nations</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <item>
+             <widget class="QCustomPlot" name="plotNations" native="true"/>
             </item>
            </layout>
           </widget>
@@ -475,6 +559,13 @@
           </property>
          </spacer>
         </item>
+        <item row="2" column="5">
+         <widget class="QToolButton" name="play_params">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -592,12 +683,28 @@
     <string>Import Shapefile...</string>
    </property>
   </action>
+  <action name="actionPalettes">
+   <property name="text">
+    <string>Values...</string>
+   </property>
+  </action>
+  <action name="actionPopulations">
+   <property name="text">
+    <string>Populations...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>WrapperWidget</class>
    <extends>QWidget</extends>
    <header>wrapperwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

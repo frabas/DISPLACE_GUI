@@ -5,14 +5,29 @@
 NodeData::NodeData(Node *nd, DisplaceModel *model)
     : mNode (nd),
       mModel(model),
-      mPop(nd ? new double[nd->get_nbpops()] : 0),
-      mPopTot(0)
+      mPop(0),
+      mPopTot(0),
+      mPopW(0),
+      mPopWTot(0)
 {
+    if (nd) {
+        int N = nd->get_nbpops();
+        mPop = new double[N] ;
+        mPopW = new double[N] ;
+        mImpact = new double[N];
+        for (int i = 0; i < N; ++i) {
+            mPop[i] = 0.0;
+            mPopW[i] = 0.0;
+            mImpact[i] = 0.0;
+        }
+    }
 }
 
 NodeData::~NodeData()
 {
     delete []mPop;
+    delete []mPopW;
+    delete []mImpact;
 }
 
 int NodeData::getPopCount() const
@@ -22,8 +37,13 @@ int NodeData::getPopCount() const
 
 void NodeData::setPop(int pop, double v)
 {
-    if (mPop && pop < mNode->get_nbpops() && pop > 0)
+    if (pop < mNode->get_nbpops() && pop > 0)
         mPop[pop] = v;
+}
+
+void NodeData::setPopTot(double tot)
+{
+    mPopTot = tot;
 }
 
 void NodeData::setPop(QList<double> v, double tot)
@@ -36,9 +56,42 @@ void NodeData::setPop(QList<double> v, double tot)
 
 double NodeData::getPop(int pop) const
 {
-    if (mPop && pop < mNode->get_nbpops() && pop > 0)
+    if (pop < mNode->get_nbpops() && pop >= 0)
         return mPop[pop];
 
     return -1;
+}
+
+void NodeData::setPopW(int pop, double val)
+{
+    if (pop < mNode->get_nbpops() && pop > 0)
+        mPopW[pop] = val;
+}
+
+void NodeData::setPopWTot(double tot)
+{
+    mPopWTot = tot;
+}
+
+void NodeData::setPopW(QList<double> v, double tot)
+{
+    for (int i=0; i < v.size() && i < mNode->get_nbpops(); ++i) {
+        mPopW[i] = v[i];
+    }
+    mPopWTot = tot;
+}
+
+double NodeData::getPopW(int pop) const
+{
+    if (pop < mNode->get_nbpops() && pop >= 0)
+        return mPopW[pop];
+
+    return -1;
+}
+
+void NodeData::setImpact(int pop, double impact)
+{
+    if (pop < mNode->get_nbpops() && pop >= 0)
+        mImpact[pop] = impact;
 }
 

@@ -3,15 +3,22 @@
 #include <dbhelper.h>
 
 #include <mapobjects/harbourmapobject.h>
+#include <profiler.h>
 
 #include <readdata.h>
 #include <qdebug.h>
+#include <QtAlgorithms>
+
 
 DisplaceModel::DisplaceModel()
     : mDb(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
+      mPopStatsDirty(false),
       mLive(false),
+      mInterestingPop(),
+      mInterestingSizeTotal(true),
+      mInterestingSizes(),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))
 {
@@ -21,11 +28,6 @@ DisplaceModel::DisplaceModel()
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
     connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
-
-    /* Add some sample interesting pop */
-    setInterestingPop(3);
-    setInterestingPop(7);
-    setInterestingPop(10);
 }
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)
@@ -45,6 +47,8 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         loadNodes();
         loadVessels();
         initBenthos();
+        initPopulations();
+        initNations();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
         return false;
@@ -71,6 +75,9 @@ bool DisplaceModel::loadDatabase(QString path)
     mDb->loadScenario(mScenario);
     loadNodesFromDb();
     loadVesselsFromDb();
+    loadHistoricalStatsFromDb();
+    initPopulations();
+    initNations();
 
     mLastStep = mDb->getLastKnownStep();
     setCurrentStep(0);
@@ -89,8 +96,10 @@ bool DisplaceModel::linkDatabase(QString path)
         return false;
 
     mDb = new DbHelper;
-    if (!mDb->attachDb(path))
+    if (!mDb->attachDb(path)) {
+        mLastError = mDb->lastDbError();
         return false;
+    }
 
     /* start a transaction to speedup insertion */
     mDb->beginTransaction();
@@ -132,8 +141,10 @@ bool DisplaceModel::save()
 
 void DisplaceModel::simulationEnded()
 {
-    if (mDb)
+    if (mDb) {
         mDb->flushBuffers();
+        mDb->createIndexes();
+    }
 }
 
 int DisplaceModel::getHarboursCount() const
@@ -163,7 +174,6 @@ void DisplaceModel::checkStatsCollection(int tstep)
     }
 
     mLastStats = tstep;
-    mNodesStatsDirty = true;
 }
 
 void DisplaceModel::updateNodesStatFromSimu(QString data)
@@ -179,30 +189,79 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
         for (int i = 0; i < num; ++i) {
             mNodes.at(start + i)->set_cumftime(fields[4+i].toDouble());
         }
+        mNodesStatsDirty = true;
     }
 }
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
-    if (mDb && mNodesStatsDirty)
-        mDb->addNodesStats(mLastStats, mNodes);
+    if (mDb) {
+        mDb->beginTransaction();
+        if (mNodesStatsDirty) {
+            mDb->addNodesStats(mLastStats, mNodes);
+            mNodesStatsDirty = false;
+        }
 
-    mNodesStatsDirty = false;
+        if (mPopStatsDirty) {
+            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+            mPopStatsDirty = false;
+        }
+        mDb->endTransaction();
+    }
+
 }
 
-void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, double tot)
+void DisplaceModel::startCollectingStats()
+{
+    if (mDb)
+        mDb->beginTransaction();
+}
+
+void DisplaceModel::endCollectingStats()
+{
+    if (mDb)
+        mDb->endTransaction();
+}
+
+void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, const QList<double> &stats_w, double tot, double wtot)
 {
     checkStatsCollection(tstep);
     mNodes.at(node_idx)->setPop(stats, tot);
+    mNodes.at(node_idx)->setPopW(stats_w, wtot);
+
+    mNodesStatsDirty = true;
 }
 
 void DisplaceModel::collectPopCumftime(int step, int node_idx, double cumftime)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->set_cumftime(cumftime);
+    mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopImpact(int step, int node_idx, int popid, double impact)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setImpact(popid, impact);
+    mNodesStatsDirty = true;
+}
 
+void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
+{
+    checkStatsCollection(step);
+    mStatsPopulationsCollected[popid].setAggregate(pops);
+    mStatsPopulationsCollected[popid].setAggregateTot(value);
+    mPopStatsDirty = true;
+}
+
+void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
+{
+    checkStatsCollection(step);
+    mStatsPopulationsCollected[popid].setMortality(pops);
+    mStatsPopulationsCollected[popid].setMortalityTot(value);
+    mPopStatsDirty = true;
+}
 
 int DisplaceModel::getVesselCount() const
 {
@@ -232,6 +291,11 @@ int DisplaceModel::getBenthosCount() const
     return mBenthos.size();
 }
 
+int DisplaceModel::getPopulationsCount() const
+{
+    return mConfig.getNbpops();
+}
+
 Scenario DisplaceModel::scenario() const
 {
     return mScenario;
@@ -244,12 +308,27 @@ void DisplaceModel::setScenario(const Scenario &scenario)
         mDb->saveScenario(mScenario);
 }
 
+Config DisplaceModel::config() const
+{
+    return mConfig;
+}
+
+void DisplaceModel::setConfig(const Config &config)
+{
+    mConfig = config;
+    if (mDb)
+        mDb->saveConfig(mConfig);
+}
+
 void DisplaceModel::setCurrentStep(int step)
 {
     mCurrentStep = step;
     if (mDb) {
         mDb->updateVesselsToStep(mCurrentStep, mVessels);
         mDb->updateStatsForNodesToStep(mCurrentStep, mNodes);
+
+        // re-loading Historical data is not needed!
+
         /* TODO: Update here all other entries */
     }
 }
@@ -258,6 +337,7 @@ void DisplaceModel::setInterestingPop(int n)
 {
     if (!mInterestingPop.contains(n))
         mInterestingPop.append(n);
+        qSort(mInterestingPop);
 }
 
 void DisplaceModel::remInterestingPop(int n)
@@ -268,6 +348,45 @@ void DisplaceModel::remInterestingPop(int n)
 bool DisplaceModel::isInterestingPop(int n)
 {
     return mInterestingPop.contains(n);
+}
+
+void DisplaceModel::clearInterestingPop()
+{
+    mInterestingPop.clear();
+}
+
+void DisplaceModel::setInterestingSize(int n)
+{
+    if (!mInterestingSizes.contains(n))
+        mInterestingSizes.append(n);
+    qSort(mInterestingSizes);
+}
+
+void DisplaceModel::remInterestingSize(int n)
+{
+    mInterestingSizes.removeAll(n);
+}
+
+bool DisplaceModel::isInterestingSize(int n)
+{
+    return mInterestingSizes.contains(n);
+}
+
+void DisplaceModel::setInterestingHarb(int n)
+{
+    if (!mInterestingHarb.contains(n))
+        mInterestingHarb.append(n);
+        qSort(mInterestingHarb);
+}
+
+void DisplaceModel::remInterestingHarb(int n)
+{
+    mInterestingHarb.removeAll(n);
+}
+
+bool DisplaceModel::isInterestingHarb(int n)
+{
+    return mInterestingHarb.contains(n);
 }
 
 void DisplaceModel::parseOutputStatsFile(QString file, int tstep)
@@ -484,10 +603,17 @@ bool DisplaceModel::loadVessels()
     vector<double> resttime_par1s;
     vector<double> resttime_par2s;
     vector<double> av_trip_duration;
+    vector<double> mult_fuelcons_when_steaming;
+    vector<double> mult_fuelcons_when_fishing;
+    vector<double> mult_fuelcons_when_returning;
+    vector<double> mult_fuelcons_when_inactive;
     read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
-        carrycapacities, tankcapacities, nbfpingspertrips,
-        resttime_par1s, resttime_par2s, av_trip_duration,
-        mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+                          carrycapacities, tankcapacities, nbfpingspertrips,
+                          resttime_par1s, resttime_par2s, av_trip_duration,
+                          mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
+                          mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
+                          mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
@@ -612,7 +738,13 @@ bool DisplaceModel::loadVessels()
             nbfpingspertrips[i],
             resttime_par1s[i],
             resttime_par2s[i],
-            av_trip_duration[i]);
+            av_trip_duration[i],
+            mult_fuelcons_when_steaming[i],
+            mult_fuelcons_when_fishing[i],
+            mult_fuelcons_when_returning[i],
+            mult_fuelcons_when_inactive[i]
+            );
+
         VesselData *vd = new VesselData(v);
         mVessels.push_back(vd);
 
@@ -828,12 +960,61 @@ bool DisplaceModel::initBenthos()
     foreach (int id, ids) {
         mBenthos.push_back(mBenthosInfo[id]);
     }
+
+    return true;
+}
+
+bool DisplaceModel::initPopulations()
+{
+    mStatsPopulationsCollected.clear();
+    for (int i = 0; i < getPopulationsCount(); ++i) {
+        mStatsPopulationsCollected.push_back(PopulationData(i));
+    }
+
+    QList<int> imp = mConfig.implicit_pops();
+    qSort(imp);
+
+    clearInterestingPop();
+    int c = 0;
+    for (int i = 0; i < imp.size(); ++i) {
+        while (c < imp[i]) {
+            setInterestingPop(c);
+            ++c;
+        }
+        ++c;
+    }
+
+    return true;
+}
+
+bool DisplaceModel::initNations()
+{
+    // nations are read from vessels.
+    QMultiMap<QString, VesselData *> nationSet;
+    foreach (VesselData *vessel, mVessels) {
+        nationSet.insertMulti(QString::fromStdString(vessel->mVessel->get_nationality()), vessel);
+    }
+
+    mNations.clear();
+    QList<QString> nationsName = nationSet.uniqueKeys();
+    for (int i = 0; i < nationsName.size(); ++i) {
+        NationData data;
+        data.setName(nationsName[i]);
+
+        QList<VesselData *>vessels = nationSet.values(nationsName[i]);
+        foreach (VesselData *vessel, vessels) {
+            vessel->setNationality(i);
+        }
+        mNations.push_back(data);
+    }
+
+    return true;
 }
 
 bool DisplaceModel::loadNodesFromDb()
 {
     mNodes.clear();
-    if (!mDb->loadNodes(mNodes, this))
+    if (!mDb->loadNodes(mNodes,mHarbours, this))
         return false;
     return true;
 }
@@ -843,6 +1024,24 @@ bool DisplaceModel::loadVesselsFromDb()
     mVessels.clear();
     if (!mDb->loadVessels(mNodes, mVessels))
         return false;
+
+    return true;
+}
+
+bool DisplaceModel::loadHistoricalStatsFromDb()
+{
+    QList<QVector<PopulationData> > dtl;
+    QList<int> steps;
+    mDb->loadHistoricalStatsForPops(steps,dtl);
+
+    qDebug() << Q_FUNC_INFO << dtl.size() << steps;
+
+    int i = 0;
+    foreach (const QVector<PopulationData> &dt, dtl) {
+        int tstep = steps[i];
+        mStatsPopulations.insertValue(tstep, dt);
+        ++i;
+    }
 
     return true;
 }

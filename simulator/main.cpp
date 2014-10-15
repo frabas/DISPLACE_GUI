@@ -97,6 +97,11 @@
 #include "readdata.h"
 #include "myutils.h"
 
+#ifdef DEBUG
+#define PROFILE
+#include <profiler.h>
+#endif
+
 #define NAUTIC 1.852			 // 1 nautical mile=1.852 km
 #define PI 3.14159265
 
@@ -106,14 +111,6 @@ using namespace std;
 #define SEL_NBSZGROUP 5			 // according to the R glm on cpue (see R code)
 #define NBAGE 11				 // nb age classes max
 #define PING_RATE 1				 // tstep=> 1 hour
-								 // a multiplier, [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_STEAMING 1
-								 // a multiplier [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_FISHING 1.1
-								 // a multiplier [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_RETURNING 1.1
-								 // a multiplier [should be incorporated to the vessel class, later]
-#define MULT_FUELCONS_WHEN_INACTIVE 0.2
 #define PI 3.14159265
 
 // global variables
@@ -128,6 +125,18 @@ FILE *pipe4;
 std::string cwd;
 char buf[MAXPATH];
 bool use_gui = false;
+bool gui_move_vessels = true;
+
+#ifdef PROFILE
+AverageProfiler mLoopProfile;
+AverageProfiler mVesselLoopProfile;
+AverageProfiler mPopExportProfile;
+Profiler mLoadProfile;
+double mLoadNodesProfileResult;
+double mLoadVesselProfileResult;
+double mLoadPopulationProfileResult;
+double mLoadGraphProfileResult;
+#endif
 
 /* GUI Protocol
  *
@@ -147,6 +156,13 @@ bool use_gui = false;
  *              stat can be:
  *                  cumftime
  */
+
+/* Command line arguments
+ *
+ * --use-gui                Enables the GUI protocol through stdout
+ * --no-gui-move-vessels    Disables sending the Vessel position update command (=V) when using GUI
+ *
+ * */
 
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
@@ -207,6 +223,10 @@ int main(int argc, char* argv[])
         {
             optind++;
             use_gui = true;
+        }
+        else if (sw == "--no-gui-move-vessels") {
+            optind ++;
+            gui_move_vessels = false;
         }
 		else if (sw=="-i")
 		{
@@ -702,6 +722,10 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
 
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
 	// check the class Node
 	Node node (1, 1.0, 1.0, 0, 0, 0, nbpops, 5);
 	dout << "is the node at 1,1? "
@@ -876,6 +900,10 @@ int main(int argc, char* argv[])
 		nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops,SEL_NBSZGROUP);
 	}
 
+#ifdef PROFILE
+    mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
 	dout << " BENTHOS-RELATED STUFFS    " << endl;
@@ -979,6 +1007,11 @@ int main(int argc, char* argv[])
 	dout << " POPULATION-RELATED STUFFS " << endl;
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
+
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
 
 	// read the pop-specific betas related to the availability
 								 // szgroup0
@@ -1239,6 +1272,12 @@ int main(int argc, char* argv[])
 		}						 // end implicit pop
 	}							 // end pop
 
+#ifdef PROFILE
+    mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
+
+
 	/*
 	// check on the node side
 	cout << "check on the node side e.g. for node 2579: " << endl;
@@ -1467,6 +1506,11 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
 
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
+
 	// read general vessel features
 	// (quarter specific, mainly because of the gamma parameters)
 	vector<string> vesselids;
@@ -1480,9 +1524,15 @@ int main(int argc, char* argv[])
 	vector<double> resttime_par1s;
 	vector<double> resttime_par2s;
 	vector<double> av_trip_duration;
+	vector<double> mult_fuelcons_when_steaming;
+    vector<double> mult_fuelcons_when_fishing;
+    vector<double> mult_fuelcons_when_returning;
+    vector<double> mult_fuelcons_when_inactive;	
 	read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
 		resttime_par1s, resttime_par2s, av_trip_duration,
+		mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
+		mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
         folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
 
 	// read the more complex objects (i.e. when several info for a same vessel)...
@@ -1608,7 +1658,12 @@ int main(int argc, char* argv[])
 			nbfpingspertrips[i],
 			resttime_par1s[i],
 			resttime_par2s[i],
-			av_trip_duration[i]);
+			av_trip_duration[i],
+			mult_fuelcons_when_steaming[i],
+			mult_fuelcons_when_fishing[i],
+			mult_fuelcons_when_returning[i],
+			mult_fuelcons_when_inactive[i]
+			);
 
 		// some useful setters...
 		// will also be useful when change of YEAR-QUARTER
@@ -1839,6 +1894,12 @@ int main(int argc, char* argv[])
 
 	*/
 
+
+#ifdef PROFILE
+    mLoadVesselProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
+
 	/*  dout << "---------------------------" << endl;
 		dout << "---------------------------" << endl;
 		dout << " SERIALISATION             " << endl;
@@ -1994,6 +2055,12 @@ int main(int argc, char* argv[])
 	dout << " BUILD A PATHS_SHOP        " << endl;
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
+
+#ifdef PROFILE
+    mLoadProfile.start();
+#endif
+
+
 
 	// the idea is to avoid using DijkstraGetShortestPathTo() dynamically
 	// in order to save a lot of time computation...
@@ -2187,6 +2254,12 @@ int main(int argc, char* argv[])
 
 		}
 
+#ifdef PROFILE
+    mLoadGraphProfileResult = mLoadProfile.elapsed_ms();
+#endif
+
+
+
 		// check by using it:
 		// retrieve the object 'previous' specific to a given origin node
 		// 1. find the idx in the idx_paths_shop object
@@ -2349,13 +2422,20 @@ int main(int argc, char* argv[])
 	popnodes_start.open(filename.c_str());
     std::string popnodes_start_filename = filename;
 
+    ofstream popnodes_inc;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_inc_"+namesimu+".dat";
+    popnodes_inc.open(filename.c_str());
+    std::string popnodes_inc_filename = filename;
+
 	ofstream popnodes_end;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
 	popnodes_end.open(filename.c_str());
+    std::string popnodes_end_filename = filename;
 
 	ofstream popnodes_impact;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
 	popnodes_impact.open(filename.c_str());
+    std::string popnodes_impact_filename = filename;
 
 	ofstream popnodes_impact_per_szgroup;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
@@ -2451,6 +2531,10 @@ int main(int argc, char* argv[])
 	//----------------------//
 	for (int tstep =0; tstep < nbsteps; ++tstep)
 	{
+#ifdef PROFILE
+        mLoopProfile.start();
+#endif
+
 		dout << endl;
 		dout << endl;
 		dout << "---------------" << endl;
@@ -2493,12 +2577,12 @@ int main(int argc, char* argv[])
 
 			if(tstep==0)
 			{
-				filename="../displace_hpc_sh/sms_fba/op_n.in";
+				filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
 				SMS_N_in.open(filename.c_str());
 				write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 				SMS_N_in.close();
 
-				filename="../displace_hpc_sh/sms_fba/op_f.in";
+				filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
 				SMS_F_in.open(filename.c_str());
 				SMS_F_in << "# data by quarter, area, species and age"<< endl;
 
@@ -2894,10 +2978,13 @@ int main(int argc, char* argv[])
 
 						// change for the SMS folder where the SMS files are lying.
 						#ifdef WINDOWS
-						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\DISPLACE_input\\sms_fba");
+						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh/");
 						#else
-						string aFolder = "~/ibm_vessels/displace_hpc_sh/sms_fba/";
-						chdir (aFolder.c_str());
+						string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+namesimu;
+                        if (chdir(aFolder.c_str()) == -1) {
+                          cout << "chdir failed!!" << endl;
+                          // note that we cannot use ~/ibm_vessels in chdir!!!
+                        }						
 						#endif
 
 						// check
@@ -2909,10 +2996,10 @@ int main(int argc, char* argv[])
 
 						// the system command line
 						#ifdef WINDOWS
-						system("\"C:\\Users\\fbas\\Documents\\GitHub\\DISPLACE_input\\sms_fba\\op -maxfn 0 -nohess");
+						system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\op -maxfn 0 -nohess");
 						#else
-
-						system("~/ibm_vessels/displace_hpc_sh/op -maxfn 0 -nohess");
+						string a_command = "~/ibm_vessels/displace_hpc_sh/"+namesimu+"/op -maxfn 0 -nohess";
+                        system(a_command.c_str());						
 						#endif
 						cout << "SMS done" << endl;
 
@@ -2922,19 +3009,24 @@ int main(int argc, char* argv[])
 						cout << "pble calling a system command" << endl;
 						exit (EXIT_FAILURE);
 					}
+
+                    // return back to the initial path
+                    string aFolder2 = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh";
+                        if (chdir(aFolder2.c_str()) == -1) {
+                          cout << "chdir failed!!" << endl;
+                          // note that we cannot use ~/ibm_vessels in chdir!!!
+                        }
+					
 					// read .out SMS files and fill in
-					read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages);
-
-					// return back to the initial path
-					chdir (cCurrentPath);
-
+					read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages, namesimu);
+					
 					// check
 					if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
 					{
 						return 1;
 					}
-					printf ("The current working directory is %s \n", cCurrentPath);
-
+					cout << "The current working directory is " << cCurrentPath << endl;
+					
 					// check for cod
 					vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
 					cout << "after" << endl;
@@ -3141,13 +3233,13 @@ int main(int argc, char* argv[])
 						{
 
 							ofstream SMS_N_in;
-							filename="../DISPLACE_input/SMS_FBA/OP_N.in";
+							filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
 							SMS_N_in.open(filename.c_str(), ios::trunc);
 							write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 							SMS_N_in.close();
 
 							ofstream SMS_F_in;
-							filename="../DISPLACE_input/SMS_FBA/OP_F.in";
+							filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
 							SMS_F_in.open(filename.c_str(), ios::trunc);
 
 						}
@@ -3170,34 +3262,28 @@ int main(int argc, char* argv[])
 				for (unsigned int n=0; n<nodes.size(); n++)
 				{
 					nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
-				}
+                    if (use_gui) {
+                        popnodes_end.flush();
+                        guiSendUpdateCommand(popnodes_end_filename, tstep);
+                    }
+                }
 			}
+
+            // EXPORT: populations statistics - Monthly
+
+#ifdef PROFILE
+            mPopExportProfile.start();
+#endif
 
 			//...and export the cumulated effort on nodes (a cumul from t=0)
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
-			}
-            if (use_gui) {
-#if 0 // removed. Just pass an "update file" command
-                size_t l = 0;
-                while (l < nodes.size()) {
-                    size_t nn = std::min ((size_t)100, nodes.size() - l);
-
-                    cout << "=Ncumftime," << tstep << "," << l << "," << nn /*<< "," << nodes.size()*/ ;
-                    for (size_t n=0; n<nn; n++)
-                    {
-                        cout <<"," << nodes.at(l + n)->get_cumftime();
-    //                    nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
-                    }
-                    cout << endl;
-                    l += nn;
+                nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
+                for (unsigned int pop = 0; pop < nbpops; ++pop) {
+                    nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, pop);
                 }
-#endif
-
-                popnodes_end.flush();
-                guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
-            }
+			}
 
 			//...and export the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)
@@ -3212,10 +3298,25 @@ int main(int argc, char* argv[])
 			}
 
             /* Flush and updates all statistics */
-            popdyn_F.flush();
-            guiSendUpdateCommand(popdyn_F_filename, tstep);
-            popdyn_N.flush();
-            guiSendUpdateCommand(popdyn_N_filename, tstep);
+            if (use_gui) {
+                popnodes_cumftime.flush();
+                guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
+
+                popnodes_impact.flush();
+                guiSendUpdateCommand(popnodes_impact_filename, tstep);
+
+                popnodes_inc.flush();
+                guiSendUpdateCommand(popnodes_inc_filename, tstep);
+
+                popdyn_F.flush();
+                guiSendUpdateCommand(popdyn_F_filename, tstep);
+
+                popdyn_N.flush();
+                guiSendUpdateCommand(popdyn_N_filename, tstep);
+            }
+#ifdef PROFILE
+            mPopExportProfile.elapsed_ms();
+#endif
         }
 		dout << "END: POP MODEL TASKS----------" << endl;
 
@@ -3260,10 +3361,19 @@ int main(int argc, char* argv[])
 			resttime_par1s.clear();
 			resttime_par2s.clear();
 			av_trip_duration.clear();
+			mult_fuelcons_when_steaming.clear();
+            mult_fuelcons_when_fishing.clear();
+            mult_fuelcons_when_returning.clear();
+            mult_fuelcons_when_inactive.clear();
+
 			// then, re-read...
 			read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
 				carrycapacities, tankcapacities, nbfpingspertrips,
 				resttime_par1s, resttime_par2s, av_trip_duration,
+				mult_fuelcons_when_steaming,
+				mult_fuelcons_when_fishing,
+				mult_fuelcons_when_returning,
+				mult_fuelcons_when_inactive,
                 folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
 
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
@@ -3665,6 +3775,10 @@ int main(int argc, char* argv[])
 		///------------------------------///
 		///------------------------------///
 								 // LOOP OVER VESSELS
+#ifdef PROFILE
+        mVesselLoopProfile.start();
+#endif
+
 		for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
 		{
 
@@ -3827,13 +3941,13 @@ int main(int argc, char* argv[])
 								if(vessels[ index_v ]->get_metier()->get_metier_type()==1)
 								{
 									//trawling (type 1)
-									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_FISHING;
+									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_fishing();
 									dout << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl;
 								}
 								else
 								{
 									// gillnetting, seining (type 2)
-									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_INACTIVE;
+									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_inactive();
 									dout << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl;
 								}
 								vessels[ index_v ]->set_cumfuelcons(cumfuelcons);
@@ -3915,7 +4029,7 @@ int main(int argc, char* argv[])
 					<< vessels[ index_v ]->get_state() << " " <<  endl;
 			}
 
-            if (use_gui && tstep < 8641) {
+            if (use_gui && gui_move_vessels && tstep < 8641) {
                 cout << "=V" << tstep << ","
                     << vessels[ index_v ]->get_idx() << ","
                     << vessels[ index_v ]->get_tstep_dep() << ","
@@ -3935,6 +4049,10 @@ int main(int argc, char* argv[])
 			}
 
 		}
+
+#ifdef PROFILE
+        mVesselLoopProfile.elapsed_ms();
+#endif
 
 		// move the ships along the ship lanes
 		for(int s=0; s<ships.size(); s++)
@@ -3973,7 +4091,23 @@ int main(int argc, char* argv[])
 		}
 		#endif
 
+#ifdef PROFILE
+        mLoopProfile.elapsed_ms();
+        if ((mLoopProfile.runs() % 500) == 0)
+            cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
+#endif
 	}							 // end FOR LOOP OVER TIME
+
+#ifdef PROFILE
+    cout << "*** Profilers statistics ***\n";
+    cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
+    cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
+    cout << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";
+    cout << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
+    cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
+    cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
+    cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
+#endif
 
 	// close all....
 	vmslike.close();

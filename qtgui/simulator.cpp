@@ -6,7 +6,11 @@
 Simulator::Simulator()
     : mSimulation(0),
       mSimSteps(8761),
-      mLastStep(-1)
+      mLastStep(-1),
+      mOutputName("baseline"),
+      mSimuName("simu2"),
+      mMoveVesselOption(true),
+      mProcessState(QProcess::NotRunning)
 {
 }
 
@@ -24,11 +28,11 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back(name);
 
     arguments.push_back("-f2");
-    arguments.push_back("baseline"); // Changeme
+    arguments.push_back(mOutputName);
     arguments.push_back("-s");
-    arguments.push_back("simu2"); // Changeme
+    arguments.push_back(mSimuName);
     arguments.push_back("-i");
-    arguments.push_back(QString("%1").arg(mSimSteps)); // Changeme
+    arguments.push_back(QString::number(mSimSteps));
     arguments.push_back("-p");
     arguments.push_back("1"); // Changeme
     arguments.push_back("-o");
@@ -40,12 +44,15 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back("--without-gnuplot");
     arguments.push_back("--use-gui");
 
+    if (!mMoveVesselOption)
+        arguments.push_back("--no-gui-move-vessels");
+
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
     connect(mSimulation, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
     connect(mSimulation, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
     connect(mSimulation, SIGNAL(started()), this, SLOT(started()));
-    connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), SIGNAL(processStateChanged(QProcess::ProcessState)));
+    connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
     qDebug() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
@@ -82,12 +89,15 @@ QProcess::ProcessState Simulator::processState() const
 
 void Simulator::error(QProcess::ProcessError error)
 {
+    Q_UNUSED(error);
     emit log(QString("Process error: %1").arg(mSimulation->errorString()));
 }
 
-void Simulator::finished(int, QProcess::ExitStatus)
+void Simulator::finished(int code, QProcess::ExitStatus status)
 {
-
+    emit log(QString("Process exited %1 with exit status %2")
+             .arg(status == QProcess::NormalExit ? "normally" : "by crash")
+             .arg(code));
 }
 
 void Simulator::readyReadStandardError()
@@ -111,8 +121,47 @@ void Simulator::readyReadStandardOutput()
 
 void Simulator::started()
 {
-
+    emit log(QString("Process started"));
 }
+
+void Simulator::subprocessStateChanged(QProcess::ProcessState state)
+{
+    QProcess::ProcessState oldstate = mProcessState;
+    mProcessState = state;
+
+    emit processStateChanged(oldstate, mProcessState);
+}
+
+QString Simulator::getSimulationName() const
+{
+    return mSimuName;
+}
+
+void Simulator::setSimulationName(const QString &value)
+{
+    mSimuName = value;
+}
+
+QString Simulator::getOutputName() const
+{
+    return mOutputName;
+}
+
+void Simulator::setOutputName(const QString &value)
+{
+    mOutputName = value;
+}
+
+bool Simulator::getMoveVesselOption() const
+{
+    return mMoveVesselOption;
+}
+
+void Simulator::setMoveVesselOption(bool value)
+{
+    mMoveVesselOption = value;
+}
+
 int Simulator::getSimSteps() const
 {
     return mSimSteps;

@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QThread>
+#include <QMutex>
+
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QSqlQuery;
@@ -11,7 +14,9 @@ QT_END_NAMESPACE
 
 class DisplaceModel;
 class NodeData;
+class Harbour;
 class VesselData;
+class PopulationData;
 class DbHelper;
 class Config;
 class Scenario;
@@ -45,13 +50,16 @@ class DbHelper : public QObject
     QSqlDatabase mDb;
 public:
     DbHelper();
+    ~DbHelper();
 
     bool attachDb(QString file);
+    QString lastDbError() const;
 
     void addNodesDetails(int idx, NodeData *node);
     void removeAllNodesDetails();
 
     void addNodesStats (int tstep, const QList<NodeData *> &nodes);
+    void addPopStats(int tstep, const QVector<PopulationData> &pops);
 
     void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
@@ -62,14 +70,23 @@ public:
     bool loadScenario (Scenario &);
     bool saveScenario (const Scenario &);
 
-    bool loadNodes(QList<NodeData *> &nodes, DisplaceModel *model);
+    bool loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
+
+    /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
     bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
+    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
 
     void beginTransaction();
     void endTransaction();
+    void forceEndTransaction();
     void flushBuffers();
+
+    /* Creates all indexes on db - to be called at the end of simulation */
+    void createIndexes();
+
+    /* Metadata */
 
     void setMetadata (QString key, QString value);
     QString getMetadata (QString key);
@@ -85,10 +102,14 @@ protected:
     bool checkNodesStats(int version);
     bool checkVesselsTable(int version);
     bool checkVesselsPosTable(int version);
+    bool checkStatsTable (int version);
+
+    void createIndexOnTstepForTable(QString table);
 
 private:
-    bool mOngoingTransaction;
+    int mOngoingTransactionsCount;
 
+    QMutex mMutex;
     VesselPositionInserter *mInserter;
     QThread *mInsertThread;
     int mVersion;
@@ -99,6 +120,8 @@ private:
     static const QString TBL_NODES;
     static const QString TBL_NODES_STATS;
     static const QString TBL_POPNODES_STATS;
+    static const QString TBL_POP_STATS;
+    static const QString TBL_POPSZ_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
 

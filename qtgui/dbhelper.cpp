@@ -5,7 +5,11 @@
 
 #include <modelobjects/nodedata.h>
 #include <modelobjects/vesseldata.h>
+#include <Harbour.h>
+
 #include <displacemodel.h>
+
+#include <profiler.h>
 
 #include <QStringList>
 #include <QSqlQuery>
@@ -18,6 +22,8 @@ const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
+const QString DbHelper::TBL_POP_STATS = "PopStats";
+const QString DbHelper::TBL_POPSZ_STATS = "PopStatsSz";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
 
@@ -28,10 +34,15 @@ const QString DbHelper::META_VERSION = "version";
 
 DbHelper::DbHelper()
     : mDb(),
-      mOngoingTransaction(false),
+      mOngoingTransactionsCount(0),
       mVersion(-1)
 {
     mInsertThread = new QThread();
+}
+
+DbHelper::~DbHelper()
+{
+    mDb.commit();
 }
 
 bool DbHelper::attachDb(QString file)
@@ -50,6 +61,7 @@ bool DbHelper::attachDb(QString file)
     checkNodesStats(mVersion);
     checkVesselsPosTable(mVersion);
     checkVesselsTable(mVersion);
+    checkStatsTable(mVersion);
 
     /* update ended here */
     mVersion = VERSION;
@@ -63,6 +75,11 @@ bool DbHelper::attachDb(QString file)
     mInsertThread->start();
 
     return true;
+}
+
+QString DbHelper::lastDbError() const
+{
+    return mDb.lastError().text();
 }
 
 void DbHelper::addVesselPosition(int step, int idx, VesselData *vessel)
@@ -83,21 +100,21 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
-              + "(nodeid,tstep,cumftime,totpop) "
-              + "VALUES (?,?,?,?)");
+              + "(nodeid,tstep,cumftime,totpop,totpopw) "
+              + "VALUES (?,?,?,?,?)");
 
     DB_ASSERT(r,q);
 
     r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
-        + "(statid,popid,value) VALUES(?,?,?)");
+        + "(statid,tstep,nodeid,popid,pop,popw,impact) VALUES(?,?,?,?,?,?,?)");
     DB_ASSERT(r,sq);
 
-    beginTransaction();
     foreach (NodeData *n, nodes) {
         q.addBindValue(n->get_idx_node());
         q.addBindValue(tstep);
         q.addBindValue(n->get_cumftime());
         q.addBindValue(n->getPopTot());
+        q.addBindValue(n->getPopWTot());
 
         bool res = q.exec();
         DB_ASSERT(res, q);
@@ -106,14 +123,56 @@ void DbHelper::addNodesStats(int tstep, const QList<NodeData *> &nodes)
 
         for (int i = 0; i < n->getPopCount(); ++i) {
             sq.addBindValue(statid);
+            sq.addBindValue(tstep);
+            sq.addBindValue(n->get_idx_node());
             sq.addBindValue(i);
             sq.addBindValue(n->getPop(i));
+            sq.addBindValue(n->getPopW(i));
+            sq.addBindValue(n->getImpact(i));
 
             res = sq.exec();
             DB_ASSERT(res,sq);
         }
     }
-    endTransaction();
+}
+
+void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
+{
+    QSqlQuery q,qn;
+
+    bool r =
+    q.prepare("INSERT INTO " + TBL_POP_STATS
+              + "(tstep,popid,N,F) "
+              + "VALUES (?,?,?,?)");
+    DB_ASSERT(r,q);
+
+    r =
+    qn.prepare("INSERT INTO " + TBL_POPSZ_STATS
+              + "(tstep,popid,szgroup,N,F) "
+              + "VALUES (?,?,?,?,?)");
+    DB_ASSERT(r,qn);
+
+
+    foreach (const PopulationData &p, pops) {
+        q.addBindValue(tstep);
+        q.addBindValue(p.getId());
+        q.addBindValue(p.getAggregateTot());
+        q.addBindValue(p.getMortalityTot());
+
+        bool res = q.exec();
+        DB_ASSERT(res, q);
+
+        int n = p.getAggregate().size();
+        for (int i = 0; i < n; ++i) {
+            qn.addBindValue(tstep);
+            qn.addBindValue(p.getId());
+            qn.addBindValue(i);
+            qn.addBindValue(p.getAggregate().at(i));
+            qn.addBindValue(p.getMortality().at(i));
+            res = qn.exec();
+            DB_ASSERT(res,qn);
+        }
+    }
 }
 
 void DbHelper::removeAllVesselsDetails()
@@ -125,12 +184,13 @@ void DbHelper::removeAllVesselsDetails()
 
 void DbHelper::addNodesDetails(int idx, NodeData *node)
 {
+    Q_UNUSED(idx);
     bool res;
     QSqlQuery q;
 
     res = q.prepare("INSERT INTO " + TBL_NODES
-                + "(_id,x,y,harbour,areacode,landscape) "
-                + "VALUES (?,?,?,?,?,?)");
+                + "(_id,x,y,harbour,areacode,landscape,name) "
+                + "VALUES (?,?,?,?,?,?,?)");
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
@@ -140,6 +200,12 @@ void DbHelper::addNodesDetails(int idx, NodeData *node)
     q.addBindValue(node->get_harbour());
     q.addBindValue(node->get_code_area());
     q.addBindValue(node->get_marine_landscape());
+    if (node->get_harbour()) {
+        q.addBindValue(QString::fromStdString(node->get_name()));
+    } else {
+        q.addBindValue(QVariant());
+    }
+
 
     res = q.exec();
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
@@ -165,6 +231,7 @@ void DbHelper::addVesselDetails(int idx, VesselData *vessel)
 bool DbHelper::loadConfig(Config &cfg)
 {
     cfg.setNbpops(getMetadata("config::nbpops").toInt());
+    cfg.setSzGroups(getMetadata("config::szgroups").toInt());
 
     QList<int> ipops;
     QStringList lsi = getMetadata("config::ipops").split(" ");
@@ -200,6 +267,7 @@ bool DbHelper::loadConfig(Config &cfg)
 bool DbHelper::saveConfig(const Config &cfg)
 {
     setMetadata("config::nbpops", QString::number(cfg.getNbpops()));
+    setMetadata("config::szgroups", QString::number(cfg.getSzGroups()));
 
     QStringList str;
     QList<int> il = cfg.implicit_pops();
@@ -256,9 +324,9 @@ bool DbHelper::saveScenario(const Scenario &sce)
     return true;
 }
 
-bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
+bool DbHelper::loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape FROM " + TBL_NODES + " ORDER BY _id");
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,name FROM " + TBL_NODES + " ORDER BY _id");
     bool res = q.exec();
 
     DB_ASSERT(res,q);
@@ -271,16 +339,28 @@ bool DbHelper::loadNodes(QList<NodeData *> &nodes, DisplaceModel *model)
         int areacode = q.value(4).toInt();
         int landscape = q.value(5).toInt();
 
-        int nbpops = 0; // not used!
-        int szgroup = 0;
+        int nbpops = model->getNBPops();
+        int szgroup = model->getSzGrupsCount();
+        QString name = q.value(6).toString();
 
-        Node *nd = new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup);
+        /* TODO: a,b */
+        multimap<int,double> a;
+        map<string,double> b;
+        Node *nd;
+        Harbour *h;
+        if (harbour) {
+            nd = h = new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, szgroup, name.toStdString(),a,b);
+        } else {
+            nd = new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup);
+        }
         NodeData*n = new NodeData(nd, model);
 
         while (nodes.size() < idx+1)
             nodes.push_back(0);
 
         nodes[idx] = n;
+        if (n->get_harbour())
+            harbours.push_back(h);
     }
 
     return true;
@@ -344,11 +424,24 @@ bool DbHelper::updateVesselsToStep(int steps, QList<VesselData *> &vessels)
 bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
 {
     QSqlQuery q;
-    bool res =
-    q.prepare("SELECT nodeid,popid,value FROM " + TBL_NODES_STATS
-              + " INNER JOIN " + TBL_POPNODES_STATS + " ON "
-              + TBL_NODES_STATS + ".statid = " + TBL_POPNODES_STATS + ".statid "
-              + "WHERE tstep=?");
+    bool res = q.prepare("SELECT nodeid,cumftime,totpop,totpopw FROM " + TBL_NODES_STATS + " WHERE tstep=?");
+    DB_ASSERT(res,q);
+
+    q.addBindValue(step);
+    res = q.exec();
+    while (q.next()) {
+        int nid = q.value(0).toInt();
+        double cum = q.value(1).toDouble();
+        double tot = q.value(2).toDouble();
+        double totw = q.value(3).toDouble();
+
+        nodes.at(nid)->set_cumftime(cum);
+        nodes.at(nid)->setPopTot(tot);
+        nodes.at(nid)->setPopWTot(totw);
+    }
+
+    q.prepare ("SELECT nodeid,popid,pop,popw,impact FROM " + TBL_POPNODES_STATS
+               + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
     q.addBindValue(step);
@@ -357,28 +450,134 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<NodeData *> &nodes)
         int nid = q.value(0).toInt();
         int pid = q.value(1).toInt();
         double val = q.value(2).toDouble();
+        double valw = q.value(3).toDouble();
+        double impact = q.value(4).toDouble();
 
         nodes.at(nid)->setPop(pid,val);
+        nodes.at(nid)->setPopW(pid,valw);
+        nodes.at(nid)->setImpact(pid,impact);
+    }
+    return true;
+}
+
+bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population)
+{
+    QSqlQuery q;
+    bool res = q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " ORDER BY tstep");
+    DB_ASSERT(res,q);
+
+    QSqlQuery qn;
+    res = qn.prepare("SELECT szgroup,N,F FROM " + TBL_POPSZ_STATS + " WHERE tstep=? AND popid=?");
+    DB_ASSERT(res,qn);
+
+    int last_tstep = -1;
+    population.clear();
+
+    res = q.exec();
+    QVector<PopulationData> v;
+    while (q.next()) {
+        int tstep = q.value(0).toInt();
+
+        if (last_tstep != tstep && last_tstep != -1) {
+            steps.push_back(last_tstep);
+            population.push_back(v);
+        }
+        last_tstep = tstep;
+
+        int pid = q.value(1).toInt();
+        double n = q.value(2).toDouble();
+        double f = q.value(3).toDouble();
+
+        for (int i = v.size(); i <= pid; ++i) {
+            PopulationData p(i);
+            v.push_back(p);
+        }
+
+        /* Load size groups */
+
+        qn.addBindValue(tstep);
+        qn.addBindValue(pid);
+
+        qn.exec();
+
+        QVector<double> nv;
+        QVector<double> fv;
+        while (qn.next()) {
+            int sz = qn.value(0).toInt();
+            double v = qn.value(1).toDouble();
+
+            while (nv.size() <= sz)
+                nv.push_back(0);
+            nv[sz] = v;
+            while (fv.size() <= sz)
+                fv.push_back(0);
+            fv[sz] = v;
+        }
+
+        v[pid].setAggregate(nv);
+        v[pid].setMortality(fv);
+        v[pid].setAggregateTot(n);
+        v[pid].setMortalityTot(f);
+    }
+
+    if (last_tstep != -1) {
+        population.push_back(v);
+        steps.push_back(last_tstep);
     }
 
     return true;
+
 }
 
 void DbHelper::beginTransaction()
 {
-    mDb.transaction();
-    mOngoingTransaction = true;
+    QMutexLocker locker(&mMutex);
+    if (mOngoingTransactionsCount == 0) {
+        mDb.transaction();
+    }
+    ++mOngoingTransactionsCount;
 }
 
 void DbHelper::endTransaction()
 {
+    QMutexLocker locker(&mMutex);
+    --mOngoingTransactionsCount;
+
+    if (mOngoingTransactionsCount < 0)
+        mOngoingTransactionsCount = 0;
+    if (mOngoingTransactionsCount == 0) {
+        mDb.commit();
+    }
+}
+
+void DbHelper::forceEndTransaction()
+{
+    QMutexLocker locker(&mMutex);
+    mOngoingTransactionsCount = 0;
     mDb.commit();
-    mOngoingTransaction = false;
 }
 
 void DbHelper::flushBuffers()
 {
     emit flush();
+}
+
+void DbHelper::createIndexes()
+{
+    qDebug() << "Create Indexes";
+    Profiler pr;
+    createIndexOnTstepForTable(TBL_NODES_STATS);
+    createIndexOnTstepForTable(TBL_POPNODES_STATS);
+    createIndexOnTstepForTable(TBL_VESSELS_POS);
+    qDebug() << "Indexes created in " << pr.elapsed_ms() << " ms";
+}
+
+void DbHelper::createIndexOnTstepForTable(QString table)
+{
+    QSqlQuery q;
+    bool res = q.exec("CREATE INDEX idx_" + table + " ON " + table + "(tstep)");
+
+    DB_ASSERT(res,q);
 }
 
 void DbHelper::setMetadata(QString key, QString value)
@@ -448,7 +647,8 @@ bool DbHelper::checkNodesTable(int version)
                + "y REAL,"
                + "harbour INTEGER,"
                + "areacode INTEGER,"
-               + "landscape INTEGER"
+               + "landscape INTEGER,"
+               + "name VARCHAR(32)"
                + ");"
                );
 
@@ -472,13 +672,11 @@ bool DbHelper::checkNodesStats(int version)
                + "nodeid INTEGER,"
                + "tstep INTEGER,"
                + "cumftime REAL,"
-               + "totpop REAL"
+               + "totpop REAL,"
+               + "totpopw REAL"
                + ");"
                );
 
-        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
-
-        q.exec("CREATE INDEX Idx" + TBL_NODES_STATS + " ON " + TBL_NODES_STATS + "(nodeid)");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
@@ -487,12 +685,13 @@ bool DbHelper::checkNodesStats(int version)
         bool r =
         q.exec("CREATE TABLE " + TBL_POPNODES_STATS + "("
                + "statid INTEGER,"
+               + "tstep INTEGER,"
+               + "nodeid INTEGER,"
                + "popid INTEGER,"
-               + "value REAL"
+               + "pop REAL,"
+               + "popw REAL,"
+               + "impact REAL"
                + ");");
-        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
-
-        q.exec("CREATE INDEX Idx" + TBL_POPNODES_STATS + " ON " + TBL_POPNODES_STATS + "(statid)");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
@@ -522,6 +721,45 @@ bool DbHelper::checkVesselsPosTable(int version)
                + "cumcatches REAL,"
                + "timeatsea REAL,"
                + "reason_to_go_back INTEGER"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (version < 2) {
+
+    }
+
+    return true;
+}
+
+bool DbHelper::checkStatsTable(int version)
+{
+    if (!mDb.tables().contains(TBL_POP_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_POP_STATS + "("
+               + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "popid INTEGER,"
+               + "N REAL,"
+               + "F REAL"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+    if (!mDb.tables().contains(TBL_POPSZ_STATS)) {
+        QSqlQuery q;
+        bool r =
+        q.exec("CREATE TABLE " + TBL_POPSZ_STATS + "("
+               + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "popid INTEGER,"
+               + "szgroup INTEGER,"
+               + "N REAL,"
+               + "F REAL"
                + ");"
                );
 
@@ -579,9 +817,6 @@ VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *d
 
 void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double course,double fuel, int state)
 {
-    /* if it's a new step, commits the insertion and restart */
-    ++mCounter;
-
     if (mCounter >= mFlushCount) {
         mHelper->endTransaction();
         mHelper->beginTransaction();
@@ -589,9 +824,11 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
     }
 
     /* if there's no transaction ongoing, start it */
-    if (!mHelper->mOngoingTransaction) {
+    if (mCounter == 0)
         mHelper->beginTransaction();
-    }
+
+    /* if it's a new step, commits the insertion and restart */
+    ++mCounter;
 
     mLastStep = step;
 
@@ -609,6 +846,6 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
 
 void VesselPositionInserter::flush()
 {
-    mHelper->endTransaction();
+    mHelper->forceEndTransaction();
     mCounter = 0;
 }

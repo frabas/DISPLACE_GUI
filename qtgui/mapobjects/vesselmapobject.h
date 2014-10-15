@@ -17,7 +17,7 @@ class VesselMapObject : public MapObject
 
     class VesselGraphics : public qmapcontrol::GeometryPointShapeScaled {
         static QBrush *color;
-        static QBrush *altColor;
+        static QBrush *statHarbour, *statSteaming, *statFishing;
 
         VesselData *mVessel;
     public:

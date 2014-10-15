@@ -9,16 +9,26 @@ namespace qmapcontrol {
     class RectWorldCoord;
 }
 
+class MapObjectsController;
+
 class NodeMapObject : public MapObject
 {
+    MapObjectsController *mController;
 public:
+    /* Note to developers: When adding "Roles", add a proper creation case into Constructor.
+     * Also check MapObjectsController::createMapObjectsFromModel for proper layer creation.
+     * And MapObjectsController should define a proper Output Layer type (OutLayerId)
+     *
+     * */
     enum Role {
         GraphNodeRole,
         GraphNodeWithPopStatsRole,
+        GraphNodeWithBiomass,
         GraphNodeWithCumFTimeRole,
+        GraphNodeWithPopImpact,
     };
 
-    NodeMapObject(Role role, NodeData *node);
+    NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;

@@ -23,8 +23,6 @@
 #include <fstream>
 #include <sstream>
 #define PING_RATE 1				 // tstep=> 1 hour
-#define MULT_FUELCONS_WHEN_STEAMING 1
-#define MULT_FUELCONS_WHEN_RETURNING 1.1
 #define NAUTIC 1.852			 // 1 knots=1.852 km
 #define PI 3.14159265
 #define NBSZGROUP 14
@@ -90,7 +88,9 @@ const vector<double> &_percent_tac_per_pop,
 const multimap<int, int> &_possible_metiers, const multimap<int, double> &_freq_possible_metiers,
 double a_speed, double a_fuelcons, double a_length, double a_KW,
 double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
-double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration)
+double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
+double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
+double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 {
 	m_location = p_location;
 	idx_vessel = a_idx_vessel;
@@ -139,6 +139,10 @@ double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration)
 	resttime_par2=a_resttime_par2;
 								 // FILLED FROM DATA
 	av_trip_duration=a_av_trip_duration;
+    mult_fuelcons_when_steaming= _mult_fuelcons_when_steaming;// FILLED FROM DATA
+    mult_fuelcons_when_fishing= _mult_fuelcons_when_fishing;// FILLED FROM DATA
+    mult_fuelcons_when_returning= _mult_fuelcons_when_returning;// FILLED FROM DATA
+    mult_fuelcons_when_inactive= _mult_fuelcons_when_inactive;// FILLED FROM DATA	
 	distprevpos=0;
 	timeatsea=0;
 	traveled_dist_this_trip=0;
@@ -494,6 +498,26 @@ double Vessel::get_timeforrest () const
 double Vessel::get_timeatsea () const
 {
 	return(timeatsea);
+}
+
+double Vessel::get_mult_fuelcons_when_steaming () const
+{
+    return(mult_fuelcons_when_steaming);
+}
+
+double Vessel::get_mult_fuelcons_when_fishing () const
+{
+    return(mult_fuelcons_when_fishing);
+}
+
+double Vessel::get_mult_fuelcons_when_returning () const
+{
+    return(mult_fuelcons_when_returning);
+}
+
+double Vessel::get_mult_fuelcons_when_inactive () const
+{
+    return(mult_fuelcons_when_inactive);
 }
 
 
@@ -1204,14 +1228,12 @@ void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
 		// update
 		if(returning_to_harbour)
 		{
-			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_RETURNING) ) ;
-			set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_RETURNING) ) ;
-		}
+            set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE* get_mult_fuelcons_when_returning()) ) ;
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		}
 		else
 		{
-			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_STEAMING) ) ;
-			set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_STEAMING) ) ;
-		}
+			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
 		set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
 		set_state(2);
 		dout << "in find_next_point_on_the_graph: distance prev pt: " << dist_next_node
@@ -1330,15 +1352,13 @@ void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
 		if(returning_to_harbour)
 		{
 			dout << "returning" << endl;
-			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_RETURNING) ) ;
-			set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_RETURNING) ) ;
-		}
+			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_returning()) ) ;		}
 		else
 		{
 			dout << "steaming to" << endl;
-			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_STEAMING) ) ;
-			set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*MULT_FUELCONS_WHEN_STEAMING) ) ;
-		}
+			set_cumfuelcons( get_cumfuelcons() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;
+            set_consotogetthere( get_consotogetthere() + (get_fuelcons()*PING_RATE*get_mult_fuelcons_when_steaming()) ) ;		}
 		set_cumsteaming( get_cumsteaming() + PING_RATE ) ;
 		set_timeatsea(get_timeatsea()+ PING_RATE);
 		set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
@@ -2251,7 +2271,7 @@ ofstream& freq_profit)
 								 // *2 because WE NEED TO GO BACK TO PORT!
 		time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
 		//if(tstep>1) cout << "the expected time to reach this ground is " << time_for_steaming << endl;
-		scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  MULT_FUELCONS_WHEN_STEAMING;
+		scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();		
 		//if(tstep>1) cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
 
 		//3. compute the expected cost when fishing
@@ -2268,7 +2288,7 @@ ofstream& freq_profit)
 		}
 
 		double time_for_fishing_given_fuel_tank= (this->get_tankcapacity() -
-			( time_for_steaming * this->get_fuelcons() *  MULT_FUELCONS_WHEN_STEAMING)) /
+			( time_for_steaming * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming())) /
 			(this->get_fuelcons()) ;// (tank - expected tot fuelcons when steaming) / conso per hour when fishing
 		//if(tstep>1) cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl;
 
@@ -3657,7 +3677,7 @@ vector <double>& dist_to_ports
 		//bool flag2 = this->get_tankcapacity() - this->get_cumfuelcons()
 		//             > this->get_consotogetthere();
 		bool flag2 = this->get_tankcapacity() - this->get_cumfuelcons()
-			> ( (a_min_dist /(this->get_speed() * NAUTIC)) * this->get_fuelcons()*MULT_FUELCONS_WHEN_STEAMING );
+			> ( (a_min_dist /(this->get_speed() * NAUTIC)) * this->get_fuelcons()*this->get_mult_fuelcons_when_steaming() );		
 		// boolean for knowing if we have to go back because of full of catches (continue action if true)
 		bool flag3 = this->get_cumcatches() < this->get_carrycapacity();
 		// boolean for knowing if we may change of grounds

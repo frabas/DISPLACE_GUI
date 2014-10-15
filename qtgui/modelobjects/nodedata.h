@@ -36,17 +36,34 @@ public:
 
     int getPopCount() const;
     void setPop(int pop, double v);
+    void setPopTot(double tot);
     void setPop(QList<double> v, double tot);
     double getPop(int pop) const ;
     double getPopTot () const {
         return mPopTot;
     }
 
+    void setPopW(int pop, double val);
+    void setPopWTot(double tot);
+    void setPopW(QList<double> v, double tot);
+    double getPopW(int pop) const ;
+    double getPopWTot () const {
+        return mPopWTot;
+    }
+
+    void setImpact(int pop, double impact);
+    double getImpact(int pop) const {
+        return mImpact[pop];
+    }
+
 private:
     DisplaceModel *mModel;
     double *mPop;
     double mPopTot;
+    double *mPopW;
+    double mPopWTot;
 
+    double *mImpact;
 };
 
 #endif // NODEDATA_H

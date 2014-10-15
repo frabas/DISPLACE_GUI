@@ -2,9 +2,11 @@
 #define MAINWINDOW_H
 
 #include <outputfileparser.h>
+#include <statscontroller.h>
 
 #include <QMainWindow>
 #include <QProcess>
+#include <QTimer>
 
 #include <memory>
 #include <QMapControl/Point.h>
@@ -28,7 +30,7 @@ class MapObjectsController;
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
-#define MAX_MODELS 2
+#define MAX_MODELS 4
 
 class MainWindow : public QMainWindow
 {
@@ -40,7 +42,7 @@ public:
 
 private slots:
     void simulatorLogging(QString);
-    void simulatorProcessStateChanged (QProcess::ProcessState);
+    void simulatorProcessStateChanged (QProcess::ProcessState oldstate, QProcess::ProcessState newstate);
     void simulatorProcessStepChanged (int step);
     void simulatorNodeStatsUpdate(QString);
 
@@ -51,6 +53,8 @@ private slots:
     void mapFocusPointChanged(PointWorldCoord);
 
     void errorImportingStatsFile(QString);
+
+    void playTimerTimeout();
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
@@ -72,6 +76,11 @@ private slots:
     void on_play_first_clicked();
     void on_play_last_clicked();
     void on_play_auto_clicked();
+    void on_actionPalettes_triggered();
+    void on_popStatSelector_currentIndexChanged(int index);
+    void on_actionPopulations_triggered();
+    void on_actionConfiguration_triggered();
+    void on_play_params_clicked();
 
 signals:
     void modelStateChanged();
@@ -86,6 +95,8 @@ protected:
     void centerMapOnNodeId (int id);
     void centerMapOnVesselId (int id);
 
+    void showPaletteDialog(PaletteRole role);
+
 private:
     Ui::MainWindow *ui;
 
@@ -95,6 +106,7 @@ private:
     int currentModelIdx;
     Simulator *mSimulation;
     MapObjectsController *mMapController;
+    StatsController *mStatsController;
 
     // Geospatial objects
     qmapcontrol::QMapControl *map;
@@ -102,10 +114,15 @@ private:
     // tree model adapter
     ObjectTreeModel *treemodel;
 
+    QTimer mPlayTimer;
+    int mPlayTimerInterval;
+
     static const QString dbSuffix;
     static const QString dbFilter;
     static const QString dbLastDirKey;
     static const int maxModels;
+    static const int playTimerDefault;
+    static const int playTimerRates[];
 };
 
 #endif // MAINWINDOW_H

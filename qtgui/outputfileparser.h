@@ -24,8 +24,11 @@ signals:
     void parseCompleted();
 
 protected:
-    void parsePopStart(QFile *file, DisplaceModel *model);
+    void parsePopStart(QFile *file, int tstep, DisplaceModel *model);
     void parsePopCumftime(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopImpact(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopdynF(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopdyn(QFile *file, int tstep, DisplaceModel *model);
 };
 
 #endif // OUTPUTFILEPARSER_H

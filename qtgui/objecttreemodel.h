@@ -6,6 +6,7 @@
 
 class DisplaceModel;
 class MapObjectsController;
+class StatsController;
 
 namespace objecttree {
 class ObjectTreeEntity;
@@ -20,10 +21,11 @@ public:
         Layers = 0,
         OutputLayers,
         Nodes, Harbours, Vessels, Populations, Benthos,
+        Nations, SizeGroups,
         LastCategory
     };
 
-    explicit ObjectTreeModel(MapObjectsController *map, QObject *parent = 0);
+    explicit ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent = 0);
 
     int columnCount(const QModelIndex &parent) const;
     int rowCount(const QModelIndex &parent) const;
@@ -37,6 +39,7 @@ public:
     int getModelIdx() const { return mModelIdx; }
     DisplaceModel *getModel() const { return mModel; }
     MapObjectsController *getMapControl() const { return mMapControl; }
+    StatsController *getStatsController() const { return mStatsController; }
 
     // For use from ObjectTreeEntities
     QModelIndex createCategoryEntity(int row, int column, Category cat) const;
@@ -53,6 +56,7 @@ public slots:
 
 private:
     MapObjectsController *mMapControl;
+    StatsController *mStatsController;
     DisplaceModel *mModel;
     int mModelIdx;
 

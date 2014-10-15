@@ -1,5 +1,5 @@
 TEMPLATE=app
-QT += core gui network sql
+QT += core gui network sql xml printsupport
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -16,6 +16,9 @@ CONFIG(debug,release|debug) {
 }
 CONFIG(release,release|debug) {
     QMAPCONTROL_LIB=qmapcontrol
+
+# For use with callgrind
+#    QMAKE_CXXFLAGS += -g -O2
 }
 
 macx {
@@ -28,6 +31,7 @@ win32 {
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 }
 
+DEFINES += PROFILE
 LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
 
 SOURCES += \
@@ -58,12 +62,25 @@ SOURCES += \
     modelobjects/nodedata.cpp \
     modelobjects/vesseldata.cpp \
     mapobjects/nodegraphics.cpp \
-    objects/outputlayerentity.cpp
+    objects/outputlayerentity.cpp \
+    editpalettedialog.cpp \
+    palettemanager.cpp \
+    qcustomplot.cpp \
+    statscontroller.cpp \
+    modelobjects/populationdata.cpp \
+    objects/populationentity.cpp \
+    graphinteractioncontroller.cpp \
+    modelobjects/nationdata.cpp \
+    objects/nationentity.cpp \
+    objects/szgroupentity.cpp \
+    configdialog.cpp
 
 FORMS += \
     mainwindow.ui \
     scenariodialog.ui \
-    simulationsetupdialog.ui
+    simulationsetupdialog.ui \
+    editpalettedialog.ui \
+    configdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -93,11 +110,27 @@ HEADERS += \
     modelobjects/nodedata.h \
     modelobjects/vesseldata.h \
     mapobjects/nodegraphics.h \
-    objects/outputlayerentity.h
+    objects/outputlayerentity.h \
+    editpalettedialog.h \
+    palettemanager.h \
+    qcustomplot.h \
+    statscontroller.h \
+    modelobjects/populationdata.h \
+    objects/populationentity.h \
+    ../include/profiler.h \
+    historicaldatacollector.h \
+    graphinteractioncontroller.h \
+    modelobjects/nationdata.h \
+    objects/nationentity.h \
+    objects/szgroupentity.h \
+    configdialog.h
 
 RESOURCES += \
     qtgui.qrc
 
 OTHER_FILES += \
     qtgui.rc \
-    ../docs/output_fileformats.txt
+    ../docs/output_fileformats.txt \
+    palettes/iso1996_2.p2c \
+    ../docs/database.txt \
+    ../docs/dbstruct.sh

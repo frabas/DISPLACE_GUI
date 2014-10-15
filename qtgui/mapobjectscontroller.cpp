@@ -16,6 +16,7 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
+      mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax))
@@ -37,6 +38,14 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
+    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
+    QFile pf(":/palettes/iso1996_2.p2c");
+    Palette p;
+    p.loadFromFile(&pf);
+
+    for (int i = 0; i < (int)LastRole; ++i)
+        mPaletteManager[model_n]->setPalette((PaletteRole)i, p);
+
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 
@@ -48,6 +57,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Pop Stats"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
+
+    std::shared_ptr<qmapcontrol::LayerGeometry> biomasslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Biomass"));
+    addOutputLayer(model_n, OutLayerBiomass, biomasslayer);
+
+    std::shared_ptr<qmapcontrol::LayerGeometry> impactlayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Impact"));
+    addOutputLayer(model_n, OutLayerPopImpact, impactlayer);
 
     std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Cum F Time"));
     addOutputLayer(model_n, OutLayerCumFTime, cumftimelayer);
@@ -62,19 +77,27 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<NodeData *> &nodes = model->getNodesList();
     foreach (NodeData *nd, nodes) {
-        NodeMapObject *obj = new NodeMapObject(NodeMapObject::GraphNodeRole, nd);
+        NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
         mNodeObjects[model_n].append(obj);
 
         mGraphLayer->addGeometry(obj->getGeometryEntity());
 
         /* add here other roles */
-        obj = new NodeMapObject(NodeMapObject::GraphNodeWithPopStatsRole, nd);
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
         mNodeObjects[model_n].append(obj);
         popstatslayer->addGeometry(obj->getGeometryEntity());
 
-        obj = new NodeMapObject(NodeMapObject::GraphNodeWithCumFTimeRole, nd);
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
         mNodeObjects[model_n].append(obj);
         cumftimelayer->addGeometry(obj->getGeometryEntity());
+
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
+        mNodeObjects[model_n].append(obj);
+        impactlayer->addGeometry(obj->getGeometryEntity());
+
+        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
+        mNodeObjects[model_n].append(obj);
+        biomasslayer->addGeometry(obj->getGeometryEntity());
     }
 
     const QList<VesselData *> &vessels = model->getVesselList();
@@ -150,6 +173,16 @@ bool MapObjectsController::isOutLayerVisible(int model, OutLayerIds layer)
 bool MapObjectsController::isModelActive(int model) const
 {
     return mModelVisibility[model];
+}
+
+void MapObjectsController::setPalette(int model, PaletteRole n, const Palette &palette)
+{
+    mPaletteManager[model]->setPalette(n, palette);
+}
+
+void MapObjectsController::forceRedraw()
+{
+    mMap->requestRedraw();
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)

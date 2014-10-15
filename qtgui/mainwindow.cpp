@@ -8,9 +8,12 @@
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
 #include <simulator.h>
+#include <editpalettedialog.h>
 
 #include <scenariodialog.h>
+#include <configdialog.h>
 #include <simulationsetupdialog.h>
+#include <graphinteractioncontroller.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -23,11 +26,17 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#include <QInputDialog>
 
 const int MainWindow::maxModels = MAX_MODELS;
 const QString MainWindow::dbSuffix = ".db";
 const QString MainWindow::dbFilter = QT_TR_NOOP("Displace Database files (*.db);;All files (*.*)") ;
 const QString MainWindow::dbLastDirKey = "db_lastdir";
+const int MainWindow::playTimerDefault = 20;
+
+const int MainWindow::playTimerRates[] = {
+    50, 40, 25, 20, 15, 10, 5, 2, 1
+};
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,7 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mSimulation(0),
     mMapController(0),
     map(0),
-    treemodel(0)
+    treemodel(0),
+    mPlayTimerInterval(playTimerDefault)
 {
     ui->setupUi(this);
 
@@ -51,10 +61,11 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
+    connect (&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
-    connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState)));
+    connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState,QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState,QProcess::ProcessState)));
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
 
     connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
@@ -62,7 +73,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
 
-    simulatorProcessStateChanged(QProcess::NotRunning);
+    /* Setup graph controller */
+    new GraphInteractionController(ui->plotHarbours, this);
+    new GraphInteractionController(ui->plotPopulations, this);
+    new GraphInteractionController(ui->plotNations, this);
+
+    simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
     mMapController = new MapObjectsController(map);
@@ -79,8 +95,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mapWidget->setWidget(map);
 
+    /* Stats windows setup */
+
+    mStatsController = new StatsController(this);
+    mStatsController->setPopulationPlot(ui->plotPopulations);
+    mStatsController->setHarboursPlot(ui->plotHarbours);
+    mStatsController->setNationsPlot(ui->plotNations);
+
     /* Tree model setup */
-    treemodel = new ObjectTreeModel(mMapController);
+    treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
 }
 
@@ -155,6 +178,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     treemodel->setCurrentModel(currentModelIdx, currentModel);
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
+    mStatsController->updateStats(currentModel);
 
     bool e = (currentModelIdx != 0);
     ui->play_bk->setEnabled(e);
@@ -164,6 +188,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->play_fwd->setEnabled(e);
     ui->play_last->setEnabled(e);
     ui->play_step->setEnabled(e);
+    ui->play_auto->setEnabled(e);
     if (!e || currentModel == 0) {
         ui->play_step->setValue(0);
     } else {
@@ -181,18 +206,19 @@ void MainWindow::simulatorLogging(QString msg)
     ui->console->appendPlainText(msg);
 }
 
-void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState state)
+void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate)
 {
     if (models[0] != 0) {
-        ui->cmdStart->setEnabled(state == QProcess::NotRunning);
+        ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
         ui->cmdPause->setEnabled(false);
-        ui->cmdStop->setEnabled(state == QProcess::Running);
+        ui->cmdStop->setEnabled(newstate == QProcess::Running);
 
-        if (state != QProcess::Running)
+        if (newstate != QProcess::Running)
             simulatorProcessStepChanged(-1);
 
-        if (state == QProcess::NotRunning)
+        if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
             models[0]->simulationEnded();
+        }
     } else {
         ui->cmdStart->setEnabled(false);
         ui->cmdPause->setEnabled(false);
@@ -225,7 +251,7 @@ void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, 
 
 void MainWindow::updateModelState()
 {
-    simulatorProcessStateChanged(mSimulation->processState());
+    simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
     updateModelList();
 }
 
@@ -237,6 +263,7 @@ void MainWindow::updateOutputFile(QString path, int n)
 void MainWindow::outputUpdated()
 {
     mMapController->updateNodes(0);
+    mStatsController->updateStats(models[0]);
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
@@ -248,6 +275,14 @@ void MainWindow::errorImportingStatsFile(QString msg)
 {
     QMessageBox::warning(this, tr("Error importing stats file"),
                          msg);
+}
+
+void MainWindow::playTimerTimeout()
+{
+    if (currentModel->getCurrentStep() < currentModel->getLastStep())
+        on_play_fwd_clicked();
+    else
+        on_play_auto_clicked();
 }
 
 void MainWindow::updateModelList()
@@ -272,6 +307,7 @@ void MainWindow::updateModelList()
 void MainWindow::updateAllDisplayObjects()
 {
     mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel);
+    mStatsController->updateStats(currentModel);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -346,6 +382,24 @@ void MainWindow::on_actionScenario_triggered()
     }
 }
 
+void MainWindow::on_actionConfiguration_triggered()
+{
+    if (currentModel) {
+        Config c = currentModel->config();
+        ConfigDialog dlg (this);
+        dlg.set(c);
+        if (dlg.exec() == QDialog::Accepted) {
+            if (!dlg.get(c)) {
+                QMessageBox::warning(this, tr("Configuration failed"),
+                                     tr("An error occurred while parsing configuration. Please check carefully the entered data."));
+                return;
+            }
+
+            currentModel->setConfig(c);
+        }
+    }
+}
+
 void MainWindow::on_actionSave_triggered()
 {
     if (models[0] && models[0]->save()) {
@@ -409,13 +463,23 @@ void MainWindow::on_cmdSetup_clicked()
     SimulationSetupDialog dlg(this);
 
     dlg.setSimulationSteps(mSimulation->getSimSteps());
+    dlg.setSimulationName(mSimulation->getSimulationName());
+    dlg.setSimulationOutputName(mSimulation->getOutputName());
+    dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
+
     if (dlg.exec() == QDialog::Accepted) {
         mSimulation->setSimSteps(dlg.getSimulationSteps());
+        mSimulation->setSimulationName(dlg.getSimulationName());
+        mSimulation->setOutputName(dlg.getSimulationOutputName());
+        mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
     }
 }
 
 void MainWindow::on_action_Link_database_triggered()
 {
+    if (models[0] == 0)
+        return;
+
     QSettings sets;
     QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
                                          sets.value(dbLastDirKey).toString(), dbFilter,0, QFileDialog::DontConfirmOverwrite);
@@ -429,16 +493,31 @@ void MainWindow::on_action_Link_database_triggered()
 
         if (!models[0]->linkDatabase(dbname)) {
             QMessageBox::warning(this, tr("Link database failed"),
-                                 QString(tr("Cannot link this database.")));
+                                 QString(tr("Cannot link database file %1: %2"))
+                                 .arg(dbname).arg(models[0]->getLastError()));
             return;
         }
 
-        sets.setValue(dbLastDirKey, info.absoluteFilePath());
+        sets.setValue(dbLastDirKey, info.absolutePath());
     }
 }
 
 void MainWindow::on_actionImport_results_triggered()
 {
+    if (currentModelIdx == 0 || currentModel == 0)
+        return;
+
+    QSettings sets;
+    QString name =  QFileDialog::getOpenFileName(this, tr("Import data result file"),
+                                         sets.value("import_last").toString());
+
+    if (!name.isEmpty()) {
+        QFileInfo info (name);
+
+        currentModel->parseOutputStatsFile(name, -1);
+
+        sets.setValue("import_last", info.absolutePath());
+    }
 }
 
 void MainWindow::on_actionLoad_results_triggered()
@@ -473,7 +552,7 @@ void MainWindow::on_actionLoad_results_triggered()
             return;
         }
 
-        sets.setValue(dbLastDirKey, info.absoluteFilePath());
+        sets.setValue(dbLastDirKey, info.absolutePath());
 
         delete models[i];
         models[i] = newmodel;
@@ -526,5 +605,73 @@ void MainWindow::on_play_last_clicked()
 
 void MainWindow::on_play_auto_clicked()
 {
+    bool en = mPlayTimer.isActive();
+    if (en) {
+        mPlayTimer.stop();
+    } else {
+        mPlayTimer.setInterval(mPlayTimerInterval);
+        mPlayTimer.setSingleShot(false);
+        mPlayTimer.start();
+    }
 
+    //ui->play_auto->setIcon();
+    ui->play_bk->setEnabled(en);
+    ui->play_fbk->setEnabled(en);
+    ui->play_ffwd->setEnabled(en);
+    ui->play_first->setEnabled(en);
+    ui->play_fwd->setEnabled(en);
+    ui->play_last->setEnabled(en);
+    ui->play_step->setEnabled(en);
+}
+
+void MainWindow::on_actionPalettes_triggered()
+{
+    showPaletteDialog(ValueRole);
+}
+
+void MainWindow::on_actionPopulations_triggered()
+{
+    showPaletteDialog(PopulationRole);
+}
+
+void MainWindow::showPaletteDialog (PaletteRole role)
+{
+    EditPaletteDialog dlg;
+    Palette pal = mMapController->getPalette(currentModelIdx, role);
+    dlg.linkPalette(&pal);
+    dlg.showSpecials(false);
+    if (dlg.exec() == QDialog::Accepted) {
+        mMapController->setPalette(currentModelIdx, role, pal);
+
+        mMapController->forceRedraw();
+    }
+}
+
+void MainWindow::on_popStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setPopulationStat((StatsController::PopulationStat)index);
+}
+
+
+void MainWindow::on_play_params_clicked()
+{
+    bool ok;
+    QStringList rates;
+    for (size_t i = 0; i < sizeof(playTimerRates) / sizeof(playTimerRates[0]); ++i) {
+        rates << QString::number(playTimerRates[i]);
+    }
+    int current = rates.size();
+    rates << QString::number(1000 / mPlayTimerInterval);
+
+    QString value = QInputDialog::getItem(this, tr("Autoplay frame rate"), tr("Frame rate, in fps"), rates, current, true, &ok);
+    if (ok) {
+        int n = value.toInt(&ok);
+        if (ok) {
+            mPlayTimerInterval = 1000 / n;
+            mPlayTimer.setInterval(mPlayTimerInterval);
+        } else {
+            QMessageBox::warning(this, tr("Invalid value"), tr("The value selected is not valid"));
+            return;
+        }
+    }
 }

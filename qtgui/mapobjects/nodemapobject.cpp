@@ -4,8 +4,8 @@
 #include <mapobjects/nodegraphics.h>
 
 NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node)
-    : mNode(node),
-      mController(controller),
+    : mController(controller),
+      mNode(node),
       mGeometry()
 {
     switch (role) {

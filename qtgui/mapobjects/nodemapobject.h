@@ -37,6 +37,7 @@ public:
     virtual bool clicked();
 private:
     NodeData *mNode;
+    Role mRole;
     std::shared_ptr<NodeGraphics> mGeometry;
 
 };

@@ -10,6 +10,7 @@
 NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node)
     : mController(controller),
       mNode(node),
+      mRole(role),
       mGeometry()
 {
     switch (role) {
@@ -49,6 +50,9 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
 bool NodeMapObject::clicked()
 {
+    if (mRole != GraphNodeRole)
+        return false;
+
     NodeDetailsWidget *w = new NodeDetailsWidget(mController->mapWidget());
     w->setText(QString("<b>Name</b>: %1<br/>"
                         "<b>Coords: </b>%2 %3<br/>"
@@ -57,8 +61,7 @@ bool NodeMapObject::clicked()
                                 .arg(mNode->get_y())
                                 .arg(mNode->get_x()));
 
-    mController->showDetailsWidget(mGeometry->coord(),
-                                w);
+    mController->showDetailsWidget(mGeometry->coord(),w);
 
     return true;
 }

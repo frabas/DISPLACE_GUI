@@ -612,7 +612,7 @@
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
-    <string>Save...</string>
+    <string>Save Simulation Config...</string>
    </property>
   </action>
   <action name="actionQuit">

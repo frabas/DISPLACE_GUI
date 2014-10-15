@@ -74,8 +74,20 @@ void NodeMapObject::update()
             .arg(mNode->get_x());
 
     switch (mRole) {
+    default:
     case GraphNodeRole:
         break;
+
+    case GraphNodeWithPopStatsRole:
+        text += updateStatText("Population");
+        break;
+    case GraphNodeWithBiomass:
+        text += updateStatText("Biomass");
+        break;
+    case GraphNodeWithPopImpact:
+        text += updateStatText("Impact");
+        break;
+
     case GraphNodeWithCumFTimeRole:
         text += QString("<br/><b>CumFTime:</b> %1<br/>")
                 .arg(mNode->get_cumftime());
@@ -83,6 +95,40 @@ void NodeMapObject::update()
     }
 
     mWidget->setText(text);
+}
+
+QString NodeMapObject::updateStatText(QString prefix)
+{
+    QString text = "<br/>";
+
+    QList<int> ilist = mNode->getModel()->getInterestingPops();
+    double tot = 0.0;
+
+    foreach(int i, ilist) {
+        double val;
+
+        switch (mRole) {
+        case GraphNodeWithPopStatsRole:
+            val = mNode->getPop(i);
+            break;
+        case GraphNodeWithBiomass:
+            val = mNode->getPopW(i);
+            break;
+        case GraphNodeWithPopImpact:
+            val = mNode->getImpact(i);
+            break;
+        }
+
+        text += QString("<b>%1 %2:</b> %3<br/>")
+                .arg(prefix)
+                .arg(i)
+                .arg(val);
+        tot += val;
+    }
+    text += QString("<b>Total:</b> %1<br/>")
+            .arg(tot);
+
+    return text;
 }
 
 void NodeMapObject::widgetClosed()

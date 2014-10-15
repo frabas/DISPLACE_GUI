@@ -42,6 +42,9 @@ public:
     virtual bool clicked();
     virtual void update();
 
+protected:
+    QString updateStatText(QString prefix);
+
 private slots:
     void widgetClosed();
 

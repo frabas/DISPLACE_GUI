@@ -33,9 +33,10 @@ NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int
     PointWorldPx c2 = qmapcontrol::projection::get().toPointWorldPx(qmapcontrol::PointWorldCoord(psi - dx/2, phi - dy/2), baseZoom());
     PointWorldPx c1 = qmapcontrol::projection::get().toPointWorldPx(qmapcontrol::PointWorldCoord(psi + dx/2, phi + dy/2), baseZoom());
 
-
     mGrid.setHeight(c2.y() - c1.y());
     mGrid.setWidth(c2.x() - c1.x() );
+
+    setSizePx(mGrid);
 }
 
 void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)

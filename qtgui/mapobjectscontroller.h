@@ -10,17 +10,18 @@
 #include <palettemanager.h>
 
 #include <QMapControl/Layer.h>
+#include <QMapControl/Geometry.h>
 
 namespace qmapcontrol {
 class QMapControl;
 class MapAdapter;
 class LayerMapAdapter;
 class LayerGeometry;
-class Geometry;
 class GeometryWidget;
 }
 
 class DisplaceModel;
+class MapObject;
 class HarbourMapObject;
 class NodeMapObject;
 class VesselMapObject;
@@ -50,6 +51,17 @@ public:
             : QObjectUserData(), mWidget(w) {}
 
         std::shared_ptr<qmapcontrol::GeometryWidget> widget() const { return mWidget; }
+    };
+
+    class WidgetAncillaryData : public qmapcontrol::Geometry::AncillaryData {
+    private:
+        MapObject *mObject;
+    public:
+        explicit WidgetAncillaryData(MapObject *object)
+            : mObject(object) {
+        }
+
+        MapObject *object() const { return mObject; }
     };
 
 private:

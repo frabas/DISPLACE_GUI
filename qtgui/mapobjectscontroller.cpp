@@ -134,6 +134,7 @@ void MapObjectsController::updateVesselPosition(int model, int idx)
 void MapObjectsController::updateNodes(int model)
 {
     foreach (NodeMapObject *obj, mNodeObjects[model]) {
+        obj->update();
         obj->getGeometryEntity()->requestRedraw();
     }
 }
@@ -221,10 +222,10 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 
 void MapObjectsController::geometryClicked(const Geometry *geometry)
 {
-    MapObject *object = reinterpret_cast<MapObject *>(geometry->ancillaryData());
+    WidgetAncillaryData *objPtr = reinterpret_cast<WidgetAncillaryData *>(geometry->ancillaryData());
 
-    if (object)
-        object->clicked();
+    if (objPtr && objPtr->object())
+        objPtr->object()->clicked();
 }
 
 void MapObjectsController::widgetClosed(QObject *widget)

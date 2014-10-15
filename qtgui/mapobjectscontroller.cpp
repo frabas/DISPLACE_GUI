@@ -85,6 +85,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<NodeData *> &nodes = model->getNodesList();
     foreach (NodeData *nd, nodes) {
+        if (nd->get_harbour())
+            continue;
+
         NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
         mNodeObjects[model_n].append(obj);
 

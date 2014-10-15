@@ -1,6 +1,7 @@
 ﻿#ifndef MAPOBJECTSCONTROLLER_H
 #define MAPOBJECTSCONTROLLER_H
 
+#include <QObject>
 #include <QList>
 #include <QVector>
 
@@ -15,6 +16,8 @@ class QMapControl;
 class MapAdapter;
 class LayerMapAdapter;
 class LayerGeometry;
+class Geometry;
+class GeometryWidget;
 }
 
 class DisplaceModel;
@@ -22,8 +25,16 @@ class HarbourMapObject;
 class NodeMapObject;
 class VesselMapObject;
 
-class MapObjectsController
+QT_BEGIN_NAMESPACE
+class QTextEdit;
+QT_END_NAMESPACE
+
+using qmapcontrol::Geometry;
+
+class MapObjectsController : public QObject
 {
+    Q_OBJECT
+
 public:
     class LayerList {
     public:
@@ -106,9 +117,13 @@ public:
 
     void forceRedraw();
 
+    void setDetailsText(const PointWorldCoord &point, QString text);
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
+
+protected slots:
+    void geometryClicked(const Geometry *);
 
 private:
     qmapcontrol::QMapControl *mMap;
@@ -121,6 +136,9 @@ private:
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
+    std::shared_ptr<qmapcontrol::LayerGeometry> mWidgetLayer;
+    QTextEdit *mDetailsWidget;
+    std::shared_ptr<qmapcontrol::GeometryWidget> mDetailsWidgetContainer;
 
     QVector<bool> mModelVisibility;
     QVector<LayerListImpl> mLayers;

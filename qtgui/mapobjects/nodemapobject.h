@@ -34,6 +34,7 @@ public:
         return mGeometry;
     }
 
+    virtual bool clicked();
 private:
     NodeData *mNode;
     std::shared_ptr<NodeGraphics> mGeometry;

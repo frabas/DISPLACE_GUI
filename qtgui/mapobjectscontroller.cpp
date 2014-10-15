@@ -13,6 +13,9 @@
 #include <QMapControl/GeometryPointCircle.h>
 #include <QMapControl/LayerMapAdapter.h>
 #include <QMapControl/ImageManager.h>
+#include <QMapControl/GeometryWidget.h>
+
+#include <QTextEdit>
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
@@ -28,12 +31,23 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     // create a layer with the mapadapter and type MapLayer
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
+    mWidgetLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Details"));
+
+    mDetailsWidget = new QTextEdit(mMap);
+    mDetailsWidgetContainer = std::shared_ptr<qmapcontrol::GeometryWidget>(new qmapcontrol::GeometryWidget(PointWorldCoord(0.0, 0.0), mDetailsWidget));
+    mDetailsWidgetContainer->setAlignmentType(GeometryPoint::AlignmentType::TopLeft);
+    mDetailsWidgetContainer->setVisible(false);
 
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
+    mMap->addLayer(mWidgetLayer);
 
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
     mMap->setZoom(10);
+
+    mWidgetLayer->addGeometry(mDetailsWidgetContainer);
+
+    connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));
 }
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
@@ -185,6 +199,13 @@ void MapObjectsController::forceRedraw()
     mMap->requestRedraw();
 }
 
+void MapObjectsController::setDetailsText(const qmapcontrol::PointWorldCoord &point, QString text)
+{
+    mDetailsWidget->setHtml(text);
+    mDetailsWidgetContainer->setCoord(point);
+    mDetailsWidgetContainer->setVisible(true);
+}
+
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
 {
     if (layer != mMainLayer && layer != mSeamarkLayer)
@@ -196,4 +217,11 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 {
     mMap->addLayer(layer);
     mOutputLayers[model].layers[id] = layer;
+}
+
+void MapObjectsController::geometryClicked(const Geometry *geometry)
+{
+    MapObject *object = reinterpret_cast<MapObject *>(geometry->ancillaryData());
+
+    object->clicked();
 }

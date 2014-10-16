@@ -52,8 +52,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setAttribute(Qt::WA_DeleteOnClose);
-
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());

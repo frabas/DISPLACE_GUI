@@ -17,6 +17,10 @@
 
 #include <QTextEdit>
 
+/* If defined, CONFIG_ALLOW_MULTIPLE_DETAILS_WINDOWS allows opening more than one Details window.
+ */
+#undef CONFIG_ALLOW_MULTIPLE_DETAILS_WINDOWS
+
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
       mPaletteManager(),
@@ -199,6 +203,13 @@ void MapObjectsController::forceRedraw()
 
 void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidget *widget)
 {
+#ifndef CONFIG_ALLOW_MULTIPLE_DETAILS_WINDOWS
+    removeAllWidgets();
+//    foreach (const auto &g, mWidgetLayer->getGeometryWidgets()) {
+//        mWidgetLayer->removeGeometry(g);
+//    }
+#endif
+
     std::shared_ptr<qmapcontrol::GeometryWidget>  mDetailsWidgetContainer = std::shared_ptr<qmapcontrol::GeometryWidget>(new qmapcontrol::GeometryWidget(point, widget));
     mDetailsWidgetContainer->setAlignmentType(GeometryPoint::AlignmentType::BottomLeft);
     mDetailsWidgetContainer->setVisible(true);
@@ -233,6 +244,8 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
 
 void MapObjectsController::widgetClosed(QObject *widget)
 {
+    if (mClosing)
+        return;
     WidgetUserData *obj = reinterpret_cast<WidgetUserData*>(widget->userData(0));
     if (obj) {
         mWidgetLayer->removeGeometry(obj->widget(), mClosing);
@@ -247,6 +260,7 @@ void MapObjectsController::signalAppIsClosing()
 void MapObjectsController::removeAllWidgets()
 {
     foreach (const auto &wid, mWidgetLayer->getGeometryWidgets()) {
+        wid->getWidget()->close();
         mWidgetLayer->removeGeometry(wid, true);
     }
 }

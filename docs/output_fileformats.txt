@@ -64,7 +64,7 @@ Format:
 1 tstep         Current tstep
 2 reason_to_go_back
 3 cum_steam
-4 loc->nodeidx
+4 loc->nodeidx (Harbour?)
 5 idx
 6 name
 7 timeatsea
@@ -78,5 +78,5 @@ fuelcost
 gav
 gav2
 
-
+N: can be calculated with NUMFIELDS - 16.
 

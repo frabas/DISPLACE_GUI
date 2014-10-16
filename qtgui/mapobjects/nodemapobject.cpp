@@ -89,7 +89,7 @@ void NodeMapObject::update()
         break;
 
     case GraphNodeWithCumFTimeRole:
-        text += QString("<br/><b>CumFTime:</b> %1<br/>")
+        text += QString("<br/><b>Fishing Effort:</b> %1<br/>")
                 .arg(mNode->get_cumftime());
         break;
     }

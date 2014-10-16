@@ -72,7 +72,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     std::shared_ptr<qmapcontrol::LayerGeometry> impactlayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Impact"));
     addOutputLayer(model_n, OutLayerPopImpact, impactlayer);
 
-    std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Cum F Time"));
+    std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Fishing Effort"));
     addOutputLayer(model_n, OutLayerCumFTime, cumftimelayer);
 
     const QList<Harbour *> &harbours = model->getHarboursList();

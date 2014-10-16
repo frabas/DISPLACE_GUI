@@ -144,13 +144,16 @@ double mLoadGraphProfileResult;
  * These will be sent only if --use-gui command line option is present.
  * The control character will be followed by a 1 character command code. Then the argument of the command will
  * follow.
+ *
+ * NOTE: All fields are ALWAYS separated by SPACES
+ *
  * These are the commands:
  *
  * =Snnnn       Simulation Step nnnn (int) has been performed
- * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by commas:
+ * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by spaces:
  *                   id,x,y,course,fuel,state
  * =v...        Vessel statistics. see loglike_*.dat
- * =Upath[,tstep]       Output file has been updated. path is the absolute path of the file.
+ * =Upath[ tstep]       Output file has been updated. path is the absolute path of the file.
  *                  optionally: includes the current sim step
  * =Ndata       Nodes stats update: format
  *                  stat,tstep,first,number,data...
@@ -168,7 +171,7 @@ double mLoadGraphProfileResult;
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
     if (use_gui)
-        std::cout << "=U" << filename << "," << tstep << endl;
+        std::cout << "=U" << filename << " " << tstep << endl;
 }
 
 void guiSendVesselLogbook(const std::string &line)
@@ -4042,13 +4045,13 @@ int main(int argc, char* argv[])
 			}
 
             if (use_gui && gui_move_vessels && tstep < 8641) {
-                cout << "=V" << tstep << ","
-                    << vessels[ index_v ]->get_idx() << ","
-                    << vessels[ index_v ]->get_tstep_dep() << ","
-                    << setprecision(6) << fixed << vessels[ index_v ]->get_x() << ","
-                    << setprecision(6) << fixed << vessels[ index_v ]->get_y() << ","
-                    << setprecision(2) << fixed << vessels[ index_v ]->get_course() << ","
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << ","
+                cout << "=V" << tstep << " "
+                    << vessels[ index_v ]->get_idx() << " "
+                    << vessels[ index_v ]->get_tstep_dep() << " "
+                    << setprecision(6) << fixed << vessels[ index_v ]->get_x() << " "
+                    << setprecision(6) << fixed << vessels[ index_v ]->get_y() << " "
+                    << setprecision(2) << fixed << vessels[ index_v ]->get_course() << " "
+                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
                     << vessels[ index_v ]->get_state() <<  endl;
             }
 

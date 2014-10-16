@@ -26,6 +26,8 @@ const QString DbHelper::TBL_POP_STATS = "PopStats";
 const QString DbHelper::TBL_POPSZ_STATS = "PopStatsSz";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
+const QString DbHelper::TBL_VESSELS_STATS_TM = "VesselsStatsTimed";
+const QString DbHelper::TBL_VESSELS_STATS_TMSZ = "VesselsStatsPerPop";
 
 const QString DbHelper::META_VERSION = "version";
 
@@ -172,6 +174,47 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
             res = qn.exec();
             DB_ASSERT(res,qn);
         }
+    }
+}
+
+void DbHelper::addNationsStats(int tstep, const QVector<NationStats> &nats)
+{
+}
+
+void DbHelper::addVesselStats(int tstep, VesselData *vessel)
+{
+    QSqlQuery q,qn;
+
+    bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue,revenue_av)"
+                       + " VALUES(?,?,?,?,?,?,?)");
+    DB_ASSERT(r,q);
+
+    r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
+                   + "(tstep,vid,sz,cum)"
+                   + " VALUES(?,?,?,?)");
+    DB_ASSERT(r,qn);
+
+    q.addBindValue(tstep);
+    q.addBindValue(vessel->mVessel->get_idx());
+    q.addBindValue(vessel->mVessel->get_timeatsea());
+    q.addBindValue(vessel->getLastHarbour());
+    q.addBindValue(vessel->mVessel->get_reason_to_go_back());
+    q.addBindValue(vessel->getRevenue());
+    q.addBindValue(vessel->getRevenueAV());
+
+    r = q.exec();
+    DB_ASSERT(r,q);
+
+    int n = vessel->getCatchesListSize();
+    for (int i =0; i < n; ++i) {
+        qn.addBindValue(tstep);
+        qn.addBindValue(vessel->mVessel->get_idx());
+        qn.addBindValue(i);
+        qn.addBindValue(vessel->getCatch(i));
+
+        r = qn.exec();
+        DB_ASSERT(r,qn);
     }
 }
 
@@ -783,6 +826,39 @@ bool DbHelper::checkVesselsTable(int version)
                + "_id INTEGER PRIMARY KEY,"
                + "name VARCHAR(16),"
                + "node INTEGER"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (!mDb.tables().contains(TBL_VESSELS_STATS_TM)) {
+        QSqlQuery q;
+        r =
+        q.exec("CREATE TABLE " + TBL_VESSELS_STATS_TM + "("
+               + "_id INTEGER PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "vid INTEGER,"
+               + "timeatsea INTEGER,"
+               + "harbour INTEGER,"
+               + "reason INTEGER,"
+               + "revenue REAL,"
+               + "revenue_av REAL"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (!mDb.tables().contains(TBL_VESSELS_STATS_TMSZ)) {
+        QSqlQuery q;
+        r =
+        q.exec("CREATE TABLE " + TBL_VESSELS_STATS_TMSZ + "("
+               + "_id INTEGER PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "vid INTEGER,"
+               + "sz INTEGER,"
+               + "cum REAL"
                + ");"
                );
 

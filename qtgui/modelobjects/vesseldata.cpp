@@ -14,3 +14,47 @@ void VesselData::setNationality(int value)
 {
     mNationality = value;
 }
+
+int VesselData::getLastHarbour() const
+{
+    return mLastHarbour;
+}
+
+void VesselData::setLastHarbour(int value)
+{
+    mLastHarbour = value;
+}
+double VesselData::getRevenue() const
+{
+    return mRevenue;
+}
+
+void VesselData::setRevenue(double value)
+{
+    mRevenue = value;
+}
+double VesselData::getRevenueAV() const
+{
+    return mRevenueAV;
+}
+
+void VesselData::setRevenueAV(double value)
+{
+    mRevenueAV = value;
+}
+
+void VesselData::setCatch(int idx, double val)
+{
+    while (mCatches.size() < idx)
+        mCatches.push_back(0);
+    mCatches.push_back(val);
+}
+
+void VesselData::addCatch(int idx, double val)
+{
+    while (mCatches.size() <= idx)
+        mCatches.push_back(0);
+    mCatches[idx] += val;
+}
+
+

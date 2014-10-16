@@ -160,6 +160,8 @@ void MainWindow::on_action_Load_triggered()
         ui->modelSelector->setCurrentIndex(0);
         models[0] = m;
 
+        mSimulation->linkModel(models[0]);
+
         emit modelStateChanged();
     }
 }

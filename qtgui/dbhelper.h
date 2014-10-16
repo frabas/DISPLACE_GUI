@@ -17,6 +17,7 @@ class NodeData;
 class Harbour;
 class VesselData;
 class PopulationData;
+class NationStats;
 class DbHelper;
 class Config;
 class Scenario;
@@ -60,6 +61,8 @@ public:
 
     void addNodesStats (int tstep, const QList<NodeData *> &nodes);
     void addPopStats(int tstep, const QVector<PopulationData> &pops);
+    void addNationsStats(int tstep, const QVector<NationStats> &nats);
+    void addVesselStats(int tstep, VesselData *vessel);
 
     void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
@@ -124,6 +127,8 @@ private:
     static const QString TBL_POPSZ_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
+    static const QString TBL_VESSELS_STATS_TM;
+    static const QString TBL_VESSELS_STATS_TMSZ;
 
     static const QString META_VERSION;
 };

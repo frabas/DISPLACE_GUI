@@ -31,7 +31,8 @@ class DisplaceModel : public QObject
 public:
     typedef QVector<PopulationData> PopulationStat;
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-
+    typedef QVector<NationStats> NationsStats;
+    typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
 
     DisplaceModel();
 
@@ -80,6 +81,7 @@ public:
     const QList<Benthos*> &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
+    /* Access to Population statistics */
     int getPopulationsCount() const;
     const PopulationData &getPopulationsAtStep (int step, int idx) const {
         return mStatsPopulations.getValue(step).at(idx);
@@ -93,8 +95,23 @@ public:
 
     const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
+    /* Access to Nations statistics */
+
     const QList<NationData> &getNationsList() const { return mNations; }
     const NationData &getNation(int idx) const { return mNations.at(idx); }
+
+    int getNationsStatsCount() const {
+        return mStatsNations.getUniqueValuesCount();
+    }
+    NationsStatsContainer::Container::const_iterator getNationsStatsFirstValue() const {
+        return mStatsNations.getFirst();
+    }
+    const NationsStats &getNationsStatAtStep(int step) const {
+        return mStatsNations.getValue(step);
+    }
+    const NationStats &getNationStatAtStep(int step, int idx) const {
+        return mStatsNations.getValue(step).at(idx);
+    }
 
     /* Scenario and configuration */
 
@@ -135,7 +152,6 @@ public:
     void remInterestingSize(int n);
     bool isInterestingSize(int n);
 
-
     /* Interesting harbours - see pop */
     const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
 
@@ -146,6 +162,23 @@ public:
     void remInterestingHarb(int n);
     bool isInterestingHarb(int n);
 
+    /* Interesting Nations */
+    const QList<int> &getInterestingNations() const { return mInterestingNations; }
+
+    /** \brief insert the pop into the list of interest for pops */
+    void setInterestingNations(int n) {
+        if (!mInterestingNations.contains(n))
+            mInterestingNations.append(n);
+            qSort(mInterestingNations);
+    }
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingNations(int n) {
+        mInterestingNations.removeAll(n);
+    }
+    bool isInterestingNations(int n) {
+        return mInterestingNations.contains(n);
+    }
 
     //
 
@@ -165,6 +198,7 @@ public:
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
+    void collectVesselStats (int step, std::shared_ptr<VesselStats> stats);
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -193,6 +227,7 @@ private:
     int mLastStats;
     bool mNodesStatsDirty;
     bool mPopStatsDirty;
+    bool mVesselsStatsDirty;
 
     bool mLive;
     Scenario mScenario;
@@ -202,6 +237,7 @@ private:
     bool mInterestingSizeTotal;
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
+    QList<int> mInterestingNations;
 
     QList<Harbour *> mHarbours;
     QList<NodeData *> mNodes;
@@ -211,6 +247,9 @@ private:
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;
+    NationsStatsContainer mStatsNations;
+    NationsStats mStatsNationsCollected;
+
     QMap<int, Benthos *> mBenthosInfo;
 
     // --- Working objects

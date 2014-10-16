@@ -1,10 +1,15 @@
 #include "simulator.h"
 
+#include <displacemodel.h>
+#include <modelobjects/vesseldata.h>
+#include <outputfileparser.h>
+
 #include <QApplication>
 #include <QDebug>
 
 Simulator::Simulator()
     : mSimulation(0),
+      mModel(0),
       mSimSteps(8761),
       mLastStep(-1),
       mOutputName("baseline"),
@@ -12,6 +17,11 @@ Simulator::Simulator()
       mMoveVesselOption(true),
       mProcessState(QProcess::NotRunning)
 {
+}
+
+void Simulator::linkModel(DisplaceModel *model)
+{
+    mModel= model;
 }
 
 // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
@@ -190,6 +200,10 @@ bool Simulator::processCodedLine(QString line)
         parseUpdateVessel(args);
         break;
 
+    case 'v':
+        parseUpdateVesselStats(args);
+        break;
+
     case 'U':
         emit outputFileUpdated(args[0], args[1].toInt());
         break;
@@ -215,4 +229,12 @@ void Simulator::parseUpdateVessel(QStringList fields)
     int state = fields[7].toInt();
 
     emit vesselMoved(mLastStep, id, x, y, course, fuel, state);
+}
+
+void Simulator::parseUpdateVesselStats(QStringList fields)
+{
+    std::shared_ptr<VesselStats> v = OutputFileParser::parseVesselStatLine(fields);
+
+    if (mModel)
+        mModel->collectVesselStats(v->tstep, v);
 }

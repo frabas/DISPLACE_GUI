@@ -207,6 +207,15 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
             mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
             mPopStatsDirty = false;
         }
+
+        if (mVesselsStatsDirty) {
+            mStatsNations.insertValue(tstep, mStatsNationsCollected);
+            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
+
+            // ...
+            mVesselsStatsDirty = false;
+            mStatsNationsCollected.clear();
+        }
         mDb->endTransaction();
     }
 
@@ -261,6 +270,32 @@ void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &p
     mStatsPopulationsCollected[popid].setMortality(pops);
     mStatsPopulationsCollected[popid].setMortalityTot(value);
     mPopStatsDirty = true;
+}
+
+void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> stats)
+{
+    VesselData *vessel = mVessels.at(stats->vesselId);
+
+    vessel->setLastHarbour(stats->lastHarbour);
+    vessel->setRevenue(stats->revenue);
+    vessel->setRevenueAV(stats->revenueAV);
+    vessel->mVessel->set_reason_to_go_back(stats->reasonToGoBack);
+    vessel->mVessel->set_timeatsea(stats->timeAtSea);
+
+    int nat = vessel->getNationality();
+    while (mStatsNationsCollected.size() <= nat) {
+        mStatsNationsCollected.push_back(NationStats());
+    }
+    mStatsNationsCollected[nat].mRevenues += stats->revenue;
+
+    int n = stats->mCatches.size();
+    for (int i = 0; i < n; ++i)
+        vessel->addCatch(i, stats->mCatches[i]);
+
+    if (mDb)
+        mDb->addVesselStats(tstep,vessel);
+
+    mVesselsStatsDirty = true;
 }
 
 int DisplaceModel::getVesselCount() const

@@ -23,9 +23,16 @@ public:
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
+    enum NationsStat { Catches, Earnings };
+    void setNationsStat(NationsStat stat);
+    NationsStat getNationsStat() const { return mSelectedNationsStat; }
     /* == */
 
     void initPlots();
+
+protected:
+    void updatePopulationStats(DisplaceModel *model);
+    void updateNationStats(DisplaceModel *model);
 
 private:
     Palette mPalette;
@@ -39,6 +46,7 @@ private:
 
     /* Nations */
     QCustomPlot *mPlotNations;
+    NationsStat mSelectedNationsStat;
 
     DisplaceModel *mLastModel;
 };

@@ -7,6 +7,8 @@
 #include <Vessel.h>
 #include <memory>
 
+class DisplaceModel;
+
 /** \brief An ongoing simulation process
  *
  */
@@ -16,6 +18,7 @@ class Simulator : public QObject
 public:
     Simulator();
 
+    void linkModel (DisplaceModel *model);
     bool start(QString name, QString folder);
     bool isRunning();
     bool forceStop();
@@ -51,6 +54,7 @@ private slots:
 
 private:
     QProcess *mSimulation;
+    DisplaceModel *mModel;
     int mSimSteps;
     int mLastStep;
     QString mOutputName;
@@ -60,6 +64,7 @@ private:
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);
+    void parseUpdateVesselStats(QStringList fields);
 };
 
 #endif // SIMULATOR_H

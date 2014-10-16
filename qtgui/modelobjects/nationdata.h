@@ -13,4 +13,15 @@ public:
     void setName(const QString &value);
 };
 
+class NationStats {
+public:
+    NationStats()
+        : mTotCatches(0.0),
+          mRevenues(0.0) {
+    }
+
+    double mTotCatches;
+    double mRevenues;
+};
+
 #endif // NATIONALITYDATA_H

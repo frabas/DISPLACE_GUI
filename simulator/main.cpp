@@ -149,6 +149,7 @@ double mLoadGraphProfileResult;
  * =Snnnn       Simulation Step nnnn (int) has been performed
  * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by commas:
  *                   id,x,y,course,fuel,state
+ * =v...        Vessel statistics. see loglike_*.dat
  * =Upath[,tstep]       Output file has been updated. path is the absolute path of the file.
  *                  optionally: includes the current sim step
  * =Ndata       Nodes stats update: format
@@ -168,6 +169,12 @@ void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
     if (use_gui)
         std::cout << "=U" << filename << "," << tstep << endl;
+}
+
+void guiSendVesselLogbook(const std::string &line)
+{
+    if (use_gui)
+        std::cout << "=v" << line;
 }
 
 /**---------------------------------------------------------------**/
@@ -2390,6 +2397,7 @@ int main(int argc, char* argv[])
 	ofstream loglike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
 	loglike.open(filename.c_str());
+    std::string loglike_filename = filename;
 
 	ofstream loglike_prop_met;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
@@ -3803,7 +3811,11 @@ int main(int argc, char* argv[])
 								 // i.e. just arrived!
 						if(!vessels[ index_v ]-> get_inactive())
 						{
-							vessels[ index_v ]->export_loglike (loglike, populations, tstep, nbpops);
+                            std::ostringstream ss;
+                            vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
+                            loglike << ss.str();
+
+                            guiSendVesselLogbook(ss.str());
 
 							//vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
 							vessels[ index_v ]->reinit_after_a_trip();
@@ -4053,6 +4065,13 @@ int main(int argc, char* argv[])
 #ifdef PROFILE
         mVesselLoopProfile.elapsed_ms();
 #endif
+
+        // EXPORT: vessel_loglike - disabled
+        /*
+        if (use_gui) {
+            loglike.flush();
+            guiSendUpdateCommand(loglike_filename, tstep);
+        }*/
 
 		// move the ships along the ship lanes
 		for(int s=0; s<ships.size(); s++)

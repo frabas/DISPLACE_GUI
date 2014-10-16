@@ -54,3 +54,29 @@ Content:
 Format:
 tstep   node   long    lat    cumftime
 
+* loglike_*.dat
+---------------
+Written by: Vessel::export_loglike()
+See commons/Vessel.cpp
+Content: Vessel status as a logbook
+Format:
+0 tstep_dep
+1 tstep         Current tstep
+2 reason_to_go_back
+3 cum_steam
+4 loc->nodeidx
+5 idx
+6 name
+7 timeatsea
+8 cumfulecons
+9 travel_dist_this_trip
+10xN    cumul sz per pop(1..N)
+freq_metiers
+revenue
+revenue_from_av_prices
+fuelcost
+gav
+gav2
+
+
+

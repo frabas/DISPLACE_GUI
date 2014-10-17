@@ -78,10 +78,10 @@ private slots:
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
     void on_popStatSelector_currentIndexChanged(int index);
+    void on_nationsStatsSelector_currentIndexChanged(int index);
     void on_actionPopulations_triggered();
     void on_actionConfiguration_triggered();
     void on_play_params_clicked();
-
     void on_actionQuit_triggered();
 
 signals:

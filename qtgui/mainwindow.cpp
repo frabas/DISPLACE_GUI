@@ -658,6 +658,10 @@ void MainWindow::on_popStatSelector_currentIndexChanged(int index)
     mStatsController->setPopulationStat((StatsController::PopulationStat)index);
 }
 
+void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
+{
+    mStatsController->setNationsStat((StatsController::NationsStat)index);
+}
 
 void MainWindow::on_play_params_clicked()
 {

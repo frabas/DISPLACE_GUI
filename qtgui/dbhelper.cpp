@@ -572,6 +572,11 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 
 }
 
+bool DbHelper::loadHistoricalStatsForNations(QList<int> &steps, QList<QVector<NodeData> > &nations)
+{
+#error "fill here"
+}
+
 void DbHelper::beginTransaction()
 {
     QMutexLocker locker(&mMutex);

@@ -1066,8 +1066,10 @@ bool DisplaceModel::loadVesselsFromDb()
 bool DisplaceModel::loadHistoricalStatsFromDb()
 {
     QList<QVector<PopulationData> > dtl;
+    QList<QVector<NationData> > ndl;
     QList<int> steps;
     mDb->loadHistoricalStatsForPops(steps,dtl);
+    mDb->loadHistoricalStatsForNations(steps, ndl);
 
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 

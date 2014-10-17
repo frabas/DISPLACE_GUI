@@ -7,6 +7,10 @@ StatsController::StatsController(QObject *parent)
     : QObject(parent),
       mPalette(),
       mPlotPopulations(0),
+      mSelectedPopStat(Aggregate),
+      mPlotHarbours(0),
+      mPlotNations(0),
+      mSelectedNationsStat(Catches),
       mLastModel(0)
 {
     QFile file (":/palettes/iso1996_2.p2c");
@@ -49,6 +53,12 @@ void StatsController::updateStats(DisplaceModel *model)
 void StatsController::setPopulationStat(StatsController::PopulationStat stat)
 {
     mSelectedPopStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setNationsStat(StatsController::NationsStat stat)
+{
+    mSelectedNationsStat = stat;
     updateStats(mLastModel);
 }
 

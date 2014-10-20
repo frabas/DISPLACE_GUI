@@ -1,13 +1,14 @@
 #include "harbourmapobject.h"
 
 #include <mapobjectscontroller.h>
-
+#include <displacemodel.h>
 #include <QMapControl/QMapControl.h>
 
 QPixmap *HarbourMapObject::symbol = 0;
 
-HarbourMapObject::HarbourMapObject(MapObjectsController *controller, HarbourData *harbour)
+HarbourMapObject::HarbourMapObject(MapObjectsController *controller, DisplaceModel *model, HarbourData *harbour)
     : mController(controller),
+      mModel(model),
       mHarbour(harbour),
       mGeometry(),
       mWidget(0)
@@ -52,13 +53,17 @@ void HarbourMapObject::update()
             .arg(mHarbour->mHarbour->get_x());
 
     text += "<br/>";
-    /*
-    text += QString("<b>Fuel:</b> %1<br/>").arg(mVessel->mVessel->get_cumfuelcons());
-    text += QString("<b>State:</b> %1<br/>").arg(mVessel->mVessel->get_state());
-    text += QString("<b>Cum Catches:</b> %1<br/>").arg(mVessel->mVessel->get_cumcatches());
-    text += QString("<b>Time at sea:</b> %1<br/>").arg(mVessel->mVessel->get_timeatsea());
-    text += QString("<b>Reason To go Back:</b> %1<br/>").arg(mVessel->mVessel->get_reason_to_go_back());
-*/
+
+    HarbourStats s = mModel->retrieveHarbourIdxStatAtStep(mHarbour->mHarbour->get_idx_node(), mModel->getCurrentStep());
+
+    text += QString("<b>Cumul Catches:</b> %1<br/>").arg(s.mCumCatches);
+    text += QString("<b>Profit:</b> %1<br/>").arg(s.mCumProfit);
+
+    for (int i = 0; i < s.szCatches.size(); ++i) {
+        text += QString("<b>Pop %1 Catches:</b> %2<br/>")
+                .arg(i).arg(s.szCatches[i]);
+    }
+
     mWidget->setText(text);
 }
 

@@ -649,6 +649,50 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
     return true;
 }
 
+HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
+{
+    QSqlQuery q;
+    bool res = q.prepare("SELECT sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? AND harbour=? GROUP BY vid,sz");
+    DB_ASSERT(res,q);
+
+    QSqlQuery q2;
+    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
+    DB_ASSERT(res,q2);
+
+    HarbourStats curHarbourData;
+
+    q.addBindValue(step);
+    q.addBindValue(idx);
+    q2.addBindValue(step);
+    q2.addBindValue(idx);
+
+    res = q.exec();
+    DB_ASSERT(res,q);
+
+    while (q.next()) {
+        int sz = q.value(0).toInt();
+        int catches = q.value(1).toDouble();
+
+        QVector<double> &g = curHarbourData.szCatches; // alias
+        while (g.size() <= sz)
+            g.push_back(0.0);
+        g[sz] += catches;
+
+        curHarbourData.mCumCatches += catches;
+    }
+
+    res = q2.exec();
+    DB_ASSERT(res,q2);
+    while (q2.next()) {
+        double timeatsea = q2.value(0).toDouble();
+        double rev = q2.value(1).toDouble();
+
+        curHarbourData.mCumProfit += rev;
+    }
+
+    return curHarbourData;
+}
+
 void DbHelper::beginTransaction()
 {
     QMutexLocker locker(&mMutex);

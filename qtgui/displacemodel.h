@@ -132,6 +132,8 @@ public:
     const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
         return mStatsHarbours.getValue(step).at(idx);
     }
+    /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
+    HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
 
 
     /* Scenario and configuration */

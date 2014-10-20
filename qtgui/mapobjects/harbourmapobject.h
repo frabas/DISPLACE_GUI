@@ -11,12 +11,13 @@
 #include <QPixmap>
 
 class MapObjectsController;
+class DisplaceModel;
 
 class HarbourMapObject : public QObject, public MapObject
 {
     Q_OBJECT
 public:
-    HarbourMapObject(MapObjectsController *controller, HarbourData *harbour);
+    HarbourMapObject(MapObjectsController *controller, DisplaceModel *model, HarbourData *harbour);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
@@ -30,6 +31,7 @@ private slots:
 
 private:
     MapObjectsController *mController;
+    DisplaceModel *mModel;
 
     HarbourData *mHarbour;
     std::shared_ptr<qmapcontrol::GeometryPointImageScaled> mGeometry;

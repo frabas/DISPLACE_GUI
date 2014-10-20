@@ -81,7 +81,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<HarbourData *> &harbours = model->getHarboursList();
     foreach (HarbourData *h, harbours) {
-        HarbourMapObject *obj = new HarbourMapObject(this, h);
+        HarbourMapObject *obj = new HarbourMapObject(this, model, h);
         mHarbourObjects[model_n].append(obj);
 
         mEntityLayer->addGeometry(obj->getGeometryEntity());

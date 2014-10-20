@@ -83,6 +83,8 @@ public:
     bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
     bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour);
 
+    HarbourStats getHarbourStatsAtStep(int idx, int step);
+
     void beginTransaction();
     void endTransaction();
     void forceEndTransaction();

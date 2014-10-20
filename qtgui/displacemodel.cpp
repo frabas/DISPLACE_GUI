@@ -331,6 +331,15 @@ int DisplaceModel::getPopulationsCount() const
     return mConfig.getNbpops();
 }
 
+HarbourStats DisplaceModel::retrieveHarbourIdxStatAtStep(int idx, int step)
+{
+    if (mLive || !mDb) {
+        return getHarboursStatAtStep(step, idx);
+    }
+
+    return mDb->getHarbourStatsAtStep(idx, step);
+}
+
 Scenario DisplaceModel::scenario() const
 {
     return mScenario;

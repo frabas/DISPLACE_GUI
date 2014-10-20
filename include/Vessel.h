@@ -102,6 +102,9 @@ class Vessel
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
+protected:
+        void init();
+
 	public:
 		//Vessel(string name,  boost::shared_ptr<Node> a_location);
 		Vessel(string name,  Node* a_location);

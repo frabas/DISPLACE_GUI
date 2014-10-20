@@ -117,7 +117,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<VesselData *> &vessels = model->getVesselList();
     foreach (VesselData *vsl, vessels) {
-        VesselMapObject *obj = new VesselMapObject(vsl);
+        VesselMapObject *obj = new VesselMapObject(this,vsl);
         mVesselObjects[model_n].append(obj);
 
         mEntityLayer->addGeometry(obj->getGeometryEntity());

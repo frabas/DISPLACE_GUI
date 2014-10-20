@@ -1,5 +1,8 @@
 #include "vesselmapobject.h"
 
+#include <mapobjectscontroller.h>
+
+#include <QMapControl/QMapControl.h>
 #include <QMapControl/Point.h>
 #include <QMapControl/Projection.h>
 #include <QMapControl/LayerGeometry.h>
@@ -9,10 +12,48 @@
 #include <QPainter>
 #include <QDebug>
 
-VesselMapObject::VesselMapObject(VesselData *vessel)
-    : mVessel(vessel)
+VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *vessel)
+    : mController(controller),
+      mVessel(vessel),
+      mWidget(0)
 {
     mGeometry = std::shared_ptr<VesselGraphics> (new VesselGraphics(mVessel));
+
+    mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
+}
+
+bool VesselMapObject::clicked()
+{
+    if (!mWidget) {
+        mWidget = new NodeDetailsWidget(mController->mapWidget());
+        connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
+    }
+
+    update();
+    mController->showDetailsWidget(mGeometry->coord(),mWidget);
+
+    return true;
+}
+
+void VesselMapObject::update()
+{
+    if (!mWidget)
+        return;
+
+    QString text = QString("<b>Name</b>: %1<br/>"
+                           "<b>Coords: </b>%2 %3<br/>")
+            .arg(QString::fromStdString(mVessel->mVessel->get_name()))
+            .arg(mVessel->mVessel->get_y())
+            .arg(mVessel->mVessel->get_x());
+
+    text += "<br/>";
+    text += QString("<b>Fuel:</b> %1<br/>").arg(mVessel->mVessel->get_cumfuelcons());
+    text += QString("<b>State:</b> %1<br/>").arg(mVessel->mVessel->get_state());
+    text += QString("<b>Cum Catches:</b> %1<br/>").arg(mVessel->mVessel->get_cumcatches());
+    text += QString("<b>Time at sea:</b> %1<br/>").arg(mVessel->mVessel->get_timeatsea());
+    text += QString("<b>Reason To go Back:</b> %1<br/>").arg(mVessel->mVessel->get_reason_to_go_back());
+
+    mWidget->setText(text);
 }
 
 void VesselMapObject::vesselUpdated()
@@ -20,6 +61,11 @@ void VesselMapObject::vesselUpdated()
     mGeometry->layer()->removeGeometry(mGeometry);
     mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
     mGeometry->layer()->addGeometry(mGeometry);
+}
+
+void VesselMapObject::widgetClosed()
+{
+    mWidget = 0;
 }
 
 

@@ -7,6 +7,8 @@ HarbourData::HarbourData(Harbour *harbour)
 
 
 HarbourStats::HarbourStats()
+    : mCumCatches(0.0),
+      mCumProfit(0.0),
+      szCatches()
 {
-
 }

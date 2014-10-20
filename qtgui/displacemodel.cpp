@@ -334,7 +334,7 @@ int DisplaceModel::getPopulationsCount() const
 HarbourStats DisplaceModel::retrieveHarbourIdxStatAtStep(int idx, int step)
 {
     if (mLive || !mDb) {
-        return getHarboursStatAtStep(step, idx);
+        return HarbourStats(); //getHarboursStatAtStep(step, idx);
     }
 
     return mDb->getHarbourStatsAtStep(idx, step);

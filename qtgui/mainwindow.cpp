@@ -663,6 +663,11 @@ void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
     mStatsController->setNationsStat((StatsController::NationsStat)index);
 }
 
+void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setHarbourStat((StatsController::HarboursStat)index);
+}
+
 void MainWindow::on_play_params_clicked()
 {
     bool ok;

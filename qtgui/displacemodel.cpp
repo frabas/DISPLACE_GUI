@@ -579,6 +579,7 @@ bool DisplaceModel::loadNodes()
             mHarbours.push_back(hd);
 
             NodeData *n = new NodeData(h, this);
+            n->setHarbourId(mHarbours.size()-1);
             mNodes.push_back(n);
         }
         else
@@ -1070,9 +1071,11 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
 {
     QList<QVector<PopulationData> > dtl;
     QList<QVector<NationStats> > ndl;
+    QList<QVector<HarbourStats> > hdl;
+
     QList<int> steps;
     mDb->loadHistoricalStatsForPops(steps,dtl);
-    mDb->loadHistoricalStatsForVessels(steps, mVessels, ndl);
+    mDb->loadHistoricalStatsForVessels(steps, mVessels, mNodes, ndl, hdl);
 
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 
@@ -1087,6 +1090,13 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     foreach (const QVector<NationStats> &dt, ndl) {
         int tstep = steps[i];
         mStatsNations.insertValue(tstep, dt);
+        ++i;
+    }
+
+    i = 0;
+    foreach(const QVector<HarbourStats> &dt, hdl) {
+        int tstep = steps[i];
+        mStatsHarbours.insertValue(tstep, dt);
         ++i;
     }
 

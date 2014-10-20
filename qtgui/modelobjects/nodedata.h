@@ -56,8 +56,12 @@ public:
         return mImpact[pop];
     }
 
+    int getHarbourId() const;
+    void setHarbourId(int value);
+
 private:
     DisplaceModel *mModel;
+    int mHarbourId;
     double *mPop;
     double mPopTot;
     double *mPopW;

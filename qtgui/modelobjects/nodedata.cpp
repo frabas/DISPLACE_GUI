@@ -8,7 +8,8 @@ NodeData::NodeData(Node *nd, DisplaceModel *model)
       mPop(0),
       mPopTot(0),
       mPopW(0),
-      mPopWTot(0)
+      mPopWTot(0),
+      mHarbourId(-1)
 {
     if (nd) {
         int N = nd->get_nbpops();
@@ -94,4 +95,14 @@ void NodeData::setImpact(int pop, double impact)
     if (pop < mNode->get_nbpops() && pop >= 0)
         mImpact[pop] = impact;
 }
+int NodeData::getHarbourId() const
+{
+    return mHarbourId;
+}
+
+void NodeData::setHarbourId(int value)
+{
+    mHarbourId = value;
+}
+
 

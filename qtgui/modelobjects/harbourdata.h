@@ -15,6 +15,9 @@ class HarbourStats
 {
 public:
     HarbourStats();
+
+    double mCumCatches;
+    double mCumProfit;
 };
 
 #endif // HARBOURDATA_H

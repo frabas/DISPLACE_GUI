@@ -46,6 +46,9 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mPlotNations) {
         updateNationStats(model);
     }
+    if (mPlotHarbours) {
+        updateHarboursStats(model);
+    }
 
     mLastModel = model;
 }
@@ -59,6 +62,12 @@ void StatsController::setPopulationStat(StatsController::PopulationStat stat)
 void StatsController::setNationsStat(StatsController::NationsStat stat)
 {
     mSelectedNationsStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setHarbourStat(StatsController::HarboursStat stat)
+{
+    mSelectedHarboursStat = stat;
     updateStats(mLastModel);
 }
 
@@ -185,7 +194,57 @@ void StatsController::updateNationStats(DisplaceModel *model)
     }
 
     mPlotNations->rescaleAxes();
-    mPlotNations->replot();
+    mPlotNations->replot();    
+}
+
+void StatsController::updateHarboursStats(DisplaceModel *model)
+{
+    static const QPen pen(QColor(0,0,255,200));
+    mPlotHarbours->clearGraphs();
+
+    QList<int> ipl = model->getInterestingHarbours();
+
+    int cnt;
+    int palcnt = 0;
+    foreach (int ip, ipl) {
+        QVector<double> keyData;
+        QVector<double> valueData;
+
+        QCPGraph *graph = mPlotHarbours->addGraph();
+        graph->setPen(pen);
+        graph->setLineStyle(QCPGraph::lsLine);
+        QColor col = mPalette.colorForIndexMod(palcnt % mPalette.colorCount());
+
+        col.setAlpha(128);
+        graph->setBrush(QBrush(col));
+        ++cnt;
+
+        graph->setName(QString::fromStdString(model->getHarbourData(ip).mHarbour->get_name()));
+
+        int n = model->getHarboursStatsCount();
+        DisplaceModel::HarboursStatsContainer::Container::const_iterator it = model->getHarboursStatsFirstValue();
+        for (int i = 0; i <n; ++i) {
+            keyData << it.key();
+
+            switch (mSelectedHarboursStat) {
+            case H_Catches:
+                valueData << it.value().at(ip).mCumCatches;
+                break;
+            case H_Earnings:
+                valueData << it.value().at(ip).mCumProfit;
+                break;
+            }
+
+            ++it;
+        }
+
+        graph->setData(keyData, valueData);
+
+        ++palcnt;
+    }
+
+    mPlotHarbours->rescaleAxes();
+    mPlotHarbours->replot();
 
 }
 

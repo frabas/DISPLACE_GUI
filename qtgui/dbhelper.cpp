@@ -404,6 +404,7 @@ bool DbHelper::loadNodes(QList<NodeData *> &nodes, QList<HarbourData *> &harbour
 
         nodes[idx] = n;
         if (n->get_harbour()) {
+            n->setHarbourId(harbours.size());
             HarbourData *hdt = new HarbourData(h);
             harbours.push_back(hdt);
         }
@@ -575,18 +576,19 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 
 }
 
-bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, QList<QVector<NationStats> > &nations)
+bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour)
 {
     QSqlQuery q;
-    bool res = q.prepare("SELECT vid,sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz");
+    bool res = q.prepare("SELECT vid,sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz"); /*,harbour  */
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
-    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     foreach(int tstep, steps) {
         QVector<NationStats> curnationsdata;
+        QVector<HarbourStats> curHarbourData;
 
         q.addBindValue(tstep);
         q2.addBindValue(tstep);
@@ -600,16 +602,25 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             int sz = q.value(1).toInt();
             int nid = vessels.at(vid)->getNationality();
             int catches = q.value(2).toDouble();
+            /*
+            int hid = q.value(3).toInt();
+            int hidx = nodes.at(hid)->getHarbourId();
+            */
 
             while (curnationsdata.size() <= nid)
                 curnationsdata.push_back(NationStats());
+
+            /*
+            while (curHarbourData.size() <= hidx)
+                curHarbourData.push_back(HarbourStats());
+            */
 
             QVector<double> &g = curnationsdata[nid].szGroups; // alias
             while (g.size() <= sz)
                 g.push_back(0.0);
             g[sz] += catches;
 
-            curnationsdata[nid].mTotCatches += catches;
+            curnationsdata[nid].mTotCatches += catches;            
         }
 
         res = q2.exec();
@@ -619,15 +630,22 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             int nid = vessels.at(vid)->getNationality();
             double timeatsea = q2.value(1).toDouble();
             double rev = q2.value(2).toDouble();
+            int hid = q2.value(3).toInt();
+            int hidx = nodes.at(hid)->getHarbourId();
 
             while (curnationsdata.size() <= nid)
                 curnationsdata.push_back(NationStats());
+            while (curHarbourData.size() <= hidx)
+                curHarbourData.push_back(HarbourStats());
 
             curnationsdata[nid].mRevenues += rev;
             curnationsdata[nid].mTimeAtSea += timeatsea;
+            //curHarbourData[hidx].mCumCatches += catches;
+            curHarbourData[hidx].mCumProfit += rev;
         }
 
         nations.push_back(curnationsdata);
+        harbour.push_back(curHarbourData);
     }
 
     return true;

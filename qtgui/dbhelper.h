@@ -18,6 +18,7 @@ class HarbourData;
 class VesselData;
 class PopulationData;
 class NationStats;
+class HarbourStats;
 class DbHelper;
 class Config;
 class Scenario;
@@ -80,7 +81,7 @@ public:
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
     bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
     bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
-    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, QList<QVector<NationStats> > &nations);
+    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour);
 
     void beginTransaction();
     void endTransaction();

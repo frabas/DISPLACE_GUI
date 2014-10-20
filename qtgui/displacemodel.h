@@ -9,7 +9,7 @@
 #include <modelobjects/benthos.h>
 #include <modelobjects/populationdata.h>
 #include <modelobjects/nationdata.h>
-#include <Harbour.h>
+#include <modelobjects/harbourdata.h>
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
 
@@ -33,6 +33,8 @@ public:
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
     typedef QVector<NationStats> NationsStats;
     typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
+    typedef QVector<HarbourStats> HarboursStats;
+    typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
 
     DisplaceModel();
 
@@ -57,7 +59,7 @@ public:
         return mConfig.getSzGroups();
     }
 
-    const QList<Harbour *> &getHarboursList() const { return mHarbours; }
+    const QList<HarbourData *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
 
@@ -112,6 +114,25 @@ public:
     const NationStats &getNationStatAtStep(int step, int idx) const {
         return mStatsNations.getValue(step).at(idx);
     }
+
+    /* Access to Harbour statistics */
+
+    const QList<HarbourData *> &getHarbourList() const { return mHarbours; }
+    const HarbourData &getHarbourData(int idx) const { return *mHarbours.at(idx); }
+
+    int getHarboursStatsCount() const {
+        return mStatsHarbours.getUniqueValuesCount();
+    }
+    HarboursStatsContainer::Container::const_iterator getHarboursStatsFirstValue() const {
+        return mStatsHarbours.getFirst();
+    }
+    const HarboursStats &getHarboursStatAtStep(int step) const {
+        return mStatsHarbours.getValue(step);
+    }
+    const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
+        return mStatsHarbours.getValue(step).at(idx);
+    }
+
 
     /* Scenario and configuration */
 
@@ -239,7 +260,7 @@ private:
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
 
-    QList<Harbour *> mHarbours;
+    QList<HarbourData *> mHarbours;
     QList<NodeData *> mNodes;
     QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
@@ -249,6 +270,7 @@ private:
     PopulationStat mStatsPopulationsCollected;
     NationsStatsContainer mStatsNations;
     NationsStats mStatsNationsCollected;
+    HarboursStatsContainer mStatsHarbours;
 
     QMap<int, Benthos *> mBenthosInfo;
 

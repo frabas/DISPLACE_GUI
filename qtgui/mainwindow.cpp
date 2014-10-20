@@ -347,8 +347,8 @@ void MainWindow::centerMap(const qmapcontrol::PointWorldCoord &pt)
 
 void MainWindow::centerMapOnHarbourId(int id)
 {
-    Harbour *h = currentModel->getHarboursList()[id];
-    centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
+    HarbourData *h = currentModel->getHarboursList()[id];
+    centerMap(qmapcontrol::PointWorldCoord(h->mHarbour->get_x(), h->mHarbour->get_y()));
 }
 
 void MainWindow::centerMapOnNodeId(int id)

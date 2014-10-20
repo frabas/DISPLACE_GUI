@@ -3,20 +3,20 @@
 
 #include <mapobjects/mapobject.h>
 #include <QMapControl/GeometryPointImageScaled.h>
-#include <Harbour.h>
+#include <modelobjects/harbourdata.h>
 #include <QPixmap>
 
 class HarbourMapObject : public MapObject
 {
 public:
-    HarbourMapObject(Harbour *harbour);
+    HarbourMapObject(HarbourData *harbour);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
     }
 
 private:
-    Harbour *mHarbour;
+    HarbourData *mHarbour;
     std::shared_ptr<qmapcontrol::GeometryPointImageScaled> mGeometry;
 
     static QPixmap *symbol;

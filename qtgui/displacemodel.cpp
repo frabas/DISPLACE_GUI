@@ -154,7 +154,7 @@ int DisplaceModel::getHarboursCount() const
 
 QString DisplaceModel::getHarbourId(int idx) const
 {
-    return QString::fromStdString(mHarbours.at(idx)->get_name());
+    return QString::fromStdString(mHarbours.at(idx)->mHarbour->get_name());
 }
 
 int DisplaceModel::getNodesCount() const
@@ -575,8 +575,10 @@ bool DisplaceModel::loadNodes()
                                        fishprices_each_species_per_cat,
                                        init_fuelprices
                                        );
+            HarbourData *hd = new HarbourData(h);
+            mHarbours.push_back(hd);
+
             NodeData *n = new NodeData(h, this);
-            mHarbours.push_back(h);
             mNodes.push_back(n);
         }
         else

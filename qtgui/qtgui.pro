@@ -74,7 +74,8 @@ SOURCES += \
     objects/nationentity.cpp \
     objects/szgroupentity.cpp \
     configdialog.cpp \
-    mapobjects/nodedetailswidget.cpp
+    mapobjects/nodedetailswidget.cpp \
+    modelobjects/harbourdata.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -126,7 +127,8 @@ HEADERS += \
     objects/nationentity.h \
     objects/szgroupentity.h \
     configdialog.h \
-    mapobjects/nodedetailswidget.h
+    mapobjects/nodedetailswidget.h \
+    modelobjects/harbourdata.h
 
 RESOURCES += \
     qtgui.qrc

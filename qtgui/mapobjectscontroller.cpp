@@ -79,8 +79,8 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Fishing Effort"));
     addOutputLayer(model_n, OutLayerCumFTime, cumftimelayer);
 
-    const QList<Harbour *> &harbours = model->getHarboursList();
-    foreach (Harbour *h, harbours) {
+    const QList<HarbourData *> &harbours = model->getHarboursList();
+    foreach (HarbourData *h, harbours) {
         HarbourMapObject *obj = new HarbourMapObject(h);
         mHarbourObjects[model_n].append(obj);
 

@@ -191,8 +191,8 @@ void DbHelper::addVesselStats(int tstep, VesselData *vessel)
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
-                   + "(tstep,vid,sz,cum)"
-                   + " VALUES(?,?,?,?)");
+                   + "(tstep,vid,harbour,sz,cum)"
+                   + " VALUES(?,?,?,?,?)");
     DB_ASSERT(r,qn);
 
     q.addBindValue(tstep);
@@ -210,6 +210,7 @@ void DbHelper::addVesselStats(int tstep, VesselData *vessel)
     for (int i =0; i < n; ++i) {
         qn.addBindValue(tstep);
         qn.addBindValue(vessel->mVessel->get_idx());
+        qn.addBindValue(vessel->getLastHarbour());
         qn.addBindValue(i);
         qn.addBindValue(vessel->getCatch(i));
 
@@ -579,7 +580,7 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour)
 {
     QSqlQuery q;
-    bool res = q.prepare("SELECT vid,sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz"); /*,harbour  */
+    bool res = q.prepare("SELECT vid,sz,SUM(cum),harbour FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz"); /*,harbour  */
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
@@ -602,18 +603,14 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             int sz = q.value(1).toInt();
             int nid = vessels.at(vid)->getNationality();
             int catches = q.value(2).toDouble();
-            /*
             int hid = q.value(3).toInt();
             int hidx = nodes.at(hid)->getHarbourId();
-            */
 
             while (curnationsdata.size() <= nid)
                 curnationsdata.push_back(NationStats());
 
-            /*
             while (curHarbourData.size() <= hidx)
                 curHarbourData.push_back(HarbourStats());
-            */
 
             QVector<double> &g = curnationsdata[nid].szGroups; // alias
             while (g.size() <= sz)
@@ -936,6 +933,7 @@ bool DbHelper::checkVesselsTable(int version)
                + "_id INTEGER PRIMARY KEY,"
                + "tstep INTEGER,"
                + "vid INTEGER,"
+               + "harbour INTEGER,"
                + "sz INTEGER,"
                + "cum REAL"
                + ");"

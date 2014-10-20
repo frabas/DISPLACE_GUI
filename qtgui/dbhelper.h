@@ -80,7 +80,7 @@ public:
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
     bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
     bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
-    bool loadHistoricalStatsForNations( QList<int> &steps, QList<QVector<NodeData> > &nations);
+    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, QList<QVector<NationStats> > &nations);
 
     void beginTransaction();
     void endTransaction();

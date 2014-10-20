@@ -262,13 +262,14 @@ void DbHelper::addVesselDetails(int idx, VesselData *vessel)
     res = q.prepare("INSERT INTO " +TBL_VESSELS
                     + "(_id,name,node) VALUES(?,?,?)");
 
-    Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    DB_ASSERT(res,q);
 
     q.addBindValue(idx);
     q.addBindValue(QString::fromUtf8(vessel->mVessel->get_name().c_str()));
     q.addBindValue(vessel->mVessel->get_loc()->get_idx_node());
     res = q.exec();
-    Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
+
+    DB_ASSERT(res,q);
 }
 
 bool DbHelper::loadConfig(Config &cfg)
@@ -572,9 +573,62 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 
 }
 
-bool DbHelper::loadHistoricalStatsForNations(QList<int> &steps, QList<QVector<NodeData> > &nations)
+bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, QList<QVector<NationStats> > &nations)
 {
-#error "fill here"
+    QSqlQuery q;
+    bool res = q.prepare("SELECT vid,sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz");
+    DB_ASSERT(res,q);
+
+    QSqlQuery q2;
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    DB_ASSERT(res,q2);
+
+    foreach(int tstep, steps) {
+        QVector<NationStats> curnationsdata;
+
+        q.addBindValue(tstep);
+        q2.addBindValue(tstep);
+
+        res = q.exec();
+        DB_ASSERT(res,q);
+
+        /* Nations cum catches */
+        while (q.next()) {
+            int vid = q.value(0).toInt();
+            int sz = q.value(1).toInt();
+            int nid = vessels.at(vid)->getNationality();
+            int catches = q.value(2).toDouble();
+
+            while (curnationsdata.size() <= nid)
+                curnationsdata.push_back(NationStats());
+
+            QVector<double> &g = curnationsdata[nid].szGroups; // alias
+            while (g.size() <= sz)
+                g.push_back(0.0);
+            g[sz] += catches;
+
+            curnationsdata[nid].mTotCatches += catches;
+        }
+
+        res = q2.exec();
+        DB_ASSERT(res,q2);
+        while (q2.next()) {
+            int vid = q2.value(0).toInt();
+            int nid = vessels.at(vid)->getNationality();
+            double timeatsea = q2.value(1).toDouble();
+            double rev = q2.value(2).toDouble();
+
+            while (curnationsdata.size() <= nid)
+                curnationsdata.push_back(NationStats());
+
+            curnationsdata[nid].mRevenues += rev;
+            curnationsdata[nid].mTimeAtSea += timeatsea;
+        }
+
+        nations.push_back(curnationsdata);
+    }
+
+    return true;
 }
 
 void DbHelper::beginTransaction()

@@ -1059,6 +1059,7 @@ bool DisplaceModel::loadVesselsFromDb()
     mVessels.clear();
     if (!mDb->loadVessels(mNodes, mVessels))
         return false;
+    initNations();
 
     return true;
 }
@@ -1066,10 +1067,10 @@ bool DisplaceModel::loadVesselsFromDb()
 bool DisplaceModel::loadHistoricalStatsFromDb()
 {
     QList<QVector<PopulationData> > dtl;
-    QList<QVector<NationData> > ndl;
+    QList<QVector<NationStats> > ndl;
     QList<int> steps;
     mDb->loadHistoricalStatsForPops(steps,dtl);
-    mDb->loadHistoricalStatsForNations(steps, ndl);
+    mDb->loadHistoricalStatsForVessels(steps, mVessels, ndl);
 
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 
@@ -1077,6 +1078,13 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     foreach (const QVector<PopulationData> &dt, dtl) {
         int tstep = steps[i];
         mStatsPopulations.insertValue(tstep, dt);
+        ++i;
+    }
+
+    i = 0;
+    foreach (const QVector<NationStats> &dt, ndl) {
+        int tstep = steps[i];
+        mStatsNations.insertValue(tstep, dt);
         ++i;
     }
 

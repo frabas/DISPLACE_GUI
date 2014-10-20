@@ -171,6 +171,9 @@ void StatsController::updateNationStats(DisplaceModel *model)
             case Earnings:
                 valueData << it.value().at(ip).mRevenues;
                 break;
+            case TimeAtSea:
+                valueData << it.value().at(ip).mTimeAtSea;
+                break;
             }
 
             ++it;

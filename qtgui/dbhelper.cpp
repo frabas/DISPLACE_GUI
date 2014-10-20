@@ -617,7 +617,8 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
                 g.push_back(0.0);
             g[sz] += catches;
 
-            curnationsdata[nid].mTotCatches += catches;            
+            curnationsdata[nid].mTotCatches += catches;
+            curHarbourData[hidx].mCumCatches += catches;
         }
 
         res = q2.exec();

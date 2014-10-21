@@ -18,6 +18,8 @@
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
+#include <gdal/ogrsf_frmts.h>
+
 #include <QBoxLayout>
 #include <QTextEdit>
 #include <QSettings>
@@ -694,4 +696,31 @@ void MainWindow::on_play_params_clicked()
 void MainWindow::on_actionQuit_triggered()
 {
     close();
+}
+
+void MainWindow::on_actionImport_Shapefile_triggered()
+{
+    QSettings sets;
+    QString name =  QFileDialog::getOpenFileName(this, tr("Import shapefile"),
+                                         sets.value("import_shape").toString());
+
+    if (!name.isEmpty()) {
+        QFileInfo info (name);
+
+        OGRDataSource *ds = OGRSFDriverRegistrar::Open(name.toStdString().c_str(), FALSE);
+
+        QString layer;
+
+        if (ds->GetLayerCount() > 1) {
+            QStringList items;
+            for(int i = 0; i < ds->GetLayerCount(); ++i)
+                items << ds->GetLayer(i)->GetName();
+
+            layer = QInputDialog::getItem(this, tr("Shapefile open"), tr("Please select the a layer, or cancel for all layers"), items,0, false);
+        }
+
+        mMapController->importShapefile(currentModelIdx, name, layer);
+        sets.setValue("import_shape", info.absolutePath());
+    }
+
 }

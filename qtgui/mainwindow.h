@@ -84,6 +84,7 @@ private slots:
     void on_actionConfiguration_triggered();
     void on_play_params_clicked();
     void on_actionQuit_triggered();
+    void on_actionImport_Shapefile_triggered();
 
 signals:
     void modelStateChanged();

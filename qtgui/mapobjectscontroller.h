@@ -18,6 +18,7 @@ class MapAdapter;
 class LayerMapAdapter;
 class LayerGeometry;
 class GeometryWidget;
+class LayerESRIShapefile;
 }
 
 class DisplaceModel;
@@ -91,6 +92,7 @@ public:
     enum LayerIds {
         LayerMain = 0, LayerSeamarks = 1,
         LayerEntities = 2, LayerGraph = 3,
+        LayerShapefile,
 
         LayerMax
     };
@@ -143,6 +145,8 @@ public:
 
     void showDetailsWidget(const PointWorldCoord &point, QWidget *widget);
 
+    bool importShapefile(int model_idx, QString path, QString layername);
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
@@ -161,6 +165,7 @@ private:
     QList<NodeMapObject *> mNodeObjects[MAX_MODELS];
     QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
     std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerESRIShapefile> mShapefileLayer[MAX_MODELS];
 
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;

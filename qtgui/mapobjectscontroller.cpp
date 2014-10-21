@@ -14,6 +14,7 @@
 #include <QMapControl/LayerMapAdapter.h>
 #include <QMapControl/ImageManager.h>
 #include <QMapControl/GeometryWidget.h>
+#include <QMapControl/LayerESRIShapefile.h>
 
 #include <QTextEdit>
 
@@ -63,9 +64,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
+    mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
+    mShapefileLayer[model_n]->setVisible(true);
 
     addStandardLayer(model_n, LayerEntities, mEntityLayer);
     addStandardLayer(model_n, LayerGraph, mGraphLayer);
+    addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
@@ -219,6 +223,18 @@ void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidg
     connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(widgetClosed(QObject*)));
 
     mWidgetLayer->addGeometry(mDetailsWidgetContainer);
+}
+
+bool MapObjectsController::importShapefile(int model_idx, QString path, QString layername)
+{
+    std::shared_ptr<ESRIShapefile> file (new ESRIShapefile(path.toStdString(), layername.toStdString()));
+
+    file->setPenPolygon(QPen(Qt::red));
+    file->setBrushPolygon(QBrush(Qt::yellow));
+
+    mShapefileLayer[model_idx]->addESRIShapefile(file);
+
+    return true;
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)

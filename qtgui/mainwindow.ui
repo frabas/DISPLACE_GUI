@@ -65,7 +65,6 @@
     <addaction name="actionLoad_results"/>
     <addaction name="actionImport_results"/>
     <addaction name="action_Link_database"/>
-    <addaction name="actionImport_Shapefile"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -74,6 +73,7 @@
     <property name="title">
      <string>&amp;Editor</string>
     </property>
+    <addaction name="actionImport_Shapefile"/>
     <addaction name="actionGraph"/>
     <addaction name="actionAdd_Polygon"/>
    </widget>

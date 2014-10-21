@@ -225,6 +225,7 @@ public:
 protected:
     bool loadNodes();
     bool loadVessels();
+    bool loadGraphs();
     bool initBenthos();
     bool initPopulations();
     bool initNations();

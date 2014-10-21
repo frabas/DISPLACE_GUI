@@ -67,15 +67,22 @@ void NodeMapObject::update()
     if (!mWidget)
         return;
 
-    QString text = QString("<b>Name</b>: %1<br/>"
+    QString text = QString("<b>Name</b>: %1 <b>id</b>: %4<br/>"
                            "<b>Coords: </b>%2 %3<br/>")
             .arg(QString::fromStdString(mNode->get_name()))
             .arg(mNode->get_y())
-            .arg(mNode->get_x());
+            .arg(mNode->get_x())
+            .arg(mNode->get_idx_node());
 
     switch (mRole) {
     default:
     case GraphNodeRole:
+        text += QString("<br/><b>Adiacencies</b><br/>");
+        for (int i = 0; i < mNode->getAdiacencyCount(); ++i) {
+            text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
+                    .arg(mNode->getAdiacencyByIdx(i))
+                    .arg(mNode->getAdiacencyWeight(i));
+        }
         break;
 
     case GraphNodeWithPopStatsRole:

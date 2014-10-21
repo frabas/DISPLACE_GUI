@@ -105,4 +105,31 @@ void NodeData::setHarbourId(int value)
     mHarbourId = value;
 }
 
+void NodeData::appendAdiancency(int to_id, double weight)
+{
+    mAdiacency.push_back(to_id);
+    mWeights.push_back(weight);
+}
+
+void NodeData::removeAdiacencyByIdx(int idx)
+{
+    mAdiacency.removeAt(idx);
+    mWeights.removeAt(idx);
+}
+
+int NodeData::getAdiacencyCount() const
+{
+    return mAdiacency.size();
+}
+
+int NodeData::getAdiacencyByIdx(int idx) const
+{
+    return mAdiacency.at(idx);
+}
+
+double NodeData::getAdiacencyWeight(int idx) const
+{
+    return mWeights.at(idx);
+}
+
 

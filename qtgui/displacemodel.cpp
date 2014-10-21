@@ -46,11 +46,13 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
 
         loadNodes();
         loadVessels();
+        loadGraphs();
         initBenthos();
         initPopulations();
         initNations();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
+        qDebug() << "ERROR: " << mLastError;
         return false;
     }
 
@@ -981,6 +983,62 @@ bool DisplaceModel::loadVessels()
     }
 
     return false;
+}
+
+bool DisplaceModel::loadGraphs()
+{
+    struct data {
+        int from;
+        int to;
+        double weight;
+    };
+
+    QString filename_graph = mBasePath + "/graphsspe/graph" + QString::number(mScenario.getGraph()) + ".dat";
+    qDebug() << "Loading: " << filename_graph << " With " << mScenario.getNrow_graph() << " lines";
+
+    QFile f(filename_graph);
+    if (!f.open(QIODevice::ReadOnly)) {
+        throw DisplaceException(f.errorString());
+        return false;
+    }
+
+    QTextStream strm(&f);
+    QString line;
+    int linenum = 0;
+    QList<data> datas;
+
+    while (!(line = strm.readLine()).isNull()) {
+        bool ok;
+        int stat = linenum / mScenario.getNrow_graph();
+        int idx = linenum % mScenario.getNrow_graph();
+
+        switch (stat) {
+        case 0: // from
+            datas.push_back(data());
+            datas[idx].from = line.toInt(&ok);
+            break;
+        case 1: // to
+            datas[idx].to = line.toInt(&ok);
+            break;
+        case 2: // weight
+            datas[idx].weight = line.toDouble(&ok);
+            break;
+        }
+
+        if (!ok) {
+            throw DisplaceException(QString("Graph %2 Parse error at line %1 (%3)").arg(linenum+1).arg(filename_graph).arg(line));
+            return false;
+        }
+
+        ++linenum;
+    }
+
+    /* file has been read. Now feed the data! */
+    foreach (data d, datas) {
+        mNodes[d.from]->appendAdiancency(d.to, d.weight);
+    }
+
+    return true;
 }
 
 bool DisplaceModel::initBenthos()

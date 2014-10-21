@@ -92,7 +92,7 @@ public:
     enum LayerIds {
         LayerMain = 0, LayerSeamarks = 1,
         LayerEntities = 2, LayerGraph = 3,
-        LayerShapefile,
+        LayerEdges, LayerShapefile,
 
         LayerMax
     };

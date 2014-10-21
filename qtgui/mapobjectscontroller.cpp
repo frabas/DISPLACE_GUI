@@ -4,6 +4,7 @@
 #include <mapobjects/harbourmapobject.h>
 #include <mapobjects/nodemapobject.h>
 #include <mapobjects/vesselmapobject.h>
+#include <mapobjects/edgemapobject.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/MapAdapterOSM.h>
@@ -64,12 +65,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
+    std::shared_ptr<qmapcontrol::LayerGeometry> mEdgesLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph Edges"));
     mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
     mShapefileLayer[model_n]->setVisible(true);
 
     addStandardLayer(model_n, LayerEntities, mEntityLayer);
     addStandardLayer(model_n, LayerGraph, mGraphLayer);
     addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
+    addStandardLayer(model_n, LayerEdges, mEdgesLayer);
 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
@@ -117,6 +120,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
         obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
         mNodeObjects[model_n].append(obj);
         biomasslayer->addGeometry(obj->getGeometryEntity());
+
+        for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+            EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
+//            mNodeObjects[model_n].append(obj);
+            mEdgesLayer->addGeometry(edge->getGeometryEntity());
+        }
     }
 
     const QList<VesselData *> &vessels = model->getVesselList();

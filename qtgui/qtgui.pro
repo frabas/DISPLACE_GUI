@@ -34,7 +34,7 @@ win32 {
 }
 
 DEFINES += PROFILE
-LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB -lgdal
+LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
 
 
 # Add GDAL include path.
@@ -44,7 +44,7 @@ INCLUDEPATH += $$QMC_GDAL_INC
 win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
 
 # Add GDAL library path and library (unix).
-unix:LIBS += -L$$QMC_GDAL_LIB -lgdal
+unix:LIBS += -lgdal
 
 SOURCES += \
     main.cpp \

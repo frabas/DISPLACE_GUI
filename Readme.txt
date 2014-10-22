@@ -1,5 +1,13 @@
+README
+======
+
+Summary
+- How to build
+- GDAL notes
+
+
 How to build
-------------
+============
 
 
 Windows
@@ -51,3 +59,14 @@ mv * gdal
 
 A warning will appear, telling that gdal can't be moved into gdal/gdal. It's ok, ignore it.
 
+
+GDAL Notes
+==========
+
+Current version of QMapControl supports shapefiles loading ONLY for WGS84 Coordinates system. This is because QMapControl itself uses WGS84 coordinates.
+So you need to convert your shapefiles if not using this CRS.
+You can use ogr2ogr or the provided script in the scripts/ directory.
+
+$ ogr2ogr -t_srs WGS84 DEST.shp SRC.shp
+
+Note that DEST file is specified before the source!

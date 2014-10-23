@@ -1111,6 +1111,8 @@ bool DisplaceModel::initNations()
             vessel->setNationality(i);
         }
         mNations.push_back(data);
+
+        mInterestingNations.push_back(i);
     }
 
     return true;

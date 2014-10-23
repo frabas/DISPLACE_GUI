@@ -66,6 +66,8 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
     std::shared_ptr<qmapcontrol::LayerGeometry> mEdgesLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph Edges"));
+    mEdgesLayer->setVisible(false);
+
     mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
     mShapefileLayer[model_n]->setVisible(true);
 

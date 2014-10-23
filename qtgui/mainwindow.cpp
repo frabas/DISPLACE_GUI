@@ -394,7 +394,7 @@ void MainWindow::on_actionConfiguration_triggered()
 {
     if (currentModel) {
         Config c = currentModel->config();
-        ConfigDialog dlg (this);
+        ConfigDialog dlg (currentModel, this);
         dlg.set(c);
         if (dlg.exec() == QDialog::Accepted) {
             if (!dlg.get(c)) {

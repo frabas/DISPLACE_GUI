@@ -306,6 +306,13 @@ bool DbHelper::loadConfig(Config &cfg)
     }
     cfg.setCalib_cpue_multiplier(vl);
 
+    ipops.clear();
+    lsi = getMetadata("config::int_harbours").split(" ");
+    foreach (QString i, lsi) {
+        ipops.push_back(i.toInt());
+    }
+    cfg.m_interesting_harbours = ipops;
+
     return true;
 }
 
@@ -337,6 +344,12 @@ bool DbHelper::saveConfig(const Config &cfg)
     foreach (double d, dl)
         str.push_back(QString::number(d));
     setMetadata("config::calib_cpue_multi", str.join(" "));
+
+    str.clear();
+    il = cfg.m_interesting_harbours;
+    foreach (int d, il)
+        str.push_back(QString::number(d));
+    setMetadata("config::int_harbours", str.join(" "));
 
     return true;
 }

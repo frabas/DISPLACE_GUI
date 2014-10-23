@@ -378,14 +378,16 @@ int main(int argc, char* argv[])
 	vector <double> calib_oth_landings;
 	vector <double> calib_weight_at_szgroup;
 	vector <double> calib_cpue_multiplier;
-	read_config_file (
+    vector <int> int_harbours;
+    read_config_file (
 		folder_name_parameterization,
         "../"+inputfolder,
 		nbpops,
 		implicit_pops,
 		calib_oth_landings,
 		calib_weight_at_szgroup,
-		calib_cpue_multiplier
+        calib_cpue_multiplier,
+                int_harbours
 		);
 
 	read_scenario_config_file (

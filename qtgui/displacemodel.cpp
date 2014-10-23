@@ -44,6 +44,8 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         mScenario = Scenario::readFromFile(mName, mBasePath, mOutputName);
         mConfig = Config::readFromFile(mName, mBasePath, mOutputName);
 
+        mInterestingHarb = mConfig.m_interesting_harbours;
+
         loadNodes();
         loadVessels();
         loadGraphs();
@@ -364,6 +366,8 @@ void DisplaceModel::setConfig(const Config &config)
     mConfig = config;
     if (mDb)
         mDb->saveConfig(mConfig);
+
+    mInterestingHarb = mConfig.m_interesting_harbours;
 }
 
 void DisplaceModel::setCurrentStep(int step)

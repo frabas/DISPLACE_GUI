@@ -37,6 +37,8 @@ public:
 
 protected:
     void updatePopulationStats(DisplaceModel *model);
+    double getPopStatValue (DisplaceModel *model, int tstep, int popid, int szid, PopulationStat stattype);
+
     void updateNationStats(DisplaceModel *model);
     void updateHarboursStats (DisplaceModel *model);
 

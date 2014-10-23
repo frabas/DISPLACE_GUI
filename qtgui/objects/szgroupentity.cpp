@@ -57,18 +57,33 @@ int SzGroupEntity::columnCount() const
 QVariant SzGroupEntity::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DisplayRole) {
-        if (index.row() == 0) {
+        switch (index.row()) {
+        case Total:
             return QString(QObject::tr("Total"));
+        case Average:
+            return QString(QObject::tr("Average"));
+        case Min:
+            return QString(QObject::tr("Min"));
+        case Max:
+            return QString(QObject::tr("Max"));
+        default:
+            return QString(QObject::tr("Size/Age Group #%1")).arg(index.row() - LastSpecialGroup +1);
         }
-        return QString(QObject::tr("Size Group #%1")).arg(index.row());
     }
 
     if (role == Qt::CheckStateRole) {
-        if (index.row() == 0) {
+        switch (index.row()) {
+        case Total:
             return QVariant(model->getModel()->isInterestingSizeTotal() ? Qt::Checked : Qt::Unchecked);
+        case Average:
+            return QVariant(model->getModel()->isInterestingSizeAvg() ? Qt::Checked : Qt::Unchecked);
+        case Min:
+            return QVariant(model->getModel()->isInterestingSizeMin() ? Qt::Checked : Qt::Unchecked);
+        case Max:
+            return QVariant(model->getModel()->isInterestingSizeMax() ? Qt::Checked : Qt::Unchecked);
+        default:
+            return QVariant(model->getModel()->isInterestingSize(index.row() - LastSpecialGroup) ? Qt::Checked : Qt::Unchecked);
         }
-        // Note: index.row() == 0 means ALL
-        return QVariant(model->getModel()->isInterestingSize(index.row()-1) ? Qt::Checked : Qt::Unchecked);
     }
 
     return QVariant();
@@ -84,14 +99,26 @@ bool SzGroupEntity::setData(const QModelIndex &index, const QVariant &value, int
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
 
-        if (index.row() == 0) {
+        switch (index.row()) {
+        case Total:
             model->getModel()->setInterestingSizeTotal(value.toInt() != 0);
-        } else {
+            break;
+        case Average:
+            model->getModel()->setInterestingSizeAvg(value.toInt() != 0);
+            break;
+        case Min:
+            model->getModel()->setInterestingSizeMin(value.toInt() != 0);
+            break;
+        case Max:
+            model->getModel()->setInterestingSizeMax(value.toInt() != 0);
+            break;
+        default:
             if (value.toInt() == 0) {
-                model->getModel()->remInterestingSize(index.row() - 1);
+                model->getModel()->remInterestingSize(index.row() - LastSpecialGroup);
             } else {
-                model->getModel()->setInterestingSize(index.row() - 1);
+                model->getModel()->setInterestingSize(index.row() - LastSpecialGroup);
             }
+            break;
         }
 
         model->getStatsController()->updateStats(model->getModel());

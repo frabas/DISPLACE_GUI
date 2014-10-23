@@ -86,6 +86,10 @@ public:
     /* Access to Population statistics */
     int getPopulationsCount() const;
     const PopulationData &getPopulationsAtStep (int step, int idx) const {
+        if (idx >= mStatsPopulations.getValue(step).size()) {
+            qDebug() << step << idx << mStatsPopulations.getValue(step).size();
+            Q_ASSERT(false);
+        }
         return mStatsPopulations.getValue(step).at(idx);
     }
     int getPopulationsValuesCount() const {
@@ -165,6 +169,12 @@ public:
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
     void setInterestingSizeTotal(bool b) { mInterestingSizeTotal = b; }
+    bool isInterestingSizeAvg() const { return mInterestingSizeAvg; }
+    void setInterestingSizeAvg(bool b) { mInterestingSizeAvg = b; }
+    bool isInterestingSizeMin() const { return mInterestingSizeMin; }
+    void setInterestingSizeMin(bool b) { mInterestingSizeMin = b; }
+    bool isInterestingSizeMax() const { return mInterestingSizeMax; }
+    void setInterestingSizeMax(bool b) { mInterestingSizeMax = b; }
 
     const QList<int> &getInterestingSizes() const { return mInterestingSizes; }
 
@@ -258,7 +268,7 @@ private:
     Config mConfig;
 
     QList<int> mInterestingPop;
-    bool mInterestingSizeTotal;
+    bool mInterestingSizeTotal, mInterestingSizeAvg, mInterestingSizeMin, mInterestingSizeMax;
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;

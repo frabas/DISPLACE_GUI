@@ -10,6 +10,9 @@ class SzGroupEntity : public ObjectTreeEntity
     int mGroupIndex;
 
 public:
+    enum SpecialGroup { Total, Average, Min, Max,
+                        LastSpecialGroup };
+
     SzGroupEntity(ObjectTreeModel *_model, int idx = -1);
     virtual ~SzGroupEntity();
 

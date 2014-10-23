@@ -82,66 +82,141 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
 {
     static const QPen pen(QColor(0,0,255,200));
     mPlotPopulations->clearGraphs();
+    double val;
 
     QList<int> ipl = model->getInterestingPops();
     QList<int> szpl = model->getInterestingSizes();
     bool showtotal = model->isInterestingSizeTotal();
-    int nsz = szpl.size() + (showtotal ? 1 : 0);
+    bool showavg =  model->isInterestingSizeAvg();
+    bool showmin =  model->isInterestingSizeMin();
+    bool showmax =  model->isInterestingSizeMax();
 
-    int cnt;
-    int palcnt = 0;
+    int nsz_r = szpl.size();    /* Number of total "real" sizes */
+
+    if (showmax)
+        szpl.push_front(-4);
+    if (showmin)
+        szpl.push_front(-3);
+    if (showavg)
+        szpl.push_front(-2);
+    if (showtotal)
+        szpl.push_front(-1);
+
+    int nsz = szpl.size();
+
+    QList<QCPGraph *>graphs;
+    QList<QVector<double> >keyData;
+    QList<QVector<double> >valueData;
+
     foreach (int ip, ipl) {
-
         for (int isz = 0; isz < nsz; ++isz) {
-            QVector<double> keyData;
-            QVector<double> valueData;
-
+            // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(pen);
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = mPalette.colorForIndexMod(palcnt % mPalette.colorCount());
+            QColor col = mPalette.colorForIndexMod(ip % mPalette.colorCount());
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
-            ++cnt;
 
-            if (isz < szpl.size()) {        // is a siz group
-                graph->setName(QString(QObject::tr("Pop %1 SzGrp %2")).arg(ip).arg(szpl[isz]+1));
-            } else {
+            switch (szpl[isz]) {
+            case -4:
+                graph->setName(QString(QObject::tr("Pop %1 Max")).arg(ip));
+                break;
+            case -3:
+                graph->setName(QString(QObject::tr("Pop %1 Min")).arg(ip));
+                break;
+            case -2:
+                graph->setName(QString(QObject::tr("Pop %1 Avg")).arg(ip));
+                break;
+            case -1:
                 graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ip));
+                break;
+            default:
+                graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ip).arg(szpl[isz]+1));
             }
 
-            int n = model->getPopulationsValuesCount();
-            DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
-            for (int i = 0; i <n; ++i) {
-                keyData << it.key();
+            graphs.push_back(graph);
+            keyData.push_back(QVector<double>());
+            valueData.push_back(QVector<double>());
+        }
+    }
 
-                switch (mSelectedPopStat) {
-                case Aggregate:
-                    if (isz < szpl.size())
-                        valueData << it.value().at(ip).getAggregate()[szpl[isz]];
-                    else
-                        valueData << it.value().at(ip).getAggregateTot();
+    int fidx = nsz - nsz_r;     /* First "real" index */
+
+    int n = model->getPopulationsValuesCount();
+    DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
+    for (int i = 0; i <n; ++i) {
+        int nipl = ipl.size();
+        for (int ii = 0; ii < nipl; ++ii) {
+
+            // calculate transversal values...
+            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
+            for (int isz = fidx; isz < nsz; ++isz) {
+                val = getPopStatValue(model, it.key(), ipl[ii], szpl[isz], mSelectedPopStat);
+                if (isz == fidx) {
+                    mMin = val;
+                    mMax = val;
+                } else {
+                    if (mMin > val)
+                        mMin = val;
+                    if (mMax < val)
+                        mMax = val;
+                }
+                mAvg += val;
+                mTot += val;
+            }
+            if (nsz_r > 0)
+                mAvg /= nsz_r;
+
+            for (int isz = 0; isz < nsz; ++isz) {
+                int gidx = ii * nsz + isz;
+
+                keyData[gidx] << it.key();
+                switch (szpl[isz]) {
+                case -4:
+                    val = mMax;
                     break;
-                case Mortality:
-                    if (isz < szpl.size())
-                        valueData << it.value().at(ip).getMortality()[szpl[isz]];
-                    else
-                        valueData << it.value().at(ip).getMortalityTot();
+                case -3:
+                    val = mMin;
+                    break;
+                case -2:
+                    val = mAvg;
+                    break;
+                case -1:
+                    val = mTot;
+                    break;
+                default:
+                    val = getPopStatValue(model, it.key(), ipl[ii], szpl[isz], mSelectedPopStat);
                     break;
                 }
 
-                ++it;
+                valueData[gidx] << val;
             }
-
-            graph->setData(keyData, valueData);
-
-            ++palcnt;
         }
+        ++it;
+    }
+
+    for (int i = 0; i < graphs.size(); ++i) {
+        graphs[i]->setData(keyData.at(i), valueData.at(i));
+
+//        qDebug() << i << graphs[i]->name() << keyData[i] << valueData[i];
     }
 
     mPlotPopulations->rescaleAxes();
     mPlotPopulations->replot();
+}
+
+double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int popid, int szid, StatsController::PopulationStat stattype)
+{
+    switch (stattype) {
+    case Aggregate:
+        return model->getPopulationsAtStep(tstep, popid).getAggregate().at(szid);
+    case Mortality:
+        return model->getPopulationsAtStep(tstep, popid).getMortality().at(szid);
+    }
+
+    return 0;
 }
 
 void StatsController::updateNationStats(DisplaceModel *model)

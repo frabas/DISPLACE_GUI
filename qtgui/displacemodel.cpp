@@ -18,6 +18,9 @@ DisplaceModel::DisplaceModel()
       mLive(false),
       mInterestingPop(),
       mInterestingSizeTotal(true),
+      mInterestingSizeAvg(true),
+      mInterestingSizeMin(false),
+      mInterestingSizeMax(false),
       mInterestingSizes(),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))

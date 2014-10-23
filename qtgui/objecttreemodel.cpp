@@ -24,7 +24,7 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Populations"),
     QT_TR_NOOP_UTF8("Benthos"),
     QT_TR_NOOP_UTF8("Nations"),
-    QT_TR_NOOP_UTF8("Size Groups"),
+    QT_TR_NOOP_UTF8("Size Groups or Age"),
 };
 
 ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent) :

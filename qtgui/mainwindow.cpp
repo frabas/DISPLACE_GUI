@@ -700,6 +700,12 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_actionImport_Shapefile_triggered()
 {
+    if (currentModel == 0) {
+        QMessageBox::information(this, tr("Importing shape file"), tr("Please load a simulation or database before importing a shapefile"));
+        return;
+    }
+
+
     QSettings sets;
     QString name =  QFileDialog::getOpenFileName(this, tr("Import shapefile"),
                                          sets.value("import_shape").toString());

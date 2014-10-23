@@ -3273,12 +3273,12 @@ int main(int argc, char* argv[])
 				for (unsigned int n=0; n<nodes.size(); n++)
 				{
 					nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
-                    if (use_gui) {
-                        popnodes_end.flush();
-                        guiSendUpdateCommand(popnodes_end_filename, tstep);
-                    }
                 }
-			}
+                if (use_gui) {
+                    popnodes_end.flush();
+                    guiSendUpdateCommand(popnodes_end_filename, tstep);
+                }
+            }
 
             // EXPORT: populations statistics - Monthly
 

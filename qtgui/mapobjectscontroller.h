@@ -26,6 +26,7 @@ class MapObject;
 class HarbourMapObject;
 class NodeMapObject;
 class VesselMapObject;
+class EdgeLayer;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -158,6 +159,9 @@ protected slots:
 public slots:
     void signalAppIsClosing();
     void removeAllWidgets();
+
+signals:
+    int edgeSelectionChanged (int num);
 
 private:
     qmapcontrol::QMapControl *mMap;

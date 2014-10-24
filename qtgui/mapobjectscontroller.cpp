@@ -5,6 +5,7 @@
 #include <mapobjects/nodemapobject.h>
 #include <mapobjects/vesselmapobject.h>
 #include <mapobjects/edgemapobject.h>
+#include <mapobjects/edgelayer.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/MapAdapterOSM.h>
@@ -65,8 +66,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
-    std::shared_ptr<qmapcontrol::LayerGeometry> mEdgesLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph Edges"));
+    std::shared_ptr<EdgeLayer> mEdgesLayer = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
     mEdgesLayer->setVisible(false);
+    connect (mEdgesLayer.get(), SIGNAL(edgeSelectionChanged(int)), SIGNAL(edgeSelectionChanged(int)));
 
     mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
     mShapefileLayer[model_n]->setVisible(true);
@@ -74,7 +76,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerEntities, mEntityLayer);
     addStandardLayer(model_n, LayerGraph, mGraphLayer);
     addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
-    addStandardLayer(model_n, LayerEdges, mEdgesLayer);
+    addStandardLayer(model_n, LayerEdges, mEdgesLayer->layer());
 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
@@ -126,7 +128,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
         for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
             EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
 //            mNodeObjects[model_n].append(obj);
-            mEdgesLayer->addGeometry(edge->getGeometryEntity());
+            mEdgesLayer->addEdge(edge);
         }
     }
 

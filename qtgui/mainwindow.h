@@ -52,6 +52,8 @@ private slots:
     void outputUpdated();
     void mapFocusPointChanged(PointWorldCoord);
 
+    void edgeSelectionsChanged(int);
+
     void errorImportingStatsFile(QString);
 
     void playTimerTimeout();

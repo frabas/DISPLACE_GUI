@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
     mMapController = new MapObjectsController(map);
+    connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
 
     connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
 
@@ -273,6 +274,11 @@ void MainWindow::outputUpdated()
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
     statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+}
+
+void MainWindow::edgeSelectionsChanged(int num)
+{
+    qDebug() << "Edges " << num << "selected";
 }
 
 void MainWindow::errorImportingStatsFile(QString msg)

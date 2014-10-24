@@ -26,7 +26,7 @@ public:
         return mGeometry;
     }
 
-//    virtual bool clicked();
+    virtual bool clicked();
 //    virtual void update();
 
 protected:
@@ -35,10 +35,16 @@ protected:
 private slots:
 //    void widgetClosed();
 
+signals:
+    void selected(/*EdgeMapObject *, */ bool);
+
 private:
+    static QPen mNormalPen, mSelectedPen;
+
     MapObjectsController *mController;
     NodeData *mNode;
     int mEdgeIndex;
+    bool mSelected;
 
     std::shared_ptr<qmapcontrol::GeometryLineString> mGeometry;
     NodeDetailsWidget *mWidget;

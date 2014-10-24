@@ -88,7 +88,8 @@ SOURCES += \
     configdialog.cpp \
     mapobjects/nodedetailswidget.cpp \
     modelobjects/harbourdata.cpp \
-    mapobjects/edgemapobject.cpp
+    mapobjects/edgemapobject.cpp \
+    mapobjects/edgelayer.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -142,7 +143,8 @@ HEADERS += \
     configdialog.h \
     mapobjects/nodedetailswidget.h \
     modelobjects/harbourdata.h \
-    mapobjects/edgemapobject.h
+    mapobjects/edgemapobject.h \
+    mapobjects/edgelayer.h
 
 RESOURCES += \
     qtgui.qrc

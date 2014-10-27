@@ -6,14 +6,13 @@
 #include <QMessageBox>
 #include <QPen>
 
-QPen EdgeMapObject::mNormalPen(Qt::black);
-QPen EdgeMapObject::mSelectedPen (QBrush(Qt::red), 3, Qt::SolidLine);
+QPen EdgeGraphics::mNormalPen(Qt::black);
+QPen EdgeGraphics::mSelectedPen (QBrush(Qt::red), 3, Qt::SolidLine);
 
 EdgeMapObject::EdgeMapObject(MapObjectsController *controller, int indx, NodeData *node)
     : QObject(),
       mController(controller),
       mEdgeIndex(indx),
-      mSelected(false),
       mNode(node)
 {
     std::vector<qmapcontrol::PointWorldCoord> line;
@@ -22,20 +21,25 @@ EdgeMapObject::EdgeMapObject(MapObjectsController *controller, int indx, NodeDat
     NodeData *t = mNode->getModel()->getNodesList()[mNode->getAdiacencyByIdx(mEdgeIndex)];
     line.push_back(qmapcontrol::PointWorldCoord(t->get_x(), t->get_y()));
 
-    mGeometry = std::shared_ptr<qmapcontrol::GeometryLineString>(new qmapcontrol::GeometryLineString(line));
+    mGeometry = std::shared_ptr<EdgeGraphics>(new EdgeGraphics(line));
+    mGeometry->setFlags(qmapcontrol::Geometry::IsSelectable);
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
-
-    mGeometry->setPen(mNormalPen);
 }
 
-bool EdgeMapObject::showProperties()
+void EdgeMapObject::onSelectionChanged()
 {
-    mSelected = !mSelected;
-    mGeometry->setPen(mSelected ? mSelectedPen : mNormalPen);
+    emit edgeSelectionHasChanged(this);
+}
 
-//    mGeometry->requestRedraw();
-    emit selected( /*this,*/ mSelected);
+EdgeGraphics::EdgeGraphics(const std::vector<PointWorldCoord> &points)
+    : qmapcontrol::GeometryLineString(points)
+{
+    setPen(mNormalPen);
+}
 
-    qDebug() << "Selected: " << mNode->get_idx_node() << mEdgeIndex;
-    return true;
+void EdgeGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &backbuffer_rect_coord, const int &controller_zoom)
+{
+    setPen(selected() ? mSelectedPen : mNormalPen);
+
+    qmapcontrol::GeometryLineString::draw(painter, backbuffer_rect_coord, controller_zoom);
 }

@@ -751,4 +751,14 @@ void MainWindow::on_actionGraph_toggled(bool en)
     ui->actionAdd->setEnabled(en);
     ui->actionDelete->setEnabled(en);
     ui->actionProperties->setEnabled(en);
+
+    if (!en) {
+        mMapController->setEditorMode(MapObjectsController::NoEditorMode);
+    }
+}
+
+void MainWindow::on_actionEdge_Edit_toggled(bool en)
+{
+    if (en)
+        mMapController->setEditorMode(MapObjectsController::EdgeEditorMode);
 }

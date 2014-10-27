@@ -30,6 +30,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
+      mEditorMode(NoEditorMode),
       mClosing(false)
 {
     // create mapadapter, for mainlayer and overlay
@@ -68,7 +69,6 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
     std::shared_ptr<EdgeLayer> mEdgesLayer = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
     mEdgesLayer->setVisible(false);
-    connect (mEdgesLayer.get(), SIGNAL(edgeSelectionChanged(int)), SIGNAL(edgeSelectionChanged(int)));
 
     mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
     mShapefileLayer[model_n]->setVisible(true);
@@ -127,6 +127,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
         for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
             EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
+
+            connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
+
 //            mNodeObjects[model_n].append(obj);
             mEdgesLayer->addEdge(edge);
         }
@@ -250,6 +253,11 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
     return true;
 }
 
+void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
+{
+    mEditorMode = mode;
+}
+
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
 {
     if (layer != mMainLayer && layer != mSeamarkLayer)
@@ -267,8 +275,16 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
 {
     WidgetAncillaryData *objPtr = reinterpret_cast<WidgetAncillaryData *>(geometry->ancillaryData());
 
-    if (objPtr && objPtr->object())
-        objPtr->object()->showProperties();
+    if (objPtr && objPtr->object()) {
+        switch(mEditorMode) {
+        case NoEditorMode:
+            objPtr->object()->showProperties();
+            break;
+        case EdgeEditorMode:
+            objPtr->object()->toggleSelection();
+            break;
+        }
+    }
 }
 
 void MapObjectsController::widgetClosed(QObject *widget)
@@ -292,4 +308,14 @@ void MapObjectsController::removeAllWidgets()
         wid->getWidget()->close();
         mWidgetLayer->removeGeometry(wid, true);
     }
+}
+
+void MapObjectsController::edgeSelectionHasChanged(EdgeMapObject *object)
+{
+    if (object->selected())
+        mEdgeSelection.insert(object);
+    else
+        mEdgeSelection.remove(object);
+
+    emit edgeSelectionChanged(mEdgeSelection.size());
 }

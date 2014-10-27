@@ -27,6 +27,7 @@ class HarbourMapObject;
 class NodeMapObject;
 class VesselMapObject;
 class EdgeLayer;
+class EdgeMapObject;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -106,6 +107,11 @@ public:
         OutLayerMax
     };
 
+    enum EditorModes {
+        NoEditorMode,
+        EdgeEditorMode
+    };
+
     MapObjectsController(qmapcontrol::QMapControl *map);
 
     qmapcontrol::QMapControl *mapWidget() const { return mMap; }
@@ -148,6 +154,10 @@ public:
 
     bool importShapefile(int model_idx, QString path, QString layername);
 
+    void setEditorMode (EditorModes mode);
+
+    QSet<EdgeMapObject *> edgeSelection() const { return mEdgeSelection; }
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
@@ -159,6 +169,9 @@ protected slots:
 public slots:
     void signalAppIsClosing();
     void removeAllWidgets();
+
+    /* Selection slots */
+    void edgeSelectionHasChanged (EdgeMapObject *object);
 
 signals:
     int edgeSelectionChanged (int num);
@@ -181,7 +194,12 @@ private:
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
 
+    EditorModes mEditorMode;
     bool mClosing;
+
+    /* Selection handling */
+
+    QSet<EdgeMapObject *> mEdgeSelection;
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

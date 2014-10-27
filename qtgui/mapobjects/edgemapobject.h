@@ -7,6 +7,7 @@
 #include <modelobjects/nodedata.h>
 #include <mapobjects/nodegraphics.h>
 #include <QMapControl/GeometryLineString.h>
+#include <QMapControl/Geometry.h>
 
 namespace qmapcontrol {
     class RectWorldCoord;
@@ -14,6 +15,16 @@ namespace qmapcontrol {
 
 class MapObjectsController;
 class NodeDetailsWidget;
+
+class EdgeGraphics;
+
+class EdgeGraphics : public qmapcontrol::GeometryLineString {
+    static QPen mNormalPen, mSelectedPen;
+public:
+    explicit EdgeGraphics(const std::vector<qmapcontrol::PointWorldCoord>& points);
+
+    virtual void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
+};
 
 class EdgeMapObject : public QObject, public MapObject
 {
@@ -26,27 +37,24 @@ public:
         return mGeometry;
     }
 
-    virtual bool showProperties();
-//    virtual void update();
+    void onSelectionChanged() override;
+
+    bool selected() const { return mGeometry->selected(); }
 
 protected:
-//    QString updateStatText(QString prefix);
 
 private slots:
-//    void widgetClosed();
 
 signals:
-    void selected(/*EdgeMapObject *, */ bool);
+    void edgeSelectionHasChanged(EdgeMapObject *object);
 
 private:
-    static QPen mNormalPen, mSelectedPen;
 
     MapObjectsController *mController;
     NodeData *mNode;
     int mEdgeIndex;
-    bool mSelected;
 
-    std::shared_ptr<qmapcontrol::GeometryLineString> mGeometry;
+    std::shared_ptr<EdgeGraphics> mGeometry;
     NodeDetailsWidget *mWidget;
 };
 

@@ -21,14 +21,6 @@ public:
 
     const QList<EdgeMapObject *>selection() const { return mSelection; }
 
-signals:
-    void edgeSelectionChanged(int);
-
-public slots:
-
-public slots:
-    void edgeSelected(bool stat);
-
 private:
     MapObjectsController *mController;
     std::shared_ptr<qmapcontrol::LayerGeometry> mLayer;

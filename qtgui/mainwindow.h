@@ -90,6 +90,8 @@ private slots:
 
     void on_actionGraph_toggled(bool arg1);
 
+    void on_actionEdge_Edit_toggled(bool arg1);
+
 signals:
     void modelStateChanged();
 

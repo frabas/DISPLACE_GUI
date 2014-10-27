@@ -13,20 +13,4 @@ EdgeLayer::EdgeLayer(MapObjectsController *controller, const QString &name, QObj
 void EdgeLayer::addEdge(EdgeMapObject *edge )
 {
     mLayer->addGeometry(edge->getGeometryEntity());
-//    connect (edge, SIGNAL(selected(EdgeMapObject*,bool)), this, SLOT(edgeSelected(EdgeMapObject*,bool)));
-
-    connect(edge, SIGNAL(selected(bool)), this, SLOT(edgeSelected(bool)));
-}
-
-void EdgeLayer::edgeSelected(/*EdgeMapObject *obj, */ bool stat)
-{
-    qDebug() << "edge selected " << stat << mSelection.size();
-    /*
-    if (stat)
-        mSelection.append(obj);
-    else
-        mSelection.removeAll(obj);
-*/
-
-    emit edgeSelectionChanged(mSelection.size());
 }

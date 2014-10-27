@@ -64,6 +64,7 @@
     <addaction name="action_Load"/>
     <addaction name="actionLoad_results"/>
     <addaction name="actionImport_results"/>
+    <addaction name="actionImport_Shapefile"/>
     <addaction name="action_Link_database"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
@@ -73,9 +74,13 @@
     <property name="title">
      <string>&amp;Editor</string>
     </property>
-    <addaction name="actionImport_Shapefile"/>
     <addaction name="actionGraph"/>
-    <addaction name="actionAdd_Polygon"/>
+    <addaction name="actionClear_Graph"/>
+    <addaction name="actionEdge_Edit"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdd"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionProperties"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
@@ -684,7 +689,6 @@
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionGraph"/>
-   <addaction name="actionAdd_Polygon"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
@@ -751,21 +755,15 @@
    </property>
   </action>
   <action name="actionGraph">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="qtgui.qrc">
      <normaloff>:/icons/graph.png</normaloff>:/icons/graph.png</iconset>
    </property>
    <property name="text">
-    <string>Graph...</string>
-   </property>
-  </action>
-  <action name="actionAdd_Polygon">
-   <property name="icon">
-    <iconset resource="qtgui.qrc">
-     <normaloff>:/icons/geometry.png</normaloff>:/icons/geometry.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add Polygon</string>
+    <string>Editor Mode</string>
    </property>
   </action>
   <action name="actionImport_Shapefile">
@@ -785,6 +783,38 @@
   <action name="actionPopulations">
    <property name="text">
     <string>Populations...</string>
+   </property>
+  </action>
+  <action name="actionEdge_Edit">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Edge Edit</string>
+   </property>
+  </action>
+  <action name="actionClear_Graph">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/close.png</normaloff>:/icons/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Graph</string>
+   </property>
+  </action>
+  <action name="actionAdd">
+   <property name="text">
+    <string>Add...</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete...</string>
+   </property>
+  </action>
+  <action name="actionProperties">
+   <property name="text">
+    <string>Properties...</string>
    </property>
   </action>
  </widget>

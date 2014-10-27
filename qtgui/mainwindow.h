@@ -88,6 +88,8 @@ private slots:
     void on_actionQuit_triggered();
     void on_actionImport_Shapefile_triggered();
 
+    void on_actionGraph_toggled(bool arg1);
+
 signals:
     void modelStateChanged();
 

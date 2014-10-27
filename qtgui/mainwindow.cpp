@@ -108,6 +108,9 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
+
+    ui->actionGraph->setChecked(false);
+    on_actionGraph_toggled(false);  /* Force action function execution */
 }
 
 MainWindow::~MainWindow()
@@ -735,4 +738,17 @@ void MainWindow::on_actionImport_Shapefile_triggered()
         sets.setValue("import_shape", info.absolutePath());
     }
 
+}
+
+void MainWindow::on_actionGraph_toggled(bool en)
+{
+    /* Enable/Disable editor commands */
+
+    ui->actionClear_Graph->setEnabled(en);
+    ui->actionEdge_Edit->setEnabled(en);
+
+    /* -- */
+    ui->actionAdd->setEnabled(en);
+    ui->actionDelete->setEnabled(en);
+    ui->actionProperties->setEnabled(en);
 }

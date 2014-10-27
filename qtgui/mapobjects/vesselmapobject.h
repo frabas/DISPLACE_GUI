@@ -41,8 +41,8 @@ public:
         return mGeometry;
     }
 
-    virtual bool clicked();
-    virtual void update();
+    virtual bool showProperties();
+    virtual void updateProperties();
 
     void vesselUpdated();
 

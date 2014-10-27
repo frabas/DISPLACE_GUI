@@ -158,7 +158,7 @@ void MapObjectsController::updateVesselPosition(int model, int idx)
 void MapObjectsController::updateNodes(int model)
 {
     foreach (NodeMapObject *obj, mNodeObjects[model]) {
-        obj->update();
+        obj->updateProperties();
         obj->getGeometryEntity()->requestRedraw();
     }
 }
@@ -268,7 +268,7 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
     WidgetAncillaryData *objPtr = reinterpret_cast<WidgetAncillaryData *>(geometry->ancillaryData());
 
     if (objPtr && objPtr->object())
-        objPtr->object()->clicked();
+        objPtr->object()->showProperties();
 }
 
 void MapObjectsController::widgetClosed(QObject *widget)

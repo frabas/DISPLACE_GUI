@@ -28,20 +28,20 @@ HarbourMapObject::HarbourMapObject(MapObjectsController *controller, DisplaceMod
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 }
 
-bool HarbourMapObject::clicked()
+bool HarbourMapObject::showProperties()
 {
     if (!mWidget) {
         mWidget = new NodeDetailsWidget(mController->mapWidget());
         connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
     }
 
-    update();
+    updateProperties();
     mController->showDetailsWidget(mGeometry->coord(),mWidget);
 
     return true;
 }
 
-void HarbourMapObject::update()
+void HarbourMapObject::updateProperties()
 {
     if (!mWidget)
         return;

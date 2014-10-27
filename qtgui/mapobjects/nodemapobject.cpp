@@ -49,20 +49,20 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 }
 
-bool NodeMapObject::clicked()
+bool NodeMapObject::showProperties()
 {
     if (!mWidget) {
         mWidget = new NodeDetailsWidget(mController->mapWidget());
         connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
     }
 
-    update();
+    updateProperties();
     mController->showDetailsWidget(mGeometry->coord(),mWidget);
 
     return true;
 }
 
-void NodeMapObject::update()
+void NodeMapObject::updateProperties()
 {
     if (!mWidget)
         return;

@@ -26,7 +26,7 @@ public:
         return mGeometry;
     }
 
-    virtual bool clicked();
+    virtual bool showProperties();
 //    virtual void update();
 
 protected:

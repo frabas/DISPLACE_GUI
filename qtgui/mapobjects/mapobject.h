@@ -15,8 +15,8 @@ public:
 
 
     virtual std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const = 0;
-    virtual bool clicked();
-    virtual void update();
+    virtual bool showProperties();
+    virtual void updateProperties();
 };
 
 #endif // MAPOBJECT_H

@@ -11,12 +11,12 @@ MapObject::~MapObject()
 
 }
 
-bool MapObject::clicked()
+bool MapObject::showProperties()
 {
     return false;
 }
 
-void MapObject::update()
+void MapObject::updateProperties()
 {
 
 }

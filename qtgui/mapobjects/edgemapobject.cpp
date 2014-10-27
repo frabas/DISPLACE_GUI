@@ -28,7 +28,7 @@ EdgeMapObject::EdgeMapObject(MapObjectsController *controller, int indx, NodeDat
     mGeometry->setPen(mNormalPen);
 }
 
-bool EdgeMapObject::clicked()
+bool EdgeMapObject::showProperties()
 {
     mSelected = !mSelected;
     mGeometry->setPen(mSelected ? mSelectedPen : mNormalPen);

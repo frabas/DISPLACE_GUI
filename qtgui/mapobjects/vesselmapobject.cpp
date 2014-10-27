@@ -22,20 +22,20 @@ VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *v
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 }
 
-bool VesselMapObject::clicked()
+bool VesselMapObject::showProperties()
 {
     if (!mWidget) {
         mWidget = new NodeDetailsWidget(mController->mapWidget());
         connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
     }
 
-    update();
+    updateProperties();
     mController->showDetailsWidget(mGeometry->coord(),mWidget);
 
     return true;
 }
 
-void VesselMapObject::update()
+void VesselMapObject::updateProperties()
 {
     if (!mWidget)
         return;

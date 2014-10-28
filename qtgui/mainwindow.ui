@@ -689,6 +689,11 @@
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionGraph"/>
+   <addaction name="actionEdge_Edit"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdd"/>
+   <addaction name="actionDelete"/>
+   <addaction name="actionProperties"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
@@ -789,6 +794,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/edge.png</normaloff>:/icons/edge.png</iconset>
+   </property>
    <property name="text">
     <string>Edge Edit</string>
    </property>
@@ -803,11 +812,19 @@
    </property>
   </action>
   <action name="actionAdd">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+   </property>
    <property name="text">
     <string>Add...</string>
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/delete.png</normaloff>:/icons/delete.png</iconset>
+   </property>
    <property name="text">
     <string>Delete...</string>
    </property>
@@ -816,6 +833,10 @@
    </property>
   </action>
   <action name="actionProperties">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
+   </property>
    <property name="text">
     <string>Properties...</string>
    </property>

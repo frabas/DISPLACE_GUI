@@ -26,5 +26,9 @@
         <file>icons/places.png</file>
         <file>backgrounds/callout.png</file>
         <file>icons/close.png</file>
+        <file>icons/edge.png</file>
+        <file>icons/add.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/info.png</file>
     </qresource>
 </RCC>

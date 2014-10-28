@@ -9,7 +9,7 @@
 
 Simulator::Simulator()
     : mSimulation(0),
-      mModel(0),
+      mModel(),
       mSimSteps(8761),
       mLastStep(-1),
       mOutputName("baseline"),
@@ -19,7 +19,7 @@ Simulator::Simulator()
 {
 }
 
-void Simulator::linkModel(DisplaceModel *model)
+void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
 {
     mModel= model;
 }

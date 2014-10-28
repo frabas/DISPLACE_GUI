@@ -38,6 +38,9 @@ public:
 
     DisplaceModel();
 
+    void setIndex(int idx) { mIndex = idx; }
+    int index() const { return mIndex; }
+
     bool load (QString path, QString modelname, QString outputname);
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
@@ -232,6 +235,7 @@ public:
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
     void collectVesselStats (int step, std::shared_ptr<VesselStats> stats);
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -256,6 +260,7 @@ private:
     QString mName;
     QString mBasePath;
     QString mOutputName;
+    int mIndex;
 
     int mCurrentStep, mLastStep;
     int mLastStats;

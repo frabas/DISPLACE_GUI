@@ -14,3 +14,8 @@ void EdgeLayer::addEdge(EdgeMapObject *edge )
 {
     mLayer->addGeometry(edge->getGeometryEntity());
 }
+
+void EdgeLayer::removeEdge(EdgeMapObject *edge)
+{
+    mLayer->removeGeometry(edge->getGeometryEntity());
+}

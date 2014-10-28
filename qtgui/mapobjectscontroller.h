@@ -113,9 +113,9 @@ public:
     };
 
     MapObjectsController(qmapcontrol::QMapControl *map);
-
     qmapcontrol::QMapControl *mapWidget() const { return mMap; }
 
+    void setModel(int model_n, std::shared_ptr<DisplaceModel> model);
     void createMapObjectsFromModel(int model_n, DisplaceModel *model);
     void updateMapObjectsFromModel(int model_n, DisplaceModel *model);
 
@@ -152,16 +152,21 @@ public:
 
     void showDetailsWidget(const PointWorldCoord &point, QWidget *widget);
 
+    /* Editor functions */
+
     bool importShapefile(int model_idx, QString path, QString layername);
 
     void setEditorMode (EditorModes mode);
 
-    QSet<EdgeMapObject *> edgeSelection() const { return mEdgeSelection; }
+    void delSelected(int model);
+
+    QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
 
+    void delSelectedEdges(int model);
 protected slots:
     void geometryClicked(const Geometry *);
     void widgetClosed(QObject *);
@@ -178,9 +183,13 @@ signals:
 
 private:
     qmapcontrol::QMapControl *mMap;
+    std::shared_ptr<DisplaceModel> mModels[MAX_MODELS];
+
     QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];
     QList<NodeMapObject *> mNodeObjects[MAX_MODELS];
     QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
+    QList<EdgeMapObject *> mEdgeObjects[MAX_MODELS];
+
     std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerESRIShapefile> mShapefileLayer[MAX_MODELS];
 
@@ -189,6 +198,8 @@ private:
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
     std::shared_ptr<qmapcontrol::LayerGeometry> mWidgetLayer;
+
+    std::shared_ptr<EdgeLayer> mEdgesLayer[MAX_MODELS];
 
     QVector<bool> mModelVisibility;
     QVector<LayerListImpl> mLayers;
@@ -199,7 +210,7 @@ private:
 
     /* Selection handling */
 
-    QSet<EdgeMapObject *> mEdgeSelection;
+    QSet<EdgeMapObject *> mEdgeSelection[MAX_MODELS];
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

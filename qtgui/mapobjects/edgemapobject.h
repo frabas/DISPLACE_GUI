@@ -41,6 +41,8 @@ public:
 
     bool selected() const { return mGeometry->selected(); }
 
+    NodeData *node() const { return mNode; }
+    NodeData *target() const { return mTarget; }
 protected:
 
 private slots:
@@ -51,8 +53,7 @@ signals:
 private:
 
     MapObjectsController *mController;
-    NodeData *mNode;
-    int mEdgeIndex;
+    NodeData *mNode, *mTarget;
 
     std::shared_ptr<EdgeGraphics> mGeometry;
     NodeDetailsWidget *mWidget;

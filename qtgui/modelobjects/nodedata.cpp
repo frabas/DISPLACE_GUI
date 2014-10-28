@@ -95,6 +95,7 @@ void NodeData::setImpact(int pop, double impact)
     if (pop < mNode->get_nbpops() && pop >= 0)
         mImpact[pop] = impact;
 }
+
 int NodeData::getHarbourId() const
 {
     return mHarbourId;
@@ -115,6 +116,12 @@ void NodeData::removeAdiacencyByIdx(int idx)
 {
     mAdiacency.removeAt(idx);
     mWeights.removeAt(idx);
+}
+
+void NodeData::removeAdiacencyByTarget(int target)
+{
+    int idx = mAdiacency.indexOf(target);
+    removeAdiacencyByIdx(idx);
 }
 
 int NodeData::getAdiacencyCount() const

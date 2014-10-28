@@ -52,6 +52,11 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));
 }
 
+void MapObjectsController::setModel(int model_n, std::shared_ptr<DisplaceModel> model)
+{
+    mModels[model_n] = model;
+}
+
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
     mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
@@ -67,8 +72,8 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
-    std::shared_ptr<EdgeLayer> mEdgesLayer = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
-    mEdgesLayer->setVisible(false);
+    mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
+    mEdgesLayer[model_n]->setVisible(false);
 
     mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
     mShapefileLayer[model_n]->setVisible(true);
@@ -76,7 +81,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerEntities, mEntityLayer);
     addStandardLayer(model_n, LayerGraph, mGraphLayer);
     addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
-    addStandardLayer(model_n, LayerEdges, mEdgesLayer->layer());
+    addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer());
 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
     addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
@@ -130,8 +135,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
             connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
-//            mNodeObjects[model_n].append(obj);
-            mEdgesLayer->addEdge(edge);
+            mEdgesLayer[model_n]->addEdge(edge);
         }
     }
 
@@ -258,6 +262,18 @@ void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
     mEditorMode = mode;
 }
 
+void MapObjectsController::delSelected(int model)
+{
+    if (mEditorMode == NoEditorMode)
+        return;
+
+    switch (mEditorMode) {
+    case EdgeEditorMode:
+        delSelectedEdges(model);
+        break;
+    }
+}
+
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
 {
     if (layer != mMainLayer && layer != mSeamarkLayer)
@@ -269,6 +285,29 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 {
     mMap->addLayer(layer);
     mOutputLayers[model].layers[id] = layer;
+}
+
+void MapObjectsController::delSelectedEdges(int model)
+{
+    foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
+        NodeData *nd = edge->node();
+        NodeData *tg = edge->target();
+
+//        int nodeid1 = nd->get_idx_node();
+
+        // TODO: automatically remove other side edges
+//        int nodeid2 = nd->getAdiacencyByIdx(eid1);
+
+//        NodeData *nd2 = mModels[model]->getNodesList()[nodeid2];
+//        nd2->removeAdiacencyByTarget(nodeid1);
+//        nd->removeAdiacencyByIdx(eid1);
+        nd->removeAdiacencyByTarget(tg->get_idx_node());
+
+        mEdgesLayer[model]->removeEdge(edge);
+    }
+
+    mEdgeSelection[model].clear();
+    emit edgeSelectionChanged(0);
 }
 
 void MapObjectsController::geometryClicked(const Geometry *geometry)
@@ -312,10 +351,12 @@ void MapObjectsController::removeAllWidgets()
 
 void MapObjectsController::edgeSelectionHasChanged(EdgeMapObject *object)
 {
-    if (object->selected())
-        mEdgeSelection.insert(object);
-    else
-        mEdgeSelection.remove(object);
+    int modelIndex = object->node()->getModel()->index();
 
-    emit edgeSelectionChanged(mEdgeSelection.size());
+    if (object->selected())
+        mEdgeSelection[modelIndex].insert(object);
+    else
+        mEdgeSelection[modelIndex].remove(object);
+
+    emit edgeSelectionChanged(mEdgeSelection[modelIndex].size());
 }

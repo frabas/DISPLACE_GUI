@@ -811,6 +811,9 @@
    <property name="text">
     <string>Delete...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
   </action>
   <action name="actionProperties">
    <property name="text">

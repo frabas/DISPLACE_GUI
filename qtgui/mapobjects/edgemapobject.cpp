@@ -12,14 +12,13 @@ QPen EdgeGraphics::mSelectedPen (QBrush(Qt::red), 3, Qt::SolidLine);
 EdgeMapObject::EdgeMapObject(MapObjectsController *controller, int indx, NodeData *node)
     : QObject(),
       mController(controller),
-      mEdgeIndex(indx),
       mNode(node)
 {
     std::vector<qmapcontrol::PointWorldCoord> line;
     line.push_back(qmapcontrol::PointWorldCoord(mNode->get_x(), mNode->get_y()));
 
-    NodeData *t = mNode->getModel()->getNodesList()[mNode->getAdiacencyByIdx(mEdgeIndex)];
-    line.push_back(qmapcontrol::PointWorldCoord(t->get_x(), t->get_y()));
+    mTarget = mNode->getModel()->getNodesList()[mNode->getAdiacencyByIdx(indx)];
+    line.push_back(qmapcontrol::PointWorldCoord(mTarget->get_x(), mTarget->get_y()));
 
     mGeometry = std::shared_ptr<EdgeGraphics>(new EdgeGraphics(line));
     mGeometry->setFlags(qmapcontrol::Geometry::IsSelectable);

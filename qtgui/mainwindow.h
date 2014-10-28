@@ -92,6 +92,8 @@ private slots:
 
     void on_actionEdge_Edit_toggled(bool arg1);
 
+    void on_actionDelete_triggered();
+
 signals:
     void modelStateChanged();
 
@@ -111,8 +113,8 @@ private:
     Ui::MainWindow *ui;
 
     // Data model
-    DisplaceModel *models[MAX_MODELS];
-    DisplaceModel *currentModel;
+    std::shared_ptr<DisplaceModel> models[MAX_MODELS];
+    std::shared_ptr<DisplaceModel> currentModel;
     int currentModelIdx;
     Simulator *mSimulation;
     MapObjectsController *mMapController;

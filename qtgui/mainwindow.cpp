@@ -150,7 +150,7 @@ void MainWindow::on_action_Load_triggered()
 
         // load the model named x
 
-        DisplaceModel *m = new DisplaceModel();
+        std::shared_ptr<DisplaceModel> m(new DisplaceModel());
 
         if (!m->load(d.absolutePath(), parts.at(1), "baseline")) {
             QMessageBox::warning(this, tr("Load failed."),
@@ -159,10 +159,12 @@ void MainWindow::on_action_Load_triggered()
         }
 
         /* Connect model */
-        connect (m, SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
-        connect (m, SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
+        connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
+        connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
 
-        mMapController->createMapObjectsFromModel(0, m);
+        m->setIndex(0);
+        mMapController->setModel(0, m);
+        mMapController->createMapObjectsFromModel(0, m.get());
         ui->modelSelector->setCurrentIndex(0);
         models[0] = m;
 
@@ -183,10 +185,10 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         currentModel = models[currentModelIdx];
     else
         currentModel = 0;
-    treemodel->setCurrentModel(currentModelIdx, currentModel);
+    treemodel->setCurrentModel(currentModelIdx, currentModel.get());
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
-    mStatsController->updateStats(currentModel);
+    mStatsController->updateStats(currentModel.get());
 
     bool e = (currentModelIdx != 0);
     ui->play_bk->setEnabled(e);
@@ -271,7 +273,7 @@ void MainWindow::updateOutputFile(QString path, int n)
 void MainWindow::outputUpdated()
 {
     mMapController->updateNodes(0);
-    mStatsController->updateStats(models[0]);
+    mStatsController->updateStats(models[0].get());
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
@@ -281,7 +283,8 @@ void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 
 void MainWindow::edgeSelectionsChanged(int num)
 {
-    qDebug() << "Edges " << num << "selected";
+    ui->actionDelete->setEnabled(num > 0);
+    ui->actionProperties->setEnabled(num > 0);
 }
 
 void MainWindow::errorImportingStatsFile(QString msg)
@@ -319,8 +322,8 @@ void MainWindow::updateModelList()
 
 void MainWindow::updateAllDisplayObjects()
 {
-    mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel);
-    mStatsController->updateStats(currentModel);
+    mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel.get());
+    mStatsController->updateStats(currentModel.get());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -403,7 +406,7 @@ void MainWindow::on_actionConfiguration_triggered()
 {
     if (currentModel) {
         Config c = currentModel->config();
-        ConfigDialog dlg (currentModel, this);
+        ConfigDialog dlg (currentModel.get(), this);
         dlg.set(c);
         if (dlg.exec() == QDialog::Accepted) {
             if (!dlg.get(c)) {
@@ -561,7 +564,7 @@ void MainWindow::on_actionLoad_results_triggered()
             info = QFileInfo(dbname);
         }
 
-        DisplaceModel *newmodel = new DisplaceModel();
+        std::shared_ptr<DisplaceModel> newmodel(new DisplaceModel());
 
         if (!newmodel->loadDatabase(dbname)) {
             QMessageBox::warning(this, tr("Database Load failed"),
@@ -571,10 +574,11 @@ void MainWindow::on_actionLoad_results_triggered()
 
         sets.setValue(dbLastDirKey, info.absolutePath());
 
-        delete models[i];
+        newmodel->setIndex(i);
         models[i] = newmodel;
 
-        mMapController->createMapObjectsFromModel(i,models[i]);
+        mMapController->setModel(i, newmodel);
+        mMapController->createMapObjectsFromModel(i,models[i].get());
         ui->modelSelector->setCurrentIndex(i);
 
         emit modelStateChanged();
@@ -761,4 +765,9 @@ void MainWindow::on_actionEdge_Edit_toggled(bool en)
 {
     if (en)
         mMapController->setEditorMode(MapObjectsController::EdgeEditorMode);
+}
+
+void MainWindow::on_actionDelete_triggered()
+{
+    mMapController->delSelected(currentModelIdx);
 }

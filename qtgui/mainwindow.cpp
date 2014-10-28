@@ -54,6 +54,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QActionGroup *grp = new QActionGroup(this);
+    grp->addAction(ui->actionNode_Editor);
+    grp->addAction(ui->actionEdge_Edit);
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
@@ -85,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     map = new qmapcontrol::QMapControl(ui->mapWidget);
     mMapController = new MapObjectsController(map);
     connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
+    connect (mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
 
     connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
 
@@ -750,6 +755,7 @@ void MainWindow::on_actionGraph_toggled(bool en)
 
     ui->actionClear_Graph->setEnabled(en);
     ui->actionEdge_Edit->setEnabled(en);
+    ui->actionNode_Editor->setEnabled(en);
 
     /* -- */
     ui->actionAdd->setEnabled(en);
@@ -763,8 +769,18 @@ void MainWindow::on_actionGraph_toggled(bool en)
 
 void MainWindow::on_actionEdge_Edit_toggled(bool en)
 {
-    if (en)
+    if (en) {
+        map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectLine, false);
         mMapController->setEditorMode(MapObjectsController::EdgeEditorMode);
+    }
+}
+
+void MainWindow::on_actionNode_Editor_toggled(bool en)
+{
+    if (en) {
+        map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectBox, false);
+        mMapController->setEditorMode(MapObjectsController::NodeEditorMode);
+    }
 }
 
 void MainWindow::on_actionDelete_triggered()

@@ -109,7 +109,7 @@ public:
 
     enum EditorModes {
         NoEditorMode,
-        EdgeEditorMode
+        EdgeEditorMode, NodeEditorMode
     };
 
     MapObjectsController(qmapcontrol::QMapControl *map);
@@ -177,9 +177,11 @@ public slots:
 
     /* Selection slots */
     void edgeSelectionHasChanged (EdgeMapObject *object);
+    void nodeSelectionHasChanged (NodeMapObject *node);
 
 signals:
     int edgeSelectionChanged (int num);
+    int nodeSelectionChanged (int num);
 
 private:
     qmapcontrol::QMapControl *mMap;
@@ -211,6 +213,7 @@ private:
     /* Selection handling */
 
     QSet<EdgeMapObject *> mEdgeSelection[MAX_MODELS];
+    QSet<NodeMapObject *> mNodeSelection[MAX_MODELS];
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

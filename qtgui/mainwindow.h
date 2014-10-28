@@ -94,6 +94,8 @@ private slots:
 
     void on_actionDelete_triggered();
 
+    void on_actionNode_Editor_toggled(bool arg1);
+
 signals:
     void modelStateChanged();
 

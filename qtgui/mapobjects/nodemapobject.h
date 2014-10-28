@@ -42,11 +42,19 @@ public:
     virtual bool showProperties();
     virtual void updateProperties();
 
+    void onSelectionChanged() override;
+
+    bool selected() const { return mGeometry->selected(); }
+    NodeData *node() const { return mNode; }
+
 protected:
     QString updateStatText(QString prefix);
 
 private slots:
     void widgetClosed();
+
+signals:
+    void nodeSelectionHasChanged(NodeMapObject *object);
 
 private:
     NodeData *mNode;

@@ -19,6 +19,7 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
     case GraphNodeRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeGraphics(mNode, mController, indx));
+        mGeometry->setFlags(qmapcontrol::Geometry::IsSelectable);
         break;
 
     case GraphNodeWithPopStatsRole:
@@ -102,6 +103,12 @@ void NodeMapObject::updateProperties()
     }
 
     mWidget->setText(text);
+}
+
+void NodeMapObject::onSelectionChanged()
+{
+    mGeometry->requestRedraw();
+    emit nodeSelectionHasChanged(this);
 }
 
 QString NodeMapObject::updateStatText(QString prefix)

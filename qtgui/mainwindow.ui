@@ -76,6 +76,7 @@
     </property>
     <addaction name="actionGraph"/>
     <addaction name="actionClear_Graph"/>
+    <addaction name="actionNode_Editor"/>
     <addaction name="actionEdge_Edit"/>
     <addaction name="separator"/>
     <addaction name="actionAdd"/>
@@ -689,6 +690,7 @@
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionGraph"/>
+   <addaction name="actionNode_Editor"/>
    <addaction name="actionEdge_Edit"/>
    <addaction name="separator"/>
    <addaction name="actionAdd"/>
@@ -799,7 +801,7 @@
      <normaloff>:/icons/edge.png</normaloff>:/icons/edge.png</iconset>
    </property>
    <property name="text">
-    <string>Edge Edit</string>
+    <string>Edge Editor</string>
    </property>
   </action>
   <action name="actionClear_Graph">
@@ -839,6 +841,18 @@
    </property>
    <property name="text">
     <string>Properties...</string>
+   </property>
+  </action>
+  <action name="actionNode_Editor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/node.png</normaloff>:/icons/node.png</iconset>
+   </property>
+   <property name="text">
+    <string>Node Editor</string>
    </property>
   </action>
  </widget>

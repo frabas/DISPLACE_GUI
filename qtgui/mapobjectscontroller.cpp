@@ -109,6 +109,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
             continue;
 
         NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
+        connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
         mNodeObjects[model_n].append(obj);
 
         mGraphLayer->addGeometry(obj->getGeometryEntity());
@@ -322,6 +323,9 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
         case EdgeEditorMode:
             objPtr->object()->toggleSelection();
             break;
+        case NodeEditorMode:
+            objPtr->object()->toggleSelection();
+            break;
         }
     }
 }
@@ -359,4 +363,16 @@ void MapObjectsController::edgeSelectionHasChanged(EdgeMapObject *object)
         mEdgeSelection[modelIndex].remove(object);
 
     emit edgeSelectionChanged(mEdgeSelection[modelIndex].size());
+}
+
+void MapObjectsController::nodeSelectionHasChanged(NodeMapObject *node)
+{
+    int modelIndex = node->node()->getModel()->index();
+
+    if (node->selected())
+        mNodeSelection[modelIndex].insert(node);
+    else
+        mNodeSelection[modelIndex].remove(node);
+
+    emit nodeSelectionChanged(mNodeSelection[modelIndex].size());
 }

@@ -202,30 +202,35 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
-    if (mDb) {
+    if (mDb)
         mDb->beginTransaction();
-        if (mNodesStatsDirty) {
+
+    if (mNodesStatsDirty) {
+        if (mDb)
             mDb->addNodesStats(mLastStats, mNodes);
-            mNodesStatsDirty = false;
-        }
-
-        if (mPopStatsDirty) {
-            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
-            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
-            mPopStatsDirty = false;
-        }
-
-        if (mVesselsStatsDirty) {
-            mStatsNations.insertValue(tstep, mStatsNationsCollected);
-            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
-
-            // ...
-            mVesselsStatsDirty = false;
-            mStatsNationsCollected.clear();
-        }
-        mDb->endTransaction();
+        mNodesStatsDirty = false;
     }
 
+    if (mPopStatsDirty) {
+        mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+        if (mDb)
+            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+        mPopStatsDirty = false;
+    }
+
+    if (mVesselsStatsDirty) {
+        mStatsNations.insertValue(tstep, mStatsNationsCollected);
+        if (mDb)
+            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
+
+        // ...
+        mStatsNationsCollected.clear();
+        mVesselsStatsDirty = false;
+    }
+
+
+    if (mDb)
+        mDb->endTransaction();
 }
 
 void DisplaceModel::startCollectingStats()

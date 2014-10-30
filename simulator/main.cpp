@@ -2523,7 +2523,7 @@ int main(int argc, char* argv[])
 	}
 
     popdyn_N.flush();
-    guiSendUpdateCommand(popdyn_F_filename, 0);
+    guiSendUpdateCommand(popdyn_N_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
 	if(namefolderinput!="fake") for (int n=0; n<nodes.size(); n++)

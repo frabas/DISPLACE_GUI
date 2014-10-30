@@ -147,7 +147,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     }
 
     int fidx = nsz - nsz_r;     /* First "real" index */
-    qDebug() << "fidx=" << fidx << nsz << nsz_r;
 
     int n = model->getPopulationsValuesCount();
     DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
@@ -249,20 +248,21 @@ void StatsController::updateNationStats(DisplaceModel *model)
         int n = model->getNationsStatsCount();
         DisplaceModel::NationsStatsContainer::Container::const_iterator it = model->getNationsStatsFirstValue();
         for (int i = 0; i <n; ++i) {
-            keyData << it.key();
+            if (it.value().size() > ip) {
+                keyData << it.key();
 
-            switch (mSelectedNationsStat) {
-            case Catches:
-                valueData << it.value().at(ip).mTotCatches;
-                break;
-            case Earnings:
-                valueData << it.value().at(ip).mRevenues;
-                break;
-            case TimeAtSea:
-                valueData << it.value().at(ip).mTimeAtSea;
-                break;
+                switch (mSelectedNationsStat) {
+                case Catches:
+                    valueData << it.value().at(ip).mTotCatches;
+                    break;
+                case Earnings:
+                    valueData << it.value().at(ip).mRevenues;
+                    break;
+                case TimeAtSea:
+                    valueData << it.value().at(ip).mTimeAtSea;
+                    break;
+                }
             }
-
             ++it;
         }
 

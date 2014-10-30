@@ -575,8 +575,6 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
             fv[sz] = v;
         }
 
-        qDebug() << "tstep=" << tstep << "pid" << pid << nv.size() << nv;
-
         v[pid].setAggregate(nv);
         v[pid].setMortality(fv);
         v[pid].setAggregateTot(n);

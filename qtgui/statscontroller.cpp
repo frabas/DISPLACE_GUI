@@ -85,7 +85,8 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     double val;
 
     QList<int> ipl = model->getInterestingPops();
-    QList<int> szpl = model->getInterestingSizes();
+    const QList<int> &szil = model->getInterestingSizes();
+    QList<int> szpl;
     bool showtotal = model->isInterestingSizeTotal();
     bool showavg =  model->isInterestingSizeAvg();
     bool showmin =  model->isInterestingSizeMin();
@@ -101,6 +102,9 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
         szpl.push_front(-2);
     if (showtotal)
         szpl.push_front(-1);
+
+    if (szpl.size() == 0)
+        szpl.append(szil);
 
     int nsz = szpl.size();
 
@@ -143,6 +147,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     }
 
     int fidx = nsz - nsz_r;     /* First "real" index */
+    qDebug() << "fidx=" << fidx << nsz << nsz_r;
 
     int n = model->getPopulationsValuesCount();
     DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
@@ -152,8 +157,8 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
 
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int isz = fidx; isz < nsz; ++isz) {
-                val = getPopStatValue(model, it.key(), ipl[ii], szpl[isz], mSelectedPopStat);
+            for (int isz = 0; isz < szil.size(); ++isz) {
+                val = getPopStatValue(model, it.key(), ipl[ii], szil[isz], mSelectedPopStat);
                 if (isz == fidx) {
                     mMin = val;
                     mMax = val;
@@ -199,8 +204,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
 
     for (int i = 0; i < graphs.size(); ++i) {
         graphs[i]->setData(keyData.at(i), valueData.at(i));
-
-//        qDebug() << i << graphs[i]->name() << keyData[i] << valueData[i];
     }
 
     mPlotPopulations->rescaleAxes();

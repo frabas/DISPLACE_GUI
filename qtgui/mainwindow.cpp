@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     models(),
     currentModel(0),
-    currentModelIdx(0),
+    currentModelIdx(-1),
     mSimulation(0),
     mMapController(0),
     map(0),
@@ -116,6 +116,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
+
+    for (int i = 0; i < maxModels; ++i) {
+        ui->modelSelector->addItem(QString(tr("[%1]")).arg(i),i);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -190,6 +194,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         currentModel = models[currentModelIdx];
     else
         currentModel = 0;
+
     treemodel->setCurrentModel(currentModelIdx, currentModel.get());
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
@@ -319,6 +324,10 @@ void MainWindow::updateModelList()
                         i);
             if (i == n)
                 sel = i;
+        } else {
+            ui->modelSelector->addItem(
+                        QString(tr("[%1]")).arg(i),
+                        i);
         }
     }
 

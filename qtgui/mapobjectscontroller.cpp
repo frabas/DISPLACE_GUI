@@ -30,6 +30,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
+      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -75,12 +76,12 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
     mEdgesLayer[model_n]->setVisible(false);
 
-    mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
-    mShapefileLayer[model_n]->setVisible(true);
+//    mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
+//    mShapefileLayer[model_n]->setVisible(true);
 
     addStandardLayer(model_n, LayerEntities, mEntityLayer);
     addStandardLayer(model_n, LayerGraph, mGraphLayer);
-    addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
+//    addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
     addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer());
 
     std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
@@ -187,18 +188,43 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     }
 }
 
-void MapObjectsController::setLayerVisibility(int model, MapObjectsController::LayerIds layer, bool visibility)
+void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Category type, int layer, bool visibility)
 {
-    mLayers[model].setVisible(layer, visibility);
-    if (isModelActive(model))
-        mLayers[model].layers[layer]->setVisible(visibility);
+    switch (type) {
+    case ObjectTreeModel::Layers:
+        mLayers[model].setVisible(layer, visibility);
+        if (isModelActive(model))
+            mLayers[model].layers[layer]->setVisible(visibility);
+        break;
+    case ObjectTreeModel::OutputLayers:
+        mOutputLayers[model].setVisible(layer, visibility);
+        if (isModelActive(model))
+            mOutputLayers[model].layers[layer]->setVisible(visibility);
+        break;
+    case ObjectTreeModel::ShapefileLayers:
+        mShapefileLayers[model].setVisible(layer, visibility);
+        if (isModelActive(model))
+            mShapefileLayers[model].layers[layer]->setVisible(visibility);
+        break;
+    }
 }
 
-bool MapObjectsController::isLayerVisible(int model, MapObjectsController::LayerIds layer)
+bool MapObjectsController::isLayerVisible(int model, ObjectTreeModel::Category type, int layer)
 {
-    return mModelVisibility[model] && mLayers[model].isVisible(layer);
+    if (!mModelVisibility[model])
+        return false;
+
+    switch (type) {
+    case ObjectTreeModel::Layers:
+        return mLayers[model].isVisible(layer);
+    case ObjectTreeModel::OutputLayers:
+        return mOutputLayers[model].isVisible(layer);
+    case ObjectTreeModel::ShapefileLayers:
+        return mShapefileLayers[model].isVisible(layer);
+    }
 }
 
+/*
 void MapObjectsController::setOutLayerVisibility(int model, MapObjectsController::OutLayerIds layer, bool visibility)
 {
     mOutputLayers[model].setVisible(layer, visibility);
@@ -209,7 +235,7 @@ void MapObjectsController::setOutLayerVisibility(int model, MapObjectsController
 bool MapObjectsController::isOutLayerVisible(int model, OutLayerIds layer)
 {
     return mModelVisibility[model] && mOutputLayers[model].isVisible(layer);
-}
+}*/
 
 bool MapObjectsController::isModelActive(int model) const
 {
@@ -253,7 +279,15 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
     file->setPenPolygon(QPen(Qt::red));
     file->setBrushPolygon(QBrush(Qt::yellow));
 
-    mShapefileLayer[model_idx]->addESRIShapefile(file);
+    QFileInfo info(path);
+    QString label = QString("Shapefile %1").arg(info.fileName());
+
+    if (!layername.isEmpty())
+        label += QString (" (%1)").arg(layername);
+
+    std::shared_ptr<qmapcontrol::LayerESRIShapefile> newlayer(new qmapcontrol::LayerESRIShapefile(label.toStdString()));
+    newlayer->addESRIShapefile(file);
+    addShapefileLayer(model_idx, newlayer);
 
     return true;
 }
@@ -286,6 +320,12 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 {
     mMap->addLayer(layer);
     mOutputLayers[model].layers[id] = layer;
+}
+
+void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show)
+{
+    mMap->addLayer(layer);
+    mShapefileLayers[model].add(layer, show);
 }
 
 void MapObjectsController::delSelectedEdges(int model)

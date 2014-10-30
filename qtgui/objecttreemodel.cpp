@@ -1,8 +1,8 @@
 #include "objecttreemodel.h"
 
+#include <mapobjectscontroller.h>
 #include <objects/objecttreeentity.h>
 #include <objects/layerentity.h>
-#include <objects/outputlayerentity.h>
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
@@ -17,6 +17,7 @@
 QList<objecttree::ObjectTreeEntity *> ObjectTreeModel::entityTemplates;
 QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Layers"),
+    QT_TR_NOOP_UTF8("Shapefile Layers"),
     QT_TR_NOOP_UTF8("Output Layers"),
     QT_TR_NOOP_UTF8("Nodes"),
     QT_TR_NOOP_UTF8("Harbours"),
@@ -41,8 +42,9 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         for (int i = 0; i < LastCategory; ++i)
             entityTemplates.push_back(0);
 
-        entityTemplates[Layers] = new objecttree::LayerEntity(this);
-        entityTemplates[OutputLayers] = new objecttree::OutputLayerEntity(this);
+        entityTemplates[Layers] = new objecttree::LayerEntity(Layers, this);
+        entityTemplates[ShapefileLayers] = new objecttree::LayerEntity(ShapefileLayers, this);
+        entityTemplates[OutputLayers] = new objecttree::LayerEntity(OutputLayers, this);
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
         entityTemplates[Nodes] = new objecttree::NodeEntity(this);
         entityTemplates[Vessels] = new objecttree::VesselEntity(this);
@@ -165,4 +167,10 @@ ObjectTreeModel::Category ObjectTreeModel::getCategory(QModelIndex index) const
 objecttree::ObjectTreeEntity *ObjectTreeModel::entity(const QModelIndex &index) const
 {
     return (objecttree::ObjectTreeEntity*)index.internalPointer();
+}
+
+void ObjectTreeModel::refresh()
+{
+    beginResetModel();
+    endResetModel();
 }

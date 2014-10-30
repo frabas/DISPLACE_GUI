@@ -74,7 +74,6 @@ SOURCES += \
     modelobjects/nodedata.cpp \
     modelobjects/vesseldata.cpp \
     mapobjects/nodegraphics.cpp \
-    objects/outputlayerentity.cpp \
     editpalettedialog.cpp \
     palettemanager.cpp \
     qcustomplot.cpp \
@@ -127,7 +126,6 @@ HEADERS += \
     modelobjects/nodedata.h \
     modelobjects/vesseldata.h \
     mapobjects/nodegraphics.h \
-    objects/outputlayerentity.h \
     editpalettedialog.h \
     palettemanager.h \
     qcustomplot.h \

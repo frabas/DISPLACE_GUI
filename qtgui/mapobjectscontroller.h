@@ -8,6 +8,7 @@
 #include <memory>
 #include <mainwindow.h>
 #include <palettemanager.h>
+#include <objecttreemodel.h>
 
 #include <QMapControl/Layer.h>
 #include <QMapControl/Geometry.h>
@@ -85,16 +86,38 @@ private:
 
         virtual int getCount() const { return layers.size(); }
         virtual QString getName(int idx) const { return QString::fromStdString(layers[idx]->getName()); }
-        virtual bool isVisible(int idx) const { return layers[idx]->isVisible(); }
+        virtual bool isVisible(int idx) const { return layers[idx] != 0 && layers[idx]->isVisible(); }
 
         virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
     };
+
+    class LayerVarListImpl : public LayerList {
+    public:
+        LayerVarListImpl() {}
+
+        QList<std::shared_ptr<qmapcontrol::Layer> > layers;
+        QVector<bool> visibility;
+
+        virtual int getCount() const { return layers.size(); }
+        virtual QString getName(int idx) const { return QString::fromStdString(layers[idx]->getName()); }
+        virtual bool isVisible(int idx) const { return layers[idx] != 0 && layers[idx]->isVisible(); }
+
+        virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
+
+        virtual bool add(std::shared_ptr<qmapcontrol::Layer> layer, bool show = true) {
+            layers.push_back(layer);
+            visibility.push_back(show);
+
+            return true;
+        }
+    };
+
 
 public:
     enum LayerIds {
         LayerMain = 0, LayerSeamarks = 1,
         LayerEntities = 2, LayerGraph = 3,
-        LayerEdges, LayerShapefile,
+        LayerEdges,
 
         LayerMax
     };
@@ -123,11 +146,13 @@ public:
 
     void updateNodes(int model);
 
-    LayerList *getStandardLayerList(int model) {
-        return &mLayers[model];
-    }
-    LayerList *getOutputLayerList(int model) {
-        return &mOutputLayers[model];
+    LayerList *getLayerList(int model, ObjectTreeModel::Category type) {
+        switch (type) {
+        case ObjectTreeModel::Layers: return &mLayers[model];
+        case ObjectTreeModel::ShapefileLayers: return &mShapefileLayers[model];
+        case ObjectTreeModel::OutputLayers: return &mOutputLayers[model];
+        }
+        return 0;
     }
 
     enum Visibility { Visible, Invisible };
@@ -136,10 +161,8 @@ public:
      * \param visibility visibility status
      * */
     void setModelVisibility(int model, Visibility visibility);
-    void setLayerVisibility (int model, LayerIds layer, bool visibility);
-    bool isLayerVisible (int model, LayerIds layer);
-    void setOutLayerVisibility (int model, OutLayerIds layer, bool visibility);
-    bool isOutLayerVisible (int model, OutLayerIds layer);
+    void setLayerVisibility (int model, ObjectTreeModel::Category type, int layer, bool visibility);
+    bool isLayerVisible (int model, ObjectTreeModel::Category type, int layer);
 
     bool isModelActive (int model) const;
 
@@ -165,6 +188,7 @@ public:
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
+    void addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show = true);
 
     void delSelectedEdges(int model);
 protected slots:
@@ -193,7 +217,6 @@ private:
     QList<EdgeMapObject *> mEdgeObjects[MAX_MODELS];
 
     std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerESRIShapefile> mShapefileLayer[MAX_MODELS];
 
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;
@@ -204,8 +227,10 @@ private:
     std::shared_ptr<EdgeLayer> mEdgesLayer[MAX_MODELS];
 
     QVector<bool> mModelVisibility;
+
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
+    QVector<LayerVarListImpl> mShapefileLayers;
 
     EditorModes mEditorMode;
     bool mClosing;

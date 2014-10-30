@@ -768,6 +768,8 @@ void MainWindow::on_actionImport_Shapefile_triggered()
 
         mMapController->importShapefile(currentModelIdx, name, layer);
         sets.setValue("import_shape", info.absolutePath());
+
+        treemodel->refresh();
     }
 
 }

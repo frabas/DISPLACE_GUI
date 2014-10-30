@@ -77,18 +77,28 @@ private:
             : LayerListImpl(MaxLayers) {}
 
         explicit LayerListImpl (int sz) {
-            layers.fill(std::shared_ptr<qmapcontrol::Layer>(), sz);
-            visibility.fill(false, sz);
+            Q_UNUSED(sz);
         }
 
-        QVector<std::shared_ptr<qmapcontrol::Layer> > layers;
-        QVector<bool> visibility;
-
         virtual int getCount() const { return layers.size(); }
-        virtual QString getName(int idx) const { return QString::fromStdString(layers[idx]->getName()); }
+        virtual QString getName(int idx) const { return layers[idx] != 0 ? QString::fromStdString(layers[idx]->getName()) : QString(""); }
         virtual bool isVisible(int idx) const { return layers[idx] != 0 && layers[idx]->isVisible(); }
 
         virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
+
+        virtual void setLayer (int idx, std::shared_ptr<qmapcontrol::Layer> layer, bool shown = true) {
+            while (layers.size() <= idx)
+                layers.push_back(0);
+            while (visibility.size() <= idx)
+                visibility.push_back(false);
+            layers[idx] = layer;
+            visibility[idx] = shown;
+        }
+
+        std::shared_ptr<qmapcontrol::Layer> layer(int idx) const { return layers[idx]; }
+    protected:
+        QVector<std::shared_ptr<qmapcontrol::Layer> > layers;
+        QVector<bool> visibility;
     };
 
     class LayerVarListImpl : public LayerList {

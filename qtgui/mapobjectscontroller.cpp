@@ -194,12 +194,12 @@ void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Catego
     case ObjectTreeModel::Layers:
         mLayers[model].setVisible(layer, visibility);
         if (isModelActive(model))
-            mLayers[model].layers[layer]->setVisible(visibility);
+            mLayers[model].layer(layer)->setVisible(visibility);
         break;
     case ObjectTreeModel::OutputLayers:
         mOutputLayers[model].setVisible(layer, visibility);
         if (isModelActive(model))
-            mOutputLayers[model].layers[layer]->setVisible(visibility);
+            mOutputLayers[model].layer(layer)->setVisible(visibility);
         break;
     case ObjectTreeModel::ShapefileLayers:
         mShapefileLayers[model].setVisible(layer, visibility);
@@ -222,6 +222,8 @@ bool MapObjectsController::isLayerVisible(int model, ObjectTreeModel::Category t
     case ObjectTreeModel::ShapefileLayers:
         return mShapefileLayers[model].isVisible(layer);
     }
+
+    return false;
 }
 
 /*
@@ -313,13 +315,13 @@ void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_
 {
     if (layer != mMainLayer && layer != mSeamarkLayer)
         mMap->addLayer(layer);
-    mLayers[model].layers[id] = layer;
+    mLayers[model].setLayer(id, layer);
 }
 
 void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer)
 {
     mMap->addLayer(layer);
-    mOutputLayers[model].layers[id] = layer;
+    mOutputLayers[model].setLayer(id,layer);
 }
 
 void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show)

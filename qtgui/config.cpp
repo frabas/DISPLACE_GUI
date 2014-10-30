@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QFile>
 #include <QTextStream>
+#include <QtAlgorithms>
 
 #define NBSZGROUP 14
 
@@ -107,6 +108,11 @@ bool Config::save(QString path, QString modelname, QString outputname)
         stream << a << " ";
     stream << endl;
 
+    stream <<"# Interesting harbours\n";
+    foreach (int a, m_interesting_harbours)
+        stream << a << " ";
+    stream << endl;
+
     file.close();
     return true;
 }
@@ -120,6 +126,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     config.szGroups = NBSZGROUP;
 
     std::vector <int> implicit_pops;
+    std::vector <int> implicit_harbours;
     std::vector <double> calib_oth_landings;
     std::vector <double> calib_weight_at_szgroup;
     std::vector <double> calib_cpue_multiplier;
@@ -131,7 +138,8 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         implicit_pops,
         calib_oth_landings,
         calib_weight_at_szgroup,
-        calib_cpue_multiplier
+        calib_cpue_multiplier,
+                implicit_harbours
         ) <0 )
 
         throw DisplaceException(QString(QObject::tr("Cannot load configuration file: %1"))
@@ -145,7 +153,11 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     for (std::vector<double>::iterator it = calib_weight_at_szgroup.begin(); it != calib_weight_at_szgroup.end(); ++it)
         config.m_calib_weight_at_szgroup.push_back(*it);
     for (std::vector<double>::iterator it = calib_cpue_multiplier.begin(); it != calib_cpue_multiplier.end(); ++it)
-       config. m_calib_cpue_multiplier.push_back(*it);
+        config.m_calib_cpue_multiplier.push_back(*it);
+    for (std::vector<int>::iterator it = implicit_harbours.begin(); it != implicit_harbours.end(); ++it)
+        config.m_interesting_harbours.push_back(*it);
+
+    qSort(config.m_interesting_harbours);
 
     return config;
 }

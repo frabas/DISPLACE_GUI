@@ -2,6 +2,8 @@
 
 #include <displacemodel.h>
 #include <mainwindow.h>
+#include <modelobjects/vesseldata.h>
+
 
 #include <QFile>
 #include <QFileInfo>
@@ -43,6 +45,9 @@ void OutputFileParser::parse(QString path, int tstep)
         parsePopdynF(&file, tstep, mModel);
     } else if (name.startsWith("popdyn_")) {
         parsePopdyn(&file, tstep, mModel);
+    } else if (name.startsWith("loglike_")) {
+        //parseVessels(&file, tstep, mModel);
+        qDebug() << "File ignored...";
     } else { /* Don't know how to handle... */
 
         qDebug() << "File isn't recognized: " << path;
@@ -175,9 +180,55 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
                 double v = fields[i].toDouble();
                 tot += v;
                 pop[i-2] = v;
-//                pop.push_back(v);
             }
             model->collectPopdynN(step, id, pop, tot);
         }
     }
+}
+
+void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model)
+{
+    // to be completed.
+    qDebug() << "PARSING: " << file->fileName();
+    QTextStream strm (file);
+
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[1].toInt();
+
+        if (step == tstep || tstep == -1) {
+            QVector<double> pop(model->getSzGrupsCount());
+            int id = fields[5].toInt();
+
+//            model->collectVesselStats(step, 0);
+        }
+    }
+}
+
+std::shared_ptr<VesselStats> OutputFileParser::parseVesselStatLine(const QStringList &fields)
+{
+    std::shared_ptr<VesselStats> v = std::shared_ptr<VesselStats>(new VesselStats());
+
+    try {
+        v->tstep = toInt(fields[1]);
+        v->reasonToGoBack = toInt(fields[2]);
+        v->lastHarbour = toInt(fields[4]);
+        v->vesselId = toInt(fields[5]);
+        v->timeAtSea = toDouble(fields[7]);
+
+        int pop = fields.size() - 16;
+        for (int i = 0; i < pop; ++i) {
+            double value = toDouble(fields[10+i]);
+            v->mCatches.push_back(value);
+        }
+        v->revenue = toDouble(fields[10 + pop + 1]);
+        v->revenueAV = toDouble(fields[10 + pop + 2]);
+
+    } catch (std::exception &x) {
+        Q_UNUSED(x);
+        return std::shared_ptr<VesselStats>();
+    }
+
+    return v;
 }

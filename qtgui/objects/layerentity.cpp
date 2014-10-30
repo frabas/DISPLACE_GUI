@@ -5,9 +5,10 @@
 
 namespace objecttree {
 
-LayerEntity::LayerEntity(ObjectTreeModel *_model, int LayerEntity_idx)
+LayerEntity::LayerEntity(ObjectTreeModel::Category type, ObjectTreeModel *_model, int LayerEntity_idx)
     : ObjectTreeEntity(_model),
-      mLayerEntityIndex(LayerEntity_idx)
+      mLayerEntityIndex(LayerEntity_idx),
+      mLayerEntityType(type)
 {
 }
 
@@ -19,21 +20,21 @@ LayerEntity::~LayerEntity()
 QModelIndex LayerEntity::parent(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return model->createCategoryEntityFromChild(ObjectTreeModel::Layers);
+    return model->createCategoryEntityFromChild(mLayerEntityType);
 }
 
 QModelIndex LayerEntity::index(int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    ObjectTreeEntity * entity = new LayerEntity(model, row);
+    ObjectTreeEntity * entity = new LayerEntity(mLayerEntityType, model, row);
     return model->createEntity(row, column, entity);
 }
 
 int LayerEntity::rowCount() const
 {
     if (mLayerEntityIndex == -1 && model->getModelIdx() != -1)
-        return model->getMapControl()->getStandardLayerList(model->getModelIdx())->getCount();
+        return model->getMapControl()->getLayerList(model->getModelIdx(), mLayerEntityType)->getCount();
 
     return 0;
 }
@@ -46,9 +47,9 @@ int LayerEntity::columnCount() const
 QVariant LayerEntity::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DisplayRole)
-        return model->getMapControl()->getStandardLayerList(model->getModelIdx())->getName(index.row()); //->getLayers().at(index.row())->getName());
+        return model->getMapControl()->getLayerList(model->getModelIdx(), mLayerEntityType)->getName(index.row()); //->getLayers().at(index.row())->getName());
     if (role == Qt::CheckStateRole)
-        return QVariant(model->getMapControl()->isLayerVisible(model->getModelIdx(), (MapObjectsController::LayerIds) index.row()) ? Qt::Checked : Qt::Unchecked);
+        return QVariant(model->getMapControl()->isLayerVisible(model->getModelIdx(), mLayerEntityType, (MapObjectsController::LayerIds) index.row()) ? Qt::Checked : Qt::Unchecked);
     return QVariant();
 }
 
@@ -62,9 +63,9 @@ bool LayerEntity::setData(const QModelIndex &index, const QVariant &value, int r
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
-            model->getMapControl()->setLayerVisibility(model->getModelIdx(), (MapObjectsController::LayerIds)index.row(), false);
+            model->getMapControl()->setLayerVisibility(model->getModelIdx(), mLayerEntityType, (MapObjectsController::LayerIds)index.row(), false);
         } else {
-            model->getMapControl()->setLayerVisibility(model->getModelIdx(), (MapObjectsController::LayerIds)index.row(), true);
+            model->getMapControl()->setLayerVisibility(model->getModelIdx(), mLayerEntityType, (MapObjectsController::LayerIds)index.row(), true);
         }
         return true;
     }

@@ -18,6 +18,9 @@ DisplaceModel::DisplaceModel()
       mLive(false),
       mInterestingPop(),
       mInterestingSizeTotal(true),
+      mInterestingSizeAvg(true),
+      mInterestingSizeMin(false),
+      mInterestingSizeMax(false),
       mInterestingSizes(),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))
@@ -44,13 +47,17 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         mScenario = Scenario::readFromFile(mName, mBasePath, mOutputName);
         mConfig = Config::readFromFile(mName, mBasePath, mOutputName);
 
+        mInterestingHarb = mConfig.m_interesting_harbours;
+
         loadNodes();
         loadVessels();
+        loadGraphs();
         initBenthos();
         initPopulations();
         initNations();
     } catch (DisplaceException &ex) {
         mLastError = ex.what();
+        qDebug() << "ERROR: " << mLastError;
         return false;
     }
 
@@ -101,30 +108,40 @@ bool DisplaceModel::linkDatabase(QString path)
         return false;
     }
 
-    /* start a transaction to speedup insertion */
-    mDb->beginTransaction();
+    return true;
+}
 
-    mDb->setMetadata("name", mName);
-    mDb->setMetadata("basepath", mBasePath);
-    mDb->setMetadata("output", mOutputName);
+bool DisplaceModel::prepareDatabaseForSimulation()
+{
+    if (mDb) {
 
-    mDb->saveConfig(mConfig);
-    mDb->saveScenario(mScenario);
+        /* start a transaction to speedup insertion */
+        mDb->beginTransaction();
 
-    /* load nodes */
-    mDb->removeAllNodesDetails();
-    for (int i = 0; i < mNodes.size(); ++i) {
-        mDb->addNodesDetails(i, mNodes.at(i));
+        mDb->setMetadata("name", mName);
+        mDb->setMetadata("basepath", mBasePath);
+        mDb->setMetadata("output", mOutputName);
+
+        mDb->saveConfig(mConfig);
+        mDb->saveScenario(mScenario);
+
+        mDb->removeAllStatsData();
+
+        /* load nodes */
+        mDb->removeAllNodesDetails();
+        for (int i = 0; i < mNodes.size(); ++i) {
+            mDb->addNodesDetails(i, mNodes.at(i));
+        }
+
+        /* load vessels */
+        mDb->removeAllVesselsDetails();
+        for (int i = 0; i< mVessels.size(); ++i) {
+            mDb->addVesselDetails(i, mVessels.at(i));
+        }
+
+        /* end: commit transaction */
+        mDb->endTransaction();
     }
-
-    /* load vessels */
-    mDb->removeAllVesselsDetails();
-    for (int i = 0; i< mVessels.size(); ++i) {
-        mDb->addVesselDetails(i, mVessels.at(i));
-    }
-
-    /* end: commit transaction */
-    mDb->endTransaction();
 
     return true;
 }
@@ -154,7 +171,7 @@ int DisplaceModel::getHarboursCount() const
 
 QString DisplaceModel::getHarbourId(int idx) const
 {
-    return QString::fromStdString(mHarbours.at(idx)->get_name());
+    return QString::fromStdString(mHarbours.at(idx)->mHarbour->get_name());
 }
 
 int DisplaceModel::getNodesCount() const
@@ -195,21 +212,39 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 {
-    if (mDb) {
+    if (mDb)
         mDb->beginTransaction();
-        if (mNodesStatsDirty) {
-            mDb->addNodesStats(mLastStats, mNodes);
-            mNodesStatsDirty = false;
-        }
 
-        if (mPopStatsDirty) {
-            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
-            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
-            mPopStatsDirty = false;
-        }
-        mDb->endTransaction();
+    if (mNodesStatsDirty) {
+        if (mDb)
+            mDb->addNodesStats(mLastStats, mNodes);
+        mNodesStatsDirty = false;
     }
 
+    if (mPopStatsDirty) {
+        mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+        if (mDb)
+            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+        mPopStatsDirty = false;
+    }
+
+    if (mVesselsStatsDirty) {
+        mStatsNations.insertValue(tstep, mStatsNationsCollected);
+        if (mDb)
+            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
+
+        // Harbours stats are not saved on db, but loaded on the fly
+        mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
+
+        // ...
+        mStatsNationsCollected.clear();
+        mStatsHarboursCollected.clear();
+        mVesselsStatsDirty = false;
+    }
+
+
+    if (mDb)
+        mDb->endTransaction();
 }
 
 void DisplaceModel::startCollectingStats()
@@ -263,6 +298,40 @@ void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &p
     mPopStatsDirty = true;
 }
 
+void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> stats)
+{
+    VesselData *vessel = mVessels.at(stats->vesselId);
+
+    vessel->setLastHarbour(stats->lastHarbour);
+    vessel->setRevenue(stats->revenue);
+    vessel->setRevenueAV(stats->revenueAV);
+    vessel->mVessel->set_reason_to_go_back(stats->reasonToGoBack);
+    vessel->mVessel->set_timeatsea(stats->timeAtSea);
+
+    int nat = vessel->getNationality();
+    while (mStatsNationsCollected.size() <= nat) {
+        mStatsNationsCollected.push_back(NationStats());
+    }
+    mStatsNationsCollected[nat].mRevenues += stats->revenue;
+
+    int hidx = vessel->getLastHarbour();
+    while (mStatsHarboursCollected.size() <= hidx)
+        mStatsHarboursCollected.push_back(HarbourStats());
+
+    mStatsHarboursCollected[hidx].mCumProfit += stats->revenue;
+
+    int n = stats->mCatches.size();
+    for (int i = 0; i < n; ++i) {
+        vessel->addCatch(i, stats->mCatches[i]);
+        mStatsHarboursCollected[hidx].mCumCatches += stats->mCatches[i];
+    }
+
+    if (mDb)
+        mDb->addVesselStats(tstep,vessel);
+
+    mVesselsStatsDirty = true;
+}
+
 int DisplaceModel::getVesselCount() const
 {
     return mVessels.size();
@@ -296,6 +365,15 @@ int DisplaceModel::getPopulationsCount() const
     return mConfig.getNbpops();
 }
 
+HarbourStats DisplaceModel::retrieveHarbourIdxStatAtStep(int idx, int step)
+{
+    if (mLive || !mDb) {
+        return HarbourStats(); //getHarboursStatAtStep(step, idx);
+    }
+
+    return mDb->getHarbourStatsAtStep(idx, step);
+}
+
 Scenario DisplaceModel::scenario() const
 {
     return mScenario;
@@ -318,6 +396,8 @@ void DisplaceModel::setConfig(const Config &config)
     mConfig = config;
     if (mDb)
         mDb->saveConfig(mConfig);
+
+    mInterestingHarb = mConfig.m_interesting_harbours;
 }
 
 void DisplaceModel::setCurrentStep(int step)
@@ -540,8 +620,11 @@ bool DisplaceModel::loadNodes()
                                        fishprices_each_species_per_cat,
                                        init_fuelprices
                                        );
+            HarbourData *hd = new HarbourData(h);
+            mHarbours.push_back(hd);
+
             NodeData *n = new NodeData(h, this);
-            mHarbours.push_back(h);
+            n->setHarbourId(mHarbours.size()-1);
             mNodes.push_back(n);
         }
         else
@@ -936,6 +1019,62 @@ bool DisplaceModel::loadVessels()
     return false;
 }
 
+bool DisplaceModel::loadGraphs()
+{
+    struct data {
+        int from;
+        int to;
+        double weight;
+    };
+
+    QString filename_graph = mBasePath + "/graphsspe/graph" + QString::number(mScenario.getGraph()) + ".dat";
+    qDebug() << "Loading: " << filename_graph << " With " << mScenario.getNrow_graph() << " lines";
+
+    QFile f(filename_graph);
+    if (!f.open(QIODevice::ReadOnly)) {
+        throw DisplaceException(f.errorString());
+        return false;
+    }
+
+    QTextStream strm(&f);
+    QString line;
+    int linenum = 0;
+    QList<data> datas;
+
+    while (!(line = strm.readLine()).isNull()) {
+        bool ok;
+        int stat = linenum / mScenario.getNrow_graph();
+        int idx = linenum % mScenario.getNrow_graph();
+
+        switch (stat) {
+        case 0: // from
+            datas.push_back(data());
+            datas[idx].from = line.toInt(&ok);
+            break;
+        case 1: // to
+            datas[idx].to = line.toInt(&ok);
+            break;
+        case 2: // weight
+            datas[idx].weight = line.toDouble(&ok);
+            break;
+        }
+
+        if (!ok) {
+            throw DisplaceException(QString("Graph %2 Parse error at line %1 (%3)").arg(linenum+1).arg(filename_graph).arg(line));
+            return false;
+        }
+
+        ++linenum;
+    }
+
+    /* file has been read. Now feed the data! */
+    foreach (data d, datas) {
+        mNodes[d.from]->appendAdiancency(d.to, d.weight);
+    }
+
+    return true;
+}
+
 bool DisplaceModel::initBenthos()
 {
     QList<int> ids;
@@ -1006,6 +1145,8 @@ bool DisplaceModel::initNations()
             vessel->setNationality(i);
         }
         mNations.push_back(data);
+
+        mInterestingNations.push_back(i);
     }
 
     return true;
@@ -1024,6 +1165,7 @@ bool DisplaceModel::loadVesselsFromDb()
     mVessels.clear();
     if (!mDb->loadVessels(mNodes, mVessels))
         return false;
+    initNations();
 
     return true;
 }
@@ -1031,8 +1173,12 @@ bool DisplaceModel::loadVesselsFromDb()
 bool DisplaceModel::loadHistoricalStatsFromDb()
 {
     QList<QVector<PopulationData> > dtl;
+    QList<QVector<NationStats> > ndl;
+    QList<QVector<HarbourStats> > hdl;
+
     QList<int> steps;
     mDb->loadHistoricalStatsForPops(steps,dtl);
+    mDb->loadHistoricalStatsForVessels(steps, mVessels, mNodes, ndl, hdl);
 
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 
@@ -1040,6 +1186,20 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     foreach (const QVector<PopulationData> &dt, dtl) {
         int tstep = steps[i];
         mStatsPopulations.insertValue(tstep, dt);
+        ++i;
+    }
+
+    i = 0;
+    foreach (const QVector<NationStats> &dt, ndl) {
+        int tstep = steps[i];
+        mStatsNations.insertValue(tstep, dt);
+        ++i;
+    }
+
+    i = 0;
+    foreach(const QVector<HarbourStats> &dt, hdl) {
+        int tstep = steps[i];
+        mStatsHarbours.insertValue(tstep, dt);
         ++i;
     }
 

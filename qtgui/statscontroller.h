@@ -23,9 +23,24 @@ public:
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
+    enum NationsStat { Catches, Earnings, TimeAtSea };
+    void setNationsStat(NationsStat stat);
+    NationsStat getNationsStat() const { return mSelectedNationsStat; }
+
+    enum HarboursStat { H_Catches, H_Earnings };
+    void setHarbourStat(HarboursStat stat);
+    HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
+
     /* == */
 
     void initPlots();
+
+protected:
+    void updatePopulationStats(DisplaceModel *model);
+    double getPopStatValue (DisplaceModel *model, int tstep, int popid, int szid, PopulationStat stattype);
+
+    void updateNationStats(DisplaceModel *model);
+    void updateHarboursStats (DisplaceModel *model);
 
 private:
     Palette mPalette;
@@ -36,9 +51,11 @@ private:
 
     /* Harbour stuff */
     QCustomPlot *mPlotHarbours;
+    HarboursStat mSelectedHarboursStat;
 
     /* Nations */
     QCustomPlot *mPlotNations;
+    NationsStat mSelectedNationsStat;
 
     DisplaceModel *mLastModel;
 };

@@ -76,6 +76,8 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 	tankcapacity=20000;			 // TO BE FILLED FROM DATA
 	nbfpingspertrip=3;			 // TO BE FILLED FROM DATA
 	message=0;
+
+    init();
 }
 
 
@@ -236,6 +238,31 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 
 //Vessel::Vessel(string name, boost::shared_ptr<Node> a_location)
+void Vessel::init()
+{
+    // deduce the vessel nationality from the vessel name
+    string vessel_name = this->get_name();
+    string str_den("DNK");
+    std::size_t found = vessel_name.find(str_den);
+    if (found==std::string::npos)
+    {
+        string str_swe("SWE");
+        std::size_t found = vessel_name.find(str_swe);
+        if (found==std::string::npos)
+        {
+            nationality="DEU";
+        }
+        else
+        {
+            nationality="SWE";
+        }
+    }
+    else
+    {
+        nationality="DNK";
+    }
+}
+
 Vessel::Vessel(string name, Node* a_location)
 : name(name), m_location(a_location)
 {
@@ -3274,7 +3301,7 @@ void Vessel::reinit_after_a_trip()
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::export_loglike(ofstream& loglike, vector<Population* >& populations, int tstep, int nbpops)
+void Vessel::export_loglike(ostream &loglike, vector<Population* >& populations, int tstep, int nbpops)
 {
 
 	dout << "write down the logbooks (trip-based data)...";

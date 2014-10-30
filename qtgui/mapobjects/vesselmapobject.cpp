@@ -1,5 +1,8 @@
 #include "vesselmapobject.h"
 
+#include <mapobjectscontroller.h>
+
+#include <QMapControl/QMapControl.h>
 #include <QMapControl/Point.h>
 #include <QMapControl/Projection.h>
 #include <QMapControl/LayerGeometry.h>
@@ -9,10 +12,48 @@
 #include <QPainter>
 #include <QDebug>
 
-VesselMapObject::VesselMapObject(VesselData *vessel)
-    : mVessel(vessel)
+VesselMapObject::VesselMapObject(MapObjectsController *controller, VesselData *vessel)
+    : mController(controller),
+      mVessel(vessel),
+      mWidget(0)
 {
     mGeometry = std::shared_ptr<VesselGraphics> (new VesselGraphics(mVessel));
+
+    mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
+}
+
+bool VesselMapObject::showProperties()
+{
+    if (!mWidget) {
+        mWidget = new NodeDetailsWidget(mController->mapWidget());
+        connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
+    }
+
+    updateProperties();
+    mController->showDetailsWidget(mGeometry->coord(),mWidget);
+
+    return true;
+}
+
+void VesselMapObject::updateProperties()
+{
+    if (!mWidget)
+        return;
+
+    QString text = QString("<b>Name</b>: %1<br/>"
+                           "<b>Coords: </b>%2 %3<br/>")
+            .arg(QString::fromStdString(mVessel->mVessel->get_name()))
+            .arg(mVessel->mVessel->get_y())
+            .arg(mVessel->mVessel->get_x());
+
+    text += "<br/>";
+    text += QString("<b>Fuel:</b> %1<br/>").arg(mVessel->mVessel->get_cumfuelcons());
+    text += QString("<b>State:</b> %1<br/>").arg(mVessel->mVessel->get_state());
+    text += QString("<b>Cum Catches:</b> %1<br/>").arg(mVessel->mVessel->get_cumcatches());
+    text += QString("<b>Time at sea:</b> %1<br/>").arg(mVessel->mVessel->get_timeatsea());
+    text += QString("<b>Reason To go Back:</b> %1<br/>").arg(mVessel->mVessel->get_reason_to_go_back());
+
+    mWidget->setText(text);
 }
 
 void VesselMapObject::vesselUpdated()
@@ -22,6 +63,11 @@ void VesselMapObject::vesselUpdated()
     mGeometry->layer()->addGeometry(mGeometry);
 }
 
+void VesselMapObject::widgetClosed()
+{
+    mWidget = 0;
+}
+
 
 QBrush *VesselMapObject::VesselGraphics::color = 0;
 QBrush *VesselMapObject::VesselGraphics::statFishing= 0;
@@ -29,7 +75,7 @@ QBrush *VesselMapObject::VesselGraphics::statHarbour = 0;
 QBrush *VesselMapObject::VesselGraphics::statSteaming = 0;
 
 VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 9, 17),
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(vessel->mVessel->get_x(), vessel->mVessel->get_y()), QSizeF(20.0, 40.0), 11, 7, 17),
       mVessel(vessel)
 {
     if (color == 0)
@@ -40,6 +86,8 @@ VesselMapObject::VesselGraphics::VesselGraphics(VesselData *vessel)
         statFishing = new QBrush(Qt::red);
     if (statSteaming == 0)
         statSteaming = new QBrush(Qt::black);
+
+    setNonlinearZoomFactor(0.9);
 }
 
 void VesselMapObject::VesselGraphics::updated()

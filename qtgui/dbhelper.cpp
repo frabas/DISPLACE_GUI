@@ -26,6 +26,8 @@ const QString DbHelper::TBL_POP_STATS = "PopStats";
 const QString DbHelper::TBL_POPSZ_STATS = "PopStatsSz";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
 const QString DbHelper::TBL_VESSELS_POS = "VesselsPos";
+const QString DbHelper::TBL_VESSELS_STATS_TM = "VesselsStatsTimed";
+const QString DbHelper::TBL_VESSELS_STATS_TMSZ = "VesselsStatsPerPop";
 
 const QString DbHelper::META_VERSION = "version";
 
@@ -175,6 +177,48 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
     }
 }
 
+void DbHelper::addNationsStats(int tstep, const QVector<NationStats> &nats)
+{
+}
+
+void DbHelper::addVesselStats(int tstep, VesselData *vessel)
+{
+    QSqlQuery q,qn;
+
+    bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue,revenue_av)"
+                       + " VALUES(?,?,?,?,?,?,?)");
+    DB_ASSERT(r,q);
+
+    r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
+                   + "(tstep,vid,harbour,sz,cum)"
+                   + " VALUES(?,?,?,?,?)");
+    DB_ASSERT(r,qn);
+
+    q.addBindValue(tstep);
+    q.addBindValue(vessel->mVessel->get_idx());
+    q.addBindValue(vessel->mVessel->get_timeatsea());
+    q.addBindValue(vessel->getLastHarbour());
+    q.addBindValue(vessel->mVessel->get_reason_to_go_back());
+    q.addBindValue(vessel->getRevenue());
+    q.addBindValue(vessel->getRevenueAV());
+
+    r = q.exec();
+    DB_ASSERT(r,q);
+
+    int n = vessel->getCatchesListSize();
+    for (int i =0; i < n; ++i) {
+        qn.addBindValue(tstep);
+        qn.addBindValue(vessel->mVessel->get_idx());
+        qn.addBindValue(vessel->getLastHarbour());
+        qn.addBindValue(i);
+        qn.addBindValue(vessel->getCatch(i));
+
+        r = qn.exec();
+        DB_ASSERT(r,qn);
+    }
+}
+
 void DbHelper::removeAllVesselsDetails()
 {
     QSqlQuery q;
@@ -219,14 +263,35 @@ void DbHelper::addVesselDetails(int idx, VesselData *vessel)
     res = q.prepare("INSERT INTO " +TBL_VESSELS
                     + "(_id,name,node) VALUES(?,?,?)");
 
-    Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    DB_ASSERT(res,q);
 
     q.addBindValue(idx);
     q.addBindValue(QString::fromUtf8(vessel->mVessel->get_name().c_str()));
     q.addBindValue(vessel->mVessel->get_loc()->get_idx_node());
     res = q.exec();
-    Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
+
+    DB_ASSERT(res,q);
 }
+
+void DbHelper::removeAllStatsData()
+{
+    QSqlQuery q;
+    bool res = q.exec("DELETE FROM " +TBL_NODES_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_POPNODES_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_POP_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_POPSZ_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_VESSELS_POS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_VESSELS_STATS_TM);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_VESSELS_STATS_TMSZ);
+    DB_ASSERT(res,q);
+}
+
 
 bool DbHelper::loadConfig(Config &cfg)
 {
@@ -261,6 +326,13 @@ bool DbHelper::loadConfig(Config &cfg)
     }
     cfg.setCalib_cpue_multiplier(vl);
 
+    ipops.clear();
+    lsi = getMetadata("config::int_harbours").split(" ");
+    foreach (QString i, lsi) {
+        ipops.push_back(i.toInt());
+    }
+    cfg.m_interesting_harbours = ipops;
+
     return true;
 }
 
@@ -293,6 +365,12 @@ bool DbHelper::saveConfig(const Config &cfg)
         str.push_back(QString::number(d));
     setMetadata("config::calib_cpue_multi", str.join(" "));
 
+    str.clear();
+    il = cfg.m_interesting_harbours;
+    foreach (int d, il)
+        str.push_back(QString::number(d));
+    setMetadata("config::int_harbours", str.join(" "));
+
     return true;
 }
 
@@ -324,7 +402,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     return true;
 }
 
-bool DbHelper::loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model)
+bool DbHelper::loadNodes(QList<NodeData *> &nodes, QList<HarbourData *> &harbours, DisplaceModel *model)
 {
     QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,name FROM " + TBL_NODES + " ORDER BY _id");
     bool res = q.exec();
@@ -359,8 +437,11 @@ bool DbHelper::loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, D
             nodes.push_back(0);
 
         nodes[idx] = n;
-        if (n->get_harbour())
-            harbours.push_back(h);
+        if (n->get_harbour()) {
+            n->setHarbourId(harbours.size());
+            HarbourData *hdt = new HarbourData(h);
+            harbours.push_back(hdt);
+        }
     }
 
     return true;
@@ -529,6 +610,122 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 
 }
 
+bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour)
+{
+    QSqlQuery q;
+    bool res = q.prepare("SELECT vid,sz,SUM(cum),harbour FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz"); /*,harbour  */
+    DB_ASSERT(res,q);
+
+    QSqlQuery q2;
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    DB_ASSERT(res,q2);
+
+    foreach(int tstep, steps) {
+        QVector<NationStats> curnationsdata;
+        QVector<HarbourStats> curHarbourData;
+
+        q.addBindValue(tstep);
+        q2.addBindValue(tstep);
+
+        res = q.exec();
+        DB_ASSERT(res,q);
+
+        /* Nations cum catches */
+        while (q.next()) {
+            int vid = q.value(0).toInt();
+            int sz = q.value(1).toInt();
+            int nid = vessels.at(vid)->getNationality();
+            int catches = q.value(2).toDouble();
+            int hid = q.value(3).toInt();
+            int hidx = nodes.at(hid)->getHarbourId();
+
+            while (curnationsdata.size() <= nid)
+                curnationsdata.push_back(NationStats());
+
+            while (curHarbourData.size() <= hidx)
+                curHarbourData.push_back(HarbourStats());
+
+            QVector<double> &g = curnationsdata[nid].szGroups; // alias
+            while (g.size() <= sz)
+                g.push_back(0.0);
+            g[sz] += catches;
+
+            curnationsdata[nid].mTotCatches += catches;
+            curHarbourData[hidx].mCumCatches += catches;
+        }
+
+        res = q2.exec();
+        DB_ASSERT(res,q2);
+        while (q2.next()) {
+            int vid = q2.value(0).toInt();
+            int nid = vessels.at(vid)->getNationality();
+            double timeatsea = q2.value(1).toDouble();
+            double rev = q2.value(2).toDouble();
+            int hid = q2.value(3).toInt();
+            int hidx = nodes.at(hid)->getHarbourId();
+
+            while (curnationsdata.size() <= nid)
+                curnationsdata.push_back(NationStats());
+            while (curHarbourData.size() <= hidx)
+                curHarbourData.push_back(HarbourStats());
+
+            curnationsdata[nid].mRevenues += rev;
+            curnationsdata[nid].mTimeAtSea += timeatsea;
+            //curHarbourData[hidx].mCumCatches += catches;
+            curHarbourData[hidx].mCumProfit += rev;
+        }
+
+        nations.push_back(curnationsdata);
+        harbour.push_back(curHarbourData);
+    }
+
+    return true;
+}
+
+HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
+{
+    QSqlQuery q;
+    bool res = q.prepare("SELECT sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? AND harbour=? GROUP BY vid,sz");
+    DB_ASSERT(res,q);
+
+    QSqlQuery q2;
+    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
+    DB_ASSERT(res,q2);
+
+    HarbourStats curHarbourData;
+
+    q.addBindValue(step);
+    q.addBindValue(idx);
+    q2.addBindValue(step);
+    q2.addBindValue(idx);
+
+    res = q.exec();
+    DB_ASSERT(res,q);
+
+    while (q.next()) {
+        int sz = q.value(0).toInt();
+        int catches = q.value(1).toDouble();
+
+        QVector<double> &g = curHarbourData.szCatches; // alias
+        while (g.size() <= sz)
+            g.push_back(0.0);
+        g[sz] += catches;
+
+        curHarbourData.mCumCatches += catches;
+    }
+
+    res = q2.exec();
+    DB_ASSERT(res,q2);
+    while (q2.next()) {
+        double timeatsea = q2.value(0).toDouble();
+        double rev = q2.value(1).toDouble();
+
+        curHarbourData.mCumProfit += rev;
+    }
+
+    return curHarbourData;
+}
+
 void DbHelper::beginTransaction()
 {
     QMutexLocker locker(&mMutex);
@@ -575,7 +772,7 @@ void DbHelper::createIndexes()
 void DbHelper::createIndexOnTstepForTable(QString table)
 {
     QSqlQuery q;
-    bool res = q.exec("CREATE INDEX idx_" + table + " ON " + table + "(tstep)");
+    bool res = q.exec("CREATE INDEX IF NOT EXISTS idx_" + table + " ON " + table + "(tstep)");
 
     DB_ASSERT(res,q);
 }
@@ -783,6 +980,40 @@ bool DbHelper::checkVesselsTable(int version)
                + "_id INTEGER PRIMARY KEY,"
                + "name VARCHAR(16),"
                + "node INTEGER"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (!mDb.tables().contains(TBL_VESSELS_STATS_TM)) {
+        QSqlQuery q;
+        r =
+        q.exec("CREATE TABLE " + TBL_VESSELS_STATS_TM + "("
+               + "_id INTEGER PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "vid INTEGER,"
+               + "timeatsea INTEGER,"
+               + "harbour INTEGER,"
+               + "reason INTEGER,"
+               + "revenue REAL,"
+               + "revenue_av REAL"
+               + ");"
+               );
+
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
+
+    if (!mDb.tables().contains(TBL_VESSELS_STATS_TMSZ)) {
+        QSqlQuery q;
+        r =
+        q.exec("CREATE TABLE " + TBL_VESSELS_STATS_TMSZ + "("
+               + "_id INTEGER PRIMARY KEY,"
+               + "tstep INTEGER,"
+               + "vid INTEGER,"
+               + "harbour INTEGER,"
+               + "sz INTEGER,"
+               + "cum REAL"
                + ");"
                );
 

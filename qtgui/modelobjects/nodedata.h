@@ -4,6 +4,7 @@
 #include <Node.h>
 
 #include <QList>
+#include <QVector>
 
 class DisplaceModel;
 
@@ -13,6 +14,9 @@ class DisplaceModel;
 class NodeData
 {
 public:
+    typedef QVector<int> AdiacencyList;
+    typedef QVector<double> AdiacencyWeightList;
+
     Node *mNode;    /* This is crap. But we have no other choice */
 
     explicit NodeData(Node *nd, DisplaceModel *model);
@@ -56,14 +60,29 @@ public:
         return mImpact[pop];
     }
 
+    int getHarbourId() const;
+    void setHarbourId(int value);
+
+    /* Adiacency functions */
+    void appendAdiancency(int to_id, double weight);
+    void removeAdiacencyByIdx(int idx);
+    void removeAdiacencyByTarget(int target);
+    int getAdiacencyCount() const;
+    int getAdiacencyByIdx(int idx) const;
+    double getAdiacencyWeight(int idx) const;
+
 private:
     DisplaceModel *mModel;
+    int mHarbourId;
     double *mPop;
     double mPopTot;
     double *mPopW;
     double mPopWTot;
 
     double *mImpact;
+
+    AdiacencyList mAdiacency;
+    AdiacencyWeightList mWeights;
 };
 
 #endif // NODEDATA_H

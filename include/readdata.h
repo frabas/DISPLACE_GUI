@@ -36,7 +36,7 @@ vector<int>& a_vector_line4,
 vector<double>& a_vector_line6,
 vector<double>& a_vector_line8,
 vector<double>& a_vector_line10
-);
+, vector<int> &interesting_harbours);
 
 int read_scenario_config_file(
     string folder_name_parameterization,

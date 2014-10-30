@@ -55,7 +55,8 @@ int read_config_file (string folder_name_parameterization,
     vector<int>& a_vector_line4,
     vector<double>& a_vector_line6,
     vector<double>& a_vector_line8,
-    vector<double>& a_vector_line10)
+    vector<double>& a_vector_line10,
+                      vector<int> &interesting_harbours)
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
@@ -113,7 +114,14 @@ int read_config_file (string folder_name_parameterization,
 				a_vector_line10.push_back(val);
 			}
 		}
-
+        if(counter==12)
+        {
+            double val;
+            while(linestream >> val)
+            {
+                interesting_harbours.push_back(val);
+            }
+        }
 	}
 	cout << "read config file...OK" << endl << flush;
 

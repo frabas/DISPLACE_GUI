@@ -5,8 +5,12 @@
 
 #include <QMapControl/ImageManager.h>
 
+#include <gdal/ogrsf_frmts.h>
+
 int main (int argc, char *argv[])
 {
+    OGRRegisterAll();
+
     QCoreApplication::setOrganizationName("Studiofuga");
     QCoreApplication::setOrganizationDomain("studiofuga.com");
     QCoreApplication::setApplicationName("displace");

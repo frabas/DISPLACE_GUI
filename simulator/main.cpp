@@ -144,12 +144,16 @@ double mLoadGraphProfileResult;
  * These will be sent only if --use-gui command line option is present.
  * The control character will be followed by a 1 character command code. Then the argument of the command will
  * follow.
+ *
+ * NOTE: All fields are ALWAYS separated by SPACES
+ *
  * These are the commands:
  *
  * =Snnnn       Simulation Step nnnn (int) has been performed
- * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by commas:
+ * =Vxxxx       Vessel has moved. xxxx is a multifield string, separated by spaces:
  *                   id,x,y,course,fuel,state
- * =Upath[,tstep]       Output file has been updated. path is the absolute path of the file.
+ * =v...        Vessel statistics. see loglike_*.dat
+ * =Upath[ tstep]       Output file has been updated. path is the absolute path of the file.
  *                  optionally: includes the current sim step
  * =Ndata       Nodes stats update: format
  *                  stat,tstep,first,number,data...
@@ -167,7 +171,13 @@ double mLoadGraphProfileResult;
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
     if (use_gui)
-        std::cout << "=U" << filename << "," << tstep << endl;
+        std::cout << "=U" << filename << " " << tstep << endl;
+}
+
+void guiSendVesselLogbook(const std::string &line)
+{
+    if (use_gui)
+        std::cout << "=v" << line;
 }
 
 /**---------------------------------------------------------------**/
@@ -368,14 +378,16 @@ int main(int argc, char* argv[])
 	vector <double> calib_oth_landings;
 	vector <double> calib_weight_at_szgroup;
 	vector <double> calib_cpue_multiplier;
-	read_config_file (
+    vector <int> int_harbours;
+    read_config_file (
 		folder_name_parameterization,
         "../"+inputfolder,
 		nbpops,
 		implicit_pops,
 		calib_oth_landings,
 		calib_weight_at_szgroup,
-		calib_cpue_multiplier
+        calib_cpue_multiplier,
+                int_harbours
 		);
 
 	read_scenario_config_file (
@@ -2390,6 +2402,7 @@ int main(int argc, char* argv[])
 	ofstream loglike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
 	loglike.open(filename.c_str());
+    std::string loglike_filename = filename;
 
 	ofstream loglike_prop_met;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
@@ -2510,7 +2523,7 @@ int main(int argc, char* argv[])
 	}
 
     popdyn_N.flush();
-    guiSendUpdateCommand(popdyn_F_filename, 0);
+    guiSendUpdateCommand(popdyn_N_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
 	if(namefolderinput!="fake") for (int n=0; n<nodes.size(); n++)
@@ -2881,7 +2894,7 @@ int main(int argc, char* argv[])
 							// update, export and clear for the next time...
 							if(impact_on_pop!=0)
 							{
-								if(namesimu=="simu1") a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
+                                a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
 							}
 						}
 								 // RE-INIT
@@ -3262,12 +3275,12 @@ int main(int argc, char* argv[])
 				for (unsigned int n=0; n<nodes.size(); n++)
 				{
 					nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
-                    if (use_gui) {
-                        popnodes_end.flush();
-                        guiSendUpdateCommand(popnodes_end_filename, tstep);
-                    }
                 }
-			}
+                if (use_gui) {
+                    popnodes_end.flush();
+                    guiSendUpdateCommand(popnodes_end_filename, tstep);
+                }
+            }
 
             // EXPORT: populations statistics - Monthly
 
@@ -3280,9 +3293,6 @@ int main(int argc, char* argv[])
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
                 nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
-                for (unsigned int pop = 0; pop < nbpops; ++pop) {
-                    nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, pop);
-                }
 			}
 
 			//...and export the benthos biomasses on node
@@ -3803,7 +3813,11 @@ int main(int argc, char* argv[])
 								 // i.e. just arrived!
 						if(!vessels[ index_v ]-> get_inactive())
 						{
-							vessels[ index_v ]->export_loglike (loglike, populations, tstep, nbpops);
+                            std::ostringstream ss;
+                            vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
+                            loglike << ss.str();
+
+                            guiSendVesselLogbook(ss.str());
 
 							//vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
 							vessels[ index_v ]->reinit_after_a_trip();
@@ -4030,13 +4044,13 @@ int main(int argc, char* argv[])
 			}
 
             if (use_gui && gui_move_vessels && tstep < 8641) {
-                cout << "=V" << tstep << ","
-                    << vessels[ index_v ]->get_idx() << ","
-                    << vessels[ index_v ]->get_tstep_dep() << ","
-                    << setprecision(6) << fixed << vessels[ index_v ]->get_x() << ","
-                    << setprecision(6) << fixed << vessels[ index_v ]->get_y() << ","
-                    << setprecision(2) << fixed << vessels[ index_v ]->get_course() << ","
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << ","
+                cout << "=V" << tstep << " "
+                    << vessels[ index_v ]->get_idx() << " "
+                    << vessels[ index_v ]->get_tstep_dep() << " "
+                    << setprecision(6) << fixed << vessels[ index_v ]->get_x() << " "
+                    << setprecision(6) << fixed << vessels[ index_v ]->get_y() << " "
+                    << setprecision(2) << fixed << vessels[ index_v ]->get_course() << " "
+                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
                     << vessels[ index_v ]->get_state() <<  endl;
             }
 
@@ -4053,6 +4067,13 @@ int main(int argc, char* argv[])
 #ifdef PROFILE
         mVesselLoopProfile.elapsed_ms();
 #endif
+
+        // EXPORT: vessel_loglike - disabled
+        /*
+        if (use_gui) {
+            loglike.flush();
+            guiSendUpdateCommand(loglike_filename, tstep);
+        }*/
 
 		// move the ships along the ship lanes
 		for(int s=0; s<ships.size(); s++)

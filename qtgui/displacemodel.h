@@ -9,7 +9,7 @@
 #include <modelobjects/benthos.h>
 #include <modelobjects/populationdata.h>
 #include <modelobjects/nationdata.h>
-#include <Harbour.h>
+#include <modelobjects/harbourdata.h>
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
 
@@ -31,13 +31,20 @@ class DisplaceModel : public QObject
 public:
     typedef QVector<PopulationData> PopulationStat;
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-
+    typedef QVector<NationStats> NationsStats;
+    typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
+    typedef QVector<HarbourStats> HarboursStats;
+    typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
 
     DisplaceModel();
+
+    void setIndex(int idx) { mIndex = idx; }
+    int index() const { return mIndex; }
 
     bool load (QString path, QString modelname, QString outputname);
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
+    bool prepareDatabaseForSimulation ();
     bool save();
 
     /** \brief Signals the simulation has ended. Flush all buffers */
@@ -56,7 +63,7 @@ public:
         return mConfig.getSzGroups();
     }
 
-    const QList<Harbour *> &getHarboursList() const { return mHarbours; }
+    const QList<HarbourData *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
 
@@ -80,8 +87,13 @@ public:
     const QList<Benthos*> &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
+    /* Access to Population statistics */
     int getPopulationsCount() const;
     const PopulationData &getPopulationsAtStep (int step, int idx) const {
+        if (idx >= mStatsPopulations.getValue(step).size()) {
+            qDebug() << step << idx << mStatsPopulations.getValue(step).size();
+            Q_ASSERT(false);
+        }
         return mStatsPopulations.getValue(step).at(idx);
     }
     int getPopulationsValuesCount() const {
@@ -93,8 +105,44 @@ public:
 
     const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
+    /* Access to Nations statistics */
+
     const QList<NationData> &getNationsList() const { return mNations; }
     const NationData &getNation(int idx) const { return mNations.at(idx); }
+
+    int getNationsStatsCount() const {
+        return mStatsNations.getUniqueValuesCount();
+    }
+    NationsStatsContainer::Container::const_iterator getNationsStatsFirstValue() const {
+        return mStatsNations.getFirst();
+    }
+    const NationsStats &getNationsStatAtStep(int step) const {
+        return mStatsNations.getValue(step);
+    }
+    const NationStats &getNationStatAtStep(int step, int idx) const {
+        return mStatsNations.getValue(step).at(idx);
+    }
+
+    /* Access to Harbour statistics */
+
+    const QList<HarbourData *> &getHarbourList() const { return mHarbours; }
+    const HarbourData &getHarbourData(int idx) const { return *mHarbours.at(idx); }
+
+    int getHarboursStatsCount() const {
+        return mStatsHarbours.getUniqueValuesCount();
+    }
+    HarboursStatsContainer::Container::const_iterator getHarboursStatsFirstValue() const {
+        return mStatsHarbours.getFirst();
+    }
+    const HarboursStats &getHarboursStatAtStep(int step) const {
+        return mStatsHarbours.getValue(step);
+    }
+    const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
+        return mStatsHarbours.getValue(step).at(idx);
+    }
+    /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
+    HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
+
 
     /* Scenario and configuration */
 
@@ -125,6 +173,12 @@ public:
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
     void setInterestingSizeTotal(bool b) { mInterestingSizeTotal = b; }
+    bool isInterestingSizeAvg() const { return mInterestingSizeAvg; }
+    void setInterestingSizeAvg(bool b) { mInterestingSizeAvg = b; }
+    bool isInterestingSizeMin() const { return mInterestingSizeMin; }
+    void setInterestingSizeMin(bool b) { mInterestingSizeMin = b; }
+    bool isInterestingSizeMax() const { return mInterestingSizeMax; }
+    void setInterestingSizeMax(bool b) { mInterestingSizeMax = b; }
 
     const QList<int> &getInterestingSizes() const { return mInterestingSizes; }
 
@@ -134,7 +188,6 @@ public:
     /** \brief remove the pop from the list of interest for pops */
     void remInterestingSize(int n);
     bool isInterestingSize(int n);
-
 
     /* Interesting harbours - see pop */
     const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
@@ -146,6 +199,23 @@ public:
     void remInterestingHarb(int n);
     bool isInterestingHarb(int n);
 
+    /* Interesting Nations */
+    const QList<int> &getInterestingNations() const { return mInterestingNations; }
+
+    /** \brief insert the pop into the list of interest for pops */
+    void setInterestingNations(int n) {
+        if (!mInterestingNations.contains(n))
+            mInterestingNations.append(n);
+            qSort(mInterestingNations);
+    }
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingNations(int n) {
+        mInterestingNations.removeAll(n);
+    }
+    bool isInterestingNations(int n) {
+        return mInterestingNations.contains(n);
+    }
 
     //
 
@@ -165,9 +235,12 @@ public:
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
+    void collectVesselStats (int step, std::shared_ptr<VesselStats> stats);
+
 protected:
     bool loadNodes();
     bool loadVessels();
+    bool loadGraphs();
     bool initBenthos();
     bool initPopulations();
     bool initNations();
@@ -188,22 +261,25 @@ private:
     QString mName;
     QString mBasePath;
     QString mOutputName;
+    int mIndex;
 
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;
     bool mPopStatsDirty;
+    bool mVesselsStatsDirty;
 
     bool mLive;
     Scenario mScenario;
     Config mConfig;
 
     QList<int> mInterestingPop;
-    bool mInterestingSizeTotal;
+    bool mInterestingSizeTotal, mInterestingSizeAvg, mInterestingSizeMin, mInterestingSizeMax;
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
+    QList<int> mInterestingNations;
 
-    QList<Harbour *> mHarbours;
+    QList<HarbourData *> mHarbours;
     QList<NodeData *> mNodes;
     QList<VesselData *> mVessels;
     QList<Benthos *> mBenthos;
@@ -211,6 +287,11 @@ private:
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;
+    NationsStatsContainer mStatsNations;
+    NationsStats mStatsNationsCollected;
+    HarboursStatsContainer mStatsHarbours;
+    HarboursStats mStatsHarboursCollected;
+
     QMap<int, Benthos *> mBenthosInfo;
 
     // --- Working objects

@@ -15,6 +15,9 @@ class Config
     QList <double> m_calib_cpue_multiplier;
 
 public:
+    QList <int> m_interesting_harbours;
+
+public:
     Config();
 
     bool save (QString path, QString modelname, QString outputname);

@@ -19,7 +19,7 @@ public:
     }
 
     const Value &getValue(int tstep) const {
-        typename Container::const_iterator it = mData.lowerBound(tstep);
+        typename Container::const_iterator it = mData.lowerBound(tstep+1);
         --it;
         return it.value();
     }

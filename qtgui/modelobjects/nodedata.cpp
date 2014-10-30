@@ -92,8 +92,7 @@ double NodeData::getPopW(int pop) const
 
 void NodeData::setImpact(int pop, double impact)
 {
-    if (pop < mNode->get_nbpops() && pop >= 0)
-        mImpact[pop] = impact;
+    mImpact[pop] = impact;
 }
 
 int NodeData::getHarbourId() const

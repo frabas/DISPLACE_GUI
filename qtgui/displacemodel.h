@@ -289,6 +289,7 @@ private:
     NationsStatsContainer mStatsNations;
     NationsStats mStatsNationsCollected;
     HarboursStatsContainer mStatsHarbours;
+    HarboursStats mStatsHarboursCollected;
 
     QMap<int, Benthos *> mBenthosInfo;
 

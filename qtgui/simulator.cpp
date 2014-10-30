@@ -27,8 +27,10 @@ void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
 // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
 bool Simulator::start(QString name, QString folder)
 {
-    if (mSimulation != 0)
-        return false;
+    if (mSimulation != 0) {
+        delete mSimulation;
+        mSimulation = 0;
+    }
 
     mSimulation = new QProcess();
 
@@ -150,6 +152,11 @@ QString Simulator::getSimulationName() const
 void Simulator::setSimulationName(const QString &value)
 {
     mSimuName = value;
+}
+
+bool Simulator::wasSimulationStarted() const
+{
+    return mSimulation != 0;
 }
 
 QString Simulator::getOutputName() const

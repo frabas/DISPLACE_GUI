@@ -273,6 +273,26 @@ void DbHelper::addVesselDetails(int idx, VesselData *vessel)
     DB_ASSERT(res,q);
 }
 
+void DbHelper::removeAllStatsData()
+{
+    QSqlQuery q;
+    bool res = q.exec("DELETE FROM " +TBL_NODES_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_POPNODES_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_POP_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_POPSZ_STATS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_VESSELS_POS);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_VESSELS_STATS_TM);
+    DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_VESSELS_STATS_TMSZ);
+    DB_ASSERT(res,q);
+}
+
+
 bool DbHelper::loadConfig(Config &cfg)
 {
     cfg.setNbpops(getMetadata("config::nbpops").toInt());
@@ -752,7 +772,7 @@ void DbHelper::createIndexes()
 void DbHelper::createIndexOnTstepForTable(QString table)
 {
     QSqlQuery q;
-    bool res = q.exec("CREATE INDEX idx_" + table + " ON " + table + "(tstep)");
+    bool res = q.exec("CREATE INDEX IF NOT EXISTS idx_" + table + " ON " + table + "(tstep)");
 
     DB_ASSERT(res,q);
 }

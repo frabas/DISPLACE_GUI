@@ -385,6 +385,15 @@ void MainWindow::centerMapOnVesselId(int id)
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
+        if (mSimulation->wasSimulationStarted()) {
+            int res = QMessageBox::information(this, tr("Restart simulation"),
+                                               tr("Restarting simulation will eventually overwrite the results data, either in a linked db or in the output files. Are you sure to continue?"),
+                                               QMessageBox::Yes, QMessageBox::No);
+            if (res == QMessageBox::No)
+                return;
+        }
+
+        models[0]->prepareDatabaseForSimulation();
         mSimulation->start(models[0]->name(), models[0]->basepath());
     }
 }
@@ -507,13 +516,18 @@ void MainWindow::on_action_Link_database_triggered()
 
     QSettings sets;
     QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
-                                         sets.value(dbLastDirKey).toString(), dbFilter,0, QFileDialog::DontConfirmOverwrite);
+                                         sets.value(dbLastDirKey).toString(), dbFilter,0);
 
     if (!dbname.isEmpty()) {
         QFileInfo info (dbname);
         if (info.suffix().isEmpty()) {
             dbname += dbSuffix;
             info = QFileInfo(dbname);
+        }
+
+        if (info.exists()) {
+            QFile f(dbname);
+            f.remove();
         }
 
         if (!models[0]->linkDatabase(dbname)) {

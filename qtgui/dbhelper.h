@@ -69,6 +69,8 @@ public:
     void removeAllVesselsDetails();
     void addVesselDetails (int idx, VesselData *vessel);
 
+    void removeAllStatsData();
+
     bool loadConfig(Config &);
     bool saveConfig (const Config &);
     bool loadScenario (Scenario &);

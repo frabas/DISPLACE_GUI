@@ -108,30 +108,40 @@ bool DisplaceModel::linkDatabase(QString path)
         return false;
     }
 
-    /* start a transaction to speedup insertion */
-    mDb->beginTransaction();
+    return true;
+}
 
-    mDb->setMetadata("name", mName);
-    mDb->setMetadata("basepath", mBasePath);
-    mDb->setMetadata("output", mOutputName);
+bool DisplaceModel::prepareDatabaseForSimulation()
+{
+    if (mDb) {
 
-    mDb->saveConfig(mConfig);
-    mDb->saveScenario(mScenario);
+        /* start a transaction to speedup insertion */
+        mDb->beginTransaction();
 
-    /* load nodes */
-    mDb->removeAllNodesDetails();
-    for (int i = 0; i < mNodes.size(); ++i) {
-        mDb->addNodesDetails(i, mNodes.at(i));
+        mDb->setMetadata("name", mName);
+        mDb->setMetadata("basepath", mBasePath);
+        mDb->setMetadata("output", mOutputName);
+
+        mDb->saveConfig(mConfig);
+        mDb->saveScenario(mScenario);
+
+        mDb->removeAllStatsData();
+
+        /* load nodes */
+        mDb->removeAllNodesDetails();
+        for (int i = 0; i < mNodes.size(); ++i) {
+            mDb->addNodesDetails(i, mNodes.at(i));
+        }
+
+        /* load vessels */
+        mDb->removeAllVesselsDetails();
+        for (int i = 0; i< mVessels.size(); ++i) {
+            mDb->addVesselDetails(i, mVessels.at(i));
+        }
+
+        /* end: commit transaction */
+        mDb->endTransaction();
     }
-
-    /* load vessels */
-    mDb->removeAllVesselsDetails();
-    for (int i = 0; i< mVessels.size(); ++i) {
-        mDb->addVesselDetails(i, mVessels.at(i));
-    }
-
-    /* end: commit transaction */
-    mDb->endTransaction();
 
     return true;
 }

@@ -36,6 +36,8 @@ public:
     QString getSimulationName() const;
     void setSimulationName(const QString &value);
 
+    bool wasSimulationStarted() const;
+
 signals:
     void log(QString);
     void processStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate);

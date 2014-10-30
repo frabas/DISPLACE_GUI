@@ -44,6 +44,7 @@ public:
     bool load (QString path, QString modelname, QString outputname);
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
+    bool prepareDatabaseForSimulation ();
     bool save();
 
     /** \brief Signals the simulation has ended. Flush all buffers */

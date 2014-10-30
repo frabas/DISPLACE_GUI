@@ -2894,7 +2894,7 @@ int main(int argc, char* argv[])
 							// update, export and clear for the next time...
 							if(impact_on_pop!=0)
 							{
-								if(namesimu=="simu1") a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
+                                a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
 							}
 						}
 								 // RE-INIT
@@ -3293,9 +3293,6 @@ int main(int argc, char* argv[])
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
                 nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
-                for (unsigned int pop = 0; pop < nbpops; ++pop) {
-                    nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, pop);
-                }
 			}
 
 			//...and export the benthos biomasses on node

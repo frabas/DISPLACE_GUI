@@ -45,6 +45,7 @@ public:
 
     ModelType modelType() const { return mModelType; }
 
+    bool edit(QString modelname);
     void setIndex(int idx) { mIndex = idx; }
     int index() const { return mIndex; }
 

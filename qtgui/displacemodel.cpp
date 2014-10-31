@@ -13,6 +13,9 @@
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
       mDb(0),
+      mName(),mBasePath(),mOutputName(),
+      mIndex(-1),
+      mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
@@ -31,6 +34,18 @@ DisplaceModel::DisplaceModel()
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
     connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+}
+
+bool DisplaceModel::edit(QString modelname)
+{
+    if (mModelType != EmptyModelType)
+        return false;
+
+    // ...
+
+    mName = modelname;
+
+    return true;
 }
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)

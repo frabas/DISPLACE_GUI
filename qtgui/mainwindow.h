@@ -30,7 +30,7 @@ class MapObjectsController;
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
-#define MAX_MODELS 4
+#define MAX_MODELS 5
 
 class MainWindow : public QMainWindow
 {
@@ -112,6 +112,8 @@ protected:
     void centerMapOnVesselId (int id);
 
     void showPaletteDialog(PaletteRole role);
+
+    int newEditorModel(QString name);
 
 private:
     Ui::MainWindow *ui;

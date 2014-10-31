@@ -117,9 +117,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
 
-    for (int i = 0; i < maxModels; ++i) {
-        ui->modelSelector->addItem(QString(tr("[%1]")).arg(i),i);
-    }
+    int idx = newEditorModel("new model");
+    ui->modelSelector->setCurrentIndex(idx);
+    updateModelList();
 }
 
 MainWindow::~MainWindow()
@@ -613,6 +613,24 @@ void MainWindow::on_actionLoad_results_triggered()
     }
 
 }
+
+int MainWindow::newEditorModel(QString name)
+{
+    int i = MAX_MODELS-1;
+    std::shared_ptr<DisplaceModel> edmodel = std::shared_ptr<DisplaceModel>(new DisplaceModel());
+    edmodel->edit(name);
+    edmodel->setIndex(i);
+    models[i] = edmodel;
+
+    mMapController->setModel(i, edmodel);
+    mMapController->createMapObjectsFromModel(i,models[i].get());
+    ui->modelSelector->setCurrentIndex(i);
+
+    emit modelStateChanged();
+
+    return i;
+}
+
 
 void MainWindow::on_play_step_valueChanged(int step)
 {

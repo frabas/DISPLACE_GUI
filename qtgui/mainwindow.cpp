@@ -200,7 +200,9 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
     mStatsController->updateStats(currentModel.get());
 
-    bool e = (currentModelIdx != 0);
+    DisplaceModel::ModelType type = currentModel == 0 ? DisplaceModel::EmptyModelType : currentModel->modelType() ;
+
+    bool e = (type == DisplaceModel::OfflineModelType);
     ui->play_bk->setEnabled(e);
     ui->play_fbk->setEnabled(e);
     ui->play_ffwd->setEnabled(e);
@@ -212,13 +214,29 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     if (!e || currentModel == 0) {
         ui->play_step->setValue(0);
     } else {
-        int last = currentModel->getLastStep();
-        ui->play_step->setValue(currentModel->getCurrentStep());
-        ui->play_step->setMinimum(0);
-        ui->play_step->setMaximum(last);
+        if (type == DisplaceModel::OfflineModelType) {
+            int last = currentModel->getLastStep();
+            ui->play_step->setValue(currentModel->getCurrentStep());
+            ui->play_step->setMinimum(0);
+            ui->play_step->setMaximum(last);
 
-        ui->play_step->setSuffix(QString(tr("/%1")).arg(last));
+            ui->play_step->setSuffix(QString(tr("/%1")).arg(last));
+        } else if (type == DisplaceModel::EditorModelType) {
+            ui->play_step->setValue(0);
+            ui->play_step->setMinimum(0);
+            ui->play_step->setMaximum(0);
+        }
     }
+
+    /* Editor specific tools */
+    e = type == DisplaceModel::EditorModelType;
+    ui->actionAdd->setEnabled(e);
+    ui->actionClear_Graph->setEnabled(e);
+    ui->actionDelete->setEnabled(e);
+    ui->actionEdge_Edit->setEnabled(e);
+    ui->actionGraph->setEnabled(e);
+    ui->actionNode_Editor->setEnabled(e);
+    ui->actionProperties->setEnabled(e);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -634,7 +652,7 @@ int MainWindow::newEditorModel(QString name)
 
 void MainWindow::on_play_step_valueChanged(int step)
 {
-    if (currentModelIdx > 0) {
+    if (currentModel && currentModel->modelType() == DisplaceModel::OfflineModelType) {
         currentModel->setCurrentStep(step);
         updateAllDisplayObjects();
     }

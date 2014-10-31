@@ -44,6 +44,7 @@ bool DisplaceModel::edit(QString modelname)
     // ...
 
     mName = modelname;
+    mModelType = EditorModelType;
 
     return true;
 }

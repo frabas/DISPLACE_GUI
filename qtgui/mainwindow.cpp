@@ -13,6 +13,8 @@
 #include <scenariodialog.h>
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
+#include <creategraphdialog.h>
+
 #include <graphinteractioncontroller.h>
 
 #include <QMapControl/QMapControl.h>
@@ -855,12 +857,31 @@ void MainWindow::on_actionDelete_triggered()
 
 void MainWindow::on_actionClear_Graph_triggered()
 {
-    if (currentModel) {
-        int res = QMessageBox::question(this, tr("Clear graph"), tr("You're about to delete the entire graph data. Do you want to proceed?"),
-                                        QMessageBox::No, QMessageBox::Yes);
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
 
-        if (res == QMessageBox::Yes) {
-//            currentModel->delAllNodes();
-        }
+    int res = QMessageBox::question(this, tr("Clear graph"), tr("You're about to delete the entire graph data. Do you want to proceed?"),
+                                    QMessageBox::No, QMessageBox::Yes);
+
+    if (res == QMessageBox::Yes) {
+        //            currentModel->delAllNodes();
+    }
+}
+
+void MainWindow::on_actionCreate_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    CreateGraphDialog dlg(this);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        /* TODO Correct this */
+        QList<QPointF> l;
+
+        for (int i = 0; i < 10; ++i)
+            l.push_back(QPointF(10.0 + i, 60.0 + i));
+
+        currentModel->addGraph (l, mMapController);
     }
 }

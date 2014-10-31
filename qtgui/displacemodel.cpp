@@ -5,10 +5,13 @@
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
 
+#include <mapobjectscontroller.h>
+
 #include <readdata.h>
 #include <qdebug.h>
 #include <QtAlgorithms>
 
+const char *FLD_NODEID="nodeid";
 
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
@@ -28,6 +31,25 @@ DisplaceModel::DisplaceModel()
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))
 {
+    OGRRegisterAll();
+
+    const char *pszDriverName = "Memory";
+    OGRSFDriver *poDriver;
+    poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+
+    mDataSource = poDriver->CreateDataSource("memory");
+    Q_ASSERT(mDataSource);
+
+    mSpatialRef = new OGRSpatialReference();
+    mSpatialRef->SetWellKnownGeogCS("WGS84");
+
+    mNodesLayer = mDataSource->CreateLayer("nodes", mSpatialRef, wkbPoint);
+    Q_ASSERT(mNodesLayer);
+
+    // Create any field
+    OGRFieldDefn fld(FLD_NODEID, OFTInteger);
+    mNodesLayer->CreateField(&fld);
+
     mOutputFileParser->moveToThread(mParserThread);
     mParserThread->start();
 
@@ -354,6 +376,36 @@ void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> s
         mDb->addVesselStats(tstep,vessel);
 
     mVesselsStatsDirty = true;
+}
+
+bool DisplaceModel::addGraph(const QList<QPointF> &points, MapObjectsController *controller)
+{
+    if (mModelType != EditorModelType)
+        return false;
+
+    foreach(QPointF point, points) {
+        int nodeid = mNodes.size();
+
+        OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+        feature->SetField(FLD_NODEID, nodeid);
+
+        OGRPoint pt;
+        pt.setX(point.x());
+        pt.setY(point.y());
+
+        feature->SetGeometry(&pt);
+
+        mNodesLayer->CreateFeature(feature);
+
+        Node *nd = new Node();
+        nd->set_xy(point.x(), point.y());
+        NodeData *node = new NodeData(nd, this);
+        mNodes.push_back(node);
+
+        controller->addNode(mIndex, node);
+    }
+
+    return true;
 }
 
 int DisplaceModel::getVesselCount() const

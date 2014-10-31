@@ -29,6 +29,7 @@ class NodeMapObject;
 class VesselMapObject;
 class EdgeLayer;
 class EdgeMapObject;
+class NodeData;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -198,10 +199,14 @@ public:
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
+
+    void addNode(int model_n, NodeData *nd);
+
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
     void addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show = true);
+
 
     void delSelectedEdges(int model);
 protected slots:

@@ -21,9 +21,12 @@
 
 #include <memory>
 
+#include <gdal/ogrsf_frmts.h>
+
 #include <QDebug>
 
 class DbHelper;
+class MapObjectsController;
 
 class DisplaceModel : public QObject
 {
@@ -247,6 +250,12 @@ public:
 
     void collectVesselStats (int step, std::shared_ptr<VesselStats> stats);
 
+    /* Editor stuff */
+
+
+    bool addGraph(const QList<QPointF> &points, MapObjectsController *controller);
+
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -310,6 +319,12 @@ private:
     QThread *mParserThread;
 
     QString mLastError;
+
+    /* Editor stuff */
+    OGRDataSource *mDataSource;
+    OGRLayer *mNodesLayer;
+
+    OGRSpatialReference *mSpatialRef;
 };
 
 #endif // DISPLACEMODEL_H

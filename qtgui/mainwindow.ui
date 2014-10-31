@@ -91,6 +91,7 @@
     <addaction name="actionSave_Graph"/>
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
+    <addaction name="actionCreate_Graph"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
@@ -878,6 +879,11 @@
   <action name="actionLoad_Graph">
    <property name="text">
     <string>Load...</string>
+   </property>
+  </action>
+  <action name="actionCreate_Graph">
+   <property name="text">
+    <string>Create Graph...</string>
    </property>
   </action>
  </widget>

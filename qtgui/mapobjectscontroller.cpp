@@ -104,37 +104,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     foreach (NodeData *nd, nodes) {
         if (nd->get_harbour())
             continue;
-
-        NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
-        connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
-        mNodeObjects[model_n].append(obj);
-
-        mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity());
-
-        /* add here other roles */
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
-        mNodeObjects[model_n].append(obj);
-        mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity());
-
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
-        mNodeObjects[model_n].append(obj);
-        mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity());
-
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
-        mNodeObjects[model_n].append(obj);
-        mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity());
-
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
-        mNodeObjects[model_n].append(obj);
-        mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity());
-
-        for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-            EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
-
-            connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
-
-            mEdgesLayer[model_n]->addEdge(edge);
-        }
+        addNode(model_n, nd);
     }
 
     const QList<VesselData *> &vessels = model->getVesselList();
@@ -321,6 +291,41 @@ void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<Layer> l
 {
     mMap->addLayer(layer);
     mShapefileLayers[model].add(layer, show);
+}
+
+void MapObjectsController::addNode(int model_n, NodeData *nd)
+{
+    NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
+    connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
+    mNodeObjects[model_n].append(obj);
+
+    mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity());
+
+    /* add here other roles */
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity());
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity());
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity());
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity());
+
+    for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+        EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
+
+        connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
+
+        mEdgesLayer[model_n]->addEdge(edge);
+    }
+
 }
 
 void MapObjectsController::delSelectedEdges(int model)

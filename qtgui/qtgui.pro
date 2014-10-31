@@ -88,7 +88,8 @@ SOURCES += \
     mapobjects/nodedetailswidget.cpp \
     modelobjects/harbourdata.cpp \
     mapobjects/edgemapobject.cpp \
-    mapobjects/edgelayer.cpp
+    mapobjects/edgelayer.cpp \
+    creategraphdialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -96,7 +97,8 @@ FORMS += \
     simulationsetupdialog.ui \
     editpalettedialog.ui \
     configdialog.ui \
-    mapobjects/nodedetailswidget.ui
+    mapobjects/nodedetailswidget.ui \
+    creategraphdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -142,7 +144,8 @@ HEADERS += \
     mapobjects/nodedetailswidget.h \
     modelobjects/harbourdata.h \
     mapobjects/edgemapobject.h \
-    mapobjects/edgelayer.h
+    mapobjects/edgelayer.h \
+    creategraphdialog.h
 
 RESOURCES += \
     qtgui.qrc

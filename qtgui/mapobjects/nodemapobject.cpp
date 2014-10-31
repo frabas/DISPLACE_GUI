@@ -78,7 +78,7 @@ void NodeMapObject::updateProperties()
     switch (mRole) {
     default:
     case GraphNodeRole:
-        text += QString("<br/><b>Adiacencies</b><br/>");
+        text += QString("<br/><b>Adjacencies</b><br/>");
         for (int i = 0; i < mNode->getAdiacencyCount(); ++i) {
             text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
                     .arg(mNode->getAdiacencyByIdx(i))

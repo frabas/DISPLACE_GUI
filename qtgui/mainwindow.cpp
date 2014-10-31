@@ -230,6 +230,10 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
 
     /* Editor specific tools */
     e = type == DisplaceModel::EditorModelType;
+    ui->actionLoad_Graph->setEnabled(e);
+    ui->actionSave_Graph->setEnabled(e);
+    ui->actionExport_Graph->setEnabled(e);
+
     ui->actionAdd->setEnabled(e);
     ui->actionClear_Graph->setEnabled(e);
     ui->actionDelete->setEnabled(e);

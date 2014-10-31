@@ -83,8 +83,18 @@
     <addaction name="actionDelete"/>
     <addaction name="actionProperties"/>
    </widget>
+   <widget class="QMenu" name="menuGraph">
+    <property name="title">
+     <string>Graph</string>
+    </property>
+    <addaction name="actionLoad_Graph"/>
+    <addaction name="actionSave_Graph"/>
+    <addaction name="actionExport_Graph"/>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
+   <addaction name="menuGraph"/>
    <addaction name="menu_Editor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -853,6 +863,21 @@
    </property>
    <property name="text">
     <string>Node Editor</string>
+   </property>
+  </action>
+  <action name="actionExport_Graph">
+   <property name="text">
+    <string>Export...</string>
+   </property>
+  </action>
+  <action name="actionSave_Graph">
+   <property name="text">
+    <string>Save...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Graph">
+   <property name="text">
+    <string>Load...</string>
    </property>
   </action>
  </widget>

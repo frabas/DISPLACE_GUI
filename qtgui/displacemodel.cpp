@@ -236,9 +236,9 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
 
-        // ...
-        mStatsNationsCollected.clear();
-        mStatsHarboursCollected.clear();
+        // don't clear stats: they are cumulated
+//        mStatsNationsCollected.clear();
+//        mStatsHarboursCollected.clear();
         mVesselsStatsDirty = false;
     }
 
@@ -312,7 +312,9 @@ void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> s
     while (mStatsNationsCollected.size() <= nat) {
         mStatsNationsCollected.push_back(NationStats());
     }
+
     mStatsNationsCollected[nat].mRevenues += stats->revenue;
+    mStatsNationsCollected[nat].mTimeAtSea += stats->timeAtSea;
 
     int hidx = vessel->getLastHarbour();
     while (mStatsHarboursCollected.size() <= hidx)
@@ -324,6 +326,7 @@ void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> s
     for (int i = 0; i < n; ++i) {
         vessel->addCatch(i, stats->mCatches[i]);
         mStatsHarboursCollected[hidx].mCumCatches += stats->mCatches[i];
+        mStatsNationsCollected[nat].mTotCatches += stats->mCatches[i];
     }
 
     if (mDb)

@@ -36,7 +36,14 @@ public:
     typedef QVector<HarbourStats> HarboursStats;
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
 
+    enum ModelType {
+        LiveModelType, EditorModelType, OfflineModelType,
+        EmptyModelType
+    };
+
     DisplaceModel();
+
+    ModelType modelType() const { return mModelType; }
 
     void setIndex(int idx) { mIndex = idx; }
     int index() const { return mIndex; }
@@ -259,6 +266,7 @@ signals:
     void errorParsingStatsFile(QString);
 
 private:
+    ModelType mModelType;
     DbHelper *mDb;
     QString mName;
     QString mBasePath;
@@ -271,7 +279,6 @@ private:
     bool mPopStatsDirty;
     bool mVesselsStatsDirty;
 
-    bool mLive;
     Scenario mScenario;
     Config mConfig;
 

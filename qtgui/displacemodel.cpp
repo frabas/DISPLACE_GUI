@@ -11,11 +11,11 @@
 
 
 DisplaceModel::DisplaceModel()
-    : mDb(0),
+    : mModelType(EmptyModelType),
+      mDb(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
-      mLive(false),
       mInterestingPop(),
       mInterestingSizeTotal(true),
       mInterestingSizeAvg(true),
@@ -35,6 +35,9 @@ DisplaceModel::DisplaceModel()
 
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)
 {
+    if (mModelType != EmptyModelType)
+        return false;
+
     qDebug() << "Loading model" << modelname << "from folder" << path;
 
     mName = modelname;
@@ -61,13 +64,13 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         return false;
     }
 
-    mLive = true;
+    mModelType = LiveModelType;
     return true;
 }
 
 bool DisplaceModel::loadDatabase(QString path)
 {
-    if (mLive || mDb != 0)
+    if (mModelType != EmptyModelType || mDb != 0)
         return false;
 
     mDb = new DbHelper;
@@ -88,6 +91,8 @@ bool DisplaceModel::loadDatabase(QString path)
 
     mLastStep = mDb->getLastKnownStep();
     setCurrentStep(0);
+
+    mModelType = OfflineModelType;
     return true;
 }
 
@@ -99,7 +104,7 @@ bool DisplaceModel::loadDatabase(QString path)
  */
 bool DisplaceModel::linkDatabase(QString path)
 {
-    if (!mLive || mDb != 0)
+    if (mModelType != LiveModelType || mDb != 0)
         return false;
 
     mDb = new DbHelper;
@@ -370,7 +375,7 @@ int DisplaceModel::getPopulationsCount() const
 
 HarbourStats DisplaceModel::retrieveHarbourIdxStatAtStep(int idx, int step)
 {
-    if (mLive || !mDb) {
+    if (mModelType != OfflineModelType || !mDb) {
         return HarbourStats(); //getHarboursStatAtStep(step, idx);
     }
 

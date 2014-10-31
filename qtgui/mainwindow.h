@@ -96,6 +96,8 @@ private slots:
 
     void on_actionNode_Editor_toggled(bool arg1);
 
+    void on_actionClear_Graph_triggered();
+
 signals:
     void modelStateChanged();
 

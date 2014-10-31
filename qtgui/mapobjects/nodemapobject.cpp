@@ -131,6 +131,8 @@ QString NodeMapObject::updateStatText(QString prefix)
         case GraphNodeWithPopImpact:
             val = mNode->getImpact(i);
             break;
+        default:
+            throw std::runtime_error("Unhandled case in updateStatText");
         }
 
         text += QString("<b>%1 %2:</b> %3<br/>")

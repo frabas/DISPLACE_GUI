@@ -63,6 +63,8 @@ public:
         return mConfig.getSzGroups();
     }
 
+    /* Graphs operation */
+
     const QList<HarbourData *> &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;

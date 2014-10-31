@@ -812,3 +812,15 @@ void MainWindow::on_actionDelete_triggered()
 {
     mMapController->delSelected(currentModelIdx);
 }
+
+void MainWindow::on_actionClear_Graph_triggered()
+{
+    if (currentModel) {
+        int res = QMessageBox::question(this, tr("Clear graph"), tr("You're about to delete the entire graph data. Do you want to proceed?"),
+                                        QMessageBox::No, QMessageBox::Yes);
+
+        if (res == QMessageBox::Yes) {
+//            currentModel->delAllNodes();
+        }
+    }
+}

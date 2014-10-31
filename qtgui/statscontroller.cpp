@@ -302,17 +302,18 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
         int n = model->getHarboursStatsCount();
         DisplaceModel::HarboursStatsContainer::Container::const_iterator it = model->getHarboursStatsFirstValue();
         for (int i = 0; i <n; ++i) {
-            keyData << it.key();
+            if (it.value().size() > ip) {
+                keyData << it.key();
 
-            switch (mSelectedHarboursStat) {
-            case H_Catches:
-                valueData << it.value().at(ip).mCumCatches;
-                break;
-            case H_Earnings:
-                valueData << it.value().at(ip).mCumProfit;
-                break;
+                switch (mSelectedHarboursStat) {
+                case H_Catches:
+                    valueData << it.value().at(ip).mCumCatches;
+                    break;
+                case H_Earnings:
+                    valueData << it.value().at(ip).mCumProfit;
+                    break;
+                }
             }
-
             ++it;
         }
 

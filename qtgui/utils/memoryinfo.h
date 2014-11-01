@@ -1,7 +1,7 @@
 #ifndef MEMORYINFO_H
 #define MEMORYINFO_H
 
-/* Abstract class - uses IMPL */
+#include <stddef.h>
 
 class MemoryInfoImpl;
 
@@ -10,11 +10,13 @@ class MemoryInfo
 public:
     MemoryInfo();
 
-    unsigned long free() const { return mFree_kb; }
+    size_t rss() const { return mRss_kb; }
+    size_t peakRss() const { return mPeakRss_kb; }
 
     bool update();
 protected:
-    unsigned long mFree_kb;
+    size_t mRss_kb;
+    size_t mPeakRss_kb;
 };
 
 #endif // MEMORYINFO_H

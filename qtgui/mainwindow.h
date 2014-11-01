@@ -4,6 +4,8 @@
 #include <outputfileparser.h>
 #include <statscontroller.h>
 
+#include <utils/memoryinfo.h>
+
 #include <QMainWindow>
 #include <QProcess>
 #include <QTimer>
@@ -57,6 +59,7 @@ private slots:
     void errorImportingStatsFile(QString);
 
     void playTimerTimeout();
+    void memoryTimerTimeout();
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
@@ -87,17 +90,11 @@ private slots:
     void on_play_params_clicked();
     void on_actionQuit_triggered();
     void on_actionImport_Shapefile_triggered();
-
     void on_actionGraph_toggled(bool arg1);
-
     void on_actionEdge_Edit_toggled(bool arg1);
-
     void on_actionDelete_triggered();
-
     void on_actionNode_Editor_toggled(bool arg1);
-
     void on_actionClear_Graph_triggered();
-
     void on_actionCreate_Graph_triggered();
 
 signals:
@@ -136,6 +133,9 @@ private:
 
     QTimer mPlayTimer;
     int mPlayTimerInterval;
+    QTimer mMemoryWatchTimer;
+    MemoryInfo mMemInfo;
+    QLabel *mMemInfoLabel;
 
     static const QString dbSuffix;
     static const QString dbFilter;

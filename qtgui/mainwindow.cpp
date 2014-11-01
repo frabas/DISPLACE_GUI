@@ -60,6 +60,9 @@ MainWindow::MainWindow(QWidget *parent) :
     grp->addAction(ui->actionNode_Editor);
     grp->addAction(ui->actionEdge_Edit);
 
+    mMemInfoLabel = new QLabel(this);
+    statusBar()->addPermanentWidget(mMemInfoLabel);
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
@@ -70,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
     connect (&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
+    connect (&mMemoryWatchTimer, SIGNAL(timeout()), this, SLOT(memoryTimerTimeout()));
+
+    mMemoryWatchTimer.start(2500);
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -333,6 +339,12 @@ void MainWindow::playTimerTimeout()
         on_play_fwd_clicked();
     else
         on_play_auto_clicked();
+}
+
+void MainWindow::memoryTimerTimeout()
+{
+    mMemInfo.update();
+    mMemInfoLabel->setText(QString(tr("Used memory: %1Mb Peak: %2Mb")).arg(mMemInfo.rss()/1024).arg(mMemInfo.peakRss()/1024));
 }
 
 void MainWindow::updateModelList()

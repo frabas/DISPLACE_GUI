@@ -89,6 +89,7 @@ SOURCES += \
     modelobjects/harbourdata.cpp \
     mapobjects/edgemapobject.cpp \
     mapobjects/edgelayer.cpp \
+    utils/memoryinfo.cpp \
     creategraphdialog.cpp
 
 FORMS += \
@@ -145,6 +146,7 @@ HEADERS += \
     modelobjects/harbourdata.h \
     mapobjects/edgemapobject.h \
     mapobjects/edgelayer.h \
+    utils/memoryinfo.h \
     creategraphdialog.h
 
 RESOURCES += \

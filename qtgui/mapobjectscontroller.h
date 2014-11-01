@@ -200,7 +200,7 @@ public:
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
 
-    void addNode(int model_n, NodeData *nd);
+    void addNode(int model_n, std::shared_ptr<NodeData> nd);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);

@@ -411,19 +411,19 @@ void MainWindow::centerMap(const qmapcontrol::PointWorldCoord &pt)
 
 void MainWindow::centerMapOnHarbourId(int id)
 {
-    HarbourData *h = currentModel->getHarboursList()[id];
+    std::shared_ptr<HarbourData> h (currentModel->getHarboursList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->mHarbour->get_x(), h->mHarbour->get_y()));
 }
 
 void MainWindow::centerMapOnNodeId(int id)
 {
-    NodeData *h = currentModel->getNodesList()[id];
+    std::shared_ptr<NodeData> h (currentModel->getNodesList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
 
 void MainWindow::centerMapOnVesselId(int id)
 {
-    VesselData *h = currentModel->getVesselList()[id];
+    std::shared_ptr<VesselData> h(currentModel->getVesselList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->mVessel->get_x(), h->mVessel->get_y()));
 }
 

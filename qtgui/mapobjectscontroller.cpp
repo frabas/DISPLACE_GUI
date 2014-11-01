@@ -92,24 +92,24 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Fishing Effort"));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n]);
 
-    const QList<HarbourData *> &harbours = model->getHarboursList();
-    foreach (HarbourData *h, harbours) {
-        HarbourMapObject *obj = new HarbourMapObject(this, model, h);
+    const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
+    foreach (std::shared_ptr<HarbourData> h, harbours) {
+        HarbourMapObject *obj = new HarbourMapObject(this, model, h.get());
         mHarbourObjects[model_n].append(obj);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }
 
-    const QList<NodeData *> &nodes = model->getNodesList();
-    foreach (NodeData *nd, nodes) {
+    const QList<std::shared_ptr<NodeData> > &nodes = model->getNodesList();
+    foreach (std::shared_ptr<NodeData> nd, nodes) {
         if (nd->get_harbour())
             continue;
         addNode(model_n, nd);
     }
 
-    const QList<VesselData *> &vessels = model->getVesselList();
-    foreach (VesselData *vsl, vessels) {
-        VesselMapObject *obj = new VesselMapObject(this,vsl);
+    const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
+    foreach (std::shared_ptr<VesselData> vsl, vessels) {
+        VesselMapObject *obj = new VesselMapObject(this,vsl.get());
         mVesselObjects[model_n].append(obj);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
@@ -118,8 +118,8 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
 void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-    const QList<VesselData *> &vessels = model->getVesselList();
-    foreach (VesselData *vsl, vessels) {
+    const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
+    foreach (std::shared_ptr<VesselData> vsl, vessels) {
         updateVesselPosition(model_n, vsl->mVessel->get_idx());
     }
 
@@ -293,7 +293,7 @@ void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<Layer> l
     mShapefileLayers[model].add(layer, show);
 }
 
-void MapObjectsController::addNode(int model_n, NodeData *nd)
+void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
 {
     NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
     connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
@@ -319,7 +319,7 @@ void MapObjectsController::addNode(int model_n, NodeData *nd)
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity());
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-        EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
+        EdgeMapObject *edge = new EdgeMapObject(this, i, nd.get());
 
         connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
@@ -331,8 +331,8 @@ void MapObjectsController::addNode(int model_n, NodeData *nd)
 void MapObjectsController::delSelectedEdges(int model)
 {
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
-        NodeData *nd = edge->node();
-        NodeData *tg = edge->target();
+        std::shared_ptr<NodeData> nd = edge->node();
+        std::shared_ptr<NodeData> tg = edge->target();
 
 //        int nodeid1 = nd->get_idx_node();
 

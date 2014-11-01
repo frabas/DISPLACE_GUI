@@ -57,17 +57,17 @@ public:
     bool attachDb(QString file);
     QString lastDbError() const;
 
-    void addNodesDetails(int idx, NodeData *node);
+    void addNodesDetails(int idx, std::shared_ptr<NodeData> node);
     void removeAllNodesDetails();
 
-    void addNodesStats (int tstep, const QList<NodeData *> &nodes);
-    void addPopStats(int tstep, const QVector<PopulationData> &pops);
-    void addNationsStats(int tstep, const QVector<NationStats> &nats);
-    void addVesselStats(int tstep, VesselData *vessel);
+    void addNodesStats (int tstep, const QList<std::shared_ptr<NodeData> > &nodes);
+    void addPopStats(int tstep, const QVector<std::shared_ptr<PopulationData> > &pops);
+    void addNationsStats(int tstep, const QVector<std::shared_ptr<NationStats> > &nats);
+    void addVesselStats(int tstep, std::shared_ptr<VesselData> vessel);
 
-    void addVesselPosition (int step, int idx, VesselData *vessel);
+    void addVesselPosition (int step, int idx, std::shared_ptr<VesselData> vessel);
     void removeAllVesselsDetails();
-    void addVesselDetails (int idx, VesselData *vessel);
+    void addVesselDetails (int idx, std::shared_ptr<VesselData> vessel);
 
     void removeAllStatsData();
 
@@ -76,14 +76,14 @@ public:
     bool loadScenario (Scenario &);
     bool saveScenario (const Scenario &);
 
-    bool loadNodes(QList<NodeData *> &nodes, QList<HarbourData *> &harbours, DisplaceModel *model);
-    bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
+    bool loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model);
+    bool loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels);
 
     /* Update datas for step */
-    bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
-    bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
-    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
-    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour);
+    bool updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels);
+    bool updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes);
+    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<std::shared_ptr<PopulationData> > > &population);
+    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<std::shared_ptr<VesselData> > &vessels, const QList<std::shared_ptr<NodeData> >&nodes, QList<QVector<std::shared_ptr<NationStats> > > &nations, QList<QVector<std::shared_ptr<HarbourStats> > > &harbour) ;
 
     HarbourStats getHarbourStatsAtStep(int idx, int step);
 

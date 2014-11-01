@@ -32,11 +32,11 @@ class DisplaceModel : public QObject
 {
     Q_OBJECT
 public:
-    typedef QVector<PopulationData> PopulationStat;
+    typedef QVector<std::shared_ptr<PopulationData> > PopulationStat;
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-    typedef QVector<NationStats> NationsStats;
+    typedef QVector<std::shared_ptr<NationStats> > NationsStats;
     typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
-    typedef QVector<HarbourStats> HarboursStats;
+    typedef QVector<std::shared_ptr<HarbourStats> > HarboursStats;
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
 
     enum ModelType {
@@ -76,11 +76,11 @@ public:
 
     /* Graphs operation */
 
-    const QList<HarbourData *> &getHarboursList() const { return mHarbours; }
+    const QList<std::shared_ptr<HarbourData> > &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
 
-    const QList<NodeData *> &getNodesList() const { return mNodes; }
+    const QList<std::shared_ptr<NodeData> > &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
 
@@ -92,12 +92,12 @@ public:
      * */
     void updateNodesStatFromSimu(QString);
 
-    const QList<VesselData *> &getVesselList() const { return mVessels; }
+    const QList<std::shared_ptr<VesselData> > &getVesselList() const { return mVessels; }
     int getVesselCount() const;
     QString getVesselId(int idx) const;
     void updateVessel (int tstep, int idx, float x, float y, float course, float fuel, int state );
 
-    const QList<Benthos*> &getBenthosList() const { return mBenthos; }
+    const QList<std::shared_ptr<Benthos> > &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
     /* Access to Population statistics */
@@ -107,7 +107,7 @@ public:
             qDebug() << step << idx << mStatsPopulations.getValue(step).size();
             Q_ASSERT(false);
         }
-        return mStatsPopulations.getValue(step).at(idx);
+        return *mStatsPopulations.getValue(step).at(idx);
     }
     int getPopulationsValuesCount() const {
         return mStatsPopulations.getUniqueValuesCount();
@@ -120,8 +120,8 @@ public:
 
     /* Access to Nations statistics */
 
-    const QList<NationData> &getNationsList() const { return mNations; }
-    const NationData &getNation(int idx) const { return mNations.at(idx); }
+    const QList<std::shared_ptr<NationData> > &getNationsList() const { return mNations; }
+    const NationData &getNation(int idx) const { return *mNations.at(idx); }
 
     int getNationsStatsCount() const {
         return mStatsNations.getUniqueValuesCount();
@@ -133,12 +133,12 @@ public:
         return mStatsNations.getValue(step);
     }
     const NationStats &getNationStatAtStep(int step, int idx) const {
-        return mStatsNations.getValue(step).at(idx);
+        return *mStatsNations.getValue(step).at(idx);
     }
 
     /* Access to Harbour statistics */
 
-    const QList<HarbourData *> &getHarbourList() const { return mHarbours; }
+    const QList<std::shared_ptr<HarbourData> > &getHarbourList() const { return mHarbours; }
     const HarbourData &getHarbourData(int idx) const { return *mHarbours.at(idx); }
 
     int getHarboursStatsCount() const {
@@ -151,7 +151,7 @@ public:
         return mStatsHarbours.getValue(step);
     }
     const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
-        return mStatsHarbours.getValue(step).at(idx);
+        return *mStatsHarbours.getValue(step).at(idx);
     }
     /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
     HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
@@ -298,11 +298,11 @@ private:
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
 
-    QList<HarbourData *> mHarbours;
-    QList<NodeData *> mNodes;
-    QList<VesselData *> mVessels;
-    QList<Benthos *> mBenthos;
-    QList<NationData> mNations;
+    QList<std::shared_ptr<HarbourData>> mHarbours;
+    QList<std::shared_ptr<NodeData> > mNodes;
+    QList<std::shared_ptr<VesselData> > mVessels;
+    QList<std::shared_ptr<Benthos> > mBenthos;
+    QList<std::shared_ptr<NationData> > mNations;
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;
@@ -311,7 +311,7 @@ private:
     HarboursStatsContainer mStatsHarbours;
     HarboursStats mStatsHarboursCollected;
 
-    QMap<int, Benthos *> mBenthosInfo;
+    QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
 
     // --- Working objects
 

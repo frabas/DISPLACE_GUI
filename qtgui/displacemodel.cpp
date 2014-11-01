@@ -328,22 +328,22 @@ void DisplaceModel::collectPopImpact(int step, int node_idx, int popid, double i
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setAggregate(pops);
-    mStatsPopulationsCollected[popid].setAggregateTot(value);
+    mStatsPopulationsCollected[popid]->setAggregate(pops);
+    mStatsPopulationsCollected[popid]->setAggregateTot(value);
     mPopStatsDirty = true;
 }
 
 void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setMortality(pops);
-    mStatsPopulationsCollected[popid].setMortalityTot(value);
+    mStatsPopulationsCollected[popid]->setMortality(pops);
+    mStatsPopulationsCollected[popid]->setMortalityTot(value);
     mPopStatsDirty = true;
 }
 
 void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> stats)
 {
-    VesselData *vessel = mVessels.at(stats->vesselId);
+    std::shared_ptr<VesselData> vessel = mVessels.at(stats->vesselId);
 
     vessel->setLastHarbour(stats->lastHarbour);
     vessel->setRevenue(stats->revenue);
@@ -353,23 +353,23 @@ void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> s
 
     int nat = vessel->getNationality();
     while (mStatsNationsCollected.size() <= nat) {
-        mStatsNationsCollected.push_back(NationStats());
+        mStatsNationsCollected.push_back(std::shared_ptr<NationStats>(new NationStats()));
     }
 
-    mStatsNationsCollected[nat].mRevenues += stats->revenue;
-    mStatsNationsCollected[nat].mTimeAtSea += stats->timeAtSea;
+    mStatsNationsCollected[nat]->mRevenues += stats->revenue;
+    mStatsNationsCollected[nat]->mTimeAtSea += stats->timeAtSea;
 
     int hidx = vessel->getLastHarbour();
     while (mStatsHarboursCollected.size() <= hidx)
-        mStatsHarboursCollected.push_back(HarbourStats());
+        mStatsHarboursCollected.push_back(std::shared_ptr<HarbourStats> (new HarbourStats()));
 
-    mStatsHarboursCollected[hidx].mCumProfit += stats->revenue;
+    mStatsHarboursCollected[hidx]->mCumProfit += stats->revenue;
 
     int n = stats->mCatches.size();
     for (int i = 0; i < n; ++i) {
         vessel->addCatch(i, stats->mCatches[i]);
-        mStatsHarboursCollected[hidx].mCumCatches += stats->mCatches[i];
-        mStatsNationsCollected[nat].mTotCatches += stats->mCatches[i];
+        mStatsHarboursCollected[hidx]->mCumCatches += stats->mCatches[i];
+        mStatsNationsCollected[nat]->mTotCatches += stats->mCatches[i];
     }
 
     if (mDb)
@@ -397,9 +397,9 @@ bool DisplaceModel::addGraph(const QList<QPointF> &points, MapObjectsController 
 
         mNodesLayer->CreateFeature(feature);
 
-        Node *nd = new Node();
+        std::shared_ptr<Node> nd (new Node());
         nd->set_xy(point.x(), point.y());
-        NodeData *node = new NodeData(nd, this);
+        std::shared_ptr<NodeData> node (new NodeData(nd, this));
         mNodes.push_back(node);
 
         controller->addNode(mIndex, node);
@@ -420,7 +420,7 @@ QString DisplaceModel::getVesselId(int idx) const
 
 void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float course, float fuel, int state)
 {
-    VesselData *v = mVessels.at(idx);
+    std::shared_ptr<VesselData> v(mVessels.at(idx));
     v->mVessel->set_xy(x,y);
     v->mVessel->set_course(course);
     v->mVessel->set_cumfuelcons(fuel);
@@ -683,7 +683,7 @@ bool DisplaceModel::loadNodes()
 
             }
 
-            Harbour *h = new Harbour(i,
+            std::shared_ptr<Harbour> h (new Harbour(i,
                                        graph_coord_x[i],
                                        graph_coord_y[i],
                                        graph_coord_harbour[i],
@@ -695,25 +695,25 @@ bool DisplaceModel::loadNodes()
                                        //prices,
                                        fishprices_each_species_per_cat,
                                        init_fuelprices
-                                       );
-            HarbourData *hd = new HarbourData(h);
+                                       ));
+            std::shared_ptr<HarbourData> hd (new HarbourData(h));
             mHarbours.push_back(hd);
 
-            NodeData *n = new NodeData(h, this);
+            std::shared_ptr<NodeData> n (new NodeData(h, this));
             n->setHarbourId(mHarbours.size()-1);
             mNodes.push_back(n);
         }
         else
         {
-            Node * nd = new Node(i,
+            std::shared_ptr<Node> nd (new Node(i,
                                  graph_coord_x[i],
                                  graph_coord_y[i],
                                  graph_coord_harbour[i],
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
                                  nbpops,
-                                 NBSZGROUP);
-            NodeData *n = new NodeData(nd, this);
+                                 NBSZGROUP));
+            std::shared_ptr<NodeData> n(new NodeData(nd, this));
 
             mNodes.push_back(n);
 
@@ -875,7 +875,7 @@ bool DisplaceModel::loadVessels()
             cout << "then take node: " << start_harbour << endl;
         }
 
-        Vessel * v = new Vessel(mNodes.at(start_harbour)->mNode,
+        std::shared_ptr<Vessel> v (new Vessel(mNodes.at(start_harbour)->mNode.get(),
             i,
             vesselids[i],
             nbpops,
@@ -902,9 +902,9 @@ bool DisplaceModel::loadVessels()
             mult_fuelcons_when_fishing[i],
             mult_fuelcons_when_returning[i],
             mult_fuelcons_when_inactive[i]
-            );
+            ));
 
-        VesselData *vd = new VesselData(v);
+        std::shared_ptr<VesselData> vd (new VesselData(v));
         mVessels.push_back(vd);
 
         // some useful setters...
@@ -1155,20 +1155,20 @@ bool DisplaceModel::initBenthos()
 {
     QList<int> ids;
 
-    foreach (NodeData *nd, mNodes) {
+    foreach (std::shared_ptr<NodeData> nd, mNodes) {
         int bm = nd->get_marine_landscape();
-        Benthos *benthos = 0;
+        std::shared_ptr<Benthos> benthos;
 
-        QMap<int, Benthos *>::iterator it = mBenthosInfo.find(bm);
+        QMap<int, std::shared_ptr<Benthos> >::iterator it = mBenthosInfo.find(bm);
         if (it == mBenthosInfo.end()) {
-            benthos = new Benthos (bm);
+            benthos = std::shared_ptr<Benthos> (new Benthos (bm));
             ids.push_back(bm);
             mBenthosInfo.insert(bm, benthos);
         } else {
             benthos = it.value();
         }
 
-        benthos->appendNode (nd);
+        benthos->appendNode (nd.get());
     }
 
     qSort(ids);
@@ -1183,7 +1183,7 @@ bool DisplaceModel::initPopulations()
 {
     mStatsPopulationsCollected.clear();
     for (int i = 0; i < getPopulationsCount(); ++i) {
-        mStatsPopulationsCollected.push_back(PopulationData(i));
+        mStatsPopulationsCollected.push_back(std::shared_ptr<PopulationData>(new PopulationData(i)));
     }
 
     QList<int> imp = mConfig.implicit_pops();
@@ -1205,19 +1205,19 @@ bool DisplaceModel::initPopulations()
 bool DisplaceModel::initNations()
 {
     // nations are read from vessels.
-    QMultiMap<QString, VesselData *> nationSet;
-    foreach (VesselData *vessel, mVessels) {
+    QMultiMap<QString, std::shared_ptr<VesselData> > nationSet;
+    foreach (std::shared_ptr<VesselData> vessel, mVessels) {
         nationSet.insertMulti(QString::fromStdString(vessel->mVessel->get_nationality()), vessel);
     }
 
     mNations.clear();
     QList<QString> nationsName = nationSet.uniqueKeys();
     for (int i = 0; i < nationsName.size(); ++i) {
-        NationData data;
-        data.setName(nationsName[i]);
+        std::shared_ptr<NationData> data(new NationData());
+        data->setName(nationsName[i]);
 
-        QList<VesselData *>vessels = nationSet.values(nationsName[i]);
-        foreach (VesselData *vessel, vessels) {
+        QList<std::shared_ptr<VesselData> >vessels = nationSet.values(nationsName[i]);
+        foreach (std::shared_ptr<VesselData> vessel, vessels) {
             vessel->setNationality(i);
         }
         mNations.push_back(data);
@@ -1248,9 +1248,9 @@ bool DisplaceModel::loadVesselsFromDb()
 
 bool DisplaceModel::loadHistoricalStatsFromDb()
 {
-    QList<QVector<PopulationData> > dtl;
-    QList<QVector<NationStats> > ndl;
-    QList<QVector<HarbourStats> > hdl;
+    QList<QVector<std::shared_ptr<PopulationData> > > dtl;
+    QList<QVector<std::shared_ptr<NationStats> > > ndl;
+    QList<QVector<std::shared_ptr<HarbourStats> > > hdl;
 
     QList<int> steps;
     mDb->loadHistoricalStatsForPops(steps,dtl);
@@ -1259,21 +1259,21 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 
     int i = 0;
-    foreach (const QVector<PopulationData> &dt, dtl) {
+    foreach (const QVector<std::shared_ptr<PopulationData> > &dt, dtl) {
         int tstep = steps[i];
         mStatsPopulations.insertValue(tstep, dt);
         ++i;
     }
 
     i = 0;
-    foreach (const QVector<NationStats> &dt, ndl) {
+    foreach (const QVector<std::shared_ptr<NationStats> > &dt, ndl) {
         int tstep = steps[i];
         mStatsNations.insertValue(tstep, dt);
         ++i;
     }
 
     i = 0;
-    foreach(const QVector<HarbourStats> &dt, hdl) {
+    foreach(const QVector<std::shared_ptr<HarbourStats> > &dt, hdl) {
         int tstep = steps[i];
         mStatsHarbours.insertValue(tstep, dt);
         ++i;

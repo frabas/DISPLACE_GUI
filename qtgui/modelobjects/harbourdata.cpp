@@ -1,6 +1,6 @@
 #include "harbourdata.h"
 
-HarbourData::HarbourData(Harbour *harbour)
+HarbourData::HarbourData(std::shared_ptr<Harbour> harbour)
     : mHarbour(harbour)
 {
 }

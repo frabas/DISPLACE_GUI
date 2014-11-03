@@ -31,6 +31,9 @@ macx {
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+
+    # For GetProcessMemoryInfo()
+    LIBS += -lpsapi
 }
 
 DEFINES += PROFILE

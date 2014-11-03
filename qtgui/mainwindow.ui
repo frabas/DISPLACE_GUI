@@ -305,6 +305,10 @@
            </layout>
           </widget>
           <widget class="QWidget" name="tabStatsPopulations">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/fish.png</normaloff>:/icons/fish.png</iconset>
+           </attribute>
            <attribute name="title">
             <string>Populations</string>
            </attribute>

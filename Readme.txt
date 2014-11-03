@@ -14,31 +14,71 @@ Windows
 -------
 
 Since version 0.5.0 Displace requires GDAL library.
-It must be properly built under MinGW. See the proper section below, because there's no a
+Since version 0.5.4, Displace supports builds under 64bit MinGW.
 
-QT5 with MinGW is at the moment 32bit only.
-Displace simulator requires to be compiled with a 64bit compiler, to allow access to more than 1.2G ram.
-In the simulator projecy file (simulator.pro) the mingw64 compiler is named x86_64-w64-mingw32-g++ , 
-instead of g++, to force you to correctly configure the project.
-So before trying to compile under windows, you need to include the 64bit compiler path in the project.
+NOTE: Compiling the project under 64bit compilers is HIGLY RECOMMENDED. 
+Displace (both Gui and Simulator) requires huge amounts of data that 32bit Windows can't handle properly.
+The 32 bit Windows subsystem has a limit of 1Gb allocated memory, when the total size of allocate data 
+exceed this limit, the program will crash. 
+So Displace requires compilation under 64bit systems.
 
-Under Projects > select Displace project > Build Environment >
+Unfortunately at this time, neither QT and GDAL are available in 64bit binary form from the official channels,
+so some hand work is required.
 
-add the compiler's path to the END of the PATH variable, separated by ";"
-For example: from
-	PATH = C:\Qt\....
-to
-	PATH = C:\Qt\...;C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin
+0) We assume that you have MSYS and QT with MinGW 32 bit already installed. Please refer to the proper websites for instructions.
+You'll have also Qt Creator already installed.
 
-If you forget to append this, the compilation will fail with a "File not found" error.
+1) Installation of 64bit QT5.3.1
 
-GDAL Installation under MinGW
------------------------------
+Go to http://www.tver-soft.org/qt64 and download the proper installer (MinGW 64bit, OpenGL, seh Exception Handling, Posix Threading)
 
-Install MSYS. Compilation must be performed from the MSYS shell, so you must have a working MSYS system with proper toolchain and autotools.
+At this time, this is the direct link.
 
-From the MSYS shell, enter the gdal-1.x.x directory.
-Then build the library as normally done with Gnu projects:
+http://sourceforge.net/projects/qtx64/files/qt-x64/5.3.2/mingw-4.9/seh/qt-5.3.2-x64-mingw491r1-seh-opengl.exe/download
+
+Install the packet. You don't need QT sources or examples, but you need compilers (they are included). I suggest to use the 
+default qt path, so you'll have all qt related libraries (and mingw) under the same path: C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl
+
+2) Compile and install zlib
+
+GDAL requires zlib to be a shared library, but unfortunately the previous package only provide it in form of a static library.
+This way, only static gdal library will be compiled, and you'll be unable to link displace and the gdal utilities will bloat.
+
+So download the zlib sources from http://www.zlib.net/, unpack it somewhere (I suggest some path under the mingw path) and compile
+To be able to use the 64bit compiler from the default MSYS environment, you'll need to prepend the compiler path to the system PATH
+
+$ export PATH=C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin:$PATH
+
+edit the win32\Makefile.gcc file this way:
+
+change the PREFIX variable
+
+PREFIX = x86_64-w64-mingw32-
+
+
+Modify the following variables (search and correct them accordingly) :
+
+AR = ar
+RC = windres
+
+STRIP = strip
+
+
+then compile the library and install:
+
+$ make -f win32/Makefile.gcc
+...
+$ cp zlib1.dll /usr/local/bin
+$ cp zconf.h zlib.h /usr/local/include
+$ cp libz.a /usr/local/lib
+$ cp libz.dll.a /usr/local/lib/libz.dll.a
+
+Change /usr/local/ accordingly if needed.
+
+3) Compile GDAL
+
+Enter the gdal source (they can be downloaded from: http://trac.osgeo.org/gdal/wiki/DownloadSource )
+Use configure & make, as usual: 
 
 $ ./configure  --host=x86_64-w64-mingw32 --disable-static --enable-shared
 
@@ -54,7 +94,7 @@ CONFIG_LIBS	=	$(GDAL_ROOT)/$(LIBGDAL) -liconv
 Then run make:
 $ make
 
-After a while, you should have the gdal library built.
+After a while, you should have the gdal library built. Check that libgdal-1.dll in .bin/ is present.
 Then install it in the install/extra/ subdirectory of the project. if project is located in YourUsers/Documents/Displace, then use
 
 $ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
@@ -67,8 +107,6 @@ cd /c/Users/YourUsers/Documents/Displace/install/extra
 cd usr/local/include
 mkdir gdal
 mv * gdal
-
-A warning will appear, telling that gdal can't be moved into gdal/gdal. It's ok, ignore it.
 
 
 GDAL Notes

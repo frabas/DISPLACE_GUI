@@ -40,13 +40,24 @@ Install MSYS. Compilation must be performed from the MSYS shell, so you must hav
 From the MSYS shell, enter the gdal-1.x.x directory.
 Then build the library as normally done with Gnu projects:
 
-./configure
-make
+$ ./configure  --host=x86_64-w64-mingw32 --disable-static --enable-shared
+
+FIX the compilation script: 
+compiling under MinGW 64 requires link gdal with iconv: so open the GDALmake.opt file and change the following line:
+
+CONFIG_LIBS	=	$(GDAL_ROOT)/$(LIBGDAL)
+
+to:
+
+CONFIG_LIBS	=	$(GDAL_ROOT)/$(LIBGDAL) -liconv
+
+Then run make:
+$ make
 
 After a while, you should have the gdal library built.
 Then install it in the install/extra/ subdirectory of the project. if project is located in YourUsers/Documents/Displace, then use
 
-make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
+$ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
 
 Now you need to FIX the GDAL installation.
 Linux and other Unix systems use subdirectories of include path to keep libraries header files separated. MinGW does not.

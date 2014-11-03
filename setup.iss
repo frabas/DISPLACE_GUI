@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.5.2"
+#define MyAppVersion "0.5.4"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -12,6 +12,9 @@
 ;#define QT_DEBUG "d"
 #define Build "release"
 #define QT_DEBUG ""
+#define MINGW_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin"
+#define QT_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl\bin"
+#define QT_PLUGINS_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl\plugins"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -47,26 +50,26 @@ Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\usr\local\bin\libgdal-1.dll; DestDir: {app}; Flags: ignoreversion
 ;NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: C:\lib\vcredist_x86.exe; DestDir: {tmp}
-;Source: C:\Qt\5.3\mingw48_32\bin\mingwm10.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\libwinpthread-1.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\icuin52.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\icuuc52.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\icudt52.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\libgcc_s_dw2-1.dll; DestDir: {app}
-Source: c:\Qt\5.3\mingw482_32\bin\libstdc++-6.dll; DestDir: {app}
-Source: C:\mingw\bin\libiconv-2.dll; DestDir: {app}
+Source: {#MINGW_DIR}\libwinpthread-1.dll; DestDir: {app}
+Source: {#QT_DIR}\icuin53.dll; DestDir: {app}
+Source: {#QT_DIR}\icuuc53.dll; DestDir: {app}
+Source: {#QT_DIR}\icudt53.dll; DestDir: {app}
+Source: {#MINGW_DIR}\libgcc_s_seh-1.dll; DestDir: {app}
+Source: {#QT_DIR}\libstdc++-6.dll; DestDir: {app}
+;ource: C:\mingw\bin\libiconv-2.dll; DestDir: {app}
 ;Source: C:\MinGW\OpenSSL-Win32\libeay32.dll; DestDir: {app}
 ;Source: C:\MinGW\OpenSSL-Win32\libssl32.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Sql{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5Xml{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\bin\Qt5PrintSupport{#QT_DEBUG}.dll; DestDir: {app}
-Source: C:\Qt\5.3\mingw482_32\plugins\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms
-Source: C:\Qt\5.3\mingw482_32\plugins\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\sqldrivers
-Source: C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin\libgcc_s_seh-1.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Sql{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Svg{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5Xml{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_DIR}\Qt5PrintSupport{#QT_DEBUG}.dll; DestDir: {app}
+Source: {#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms
+Source: {#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\sqldrivers
+Source: {#MINGW_DIR}\..\x86_64-w64-mingw32\lib\zlib1.dll; DestDir: {app}
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

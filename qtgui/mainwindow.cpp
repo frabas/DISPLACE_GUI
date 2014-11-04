@@ -260,8 +260,8 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
 {
     if (models[0] != 0) {
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
-//        ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
+        ui->cmdSetup->setEnabled(newstate == QProcess::NotRunning);
 
         if (newstate != QProcess::Running)
             simulatorProcessStepChanged(-1);
@@ -271,8 +271,8 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
         }
     } else {
         ui->cmdStart->setEnabled(false);
-//        ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(false);
+        ui->cmdSetup->setEnabled(false);
         simulatorProcessStepChanged(-1);
     }
 }
@@ -356,7 +356,7 @@ void MainWindow::updateModelList()
     for (int i = 0; i < MAX_MODELS; ++i) {
         if (models[i] != 0) {
             ui->modelSelector->addItem(
-                        QString(tr("[%1] %2")).arg(i).arg(models[i]->name()),
+                        QString(tr("[%1] %2")).arg(i).arg(models[i]->inputName()),
                         i);
             if (i == n)
                 sel = i;
@@ -430,7 +430,7 @@ void MainWindow::centerMapOnVesselId(int id)
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
-        if (mSimulation->wasSimulationStarted()) {
+        if ((mLastRunDatabase == models[0]->linkedDatabase() || mLastRunSimulationName == models[0]->simulationName()) && mSimulation->wasSimulationStarted()) {
             int res = QMessageBox::information(this, tr("Restart simulation"),
                                                tr("Restarting simulation will eventually overwrite the results data, either in a linked db or in the output files. Are you sure to continue?"),
                                                QMessageBox::Yes, QMessageBox::No);
@@ -438,8 +438,11 @@ void MainWindow::on_cmdStart_clicked()
                 return;
         }
 
+        mLastRunSimulationName = models[0]->simulationName();
+        mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->prepareDatabaseForSimulation();
-        mSimulation->start(models[0]->name(), models[0]->basepath());
+        mSimulation->setSimSteps(models[0]->getSimulationSteps());
+        mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }
 }
 
@@ -483,7 +486,7 @@ void MainWindow::on_actionSave_triggered()
 {
     if (models[0] && models[0]->save()) {
         QMessageBox::information(this, tr("Model saved"),
-                                 QString(tr("The model %1 has been saved successfully.")).arg(models[0]->name()));
+                                 QString(tr("The model %1 has been saved successfully.")).arg(models[0]->inputName()));
         return;
     } else {
         QMessageBox::warning(this, tr("Load failed"),
@@ -541,15 +544,15 @@ void MainWindow::on_cmdSetup_clicked()
 {
     SimulationSetupDialog dlg(this);
 
-    dlg.setSimulationSteps(mSimulation->getSimSteps());
-    dlg.setSimulationName(mSimulation->getSimulationName());
-    dlg.setSimulationOutputName(mSimulation->getOutputName());
+    dlg.setSimulationSteps(models[0]->getSimulationSteps());
+    dlg.setSimulationName(models[0]->simulationName());
+    dlg.setSimulationOutputName(models[0]->outputName());
     dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
 
     if (dlg.exec() == QDialog::Accepted) {
-        mSimulation->setSimSteps(dlg.getSimulationSteps());
-        mSimulation->setSimulationName(dlg.getSimulationName());
-        mSimulation->setOutputName(dlg.getSimulationOutputName());
+        models[0]->setSimulationSteps(dlg.getSimulationSteps());
+        models[0]->setSimulationName(dlg.getSimulationName());
+        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
     }
 }

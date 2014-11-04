@@ -49,6 +49,10 @@ DbHelper::~DbHelper()
 
 bool DbHelper::attachDb(QString file)
 {
+    if (mDb.isOpen()) {
+        mDb.close();
+    }
+
     mDb = QSqlDatabase::addDatabase("QSQLITE");
     mDb.setDatabaseName(file);
 

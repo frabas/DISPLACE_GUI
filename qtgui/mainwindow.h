@@ -137,6 +137,9 @@ private:
     MemoryInfo mMemInfo;
     QLabel *mMemInfoLabel;
 
+    QString mLastRunSimulationName;
+    QString mLastRunDatabase;
+
     static const QString dbSuffix;
     static const QString dbFilter;
     static const QString dbLastDirKey;

@@ -19,22 +19,17 @@ public:
     Simulator();
 
     void linkModel (std::shared_ptr<DisplaceModel> model);
-    bool start(QString name, QString folder);
+    bool start(QString name, QString folder, QString simul_name);
     bool isRunning();
     bool forceStop();
     QProcess::ProcessState processState() const;
 
-    int getSimSteps() const;
     void setSimSteps(int value);
 
     bool getMoveVesselOption() const;
     void setMoveVesselOption(bool value);
 
-    QString getOutputName() const;
     void setOutputName(const QString &value);
-
-    QString getSimulationName() const;
-    void setSimulationName(const QString &value);
 
     bool wasSimulationStarted() const;
 

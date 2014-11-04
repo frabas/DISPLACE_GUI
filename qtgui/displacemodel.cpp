@@ -16,8 +16,11 @@ const char *FLD_NODEID="nodeid";
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
       mDb(0),
-      mName(),mBasePath(),mOutputName(),
+      mInputName(),mBasePath(),mOutputName(),
+      mSimuName("simu2"),
+      mLinkedDbName(),
       mIndex(-1),
+      mSimulSteps(8761),
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
@@ -65,7 +68,7 @@ bool DisplaceModel::edit(QString modelname)
 
     // ...
 
-    mName = modelname;
+    mInputName = modelname;
     mModelType = EditorModelType;
 
     return true;
@@ -78,15 +81,15 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
 
     qDebug() << "Loading model" << modelname << "from folder" << path;
 
-    mName = modelname;
+    mInputName = modelname;
     mBasePath = path;
     mOutputName = outputname;
 
     /* Load files ... */
 
     try {
-        mScenario = Scenario::readFromFile(mName, mBasePath, mOutputName);
-        mConfig = Config::readFromFile(mName, mBasePath, mOutputName);
+        mScenario = Scenario::readFromFile(mInputName, mBasePath, mOutputName);
+        mConfig = Config::readFromFile(mInputName, mBasePath, mOutputName);
 
         mInterestingHarb = mConfig.m_interesting_harbours;
 
@@ -115,7 +118,7 @@ bool DisplaceModel::loadDatabase(QString path)
     if (!mDb->attachDb(path))
         return false;
 
-    mName = mDb->getMetadata("name");
+    mInputName = mDb->getMetadata("name");
     mBasePath = mDb->getMetadata("basepath");
     mOutputName = mDb->getMetadata("output");
 
@@ -142,8 +145,10 @@ bool DisplaceModel::loadDatabase(QString path)
  */
 bool DisplaceModel::linkDatabase(QString path)
 {
-    if (mModelType != LiveModelType || mDb != 0)
+    if (mModelType != LiveModelType) {
+        mLastError = tr("Model is not a live simulation");
         return false;
+    }
 
     mDb = new DbHelper;
     if (!mDb->attachDb(path)) {
@@ -151,17 +156,18 @@ bool DisplaceModel::linkDatabase(QString path)
         return false;
     }
 
+    mLinkedDbName = path;
+
     return true;
 }
 
 bool DisplaceModel::prepareDatabaseForSimulation()
 {
     if (mDb) {
-
         /* start a transaction to speedup insertion */
         mDb->beginTransaction();
 
-        mDb->setMetadata("name", mName);
+        mDb->setMetadata("name", mInputName);
         mDb->setMetadata("basepath", mBasePath);
         mDb->setMetadata("output", mOutputName);
 
@@ -191,9 +197,9 @@ bool DisplaceModel::prepareDatabaseForSimulation()
 
 bool DisplaceModel::save()
 {
-    if (!mScenario.save(mName, mBasePath, mOutputName))
+    if (!mScenario.save(mInputName, mBasePath, mOutputName))
         return false;
-    if (!mConfig.save(mName, mBasePath, mOutputName))
+    if (!mConfig.save(mInputName, mBasePath, mOutputName))
         return false;
 
     return true;
@@ -235,6 +241,16 @@ void DisplaceModel::checkStatsCollection(int tstep)
 
     mLastStats = tstep;
 }
+int DisplaceModel::getSimulationSteps() const
+{
+    return mSimulSteps;
+}
+
+void DisplaceModel::setSimulationSteps(int value)
+{
+    mSimulSteps = value;
+}
+
 
 void DisplaceModel::updateNodesStatFromSimu(QString data)
 {
@@ -615,7 +631,7 @@ bool DisplaceModel::loadNodes()
     fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord);
 
     // read harbour specific files
-    multimap<int, string> harbour_names = read_harbour_names(mName.toStdString(), mBasePath.toStdString());
+    multimap<int, string> harbour_names = read_harbour_names(mInputName.toStdString(), mBasePath.toStdString());
 
     // creation of a vector of nodes from coord
     // and check with the coord in input.
@@ -647,7 +663,7 @@ bool DisplaceModel::loadNodes()
 
                 cout << "load prices for port " << a_name << " which is point " << a_point << endl;
                 //int er = read_prices_per_harbour(a_point, a_quarter, prices, mName.toStdString());
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mName.toStdString(), mBasePath.toStdString());
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 cout << "....OK" << endl;
             }
@@ -656,7 +672,7 @@ bool DisplaceModel::loadNodes()
 
                 cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
                 //int er = read_prices_per_harbour(a_port, "quarter1", prices, mName.toStdString()); // delete later on when final parameterisation
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mName.toStdString(), mBasePath.toStdString());
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
 
             }
 
@@ -664,11 +680,11 @@ bool DisplaceModel::loadNodes()
             if (!binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
                                 "fuelprice_plus20percent"))
             {
-                read_fuel_prices_per_vsize(init_fuelprices, mName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
             }
             else
             {
-                read_fuel_prices_per_vsize(init_fuelprices, mName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
 
                 map<string,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -771,18 +787,18 @@ bool DisplaceModel::loadVessels()
                           resttime_par1s, resttime_par2s, av_trip_duration,
                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
                           mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
-                          mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+                          mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
 
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
-    multimap<string, int> fgrounds = read_fgrounds(a_quarter, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, int> harbours = read_harbours(a_quarter, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
-    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mInputName.toStdString(), mBasePath.toStdString());
 
     // debug
     if(fgrounds.size() != freq_fgrounds.size())
@@ -799,7 +815,7 @@ bool DisplaceModel::loadVessels()
     }
 
     // read nodes in polygons for area-based management
-    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mName.toStdString(), mBasePath.toStdString());
+    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
 
     // check
     //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -831,12 +847,12 @@ bool DisplaceModel::loadVessels()
         cout<<"create vessel " << i << endl;
         // read vessel and quarter specific multimap
         // quarter specific to capture a piece of seasonality in the fishnig activity
-        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
-        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
+        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
 
         //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString());
-        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
-        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
+        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
 
         // debug
         if(possible_metiers.size() != freq_possible_metiers.size())

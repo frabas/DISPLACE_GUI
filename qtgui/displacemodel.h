@@ -62,10 +62,15 @@ public:
     void simulationEnded();
 
     // Getter
-    QString name() const { return mName; }
+    QString inputName() const { return mInputName; }
     QString basepath() const { return mBasePath; }
     QString outputName() const { return mOutputName; }
-    bool isModelLoaded() const { return !mName.isEmpty(); }
+    void setOutputName(const QString &name) { mOutputName = name; }
+    QString simulationName() const { return mSimuName; }
+    void setSimulationName(const QString &name) { mSimuName = name; }
+
+    QString linkedDatabase() const { return mLinkedDbName; }
+    bool isModelLoaded() const { return !mInputName.isEmpty(); }
 
     int getNBPops() const {
         return mConfig.getNbpops();
@@ -73,6 +78,9 @@ public:
     int getSzGrupsCount() const {
         return mConfig.getSzGroups();
     }
+
+    int getSimulationSteps() const;
+    void setSimulationSteps(int value);
 
     /* Graphs operation */
 
@@ -255,7 +263,6 @@ public:
 
     bool addGraph(const QList<QPointF> &points, MapObjectsController *controller);
 
-
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -278,11 +285,14 @@ signals:
 private:
     ModelType mModelType;
     DbHelper *mDb;
-    QString mName;
+    QString mInputName;
     QString mBasePath;
     QString mOutputName;
+    QString mSimuName;
+    QString mLinkedDbName;
     int mIndex;
 
+    int mSimulSteps;
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;

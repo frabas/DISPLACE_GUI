@@ -473,17 +473,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="cmdPause">
-       <property name="text">
-        <string>Pause</string>
-       </property>
-       <property name="icon">
-        <iconset resource="qtgui.qrc">
-         <normaloff>:/icons/pause.png</normaloff>:/icons/pause.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="cmdStop">
        <property name="text">
         <string>Stop</string>
@@ -657,7 +646,7 @@
           </property>
           <property name="icon">
            <iconset resource="qtgui.qrc">
-            <normaloff>:/icons/stop.png</normaloff>:/icons/stop.png</iconset>
+            <normaloff>:/icons/start.png</normaloff>:/icons/start.png</iconset>
           </property>
          </widget>
         </item>

@@ -260,7 +260,7 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
 {
     if (models[0] != 0) {
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
-        ui->cmdPause->setEnabled(false);
+//        ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
 
         if (newstate != QProcess::Running)
@@ -271,7 +271,7 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
         }
     } else {
         ui->cmdStart->setEnabled(false);
-        ui->cmdPause->setEnabled(false);
+//        ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(false);
         simulatorProcessStepChanged(-1);
     }
@@ -718,10 +718,12 @@ void MainWindow::on_play_auto_clicked()
     bool en = mPlayTimer.isActive();
     if (en) {
         mPlayTimer.stop();
+        ui->play_auto->setIcon(QIcon(":/icons/start.png"));
     } else {
         mPlayTimer.setInterval(mPlayTimerInterval);
         mPlayTimer.setSingleShot(false);
         mPlayTimer.start();
+        ui->play_auto->setIcon(QIcon(":/icons/pause.png"));
     }
 
     //ui->play_auto->setIcon();

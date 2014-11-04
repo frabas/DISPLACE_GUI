@@ -344,52 +344,52 @@ void DisplaceModel::collectPopImpact(int step, int node_idx, int popid, double i
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
-    mStatsPopulationsCollected[popid]->setAggregate(pops);
-    mStatsPopulationsCollected[popid]->setAggregateTot(value);
+    mStatsPopulationsCollected[popid].setAggregate(pops);
+    mStatsPopulationsCollected[popid].setAggregateTot(value);
     mPopStatsDirty = true;
 }
 
 void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
-    mStatsPopulationsCollected[popid]->setMortality(pops);
-    mStatsPopulationsCollected[popid]->setMortalityTot(value);
+    mStatsPopulationsCollected[popid].setMortality(pops);
+    mStatsPopulationsCollected[popid].setMortalityTot(value);
     mPopStatsDirty = true;
 }
 
-void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> stats)
+void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 {
-    std::shared_ptr<VesselData> vessel = mVessels.at(stats->vesselId);
+    std::shared_ptr<VesselData> vessel = mVessels.at(stats.vesselId);
 
-    vessel->setLastHarbour(stats->lastHarbour);
-    vessel->setRevenue(stats->revenue);
-    vessel->setRevenueAV(stats->revenueAV);
-    vessel->mVessel->set_reason_to_go_back(stats->reasonToGoBack);
-    vessel->mVessel->set_timeatsea(stats->timeAtSea);
+    vessel->setLastHarbour(stats.lastHarbour);
+    vessel->setRevenue(stats.revenue);
+    vessel->setRevenueAV(stats.revenueAV);
+    vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
+    vessel->mVessel->set_timeatsea(stats.timeAtSea);
 
     int nat = vessel->getNationality();
     while (mStatsNationsCollected.size() <= nat) {
-        mStatsNationsCollected.push_back(std::shared_ptr<NationStats>(new NationStats()));
+        mStatsNationsCollected.push_back(NationStats());
     }
 
-    mStatsNationsCollected[nat]->mRevenues += stats->revenue;
-    mStatsNationsCollected[nat]->mTimeAtSea += stats->timeAtSea;
+    mStatsNationsCollected[nat].mRevenues += stats.revenue;
+    mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
 
     int hidx = vessel->getLastHarbour();
     while (mStatsHarboursCollected.size() <= hidx)
-        mStatsHarboursCollected.push_back(std::shared_ptr<HarbourStats> (new HarbourStats()));
+        mStatsHarboursCollected.push_back(HarbourStats());
 
-    mStatsHarboursCollected[hidx]->mCumProfit += stats->revenue;
+    mStatsHarboursCollected[hidx].mCumProfit += stats.revenue;
 
-    int n = stats->mCatches.size();
+    int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {
-        vessel->addCatch(i, stats->mCatches[i]);
-        mStatsHarboursCollected[hidx]->mCumCatches += stats->mCatches[i];
-        mStatsNationsCollected[nat]->mTotCatches += stats->mCatches[i];
+        vessel->addCatch(i, stats.mCatches[i]);
+        mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
+        mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
     }
 
     if (mDb)
-        mDb->addVesselStats(tstep,vessel);
+        mDb->addVesselStats(tstep,*vessel);
 
     mVesselsStatsDirty = true;
 }
@@ -1199,7 +1199,7 @@ bool DisplaceModel::initPopulations()
 {
     mStatsPopulationsCollected.clear();
     for (int i = 0; i < getPopulationsCount(); ++i) {
-        mStatsPopulationsCollected.push_back(std::shared_ptr<PopulationData>(new PopulationData(i)));
+        mStatsPopulationsCollected.push_back(PopulationData(i));
     }
 
     QList<int> imp = mConfig.implicit_pops();
@@ -1264,9 +1264,9 @@ bool DisplaceModel::loadVesselsFromDb()
 
 bool DisplaceModel::loadHistoricalStatsFromDb()
 {
-    QList<QVector<std::shared_ptr<PopulationData> > > dtl;
-    QList<QVector<std::shared_ptr<NationStats> > > ndl;
-    QList<QVector<std::shared_ptr<HarbourStats> > > hdl;
+    QList<QVector<PopulationData> > dtl;
+    QList<QVector<NationStats> > ndl;
+    QList<QVector<HarbourStats> > hdl;
 
     QList<int> steps;
     mDb->loadHistoricalStatsForPops(steps,dtl);
@@ -1275,21 +1275,21 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 
     int i = 0;
-    foreach (const QVector<std::shared_ptr<PopulationData> > &dt, dtl) {
+    foreach (const QVector<PopulationData> &dt, dtl) {
         int tstep = steps[i];
         mStatsPopulations.insertValue(tstep, dt);
         ++i;
     }
 
     i = 0;
-    foreach (const QVector<std::shared_ptr<NationStats> > &dt, ndl) {
+    foreach (const QVector<NationStats> &dt, ndl) {
         int tstep = steps[i];
         mStatsNations.insertValue(tstep, dt);
         ++i;
     }
 
     i = 0;
-    foreach(const QVector<std::shared_ptr<HarbourStats> > &dt, hdl) {
+    foreach(const QVector<HarbourStats> &dt, hdl) {
         int tstep = steps[i];
         mStatsHarbours.insertValue(tstep, dt);
         ++i;

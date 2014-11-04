@@ -260,13 +260,13 @@ void StatsController::updateNationStats(DisplaceModel *model)
 
                 switch (mSelectedNationsStat) {
                 case Catches:
-                    valueData << it.value().at(ip)->mTotCatches;
+                    valueData << it.value().at(ip).mTotCatches;
                     break;
                 case Earnings:
-                    valueData << it.value().at(ip)->mRevenues;
+                    valueData << it.value().at(ip).mRevenues;
                     break;
                 case TimeAtSea:
-                    valueData << it.value().at(ip)->mTimeAtSea;
+                    valueData << it.value().at(ip).mTimeAtSea;
                     break;
                 }
             }
@@ -314,10 +314,10 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
 
                 switch (mSelectedHarboursStat) {
                 case H_Catches:
-                    valueData << it.value().at(ip)->mCumCatches;
+                    valueData << it.value().at(ip).mCumCatches;
                     break;
                 case H_Earnings:
-                    valueData << it.value().at(ip)->mCumProfit;
+                    valueData << it.value().at(ip).mCumProfit;
                     break;
                 }
             }

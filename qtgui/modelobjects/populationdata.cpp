@@ -28,6 +28,9 @@ const QVector<double> &PopulationData::getAggregate() const
 void PopulationData::setAggregate(const QVector<double> &value)
 {
     aggregate = value;
+    // force aggregate and mortality to have the same size!
+    while (mortality.size() < aggregate.size())
+        mortality.push_back(0);
 }
 
 const QVector<double> &PopulationData::getMortality() const
@@ -38,6 +41,9 @@ const QVector<double> &PopulationData::getMortality() const
 void PopulationData::setMortality(const QVector<double> &value)
 {
     mortality = value;
+    // force aggregate and mortality to have the same size!
+    while (aggregate.size() < mortality.size())
+        aggregate.push_back(0);
 }
 
 int PopulationData::getId() const

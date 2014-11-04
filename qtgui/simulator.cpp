@@ -220,8 +220,8 @@ void Simulator::parseUpdateVessel(QStringList fields)
 
 void Simulator::parseUpdateVesselStats(QStringList fields)
 {
-    std::shared_ptr<VesselStats> v = OutputFileParser::parseVesselStatLine(fields);
+    VesselStats v = OutputFileParser::parseVesselStatLine(fields);
 
     if (mModel)
-        mModel->collectVesselStats(v->tstep, v);
+        mModel->collectVesselStats(v.tstep, v);
 }

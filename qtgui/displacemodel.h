@@ -32,11 +32,11 @@ class DisplaceModel : public QObject
 {
     Q_OBJECT
 public:
-    typedef QVector<std::shared_ptr<PopulationData> > PopulationStat;
+    typedef QVector<PopulationData> PopulationStat;
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-    typedef QVector<std::shared_ptr<NationStats> > NationsStats;
+    typedef QVector<NationStats> NationsStats;
     typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
-    typedef QVector<std::shared_ptr<HarbourStats> > HarboursStats;
+    typedef QVector<HarbourStats> HarboursStats;
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
 
     enum ModelType {
@@ -115,7 +115,7 @@ public:
             qDebug() << step << idx << mStatsPopulations.getValue(step).size();
             Q_ASSERT(false);
         }
-        return *mStatsPopulations.getValue(step).at(idx);
+        return mStatsPopulations.getValue(step).at(idx);
     }
     int getPopulationsValuesCount() const {
         return mStatsPopulations.getUniqueValuesCount();
@@ -141,7 +141,7 @@ public:
         return mStatsNations.getValue(step);
     }
     const NationStats &getNationStatAtStep(int step, int idx) const {
-        return *mStatsNations.getValue(step).at(idx);
+        return mStatsNations.getValue(step).at(idx);
     }
 
     /* Access to Harbour statistics */
@@ -159,7 +159,7 @@ public:
         return mStatsHarbours.getValue(step);
     }
     const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
-        return *mStatsHarbours.getValue(step).at(idx);
+        return mStatsHarbours.getValue(step).at(idx);
     }
     /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
     HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
@@ -256,7 +256,7 @@ public:
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
-    void collectVesselStats (int step, std::shared_ptr<VesselStats> stats);
+    void collectVesselStats (int step, const VesselStats &stats);
 
     /* Editor stuff */
 

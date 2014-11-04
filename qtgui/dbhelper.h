@@ -61,9 +61,9 @@ public:
     void removeAllNodesDetails();
 
     void addNodesStats (int tstep, const QList<std::shared_ptr<NodeData> > &nodes);
-    void addPopStats(int tstep, const QVector<std::shared_ptr<PopulationData> > &pops);
-    void addNationsStats(int tstep, const QVector<std::shared_ptr<NationStats> > &nats);
-    void addVesselStats(int tstep, std::shared_ptr<VesselData> vessel);
+    void addPopStats(int tstep, const QVector<PopulationData> &pops);
+    void addNationsStats(int tstep, const QVector<NationStats> &nats);
+    void addVesselStats(int tstep, const VesselData &vessel);
 
     void addVesselPosition (int step, int idx, std::shared_ptr<VesselData> vessel);
     void removeAllVesselsDetails();
@@ -82,8 +82,8 @@ public:
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels);
     bool updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes);
-    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<std::shared_ptr<PopulationData> > > &population);
-    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<std::shared_ptr<VesselData> > &vessels, const QList<std::shared_ptr<NodeData> >&nodes, QList<QVector<std::shared_ptr<NationStats> > > &nations, QList<QVector<std::shared_ptr<HarbourStats> > > &harbour) ;
+    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
+    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<std::shared_ptr<VesselData> > &vessels, const QList<std::shared_ptr<NodeData> > &nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour) ;
 
     HarbourStats getHarbourStatsAtStep(int idx, int step);
 

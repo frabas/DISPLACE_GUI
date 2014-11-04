@@ -84,60 +84,66 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     mPlotPopulations->clearGraphs();
     double val;
 
-    QList<int> ipl = model->getInterestingPops();
-    const QList<int> &szil = model->getInterestingSizes();
-    QList<int> szpl;
+    QList<int> interPopList = model->getInterestingPops();
+    QList<int> interSizeList = model->getInterestingSizes();
+    QList<int> graphList;
     bool showtotal = model->isInterestingSizeTotal();
     bool showavg =  model->isInterestingSizeAvg();
     bool showmin =  model->isInterestingSizeMin();
     bool showmax =  model->isInterestingSizeMax();
 
-    int nsz_r = szpl.size();    /* Number of total "real" sizes */
+    int nsz_r = graphList.size();    /* Number of total "real" sizes */
 
     if (showmax)
-        szpl.push_front(-4);
+        graphList.push_front(-4);
     if (showmin)
-        szpl.push_front(-3);
+        graphList.push_front(-3);
     if (showavg)
-        szpl.push_front(-2);
+        graphList.push_front(-2);
     if (showtotal)
-        szpl.push_front(-1);
+        graphList.push_front(-1);
 
-    if (szpl.size() == 0)
-        szpl.append(szil);
+    if (graphList.size() == 0)
+        graphList.append(interSizeList);
 
-    int nsz = szpl.size();
+    /* If no size is selected, but aggregate is selected, select all sizes */
+    if (interSizeList.size() == 0 && graphList.size() != 0) {
+        for(int i = 0; i < model->getSzGrupsCount(); ++i)
+            interSizeList.push_back(i);
+    }
+
+    int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
     QList<QVector<double> >keyData;
     QList<QVector<double> >valueData;
 
-    foreach (int ip, ipl) {
-        for (int isz = 0; isz < nsz; ++isz) {
+    foreach (int ipop, interPopList) {
+        for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(pen);
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = mPalette.colorForIndexMod(ip % mPalette.colorCount());
+            QColor col = mPalette.colorForIndexMod(ipop % mPalette.colorCount());
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
 
-            switch (szpl[isz]) {
+            switch (graphList[igraph]) {
             case -4:
-                graph->setName(QString(QObject::tr("Pop %1 Max")).arg(ip));
+                graph->setName(QString(QObject::tr("Pop %1 Max")).arg(ipop));
                 break;
             case -3:
-                graph->setName(QString(QObject::tr("Pop %1 Min")).arg(ip));
+                graph->setName(QString(QObject::tr("Pop %1 Min")).arg(ipop));
                 break;
             case -2:
-                graph->setName(QString(QObject::tr("Pop %1 Avg")).arg(ip));
+                graph->setName(QString(QObject::tr("Pop %1 Avg")).arg(ipop));
                 break;
             case -1:
-                graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ip));
+                graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ipop));
                 break;
             default:
-                graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ip).arg(szpl[isz]+1));
+                graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ipop).arg(graphList[igraph]+1));
             }
 
             graphs.push_back(graph);
@@ -146,19 +152,20 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
         }
     }
 
-    int fidx = nsz - nsz_r;     /* First "real" index */
+    int fidx = graphNum - nsz_r;     /* First "real" index */
 
-    int n = model->getPopulationsValuesCount();
+    int nsteps = model->getPopulationsValuesCount();
+
     DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
-    for (int i = 0; i <n; ++i) {
-        int nipl = ipl.size();
-        for (int ii = 0; ii < nipl; ++ii) {
+    for (int istep = 0; istep <nsteps; ++istep) {
+        int ninterPop = interPopList.size();
+        for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
 
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int isz = 0; isz < szil.size(); ++isz) {
-                val = getPopStatValue(model, it.key(), ipl[ii], szil[isz], mSelectedPopStat);
-                if (isz == fidx) {
+            for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
+                val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], mSelectedPopStat);
+                if (iInterSize == fidx) {
                     mMin = val;
                     mMax = val;
                 } else {
@@ -173,11 +180,11 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             if (nsz_r > 0)
                 mAvg /= nsz_r;
 
-            for (int isz = 0; isz < nsz; ++isz) {
-                int gidx = ii * nsz + isz;
+            for (int isz = 0; isz < graphNum; ++isz) {
+                int gidx = iinterpPop * graphNum + isz;
 
                 keyData[gidx] << it.key();
-                switch (szpl[isz]) {
+                switch (graphList[isz]) {
                 case -4:
                     val = mMax;
                     break;
@@ -191,7 +198,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
                     val = mTot;
                     break;
                 default:
-                    val = getPopStatValue(model, it.key(), ipl[ii], szpl[isz], mSelectedPopStat);
+                    val = getPopStatValue(model, it.key(), interPopList[iinterpPop], graphList[isz], mSelectedPopStat);
                     break;
                 }
 

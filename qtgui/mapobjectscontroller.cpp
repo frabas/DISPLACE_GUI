@@ -71,25 +71,25 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 
-    mEntityLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
-    mGraphLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
-    mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
+    mEntityLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("%1 Entities")).arg(model_n).toStdString()));
+    mGraphLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("%1 Graph")).arg(model_n).toStdString()));
+    mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(tr("%1 Graph Edges")).arg(model_n)));
     mEdgesLayer[model_n]->setVisible(false);
 
     addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n]);
     addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n]);
     addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer());
 
-    mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
+    mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("%1 Abundance")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n]);
 
-    mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Biomass"));
+    mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("%1 Biomass")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n]);
 
-    mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Impact"));
+    mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("%1 Impact")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n] );
 
-    mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Fishing Effort"));
+    mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("%1 Fishing Effort")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n]);
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();

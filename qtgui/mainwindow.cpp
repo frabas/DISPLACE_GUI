@@ -556,8 +556,15 @@ void MainWindow::on_cmdSetup_clicked()
 
 void MainWindow::on_action_Link_database_triggered()
 {
-    if (models[0] == 0)
+    if (models[0] == 0) {
+        QMessageBox::warning(this, tr("Link database"), tr("Please load a simulation before linking a database."));
         return;
+    }
+
+    if (mSimulation->isRunning()) {
+        QMessageBox::warning(this, tr("Link database"), tr("Cannot link database while a simulation is running."));
+        return;
+    }
 
     QSettings sets;
     QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),

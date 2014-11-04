@@ -64,8 +64,8 @@
     <addaction name="action_Load"/>
     <addaction name="actionLoad_results"/>
     <addaction name="actionImport_results"/>
-    <addaction name="action_Link_database"/>
     <addaction name="actionImport_Shapefile"/>
+    <addaction name="action_Link_database"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -75,7 +75,13 @@
      <string>&amp;Editor</string>
     </property>
     <addaction name="actionGraph"/>
-    <addaction name="actionAdd_Polygon"/>
+    <addaction name="actionClear_Graph"/>
+    <addaction name="actionNode_Editor"/>
+    <addaction name="actionEdge_Edit"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdd"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionProperties"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
@@ -229,7 +235,7 @@
            <attribute name="title">
             <string>Harbours</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
+           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1">
             <property name="spacing">
              <number>0</number>
             </property>
@@ -245,6 +251,43 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QComboBox" name="harbStatSelector">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Cum Catches</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Profit</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
             <item>
              <widget class="QCustomPlot" name="plotHarbours" native="true"/>
             </item>
@@ -320,7 +363,64 @@
            <attribute name="title">
             <string>Nations</string>
            </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_9">
+           <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QComboBox" name="nationsStatsSelector">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Catches</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Time At Sea</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
             <item>
              <widget class="QCustomPlot" name="plotNations" native="true"/>
             </item>
@@ -590,7 +690,12 @@
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionGraph"/>
-   <addaction name="actionAdd_Polygon"/>
+   <addaction name="actionNode_Editor"/>
+   <addaction name="actionEdge_Edit"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdd"/>
+   <addaction name="actionDelete"/>
+   <addaction name="actionProperties"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
@@ -612,7 +717,7 @@
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
-    <string>Save...</string>
+    <string>Save Simulation Config...</string>
    </property>
   </action>
   <action name="actionQuit">
@@ -657,21 +762,15 @@
    </property>
   </action>
   <action name="actionGraph">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="qtgui.qrc">
      <normaloff>:/icons/graph.png</normaloff>:/icons/graph.png</iconset>
    </property>
    <property name="text">
-    <string>Graph...</string>
-   </property>
-  </action>
-  <action name="actionAdd_Polygon">
-   <property name="icon">
-    <iconset resource="qtgui.qrc">
-     <normaloff>:/icons/geometry.png</normaloff>:/icons/geometry.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add Polygon</string>
+    <string>Editor Mode</string>
    </property>
   </action>
   <action name="actionImport_Shapefile">
@@ -691,6 +790,69 @@
   <action name="actionPopulations">
    <property name="text">
     <string>Populations...</string>
+   </property>
+  </action>
+  <action name="actionEdge_Edit">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/edge.png</normaloff>:/icons/edge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edge Editor</string>
+   </property>
+  </action>
+  <action name="actionClear_Graph">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/close.png</normaloff>:/icons/close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Graph</string>
+   </property>
+  </action>
+  <action name="actionAdd">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add...</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/delete.png</normaloff>:/icons/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionProperties">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
+   </property>
+   <property name="text">
+    <string>Properties...</string>
+   </property>
+  </action>
+  <action name="actionNode_Editor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/node.png</normaloff>:/icons/node.png</iconset>
+   </property>
+   <property name="text">
+    <string>Node Editor</string>
    </property>
   </action>
  </widget>

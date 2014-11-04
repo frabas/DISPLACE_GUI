@@ -52,6 +52,8 @@ private slots:
     void outputUpdated();
     void mapFocusPointChanged(PointWorldCoord);
 
+    void edgeSelectionsChanged(int);
+
     void errorImportingStatsFile(QString);
 
     void playTimerTimeout();
@@ -78,9 +80,21 @@ private slots:
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
     void on_popStatSelector_currentIndexChanged(int index);
+    void on_nationsStatsSelector_currentIndexChanged(int index);
+    void on_harbStatSelector_currentIndexChanged(int index);
     void on_actionPopulations_triggered();
     void on_actionConfiguration_triggered();
     void on_play_params_clicked();
+    void on_actionQuit_triggered();
+    void on_actionImport_Shapefile_triggered();
+
+    void on_actionGraph_toggled(bool arg1);
+
+    void on_actionEdge_Edit_toggled(bool arg1);
+
+    void on_actionDelete_triggered();
+
+    void on_actionNode_Editor_toggled(bool arg1);
 
 signals:
     void modelStateChanged();
@@ -101,8 +115,8 @@ private:
     Ui::MainWindow *ui;
 
     // Data model
-    DisplaceModel *models[MAX_MODELS];
-    DisplaceModel *currentModel;
+    std::shared_ptr<DisplaceModel> models[MAX_MODELS];
+    std::shared_ptr<DisplaceModel> currentModel;
     int currentModelIdx;
     Simulator *mSimulation;
     MapObjectsController *mMapController;

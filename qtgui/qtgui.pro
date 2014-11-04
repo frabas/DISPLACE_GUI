@@ -8,6 +8,8 @@ TARGET = displacegui
 
 INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/
 
+include (../QMapControl/QMapControl/QMapControl.pri)
+
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol
 
@@ -33,6 +35,16 @@ win32 {
 
 DEFINES += PROFILE
 LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
+
+
+# Add GDAL include path.
+INCLUDEPATH += $$QMC_GDAL_INC
+
+# Add GDAL library path and library (windows).
+win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
+
+# Add GDAL library path and library (unix).
+unix:LIBS += -lgdal
 
 SOURCES += \
     main.cpp \
@@ -62,7 +74,6 @@ SOURCES += \
     modelobjects/nodedata.cpp \
     modelobjects/vesseldata.cpp \
     mapobjects/nodegraphics.cpp \
-    objects/outputlayerentity.cpp \
     editpalettedialog.cpp \
     palettemanager.cpp \
     qcustomplot.cpp \
@@ -73,14 +84,19 @@ SOURCES += \
     modelobjects/nationdata.cpp \
     objects/nationentity.cpp \
     objects/szgroupentity.cpp \
-    configdialog.cpp
+    configdialog.cpp \
+    mapobjects/nodedetailswidget.cpp \
+    modelobjects/harbourdata.cpp \
+    mapobjects/edgemapobject.cpp \
+    mapobjects/edgelayer.cpp
 
 FORMS += \
     mainwindow.ui \
     scenariodialog.ui \
     simulationsetupdialog.ui \
     editpalettedialog.ui \
-    configdialog.ui
+    configdialog.ui \
+    mapobjects/nodedetailswidget.ui
 
 HEADERS += \
     mainwindow.h \
@@ -110,7 +126,6 @@ HEADERS += \
     modelobjects/nodedata.h \
     modelobjects/vesseldata.h \
     mapobjects/nodegraphics.h \
-    objects/outputlayerentity.h \
     editpalettedialog.h \
     palettemanager.h \
     qcustomplot.h \
@@ -123,7 +138,11 @@ HEADERS += \
     modelobjects/nationdata.h \
     objects/nationentity.h \
     objects/szgroupentity.h \
-    configdialog.h
+    configdialog.h \
+    mapobjects/nodedetailswidget.h \
+    modelobjects/harbourdata.h \
+    mapobjects/edgemapobject.h \
+    mapobjects/edgelayer.h
 
 RESOURCES += \
     qtgui.qrc

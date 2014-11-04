@@ -19,6 +19,7 @@ class ObjectTreeModel : public QAbstractItemModel
 public:
     enum Category {
         Layers = 0,
+        ShapefileLayers,
         OutputLayers,
         Nodes, Harbours, Vessels, Populations, Benthos,
         Nations, SizeGroups,
@@ -50,6 +51,7 @@ public:
     Category getCategory (QModelIndex index) const;
     objecttree::ObjectTreeEntity *entity (const QModelIndex &index) const;
 
+    void refresh();
 signals:
 
 public slots:

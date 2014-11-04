@@ -9,19 +9,25 @@ namespace Ui {
 class ConfigDialog;
 }
 
+class DisplaceModel;
+
 class ConfigDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ConfigDialog(QWidget *parent = 0);
+    explicit ConfigDialog(DisplaceModel *model, QWidget *parent = 0);
     ~ConfigDialog();
 
     bool get(Config &config) const;
     void set(const Config &config);
 
+private slots:
+    void on_readFromTree_clicked();
+
 private:
     Ui::ConfigDialog *ui;
+    DisplaceModel *mModel;
 };
 
 #endif // CONFIGDIALOG_H

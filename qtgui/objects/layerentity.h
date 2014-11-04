@@ -8,9 +8,10 @@ namespace objecttree {
 class LayerEntity : public ObjectTreeEntity
 {
     int mLayerEntityIndex;
+    ObjectTreeModel::Category mLayerEntityType;
 
 public:
-    LayerEntity(ObjectTreeModel *_model, int LayerEntity_idx = -1);
+    LayerEntity(ObjectTreeModel::Category  type, ObjectTreeModel *_model, int LayerEntity_idx = -1);
     virtual ~LayerEntity();
 
     virtual ObjectTreeModel::Category getCategory() const {

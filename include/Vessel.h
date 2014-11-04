@@ -102,6 +102,9 @@ class Vessel
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
+protected:
+        void init();
+
 	public:
 		//Vessel(string name,  boost::shared_ptr<Node> a_location);
 		Vessel(string name,  Node* a_location);
@@ -266,7 +269,7 @@ class Vessel
 		void clear_cumcatch_and_cumeffort();
 		void receive_message(int message);
 		void reset_message();
-		void export_loglike(ofstream& loglike, vector<Population* >& populations, int tstep, int nbpops);
+        void export_loglike(ostream& loglike, vector<Population* >& populations, int tstep, int nbpops);
 		void export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int nbpops);
 		void reinit_after_a_trip();
 		void alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes_in_polygons);

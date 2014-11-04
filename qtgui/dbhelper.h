@@ -14,9 +14,11 @@ QT_END_NAMESPACE
 
 class DisplaceModel;
 class NodeData;
-class Harbour;
+class HarbourData;
 class VesselData;
 class PopulationData;
+class NationStats;
+class HarbourStats;
 class DbHelper;
 class Config;
 class Scenario;
@@ -60,23 +62,30 @@ public:
 
     void addNodesStats (int tstep, const QList<NodeData *> &nodes);
     void addPopStats(int tstep, const QVector<PopulationData> &pops);
+    void addNationsStats(int tstep, const QVector<NationStats> &nats);
+    void addVesselStats(int tstep, VesselData *vessel);
 
     void addVesselPosition (int step, int idx, VesselData *vessel);
     void removeAllVesselsDetails();
     void addVesselDetails (int idx, VesselData *vessel);
+
+    void removeAllStatsData();
 
     bool loadConfig(Config &);
     bool saveConfig (const Config &);
     bool loadScenario (Scenario &);
     bool saveScenario (const Scenario &);
 
-    bool loadNodes(QList<NodeData *> &nodes, QList<Harbour *> &harbours, DisplaceModel *model);
+    bool loadNodes(QList<NodeData *> &nodes, QList<HarbourData *> &harbours, DisplaceModel *model);
     bool loadVessels(const QList<NodeData *> &nodes, QList<VesselData *> &vessels);
 
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<VesselData *> &vessels);
     bool updateStatsForNodesToStep(int step, QList<NodeData *> &nodes);
     bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
+    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<VesselData *> &vessels, const QList<NodeData *>&nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour);
+
+    HarbourStats getHarbourStatsAtStep(int idx, int step);
 
     void beginTransaction();
     void endTransaction();
@@ -124,6 +133,8 @@ private:
     static const QString TBL_POPSZ_STATS;
     static const QString TBL_VESSELS;
     static const QString TBL_VESSELS_POS;
+    static const QString TBL_VESSELS_STATS_TM;
+    static const QString TBL_VESSELS_STATS_TMSZ;
 
     static const QString META_VERSION;
 };

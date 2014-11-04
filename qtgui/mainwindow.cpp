@@ -18,6 +18,8 @@
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
+#include <gdal/ogrsf_frmts.h>
+
 #include <QBoxLayout>
 #include <QTextEdit>
 #include <QSettings>
@@ -43,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     models(),
     currentModel(0),
-    currentModelIdx(0),
+    currentModelIdx(-1),
     mSimulation(0),
     mMapController(0),
     map(0),
@@ -51,6 +53,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mPlayTimerInterval(playTimerDefault)
 {
     ui->setupUi(this);
+
+    QActionGroup *grp = new QActionGroup(this);
+    grp->addAction(ui->actionNode_Editor);
+    grp->addAction(ui->actionEdge_Edit);
 
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
@@ -82,6 +88,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map = new qmapcontrol::QMapControl(ui->mapWidget);
     mMapController = new MapObjectsController(map);
+    connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
+    connect (mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
 
     connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
 
@@ -105,6 +113,13 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
+
+    ui->actionGraph->setChecked(false);
+    on_actionGraph_toggled(false);  /* Force action function execution */
+
+    for (int i = 0; i < maxModels; ++i) {
+        ui->modelSelector->addItem(QString(tr("[%1]")).arg(i),i);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -144,7 +159,7 @@ void MainWindow::on_action_Load_triggered()
 
         // load the model named x
 
-        DisplaceModel *m = new DisplaceModel();
+        std::shared_ptr<DisplaceModel> m(new DisplaceModel());
 
         if (!m->load(d.absolutePath(), parts.at(1), "baseline")) {
             QMessageBox::warning(this, tr("Load failed."),
@@ -153,12 +168,16 @@ void MainWindow::on_action_Load_triggered()
         }
 
         /* Connect model */
-        connect (m, SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
-        connect (m, SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
+        connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
+        connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
 
-        mMapController->createMapObjectsFromModel(0, m);
+        m->setIndex(0);
+        mMapController->setModel(0, m);
+        mMapController->createMapObjectsFromModel(0, m.get());
         ui->modelSelector->setCurrentIndex(0);
         models[0] = m;
+
+        mSimulation->linkModel(models[0]);
 
         emit modelStateChanged();
     }
@@ -175,10 +194,11 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         currentModel = models[currentModelIdx];
     else
         currentModel = 0;
-    treemodel->setCurrentModel(currentModelIdx, currentModel);
+
+    treemodel->setCurrentModel(currentModelIdx, currentModel.get());
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
-    mStatsController->updateStats(currentModel);
+    mStatsController->updateStats(currentModel.get());
 
     bool e = (currentModelIdx != 0);
     ui->play_bk->setEnabled(e);
@@ -263,12 +283,18 @@ void MainWindow::updateOutputFile(QString path, int n)
 void MainWindow::outputUpdated()
 {
     mMapController->updateNodes(0);
-    mStatsController->updateStats(models[0]);
+    mStatsController->updateStats(models[0].get());
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
     statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+}
+
+void MainWindow::edgeSelectionsChanged(int num)
+{
+    ui->actionDelete->setEnabled(num > 0);
+    ui->actionProperties->setEnabled(num > 0);
 }
 
 void MainWindow::errorImportingStatsFile(QString msg)
@@ -298,6 +324,10 @@ void MainWindow::updateModelList()
                         i);
             if (i == n)
                 sel = i;
+        } else {
+            ui->modelSelector->addItem(
+                        QString(tr("[%1]")).arg(i),
+                        i);
         }
     }
 
@@ -306,8 +336,8 @@ void MainWindow::updateModelList()
 
 void MainWindow::updateAllDisplayObjects()
 {
-    mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel);
-    mStatsController->updateStats(currentModel);
+    mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel.get());
+    mStatsController->updateStats(currentModel.get());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -331,6 +361,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QSettings sets;
         sets.setValue("mainGeometry", saveGeometry());
         sets.setValue("mainState", saveState());
+
+        mMapController->signalAppIsClosing();
+        mMapController->removeAllWidgets();
+        qApp->closeAllWindows();
     }
 }
 
@@ -341,8 +375,8 @@ void MainWindow::centerMap(const qmapcontrol::PointWorldCoord &pt)
 
 void MainWindow::centerMapOnHarbourId(int id)
 {
-    Harbour *h = currentModel->getHarboursList()[id];
-    centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
+    HarbourData *h = currentModel->getHarboursList()[id];
+    centerMap(qmapcontrol::PointWorldCoord(h->mHarbour->get_x(), h->mHarbour->get_y()));
 }
 
 void MainWindow::centerMapOnNodeId(int id)
@@ -360,6 +394,15 @@ void MainWindow::centerMapOnVesselId(int id)
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
+        if (mSimulation->wasSimulationStarted()) {
+            int res = QMessageBox::information(this, tr("Restart simulation"),
+                                               tr("Restarting simulation will eventually overwrite the results data, either in a linked db or in the output files. Are you sure to continue?"),
+                                               QMessageBox::Yes, QMessageBox::No);
+            if (res == QMessageBox::No)
+                return;
+        }
+
+        models[0]->prepareDatabaseForSimulation();
         mSimulation->start(models[0]->name(), models[0]->basepath());
     }
 }
@@ -386,7 +429,7 @@ void MainWindow::on_actionConfiguration_triggered()
 {
     if (currentModel) {
         Config c = currentModel->config();
-        ConfigDialog dlg (this);
+        ConfigDialog dlg (currentModel.get(), this);
         dlg.set(c);
         if (dlg.exec() == QDialog::Accepted) {
             if (!dlg.get(c)) {
@@ -482,13 +525,18 @@ void MainWindow::on_action_Link_database_triggered()
 
     QSettings sets;
     QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
-                                         sets.value(dbLastDirKey).toString(), dbFilter,0, QFileDialog::DontConfirmOverwrite);
+                                         sets.value(dbLastDirKey).toString(), dbFilter,0);
 
     if (!dbname.isEmpty()) {
         QFileInfo info (dbname);
         if (info.suffix().isEmpty()) {
             dbname += dbSuffix;
             info = QFileInfo(dbname);
+        }
+
+        if (info.exists()) {
+            QFile f(dbname);
+            f.remove();
         }
 
         if (!models[0]->linkDatabase(dbname)) {
@@ -544,7 +592,7 @@ void MainWindow::on_actionLoad_results_triggered()
             info = QFileInfo(dbname);
         }
 
-        DisplaceModel *newmodel = new DisplaceModel();
+        std::shared_ptr<DisplaceModel> newmodel(new DisplaceModel());
 
         if (!newmodel->loadDatabase(dbname)) {
             QMessageBox::warning(this, tr("Database Load failed"),
@@ -554,10 +602,11 @@ void MainWindow::on_actionLoad_results_triggered()
 
         sets.setValue(dbLastDirKey, info.absolutePath());
 
-        delete models[i];
+        newmodel->setIndex(i);
         models[i] = newmodel;
 
-        mMapController->createMapObjectsFromModel(i,models[i]);
+        mMapController->setModel(i, newmodel);
+        mMapController->createMapObjectsFromModel(i,models[i].get());
         ui->modelSelector->setCurrentIndex(i);
 
         emit modelStateChanged();
@@ -652,6 +701,15 @@ void MainWindow::on_popStatSelector_currentIndexChanged(int index)
     mStatsController->setPopulationStat((StatsController::PopulationStat)index);
 }
 
+void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
+{
+    mStatsController->setNationsStat((StatsController::NationsStat)index);
+}
+
+void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setHarbourStat((StatsController::HarboursStat)index);
+}
 
 void MainWindow::on_play_params_clicked()
 {
@@ -674,4 +732,83 @@ void MainWindow::on_play_params_clicked()
             return;
         }
     }
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+    close();
+}
+
+void MainWindow::on_actionImport_Shapefile_triggered()
+{
+    if (currentModel == 0) {
+        QMessageBox::information(this, tr("Importing shape file"), tr("Please load a simulation or database before importing a shapefile"));
+        return;
+    }
+
+
+    QSettings sets;
+    QString name =  QFileDialog::getOpenFileName(this, tr("Import shapefile"),
+                                         sets.value("import_shape").toString());
+
+    if (!name.isEmpty()) {
+        QFileInfo info (name);
+
+        OGRDataSource *ds = OGRSFDriverRegistrar::Open(name.toStdString().c_str(), FALSE);
+
+        QString layer;
+
+        if (ds->GetLayerCount() > 1) {
+            QStringList items;
+            for(int i = 0; i < ds->GetLayerCount(); ++i)
+                items << ds->GetLayer(i)->GetName();
+
+            layer = QInputDialog::getItem(this, tr("Shapefile open"), tr("Please select the a layer, or cancel for all layers"), items,0, false);
+        }
+
+        mMapController->importShapefile(currentModelIdx, name, layer);
+        sets.setValue("import_shape", info.absolutePath());
+
+        treemodel->refresh();
+    }
+
+}
+
+void MainWindow::on_actionGraph_toggled(bool en)
+{
+    /* Enable/Disable editor commands */
+
+    ui->actionClear_Graph->setEnabled(en);
+    ui->actionEdge_Edit->setEnabled(en);
+    ui->actionNode_Editor->setEnabled(en);
+
+    /* -- */
+    ui->actionAdd->setEnabled(en);
+    ui->actionDelete->setEnabled(en);
+    ui->actionProperties->setEnabled(en);
+
+    if (!en) {
+        mMapController->setEditorMode(MapObjectsController::NoEditorMode);
+    }
+}
+
+void MainWindow::on_actionEdge_Edit_toggled(bool en)
+{
+    if (en) {
+        map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectLine, false);
+        mMapController->setEditorMode(MapObjectsController::EdgeEditorMode);
+    }
+}
+
+void MainWindow::on_actionNode_Editor_toggled(bool en)
+{
+    if (en) {
+        map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectBox, false);
+        mMapController->setEditorMode(MapObjectsController::NodeEditorMode);
+    }
+}
+
+void MainWindow::on_actionDelete_triggered()
+{
+    mMapController->delSelected(currentModelIdx);
 }

@@ -1,10 +1,15 @@
 #include "simulator.h"
 
+#include <displacemodel.h>
+#include <modelobjects/vesseldata.h>
+#include <outputfileparser.h>
+
 #include <QApplication>
 #include <QDebug>
 
 Simulator::Simulator()
     : mSimulation(0),
+      mModel(),
       mSimSteps(8761),
       mLastStep(-1),
       mOutputName("baseline"),
@@ -14,11 +19,18 @@ Simulator::Simulator()
 {
 }
 
+void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
+{
+    mModel= model;
+}
+
 // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
 bool Simulator::start(QString name, QString folder)
 {
-    if (mSimulation != 0)
-        return false;
+    if (mSimulation != 0) {
+        delete mSimulation;
+        mSimulation = 0;
+    }
 
     mSimulation = new QProcess();
 
@@ -142,6 +154,11 @@ void Simulator::setSimulationName(const QString &value)
     mSimuName = value;
 }
 
+bool Simulator::wasSimulationStarted() const
+{
+    return mSimulation != 0;
+}
+
 QString Simulator::getOutputName() const
 {
     return mOutputName;
@@ -178,7 +195,7 @@ bool Simulator::processCodedLine(QString line)
     if (!line.startsWith("="))
         return false;
 
-    QStringList args = line.trimmed().mid(2).split(",");
+    QStringList args = line.trimmed().mid(2).split(" ", QString::SkipEmptyParts);
 
     switch(line.at(1).toLatin1()) {
     case 'S':
@@ -188,6 +205,10 @@ bool Simulator::processCodedLine(QString line)
 
     case 'V':
         parseUpdateVessel(args);
+        break;
+
+    case 'v':
+        parseUpdateVesselStats(args);
         break;
 
     case 'U':
@@ -215,4 +236,12 @@ void Simulator::parseUpdateVessel(QStringList fields)
     int state = fields[7].toInt();
 
     emit vesselMoved(mLastStep, id, x, y, course, fuel, state);
+}
+
+void Simulator::parseUpdateVesselStats(QStringList fields)
+{
+    std::shared_ptr<VesselStats> v = OutputFileParser::parseVesselStatLine(fields);
+
+    if (mModel)
+        mModel->collectVesselStats(v->tstep, v);
 }

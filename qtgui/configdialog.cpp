@@ -1,9 +1,12 @@
 #include "configdialog.h"
 #include "ui_configdialog.h"
 
-ConfigDialog::ConfigDialog(QWidget *parent) :
+#include <displacemodel.h>
+
+ConfigDialog::ConfigDialog(DisplaceModel *model, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ConfigDialog)
+    ui(new Ui::ConfigDialog),
+    mModel(model)
 {
     ui->setupUi(this);
 }
@@ -48,12 +51,21 @@ bool ConfigDialog::get(Config &config) const
             return false;
     }
 
+    QList<int> ih;
+    l = ui->m_int_harbours->text().split(" ", QString::SkipEmptyParts);
+    foreach(QString s, l) {
+        ih.push_back(s.toInt(&ok));
+        if (!ok)
+            return false;
+    }
+
     config.setNbpops(ui->nbpops->value());
     config.setSzGroups(ui->nbpops->value());
     config.setImplicit_pops(impl);
     config.setCalib_oth_landings(cal1);
     config.setCalib_weight_at_szgroup(cal2);
     config.setCalib_cpue_multiplier(cal3);
+    config.m_interesting_harbours = ih;
 
     return true;
 }
@@ -90,4 +102,22 @@ void ConfigDialog::set(const Config &config)
         il4 << QString::number(i);
 
     ui->m_calib_weight_at_szgroup->setText(il4.join(" "));
+
+    l1 = config.m_interesting_harbours;
+    il.clear();
+    foreach (int i, l1)
+        il << QString::number(i);
+
+    ui->m_int_harbours->setText(il.join(" "));
+}
+
+void ConfigDialog::on_readFromTree_clicked()
+{
+    QString x;
+    const QList<int> & list = mModel->getInterestingHarbours();
+    foreach(int i, list) {
+        x += QString::number(i) + " ";
+    }
+
+    ui->m_int_harbours->setText(x);
 }

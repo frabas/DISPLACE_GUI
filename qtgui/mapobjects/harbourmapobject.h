@@ -1,25 +1,44 @@
 #ifndef HARBOURMAPOBJECT_H
 #define HARBOURMAPOBJECT_H
 
+#include <QObject>
+
 #include <mapobjects/mapobject.h>
 #include <QMapControl/GeometryPointImageScaled.h>
-#include <Harbour.h>
+#include <modelobjects/harbourdata.h>
+#include <mapobjects/nodedetailswidget.h>
+
 #include <QPixmap>
 
-class HarbourMapObject : public MapObject
+class MapObjectsController;
+class DisplaceModel;
+
+class HarbourMapObject : public QObject, public MapObject
 {
+    Q_OBJECT
 public:
-    HarbourMapObject(Harbour *harbour);
+    HarbourMapObject(MapObjectsController *controller, DisplaceModel *model, HarbourData *harbour);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
     }
 
+    virtual bool showProperties();
+    virtual void updateProperties();
+
+private slots:
+    void widgetClosed();
+
 private:
-    Harbour *mHarbour;
+    MapObjectsController *mController;
+    DisplaceModel *mModel;
+
+    HarbourData *mHarbour;
     std::shared_ptr<qmapcontrol::GeometryPointImageScaled> mGeometry;
 
     static QPixmap *symbol;
+    NodeDetailsWidget *mWidget;
+
 };
 
 #endif // HARBOURMAPOBJECT_H

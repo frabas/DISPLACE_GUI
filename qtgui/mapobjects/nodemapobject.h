@@ -5,14 +5,19 @@
 #include <modelobjects/nodedata.h>
 #include <mapobjects/nodegraphics.h>
 
+#include <QObject>
+
 namespace qmapcontrol {
     class RectWorldCoord;
 }
 
 class MapObjectsController;
+class NodeDetailsWidget;
 
-class NodeMapObject : public MapObject
+class NodeMapObject : public QObject, public MapObject
 {
+    Q_OBJECT
+
     MapObjectsController *mController;
 public:
     /* Note to developers: When adding "Roles", add a proper creation case into Constructor.
@@ -34,10 +39,28 @@ public:
         return mGeometry;
     }
 
+    virtual bool showProperties();
+    virtual void updateProperties();
+
+    void onSelectionChanged() override;
+
+    bool selected() const { return mGeometry->selected(); }
+    NodeData *node() const { return mNode; }
+
+protected:
+    QString updateStatText(QString prefix);
+
+private slots:
+    void widgetClosed();
+
+signals:
+    void nodeSelectionHasChanged(NodeMapObject *object);
+
 private:
     NodeData *mNode;
+    Role mRole;
     std::shared_ptr<NodeGraphics> mGeometry;
-
+    NodeDetailsWidget *mWidget;
 };
 
 #endif // NODEMAPOBJECT_H

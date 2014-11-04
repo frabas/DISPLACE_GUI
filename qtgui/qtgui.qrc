@@ -24,5 +24,12 @@
         <file>icons/OpenSeaMap.png</file>
         <file>palettes/iso1996_2.p2c</file>
         <file>icons/places.png</file>
+        <file>backgrounds/callout.png</file>
+        <file>icons/close.png</file>
+        <file>icons/edge.png</file>
+        <file>icons/add.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/info.png</file>
+        <file>icons/node.png</file>
     </qresource>
 </RCC>

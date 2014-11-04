@@ -49,8 +49,7 @@ QVariant NationEntity::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
         return QString(model->getModel()->getNation(index.row()).getName());
     if (role == Qt::CheckStateRole)
-        return QVariant(Qt::Checked);
-        //return QVariant(model->getModel()->isInteresting(index.row()) ? Qt::Checked : Qt::Unchecked);
+        return QVariant(model->getModel()->isInterestingNations(index.row()) ? Qt::Checked : Qt::Unchecked);
     return QVariant();
 }
 
@@ -64,9 +63,9 @@ bool NationEntity::setData(const QModelIndex &index, const QVariant &value, int 
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
-//            model->getModel()->remInterestingPop(index.row());
+            model->getModel()->remInterestingNations(index.row());
         } else {
-//            model->getModel()->setInterestingPop(index.row());
+            model->getModel()->setInterestingNations(index.row());
         }
         model->getStatsController()->updateStats(model->getModel());
         model->getMapControl()->updateNodes(model->getModelIdx());

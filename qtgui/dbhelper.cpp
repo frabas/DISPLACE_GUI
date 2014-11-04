@@ -566,7 +566,8 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<std::
 
         if (last_tstep != tstep && last_tstep != -1) {
             steps.push_back(last_tstep);
-            population.push_back(v);
+            population.push_back(v);            
+            v.clear();
         }
         last_tstep = tstep;
 
@@ -584,26 +585,29 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<std::
         qn.addBindValue(tstep);
         qn.addBindValue(pid);
 
-        qn.exec();
+        res = qn.exec();
+        DB_ASSERT(res, qn);
 
         QVector<double> nv;
         QVector<double> fv;
         while (qn.next()) {
             int sz = qn.value(0).toInt();
-            double v = qn.value(1).toDouble();
+            double agg = qn.value(1).toDouble();
+            double mor = qn.value(2).toDouble();
 
             while (nv.size() <= sz)
                 nv.push_back(0);
-            nv[sz] = v;
+            nv[sz] = agg;
             while (fv.size() <= sz)
                 fv.push_back(0);
-            fv[sz] = v;
+            fv[sz] = mor;
         }
 
         v[pid]->setAggregate(nv);
         v[pid]->setMortality(fv);
         v[pid]->setAggregateTot(n);
         v[pid]->setMortalityTot(f);
+
     }
 
     if (last_tstep != -1) {

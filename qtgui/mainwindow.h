@@ -4,6 +4,8 @@
 #include <outputfileparser.h>
 #include <statscontroller.h>
 
+#include <utils/memoryinfo.h>
+
 #include <QMainWindow>
 #include <QProcess>
 #include <QTimer>
@@ -30,7 +32,7 @@ class MapObjectsController;
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
-#define MAX_MODELS 4
+#define MAX_MODELS 5
 
 class MainWindow : public QMainWindow
 {
@@ -57,6 +59,7 @@ private slots:
     void errorImportingStatsFile(QString);
 
     void playTimerTimeout();
+    void memoryTimerTimeout();
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
@@ -87,14 +90,12 @@ private slots:
     void on_play_params_clicked();
     void on_actionQuit_triggered();
     void on_actionImport_Shapefile_triggered();
-
     void on_actionGraph_toggled(bool arg1);
-
     void on_actionEdge_Edit_toggled(bool arg1);
-
     void on_actionDelete_triggered();
-
     void on_actionNode_Editor_toggled(bool arg1);
+    void on_actionClear_Graph_triggered();
+    void on_actionCreate_Graph_triggered();
 
 signals:
     void modelStateChanged();
@@ -110,6 +111,8 @@ protected:
     void centerMapOnVesselId (int id);
 
     void showPaletteDialog(PaletteRole role);
+
+    int newEditorModel(QString name);
 
 private:
     Ui::MainWindow *ui;
@@ -130,6 +133,12 @@ private:
 
     QTimer mPlayTimer;
     int mPlayTimerInterval;
+    QTimer mMemoryWatchTimer;
+    MemoryInfo mMemInfo;
+    QLabel *mMemInfoLabel;
+
+    QString mLastRunSimulationName;
+    QString mLastRunDatabase;
 
     static const QString dbSuffix;
     static const QString dbFilter;

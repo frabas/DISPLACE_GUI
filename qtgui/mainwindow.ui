@@ -83,8 +83,19 @@
     <addaction name="actionDelete"/>
     <addaction name="actionProperties"/>
    </widget>
+   <widget class="QMenu" name="menuGraph">
+    <property name="title">
+     <string>Graph</string>
+    </property>
+    <addaction name="actionLoad_Graph"/>
+    <addaction name="actionSave_Graph"/>
+    <addaction name="actionExport_Graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreate_Graph"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
+   <addaction name="menuGraph"/>
    <addaction name="menu_Editor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -294,6 +305,10 @@
            </layout>
           </widget>
           <widget class="QWidget" name="tabStatsPopulations">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/fish.png</normaloff>:/icons/fish.png</iconset>
+           </attribute>
            <attribute name="title">
             <string>Populations</string>
            </attribute>
@@ -454,17 +469,6 @@
        <property name="icon">
         <iconset resource="qtgui.qrc">
          <normaloff>:/icons/start.png</normaloff>:/icons/start.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cmdPause">
-       <property name="text">
-        <string>Pause</string>
-       </property>
-       <property name="icon">
-        <iconset resource="qtgui.qrc">
-         <normaloff>:/icons/pause.png</normaloff>:/icons/pause.png</iconset>
        </property>
       </widget>
      </item>
@@ -642,7 +646,7 @@
           </property>
           <property name="icon">
            <iconset resource="qtgui.qrc">
-            <normaloff>:/icons/stop.png</normaloff>:/icons/stop.png</iconset>
+            <normaloff>:/icons/start.png</normaloff>:/icons/start.png</iconset>
           </property>
          </widget>
         </item>
@@ -853,6 +857,26 @@
    </property>
    <property name="text">
     <string>Node Editor</string>
+   </property>
+  </action>
+  <action name="actionExport_Graph">
+   <property name="text">
+    <string>Export...</string>
+   </property>
+  </action>
+  <action name="actionSave_Graph">
+   <property name="text">
+    <string>Save...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Graph">
+   <property name="text">
+    <string>Load...</string>
+   </property>
+  </action>
+  <action name="actionCreate_Graph">
+   <property name="text">
+    <string>Create Graph...</string>
    </property>
   </action>
  </widget>

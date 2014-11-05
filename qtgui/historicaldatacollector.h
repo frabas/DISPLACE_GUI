@@ -24,14 +24,9 @@ public:
         return it.value();
     }
 
-//    int getFirstStep() const ;
-//    int getLastStep() const;
-
     int getUniqueValuesCount() const {
         return mData.size();
     }
-
-//    const std::shared_ptr<T> getUniqueValueAt(int n) const;
 
     typename Container::const_iterator getFirst() const {
         return mData.begin();
@@ -39,7 +34,6 @@ public:
 
 protected:
     Container mData;
-    int mFirst, mLast;
 };
 
 #endif // HISTORICALDATACOLLECTOR_H

@@ -33,7 +33,7 @@ public:
         GraphNodeWithPopImpact,
     };
 
-    NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node);
+    NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
@@ -45,7 +45,7 @@ public:
     void onSelectionChanged() override;
 
     bool selected() const { return mGeometry->selected(); }
-    NodeData *node() const { return mNode; }
+    std::shared_ptr<NodeData> node() const { return mNode; }
 
 protected:
     QString updateStatText(QString prefix);
@@ -57,7 +57,7 @@ signals:
     void nodeSelectionHasChanged(NodeMapObject *object);
 
 private:
-    NodeData *mNode;
+    std::shared_ptr<NodeData> mNode;
     Role mRole;
     std::shared_ptr<NodeGraphics> mGeometry;
     NodeDetailsWidget *mWidget;

@@ -4,12 +4,14 @@
 #include <Harbour.h>
 #include <QVector>
 
+#include <memory>
+
 class HarbourData
 {
 public:
-    Harbour *mHarbour;
+    std::shared_ptr<Harbour> mHarbour;
 
-    explicit HarbourData(Harbour *harbour);
+    explicit HarbourData(std::shared_ptr<Harbour> harbour);
 };
 
 class HarbourStats

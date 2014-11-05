@@ -1,6 +1,6 @@
 #include "vesseldata.h"
 
-VesselData::VesselData(Vessel *vessel)
+VesselData::VesselData(std::shared_ptr<Vessel> vessel)
     : mVessel(vessel)
 {
 }

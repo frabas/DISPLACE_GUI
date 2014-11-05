@@ -25,13 +25,14 @@ void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
 }
 
 // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
-bool Simulator::start(QString name, QString folder)
+bool Simulator::start(QString name, QString folder, QString simul_name)
 {
     if (mSimulation != 0) {
         delete mSimulation;
         mSimulation = 0;
     }
 
+    mSimuName = simul_name;
     mSimulation = new QProcess();
 
     QStringList arguments;
@@ -42,7 +43,7 @@ bool Simulator::start(QString name, QString folder)
     arguments.push_back("-f2");
     arguments.push_back(mOutputName);
     arguments.push_back("-s");
-    arguments.push_back(mSimuName);
+    arguments.push_back(simul_name);
     arguments.push_back("-i");
     arguments.push_back(QString::number(mSimSteps));
     arguments.push_back("-p");
@@ -144,24 +145,9 @@ void Simulator::subprocessStateChanged(QProcess::ProcessState state)
     emit processStateChanged(oldstate, mProcessState);
 }
 
-QString Simulator::getSimulationName() const
-{
-    return mSimuName;
-}
-
-void Simulator::setSimulationName(const QString &value)
-{
-    mSimuName = value;
-}
-
 bool Simulator::wasSimulationStarted() const
 {
     return mSimulation != 0;
-}
-
-QString Simulator::getOutputName() const
-{
-    return mOutputName;
 }
 
 void Simulator::setOutputName(const QString &value)
@@ -179,16 +165,10 @@ void Simulator::setMoveVesselOption(bool value)
     mMoveVesselOption = value;
 }
 
-int Simulator::getSimSteps() const
-{
-    return mSimSteps;
-}
-
 void Simulator::setSimSteps(int value)
 {
     mSimSteps = value;
 }
-
 
 bool Simulator::processCodedLine(QString line)
 {
@@ -240,8 +220,8 @@ void Simulator::parseUpdateVessel(QStringList fields)
 
 void Simulator::parseUpdateVesselStats(QStringList fields)
 {
-    std::shared_ptr<VesselStats> v = OutputFileParser::parseVesselStatLine(fields);
+    VesselStats v = OutputFileParser::parseVesselStatLine(fields);
 
     if (mModel)
-        mModel->collectVesselStats(v->tstep, v);
+        mModel->collectVesselStats(v.tstep, v);
 }

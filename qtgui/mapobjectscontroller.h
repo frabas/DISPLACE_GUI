@@ -29,6 +29,7 @@ class NodeMapObject;
 class VesselMapObject;
 class EdgeLayer;
 class EdgeMapObject;
+class NodeData;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -161,6 +162,8 @@ public:
         case ObjectTreeModel::Layers: return &mLayers[model];
         case ObjectTreeModel::ShapefileLayers: return &mShapefileLayers[model];
         case ObjectTreeModel::OutputLayers: return &mOutputLayers[model];
+        default:
+            break;
         }
         return 0;
     }
@@ -192,13 +195,18 @@ public:
     void setEditorMode (EditorModes mode);
 
     void delSelected(int model);
+    void delAllNodes(int model);
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
+
+
+    void addNode(int model_n, std::shared_ptr<NodeData> nd);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
     void addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show = true);
+
 
     void delSelectedEdges(int model);
 protected slots:
@@ -228,14 +236,21 @@ private:
 
     std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
 
+    /* Layers and adapters commons to all models */
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
     std::shared_ptr<qmapcontrol::MapAdapter> mSeamarkAdapter;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
     std::shared_ptr<qmapcontrol::LayerGeometry> mWidgetLayer;
 
+    /* Layers specific to every model */
+    std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer[MAX_MODELS];
     std::shared_ptr<EdgeLayer> mEdgesLayer[MAX_MODELS];
-
+    std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerPop[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBiomass[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerImpact [MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MAX_MODELS];
     QVector<bool> mModelVisibility;
 
     QVector<LayerListImpl> mLayers;

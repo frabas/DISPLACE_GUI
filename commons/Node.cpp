@@ -81,10 +81,26 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 
 
 Node::Node()
+    : idx_node(0),
+      x(0),
+      y(0),
+      harbour(0),
+      code_area(0),
+      marine_landscape(0),
+      is_harbour(false),
+      cumftime(0),
+      Ns_pops_at_szgroup(),
+      Ns_pops_at_szgroup_at_month_start(),
+      removals_pops_at_szgroup(),
+      pressure_pops_at_szgroup(),
+      avai_pops_at_selected_szgroup(),
+      impact_on_pops(),
+      vid(),
+      pop_names_on_node(),
+      benthos_tot_biomass(),
+      m_nbpops(0),
+      m_nszgrp(0)
 {
-	x=0;
-	y=0;
-
 }
 
 

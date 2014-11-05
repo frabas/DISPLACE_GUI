@@ -7,7 +7,7 @@
 
 #include <mapobjects/nodedetailswidget.h>
 
-NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, NodeData *node)
+NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node)
     : mController(controller),
       mNode(node),
       mRole(role),
@@ -18,28 +18,28 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
     case GraphNodeRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeGraphics(mNode, mController, indx));
+                    new NodeGraphics(mNode.get(), mController, indx));
         mGeometry->setFlags(qmapcontrol::Geometry::IsSelectable);
         break;
 
     case GraphNodeWithPopStatsRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Population, mNode, mController, indx));
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Population, mNode.get(), mController, indx));
         break;
 
     case GraphNodeWithBiomass:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Biomass, mNode, mController, indx));
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Biomass, mNode.get(), mController, indx));
         break;
 
     case GraphNodeWithPopImpact:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Impact, mNode, mController, indx));
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Impact, mNode.get(), mController, indx));
         break;
 
     case GraphNodeWithCumFTimeRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithCumFTimeGraphics(mNode, mController, indx));
+                    new NodeWithCumFTimeGraphics(mNode.get(), mController, indx));
         break;
 
     default:
@@ -78,7 +78,7 @@ void NodeMapObject::updateProperties()
     switch (mRole) {
     default:
     case GraphNodeRole:
-        text += QString("<br/><b>Adiacencies</b><br/>");
+        text += QString("<br/><b>Adjacencies</b><br/>");
         for (int i = 0; i < mNode->getAdiacencyCount(); ++i) {
             text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
                     .arg(mNode->getAdiacencyByIdx(i))
@@ -131,6 +131,8 @@ QString NodeMapObject::updateStatText(QString prefix)
         case GraphNodeWithPopImpact:
             val = mNode->getImpact(i);
             break;
+        default:
+            throw std::runtime_error("Unhandled case in updateStatText");
         }
 
         text += QString("<b>%1 %2:</b> %3<br/>")

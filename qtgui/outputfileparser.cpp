@@ -206,28 +206,28 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
     }
 }
 
-std::shared_ptr<VesselStats> OutputFileParser::parseVesselStatLine(const QStringList &fields)
+VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
 {
-    std::shared_ptr<VesselStats> v = std::shared_ptr<VesselStats>(new VesselStats());
+    VesselStats v;
 
     try {
-        v->tstep = toInt(fields[1]);
-        v->reasonToGoBack = toInt(fields[2]);
-        v->lastHarbour = toInt(fields[4]);
-        v->vesselId = toInt(fields[5]);
-        v->timeAtSea = toDouble(fields[7]);
+        v.tstep = toInt(fields[1]);
+        v.reasonToGoBack = toInt(fields[2]);
+        v.lastHarbour = toInt(fields[4]);
+        v.vesselId = toInt(fields[5]);
+        v.timeAtSea = toDouble(fields[7]);
 
         int pop = fields.size() - 16;
         for (int i = 0; i < pop; ++i) {
             double value = toDouble(fields[10+i]);
-            v->mCatches.push_back(value);
+            v.mCatches.push_back(value);
         }
-        v->revenue = toDouble(fields[10 + pop + 1]);
-        v->revenueAV = toDouble(fields[10 + pop + 2]);
+        v.revenue = toDouble(fields[10 + pop + 1]);
+        v.revenueAV = toDouble(fields[10 + pop + 2]);
 
     } catch (std::exception &x) {
         Q_UNUSED(x);
-        return std::shared_ptr<VesselStats>();
+        return VesselStats();
     }
 
     return v;

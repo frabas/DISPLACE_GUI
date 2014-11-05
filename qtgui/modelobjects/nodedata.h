@@ -6,6 +6,8 @@
 #include <QList>
 #include <QVector>
 
+#include <memory>
+
 class DisplaceModel;
 
 /** \brief an extension class for Node
@@ -17,9 +19,9 @@ public:
     typedef QVector<int> AdiacencyList;
     typedef QVector<double> AdiacencyWeightList;
 
-    Node *mNode;    /* This is crap. But we have no other choice */
+    std::shared_ptr<Node> mNode;    /* This is crap. But we have no other choice */
 
-    explicit NodeData(Node *nd, DisplaceModel *model);
+    explicit NodeData(std::shared_ptr<Node> nd, DisplaceModel *model);
     virtual ~NodeData();
 
     /* Proxy functions to avoid change too much code */

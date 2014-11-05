@@ -16,6 +16,7 @@
 #include <creategraphdialog.h>
 
 #include <graphinteractioncontroller.h>
+#include <graphbuilder.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -141,53 +142,21 @@ void MainWindow::on_action_Load_triggered()
     QString lastpath;
 
     lastpath = sets.value("lastpath", QDir::homePath()).toString();
-    QString dir = QFileDialog::getExistingDirectory(this,
-                                                    tr("Select Model directory"),
-                                                    lastpath);
 
+    QString dir  = QFileDialog::getOpenFileName(this,
+                                                tr("Select a scenario file - look at simusspe_* directory"),
+                                                lastpath, QString("*.dat"));
     if (dir.isEmpty())
         return;
 
     QDir d (dir);
-    QStringList parts = d.dirName().split("_");
-    d.cdUp();
+    sets.setValue("lastpath", d.absolutePath());
 
-    if (parts.count() < 2) {
-        // fails.
-        QMessageBox::warning(this, tr("Name not valid"),
-                             tr("The selected directory doesn't seems to be a valid Model directory."));
+    QString error;
+    if (!loadLiveModel(dir, &error)) {
+        QMessageBox::warning(this, tr("Load failed."),
+                             QString(tr("Error loading model %1: %2")).arg(d.absolutePath()).arg(error));
         return;
-    }
-
-    int res = QMessageBox::question(this, tr("Confirm loading model"),
-                                    QString(tr("Do you want to load the model named %1 ?")).arg(parts.at(1)),
-                                    QMessageBox::Yes, QMessageBox::No);
-    if (res == QMessageBox::Yes) {
-        sets.setValue("lastpath", d.absolutePath());
-
-        // load the model named x
-
-        std::shared_ptr<DisplaceModel> m(new DisplaceModel());
-
-        if (!m->load(d.absolutePath(), parts.at(1), "baseline")) {
-            QMessageBox::warning(this, tr("Load failed."),
-                                 QString(tr("Error loading model %1: %2")).arg(parts.at(1)).arg(m->getLastError()));
-            return;
-        }
-
-        /* Connect model */
-        connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
-        connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
-
-        m->setIndex(0);
-        mMapController->setModel(0, m);
-        mMapController->createMapObjectsFromModel(0, m.get());
-        ui->modelSelector->setCurrentIndex(0);
-        models[0] = m;
-
-        mSimulation->linkModel(models[0]);
-
-        emit modelStateChanged();
     }
 }
 
@@ -459,7 +428,21 @@ void MainWindow::on_actionScenario_triggered()
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
         if (dlg.exec() == QDialog::Accepted) {
-            currentModel->setScenario(dlg.getScenario());
+            int r = QMessageBox::question(this, tr("Saving scenario"),
+                                          tr("The scenario file must be saved and the model reloaded. Proceed?"),
+                                          QMessageBox::No, QMessageBox::Yes);
+            if (r == QMessageBox::Yes) {
+                currentModel->setScenario(dlg.getScenario());
+                on_actionSave_triggered();
+                QString error;
+                if (!loadLiveModel(currentModel->fullpath(), &error)) {
+                    QMessageBox::warning(this, tr("Error reloading model."),
+                                         QString(tr("There was an error loading the model. Likely the scenario is wrong. "
+                                                    "The old model has been kept, so you can fix it. But it will not be possible "
+                                                    "to run a simulation.\n"
+                                                    "The error message was: %1")).arg(error));
+                }
+            }
         }
     }
 }
@@ -751,7 +734,7 @@ void MainWindow::on_actionPopulations_triggered()
 
 void MainWindow::showPaletteDialog (PaletteRole role)
 {
-    EditPaletteDialog dlg;
+    EditPaletteDialog dlg(this);
     Palette pal = mMapController->getPalette(currentModelIdx, role);
     dlg.linkPalette(&pal);
     dlg.showSpecials(false);
@@ -900,12 +883,42 @@ void MainWindow::on_actionCreate_Graph_triggered()
     CreateGraphDialog dlg(this);
 
     if (dlg.exec() == QDialog::Accepted) {
-        /* TODO Correct this */
-        QList<QPointF> l;
+        GraphBuilder gb;
+        gb.setType(GraphBuilder::Hex);
+        gb.setDistance(dlg.step());
+        gb.setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
-        for (int i = 0; i < 10; ++i)
-            l.push_back(QPointF(10.0 + i, 60.0 + i));
+        QList<QPointF> l = gb.buildGraph();
 
         currentModel->addGraph (l, mMapController);
     }
+}
+
+bool MainWindow::loadLiveModel(QString path, QString *error)
+{
+    std::shared_ptr<DisplaceModel> m(new DisplaceModel());
+
+    if (!m->load(path)) {
+        if (error)
+            *error = m->getLastError();
+        return false;
+    }
+
+    /* Connect model */
+    connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
+    connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
+
+    mMapController->removeModel(0);
+
+    m->setIndex(0);
+    mMapController->setModel(0, m);
+    mMapController->createMapObjectsFromModel(0, m.get());
+    ui->modelSelector->setCurrentIndex(0);
+    models[0] = m;
+
+    mSimulation->linkModel(models[0]);
+
+    emit modelStateChanged();
+
+    return true;
 }

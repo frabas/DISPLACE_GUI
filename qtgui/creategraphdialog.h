@@ -15,6 +15,11 @@ public:
     explicit CreateGraphDialog(QWidget *parent = 0);
     ~CreateGraphDialog();
 
+    double step() const;
+    double minLon() const;
+    double minLat() const;
+    double maxLon() const;
+    double maxLat() const;
 private:
     Ui::CreateGraphDialog *ui;
 };

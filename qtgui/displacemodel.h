@@ -52,7 +52,7 @@ public:
     void setIndex(int idx) { mIndex = idx; }
     int index() const { return mIndex; }
 
-    bool load (QString path, QString modelname, QString outputname);
+    bool load (QString path);
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();
@@ -62,6 +62,7 @@ public:
     void simulationEnded();
 
     // Getter
+    QString fullpath() const { return mFullPath; }
     QString inputName() const { return mInputName; }
     QString basepath() const { return mBasePath; }
     QString outputName() const { return mOutputName; }
@@ -285,6 +286,7 @@ signals:
 private:
     ModelType mModelType;
     DbHelper *mDb;
+    QString mFullPath;
     QString mInputName;
     QString mBasePath;
     QString mOutputName;

@@ -118,13 +118,17 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     QList<QVector<double> >keyData;
     QList<QVector<double> >valueData;
 
+    Palette::Iterator col_it = mPalette.begin();
     foreach (int ipop, interPopList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
+            if (col_it == mPalette.end())
+                col_it = mPalette.begin();
+
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(pen);
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = mPalette.colorForIndexMod(ipop % mPalette.colorCount());
+            QColor col = *col_it;
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
@@ -149,6 +153,8 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             graphs.push_back(graph);
             keyData.push_back(QVector<double>());
             valueData.push_back(QVector<double>());
+
+            ++col_it;
         }
     }
 
@@ -236,15 +242,18 @@ void StatsController::updateNationStats(DisplaceModel *model)
     QList<int> ipl = model->getInterestingNations();
 
     int cnt;
-    int palcnt = 0;
+    Palette::Iterator col_it = mPalette.begin();
     foreach (int ip, ipl) {
+        if (col_it == mPalette.end())
+            col_it = mPalette.begin();
+
         QVector<double> keyData;
         QVector<double> valueData;
 
         QCPGraph *graph = mPlotNations->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = mPalette.colorForIndexMod(palcnt % mPalette.colorCount());
+        QColor col = *col_it;
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
@@ -275,7 +284,7 @@ void StatsController::updateNationStats(DisplaceModel *model)
 
         graph->setData(keyData, valueData);
 
-        ++palcnt;
+        ++col_it;
     }
 
     mPlotNations->rescaleAxes();
@@ -290,15 +299,19 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
     QList<int> ipl = model->getInterestingHarbours();
 
     int cnt;
-    int palcnt = 0;
+    Palette::Iterator col_it = mPalette.begin();
+
     foreach (int ip, ipl) {
+        if (col_it == mPalette.end())
+            col_it = mPalette.begin();
+
         QVector<double> keyData;
         QVector<double> valueData;
 
         QCPGraph *graph = mPlotHarbours->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = mPalette.colorForIndexMod(palcnt % mPalette.colorCount());
+        QColor col = *col_it;
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
@@ -326,7 +339,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
 
         graph->setData(keyData, valueData);
 
-        ++palcnt;
+        ++col_it;
     }
 
     mPlotHarbours->rescaleAxes();

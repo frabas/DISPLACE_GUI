@@ -101,6 +101,8 @@ signals:
     void modelStateChanged();
 
 protected:
+    bool loadLiveModel(QString path, QString *error);
+
     void updateModelList();
     void updateAllDisplayObjects();
     void closeEvent ( QCloseEvent * event );

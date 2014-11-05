@@ -14,6 +14,13 @@
    <string>Scenario</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="group_dyn_alloc_sce">
+     <property name="title">
+      <string>Dyn Alloc Sce</string>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="1">
     <widget class="QDoubleSpinBox" name="gridres">
      <property name="suffix">
@@ -55,10 +62,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Dyn Alloc Sce:</string>
+      <string>N Row Graph</string>
      </property>
     </widget>
    </item>
@@ -69,17 +76,17 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>N Row Graph</string>
-     </property>
-    </widget>
-   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>Grid Resolution:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>N Row Coord</string>
      </property>
     </widget>
    </item>
@@ -93,38 +100,10 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Dyn Pop Sce:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>N Row Coord</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="dyn_pop_sce">
-     <property name="toolTip">
-      <string>Enter values separated by spaces</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Bio Sce:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="dyn_alloc_sce">
-     <property name="toolTip">
-      <string>Enter values separated by spaces</string>
      </property>
     </widget>
    </item>
@@ -134,6 +113,9 @@
       <string>AGraph</string>
      </property>
     </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="biol_sce"/>
    </item>
    <item row="8" column="1">
     <spacer name="verticalSpacer">
@@ -148,14 +130,16 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="biol_sce"/>
+   <item row="1" column="0" colspan="2">
+    <widget class="QGroupBox" name="group_dyn_pop_sce">
+     <property name="title">
+      <string>Dyn Pop Sce</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>dyn_alloc_sce</tabstop>
-  <tabstop>dyn_pop_sce</tabstop>
   <tabstop>biol_sce</tabstop>
   <tabstop>agraph</tabstop>
   <tabstop>nrowcoord</tabstop>

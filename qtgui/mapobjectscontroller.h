@@ -150,6 +150,7 @@ public:
     qmapcontrol::QMapControl *mapWidget() const { return mMap; }
 
     void setModel(int model_n, std::shared_ptr<DisplaceModel> model);
+    void removeModel(int model_n);
     void createMapObjectsFromModel(int model_n, DisplaceModel *model);
     void updateMapObjectsFromModel(int model_n, DisplaceModel *model);
 

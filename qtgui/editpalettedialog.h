@@ -29,15 +29,14 @@ signals:
 
 private slots:
     void on_palette_doubleClicked(const QModelIndex &index);
-    void on_minVal_valueChanged(double arg1);
-    void on_maxVal_valueChanged(double arg1);
-    void on_nrCol_valueChanged(int arg1);
-    void on_step_valueChanged(double arg1);
     void on_specialPalette_doubleClicked(const QModelIndex &index);
     void on_btLoad_clicked();
     void on_btSave_clicked();
-
     void on_name_textChanged(const QString &arg1);
+    void on_add_clicked();
+    void on_remove_clicked();
+
+    void on_pushButton_clicked();
 
 protected:
     void updateControlValues();

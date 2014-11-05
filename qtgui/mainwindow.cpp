@@ -751,7 +751,7 @@ void MainWindow::on_actionPopulations_triggered()
 
 void MainWindow::showPaletteDialog (PaletteRole role)
 {
-    EditPaletteDialog dlg;
+    EditPaletteDialog dlg(this);
     Palette pal = mMapController->getPalette(currentModelIdx, role);
     dlg.linkPalette(&pal);
     dlg.showSpecials(false);

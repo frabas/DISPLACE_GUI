@@ -73,7 +73,7 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
             for (int i = 0; i < ilist.size(); ++i) {
                 v = getValueForPop(ilist[i]);
                 v = v / tot * 360.0 * 16.0;
-                painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).colorForIndexMod(ilist[i]));
+                painter.setBrush(mController->getPalette(mModelIndex, PopulationRole).color(ilist[i]));
                 painter.drawPie(-RADIUS / 2, -RADIUS / 2, RADIUS, RADIUS, inc, (v ));
                 inc += v;
             }

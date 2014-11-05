@@ -19,6 +19,8 @@ enum PaletteRole {
 
 class Palette {
 public:
+    typedef QMap<double,QColor> Container;
+    typedef Container::const_iterator Iterator;
 
     Palette();
     explicit Palette(PaletteRole role, const QString &name);
@@ -36,34 +38,18 @@ public:
     // Palette Colors
     int colorCount() const { return m_palette.count(); }
 
-    void setColor (int i, const QColor &col) { m_palette[i] = col; }
-    void addColor (const QColor &col) { m_palette.push_back(col); }
+    Iterator begin() const { return m_palette.cbegin(); }
+    Iterator end() const { return m_palette.cend(); }
+    void addColor (double value, const QColor &col) { m_palette.insert(value, col); }
 
-    QColor colorForIndex(int i) const { return m_palette[i]; }
-    QColor colorForIndexMod(int i) const { return m_palette[i % m_palette.size()]; }
-
-    QColor color(float val) const {
-        int idx = static_cast<int>(std::floor( (val - m_min) / getStep()) );
-        if (idx < 0) idx = 0;
-        if (idx > m_palette.count()-1) idx = m_palette.count()-1;
-        return m_palette[ idx ];
+    QColor color(double val) const {
+        Iterator it = m_palette.lowerBound(val);
+        if (it != m_palette.begin())
+            --it;
+        return *it;
     }
-    const QVector<QColor> &colors() const { return m_palette; }
 
     // Palette Parameters
-    float getMin() const { return m_min; }
-    float getMax() const { return m_max; }
-    float getStep() const {
-        if (m_palette.count() >= 2)
-            return (m_max - m_min) / (m_palette.count()-2);
-        else
-            return 0.0;     // non ha senso
-    }
-
-    void setMin(float m) { m_min = m; }
-    void setMax(float m) { m_max = m; }
-    void setNumColor (int i);
-    void setStep (float s);
 
     // Palette Special Color
     int specialColorCount() const { return mSpecials.size(); }
@@ -75,7 +61,7 @@ public:
     void setNumSpecialColor (int i);
 
     // Reset
-    void reset() {
+    void clear() {
         m_palette.clear();
         mSpecials.clear();
     }
@@ -87,7 +73,7 @@ public:
 protected:
     PaletteRole mRole;
     QString m_name;
-    QVector<QColor> m_palette;
+    Container m_palette;
     QVector<QColor> mSpecials;
 
     double m_min, m_max;

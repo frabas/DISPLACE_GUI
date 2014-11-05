@@ -16,6 +16,7 @@
 #include <creategraphdialog.h>
 
 #include <graphinteractioncontroller.h>
+#include <graphbuilder.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -882,11 +883,12 @@ void MainWindow::on_actionCreate_Graph_triggered()
     CreateGraphDialog dlg(this);
 
     if (dlg.exec() == QDialog::Accepted) {
-        /* TODO Correct this */
-        QList<QPointF> l;
+        GraphBuilder gb;
+        gb.setType(GraphBuilder::Hex);
+        gb.setDistance(dlg.step());
+        gb.setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
-        for (int i = 0; i < 10; ++i)
-            l.push_back(QPointF(10.0 + i, 60.0 + i));
+        QList<QPointF> l = gb.buildGraph();
 
         currentModel->addGraph (l, mMapController);
     }

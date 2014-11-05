@@ -21,9 +21,12 @@
 
 #include <memory>
 
+#include <gdal/ogrsf_frmts.h>
+
 #include <QDebug>
 
 class DbHelper;
+class MapObjectsController;
 
 class DisplaceModel : public QObject
 {
@@ -36,8 +39,16 @@ public:
     typedef QVector<HarbourStats> HarboursStats;
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
 
+    enum ModelType {
+        LiveModelType, EditorModelType, OfflineModelType,
+        EmptyModelType
+    };
+
     DisplaceModel();
 
+    ModelType modelType() const { return mModelType; }
+
+    bool edit(QString modelname);
     void setIndex(int idx) { mIndex = idx; }
     int index() const { return mIndex; }
 
@@ -51,10 +62,15 @@ public:
     void simulationEnded();
 
     // Getter
-    QString name() const { return mName; }
+    QString inputName() const { return mInputName; }
     QString basepath() const { return mBasePath; }
     QString outputName() const { return mOutputName; }
-    bool isModelLoaded() const { return !mName.isEmpty(); }
+    void setOutputName(const QString &name) { mOutputName = name; }
+    QString simulationName() const { return mSimuName; }
+    void setSimulationName(const QString &name) { mSimuName = name; }
+
+    QString linkedDatabase() const { return mLinkedDbName; }
+    bool isModelLoaded() const { return !mInputName.isEmpty(); }
 
     int getNBPops() const {
         return mConfig.getNbpops();
@@ -63,11 +79,16 @@ public:
         return mConfig.getSzGroups();
     }
 
-    const QList<HarbourData *> &getHarboursList() const { return mHarbours; }
+    int getSimulationSteps() const;
+    void setSimulationSteps(int value);
+
+    /* Graphs operation */
+
+    const QList<std::shared_ptr<HarbourData> > &getHarboursList() const { return mHarbours; }
     int getHarboursCount() const;
     QString getHarbourId(int idx) const;
 
-    const QList<NodeData *> &getNodesList() const { return mNodes; }
+    const QList<std::shared_ptr<NodeData> > &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
 
@@ -79,12 +100,12 @@ public:
      * */
     void updateNodesStatFromSimu(QString);
 
-    const QList<VesselData *> &getVesselList() const { return mVessels; }
+    const QList<std::shared_ptr<VesselData> > &getVesselList() const { return mVessels; }
     int getVesselCount() const;
     QString getVesselId(int idx) const;
     void updateVessel (int tstep, int idx, float x, float y, float course, float fuel, int state );
 
-    const QList<Benthos*> &getBenthosList() const { return mBenthos; }
+    const QList<std::shared_ptr<Benthos> > &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
     /* Access to Population statistics */
@@ -107,8 +128,8 @@ public:
 
     /* Access to Nations statistics */
 
-    const QList<NationData> &getNationsList() const { return mNations; }
-    const NationData &getNation(int idx) const { return mNations.at(idx); }
+    const QList<std::shared_ptr<NationData> > &getNationsList() const { return mNations; }
+    const NationData &getNation(int idx) const { return *mNations.at(idx); }
 
     int getNationsStatsCount() const {
         return mStatsNations.getUniqueValuesCount();
@@ -125,7 +146,7 @@ public:
 
     /* Access to Harbour statistics */
 
-    const QList<HarbourData *> &getHarbourList() const { return mHarbours; }
+    const QList<std::shared_ptr<HarbourData> > &getHarbourList() const { return mHarbours; }
     const HarbourData &getHarbourData(int idx) const { return *mHarbours.at(idx); }
 
     int getHarboursStatsCount() const {
@@ -235,7 +256,12 @@ public:
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
 
-    void collectVesselStats (int step, std::shared_ptr<VesselStats> stats);
+    void collectVesselStats (int step, const VesselStats &stats);
+
+    /* Editor stuff */
+
+
+    bool addGraph(const QList<QPointF> &points, MapObjectsController *controller);
 
 protected:
     bool loadNodes();
@@ -257,19 +283,22 @@ signals:
     void errorParsingStatsFile(QString);
 
 private:
+    ModelType mModelType;
     DbHelper *mDb;
-    QString mName;
+    QString mInputName;
     QString mBasePath;
     QString mOutputName;
+    QString mSimuName;
+    QString mLinkedDbName;
     int mIndex;
 
+    int mSimulSteps;
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;
     bool mPopStatsDirty;
     bool mVesselsStatsDirty;
 
-    bool mLive;
     Scenario mScenario;
     Config mConfig;
 
@@ -279,11 +308,11 @@ private:
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
 
-    QList<HarbourData *> mHarbours;
-    QList<NodeData *> mNodes;
-    QList<VesselData *> mVessels;
-    QList<Benthos *> mBenthos;
-    QList<NationData> mNations;
+    QList<std::shared_ptr<HarbourData>> mHarbours;
+    QList<std::shared_ptr<NodeData> > mNodes;
+    QList<std::shared_ptr<VesselData> > mVessels;
+    QList<std::shared_ptr<Benthos> > mBenthos;
+    QList<std::shared_ptr<NationData> > mNations;
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;
@@ -292,7 +321,7 @@ private:
     HarboursStatsContainer mStatsHarbours;
     HarboursStats mStatsHarboursCollected;
 
-    QMap<int, Benthos *> mBenthosInfo;
+    QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
 
     // --- Working objects
 
@@ -300,6 +329,12 @@ private:
     QThread *mParserThread;
 
     QString mLastError;
+
+    /* Editor stuff */
+    OGRDataSource *mDataSource;
+    OGRLayer *mNodesLayer;
+
+    OGRSpatialReference *mSpatialRef;
 };
 
 #endif // DISPLACEMODEL_H

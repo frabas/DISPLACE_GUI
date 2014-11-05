@@ -4,14 +4,16 @@
 #include <Vessel.h>
 #include <QList>
 
+#include <memory>
+
 class VesselStats;
 
 class VesselData
 {
 public:
-    Vessel *mVessel; /* This is crap too. */
+    std::shared_ptr<Vessel> mVessel; /* This is crap too. */
 
-    VesselData(Vessel *vessel = 0);
+    VesselData(std::shared_ptr<Vessel> vessel);
 
     int getNationality() const;
     void setNationality(int value);

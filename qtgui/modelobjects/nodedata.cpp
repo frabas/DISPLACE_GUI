@@ -2,7 +2,7 @@
 
 #include <displacemodel.h>
 
-NodeData::NodeData(Node *nd, DisplaceModel *model)
+NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
     : mNode (nd),
       mModel(model),
       mPop(0),

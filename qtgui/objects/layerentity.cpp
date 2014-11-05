@@ -46,8 +46,14 @@ int LayerEntity::columnCount() const
 
 QVariant LayerEntity::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole)
-        return model->getMapControl()->getLayerList(model->getModelIdx(), mLayerEntityType)->getName(index.row()); //->getLayers().at(index.row())->getName());
+    if (role == Qt::DisplayRole) {
+        QString name = model->getMapControl()->getLayerList(model->getModelIdx(), mLayerEntityType)->getName(index.row());
+        if (name.startsWith('#')) {
+            // Layer name has control index: clean the name.
+            name = name.mid(name.lastIndexOf('#')+1);
+        }
+        return name;
+    }
     if (role == Qt::CheckStateRole)
         return QVariant(model->getMapControl()->isLayerVisible(model->getModelIdx(), mLayerEntityType, (MapObjectsController::LayerIds) index.row()) ? Qt::Checked : Qt::Unchecked);
     return QVariant();

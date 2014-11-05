@@ -31,6 +31,9 @@ macx {
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+
+    # For GetProcessMemoryInfo()
+    LIBS += -lpsapi
 }
 
 DEFINES += PROFILE
@@ -88,7 +91,9 @@ SOURCES += \
     mapobjects/nodedetailswidget.cpp \
     modelobjects/harbourdata.cpp \
     mapobjects/edgemapobject.cpp \
-    mapobjects/edgelayer.cpp
+    mapobjects/edgelayer.cpp \
+    utils/memoryinfo.cpp \
+    creategraphdialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -96,7 +101,8 @@ FORMS += \
     simulationsetupdialog.ui \
     editpalettedialog.ui \
     configdialog.ui \
-    mapobjects/nodedetailswidget.ui
+    mapobjects/nodedetailswidget.ui \
+    creategraphdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -142,7 +148,9 @@ HEADERS += \
     mapobjects/nodedetailswidget.h \
     modelobjects/harbourdata.h \
     mapobjects/edgemapobject.h \
-    mapobjects/edgelayer.h
+    mapobjects/edgelayer.h \
+    utils/memoryinfo.h \
+    creategraphdialog.h
 
 RESOURCES += \
     qtgui.qrc

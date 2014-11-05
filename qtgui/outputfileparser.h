@@ -51,7 +51,7 @@ protected:
     }
 
 public:
-    static std::shared_ptr<VesselStats> parseVesselStatLine (const QStringList &fields);
+    static VesselStats parseVesselStatLine(const QStringList &fields);
 };
 
 #endif // OUTPUTFILEPARSER_H

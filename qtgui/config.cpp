@@ -12,6 +12,15 @@
 
 #define NBSZGROUP 14
 
+Config::Config()
+    : nbpops(0),
+      szGroups(0),
+      m_implicit_pops(),
+      m_calib_oth_landings(),
+      m_calib_weight_at_szgroup()
+{
+}
+
 const QList<int> &Config::implicit_pops() const
 {
     return m_implicit_pops;
@@ -70,10 +79,6 @@ int Config::getSzGroups() const
 void Config::setSzGroups(int value)
 {
     szGroups = value;
-}
-
-Config::Config()
-{
 }
 
 bool Config::save(QString path, QString modelname, QString outputname)

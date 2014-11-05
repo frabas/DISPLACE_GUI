@@ -13,6 +13,8 @@
 #include <scenariodialog.h>
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
+#include <creategraphdialog.h>
+
 #include <graphinteractioncontroller.h>
 
 #include <QMapControl/QMapControl.h>
@@ -58,6 +60,9 @@ MainWindow::MainWindow(QWidget *parent) :
     grp->addAction(ui->actionNode_Editor);
     grp->addAction(ui->actionEdge_Edit);
 
+    mMemInfoLabel = new QLabel(this);
+    statusBar()->addPermanentWidget(mMemInfoLabel);
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
@@ -68,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (this, SIGNAL(modelStateChanged()), this, SLOT(updateModelState()));
     connect (&mPlayTimer, SIGNAL(timeout()), this, SLOT(playTimerTimeout()));
+    connect (&mMemoryWatchTimer, SIGNAL(timeout()), this, SLOT(memoryTimerTimeout()));
+
+    mMemoryWatchTimer.start(2500);
 
     mSimulation = new Simulator();
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -117,9 +125,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
 
-    for (int i = 0; i < maxModels; ++i) {
-        ui->modelSelector->addItem(QString(tr("[%1]")).arg(i),i);
-    }
+    int idx = newEditorModel("new model");
+    ui->modelSelector->setCurrentIndex(idx);
+    updateModelList();
 }
 
 MainWindow::~MainWindow()
@@ -200,7 +208,9 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
     mStatsController->updateStats(currentModel.get());
 
-    bool e = (currentModelIdx != 0);
+    DisplaceModel::ModelType type = currentModel == 0 ? DisplaceModel::EmptyModelType : currentModel->modelType() ;
+
+    bool e = (type == DisplaceModel::OfflineModelType);
     ui->play_bk->setEnabled(e);
     ui->play_fbk->setEnabled(e);
     ui->play_ffwd->setEnabled(e);
@@ -212,13 +222,33 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     if (!e || currentModel == 0) {
         ui->play_step->setValue(0);
     } else {
-        int last = currentModel->getLastStep();
-        ui->play_step->setValue(currentModel->getCurrentStep());
-        ui->play_step->setMinimum(0);
-        ui->play_step->setMaximum(last);
+        if (type == DisplaceModel::OfflineModelType) {
+            int last = currentModel->getLastStep();
+            ui->play_step->setValue(currentModel->getCurrentStep());
+            ui->play_step->setMinimum(0);
+            ui->play_step->setMaximum(last);
 
-        ui->play_step->setSuffix(QString(tr("/%1")).arg(last));
+            ui->play_step->setSuffix(QString(tr("/%1")).arg(last));
+        } else if (type == DisplaceModel::EditorModelType) {
+            ui->play_step->setValue(0);
+            ui->play_step->setMinimum(0);
+            ui->play_step->setMaximum(0);
+        }
     }
+
+    /* Editor specific tools */
+    e = type == DisplaceModel::EditorModelType;
+    ui->actionLoad_Graph->setEnabled(e);
+    ui->actionSave_Graph->setEnabled(e);
+    ui->actionExport_Graph->setEnabled(e);
+
+    ui->actionAdd->setEnabled(e);
+    ui->actionClear_Graph->setEnabled(e);
+    ui->actionDelete->setEnabled(e);
+    ui->actionEdge_Edit->setEnabled(e);
+    ui->actionGraph->setEnabled(e);
+    ui->actionNode_Editor->setEnabled(e);
+    ui->actionProperties->setEnabled(e);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -230,8 +260,8 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
 {
     if (models[0] != 0) {
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
-        ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
+        ui->cmdSetup->setEnabled(newstate == QProcess::NotRunning);
 
         if (newstate != QProcess::Running)
             simulatorProcessStepChanged(-1);
@@ -241,8 +271,8 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
         }
     } else {
         ui->cmdStart->setEnabled(false);
-        ui->cmdPause->setEnabled(false);
         ui->cmdStop->setEnabled(false);
+        ui->cmdSetup->setEnabled(false);
         simulatorProcessStepChanged(-1);
     }
 }
@@ -311,6 +341,12 @@ void MainWindow::playTimerTimeout()
         on_play_auto_clicked();
 }
 
+void MainWindow::memoryTimerTimeout()
+{
+    mMemInfo.update();
+    mMemInfoLabel->setText(QString(tr("Used memory: %1Mb Peak: %2Mb")).arg(mMemInfo.rss()/1024).arg(mMemInfo.peakRss()/1024));
+}
+
 void MainWindow::updateModelList()
 {
     int n = ui->modelSelector->currentData().toInt();
@@ -320,7 +356,7 @@ void MainWindow::updateModelList()
     for (int i = 0; i < MAX_MODELS; ++i) {
         if (models[i] != 0) {
             ui->modelSelector->addItem(
-                        QString(tr("[%1] %2")).arg(i).arg(models[i]->name()),
+                        QString(tr("[%1] %2")).arg(i).arg(models[i]->inputName()),
                         i);
             if (i == n)
                 sel = i;
@@ -375,26 +411,26 @@ void MainWindow::centerMap(const qmapcontrol::PointWorldCoord &pt)
 
 void MainWindow::centerMapOnHarbourId(int id)
 {
-    HarbourData *h = currentModel->getHarboursList()[id];
+    std::shared_ptr<HarbourData> h (currentModel->getHarboursList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->mHarbour->get_x(), h->mHarbour->get_y()));
 }
 
 void MainWindow::centerMapOnNodeId(int id)
 {
-    NodeData *h = currentModel->getNodesList()[id];
+    std::shared_ptr<NodeData> h (currentModel->getNodesList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
 
 void MainWindow::centerMapOnVesselId(int id)
 {
-    VesselData *h = currentModel->getVesselList()[id];
+    std::shared_ptr<VesselData> h(currentModel->getVesselList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->mVessel->get_x(), h->mVessel->get_y()));
 }
 
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
-        if (mSimulation->wasSimulationStarted()) {
+        if ((mLastRunDatabase == models[0]->linkedDatabase() || mLastRunSimulationName == models[0]->simulationName()) && mSimulation->wasSimulationStarted()) {
             int res = QMessageBox::information(this, tr("Restart simulation"),
                                                tr("Restarting simulation will eventually overwrite the results data, either in a linked db or in the output files. Are you sure to continue?"),
                                                QMessageBox::Yes, QMessageBox::No);
@@ -402,8 +438,11 @@ void MainWindow::on_cmdStart_clicked()
                 return;
         }
 
+        mLastRunSimulationName = models[0]->simulationName();
+        mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->prepareDatabaseForSimulation();
-        mSimulation->start(models[0]->name(), models[0]->basepath());
+        mSimulation->setSimSteps(models[0]->getSimulationSteps());
+        mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }
 }
 
@@ -447,7 +486,7 @@ void MainWindow::on_actionSave_triggered()
 {
     if (models[0] && models[0]->save()) {
         QMessageBox::information(this, tr("Model saved"),
-                                 QString(tr("The model %1 has been saved successfully.")).arg(models[0]->name()));
+                                 QString(tr("The model %1 has been saved successfully.")).arg(models[0]->inputName()));
         return;
     } else {
         QMessageBox::warning(this, tr("Load failed"),
@@ -505,23 +544,30 @@ void MainWindow::on_cmdSetup_clicked()
 {
     SimulationSetupDialog dlg(this);
 
-    dlg.setSimulationSteps(mSimulation->getSimSteps());
-    dlg.setSimulationName(mSimulation->getSimulationName());
-    dlg.setSimulationOutputName(mSimulation->getOutputName());
+    dlg.setSimulationSteps(models[0]->getSimulationSteps());
+    dlg.setSimulationName(models[0]->simulationName());
+    dlg.setSimulationOutputName(models[0]->outputName());
     dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
 
     if (dlg.exec() == QDialog::Accepted) {
-        mSimulation->setSimSteps(dlg.getSimulationSteps());
-        mSimulation->setSimulationName(dlg.getSimulationName());
-        mSimulation->setOutputName(dlg.getSimulationOutputName());
+        models[0]->setSimulationSteps(dlg.getSimulationSteps());
+        models[0]->setSimulationName(dlg.getSimulationName());
+        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
     }
 }
 
 void MainWindow::on_action_Link_database_triggered()
 {
-    if (models[0] == 0)
+    if (models[0] == 0) {
+        QMessageBox::warning(this, tr("Link database"), tr("Please load a simulation before linking a database."));
         return;
+    }
+
+    if (mSimulation->isRunning()) {
+        QMessageBox::warning(this, tr("Link database"), tr("Cannot link database while a simulation is running."));
+        return;
+    }
 
     QSettings sets;
     QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
@@ -614,9 +660,27 @@ void MainWindow::on_actionLoad_results_triggered()
 
 }
 
+int MainWindow::newEditorModel(QString name)
+{
+    int i = MAX_MODELS-1;
+    std::shared_ptr<DisplaceModel> edmodel = std::shared_ptr<DisplaceModel>(new DisplaceModel());
+    edmodel->edit(name);
+    edmodel->setIndex(i);
+    models[i] = edmodel;
+
+    mMapController->setModel(i, edmodel);
+    mMapController->createMapObjectsFromModel(i,models[i].get());
+    ui->modelSelector->setCurrentIndex(i);
+
+    emit modelStateChanged();
+
+    return i;
+}
+
+
 void MainWindow::on_play_step_valueChanged(int step)
 {
-    if (currentModelIdx > 0) {
+    if (currentModel && currentModel->modelType() == DisplaceModel::OfflineModelType) {
         currentModel->setCurrentStep(step);
         updateAllDisplayObjects();
     }
@@ -657,10 +721,12 @@ void MainWindow::on_play_auto_clicked()
     bool en = mPlayTimer.isActive();
     if (en) {
         mPlayTimer.stop();
+        ui->play_auto->setIcon(QIcon(":/icons/start.png"));
     } else {
         mPlayTimer.setInterval(mPlayTimerInterval);
         mPlayTimer.setSingleShot(false);
         mPlayTimer.start();
+        ui->play_auto->setIcon(QIcon(":/icons/pause.png"));
     }
 
     //ui->play_auto->setIcon();
@@ -811,4 +877,35 @@ void MainWindow::on_actionNode_Editor_toggled(bool en)
 void MainWindow::on_actionDelete_triggered()
 {
     mMapController->delSelected(currentModelIdx);
+}
+
+void MainWindow::on_actionClear_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    int res = QMessageBox::question(this, tr("Clear graph"), tr("You're about to delete the entire graph data. Do you want to proceed?"),
+                                    QMessageBox::No, QMessageBox::Yes);
+
+    if (res == QMessageBox::Yes) {
+        //            currentModel->delAllNodes();
+    }
+}
+
+void MainWindow::on_actionCreate_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    CreateGraphDialog dlg(this);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        /* TODO Correct this */
+        QList<QPointF> l;
+
+        for (int i = 0; i < 10; ++i)
+            l.push_back(QPointF(10.0 + i, 60.0 + i));
+
+        currentModel->addGraph (l, mMapController);
+    }
 }

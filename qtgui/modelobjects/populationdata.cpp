@@ -1,5 +1,8 @@
 #include "populationdata.h"
 
+
+#include <QDebug>
+
 PopulationData::PopulationData(int _id)
     : id(_id),
       aggregate(), mortality(),
@@ -25,7 +28,6 @@ const QVector<double> &PopulationData::getAggregate() const
 void PopulationData::setAggregate(const QVector<double> &value)
 {
     aggregate = value;
-
     // force aggregate and mortality to have the same size!
     while (mortality.size() < aggregate.size())
         mortality.push_back(0);

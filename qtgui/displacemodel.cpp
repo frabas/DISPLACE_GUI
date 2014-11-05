@@ -5,17 +5,26 @@
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
 
+#include <mapobjectscontroller.h>
+
 #include <readdata.h>
 #include <qdebug.h>
 #include <QtAlgorithms>
 
+const char *FLD_NODEID="nodeid";
 
 DisplaceModel::DisplaceModel()
-    : mDb(0),
+    : mModelType(EmptyModelType),
+      mDb(0),
+      mInputName(),mBasePath(),mOutputName(),
+      mSimuName("simu2"),
+      mLinkedDbName(),
+      mIndex(-1),
+      mSimulSteps(8761),
+      mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
-      mLive(false),
       mInterestingPop(),
       mInterestingSizeTotal(true),
       mInterestingSizeAvg(true),
@@ -25,6 +34,25 @@ DisplaceModel::DisplaceModel()
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this))
 {
+    OGRRegisterAll();
+
+    const char *pszDriverName = "Memory";
+    OGRSFDriver *poDriver;
+    poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
+
+    mDataSource = poDriver->CreateDataSource("memory");
+    Q_ASSERT(mDataSource);
+
+    mSpatialRef = new OGRSpatialReference();
+    mSpatialRef->SetWellKnownGeogCS("WGS84");
+
+    mNodesLayer = mDataSource->CreateLayer("nodes", mSpatialRef, wkbPoint);
+    Q_ASSERT(mNodesLayer);
+
+    // Create any field
+    OGRFieldDefn fld(FLD_NODEID, OFTInteger);
+    mNodesLayer->CreateField(&fld);
+
     mOutputFileParser->moveToThread(mParserThread);
     mParserThread->start();
 
@@ -33,19 +61,35 @@ DisplaceModel::DisplaceModel()
     connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
 }
 
+bool DisplaceModel::edit(QString modelname)
+{
+    if (mModelType != EmptyModelType)
+        return false;
+
+    // ...
+
+    mInputName = modelname;
+    mModelType = EditorModelType;
+
+    return true;
+}
+
 bool DisplaceModel::load(QString path, QString modelname, QString outputname)
 {
+    if (mModelType != EmptyModelType)
+        return false;
+
     qDebug() << "Loading model" << modelname << "from folder" << path;
 
-    mName = modelname;
+    mInputName = modelname;
     mBasePath = path;
     mOutputName = outputname;
 
     /* Load files ... */
 
     try {
-        mScenario = Scenario::readFromFile(mName, mBasePath, mOutputName);
-        mConfig = Config::readFromFile(mName, mBasePath, mOutputName);
+        mScenario = Scenario::readFromFile(mInputName, mBasePath, mOutputName);
+        mConfig = Config::readFromFile(mInputName, mBasePath, mOutputName);
 
         mInterestingHarb = mConfig.m_interesting_harbours;
 
@@ -61,20 +105,20 @@ bool DisplaceModel::load(QString path, QString modelname, QString outputname)
         return false;
     }
 
-    mLive = true;
+    mModelType = LiveModelType;
     return true;
 }
 
 bool DisplaceModel::loadDatabase(QString path)
 {
-    if (mLive || mDb != 0)
+    if (mModelType != EmptyModelType || mDb != 0)
         return false;
 
     mDb = new DbHelper;
     if (!mDb->attachDb(path))
         return false;
 
-    mName = mDb->getMetadata("name");
+    mInputName = mDb->getMetadata("name");
     mBasePath = mDb->getMetadata("basepath");
     mOutputName = mDb->getMetadata("output");
 
@@ -88,6 +132,8 @@ bool DisplaceModel::loadDatabase(QString path)
 
     mLastStep = mDb->getLastKnownStep();
     setCurrentStep(0);
+
+    mModelType = OfflineModelType;
     return true;
 }
 
@@ -99,8 +145,10 @@ bool DisplaceModel::loadDatabase(QString path)
  */
 bool DisplaceModel::linkDatabase(QString path)
 {
-    if (!mLive || mDb != 0)
+    if (mModelType != LiveModelType) {
+        mLastError = tr("Model is not a live simulation");
         return false;
+    }
 
     mDb = new DbHelper;
     if (!mDb->attachDb(path)) {
@@ -108,17 +156,18 @@ bool DisplaceModel::linkDatabase(QString path)
         return false;
     }
 
+    mLinkedDbName = path;
+
     return true;
 }
 
 bool DisplaceModel::prepareDatabaseForSimulation()
 {
     if (mDb) {
-
         /* start a transaction to speedup insertion */
         mDb->beginTransaction();
 
-        mDb->setMetadata("name", mName);
+        mDb->setMetadata("name", mInputName);
         mDb->setMetadata("basepath", mBasePath);
         mDb->setMetadata("output", mOutputName);
 
@@ -148,9 +197,9 @@ bool DisplaceModel::prepareDatabaseForSimulation()
 
 bool DisplaceModel::save()
 {
-    if (!mScenario.save(mName, mBasePath, mOutputName))
+    if (!mScenario.save(mInputName, mBasePath, mOutputName))
         return false;
-    if (!mConfig.save(mName, mBasePath, mOutputName))
+    if (!mConfig.save(mInputName, mBasePath, mOutputName))
         return false;
 
     return true;
@@ -192,6 +241,16 @@ void DisplaceModel::checkStatsCollection(int tstep)
 
     mLastStats = tstep;
 }
+int DisplaceModel::getSimulationSteps() const
+{
+    return mSimulSteps;
+}
+
+void DisplaceModel::setSimulationSteps(int value)
+{
+    mSimulSteps = value;
+}
+
 
 void DisplaceModel::updateNodesStatFromSimu(QString data)
 {
@@ -236,9 +295,9 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
 
-        // ...
-        mStatsNationsCollected.clear();
-        mStatsHarboursCollected.clear();
+        // don't clear stats: they are cumulated
+//        mStatsNationsCollected.clear();
+//        mStatsHarboursCollected.clear();
         mVesselsStatsDirty = false;
     }
 
@@ -298,38 +357,71 @@ void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &p
     mPopStatsDirty = true;
 }
 
-void DisplaceModel::collectVesselStats(int tstep, std::shared_ptr<VesselStats> stats)
+void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 {
-    VesselData *vessel = mVessels.at(stats->vesselId);
+    std::shared_ptr<VesselData> vessel = mVessels.at(stats.vesselId);
 
-    vessel->setLastHarbour(stats->lastHarbour);
-    vessel->setRevenue(stats->revenue);
-    vessel->setRevenueAV(stats->revenueAV);
-    vessel->mVessel->set_reason_to_go_back(stats->reasonToGoBack);
-    vessel->mVessel->set_timeatsea(stats->timeAtSea);
+    vessel->setLastHarbour(stats.lastHarbour);
+    vessel->setRevenue(stats.revenue);
+    vessel->setRevenueAV(stats.revenueAV);
+    vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
+    vessel->mVessel->set_timeatsea(stats.timeAtSea);
 
     int nat = vessel->getNationality();
     while (mStatsNationsCollected.size() <= nat) {
         mStatsNationsCollected.push_back(NationStats());
     }
-    mStatsNationsCollected[nat].mRevenues += stats->revenue;
+
+    mStatsNationsCollected[nat].mRevenues += stats.revenue;
+    mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
 
     int hidx = vessel->getLastHarbour();
     while (mStatsHarboursCollected.size() <= hidx)
         mStatsHarboursCollected.push_back(HarbourStats());
 
-    mStatsHarboursCollected[hidx].mCumProfit += stats->revenue;
+    mStatsHarboursCollected[hidx].mCumProfit += stats.revenue;
 
-    int n = stats->mCatches.size();
+    int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {
-        vessel->addCatch(i, stats->mCatches[i]);
-        mStatsHarboursCollected[hidx].mCumCatches += stats->mCatches[i];
+        vessel->addCatch(i, stats.mCatches[i]);
+        mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
+        mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
     }
 
     if (mDb)
-        mDb->addVesselStats(tstep,vessel);
+        mDb->addVesselStats(tstep,*vessel);
 
     mVesselsStatsDirty = true;
+}
+
+bool DisplaceModel::addGraph(const QList<QPointF> &points, MapObjectsController *controller)
+{
+    if (mModelType != EditorModelType)
+        return false;
+
+    foreach(QPointF point, points) {
+        int nodeid = mNodes.size();
+
+        OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+        feature->SetField(FLD_NODEID, nodeid);
+
+        OGRPoint pt;
+        pt.setX(point.x());
+        pt.setY(point.y());
+
+        feature->SetGeometry(&pt);
+
+        mNodesLayer->CreateFeature(feature);
+
+        std::shared_ptr<Node> nd (new Node());
+        nd->set_xy(point.x(), point.y());
+        std::shared_ptr<NodeData> node (new NodeData(nd, this));
+        mNodes.push_back(node);
+
+        controller->addNode(mIndex, node);
+    }
+
+    return true;
 }
 
 int DisplaceModel::getVesselCount() const
@@ -344,7 +436,7 @@ QString DisplaceModel::getVesselId(int idx) const
 
 void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float course, float fuel, int state)
 {
-    VesselData *v = mVessels.at(idx);
+    std::shared_ptr<VesselData> v(mVessels.at(idx));
     v->mVessel->set_xy(x,y);
     v->mVessel->set_course(course);
     v->mVessel->set_cumfuelcons(fuel);
@@ -367,7 +459,7 @@ int DisplaceModel::getPopulationsCount() const
 
 HarbourStats DisplaceModel::retrieveHarbourIdxStatAtStep(int idx, int step)
 {
-    if (mLive || !mDb) {
+    if (mModelType != OfflineModelType || !mDb) {
         return HarbourStats(); //getHarboursStatAtStep(step, idx);
     }
 
@@ -539,7 +631,7 @@ bool DisplaceModel::loadNodes()
     fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord);
 
     // read harbour specific files
-    multimap<int, string> harbour_names = read_harbour_names(mName.toStdString(), mBasePath.toStdString());
+    multimap<int, string> harbour_names = read_harbour_names(mInputName.toStdString(), mBasePath.toStdString());
 
     // creation of a vector of nodes from coord
     // and check with the coord in input.
@@ -571,7 +663,7 @@ bool DisplaceModel::loadNodes()
 
                 cout << "load prices for port " << a_name << " which is point " << a_point << endl;
                 //int er = read_prices_per_harbour(a_point, a_quarter, prices, mName.toStdString());
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mName.toStdString(), mBasePath.toStdString());
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 cout << "....OK" << endl;
             }
@@ -580,7 +672,7 @@ bool DisplaceModel::loadNodes()
 
                 cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
                 //int er = read_prices_per_harbour(a_port, "quarter1", prices, mName.toStdString()); // delete later on when final parameterisation
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mName.toStdString(), mBasePath.toStdString());
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
 
             }
 
@@ -588,11 +680,11 @@ bool DisplaceModel::loadNodes()
             if (!binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
                                 "fuelprice_plus20percent"))
             {
-                read_fuel_prices_per_vsize(init_fuelprices, mName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
             }
             else
             {
-                read_fuel_prices_per_vsize(init_fuelprices, mName.toStdString(), mBasePath.toStdString());
+                read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
 
                 map<string,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -607,7 +699,7 @@ bool DisplaceModel::loadNodes()
 
             }
 
-            Harbour *h = new Harbour(i,
+            std::shared_ptr<Harbour> h (new Harbour(i,
                                        graph_coord_x[i],
                                        graph_coord_y[i],
                                        graph_coord_harbour[i],
@@ -619,25 +711,25 @@ bool DisplaceModel::loadNodes()
                                        //prices,
                                        fishprices_each_species_per_cat,
                                        init_fuelprices
-                                       );
-            HarbourData *hd = new HarbourData(h);
+                                       ));
+            std::shared_ptr<HarbourData> hd (new HarbourData(h));
             mHarbours.push_back(hd);
 
-            NodeData *n = new NodeData(h, this);
+            std::shared_ptr<NodeData> n (new NodeData(h, this));
             n->setHarbourId(mHarbours.size()-1);
             mNodes.push_back(n);
         }
         else
         {
-            Node * nd = new Node(i,
+            std::shared_ptr<Node> nd (new Node(i,
                                  graph_coord_x[i],
                                  graph_coord_y[i],
                                  graph_coord_harbour[i],
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
                                  nbpops,
-                                 NBSZGROUP);
-            NodeData *n = new NodeData(nd, this);
+                                 NBSZGROUP));
+            std::shared_ptr<NodeData> n(new NodeData(nd, this));
 
             mNodes.push_back(n);
 
@@ -695,18 +787,18 @@ bool DisplaceModel::loadVessels()
                           resttime_par1s, resttime_par2s, av_trip_duration,
                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
                           mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
-                          mName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+                          mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
 
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
-    multimap<string, int> fgrounds = read_fgrounds(a_quarter, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, int> harbours = read_harbours(a_quarter, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
-    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mName.toStdString(), mBasePath.toStdString());
-    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mInputName.toStdString(), mBasePath.toStdString());
 
     // debug
     if(fgrounds.size() != freq_fgrounds.size())
@@ -723,7 +815,7 @@ bool DisplaceModel::loadVessels()
     }
 
     // read nodes in polygons for area-based management
-    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mName.toStdString(), mBasePath.toStdString());
+    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
 
     // check
     //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -755,12 +847,12 @@ bool DisplaceModel::loadVessels()
         cout<<"create vessel " << i << endl;
         // read vessel and quarter specific multimap
         // quarter specific to capture a piece of seasonality in the fishnig activity
-        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
-        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
+        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
 
         //cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString());
-        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
-        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mName.toStdString(), mBasePath.toStdString());
+        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
+        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], mInputName.toStdString(), mBasePath.toStdString());
 
         // debug
         if(possible_metiers.size() != freq_possible_metiers.size())
@@ -799,7 +891,7 @@ bool DisplaceModel::loadVessels()
             cout << "then take node: " << start_harbour << endl;
         }
 
-        Vessel * v = new Vessel(mNodes.at(start_harbour)->mNode,
+        std::shared_ptr<Vessel> v (new Vessel(mNodes.at(start_harbour)->mNode.get(),
             i,
             vesselids[i],
             nbpops,
@@ -826,9 +918,9 @@ bool DisplaceModel::loadVessels()
             mult_fuelcons_when_fishing[i],
             mult_fuelcons_when_returning[i],
             mult_fuelcons_when_inactive[i]
-            );
+            ));
 
-        VesselData *vd = new VesselData(v);
+        std::shared_ptr<VesselData> vd (new VesselData(v));
         mVessels.push_back(vd);
 
         // some useful setters...
@@ -1079,20 +1171,20 @@ bool DisplaceModel::initBenthos()
 {
     QList<int> ids;
 
-    foreach (NodeData *nd, mNodes) {
+    foreach (std::shared_ptr<NodeData> nd, mNodes) {
         int bm = nd->get_marine_landscape();
-        Benthos *benthos = 0;
+        std::shared_ptr<Benthos> benthos;
 
-        QMap<int, Benthos *>::iterator it = mBenthosInfo.find(bm);
+        QMap<int, std::shared_ptr<Benthos> >::iterator it = mBenthosInfo.find(bm);
         if (it == mBenthosInfo.end()) {
-            benthos = new Benthos (bm);
+            benthos = std::shared_ptr<Benthos> (new Benthos (bm));
             ids.push_back(bm);
             mBenthosInfo.insert(bm, benthos);
         } else {
             benthos = it.value();
         }
 
-        benthos->appendNode (nd);
+        benthos->appendNode (nd.get());
     }
 
     qSort(ids);
@@ -1129,19 +1221,19 @@ bool DisplaceModel::initPopulations()
 bool DisplaceModel::initNations()
 {
     // nations are read from vessels.
-    QMultiMap<QString, VesselData *> nationSet;
-    foreach (VesselData *vessel, mVessels) {
+    QMultiMap<QString, std::shared_ptr<VesselData> > nationSet;
+    foreach (std::shared_ptr<VesselData> vessel, mVessels) {
         nationSet.insertMulti(QString::fromStdString(vessel->mVessel->get_nationality()), vessel);
     }
 
     mNations.clear();
     QList<QString> nationsName = nationSet.uniqueKeys();
     for (int i = 0; i < nationsName.size(); ++i) {
-        NationData data;
-        data.setName(nationsName[i]);
+        std::shared_ptr<NationData> data(new NationData());
+        data->setName(nationsName[i]);
 
-        QList<VesselData *>vessels = nationSet.values(nationsName[i]);
-        foreach (VesselData *vessel, vessels) {
+        QList<std::shared_ptr<VesselData> >vessels = nationSet.values(nationsName[i]);
+        foreach (std::shared_ptr<VesselData> vessel, vessels) {
             vessel->setNationality(i);
         }
         mNations.push_back(data);

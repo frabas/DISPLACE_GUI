@@ -119,6 +119,9 @@ QModelIndex PopulationEntityWithGroup::parent(const QModelIndex &parent) const
 
 QModelIndex PopulationEntityWithGroup::index(int row, int column, const QModelIndex &parent) const
 {
+    Q_UNUSED(column);
+    Q_UNUSED(row);
+    Q_UNUSED(parent);
     return QModelIndex();
 }
 
@@ -154,6 +157,9 @@ Qt::ItemFlags PopulationEntityWithGroup::flags(Qt::ItemFlags defflags, const QMo
 
 bool PopulationEntityWithGroup::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    Q_UNUSED(index);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
     return false;
 }
 

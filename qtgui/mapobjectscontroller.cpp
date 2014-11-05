@@ -71,89 +71,55 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 
-    std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Entities"));
-    std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Graph"));
-    mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(QObject::tr("Graph Edges"))));
+    mEntityLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Entities")).arg(model_n).toStdString()));
+    mGraphLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Graph")).arg(model_n).toStdString()));
+    mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(tr("#%1#Graph Edges")).arg(model_n)));
     mEdgesLayer[model_n]->setVisible(false);
 
-//    mShapefileLayer[model_n] = std::shared_ptr<qmapcontrol::LayerESRIShapefile> (new qmapcontrol::LayerESRIShapefile("Shapefile"));
-//    mShapefileLayer[model_n]->setVisible(true);
-
-    addStandardLayer(model_n, LayerEntities, mEntityLayer);
-    addStandardLayer(model_n, LayerGraph, mGraphLayer);
-//    addStandardLayer(model_n, LayerShapefile, mShapefileLayer[model_n]);
+    addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n]);
+    addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n]);
     addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer());
 
-    std::shared_ptr<qmapcontrol::LayerGeometry> popstatslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Abundance"));
-    addOutputLayer(model_n, OutLayerPopStats, popstatslayer);
+    mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Abundance")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n]);
 
-    std::shared_ptr<qmapcontrol::LayerGeometry> biomasslayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Biomass"));
-    addOutputLayer(model_n, OutLayerBiomass, biomasslayer);
+    mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Biomass")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n]);
 
-    std::shared_ptr<qmapcontrol::LayerGeometry> impactlayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Impact"));
-    addOutputLayer(model_n, OutLayerPopImpact, impactlayer);
+    mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Impact")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n] );
 
-    std::shared_ptr<qmapcontrol::LayerGeometry> cumftimelayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Fishing Effort"));
-    addOutputLayer(model_n, OutLayerCumFTime, cumftimelayer);
+    mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n]);
 
-    const QList<HarbourData *> &harbours = model->getHarboursList();
-    foreach (HarbourData *h, harbours) {
-        HarbourMapObject *obj = new HarbourMapObject(this, model, h);
+    const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
+    foreach (std::shared_ptr<HarbourData> h, harbours) {
+        HarbourMapObject *obj = new HarbourMapObject(this, model, h.get());
         mHarbourObjects[model_n].append(obj);
 
-        mEntityLayer->addGeometry(obj->getGeometryEntity());
+        mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }
 
-    const QList<NodeData *> &nodes = model->getNodesList();
-    foreach (NodeData *nd, nodes) {
+    const QList<std::shared_ptr<NodeData> > &nodes = model->getNodesList();
+    foreach (std::shared_ptr<NodeData> nd, nodes) {
         if (nd->get_harbour())
             continue;
-
-        NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
-        connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
-        mNodeObjects[model_n].append(obj);
-
-        mGraphLayer->addGeometry(obj->getGeometryEntity());
-
-        /* add here other roles */
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
-        mNodeObjects[model_n].append(obj);
-        popstatslayer->addGeometry(obj->getGeometryEntity());
-
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
-        mNodeObjects[model_n].append(obj);
-        cumftimelayer->addGeometry(obj->getGeometryEntity());
-
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
-        mNodeObjects[model_n].append(obj);
-        impactlayer->addGeometry(obj->getGeometryEntity());
-
-        obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
-        mNodeObjects[model_n].append(obj);
-        biomasslayer->addGeometry(obj->getGeometryEntity());
-
-        for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-            EdgeMapObject *edge = new EdgeMapObject(this, i, nd);
-
-            connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
-
-            mEdgesLayer[model_n]->addEdge(edge);
-        }
+        addNode(model_n, nd);
     }
 
-    const QList<VesselData *> &vessels = model->getVesselList();
-    foreach (VesselData *vsl, vessels) {
-        VesselMapObject *obj = new VesselMapObject(this,vsl);
+    const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
+    foreach (std::shared_ptr<VesselData> vsl, vessels) {
+        VesselMapObject *obj = new VesselMapObject(this,vsl.get());
         mVesselObjects[model_n].append(obj);
 
-        mEntityLayer->addGeometry(obj->getGeometryEntity());
+        mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }
 }
 
 void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-    const QList<VesselData *> &vessels = model->getVesselList();
-    foreach (VesselData *vsl, vessels) {
+    const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
+    foreach (std::shared_ptr<VesselData> vsl, vessels) {
         updateVesselPosition(model_n, vsl->mVessel->get_idx());
     }
 
@@ -206,6 +172,8 @@ void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Catego
         if (isModelActive(model))
             mShapefileLayers[model].layers[layer]->setVisible(visibility);
         break;
+    default:
+        throw std::runtime_error("Unhandled type in setLayerVisibility");
     }
 }
 
@@ -221,23 +189,12 @@ bool MapObjectsController::isLayerVisible(int model, ObjectTreeModel::Category t
         return mOutputLayers[model].isVisible(layer);
     case ObjectTreeModel::ShapefileLayers:
         return mShapefileLayers[model].isVisible(layer);
+    default:
+        break;
     }
 
     return false;
 }
-
-/*
-void MapObjectsController::setOutLayerVisibility(int model, MapObjectsController::OutLayerIds layer, bool visibility)
-{
-    mOutputLayers[model].setVisible(layer, visibility);
-    if (isModelActive(model))
-        mOutputLayers[model].layers[layer]->setVisible(visibility);
-}
-
-bool MapObjectsController::isOutLayerVisible(int model, OutLayerIds layer)
-{
-    return mModelVisibility[model] && mOutputLayers[model].isVisible(layer);
-}*/
 
 bool MapObjectsController::isModelActive(int model) const
 {
@@ -308,7 +265,13 @@ void MapObjectsController::delSelected(int model)
     case EdgeEditorMode:
         delSelectedEdges(model);
         break;
+    default:
+        break;
     }
+}
+
+void MapObjectsController::delAllNodes(int model)
+{
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
@@ -330,11 +293,46 @@ void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<Layer> l
     mShapefileLayers[model].add(layer, show);
 }
 
+void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
+{
+    NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
+    connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
+    mNodeObjects[model_n].append(obj);
+
+    mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity());
+
+    /* add here other roles */
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity());
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity());
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity());
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity());
+
+    for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+        EdgeMapObject *edge = new EdgeMapObject(this, i, nd.get());
+
+        connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
+
+        mEdgesLayer[model_n]->addEdge(edge);
+    }
+
+}
+
 void MapObjectsController::delSelectedEdges(int model)
 {
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
-        NodeData *nd = edge->node();
-        NodeData *tg = edge->target();
+        std::shared_ptr<NodeData> nd = edge->node();
+        std::shared_ptr<NodeData> tg = edge->target();
 
 //        int nodeid1 = nd->get_idx_node();
 

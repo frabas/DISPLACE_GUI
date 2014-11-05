@@ -12,3 +12,28 @@ CreateGraphDialog::~CreateGraphDialog()
 {
     delete ui;
 }
+
+double CreateGraphDialog::step() const
+{
+    return ui->distance->value();
+}
+
+double CreateGraphDialog::minLon() const
+{
+    return ui->long1->value();
+}
+
+double CreateGraphDialog::maxLon() const
+{
+    return ui->long2->value();
+}
+
+double CreateGraphDialog::minLat() const
+{
+    return ui->lat1->value();
+}
+
+double CreateGraphDialog::maxLat() const
+{
+    return ui->lat2->value();
+}

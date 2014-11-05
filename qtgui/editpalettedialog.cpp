@@ -14,8 +14,17 @@
 class PaletteModel : public QAbstractItemModel
 {
 public:
-    PaletteModel (Palette *palette)
-        : mPalette(palette) {
+    explicit PaletteModel (Palette *palette, QObject * parent = 0)
+        : QAbstractItemModel(parent),
+          values(), colors()
+    {
+        Palette::Iterator it = palette->begin();
+        while (it != palette->end()) {
+            values.push_back(it.key());
+            colors.push_back(*it);
+
+            ++it;
+        }
     }
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const {
@@ -30,32 +39,85 @@ public:
 
     int rowCount(const QModelIndex &parent) const {
         Q_UNUSED(parent);
-        return mPalette->colorCount();
+        return values.size();
     }
     int columnCount(const QModelIndex &parent) const {
         Q_UNUSED(parent);
-        return 3;
+        return 2;
     }
 
     QVariant data(const QModelIndex &index, int role) const {
         switch (index.column()) {
-        case 0:     // From
+        case 0:
             if (role != Qt::DisplayRole) return QVariant::Invalid;
-            if (index.row() == 0)       // first row
-                return QString(tr("Less than"));
-            return QString::number(mPalette->getMin() + (index.row()-1) * mPalette->getStep());
+            return values[index.row()];
         case 1:
-            if (role != Qt::DisplayRole) return QVariant::Invalid;
-            if (index.row() == mPalette->colorCount()-1)
-                return QString(tr("More than"));
-            return QString::number(mPalette->getMin() + index.row() * mPalette->getStep());
-        case 2:
             if (role != Qt::BackgroundColorRole && role != Qt::ForegroundRole) {
                 return QVariant::Invalid;
             }
-            return QVariant (mPalette->colorForIndex(index.row()));
+            return QVariant (colors[index.row()]);
         }
         return QVariant::Invalid;
+    }
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role) {
+        bool ok;
+        double v;
+        switch (index.column()) {
+        case 0:
+            if (role != Qt::EditRole) return false;
+            v = value.toDouble(&ok);
+            if (!ok)
+                return false;
+
+            if (index.row() < values.size()-1 && v >= values[index.row() +1])
+                return false;
+            if (index.row() > 0 && v <= values[index.row() -1])
+                return false;
+
+            values[index.row()] = v;
+            emit dataChanged(index,index);
+            return true;
+        case 1:
+            if (role != Qt::BackgroundColorRole && role != Qt::ForegroundRole) {
+                return false;
+            }
+            colors[index.row()] = value.value<QColor>();
+            emit dataChanged(index,index);
+            return true;
+        }
+        return false;
+    }
+
+    bool insertRow(int row, const QModelIndex &parent) {
+        Q_UNUSED(parent);
+        double val = ((row > 0 ? values[row-1] : 0.0) +
+                      (row < values.size() ? values[row] : (row > 0 ? 2*values[row-1] : 0.0))) /2;
+
+        values.insert(row,val);
+        colors.insert(row, QColor());
+
+        return true;
+    }
+
+    bool removeRow(int row, const QModelIndex &parent) {
+        Q_UNUSED(parent);
+        values.removeAt(row);
+        colors.removeAt(row);
+        return true;
+    }
+
+    Qt::ItemFlags flags(const QModelIndex &index) const {
+        if (index.column() == 0)
+            return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+        return QAbstractItemModel::flags(index);
+    }
+
+    void update(Palette *palette) {
+        palette->clear();
+        for (int i = 0; i < values.size(); ++i) {
+            palette->addColor(values[i],colors[i]);
+        }
     }
 
     void refresh() {
@@ -64,7 +126,8 @@ public:
     }
 
 private:
-    Palette *mPalette;
+    QList<double> values;
+    QList<QColor> colors;
 };
 
 
@@ -159,83 +222,30 @@ void EditPaletteDialog::linkPalette(Palette *palette)
 void EditPaletteDialog::updateControlValues()
 {
     mLock = true;
-    ui->minVal->setValue(mPalette->getMin());
-    ui->maxVal->setValue(mPalette->getMax());
-    ui->step->setValue(mPalette->getStep());
-    ui->nrCol->setValue(mPalette->colorCount());
+//    ui->minVal->setValue(mPalette->getMin());
+//    ui->maxVal->setValue(mPalette->getMax());
+//    ui->step->setValue(mPalette->getStep());
+//    ui->nrCol->setValue(mPalette->colorCount());
     ui->name->setText(mPalette->name());
     mLock = false;
 }
 
 void EditPaletteDialog::on_palette_doubleClicked(const QModelIndex &index)
 {
-    if (index.column() != 2) return;
+    if (index.column() != 1) return;
 
     QString s1 = ui->palette->model()->data(ui->palette->model()->index(index.row(), 0)).toString();
-    QString s2 = ui->palette->model()->data(ui->palette->model()->index(index.row(), 1)).toString();
 
-    QString tit = QString(tr("Select color for values '%1' and '%2'"))
-            .arg(s1).arg(s2);
+    QString tit = QString(tr("Select color for values under '%1'"))
+            .arg(s1);
     QColor col = ui->palette->model()->data(index, Qt::BackgroundColorRole).value<QColor>();
     col = QColorDialog::getColor(col, this, tit);
 
     if (col.isValid()) {
-        mPalette->setColor(index.row(), col);
-        mModel->refresh();
+        ui->palette->model()->setData(index, col, Qt::BackgroundColorRole);
 
         emit paletteChanged();
     }
-}
-
-void EditPaletteDialog::on_minVal_valueChanged(double arg1)
-{
-    if (mLock) return;
-    mLock = true;
-
-    mPalette->setMin(arg1);
-    ui->step->setValue(mPalette->getStep());
-    ui->nrCol->setValue(mPalette->colorCount());
-    mModel->refresh();
-    emit paletteChanged();
-    mLock = false;
-}
-
-void EditPaletteDialog::on_maxVal_valueChanged(double arg1)
-{
-    if (mLock) return;
-    mLock = true;
-
-    mPalette->setMax(arg1);
-    ui->step->setValue(mPalette->getStep());
-    ui->nrCol->setValue(mPalette->colorCount());
-    mModel->refresh();
-    emit paletteChanged();
-
-    mLock = false;
-}
-
-void EditPaletteDialog::on_nrCol_valueChanged(int arg1)
-{
-    if (mLock) return;
-    mLock = true;
-
-    mPalette->setNumColor(arg1);
-    ui->step->setValue(mPalette->getStep());
-    mModel->refresh();
-    emit paletteChanged();
-    mLock = false;
-}
-
-void EditPaletteDialog::on_step_valueChanged(double arg1)
-{
-    if (mLock) return;
-    mLock = true;
-
-    mPalette->setStep(arg1);
-    ui->nrCol->setValue(mPalette->colorCount());
-    mModel->refresh();
-    emit paletteChanged();
-    mLock = false;
 }
 
 void EditPaletteDialog::on_specialPalette_doubleClicked(const QModelIndex &index)
@@ -317,4 +327,28 @@ void EditPaletteDialog::on_btSave_clicked()
 void EditPaletteDialog::on_name_textChanged(const QString &arg1)
 {
     mPalette->setName(arg1);
+}
+
+void EditPaletteDialog::on_add_clicked()
+{
+    QModelIndex i = ui->palette->currentIndex();
+    int p = (i.isValid() ? i.row() : mModel->rowCount(QModelIndex()));
+    mModel->insertRow(p, QModelIndex());
+    mModel->refresh();
+}
+
+void EditPaletteDialog::on_remove_clicked()
+{
+    QModelIndex i = ui->palette->currentIndex();
+    if (!i.isValid())
+        return;
+
+    mModel->removeRow(i.row(), QModelIndex());
+    mModel->refresh();
+}
+
+void EditPaletteDialog::on_pushButton_clicked()
+{
+    mModel->update(mPalette);
+    QDialog::accept();
 }

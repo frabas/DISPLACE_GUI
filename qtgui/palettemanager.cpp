@@ -26,21 +26,6 @@ Palette::~Palette()
 {
 }
 
-void Palette::setNumColor(int i)
-{
-    while (m_palette.size() < i)
-        m_palette.push_back(QColor());
-    while (m_palette.size() > i)
-        m_palette.pop_back();
-}
-
-void Palette::setStep(float s)
-{
-    int n = 2 + std::ceil((m_max - m_min) / s);
-    qDebug() << "Set" << m_min << m_max << s << n;
-    setNumColor(n);
-}
-
 void Palette::setNumSpecialColor (int i)
 {
     while (mSpecials.size() < i)
@@ -64,23 +49,22 @@ bool Palette::loadFromFile(QIODevice *device)
     PaletteRole r = static_cast<PaletteRole> (root.attribute("role").toInt(&ok));
     if (!ok) return false;
 
-    double m = root.attribute("min").toFloat(&ok);
-    if (!ok) return false;
-
-    double M = root.attribute("max").toFloat(&ok);
-    if (!ok) return false;
-
-    QVector<QColor> clist, slist;
+    QVector<QColor> slist;
+    Container cols;
 
     QDomNode nd = root.firstChild();
     while (!nd.isNull()) {
         QDomElement col = nd.toElement();
         if (col.tagName() == "color") {
+            QString val = col.attribute("value");
+            double dv = val.toDouble(&ok);
+            if (!ok) return false;
+
             QString cs = col.attribute("rgb");
             QStringList components = cs.split(QChar(','));
             if (components.size() == 3) {
                 QColor color (components[0].toInt(), components[1].toInt(), components[2].toInt());
-                clist.push_back(color);
+                cols.insert(dv,color);
             } else {
                 return false;
             }
@@ -102,10 +86,8 @@ bool Palette::loadFromFile(QIODevice *device)
 
     mRole = r;
     m_name = n;
-    m_palette = clist;
+    m_palette = cols;
     mSpecials = slist;
-    m_min = m;
-    m_max = M;
     return true;
 }
 
@@ -116,17 +98,17 @@ bool Palette::saveToFile(QIODevice *device)
     root.setAttribute("type", "displace");
     root.setAttribute("name", m_name);
     root.setAttribute("role", static_cast<int>(mRole));
-    root.setAttribute("min", m_min);
-    root.setAttribute("max", m_max);
     doc.appendChild(root);
 
-    foreach (QColor col, m_palette) {
+    Iterator it = begin();
+    while (it != end()) {
         QDomElement ce = doc.createElement("color");
+        ce.setAttribute("value", it.key());
         ce.setAttribute("rgb",
                         QString("%1,%2,%3")
-                        .arg(col.red())
-                        .arg(col.green())
-                        .arg(col.blue()));
+                        .arg(it->red())
+                        .arg(it->green())
+                        .arg(it->blue()));
 
         root.appendChild(ce);
     }

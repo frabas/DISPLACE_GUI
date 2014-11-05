@@ -58,6 +58,12 @@ void MapObjectsController::setModel(int model_n, std::shared_ptr<DisplaceModel> 
     mModels[model_n] = model;
 }
 
+void MapObjectsController::removeModel(int model_n)
+{
+    mModels[model_n] = std::shared_ptr<DisplaceModel>();
+    // maybe we should reload everything...?
+}
+
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
     mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());

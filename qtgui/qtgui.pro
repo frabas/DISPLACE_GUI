@@ -93,7 +93,8 @@ SOURCES += \
     mapobjects/edgemapobject.cpp \
     mapobjects/edgelayer.cpp \
     utils/memoryinfo.cpp \
-    creategraphdialog.cpp
+    creategraphdialog.cpp \
+    graphbuilder.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -150,7 +151,8 @@ HEADERS += \
     mapobjects/edgemapobject.h \
     mapobjects/edgelayer.h \
     utils/memoryinfo.h \
-    creategraphdialog.h
+    creategraphdialog.h \
+    graphbuilder.h
 
 RESOURCES += \
     qtgui.qrc

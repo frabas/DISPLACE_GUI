@@ -32,5 +32,6 @@
         <file>icons/info.png</file>
         <file>icons/node.png</file>
         <file>icons/fish.png</file>
+        <file>icons/remove.png</file>
     </qresource>
 </RCC>

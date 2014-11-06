@@ -578,7 +578,7 @@ void DisplaceModel::setInterestingHarb(int n)
 {
     if (!mInterestingHarb.contains(n))
         mInterestingHarb.append(n);
-        qSort(mInterestingHarb);
+    qSort(mInterestingHarb);
 }
 
 void DisplaceModel::remInterestingHarb(int n)
@@ -1268,7 +1268,7 @@ bool DisplaceModel::initNations()
         }
         mNations.push_back(data);
 
-        mInterestingNations.push_back(i);
+        setInterestingNations(i);
     }
 
     return true;

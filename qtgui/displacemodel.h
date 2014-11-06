@@ -56,6 +56,7 @@ public:
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();
+    bool saveAs(const QString &path);
     bool save();
 
     /** \brief Signals the simulation has ended. Flush all buffers */
@@ -277,6 +278,8 @@ protected:
     bool loadHistoricalStatsFromDb();
 
     void checkStatsCollection(int tstep);
+
+    bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
 
 signals:
     void parseOutput(QString, int);

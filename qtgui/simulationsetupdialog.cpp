@@ -6,6 +6,8 @@ SimulationSetupDialog::SimulationSetupDialog(QWidget *parent) :
     ui(new Ui::SimulationSetupDialog)
 {
     ui->setupUi(this);
+
+    ui->outName->setReadOnly(true);
 }
 
 SimulationSetupDialog::~SimulationSetupDialog()

@@ -79,20 +79,13 @@ bool DisplaceModel::load(QString path)
     if (mModelType != EmptyModelType)
         return false;
 
-    QRegExp regexp("(.*)/simusspe_([a-zA-Z0-9]+)/([a-zA-Z09]+).dat");
-
-    // string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
     qDebug() << "Loading model from folder" << path;
 
-    if (regexp.indexIn(path) == -1) {
+    if (!parse(path, &mBasePath, &mInputName, &mOutputName)) {
         mLastError = tr("Cannot parse path for base name and simulation name.");
         return false;
     }
-
     mFullPath = path;
-    mBasePath = regexp.cap(1);
-    mInputName = regexp.cap(2);
-    mOutputName = regexp.cap(3);
 
     qDebug() << "Loading: " << mBasePath << mInputName << mOutputName;
 
@@ -117,6 +110,23 @@ bool DisplaceModel::load(QString path)
     }
 
     mModelType = LiveModelType;
+    return true;
+}
+
+bool DisplaceModel::parse(const QString &path, QString *basepath, QString *inputname, QString *outputname)
+{
+    // parse this form:  inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput+".dat";
+
+    QRegExp regexp("(.*)/simusspe_([a-zA-Z0-9]+)/([a-zA-Z09]+).dat");
+
+    if (regexp.indexIn(path) == -1) {
+        return false;
+    }
+
+    *basepath = regexp.cap(1);
+    *inputname = regexp.cap(2);
+    *outputname = regexp.cap(3);
+
     return true;
 }
 
@@ -204,6 +214,15 @@ bool DisplaceModel::prepareDatabaseForSimulation()
     }
 
     return true;
+}
+
+bool DisplaceModel::saveAs(const QString &path)
+{
+    if (!parse(path, &mBasePath, &mInputName, &mOutputName))
+        return false;
+
+    mFullPath = path;
+    return save();
 }
 
 bool DisplaceModel::save()

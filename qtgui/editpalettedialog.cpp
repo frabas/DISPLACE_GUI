@@ -18,6 +18,13 @@ public:
         : QAbstractItemModel(parent),
           values(), colors()
     {
+        reread(palette);
+    }
+
+    void reread(Palette *palette) {
+        beginResetModel();
+        values.clear();
+        colors.clear();
         Palette::Iterator it = palette->begin();
         while (it != palette->end()) {
             values.push_back(it.key());
@@ -25,6 +32,7 @@ public:
 
             ++it;
         }
+        endResetModel();
     }
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const {
@@ -193,8 +201,7 @@ QString EditPaletteDialog::mFileFilter = QT_TR_NOOP("Palette files (*.p2c);;All 
 EditPaletteDialog::EditPaletteDialog(QWidget *parent)
     : QDialog(parent),
       ui(new Ui::EditPaletteDialog),
-      mPalette(0), mModel(0),
-      mLock(false)
+      mPalette(0), mModel(0)
 {
     ui->setupUi(this);
 }
@@ -221,13 +228,7 @@ void EditPaletteDialog::linkPalette(Palette *palette)
 
 void EditPaletteDialog::updateControlValues()
 {
-    mLock = true;
-//    ui->minVal->setValue(mPalette->getMin());
-//    ui->maxVal->setValue(mPalette->getMax());
-//    ui->step->setValue(mPalette->getStep());
-//    ui->nrCol->setValue(mPalette->colorCount());
     ui->name->setText(mPalette->name());
-    mLock = false;
 }
 
 void EditPaletteDialog::on_palette_doubleClicked(const QModelIndex &index)
@@ -287,9 +288,11 @@ void EditPaletteDialog::on_btLoad_clicked()
             return;
         }
 
-        mModel->refresh();
+        mModel->reread(mPalette);
         mSpecialModel->refresh();
         updateControlValues();
+
+        emit paletteChanged();
 
         QFileInfo info(fn);
         sets.setValue("palettedir", info.absolutePath());

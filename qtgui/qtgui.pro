@@ -162,4 +162,5 @@ OTHER_FILES += \
     ../docs/output_fileformats.txt \
     palettes/iso1996_2.p2c \
     ../docs/database.txt \
-    ../docs/dbstruct.sh
+    ../docs/dbstruct.sh \
+    palettes/pop_colors.p2c

@@ -13,8 +13,7 @@ StatsController::StatsController(QObject *parent)
       mSelectedNationsStat(Catches),
       mLastModel(0)
 {
-    QFile file (":/palettes/iso1996_2.p2c");
-    mPalette.loadFromFile(&file);
+    mPalette = PaletteManager::instance()->palette(PopulationRole);
 }
 
 void StatsController::setPopulationPlot(QCustomPlot *plot)

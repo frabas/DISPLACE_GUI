@@ -181,7 +181,8 @@ public:
     bool isModelActive (int model) const;
 
     const Palette &getPalette(int model, PaletteRole n) const {
-        return mPaletteManager[model]->palette(n);
+        Q_UNUSED(model);
+        return PaletteManager::instance()->palette(n);
     }
     void setPalette (int model, PaletteRole n, const Palette &palette);
 
@@ -235,7 +236,7 @@ private:
     QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
     QList<EdgeMapObject *> mEdgeObjects[MAX_MODELS];
 
-    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
+//    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
 
     /* Layers and adapters commons to all models */
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<palette role="2" type="displace" name="POP_COLORS">
+<color value="0" rgb="153,0,0"/>
+<color value="1" rgb="83,0,93"/>
+<color value="2" rgb="0,40,86"/>
+<color value="3" rgb="0,65,107"/>
+<color value="4" rgb="0,0,136"/>
+<color value="5" rgb="36,77,12"/>
+<color value="6" rgb="68,89,0"/>
+<color value="7" rgb="80,80,30"/>
+<color value="8" rgb="121,112,0"/>
+<color value="9" rgb="110,71,0"/>
+<color value="10" rgb="86,53,13"/>
+<color value="11" rgb="196,0,38"/>
+<color value="12" rgb="129,84,144"/>
+<color value="13" rgb="0,61,132"/>
+<color value="14" rgb="0,99,164"/>
+<color value="15" rgb="0,0,170"/>
+<color value="16" rgb="50,108,17"/>
+<color value="17" rgb="95,125,0"/>
+<color value="18" rgb="102,102,51"/>
+<color value="19" rgb="170,157,0"/>
+<color value="21" rgb="154,100,0"/>
+<color value="22" rgb="110,74,32"/>
+<color value="23" rgb="255,102,102"/>
+<color value="24" rgb="165,134,179"/>
+<color value="25" rgb="92,106,166"/>
+<color value="26" rgb="89,132,189"/>
+<color value="27" rgb="0,0,255"/>
+<color value="28" rgb="77,166,25"/>
+<color value="29" rgb="146,192,0"/>
+<color value="30" rgb="153,153,102"/>
+<special rgb="0,255,255"/>
+</palette>

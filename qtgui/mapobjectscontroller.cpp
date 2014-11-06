@@ -26,7 +26,7 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
-      mPaletteManager(),
+//      mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
@@ -66,13 +66,12 @@ void MapObjectsController::removeModel(int model_n)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
-    QFile pf(":/palettes/iso1996_2.p2c");
-    Palette p;
-    p.loadFromFile(&pf);
+//    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
 
-    for (int i = 0; i < (int)LastRole; ++i)
-        mPaletteManager[model_n]->setPalette((PaletteRole)i, p);
+//    std::shared_ptr<Palette> p = PaletteManager::instance()->palette(PopulationRole);
+
+//    for (int i = 0; i < (int)LastRole; ++i)
+//        mPaletteManager[model_n]->setPalette((PaletteRole)i, *p);
 
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
@@ -209,7 +208,8 @@ bool MapObjectsController::isModelActive(int model) const
 
 void MapObjectsController::setPalette(int model, PaletteRole n, const Palette &palette)
 {
-    mPaletteManager[model]->setPalette(n, palette);
+    Q_UNUSED(model);
+    PaletteManager::instance()->setPalette(n, palette);
 }
 
 void MapObjectsController::forceRedraw()

@@ -424,6 +424,9 @@ void MainWindow::on_cmdStop_clicked()
 
 void MainWindow::on_actionScenario_triggered()
 {
+    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+        return;
+
     if (currentModel) {
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
@@ -436,17 +439,19 @@ void MainWindow::on_actionScenario_triggered()
                 currentModel->setScenario(dlg.getScenario());
                 bool ok;
                 if (dlg.isRenamed()) {
-                    ok = currentModel->saveAs(dlg.getScenarioPath());
+                    ok = currentModel->saveScenarioAs(dlg.getScenarioPath());
                 } else {
-                    ok = currentModel->save();
+                    ok = currentModel->saveScenario();
                 }
 
                 if (ok) {
                     QMessageBox::information(this, tr("Model saved"),
                                              QString(tr("The model %1 has been saved successfully.")).arg(currentModel->inputName()));
                 } else {
-                    QMessageBox::warning(this, tr("Load failed"),
-                                         QString(tr("There was an error saving the model %1").arg(currentModel->fullpath())));
+                    QMessageBox::warning(this, tr("Save failed"),
+                                         QString(tr("There was an error saving the model %1: %2"))
+                                         .arg(currentModel->fullpath())
+                                         .arg(currentModel->getLastError()));
                     return;
                 }
 
@@ -465,6 +470,9 @@ void MainWindow::on_actionScenario_triggered()
 
 void MainWindow::on_actionConfiguration_triggered()
 {
+    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+        return;
+
     if (currentModel) {
         Config c = currentModel->config();
         ConfigDialog dlg (currentModel.get(), this);
@@ -477,10 +485,19 @@ void MainWindow::on_actionConfiguration_triggered()
             }
 
             currentModel->setConfig(c);
+            if (!currentModel->saveConfig()) {
+                QMessageBox::warning(this, tr("Save failed"),
+                                     QString(tr("There was an error saving the Config file for model %1: %2"))
+                                             .arg(currentModel->fullpath())
+                                             .arg(currentModel->getLastError())
+                                     );
+                return;
+            }
         }
     }
 }
 
+#if 0
 void MainWindow::on_actionSave_triggered()
 {
     if (models[0] && models[0]->save()) {
@@ -493,6 +510,7 @@ void MainWindow::on_actionSave_triggered()
         return;
     }
 }
+#endif
 
 void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 {

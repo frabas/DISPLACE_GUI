@@ -114,13 +114,15 @@ void Scenario::setGraph_res(double value)
     graph_res = value;
 }
 
-bool Scenario::save(QString path, QString modelname, QString outputname)
+bool Scenario::save(QString path, QString modelname, QString outputname, QString *error)
 {
     QString realpath = path + "/simusspe_" + modelname +"/" + outputname + ".dat";
     QFile file (realpath);
 
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::WriteOnly)) {
+        if (error) *error = file.errorString();
         return false;
+    }
 
     QTextStream stream (&file);
 

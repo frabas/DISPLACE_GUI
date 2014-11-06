@@ -81,13 +81,17 @@ void Config::setSzGroups(int value)
     szGroups = value;
 }
 
-bool Config::save(QString path, QString modelname, QString outputname)
+bool Config::save(QString path, QString modelname, QString outputname, QString *error)
 {
+    Q_UNUSED(outputname);
+
     QString realpath = path + "/simusspe_" + modelname +"/config.dat";
     QFile file (realpath);
 
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::WriteOnly)) {
+        if (error) *error = file.errorString();
         return false;
+    }
 
     QTextStream stream (&file);
 

@@ -216,21 +216,33 @@ bool DisplaceModel::prepareDatabaseForSimulation()
     return true;
 }
 
-bool DisplaceModel::saveAs(const QString &path)
+bool DisplaceModel::saveScenarioAs(const QString &path)
 {
     if (!parse(path, &mBasePath, &mInputName, &mOutputName))
         return false;
 
     mFullPath = path;
-    return save();
+    return saveScenario();
 }
 
-bool DisplaceModel::save()
+bool DisplaceModel::saveScenario()
 {
-    if (!mScenario.save(mBasePath, mInputName, mOutputName))
+    QString error;
+    if (!mScenario.save(mBasePath, mInputName, mOutputName, &error)) {
+        mLastError = error;
         return false;
-    if (!mConfig.save(mBasePath, mInputName, mOutputName))
+    }
+
+    return true;
+}
+
+bool DisplaceModel::saveConfig()
+{
+    QString error;
+    if (!mConfig.save(mBasePath, mInputName, mOutputName, &error)) {
+        mLastError = error;
         return false;
+    }
 
     return true;
 }

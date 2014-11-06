@@ -20,7 +20,7 @@ public:
 public:
     Config();
 
-    bool save (QString path, QString modelname, QString outputname);
+    bool save (QString path, QString modelname, QString outputname, QString *error);
 
     static Config readFromFile (QString path, QString modelname, QString outputname);
 

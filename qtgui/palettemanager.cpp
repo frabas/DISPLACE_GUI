@@ -111,6 +111,7 @@ bool Palette::saveToFile(QIODevice *device)
                         .arg(it->blue()));
 
         root.appendChild(ce);
+        ++it;
     }
     foreach (QColor col, mSpecials) {
         QDomElement ce = doc.createElement("special");

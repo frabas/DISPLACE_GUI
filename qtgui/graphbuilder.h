@@ -19,14 +19,12 @@ public:
         mStep = distance;
     }
 
-    void setLimits (double lonMin, double lonMax, double latMin, double latMax) {
-        mLatMin = std::min(latMin, latMax);
-        mLatMax = std::max(latMin, latMax);
-        mLonMin = std::min(lonMin, lonMax);
-        mLonMax = std::max(lonMin, lonMax);
-    }
+    void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
 
     QList<QPointF> buildGraph();
+
+    static void pointSumWithBearing (const QPointF &p1, double dist, double bearing, QPointF &p2);
+    static const double earthRadius;
 
 private:
     Type mType;

@@ -915,12 +915,17 @@ void MainWindow::on_actionCreate_Graph_triggered()
         return;
 
     CreateGraphDialog dlg(this);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder gb;
         gb.setType(GraphBuilder::Hex);
         gb.setDistance(dlg.step() * 1000);
         gb.setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+
+        QString s = dlg.getSelectedShapefile();
+        if (!s.isEmpty())
+            gb.setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
 
         QList<QPointF> l = gb.buildGraph();
 

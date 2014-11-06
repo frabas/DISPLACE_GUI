@@ -20,6 +20,11 @@ void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double
     mLonMax = std::max(lonMin, lonMax) * M_PI / 180.0;
 }
 
+void GraphBuilder::setShapefile(std::shared_ptr<OGRDataSource> src)
+{
+    mShapefile = src;
+}
+
 QList<QPointF> GraphBuilder::buildGraph()
 {
     QList<QPointF> res;
@@ -40,7 +45,24 @@ QList<QPointF> GraphBuilder::buildGraph()
 
         int nc = 0;
         while (p1.x() <= mLonMax) {
-            res.append(QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI));
+
+            bool isFiltered = false;
+            if (mShapefile.get()) {
+                OGRPoint point (p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
+                for (int lr = 0; lr < mShapefile->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefile->GetLayer(lr);
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+
+                    layer->ResetReading();
+                    if (layer->GetNextFeature() != 0) {
+                        isFiltered = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isFiltered)
+                res.append(QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI));
             pointSumWithBearing(p1, mStep, M_PI_2, p2);
             p1 = p2;
 

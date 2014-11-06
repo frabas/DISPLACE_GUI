@@ -20,6 +20,9 @@ public:
     double minLat() const;
     double maxLon() const;
     double maxLat() const;
+
+    void setShapefileList(QStringList list);
+    QString getSelectedShapefile() const ;
 private:
     Ui::CreateGraphDialog *ui;
 };

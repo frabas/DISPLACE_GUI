@@ -4,6 +4,9 @@
 #include <QList>
 #include <QPointF>
 
+#include <memory>
+#include <gdal/ogrsf_frmts.h>
+
 class GraphBuilder
 {
 public:
@@ -20,6 +23,7 @@ public:
     }
 
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
+    void setShapefile (std::shared_ptr<OGRDataSource> src);
 
     QList<QPointF> buildGraph();
 
@@ -30,6 +34,8 @@ private:
     Type mType;
     double mStep;
     double mLatMin, mLatMax, mLonMin, mLonMax;
+
+    std::shared_ptr<OGRDataSource> mShapefile;
 };
 
 #endif // GRAPHBUILDER_H

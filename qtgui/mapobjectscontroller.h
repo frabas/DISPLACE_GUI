@@ -10,6 +10,8 @@
 #include <palettemanager.h>
 #include <objecttreemodel.h>
 
+#include <gdal/ogrsf_frmts.h>
+
 #include <QMapControl/Layer.h>
 #include <QMapControl/Geometry.h>
 
@@ -193,6 +195,8 @@ public:
     /* Editor functions */
 
     bool importShapefile(int model_idx, QString path, QString layername);
+    QStringList getShapefilesList(int model_idx) const;
+    std::shared_ptr<OGRDataSource> getShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);
 
@@ -207,8 +211,7 @@ public:
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
-    void addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show = true);
-
+    void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show = true);
 
     void delSelectedEdges(int model);
 protected slots:
@@ -257,6 +260,7 @@ private:
 
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
+    QVector<QList<std::shared_ptr<OGRDataSource> > > mShapefiles;
     QVector<LayerVarListImpl> mShapefileLayers;
 
     EditorModes mEditorMode;

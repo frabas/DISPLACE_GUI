@@ -37,3 +37,13 @@ double CreateGraphDialog::maxLat() const
 {
     return ui->lat2->value();
 }
+
+void CreateGraphDialog::setShapefileList(QStringList list)
+{
+    ui->shapefile->addItems(list);
+}
+
+QString CreateGraphDialog::getSelectedShapefile() const
+{
+    return ui->shapefile->currentText();
+}

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>404</width>
     <height>300</height>
    </rect>
   </property>
@@ -14,38 +14,18 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_7">
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>Distance</string>
+      <string>Features Shapefile</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QDoubleSpinBox" name="lat1">
-     <property name="minimum">
-      <double>-90.000000000000000</double>
+   <item row="1" column="2">
+    <widget class="QDoubleSpinBox" name="long2">
+     <property name="decimals">
+      <number>6</number>
      </property>
-     <property name="maximum">
-      <double>90.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="2">
-    <widget class="QDoubleSpinBox" name="long1">
      <property name="minimum">
       <double>-180.000000000000000</double>
      </property>
@@ -54,7 +34,14 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2" colspan="3">
+   <item row="0" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Long:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="cmdCancel">
@@ -82,6 +69,26 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Lat:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QDoubleSpinBox" name="long1">
+     <property name="decimals">
+      <number>6</number>
+     </property>
+     <property name="minimum">
+      <double>-180.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>180.000000000000000</double>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -89,37 +96,16 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
-    <widget class="QDoubleSpinBox" name="lat2">
+   <item row="0" column="4">
+    <widget class="QDoubleSpinBox" name="lat1">
+     <property name="decimals">
+      <number>6</number>
+     </property>
      <property name="minimum">
       <double>-90.000000000000000</double>
      </property>
      <property name="maximum">
       <double>90.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Long:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Long:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QDoubleSpinBox" name="long2">
-     <property name="minimum">
-      <double>-180.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>180.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -130,45 +116,100 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Long:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QDoubleSpinBox" name="lat2">
+     <property name="decimals">
+      <number>6</number>
+     </property>
+     <property name="minimum">
+      <double>-90.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>90.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2" colspan="3">
+    <widget class="QComboBox" name="shapefile"/>
+   </item>
+   <item row="3" column="0" colspan="5">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Shape</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="hex">
+        <property name="text">
+         <string>Hex</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="2" colspan="3">
     <widget class="QDoubleSpinBox" name="distance">
      <property name="suffix">
       <string> km</string>
      </property>
+     <property name="minimum">
+      <double>0.500000000000000</double>
+     </property>
      <property name="maximum">
       <double>1000.000000000000000</double>
      </property>
+     <property name="singleStep">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>10.000000000000000</double>
+     </property>
     </widget>
    </item>
-   <item row="2" column="3">
-    <widget class="QRadioButton" name="hex">
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Hex</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Distance</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Lat:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Features Shapefile</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2" colspan="3">
-    <widget class="QComboBox" name="shapefile"/>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>long1</tabstop>
+  <tabstop>lat1</tabstop>
+  <tabstop>long2</tabstop>
+  <tabstop>lat2</tabstop>
+  <tabstop>distance</tabstop>
+  <tabstop>hex</tabstop>
+  <tabstop>shapefile</tabstop>
+  <tabstop>cmdCancel</tabstop>
+  <tabstop>cmdOk</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

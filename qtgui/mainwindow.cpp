@@ -915,7 +915,10 @@ void MainWindow::on_actionCreate_Graph_triggered()
         return;
 
     CreateGraphDialog dlg(this);
-    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+    QStringList list;
+    list << QString();
+    list << mMapController->getShapefilesList(currentModelIdx);
+    dlg.setShapefileList(list);
 
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder gb;

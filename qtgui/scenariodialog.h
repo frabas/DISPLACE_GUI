@@ -21,8 +21,13 @@ public:
 
     const Scenario &getScenario() const { return mScen; }
 
+    QString getScenarioPath() const;
+    void setScenarioPath(const QString &value);
+    bool isRenamed() const { return mRenamed; }
+
 private slots:
     void on_ScenarioDialog_accepted();
+    void on_rename_clicked();
 
 private:
     void setDynPop(const QStringList &text);
@@ -34,6 +39,8 @@ private:
     Scenario mScen;
     QList<QCheckBox *> optPop;
     QList<QCheckBox *> optAll;
+    QString mScenarioPath;
+    bool mRenamed;
 };
 
 #endif // SCENARIODIALOG_H

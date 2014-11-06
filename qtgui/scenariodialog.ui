@@ -7,21 +7,21 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>325</height>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Scenario</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QGroupBox" name="group_dyn_alloc_sce">
-     <property name="title">
-      <string>Dyn Alloc Sce</string>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>N Row Graph</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="10" column="1" colspan="2">
     <widget class="QDoubleSpinBox" name="gridres">
      <property name="suffix">
       <string> km</string>
@@ -34,90 +34,87 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="9" column="1" colspan="2">
     <widget class="QSpinBox" name="aport">
      <property name="maximum">
       <number>100000</number>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="nrowgraph">
-     <property name="maximum">
-      <number>1000000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QSpinBox" name="nrowcoord">
-     <property name="maximum">
-      <number>1000000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QSpinBox" name="agraph">
-     <property name="maximum">
-      <number>100000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>N Row Graph</string>
-     </property>
-    </widget>
+   <item row="12" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="rename">
+       <property name="text">
+        <string>Rename...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="apply">
+       <property name="text">
+        <string>Save and Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="6" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>A Port</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Grid Resolution:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>N Row Coord</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Bio Sce:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>AGraph</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="biol_sce"/>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>A Port</string>
+     </property>
+    </widget>
    </item>
-   <item row="8" column="1">
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Grid Resolution:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>N Row Coord</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" colspan="2">
+    <widget class="QSpinBox" name="nrowcoord">
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -130,10 +127,51 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="6" column="1" colspan="2">
+    <widget class="QSpinBox" name="agraph">
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Bio Sce:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="QLineEdit" name="biol_sce"/>
+   </item>
+   <item row="8" column="1" colspan="2">
+    <widget class="QSpinBox" name="nrowgraph">
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Scenario file:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="scenarioPath"/>
+   </item>
+   <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="group_dyn_pop_sce">
      <property name="title">
       <string>Dyn Pop Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="group_dyn_alloc_sce">
+     <property name="title">
+      <string>Dyn Alloc Sce</string>
      </property>
     </widget>
    </item>
@@ -150,34 +188,34 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>apply</sender>
+   <signal>clicked()</signal>
    <receiver>ScenarioDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>302</x>
+     <y>302</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>398</x>
+     <y>284</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
+   <sender>cancel</sender>
+   <signal>clicked()</signal>
    <receiver>ScenarioDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>212</x>
+     <y>300</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>130</x>
+     <y>318</y>
     </hint>
    </hints>
   </connection>

@@ -3,8 +3,8 @@
 
 #include <QCheckBox>
 #include <QGridLayout>
-
-#include <QSignalMapper>
+#include <QFileDialog>
+#include <QSettings>
 
 static const char *dyn_alloc_options[] = {
     "baseline",
@@ -30,7 +30,8 @@ static const char *dyn_pop_options[] = {
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ScenarioDialog),
-    mScen(scenario)
+    mScen(scenario),
+    mRenamed(false)
 {
     ui->setupUi(this);
 
@@ -43,6 +44,8 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->gridres->setValue(mScen.getGraph_res());
     ui->nrowcoord->setValue(mScen.getNrow_coord());
     ui->nrowgraph->setValue(mScen.getNrow_graph());
+
+    ui->scenarioPath->setReadOnly(true);
 }
 
 ScenarioDialog::~ScenarioDialog()
@@ -82,6 +85,18 @@ void ScenarioDialog::setDynAlloc(const QStringList &options)
         optAll.append(box);
     }
 }
+QString ScenarioDialog::getScenarioPath() const
+{
+    return mScenarioPath;
+}
+
+void ScenarioDialog::setScenarioPath(const QString &value)
+{
+    mScenarioPath = value;
+    ui->scenarioPath->setText(mScenarioPath);
+    ui->scenarioPath->setToolTip(mScenarioPath);
+}
+
 
 void ScenarioDialog::on_ScenarioDialog_accepted()
 {
@@ -109,4 +124,17 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setGraph_res(ui->gridres->value());
     mScen.setNrow_coord(ui->nrowcoord->value());
     mScen.setNrow_graph(ui->nrowgraph->value());
+}
+
+void ScenarioDialog::on_rename_clicked()
+{
+    QSettings sets;
+    QString lastpath = sets.value("lastpath", QDir::homePath()).toString();
+    QString s = QFileDialog::getSaveFileName(this, tr("Enter Scenario Filename"),
+                                             lastpath, QString("*.dat"));
+    if (!s.isEmpty()) {
+        setScenarioPath(s);
+        sets.setValue("lastpath", s);
+        mRenamed = true;
+    }
 }

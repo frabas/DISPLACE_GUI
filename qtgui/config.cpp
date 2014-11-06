@@ -88,36 +88,36 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
     QString realpath = path + "/simusspe_" + modelname +"/config.dat";
     QFile file (realpath);
 
-    if (!file.open(QFile::WriteOnly)) {
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
         if (error) *error = file.errorString();
         return false;
     }
 
     QTextStream stream (&file);
 
-    stream << "# nbpops \n" << nbpops << endl;
+    stream << "# nbpops"<< endl << nbpops << endl;
 
-    stream <<"# implicit stocks\n";
+    stream <<"# implicit stocks"<< endl;
     foreach (int a, m_implicit_pops)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# calib the other landings per stock \n";
+    stream <<"# calib the other landings per stock"<< endl;
     foreach (double a, m_calib_oth_landings)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# calib weight-at-szgroup per stock \n";
+    stream <<"# calib weight-at-szgroup per stock"<< endl;
     foreach (double a, m_calib_weight_at_szgroup)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# calib the cpue multiplier per stock \n";
+    stream <<"# calib the cpue multiplier per stock"<< endl;
     foreach (double a, m_calib_cpue_multiplier)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# Interesting harbours\n";
+    stream <<"# Interesting harbours"<< endl;
     foreach (int a, m_interesting_harbours)
         stream << a << " ";
     stream << endl;

@@ -427,13 +427,29 @@ void MainWindow::on_actionScenario_triggered()
     if (currentModel) {
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
+        dlg.setScenarioPath(currentModel->fullpath());
         if (dlg.exec() == QDialog::Accepted) {
             int r = QMessageBox::question(this, tr("Saving scenario"),
                                           tr("The scenario file must be saved and the model reloaded. Proceed?"),
                                           QMessageBox::No, QMessageBox::Yes);
             if (r == QMessageBox::Yes) {
                 currentModel->setScenario(dlg.getScenario());
-                on_actionSave_triggered();
+                bool ok;
+                if (dlg.isRenamed()) {
+                    ok = currentModel->saveAs(dlg.getScenarioPath());
+                } else {
+                    ok = currentModel->save();
+                }
+
+                if (ok) {
+                    QMessageBox::information(this, tr("Model saved"),
+                                             QString(tr("The model %1 has been saved successfully.")).arg(currentModel->inputName()));
+                } else {
+                    QMessageBox::warning(this, tr("Load failed"),
+                                         QString(tr("There was an error saving the model %1").arg(currentModel->fullpath())));
+                    return;
+                }
+
                 QString error;
                 if (!loadLiveModel(currentModel->fullpath(), &error)) {
                     QMessageBox::warning(this, tr("Error reloading model."),
@@ -534,8 +550,8 @@ void MainWindow::on_cmdSetup_clicked()
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
-        models[0]->setSimulationName(dlg.getSimulationName());
-        models[0]->setOutputName(dlg.getSimulationOutputName());
+//        models[0]->setSimulationName(dlg.getSimulationName());
+//        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
     }
 }

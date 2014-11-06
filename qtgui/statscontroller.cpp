@@ -92,8 +92,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     bool showmin =  model->isInterestingSizeMin();
     bool showmax =  model->isInterestingSizeMax();
 
-    int nsz_r = graphList.size();    /* Number of total "real" sizes */
-
     if (showmax)
         graphList.push_front(-4);
     if (showmin)
@@ -112,6 +110,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             interSizeList.push_back(i);
     }
 
+    int szNum = interSizeList.size();
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -158,8 +157,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
         }
     }
 
-    int fidx = graphNum - nsz_r;     /* First "real" index */
-
     int nsteps = model->getPopulationsValuesCount();
 
     DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
@@ -171,7 +168,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
             for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
                 val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], mSelectedPopStat);
-                if (iInterSize == fidx) {
+                if (iInterSize == 0) {
                     mMin = val;
                     mMax = val;
                 } else {
@@ -183,8 +180,8 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
                 mAvg += val;
                 mTot += val;
             }
-            if (nsz_r > 0)
-                mAvg /= nsz_r;
+            if (szNum > 0)
+                mAvg /= szNum;
 
             for (int isz = 0; isz < graphNum; ++isz) {
                 int gidx = iinterpPop * graphNum + isz;

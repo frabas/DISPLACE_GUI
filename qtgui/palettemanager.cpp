@@ -146,7 +146,8 @@ PaletteManager::PaletteManager()
     for (int i = 0; i < LastRole; ++i) {
         std::shared_ptr<Palette> p (new Palette());
         QFile pf(defaultPaletteFileNames[i]);
-        Q_ASSERT(p->loadFromFile(&pf));
+        bool ok = p->loadFromFile(&pf);
+        Q_ASSERT(ok);
         m_list.append(p);
     }
 }

@@ -126,7 +126,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(pen);
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = *col_it;
+            QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
@@ -249,7 +249,7 @@ void StatsController::updateNationStats(DisplaceModel *model)
         QCPGraph *graph = mPlotNations->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = *col_it;
+        QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
@@ -307,7 +307,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
         QCPGraph *graph = mPlotHarbours->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = *col_it;
+        QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));

@@ -467,7 +467,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         mNodes.push_back(nodedata);
 
         if (node.good) {
-            foreach (int adidx, node.adiancies) {
+            foreach (int adidx, node.adiacencies) {
                 if (nodes[adidx].good)
                     nodedata->appendAdiancency(adidx + nodeidx, 0.0);
             }

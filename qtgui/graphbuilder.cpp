@@ -117,30 +117,30 @@ void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QLi
 //            continue;
 
         if (i > 0 /*&& nodes[idx[i-1]].good*/)
-            nodes[idx[i]].adiancies.push_back(idx[i-1]);     // left node
+            nodes[idx[i]].adiacencies.push_back(idx[i-1]);     // left node
         if (i < idx.size()-1 /*&& nodes[idx[i+1]].good*/)
-            nodes[idx[i]].adiancies.push_back(idx[i+1]);     // right node
+            nodes[idx[i]].adiacencies.push_back(idx[i+1]);     // right node
 
         if ((row_index % 2) == 0) {     // even
             if (i > 0 && i-1 < pidx.size() /*&& nodes[pidx[i-1]].good*/)
-                nodes[idx[i]].adiancies.push_back(pidx[i-1]);
+                nodes[idx[i]].adiacencies.push_back(pidx[i-1]);
             if (i < pidx.size() /*&& nodes[pidx[i]].good*/)
-                nodes[idx[i]].adiancies.push_back(pidx[i]);
+                nodes[idx[i]].adiacencies.push_back(pidx[i]);
 
             if (i > 0 && i-1 < nidx.size() /*&& nodes[nidx[i-1]].good*/)
-                nodes[idx[i]].adiancies.push_back(nidx[i-1]);
+                nodes[idx[i]].adiacencies.push_back(nidx[i-1]);
             if (i < nidx.size() /*&& nodes[nidx[i]].good*/)
-                nodes[idx[i]].adiancies.push_back(nidx[i]);
+                nodes[idx[i]].adiacencies.push_back(nidx[i]);
         } else {    // odd
             if (i < pidx.size() /*&& nodes[pidx[i]].good*/)
-                nodes[idx[i]].adiancies.push_back(pidx[i]);
+                nodes[idx[i]].adiacencies.push_back(pidx[i]);
             if (i+1 < pidx.size() /*&& nodes[pidx[i+1]].good*/)
-                nodes[idx[i]].adiancies.push_back(pidx[i+1]);
+                nodes[idx[i]].adiacencies.push_back(pidx[i+1]);
 
             if (i < nidx.size() /*&& nodes[nidx[i]].good*/)
-                nodes[idx[i]].adiancies.push_back(nidx[i]);
+                nodes[idx[i]].adiacencies.push_back(nidx[i]);
             if (i+1 < nidx.size() /*&& nodes[nidx[i+1]].good*/)
-                nodes[idx[i]].adiancies.push_back(nidx[i+1]);
+                nodes[idx[i]].adiacencies.push_back(nidx[i+1]);
         }
 
 //        qDebug() << "edges" << idx[i] << nodes[idx[i]].adiancies;

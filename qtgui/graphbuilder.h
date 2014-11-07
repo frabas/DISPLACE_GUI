@@ -15,7 +15,7 @@ public:
     class Node {
     public:
         QPointF point;
-        QList<int> adiancies;
+        QList<int> adiacencies;
         bool good;
     };
 

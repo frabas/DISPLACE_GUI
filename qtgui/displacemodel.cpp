@@ -471,6 +471,8 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 if (nodes[adidx].good)
                     nodedata->appendAdiancency(adidx + nodeidx, 0.0);
             }
+        } else {
+            nodedata->setDeleted(true);
         }
 
         newnodes.push_back(nodedata);
@@ -495,7 +497,8 @@ bool DisplaceModel::exportGraph(const QString &path)
 
     QTextStream strm(&file);
     foreach (std::shared_ptr<NodeData> nd, mNodes) {
-        strm << nd->get_x() << " " << nd->get_y() << " " << "0" << endl;
+        if (!nd->isDeleted())
+            strm << nd->get_x() << " " << nd->get_y() << " " << "0" << endl;
     }
 
     file.close();

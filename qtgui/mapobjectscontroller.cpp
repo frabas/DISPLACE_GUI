@@ -329,6 +329,9 @@ void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataS
 
 void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
 {
+    if (nd->isDeleted())
+        return;
+
     NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
     connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
     mNodeObjects[model_n].append(obj);

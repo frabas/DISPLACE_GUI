@@ -109,37 +109,40 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
 
 void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index)
 {
-    qDebug() << row_index<< idx.size();
+//    qDebug() << row_index<< idx.size();
     for (int i = 0; i < idx.size(); ++i) {
         // current node is nodes[i]
 
-        if (i > 0)
+//        if (!nodes[idx[i]].good)
+//            continue;
+
+        if (i > 0 /*&& nodes[idx[i-1]].good*/)
             nodes[idx[i]].adiancies.push_back(idx[i-1]);     // left node
-        if (i < idx.size()-1)
+        if (i < idx.size()-1 /*&& nodes[idx[i+1]].good*/)
             nodes[idx[i]].adiancies.push_back(idx[i+1]);     // right node
 
         if ((row_index % 2) == 0) {     // even
-            if (i > 0 && i-1 < pidx.size())
+            if (i > 0 && i-1 < pidx.size() /*&& nodes[pidx[i-1]].good*/)
                 nodes[idx[i]].adiancies.push_back(pidx[i-1]);
-            if (i < pidx.size())
+            if (i < pidx.size() /*&& nodes[pidx[i]].good*/)
                 nodes[idx[i]].adiancies.push_back(pidx[i]);
 
-            if (i > 0 && i-1 < nidx.size())
+            if (i > 0 && i-1 < nidx.size() /*&& nodes[nidx[i-1]].good*/)
                 nodes[idx[i]].adiancies.push_back(nidx[i-1]);
-            if (i < nidx.size())
+            if (i < nidx.size() /*&& nodes[nidx[i]].good*/)
                 nodes[idx[i]].adiancies.push_back(nidx[i]);
         } else {    // odd
-            if (i < pidx.size())
+            if (i < pidx.size() /*&& nodes[pidx[i]].good*/)
                 nodes[idx[i]].adiancies.push_back(pidx[i]);
-            if (i+1 < pidx.size())
+            if (i+1 < pidx.size() /*&& nodes[pidx[i+1]].good*/)
                 nodes[idx[i]].adiancies.push_back(pidx[i+1]);
 
-            if (i < nidx.size())
+            if (i < nidx.size() /*&& nodes[nidx[i]].good*/)
                 nodes[idx[i]].adiancies.push_back(nidx[i]);
-            if (i+1 < nidx.size())
+            if (i+1 < nidx.size() /*&& nodes[nidx[i+1]].good*/)
                 nodes[idx[i]].adiancies.push_back(nidx[i+1]);
         }
 
-        qDebug() << "edges" << idx[i] << nodes[idx[i]].adiancies;
+//        qDebug() << "edges" << idx[i] << nodes[idx[i]].adiancies;
     }
 }

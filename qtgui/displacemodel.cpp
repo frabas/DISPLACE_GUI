@@ -445,6 +445,10 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     int nodeidx = mNodes.count();
     int cntr = 0;
     foreach(GraphBuilder::Node node, nodes) {
+//        if (!node.good) {
+//            continue;
+//        }
+
         int nodeid = mNodes.size();
 
         OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
@@ -462,8 +466,12 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
         mNodes.push_back(nodedata);
 
-        foreach (int adidx, node.adiancies)
-            nodedata->appendAdiancency(adidx + nodeidx, 0.0);
+        if (node.good) {
+            foreach (int adidx, node.adiancies) {
+                if (nodes[adidx].good)
+                    nodedata->appendAdiancency(adidx + nodeidx, 0.0);
+            }
+        }
 
         newnodes.push_back(nodedata);
         ++cntr;

@@ -97,6 +97,8 @@ private slots:
     void on_actionClear_Graph_triggered();
     void on_actionCreate_Graph_triggered();
 
+    void on_actionExport_Graph_triggered();
+
 signals:
     void modelStateChanged();
 

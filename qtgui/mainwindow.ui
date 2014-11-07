@@ -87,7 +87,6 @@
      <string>Graph</string>
     </property>
     <addaction name="actionLoad_Graph"/>
-    <addaction name="actionSave_Graph"/>
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>

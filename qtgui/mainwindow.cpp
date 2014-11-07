@@ -964,3 +964,24 @@ bool MainWindow::loadLiveModel(QString path, QString *error)
 
     return true;
 }
+
+void MainWindow::on_actionExport_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath;
+
+    lastpath = sets.value("last_export", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getSaveFileName(this, tr("Export Graph"), lastpath, tr("Graph Files (*.dat)"));
+    if (!fn.isEmpty()) {
+        if (currentModel->exportGraph(fn)) {
+            QFileInfo info(fn);
+            sets.setValue("last_export", info.absolutePath());
+        } else {
+            QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(currentModel->getLastError()));
+        }
+    }
+}

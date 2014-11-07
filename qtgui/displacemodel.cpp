@@ -466,6 +466,23 @@ bool DisplaceModel::addGraph(const QList<QPointF> &points, MapObjectsController 
     return true;
 }
 
+bool DisplaceModel::exportGraph(const QString &path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        mLastError = file.errorString();
+        return false;
+    }
+
+    QTextStream strm(&file);
+    foreach (std::shared_ptr<NodeData> nd, mNodes) {
+        strm << nd->get_x() << " " << nd->get_y() << " " << "0" << endl;
+    }
+
+    file.close();
+    return true;
+}
+
 int DisplaceModel::getVesselCount() const
 {
     return mVessels.size();

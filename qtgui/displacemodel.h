@@ -265,6 +265,7 @@ public:
 
 
     bool addGraph(const QList<QPointF> &points, MapObjectsController *controller);
+    bool exportGraph(const QString &path);
 
 protected:
     bool loadNodes();

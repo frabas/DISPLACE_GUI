@@ -26,11 +26,12 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
-      mPaletteManager(),
+//      mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
       mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
+      mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -66,13 +67,12 @@ void MapObjectsController::removeModel(int model_n)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
-    QFile pf(":/palettes/iso1996_2.p2c");
-    Palette p;
-    p.loadFromFile(&pf);
+//    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
 
-    for (int i = 0; i < (int)LastRole; ++i)
-        mPaletteManager[model_n]->setPalette((PaletteRole)i, p);
+//    std::shared_ptr<Palette> p = PaletteManager::instance()->palette(PopulationRole);
+
+//    for (int i = 0; i < (int)LastRole; ++i)
+//        mPaletteManager[model_n]->setPalette((PaletteRole)i, *p);
 
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
@@ -209,7 +209,8 @@ bool MapObjectsController::isModelActive(int model) const
 
 void MapObjectsController::setPalette(int model, PaletteRole n, const Palette &palette)
 {
-    mPaletteManager[model]->setPalette(n, palette);
+    Q_UNUSED(model);
+    PaletteManager::instance()->setPalette(n, palette);
 }
 
 void MapObjectsController::forceRedraw()
@@ -239,7 +240,12 @@ void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidg
 
 bool MapObjectsController::importShapefile(int model_idx, QString path, QString layername)
 {
-    std::shared_ptr<ESRIShapefile> file (new ESRIShapefile(path.toStdString(), layername.toStdString()));
+    std::shared_ptr<OGRDataSource> src(OGRSFDriverRegistrar::Open(path.toStdString().c_str(), FALSE));
+    if (!src.get()) {
+        return false;
+    }
+
+    std::shared_ptr<ESRIShapefile> file (new ESRIShapefile(src.get(), layername.toStdString()));
 
     file->setPenPolygon(QPen(Qt::red));
     file->setBrushPolygon(QBrush(Qt::yellow));
@@ -252,9 +258,30 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
 
     std::shared_ptr<qmapcontrol::LayerESRIShapefile> newlayer(new qmapcontrol::LayerESRIShapefile(label.toStdString()));
     newlayer->addESRIShapefile(file);
-    addShapefileLayer(model_idx, newlayer);
+    addShapefileLayer(model_idx, src, newlayer);
 
     return true;
+}
+
+QStringList MapObjectsController::getShapefilesList(int model_idx) const
+{
+    QStringList list;
+    int n = mShapefileLayers[model_idx].getCount();
+    for (int i = 0; i < n; ++i) {
+        list << mShapefileLayers[model_idx].getName(i);
+    }
+    return list;
+}
+
+std::shared_ptr<OGRDataSource> MapObjectsController::getShapefileDatasource(int model_idx, const QString &name)
+{
+    for (int i = 0; i < mShapefileLayers[model_idx].getCount(); ++i) {
+        if (mShapefileLayers[model_idx].getName(i) == name) {
+            return mShapefiles[model_idx].at(i);
+        }
+    }
+
+    return std::shared_ptr<OGRDataSource>();
 }
 
 void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
@@ -293,14 +320,18 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
     mOutputLayers[model].setLayer(id,layer);
 }
 
-void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show)
+void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show)
 {
     mMap->addLayer(layer);
     mShapefileLayers[model].add(layer, show);
+    mShapefiles[model].append(datasource);
 }
 
 void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
 {
+    if (nd->isDeleted())
+        return;
+
     NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
     connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
     mNodeObjects[model_n].append(obj);

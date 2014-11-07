@@ -2,6 +2,14 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QDebug>
+#include <QFile>
+
+PaletteManager *PaletteManager::mInstance = 0;
+
+const QString PaletteManager::defaultPaletteFileNames[] = {
+    ":/palettes/iso1996_2.p2c",
+    ":/palettes/pop_colors.p2c"
+};
 
 Palette::Palette()
     : mRole(ValueRole), m_name(""), m_palette()
@@ -135,8 +143,13 @@ bool Palette::saveToFile(QIODevice *device)
 
 PaletteManager::PaletteManager()
 {
-    for (int i = 0; i < LastRole; ++i)
-        m_list.append(std::shared_ptr<Palette>());
+    for (int i = 0; i < LastRole; ++i) {
+        std::shared_ptr<Palette> p (new Palette());
+        QFile pf(defaultPaletteFileNames[i]);
+        bool ok = p->loadFromFile(&pf);
+        Q_ASSERT(ok);
+        m_list.append(p);
+    }
 }
 
 PaletteManager::~PaletteManager()

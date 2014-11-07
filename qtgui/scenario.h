@@ -41,7 +41,7 @@ public:
     double getGraph_res() const;
     void setGraph_res(double value);
 
-    bool save (QString path, QString modelname, QString outputname);
+    bool save (QString path, QString modelname, QString outputname, QString *error);
 
     static Scenario readFromFile (QString path, QString modelname, QString outputname);
 };

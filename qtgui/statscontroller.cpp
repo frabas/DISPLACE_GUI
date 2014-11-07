@@ -13,8 +13,7 @@ StatsController::StatsController(QObject *parent)
       mSelectedNationsStat(Catches),
       mLastModel(0)
 {
-    QFile file (":/palettes/iso1996_2.p2c");
-    mPalette.loadFromFile(&file);
+    mPalette = PaletteManager::instance()->palette(PopulationRole);
 }
 
 void StatsController::setPopulationPlot(QCustomPlot *plot)
@@ -92,8 +91,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     bool showmin =  model->isInterestingSizeMin();
     bool showmax =  model->isInterestingSizeMax();
 
-    int nsz_r = graphList.size();    /* Number of total "real" sizes */
-
     if (showmax)
         graphList.push_front(-4);
     if (showmin)
@@ -112,6 +109,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             interSizeList.push_back(i);
     }
 
+    int szNum = interSizeList.size();
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -128,7 +126,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(pen);
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = *col_it;
+            QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
@@ -158,8 +156,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
         }
     }
 
-    int fidx = graphNum - nsz_r;     /* First "real" index */
-
     int nsteps = model->getPopulationsValuesCount();
 
     DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
@@ -171,7 +167,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
             for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
                 val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], mSelectedPopStat);
-                if (iInterSize == fidx) {
+                if (iInterSize == 0) {
                     mMin = val;
                     mMax = val;
                 } else {
@@ -183,8 +179,8 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
                 mAvg += val;
                 mTot += val;
             }
-            if (nsz_r > 0)
-                mAvg /= nsz_r;
+            if (szNum > 0)
+                mAvg /= szNum;
 
             for (int isz = 0; isz < graphNum; ++isz) {
                 int gidx = iinterpPop * graphNum + isz;
@@ -253,7 +249,7 @@ void StatsController::updateNationStats(DisplaceModel *model)
         QCPGraph *graph = mPlotNations->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = *col_it;
+        QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
@@ -311,7 +307,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
         QCPGraph *graph = mPlotHarbours->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = *col_it;
+        QColor col = col_it != mPalette.end() ? *col_it : QColor();
 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));

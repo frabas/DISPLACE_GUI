@@ -12,6 +12,7 @@
 #include <modelobjects/harbourdata.h>
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
+#include <graphbuilder.h>
 
 #include <QObject>
 #include <QString>
@@ -56,8 +57,9 @@ public:
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();
-    bool saveAs(const QString &path);
-    bool save();
+    bool saveScenarioAs(const QString &path);
+    bool saveScenario();
+    bool saveConfig();
 
     /** \brief Signals the simulation has ended. Flush all buffers */
     void simulationEnded();
@@ -263,7 +265,8 @@ public:
     /* Editor stuff */
 
 
-    bool addGraph(const QList<QPointF> &points, MapObjectsController *controller);
+    bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
+    bool exportGraph(const QString &path);
 
 protected:
     bool loadNodes();

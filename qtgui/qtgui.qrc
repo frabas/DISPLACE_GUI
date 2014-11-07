@@ -33,5 +33,6 @@
         <file>icons/node.png</file>
         <file>icons/fish.png</file>
         <file>icons/remove.png</file>
+        <file>palettes/pop_colors.p2c</file>
     </qresource>
 </RCC>

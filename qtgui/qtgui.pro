@@ -19,8 +19,9 @@ CONFIG(debug,release|debug) {
 CONFIG(release,release|debug) {
     QMAPCONTROL_LIB=qmapcontrol
 
-# For use with callgrind
-#    QMAKE_CXXFLAGS += -g -O2
+# For use with debugger in release mode
+#   QMAKE_CXXFLAGS_RELEASE += -g -O2
+#   QMAKE_LFLAGS_RELEASE=
 }
 
 macx {
@@ -162,4 +163,5 @@ OTHER_FILES += \
     ../docs/output_fileformats.txt \
     palettes/iso1996_2.p2c \
     ../docs/database.txt \
-    ../docs/dbstruct.sh
+    ../docs/dbstruct.sh \
+    palettes/pop_colors.p2c

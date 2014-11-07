@@ -66,7 +66,6 @@
     <addaction name="actionImport_results"/>
     <addaction name="actionImport_Shapefile"/>
     <addaction name="action_Link_database"/>
-    <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -88,7 +87,6 @@
      <string>Graph</string>
     </property>
     <addaction name="actionLoad_Graph"/>
-    <addaction name="actionSave_Graph"/>
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
@@ -691,7 +689,6 @@
    <addaction name="actionImport_results"/>
    <addaction name="action_Link_database"/>
    <addaction name="actionImport_Shapefile"/>
-   <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionGraph"/>
    <addaction name="actionNode_Editor"/>

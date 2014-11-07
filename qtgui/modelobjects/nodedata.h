@@ -73,8 +73,12 @@ public:
     int getAdiacencyByIdx(int idx) const;
     double getAdiacencyWeight(int idx) const;
 
+    bool isDeleted() const;
+    void setDeleted(bool value = true);
+
 private:
     DisplaceModel *mModel;
+    bool mDeleted;
     int mHarbourId;
     double *mPop;
     double mPopTot;

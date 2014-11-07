@@ -25,16 +25,18 @@ void GraphBuilder::setShapefile(std::shared_ptr<OGRDataSource> src)
     mShapefile = src;
 }
 
-QList<QPointF> GraphBuilder::buildGraph()
+QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 {
-    QList<QPointF> res;
+    QList<Node> res;
 
     double lat = mLatMin;
     double latinc = std::sqrt(3) / 2.0 * mStep;
 
     QPointF p1(mLonMin, mLatMin), p2;
 
-    int nr = 0;
+    QList<int> idx0, idx1, idx2;
+
+    int nr = 0, nc = 0;
     while (lat <= mLatMax) {
         if ((nr % 2) == 1) {
             pointSumWithBearing(QPointF(mLonMin, lat), mStep/2, M_PI_2, p1);
@@ -43,36 +45,47 @@ QList<QPointF> GraphBuilder::buildGraph()
             p1.setY(lat);
         }
 
-        int nc = 0;
+        nc = 0;
         while (p1.x() <= mLonMax) {
+            Node n;
+            n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
+            n.good = true;
 
-            bool isFiltered = false;
             if (mShapefile.get()) {
-                OGRPoint point (p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
+                OGRPoint point (n.point.x(), n.point.y());
                 for (int lr = 0; lr < mShapefile->GetLayerCount(); ++lr) {
                     OGRLayer *layer = mShapefile->GetLayer(lr);
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
                     layer->ResetReading();
                     if (layer->GetNextFeature() != 0) {
-                        isFiltered = true;
+                        n.good = false;
                         break;
                     }
                 }
             }
 
-            if (!isFiltered)
-                res.append(QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI));
+            res.append(n);
+            idx0.push_back(res.size()-1);
+
             pointSumWithBearing(p1, mStep, M_PI_2, p2);
             p1 = p2;
 
             ++nc;
         }
 
+        createAdiacencies(res, idx2, idx1, idx0, nr-1);
+
         pointSumWithBearing(p1, latinc, 0, p2);
         lat = p2.y();
         ++nr;
+
+        idx2 = idx1;
+        idx1 = idx0;
+        idx0.clear();
     }
+
+    createAdiacencies(res, idx2, idx1, idx0, nr-1);
 
     return res;
 }
@@ -92,4 +105,41 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
             std::atan2( std::sin(bearing) * std::sin(dist/earthRadius) * std::cos(p1.y()),
                         std::cos(dist/earthRadius) - std::sin(p1.y()) * std::sin(p2.y()))
             );
+}
+
+void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index)
+{
+    qDebug() << row_index<< idx.size();
+    for (int i = 0; i < idx.size(); ++i) {
+        // current node is nodes[i]
+
+        if (i > 0)
+            nodes[idx[i]].adiancies.push_back(idx[i-1]);     // left node
+        if (i < idx.size()-1)
+            nodes[idx[i]].adiancies.push_back(idx[i+1]);     // right node
+
+        if ((row_index % 2) == 0) {     // even
+            if (i > 0 && i-1 < pidx.size())
+                nodes[idx[i]].adiancies.push_back(pidx[i-1]);
+            if (i < pidx.size())
+                nodes[idx[i]].adiancies.push_back(pidx[i]);
+
+            if (i > 0 && i-1 < nidx.size())
+                nodes[idx[i]].adiancies.push_back(nidx[i-1]);
+            if (i < nidx.size())
+                nodes[idx[i]].adiancies.push_back(nidx[i]);
+        } else {    // odd
+            if (i < pidx.size())
+                nodes[idx[i]].adiancies.push_back(pidx[i]);
+            if (i+1 < pidx.size())
+                nodes[idx[i]].adiancies.push_back(pidx[i+1]);
+
+            if (i < nidx.size())
+                nodes[idx[i]].adiancies.push_back(nidx[i]);
+            if (i+1 < nidx.size())
+                nodes[idx[i]].adiancies.push_back(nidx[i+1]);
+        }
+
+        qDebug() << "edges" << idx[i] << nodes[idx[i]].adiancies;
+    }
 }

@@ -436,32 +436,43 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mVesselsStatsDirty = true;
 }
 
-bool DisplaceModel::addGraph(const QList<QPointF> &points, MapObjectsController *controller)
+bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller)
 {
     if (mModelType != EditorModelType)
         return false;
 
-    foreach(QPointF point, points) {
+    QList<std::shared_ptr<NodeData> > newnodes;
+    int nodeidx = mNodes.count();
+    int cntr = 0;
+    foreach(GraphBuilder::Node node, nodes) {
         int nodeid = mNodes.size();
 
         OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
         feature->SetField(FLD_NODEID, nodeid);
 
         OGRPoint pt;
-        pt.setX(point.x());
-        pt.setY(point.y());
+        pt.setX(node.point.x());
+        pt.setY(node.point.y());
 
         feature->SetGeometry(&pt);
 
         mNodesLayer->CreateFeature(feature);
 
-        std::shared_ptr<Node> nd (new Node());
-        nd->set_xy(point.x(), point.y());
-        std::shared_ptr<NodeData> node (new NodeData(nd, this));
-        mNodes.push_back(node);
+        std::shared_ptr<Node> nd (new Node(cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+        std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+        mNodes.push_back(nodedata);
 
+        foreach (int adidx, node.adiancies)
+            nodedata->appendAdiancency(adidx + nodeidx, 0.0);
+
+        newnodes.push_back(nodedata);
+        ++cntr;
+    }
+
+    foreach(std::shared_ptr<NodeData> node, newnodes) {
         controller->addNode(mIndex, node);
     }
+
 
     return true;
 }

@@ -930,7 +930,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
         if (!s.isEmpty())
             gb.setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
 
-        QList<QPointF> l = gb.buildGraph();
+        QList<GraphBuilder::Node> l = gb.buildGraph();
 
         currentModel->addGraph (l, mMapController);
     }

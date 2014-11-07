@@ -12,6 +12,7 @@
 #include <modelobjects/harbourdata.h>
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
+#include <graphbuilder.h>
 
 #include <QObject>
 #include <QString>
@@ -264,7 +265,7 @@ public:
     /* Editor stuff */
 
 
-    bool addGraph(const QList<QPointF> &points, MapObjectsController *controller);
+    bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
     bool exportGraph(const QString &path);
 
 protected:

@@ -116,17 +116,13 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     QList<QVector<double> >keyData;
     QList<QVector<double> >valueData;
 
-    Palette::Iterator col_it = mPalette.begin();
     foreach (int ipop, interPopList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
-            if (col_it == mPalette.end())
-                col_it = mPalette.begin();
-
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlotPopulations->addGraph();
             graph->setPen(pen);
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = col_it != mPalette.end() ? *col_it : QColor();
+            QColor col = mPalette.color(ipop);
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
@@ -151,8 +147,6 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             graphs.push_back(graph);
             keyData.push_back(QVector<double>());
             valueData.push_back(QVector<double>());
-
-            ++col_it;
         }
     }
 

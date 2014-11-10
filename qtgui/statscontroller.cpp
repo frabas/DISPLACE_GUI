@@ -3,14 +3,20 @@
 #include <QVector>
 #include <QtAlgorithms>
 
+double StatsController::timelineMax = 1e20;
+double StatsController::timelineMin = -1e20;
+
 StatsController::StatsController(QObject *parent)
     : QObject(parent),
       mPalette(),
       mPlotPopulations(0),
       mSelectedPopStat(Aggregate),
+      mPopTimeLine(0),
       mPlotHarbours(0),
+      mHarbTimeLine(0),
       mPlotNations(0),
       mSelectedNationsStat(Catches),
+      mNatTimeLine(0),
       mLastModel(0)
 {
     mPalette = PaletteManager::instance()->palette(PopulationRole);
@@ -20,18 +26,36 @@ void StatsController::setPopulationPlot(QCustomPlot *plot)
 {
     mPlotPopulations = plot;
     mPlotPopulations->legend->setVisible(true);
+
+    if (mPopTimeLine != 0)
+        delete mPopTimeLine;
+
+    mPopTimeLine = new QCPItemLine(mPlotPopulations);
+    mPlotPopulations->addItem(mPopTimeLine);
 }
 
 void StatsController::setHarboursPlot(QCustomPlot *plot)
 {
     mPlotHarbours = plot;
     mPlotHarbours->legend->setVisible(true);
+
+    if (mHarbTimeLine != 0)
+        delete mHarbTimeLine;
+
+    mHarbTimeLine = new QCPItemLine(mPlotPopulations);
+    mPlotHarbours->addItem(mHarbTimeLine);
 }
 
 void StatsController::setNationsPlot(QCustomPlot *plot)
 {
     mPlotNations = plot;
     mPlotNations->legend->setVisible(true);
+
+    if (mNatTimeLine != 0)
+        delete mNatTimeLine;
+
+    mNatTimeLine = new QCPItemLine(mPlotPopulations);
+    mPlotNations->addItem(mNatTimeLine);
 }
 
 void StatsController::updateStats(DisplaceModel *model)
@@ -77,6 +101,19 @@ void StatsController::initPlots()
     }
 }
 
+void StatsController::setCurrentTimeStep(double t)
+{
+    mPopTimeLine->start->setCoords(t, timelineMin);
+    mPopTimeLine->end->setCoords(t, timelineMax);
+
+    mHarbTimeLine->start->setCoords(t, timelineMin);
+    mHarbTimeLine->end->setCoords(t, timelineMax);
+
+    mNatTimeLine->start->setCoords(t, timelineMin);
+    mNatTimeLine->end->setCoords(t, timelineMax);
+
+}
+
 void StatsController::updatePopulationStats(DisplaceModel *model)
 {
     static const QPen pen(QColor(0,0,255,200));
@@ -115,6 +152,10 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     QList<QCPGraph *>graphs;
     QList<QVector<double> >keyData;
     QList<QVector<double> >valueData;
+
+    double t = model->getCurrentStep();
+    mPopTimeLine->start->setCoords(t, timelineMin);
+    mPopTimeLine->end->setCoords(t, timelineMax);
 
     foreach (int ipop, interPopList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
@@ -232,6 +273,10 @@ void StatsController::updateNationStats(DisplaceModel *model)
 
     QList<int> ipl = model->getInterestingNations();
 
+    double t = model->getCurrentStep();
+    mNatTimeLine->start->setCoords(t, timelineMin);
+    mNatTimeLine->end->setCoords(t, timelineMax);
+
     int cnt;
     Palette::Iterator col_it = mPalette.begin();
     foreach (int ip, ipl) {
@@ -291,6 +336,10 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
 
     int cnt;
     Palette::Iterator col_it = mPalette.begin();
+
+    double t = model->getCurrentStep();
+    mHarbTimeLine->start->setCoords(t, timelineMin);
+    mHarbTimeLine->end->setCoords(t, timelineMax);
 
     foreach (int ip, ipl) {
         if (col_it == mPalette.end())

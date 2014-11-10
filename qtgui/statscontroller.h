@@ -35,6 +35,8 @@ public:
 
     void initPlots();
 
+    void setCurrentTimeStep(double t);
+
 protected:
     void updatePopulationStats(DisplaceModel *model);
     double getPopStatValue (DisplaceModel *model, int tstep, int popid, int szid, PopulationStat stattype);
@@ -48,16 +50,21 @@ private:
     /* Populations stuff */
     QCustomPlot *mPlotPopulations;
     PopulationStat mSelectedPopStat;
+    QCPItemLine *mPopTimeLine;
 
     /* Harbour stuff */
     QCustomPlot *mPlotHarbours;
     HarboursStat mSelectedHarboursStat;
+    QCPItemLine *mHarbTimeLine;
 
     /* Nations */
     QCustomPlot *mPlotNations;
     NationsStat mSelectedNationsStat;
+    QCPItemLine *mNatTimeLine;
 
     DisplaceModel *mLastModel;
+
+    static double timelineMin, timelineMax;
 };
 
 #endif // STATSCONTROLLER_H

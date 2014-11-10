@@ -699,6 +699,7 @@ void MainWindow::on_play_step_valueChanged(int step)
 {
     if (currentModel && currentModel->modelType() == DisplaceModel::OfflineModelType) {
         currentModel->setCurrentStep(step);
+        mStatsController->setCurrentTimeStep(step);
         updateAllDisplayObjects();
     }
 }

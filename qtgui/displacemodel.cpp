@@ -219,6 +219,22 @@ bool DisplaceModel::prepareDatabaseForSimulation()
     return true;
 }
 
+bool DisplaceModel::clearStats()
+{
+    mStatsPopulations.clear();
+    for (int i = 0; i < mStatsNationsCollected.size(); ++i) {
+        mStatsPopulationsCollected[i].clear();
+    }
+
+    mStatsNations.clear();
+    mStatsNationsCollected.clear();
+
+    mStatsHarbours.clear();
+    mStatsHarboursCollected.clear();
+
+    return true;
+}
+
 bool DisplaceModel::saveScenarioAs(const QString &path)
 {
     if (!parse(path, &mBasePath, &mInputName, &mOutputName))

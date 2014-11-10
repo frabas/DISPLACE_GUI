@@ -413,6 +413,7 @@ void MainWindow::on_cmdStart_clicked()
         mLastRunSimulationName = models[0]->simulationName();
         mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->prepareDatabaseForSimulation();
+        models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
         mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }

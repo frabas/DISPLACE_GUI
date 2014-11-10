@@ -58,6 +58,7 @@ public:
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();
+    bool clearStats();
     bool saveScenarioAs(const QString &path);
     bool saveScenario();
     bool saveConfig();

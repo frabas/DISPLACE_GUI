@@ -133,6 +133,11 @@ void ScenarioDialog::on_rename_clicked()
     QString s = QFileDialog::getSaveFileName(this, tr("Enter Scenario Filename"),
                                              lastpath, QString("*.dat"));
     if (!s.isEmpty()) {
+        QFileInfo info(s);
+        if (info.suffix() != ".dat") {
+            s += ".dat";
+        }
+
         setScenarioPath(s);
         sets.setValue("lastpath", s);
         mRenamed = true;

@@ -42,7 +42,7 @@ void StatsController::setHarboursPlot(QCustomPlot *plot)
     if (mHarbTimeLine != 0)
         delete mHarbTimeLine;
 
-    mHarbTimeLine = new QCPItemLine(mPlotPopulations);
+    mHarbTimeLine = new QCPItemLine(mPlotHarbours);
     mPlotHarbours->addItem(mHarbTimeLine);
 }
 
@@ -54,7 +54,7 @@ void StatsController::setNationsPlot(QCustomPlot *plot)
     if (mNatTimeLine != 0)
         delete mNatTimeLine;
 
-    mNatTimeLine = new QCPItemLine(mPlotPopulations);
+    mNatTimeLine = new QCPItemLine(mPlotNations);
     mPlotNations->addItem(mNatTimeLine);
 }
 

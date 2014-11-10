@@ -20,15 +20,15 @@
 <color value="17" rgb="95,125,0"/>
 <color value="18" rgb="102,102,51"/>
 <color value="19" rgb="170,157,0"/>
-<color value="21" rgb="154,100,0"/>
-<color value="22" rgb="110,74,32"/>
-<color value="23" rgb="255,102,102"/>
-<color value="24" rgb="165,134,179"/>
-<color value="25" rgb="92,106,166"/>
-<color value="26" rgb="89,132,189"/>
-<color value="27" rgb="0,0,255"/>
-<color value="28" rgb="77,166,25"/>
-<color value="29" rgb="146,192,0"/>
-<color value="30" rgb="153,153,102"/>
+<color value="20" rgb="154,100,0"/>
+<color value="21" rgb="110,74,32"/>
+<color value="22" rgb="255,102,102"/>
+<color value="23" rgb="165,134,179"/>
+<color value="24" rgb="92,106,166"/>
+<color value="25" rgb="89,132,189"/>
+<color value="26" rgb="0,0,255"/>
+<color value="27" rgb="77,166,25"/>
+<color value="28" rgb="146,192,0"/>
+<color value="29" rgb="153,153,102"/>
 <special rgb="0,255,255"/>
 </palette>

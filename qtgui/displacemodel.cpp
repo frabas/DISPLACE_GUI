@@ -1,6 +1,7 @@
 #include "displacemodel.h"
 #include <exceptions.h>
 #include <dbhelper.h>
+#include <calendar.h>
 
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
@@ -16,6 +17,7 @@ const char *FLD_NODEID="nodeid";
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
       mDb(0),
+      mCalendar(),
       mInputName(),mBasePath(),mOutputName(),
       mSimuName("simu2"),
       mLinkedDbName(),
@@ -94,6 +96,7 @@ bool DisplaceModel::load(QString path)
     try {
         mScenario = Scenario::readFromFile(mInputName, mBasePath, mOutputName);
         mConfig = Config::readFromFile(mInputName, mBasePath, mOutputName);
+        mCalendar = std::shared_ptr<Calendar> (Calendar::load(mBasePath, mInputName));
 
         mInterestingHarb = mConfig.m_interesting_harbours;
 

@@ -166,6 +166,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Invisible);
     }
 
+    int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     currentModelIdx = ui->modelSelector->itemData(index).toInt();
     if (currentModelIdx >= 0)
         currentModel = models[currentModelIdx];
@@ -204,6 +205,8 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
             ui->play_step->setMaximum(0);
         }
     }
+
+    ui->play_step->setValue(currentStep);
 
     /* Editor specific tools */
     e = type == DisplaceModel::EditorModelType;

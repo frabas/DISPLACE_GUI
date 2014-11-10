@@ -497,14 +497,16 @@ bool DbHelper::updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> 
         int r = q.value(7).toInt();
         double course = q.value(8).toDouble();
 
-        std::shared_ptr<VesselData> v (vessels.at(idx));
-        v->mVessel->set_xy(x,y);
-        v->mVessel->set_fuelcons(fuel);
-        v->mVessel->set_state(state);
-        v->mVessel->set_cumcatches(cum);
-        v->mVessel->set_timeatsea(tim);
-        v->mVessel->set_reason_to_go_back(r);
-        v->mVessel->set_course(course);
+        if (idx < vessels.size()) {
+            std::shared_ptr<VesselData> v (vessels.at(idx));
+            v->mVessel->set_xy(x,y);
+            v->mVessel->set_fuelcons(fuel);
+            v->mVessel->set_state(state);
+            v->mVessel->set_cumcatches(cum);
+            v->mVessel->set_timeatsea(tim);
+            v->mVessel->set_reason_to_go_back(r);
+            v->mVessel->set_course(course);
+        }
     }
     return true;
 }
@@ -523,9 +525,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double tot = q.value(2).toDouble();
         double totw = q.value(3).toDouble();
 
-        nodes.at(nid)->set_cumftime(cum);
-        nodes.at(nid)->setPopTot(tot);
-        nodes.at(nid)->setPopWTot(totw);
+        if (nid < nodes.size()) {
+            nodes.at(nid)->set_cumftime(cum);
+            nodes.at(nid)->setPopTot(tot);
+            nodes.at(nid)->setPopWTot(totw);
+        }
     }
 
     q.prepare ("SELECT nodeid,popid,pop,popw,impact FROM " + TBL_POPNODES_STATS
@@ -541,9 +545,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double valw = q.value(3).toDouble();
         double impact = q.value(4).toDouble();
 
-        nodes.at(nid)->setPop(pid,val);
-        nodes.at(nid)->setPopW(pid,valw);
-        nodes.at(nid)->setImpact(pid,impact);
+        if (nid < nodes.size()) {
+            nodes.at(nid)->setPop(pid,val);
+            nodes.at(nid)->setPopW(pid,valw);
+            nodes.at(nid)->setImpact(pid,impact);
+        }
     }
     return true;
 }

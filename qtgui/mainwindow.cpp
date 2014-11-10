@@ -450,7 +450,7 @@ void MainWindow::on_actionScenario_triggered()
                 } else {
                     QMessageBox::warning(this, tr("Save failed"),
                                          QString(tr("There was an error saving the model %1: %2"))
-                                         .arg(currentModel->fullpath())
+                                         .arg(dlg.getScenarioPath())
                                          .arg(currentModel->getLastError()));
                     return;
                 }

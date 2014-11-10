@@ -120,9 +120,10 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlotPopulations->addGraph();
-            graph->setPen(pen);
+            QColor col = mPalette.colorByIndex(ipop);
+
             graph->setLineStyle(QCPGraph::lsLine);
-            QColor col = mPalette.color(ipop);
+            graph->setPen(QPen(QBrush(col),2));
 
             col.setAlpha(128);
             graph->setBrush(QBrush(col));

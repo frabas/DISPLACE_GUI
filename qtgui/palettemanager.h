@@ -42,10 +42,16 @@ public:
     Iterator end() const { return m_palette.cend(); }
     void addColor (double value, const QColor &col) { m_palette.insert(value, col); }
 
-    QColor color(double val) const {
+    const QColor &color(double val) const {
         Iterator it = m_palette.lowerBound(val);
         if (it != m_palette.begin())
             --it;
+        return *it;
+    }
+
+    const QColor &colorByIndex(int idx) const {
+        Iterator it = m_palette.begin();
+        it += (idx % m_palette.size());
         return *it;
     }
 

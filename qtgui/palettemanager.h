@@ -42,10 +42,16 @@ public:
     Iterator end() const { return m_palette.cend(); }
     void addColor (double value, const QColor &col) { m_palette.insert(value, col); }
 
-    QColor color(double val) const {
+    const QColor &color(double val) const {
         Iterator it = m_palette.lowerBound(val);
         if (it != m_palette.begin())
             --it;
+        return *it;
+    }
+
+    const QColor &colorByIndex(int idx) const {
+        Iterator it = m_palette.begin();
+        it += (idx % m_palette.size());
         return *it;
     }
 
@@ -95,12 +101,21 @@ public:
     void removePalette (const QString &name);
     void removePalette (const Palette &view);
 
+    static PaletteManager *instance() {
+        if (mInstance == 0)
+            mInstance = new PaletteManager();
+        return mInstance;
+    }
+
 protected:
     typedef QMap<QString, std::shared_ptr<Palette> > PaletteMapContainer;
     typedef QList<std::shared_ptr<Palette> > PaletteListContainer;
 
     PaletteMapContainer m_map;
     PaletteListContainer m_list;
+
+    static PaletteManager *mInstance;
+    static const QString defaultPaletteFileNames[];
 };
 
 #endif // PALETTEMANAGER_H

@@ -10,6 +10,8 @@
 #include <palettemanager.h>
 #include <objecttreemodel.h>
 
+#include <gdal/ogrsf_frmts.h>
+
 #include <QMapControl/Layer.h>
 #include <QMapControl/Geometry.h>
 
@@ -181,7 +183,8 @@ public:
     bool isModelActive (int model) const;
 
     const Palette &getPalette(int model, PaletteRole n) const {
-        return mPaletteManager[model]->palette(n);
+        Q_UNUSED(model);
+        return PaletteManager::instance()->palette(n);
     }
     void setPalette (int model, PaletteRole n, const Palette &palette);
 
@@ -192,6 +195,8 @@ public:
     /* Editor functions */
 
     bool importShapefile(int model_idx, QString path, QString layername);
+    QStringList getShapefilesList(int model_idx) const;
+    std::shared_ptr<OGRDataSource> getShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);
 
@@ -206,8 +211,7 @@ public:
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
-    void addShapefileLayer(int model, std::shared_ptr<Layer> layer, bool show = true);
-
+    void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show = true);
 
     void delSelectedEdges(int model);
 protected slots:
@@ -235,7 +239,7 @@ private:
     QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
     QList<EdgeMapObject *> mEdgeObjects[MAX_MODELS];
 
-    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
+//    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
 
     /* Layers and adapters commons to all models */
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
@@ -256,6 +260,7 @@ private:
 
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
+    QVector<QList<std::shared_ptr<OGRDataSource> > > mShapefiles;
     QVector<LayerVarListImpl> mShapefileLayers;
 
     EditorModes mEditorMode;

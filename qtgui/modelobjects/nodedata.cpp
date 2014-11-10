@@ -5,6 +5,7 @@
 NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
     : mNode (nd),
       mModel(model),
+      mDeleted(false),
       mPop(0),
       mPopTot(0),
       mPopW(0),
@@ -137,5 +138,15 @@ double NodeData::getAdiacencyWeight(int idx) const
 {
     return mWeights.at(idx);
 }
+bool NodeData::isDeleted() const
+{
+    return mDeleted;
+}
+
+void NodeData::setDeleted(bool value)
+{
+    mDeleted = value;
+}
+
 
 

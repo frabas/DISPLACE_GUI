@@ -46,7 +46,6 @@ private:
     Palette *mPalette;
     PaletteModel *mModel;
     SpecialPaletteModel *mSpecialModel;
-    bool mLock;
 
     static QString mFileFilter;
 };

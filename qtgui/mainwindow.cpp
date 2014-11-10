@@ -424,6 +424,9 @@ void MainWindow::on_cmdStop_clicked()
 
 void MainWindow::on_actionScenario_triggered()
 {
+    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+        return;
+
     if (currentModel) {
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
@@ -436,17 +439,19 @@ void MainWindow::on_actionScenario_triggered()
                 currentModel->setScenario(dlg.getScenario());
                 bool ok;
                 if (dlg.isRenamed()) {
-                    ok = currentModel->saveAs(dlg.getScenarioPath());
+                    ok = currentModel->saveScenarioAs(dlg.getScenarioPath());
                 } else {
-                    ok = currentModel->save();
+                    ok = currentModel->saveScenario();
                 }
 
                 if (ok) {
                     QMessageBox::information(this, tr("Model saved"),
                                              QString(tr("The model %1 has been saved successfully.")).arg(currentModel->inputName()));
                 } else {
-                    QMessageBox::warning(this, tr("Load failed"),
-                                         QString(tr("There was an error saving the model %1").arg(currentModel->fullpath())));
+                    QMessageBox::warning(this, tr("Save failed"),
+                                         QString(tr("There was an error saving the model %1: %2"))
+                                         .arg(dlg.getScenarioPath())
+                                         .arg(currentModel->getLastError()));
                     return;
                 }
 
@@ -465,6 +470,9 @@ void MainWindow::on_actionScenario_triggered()
 
 void MainWindow::on_actionConfiguration_triggered()
 {
+    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+        return;
+
     if (currentModel) {
         Config c = currentModel->config();
         ConfigDialog dlg (currentModel.get(), this);
@@ -477,10 +485,19 @@ void MainWindow::on_actionConfiguration_triggered()
             }
 
             currentModel->setConfig(c);
+            if (!currentModel->saveConfig()) {
+                QMessageBox::warning(this, tr("Save failed"),
+                                     QString(tr("There was an error saving the Config file for model %1: %2"))
+                                             .arg(currentModel->fullpath())
+                                             .arg(currentModel->getLastError())
+                                     );
+                return;
+            }
         }
     }
 }
 
+#if 0
 void MainWindow::on_actionSave_triggered()
 {
     if (models[0] && models[0]->save()) {
@@ -493,6 +510,7 @@ void MainWindow::on_actionSave_triggered()
         return;
     }
 }
+#endif
 
 void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 {
@@ -681,6 +699,7 @@ void MainWindow::on_play_step_valueChanged(int step)
 {
     if (currentModel && currentModel->modelType() == DisplaceModel::OfflineModelType) {
         currentModel->setCurrentStep(step);
+        mStatsController->setCurrentTimeStep(step);
         updateAllDisplayObjects();
     }
 }
@@ -897,14 +916,22 @@ void MainWindow::on_actionCreate_Graph_triggered()
         return;
 
     CreateGraphDialog dlg(this);
+    QStringList list;
+    list << QString();
+    list << mMapController->getShapefilesList(currentModelIdx);
+    dlg.setShapefileList(list);
 
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder gb;
         gb.setType(GraphBuilder::Hex);
-        gb.setDistance(dlg.step());
+        gb.setDistance(dlg.step() * 1000);
         gb.setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
-        QList<QPointF> l = gb.buildGraph();
+        QString s = dlg.getSelectedShapefile();
+        if (!s.isEmpty())
+            gb.setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
+
+        QList<GraphBuilder::Node> l = gb.buildGraph();
 
         currentModel->addGraph (l, mMapController);
     }
@@ -937,4 +964,25 @@ bool MainWindow::loadLiveModel(QString path, QString *error)
     emit modelStateChanged();
 
     return true;
+}
+
+void MainWindow::on_actionExport_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath;
+
+    lastpath = sets.value("last_export", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getSaveFileName(this, tr("Export Graph"), lastpath, tr("Graph Files (*.dat)"));
+    if (!fn.isEmpty()) {
+        if (currentModel->exportGraph(fn)) {
+            QFileInfo info(fn);
+            sets.setValue("last_export", info.absolutePath());
+        } else {
+            QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(currentModel->getLastError()));
+        }
+    }
 }

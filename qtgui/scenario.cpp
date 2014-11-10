@@ -114,32 +114,34 @@ void Scenario::setGraph_res(double value)
     graph_res = value;
 }
 
-bool Scenario::save(QString path, QString modelname, QString outputname)
+bool Scenario::save(QString path, QString modelname, QString outputname, QString *error)
 {
     QString realpath = path + "/simusspe_" + modelname +"/" + outputname + ".dat";
     QFile file (realpath);
 
-    if (!file.open(QFile::WriteOnly))
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        if (error) *error = file.errorString();
         return false;
+    }
 
     QTextStream stream (&file);
 
-    stream << "# dyn_alloc_sce\n";
+    stream << "# dyn_alloc_sce"<< endl;
     foreach (QString a, dyn_alloc_sce)
         stream << a << " ";
     stream << endl;
 
-    stream <<"# dyn_pop_sce\n";
+    stream <<"# dyn_pop_sce"<< endl;
     foreach (QString a, dyn_pop_sce)
         stream << a << " ";
     stream << endl;
 
-    stream << "# biolsce\n" << biolsce << "\n";
-    stream << "# a_graph\n" << graph << "\n";
-    stream << "# nrow_coord\n" << nrow_coord << "\n";
-    stream << "# nrow_graph\n" << nrow_graph << "\n";
-    stream << "# a_port\n" << a_port << "\n";
-    stream << "# grid res km\n" << graph_res << "\n";
+    stream << "# biolsce\n" << biolsce << endl;
+    stream << "# a_graph\n" << graph << endl;
+    stream << "# nrow_coord\n" << nrow_coord << endl;
+    stream << "# nrow_graph\n" << nrow_graph << endl;
+    stream << "# a_port\n" << a_port << endl;
+    stream << "# grid res km\n" << graph_res << endl;
 
     file.close();
     return true;

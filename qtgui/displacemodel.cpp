@@ -216,21 +216,33 @@ bool DisplaceModel::prepareDatabaseForSimulation()
     return true;
 }
 
-bool DisplaceModel::saveAs(const QString &path)
+bool DisplaceModel::saveScenarioAs(const QString &path)
 {
     if (!parse(path, &mBasePath, &mInputName, &mOutputName))
         return false;
 
     mFullPath = path;
-    return save();
+    return saveScenario();
 }
 
-bool DisplaceModel::save()
+bool DisplaceModel::saveScenario()
 {
-    if (!mScenario.save(mBasePath, mInputName, mOutputName))
+    QString error;
+    if (!mScenario.save(mBasePath, mInputName, mOutputName, &error)) {
+        mLastError = error;
         return false;
-    if (!mConfig.save(mBasePath, mInputName, mOutputName))
+    }
+
+    return true;
+}
+
+bool DisplaceModel::saveConfig()
+{
+    QString error;
+    if (!mConfig.save(mBasePath, mInputName, mOutputName, &error)) {
+        mLastError = error;
         return false;
+    }
 
     return true;
 }
@@ -424,33 +436,72 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mVesselsStatsDirty = true;
 }
 
-bool DisplaceModel::addGraph(const QList<QPointF> &points, MapObjectsController *controller)
+bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller)
 {
     if (mModelType != EditorModelType)
         return false;
 
-    foreach(QPointF point, points) {
+    QList<std::shared_ptr<NodeData> > newnodes;
+    int nodeidx = mNodes.count();
+    int cntr = 0;
+    foreach(GraphBuilder::Node node, nodes) {
+//        if (!node.good) {
+//            continue;
+//        }
+
         int nodeid = mNodes.size();
 
         OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
         feature->SetField(FLD_NODEID, nodeid);
 
         OGRPoint pt;
-        pt.setX(point.x());
-        pt.setY(point.y());
+        pt.setX(node.point.x());
+        pt.setY(node.point.y());
 
         feature->SetGeometry(&pt);
 
         mNodesLayer->CreateFeature(feature);
 
-        std::shared_ptr<Node> nd (new Node());
-        nd->set_xy(point.x(), point.y());
-        std::shared_ptr<NodeData> node (new NodeData(nd, this));
-        mNodes.push_back(node);
+        std::shared_ptr<Node> nd (new Node(cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+        std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+        mNodes.push_back(nodedata);
 
+        if (node.good) {
+            foreach (int adidx, node.adiacencies) {
+                if (nodes[adidx].good)
+                    nodedata->appendAdiancency(adidx + nodeidx, 0.0);
+            }
+        } else {
+            nodedata->setDeleted(true);
+        }
+
+        newnodes.push_back(nodedata);
+        ++cntr;
+    }
+
+    foreach(std::shared_ptr<NodeData> node, newnodes) {
         controller->addNode(mIndex, node);
     }
 
+
+    return true;
+}
+
+bool DisplaceModel::exportGraph(const QString &path)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        mLastError = file.errorString();
+        return false;
+    }
+
+    QTextStream strm(&file);
+    foreach (std::shared_ptr<NodeData> nd, mNodes) {
+        if (!nd->isDeleted())
+            strm << nd->get_x() << " " << nd->get_y() << " " << "0" << endl;
+    }
+
+    file.close();
     return true;
 }
 
@@ -578,7 +629,7 @@ void DisplaceModel::setInterestingHarb(int n)
 {
     if (!mInterestingHarb.contains(n))
         mInterestingHarb.append(n);
-        qSort(mInterestingHarb);
+    qSort(mInterestingHarb);
 }
 
 void DisplaceModel::remInterestingHarb(int n)
@@ -1268,7 +1319,7 @@ bool DisplaceModel::initNations()
         }
         mNations.push_back(data);
 
-        mInterestingNations.push_back(i);
+        setInterestingNations(i);
     }
 
     return true;

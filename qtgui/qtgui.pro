@@ -9,6 +9,7 @@ TARGET = displacegui
 INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/
 
 include (../QMapControl/QMapControl/QMapControl.pri)
+include ("$$top_srcdir/localconfig.pri")
 
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol

@@ -21,6 +21,8 @@ public:
 
     double mCumCatches;
     double mCumProfit;
+    double mGav;
+    double mVpuf;
 
     QVector<double> szCatches;
 };

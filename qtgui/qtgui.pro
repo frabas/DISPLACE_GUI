@@ -9,6 +9,7 @@ TARGET = displacegui
 INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/
 
 include (../QMapControl/QMapControl/QMapControl.pri)
+include ("$$top_srcdir/localconfig.pri")
 
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol
@@ -95,7 +96,10 @@ SOURCES += \
     mapobjects/edgelayer.cpp \
     utils/memoryinfo.cpp \
     creategraphdialog.cpp \
-    graphbuilder.cpp
+    graphbuilder.cpp \
+    calendar.cpp \
+    waitdialog.cpp \
+    backgroundworker.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -104,7 +108,8 @@ FORMS += \
     editpalettedialog.ui \
     configdialog.ui \
     mapobjects/nodedetailswidget.ui \
-    creategraphdialog.ui
+    creategraphdialog.ui \
+    waitdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -153,7 +158,10 @@ HEADERS += \
     mapobjects/edgelayer.h \
     utils/memoryinfo.h \
     creategraphdialog.h \
-    graphbuilder.h
+    graphbuilder.h \
+    calendar.h \
+    waitdialog.h \
+    backgroundworker.h
 
 RESOURCES += \
     qtgui.qrc

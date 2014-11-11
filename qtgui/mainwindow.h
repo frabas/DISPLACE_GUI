@@ -13,6 +13,8 @@
 #include <memory>
 #include <QMapControl/Point.h>
 
+#include <backgroundworker.h>
+
 using namespace qmapcontrol;
 
 namespace Ui {
@@ -28,6 +30,7 @@ class ObjectTreeModel;
 class DisplaceModel;
 class Simulator;
 class MapObjectsController;
+class WaitDialog;
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -61,12 +64,14 @@ private slots:
     void playTimerTimeout();
     void memoryTimerTimeout();
 
+    void waitStart();
+    void waitEnd();
+
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
     void on_cmdStop_clicked();
     void on_actionScenario_triggered();
-//    void on_actionSave_triggered();
     void on_treeView_doubleClicked(const QModelIndex &index);
     void on_saveConsoleButton_clicked();
     void on_cmdSetup_clicked();
@@ -96,15 +101,15 @@ private slots:
     void on_actionNode_Editor_toggled(bool arg1);
     void on_actionClear_Graph_triggered();
     void on_actionCreate_Graph_triggered();
-
     void on_actionExport_Graph_triggered();
 
 signals:
     void modelStateChanged();
 
-protected:
+public:
     bool loadLiveModel(QString path, QString *error);
 
+protected:
     void updateModelList();
     void updateAllDisplayObjects();
     void closeEvent ( QCloseEvent * event );
@@ -118,6 +123,7 @@ protected:
 
     int newEditorModel(QString name);
 
+    void startBackgroundOperation (BackgroundWorker *work);
 private:
     Ui::MainWindow *ui;
 
@@ -143,6 +149,10 @@ private:
 
     QString mLastRunSimulationName;
     QString mLastRunDatabase;
+
+    /* Other objects */
+
+    WaitDialog *mWaitDialog;
 
     static const QString dbSuffix;
     static const QString dbFilter;

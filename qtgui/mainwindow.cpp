@@ -18,6 +18,10 @@
 #include <graphinteractioncontroller.h>
 #include <graphbuilder.h>
 
+#include <waitdialog.h>
+
+#include <backgroundworker.h>
+
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
@@ -53,7 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mMapController(0),
     map(0),
     treemodel(0),
-    mPlayTimerInterval(playTimerDefault)
+    mPlayTimerInterval(playTimerDefault),
+    mWaitDialog(0)
 {
     ui->setupUi(this);
 
@@ -136,6 +141,26 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+class Loader : public BackgroundWorker {
+    QString mDir;
+public:
+    Loader(MainWindow *main, QString dir)
+        : BackgroundWorker(main), mDir(dir) {
+    }
+
+    virtual void execute() override {
+        qDebug() << "Loader started";
+        QString error;
+        if (!mMain->loadLiveModel(mDir, &error)) {
+            QMessageBox::warning(mMain, tr("Load failed."),
+                                 QString(tr("Error loading model %1: %2")).arg(mDir).arg(error));
+            return;
+        }
+
+    }
+};
+
+
 void MainWindow::on_action_Load_triggered()
 {
     QSettings sets;
@@ -152,12 +177,9 @@ void MainWindow::on_action_Load_triggered()
     QDir d (dir);
     sets.setValue("lastpath", d.absolutePath());
 
-    QString error;
-    if (!loadLiveModel(dir, &error)) {
-        QMessageBox::warning(this, tr("Load failed."),
-                             QString(tr("Error loading model %1: %2")).arg(d.absolutePath()).arg(error));
-        return;
-    }
+    Loader *loader = new Loader(this,dir);
+
+    startBackgroundOperation(loader);
 }
 
 void MainWindow::on_modelSelector_currentIndexChanged(int index)
@@ -166,6 +188,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Invisible);
     }
 
+    int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     currentModelIdx = ui->modelSelector->itemData(index).toInt();
     if (currentModelIdx >= 0)
         currentModel = models[currentModelIdx];
@@ -204,6 +227,8 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
             ui->play_step->setMaximum(0);
         }
     }
+
+    ui->play_step->setValue(currentStep);
 
     /* Editor specific tools */
     e = type == DisplaceModel::EditorModelType;
@@ -316,6 +341,23 @@ void MainWindow::memoryTimerTimeout()
     mMemInfoLabel->setText(QString(tr("Used memory: %1Mb Peak: %2Mb")).arg(mMemInfo.rss()/1024).arg(mMemInfo.peakRss()/1024));
 }
 
+void MainWindow::waitStart()
+{
+    if (!mWaitDialog) {
+        mWaitDialog = new WaitDialog(this);
+    }
+    mWaitDialog->show();
+}
+
+void MainWindow::waitEnd()
+{
+    if (mWaitDialog) {
+        mWaitDialog->close();
+        delete mWaitDialog;
+        mWaitDialog = 0;
+    }
+}
+
 void MainWindow::updateModelList()
 {
     int n = ui->modelSelector->currentData().toInt();
@@ -410,6 +452,7 @@ void MainWindow::on_cmdStart_clicked()
         mLastRunSimulationName = models[0]->simulationName();
         mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->prepareDatabaseForSimulation();
+        models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
         mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }
@@ -694,6 +737,17 @@ int MainWindow::newEditorModel(QString name)
     return i;
 }
 
+void MainWindow::startBackgroundOperation(BackgroundWorker *work)
+{
+    QThread *thread = new QThread(this);
+
+    work->moveToThread(thread);
+    connect (thread, SIGNAL(started()), work, SLOT(process()));
+    connect (work, SIGNAL(workStarted()), this, SLOT(waitStart()));
+    connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
+
+    thread->start();
+}
 
 void MainWindow::on_play_step_valueChanged(int step)
 {

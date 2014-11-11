@@ -1,6 +1,7 @@
 #include "displacemodel.h"
 #include <exceptions.h>
 #include <dbhelper.h>
+#include <calendar.h>
 
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
@@ -16,6 +17,7 @@ const char *FLD_NODEID="nodeid";
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
       mDb(0),
+      mCalendar(),
       mInputName(),mBasePath(),mOutputName(),
       mSimuName("simu2"),
       mLinkedDbName(),
@@ -94,6 +96,7 @@ bool DisplaceModel::load(QString path)
     try {
         mScenario = Scenario::readFromFile(mInputName, mBasePath, mOutputName);
         mConfig = Config::readFromFile(mInputName, mBasePath, mOutputName);
+        mCalendar = std::shared_ptr<Calendar> (Calendar::load(mBasePath, mInputName));
 
         mInterestingHarb = mConfig.m_interesting_harbours;
 
@@ -212,6 +215,22 @@ bool DisplaceModel::prepareDatabaseForSimulation()
         /* end: commit transaction */
         mDb->endTransaction();
     }
+
+    return true;
+}
+
+bool DisplaceModel::clearStats()
+{
+    mStatsPopulations.clear();
+    for (int i = 0; i < mStatsNationsCollected.size(); ++i) {
+        mStatsPopulationsCollected[i].clear();
+    }
+
+    mStatsNations.clear();
+    mStatsNationsCollected.clear();
+
+    mStatsHarbours.clear();
+    mStatsHarboursCollected.clear();
 
     return true;
 }
@@ -337,6 +356,11 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
 
+        if (mCalendar && mCalendar->isYear(tstep)) {
+            mStatsNationsCollected.clear();
+            mStatsHarboursCollected.clear();
+        }
+
         // don't clear stats: they are cumulated
 //        mStatsNationsCollected.clear();
 //        mStatsHarboursCollected.clear();
@@ -404,7 +428,6 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     std::shared_ptr<VesselData> vessel = mVessels.at(stats.vesselId);
 
     vessel->setLastHarbour(stats.lastHarbour);
-    vessel->setRevenue(stats.revenue);
     vessel->setRevenueAV(stats.revenueAV);
     vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
     vessel->mVessel->set_timeatsea(stats.timeAtSea);
@@ -414,14 +437,18 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsNationsCollected.push_back(NationStats());
     }
 
-    mStatsNationsCollected[nat].mRevenues += stats.revenue;
+    mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
+    mStatsNationsCollected[nat].mGav += stats.gav;
+    mStatsNationsCollected[nat].mVpuf += stats.vpuf();
 
-    int hidx = vessel->getLastHarbour();
+    int hidx = mNodes[vessel->getLastHarbour()]->getHarbourId();
     while (mStatsHarboursCollected.size() <= hidx)
         mStatsHarboursCollected.push_back(HarbourStats());
 
-    mStatsHarboursCollected[hidx].mCumProfit += stats.revenue;
+    mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
+    mStatsHarboursCollected[hidx].mGav += stats.gav;
+    mStatsHarboursCollected[hidx].mVpuf += stats.vpuf();
 
     int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {

@@ -28,6 +28,7 @@
 
 class DbHelper;
 class MapObjectsController;
+class Calendar;
 
 class DisplaceModel : public QObject
 {
@@ -57,9 +58,12 @@ public:
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();
+    bool clearStats();
     bool saveScenarioAs(const QString &path);
     bool saveScenario();
     bool saveConfig();
+
+    std::shared_ptr<Calendar> calendar() const { return mCalendar; }
 
     /** \brief Signals the simulation has ended. Flush all buffers */
     void simulationEnded();
@@ -292,6 +296,7 @@ signals:
 private:
     ModelType mModelType;
     DbHelper *mDb;
+    std::shared_ptr<Calendar> mCalendar;
     QString mFullPath;
     QString mInputName;
     QString mBasePath;

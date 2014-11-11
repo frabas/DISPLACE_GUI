@@ -56,5 +56,33 @@ void VesselData::addCatch(int idx, double val)
         mCatches.push_back(0);
     mCatches[idx] += val;
 }
+double VesselData::getCumFuelCons() const
+{
+    return cumFuelCons;
+}
+
+void VesselData::setCumFuelCons(double value)
+{
+    cumFuelCons = value;
+}
+double VesselData::getFuelCost() const
+{
+    return fuelCost;
+}
+
+void VesselData::setFuelCost(double value)
+{
+    fuelCost = value;
+}
+double VesselData::getGav() const
+{
+    return gav;
+}
+
+void VesselData::setGav(double value)
+{
+    gav = value;
+}
+
 
 

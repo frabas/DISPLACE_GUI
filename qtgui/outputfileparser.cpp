@@ -216,6 +216,7 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.lastHarbour = toInt(fields[4]);
         v.vesselId = toInt(fields[5]);
         v.timeAtSea = toDouble(fields[7]);
+        v.cumFuelCons = toDouble(fields[8]);
 
         int pop = fields.size() - 16;
         for (int i = 0; i < pop; ++i) {
@@ -224,6 +225,8 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         }
         v.revenue = toDouble(fields[10 + pop + 1]);
         v.revenueAV = toDouble(fields[10 + pop + 2]);
+        v.fuelCost = toDouble(fields[10 + pop + 3]);
+        v.gav = toDouble(fields[10 + pop + 5]);
 
     } catch (std::exception &x) {
         Q_UNUSED(x);

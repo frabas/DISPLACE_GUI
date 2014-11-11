@@ -313,6 +313,12 @@ void StatsController::updateNationStats(DisplaceModel *model)
                 case TimeAtSea:
                     valueData << it.value().at(ip).mTimeAtSea;
                     break;
+                case Gav:
+                    valueData << it.value().at(ip).mGav;
+                    break;
+                case Vpuf:
+                    valueData << it.value().at(ip).mVpuf;
+                    break;
                 }
             }
             ++it;
@@ -371,6 +377,12 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
                     break;
                 case H_Earnings:
                     valueData << it.value().at(ip).mCumProfit;
+                    break;
+                case H_Gav:
+                    valueData << it.value().at(ip).mGav;
+                    break;
+                case H_Vpuf:
+                    valueData << it.value().at(ip).mVpuf;
                     break;
                 }
             }

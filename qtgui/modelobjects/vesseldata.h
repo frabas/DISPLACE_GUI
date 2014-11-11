@@ -32,17 +32,31 @@ public:
     void setCatch(int idx, double val);
     void addCatch(int idx, double val);
 
+    double getCumFuelCons() const;
+    void setCumFuelCons(double value);
+
+    double getFuelCost() const;
+    void setFuelCost(double value);
+
+    double getGav() const;
+    void setGav(double value);
+
 private:
     int mNationality;
     int mLastHarbour;
     double mRevenue;
     double mRevenueAV;
+    double cumFuelCons;
+    double fuelCost;
+    double gav;
 
     QList<double> mCatches;
 };
 
 class VesselStats {
 public:
+    double vpuf() const { return gav / cumFuelCons; }
+
     int tstep;
 
     int vesselId;
@@ -51,6 +65,9 @@ public:
     double revenueAV;
     double timeAtSea;
     int reasonToGoBack;
+    double cumFuelCons;
+    double fuelCost;
+    double gav;
 
     QList<double> mCatches;
 

@@ -440,12 +440,16 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
     mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
+    mStatsNationsCollected[nat].mGav += stats.gav;
+    mStatsNationsCollected[nat].mVpuf += stats.vpuf();
 
     int hidx = mNodes[vessel->getLastHarbour()]->getHarbourId();
     while (mStatsHarboursCollected.size() <= hidx)
         mStatsHarboursCollected.push_back(HarbourStats());
 
     mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
+    mStatsHarboursCollected[hidx].mGav += stats.gav;
+    mStatsHarboursCollected[hidx].mVpuf += stats.vpuf();
 
     int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {

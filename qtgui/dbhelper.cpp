@@ -192,8 +192,8 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
     QSqlQuery q,qn;
 
     bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
-                       + "(tstep,vid,timeatsea,harbour,reason,revenue,revenue_av)"
-                       + " VALUES(?,?,?,?,?,?,?)");
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue,revenue_av,cumfuel,fuelcost,gav)"
+                       + " VALUES(?,?,?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
@@ -206,8 +206,11 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
     q.addBindValue(vessel.mVessel->get_timeatsea());
     q.addBindValue(vessel.getLastHarbour());
     q.addBindValue(vessel.mVessel->get_reason_to_go_back());
-    q.addBindValue(vessel.getRevenue());
+    q.addBindValue(0);
     q.addBindValue(vessel.getRevenueAV());
+    q.addBindValue(vessel.getCumFuelCons());
+    q.addBindValue(vessel.getFuelCost());
+    q.addBindValue(vessel.getGav());
 
     r = q.exec();
     DB_ASSERT(r,q);
@@ -497,14 +500,16 @@ bool DbHelper::updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> 
         int r = q.value(7).toInt();
         double course = q.value(8).toDouble();
 
-        std::shared_ptr<VesselData> v (vessels.at(idx));
-        v->mVessel->set_xy(x,y);
-        v->mVessel->set_fuelcons(fuel);
-        v->mVessel->set_state(state);
-        v->mVessel->set_cumcatches(cum);
-        v->mVessel->set_timeatsea(tim);
-        v->mVessel->set_reason_to_go_back(r);
-        v->mVessel->set_course(course);
+        if (idx < vessels.size()) {
+            std::shared_ptr<VesselData> v (vessels.at(idx));
+            v->mVessel->set_xy(x,y);
+            v->mVessel->set_fuelcons(fuel);
+            v->mVessel->set_state(state);
+            v->mVessel->set_cumcatches(cum);
+            v->mVessel->set_timeatsea(tim);
+            v->mVessel->set_reason_to_go_back(r);
+            v->mVessel->set_course(course);
+        }
     }
     return true;
 }
@@ -523,9 +528,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double tot = q.value(2).toDouble();
         double totw = q.value(3).toDouble();
 
-        nodes.at(nid)->set_cumftime(cum);
-        nodes.at(nid)->setPopTot(tot);
-        nodes.at(nid)->setPopWTot(totw);
+        if (nid < nodes.size()) {
+            nodes.at(nid)->set_cumftime(cum);
+            nodes.at(nid)->setPopTot(tot);
+            nodes.at(nid)->setPopWTot(totw);
+        }
     }
 
     q.prepare ("SELECT nodeid,popid,pop,popw,impact FROM " + TBL_POPNODES_STATS
@@ -541,9 +548,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double valw = q.value(3).toDouble();
         double impact = q.value(4).toDouble();
 
-        nodes.at(nid)->setPop(pid,val);
-        nodes.at(nid)->setPopW(pid,valw);
-        nodes.at(nid)->setImpact(pid,impact);
+        if (nid < nodes.size()) {
+            nodes.at(nid)->setPop(pid,val);
+            nodes.at(nid)->setPopW(pid,valw);
+            nodes.at(nid)->setImpact(pid,impact);
+        }
     }
     return true;
 }
@@ -631,7 +640,7 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
-    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour,SUM(gav),SUM(gav/cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     foreach(int tstep, steps) {
@@ -677,6 +686,8 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             double rev = q2.value(2).toDouble();
             int hid = q2.value(3).toInt();
             int hidx = nodes.at(hid)->getHarbourId();
+            double gav = q2.value(4).toDouble();
+            double vpuf = q2.value(5).toDouble();
 
             while (curnationsdata.size() <= nid)
                 curnationsdata.push_back(NationStats());
@@ -685,8 +696,12 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
 
             curnationsdata[nid].mRevenues += rev;
             curnationsdata[nid].mTimeAtSea += timeatsea;
+            curnationsdata[nid].mGav += gav;
+            curnationsdata[nid].mVpuf += vpuf;
             //curHarbourData[hidx].mCumCatches += catches;
             curHarbourData[hidx].mCumProfit += rev;
+            curHarbourData[hidx].mGav += gav;
+            curHarbourData[hidx].mVpuf += vpuf;
         }
 
         nations.push_back(curnationsdata);
@@ -703,7 +718,7 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
-    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
+    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(gav/cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     HarbourStats curHarbourData;
@@ -735,7 +750,8 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
         double rev = q2.value(1).toDouble();
 
         curHarbourData.mCumProfit += rev;
-
+        curHarbourData.mVpuf += q2.value(2).toDouble();
+        curHarbourData.mGav += q2.value(3).toDouble();
     }
 
     return curHarbourData;
@@ -1012,7 +1028,10 @@ bool DbHelper::checkVesselsTable(int version)
                + "harbour INTEGER,"
                + "reason INTEGER,"
                + "revenue REAL,"
-               + "revenue_av REAL"
+               + "revenue_av REAL,"
+               + "cumfuel REAL,"
+               + "fuelcost REAL,"
+               + "gav REAL"
                + ");"
                );
 

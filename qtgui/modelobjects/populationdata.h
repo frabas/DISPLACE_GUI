@@ -26,6 +26,14 @@ public:
     double getMortalityTot() const;
     void setMortalityTot(double value);
 
+    void clear() {
+        for (int i = 0; i < aggregate.size(); ++i)
+            aggregate[i] = 0;
+        for (int i = 0; i < mortality.size(); ++i)
+            mortality[i] = 0;
+        totAggregate = totMortality = 0;
+    }
+
     const QVector<double> &getAggregate() const;
     void setAggregate(const QVector<double> &value);
     const QVector<double> &getMortality() const;

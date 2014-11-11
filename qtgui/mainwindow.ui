@@ -280,6 +280,16 @@
                   <string>Profit</string>
                  </property>
                 </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Added Value</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>VPUF</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -415,6 +425,16 @@
                 <item>
                  <property name="text">
                   <string>Time At Sea</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Value Added</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>VPUF</string>
                  </property>
                 </item>
                </widget>

@@ -32,6 +32,8 @@ public:
         return mData.begin();
     }
 
+    void clear() { mData.clear(); }
+
 protected:
     Container mData;
 };

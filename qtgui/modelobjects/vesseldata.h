@@ -51,7 +51,7 @@ private:
 
 class VesselStats {
 public:
-    double vpuf() const { return gav / cumFuelCons; }
+    double vpuf() const { return revenueAV / cumFuelCons; }
 
     int tstep;
 

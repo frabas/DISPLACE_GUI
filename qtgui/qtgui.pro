@@ -97,7 +97,9 @@ SOURCES += \
     utils/memoryinfo.cpp \
     creategraphdialog.cpp \
     graphbuilder.cpp \
-    calendar.cpp
+    calendar.cpp \
+    waitdialog.cpp \
+    backgroundworker.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -106,7 +108,8 @@ FORMS += \
     editpalettedialog.ui \
     configdialog.ui \
     mapobjects/nodedetailswidget.ui \
-    creategraphdialog.ui
+    creategraphdialog.ui \
+    waitdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -156,7 +159,9 @@ HEADERS += \
     utils/memoryinfo.h \
     creategraphdialog.h \
     graphbuilder.h \
-    calendar.h
+    calendar.h \
+    waitdialog.h \
+    backgroundworker.h
 
 RESOURCES += \
     qtgui.qrc

@@ -18,6 +18,10 @@
 #include <graphinteractioncontroller.h>
 #include <graphbuilder.h>
 
+#include <waitdialog.h>
+
+#include <backgroundworker.h>
+
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
@@ -53,7 +57,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mMapController(0),
     map(0),
     treemodel(0),
-    mPlayTimerInterval(playTimerDefault)
+    mPlayTimerInterval(playTimerDefault),
+    mWaitDialog(0)
 {
     ui->setupUi(this);
 
@@ -136,6 +141,26 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+class Loader : public BackgroundWorker {
+    QString mDir;
+public:
+    Loader(MainWindow *main, QString dir)
+        : BackgroundWorker(main), mDir(dir) {
+    }
+
+    virtual void execute() override {
+        qDebug() << "Loader started";
+        QString error;
+        if (!mMain->loadLiveModel(mDir, &error)) {
+            QMessageBox::warning(mMain, tr("Load failed."),
+                                 QString(tr("Error loading model %1: %2")).arg(mDir).arg(error));
+            return;
+        }
+
+    }
+};
+
+
 void MainWindow::on_action_Load_triggered()
 {
     QSettings sets;
@@ -152,12 +177,9 @@ void MainWindow::on_action_Load_triggered()
     QDir d (dir);
     sets.setValue("lastpath", d.absolutePath());
 
-    QString error;
-    if (!loadLiveModel(dir, &error)) {
-        QMessageBox::warning(this, tr("Load failed."),
-                             QString(tr("Error loading model %1: %2")).arg(d.absolutePath()).arg(error));
-        return;
-    }
+    Loader *loader = new Loader(this,dir);
+
+    startBackgroundOperation(loader);
 }
 
 void MainWindow::on_modelSelector_currentIndexChanged(int index)
@@ -317,6 +339,23 @@ void MainWindow::memoryTimerTimeout()
 {
     mMemInfo.update();
     mMemInfoLabel->setText(QString(tr("Used memory: %1Mb Peak: %2Mb")).arg(mMemInfo.rss()/1024).arg(mMemInfo.peakRss()/1024));
+}
+
+void MainWindow::waitStart()
+{
+    if (!mWaitDialog) {
+        mWaitDialog = new WaitDialog(this);
+    }
+    mWaitDialog->show();
+}
+
+void MainWindow::waitEnd()
+{
+    if (mWaitDialog) {
+        mWaitDialog->close();
+        delete mWaitDialog;
+        mWaitDialog = 0;
+    }
 }
 
 void MainWindow::updateModelList()
@@ -698,6 +737,17 @@ int MainWindow::newEditorModel(QString name)
     return i;
 }
 
+void MainWindow::startBackgroundOperation(BackgroundWorker *work)
+{
+    QThread *thread = new QThread(this);
+
+    work->moveToThread(thread);
+    connect (thread, SIGNAL(started()), work, SLOT(process()));
+    connect (work, SIGNAL(workStarted()), this, SLOT(waitStart()));
+    connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
+
+    thread->start();
+}
 
 void MainWindow::on_play_step_valueChanged(int step)
 {

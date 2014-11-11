@@ -24,15 +24,7 @@ void VesselData::setLastHarbour(int value)
 {
     mLastHarbour = value;
 }
-double VesselData::getRevenue() const
-{
-    return mRevenue;
-}
 
-void VesselData::setRevenue(double value)
-{
-    mRevenue = value;
-}
 double VesselData::getRevenueAV() const
 {
     return mRevenueAV;

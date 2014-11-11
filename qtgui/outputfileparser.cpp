@@ -223,7 +223,6 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
             double value = toDouble(fields[10+i]);
             v.mCatches.push_back(value);
         }
-        v.revenue = toDouble(fields[10 + pop + 1]);
         v.revenueAV = toDouble(fields[10 + pop + 2]);
         v.fuelCost = toDouble(fields[10 + pop + 3]);
         v.gav = toDouble(fields[10 + pop + 5]);

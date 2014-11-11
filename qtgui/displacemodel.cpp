@@ -428,7 +428,6 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     std::shared_ptr<VesselData> vessel = mVessels.at(stats.vesselId);
 
     vessel->setLastHarbour(stats.lastHarbour);
-    vessel->setRevenue(stats.revenue);
     vessel->setRevenueAV(stats.revenueAV);
     vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
     vessel->mVessel->set_timeatsea(stats.timeAtSea);

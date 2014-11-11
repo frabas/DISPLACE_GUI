@@ -21,9 +21,6 @@ public:
     int getLastHarbour() const;
     void setLastHarbour(int value);
 
-    double getRevenue() const;
-    void setRevenue(double value);
-
     double getRevenueAV() const;
     void setRevenueAV(double value);
 
@@ -44,7 +41,6 @@ public:
 private:
     int mNationality;
     int mLastHarbour;
-    double mRevenue;
     double mRevenueAV;
     double cumFuelCons;
     double fuelCost;
@@ -61,7 +57,6 @@ public:
 
     int vesselId;
     int lastHarbour;
-    double revenue;
     double revenueAV;
     double timeAtSea;
     int reasonToGoBack;

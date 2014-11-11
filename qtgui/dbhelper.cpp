@@ -206,7 +206,7 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
     q.addBindValue(vessel.mVessel->get_timeatsea());
     q.addBindValue(vessel.getLastHarbour());
     q.addBindValue(vessel.mVessel->get_reason_to_go_back());
-    q.addBindValue(vessel.getRevenue());
+    q.addBindValue(0);
     q.addBindValue(vessel.getRevenueAV());
     q.addBindValue(vessel.getCumFuelCons());
     q.addBindValue(vessel.getFuelCost());

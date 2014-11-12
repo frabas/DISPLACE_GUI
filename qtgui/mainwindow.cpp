@@ -498,14 +498,9 @@ void MainWindow::on_actionScenario_triggered()
                     return;
                 }
 
-                QString error;
-                if (!loadLiveModel(currentModel->fullpath(), &error)) {
-                    QMessageBox::warning(this, tr("Error reloading model."),
-                                         QString(tr("There was an error loading the model. Likely the scenario is wrong. "
-                                                    "The old model has been kept, so you can fix it. But it will not be possible "
-                                                    "to run a simulation.\n"
-                                                    "The error message was: %1")).arg(error));
-                }
+                Loader *loader = new Loader(this,currentModel->fullpath());
+
+                startBackgroundOperation(loader);
             }
         }
     }

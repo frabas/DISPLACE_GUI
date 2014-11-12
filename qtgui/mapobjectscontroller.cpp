@@ -26,12 +26,11 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
-//      mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
-      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
       mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
+      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -67,13 +66,6 @@ void MapObjectsController::removeModel(int model_n)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-//    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
-
-//    std::shared_ptr<Palette> p = PaletteManager::instance()->palette(PopulationRole);
-
-//    for (int i = 0; i < (int)LastRole; ++i)
-//        mPaletteManager[model_n]->setPalette((PaletteRole)i, *p);
-
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 
@@ -100,17 +92,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {
-        HarbourMapObject *obj = new HarbourMapObject(this, model, h.get());
-        mHarbourObjects[model_n].append(obj);
-
-        mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+        addHarbour(model_n, h, true);
     }
 
     const QList<std::shared_ptr<NodeData> > &nodes = model->getNodesList();
     foreach (std::shared_ptr<NodeData> nd, nodes) {
         if (nd->get_harbour())
             continue;
-        addNode(model_n, nd);
+        addNode(model_n, nd, true);
     }
 
     const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
@@ -362,6 +351,14 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
 
         mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
     }
+}
+
+void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> h, bool disable_redraw)
+{
+    HarbourMapObject *obj = new HarbourMapObject(this, mModels[model_n].get(), h.get());
+    mHarbourObjects[model_n].append(obj);
+
+    mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 }
 
 void MapObjectsController::delSelectedEdges(int model)

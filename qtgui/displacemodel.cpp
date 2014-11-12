@@ -532,6 +532,18 @@ bool DisplaceModel::exportGraph(const QString &path)
     return true;
 }
 
+bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
+{
+    foreach (std::shared_ptr<HarbourData> h, list) {
+        mHarbours.push_back(h);
+
+        std::shared_ptr<NodeData> n (new NodeData(h->mHarbour, this));
+        mNodes.push_back(n);
+    }
+
+    return true;
+}
+
 int DisplaceModel::getVesselCount() const
 {
     return mVessels.size();

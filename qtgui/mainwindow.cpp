@@ -10,6 +10,7 @@
 #include <simulator.h>
 #include <editpalettedialog.h>
 
+#include <inputfileparser.h>
 #include <scenariodialog.h>
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
@@ -1083,4 +1084,33 @@ void MainWindow::on_actionExport_Graph_triggered()
             QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(currentModel->getLastError()));
         }
     }
+}
+
+void MainWindow::on_actionLoad_Harbours_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath;
+
+    lastpath = sets.value("last_harb", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getOpenFileName(this, tr("Import Harbours file"), lastpath, tr("Harbour Files (*.dat)"));
+    if (!fn.isEmpty()) {
+        QList<std::shared_ptr<HarbourData> > list;
+        QString error;
+        InputFileParser parser;
+        if (parser.parseHarbourFile(fn, list, &error)) {
+            currentModel->importHarbours(list);
+            foreach (std::shared_ptr<HarbourData> h, list)
+                mMapController->addHarbour(currentModelIdx, h, true);
+
+            QFileInfo info(fn);
+            sets.setValue("last_harb", info.absolutePath());
+        } else {
+            QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(error));
+        }
+    }
+
 }

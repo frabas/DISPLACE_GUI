@@ -90,6 +90,7 @@
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
+    <addaction name="actionLoad_Harbours"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
@@ -894,6 +895,11 @@
   <action name="actionCreate_Graph">
    <property name="text">
     <string>Create Graph...</string>
+   </property>
+  </action>
+  <action name="actionLoad_Harbours">
+   <property name="text">
+    <string>Load Harbours...</string>
    </property>
   </action>
  </widget>

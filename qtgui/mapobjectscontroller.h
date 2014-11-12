@@ -32,6 +32,7 @@ class VesselMapObject;
 class EdgeLayer;
 class EdgeMapObject;
 class NodeData;
+class HarbourData;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -207,6 +208,7 @@ public:
 
 
     void addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw = false);
+    void addHarbour(int model_n, std::shared_ptr<HarbourData> nd, bool disable_redraw = false);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);

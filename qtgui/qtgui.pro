@@ -99,7 +99,8 @@ SOURCES += \
     graphbuilder.cpp \
     calendar.cpp \
     waitdialog.cpp \
-    backgroundworker.cpp
+    backgroundworker.cpp \
+    inputfileparser.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -161,7 +162,8 @@ HEADERS += \
     graphbuilder.h \
     calendar.h \
     waitdialog.h \
-    backgroundworker.h
+    backgroundworker.h \
+    inputfileparser.h
 
 RESOURCES += \
     qtgui.qrc

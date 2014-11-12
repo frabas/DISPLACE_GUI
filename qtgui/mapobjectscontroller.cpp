@@ -327,7 +327,7 @@ void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataS
     mShapefiles[model].append(datasource);
 }
 
-void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
+void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw)
 {
     if (nd->isDeleted())
         return;
@@ -336,33 +336,32 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
     connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
     mNodeObjects[model_n].append(obj);
 
-    mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity());
+    mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     /* add here other roles */
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         EdgeMapObject *edge = new EdgeMapObject(this, i, nd.get());
 
         connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
-        mEdgesLayer[model_n]->addEdge(edge);
+        mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
     }
-
 }
 
 void MapObjectsController::delSelectedEdges(int model)
@@ -452,4 +451,9 @@ void MapObjectsController::nodeSelectionHasChanged(NodeMapObject *node)
         mNodeSelection[modelIndex].remove(node);
 
     emit nodeSelectionChanged(mNodeSelection[modelIndex].size());
+}
+
+void MapObjectsController::redraw()
+{
+    mMap->requestRedraw();
 }

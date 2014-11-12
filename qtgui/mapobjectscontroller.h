@@ -206,7 +206,7 @@ public:
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
 
-    void addNode(int model_n, std::shared_ptr<NodeData> nd);
+    void addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw = false);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
@@ -214,6 +214,7 @@ protected:
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show = true);
 
     void delSelectedEdges(int model);
+
 protected slots:
     void geometryClicked(const Geometry *);
     void widgetClosed(QObject *);
@@ -225,6 +226,8 @@ public slots:
     /* Selection slots */
     void edgeSelectionHasChanged (EdgeMapObject *object);
     void nodeSelectionHasChanged (NodeMapObject *node);
+
+    void redraw();
 
 signals:
     int edgeSelectionChanged (int num);

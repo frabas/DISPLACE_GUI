@@ -15,6 +15,13 @@ public:
     explicit WaitDialog(QWidget *parent = 0);
     ~WaitDialog();
 
+
+    void setText(QString text);
+    void setProgress(bool shown = false, int max = 10);
+
+public slots:
+    void setProgression (int level);
+
 private:
     Ui::WaitDialog *ui;
 };

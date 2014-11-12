@@ -10,6 +10,12 @@
 class GraphBuilder
 {
 public:
+    class Feedback {
+    public:
+        virtual void setMax(int m) = 0;
+        virtual void setStep(int step) = 0;
+    };
+
     enum Type { Hex };
 
     class Node {
@@ -29,6 +35,10 @@ public:
         mStep = distance;
     }
 
+    void setFeedback (Feedback *feedback) {
+        mFeedback = feedback;
+    }
+
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
     void setShapefile (std::shared_ptr<OGRDataSource> src);
 
@@ -45,6 +55,8 @@ private:
     double mLatMin, mLatMax, mLonMin, mLonMax;
 
     std::shared_ptr<OGRDataSource> mShapefile;
+
+    Feedback *mFeedback;
 };
 
 #endif // GRAPHBUILDER_H

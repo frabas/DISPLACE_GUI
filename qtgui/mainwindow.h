@@ -13,6 +13,7 @@
 #include <memory>
 #include <QMapControl/Point.h>
 
+#include <graphbuilder.h>
 #include <backgroundworker.h>
 
 using namespace qmapcontrol;
@@ -109,6 +110,7 @@ signals:
 public:
     bool loadLiveModel(QString path, QString *error);
 
+    void graphCreated(const QList<GraphBuilder::Node> &nodes);
 protected:
     void updateModelList();
     void updateAllDisplayObjects();
@@ -123,7 +125,7 @@ protected:
 
     int newEditorModel(QString name);
 
-    void startBackgroundOperation (BackgroundWorker *work);
+    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog = 0);
 private:
     Ui::MainWindow *ui;
 

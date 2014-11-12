@@ -24,12 +24,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="text">
      <property name="text">
       <string>Please Wait...</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progress">
+     <property name="value">
+      <number>24</number>
      </property>
     </widget>
    </item>

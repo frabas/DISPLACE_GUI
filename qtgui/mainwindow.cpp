@@ -346,11 +346,14 @@ void MainWindow::waitStart()
     if (!mWaitDialog) {
         mWaitDialog = new WaitDialog(this);
     }
+
     mWaitDialog->show();
 }
 
 void MainWindow::waitEnd()
 {
+    qDebug()  << "Wait End";
+
     if (mWaitDialog) {
         mWaitDialog->close();
         delete mWaitDialog;
@@ -732,14 +735,26 @@ int MainWindow::newEditorModel(QString name)
     return i;
 }
 
-void MainWindow::startBackgroundOperation(BackgroundWorker *work)
+void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *waitdialog)
 {
     QThread *thread = new QThread(this);
+
+    if (mWaitDialog) {
+        mWaitDialog->close();
+        delete mWaitDialog;
+    }
+
+    if (waitdialog == 0) {
+        mWaitDialog = new WaitDialog(this);
+    } else {
+        mWaitDialog = waitdialog;
+    }
 
     work->moveToThread(thread);
     connect (thread, SIGNAL(started()), work, SLOT(process()));
     connect (work, SIGNAL(workStarted()), this, SLOT(waitStart()));
     connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
+    connect (work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
 
     thread->start();
 }
@@ -959,6 +974,32 @@ void MainWindow::on_actionClear_Graph_triggered()
     }
 }
 
+class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedback {
+    GraphBuilder *builder;
+    WaitDialog *waitDialog;
+    QList<GraphBuilder::Node> result;
+public:
+    GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg)
+        : BackgroundWorker(win),
+          builder(b),
+          waitDialog(dlg) {
+    }
+
+    virtual void execute() override {
+        builder->setFeedback(this);
+        result = builder->buildGraph();
+        mMain->graphCreated(result);
+    }
+
+    void setMax (int m) {
+        waitDialog->setProgress(true, m);
+    }
+
+    void setStep(int step) {
+        emit progress(step);
+    }
+};
+
 void MainWindow::on_actionCreate_Graph_triggered()
 {
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
@@ -971,19 +1012,27 @@ void MainWindow::on_actionCreate_Graph_triggered()
     dlg.setShapefileList(list);
 
     if (dlg.exec() == QDialog::Accepted) {
-        GraphBuilder gb;
-        gb.setType(GraphBuilder::Hex);
-        gb.setDistance(dlg.step() * 1000);
-        gb.setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+        GraphBuilder *gb = new GraphBuilder();
+        gb->setType(GraphBuilder::Hex);
+        gb->setDistance(dlg.step() * 1000);
+        gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
         QString s = dlg.getSelectedShapefile();
         if (!s.isEmpty())
-            gb.setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
+            gb->setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
 
-        QList<GraphBuilder::Node> l = gb.buildGraph();
+        WaitDialog *dlg = new WaitDialog(this);
+        dlg->setText(tr("Wait while graph is created..."));
+        dlg->setProgress(false, 100);
 
-        currentModel->addGraph (l, mMapController);
+        GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, dlg);
+        startBackgroundOperation(wrkr, dlg);
     }
+}
+
+void MainWindow::graphCreated(const QList<GraphBuilder::Node> &nodes)
+{
+    currentModel->addGraph (nodes, mMapController);
 }
 
 bool MainWindow::loadLiveModel(QString path, QString *error)

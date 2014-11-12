@@ -509,7 +509,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     foreach(std::shared_ptr<NodeData> node, newnodes) {
         controller->addNode(mIndex, node);
     }
-
+    controller->redraw();
 
     return true;
 }

@@ -7,6 +7,8 @@ WaitDialog::WaitDialog(QWidget *parent) :
 {
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
     ui->setupUi(this);
+
+    setFixedSize(size());   /* Set a fixed size, unresizeable window */
 }
 
 WaitDialog::~WaitDialog()

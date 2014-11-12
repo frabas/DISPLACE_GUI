@@ -134,7 +134,7 @@ void ScenarioDialog::on_rename_clicked()
                                              lastpath, QString("*.dat"));
     if (!s.isEmpty()) {
         QFileInfo info(s);
-        if (info.suffix() != ".dat") {
+        if (info.suffix() != "dat") {
             s += ".dat";
         }
 

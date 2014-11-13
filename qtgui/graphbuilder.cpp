@@ -126,30 +126,51 @@ void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QLi
         // current node is nodes[i]
 
         if (i > 0)
-            nodes[idx[i]].adiacencies.push_back(idx[i-1]);     // left node
+            pushAd(nodes, idx[i], idx[i-1]);     // left node
         if (i < idx.size()-1)
-            nodes[idx[i]].adiacencies.push_back(idx[i+1]);     // right node
+            pushAd(nodes, idx[i], idx[i+1]);     // right node
 
         if ((row_index % 2) == 0) {     // even
             if (i > 0 && i-1 < pidx.size())
-                nodes[idx[i]].adiacencies.push_back(pidx[i-1]);
+                pushAd(nodes, idx[i], pidx[i-1]);
             if (i < pidx.size())
-                nodes[idx[i]].adiacencies.push_back(pidx[i]);
+                pushAd(nodes, idx[i], pidx[i]);
 
             if (i > 0 && i-1 < nidx.size())
-                nodes[idx[i]].adiacencies.push_back(nidx[i-1]);
+                pushAd(nodes, idx[i], nidx[i-1]);
             if (i < nidx.size())
-                nodes[idx[i]].adiacencies.push_back(nidx[i]);
+                pushAd(nodes, idx[i], nidx[i]);
         } else {    // odd
             if (i < pidx.size())
-                nodes[idx[i]].adiacencies.push_back(pidx[i]);
+                pushAd(nodes, idx[i], pidx[i]);
             if (i+1 < pidx.size())
-                nodes[idx[i]].adiacencies.push_back(pidx[i+1]);
+                pushAd(nodes, idx[i], pidx[i+1]);
 
             if (i < nidx.size())
-                nodes[idx[i]].adiacencies.push_back(nidx[i]);
+                pushAd(nodes, idx[i], nidx[i]);
             if (i+1 < nidx.size())
-                nodes[idx[i]].adiacencies.push_back(nidx[i+1]);
+                pushAd(nodes, idx[i], nidx[i+1]);
         }
     }
+}
+
+void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
+{
+    nodes[source].adiacencies.push_back(target);
+
+    double ph1 = nodes[source].point.x() * M_PI / 180;
+    double la1 = nodes[source].point.y() * M_PI / 180;
+    double ph2 = nodes[target].point.x() * M_PI / 180;
+    double la2 = nodes[target].point.y() * M_PI / 180;
+    double dp = ph2 - ph1;
+    double dl = la2 - la1;
+
+    double a = std::sin(dp/2) * std::sin(dp/2) +
+            std::cos(ph1) * std::cos(ph2) *
+            std::sin(dl/2) * std::sin(dl/2);
+    double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1-a));
+
+    double d = earthRadius * c;
+
+    nodes[source].weight.push_back(d);
 }

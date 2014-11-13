@@ -495,9 +495,10 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         mNodes.push_back(nodedata);
 
         if (node.good) {
-            foreach (int adidx, node.adiacencies) {
+            for (int i = 0; i < node.adiacencies.size(); ++i) {
+                int adidx = node.adiacencies[i];
                 if (nodes[adidx].good)
-                    nodedata->appendAdiancency(adidx + nodeidx, 0.0);
+                    nodedata->appendAdiancency(adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
             }
         } else {
             nodedata->setDeleted(true);

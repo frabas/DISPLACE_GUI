@@ -50,6 +50,9 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
     QTextStream strm_min(&mindist_file);
     QTextStream strm_prev(&prev_file);
 
+    strm_prev << " key  value" << endl;
+    strm_min << " key  value" << endl;
+
     boost::graph_traits < graph_t >::edge_iterator ei, ei_end;
     for (boost::tie(ei, ei_end) = edges(g); ei != ei_end; ++ei) {
         boost::graph_traits < graph_t >::edge_descriptor e = *ei;

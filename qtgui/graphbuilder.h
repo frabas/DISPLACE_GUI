@@ -22,6 +22,7 @@ public:
     public:
         QPointF point;
         QList<int> adiacencies;
+        QList<double> weight;
         bool good;
     };
 
@@ -49,6 +50,7 @@ public:
 
 private:
     void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
+    void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
     double mStep;

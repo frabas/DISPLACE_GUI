@@ -47,8 +47,10 @@ void HarbourMapObject::updateProperties()
         return;
 
     QString text = QString("<b>Name</b>: %1<br/>"
-                           "<b>Coords: </b>%2 %3<br/>")
+                           "<b>Node Id: %2<br />"
+                           "<b>Coords: </b>%3 %4<br/>")
             .arg(QString::fromStdString(mHarbour->mHarbour->get_name()))
+            .arg(mHarbour->mHarbour->get_idx_node())
             .arg(mHarbour->mHarbour->get_y())
             .arg(mHarbour->mHarbour->get_x());
 

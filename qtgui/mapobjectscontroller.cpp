@@ -364,8 +364,8 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
 void MapObjectsController::delSelectedEdges(int model)
 {
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
-        std::shared_ptr<NodeData> nd = edge->node();
-        std::shared_ptr<NodeData> tg = edge->target();
+        NodeData* nd = edge->node();
+        NodeData* tg = edge->target();
 
 //        int nodeid1 = nd->get_idx_node();
 

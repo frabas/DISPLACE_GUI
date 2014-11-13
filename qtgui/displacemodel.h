@@ -273,8 +273,9 @@ public:
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
 
-    bool isShortestPathFolderLinked() const { return mShortestPathFolder.isEmpty(); }
+    bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
+    QString linkedShortestPathFolder() const { return mShortestPathFolder; }
 
 protected:
     bool loadNodes();

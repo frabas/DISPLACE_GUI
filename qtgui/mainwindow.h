@@ -107,6 +107,8 @@ private slots:
 
     void on_actionLink_Shortest_Path_Folder_triggered();
 
+    void on_actionCreate_Shortest_Path_triggered();
+
 signals:
     void modelStateChanged();
 

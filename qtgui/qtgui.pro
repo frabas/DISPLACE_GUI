@@ -100,7 +100,8 @@ SOURCES += \
     calendar.cpp \
     waitdialog.cpp \
     backgroundworker.cpp \
-    inputfileparser.cpp
+    inputfileparser.cpp \
+    shortestpathbuilder.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -163,7 +164,8 @@ HEADERS += \
     calendar.h \
     waitdialog.h \
     backgroundworker.h \
-    inputfileparser.h
+    inputfileparser.h \
+    shortestpathbuilder.h
 
 RESOURCES += \
     qtgui.qrc

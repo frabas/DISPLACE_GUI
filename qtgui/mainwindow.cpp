@@ -22,6 +22,7 @@
 #include <waitdialog.h>
 
 #include <backgroundworker.h>
+#include <shortestpathbuilder.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -1132,4 +1133,46 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
         sets.setValue("last_spath", fn);
     }
 
+}
+
+class ShortestPathBuilderWorker : public BackgroundWorker {
+    WaitDialog *mWaitDialog;
+    DisplaceModel *mModel;
+public:
+    ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
+        : BackgroundWorker(main), mWaitDialog(dialog), mModel(model) {
+    }
+
+    void execute() override {
+        ShortestPathBuilder builder(mModel);
+
+        mWaitDialog->setText("Building shortest paths");
+        const QList<std::shared_ptr<NodeData> > &nodes = mModel->getNodesList();
+        mWaitDialog->setProgress(true, nodes.size());
+        int n = 0;
+        foreach (std::shared_ptr<NodeData> node, nodes) {
+            mWaitDialog->setProgression(n);
+
+            builder.create(node, mModel->linkedShortestPathFolder());
+            ++n;
+        }
+        mWaitDialog->setProgression(n);
+    }
+};
+
+void MainWindow::on_actionCreate_Shortest_Path_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    if (!currentModel->isShortestPathFolderLinked()) {
+        QMessageBox::warning(this, tr("Cannot create Shortest Path"),
+                             tr("Please link a shortest path folder first."));
+        return;
+    }
+
+    WaitDialog *dialog = new WaitDialog(this);
+    ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
+
+    startBackgroundOperation(builder);
 }

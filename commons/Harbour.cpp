@@ -49,7 +49,9 @@ map<string, double> _fuelprice)
 }
 
 
-Harbour::Harbour(string name)
+Harbour::Harbour(string _name)
+    : Node(), name(_name),
+      fuelprice(), mean_fish_price_per_pop_per_cat()
 {
 }
 

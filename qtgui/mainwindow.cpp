@@ -1106,6 +1106,7 @@ void MainWindow::on_actionLoad_Harbours_triggered()
             foreach (std::shared_ptr<HarbourData> h, list)
                 mMapController->addHarbour(currentModelIdx, h, true);
 
+            mMapController->redraw();
             QFileInfo info(fn);
             sets.setValue("last_harb", info.absolutePath());
         } else {

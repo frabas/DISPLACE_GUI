@@ -535,6 +535,7 @@ bool DisplaceModel::exportGraph(const QString &path)
 bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 {
     foreach (std::shared_ptr<HarbourData> h, list) {
+        h->mHarbour->set_is_harbour(mHarbours.size());
         mHarbours.push_back(h);
 
         std::shared_ptr<NodeData> n (new NodeData(h->mHarbour, this));

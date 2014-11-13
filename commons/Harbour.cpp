@@ -134,5 +134,5 @@ double Harbour::get_fuelprices(string vsize)
 	// search into the map 'prices per vsize'
 	double a_fuelprice= fuelprice.find(vsize)->second;
 
-	return(a_fuelprice);
+    return(a_fuelprice);
 }

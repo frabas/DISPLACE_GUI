@@ -103,6 +103,8 @@ class Node
 
         int get_nbpops() const { return m_nbpops; }
         int get_nszgroups() const { return m_nszgrp; }
+
+        void set_is_harbour(int id);
 	protected:
 	private:
 		int idx_node;

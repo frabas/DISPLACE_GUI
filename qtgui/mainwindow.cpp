@@ -1115,3 +1115,21 @@ void MainWindow::on_actionLoad_Harbours_triggered()
     }
 
 }
+
+void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath;
+
+    lastpath = sets.value("last_spath", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getExistingDirectory(this, tr("Import Harbours file"), lastpath);
+    if (!fn.isEmpty()) {
+        currentModel->linkShortestPathFolder(fn);
+        sets.setValue("last_spath", fn);
+    }
+
+}

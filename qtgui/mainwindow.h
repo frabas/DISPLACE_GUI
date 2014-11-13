@@ -105,6 +105,8 @@ private slots:
     void on_actionExport_Graph_triggered();
     void on_actionLoad_Harbours_triggered();
 
+    void on_actionLink_Shortest_Path_Folder_triggered();
+
 signals:
     void modelStateChanged();
 

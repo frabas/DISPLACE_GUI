@@ -34,7 +34,8 @@ DisplaceModel::DisplaceModel()
       mInterestingSizeMax(false),
       mInterestingSizes(),
       mOutputFileParser(new OutputFileParser(this)),
-      mParserThread(new QThread(this))
+      mParserThread(new QThread(this)),
+      mShortestPathFolder()
 {
     OGRRegisterAll();
 

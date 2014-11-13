@@ -273,6 +273,9 @@ public:
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
 
+    bool isShortestPathFolderLinked() const { return mShortestPathFolder.isEmpty(); }
+    void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -349,6 +352,8 @@ private:
     OGRLayer *mNodesLayer;
 
     OGRSpatialReference *mSpatialRef;
+
+    QString mShortestPathFolder;
 };
 
 #endif // DISPLACEMODEL_H

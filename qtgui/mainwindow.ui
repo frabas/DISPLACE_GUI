@@ -91,6 +91,9 @@
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
     <addaction name="actionLoad_Harbours"/>
+    <addaction name="separator"/>
+    <addaction name="actionLink_Shortest_Path_Folder"/>
+    <addaction name="actionCreate_Shortest_Path"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
@@ -900,6 +903,16 @@
   <action name="actionLoad_Harbours">
    <property name="text">
     <string>Load Harbours...</string>
+   </property>
+  </action>
+  <action name="actionLink_Shortest_Path_Folder">
+   <property name="text">
+    <string>Link Shortest Path Folder...</string>
+   </property>
+  </action>
+  <action name="actionCreate_Shortest_Path">
+   <property name="text">
+    <string>Create Shortest Path</string>
    </property>
   </action>
  </widget>

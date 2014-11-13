@@ -6,6 +6,9 @@ NodeDetailsWidget::NodeDetailsWidget(QWidget *parent) :
     ui(new Ui::NodeDetailsWidget)
 {
     ui->setupUi(this);
+    ui->tool1->setVisible(false);
+
+    connect (ui->tool1, SIGNAL(clicked()), this, SIGNAL(toolButtonClicked()));
 }
 
 NodeDetailsWidget::~NodeDetailsWidget()
@@ -16,4 +19,9 @@ NodeDetailsWidget::~NodeDetailsWidget()
 void NodeDetailsWidget::setText(QString text)
 {
     ui->text->setText(text);
+}
+
+void NodeDetailsWidget::showTool(bool display)
+{
+    ui->tool1->setVisible(display);
 }

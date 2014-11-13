@@ -16,6 +16,11 @@ public:
     ~NodeDetailsWidget();
 
     void setText(QString text);
+    void showTool (bool display);
+
+signals:
+    void toolButtonClicked();
+
 private:
     Ui::NodeDetailsWidget *ui;
 };

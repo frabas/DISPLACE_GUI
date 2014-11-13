@@ -1,11 +1,14 @@
 #include "nodemapobject.h"
 
 #include <displacemodel.h>
+#include <inputfileparser.h>
+
 #include <mapobjectscontroller.h>
 #include <mapobjects/nodegraphics.h>
+#include <mapobjects/nodedetailswidget.h>
+
 #include <QMapControl/QMapControl.h>
 
-#include <mapobjects/nodedetailswidget.h>
 
 NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node)
     : mController(controller),
@@ -78,6 +81,14 @@ void NodeMapObject::updateProperties()
     switch (mRole) {
     default:
     case GraphNodeRole:
+        if (mNode->getModel()->isShortestPathFolderLinked()) {
+            InputFileParser parser;
+
+            if (parser.isShortestPathPresent(mNode->getModel()->linkedShortestPathFolder(), mNode->get_idx_node())) {
+                connect (mWidget, SIGNAL(toolButtonClicked()), this, SLOT(toolButtonClicked()));
+                mWidget->showTool(true);
+            }
+        }
         text += QString("<br/><b>Adjacencies</b><br/>");
         for (int i = 0; i < mNode->getAdiacencyCount(); ++i) {
             text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
@@ -145,6 +156,11 @@ QString NodeMapObject::updateStatText(QString prefix)
             .arg(tot);
 
     return text;
+}
+
+void NodeMapObject::toolButtonClicked()
+{
+    QMessageBox::warning(mWidget, tr("Unimplemented"), tr("This function is not implemented yet."));
 }
 
 void NodeMapObject::widgetClosed()

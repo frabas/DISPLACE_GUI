@@ -53,3 +53,14 @@ bool InputFileParser::parseHarbourFile(const QString &path, QList<std::shared_pt
 
     return true;
 }
+
+bool InputFileParser::parseShortestPath(const QString &path, int nodeid, QList<QPair<int, int> > &graph)
+{
+
+}
+
+bool InputFileParser::isShortestPathPresent(const QString &path, int nodeid)
+{
+    QString filename = QString("%1/previous_%2.dat").arg(path).arg(nodeid);
+    return QFile(filename).exists();
+}

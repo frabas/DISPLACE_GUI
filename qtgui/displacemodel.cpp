@@ -99,6 +99,15 @@ bool DisplaceModel::load(QString path)
         mConfig = Config::readFromFile(mInputName, mBasePath, mOutputName);
         mCalendar = std::shared_ptr<Calendar> (Calendar::load(mBasePath, mInputName));
 
+        QString shortestPath = QString("%1/shortPaths_%2_a_graph%3")
+                .arg(mBasePath).arg(mInputName).arg(mScenario.getGraph());
+
+        if (QFile(shortestPath).exists()) {
+            qDebug() << "linking shortest path folder: " << shortestPath;
+            linkShortestPathFolder(shortestPath);
+        } else {
+            qDebug() << shortestPath << "doesn't exist";
+        }
         mInterestingHarb = mConfig.m_interesting_harbours;
 
         loadNodes();

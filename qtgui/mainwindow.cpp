@@ -15,6 +15,8 @@
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
 #include <creategraphdialog.h>
+#include <mousemode.h>
+#include <mousemode/drawpenaltypolygon.h>
 
 #include <graphinteractioncontroller.h>
 #include <graphbuilder.h>
@@ -60,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     map(0),
     treemodel(0),
     mPlayTimerInterval(playTimerDefault),
+    mMouseMode(0),
     mWaitDialog(0)
 {
     ui->setupUi(this);
@@ -108,6 +111,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
 
     connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
+    connect (map, SIGNAL(mouseEventPressCoordinate(QMouseEvent*,PointWorldCoord)), this, SLOT(mapMousePress(QMouseEvent*,PointWorldCoord)));
+    connect (map, SIGNAL(mouseEventReleaseCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
+    connect (map, SIGNAL(mouseEventMoveCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
 
     QPixmap pixmap;
     pixmap.fill( Qt::white );
@@ -315,6 +321,33 @@ void MainWindow::outputUpdated()
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
     statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+}
+
+void MainWindow::mapMousePress(QMouseEvent *event, PointWorldCoord point)
+{
+    if (!mMouseMode)    // no mouse mode active
+        return;
+
+    if (!mMouseMode->pressEvent(point.rawPoint()))
+        abortMouseMode();
+}
+
+void MainWindow::mapMouseRelease(QMouseEvent *, PointWorldCoord, PointWorldCoord point)
+{
+    if (!mMouseMode)    // no mouse mode active
+        return;
+
+    if (!mMouseMode->releaseEvent(point.rawPoint()))
+        abortMouseMode();
+}
+
+void MainWindow::mapMouseMove(QMouseEvent *, PointWorldCoord, PointWorldCoord point)
+{
+    if (!mMouseMode)    // no mouse mode active
+        return;
+
+    if (!mMouseMode->moveEvent(point.rawPoint()))
+        abortMouseMode();
 }
 
 void MainWindow::edgeSelectionsChanged(int num)
@@ -761,6 +794,38 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     thread->start();
 }
 
+void MainWindow::startMouseMode(MouseMode * newmode)
+{
+    abortMouseMode();
+    mMouseMode = newmode;
+
+    if (mMouseMode)
+        mMouseMode->beginMode();
+}
+
+void MainWindow::endMouseMode(bool success)
+{
+    if (!mMouseMode)
+        return;
+
+    if (success) {
+        mMouseMode->endMode(success);
+    }
+
+    delete mMouseMode;
+    mMouseMode = 0;
+}
+
+void MainWindow::abortMouseMode()
+{
+    endMouseMode(false);
+}
+
+void MainWindow::completeMouseMode()
+{
+    endMouseMode(true);
+}
+
 void MainWindow::on_play_step_valueChanged(int step)
 {
     if (currentModel && currentModel->modelType() == DisplaceModel::OfflineModelType) {
@@ -1175,4 +1240,9 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
     ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
 
     startBackgroundOperation(builder);
+}
+
+void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
+{
+    startMouseMode(new DrawPenaltyPolygon(this, mMapController));
 }

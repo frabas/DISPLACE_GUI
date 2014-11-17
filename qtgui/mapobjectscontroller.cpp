@@ -42,10 +42,13 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
     mWidgetLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Details"));
+    mEditorLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Editor"));
+    mEditorLayer->setVisible(true);
 
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
     mMap->addLayer(mWidgetLayer);
+    mMap->addLayer(mEditorLayer);
 
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
     mMap->setZoom(10);
@@ -359,6 +362,16 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
     mHarbourObjects[model_n].append(obj);
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+}
+
+void MapObjectsController::clearEditorLayer()
+{
+    mEditorLayer->clearGeometries();
+}
+
+void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geometry)
+{
+    mEditorLayer->addGeometry(geometry);
 }
 
 void MapObjectsController::delSelectedEdges(int model)

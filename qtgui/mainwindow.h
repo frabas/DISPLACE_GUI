@@ -32,6 +32,7 @@ class DisplaceModel;
 class Simulator;
 class MapObjectsController;
 class WaitDialog;
+class MouseMode;
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -57,6 +58,11 @@ private slots:
     void updateOutputFile (QString,int);
     void outputUpdated();
     void mapFocusPointChanged(PointWorldCoord);
+    void mapMousePress(QMouseEvent*,PointWorldCoord);
+    void mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord);
+    void mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord);
+    void abortMouseMode ();
+    void completeMouseMode();
 
     void edgeSelectionsChanged(int);
 
@@ -104,10 +110,9 @@ private slots:
     void on_actionCreate_Graph_triggered();
     void on_actionExport_Graph_triggered();
     void on_actionLoad_Harbours_triggered();
-
     void on_actionLink_Shortest_Path_Folder_triggered();
-
     void on_actionCreate_Shortest_Path_triggered();
+    void on_actionAdd_Penalty_on_Polygon_triggered();
 
 signals:
     void modelStateChanged();
@@ -116,6 +121,8 @@ public:
     bool loadLiveModel(QString path, QString *error);
 
     void graphCreated(const QList<GraphBuilder::Node> &nodes);
+
+
 protected:
     void updateModelList();
     void updateAllDisplayObjects();
@@ -131,6 +138,9 @@ protected:
     int newEditorModel(QString name);
 
     void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog = 0);
+    void startMouseMode (MouseMode *);
+    void endMouseMode (bool success = true);
+
 private:
     Ui::MainWindow *ui;
 
@@ -159,6 +169,7 @@ private:
 
     /* Other objects */
 
+    MouseMode *mMouseMode;
     WaitDialog *mWaitDialog;
 
     static const QString dbSuffix;

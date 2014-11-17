@@ -101,7 +101,9 @@ SOURCES += \
     waitdialog.cpp \
     backgroundworker.cpp \
     inputfileparser.cpp \
-    shortestpathbuilder.cpp
+    shortestpathbuilder.cpp \
+    mousemode.cpp \
+    mousemode/drawpenaltypolygon.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -165,7 +167,10 @@ HEADERS += \
     waitdialog.h \
     backgroundworker.h \
     inputfileparser.h \
-    shortestpathbuilder.h
+    shortestpathbuilder.h \
+    mousemode.h \
+    mousemode/drawpenaltypolygon.h \
+    editorlayerinterface.h
 
 RESOURCES += \
     qtgui.qrc

@@ -94,6 +94,8 @@
     <addaction name="separator"/>
     <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionCreate_Shortest_Path"/>
+    <addaction name="actionAdd_Penalty_from_File"/>
+    <addaction name="actionAdd_Penalty_on_Polygon"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
@@ -913,6 +915,16 @@
   <action name="actionCreate_Shortest_Path">
    <property name="text">
     <string>Create Shortest Path</string>
+   </property>
+  </action>
+  <action name="actionAdd_Penalty_from_File">
+   <property name="text">
+    <string>Add Penalty from File...</string>
+   </property>
+  </action>
+  <action name="actionAdd_Penalty_on_Polygon">
+   <property name="text">
+    <string>Add Penalty on Polygon</string>
    </property>
   </action>
  </widget>

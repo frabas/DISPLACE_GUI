@@ -103,7 +103,8 @@ SOURCES += \
     inputfileparser.cpp \
     shortestpathbuilder.cpp \
     mousemode.cpp \
-    mousemode/drawpenaltypolygon.cpp
+    mousemode/drawpenaltypolygon.cpp \
+    pathpenaltydialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -113,7 +114,8 @@ FORMS += \
     configdialog.ui \
     mapobjects/nodedetailswidget.ui \
     creategraphdialog.ui \
-    waitdialog.ui
+    waitdialog.ui \
+    pathpenaltydialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -170,7 +172,8 @@ HEADERS += \
     shortestpathbuilder.h \
     mousemode.h \
     mousemode/drawpenaltypolygon.h \
-    editorlayerinterface.h
+    editorlayerinterface.h \
+    pathpenaltydialog.h
 
 RESOURCES += \
     qtgui.qrc

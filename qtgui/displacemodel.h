@@ -272,6 +272,7 @@ public:
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
+    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight);
 
     bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }

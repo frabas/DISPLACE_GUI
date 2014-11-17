@@ -121,7 +121,7 @@ public:
     bool loadLiveModel(QString path, QString *error);
 
     void graphCreated(const QList<GraphBuilder::Node> &nodes);
-
+    void addPenaltyPolygon (const QList<QPointF> &points);
 
 protected:
     void updateModelList();

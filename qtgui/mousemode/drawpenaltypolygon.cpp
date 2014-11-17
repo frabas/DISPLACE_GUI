@@ -92,11 +92,14 @@ bool DrawPenaltyPolygon::endMode(bool success)
 {
     if (success) {
         qDebug() << mPoints.size() << "Points polygon";
+
+        mMainWindow->addPenaltyPolygon(mPoints);
     }
 
     QSettings set;
     set.setValue("draw_penalties_win", mActionDialog->pos());
     mActionDialog->hide();
     mPoints.clear();
+    mLayerInterface->clearEditorLayer();
     return true;
 }

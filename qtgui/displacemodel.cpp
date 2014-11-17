@@ -556,6 +556,34 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
     return true;
 }
 
+void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight)
+{
+//    OGRFeature *ftr = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+    OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
+
+    foreach (const QPointF &pt, poly) {
+        gring->addPoint(pt.x(), pt.y());
+    }
+    gring->closeRings();
+
+    OGRPolygon *gpoly = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
+    gpoly->addRing(gring);
+
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(gpoly);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        int id = ftr->GetFieldAsInteger(FLD_NODEID);
+
+        std::shared_ptr<NodeData> nd = mNodes[id];
+        for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+            nd->setAdiacencyWeight(i, nd->getAdiacencyWeight(i) + weight);
+        }
+    }
+
+    delete gpoly;
+}
+
 int DisplaceModel::getVesselCount() const
 {
     return mVessels.size();

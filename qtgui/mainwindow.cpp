@@ -25,6 +25,7 @@
 
 #include <backgroundworker.h>
 #include <shortestpathbuilder.h>
+#include <pathpenaltydialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -1100,6 +1101,16 @@ void MainWindow::on_actionCreate_Graph_triggered()
 void MainWindow::graphCreated(const QList<GraphBuilder::Node> &nodes)
 {
     currentModel->addGraph (nodes, mMapController);
+}
+
+void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
+{
+    PathPenaltyDialog dlg(this);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
+        mMapController->redraw();
+    }
 }
 
 bool MainWindow::loadLiveModel(QString path, QString *error)

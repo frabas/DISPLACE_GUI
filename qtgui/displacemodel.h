@@ -350,6 +350,7 @@ private:
     QString mLastError;
 
     /* Editor stuff */
+    enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
     OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
 

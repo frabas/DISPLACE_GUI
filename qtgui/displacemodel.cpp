@@ -12,7 +12,9 @@
 #include <qdebug.h>
 #include <QtAlgorithms>
 
+const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
+const char *FLD_EDGEID="edgeid";
 
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
@@ -53,8 +55,12 @@ DisplaceModel::DisplaceModel()
     Q_ASSERT(mNodesLayer);
 
     // Create any field
+    OGRFieldDefn fld2(FLD_TYPE, OFTInteger);
+    mNodesLayer->CreateField(&fld2);
     OGRFieldDefn fld(FLD_NODEID, OFTInteger);
     mNodesLayer->CreateField(&fld);
+    OGRFieldDefn fld3(FLD_EDGEID, OFTInteger);
+    mNodesLayer->CreateField(&fld3);
 
     mOutputFileParser->moveToThread(mParserThread);
     mParserThread->start();
@@ -489,6 +495,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         int nodeid = mNodes.size();
 
         OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+        feature->SetField(FLD_TYPE, (int)OgrTypeNode);
         feature->SetField(FLD_NODEID, nodeid);
 
         OGRPoint pt;
@@ -506,8 +513,21 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         if (node.good) {
             for (int i = 0; i < node.adiacencies.size(); ++i) {
                 int adidx = node.adiacencies[i];
-                if (nodes[adidx].good)
+                if (nodes[adidx].good) {
                     nodedata->appendAdiancency(adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
+
+                    OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+                    e->SetField(FLD_TYPE, (int)OgrTypeEdge);
+                    e->SetField(FLD_NODEID, nodeid);
+                    e->SetField(FLD_EDGEID, i);
+
+                    OGRLineString edge;
+                    edge.addPoint(node.point.x(), node.point.y());
+                    edge.addPoint(nodes[adidx].point.x(), nodes[adidx].point.y());
+                    e->SetGeometry(&edge);
+
+                    mNodesLayer->CreateFeature(e);
+                }
             }
         } else {
             nodedata->setDeleted(true);
@@ -558,7 +578,6 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight)
 {
-//    OGRFeature *ftr = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
     OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
 
     foreach (const QPointF &pt, poly) {
@@ -573,12 +592,33 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     mNodesLayer->SetSpatialFilter(gpoly);
     OGRFeature *ftr;
     while (( ftr = mNodesLayer->GetNextFeature())) {
-        int id = ftr->GetFieldAsInteger(FLD_NODEID);
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            // don't do this: it will sum the weight twice.
+#if 0
+            if (true) {
+                int id = ftr->GetFieldAsInteger(FLD_NODEID);
+                qDebug() << "Node " << id;
 
-        std::shared_ptr<NodeData> nd = mNodes[id];
-        for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-            nd->setAdiacencyWeight(i, nd->getAdiacencyWeight(i) + weight);
+                std::shared_ptr<NodeData> nd = mNodes[id];
+                for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+                    nd->setAdiacencyWeight(i, nd->getAdiacencyWeight(i) + weight);
+                }
+            }
+#endif
+            break;
+        case OgrTypeEdge:
+            if (true) {
+                int nodeid = ftr->GetFieldAsInteger(FLD_NODEID);
+                int edgeid = ftr->GetFieldAsInteger(FLD_EDGEID);
+
+                qDebug() << "Node id" << nodeid << " edge" << edgeid << "to node" << mNodes[nodeid]->getAdiacencyByIdx(edgeid);
+
+                mNodes[nodeid]->setAdiacencyWeight(edgeid, mNodes[nodeid]->getAdiacencyWeight(edgeid) + weight);
+            }
+            break;
         }
+
     }
 
     delete gpoly;

@@ -206,11 +206,11 @@ public:
     void setEditorMode (EditorModes mode);
 
     void delSelected(int model);
-    void delAllNodes(int model);
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
 
+    void clearAllNodes(int model_n);
     void addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw = false);
     void addHarbour(int model_n, std::shared_ptr<HarbourData> nd, bool disable_redraw = false);
 

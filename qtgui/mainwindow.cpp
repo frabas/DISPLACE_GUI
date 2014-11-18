@@ -1047,11 +1047,11 @@ void MainWindow::on_actionClear_Graph_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
-    int res = QMessageBox::question(this, tr("Clear graph"), tr("You're about to delete the entire graph data. Do you want to proceed?"),
-                                    QMessageBox::No, QMessageBox::Yes);
-
-    if (res == QMessageBox::Yes) {
-        //            currentModel->delAllNodes();
+    if (QMessageBox::warning(this, tr("Clear graph"), tr("This operation will permanently remove the all the nodes from graph. Proceed?"),
+                             QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+        currentModel->clearAllNodes();
+        mMapController->clearAllNodes(currentModelIdx);
+        mMapController->redraw();
     }
 }
 

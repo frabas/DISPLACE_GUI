@@ -19,3 +19,8 @@ void EdgeLayer::removeEdge(EdgeMapObject *edge)
 {
     mLayer->removeGeometry(edge->getGeometryEntity());
 }
+
+void EdgeLayer::clear()
+{
+    mLayer->clearGeometries();
+}

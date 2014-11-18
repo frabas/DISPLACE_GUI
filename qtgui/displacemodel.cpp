@@ -480,6 +480,12 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mVesselsStatsDirty = true;
 }
 
+void DisplaceModel::clearAllNodes()
+{
+    mNodes.clear();
+    mHarbours.clear();
+}
+
 bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller)
 {
     if (mModelType != EditorModelType)

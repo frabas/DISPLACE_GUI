@@ -74,7 +74,6 @@
      <string>&amp;Editor</string>
     </property>
     <addaction name="actionGraph"/>
-    <addaction name="actionClear_Graph"/>
     <addaction name="actionNode_Editor"/>
     <addaction name="actionEdge_Edit"/>
     <addaction name="separator"/>
@@ -86,6 +85,7 @@
     <property name="title">
      <string>Graph</string>
     </property>
+    <addaction name="actionClear_Graph"/>
     <addaction name="actionLoad_Graph"/>
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>

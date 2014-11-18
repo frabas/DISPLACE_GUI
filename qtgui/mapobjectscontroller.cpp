@@ -302,8 +302,19 @@ void MapObjectsController::delSelected(int model)
     }
 }
 
-void MapObjectsController::delAllNodes(int model)
+void MapObjectsController::clearAllNodes(int model_n)
 {
+    mGraphLayer[model_n]->clearGeometries();
+    mStatsLayerBiomass[model_n]->clearGeometries();
+    mStatsLayerCumftime[model_n]->clearGeometries();
+    mStatsLayerImpact[model_n]->clearGeometries();
+    mStatsLayerPop[model_n]->clearGeometries();
+    mEdgesLayer[model_n]->clear();
+    mEntityLayer[model_n]->clearGeometries();
+
+    mHarbourObjects[model_n].clear();
+    mNodeObjects[model_n].clear();
+    mEdgeObjects[model_n].clear();
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)

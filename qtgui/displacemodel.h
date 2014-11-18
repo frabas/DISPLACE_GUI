@@ -268,7 +268,7 @@ public:
 
     /* Editor stuff */
 
-
+    void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);

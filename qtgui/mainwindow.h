@@ -115,6 +115,8 @@ private slots:
     void on_actionCreate_Shortest_Path_triggered();
     void on_actionAdd_Penalty_on_Polygon_triggered();
 
+    void on_actionAdd_Penalty_from_File_triggered();
+
 signals:
     void modelStateChanged();
 

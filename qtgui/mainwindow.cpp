@@ -1119,6 +1119,7 @@ void MainWindow::graphCreated(const QList<GraphBuilder::Node> &nodes)
 void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
 {
     PathPenaltyDialog dlg(this);
+    dlg.showShapefileOptions(false);
 
     if (dlg.exec() == QDialog::Accepted) {
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
@@ -1269,4 +1270,34 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
 {
     startMouseMode(new DrawPenaltyPolygon(this, mMapController));
+}
+
+void MainWindow::on_actionAdd_Penalty_from_File_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    PathPenaltyDialog dlg(this);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+    dlg.showShapefileOptions(true);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        double weight = dlg.weight();
+        QString shp = dlg.selectedShapefile();
+        std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+
+        int n = ds->GetLayerCount();
+        for (int i = 0; i < n ;  ++i) {
+            OGRLayer *lr = ds->GetLayer(i);
+            lr->SetSpatialFilter(0);
+            lr->ResetReading();
+
+            OGRFeature *feature;
+            while ((feature = lr->GetNextFeature())) {
+                currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight);
+            }
+        }
+
+        mMapController->redraw();
+    }
 }

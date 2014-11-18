@@ -11,6 +11,7 @@
 #include <readdata.h>
 #include <qdebug.h>
 #include <QtAlgorithms>
+#include <QtDebug>
 
 const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
@@ -588,8 +589,15 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     OGRPolygon *gpoly = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
     gpoly->addRing(gring);
 
+    addPenaltyToNodesByAddWeight(gpoly, weight);
+
+    delete gpoly;
+}
+
+void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight)
+{
     mNodesLayer->ResetReading();
-    mNodesLayer->SetSpatialFilter(gpoly);
+    mNodesLayer->SetSpatialFilter(geometry);
     OGRFeature *ftr;
     while (( ftr = mNodesLayer->GetNextFeature())) {
         switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
@@ -612,16 +620,16 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
                 int nodeid = ftr->GetFieldAsInteger(FLD_NODEID);
                 int edgeid = ftr->GetFieldAsInteger(FLD_EDGEID);
 
-                qDebug() << "Node id" << nodeid << " edge" << edgeid << "to node" << mNodes[nodeid]->getAdiacencyByIdx(edgeid);
-
-                mNodes[nodeid]->setAdiacencyWeight(edgeid, mNodes[nodeid]->getAdiacencyWeight(edgeid) + weight);
+                if (mNodes[nodeid]->getAdiacencyCount() > edgeid) {
+//                    qDebug() << "Node id" << nodeid << " edge" << edgeid << "to node" << mNodes[nodeid]->getAdiacencyByIdx(edgeid);
+                    mNodes[nodeid]->setAdiacencyWeight(edgeid, mNodes[nodeid]->getAdiacencyWeight(edgeid) + weight);
+                } else {
+                    qWarning() << "NodeID" << nodeid << " has only " << mNodes[nodeid]->getAdiacencyCount() << " but edge" << edgeid << " requested." << __FILE__ << __LINE__;
+                }
             }
             break;
         }
-
     }
-
-    delete gpoly;
 }
 
 int DisplaceModel::getVesselCount() const

@@ -15,6 +15,10 @@ public:
     explicit PathPenaltyDialog(QWidget *parent = 0);
     ~PathPenaltyDialog();
 
+    void showShapefileOptions(bool show);
+    void setShapefileList(QStringList files);
+    QString selectedShapefile() const;
+
     double weight() const;
 private:
     Ui::PathPenaltyDialog *ui;

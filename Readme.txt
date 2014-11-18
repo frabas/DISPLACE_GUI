@@ -18,6 +18,7 @@ Windows
 Since version 0.5.0 Displace requires GDAL library.
 Since version 0.5.4, Displace supports builds under 64bit MinGW.
 Since version 0.6.0, Displace requires the Boost (Graph) Library.
+Since version 0.6.1, Displace depends on GeographicLib (http://geographiclib.sourceforge.net/)
 
 You can find the instructions for GDAL installation and 64bit mingw in a section below.
 
@@ -62,7 +63,7 @@ This way, only static gdal library will be compiled, and you'll be unable to lin
 So download the zlib sources from http://www.zlib.net/, unpack it somewhere (I suggest some path under the mingw path) and compile
 To be able to use the 64bit compiler from the default MSYS environment, you'll need to prepend the compiler path to the system PATH
 
-$ export PATH=C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin:$PATH
+$ export PATH=/c/qt-5.3.2-x64-mingw491r1-seh-opengl/mingw64/bin:$PATH
 
 edit the win32\Makefile.gcc file this way:
 
@@ -122,6 +123,24 @@ cd /c/Users/YourUsers/Documents/Displace/install/extra
 cd usr/local/include
 mkdir gdal
 mv * gdal
+
+
+4) Compile GeographicLib
+
+$ ./configure  --host=x86_64-w64-mingw32
+
+version 1.39 may require some fix, in particular in include/GeographicLib/config.h where you should add the following lines:
+
+#define GEOGRAPHICLIB_VERSION_MAJOR 1
+#define GEOGRAPHICLIB_VERSION_MINOR 32
+#define GEOGRAPHICLIB_VERSION_PATCH 0
+
+and the following to include/GeographicLib/Constants.hpp:
+
+#define GEOGRAPHICLIB_VERSION_STRING GEOGRAPHICLIB_VERSION
+
+$ make
+$ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
 
 
 GDAL Notes

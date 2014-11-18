@@ -15,6 +15,8 @@
 
 #include <QMapControl/Layer.h>
 #include <QMapControl/Geometry.h>
+#include <QMapControl/ESRIShapefile.h>
+#include <QMapControl/LayerESRIShapefile.h>
 
 namespace qmapcontrol {
 class QMapControl;
@@ -22,7 +24,6 @@ class MapAdapter;
 class LayerMapAdapter;
 class LayerGeometry;
 class GeometryWidget;
-class LayerESRIShapefile;
 }
 
 class DisplaceModel;
@@ -106,11 +107,12 @@ private:
         QVector<bool> visibility;
     };
 
+    template <typename L>
     class LayerVarListImpl : public LayerList {
     public:
         LayerVarListImpl() {}
 
-        QList<std::shared_ptr<qmapcontrol::Layer> > layers;
+        QList<std::shared_ptr<L> > layers;
         QVector<bool> visibility;
 
         virtual int getCount() const { return layers.size(); }
@@ -119,7 +121,7 @@ private:
 
         virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
 
-        virtual bool add(std::shared_ptr<qmapcontrol::Layer> layer, bool show = true) {
+        virtual bool add(std::shared_ptr<L> layer, bool show = true) {
             layers.push_back(layer);
             visibility.push_back(show);
 
@@ -198,16 +200,17 @@ public:
 
     bool importShapefile(int model_idx, QString path, QString layername);
     QStringList getShapefilesList(int model_idx) const;
+    std::shared_ptr<qmapcontrol::ESRIShapefile> getShapefile(int model_idx, int idx);
     std::shared_ptr<OGRDataSource> getShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);
 
     void delSelected(int model);
-    void delAllNodes(int model);
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
 
+    void clearAllNodes(int model_n);
     void addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw = false);
     void addHarbour(int model_n, std::shared_ptr<HarbourData> nd, bool disable_redraw = false);
 
@@ -217,7 +220,7 @@ public:
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
-    void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show = true);
+    void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
 
@@ -271,7 +274,7 @@ private:
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
     QVector<QList<std::shared_ptr<OGRDataSource> > > mShapefiles;
-    QVector<LayerVarListImpl> mShapefileLayers;
+    QVector<LayerVarListImpl<qmapcontrol::LayerESRIShapefile> > mShapefileLayers;
 
     EditorModes mEditorMode;
     bool mClosing;

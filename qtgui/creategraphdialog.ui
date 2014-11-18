@@ -168,6 +168,13 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QRadioButton" name="quad">
+        <property name="text">
+         <string>Quad</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

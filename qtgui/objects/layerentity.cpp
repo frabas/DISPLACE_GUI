@@ -1,14 +1,19 @@
 #include <objects/layerentity.h>
 
+#include <displacemodel.h>
 #include <objecttreemodel.h>
 #include <mapobjectscontroller.h>
 
+#include <QColorDialog>
+
 namespace objecttree {
+
 
 LayerEntity::LayerEntity(ObjectTreeModel::Category type, ObjectTreeModel *_model, int LayerEntity_idx)
     : ObjectTreeEntity(_model),
       mLayerEntityIndex(LayerEntity_idx),
-      mLayerEntityType(type)
+      mLayerEntityType(type),
+      mContextMenu(0)
 {
 }
 
@@ -76,6 +81,33 @@ bool LayerEntity::setData(const QModelIndex &index, const QVariant &value, int r
         return true;
     }
     return false;
+}
+
+QMenu *LayerEntity::contextMenu() const
+{
+    if (mLayerEntityIndex == -1 || mLayerEntityType != ObjectTreeModel::ShapefileLayers)
+        return 0;
+
+    if (mContextMenu == 0) {
+        mContextMenu = new QMenu();
+        connect (mContextMenu->addAction(QObject::tr("Shape Color...")), SIGNAL(triggered()), this, SLOT(onActionShapeColor()));
+    }
+
+    return mContextMenu;
+}
+
+void LayerEntity::onActionShapeColor()
+{
+    std::shared_ptr<qmapcontrol::ESRIShapefile> file = model->getMapControl()->getShapefile(model->getModelIdx(), mLayerEntityIndex);
+    QBrush brh = file->getBrushPolygon();
+
+    QColor color = QColorDialog::getColor(brh.color(), 0, tr("Select shapefile color"), QColorDialog::ShowAlphaChannel);
+
+    if (color.isValid()) {
+        brh.setColor(color);
+        file->setBrushPolygon(brh);
+        model->getMapControl()->redraw();
+    }
 }
 
 }

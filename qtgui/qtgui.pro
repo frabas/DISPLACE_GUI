@@ -99,7 +99,12 @@ SOURCES += \
     graphbuilder.cpp \
     calendar.cpp \
     waitdialog.cpp \
-    backgroundworker.cpp
+    backgroundworker.cpp \
+    inputfileparser.cpp \
+    shortestpathbuilder.cpp \
+    mousemode.cpp \
+    mousemode/drawpenaltypolygon.cpp \
+    pathpenaltydialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -109,7 +114,8 @@ FORMS += \
     configdialog.ui \
     mapobjects/nodedetailswidget.ui \
     creategraphdialog.ui \
-    waitdialog.ui
+    waitdialog.ui \
+    pathpenaltydialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -161,7 +167,13 @@ HEADERS += \
     graphbuilder.h \
     calendar.h \
     waitdialog.h \
-    backgroundworker.h
+    backgroundworker.h \
+    inputfileparser.h \
+    shortestpathbuilder.h \
+    mousemode.h \
+    mousemode/drawpenaltypolygon.h \
+    editorlayerinterface.h \
+    pathpenaltydialog.h
 
 RESOURCES += \
     qtgui.qrc

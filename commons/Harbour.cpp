@@ -49,7 +49,9 @@ map<string, double> _fuelprice)
 }
 
 
-Harbour::Harbour(string name)
+Harbour::Harbour(string _name)
+    : Node(), name(_name),
+      fuelprice(), mean_fish_price_per_pop_per_cat()
 {
 }
 
@@ -132,5 +134,5 @@ double Harbour::get_fuelprices(string vsize)
 	// search into the map 'prices per vsize'
 	double a_fuelprice= fuelprice.find(vsize)->second;
 
-	return(a_fuelprice);
+    return(a_fuelprice);
 }

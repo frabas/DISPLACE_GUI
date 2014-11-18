@@ -51,6 +51,7 @@ protected:
     QString updateStatText(QString prefix);
 
 private slots:
+    void toolButtonClicked();
     void widgetClosed();
 
 signals:

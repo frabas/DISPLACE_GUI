@@ -10,12 +10,19 @@
 class GraphBuilder
 {
 public:
+    class Feedback {
+    public:
+        virtual void setMax(int m) = 0;
+        virtual void setStep(int step) = 0;
+    };
+
     enum Type { Hex };
 
     class Node {
     public:
         QPointF point;
         QList<int> adiacencies;
+        QList<double> weight;
         bool good;
     };
 
@@ -29,6 +36,10 @@ public:
         mStep = distance;
     }
 
+    void setFeedback (Feedback *feedback) {
+        mFeedback = feedback;
+    }
+
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
     void setShapefile (std::shared_ptr<OGRDataSource> src);
 
@@ -39,12 +50,15 @@ public:
 
 private:
     void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
+    void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
     double mStep;
     double mLatMin, mLatMax, mLonMin, mLonMax;
 
     std::shared_ptr<OGRDataSource> mShapefile;
+
+    Feedback *mFeedback;
 };
 
 #endif // GRAPHBUILDER_H

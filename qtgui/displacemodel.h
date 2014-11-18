@@ -271,6 +271,12 @@ public:
 
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
     bool exportGraph(const QString &path);
+    bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
+    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight);
+
+    bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
+    void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
+    QString linkedShortestPathFolder() const { return mShortestPathFolder; }
 
 protected:
     bool loadNodes();
@@ -344,10 +350,13 @@ private:
     QString mLastError;
 
     /* Editor stuff */
+    enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
     OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
 
     OGRSpatialReference *mSpatialRef;
+
+    QString mShortestPathFolder;
 };
 
 #endif // DISPLACEMODEL_H

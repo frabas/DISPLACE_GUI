@@ -814,6 +814,12 @@ void Node::add_benthos_tot_biomass_on_node(double tot_biomass_this_group)
 
 }
 
+void Node::set_is_harbour(int id)
+{
+    harbour = id;
+    is_harbour = true;
+}
+
 
 void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep)
 {

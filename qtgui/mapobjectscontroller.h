@@ -9,6 +9,7 @@
 #include <mainwindow.h>
 #include <palettemanager.h>
 #include <objecttreemodel.h>
+#include <editorlayerinterface.h>
 
 #include <gdal/ogrsf_frmts.h>
 
@@ -32,6 +33,7 @@ class VesselMapObject;
 class EdgeLayer;
 class EdgeMapObject;
 class NodeData;
+class HarbourData;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -39,7 +41,7 @@ QT_END_NAMESPACE
 
 using qmapcontrol::Geometry;
 
-class MapObjectsController : public QObject
+class MapObjectsController : public QObject, public EditorLayerInterface
 {
     Q_OBJECT
 
@@ -206,7 +208,11 @@ public:
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
 
 
-    void addNode(int model_n, std::shared_ptr<NodeData> nd);
+    void addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw = false);
+    void addHarbour(int model_n, std::shared_ptr<HarbourData> nd, bool disable_redraw = false);
+
+    void clearEditorLayer();
+    void addEditorLayerGeometry (std::shared_ptr<qmapcontrol::Geometry> geometry);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
@@ -214,6 +220,7 @@ protected:
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show = true);
 
     void delSelectedEdges(int model);
+
 protected slots:
     void geometryClicked(const Geometry *);
     void widgetClosed(QObject *);
@@ -225,6 +232,8 @@ public slots:
     /* Selection slots */
     void edgeSelectionHasChanged (EdgeMapObject *object);
     void nodeSelectionHasChanged (NodeMapObject *node);
+
+    void redraw();
 
 signals:
     int edgeSelectionChanged (int num);
@@ -247,6 +256,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mMainLayer;
     std::shared_ptr<qmapcontrol::LayerMapAdapter> mSeamarkLayer;
     std::shared_ptr<qmapcontrol::LayerGeometry> mWidgetLayer;
+    std::shared_ptr<qmapcontrol::LayerGeometry> mEditorLayer;   /* Layer to show temporary geometries */
 
     /* Layers specific to every model */
     std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer[MAX_MODELS];

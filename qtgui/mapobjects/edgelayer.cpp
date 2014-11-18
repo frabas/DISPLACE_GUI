@@ -10,9 +10,9 @@ EdgeLayer::EdgeLayer(MapObjectsController *controller, const QString &name, QObj
 {
 }
 
-void EdgeLayer::addEdge(EdgeMapObject *edge )
+void EdgeLayer::addEdge(EdgeMapObject *edge, bool disable_redraw )
 {
-    mLayer->addGeometry(edge->getGeometryEntity());
+    mLayer->addGeometry(edge->getGeometryEntity(), disable_redraw);
 }
 
 void EdgeLayer::removeEdge(EdgeMapObject *edge)

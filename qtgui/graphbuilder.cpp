@@ -42,17 +42,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     double lat = mLatMin;
     double stepy;
     double stepx;
-    double fstpx;
+    double fal;
 
     switch (mType) {
     case Hex:
         stepy = std::sqrt(3) / 2.0 * mStep;
         stepx = mStep;
-        fstpx = mStep/2;
+        fal = 30;
         break;
     case Quad:
         stepy = stepx = mStep;
-        fstpx = 0;
+        fal = 0;
         break;
     }
 
@@ -64,16 +64,11 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
     }
 
+    double flon = mLonMin;
     int nr = 0, nc = 0;
     while (lat <= mLatMax) {
-        if ((nr % 2) == 1) {
-            pointSumWithBearing(QPointF(mLonMin, lat), fstpx, M_PI_2, p1);
-        } else {
-            p1.setX(mLonMin);
-            p1.setY(lat);
-        }
-
         nc = 0;
+        flon = p1.x();
         while (p1.x() <= mLonMax) {
             Node n;
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
@@ -104,9 +99,15 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
         createAdiacencies(res, idx2, idx1, idx0, nr-1);
 
-        pointSumWithBearing(p1, stepy, 0, p2);
+        if ((nr % 2) == 1) {
+            pointSumWithBearing(QPointF(flon, lat), mStep, -fal * M_PI / 180, p2);
+        } else {
+            pointSumWithBearing(QPointF(flon, lat), mStep, fal * M_PI / 180, p2);
+        }
+
         lat = p2.y();
         ++nr;
+        p1=p2;
 
         idx2 = idx1;
         idx1 = idx0;

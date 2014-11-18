@@ -5,7 +5,11 @@
 
 #include <QDebug>
 
-const double GraphBuilder::earthRadius = 6371000;   // ...
+#ifdef HAVE_GEOGRAPHICLIB
+#include <GeographicLib/Geodesic.hpp>
+#endif
+
+const double GraphBuilder::earthRadius = 6378137;   // ...
 
 
 GraphBuilder::GraphBuilder()
@@ -36,26 +40,35 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     QList<Node> res;
 
     double lat = mLatMin;
-    double latinc = std::sqrt(3) / 2.0 * mStep;
+    double stepy;
+    double stepx;
+    double fal;
+
+    switch (mType) {
+    case Hex:
+        stepy = std::sqrt(3) / 2.0 * mStep;
+        stepx = mStep;
+        fal = 30;
+        break;
+    case Quad:
+        stepy = stepx = mStep;
+        fal = 0;
+        break;
+    }
 
     QPointF p1(mLonMin, mLatMin), p2;
 
     QList<int> idx0, idx1, idx2;
 
     if (mFeedback) {
-        mFeedback->setMax((mLatMax - mLatMin) / (latinc /earthRadius));
+        mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
     }
 
+    double flon = mLonMin;
     int nr = 0, nc = 0;
     while (lat <= mLatMax) {
-        if ((nr % 2) == 1) {
-            pointSumWithBearing(QPointF(mLonMin, lat), mStep/2, M_PI_2, p1);
-        } else {
-            p1.setX(mLonMin);
-            p1.setY(lat);
-        }
-
         nc = 0;
+        flon = p1.x();
         while (p1.x() <= mLonMax) {
             Node n;
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
@@ -78,7 +91,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             res.append(n);
             idx0.push_back(res.size()-1);
 
-            pointSumWithBearing(p1, mStep, M_PI_2, p2);
+            pointSumWithBearing(p1, stepx, M_PI_2, p2);
             p1 = p2;
 
             ++nc;
@@ -86,9 +99,15 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
         createAdiacencies(res, idx2, idx1, idx0, nr-1);
 
-        pointSumWithBearing(p1, latinc, 0, p2);
+        if ((nr % 2) == 1) {
+            pointSumWithBearing(QPointF(flon, lat), mStep, -fal * M_PI / 180, p2);
+        } else {
+            pointSumWithBearing(QPointF(flon, lat), mStep, fal * M_PI / 180, p2);
+        }
+
         lat = p2.y();
         ++nr;
+        p1=p2;
 
         idx2 = idx1;
         idx1 = idx0;
@@ -105,6 +124,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
 void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double bearing, QPointF &p2)
 {
+
+#ifdef HAVE_GEOGRAPHICLIB
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+
+    double x,y;
+    geod.Direct(p1.y()/ M_PI * 180.0, p1.x()/ M_PI * 180.0, bearing / M_PI * 180.0, dist, y, x);
+
+    p2.setX(x* M_PI / 180.0);
+    p2.setY(y* M_PI / 180.0);
+
+#else
     // φ Latitude λ Longitude d distance R earth radius [6371km], brng bearing (rad, north, clockwise)
     // var φ2 = Math.asin( Math.sin(φ1)*Math.cos(d/R) +
     //      Math.cos(φ1)*Math.sin(d/R)*Math.cos(brng) );
@@ -118,6 +148,7 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
             std::atan2( std::sin(bearing) * std::sin(dist/earthRadius) * std::cos(p1.y()),
                         std::cos(dist/earthRadius) - std::sin(p1.y()) * std::sin(p2.y()))
             );
+#endif
 }
 
 void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index)
@@ -158,6 +189,13 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
 {
     nodes[source].adiacencies.push_back(target);
 
+#ifdef HAVE_GEOGRAPHICLIB
+    double d;
+
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+    geod.Inverse(nodes[source].point.y(), nodes[source].point.x(), nodes[target].point.y(), nodes[target].point.x(), d);
+
+#else
     double ph1 = nodes[source].point.x() * M_PI / 180;
     double la1 = nodes[source].point.y() * M_PI / 180;
     double ph2 = nodes[target].point.x() * M_PI / 180;
@@ -171,6 +209,7 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
     double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1-a));
 
     double d = earthRadius * c;
+#endif
 
     nodes[source].weight.push_back(d / 1000);
 }

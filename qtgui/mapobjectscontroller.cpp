@@ -30,7 +30,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
       mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
-      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
+      mShapefileLayers(MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -240,7 +240,9 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
     std::shared_ptr<ESRIShapefile> file (new ESRIShapefile(src.get(), layername.toStdString()));
 
     file->setPenPolygon(QPen(Qt::red));
-    file->setBrushPolygon(QBrush(Qt::yellow));
+    QColor col (Qt::yellow);
+    col.setAlpha(64);
+    file->setBrushPolygon(QBrush(col));
 
     QFileInfo info(path);
     QString label = QString("Shapefile %1").arg(info.fileName());
@@ -263,6 +265,11 @@ QStringList MapObjectsController::getShapefilesList(int model_idx) const
         list << mShapefileLayers[model_idx].getName(i);
     }
     return list;
+}
+
+std::shared_ptr<ESRIShapefile> MapObjectsController::getShapefile(int model_idx, int idx)
+{
+    return mShapefileLayers[model_idx].layers[idx]->getShapefile(0);
 }
 
 std::shared_ptr<OGRDataSource> MapObjectsController::getShapefileDatasource(int model_idx, const QString &name)
@@ -295,8 +302,19 @@ void MapObjectsController::delSelected(int model)
     }
 }
 
-void MapObjectsController::delAllNodes(int model)
+void MapObjectsController::clearAllNodes(int model_n)
 {
+    mGraphLayer[model_n]->clearGeometries();
+    mStatsLayerBiomass[model_n]->clearGeometries();
+    mStatsLayerCumftime[model_n]->clearGeometries();
+    mStatsLayerImpact[model_n]->clearGeometries();
+    mStatsLayerPop[model_n]->clearGeometries();
+    mEdgesLayer[model_n]->clear();
+    mEntityLayer[model_n]->clearGeometries();
+
+    mHarbourObjects[model_n].clear();
+    mNodeObjects[model_n].clear();
+    mEdgeObjects[model_n].clear();
 }
 
 void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
@@ -312,7 +330,7 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
     mOutputLayers[model].setLayer(id,layer);
 }
 
-void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show)
+void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
     mMap->addLayer(layer);
     mShapefileLayers[model].add(layer, show);

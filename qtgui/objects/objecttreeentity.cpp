@@ -28,5 +28,10 @@ bool ObjectTreeEntity::setData(const QModelIndex &index, const QVariant &value, 
     return false;
 }
 
+QMenu *ObjectTreeEntity::contextMenu() const
+{
+    return 0;
+}
+
 
 }

@@ -136,6 +136,8 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
+    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect (ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
@@ -355,6 +357,17 @@ void MainWindow::edgeSelectionsChanged(int num)
 {
     ui->actionDelete->setEnabled(num > 0);
     ui->actionProperties->setEnabled(num > 0);
+}
+
+void MainWindow::treeViewContextMenuRequested(QPoint point)
+{
+    QModelIndex index = ui->treeView->indexAt(point);
+    if (index.isValid()) {
+        objecttree::ObjectTreeEntity *entity = treemodel->entity(index);
+        QMenu *menu = entity->contextMenu();
+        if (menu)
+            menu->exec(ui->treeView->mapToGlobal(point));
+    }
 }
 
 void MainWindow::errorImportingStatsFile(QString msg)
@@ -1034,11 +1047,11 @@ void MainWindow::on_actionClear_Graph_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
-    int res = QMessageBox::question(this, tr("Clear graph"), tr("You're about to delete the entire graph data. Do you want to proceed?"),
-                                    QMessageBox::No, QMessageBox::Yes);
-
-    if (res == QMessageBox::Yes) {
-        //            currentModel->delAllNodes();
+    if (QMessageBox::warning(this, tr("Clear graph"), tr("This operation will permanently remove the all the nodes from graph. Proceed?"),
+                             QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+        currentModel->clearAllNodes();
+        mMapController->clearAllNodes(currentModelIdx);
+        mMapController->redraw();
     }
 }
 
@@ -1081,7 +1094,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
 
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder *gb = new GraphBuilder();
-        gb->setType(GraphBuilder::Hex);
+        gb->setType(dlg.getType());
         gb->setDistance(dlg.step() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
@@ -1089,12 +1102,12 @@ void MainWindow::on_actionCreate_Graph_triggered()
         if (!s.isEmpty())
             gb->setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
 
-        WaitDialog *dlg = new WaitDialog(this);
-        dlg->setText(tr("Wait while graph is created..."));
-        dlg->setProgress(false, 100);
+        WaitDialog *wdlg = new WaitDialog(this);
+        wdlg->setText(tr("Wait while graph is created..."));
+        wdlg->setProgress(false, 100);
 
-        GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, dlg);
-        startBackgroundOperation(wrkr, dlg);
+        GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, wdlg);
+        startBackgroundOperation(wrkr, wdlg);
     }
 }
 
@@ -1106,6 +1119,7 @@ void MainWindow::graphCreated(const QList<GraphBuilder::Node> &nodes)
 void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
 {
     PathPenaltyDialog dlg(this);
+    dlg.showShapefileOptions(false);
 
     if (dlg.exec() == QDialog::Accepted) {
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
@@ -1256,4 +1270,34 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
 {
     startMouseMode(new DrawPenaltyPolygon(this, mMapController));
+}
+
+void MainWindow::on_actionAdd_Penalty_from_File_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    PathPenaltyDialog dlg(this);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+    dlg.showShapefileOptions(true);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        double weight = dlg.weight();
+        QString shp = dlg.selectedShapefile();
+        std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+
+        int n = ds->GetLayerCount();
+        for (int i = 0; i < n ;  ++i) {
+            OGRLayer *lr = ds->GetLayer(i);
+            lr->SetSpatialFilter(0);
+            lr->ResetReading();
+
+            OGRFeature *feature;
+            while ((feature = lr->GetNextFeature())) {
+                currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight);
+            }
+        }
+
+        mMapController->redraw();
+    }
 }

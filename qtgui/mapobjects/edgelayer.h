@@ -17,6 +17,7 @@ public:
     void setVisible(bool vi) { mLayer->setVisible(vi); }
     void addEdge (EdgeMapObject *edge, bool disable_redraw = false);
     void removeEdge (EdgeMapObject *edge);
+    void clear();
 
     std::shared_ptr<qmapcontrol::LayerGeometry> layer() const { return mLayer; }
 

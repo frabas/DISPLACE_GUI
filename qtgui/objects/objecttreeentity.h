@@ -5,6 +5,7 @@
 #include <objecttreemodel.h>
 
 class ObjectTreeModel;
+class QMenu;
 
 namespace objecttree {
 
@@ -27,6 +28,8 @@ public:
 
     virtual Qt::ItemFlags flags(Qt::ItemFlags defFlags, const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+    virtual QMenu *contextMenu() const;
 };
 
 }

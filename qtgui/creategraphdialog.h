@@ -2,6 +2,7 @@
 #define CREATEGRAPHDIALOG_H
 
 #include <QDialog>
+#include <graphbuilder.h>
 
 namespace Ui {
 class CreateGraphDialog;
@@ -20,6 +21,7 @@ public:
     double minLat() const;
     double maxLon() const;
     double maxLat() const;
+    GraphBuilder::Type getType() const;
 
     void setShapefileList(QStringList list);
     QString getSelectedShapefile() const ;

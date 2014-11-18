@@ -1094,7 +1094,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
 
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder *gb = new GraphBuilder();
-        gb->setType(GraphBuilder::Hex);
+        gb->setType(dlg.getType());
         gb->setDistance(dlg.step() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
@@ -1102,12 +1102,12 @@ void MainWindow::on_actionCreate_Graph_triggered()
         if (!s.isEmpty())
             gb->setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
 
-        WaitDialog *dlg = new WaitDialog(this);
-        dlg->setText(tr("Wait while graph is created..."));
-        dlg->setProgress(false, 100);
+        WaitDialog *wdlg = new WaitDialog(this);
+        wdlg->setText(tr("Wait while graph is created..."));
+        wdlg->setProgress(false, 100);
 
-        GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, dlg);
-        startBackgroundOperation(wrkr, dlg);
+        GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, wdlg);
+        startBackgroundOperation(wrkr, wdlg);
     }
 }
 

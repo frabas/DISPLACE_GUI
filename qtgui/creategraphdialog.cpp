@@ -40,6 +40,14 @@ double CreateGraphDialog::maxLat() const
     return ui->lat2->value();
 }
 
+GraphBuilder::Type CreateGraphDialog::getType() const
+{
+    if (ui->quad->isChecked())
+        return GraphBuilder::Quad;
+    else
+        return GraphBuilder::Hex;
+}
+
 void CreateGraphDialog::setShapefileList(QStringList list)
 {
     ui->shapefile->addItems(list);

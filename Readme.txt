@@ -13,8 +13,23 @@ How to build
 Windows
 -------
 
+* Prerequisites:
+
 Since version 0.5.0 Displace requires GDAL library.
 Since version 0.5.4, Displace supports builds under 64bit MinGW.
+Since version 0.6.0, Displace requires the Boost (Graph) Library.
+
+You can find the instructions for GDAL installation and 64bit mingw in a section below.
+
+
+* Building and installing prerequisite libraries
+
+Boost:
+Boost (1.57.0 at this time) are installed in c:\mingw\boost-1_57_0
+To install, just unpack the zip file in c:\mingw. 
+If this is not the case, or a later version is used, change the INCLUDEPATH variable in qtgui/qtgui.pro
+
+Ming64 and gdal: 
 
 NOTE: Compiling the project under 64bit compilers is HIGLY RECOMMENDED. 
 Displace (both Gui and Simulator) requires huge amounts of data that 32bit Windows can't handle properly.

@@ -5,7 +5,11 @@
 
 #include <QDebug>
 
-const double GraphBuilder::earthRadius = 6371000;   // ...
+#ifdef HAVE_GEOGRAPHICLIB
+#include <GeographicLib/Geodesic.hpp>
+#endif
+
+const double GraphBuilder::earthRadius = 6378137;   // ...
 
 
 GraphBuilder::GraphBuilder()
@@ -172,6 +176,13 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
 {
     nodes[source].adiacencies.push_back(target);
 
+#ifdef HAVE_GEOGRAPHICLIB
+    double d;
+
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+    geod.Inverse(nodes[source].point.y(), nodes[source].point.x(), nodes[target].point.y(), nodes[target].point.x(), d);
+
+#else
     double ph1 = nodes[source].point.x() * M_PI / 180;
     double la1 = nodes[source].point.y() * M_PI / 180;
     double ph2 = nodes[target].point.x() * M_PI / 180;
@@ -185,6 +196,7 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
     double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1-a));
 
     double d = earthRadius * c;
+#endif
 
     nodes[source].weight.push_back(d / 1000);
 }

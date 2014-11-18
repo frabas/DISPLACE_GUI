@@ -40,6 +40,11 @@ win32 {
     LIBS += -lpsapi
 }
 
+unix {
+    DEFINES += HAVE_GEOGRAPHICLIB
+    LIBS += -lGeographic
+}
+
 DEFINES += PROFILE
 LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
 

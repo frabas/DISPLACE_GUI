@@ -30,7 +30,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
       mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
-      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
+      mShapefileLayers(MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -312,7 +312,7 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
     mOutputLayers[model].setLayer(id,layer);
 }
 
-void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<Layer> layer, bool show)
+void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
     mMap->addLayer(layer);
     mShapefileLayers[model].add(layer, show);

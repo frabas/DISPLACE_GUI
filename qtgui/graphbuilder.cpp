@@ -123,6 +123,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
 void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double bearing, QPointF &p2)
 {
+
+#ifdef HAVE_GEOGRAPHICLIB
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+
+    double x,y;
+    geod.Direct(p1.y()/ M_PI * 180.0, p1.x()/ M_PI * 180.0, bearing / M_PI * 180.0, dist, y, x);
+
+    p2.setX(x* M_PI / 180.0);
+    p2.setY(y* M_PI / 180.0);
+
+#else
     // φ Latitude λ Longitude d distance R earth radius [6371km], brng bearing (rad, north, clockwise)
     // var φ2 = Math.asin( Math.sin(φ1)*Math.cos(d/R) +
     //      Math.cos(φ1)*Math.sin(d/R)*Math.cos(brng) );
@@ -136,6 +147,7 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
             std::atan2( std::sin(bearing) * std::sin(dist/earthRadius) * std::cos(p1.y()),
                         std::cos(dist/earthRadius) - std::sin(p1.y()) * std::sin(p2.y()))
             );
+#endif
 }
 
 void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index)

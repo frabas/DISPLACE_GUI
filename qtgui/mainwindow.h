@@ -65,6 +65,7 @@ private slots:
     void completeMouseMode();
 
     void edgeSelectionsChanged(int);
+    void treeViewContextMenuRequested(QPoint);
 
     void errorImportingStatsFile(QString);
 

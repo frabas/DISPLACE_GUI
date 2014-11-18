@@ -5,8 +5,10 @@
 
 namespace objecttree {
 
-class LayerEntity : public ObjectTreeEntity
+class LayerEntity : public QObject, public ObjectTreeEntity
 {
+    Q_OBJECT
+
     int mLayerEntityIndex;
     ObjectTreeModel::Category mLayerEntityType;
 
@@ -25,6 +27,14 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual Qt::ItemFlags flags(Qt::ItemFlags defflags, const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+    virtual QMenu *contextMenu() const override ;
+
+public slots:
+    void onActionShapeColor();
+
+private:
+    mutable QMenu *mContextMenu;
 };
 
 }

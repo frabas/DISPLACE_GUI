@@ -136,6 +136,8 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
+    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect (ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
@@ -355,6 +357,17 @@ void MainWindow::edgeSelectionsChanged(int num)
 {
     ui->actionDelete->setEnabled(num > 0);
     ui->actionProperties->setEnabled(num > 0);
+}
+
+void MainWindow::treeViewContextMenuRequested(QPoint point)
+{
+    QModelIndex index = ui->treeView->indexAt(point);
+    if (index.isValid()) {
+        objecttree::ObjectTreeEntity *entity = treemodel->entity(index);
+        QMenu *menu = entity->contextMenu();
+        if (menu)
+            menu->exec(ui->treeView->mapToGlobal(point));
+    }
 }
 
 void MainWindow::errorImportingStatsFile(QString msg)

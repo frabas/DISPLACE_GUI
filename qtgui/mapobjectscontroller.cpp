@@ -265,6 +265,11 @@ QStringList MapObjectsController::getShapefilesList(int model_idx) const
     return list;
 }
 
+std::shared_ptr<ESRIShapefile> MapObjectsController::getShapefile(int model_idx, int idx)
+{
+    return mShapefileLayers[model_idx].layers[idx]->getShapefile(0);
+}
+
 std::shared_ptr<OGRDataSource> MapObjectsController::getShapefileDatasource(int model_idx, const QString &name)
 {
     for (int i = 0; i < mShapefileLayers[model_idx].getCount(); ++i) {

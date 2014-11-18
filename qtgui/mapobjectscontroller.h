@@ -200,6 +200,7 @@ public:
 
     bool importShapefile(int model_idx, QString path, QString layername);
     QStringList getShapefilesList(int model_idx) const;
+    std::shared_ptr<qmapcontrol::ESRIShapefile> getShapefile(int model_idx, int idx);
     std::shared_ptr<OGRDataSource> getShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);

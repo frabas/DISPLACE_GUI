@@ -9,6 +9,12 @@ const double GraphBuilder::earthRadius = 6371000;   // ...
 
 
 GraphBuilder::GraphBuilder()
+    : mType(Hex),
+      mStep(0),
+      mLatMin(0), mLatMax(0),
+      mLonMin(0), mLonMax(0),
+      mShapefile(),
+      mFeedback(0)
 {
 }
 
@@ -35,6 +41,10 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     QPointF p1(mLonMin, mLatMin), p2;
 
     QList<int> idx0, idx1, idx2;
+
+    if (mFeedback) {
+        mFeedback->setMax((mLatMax - mLatMin) / (latinc /earthRadius));
+    }
 
     int nr = 0, nc = 0;
     while (lat <= mLatMax) {
@@ -83,6 +93,9 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         idx2 = idx1;
         idx1 = idx0;
         idx0.clear();
+
+        if (mFeedback)
+            mFeedback->setStep(nr);
     }
 
     createAdiacencies(res, idx2, idx1, idx0, nr-1);
@@ -109,40 +122,55 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
 
 void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index)
 {
-//    qDebug() << row_index<< idx.size();
     for (int i = 0; i < idx.size(); ++i) {
         // current node is nodes[i]
 
-//        if (!nodes[idx[i]].good)
-//            continue;
-
-        if (i > 0 /*&& nodes[idx[i-1]].good*/)
-            nodes[idx[i]].adiacencies.push_back(idx[i-1]);     // left node
-        if (i < idx.size()-1 /*&& nodes[idx[i+1]].good*/)
-            nodes[idx[i]].adiacencies.push_back(idx[i+1]);     // right node
+        if (i > 0)
+            pushAd(nodes, idx[i], idx[i-1]);     // left node
+        if (i < idx.size()-1)
+            pushAd(nodes, idx[i], idx[i+1]);     // right node
 
         if ((row_index % 2) == 0) {     // even
-            if (i > 0 && i-1 < pidx.size() /*&& nodes[pidx[i-1]].good*/)
-                nodes[idx[i]].adiacencies.push_back(pidx[i-1]);
-            if (i < pidx.size() /*&& nodes[pidx[i]].good*/)
-                nodes[idx[i]].adiacencies.push_back(pidx[i]);
+            if (i > 0 && i-1 < pidx.size())
+                pushAd(nodes, idx[i], pidx[i-1]);
+            if (i < pidx.size())
+                pushAd(nodes, idx[i], pidx[i]);
 
-            if (i > 0 && i-1 < nidx.size() /*&& nodes[nidx[i-1]].good*/)
-                nodes[idx[i]].adiacencies.push_back(nidx[i-1]);
-            if (i < nidx.size() /*&& nodes[nidx[i]].good*/)
-                nodes[idx[i]].adiacencies.push_back(nidx[i]);
+            if (i > 0 && i-1 < nidx.size())
+                pushAd(nodes, idx[i], nidx[i-1]);
+            if (i < nidx.size())
+                pushAd(nodes, idx[i], nidx[i]);
         } else {    // odd
-            if (i < pidx.size() /*&& nodes[pidx[i]].good*/)
-                nodes[idx[i]].adiacencies.push_back(pidx[i]);
-            if (i+1 < pidx.size() /*&& nodes[pidx[i+1]].good*/)
-                nodes[idx[i]].adiacencies.push_back(pidx[i+1]);
+            if (i < pidx.size())
+                pushAd(nodes, idx[i], pidx[i]);
+            if (i+1 < pidx.size())
+                pushAd(nodes, idx[i], pidx[i+1]);
 
-            if (i < nidx.size() /*&& nodes[nidx[i]].good*/)
-                nodes[idx[i]].adiacencies.push_back(nidx[i]);
-            if (i+1 < nidx.size() /*&& nodes[nidx[i+1]].good*/)
-                nodes[idx[i]].adiacencies.push_back(nidx[i+1]);
+            if (i < nidx.size())
+                pushAd(nodes, idx[i], nidx[i]);
+            if (i+1 < nidx.size())
+                pushAd(nodes, idx[i], nidx[i+1]);
         }
-
-//        qDebug() << "edges" << idx[i] << nodes[idx[i]].adiancies;
     }
+}
+
+void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
+{
+    nodes[source].adiacencies.push_back(target);
+
+    double ph1 = nodes[source].point.x() * M_PI / 180;
+    double la1 = nodes[source].point.y() * M_PI / 180;
+    double ph2 = nodes[target].point.x() * M_PI / 180;
+    double la2 = nodes[target].point.y() * M_PI / 180;
+    double dp = ph2 - ph1;
+    double dl = la2 - la1;
+
+    double a = std::sin(dp/2) * std::sin(dp/2) +
+            std::cos(ph1) * std::cos(ph2) *
+            std::sin(dl/2) * std::sin(dl/2);
+    double c = 2 * std::atan2(std::sqrt(a), std::sqrt(1-a));
+
+    double d = earthRadius * c;
+
+    nodes[source].weight.push_back(d / 1000);
 }

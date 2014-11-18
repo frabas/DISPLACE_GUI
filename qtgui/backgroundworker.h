@@ -16,6 +16,7 @@ public:
 signals:
     void workStarted();
     void workEnded();
+    void progress(int n);
 
 public slots:
     void process();

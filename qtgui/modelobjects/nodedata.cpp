@@ -138,6 +138,12 @@ double NodeData::getAdiacencyWeight(int idx) const
 {
     return mWeights.at(idx);
 }
+
+void NodeData::setAdiacencyWeight(int idx, double w)
+{
+    mWeights[idx] = w;
+}
+
 bool NodeData::isDeleted() const
 {
     return mDeleted;

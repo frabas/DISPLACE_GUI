@@ -12,7 +12,9 @@
 #include <qdebug.h>
 #include <QtAlgorithms>
 
+const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
+const char *FLD_EDGEID="edgeid";
 
 DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
@@ -34,7 +36,8 @@ DisplaceModel::DisplaceModel()
       mInterestingSizeMax(false),
       mInterestingSizes(),
       mOutputFileParser(new OutputFileParser(this)),
-      mParserThread(new QThread(this))
+      mParserThread(new QThread(this)),
+      mShortestPathFolder()
 {
     OGRRegisterAll();
 
@@ -52,8 +55,12 @@ DisplaceModel::DisplaceModel()
     Q_ASSERT(mNodesLayer);
 
     // Create any field
+    OGRFieldDefn fld2(FLD_TYPE, OFTInteger);
+    mNodesLayer->CreateField(&fld2);
     OGRFieldDefn fld(FLD_NODEID, OFTInteger);
     mNodesLayer->CreateField(&fld);
+    OGRFieldDefn fld3(FLD_EDGEID, OFTInteger);
+    mNodesLayer->CreateField(&fld3);
 
     mOutputFileParser->moveToThread(mParserThread);
     mParserThread->start();
@@ -98,6 +105,15 @@ bool DisplaceModel::load(QString path)
         mConfig = Config::readFromFile(mInputName, mBasePath, mOutputName);
         mCalendar = std::shared_ptr<Calendar> (Calendar::load(mBasePath, mInputName));
 
+        QString shortestPath = QString("%1/shortPaths_%2_a_graph%3")
+                .arg(mBasePath).arg(mInputName).arg(mScenario.getGraph());
+
+        if (QFile(shortestPath).exists()) {
+            qDebug() << "linking shortest path folder: " << shortestPath;
+            linkShortestPathFolder(shortestPath);
+        } else {
+            qDebug() << shortestPath << "doesn't exist";
+        }
         mInterestingHarb = mConfig.m_interesting_harbours;
 
         loadNodes();
@@ -479,6 +495,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         int nodeid = mNodes.size();
 
         OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+        feature->SetField(FLD_TYPE, (int)OgrTypeNode);
         feature->SetField(FLD_NODEID, nodeid);
 
         OGRPoint pt;
@@ -494,9 +511,23 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         mNodes.push_back(nodedata);
 
         if (node.good) {
-            foreach (int adidx, node.adiacencies) {
-                if (nodes[adidx].good)
-                    nodedata->appendAdiancency(adidx + nodeidx, 0.0);
+            for (int i = 0; i < node.adiacencies.size(); ++i) {
+                int adidx = node.adiacencies[i];
+                if (nodes[adidx].good) {
+                    nodedata->appendAdiancency(adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
+
+                    OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+                    e->SetField(FLD_TYPE, (int)OgrTypeEdge);
+                    e->SetField(FLD_NODEID, nodeid);
+                    e->SetField(FLD_EDGEID, i);
+
+                    OGRLineString edge;
+                    edge.addPoint(node.point.x(), node.point.y());
+                    edge.addPoint(nodes[adidx].point.x(), nodes[adidx].point.y());
+                    e->SetGeometry(&edge);
+
+                    mNodesLayer->CreateFeature(e);
+                }
             }
         } else {
             nodedata->setDeleted(true);
@@ -509,7 +540,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     foreach(std::shared_ptr<NodeData> node, newnodes) {
         controller->addNode(mIndex, node);
     }
-
+    controller->redraw();
 
     return true;
 }
@@ -530,6 +561,67 @@ bool DisplaceModel::exportGraph(const QString &path)
 
     file.close();
     return true;
+}
+
+bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
+{
+    foreach (std::shared_ptr<HarbourData> h, list) {
+        h->mHarbour->set_is_harbour(mHarbours.size());
+        mHarbours.push_back(h);
+
+        std::shared_ptr<NodeData> n (new NodeData(h->mHarbour, this));
+        mNodes.push_back(n);
+    }
+
+    return true;
+}
+
+void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight)
+{
+    OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
+
+    foreach (const QPointF &pt, poly) {
+        gring->addPoint(pt.x(), pt.y());
+    }
+    gring->closeRings();
+
+    OGRPolygon *gpoly = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
+    gpoly->addRing(gring);
+
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(gpoly);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            // don't do this: it will sum the weight twice.
+#if 0
+            if (true) {
+                int id = ftr->GetFieldAsInteger(FLD_NODEID);
+                qDebug() << "Node " << id;
+
+                std::shared_ptr<NodeData> nd = mNodes[id];
+                for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+                    nd->setAdiacencyWeight(i, nd->getAdiacencyWeight(i) + weight);
+                }
+            }
+#endif
+            break;
+        case OgrTypeEdge:
+            if (true) {
+                int nodeid = ftr->GetFieldAsInteger(FLD_NODEID);
+                int edgeid = ftr->GetFieldAsInteger(FLD_EDGEID);
+
+                qDebug() << "Node id" << nodeid << " edge" << edgeid << "to node" << mNodes[nodeid]->getAdiacencyByIdx(edgeid);
+
+                mNodes[nodeid]->setAdiacencyWeight(edgeid, mNodes[nodeid]->getAdiacencyWeight(edgeid) + weight);
+            }
+            break;
+        }
+
+    }
+
+    delete gpoly;
 }
 
 int DisplaceModel::getVesselCount() const

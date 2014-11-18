@@ -72,6 +72,7 @@ public:
     int getAdiacencyCount() const;
     int getAdiacencyByIdx(int idx) const;
     double getAdiacencyWeight(int idx) const;
+    void setAdiacencyWeight (int idx, double w);
 
     bool isDeleted() const;
     void setDeleted(bool value = true);

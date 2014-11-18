@@ -26,12 +26,11 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
-//      mPaletteManager(),
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
-      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
       mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
+      mShapefileLayers(MAX_MODELS, LayerVarListImpl()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {
@@ -43,10 +42,13 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMainLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("OpenStreetMap", mMainMapAdapter));
     mSeamarkLayer = std::shared_ptr<qmapcontrol::LayerMapAdapter>(new qmapcontrol::LayerMapAdapter("Seamark", mSeamarkAdapter));
     mWidgetLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Details"));
+    mEditorLayer = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry("Editor"));
+    mEditorLayer->setVisible(true);
 
     mMap->addLayer(mMainLayer);
     mMap->addLayer(mSeamarkLayer);
     mMap->addLayer(mWidgetLayer);
+    mMap->addLayer(mEditorLayer);
 
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
     mMap->setZoom(10);
@@ -67,13 +69,6 @@ void MapObjectsController::removeModel(int model_n)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-//    mPaletteManager[model_n] = std::shared_ptr<PaletteManager>(new PaletteManager());
-
-//    std::shared_ptr<Palette> p = PaletteManager::instance()->palette(PopulationRole);
-
-//    for (int i = 0; i < (int)LastRole; ++i)
-//        mPaletteManager[model_n]->setPalette((PaletteRole)i, *p);
-
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 
@@ -100,17 +95,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {
-        HarbourMapObject *obj = new HarbourMapObject(this, model, h.get());
-        mHarbourObjects[model_n].append(obj);
-
-        mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+        addHarbour(model_n, h, true);
     }
 
     const QList<std::shared_ptr<NodeData> > &nodes = model->getNodesList();
     foreach (std::shared_ptr<NodeData> nd, nodes) {
         if (nd->get_harbour())
             continue;
-        addNode(model_n, nd);
+        addNode(model_n, nd, true);
     }
 
     const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
@@ -327,7 +319,7 @@ void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataS
     mShapefiles[model].append(datasource);
 }
 
-void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
+void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw)
 {
     if (nd->isDeleted())
         return;
@@ -336,40 +328,57 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd)
     connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
     mNodeObjects[model_n].append(obj);
 
-    mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity());
+    mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     /* add here other roles */
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
     mNodeObjects[model_n].append(obj);
-    mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity());
+    mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         EdgeMapObject *edge = new EdgeMapObject(this, i, nd.get());
 
         connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
-        mEdgesLayer[model_n]->addEdge(edge);
+        mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
     }
+}
 
+void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> h, bool disable_redraw)
+{
+    HarbourMapObject *obj = new HarbourMapObject(this, mModels[model_n].get(), h.get());
+    mHarbourObjects[model_n].append(obj);
+
+    mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+}
+
+void MapObjectsController::clearEditorLayer()
+{
+    mEditorLayer->clearGeometries();
+}
+
+void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geometry)
+{
+    mEditorLayer->addGeometry(geometry);
 }
 
 void MapObjectsController::delSelectedEdges(int model)
 {
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
-        std::shared_ptr<NodeData> nd = edge->node();
-        std::shared_ptr<NodeData> tg = edge->target();
+        NodeData* nd = edge->node();
+        NodeData* tg = edge->target();
 
 //        int nodeid1 = nd->get_idx_node();
 
@@ -452,4 +461,9 @@ void MapObjectsController::nodeSelectionHasChanged(NodeMapObject *node)
         mNodeSelection[modelIndex].remove(node);
 
     emit nodeSelectionChanged(mNodeSelection[modelIndex].size());
+}
+
+void MapObjectsController::redraw()
+{
+    mMap->requestRedraw();
 }

@@ -20,10 +20,15 @@ class EdgeGraphics;
 
 class EdgeGraphics : public qmapcontrol::GeometryLineString {
     static QPen mNormalPen, mSelectedPen;
+
+    NodeData *node;
+    int edgeIdx;
 public:
-    explicit EdgeGraphics(const std::vector<qmapcontrol::PointWorldCoord>& points);
+    explicit EdgeGraphics(const std::vector<qmapcontrol::PointWorldCoord>& points, NodeData *nd, int edge);
 
     virtual void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
+
+    static const double minZoom, maxZoom, minTextZoom;
 };
 
 class EdgeMapObject : public QObject, public MapObject
@@ -41,8 +46,8 @@ public:
 
     bool selected() const { return mGeometry->selected(); }
 
-    std::shared_ptr<NodeData> node() const { return mNode; }
-    std::shared_ptr<NodeData> target() const { return mTarget; }
+    NodeData* node() const { return mNode; }
+    NodeData* target() const { return mTarget; }
 protected:
 
 private slots:
@@ -53,7 +58,7 @@ signals:
 private:
 
     MapObjectsController *mController;
-    std::shared_ptr<NodeData> mNode, mTarget;
+    NodeData* mNode, *mTarget;
 
     std::shared_ptr<EdgeGraphics> mGeometry;
     NodeDetailsWidget *mWidget;

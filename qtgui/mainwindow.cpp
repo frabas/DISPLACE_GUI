@@ -10,10 +10,13 @@
 #include <simulator.h>
 #include <editpalettedialog.h>
 
+#include <inputfileparser.h>
 #include <scenariodialog.h>
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
 #include <creategraphdialog.h>
+#include <mousemode.h>
+#include <mousemode/drawpenaltypolygon.h>
 
 #include <graphinteractioncontroller.h>
 #include <graphbuilder.h>
@@ -21,6 +24,8 @@
 #include <waitdialog.h>
 
 #include <backgroundworker.h>
+#include <shortestpathbuilder.h>
+#include <pathpenaltydialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -58,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     map(0),
     treemodel(0),
     mPlayTimerInterval(playTimerDefault),
+    mMouseMode(0),
     mWaitDialog(0)
 {
     ui->setupUi(this);
@@ -106,6 +112,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
 
     connect (map, SIGNAL(mapFocusPointChanged(PointWorldCoord)), this, SLOT(mapFocusPointChanged(PointWorldCoord)));
+    connect (map, SIGNAL(mouseEventPressCoordinate(QMouseEvent*,PointWorldCoord)), this, SLOT(mapMousePress(QMouseEvent*,PointWorldCoord)));
+    connect (map, SIGNAL(mouseEventReleaseCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
+    connect (map, SIGNAL(mouseEventMoveCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
 
     QPixmap pixmap;
     pixmap.fill( Qt::white );
@@ -315,6 +324,33 @@ void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
     statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
 }
 
+void MainWindow::mapMousePress(QMouseEvent *event, PointWorldCoord point)
+{
+    if (!mMouseMode)    // no mouse mode active
+        return;
+
+    if (!mMouseMode->pressEvent(point.rawPoint()))
+        abortMouseMode();
+}
+
+void MainWindow::mapMouseRelease(QMouseEvent *, PointWorldCoord, PointWorldCoord point)
+{
+    if (!mMouseMode)    // no mouse mode active
+        return;
+
+    if (!mMouseMode->releaseEvent(point.rawPoint()))
+        abortMouseMode();
+}
+
+void MainWindow::mapMouseMove(QMouseEvent *, PointWorldCoord, PointWorldCoord point)
+{
+    if (!mMouseMode)    // no mouse mode active
+        return;
+
+    if (!mMouseMode->moveEvent(point.rawPoint()))
+        abortMouseMode();
+}
+
 void MainWindow::edgeSelectionsChanged(int num)
 {
     ui->actionDelete->setEnabled(num > 0);
@@ -346,11 +382,14 @@ void MainWindow::waitStart()
     if (!mWaitDialog) {
         mWaitDialog = new WaitDialog(this);
     }
+
     mWaitDialog->show();
 }
 
 void MainWindow::waitEnd()
 {
+    qDebug()  << "Wait End";
+
     if (mWaitDialog) {
         mWaitDialog->close();
         delete mWaitDialog;
@@ -498,14 +537,9 @@ void MainWindow::on_actionScenario_triggered()
                     return;
                 }
 
-                QString error;
-                if (!loadLiveModel(currentModel->fullpath(), &error)) {
-                    QMessageBox::warning(this, tr("Error reloading model."),
-                                         QString(tr("There was an error loading the model. Likely the scenario is wrong. "
-                                                    "The old model has been kept, so you can fix it. But it will not be possible "
-                                                    "to run a simulation.\n"
-                                                    "The error message was: %1")).arg(error));
-                }
+                Loader *loader = new Loader(this,currentModel->fullpath());
+
+                startBackgroundOperation(loader);
             }
         }
     }
@@ -737,16 +771,60 @@ int MainWindow::newEditorModel(QString name)
     return i;
 }
 
-void MainWindow::startBackgroundOperation(BackgroundWorker *work)
+void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *waitdialog)
 {
     QThread *thread = new QThread(this);
+
+    if (mWaitDialog) {
+        mWaitDialog->close();
+        delete mWaitDialog;
+    }
+
+    if (waitdialog == 0) {
+        mWaitDialog = new WaitDialog(this);
+    } else {
+        mWaitDialog = waitdialog;
+    }
 
     work->moveToThread(thread);
     connect (thread, SIGNAL(started()), work, SLOT(process()));
     connect (work, SIGNAL(workStarted()), this, SLOT(waitStart()));
     connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
+    connect (work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
 
     thread->start();
+}
+
+void MainWindow::startMouseMode(MouseMode * newmode)
+{
+    abortMouseMode();
+    mMouseMode = newmode;
+
+    if (mMouseMode)
+        mMouseMode->beginMode();
+}
+
+void MainWindow::endMouseMode(bool success)
+{
+    if (!mMouseMode)
+        return;
+
+    if (success) {
+        mMouseMode->endMode(success);
+    }
+
+    delete mMouseMode;
+    mMouseMode = 0;
+}
+
+void MainWindow::abortMouseMode()
+{
+    endMouseMode(false);
+}
+
+void MainWindow::completeMouseMode()
+{
+    endMouseMode(true);
 }
 
 void MainWindow::on_play_step_valueChanged(int step)
@@ -964,6 +1042,32 @@ void MainWindow::on_actionClear_Graph_triggered()
     }
 }
 
+class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedback {
+    GraphBuilder *builder;
+    WaitDialog *waitDialog;
+    QList<GraphBuilder::Node> result;
+public:
+    GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg)
+        : BackgroundWorker(win),
+          builder(b),
+          waitDialog(dlg) {
+    }
+
+    virtual void execute() override {
+        builder->setFeedback(this);
+        result = builder->buildGraph();
+        mMain->graphCreated(result);
+    }
+
+    void setMax (int m) {
+        waitDialog->setProgress(true, m);
+    }
+
+    void setStep(int step) {
+        emit progress(step);
+    }
+};
+
 void MainWindow::on_actionCreate_Graph_triggered()
 {
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
@@ -976,18 +1080,36 @@ void MainWindow::on_actionCreate_Graph_triggered()
     dlg.setShapefileList(list);
 
     if (dlg.exec() == QDialog::Accepted) {
-        GraphBuilder gb;
-        gb.setType(GraphBuilder::Hex);
-        gb.setDistance(dlg.step() * 1000);
-        gb.setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+        GraphBuilder *gb = new GraphBuilder();
+        gb->setType(GraphBuilder::Hex);
+        gb->setDistance(dlg.step() * 1000);
+        gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
         QString s = dlg.getSelectedShapefile();
         if (!s.isEmpty())
-            gb.setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
+            gb->setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
 
-        QList<GraphBuilder::Node> l = gb.buildGraph();
+        WaitDialog *dlg = new WaitDialog(this);
+        dlg->setText(tr("Wait while graph is created..."));
+        dlg->setProgress(false, 100);
 
-        currentModel->addGraph (l, mMapController);
+        GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, dlg);
+        startBackgroundOperation(wrkr, dlg);
+    }
+}
+
+void MainWindow::graphCreated(const QList<GraphBuilder::Node> &nodes)
+{
+    currentModel->addGraph (nodes, mMapController);
+}
+
+void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
+{
+    PathPenaltyDialog dlg(this);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
+        mMapController->redraw();
     }
 }
 
@@ -1039,4 +1161,99 @@ void MainWindow::on_actionExport_Graph_triggered()
             QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(currentModel->getLastError()));
         }
     }
+}
+
+void MainWindow::on_actionLoad_Harbours_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath;
+
+    lastpath = sets.value("last_harb", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getOpenFileName(this, tr("Import Harbours file"), lastpath, tr("Harbour Files (*.dat)"));
+    if (!fn.isEmpty()) {
+        QList<std::shared_ptr<HarbourData> > list;
+        QString error;
+        InputFileParser parser;
+        if (parser.parseHarbourFile(fn, list, &error)) {
+            currentModel->importHarbours(list);
+            foreach (std::shared_ptr<HarbourData> h, list)
+                mMapController->addHarbour(currentModelIdx, h, true);
+
+            mMapController->redraw();
+            QFileInfo info(fn);
+            sets.setValue("last_harb", info.absolutePath());
+        } else {
+            QMessageBox::warning(this, tr("Export failed"), QString(tr("Graph export has failed: %1")).arg(error));
+        }
+    }
+
+}
+
+void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath;
+
+    lastpath = sets.value("last_spath", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getExistingDirectory(this, tr("Import Harbours file"), lastpath);
+    if (!fn.isEmpty()) {
+        currentModel->linkShortestPathFolder(fn);
+        sets.setValue("last_spath", fn);
+    }
+
+}
+
+class ShortestPathBuilderWorker : public BackgroundWorker {
+    WaitDialog *mWaitDialog;
+    DisplaceModel *mModel;
+public:
+    ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
+        : BackgroundWorker(main), mWaitDialog(dialog), mModel(model) {
+    }
+
+    void execute() override {
+        ShortestPathBuilder builder(mModel);
+
+        mWaitDialog->setText("Building shortest paths");
+        const QList<std::shared_ptr<NodeData> > &nodes = mModel->getNodesList();
+        mWaitDialog->setProgress(true, nodes.size());
+        int n = 0;
+        foreach (std::shared_ptr<NodeData> node, nodes) {
+            mWaitDialog->setProgression(n);
+
+            builder.create(node, mModel->linkedShortestPathFolder());
+            ++n;
+        }
+        mWaitDialog->setProgression(n);
+    }
+};
+
+void MainWindow::on_actionCreate_Shortest_Path_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    if (!currentModel->isShortestPathFolderLinked()) {
+        QMessageBox::warning(this, tr("Cannot create Shortest Path"),
+                             tr("Please link a shortest path folder first."));
+        return;
+    }
+
+    WaitDialog *dialog = new WaitDialog(this);
+    ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
+
+    startBackgroundOperation(builder);
+}
+
+void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
+{
+    startMouseMode(new DrawPenaltyPolygon(this, mMapController));
 }

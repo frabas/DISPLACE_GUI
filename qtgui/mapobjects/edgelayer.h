@@ -15,7 +15,7 @@ public:
     explicit EdgeLayer(MapObjectsController *controller, const QString &name, QObject *parent = 0);
 
     void setVisible(bool vi) { mLayer->setVisible(vi); }
-    void addEdge (EdgeMapObject *edge);
+    void addEdge (EdgeMapObject *edge, bool disable_redraw = false);
     void removeEdge (EdgeMapObject *edge);
 
     std::shared_ptr<qmapcontrol::LayerGeometry> layer() const { return mLayer; }

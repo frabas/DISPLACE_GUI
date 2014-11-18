@@ -47,7 +47,7 @@ class Harbour : public Node
 		//multimap<string, double> mean_fish_price_per_met_per_pop,
 			multimap<int, double> mean_fish_price_per_pop_per_cat,
 			map<string, double> fuelprice);
-		Harbour(string name);
+        Harbour(string name);
 		Harbour();
 		~Harbour();
 		virtual string get_name() const;

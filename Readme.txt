@@ -9,6 +9,42 @@ Summary
 How to build
 ============
 
+Linux
+-----
+
+* Prerequisites:
+
+The following libraries, with development files, are required to compile under linux:
+
+Gdal library 1.10
+Boost Graph library 1.55 
+GeographicLib 
+
+To install prerequisites under Ubuntu 14.10:
+
+$ sudo apt-get install libgdal1-dev
+$ sudo apt-get install libboost-graph1.55-dev
+$ sudo apt-get install libgeographiclib-dev
+
+* Compilation under linux
+
+Using QtCreator is the simplest way: load the project file, configure the build directory and click on Build All.
+From QtCreator you can also run the application without any issue. Just be sure to select qtgui as run object.
+
+Using the command line is simple as well. Create a new directory to receive the objects files, and then run qmake and make from there:
+
+$ cd displace
+$ mkdir build-release
+$ cd build-release
+$ qmake ../
+$ make
+
+Installation script is not yet ready in linux, so at the moment you can run it in the building directory:
+
+$ LD_LIBRARY_PATH=$PWD:$PWD/QMapControl/QMapControl/src/QMapControl/lib ./displacegui
+
+NOTE: 
+Be sure to use qmake for Qt5. In case of Ubuntu 14.10, be sure to install qt5-default to automatically select qmake for qt5, otherwise qmake will point to the qt4 version.
 
 Windows
 -------

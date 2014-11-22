@@ -190,3 +190,7 @@ OTHER_FILES += \
     ../docs/database.txt \
     ../docs/dbstruct.sh \
     palettes/pop_colors.p2c
+
+
+target.path=$${PREFIX}/bin
+

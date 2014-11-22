@@ -2,6 +2,8 @@ TEMPLATE= lib
 TARGET=displacecommons
 DESTDIR=../
 
+include ("$$top_srcdir/localconfig.pri")
+
 INCLUDEPATH=../include/
 
 SOURCES= \
@@ -32,3 +34,7 @@ HEADERS= \
     ../include/myRutils.h \
     ../include/mkpath.h \
     ../include/m_constants.h
+
+target.path = $${PREFIX}/lib
+headers.path = $${PREFIX}/include/
+headers.files = $${HEADERS}

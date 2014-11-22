@@ -39,9 +39,22 @@ $ cd build-release
 $ qmake ../
 $ make
 
-Installation script is not yet ready in linux, so at the moment you can run it in the building directory:
+Installing
+To install, use make this way:
 
-$ LD_LIBRARY_PATH=$PWD:$PWD/QMapControl/QMapControl/src/QMapControl/lib ./displacegui
+$ make install
+
+will install in the unix "local" path /usr/local
+to change prefix, use PREFIX variable:
+
+$ make PREFIX=/usr/
+
+will install in the package-reserved path /usr.
+Package Maintainer can use INSTALL_ROOT variable to deploy on a separate directory:
+
+$ make PREFIX=/usr/ INSTALL_ROOT=$PWD/install
+
+Make uninstall is used the same way. 
 
 NOTE: 
 Be sure to use qmake for Qt5. In case of Ubuntu 14.10, be sure to install qt5-default to automatically select qmake for qt5, otherwise qmake will point to the qt4 version.

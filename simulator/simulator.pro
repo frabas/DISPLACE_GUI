@@ -5,6 +5,8 @@ TEMPLATE=app
 DESTDIR = ../
 INCLUDEPATH=../include
 
+include ("$$top_srcdir/localconfig.pri")
+
 LIBS+=
 
 macx {
@@ -55,3 +57,5 @@ HEADERS= \
 
 OTHER_FILES += \
     Makefile
+
+target.path=$${PREFIX}/bin

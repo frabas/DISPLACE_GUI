@@ -6,3 +6,10 @@ win32 {
     QMC_GDAL_LIB = $$EXTRA_DIR/lib
 }
 
+unix {
+    isEmpty(PREFIX) {
+        PREFIX=/usr/local/
+    }
+}
+
+INSTALLS = target

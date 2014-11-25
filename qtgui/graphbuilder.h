@@ -21,9 +21,14 @@ public:
     class Node {
     public:
         QPointF point;
+        int harbour;
         QList<int> adiacencies;
         QList<double> weight;
         bool good;
+
+        Node()
+            : point(), harbour(0), adiacencies(), weight(), good(false) {
+        }
     };
 
     GraphBuilder();

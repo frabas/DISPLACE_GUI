@@ -1301,3 +1301,61 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         mMapController->redraw();
     }
 }
+
+void MainWindow::on_actionLoad_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath = sets.value("last_graphpath", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getOpenFileName(this, tr("Import Graph file"), lastpath);
+    if (!fn.isEmpty()) {
+        QString graphpath, coordspath;
+
+        QFileInfo info(fn);
+        QString fnn = info.fileName();
+
+        if (fnn.startsWith("graph")) {
+            graphpath = fn;
+            coordspath = info.absolutePath() + "/coords" + fnn.mid(5);
+
+            int res = QMessageBox::question(this, tr("Coordinates file"),
+                                      QString(tr("Do you want also to load %1 as a coordinates file?")).arg(coordspath),
+                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Open);
+            if (res == QMessageBox::Open) {
+                coordspath = QFileDialog::getOpenFileName(this, tr("Import Coords file"), coordspath);
+            } else if (res == QMessageBox::No) {
+                coordspath = QString();
+            }
+        } else if (fnn.startsWith("coords")) {
+            coordspath = fn;
+            graphpath = info.absolutePath() + "/graph" + fnn.mid(6);
+
+            int res = QMessageBox::question(this, tr("Graph file"),
+                                      QString(tr("Do you want also to load %1 as a graph file?")).arg(graphpath),
+                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Open);
+            if (res == QMessageBox::Open) {
+                graphpath = QFileDialog::getOpenFileName(this, tr("Import Graph file"), coordspath);
+            } else if (res == QMessageBox::No) {
+                graphpath = QString();
+            }
+        } else {
+            QMessageBox::warning(this, tr("Cannot load file"), tr("Selected file must start either with graph or with coords."));
+            return;
+        }
+
+        InputFileParser parser;
+        QList<GraphBuilder::Node> nodes;
+        QString error;
+        if (parser.parseGraph(graphpath, coordspath, nodes, &error)) {
+
+            currentModel->addGraph(nodes, mMapController);
+//            currentModel->importGraph (graphpath, coordspath);
+        }
+
+        sets.setValue("last_graphpath", fn);
+    }
+
+}

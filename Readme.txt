@@ -144,7 +144,7 @@ Windows
 
 * Prerequisites:
 
-Since version 0.5.0 Displace requires GDAL library.
+Since version 0.5.0, Displace requires GDAL library, with GEOS support
 Since version 0.5.4, Displace supports builds under 64bit MinGW.
 Since version 0.6.0, Displace requires the Boost (Graph) Library.
 Since version 0.6.1, Displace depends on GeographicLib (http://geographiclib.sourceforge.net/)
@@ -192,7 +192,7 @@ This way, only static gdal library will be compiled, and you'll be unable to lin
 So download the zlib sources from http://www.zlib.net/, unpack it somewhere (I suggest some path under the mingw path) and compile
 To be able to use the 64bit compiler from the default MSYS environment, you'll need to prepend the compiler path to the system PATH
 
-$ export PATH=/c/qt-5.3.2-x64-mingw491r1-seh-opengl/mingw64/bin:$PATH
+$ export PATH=/c/Qt/qt-5.3.2-x64-mingw491r1-seh-opengl/mingw64/bin:$PATH
 
 edit the win32\Makefile.gcc file this way:
 
@@ -220,12 +220,29 @@ $ cp libz.dll.a /usr/local/lib/libz.dll.a
 
 Change /usr/local/ accordingly if needed.
 
-3) Compile GDAL
+3) Compile GEOS
+
+First download geos library from http://trac.osgeo.org/geos/ (at the time of writing, version is 3.4.2)
+Unpack the tarbz2 file, enter the source dir and run configure
+
+$ ./configure  --host=x86_64-w64-mingw32 --prefix=/usr/local
+
+then run make and make install
+
+$ make 
+$ make install
+$ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
+
+The first install instruction installs the necessary files in the mingw distribution (in /usr/local/) to allow gdal and all other libraries to find it during the configure process.
+The second install instruction, instead, installs the library in the "distribution" path for use with qtCreator.
+
+4) Compile GDAL with GEOS support
 
 Enter the gdal source (they can be downloaded from: http://trac.osgeo.org/gdal/wiki/DownloadSource )
 Use configure & make, as usual: 
 
-$ ./configure  --host=x86_64-w64-mingw32 --disable-static --enable-shared
+$ ./configure  --host=x86_64-w64-mingw32 --prefix=/usr/local --disable-static --enable-shared \
+	--with-geos=yes
 
 FIX the compilation script: 
 compiling under MinGW 64 requires link gdal with iconv: so open the GDALmake.opt file and change the following line:
@@ -254,7 +271,7 @@ mkdir gdal
 mv * gdal
 
 
-4) Compile GeographicLib
+5) Compile GeographicLib
 
 $ ./configure  --host=x86_64-w64-mingw32
 

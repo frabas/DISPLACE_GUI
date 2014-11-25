@@ -78,13 +78,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                 OGRPoint point (n.point.x(), n.point.y());
                 for (int lr = 0; lr < mShapefile->GetLayerCount(); ++lr) {
                     OGRLayer *layer = mShapefile->GetLayer(lr);
+                    layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-                    layer->ResetReading();
-                    if (layer->GetNextFeature() != 0) {
-                        n.good = false;
-                        break;
+                    OGRFeature *ftr;
+                    while (( ftr = layer->GetNextFeature()) != 0) {
+                        if (point.Within(ftr->GetGeometryRef())) {
+                            n.good = false;
+                            break;
+                        }
                     }
+
                 }
             }
 

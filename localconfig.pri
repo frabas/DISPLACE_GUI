@@ -12,4 +12,6 @@ unix {
     }
 }
 
+DESTDIR=$$top_builddir
+
 INSTALLS = target

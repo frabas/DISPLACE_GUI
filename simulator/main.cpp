@@ -37,8 +37,6 @@
 /**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
 /**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
 
-// REMEMBER TO DO 'Clean' under code::blocks to clean the project
-// if some weird bugs appears after having moving the folder including the source files
 
 //this is how we can able/disable cout in C++:
 #ifdef VERBOSE
@@ -451,7 +449,7 @@ int main(int argc, char* argv[])
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
 	// for which we do not have any info on the pops_N_at_szgroup because not assessed stock by ICES....
-	// so the dynamic of these pops are not truly simulated but vessels can do catches on them in any cases
+    // so the dynamic of these pops are not truly simulated but vessels can do some catches on them in any cases
 	// using vessel and species-specific historic cpue data... (just like in paper Bastardie et al 2010)
 
 	// set fixed seed (for max. 30 runs, random seed otherwise)
@@ -835,7 +833,6 @@ int main(int argc, char* argv[])
 			if(a_name!="none" && a_point== i)
 			{
 				cout << "load prices for port " << a_name << " which is point " << a_point << endl;
-				//int er = read_prices_per_harbour(a_point, a_quarter, prices, folder_name_parameterization);
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 								 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
 				cout << "....OK" << endl;
@@ -843,7 +840,6 @@ int main(int argc, char* argv[])
 			else
 			{
 				cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
-				//int er = read_prices_per_harbour(a_port, "quarter1", prices, folder_name_parameterization); // delete later on when final parameterisation
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 
 			}
@@ -880,8 +876,7 @@ int main(int argc, char* argv[])
 				nbpops,
 				NBSZGROUP,
 				a_name,
-								 //prices,
-				fishprices_each_species_per_cat,
+                fishprices_each_species_per_cat,
 				init_fuelprices
 				));
 			cout << "Harbour " <<  nodes[i]->get_name() << " " <<
@@ -908,7 +903,6 @@ int main(int argc, char* argv[])
 	for (unsigned int i=0; i< nodes.size(); i++)
 	{
 		nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
-								 // caution:magic number...i.e. from the R poisson regression on cpue
 		nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops,SEL_NBSZGROUP);
 	}
 
@@ -1230,7 +1224,7 @@ int main(int argc, char* argv[])
 		{
 			cout << "inform avai on nodes " << endl;
 
-			// get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
+            // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
 			cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl;
 			vector <int> nodes_with_presence;
 			multimap<int,int>::iterator lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
@@ -1912,13 +1906,6 @@ int main(int argc, char* argv[])
 #endif
 
 
-	/*  dout << "---------------------------" << endl;
-		dout << "---------------------------" << endl;
-		dout << " SERIALISATION             " << endl;
-		dout << "---------------------------" << endl;
-		dout << "---------------------------" << endl;
-
-		// TO DO
 
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
@@ -1928,7 +1915,7 @@ int main(int argc, char* argv[])
 
 	/* input data, graph connections and distance */
 	// CAUTION INDEXATION C++ from 0 to n while in R from 1 to n+1
-	// so take care to have idx of node starting from 0 in the input file providing the connections
+    // so take care to have idx of node starting from 0 in the input file
 	ifstream graph;
 	string filename_graph_test="../"+inputfolder+"/graphsspe/graph"+a_graph_s+".dat";
 	graph.open(filename_graph_test.c_str());
@@ -1939,7 +1926,7 @@ int main(int argc, char* argv[])
 	}
 	vector<int> graph_idx_dep;
 	vector<int> graph_idx_arr;
-	vector<int> graph_dist_km;	 // caution: 'integer' here to speed up c++
+    vector<int> graph_dist_km;	 // caution: use integer here to speed up c++
 	fill_from_graph(graph, graph_idx_dep, graph_idx_arr, graph_dist_km, nrow_graph);
 
 	/* fill in an adjacency map */
@@ -2028,7 +2015,7 @@ int main(int argc, char* argv[])
 		//   if((prev->second) ==1759)  cout << prev->first  <<" " << prev->second << std::endl;
 		// }
 
-		// store in path shops (avoiding recomputing the all possible paths from a given departure!!!)
+        // store in path shops (avoiding recomputing all possible paths from a given departure!!!)
 		// ...and clean
 		paths_shop.push_back(previous);
 		min_distances_shop.push_back(min_distance);
@@ -2041,7 +2028,6 @@ int main(int argc, char* argv[])
 		// 1. find the idx in the idx_paths_shop object
 		vector<int>::iterator it;
 		it = find (idx_paths_shop.begin(), idx_paths_shop.end(), 1);
-								 // tricky!
 		int idx = it - idx_paths_shop.begin();
 		cout << "The element is found at idx " << idx << endl;
 		// 2. then use this idx as index in the paths_shop to retrieve the object 'previous'
@@ -2074,9 +2060,9 @@ int main(int argc, char* argv[])
 
 
 
-	// the idea is to avoid using DijkstraGetShortestPathTo() dynamically
-	// in order to save a lot of time computation...
-	// using a shop of predefined objects 'previous' for each possible origin node,
+    // the idea is to avoid using DijkstraComputePaths() during live simulation
+    // in order to save a lot of computation time...
+    // indeed, using a shop of predefined objects 'previous' for each possible origin node,
 	// we will be able to use DijkstraGetShortestPathTo() only!
 
 	//...so we need one object 'previous' for each potential departure i.e. each
@@ -2333,8 +2319,8 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 	dout << "---------------------------" << endl;
 
-	// Note on the R code to get a map.dat file
-	// for coastline map from
+    // short note on the R code to get a map.dat file
+    // for coastline map:
 	// library(mapdata)
 	// ss<-map('worldHires', c('Denmark','Sweden','Norway','Germany','UK','Netherlands','Belgium','France','poland'))
 	// write.table(round(cbind(ss$x,ss$y),4),file="map.dat",row.names=FALSE,sep=" ")
@@ -2651,8 +2637,7 @@ int main(int argc, char* argv[])
 		// cin >> a;
 
 		dout << "BEGIN: POP MODEL TASKS----------" << endl;
-								 // apply M only by month to save computation time...
-		if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 		{
 
 			for (unsigned int sp=0; sp<populations.size(); sp++)
@@ -2670,7 +2655,7 @@ int main(int argc, char* argv[])
 					cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
 						populations.at(name_pop)->get_landings_so_far() << endl;
 
-								 // will be used in case of area_closure
+                    // will be used in case of area_closure
 					double cumul_oth_land_to_be_displaced=0.0;
 					int a_source_node_idx=0;
 					for(unsigned int n=0; n<a_list_nodes.size(); n++)
@@ -2698,10 +2683,10 @@ int main(int argc, char* argv[])
 							populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
 
 						// magic number for a the below scenario: add a stochastic variation
-								 // area-based sce
+                        // area-based sce
 						if (binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "with_stochast_oth_land"))
 						{
-								 // lognormal error
+                            // lognormal error
 							double a_rnorm = rlnorm(0,0.25);
 							dout << "a_rnorm " << a_rnorm << endl;
 							oth_land_this_pop_this_node= oth_land_this_pop_this_node*a_rnorm;
@@ -2763,9 +2748,9 @@ int main(int argc, char* argv[])
 								 // sinon, passe ton chemin....
 									}
 
-									// no this is not a closed node...so apply oth_land
+                                    // NO: this is not a closed node...so apply oth_land
 									// but also adding the previous cumul if suitable!
-								 // needed to impact the availability
+                                    // (needed to impact the availability back)
 									vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
 									a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
 
@@ -2775,7 +2760,7 @@ int main(int argc, char* argv[])
 							else
 							{
 
-								 // needed to impact the availability
+                                // needed to impact the availability
 								vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
 								a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
 								dout << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl;
@@ -2792,7 +2777,8 @@ int main(int argc, char* argv[])
 					dout << "THE IMPACT FROM PRESSURE ON STOCK ABUNDANCE----------" << endl;
 					// impact computed for the last month from N at the start month
 					// over the removals (from catches + oth_land) during this month....
-					// caution with terminology: here we named "pressure" what is actually "impact" i.e. a ratio, (to do: need correction...)
+                    // caution with terminology: here we named "pressure" what is actually "impact"
+                    // i.e. a ratio, (to do: need correction...)
 					dout << "pop " << name_pop << endl;
 					vector <double>wsz = populations[name_pop]->get_weight_at_szgroup();
 					for (unsigned int n=0; n<a_list_nodes.size(); n++)
@@ -2970,8 +2956,8 @@ int main(int argc, char* argv[])
 
 				cout << " run SMS?"<< endl;
 				// run (at the very end of the current year) one year SMS forecast each year
-				// to deduce N_1stJan y+1 from N_1stJan y knowing Fs that occurred during the year y
-								 // start the second year only
+                // to deduce N_1stJan y+1 from N_1stJan y knowing Fs that occurred during the year y.
+                // start the second year only
 				if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 				{
 					SMS_F_in.close();
@@ -3061,7 +3047,7 @@ int main(int argc, char* argv[])
 						vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
 						// apply M ---------
-						// simply annual M divided by 12 because monthly time step...
+                        // this is simply annual M divided by 12 because monthly time step...
 						//cout << "apply M on the whole pop..." << endl;
 						//populations.at(sp)->apply_natural_mortality(); // pble for using it if distribute_N() is not by month! i.e. the dead fish here are not removed from the nodes...
 						cout << "apply M on each node of the pop..." << endl;
@@ -3107,7 +3093,7 @@ int main(int argc, char* argv[])
 						}
 						#endif
 
-								 // apply only at the beginning of the year (this is maybe not always relevant...)
+                        // apply only at the beginning of the year (this is maybe not always relevant...)
 						if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 						{
 							cout<< "ADD RECRUITS" << endl;
@@ -3127,7 +3113,7 @@ int main(int argc, char* argv[])
 								sum_N_year_minus_1+=N_at_szgroup_year_minus_1.at(sz);
 							}
 
-								 // MAGIC NUMBER HERE! see Harley et al 2001 Canadian Journal
+                            // MAGIC NUMBER HERE! see Harley et al 2001 Canadian Journal
 							populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, 0.7));
 							// e.g. have a look at plot(seq(500,3000,500)/1000,(seq(500,3000,500)/1000)^0.7)
 
@@ -3138,7 +3124,7 @@ int main(int argc, char* argv[])
 
 						}
 
-								 // apply only by semester, to be consistent with timetable of survey data
+                        // apply only by semester, to be consistent with the timeframe of the survey data
 						if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep))
 						{
 							cout<< "DO GROWTH TRANSITION" << endl;
@@ -3165,7 +3151,7 @@ int main(int argc, char* argv[])
 					populations.at(sp)->set_tot_N_at_szgroup_month_minus_1( populations.at(sp)->get_tot_N_at_szgroup() );
 
 					// spread out the recruits
-								 // apply only by semester, to be consistent with timetable of survey data
+                    // apply only by semester, to be consistent with the timeframe of survey data
 					if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep))
 					{
 						// at the very end, then re-dispatch over nodes to re-dispatch the recruits over the nodes....
@@ -3198,7 +3184,7 @@ int main(int argc, char* argv[])
 					//----------------------------------------//
 					//----------------------------------------//
 
-								 // apply only at the beginning of the year (this is maybe not always relevant...)
+                    // apply only at the beginning of the year (this is maybe not always relevant...)
 					if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 					{
 						int namepop = populations.at(sp)->get_name();
@@ -3221,7 +3207,7 @@ int main(int argc, char* argv[])
 							double TAC_y = ts_tac.at(ts_tac.size()-2);
 							populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
 							if(populations.at(sp)->get_oth_land_multiplier()!=
-								 // i.e. trick to check if nan
+                                 // i.e. a trick to check if nan
 								populations.at(sp)->get_oth_land_multiplier())
 							{
 								cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
@@ -3231,7 +3217,7 @@ int main(int argc, char* argv[])
 							}
 
 							// export
-								 // ...export the cpue and oth_land multiplier
+                            // ...export the cpue and oth_land multiplier
 							populations.at(sp)->export_popdyn_annual_indic(popdyn_annual_indic, tstep);
 
 							// RE-INIT....
@@ -3241,7 +3227,7 @@ int main(int argc, char* argv[])
 
 						}
 
-								 // store N initial for the next year and reinit Fs
+                        // store N initial for the next year and reinit Fs
 						if(binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "use_SMS"))
 						{
 
@@ -3267,7 +3253,7 @@ int main(int argc, char* argv[])
 
 			}
 
-								 // apply only at the beginning of the year (this is maybe not always relevant...)
+            // apply only at the beginning of the year (this is maybe not always relevant...)
 			if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 			{
 				// export spatial distribution of biomass pop on nodes for mapping e.g. in GIS
@@ -3336,7 +3322,7 @@ int main(int argc, char* argv[])
 		// fill in with new input files for fgrounds and harbours, etc.
 		// if change of year-quarter or semester, to be quarter or semester-specific.
 
-								 // EVENT => change of quarter
+        // EVENT => change of quarter
 		if(tstep>2000 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
 			//   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
 		{
@@ -3396,7 +3382,7 @@ int main(int argc, char* argv[])
             vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
 			dout << "re-read data...OK" << endl;
 
-								 // LOOP OVER VESSELS
+            // LOOP OVER VESSELS
 			for (unsigned int v=0; v<vessels.size(); v++)
 			{
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
@@ -3762,7 +3748,7 @@ int main(int argc, char* argv[])
 
 		dout << "THE VESSEL LOOP----------" << endl;
 		// get a random order for acting vessels
-								 // random permutation
+        // random permutation
 		random_shuffle(ve.begin(),ve.end());
 
 		// check that departure is done from harbours that are
@@ -3784,7 +3770,7 @@ int main(int argc, char* argv[])
 		///  THE FOR-LOOP OVER VESSELS   ///
 		///------------------------------///
 		///------------------------------///
-								 // LOOP OVER VESSELS
+        // LOOP OVER VESSELS
 #ifdef PROFILE
         mVesselLoopProfile.start();
 #endif
@@ -3800,7 +3786,7 @@ int main(int argc, char* argv[])
 			if(vessels[ index_v ]->get_roadmap().empty())
 			{
 				// check if the vessel is actually active this quarter
-								 // when at least one possible metier within this quarter
+                // (when at least one possible metier within this quarter)
 				if(vessels[ index_v ]->get_possible_metiers().size()>1)
 				{
 					dout << "ROADMAP EMPTY" << endl;
@@ -3810,7 +3796,7 @@ int main(int argc, char* argv[])
 
 						// LAND the catches when arriving in port and DECLARE IN LOGBOOK
 						// i.e. write this trip down in the logbook output file
-								 // i.e. just arrived!
+                        // i.e. just arrived!
 						if(!vessels[ index_v ]-> get_inactive())
 						{
                             std::ostringstream ss;
@@ -3831,7 +3817,7 @@ int main(int argc, char* argv[])
 						int go_fishing= vessels[ index_v ]->should_i_go_fishing(
 							external_states_relevant_for_going_fishing, false);
 						//}
-						// ***************implement a decision************************************
+                        // ***************implement a decision*******************************
 						if(go_fishing)
 						{
 
@@ -3853,7 +3839,7 @@ int main(int argc, char* argv[])
 						{
 							//have some rest in the harbour
 							dout << "STAY IN HARBOUR" << endl;
-							// and decrease the time...
+                            // and decrease the rest time...
 							vessels[ index_v ]-> set_timeforrest( vessels[ index_v ]-> get_timeforrest() - PING_RATE );
 							vessels[ index_v ]-> set_next_xy( vessels[index_v ]->get_x(), vessels[ index_v ]->get_y() );
 							dout << "...for the next " << vessels[ index_v ]-> get_timeforrest() << " steps" << endl;
@@ -3884,7 +3870,7 @@ int main(int argc, char* argv[])
 						//....unless we got a message (e.g. at the end of a year-quarter)
 						dout << "message: " << vessels[ index_v ]->read_message() << endl;
 						bool force_another_ground=false;
-								 // check my mailbox: Am I forced to change of ground?...
+                        // check my mailbox: Am I forced to change of ground?...
 						if(vessels[ index_v ]->read_message()==1)
 						{
 							if(vessels[ index_v ]->get_fgrounds().size()<3)
@@ -3899,7 +3885,7 @@ int main(int argc, char* argv[])
 						}
 
 						// ***************implement a decision************************************
-								 //go on fishing...
+                        // go on fishing...
 						if(!stop_fishing)
 						{
 							// ***************make a decision************************************

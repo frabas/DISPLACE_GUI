@@ -49,7 +49,7 @@ Source: build\{#Build}\QMapControl\QMapControl\src\QMapControl\lib\qmapcontrol1.
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\usr\local\bin\libgdal-1.dll; DestDir: {app}; Flags: ignoreversion
 ;NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: C:\lib\vcredist_x86.exe; DestDir: {tmp}
+;Source: C:\lib\vcredist_x86.exe; DestDir: {tmp}
 Source: {#MINGW_DIR}\libwinpthread-1.dll; DestDir: {app}
 Source: {#QT_DIR}\icuin53.dll; DestDir: {app}
 Source: {#QT_DIR}\icuuc53.dll; DestDir: {app}
@@ -69,7 +69,8 @@ Source: {#QT_DIR}\Qt5Xml{#QT_DEBUG}.dll; DestDir: {app}
 Source: {#QT_DIR}\Qt5PrintSupport{#QT_DEBUG}.dll; DestDir: {app}
 Source: {#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms
 Source: {#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\sqldrivers
-Source: {#MINGW_DIR}\..\x86_64-w64-mingw32\lib\zlib1.dll; DestDir: {app}
+;Source: {#MINGW_DIR}\..\x86_64-w64-mingw32\lib\zlib1.dll; DestDir: {app}
+Source: install\extra\usr\local\bin\zlib1.dll; DestDir: {app}
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
@@ -77,5 +78,5 @@ Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desk
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon
 
 [Run]
-Filename: {tmp}\vcredist_x86.exe; Parameters: /q; WorkingDir: {tmp}
+;Filename: {tmp}\vcredist_x86.exe; Parameters: /q; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent

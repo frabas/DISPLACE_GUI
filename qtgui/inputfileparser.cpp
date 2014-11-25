@@ -70,7 +70,7 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
     QFile cfile(coordsPath);
     if (!cfile.open(QIODevice::ReadOnly)) {
         if (error)
-            *error = cfile.errorString();
+            *error = QString(QObject::tr("Error loading coords file %1: %2")).arg(coordsPath).arg(cfile.errorString());
         return false;
     }
 
@@ -96,6 +96,7 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
         line = cstrm.readLine();
 
         GraphBuilder::Node nd;
+        nd.good = true;
 
         double x = line.toDouble(&ok);
         if (!ok) {
@@ -143,7 +144,7 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
         QFile gfile(graphpath);
         if (!gfile.open(QIODevice::ReadOnly)) {
             if (error)
-                *error = gfile.errorString();
+                *error = QString(QObject::tr("Error loading %1: %2")).arg(coordsPath).arg(cfile.errorString());
             return false;
         }
 
@@ -162,11 +163,11 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
         }
 
         int graphedges = linenum / 3;
-        cstrm.seek(0);
+        gstrm.seek(0);
         linenum = 0;
         QList<int> srcs;
         for (int i = 0; i < graphedges; ++i) {
-            line = cstrm.readLine();
+            line = gstrm.readLine();
 
             int src = line.toInt(&ok);
             if (!ok) {
@@ -180,7 +181,7 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
 
         QList<int> dsts;
         for (int i = 0; i < graphedges; ++i) {
-            line = cstrm.readLine();
+            line = gstrm.readLine();
             int dst = line.toInt(&ok);
 
             if (!ok) {
@@ -193,7 +194,7 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
         }
 
         for (int i = 0; i < graphedges; ++i) {
-            line = cstrm.readLine();
+            line = gstrm.readLine();
             int w = line.toInt(&ok);
 
             if (!ok) {

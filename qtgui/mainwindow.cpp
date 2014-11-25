@@ -1319,7 +1319,7 @@ void MainWindow::on_actionLoad_Graph_triggered()
 
         if (fnn.startsWith("graph")) {
             graphpath = fn;
-            coordspath = info.absolutePath() + "/coords" + fnn.mid(5);
+            coordspath = info.absolutePath() + "/coord" + fnn.mid(5);
 
             int res = QMessageBox::question(this, tr("Coordinates file"),
                                       QString(tr("Do you want also to load %1 as a coordinates file?")).arg(coordspath),
@@ -1329,9 +1329,9 @@ void MainWindow::on_actionLoad_Graph_triggered()
             } else if (res == QMessageBox::No) {
                 coordspath = QString();
             }
-        } else if (fnn.startsWith("coords")) {
+        } else if (fnn.startsWith("coord")) {
             coordspath = fn;
-            graphpath = info.absolutePath() + "/graph" + fnn.mid(6);
+            graphpath = info.absolutePath() + "/graph" + fnn.mid(5);
 
             int res = QMessageBox::question(this, tr("Graph file"),
                                       QString(tr("Do you want also to load %1 as a graph file?")).arg(graphpath),
@@ -1350,9 +1350,13 @@ void MainWindow::on_actionLoad_Graph_triggered()
         QList<GraphBuilder::Node> nodes;
         QString error;
         if (parser.parseGraph(graphpath, coordspath, nodes, &error)) {
+            qDebug()  << nodes.size() << "Nodes loaded.";
 
             currentModel->addGraph(nodes, mMapController);
 //            currentModel->importGraph (graphpath, coordspath);
+        } else {
+            QMessageBox::warning(this, tr("Error loading greph/coords file"), error);
+            return;
         }
 
         sets.setValue("last_graphpath", fn);

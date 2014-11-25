@@ -515,6 +515,14 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
         std::shared_ptr<Node> nd (new Node(cntr, node.point.x(), node.point.y(),0,0,0,0,0));
         std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+
+        /*
+        if (node.harbour) {
+            std::shared_ptr<HarbourData> h(new HarbourData);
+            h->mHarbour->set_is_harbour(mHarbours.size());
+            mHarbours.push_back(h);
+        }*/
+
         mNodes.push_back(nodedata);
 
         if (node.good) {
@@ -568,11 +576,6 @@ bool DisplaceModel::exportGraph(const QString &path)
 
     file.close();
     return true;
-}
-
-bool DisplaceModel::importGraph(QList<std::shared_ptr<NodeData> > &nodes)
-{
-    return false;
 }
 
 bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)

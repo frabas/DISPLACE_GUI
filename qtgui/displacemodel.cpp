@@ -137,7 +137,7 @@ bool DisplaceModel::parse(const QString &path, QString *basepath, QString *input
 {
     // parse this form:  inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput+".dat";
 
-    QRegExp regexp("(.*)/simusspe_([a-zA-Z0-9]+)/([a-zA-Z09]+).dat");
+    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
 
     if (regexp.indexIn(path) == -1) {
         return false;

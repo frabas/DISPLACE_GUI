@@ -163,8 +163,8 @@ public:
         qDebug() << "Loader started";
         QString error;
         if (!mMain->loadLiveModel(mDir, &error)) {
-            QMessageBox::warning(mMain, tr("Load failed."),
-                                 QString(tr("Error loading model %1: %2")).arg(mDir).arg(error));
+            setFail(QString(tr("Error loading model %1: %2")).arg(mDir).arg(error));
+            emit warning(tr("Load failed."), getError());
             return;
         }
 
@@ -804,6 +804,7 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     connect (work, SIGNAL(workStarted()), this, SLOT(waitStart()));
     connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
     connect (work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
+    connect (work, SIGNAL(warning(QString,QString)), this, SLOT(showWarningMessageBox(QString,QString)));
 
     thread->start();
 }
@@ -838,6 +839,11 @@ void MainWindow::abortMouseMode()
 void MainWindow::completeMouseMode()
 {
     endMouseMode(true);
+}
+
+void MainWindow::showWarningMessageBox(QString title, QString message)
+{
+    QMessageBox::warning(this, title, message);
 }
 
 void MainWindow::on_play_step_valueChanged(int step)

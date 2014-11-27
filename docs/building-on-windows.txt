@@ -1,0 +1,88 @@
+Building on Windows
+===================
+
+Displace requires MinGW64. 
+It can be compiled on a 32bit O.S. but it will crash when more than about 1Gb is allocated on memory.
+At the moment, mingw64 lacks on many prerequisites, and there are no precompiled binaries available, so you must prepare the environment before being able to compile displace.
+There are other possible procedures, because many toolchains and installation flavours exists. We'll follow the "mingw64-build" procedure, because it is more oriented to development that all the others.
+
+- Installing mingw64
+- Installing MSYS
+- Installing perl
+- Installing python
+- Compiling Qt 5.3.1
+- Compiling Geos
+- Compiling Gdal
+- Compiling GeographicLib
+
+= Installing MinGW64
+
+The first step is to install mingw64. Download the installer from here:
+
+http://sourceforge.net/projects/mingw-w64/
+
+On most 64bit systems, x86_64 should be the right selection, along with posix threading and SEH Exception Handling.
+Select an easy target directory, something like "c:\mingw64" 
+
+= Installing MSYS
+
+MSYS is the command line shell for mingw. Download it from here:
+
+http://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/
+
+And proceed with installation. A good location is c:\mingw64\msys .
+Then you must configure msys with the previous mingw64 installation, so you need to run msys.bat, and run the following command
+
+$ sh /postinstall/pi.sh
+
+Answer "Y" to the following two questions, then enter the location of the mingw toolchain.
+gcc is located on the mingw64/bin/ subdirectory of the mingw installation directory. If you selected c:\mingw64 and x86_64 / posix / seh toolchain, it will likely be something like
+
+c:/mingw/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64
+
+Anyway, check your installation for the right path. After restarting MSYS, you should be able to run gcc --version without errors.
+
+= Installing perl
+
+Check if perl is alredy installed, by running "perl" from MSYS. if not, install ActivePerl from 
+
+http://www.activestate.com/activeperl/downloads
+
+= Installing Python 2.7.x
+
+Python may be missing from mingw, if so you need to install it from
+
+https://www.python.org/downloads/
+
+Note that python may be installed on a secondary directory, in my case it was on /c/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64/bin
+Eventually you may need to add that path to the PATH variable:
+
+$ export PATH=/c/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64/bin:$PATH
+
+Check it is is reachable:
+
+$ python --version
+
+= Compiling Qt
+
+Download qt from the qt-project site
+
+http://download.qt-project.org/archive/qt/5.3/5.3.2/single/
+
+Unpack it and enter the source directory from MSYS. Check that python and perl are in the PATH.
+Check also that the INCLUDE variable points to the python include path
+
+$ export PATH=/c/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64/opt/bin/:PATH
+$ export INCLUDE=/c/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64/opt/include
+
+Then run the configuration script
+
+$ ./configure -release -opensource -confirm-license -platform win32-g++ -c++11 -opengl desktop -nomake tests -nomake examples -nomake tools -skip webkit -no-accessibility
+
+$ mingw32-make -j12
+
+This will take some time. Take a tea and maybe also a book.
+At the end, install everything
+
+$ mingw32-make install
+

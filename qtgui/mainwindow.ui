@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -87,6 +87,7 @@
     </property>
     <addaction name="actionClear_Graph"/>
     <addaction name="actionLoad_Graph"/>
+    <addaction name="actionSave_Graph"/>
     <addaction name="actionExport_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
@@ -887,12 +888,11 @@
     <string>Export...</string>
    </property>
   </action>
-  <action name="actionSave_Graph">
-   <property name="text">
-    <string>Save...</string>
-   </property>
-  </action>
   <action name="actionLoad_Graph">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+   </property>
    <property name="text">
     <string>Load...</string>
    </property>
@@ -925,6 +925,15 @@
   <action name="actionAdd_Penalty_on_Polygon">
    <property name="text">
     <string>Add Penalty on Polygon</string>
+   </property>
+  </action>
+  <action name="actionSave_Graph">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save...</string>
    </property>
   </action>
  </widget>

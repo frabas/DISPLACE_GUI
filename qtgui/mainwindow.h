@@ -118,6 +118,8 @@ private slots:
     void on_actionAdd_Penalty_from_File_triggered();
     void on_actionLoad_Graph_triggered();
 
+    void on_actionSave_Graph_triggered();
+
 signals:
     void modelStateChanged();
 

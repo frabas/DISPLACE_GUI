@@ -10,6 +10,7 @@
 #include <simulator.h>
 #include <editpalettedialog.h>
 
+#include <inputfileexporter.h>
 #include <inputfileparser.h>
 #include <scenariodialog.h>
 #include <configdialog.h>
@@ -1362,6 +1363,68 @@ void MainWindow::on_actionLoad_Graph_triggered()
 //            currentModel->importGraph (graphpath, coordspath);
         } else {
             QMessageBox::warning(this, tr("Error loading greph/coords file"), error);
+            return;
+        }
+
+        sets.setValue("last_graphpath", fn);
+    }
+
+}
+
+void MainWindow::on_actionSave_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    QSettings sets;
+    QString lastpath = sets.value("last_graphpath", QDir::homePath()).toString();
+
+    QString fn = QFileDialog::getSaveFileName(this, tr("Save Graph - Select coordXX.dat file"), lastpath);
+    if (!fn.isEmpty()) {
+        QString graphpath, coordspath;
+
+        QFileInfo info(fn);
+        QString fnn = info.fileName();
+
+        if (fnn.startsWith("graph")) {
+            graphpath = fn;
+            coordspath = info.absolutePath() + "/coord" + fnn.mid(5);
+
+            int res = QMessageBox::question(this, tr("Coordinates file"),
+                                      QString(tr("Do you want also to save %1 as a coordinates file?")).arg(coordspath),
+                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Open);
+            if (res == QMessageBox::Open) {
+                coordspath = QFileDialog::getSaveFileName(this, tr("Import Coords file"), coordspath);
+            } else if (res == QMessageBox::No) {
+                coordspath = QString();
+            }
+        } else if (fnn.startsWith("coord")) {
+            coordspath = fn;
+            graphpath = info.absolutePath() + "/graph" + fnn.mid(5);
+
+            int res = QMessageBox::question(this, tr("Graph file"),
+                                      QString(tr("Do you want also to save %1 as a graph file?")).arg(graphpath),
+                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Open);
+            if (res == QMessageBox::Open) {
+                graphpath = QFileDialog::getSaveFileName(this, tr("Import Graph file"), coordspath);
+            } else if (res == QMessageBox::No) {
+                graphpath = QString();
+            }
+        } else {
+            QMessageBox::warning(this, tr("Cannot Save file"), tr("Selected file must start either with 'graph' or with 'coords' keyword."));
+            return;
+        }
+
+        if (!graphpath.endsWith(".dat"))
+            graphpath += ".dat";
+        if (!coordspath.endsWith(".dat"))
+            coordspath += ".dat";
+
+        QString error;
+        InputFileExporter exporter;
+        if (exporter.exportGraph(graphpath, coordspath, currentModel.get(), &error)) {
+        } else {
+            QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;
         }
 

@@ -48,6 +48,39 @@ void EdgeGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &ba
 
     qmapcontrol::GeometryLineString::draw(painter, backbuffer_rect_coord, controller_zoom);
 
+    if (selected()) {
+        QPointF p1 = projection::get().toPointWorldPx(m_points[0], controller_zoom).rawPoint();
+        QPointF p2 = projection::get().toPointWorldPx(m_points[1], controller_zoom).rawPoint();
+
+        double dx = p2.x() - p1.x();
+        double dy = p2.y() - p1.y();
+        double angle = ::acos(dx
+                              / std::sqrt(dx*dx + dy*dy));
+        double arrowSize = 20.0;
+        if (dy >= 0)
+            angle = (M_PI * 2) - angle;
+
+        QPointF arrowP1 = p1 + QPointF(sin(angle + M_PI / 3) * arrowSize,
+                                                cos(angle + M_PI / 3) * arrowSize);
+        QPointF arrowP2 = p1 + QPointF(sin(angle + M_PI - M_PI / 3) * arrowSize,
+                                                cos(angle + M_PI - M_PI / 3) * arrowSize);
+
+        QPolygonF arrowHead;
+        arrowHead.clear();
+        arrowHead << p1 << arrowP1 << arrowP2;
+//        painter.drawLine(line());
+        painter.drawPolygon(arrowHead);
+        /*
+        if (isSelected()) {
+            painter->setPen(QPen(myColor, 1, Qt::DashLine));
+            QLineF myLine = line();
+            myLine.translate(0, 4.0);
+            painter->drawLine(myLine);
+            myLine.translate(0,-8.0);
+            painter->drawLine(myLine);
+        }*/
+    }
+
     if (controller_zoom >= minTextZoom) {
         QPointF p1 = projection::get().toPointWorldPx(m_points[0], controller_zoom).rawPoint();
         QPointF p2 = projection::get().toPointWorldPx(m_points[1], controller_zoom).rawPoint();

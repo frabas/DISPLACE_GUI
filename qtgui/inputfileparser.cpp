@@ -204,8 +204,6 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
 
             nodes[srcs[i]].adiacencies.push_back(dsts[i]);
             nodes[srcs[i]].weight.push_back(w);
-            nodes[dsts[i]].adiacencies.push_back(srcs[i]);
-            nodes[dsts[i]].weight.push_back(w);
 
             ++linenum;
         }

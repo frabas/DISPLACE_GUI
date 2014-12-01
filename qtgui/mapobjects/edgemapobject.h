@@ -29,6 +29,9 @@ public:
     virtual void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
 
     static const double minZoom, maxZoom, minTextZoom;
+
+private:
+    void buildArrow(const qmapcontrol::PointWorldCoord& from, const qmapcontrol::PointWorldCoord &to);
 };
 
 class EdgeMapObject : public QObject, public MapObject

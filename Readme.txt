@@ -170,78 +170,96 @@ So Displace requires compilation under 64bit systems.
 Unfortunately at this time, neither QT and GDAL are available in 64bit binary form from the official channels,
 so some hand work is required.
 
-0) We assume that you have MSYS and QT with MinGW 32 bit already installed. Please refer to the proper websites for instructions.
-You'll have also Qt Creator already installed.
+We Assume you already have QtCreator installed.
 
-1) Installation of 64bit QT5.3.1
+Notes: You can always use -jXXX on mingw32-make to build concurrently, if you have a molticore/multiprocessor system.
 
-Go to http://www.tver-soft.org/qt64 and download the proper installer (MinGW 64bit, OpenGL, seh Exception Handling, Posix Threading)
 
-At this time, this is the direct link.
+=== Install Qt 5.3.1 64 bit 
 
-http://sourceforge.net/projects/qtx64/files/qt-x64/5.3.2/mingw-4.9/seh/qt-5.3.2-x64-mingw491r1-seh-opengl.exe/download
+=== Install MSYS
 
-Install the packet. You don't need QT sources or examples, but you need compilers (they are included). I suggest to use the 
-default qt path, so you'll have all qt related libraries (and mingw) under the same path: C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl
 
-2) Compile and install zlib
+********* NOTE ALL prefix under msys must be /mingw!!!!
+
+
+MSYS is the command line shell for mingw. Download it from here:
+
+http://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/
+
+Unpack msys in c:/Qt
+Then you must configure msys with the previous mingw64 installation, so you need to run msys.bat, and run the following command
+
+$ sh /postinstall/pi.sh
+
+Answer "Y" to the following two questions, then enter the location of the mingw toolchain.
+gcc is located on the mingw64/bin/ subdirectory of the mingw installation directory. If you selected c:\mingw64 and x86_64 / posix / seh toolchain, it will likely be something like
+
+c:/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64
+
+Anyway, check your installation for the right path. After restarting MSYS, you should be able to run gcc --version without errors.
+
+
+=== Installing find
+
+msys doesn't provide the find utility, and windows provides a very limited utility called FIND.EXE that is incompatible.
+You need to manually install find: take it from here:
+
+http://sourceforge.net/projects/mingw/files/MSYS/Base/findutils/
+
+and copy the 3 files in msys/bin
+
+
+=== Compile and install zlib 1.2.8
 
 GDAL requires zlib to be a shared library, but unfortunately the previous package only provide it in form of a static library.
 This way, only static gdal library will be compiled, and you'll be unable to link displace and the gdal utilities will bloat.
 
 So download the zlib sources from http://www.zlib.net/, unpack it somewhere (I suggest some path under the mingw path) and compile
-To be able to use the 64bit compiler from the default MSYS environment, you'll need to prepend the compiler path to the system PATH
 
-$ export PATH=/c/Qt/qt-5.3.2-x64-mingw491r1-seh-opengl/mingw64/bin:$PATH
-
-edit the win32\Makefile.gcc file this way:
-
-change the PREFIX variable
-
-PREFIX = x86_64-w64-mingw32-
-
-
-Modify the following variables (search and correct them accordingly) :
-
-AR = ar
-RC = windres
-
-STRIP = strip
-
-
-then compile the library and install:
-
-$ make -f win32/Makefile.gcc
+$ mingw32-make -f win32/Makefile.gcc -j12
 ...
-$ cp zlib1.dll /usr/local/bin
-$ cp zconf.h zlib.h /usr/local/include
-$ cp libz.a /usr/local/lib
-$ cp libz.dll.a /usr/local/lib/libz.dll.a
+$ cp zlib1.dll /c/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64/bin/
+$ cp zconf.h zlib.h /c/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64include
+$ cp libz.a /c/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64lib
+$ cp libz.dll.a /c/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64lib/libz.dll.a
 
-Change /usr/local/ accordingly if needed.
 
-3) Compile GEOS
+=== Compile GEOS 3.4.2
 
 First download geos library from http://trac.osgeo.org/geos/ (at the time of writing, version is 3.4.2)
 Unpack the tarbz2 file, enter the source dir and run configure
 
-$ ./configure  --host=x86_64-w64-mingw32 --prefix=/usr/local
+$ ./configure --prefix=/usr/local
+
+Change capi/Makefile from
+
+libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
+
+to
+
+libgeos_c_la_CPPFLAGS = 
+
 
 then run make and make install
 
-$ make 
-$ make install
-$ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
+$ mingw32-make 
+$ mingw32-make install
+
+( Eventually: $ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install  )
 
 The first install instruction installs the necessary files in the mingw distribution (in /usr/local/) to allow gdal and all other libraries to find it during the configure process.
 The second install instruction, instead, installs the library in the "distribution" path for use with qtCreator.
 
-4) Compile GDAL with GEOS support
+
+
+
+=== Compile GDAL with GEOS support
 
 Enter the gdal source (they can be downloaded from: http://trac.osgeo.org/gdal/wiki/DownloadSource )
 Use configure & make, as usual: 
 
-$ ./configure  --host=x86_64-w64-mingw32 --prefix=/usr/local --disable-static --enable-shared \
+$ ./configure  --prefix=/usr/local --disable-static --enable-shared \
 	--with-geos=yes
 
 FIX the compilation script: 
@@ -253,13 +271,54 @@ to:
 
 CONFIG_LIBS	=	$(GDAL_ROOT)/$(LIBGDAL) -liconv
 
+
+FIX the compilation script: 
+compiling under MinGW 64 requires link gdal with iconv: so open the GDALmake.opt file and change the following line:
+
+CONFIG_LIBS	=	$(GDAL_ROOT)/$(LIBGDAL) -liconv
+
+Then, fix gcore/GnuMakefile: look for the gdaldrivermanager.$(OBJ_EXT) recipe, remove it and put this:
+	
+instdata.h: 
+	echo "#define INST_DATA \"$(INST_DATA)\"" > $@
+
+gdaldrivermanager.$(OBJ_EXT):	gdaldrivermanager.cpp ../GDALmake.opt instdata.h
+	$(CXX) -c $(GDAL_INCLUDE) $(CXXFLAGS) \
+		$< -o $@	
+
+Then add the following
+
+#include "instdata.h"
+
+in gcore/gdaldrivermanager.cpp
+Make analogous changes to ogr/ogrsfformats/generic/GNUMakefile, removing INST_DATA from CXXFLAGS: 
+
+CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=\"$(INST_DATA)\" $(BASEFORMATS)
+
+to 
+
+CXXFLAGS :=     $(CXXFLAGS) $(BASEFORMATS)
+
+and change 
+
+#include "../../../gcore/instdata.h"
+
+to ogr/ogrsfformats/generic/ogrsfdriverregistrar.cpp
+
+
+
+
 Then run make:
-$ make
+$ mingw32-make
 
 After a while, you should have the gdal library built. Check that libgdal-1.dll in .bin/ is present.
+Then install
+
+$ mingw32-make install
+
 Then install it in the install/extra/ subdirectory of the project. if project is located in YourUsers/Documents/Displace, then use
 
-$ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
+$ mingw32-make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
 
 Now you need to FIX the GDAL installation.
 Linux and other Unix systems use subdirectories of include path to keep libraries header files separated. MinGW does not.
@@ -271,22 +330,45 @@ mkdir gdal
 mv * gdal
 
 
-5) Compile GeographicLib
 
-$ ./configure  --host=x86_64-w64-mingw32
+
+==== Compile GeographicLib
+
+$ ./configure  --prefix=/usr/local
 
 version 1.39 may require some fix, in particular in include/GeographicLib/config.h where you should add the following lines:
 
 #define GEOGRAPHICLIB_VERSION_MAJOR 1
-#define GEOGRAPHICLIB_VERSION_MINOR 32
+#define GEOGRAPHICLIB_VERSION_MINOR 39
 #define GEOGRAPHICLIB_VERSION_PATCH 0
+#define GEOGRAPHICLIB_VERSION_STRING "1.39.0"
+#define GEOGRAPHICLIB_DATA "/usr/local/share/GeographicLib"
 
-and the following to include/GeographicLib/Constants.hpp:
+$ mingw32-make
+$ mingw32-make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
 
-#define GEOGRAPHICLIB_VERSION_STRING GEOGRAPHICLIB_VERSION
 
-$ make
-$ make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
+= Building boost
+
+Download boost and download the following patch
+
+http://www.kineticsystem.org/sites/default/files/mingw/patch/boost-1.56-bootstrap.patch
+
+The apply the patch 
+
+$ patch -p1 -i boost-1.56-bootstrap.patch
+
+This patch applies flawlessly even on boost 1.57
+
+Then bootstrap boost:
+
+$ sh bootstrap.sh --with-toolset=mingw
+
+and compile
+
+$ b2 -j4 --prefix=$BOOST_PREFIX --disable-filesystem2 --with-graph  toolset=gcc /
+    address-model=64 variant=release link=shared threading=multi install
+	
 
 
 GDAL Notes

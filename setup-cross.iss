@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.6.4"
+#define MyAppVersion "0.6.3"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -48,26 +48,43 @@ Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qmapcontrol1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 
-Source: install\extra\libgcc_s_seh-1.dll; DestDir: {app}
-Source: install\extra\libgdal-1.dll; DestDir: {app}
-Source: install\extra\libgeos_c-1.dll; DestDir: {app}
-Source: install\extra\libgeos-3-4-2.dll; DestDir: {app}
-Source: install\extra\libproj-0.dll; DestDir: {app}
-Source: install\extra\libstdc++-6.dll; DestDir: {app}
-Source: install\extra\libwinpthread-1.dll; DestDir: {app}
-Source: install\extra\Qt5Core.dll; DestDir: {app}
-Source: install\extra\Qt5Gui.dll; DestDir: {app}
-Source: install\extra\Qt5Network.dll; DestDir: {app}
-Source: install\extra\Qt5OpenGL.dll; DestDir: {app}
-Source: install\extra\Qt5PrintSupport.dll; DestDir: {app}
-Source: install\extra\Qt5Sql.dll; DestDir: {app}
-Source: install\extra\Qt5Widgets.dll; DestDir: {app}
-Source: install\extra\Qt5Xml.dll; DestDir: {app}
-Source: install\extra\zlib1.dll; DestDir: {app}
+Source: install\runtime\icudt53.dll; DestDir: {app}
+Source: install\runtime\icuin53.dll; DestDir: {app}
+Source: install\runtime\icuuc53.dll; DestDir: {app}
+Source: install\runtime\libbz2.dll; DestDir: {app}
+Source: install\runtime\libeay32.dll; DestDir: {app}
+Source: install\runtime\libfreetype-6.dll; DestDir: {app}
+Source: install\runtime\libgcc_s_seh-1.dll; DestDir: {app}
+Source: install\runtime\libgdal-1.dll; DestDir: {app}
+Source: install\runtime\libgeos_c-1.dll; DestDir: {app}
+Source: install\runtime\libgeos-3-4-2.dll; DestDir: {app}
+Source: install\runtime\libgif-6.dll; DestDir: {app}
+Source: install\runtime\libglib-2.0-0.dll; DestDir: {app}
+Source: install\runtime\libharfbuzz-0.dll; DestDir: {app}
+Source: install\runtime\libiconv-2.dll; DestDir: {app}
+Source: install\runtime\libintl-8.dll; DestDir: {app}
+Source: install\runtime\libjpeg-9.dll; DestDir: {app}
+Source: install\runtime\liblzma-5.dll; DestDir: {app}
+Source: install\runtime\libpcre-1.dll; DestDir: {app}
+Source: install\runtime\libpcre16-0.dll; DestDir: {app}
+Source: install\runtime\libpng16-16.dll; DestDir: {app}
+Source: install\runtime\libproj-0.dll; DestDir: {app}
+Source: install\runtime\libsqlite3-0.dll; DestDir: {app}
+Source: install\runtime\libstdc++-6.dll; DestDir: {app}
+Source: install\runtime\libtiff-5.dll; DestDir: {app}
+Source: install\runtime\Qt5Core.dll; DestDir: {app}
+Source: install\runtime\Qt5Gui.dll; DestDir: {app}
+Source: install\runtime\Qt5Network.dll; DestDir: {app}
+Source: install\runtime\Qt5PrintSupport.dll; DestDir: {app}
+Source: install\runtime\Qt5Sql.dll; DestDir: {app}
+Source: install\runtime\Qt5Widgets.dll; DestDir: {app}
+Source: install\runtime\Qt5Xml.dll; DestDir: {app}
+Source: install\runtime\ssleay32.dll; DestDir: {app}
+Source: install\runtime\zlib1.dll; DestDir: {app}
 
-Source: install\extra\platforms\qminimal.dll; DestDir: {app}\platforms
-Source: install\extra\platforms\qwindows.dll; DestDir: {app}\platforms
-Source: install\extra\sqldrivers\qsqlite.dll; DestDir: {app}\sqldrivers
+Source: install\runtime\platforms\qminimal.dll; DestDir: {app}\platforms
+Source: install\runtime\platforms\qwindows.dll; DestDir: {app}\platforms
+Source: install\runtime\sqldrivers\qsqlite.dll; DestDir: {app}\sqldrivers
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

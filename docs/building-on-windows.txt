@@ -22,7 +22,7 @@ The first step is to install mingw64. Download the installer from here:
 http://sourceforge.net/projects/mingw-w64/
 
 On most 64bit systems, x86_64 should be the right selection, along with posix threading and SEH Exception Handling.
-Select an easy target directory, something like "c:\mingw64" 
+Select an easy target directory, something like "c:/mingw64" 
 
 = Installing MSYS
 
@@ -30,17 +30,26 @@ MSYS is the command line shell for mingw. Download it from here:
 
 http://sourceforge.net/projects/mingw-w64/files/External%20binary%20packages%20%28Win64%20hosted%29/MSYS%20%2832-bit%29/
 
-And proceed with installation. A good location is c:\mingw64\msys .
+And proceed with installation. A good location is c:/mingw64/msys .
 Then you must configure msys with the previous mingw64 installation, so you need to run msys.bat, and run the following command
 
 $ sh /postinstall/pi.sh
 
 Answer "Y" to the following two questions, then enter the location of the mingw toolchain.
-gcc is located on the mingw64/bin/ subdirectory of the mingw installation directory. If you selected c:\mingw64 and x86_64 / posix / seh toolchain, it will likely be something like
+gcc is located on the mingw64/bin/ subdirectory of the mingw installation directory. If you selected c:/mingw64 and x86_64 / posix / seh toolchain, it will likely be something like
 
 c:/mingw/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64
 
 Anyway, check your installation for the right path. After restarting MSYS, you should be able to run gcc --version without errors.
+
+= Installing find
+
+msys doesn't provide the find utility, and windows provides a very limited utility called FIND.EXE that is incompatible.
+You need to manually install find: take it from here:
+
+http://sourceforge.net/projects/mingw/files/MSYS/Base/findutils/
+
+and copy the 3 files in msys/bin
 
 = Installing perl
 
@@ -63,6 +72,21 @@ Check it is is reachable:
 
 $ python --version
 
+
+=== Compile and install zlib 1.2.8
+
+GDAL requires zlib to be a shared library, but unfortunately the previous package only provide it in form of a static library.
+This way, only static gdal library will be compiled, and you'll be unable to link displace and the gdal utilities will bloat.
+
+So download the zlib sources from http://www.zlib.net/, unpack it somewhere (I suggest some path under the mingw path) and compile
+
+$ mingw32-make -f win32/Makefile.gcc -j12
+...
+$ cp zlib1.dll /mingw/bin/
+$ cp zconf.h zlib.h /mingw/include
+$ cp libz.a /mingw/lib
+$ cp libz.dll.a /mingw/lib
+
 = Compiling Qt
 
 Download qt from the qt-project site
@@ -77,8 +101,11 @@ $ export INCLUDE=/c/mingw-w64/x86_64-4.9.2-posix-seh-rt_v3-rev0/mingw64/opt/incl
 
 Then run the configuration script
 
-$ ./configure -release -opensource -confirm-license -platform win32-g++ -c++11 -opengl desktop -nomake tests -nomake examples -nomake tools -skip webkit -no-accessibility
-
+$ ./configure -prefix /mingw/ -release -opensource -confirm-license -platform win32-g++ -c++11 -opengl desktop \
+	-nomake tests -nomake examples -nomake tools -no-accessibility \
+	-skip webkit -skip connectivity -skip declarative -skip enginio -skip location \
+	-skip quick1 -skip sensors -skip serialport -skip svg -skip websockets -skip xmlpatterns	
+	
 $ mingw32-make -j12
 
 This will take some time. Take a tea and maybe also a book.
@@ -86,3 +113,147 @@ At the end, install everything
 
 $ mingw32-make install
 
+IMPORTANT:
+At the end, you'll need to fix the installation, by creating a new file in the qmake's bin director (should be /mingw/bin/ ) named qt.conf with the follwoign content:
+
+[Paths]
+Prefix=..
+
+
+
+= Compiling GreographicLib
+
+Unpack the source package somewhere, enter the directory and launch configure:
+
+$ ./configure --prefix=/mingw/
+
+Unfortunately there are bugs in the building system for mingw64, so we need to make some fix by hand.
+First, we need to remove a definition instruction in makefile to prevent libtool from complaining for shell special characters.
+Edit src/Makefile, search for the following line 
+
+DEFS = -DGEOGRAPHICLIB_DATA=/"$(geographiclib_data)/" -DHAVE_CONFIG_H
+
+(is line 249 on 1.39.0) and change it with
+
+DEFS = -DHAVE_CONFIG_H
+
+Then put the removed #define instruction in include/GeographicLib/Config.h along with other definitions:
+
+#define GEOGRAPHICLIB_DATA "/mingw/share/GeographicLib"
+
+Then run make and make install:
+
+$ mingw32-make -j12
+$ mingw32-make install
+
+NOTE: if you re-run configure, you'll need to re-apply these changes, because configure will automatically overwrite them.
+
+= Compiling Geos
+
+Unpack geos and run configure:
+
+$ ./configure --prefix=/mingw/ --enable-shared --disable-static
+
+Change capi/Makefile, look for this line: 
+
+libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
+
+and change it to:
+
+libgeos_c_la_CPPFLAGS = 
+
+make and make install:
+
+$ mingw32-make -j12
+$ mingw32-make install
+
+= COmpiling proj4
+
+Run configuew
+
+$ ./configure --prefix=/mingw/ --enable-shared 
+
+Then open src/Makefile, search for the INCLUDES variable, remove the -DPROJ_LIB=\"xxxx\" string.
+Open src/projects.h, just before the last #endif put the followign line
+
+#define PROJ_LIB "/mingw/share/proj"
+
+Then make and make install
+
+= Compiling gdal 1.11
+
+Extract the package and run configure.
+
+$ ./configure --prefix=/mingw/ --enable-shared --with-geos=yes
+
+FIX the compilation script: 
+compiling under MinGW 64 requires link gdal with iconv: so open the GDALmake.opt file and change the following line:
+
+CONFIG_LIBS	=	$(GDAL_ROOT)/$(LIBGDAL) -liconv
+
+Then, fix gcore/GnuMakefile: look for the gdaldrivermanager.$(OBJ_EXT) recipe, remove it and put this:
+	
+instdata.h: 
+	echo "#define INST_DATA /"$(INST_DATA)/"" > $@
+
+gdaldrivermanager.$(OBJ_EXT):	gdaldrivermanager.cpp ../GDALmake.opt instdata.h
+	$(CXX) -c $(GDAL_INCLUDE) $(CXXFLAGS) /
+		$< -o $@	
+
+Then add the following
+
+#include "instdata.h"
+
+in gcore/gdaldrivermanager.cpp
+Make analogous changes to ogr/ogrsfformats/generic/GNUMakefile, removing INST_DATA from CXXFLAGS: 
+
+CXXFLAGS :=     $(CXXFLAGS) -DINST_DATA=/"$(INST_DATA)/" $(BASEFORMATS)
+
+to 
+
+CXXFLAGS :=     $(CXXFLAGS) $(BASEFORMATS)
+
+and change 
+
+#include "../../../gcore/instdata.h"
+
+to ogr/ogrsfformats/generic/ogrsfdriverregistrar.cpp
+
+Edit the main GNMakefile, check the following recipes: $(LIBGDAL): , $(GDAL_SLIB): and $(GDAL_LIB): and remove the dependencies from $(GDAL_OBJ)
+Remove also the references to apps-target from default: recipe and the following line:
+
+(cd apps; $(MAKE) install) 
+
+from the install: recipe.
+
+Then Make and Make Install
+
+$ mingw32-make
+$ mingw32-make install
+
+Then fix the include path:
+
+$ cd /mingw/include
+$ ln -s . gdal
+
+= Building boost
+
+Download boost and download the following patch
+
+http://www.kineticsystem.org/sites/default/files/mingw/patch/boost-1.56-bootstrap.patch
+
+The apply the patch 
+
+$ patch -p1 -i boost-1.56-bootstrap.patch
+
+This patch applies flawlessly even on boost 1.57
+
+Then bootstrap boost:
+
+$ sh bootstrap.sh --with-toolset=mingw
+
+and compile
+
+$ b2 -j4 --prefix=/mingw/ --disable-filesystem2 --with-graph  toolset=gcc /
+    address-model=64 variant=release link=shared threading=multi install
+	

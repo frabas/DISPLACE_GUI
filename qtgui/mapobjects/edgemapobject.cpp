@@ -36,9 +36,11 @@ void EdgeMapObject::onSelectionChanged()
 }
 
 EdgeGraphics::EdgeGraphics(const std::vector<PointWorldCoord> &points, NodeData *nd, int edge)
-    : qmapcontrol::GeometryLineString(points, minZoom, maxZoom),
+    : qmapcontrol::GeometryLineString(minZoom, maxZoom),
       node(nd), edgeIdx(edge)
 {
+    buildArrow(points[0], points[1]);
+
     setPen(mNormalPen);
 }
 
@@ -56,4 +58,35 @@ void EdgeGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &ba
 
         painter.drawText(mid, QString::number(node->getAdiacencyWeight(edgeIdx)));
     }
+}
+
+void EdgeGraphics::buildArrow(const qmapcontrol::PointWorldCoord &to, const qmapcontrol::PointWorldCoord &from)
+{
+    double dx = to.longitude() - from.longitude();
+    double dy = to.latitude() - from.latitude();
+    double len = std::sqrt(dx*dx + dy*dy);
+
+    qmapcontrol::PointWorldCoord arrowHead;
+    arrowHead.setLongitude(from.longitude() + 0.25 * dx);
+    arrowHead.setLatitude(from.latitude() + 0.25 * dy);
+
+    double angle = ::acos(dx / len);
+
+    double arrowSize = 0.01; // len / 10;
+    if (dy >= 0)
+        angle = (M_PI * 2) - angle;
+
+    qmapcontrol::PointWorldCoord a1;
+    a1.setLongitude(arrowHead.longitude() + sin(angle + M_PI / 3) * arrowSize);
+    a1.setLatitude(arrowHead.latitude() + cos(angle + M_PI / 3) * arrowSize);
+    qmapcontrol::PointWorldCoord a2;
+    a2.setLongitude(arrowHead.longitude() + sin(angle + M_PI - M_PI / 3) * arrowSize);
+    a2.setLatitude(arrowHead.latitude() + cos(angle + M_PI - M_PI / 3) * arrowSize);
+
+    addPoint(from);
+    addPoint(arrowHead);
+    addPoint(a1);
+    addPoint(a2);
+    addPoint(arrowHead);
+    addPoint(to);
 }

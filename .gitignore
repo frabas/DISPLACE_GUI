@@ -8,3 +8,7 @@ simulator/*.o
 /install
 *~
 Thumbs.db
+obj/
+tmp/
+ui/
+qtgui/resources/qrc_qtgui.cpp

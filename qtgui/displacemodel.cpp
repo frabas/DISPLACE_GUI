@@ -137,7 +137,7 @@ bool DisplaceModel::parse(const QString &path, QString *basepath, QString *input
 {
     // parse this form:  inputfolder + "/simusspe_" + folder_name_parameterization + "/" + namefolderoutput+".dat";
 
-    QRegExp regexp("(.*)/simusspe_([a-zA-Z0-9]+)/([a-zA-Z09]+).dat");
+    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
 
     if (regexp.indexIn(path) == -1) {
         return false;
@@ -515,6 +515,14 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
         std::shared_ptr<Node> nd (new Node(cntr, node.point.x(), node.point.y(),0,0,0,0,0));
         std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+
+        /*
+        if (node.harbour) {
+            std::shared_ptr<HarbourData> h(new HarbourData);
+            h->mHarbour->set_is_harbour(mHarbours.size());
+            mHarbours.push_back(h);
+        }*/
+
         mNodes.push_back(nodedata);
 
         if (node.good) {

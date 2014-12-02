@@ -109,7 +109,8 @@ SOURCES += \
     shortestpathbuilder.cpp \
     mousemode.cpp \
     mousemode/drawpenaltypolygon.cpp \
-    pathpenaltydialog.cpp
+    pathpenaltydialog.cpp \
+    inputfileexporter.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -178,7 +179,8 @@ HEADERS += \
     mousemode.h \
     mousemode/drawpenaltypolygon.h \
     editorlayerinterface.h \
-    pathpenaltydialog.h
+    pathpenaltydialog.h \
+    inputfileexporter.h
 
 RESOURCES += \
     qtgui.qrc
@@ -189,4 +191,9 @@ OTHER_FILES += \
     palettes/iso1996_2.p2c \
     ../docs/database.txt \
     ../docs/dbstruct.sh \
-    palettes/pop_colors.p2c
+    palettes/pop_colors.p2c \
+    ../docs/input_fileformats.txt
+
+
+target.path=$${PREFIX}/bin
+

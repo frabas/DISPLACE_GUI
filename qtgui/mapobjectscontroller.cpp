@@ -150,6 +150,9 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     foreach (VesselMapObject *v, mVesselObjects[model]) {
         v->getGeometryEntity()->setVisible(visible);
     }
+    foreach (EdgeMapObject *e, mEdgeObjects[model]) {
+        e->getGeometryEntity()->setVisible(visible);
+    }
 }
 
 void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Category type, int layer, bool visibility)
@@ -370,6 +373,7 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
 
         connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
+        mEdgeObjects[model_n].append(edge);
         mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
     }
 }

@@ -49,6 +49,8 @@ class Harbour : public Node
 			map<string, double> fuelprice);
         Harbour(string name);
 		Harbour();
+        Harbour(int idx,double xval,double yval,int _harbour);
+
 		~Harbour();
 		virtual string get_name() const;
 		//virtual double get_prices(string met, int pop) ;

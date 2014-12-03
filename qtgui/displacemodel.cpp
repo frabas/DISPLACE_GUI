@@ -516,6 +516,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         return false;
 
     QList<std::shared_ptr<NodeData> > newnodes;
+    QList<std::shared_ptr<HarbourData> > newharbours;
     int nodeidx = mNodes.count();
     int cntr = 0;
     foreach(GraphBuilder::Node node, nodes) {
@@ -537,15 +538,19 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
         mNodesLayer->CreateFeature(feature);
 
-        std::shared_ptr<Node> nd (new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
-        std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+        std::shared_ptr<Node> nd;
 
-        /*
         if (node.harbour) {
-            std::shared_ptr<HarbourData> h(new HarbourData);
-            h->mHarbour->set_is_harbour(mHarbours.size());
-            mHarbours.push_back(h);
-        }*/
+            std::shared_ptr<Harbour> h(new Harbour(nodeidx + cntr, node.point.x(), node.point.y(), node.harbour));
+            nd = h;
+            std::shared_ptr<HarbourData> hd(new HarbourData(h));
+            mHarbours.push_back(hd);
+            newharbours.push_back(hd);
+        } else {
+            nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+        }
+
+        std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
 
         mNodes.push_back(nodedata);
 
@@ -577,8 +582,13 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     }
 
     foreach(std::shared_ptr<NodeData> node, newnodes) {
-        controller->addNode(mIndex, node);
+        if (!node->mNode->get_harbour())
+            controller->addNode(mIndex, node);
     }
+    foreach (std::shared_ptr<HarbourData> h, newharbours) {
+        controller->addHarbour(mIndex, h, true);
+    }
+
     controller->redraw();
 
     return true;
@@ -608,7 +618,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
         int hid = mHarbours.size();
         int nid = mNodes.size();
         h->mHarbour->set_idx_node(nid);
-        h->mHarbour->set_is_harbour(hid);
+//        h->mHarbour->set_is_harbour(hid);
         mHarbours.push_back(h);
 
         std::shared_ptr<NodeData> n (new NodeData(h->mHarbour, this));

@@ -537,7 +537,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
         mNodesLayer->CreateFeature(feature);
 
-        std::shared_ptr<Node> nd (new Node(cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+        std::shared_ptr<Node> nd (new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
         std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
 
         /*
@@ -605,10 +605,14 @@ bool DisplaceModel::exportGraph(const QString &path)
 bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 {
     foreach (std::shared_ptr<HarbourData> h, list) {
-        h->mHarbour->set_is_harbour(mHarbours.size());
+        int hid = mHarbours.size();
+        int nid = mNodes.size();
+        h->mHarbour->set_idx_node(nid);
+        h->mHarbour->set_is_harbour(hid);
         mHarbours.push_back(h);
 
         std::shared_ptr<NodeData> n (new NodeData(h->mHarbour, this));
+        n->setHarbourId(hid);
         mNodes.push_back(n);
     }
 

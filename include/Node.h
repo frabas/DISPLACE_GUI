@@ -105,7 +105,9 @@ class Node
         int get_nszgroups() const { return m_nszgrp; }
 
         void set_is_harbour(int id);
-	protected:
+        void set_idx_node(int idx);
+
+protected:
 	private:
 		int idx_node;
 		double x;

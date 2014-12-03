@@ -115,6 +115,10 @@ int Node::get_idx_node() const
 	return(idx_node);
 }
 
+void Node::set_idx_node(int idx)
+{
+    idx_node = idx;
+}
 
 int Node::get_code_area() const
 {

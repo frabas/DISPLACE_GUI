@@ -92,6 +92,7 @@
     <addaction name="separator"/>
     <addaction name="actionCreate_Graph"/>
     <addaction name="actionLoad_Harbours"/>
+    <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionCreate_Shortest_Path"/>
@@ -934,6 +935,11 @@
    </property>
    <property name="text">
     <string>Save...</string>
+   </property>
+  </action>
+  <action name="actionLink_Harbours_to_Graph">
+   <property name="text">
+    <string>Link Harbours to Graph...</string>
    </property>
   </action>
  </widget>

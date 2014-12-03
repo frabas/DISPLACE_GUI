@@ -110,7 +110,8 @@ SOURCES += \
     mousemode.cpp \
     mousemode/drawpenaltypolygon.cpp \
     pathpenaltydialog.cpp \
-    inputfileexporter.cpp
+    inputfileexporter.cpp \
+    linkharboursdialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -121,7 +122,8 @@ FORMS += \
     mapobjects/nodedetailswidget.ui \
     creategraphdialog.ui \
     waitdialog.ui \
-    pathpenaltydialog.ui
+    pathpenaltydialog.ui \
+    linkharboursdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -180,7 +182,8 @@ HEADERS += \
     mousemode/drawpenaltypolygon.h \
     editorlayerinterface.h \
     pathpenaltydialog.h \
-    inputfileexporter.h
+    inputfileexporter.h \
+    linkharboursdialog.h
 
 RESOURCES += \
     qtgui.qrc

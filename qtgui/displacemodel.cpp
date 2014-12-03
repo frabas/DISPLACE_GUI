@@ -7,6 +7,7 @@
 #include <profiler.h>
 
 #include <mapobjectscontroller.h>
+#include <GeographicLib/Geodesic.hpp>
 
 #include <readdata.h>
 #include <qdebug.h>
@@ -309,6 +310,29 @@ int DisplaceModel::getNodesCount() const
 QString DisplaceModel::getNodeId(int idx) const
 {
     return QString::fromStdString(mNodes.at(idx)->get_name());
+}
+
+QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist) const
+{
+    QList<std::shared_ptr<NodeData> > nodes;
+
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+
+    double mx, my, Mx, My, d;
+    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist * 500, My, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist * 500, d, Mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist * 500, my, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist * 500, d, mx);
+
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);
+    OGRFeature *f;
+    while ((f = mNodesLayer->GetNextFeature()) != 0) {
+        int nodeid = f->GetFieldAsInteger(FLD_NODEID);
+        nodes.push_back(mNodes[nodeid]);
+    }
+
+    return nodes;
 }
 
 void DisplaceModel::checkStatsCollection(int tstep)

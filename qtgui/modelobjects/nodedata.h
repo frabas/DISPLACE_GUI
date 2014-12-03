@@ -69,6 +69,7 @@ public:
     void appendAdiancency(int to_id, double weight);
     void removeAdiacencyByIdx(int idx);
     void removeAdiacencyByTarget(int target);
+    void removeAllAdiacencies();
     int getAdiacencyCount() const;
     int getAdiacencyByIdx(int idx) const;
     double getAdiacencyWeight(int idx) const;

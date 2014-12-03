@@ -120,6 +120,8 @@ private slots:
 
     void on_actionSave_Graph_triggered();
 
+    void on_actionLink_Harbours_to_Graph_triggered();
+
 signals:
     void modelStateChanged();
 

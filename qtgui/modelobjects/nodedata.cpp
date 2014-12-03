@@ -124,6 +124,12 @@ void NodeData::removeAdiacencyByTarget(int target)
     removeAdiacencyByIdx(idx);
 }
 
+void NodeData::removeAllAdiacencies()
+{
+    mAdiacency.clear();
+    mWeights.clear();
+}
+
 int NodeData::getAdiacencyCount() const
 {
     return mAdiacency.size();

@@ -27,11 +27,13 @@
 #include <backgroundworker.h>
 #include <shortestpathbuilder.h>
 #include <pathpenaltydialog.h>
+#include <linkharboursdialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
 #include <gdal/ogrsf_frmts.h>
+#include <GeographicLib/Geodesic.hpp>
 
 #include <QBoxLayout>
 #include <QTextEdit>
@@ -1431,4 +1433,62 @@ void MainWindow::on_actionSave_Graph_triggered()
         sets.setValue("last_graphpath", fn);
     }
 
+}
+
+struct sorter {
+    double weight;
+    std::shared_ptr<NodeData> node;
+
+    sorter(std::shared_ptr<NodeData> _node, double _weight) {
+        weight = _weight;
+        node = _node;
+    }
+
+    friend bool operator < (const sorter &s1, const sorter &s2) {
+        return s1.weight < s2.weight;
+    }
+};
+
+void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    LinkHarboursDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.isRemoveLinksSet()) {
+            foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
+                currentModel->getNodesList()[harbour->mHarbour->get_idx_node()]->removeAllAdiacencies();
+            }
+        }
+        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+
+        foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
+            int harbid = harbour->mHarbour->get_idx_node();
+            QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
+            QList<std::shared_ptr<NodeData> > nodes = currentModel->getAllNodesWithin(pos, dlg.getMaxDinstance());
+
+            QList<sorter> snodes;
+            double dist;
+            foreach (std::shared_ptr<NodeData> node, nodes) {
+                if (node->get_idx_node() != harbid) {
+                    geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
+                    snodes.push_back(sorter(node, dist));
+                }
+            }
+
+            qSort(snodes);
+
+            int n;
+            if (n == -1)
+                n = snodes.count();
+            else
+                n = min(snodes.count(), dlg.getMaxLinks());
+            for (int i = 0; i < n; ++i) {
+                int nodeid = snodes[i].node->get_idx_node();
+                currentModel->getNodesList()[harbid]->appendAdiancency(nodeid, snodes[i].weight);
+                currentModel->getNodesList()[nodeid]->appendAdiancency(harbid, snodes[i].weight);
+            }
+        }
+    }
 }

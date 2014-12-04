@@ -77,6 +77,7 @@ private slots:
     void waitEnd();
 
     void editorAddNode(QPointF);
+    void editorAddEdge(int from, int to);
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);

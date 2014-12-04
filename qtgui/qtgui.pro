@@ -113,7 +113,8 @@ SOURCES += \
     inputfileexporter.cpp \
     linkharboursdialog.cpp \
     mousemode/movefilteringmousemodedecorator.cpp \
-    mousemode/singleclickmousemode.cpp
+    mousemode/singleclickmousemode.cpp \
+    mousemode/edgeaddmousemode.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -187,7 +188,8 @@ HEADERS += \
     inputfileexporter.h \
     linkharboursdialog.h \
     mousemode/movefilteringmousemodedecorator.h \
-    mousemode/singleclickmousemode.h
+    mousemode/singleclickmousemode.h \
+    mousemode/edgeaddmousemode.h
 
 RESOURCES += \
     qtgui.qrc

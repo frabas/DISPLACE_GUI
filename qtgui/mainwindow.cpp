@@ -21,6 +21,7 @@
 #include <mousemode/drawpenaltypolygon.h>
 #include <mousemode/movefilteringmousemodedecorator.h>
 #include <mousemode/singleclickmousemode.h>
+#include <mousemode/edgeaddmousemode.h>
 
 #include <graphinteractioncontroller.h>
 #include <graphbuilder.h>
@@ -430,6 +431,24 @@ void MainWindow::editorAddNode(QPointF point)
     QList<GraphBuilder::Node> nl;
     nl << newnode;
     currentModel->addGraph(nl, mMapController);
+
+    completeMouseMode();
+}
+
+void MainWindow::editorAddEdge(int from, int to)
+{
+    if (!isEditorModel()) {
+        abortMouseMode();
+        return;
+    }
+
+    qDebug() << "EDGE" << from << to;
+
+    int id1 = currentModel->addEdge(from, to, 0);
+    int id2 = currentModel->addEdge(to, from, 0);
+
+    mMapController->addEdge(currentModelIdx, id1, currentModel->getNodesList()[from], true);
+    mMapController->addEdge(currentModelIdx, id2, currentModel->getNodesList()[to], true);
 
     completeMouseMode();
 }
@@ -1523,11 +1542,21 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
 
 void MainWindow::on_actionAdd_triggered()
 {
+    if (!isEditorModel())
+        return;
+
     switch (mMapController->getEditorMode()) {
     case MapObjectsController::NodeEditorMode:
         if (true) {
             SingleClickMouseMode *mode = new SingleClickMouseMode();
             connect (mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
+            startMouseMode(new MoveFilteringMouseModeDecorator(mode));
+        }
+        break;
+    case MapObjectsController::EdgeEditorMode:
+        if (true) {
+            EdgeAddMouseMode *mode = new EdgeAddMouseMode(currentModel.get());
+            connect (mode, SIGNAL(edgeAdded(int,int)), this, SLOT(editorAddEdge(int,int)));
             startMouseMode(new MoveFilteringMouseModeDecorator(mode));
         }
         break;

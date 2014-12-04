@@ -1534,7 +1534,12 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                 currentModel->getNodesList()[harbour->mHarbour->get_idx_node()]->removeAllAdiacencies();
             }
         }
+
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
         const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
 
         foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
             int harbid = harbour->mHarbour->get_idx_node();

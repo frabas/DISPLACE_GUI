@@ -1,13 +1,12 @@
-#ifndef MOUSEMODE_H
-#define MOUSEMODE_H
+#ifndef MOVEFILTERINGMOUSEMODEDECORATOR_H
+#define MOVEFILTERINGMOUSEMODEDECORATOR_H
 
-#include <QPointF>
+#include <mousemode.h>
 
-class MouseMode
+class MoveFilteringMouseModeDecorator : public MouseMode
 {
 public:
-    MouseMode();
-    virtual ~MouseMode();
+    MoveFilteringMouseModeDecorator(MouseMode *mode);
 
     /** \brief signals a mouse press event.
      * \return false if the mouse mode must be aborted, true otherwise
@@ -29,10 +28,16 @@ public:
      * */
     virtual bool beginMode();
 
+
     /** \brief Completes the mouse mode
      * \return false if the mouse mode must be aborted, true otherwise
      * */
-    virtual bool endMode(bool success) = 0;
+    virtual bool endMode(bool success);
+
+private:
+    MouseMode *mMode;
+    bool mHasMoved;
+    bool mPressed;
 };
 
-#endif // MOUSEMODE_H
+#endif // MOVEFILTERINGMOUSEMODEDECORATOR_H

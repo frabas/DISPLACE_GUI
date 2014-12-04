@@ -111,7 +111,9 @@ SOURCES += \
     mousemode/drawpenaltypolygon.cpp \
     pathpenaltydialog.cpp \
     inputfileexporter.cpp \
-    linkharboursdialog.cpp
+    linkharboursdialog.cpp \
+    mousemode/movefilteringmousemodedecorator.cpp \
+    mousemode/singleclickmousemode.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -183,7 +185,9 @@ HEADERS += \
     editorlayerinterface.h \
     pathpenaltydialog.h \
     inputfileexporter.h \
-    linkharboursdialog.h
+    linkharboursdialog.h \
+    mousemode/movefilteringmousemodedecorator.h \
+    mousemode/singleclickmousemode.h
 
 RESOURCES += \
     qtgui.qrc

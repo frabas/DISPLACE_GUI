@@ -204,6 +204,7 @@ public:
     std::shared_ptr<OGRDataSource> getShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);
+    EditorModes getEditorMode() const { return mEditorMode; }
 
     void delSelected(int model);
 

@@ -76,6 +76,8 @@ private slots:
     void waitStart();
     void waitEnd();
 
+    void editorAddNode(QPointF);
+
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
@@ -117,10 +119,9 @@ private slots:
     void on_actionAdd_Penalty_on_Polygon_triggered();
     void on_actionAdd_Penalty_from_File_triggered();
     void on_actionLoad_Graph_triggered();
-
     void on_actionSave_Graph_triggered();
-
     void on_actionLink_Harbours_to_Graph_triggered();
+    void on_actionAdd_triggered();
 
 signals:
     void modelStateChanged();
@@ -148,6 +149,8 @@ protected:
     void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog = 0);
     void startMouseMode (MouseMode *);
     void endMouseMode (bool success = true);
+
+    bool isEditorModel();
 
 private:
     Ui::MainWindow *ui;

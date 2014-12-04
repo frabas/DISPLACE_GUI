@@ -271,8 +271,8 @@ public:
 
     void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
-    void addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
-    void addEdge (int srcidx, int targetidx, double weight);
+    int addEdge(std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
+    int addEdge(int srcidx, int targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight);
@@ -289,6 +289,7 @@ protected:
     bool initBenthos();
     bool initPopulations();
     bool initNations();
+    void createFeaturesLayer();
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
@@ -357,6 +358,7 @@ private:
     enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
     OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
+    int mNodesLayerIndex;
 
     OGRSpatialReference *mSpatialRef;
 

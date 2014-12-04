@@ -53,6 +53,19 @@ DisplaceModel::DisplaceModel()
     mSpatialRef = new OGRSpatialReference();
     mSpatialRef->SetWellKnownGeogCS("WGS84");
 
+    createFeaturesLayer();
+
+    mOutputFileParser->moveToThread(mParserThread);
+    mParserThread->start();
+
+    connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
+    connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
+    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+}
+
+void DisplaceModel::createFeaturesLayer()
+{
+    mNodesLayerIndex = mDataSource->GetLayerCount();
     mNodesLayer = mDataSource->CreateLayer("nodes", mSpatialRef, wkbPoint);
     Q_ASSERT(mNodesLayer);
 
@@ -64,12 +77,6 @@ DisplaceModel::DisplaceModel()
     OGRFieldDefn fld3(FLD_EDGEID, OFTInteger);
     mNodesLayer->CreateField(&fld3);
 
-    mOutputFileParser->moveToThread(mParserThread);
-    mParserThread->start();
-
-    connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
-    connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
-    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
 }
 
 bool DisplaceModel::edit(QString modelname)
@@ -508,6 +515,8 @@ void DisplaceModel::clearAllNodes()
 {
     mNodes.clear();
     mHarbours.clear();
+    mDataSource->DeleteLayer(mNodesLayerIndex);
+    createFeaturesLayer();
 }
 
 bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller)
@@ -590,7 +599,14 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     return true;
 }
 
-void DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight)
+/**
+ * @brief DisplaceModel::addEdge
+ * @param nodedata
+ * @param targetidx
+ * @param weight
+ * @return Adiacency id for that node
+ */
+int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight)
 {
     int i = nodedata->appendAdiancency(targetidx, weight);
 
@@ -606,11 +622,19 @@ void DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, 
 
     mNodesLayer->CreateFeature(e);
 
+    return i;
 }
 
-void DisplaceModel::addEdge(int srcidx, int targetidx, double weight)
+/**
+ * @brief DisplaceModel::addEdge
+ * @param srcidx
+ * @param targetidx
+ * @param weight
+ * @return Adiacency id
+ */
+int DisplaceModel::addEdge(int srcidx, int targetidx, double weight)
 {
-    addEdge(mNodes[srcidx], targetidx, weight);
+    return addEdge(mNodes[srcidx], targetidx, weight);
 }
 
 bool DisplaceModel::exportGraph(const QString &path)

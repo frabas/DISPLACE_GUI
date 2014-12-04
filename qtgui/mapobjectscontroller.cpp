@@ -389,6 +389,11 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
     mHarbourObjects[model_n].append(obj);
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    std::shared_ptr<NodeData> nd = mModels[model_n]->getNodesList()[h->mHarbour->get_idx_node()];
+    for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+        addEdge(model_n,i, nd, disable_redraw);
+    }
 }
 
 void MapObjectsController::clearEditorLayer()

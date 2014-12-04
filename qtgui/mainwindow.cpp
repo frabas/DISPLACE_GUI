@@ -1486,10 +1486,10 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                 n = min(snodes.count(), dlg.getMaxLinks());
             for (int i = 0; i < n; ++i) {
                 int nodeid = snodes[i].node->get_idx_node();
-                currentModel->addEdge(harbid, nodeid, snodes[i].weight);
-                currentModel->addEdge(nodeid, harbid, snodes[i].weight);
-//                currentModel->getNodesList()[harbid]->appendAdiancency(nodeid, snodes[i].weight);
-//                currentModel->getNodesList()[nodeid]->appendAdiancency(harbid, snodes[i].weight);
+                int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight);
+                int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight);
+                mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
+                mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
             }
         }
     }

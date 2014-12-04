@@ -335,8 +335,10 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
     mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);
     OGRFeature *f;
     while ((f = mNodesLayer->GetNextFeature()) != 0) {
-        int nodeid = f->GetFieldAsInteger(FLD_NODEID);
-        nodes.push_back(mNodes[nodeid]);
+        if (f->GetFieldAsInteger(FLD_TYPE) == (int)OgrTypeNode) {
+            int nodeid = f->GetFieldAsInteger(FLD_NODEID);
+            nodes.push_back(mNodes[nodeid]);
+        }
     }
 
     return nodes;

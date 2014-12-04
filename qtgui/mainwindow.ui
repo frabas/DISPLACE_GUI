@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -80,6 +80,7 @@
     <addaction name="actionAdd"/>
     <addaction name="actionDelete"/>
     <addaction name="actionProperties"/>
+    <addaction name="actionAbort_Operation"/>
    </widget>
    <widget class="QMenu" name="menuGraph">
     <property name="title">
@@ -725,6 +726,7 @@
    <addaction name="actionAdd"/>
    <addaction name="actionDelete"/>
    <addaction name="actionProperties"/>
+   <addaction name="actionAbort_Operation"/>
   </widget>
   <action name="action_Load">
    <property name="icon">
@@ -940,6 +942,15 @@
   <action name="actionLink_Harbours_to_Graph">
    <property name="text">
     <string>Link Harbours to Graph...</string>
+   </property>
+  </action>
+  <action name="actionAbort_Operation">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Abort Operation</string>
    </property>
   </action>
  </widget>

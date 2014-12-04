@@ -271,6 +271,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionGraph->setEnabled(e);
     ui->actionNode_Editor->setEnabled(e);
     ui->actionProperties->setEnabled(e);
+    ui->actionAbort_Operation->setEnabled(false);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -879,6 +880,8 @@ void MainWindow::startMouseMode(MouseMode * newmode)
         mMouseModeInfoLabel->setText(mMouseMode->getModeDescription());
 
         mMouseMode->beginMode();
+
+        ui->actionAbort_Operation->setEnabled(true);
     }
 }
 
@@ -892,6 +895,8 @@ void MainWindow::endMouseMode(bool success)
     if (success) {
         mMouseMode->endMode(success);
     }
+
+    ui->actionAbort_Operation->setEnabled(false);
 
     delete mMouseMode;
     mMouseMode = 0;
@@ -1584,4 +1589,9 @@ void MainWindow::on_actionAdd_triggered()
         }
         break;
     }
+}
+
+void MainWindow::on_actionAbort_Operation_triggered()
+{
+    abortMouseMode();
 }

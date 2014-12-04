@@ -1,6 +1,9 @@
 #include "mousemode.h"
 
+#include <QDebug>
+
 MouseMode::MouseMode()
+    : mGui(0)
 {
 }
 
@@ -30,4 +33,15 @@ bool MouseMode::moveEvent(const QPointF &point)
 bool MouseMode::beginMode()
 {
     return true;
+}
+
+void MouseMode::setMouseModeInterface(MouseModeInterface *ifc)
+{
+    mGui = ifc;
+}
+
+void MouseMode::showMessage(QString msg)
+{
+    if (mGui)
+        mGui->showMessage(msg);
 }

@@ -79,6 +79,10 @@ MainWindow::MainWindow(QWidget *parent) :
     grp->addAction(ui->actionNode_Editor);
     grp->addAction(ui->actionEdge_Edit);
 
+    mMouseModeInfoLabel = new QLabel(this);
+    statusBar()->addPermanentWidget(mMouseModeInfoLabel);
+    mMouseModeInfoLabel->hide();
+
     mMemInfoLabel = new QLabel(this);
     statusBar()->addPermanentWidget(mMemInfoLabel);
 
@@ -358,6 +362,11 @@ void MainWindow::mapMouseMove(QMouseEvent *, PointWorldCoord, PointWorldCoord po
 
     if (!mMouseMode->moveEvent(point.rawPoint()))
         abortMouseMode();
+}
+
+void MainWindow::showMessage(const QString &message)
+{
+    statusBar()->showMessage(message);
 }
 
 void MainWindow::edgeSelectionsChanged(int num)
@@ -857,12 +866,18 @@ void MainWindow::startMouseMode(MouseMode * newmode)
     abortMouseMode();
     mMouseMode = newmode;
 
-    if (mMouseMode)
+    if (mMouseMode) {
+        mMouseMode->setMouseModeInterface(this);
+        mMouseModeInfoLabel->show();
+        mMouseModeInfoLabel->setText(mMouseMode->getModeDescription());
+
         mMouseMode->beginMode();
+    }
 }
 
 void MainWindow::endMouseMode(bool success)
 {
+    mMouseModeInfoLabel->hide();
     if (!mMouseMode)
         return;
 
@@ -1548,7 +1563,7 @@ void MainWindow::on_actionAdd_triggered()
     switch (mMapController->getEditorMode()) {
     case MapObjectsController::NodeEditorMode:
         if (true) {
-            SingleClickMouseMode *mode = new SingleClickMouseMode();
+            SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));
             connect (mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
             startMouseMode(new MoveFilteringMouseModeDecorator(mode));
         }

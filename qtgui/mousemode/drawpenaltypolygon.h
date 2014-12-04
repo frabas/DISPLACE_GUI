@@ -43,6 +43,7 @@ public:
      * */
     virtual bool endMode(bool success);
 
+    QString getModeDescription() const;
 private:
     MainWindow *mMainWindow;
     EditorLayerInterface *mLayerInterface;

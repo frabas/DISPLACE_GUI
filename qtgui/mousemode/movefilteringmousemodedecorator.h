@@ -34,6 +34,12 @@ public:
      * */
     virtual bool endMode(bool success);
 
+    QString getModeDescription() const;
+
+    void setMouseModeInterface (MouseModeInterface *ifc) {
+        mMode->setMouseModeInterface(ifc);
+    }
+
 private:
     MouseMode *mMode;
     bool mHasMoved;

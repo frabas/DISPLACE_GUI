@@ -16,6 +16,8 @@
 #include <graphbuilder.h>
 #include <backgroundworker.h>
 
+#include <mousemode.h>
+
 using namespace qmapcontrol;
 
 namespace Ui {
@@ -39,7 +41,7 @@ QT_END_NAMESPACE
 
 #define MAX_MODELS 5
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public MouseModeInterface
 {
     Q_OBJECT
 
@@ -61,6 +63,7 @@ private slots:
     void mapMousePress(QMouseEvent*,PointWorldCoord);
     void mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord);
     void mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord);
+    void showMessage(const QString &);
     void abortMouseMode ();
     void completeMouseMode();
 
@@ -175,6 +178,7 @@ private:
     QTimer mMemoryWatchTimer;
     MemoryInfo mMemInfo;
     QLabel *mMemInfoLabel;
+    QLabel *mMouseModeInfoLabel;
 
     QString mLastRunSimulationName;
     QString mLastRunDatabase;

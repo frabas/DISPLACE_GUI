@@ -6,7 +6,7 @@
 
 class DisplaceModel;
 
-class EdgeAddMouseMode : public QObject, public MouseMode
+class EdgeAddMouseMode : public MouseMode
 {
     Q_OBJECT
 public:
@@ -14,8 +14,10 @@ public:
 
     bool releaseEvent(const QPointF &point);
 
+    bool beginMode();
     bool endMode(bool success);
 
+    QString getModeDescription() const;
 signals:
     void edgeAdded (int from_idx, int to_idx);
 

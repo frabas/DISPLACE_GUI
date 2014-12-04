@@ -3,8 +3,9 @@
 
 #include <QDebug>
 
-SingleClickMouseMode::SingleClickMouseMode()
-    : MouseMode()
+SingleClickMouseMode::SingleClickMouseMode(QString description)
+    : MouseMode(),
+      mDescription(description)
 {
 }
 
@@ -22,4 +23,9 @@ bool SingleClickMouseMode::releaseEvent(const QPointF &point)
 bool SingleClickMouseMode::endMode(bool success)
 {
     return true;
+}
+
+QString SingleClickMouseMode::getModeDescription() const
+{
+    return mDescription;
 }

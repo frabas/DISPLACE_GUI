@@ -13,11 +13,11 @@
  * clicked, by emitting the modeCompleted(QPointF) signal.
  * The class can be decorated using the MoveVilteringMouseModeDecorator.
  */
-class SingleClickMouseMode : public QObject, public MouseMode
+class SingleClickMouseMode : public MouseMode
 {
     Q_OBJECT
 public:
-    SingleClickMouseMode();
+    explicit SingleClickMouseMode(QString description);
 
     virtual ~SingleClickMouseMode();
 
@@ -31,11 +31,12 @@ public:
      * */
     virtual bool endMode(bool success);
 
+    QString getModeDescription() const;
 signals:
     void modeCompleted(QPointF);
 
 protected:
-
+    QString mDescription;
 };
 
 #endif // ADDNODEMOUSEMODE_H

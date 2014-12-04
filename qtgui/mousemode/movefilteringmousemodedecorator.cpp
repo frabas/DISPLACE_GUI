@@ -18,7 +18,6 @@ bool MoveFilteringMouseModeDecorator::pressEvent(const QPointF &point)
 
 bool MoveFilteringMouseModeDecorator::releaseEvent(const QPointF &point)
 {
-    qDebug() << "Has Moved: " << mHasMoved;
     mPressed = false;
     if (!mHasMoved)
         return mMode->releaseEvent(point);
@@ -42,4 +41,9 @@ bool MoveFilteringMouseModeDecorator::beginMode()
 bool MoveFilteringMouseModeDecorator::endMode(bool success)
 {
     return mMode->endMode(success);
+}
+
+QString MoveFilteringMouseModeDecorator::getModeDescription() const
+{
+    return mMode->getModeDescription();
 }

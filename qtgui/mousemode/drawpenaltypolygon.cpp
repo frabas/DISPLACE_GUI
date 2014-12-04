@@ -103,3 +103,8 @@ bool DrawPenaltyPolygon::endMode(bool success)
     mLayerInterface->clearEditorLayer();
     return true;
 }
+
+QString DrawPenaltyPolygon::getModeDescription() const
+{
+    return QString(tr("Drawing Penalty Polygon Mode"));
+}

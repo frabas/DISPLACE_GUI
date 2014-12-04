@@ -86,6 +86,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mMemInfoLabel = new QLabel(this);
     statusBar()->addPermanentWidget(mMemInfoLabel);
 
+    mCoordinatesInfoLabel = new QLabel(this);
+    statusBar()->addWidget(mCoordinatesInfoLabel, 1);
+
+    mStatusInfoLabel = new QLabel(this);
+    statusBar()->addWidget(mStatusInfoLabel, 3);
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
@@ -334,11 +340,12 @@ void MainWindow::outputUpdated()
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
-    statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+    mCoordinatesInfoLabel->setText(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
 }
 
 void MainWindow::mapMousePress(QMouseEvent *event, PointWorldCoord point)
 {
+    Q_UNUSED(event);
     if (!mMouseMode)    // no mouse mode active
         return;
 
@@ -366,7 +373,7 @@ void MainWindow::mapMouseMove(QMouseEvent *, PointWorldCoord, PointWorldCoord po
 
 void MainWindow::showMessage(const QString &message)
 {
-    statusBar()->showMessage(message);
+    mStatusInfoLabel->setText(message);
 }
 
 void MainWindow::edgeSelectionsChanged(int num)
@@ -878,6 +885,7 @@ void MainWindow::startMouseMode(MouseMode * newmode)
 void MainWindow::endMouseMode(bool success)
 {
     mMouseModeInfoLabel->hide();
+    mStatusInfoLabel->setText("");
     if (!mMouseMode)
         return;
 

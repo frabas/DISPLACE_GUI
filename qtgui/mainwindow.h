@@ -179,6 +179,8 @@ private:
     MemoryInfo mMemInfo;
     QLabel *mMemInfoLabel;
     QLabel *mMouseModeInfoLabel;
+    QLabel *mCoordinatesInfoLabel;
+    QLabel *mStatusInfoLabel;
 
     QString mLastRunSimulationName;
     QString mLastRunDatabase;

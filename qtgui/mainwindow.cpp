@@ -1486,8 +1486,10 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                 n = min(snodes.count(), dlg.getMaxLinks());
             for (int i = 0; i < n; ++i) {
                 int nodeid = snodes[i].node->get_idx_node();
-                currentModel->getNodesList()[harbid]->appendAdiancency(nodeid, snodes[i].weight);
-                currentModel->getNodesList()[nodeid]->appendAdiancency(harbid, snodes[i].weight);
+                currentModel->addEdge(harbid, nodeid, snodes[i].weight);
+                currentModel->addEdge(nodeid, harbid, snodes[i].weight);
+//                currentModel->getNodesList()[harbid]->appendAdiancency(nodeid, snodes[i].weight);
+//                currentModel->getNodesList()[nodeid]->appendAdiancency(harbid, snodes[i].weight);
             }
         }
     }

@@ -106,10 +106,17 @@ void NodeData::setHarbourId(int value)
     mHarbourId = value;
 }
 
-void NodeData::appendAdiancency(int to_id, double weight)
+/**
+ * @brief NodeData::appendAdiancency
+ * @param to_id
+ * @param weight
+ * @return Index of the appended adiacency
+ */
+int NodeData::appendAdiancency(int to_id, double weight)
 {
     mAdiacency.push_back(to_id);
     mWeights.push_back(weight);
+    return mAdiacency.size() -1;
 }
 
 void NodeData::removeAdiacencyByIdx(int idx)

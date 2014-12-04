@@ -554,31 +554,27 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
         mNodes.push_back(nodedata);
 
-        if (node.good) {
-            for (int i = 0; i < node.adiacencies.size(); ++i) {
-                int adidx = node.adiacencies[i];
-                if (nodes[adidx].good) {
-                    nodedata->appendAdiancency(adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
-
-                    OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
-                    e->SetField(FLD_TYPE, (int)OgrTypeEdge);
-                    e->SetField(FLD_NODEID, nodeid);
-                    e->SetField(FLD_EDGEID, i);
-
-                    OGRLineString edge;
-                    edge.addPoint(node.point.x(), node.point.y());
-                    edge.addPoint(nodes[adidx].point.x(), nodes[adidx].point.y());
-                    e->SetGeometry(&edge);
-
-                    mNodesLayer->CreateFeature(e);
-                }
-            }
-        } else {
+        if (!node.good) {
             nodedata->setDeleted(true);
         }
 
         newnodes.push_back(nodedata);
         ++cntr;
+    }
+
+    cntr = 0;
+    foreach(GraphBuilder::Node node, nodes) {
+        if (node.good) {
+            std::shared_ptr<NodeData> nodedata = mNodes[nodeidx + cntr];
+            for (int i = 0; i < node.adiacencies.size(); ++i) {
+                int adidx = node.adiacencies[i];
+                if (nodes[adidx].good) {
+                    addEdge(nodedata, adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
+                    // HERE
+                }
+            }
+            ++cntr;
+        }
     }
 
     foreach(std::shared_ptr<NodeData> node, newnodes) {
@@ -592,6 +588,29 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     controller->redraw();
 
     return true;
+}
+
+void DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight)
+{
+    int i = nodedata->appendAdiancency(targetidx, weight);
+
+    OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+    e->SetField(FLD_TYPE, (int)OgrTypeEdge);
+    e->SetField(FLD_NODEID, nodedata->get_idx_node());
+    e->SetField(FLD_EDGEID, i);
+
+    OGRLineString edge;
+    edge.addPoint(nodedata->get_x(), nodedata->get_y());
+    edge.addPoint(mNodes[targetidx]->get_x(), mNodes[targetidx]->get_y());
+    e->SetGeometry(&edge);
+
+    mNodesLayer->CreateFeature(e);
+
+}
+
+void DisplaceModel::addEdge(int srcidx, int targetidx, double weight)
+{
+    addEdge(mNodes[srcidx], targetidx, weight);
 }
 
 bool DisplaceModel::exportGraph(const QString &path)

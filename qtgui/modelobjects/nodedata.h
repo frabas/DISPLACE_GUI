@@ -66,7 +66,7 @@ public:
     void setHarbourId(int value);
 
     /* Adiacency functions */
-    void appendAdiancency(int to_id, double weight);
+    int appendAdiancency(int to_id, double weight);
     void removeAdiacencyByIdx(int idx);
     void removeAdiacencyByTarget(int target);
     void removeAllAdiacencies();

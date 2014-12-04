@@ -271,6 +271,8 @@ public:
 
     void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
+    void addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
+    void addEdge (int srcidx, int targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight);

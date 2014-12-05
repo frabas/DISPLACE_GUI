@@ -129,6 +129,8 @@ private slots:
 
     void on_actionAbort_Operation_triggered();
 
+    void on_actionAbout_displace_triggered();
+
 signals:
     void modelStateChanged();
 

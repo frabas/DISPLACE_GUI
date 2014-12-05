@@ -67,6 +67,8 @@
     <addaction name="actionImport_Shapefile"/>
     <addaction name="action_Link_database"/>
     <addaction name="separator"/>
+    <addaction name="actionAbout_displace"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menu_Editor">
@@ -951,6 +953,11 @@
    </property>
    <property name="text">
     <string>Abort Operation</string>
+   </property>
+  </action>
+  <action name="actionAbout_displace">
+   <property name="text">
+    <string>About displace...</string>
    </property>
   </action>
  </widget>

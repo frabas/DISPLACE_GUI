@@ -16,6 +16,7 @@
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
 #include <creategraphdialog.h>
+#include <aboutdialog.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -1599,4 +1600,10 @@ void MainWindow::on_actionAdd_triggered()
 void MainWindow::on_actionAbort_Operation_triggered()
 {
     abortMouseMode();
+}
+
+void MainWindow::on_actionAbout_displace_triggered()
+{
+    AboutDialog dlg(this);
+    dlg.exec();
 }

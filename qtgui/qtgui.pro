@@ -114,7 +114,8 @@ SOURCES += \
     linkharboursdialog.cpp \
     mousemode/movefilteringmousemodedecorator.cpp \
     mousemode/singleclickmousemode.cpp \
-    mousemode/edgeaddmousemode.cpp
+    mousemode/edgeaddmousemode.cpp \
+    aboutdialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -126,7 +127,8 @@ FORMS += \
     creategraphdialog.ui \
     waitdialog.ui \
     pathpenaltydialog.ui \
-    linkharboursdialog.ui
+    linkharboursdialog.ui \
+    aboutdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -189,7 +191,9 @@ HEADERS += \
     linkharboursdialog.h \
     mousemode/movefilteringmousemodedecorator.h \
     mousemode/singleclickmousemode.h \
-    mousemode/edgeaddmousemode.h
+    mousemode/edgeaddmousemode.h \
+    version.h \
+    aboutdialog.h
 
 RESOURCES += \
     qtgui.qrc

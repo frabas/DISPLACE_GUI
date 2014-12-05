@@ -2,13 +2,16 @@ DEFINES += QMC_GDAL
 
 win32 {
     #MINGW=C:\Qt\qt-5.3.1-x64-mingw482r4-seh-opengl\mingw64
-    MINGW=C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64
+    #MINGW=C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64
+    #SDK=$$MINGW
 
-    QMC_GDAL_INC = $$MINGW/include
-    QMC_GDAL_LIB = $$MINGW/lib
+    SDK=$$top_srcdir/install/extra
 
-    INCLUDEPATH += $$MINGW/include/ $$MINGW/include/boost-1_57
-    LIBS += -L$$MINGW/lib
+    QMC_GDAL_INC = $$SDK/include
+    QMC_GDAL_LIB = $$SDK/lib
+
+    INCLUDEPATH += $$SDK/include/ $$SDK/include/boost-1_57
+    LIBS += -L$$SDK/lib
 }
 
 unix {

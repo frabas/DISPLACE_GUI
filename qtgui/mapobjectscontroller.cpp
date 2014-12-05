@@ -150,6 +150,9 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     foreach (VesselMapObject *v, mVesselObjects[model]) {
         v->getGeometryEntity()->setVisible(visible);
     }
+    foreach (EdgeMapObject *e, mEdgeObjects[model]) {
+        e->getGeometryEntity()->setVisible(visible);
+    }
 }
 
 void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Category type, int layer, bool visibility)
@@ -366,12 +369,18 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-        EdgeMapObject *edge = new EdgeMapObject(this, i, nd.get());
-
-        connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
-
-        mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
+        addEdge(model_n,i, nd, disable_redraw);
     }
+}
+
+void MapObjectsController::addEdge (int model_n, int adj_id, std::shared_ptr<NodeData> node, bool disable_redraw)
+{
+    EdgeMapObject *edge = new EdgeMapObject(this, adj_id, node.get());
+
+    connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
+
+    mEdgeObjects[model_n].append(edge);
+    mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
 }
 
 void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> h, bool disable_redraw)
@@ -380,6 +389,11 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
     mHarbourObjects[model_n].append(obj);
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    std::shared_ptr<NodeData> nd = mModels[model_n]->getNodesList()[h->mHarbour->get_idx_node()];
+    for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+        addEdge(model_n,i, nd, disable_redraw);
+    }
 }
 
 void MapObjectsController::clearEditorLayer()

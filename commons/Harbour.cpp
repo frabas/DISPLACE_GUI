@@ -60,6 +60,12 @@ Harbour::Harbour()
 {
 }
 
+Harbour::Harbour(int idx, double xval, double yval, int _harbour)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0)
+{
+
+}
+
 
 Harbour::~Harbour()
 {

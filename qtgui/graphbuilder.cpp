@@ -81,6 +81,9 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                     layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
+                    if (layer->GetNextFeature() != 0)
+                        n.good = false;
+#if 0
                     OGRFeature *ftr;
                     while (( ftr = layer->GetNextFeature()) != 0) {
                         if (point.Within(ftr->GetGeometryRef())) {
@@ -88,7 +91,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                             break;
                         }
                     }
-
+#endif
                 }
             }
 
@@ -130,10 +133,10 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
 {
 
 #ifdef HAVE_GEOGRAPHICLIB
-#ifndef GEOGRAPHICLIB_VERSION_MINOR
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#else
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
     double x,y;
@@ -200,10 +203,10 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
 #ifdef HAVE_GEOGRAPHICLIB
     double d;
 
-#ifndef GEOGRAPHICLIB_VERSION_MINOR
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#else
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
     geod.Inverse(nodes[source].point.y(), nodes[source].point.x(), nodes[target].point.y(), nodes[target].point.x(), d);

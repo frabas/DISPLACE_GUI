@@ -16,8 +16,13 @@
 #include <configdialog.h>
 #include <simulationsetupdialog.h>
 #include <creategraphdialog.h>
+#include <aboutdialog.h>
+
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
+#include <mousemode/movefilteringmousemodedecorator.h>
+#include <mousemode/singleclickmousemode.h>
+#include <mousemode/edgeaddmousemode.h>
 
 #include <graphinteractioncontroller.h>
 #include <graphbuilder.h>
@@ -27,11 +32,13 @@
 #include <backgroundworker.h>
 #include <shortestpathbuilder.h>
 #include <pathpenaltydialog.h>
+#include <linkharboursdialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
 #include <gdal/ogrsf_frmts.h>
+#include <GeographicLib/Geodesic.hpp>
 
 #include <QBoxLayout>
 #include <QTextEdit>
@@ -73,8 +80,18 @@ MainWindow::MainWindow(QWidget *parent) :
     grp->addAction(ui->actionNode_Editor);
     grp->addAction(ui->actionEdge_Edit);
 
+    mMouseModeInfoLabel = new QLabel(this);
+    statusBar()->addPermanentWidget(mMouseModeInfoLabel);
+    mMouseModeInfoLabel->hide();
+
     mMemInfoLabel = new QLabel(this);
     statusBar()->addPermanentWidget(mMemInfoLabel);
+
+    mCoordinatesInfoLabel = new QLabel(this);
+    statusBar()->addWidget(mCoordinatesInfoLabel, 1);
+
+    mStatusInfoLabel = new QLabel(this);
+    statusBar()->addWidget(mStatusInfoLabel, 3);
 
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
@@ -255,6 +272,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionGraph->setEnabled(e);
     ui->actionNode_Editor->setEnabled(e);
     ui->actionProperties->setEnabled(e);
+    ui->actionAbort_Operation->setEnabled(false);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -324,11 +342,12 @@ void MainWindow::outputUpdated()
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
 {
-    statusBar()->showMessage(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
+    mCoordinatesInfoLabel->setText(QString("Pos: %1 %2").arg(pos.latitude(),5).arg(pos.longitude(),5));
 }
 
 void MainWindow::mapMousePress(QMouseEvent *event, PointWorldCoord point)
 {
+    Q_UNUSED(event);
     if (!mMouseMode)    // no mouse mode active
         return;
 
@@ -352,6 +371,11 @@ void MainWindow::mapMouseMove(QMouseEvent *, PointWorldCoord, PointWorldCoord po
 
     if (!mMouseMode->moveEvent(point.rawPoint()))
         abortMouseMode();
+}
+
+void MainWindow::showMessage(const QString &message)
+{
+    mStatusInfoLabel->setText(message);
 }
 
 void MainWindow::edgeSelectionsChanged(int num)
@@ -409,6 +433,42 @@ void MainWindow::waitEnd()
         delete mWaitDialog;
         mWaitDialog = 0;
     }
+}
+
+void MainWindow::editorAddNode(QPointF point)
+{
+    if (!isEditorModel()) {
+        abortMouseMode();
+        return;
+    }
+
+    GraphBuilder::Node newnode;
+    newnode.point = point;
+    newnode.good = true;
+    newnode.harbour = 0;
+    QList<GraphBuilder::Node> nl;
+    nl << newnode;
+    currentModel->addGraph(nl, mMapController);
+
+    completeMouseMode();
+}
+
+void MainWindow::editorAddEdge(int from, int to)
+{
+    if (!isEditorModel()) {
+        abortMouseMode();
+        return;
+    }
+
+    qDebug() << "EDGE" << from << to;
+
+    int id1 = currentModel->addEdge(from, to, 0);
+    int id2 = currentModel->addEdge(to, from, 0);
+
+    mMapController->addEdge(currentModelIdx, id1, currentModel->getNodesList()[from], true);
+    mMapController->addEdge(currentModelIdx, id2, currentModel->getNodesList()[to], true);
+
+    completeMouseMode();
 }
 
 void MainWindow::updateModelList()
@@ -815,12 +875,21 @@ void MainWindow::startMouseMode(MouseMode * newmode)
     abortMouseMode();
     mMouseMode = newmode;
 
-    if (mMouseMode)
+    if (mMouseMode) {
+        mMouseMode->setMouseModeInterface(this);
+        mMouseModeInfoLabel->show();
+        mMouseModeInfoLabel->setText(mMouseMode->getModeDescription());
+
         mMouseMode->beginMode();
+
+        ui->actionAbort_Operation->setEnabled(true);
+    }
 }
 
 void MainWindow::endMouseMode(bool success)
 {
+    mMouseModeInfoLabel->hide();
+    mStatusInfoLabel->setText("");
     if (!mMouseMode)
         return;
 
@@ -828,8 +897,15 @@ void MainWindow::endMouseMode(bool success)
         mMouseMode->endMode(success);
     }
 
+    ui->actionAbort_Operation->setEnabled(false);
+
     delete mMouseMode;
     mMouseMode = 0;
+}
+
+bool MainWindow::isEditorModel()
+{
+    return (currentModel && currentModel->modelType() == DisplaceModel::EditorModelType);
 }
 
 void MainWindow::abortMouseMode()
@@ -1431,4 +1507,103 @@ void MainWindow::on_actionSave_Graph_triggered()
         sets.setValue("last_graphpath", fn);
     }
 
+}
+
+struct sorter {
+    double weight;
+    std::shared_ptr<NodeData> node;
+
+    sorter(std::shared_ptr<NodeData> _node, double _weight) {
+        weight = _weight;
+        node = _node;
+    }
+
+    friend bool operator < (const sorter &s1, const sorter &s2) {
+        return s1.weight < s2.weight;
+    }
+};
+
+void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    LinkHarboursDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.isRemoveLinksSet()) {
+            foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
+                currentModel->getNodesList()[harbour->mHarbour->get_idx_node()]->removeAllAdiacencies();
+            }
+        }
+
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
+
+        foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
+            int harbid = harbour->mHarbour->get_idx_node();
+            QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
+            QList<std::shared_ptr<NodeData> > nodes = currentModel->getAllNodesWithin(pos, dlg.getMaxDinstance());
+
+            QList<sorter> snodes;
+            double dist;
+            foreach (std::shared_ptr<NodeData> node, nodes) {
+                if (node->get_idx_node() != harbid) {
+                    geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
+                    snodes.push_back(sorter(node, dist));
+                }
+            }
+
+            qSort(snodes);
+
+            int n;
+            if (n == -1)
+                n = snodes.count();
+            else
+                n = min(snodes.count(), dlg.getMaxLinks());
+            for (int i = 0; i < n; ++i) {
+                int nodeid = snodes[i].node->get_idx_node();
+                int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
+                int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
+                mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
+                mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionAdd_triggered()
+{
+    if (!isEditorModel())
+        return;
+
+    switch (mMapController->getEditorMode()) {
+    case MapObjectsController::NodeEditorMode:
+        if (true) {
+            SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));
+            connect (mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
+            startMouseMode(new MoveFilteringMouseModeDecorator(mode));
+        }
+        break;
+    case MapObjectsController::EdgeEditorMode:
+        if (true) {
+            EdgeAddMouseMode *mode = new EdgeAddMouseMode(currentModel.get());
+            connect (mode, SIGNAL(edgeAdded(int,int)), this, SLOT(editorAddEdge(int,int)));
+            startMouseMode(new MoveFilteringMouseModeDecorator(mode));
+        }
+        break;
+    }
+}
+
+void MainWindow::on_actionAbort_Operation_triggered()
+{
+    abortMouseMode();
+}
+
+void MainWindow::on_actionAbout_displace_triggered()
+{
+    AboutDialog dlg(this);
+    dlg.exec();
 }

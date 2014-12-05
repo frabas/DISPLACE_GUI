@@ -1,0 +1,1 @@
+<html><head/><body><p align="center"><span style=" font-size:16pt;">Displace</span></p><p align="center">version $VERSION</p><p align="center"><br/></p><p align="justify"/></body></html>

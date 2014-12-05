@@ -7,6 +7,7 @@
 #include <profiler.h>
 
 #include <mapobjectscontroller.h>
+#include <GeographicLib/Geodesic.hpp>
 
 #include <readdata.h>
 #include <qdebug.h>
@@ -52,6 +53,19 @@ DisplaceModel::DisplaceModel()
     mSpatialRef = new OGRSpatialReference();
     mSpatialRef->SetWellKnownGeogCS("WGS84");
 
+    createFeaturesLayer();
+
+    mOutputFileParser->moveToThread(mParserThread);
+    mParserThread->start();
+
+    connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
+    connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
+    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+}
+
+void DisplaceModel::createFeaturesLayer()
+{
+    mNodesLayerIndex = mDataSource->GetLayerCount();
     mNodesLayer = mDataSource->CreateLayer("nodes", mSpatialRef, wkbPoint);
     Q_ASSERT(mNodesLayer);
 
@@ -63,12 +77,6 @@ DisplaceModel::DisplaceModel()
     OGRFieldDefn fld3(FLD_EDGEID, OFTInteger);
     mNodesLayer->CreateField(&fld3);
 
-    mOutputFileParser->moveToThread(mParserThread);
-    mParserThread->start();
-
-    connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
-    connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
-    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
 }
 
 bool DisplaceModel::edit(QString modelname)
@@ -311,6 +319,35 @@ QString DisplaceModel::getNodeId(int idx) const
     return QString::fromStdString(mNodes.at(idx)->get_name());
 }
 
+QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist) const
+{
+    QList<std::shared_ptr<NodeData> > nodes;
+
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
+
+    double mx, my, Mx, My, d;
+    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist * 500, My, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist * 500, d, Mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist * 500, my, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist * 500, d, mx);
+
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);
+    OGRFeature *f;
+    while ((f = mNodesLayer->GetNextFeature()) != 0) {
+        if (f->GetFieldAsInteger(FLD_TYPE) == (int)OgrTypeNode) {
+            int nodeid = f->GetFieldAsInteger(FLD_NODEID);
+            nodes.push_back(mNodes[nodeid]);
+        }
+    }
+
+    return nodes;
+}
+
 void DisplaceModel::checkStatsCollection(int tstep)
 {
     if (mLastStats != tstep && mNodesStatsDirty) {
@@ -484,6 +521,8 @@ void DisplaceModel::clearAllNodes()
 {
     mNodes.clear();
     mHarbours.clear();
+    mDataSource->DeleteLayer(mNodesLayerIndex);
+    createFeaturesLayer();
 }
 
 bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsController *controller)
@@ -492,72 +531,117 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         return false;
 
     QList<std::shared_ptr<NodeData> > newnodes;
+    QList<std::shared_ptr<HarbourData> > newharbours;
+    QList<int> translated_nodes;
     int nodeidx = mNodes.count();
     int cntr = 0;
     foreach(GraphBuilder::Node node, nodes) {
-//        if (!node.good) {
-//            continue;
-//        }
-
-        int nodeid = mNodes.size();
-
-        OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
-        feature->SetField(FLD_TYPE, (int)OgrTypeNode);
-        feature->SetField(FLD_NODEID, nodeid);
-
-        OGRPoint pt;
-        pt.setX(node.point.x());
-        pt.setY(node.point.y());
-
-        feature->SetGeometry(&pt);
-
-        mNodesLayer->CreateFeature(feature);
-
-        std::shared_ptr<Node> nd (new Node(cntr, node.point.x(), node.point.y(),0,0,0,0,0));
-        std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
-
-        /*
-        if (node.harbour) {
-            std::shared_ptr<HarbourData> h(new HarbourData);
-            h->mHarbour->set_is_harbour(mHarbours.size());
-            mHarbours.push_back(h);
-        }*/
-
-        mNodes.push_back(nodedata);
-
         if (node.good) {
+            int nodeid = mNodes.size();
+
+            OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+            feature->SetField(FLD_TYPE, (int)OgrTypeNode);
+            feature->SetField(FLD_NODEID, nodeid);
+
+            OGRPoint pt;
+            pt.setX(node.point.x());
+            pt.setY(node.point.y());
+
+            feature->SetGeometry(&pt);
+
+            mNodesLayer->CreateFeature(feature);
+
+            std::shared_ptr<Node> nd;
+
+            translated_nodes.push_back(nodeidx + cntr);
+            if (node.harbour) {
+                std::shared_ptr<Harbour> h(new Harbour(nodeidx + cntr, node.point.x(), node.point.y(), node.harbour));
+                nd = h;
+                std::shared_ptr<HarbourData> hd(new HarbourData(h));
+                mHarbours.push_back(hd);
+                newharbours.push_back(hd);
+            } else {
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+            }
+
+            std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+
+            mNodes.push_back(nodedata);
+
+            if (!node.good) {
+                nodedata->setDeleted(true);
+            }
+
+            newnodes.push_back(nodedata);
+            ++cntr;
+        } else {
+            translated_nodes.push_back(-1);
+        }
+    }
+
+    cntr = 0;
+    foreach(GraphBuilder::Node node, nodes) {
+        if (node.good) {
+            std::shared_ptr<NodeData> nodedata = mNodes[nodeidx + cntr];
             for (int i = 0; i < node.adiacencies.size(); ++i) {
                 int adidx = node.adiacencies[i];
                 if (nodes[adidx].good) {
-                    nodedata->appendAdiancency(adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
-
-                    OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
-                    e->SetField(FLD_TYPE, (int)OgrTypeEdge);
-                    e->SetField(FLD_NODEID, nodeid);
-                    e->SetField(FLD_EDGEID, i);
-
-                    OGRLineString edge;
-                    edge.addPoint(node.point.x(), node.point.y());
-                    edge.addPoint(nodes[adidx].point.x(), nodes[adidx].point.y());
-                    e->SetGeometry(&edge);
-
-                    mNodesLayer->CreateFeature(e);
+                    addEdge(nodedata, translated_nodes[adidx], node.weight.size() > i ? node.weight[i] : 0.0);
                 }
             }
-        } else {
-            nodedata->setDeleted(true);
+            ++cntr;
         }
-
-        newnodes.push_back(nodedata);
-        ++cntr;
     }
 
     foreach(std::shared_ptr<NodeData> node, newnodes) {
-        controller->addNode(mIndex, node);
+        if (!node->mNode->get_harbour())
+            controller->addNode(mIndex, node);
     }
+    foreach (std::shared_ptr<HarbourData> h, newharbours) {
+        controller->addHarbour(mIndex, h, true);
+    }
+
     controller->redraw();
 
     return true;
+}
+
+/**
+ * @brief DisplaceModel::addEdge
+ * @param nodedata
+ * @param targetidx
+ * @param weight
+ * @return Adiacency id for that node
+ */
+int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight)
+{
+    int i = nodedata->appendAdiancency(targetidx, weight);
+
+    OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+    e->SetField(FLD_TYPE, (int)OgrTypeEdge);
+    e->SetField(FLD_NODEID, nodedata->get_idx_node());
+    e->SetField(FLD_EDGEID, i);
+
+    OGRLineString edge;
+    edge.addPoint(nodedata->get_x(), nodedata->get_y());
+    edge.addPoint(mNodes[targetidx]->get_x(), mNodes[targetidx]->get_y());
+    e->SetGeometry(&edge);
+
+    mNodesLayer->CreateFeature(e);
+
+    return i;
+}
+
+/**
+ * @brief DisplaceModel::addEdge
+ * @param srcidx
+ * @param targetidx
+ * @param weight
+ * @return Adiacency id
+ */
+int DisplaceModel::addEdge(int srcidx, int targetidx, double weight)
+{
+    return addEdge(mNodes[srcidx], targetidx, weight);
 }
 
 bool DisplaceModel::exportGraph(const QString &path)
@@ -581,10 +665,14 @@ bool DisplaceModel::exportGraph(const QString &path)
 bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 {
     foreach (std::shared_ptr<HarbourData> h, list) {
-        h->mHarbour->set_is_harbour(mHarbours.size());
+        int hid = mHarbours.size();
+        int nid = mNodes.size();
+        h->mHarbour->set_idx_node(nid);
+//        h->mHarbour->set_is_harbour(hid);
         mHarbours.push_back(h);
 
         std::shared_ptr<NodeData> n (new NodeData(h->mHarbour, this));
+        n->setHarbourId(hid);
         mNodes.push_back(n);
     }
 

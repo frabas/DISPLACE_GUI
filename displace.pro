@@ -3,4 +3,7 @@ CONFIG+=ordered
 SUBDIRS+=commons QMapControl qtgui simulator
 
 OTHER_FILES += \
-    Readme.txt
+    Readme.txt \
+    COPYRIGHT.txt \
+    LICENSE.txt
+

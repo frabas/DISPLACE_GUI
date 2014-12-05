@@ -9,6 +9,7 @@
 
 #include <QMapControl/QMapControl.h>
 
+#include <stdexcept>
 
 NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node)
     : mController(controller),

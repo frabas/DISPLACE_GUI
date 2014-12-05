@@ -20,21 +20,22 @@ bool InputFileParser::parseHarbourFile(const QString &path, QList<std::shared_pt
         return false;
     }
 
-    bool ok1, ok2;
+    bool ok1, ok2, ok3;
     QTextStream strm(&f);
     QString line;
 
-    int linenum = 1;
+    int linenum = 0;
     while (!(line = strm.readLine()).isNull()) {
+        ++linenum;
+        if (linenum == 1)
+            continue;
+
         QStringList fields = line.split(";");
         double x = fields[1].toDouble(&ok1);
         double y = fields[2].toDouble(&ok2);
+        int hid = fields[3].toInt(&ok3);
 
-        if (!ok1 || !ok2) {
-            // Process error, but ignore for line 1
-            if (linenum == 1)
-                continue;
-
+        if (!ok1 || !ok2 || !ok3) {
             if (error)
                 *error = QString(QObject::tr("Error parsing coordinates at line %1")).arg(linenum);
             return false;
@@ -44,10 +45,9 @@ bool InputFileParser::parseHarbourFile(const QString &path, QList<std::shared_pt
         std::shared_ptr<HarbourData> dt (new HarbourData(h));
 
         h->set_xy(x,y);
+        h->set_is_harbour(hid);
 
         list.push_back(dt);
-
-        ++linenum;
     }
 
 

@@ -1,3 +1,23 @@
+/* --------------------------------------------------------------------------
+ * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
+ * AND EFFORT DISPLACEMENT
+ * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
+ *
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * --------------------------------------------------------------------------
+ */
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -15,6 +35,8 @@
 
 #include <graphbuilder.h>
 #include <backgroundworker.h>
+
+#include <mousemode.h>
 
 using namespace qmapcontrol;
 
@@ -39,7 +61,7 @@ QT_END_NAMESPACE
 
 #define MAX_MODELS 5
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public MouseModeInterface
 {
     Q_OBJECT
 
@@ -61,6 +83,7 @@ private slots:
     void mapMousePress(QMouseEvent*,PointWorldCoord);
     void mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord);
     void mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord);
+    void showMessage(const QString &);
     void abortMouseMode ();
     void completeMouseMode();
 
@@ -75,6 +98,9 @@ private slots:
 
     void waitStart();
     void waitEnd();
+
+    void editorAddNode(QPointF);
+    void editorAddEdge(int from, int to);
 
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
@@ -117,8 +143,13 @@ private slots:
     void on_actionAdd_Penalty_on_Polygon_triggered();
     void on_actionAdd_Penalty_from_File_triggered();
     void on_actionLoad_Graph_triggered();
-
     void on_actionSave_Graph_triggered();
+    void on_actionLink_Harbours_to_Graph_triggered();
+    void on_actionAdd_triggered();
+
+    void on_actionAbort_Operation_triggered();
+
+    void on_actionAbout_displace_triggered();
 
 signals:
     void modelStateChanged();
@@ -147,6 +178,8 @@ protected:
     void startMouseMode (MouseMode *);
     void endMouseMode (bool success = true);
 
+    bool isEditorModel();
+
 private:
     Ui::MainWindow *ui;
 
@@ -169,6 +202,9 @@ private:
     QTimer mMemoryWatchTimer;
     MemoryInfo mMemInfo;
     QLabel *mMemInfoLabel;
+    QLabel *mMouseModeInfoLabel;
+    QLabel *mCoordinatesInfoLabel;
+    QLabel *mStatusInfoLabel;
 
     QString mLastRunSimulationName;
     QString mLastRunDatabase;

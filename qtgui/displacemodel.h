@@ -1,3 +1,23 @@
+/* --------------------------------------------------------------------------
+ * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
+ * AND EFFORT DISPLACEMENT
+ * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
+ *
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License along
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * --------------------------------------------------------------------------
+ */
 #ifndef DISPLACEMODEL_H
 #define DISPLACEMODEL_H
 
@@ -99,6 +119,7 @@ public:
     const QList<std::shared_ptr<NodeData> > &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
+    QList<std::shared_ptr<NodeData> > getAllNodesWithin (const QPointF &centerpoint, double dist) const;
 
     /** \brief receive a Stats update for nodes from the Simulator
      *
@@ -270,6 +291,8 @@ public:
 
     void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
+    int addEdge(std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
+    int addEdge(int srcidx, int targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight);
@@ -286,6 +309,7 @@ protected:
     bool initBenthos();
     bool initPopulations();
     bool initNations();
+    void createFeaturesLayer();
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
@@ -354,6 +378,7 @@ private:
     enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
     OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
+    int mNodesLayerIndex;
 
     OGRSpatialReference *mSpatialRef;
 

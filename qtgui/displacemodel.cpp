@@ -532,49 +532,51 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
     QList<std::shared_ptr<NodeData> > newnodes;
     QList<std::shared_ptr<HarbourData> > newharbours;
+    QList<int> translated_nodes;
     int nodeidx = mNodes.count();
     int cntr = 0;
     foreach(GraphBuilder::Node node, nodes) {
-//        if (!node.good) {
-//            continue;
-//        }
+        if (node.good) {
+            int nodeid = mNodes.size();
 
-        int nodeid = mNodes.size();
+            OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
+            feature->SetField(FLD_TYPE, (int)OgrTypeNode);
+            feature->SetField(FLD_NODEID, nodeid);
 
-        OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
-        feature->SetField(FLD_TYPE, (int)OgrTypeNode);
-        feature->SetField(FLD_NODEID, nodeid);
+            OGRPoint pt;
+            pt.setX(node.point.x());
+            pt.setY(node.point.y());
 
-        OGRPoint pt;
-        pt.setX(node.point.x());
-        pt.setY(node.point.y());
+            feature->SetGeometry(&pt);
 
-        feature->SetGeometry(&pt);
+            mNodesLayer->CreateFeature(feature);
 
-        mNodesLayer->CreateFeature(feature);
+            std::shared_ptr<Node> nd;
 
-        std::shared_ptr<Node> nd;
+            translated_nodes.push_back(nodeidx + cntr);
+            if (node.harbour) {
+                std::shared_ptr<Harbour> h(new Harbour(nodeidx + cntr, node.point.x(), node.point.y(), node.harbour));
+                nd = h;
+                std::shared_ptr<HarbourData> hd(new HarbourData(h));
+                mHarbours.push_back(hd);
+                newharbours.push_back(hd);
+            } else {
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+            }
 
-        if (node.harbour) {
-            std::shared_ptr<Harbour> h(new Harbour(nodeidx + cntr, node.point.x(), node.point.y(), node.harbour));
-            nd = h;
-            std::shared_ptr<HarbourData> hd(new HarbourData(h));
-            mHarbours.push_back(hd);
-            newharbours.push_back(hd);
+            std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
+
+            mNodes.push_back(nodedata);
+
+            if (!node.good) {
+                nodedata->setDeleted(true);
+            }
+
+            newnodes.push_back(nodedata);
+            ++cntr;
         } else {
-            nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+            translated_nodes.push_back(-1);
         }
-
-        std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
-
-        mNodes.push_back(nodedata);
-
-        if (!node.good) {
-            nodedata->setDeleted(true);
-        }
-
-        newnodes.push_back(nodedata);
-        ++cntr;
     }
 
     cntr = 0;
@@ -584,8 +586,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
             for (int i = 0; i < node.adiacencies.size(); ++i) {
                 int adidx = node.adiacencies[i];
                 if (nodes[adidx].good) {
-                    addEdge(nodedata, adidx + nodeidx, node.weight.size() > i ? node.weight[i] : 0.0);
-                    // HERE
+                    addEdge(nodedata, translated_nodes[adidx], node.weight.size() > i ? node.weight[i] : 0.0);
                 }
             }
             ++cntr;

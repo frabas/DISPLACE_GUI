@@ -81,6 +81,9 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                     layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
+                    if (layer->GetNextFeature() != 0)
+                        n.good = false;
+#if 0
                     OGRFeature *ftr;
                     while (( ftr = layer->GetNextFeature()) != 0) {
                         if (point.Within(ftr->GetGeometryRef())) {
@@ -88,7 +91,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                             break;
                         }
                     }
-
+#endif
                 }
             }
 

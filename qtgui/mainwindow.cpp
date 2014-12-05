@@ -17,6 +17,7 @@
 #include <simulationsetupdialog.h>
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
+#include <createshortestpathdialog.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -1311,20 +1312,24 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 class ShortestPathBuilderWorker : public BackgroundWorker {
     WaitDialog *mWaitDialog;
     DisplaceModel *mModel;
+    QList<std::shared_ptr<NodeData> > mRelevantNodes;
 public:
     ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
         : BackgroundWorker(main), mWaitDialog(dialog), mModel(model) {
+    }
+
+    void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes) {
+        mRelevantNodes = nodes;
     }
 
     void execute() override {
         ShortestPathBuilder builder(mModel);
 
         mWaitDialog->setText("Building shortest paths");
-        const QList<std::shared_ptr<NodeData> > &nodes = mModel->getNodesList();
-        mWaitDialog->setProgress(true, nodes.size());
+        mWaitDialog->setProgress(true, mRelevantNodes.size());
         int n = 0;
-        foreach (std::shared_ptr<NodeData> node, nodes) {
-            mWaitDialog->setProgression(n);
+        foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
+            emit progress(n);
 
             builder.create(node, mModel->linkedShortestPathFolder());
             ++n;
@@ -1338,14 +1343,51 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
-    if (!currentModel->isShortestPathFolderLinked()) {
-        QMessageBox::warning(this, tr("Cannot create Shortest Path"),
-                             tr("Please link a shortest path folder first."));
+    CreateShortestPathDialog dlg(this);
+    dlg.setShortestPathFolder(currentModel->linkedShortestPathFolder());
+    if (dlg.exec() != QDialog::Accepted)
         return;
-    }
+
+    currentModel->linkShortestPathFolder(dlg.getShortestPathFolder());
 
     WaitDialog *dialog = new WaitDialog(this);
     ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
+    dialog->setProgress(true, 0);
+
+    if (dlg.isAllNodesAreRelevantChecked()) {
+        builder->setRelevantNodes(currentModel->getNodesList());
+    } else {
+        InputFileParser parser;
+        QString p1, p2;
+        if (!parser.pathParseRelevantNodes(dlg.getRelevantNodesFolder(), p1, p2)) {
+            QMessageBox::warning(this, tr("Cannot parse selected file name."),
+                                 tr("Cannot parse the selected file name into relevant nodes pattern. it must be: /.../vesselsspe_xxx_quartery.dat"));
+            return;
+        }
+
+        int i = 1;
+        bool ok;
+        QSet<int> nodes;
+        do {
+            QString in= p1.arg(i++);
+            qDebug() << "Parsing file: " << in;
+            ok = parser.parseRelevantNodes(in, nodes);
+        } while (ok);
+        i = 1;
+        do {
+            QString in = p2.arg(i++);
+            qDebug() << "Parsing file: " << in;
+            ok = parser.parseRelevantNodes(in, nodes);
+        } while (ok);
+
+        qDebug() << "nodes :" << nodes.size();
+
+        QList<std::shared_ptr<NodeData> >l;
+        foreach (int i, nodes) {
+            l.push_back(currentModel->getNodesList()[i]);
+        }
+        builder->setRelevantNodes(l);
+    }
 
     startBackgroundOperation(builder);
 }

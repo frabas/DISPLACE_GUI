@@ -7,6 +7,9 @@
 #include <Harbour.h>
 #include <modelobjects/harbourdata.h>
 
+#include <QRegExp>
+#include <QDebug>
+
 InputFileParser::InputFileParser()
 {
 }
@@ -209,5 +212,52 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
         }
     }
 
+    return true;
+}
+
+bool InputFileParser::pathParseRelevantNodes(const QString &refpath, QString &fnodePath, QString &harbPath)
+{
+    QRegExp regexp("(.*)/vesselsspe_([^/_]+)_([^/]+).dat");
+
+    if (regexp.indexIn(refpath) == -1) {
+        return false;
+    }
+
+    fnodePath = QString("%1/vesselsspe_fgrounds_quarter%2.dat")
+            .arg(regexp.cap(1)).arg("%1");
+    harbPath = QString("%1/vesselsspe_harbours_quarter%2.dat")
+            .arg(regexp.cap(1)).arg("%1");
+
+    return true;
+
+}
+
+bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
+{
+    QFile infile (file);
+    if (!infile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Can't read" << file <<": " << infile.errorString();
+        return false;
+    }
+
+    QTextStream stream(&infile);
+    QString line;
+
+    line = stream.readLine();  // ignore the first line
+
+    bool ok;
+    int linenum = 1;
+    while (!(line = stream.readLine()).isNull()) {
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int nd = fields[1].toInt(&ok);
+        if (!ok) {
+            qWarning() << "Error parsing file" << file << " at line " << linenum;
+        } else {
+            nodes.insert(nd);
+        }
+        ++linenum;
+    }
+
+    infile.close();
     return true;
 }

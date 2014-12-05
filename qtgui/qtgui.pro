@@ -115,7 +115,8 @@ SOURCES += \
     mousemode/movefilteringmousemodedecorator.cpp \
     mousemode/singleclickmousemode.cpp \
     mousemode/edgeaddmousemode.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    createshortestpathdialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -128,7 +129,8 @@ FORMS += \
     waitdialog.ui \
     pathpenaltydialog.ui \
     linkharboursdialog.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    createshortestpathdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -193,7 +195,8 @@ HEADERS += \
     mousemode/singleclickmousemode.h \
     mousemode/edgeaddmousemode.h \
     version.h \
-    aboutdialog.h
+    aboutdialog.h \
+    createshortestpathdialog.h
 
 RESOURCES += \
     qtgui.qrc

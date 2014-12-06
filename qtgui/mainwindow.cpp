@@ -1639,6 +1639,8 @@ void MainWindow::on_actionAdd_triggered()
         return;
 
     switch (mMapController->getEditorMode()) {
+    case MapObjectsController::NoEditorMode:
+        break;
     case MapObjectsController::NodeEditorMode:
         if (true) {
             SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));

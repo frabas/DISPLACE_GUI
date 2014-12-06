@@ -1,7 +1,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.6.6.0
+#define VERSION "0.6.6.0"
 #define VERSION_COMMA 0,6,0,0
 
 #define VER_PRODUCTVERSION_STR      "0.6.6\0"

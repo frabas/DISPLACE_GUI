@@ -17,6 +17,7 @@
 #include <simulationsetupdialog.h>
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
+#include <createshortestpathdialog.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -1311,20 +1312,24 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 class ShortestPathBuilderWorker : public BackgroundWorker {
     WaitDialog *mWaitDialog;
     DisplaceModel *mModel;
+    QList<std::shared_ptr<NodeData> > mRelevantNodes;
 public:
     ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
         : BackgroundWorker(main), mWaitDialog(dialog), mModel(model) {
+    }
+
+    void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes) {
+        mRelevantNodes = nodes;
     }
 
     void execute() override {
         ShortestPathBuilder builder(mModel);
 
         mWaitDialog->setText("Building shortest paths");
-        const QList<std::shared_ptr<NodeData> > &nodes = mModel->getNodesList();
-        mWaitDialog->setProgress(true, nodes.size());
+        mWaitDialog->setProgress(true, mRelevantNodes.size());
         int n = 0;
-        foreach (std::shared_ptr<NodeData> node, nodes) {
-            mWaitDialog->setProgression(n);
+        foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
+            emit progress(n);
 
             builder.create(node, mModel->linkedShortestPathFolder());
             ++n;
@@ -1338,14 +1343,51 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
-    if (!currentModel->isShortestPathFolderLinked()) {
-        QMessageBox::warning(this, tr("Cannot create Shortest Path"),
-                             tr("Please link a shortest path folder first."));
+    CreateShortestPathDialog dlg(this);
+    dlg.setShortestPathFolder(currentModel->linkedShortestPathFolder());
+    if (dlg.exec() != QDialog::Accepted)
         return;
-    }
+
+    currentModel->linkShortestPathFolder(dlg.getShortestPathFolder());
 
     WaitDialog *dialog = new WaitDialog(this);
     ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
+    dialog->setProgress(true, 0);
+
+    if (dlg.isAllNodesAreRelevantChecked()) {
+        builder->setRelevantNodes(currentModel->getNodesList());
+    } else {
+        InputFileParser parser;
+        QString p1, p2;
+        if (!parser.pathParseRelevantNodes(dlg.getRelevantNodesFolder(), p1, p2)) {
+            QMessageBox::warning(this, tr("Cannot parse selected file name."),
+                                 tr("Cannot parse the selected file name into relevant nodes pattern. it must be: /.../vesselsspe_xxx_quartery.dat"));
+            return;
+        }
+
+        int i = 1;
+        bool ok;
+        QSet<int> nodes;
+        do {
+            QString in= p1.arg(i++);
+            qDebug() << "Parsing file: " << in;
+            ok = parser.parseRelevantNodes(in, nodes);
+        } while (ok);
+        i = 1;
+        do {
+            QString in = p2.arg(i++);
+            qDebug() << "Parsing file: " << in;
+            ok = parser.parseRelevantNodes(in, nodes);
+        } while (ok);
+
+        qDebug() << "nodes :" << nodes.size();
+
+        QList<std::shared_ptr<NodeData> >l;
+        foreach (int i, nodes) {
+            l.push_back(currentModel->getNodesList()[i]);
+        }
+        builder->setRelevantNodes(l);
+    }
 
     startBackgroundOperation(builder);
 }
@@ -1528,6 +1570,12 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
+    if (currentModel->getHarboursCount() == currentModel->getNodesCount()) {
+        QMessageBox::warning(this, tr("Cannot link harbours and ndoes"),
+                             tr("All nodes are habours in this model. Cannot proceed."));
+        return;
+    }
+
     LinkHarboursDialog dlg(this);
     if (dlg.exec() == QDialog::Accepted) {
         if (dlg.isRemoveLinksSet()) {
@@ -1545,31 +1593,42 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
         foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
             int harbid = harbour->mHarbour->get_idx_node();
             QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
-            QList<std::shared_ptr<NodeData> > nodes = currentModel->getAllNodesWithin(pos, dlg.getMaxDinstance());
 
+            double distance = dlg.getMaxDinstance();
+
+            QList<std::shared_ptr<NodeData> > nodes;
             QList<sorter> snodes;
-            double dist;
-            foreach (std::shared_ptr<NodeData> node, nodes) {
-                if (node->get_idx_node() != harbid) {
-                    geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
-                    snodes.push_back(sorter(node, dist));
+            do {
+                nodes = currentModel->getAllNodesWithin(pos, distance);
+                distance *= 2.0;
+
+                if (nodes.size() > 1) {
+                    double dist;
+                    foreach (std::shared_ptr<NodeData> node, nodes) {
+                        if (node->get_idx_node() != harbid) {
+                            if (dlg.isAvoidHHLinks() && node->mNode->get_is_harbour())
+                                continue;
+                            geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
+                            snodes.push_back(sorter(node, dist));
+                        }
+                    }
+
+                    qSort(snodes);
+
+                    int n = dlg.getMaxLinks();
+                    if (n == -1)
+                        n = snodes.count();
+                    else
+                        n = min(snodes.count(), dlg.getMaxLinks());
+                    for (int i = 0; i < n; ++i) {
+                        int nodeid = snodes[i].node->get_idx_node();
+                        int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
+                        int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
+                        mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
+                        mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
+                    }
                 }
-            }
-
-            qSort(snodes);
-
-            int n;
-            if (n == -1)
-                n = snodes.count();
-            else
-                n = min(snodes.count(), dlg.getMaxLinks());
-            for (int i = 0; i < n; ++i) {
-                int nodeid = snodes[i].node->get_idx_node();
-                int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
-                int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
-                mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
-            }
+            } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());
         }
     }
 }

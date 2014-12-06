@@ -62,7 +62,7 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
         strm_min << v << " " << get(weightmap, e) << endl;
     }
 
-
+#if 0
      std::ofstream dot_file(QString("%1/graph_%2.dot").arg(path).arg(node->get_idx_node()).toStdString());
 
      dot_file << "digraph D {\n"
@@ -84,5 +84,5 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
        dot_file << "]";
      }
      dot_file << "}";
-
+#endif
 }

@@ -18,7 +18,7 @@
  *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * --------------------------------------------------------------------------
  */
-﻿#ifndef MAPOBJECTSCONTROLLER_H
+#ifndef MAPOBJECTSCONTROLLER_H
 #define MAPOBJECTSCONTROLLER_H
 
 #include <QObject>

@@ -330,10 +330,10 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
 #endif
 
     double mx, my, Mx, My, d;
-    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist * 500, My, d);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist * 500, d, Mx);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist * 500, my, d);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist * 500, d, mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist * 1000, My, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist * 1000, d, Mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist * 1000, my, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist * 1000, d, mx);
 
     mNodesLayer->ResetReading();
     mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);

@@ -26,6 +26,7 @@
 #include <QList>
 #include <QString>
 #include <QPair>
+#include <QSet>
 
 #include <graphbuilder.h>
 
@@ -41,6 +42,9 @@ public:
     bool isShortestPathPresent (const QString &path, int nodeid);
 
     bool parseGraph(const QString &graphpath, const QString &coordsPath, QList<GraphBuilder::Node> &nodes, QString *error);
+
+    bool pathParseRelevantNodes (const QString &refpath, QString &fnodePath, QString &harbPath);
+    bool parseRelevantNodes (const QString &file, QSet<int> &nodes);
 };
 
 #endif // INPUTFILEPARSER_H

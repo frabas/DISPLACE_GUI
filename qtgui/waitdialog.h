@@ -35,12 +35,14 @@ public:
     explicit WaitDialog(QWidget *parent = 0);
     ~WaitDialog();
 
-
-    void setText(QString text);
-    void setProgress(bool shown = false, int max = 10);
-
 public slots:
+    void setText(QString text);
+    void setProgress(bool shown, int max);
+    void enableAbort(bool enable);
     void setProgression (int level);
+
+private slots:
+    void on_cmdAbort_clicked();
 
 private:
     Ui::WaitDialog *ui;

@@ -209,7 +209,7 @@ void MainWindow::on_action_Load_triggered()
 
     Loader *loader = new Loader(this,dir);
 
-    startBackgroundOperation(loader);
+    startBackgroundOperation(loader, 0);
 }
 
 void MainWindow::on_modelSelector_currentIndexChanged(int index)
@@ -614,7 +614,7 @@ void MainWindow::on_actionScenario_triggered()
 
                 Loader *loader = new Loader(this,currentModel->fullpath());
 
-                startBackgroundOperation(loader);
+                startBackgroundOperation(loader,0);
             }
         }
     }
@@ -869,6 +869,11 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     connect (work, SIGNAL(warning(QString,QString)), this, SLOT(showWarningMessageBox(QString,QString)));
 
     thread->start();
+}
+
+void MainWindow::startBackgroundOperation(BackgroundWorkerWithWaitDialog *work)
+{
+    startBackgroundOperation(work, work->getWaitDialog());
 }
 
 void MainWindow::startMouseMode(MouseMode * newmode)
@@ -1309,13 +1314,12 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 
 }
 
-class ShortestPathBuilderWorker : public BackgroundWorker {
-    WaitDialog *mWaitDialog;
+class ShortestPathBuilderWorker : public BackgroundWorkerWithWaitDialog {
     DisplaceModel *mModel;
     QList<std::shared_ptr<NodeData> > mRelevantNodes;
 public:
     ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
-        : BackgroundWorker(main), mWaitDialog(dialog), mModel(model) {
+        : BackgroundWorkerWithWaitDialog(main, dialog), mModel(model) {
     }
 
     void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes) {
@@ -1325,16 +1329,16 @@ public:
     void execute() override {
         ShortestPathBuilder builder(mModel);
 
-        mWaitDialog->setText("Building shortest paths");
-        mWaitDialog->setProgress(true, mRelevantNodes.size());
+        setText("Building shortest paths");
+        setProgressMax(mRelevantNodes.size());
         int n = 0;
         foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
-            emit progress(n);
+            setProgress(n);
 
             builder.create(node, mModel->linkedShortestPathFolder());
             ++n;
         }
-        mWaitDialog->setProgression(n);
+        setProgress(n);
     }
 };
 
@@ -1389,7 +1393,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         builder->setRelevantNodes(l);
     }
 
-    startBackgroundOperation(builder);
+    startBackgroundOperation(builder, dialog);
 }
 
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()

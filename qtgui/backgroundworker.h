@@ -24,6 +24,7 @@
 #include <QObject>
 
 class MainWindow;
+class WaitDialog;
 
 class BackgroundWorker : public QObject
 {
@@ -52,6 +53,25 @@ protected:
     MainWindow *mMain;
     bool mResult;
     QString mError;
+};
+
+class BackgroundWorkerWithWaitDialog : public BackgroundWorker
+{
+    Q_OBJECT
+public:
+    explicit BackgroundWorkerWithWaitDialog(MainWindow *main, WaitDialog *dialog);
+
+    WaitDialog *getWaitDialog() const { return mWaitDialog; }
+signals:
+    void messageChanged(QString);
+    void progressBarVisibilityChanged(bool, int);
+
+protected:
+    void setProgressMax(int);
+    void setProgress(int);
+    void setText(QString);
+
+    WaitDialog *mWaitDialog;
 };
 
 #endif // BACKGROUDWORKER_H

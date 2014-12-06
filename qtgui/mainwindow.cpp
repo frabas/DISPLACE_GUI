@@ -1587,30 +1587,40 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
         foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
             int harbid = harbour->mHarbour->get_idx_node();
             QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
-            QList<std::shared_ptr<NodeData> > nodes = currentModel->getAllNodesWithin(pos, dlg.getMaxDinstance());
 
-            QList<sorter> snodes;
-            double dist;
-            foreach (std::shared_ptr<NodeData> node, nodes) {
-                if (node->get_idx_node() != harbid) {
-                    geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
-                    snodes.push_back(sorter(node, dist));
+            double distance = dlg.getMaxDinstance();
+
+            QList<std::shared_ptr<NodeData> > nodes;
+            do {
+                nodes = currentModel->getAllNodesWithin(pos, distance);
+                qDebug() << "Harb" << harbour->mHarbour->get_idx_node() << distance << nodes.size();
+                distance *= 2.0;
+            } while (nodes.size() < 2 && dlg.isAvoidLonelyHarboursSet());
+
+            if (nodes.size() > 1) {
+                QList<sorter> snodes;
+                double dist;
+                foreach (std::shared_ptr<NodeData> node, nodes) {
+                    if (node->get_idx_node() != harbid) {
+                        geod.Inverse(harbour->mHarbour->get_y(), harbour->mHarbour->get_x(), node->get_y(), node->get_x(), dist);
+                        snodes.push_back(sorter(node, dist));
+                    }
                 }
-            }
 
-            qSort(snodes);
+                qSort(snodes);
 
-            int n;
-            if (n == -1)
-                n = snodes.count();
-            else
-                n = min(snodes.count(), dlg.getMaxLinks());
-            for (int i = 0; i < n; ++i) {
-                int nodeid = snodes[i].node->get_idx_node();
-                int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
-                int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
-                mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
+                int n = dlg.getMaxLinks();
+                if (n == -1)
+                    n = snodes.count();
+                else
+                    n = min(snodes.count(), dlg.getMaxLinks());
+                for (int i = 0; i < n; ++i) {
+                    int nodeid = snodes[i].node->get_idx_node();
+                    int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
+                    int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
+                    mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
+                    mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
+                }
             }
         }
     }

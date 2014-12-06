@@ -38,6 +38,8 @@ public:
     bool isRemoveLinksSet() const;
     double getMaxDinstance() const;
     int getMaxLinks() const;
+
+    bool isAvoidLonelyHarboursSet() const;
 private:
     Ui::LinkHarboursDialog *ui;
 };

@@ -27,3 +27,8 @@ int LinkHarboursDialog::getMaxLinks() const
 {
     return ui->maxConnections->value();
 }
+
+bool LinkHarboursDialog::isAvoidLonelyHarboursSet() const
+{
+    return ui->checkLonelyHarbours->isChecked();
+}

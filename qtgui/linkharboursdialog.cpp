@@ -32,3 +32,8 @@ bool LinkHarboursDialog::isAvoidLonelyHarboursSet() const
 {
     return ui->checkLonelyHarbours->isChecked();
 }
+
+bool LinkHarboursDialog::isAvoidHHLinks() const
+{
+    return ui->checkHarboursLinks->isChecked();
+}

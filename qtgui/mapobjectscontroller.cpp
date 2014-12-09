@@ -72,6 +72,8 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerMain, mMainLayer);
     addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
 
+    DisplaceModel::ModelType type = model->modelType();
+
     mEntityLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Entities")).arg(model_n).toStdString()));
     mGraphLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Graph")).arg(model_n).toStdString()));
     mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(tr("#%1#Graph Edges")).arg(model_n)));
@@ -83,15 +85,23 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Abundance")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n]);
+    if (type != DisplaceModel::LiveModelType)
+        mStatsLayerPop[model_n]->setVisible(false);
 
     mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Biomass")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n]);
+    if (type != DisplaceModel::LiveModelType)
+        mStatsLayerBiomass[model_n]->setVisible(false);
 
     mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Impact")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n] );
+    if (type != DisplaceModel::LiveModelType)
+        mStatsLayerImpact[model_n]->setVisible(false);
 
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n]);
+    if (type != DisplaceModel::LiveModelType)
+        mStatsLayerCumftime[model_n]->setVisible(false);
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {

@@ -22,9 +22,9 @@
 #define BACKGROUDWORKER_H
 
 #include <QObject>
+#include <waitdialog.h>
 
 class MainWindow;
-class WaitDialog;
 
 class BackgroundWorker : public QObject
 {
@@ -55,7 +55,7 @@ protected:
     QString mError;
 };
 
-class BackgroundWorkerWithWaitDialog : public BackgroundWorker
+class BackgroundWorkerWithWaitDialog : public BackgroundWorker, public AbortListener
 {
     Q_OBJECT
 public:

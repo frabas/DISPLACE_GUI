@@ -5,7 +5,8 @@
 
 WaitDialog::WaitDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::WaitDialog)
+    ui(new Ui::WaitDialog),
+    mAbortListener(0)
 {
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
     ui->setupUi(this);
@@ -49,5 +50,7 @@ void WaitDialog::setProgression(int level)
 void WaitDialog::on_cmdAbort_clicked()
 {
     qDebug() << "ABORT";
+    if (mAbortListener)
+        mAbortListener->abortIssued();
     emit aborted();
 }

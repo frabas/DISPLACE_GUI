@@ -32,11 +32,12 @@ BackgroundWorkerWithWaitDialog::BackgroundWorkerWithWaitDialog(MainWindow *main,
     connect (this, SIGNAL(progressBarVisibilityChanged(bool,int)), mWaitDialog, SLOT(setProgress(bool,int)));
     connect (this, SIGNAL(abortButtonVisibilityChanged(bool)), mWaitDialog, SLOT(enableAbort(bool)));
     connect (mWaitDialog, SIGNAL(aborted()), this, SLOT(abortIssued()));
+
+    dialog->setOnAbortListener(this);
 }
 
 void BackgroundWorkerWithWaitDialog::abortIssued()
 {
-    qDebug() << "Anbort issued";
     mAborted = true;
 }
 

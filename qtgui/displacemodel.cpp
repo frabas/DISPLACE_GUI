@@ -656,7 +656,7 @@ bool DisplaceModel::exportGraph(const QString &path)
     QTextStream strm(&file);
     foreach (std::shared_ptr<NodeData> nd, mNodes) {
         if (!nd->isDeleted())
-            strm << nd->get_x() << " " << nd->get_y() << " " << "0" << endl;
+            strm << nd->get_x() << " " << nd->get_y() << " " << nd->get_harbour() << endl;
     }
 
     file.close();

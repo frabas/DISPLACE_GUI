@@ -36,6 +36,7 @@ class DisplaceModel;
 class NodeData;
 class HarbourData;
 class VesselData;
+class VesselStats;
 class PopulationData;
 class NationStats;
 class HarbourStats;
@@ -83,7 +84,7 @@ public:
     void addNodesStats (int tstep, const QList<std::shared_ptr<NodeData> > &nodes);
     void addPopStats(int tstep, const QVector<PopulationData> &pops);
     void addNationsStats(int tstep, const QVector<NationStats> &nats);
-    void addVesselStats(int tstep, const VesselData &vessel);
+    void addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats);
 
     void addVesselPosition (int step, int idx, std::shared_ptr<VesselData> vessel);
     void removeAllVesselsDetails();

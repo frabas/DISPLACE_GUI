@@ -485,6 +485,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     vessel->setRevenueAV(stats.revenueAV);
     vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
     vessel->mVessel->set_timeatsea(stats.timeAtSea);
+    vessel->addCumFuelCons(stats.cumFuelCons);
 
     int nat = vessel->getNationality();
     while (mStatsNationsCollected.size() <= nat) {
@@ -512,7 +513,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     }
 
     if (mDb)
-        mDb->addVesselStats(tstep,*vessel);
+        mDb->addVesselStats(tstep,*vessel, stats);
 
     mVesselsStatsDirty = true;
 }

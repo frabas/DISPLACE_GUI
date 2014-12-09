@@ -187,13 +187,13 @@ void DbHelper::addNationsStats(int tstep, const QVector<NationStats> &nats)
     Q_UNUSED(nats);
 }
 
-void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
+void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats)
 {
     QSqlQuery q,qn;
 
     bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
-                       + "(tstep,vid,timeatsea,harbour,reason,revenue,revenue_av,cumfuel,fuelcost,gav)"
-                       + " VALUES(?,?,?,?,?,?,?,?,?,?)");
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,cumfuel,fuelcost,gav)"
+                       + " VALUES(?,?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
@@ -203,14 +203,13 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
 
     q.addBindValue(tstep);
     q.addBindValue(vessel.mVessel->get_idx());
-    q.addBindValue(vessel.mVessel->get_timeatsea());
+    q.addBindValue(stats.timeAtSea);
     q.addBindValue(vessel.getLastHarbour());
-    q.addBindValue(vessel.mVessel->get_reason_to_go_back());
-    q.addBindValue(0);
-    q.addBindValue(vessel.getRevenueAV());
-    q.addBindValue(vessel.getCumFuelCons());
-    q.addBindValue(vessel.getFuelCost());
-    q.addBindValue(vessel.getGav());
+    q.addBindValue(stats.reasonToGoBack);
+    q.addBindValue(stats.revenueAV);
+    q.addBindValue(stats.cumFuelCons);
+    q.addBindValue(stats.fuelCost);
+    q.addBindValue(stats.gav);
 
     r = q.exec();
     DB_ASSERT(r,q);
@@ -718,7 +717,7 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
-    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(gav/cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
+    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(revenue_av/cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     HarbourStats curHarbourData;
@@ -1027,7 +1026,6 @@ bool DbHelper::checkVesselsTable(int version)
                + "timeatsea INTEGER,"
                + "harbour INTEGER,"
                + "reason INTEGER,"
-               + "revenue REAL,"
                + "revenue_av REAL,"
                + "cumfuel REAL,"
                + "fuelcost REAL,"

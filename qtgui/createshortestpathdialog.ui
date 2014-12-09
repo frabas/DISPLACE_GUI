@@ -122,21 +122,5 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>ok</sender>
-   <signal>clicked()</signal>
-   <receiver>CreateShortestPathDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>362</x>
-     <y>275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>391</x>
-     <y>232</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
 </ui>

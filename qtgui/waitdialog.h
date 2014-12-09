@@ -41,6 +41,9 @@ public slots:
     void enableAbort(bool enable);
     void setProgression (int level);
 
+signals:
+    void aborted();
+
 private slots:
     void on_cmdAbort_clicked();
 

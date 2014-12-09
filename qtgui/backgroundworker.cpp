@@ -23,11 +23,21 @@ void BackgroundWorker::process()
 
 
 BackgroundWorkerWithWaitDialog::BackgroundWorkerWithWaitDialog(MainWindow *main, WaitDialog *dialog)
-    : BackgroundWorker(main), mWaitDialog(dialog)
+    : BackgroundWorker(main),
+      mWaitDialog(dialog),
+      mAborted(false)
 {
     connect (this, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
     connect (this, SIGNAL(messageChanged(QString)), mWaitDialog, SLOT(setText(QString)));
     connect (this, SIGNAL(progressBarVisibilityChanged(bool,int)), mWaitDialog, SLOT(setProgress(bool,int)));
+    connect (this, SIGNAL(abortButtonVisibilityChanged(bool)), mWaitDialog, SLOT(enableAbort(bool)));
+    connect (mWaitDialog, SIGNAL(aborted()), this, SLOT(abortIssued()));
+}
+
+void BackgroundWorkerWithWaitDialog::abortIssued()
+{
+    qDebug() << "Anbort issued";
+    mAborted = true;
 }
 
 void BackgroundWorkerWithWaitDialog::setProgressMax(int max)
@@ -43,4 +53,9 @@ void BackgroundWorkerWithWaitDialog::setProgress(int level)
 void BackgroundWorkerWithWaitDialog::setText(QString text)
 {
     emit messageChanged(text);
+}
+
+void BackgroundWorkerWithWaitDialog::setAbortEnabled(bool en)
+{
+    emit abortButtonVisibilityChanged(en);
 }

@@ -1331,8 +1331,11 @@ public:
 
         setText("Building shortest paths");
         setProgressMax(mRelevantNodes.size());
+        setAbortEnabled(true);
         int n = 0;
         foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
+            if (aborted())
+                break;
             setProgress(n);
 
             builder.create(node, mModel->linkedShortestPathFolder());

@@ -48,5 +48,6 @@ void WaitDialog::setProgression(int level)
 
 void WaitDialog::on_cmdAbort_clicked()
 {
-    emit rejected();
+    qDebug() << "ABORT";
+    emit aborted();
 }

@@ -182,6 +182,14 @@ void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QLi
                 pushAd(nodes, idx[i], nidx[i-1]);
             if (i < nidx.size())
                 pushAd(nodes, idx[i], nidx[i]);
+
+            if (mType == Quad) {
+                if (i+1 < pidx.size())
+                    pushAd(nodes, idx[i], pidx[i+1]);
+                if (i+1 < nidx.size())
+                    pushAd(nodes, idx[i], nidx[i+1]);
+            }
+
         } else {    // odd
             if (i < pidx.size())
                 pushAd(nodes, idx[i], pidx[i]);
@@ -192,6 +200,13 @@ void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QLi
                 pushAd(nodes, idx[i], nidx[i]);
             if (i+1 < nidx.size())
                 pushAd(nodes, idx[i], nidx[i+1]);
+
+            if (mType == Quad) {
+                if (i > 0 && i-1 < pidx.size())
+                    pushAd(nodes, idx[i], pidx[i-1]);
+                if (i > 0 && i-1 < nidx.size())
+                    pushAd(nodes, idx[i], nidx[i-1]);
+            }
         }
     }
 }

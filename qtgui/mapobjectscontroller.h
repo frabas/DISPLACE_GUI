@@ -110,7 +110,7 @@ private:
         virtual QString getName(int idx) const { return layers[idx] != 0 ? QString::fromStdString(layers[idx]->getName()) : QString(""); }
         virtual bool isVisible(int idx) const { return layers[idx] != 0 && layers[idx]->isVisible(); }
 
-        virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
+        virtual void setVisible(int idx, bool v) { visibility[idx] = v; layers[idx]->setVisible(v); }
 
         virtual void setLayer (int idx, std::shared_ptr<qmapcontrol::Layer> layer, bool shown = true) {
             while (layers.size() <= idx)
@@ -119,6 +119,12 @@ private:
                 visibility.push_back(false);
             layers[idx] = layer;
             visibility[idx] = shown;
+        }
+
+        virtual void updateVisibility(bool show) {
+            for (int i = 0; i < layers.size(); ++i) {
+                layers[i]->setVisible(show ? visibility[i] : false);
+            }
         }
 
         std::shared_ptr<qmapcontrol::Layer> layer(int idx) const { return layers[idx]; }
@@ -139,7 +145,13 @@ private:
         virtual QString getName(int idx) const { return QString::fromStdString(layers[idx]->getName()); }
         virtual bool isVisible(int idx) const { return layers[idx] != 0 && layers[idx]->isVisible(); }
 
-        virtual void setVisible(int idx, bool v) { layers[idx]->setVisible(v); }
+        virtual void setVisible(int idx, bool v) { visibility[idx] = v; layers[idx]->setVisible(v); }
+
+        virtual void updateVisibility(bool show) {
+            for (int i = 0; i < layers.size(); ++i) {
+                layers[i]->setVisible(show ? visibility[i] : false);
+            }
+        }
 
         virtual bool add(std::shared_ptr<L> layer, bool show = true) {
             layers.push_back(layer);

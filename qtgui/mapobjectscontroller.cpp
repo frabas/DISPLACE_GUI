@@ -151,18 +151,8 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     bool visible = (visibility == Visible);
     mModelVisibility[model] = visible;
 
-    foreach (HarbourMapObject *h, mHarbourObjects[model]) {
-        h->getGeometryEntity()->setVisible(visible);
-    }
-    foreach (NodeMapObject *n, mNodeObjects[model]) {
-        n->getGeometryEntity()->setVisible(visible);
-    }
-    foreach (VesselMapObject *v, mVesselObjects[model]) {
-        v->getGeometryEntity()->setVisible(visible);
-    }
-    foreach (EdgeMapObject *e, mEdgeObjects[model]) {
-        e->getGeometryEntity()->setVisible(visible);
-    }
+    mLayers[model].updateVisibility(visible);
+    mOutputLayers[model].updateVisibility(visible);
 }
 
 void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Category type, int layer, bool visibility)

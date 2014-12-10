@@ -24,7 +24,7 @@
 #include <outputfileparser.h>
 #include <statscontroller.h>
 
-#include <utils/memoryinfo.h>
+#include <memoryinfo.h>
 
 #include <QMainWindow>
 #include <QProcess>

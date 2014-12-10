@@ -99,7 +99,6 @@ SOURCES += \
     modelobjects/harbourdata.cpp \
     mapobjects/edgemapobject.cpp \
     mapobjects/edgelayer.cpp \
-    utils/memoryinfo.cpp \
     creategraphdialog.cpp \
     graphbuilder.cpp \
     calendar.cpp \
@@ -177,7 +176,7 @@ HEADERS += \
     modelobjects/harbourdata.h \
     mapobjects/edgemapobject.h \
     mapobjects/edgelayer.h \
-    utils/memoryinfo.h \
+    ../include/memoryinfo.h \
     creategraphdialog.h \
     graphbuilder.h \
     calendar.h \

@@ -174,7 +174,8 @@ protected:
 
     int newEditorModel(QString name);
 
-    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog = 0);
+    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog);
+    void startBackgroundOperation (BackgroundWorkerWithWaitDialog *work);
     void startMouseMode (MouseMode *);
     void endMouseMode (bool success = true);
 

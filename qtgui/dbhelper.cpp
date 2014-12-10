@@ -49,14 +49,19 @@ DbHelper::~DbHelper()
 
 bool DbHelper::attachDb(QString file)
 {
+    static int num = 0;
+
     if (mDb.isOpen()) {
         mDb.close();
     }
 
-    mDb = QSqlDatabase::addDatabase("QSQLITE");
+    mDb = QSqlDatabase::addDatabase("QSQLITE", QString::number(num++));
     mDb.setDatabaseName(file);
 
+    qDebug() << "Database" << mDb.connectionName();
+
     if (!mDb.open()) {
+        qWarning() << "Cannot open database: " << mDb.lastError().text();
         return false;
     }
 
@@ -95,14 +100,14 @@ void DbHelper::addVesselPosition(int step, int idx, std::shared_ptr<VesselData> 
 
 void DbHelper::removeAllNodesDetails()
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.exec("DELETE FROM " + TBL_NODES);
     DB_ASSERT(res,q);
 }
 
 void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > &nodes)
 {
-    QSqlQuery q, sq;
+    QSqlQuery q(mDb), sq(mDb);
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
@@ -144,7 +149,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
 
 void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
 {
-    QSqlQuery q,qn;
+    QSqlQuery q(mDb),qn(mDb);
 
     bool r =
     q.prepare("INSERT INTO " + TBL_POP_STATS
@@ -187,13 +192,13 @@ void DbHelper::addNationsStats(int tstep, const QVector<NationStats> &nats)
     Q_UNUSED(nats);
 }
 
-void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
+void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats)
 {
-    QSqlQuery q,qn;
+    QSqlQuery q(mDb),qn(mDb);
 
     bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
-                       + "(tstep,vid,timeatsea,harbour,reason,revenue,revenue_av,cumfuel,fuelcost,gav)"
-                       + " VALUES(?,?,?,?,?,?,?,?,?,?)");
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,cumfuel,fuelcost,gav)"
+                       + " VALUES(?,?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
@@ -203,14 +208,13 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
 
     q.addBindValue(tstep);
     q.addBindValue(vessel.mVessel->get_idx());
-    q.addBindValue(vessel.mVessel->get_timeatsea());
+    q.addBindValue(stats.timeAtSea);
     q.addBindValue(vessel.getLastHarbour());
-    q.addBindValue(vessel.mVessel->get_reason_to_go_back());
-    q.addBindValue(0);
-    q.addBindValue(vessel.getRevenueAV());
-    q.addBindValue(vessel.getCumFuelCons());
-    q.addBindValue(vessel.getFuelCost());
-    q.addBindValue(vessel.getGav());
+    q.addBindValue(stats.reasonToGoBack);
+    q.addBindValue(stats.revenueAV);
+    q.addBindValue(stats.cumFuelCons);
+    q.addBindValue(stats.fuelCost);
+    q.addBindValue(stats.gav);
 
     r = q.exec();
     DB_ASSERT(r,q);
@@ -230,7 +234,7 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel)
 
 void DbHelper::removeAllVesselsDetails()
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.exec("DELETE FROM " + TBL_VESSELS);
     DB_ASSERT(res,q);
 }
@@ -239,7 +243,7 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
 {
     Q_UNUSED(idx);
     bool res;
-    QSqlQuery q;
+    QSqlQuery q(mDb);
 
     res = q.prepare("INSERT INTO " + TBL_NODES
                 + "(_id,x,y,harbour,areacode,landscape,name) "
@@ -268,7 +272,7 @@ void DbHelper::addVesselDetails(int idx, std::shared_ptr<VesselData> vessel)
 {
     bool res;
 
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     res = q.prepare("INSERT INTO " +TBL_VESSELS
                     + "(_id,name,node) VALUES(?,?,?)");
 
@@ -284,7 +288,7 @@ void DbHelper::addVesselDetails(int idx, std::shared_ptr<VesselData> vessel)
 
 void DbHelper::removeAllStatsData()
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.exec("DELETE FROM " +TBL_NODES_STATS);
     DB_ASSERT(res,q);
     res = q.exec("DELETE FROM " + TBL_POPNODES_STATS);
@@ -413,7 +417,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
 
 bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,name FROM " + TBL_NODES + " ORDER BY _id");
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,name FROM " + TBL_NODES + " ORDER BY _id", mDb);
     bool res = q.exec();
 
     DB_ASSERT(res,q);
@@ -459,7 +463,7 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
 
 bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels)
 {
-    QSqlQuery q("SELECT _id,name,node FROM " + TBL_VESSELS + " ORDER BY _id");
+    QSqlQuery q("SELECT _id,name,node FROM " + TBL_VESSELS + " ORDER BY _id", mDb);
     if (!q.exec()) {
         return false;
     }
@@ -482,7 +486,7 @@ bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList
 
 bool DbHelper::updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     q.prepare("SELECT vesselid,x,y,fuel,state,cumcatches,timeatsea,reason_to_go_back,course FROM " + TBL_VESSELS_POS
               + " WHERE tstep=?");
     q.addBindValue(steps);
@@ -516,7 +520,7 @@ bool DbHelper::updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> 
 
 bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.prepare("SELECT nodeid,cumftime,totpop,totpopw FROM " + TBL_NODES_STATS + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -559,11 +563,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
 
 bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " ORDER BY tstep");
     DB_ASSERT(res,q);
 
-    QSqlQuery qn;
+    QSqlQuery qn(mDb);
     res = qn.prepare("SELECT szgroup,N,F FROM " + TBL_POPSZ_STATS + " WHERE tstep=? AND popid=?");
     DB_ASSERT(res,qn);
 
@@ -635,12 +639,12 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
                                              QList<QVector<NationStats> > &nations,
                                              QList<QVector<HarbourStats> > &harbour)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.prepare("SELECT vid,sz,SUM(cum),harbour FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? GROUP BY vid,sz"); /*,harbour  */
     DB_ASSERT(res,q);
 
-    QSqlQuery q2;
-    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour,SUM(gav),SUM(gav/cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    QSqlQuery q2(mDb);
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour,SUM(gav),SUM(revenue_av)/SUM(cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     foreach(int tstep, steps) {
@@ -713,12 +717,12 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
 
 HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.prepare("SELECT sz,SUM(cum) FROM "+ TBL_VESSELS_STATS_TMSZ + " WHERE tstep<=? AND harbour=? GROUP BY vid,sz");
     DB_ASSERT(res,q);
 
-    QSqlQuery q2;
-    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(gav/cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
+    QSqlQuery q2(mDb);
+    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(revenue_av)/SUM(cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     HarbourStats curHarbourData;
@@ -802,7 +806,7 @@ void DbHelper::createIndexes()
 
 void DbHelper::createIndexOnTstepForTable(QString table)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     bool res = q.exec("CREATE INDEX IF NOT EXISTS idx_" + table + " ON " + table + "(tstep)");
 
     DB_ASSERT(res,q);
@@ -810,7 +814,7 @@ void DbHelper::createIndexOnTstepForTable(QString table)
 
 void DbHelper::setMetadata(QString key, QString value)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     q.prepare("INSERT OR REPLACE INTO " +TBL_META
               + "(key,value) VALUES(?,?)");
 
@@ -822,7 +826,7 @@ void DbHelper::setMetadata(QString key, QString value)
 
 QString DbHelper::getMetadata(QString key)
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     q.prepare("SELECT value FROM " + TBL_META + " WHERE key=?");
     q.addBindValue(key);
     q.exec();
@@ -833,7 +837,7 @@ QString DbHelper::getMetadata(QString key)
 
 int DbHelper::getLastKnownStep()
 {
-    QSqlQuery q;
+    QSqlQuery q(mDb);
     q.exec("SELECT MAX(tstep) FROM " + TBL_VESSELS_POS);
     if (q.next())
         return q.value(0).toInt();
@@ -843,7 +847,7 @@ int DbHelper::getLastKnownStep()
 bool DbHelper::checkMetadataTable()
 {
     if (!mDb.tables().contains(TBL_META)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_META + "("
                + "key VARCHAR(16) PRIMARY KEY,"
@@ -867,7 +871,7 @@ bool DbHelper::checkMetadataTable()
 bool DbHelper::checkNodesTable(int version)
 {
     if (!mDb.tables().contains(TBL_NODES)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_NODES + "("
                + "_id INTEGER PRIMARY KEY,"
@@ -893,7 +897,7 @@ bool DbHelper::checkNodesTable(int version)
 bool DbHelper::checkNodesStats(int version)
 {
     if (!mDb.tables().contains(TBL_NODES_STATS)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_NODES_STATS + "("
                + "statid INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -909,7 +913,7 @@ bool DbHelper::checkNodesStats(int version)
     }
 
     if (!mDb.tables().contains(TBL_POPNODES_STATS)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_POPNODES_STATS + "("
                + "statid INTEGER,"
@@ -935,7 +939,7 @@ bool DbHelper::checkNodesStats(int version)
 bool DbHelper::checkVesselsPosTable(int version)
 {
     if (!mDb.tables().contains(TBL_VESSELS_POS)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_VESSELS_POS + "("
                + "_id INTEGER AUTO_INCREMENT PRIMARY KEY,"
@@ -965,7 +969,7 @@ bool DbHelper::checkVesselsPosTable(int version)
 bool DbHelper::checkStatsTable(int version)
 {
     if (!mDb.tables().contains(TBL_POP_STATS)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_POP_STATS + "("
                + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
@@ -979,7 +983,7 @@ bool DbHelper::checkStatsTable(int version)
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
     if (!mDb.tables().contains(TBL_POPSZ_STATS)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         bool r =
         q.exec("CREATE TABLE " + TBL_POPSZ_STATS + "("
                + "statid INTEGER AUTO_INCREMENT PRIMARY KEY,"
@@ -1005,7 +1009,7 @@ bool DbHelper::checkVesselsTable(int version)
 {
     bool r;
     if (!mDb.tables().contains(TBL_VESSELS)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         r =
         q.exec("CREATE TABLE " + TBL_VESSELS + "("
                + "_id INTEGER PRIMARY KEY,"
@@ -1018,7 +1022,7 @@ bool DbHelper::checkVesselsTable(int version)
     }
 
     if (!mDb.tables().contains(TBL_VESSELS_STATS_TM)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         r =
         q.exec("CREATE TABLE " + TBL_VESSELS_STATS_TM + "("
                + "_id INTEGER PRIMARY KEY,"
@@ -1027,7 +1031,6 @@ bool DbHelper::checkVesselsTable(int version)
                + "timeatsea INTEGER,"
                + "harbour INTEGER,"
                + "reason INTEGER,"
-               + "revenue REAL,"
                + "revenue_av REAL,"
                + "cumfuel REAL,"
                + "fuelcost REAL,"
@@ -1039,7 +1042,7 @@ bool DbHelper::checkVesselsTable(int version)
     }
 
     if (!mDb.tables().contains(TBL_VESSELS_STATS_TMSZ)) {
-        QSqlQuery q;
+        QSqlQuery q(mDb);
         r =
         q.exec("CREATE TABLE " + TBL_VESSELS_STATS_TMSZ + "("
                + "_id INTEGER PRIMARY KEY,"
@@ -1071,7 +1074,7 @@ VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *d
       mCounter(0),
       mLastStep(-1)
 {
-    mVesselInsertionQuery = new QSqlQuery;
+    mVesselInsertionQuery = new QSqlQuery(mDb);
     mVesselInsertionQuery->prepare(
                 "INSERT INTO " + DbHelper::TBL_VESSELS_POS
                 + "(vesselid,tstep,x,y,course,fuel,state) VALUES (?,?,?,?,?,?,?)"

@@ -59,6 +59,11 @@ void VesselData::setCumFuelCons(double value)
     cumFuelCons = value;
 }
 
+void VesselData::addCumFuelCons(double value)
+{
+    cumFuelCons += value;
+}
+
 double VesselData::getFuelCost() const
 {
     return fuelCost;

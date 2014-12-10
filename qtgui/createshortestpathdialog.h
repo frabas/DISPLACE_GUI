@@ -25,6 +25,8 @@ private slots:
     void on_browseShortestFolder_clicked();
     void on_browseRelevantFolder_clicked();
 
+    void on_ok_clicked();
+
 private:
     Ui::CreateShortestPathDialog *ui;
 };

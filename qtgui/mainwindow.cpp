@@ -209,7 +209,7 @@ void MainWindow::on_action_Load_triggered()
 
     Loader *loader = new Loader(this,dir);
 
-    startBackgroundOperation(loader);
+    startBackgroundOperation(loader, 0);
 }
 
 void MainWindow::on_modelSelector_currentIndexChanged(int index)
@@ -481,7 +481,8 @@ void MainWindow::updateModelList()
     for (int i = 0; i < MAX_MODELS; ++i) {
         if (models[i] != 0) {
             ui->modelSelector->addItem(
-                        QString(tr("[%1] %2")).arg(i).arg(models[i]->inputName()),
+                        QString(tr("[%1] %2 %3 %4")).arg(i).arg(models[i]->inputName())
+                        .arg(models[i]->outputName()).arg(models[i]->simulationName()),
                         i);
             if (i == n)
                 sel = i;
@@ -568,6 +569,7 @@ void MainWindow::on_cmdStart_clicked()
         models[0]->prepareDatabaseForSimulation();
         models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
+        mSimulation->setOutputName(models[0]->outputName());
         mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }
 }
@@ -614,7 +616,7 @@ void MainWindow::on_actionScenario_triggered()
 
                 Loader *loader = new Loader(this,currentModel->fullpath());
 
-                startBackgroundOperation(loader);
+                startBackgroundOperation(loader,0);
             }
         }
     }
@@ -869,6 +871,11 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     connect (work, SIGNAL(warning(QString,QString)), this, SLOT(showWarningMessageBox(QString,QString)));
 
     thread->start();
+}
+
+void MainWindow::startBackgroundOperation(BackgroundWorkerWithWaitDialog *work)
+{
+    startBackgroundOperation(work, work->getWaitDialog());
 }
 
 void MainWindow::startMouseMode(MouseMode * newmode)
@@ -1309,13 +1316,12 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 
 }
 
-class ShortestPathBuilderWorker : public BackgroundWorker {
-    WaitDialog *mWaitDialog;
+class ShortestPathBuilderWorker : public BackgroundWorkerWithWaitDialog {
     DisplaceModel *mModel;
     QList<std::shared_ptr<NodeData> > mRelevantNodes;
 public:
     ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
-        : BackgroundWorker(main), mWaitDialog(dialog), mModel(model) {
+        : BackgroundWorkerWithWaitDialog(main, dialog), mModel(model) {
     }
 
     void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes) {
@@ -1325,16 +1331,19 @@ public:
     void execute() override {
         ShortestPathBuilder builder(mModel);
 
-        mWaitDialog->setText("Building shortest paths");
-        mWaitDialog->setProgress(true, mRelevantNodes.size());
+        setText("Building shortest paths");
+        setProgressMax(mRelevantNodes.size());
+        setAbortEnabled(true);
         int n = 0;
         foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
-            emit progress(n);
+            if (aborted())
+                break;
+            setProgress(n);
 
             builder.create(node, mModel->linkedShortestPathFolder());
             ++n;
         }
-        mWaitDialog->setProgression(n);
+        setProgress(n);
     }
 };
 
@@ -1389,7 +1398,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         builder->setRelevantNodes(l);
     }
 
-    startBackgroundOperation(builder);
+    startBackgroundOperation(builder, dialog);
 }
 
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
@@ -1639,6 +1648,8 @@ void MainWindow::on_actionAdd_triggered()
         return;
 
     switch (mMapController->getEditorMode()) {
+    case MapObjectsController::NoEditorMode:
+        break;
     case MapObjectsController::NodeEditorMode:
         if (true) {
             SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));

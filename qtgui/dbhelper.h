@@ -50,7 +50,7 @@ class VesselPositionInserter : public QObject {
     friend class DbHelper;
 
     DbHelper *mHelper;
-    QSqlDatabase mDb;
+    QSqlDatabase *mDb;
     QSqlQuery *mVesselInsertionQuery;
 
     int mFlushCount;

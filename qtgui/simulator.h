@@ -60,6 +60,7 @@ signals:
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
     void outputFileUpdated(QString, int);
     void nodesStatsUpdate(QString);
+    void debugMemoryStats(long rss, long peak);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -82,6 +83,7 @@ private:
     bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
+    void parseDebug(QStringList fields);
 };
 
 #endif // SIMULATOR_H

@@ -117,6 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
+    connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
 
     /* Setup graph controller */
     new GraphInteractionController(ui->plotHarbours, this);
@@ -316,6 +317,11 @@ void MainWindow::simulatorProcessStepChanged(int step)
 void MainWindow::simulatorNodeStatsUpdate(QString data)
 {
     models[0]->updateNodesStatFromSimu(data);
+}
+
+void MainWindow::simulatorDebugMemoryStats(long rss, long peak)
+{
+    mStatusInfoLabel->setText(QString("Simulator Memory RSS: %1Mb peak %2Mb").arg(rss/1024).arg(peak/1024));
 }
 
 void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, float fuel, int state)

@@ -95,6 +95,7 @@
 
 #include "readdata.h"
 #include "myutils.h"
+#include <memoryinfo.h>
 
 #ifdef DEBUG
 #define PROFILE
@@ -137,6 +138,8 @@ double mLoadPopulationProfileResult;
 double mLoadGraphProfileResult;
 #endif
 
+MemoryInfo memInfo;
+
 /* GUI Protocol
  *
  * All cout strings that begins by the control character "=", will be treated as GUI protocol strings.
@@ -158,6 +161,8 @@ double mLoadGraphProfileResult;
  *                  stat,tstep,first,number,data...
  *              stat can be:
  *                  cumftime
+ * =Dvxxx yyy ...   Debug / Profile information.
+ *                      m: Memory info, RSS values (kb), Peak (kb)
  */
 
 /* Command line arguments
@@ -177,6 +182,12 @@ void guiSendVesselLogbook(const std::string &line)
 {
     if (use_gui)
         std::cout << "=v" << line;
+}
+
+void guiSendMemoryInfo(const MemoryInfo &info)
+{
+    if (use_gui)
+        std::cout << "=Dm" << info.rss() << " " << info.peakRss() << endl;
 }
 
 /**---------------------------------------------------------------**/
@@ -217,6 +228,9 @@ int main(int argc, char* argv[])
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -o 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because need much more computation time...
 
     // --use-gui => emits machine parsable data to stdout
+
+    memInfo.update();
+    guiSendMemoryInfo(memInfo);
 
 	int optind=1;
 	// decode arguments
@@ -734,6 +748,8 @@ int main(int argc, char* argv[])
 	dout << "---------------------------" << endl;
 
 #ifdef PROFILE
+    memInfo.update();
+    guiSendMemoryInfo(memInfo);
     mLoadProfile.start();
 #endif
 
@@ -908,6 +924,9 @@ int main(int argc, char* argv[])
 	}
 
 #ifdef PROFILE
+    memInfo.update();
+    guiSendMemoryInfo(memInfo);
+
     mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
 #endif
 
@@ -4101,6 +4120,12 @@ int main(int argc, char* argv[])
 
 #ifdef PROFILE
         mLoopProfile.elapsed_ms();
+
+        if ((mLoopProfile.runs() % 50) == 0) {
+            memInfo.update();
+            guiSendMemoryInfo(memInfo);
+        }
+
         if ((mLoopProfile.runs() % 500) == 0)
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
 #endif
@@ -4115,6 +4140,9 @@ int main(int argc, char* argv[])
     cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
     cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
     cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
+
+    memInfo.update();
+    std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb";
 #endif
 
 	// close all....

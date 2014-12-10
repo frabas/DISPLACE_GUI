@@ -481,7 +481,8 @@ void MainWindow::updateModelList()
     for (int i = 0; i < MAX_MODELS; ++i) {
         if (models[i] != 0) {
             ui->modelSelector->addItem(
-                        QString(tr("[%1] %2")).arg(i).arg(models[i]->inputName()),
+                        QString(tr("[%1] %2 %3 %4")).arg(i).arg(models[i]->inputName())
+                        .arg(models[i]->outputName()).arg(models[i]->simulationName()),
                         i);
             if (i == n)
                 sel = i;

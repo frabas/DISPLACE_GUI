@@ -639,7 +639,7 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
-    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour,SUM(gav),SUM(gav/cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour,SUM(gav),SUM(revenue_av)/SUM(cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     foreach(int tstep, steps) {
@@ -717,7 +717,7 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
     DB_ASSERT(res,q);
 
     QSqlQuery q2;
-    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(revenue_av/cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
+    res = q2.prepare("SELECT SUM(timeatsea),SUM(revenue_av),SUM(revenue_av)/SUM(cumfuel),SUM(gav) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? AND harbour=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     HarbourStats curHarbourData;

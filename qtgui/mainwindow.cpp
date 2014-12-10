@@ -568,6 +568,7 @@ void MainWindow::on_cmdStart_clicked()
         models[0]->prepareDatabaseForSimulation();
         models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
+        mSimulation->setOutputName(models[0]->outputName());
         mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }
 }

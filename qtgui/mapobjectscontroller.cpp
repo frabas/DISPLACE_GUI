@@ -69,39 +69,30 @@ void MapObjectsController::removeModel(int model_n)
 
 void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel *model)
 {
-    addStandardLayer(model_n, LayerMain, mMainLayer);
-    addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer);
+    addStandardLayer(model_n, LayerMain, mMainLayer, true);
+    addStandardLayer(model_n, LayerSeamarks, mSeamarkLayer, true);
 
     DisplaceModel::ModelType type = model->modelType();
 
     mEntityLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Entities")).arg(model_n).toStdString()));
     mGraphLayer[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Graph")).arg(model_n).toStdString()));
     mEdgesLayer[model_n] = std::shared_ptr<EdgeLayer>(new EdgeLayer(this, QString(tr("#%1#Graph Edges")).arg(model_n)));
-    mEdgesLayer[model_n]->setVisible(false);
 
-    addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n]);
-    addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n]);
-    addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer());
+    addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n], true);
+    addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n], true);
+    addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer(), false);
 
     mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Abundance")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n]);
-    if (type != DisplaceModel::LiveModelType)
-        mStatsLayerPop[model_n]->setVisible(false);
+    addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
     mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Biomass")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n]);
-    if (type != DisplaceModel::LiveModelType)
-        mStatsLayerBiomass[model_n]->setVisible(false);
+    addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
     mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Impact")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n] );
-    if (type != DisplaceModel::LiveModelType)
-        mStatsLayerImpact[model_n]->setVisible(false);
+    addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n]);
-    if (type != DisplaceModel::LiveModelType)
-        mStatsLayerCumftime[model_n]->setVisible(false);
+    addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {
@@ -320,17 +311,17 @@ void MapObjectsController::clearAllNodes(int model_n)
     mEdgeObjects[model_n].clear();
 }
 
-void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer)
+void MapObjectsController::addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility)
 {
     if (layer != mMainLayer && layer != mSeamarkLayer)
         mMap->addLayer(layer);
-    mLayers[model].setLayer(id, layer);
+    mLayers[model].setLayer(id, layer, visibility);
 }
 
-void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer)
+void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility)
 {
     mMap->addLayer(layer);
-    mOutputLayers[model].setLayer(id,layer);
+    mOutputLayers[model].setLayer(id,layer, visibility);
 }
 
 void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)

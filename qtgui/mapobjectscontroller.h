@@ -252,8 +252,8 @@ public:
     void addEditorLayerGeometry (std::shared_ptr<qmapcontrol::Geometry> geometry);
 
 protected:
-    void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer);
-    void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer);
+    void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
+    void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);

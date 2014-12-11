@@ -28,7 +28,7 @@
 #ifdef VERBOSE
 #define dout(x) x
 #else
-#define dout(x) x
+#define dout(x)
 #endif
 
 #define UNUSED(expr) do { (void)(expr); } while (0)

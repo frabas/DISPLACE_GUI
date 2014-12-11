@@ -2622,25 +2622,26 @@ ofstream& freq_distance)
 
 
 void Vessel::choose_a_ground_and_go_fishing(
-int tstep,
-vector<string>& dyn_alloc_sce,
-int create_a_path_shop,
-vector <int>& idx_path_shop,
-deque<map<vertex_t, vertex_t> >& path_shop,
-deque<map<vertex_t, weight_t> >& min_distance_shop,
-adjacency_map_t& adjacency_map,
-map<vertex_t, weight_t>& min_distance,
-map<vertex_t, vertex_t>& previous,
-vector <int>& relevant_nodes,
-multimap<int, int>& nodes_in_polygons,
-vector<string>& vertex_names,
-vector<Node* >& nodes,
-vector <Metier*>& metiers,
-ofstream& freq_cpue,
-ofstream& freq_profit,
-ofstream& freq_distance
-)
+        int tstep,
+        vector<string>& dyn_alloc_sce,
+        int create_a_path_shop,
+        vector <int>& idx_path_shop,
+        deque<map<vertex_t, vertex_t> >& path_shop,
+        deque<map<vertex_t, weight_t> >& min_distance_shop,
+        adjacency_map_t& adjacency_map,
+        map<vertex_t, weight_t>& min_distance,
+        map<vertex_t, vertex_t>& previous,
+        vector <int>& relevant_nodes,
+        multimap<int, int>& nodes_in_polygons,
+        vector<string>& vertex_names,
+        vector<Node* >& nodes,
+        vector <Metier*>& metiers,
+        ofstream& freq_cpue,
+        ofstream& freq_profit,
+        ofstream& freq_distance
+        )
 {
+    UNUSED(vertex_names);
 
 	this->set_tstep_dep(tstep);	 // store departure date
 
@@ -2864,6 +2865,7 @@ void Vessel::choose_another_ground_and_go_fishing(
     UNUSED(tstep);
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
+    UNUSED(vertex_names);
 
 	bool finally_I_should_go_for_the_closest=false;
 	// => in case of area_closure: provoke oscillation at the border if the 2nd closest is inside a closed area
@@ -3112,6 +3114,7 @@ void Vessel::choose_a_port_and_then_return(
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
     UNUSED(metiers);
+    UNUSED(vertex_names);
 
     vector <int> harbs = this->get_harbours();
 	int from = this->get_loc()->get_idx_node();
@@ -3631,6 +3634,7 @@ int Vessel::should_i_stop_fishing(map<string,int>& external_states, bool use_the
     UNUSED(metiers);
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
+    UNUSED(vertex_names);
 
 	if(use_the_tree)
 	{

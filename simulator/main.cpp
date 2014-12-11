@@ -291,9 +291,9 @@ int main(int argc, char* argv[])
 			optind++;
 			selected_vessels_only = atoi(argv[optind]);
 		}
-		else
-            dout (cout << "Unknown switch: "
-                << argv[optind] << endl);
+        else {
+            dout (cout << "Unknown switch: " << argv[optind] << endl);
+        }
 		optind++;
 	}
 

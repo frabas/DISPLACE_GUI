@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QSettings>
+#include <QMessageBox>
 
 CreateShortestPathDialog::CreateShortestPathDialog(QWidget *parent) :
     QDialog(parent),
@@ -63,4 +64,15 @@ void CreateShortestPathDialog::on_browseRelevantFolder_clicked()
         setRelevantNodesFolder(path);
         sets.setValue("last_relpath", path);
     }
+}
+
+void CreateShortestPathDialog::on_ok_clicked()
+{
+    if (!isAllNodesAreRelevantChecked() && getRelevantNodesFolder().isEmpty()) {
+        QMessageBox::warning(this, tr("No nodes specified"),
+                             tr("No nodes are selected. Either tick 'All Nodes are relevant' or select the relevant nodes path"));
+        return;
+    }
+
+    accept();
 }

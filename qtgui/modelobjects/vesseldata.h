@@ -51,6 +51,7 @@ public:
 
     double getCumFuelCons() const;
     void setCumFuelCons(double value);
+    void addCumFuelCons(double value);
 
     double getFuelCost() const;
     void setFuelCost(double value);

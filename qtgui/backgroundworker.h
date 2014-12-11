@@ -22,6 +22,7 @@
 #define BACKGROUDWORKER_H
 
 #include <QObject>
+#include <waitdialog.h>
 
 class MainWindow;
 
@@ -52,6 +53,34 @@ protected:
     MainWindow *mMain;
     bool mResult;
     QString mError;
+};
+
+class BackgroundWorkerWithWaitDialog : public BackgroundWorker, public AbortListener
+{
+    Q_OBJECT
+public:
+    explicit BackgroundWorkerWithWaitDialog(MainWindow *main, WaitDialog *dialog);
+
+    WaitDialog *getWaitDialog() const { return mWaitDialog; }
+
+    bool aborted() const { return mAborted; }
+
+signals:
+    void messageChanged(QString);
+    void progressBarVisibilityChanged(bool, int);
+    void abortButtonVisibilityChanged(bool);
+
+public slots:
+    virtual void abortIssued();
+
+protected:
+    void setProgressMax(int);
+    void setProgress(int);
+    void setText(QString);
+    void setAbortEnabled(bool);
+
+    WaitDialog *mWaitDialog;
+    bool mAborted;
 };
 
 #endif // BACKGROUDWORKER_H

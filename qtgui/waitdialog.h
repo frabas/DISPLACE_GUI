@@ -27,6 +27,12 @@ namespace Ui {
 class WaitDialog;
 }
 
+/** @brief A workaround class for allowing calling the client */
+class AbortListener {
+public:
+    virtual void abortIssued() = 0;
+};
+
 class WaitDialog : public QDialog
 {
     Q_OBJECT
@@ -35,15 +41,26 @@ public:
     explicit WaitDialog(QWidget *parent = 0);
     ~WaitDialog();
 
-
-    void setText(QString text);
-    void setProgress(bool shown = false, int max = 10);
+    void setOnAbortListener(AbortListener *listener) {
+        mAbortListener = listener;
+    }
 
 public slots:
+    void setText(QString text);
+    void setProgress(bool shown, int max);
+    void enableAbort(bool enable);
     void setProgression (int level);
+
+signals:
+    void aborted();
+
+private slots:
+    void on_cmdAbort_clicked();
 
 private:
     Ui::WaitDialog *ui;
+
+    AbortListener *mAbortListener;
 };
 
 #endif // WAITDIALOG_H

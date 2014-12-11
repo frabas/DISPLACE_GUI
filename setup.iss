@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.6.5"
+#define MyAppVersion "0.6.7"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -48,26 +48,26 @@ Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qmapcontrol1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 
-Source: install\extra\libgcc_s_seh-1.dll; DestDir: {app}
-Source: install\extra\libgdal-1.dll; DestDir: {app}
-Source: install\extra\libgeos_c-1.dll; DestDir: {app}
-Source: install\extra\libgeos-3-4-2.dll; DestDir: {app}
-Source: install\extra\libproj-0.dll; DestDir: {app}
-Source: install\extra\libstdc++-6.dll; DestDir: {app}
-Source: install\extra\libwinpthread-1.dll; DestDir: {app}
-Source: install\extra\Qt5Core.dll; DestDir: {app}
-Source: install\extra\Qt5Gui.dll; DestDir: {app}
-Source: install\extra\Qt5Network.dll; DestDir: {app}
-Source: install\extra\Qt5OpenGL.dll; DestDir: {app}
-Source: install\extra\Qt5PrintSupport.dll; DestDir: {app}
-Source: install\extra\Qt5Sql.dll; DestDir: {app}
-Source: install\extra\Qt5Widgets.dll; DestDir: {app}
-Source: install\extra\Qt5Xml.dll; DestDir: {app}
-Source: install\extra\zlib1.dll; DestDir: {app}
+Source: install\extra\bin\libgcc_s_seh-1.dll; DestDir: {app}
+Source: install\extra\bin\libgdal-1.dll; DestDir: {app}
+Source: install\extra\bin\libgeos_c-1.dll; DestDir: {app}
+Source: install\extra\bin\libgeos-3-4-2.dll; DestDir: {app}
+Source: install\extra\bin\libproj-0.dll; DestDir: {app}
+Source: install\extra\bin\libstdc++-6.dll; DestDir: {app}
+Source: install\extra\bin\libwinpthread-1.dll; DestDir: {app}
+Source: install\extra\bin\Qt5Core.dll; DestDir: {app}
+Source: install\extra\bin\Qt5Gui.dll; DestDir: {app}
+Source: install\extra\bin\Qt5Network.dll; DestDir: {app}
+Source: install\extra\bin\Qt5OpenGL.dll; DestDir: {app}
+Source: install\extra\bin\Qt5PrintSupport.dll; DestDir: {app}
+Source: install\extra\bin\Qt5Sql.dll; DestDir: {app}
+Source: install\extra\bin\Qt5Widgets.dll; DestDir: {app}
+Source: install\extra\bin\Qt5Xml.dll; DestDir: {app}
+Source: install\extra\bin\zlib1.dll; DestDir: {app}
 
-Source: install\extra\platforms\qminimal.dll; DestDir: {app}\platforms
-Source: install\extra\platforms\qwindows.dll; DestDir: {app}\platforms
-Source: install\extra\sqldrivers\qsqlite.dll; DestDir: {app}\sqldrivers
+Source: install\extra\bin\platforms\qminimal.dll; DestDir: {app}\platforms
+Source: install\extra\bin\platforms\qwindows.dll; DestDir: {app}\platforms
+Source: install\extra\bin\sqldrivers\qsqlite.dll; DestDir: {app}\sqldrivers
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}

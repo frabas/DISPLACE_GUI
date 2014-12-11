@@ -15,7 +15,8 @@ Simulator::Simulator()
       mOutputName("baseline"),
       mSimuName("simu2"),
       mMoveVesselOption(true),
-      mProcessState(QProcess::NotRunning)
+      mProcessState(QProcess::NotRunning),
+      mCapture(false)
 {
 }
 
@@ -127,8 +128,12 @@ void Simulator::readyReadStandardOutput()
 
     while (mSimulation->readLine(buf, sizeof(buf)) > 0) {
         QString line (buf);
-        if (!processCodedLine(line))
+        if (!processCodedLine(line)) {
             emit log(line);
+            if (mCapture) {
+                emit debugCapture(line);
+            }
+        }
     }
 }
 
@@ -218,6 +223,13 @@ void Simulator::parseDebug(QStringList fields)
             long rss = fields[0].mid(1).toDouble();
             long peak = fields[1].toDouble();
             emit debugMemoryStats(rss,peak);
+        }
+        break;
+    case 'c':
+        if (fields[0].at(1) == '+') {
+            mCapture = true;
+        } else {
+            mCapture = false;
         }
         break;
     }

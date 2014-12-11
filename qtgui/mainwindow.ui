@@ -201,10 +201,38 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QToolButton" name="cmdProfileEnable">
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="qtgui.qrc">
+           <normaloff>:/icons/timer.png</normaloff>:/icons/timer.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="cmdProfileSave">
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="qtgui.qrc">
+           <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
       <widget class="QPlainTextEdit" name="console"/>
+     </item>
+     <item>
+      <widget class="QPlainTextEdit" name="profilingOutput"/>
      </item>
     </layout>
    </widget>

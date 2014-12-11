@@ -18,6 +18,7 @@
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
 #include <createshortestpathdialog.h>
+#include <version.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -118,6 +119,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
+    connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
+
+    ui->cmdProfileEnable->setChecked(false);
+    ui->profilingOutput->setVisible(false);
 
     /* Setup graph controller */
     new GraphInteractionController(ui->plotHarbours, this);
@@ -322,6 +327,11 @@ void MainWindow::simulatorNodeStatsUpdate(QString data)
 void MainWindow::simulatorDebugMemoryStats(long rss, long peak)
 {
     mStatusInfoLabel->setText(QString("Simulator Memory RSS: %1Mb peak %2Mb").arg(rss/1024).arg(peak/1024));
+}
+
+void MainWindow::simulatorCaptureLine(QString line)
+{
+    ui->profilingOutput->appendPlainText(line);
 }
 
 void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, float fuel, int state)
@@ -570,6 +580,7 @@ void MainWindow::on_cmdStart_clicked()
                 return;
         }
 
+        ui->profilingOutput->clear();
         mLastRunSimulationName = models[0]->simulationName();
         mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->prepareDatabaseForSimulation();
@@ -1682,4 +1693,37 @@ void MainWindow::on_actionAbout_displace_triggered()
 {
     AboutDialog dlg(this);
     dlg.exec();
+}
+
+void MainWindow::on_cmdProfileEnable_toggled(bool checked)
+{
+    ui->profilingOutput->setVisible(checked);
+}
+
+void MainWindow::on_cmdProfileSave_clicked()
+{
+    QSettings set;
+    QString defpos = set.value("report_path", QDir::homePath()).toString();
+    QString path = QFileDialog::getSaveFileName(this, tr("Append report to file"), defpos, tr("Text files (*.txt);;All files (*.*)"));
+    if (!path.isEmpty()) {
+        QFile f(path);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            QMessageBox::warning(this, tr("Save failed"), QString("Cannot save to %1: %2").arg(path).arg(f.errorString()));
+            return;
+        }
+
+        QTextStream strm(&f);
+        strm << endl << endl << "--------" << endl;
+        strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << endl;
+        strm << models[0]->inputName() << " " << models[0]->outputName() << " " << models[0]->simulationName() << endl;
+        strm << models[0]->getSimulationSteps() << " total steps";
+        strm << endl;
+        strm << ui->profilingOutput->toPlainText();
+        strm << endl;
+
+        f.close();
+
+        QFileInfo info(path);
+        set.setValue("report_path", info.absolutePath());
+    }
 }

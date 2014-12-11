@@ -61,6 +61,7 @@ signals:
     void outputFileUpdated(QString, int);
     void nodesStatsUpdate(QString);
     void debugMemoryStats(long rss, long peak);
+    void debugCapture(QString);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -79,6 +80,7 @@ private:
     QString mSimuName;
     bool mMoveVesselOption;
     QProcess::ProcessState mProcessState;
+    bool mCapture;
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);

@@ -158,6 +158,8 @@ MemoryInfo memInfo;
  *                  cumftime
  * =Dvxxx yyy ...   Debug / Profile information.
  *                      m: Memory info, RSS values (kb), Peak (kb)
+ *                      c+: capture on
+ *                      c-: capture off
  */
 
 /* Command line arguments
@@ -183,6 +185,12 @@ void guiSendMemoryInfo(const MemoryInfo &info)
 {
     if (use_gui)
         std::cout << "=Dm" << info.rss() << " " << info.peakRss() << endl;
+}
+
+void guiSendCapture(bool on)
+{
+    if (use_gui)
+        std::cout << "=Dc" << (on ? "+" : "-");
 }
 
 /**---------------------------------------------------------------**/
@@ -4135,6 +4143,8 @@ int main(int argc, char* argv[])
 	}							 // end FOR LOOP OVER TIME
 
 #ifdef PROFILE
+    guiSendCapture(true);
+
     cout << "*** Profilers statistics ***\n";
     cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
     cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
@@ -4145,7 +4155,9 @@ int main(int argc, char* argv[])
     cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
 
     memInfo.update();
-    std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb";
+    std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
+
+    guiSendCapture(false);
 #endif
 
 	// close all....

@@ -75,6 +75,7 @@ private slots:
     void simulatorProcessStepChanged (int step);
     void simulatorNodeStatsUpdate(QString);
     void simulatorDebugMemoryStats(long,long);
+    void simulatorCaptureLine(QString);
 
     void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();
@@ -147,10 +148,11 @@ private slots:
     void on_actionSave_Graph_triggered();
     void on_actionLink_Harbours_to_Graph_triggered();
     void on_actionAdd_triggered();
-
     void on_actionAbort_Operation_triggered();
-
     void on_actionAbout_displace_triggered();
+    void on_cmdProfileEnable_toggled(bool checked);
+
+    void on_cmdProfileSave_clicked();
 
 signals:
     void modelStateChanged();

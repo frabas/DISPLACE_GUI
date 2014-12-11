@@ -1068,19 +1068,17 @@ bool DbHelper::checkVesselsTable(int version)
 VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *db)
     : QObject(),
       mHelper(helper),
-      mDb(QSqlDatabase::cloneDatabase(*db, "inserter")),
+      mDb(db),
       mVesselInsertionQuery(0),
       mFlushCount(10000),
       mCounter(0),
       mLastStep(-1)
 {
-    mVesselInsertionQuery = new QSqlQuery(mDb);
+    mVesselInsertionQuery = new QSqlQuery(*mDb);
     mVesselInsertionQuery->prepare(
                 "INSERT INTO " + DbHelper::TBL_VESSELS_POS
                 + "(vesselid,tstep,x,y,course,fuel,state) VALUES (?,?,?,?,?,?,?)"
                 );
-
-    mDb.open();
 }
 
 void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double course,double fuel, int state)
@@ -1108,8 +1106,8 @@ void VesselPositionInserter::addVesselPosition(int step, int idx, double x, doub
     mVesselInsertionQuery->addBindValue(fuel);
     mVesselInsertionQuery->addBindValue(state);
 
-    if (!mVesselInsertionQuery->exec())
-        qDebug() << mVesselInsertionQuery->lastError();
+    bool r = mVesselInsertionQuery->exec();
+    DB_ASSERT(r,*mVesselInsertionQuery);
 }
 
 void VesselPositionInserter::flush()

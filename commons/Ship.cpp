@@ -27,15 +27,7 @@
 #define NAUTIC 1.852			 // 1 knots=1.852 km
 #define PI 3.14159265
 
-//this is how we can able/disable cout in C++:
-//#define VERBOSE
-
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
-
+#include <helpers.h>
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 // creator methods...
@@ -249,28 +241,28 @@ void Ship::move()
 	set_course( bearing(get_x(), get_y(), get_end_point_x(), get_end_point_y()) );
 	vector<double> a_move = destB (get_x(), get_y(), get_course(), get_vcruise()* PING_RATE * NAUTIC);
 
-	dout << "should the ship move to (" << a_move[0] << "," << a_move[1] << ") ?" << endl;
+    dout(cout  << "should the ship move to (" << a_move[0] << "," << a_move[1] << ") ?" << endl);
 	int is_pt = is_pt_lying_on_segment(get_x(), a_move[0], get_end_point_x(),
 		get_y(), a_move[1], get_end_point_y());
 	// test if the next move (on the same segment) is acceptable
 	if(!is_pt)
 	{
 
-		dout << "yes..." << endl;
+        dout(cout  << "yes..." << endl);
 		set_xy(a_move);			 // YES, keep this move
 	}
 	else
 	{
-		dout << "no..." << endl;
+        dout(cout  << "no..." << endl);
 		vector <double> this_longs = get_longs();
-		dout << "end point x is "  << endl;
-		dout <<  get_end_point_x() << endl;
-		dout << "dist to end of the lane is "  << endl;
-		dout << fabs(this_longs.at(this_longs.size()-1) - get_end_point_x()) << endl;
+        dout(cout  << "end point x is "  << endl);
+        dout(cout  <<  get_end_point_x() << endl);
+        dout(cout  << "dist to end of the lane is "  << endl);
+        dout(cout  << fabs(this_longs.at(this_longs.size()-1) - get_end_point_x()) << endl);
 								 // the end of the lane reached...
 		if( fabs(this_longs[this_longs.size()-1] - get_end_point_x())<1)
 		{
-			dout << "end of the lane..." << endl;
+            dout(cout  << "end of the lane..." << endl);
 			vector <double> the_longs = get_longs();
 			vector <double> the_lats = get_lats();
 			reverse(the_longs.begin(), the_longs.end());
@@ -280,21 +272,21 @@ void Ship::move()
 		}
 		else
 		{
-			dout << "compute a move on the next segment then..." << endl;
+            dout(cout  << "compute a move on the next segment then..." << endl);
 			// compute a move (on the next segment)
 			double dist_to_end_pt         = dist (get_x(), get_y(), get_end_point_x(), get_end_point_y());
 			double dist_km_to_be_traveled = get_vcruise()* PING_RATE * NAUTIC;
 			double dist_on_next_segment   = dist_km_to_be_traveled-dist_to_end_pt;
-			dout << "dist_on_next_segment..." << dist_on_next_segment << endl;
+            dout(cout  << "dist_on_next_segment..." << dist_on_next_segment << endl);
 			set_count(get_count () + 1);
 			int idx=(1+this->get_count());
 			double end_point_x =get_longs().at(idx);
 			double end_point_y =get_lats().at(idx);
-			dout << "end_point_x is..." << end_point_x << endl;
-			dout << "end_point_y is..." << end_point_y << endl;
+            dout(cout  << "end_point_x is..." << end_point_x << endl);
+            dout(cout  << "end_point_y is..." << end_point_y << endl);
 			set_course( bearing(get_end_point_x(), get_end_point_y(), end_point_x, end_point_y) );
 			vector<double> a_move = destB (this->get_end_point_x(), this->get_end_point_y(), this->get_course(), dist_on_next_segment);
-			dout << "move to (" << a_move[0] << "," << a_move[1] << ") " << endl;
+            dout(cout  << "move to (" << a_move[0] << "," << a_move[1] << ") " << endl);
 
 			// update
 			this->set_end_point_xy(end_point_x, end_point_y);

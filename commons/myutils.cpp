@@ -21,13 +21,7 @@
 #include"myutils.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-//#define VERBOSE
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 template <typename T, size_t N>
 T* end(T (&pArray)[N])
@@ -192,7 +186,7 @@ string inputfolder)
 	std::list<vertex_t> paths;
 
 	// 1. compute all paths from the source to the set of destinations
-	for (int i=0; i<relevant_nodes.size(); i++)
+    for (unsigned int i=0; i<relevant_nodes.size(); i++)
 	{
 		std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i], previous);
 
@@ -235,7 +229,7 @@ string inputfolder)
 			binary_search(paths.begin(), paths.end(), vertex2))
 		{
 			a_previous_map << vertex  <<" " << vertex2 << std::endl;
-			dout << "line " << vertex << " " << vertex2 << " is kept!" << endl;
+            dout(cout  << "line " << vertex << " " << vertex2 << " is kept!" << endl);
 		}
 
 	}
@@ -338,13 +332,13 @@ vector<int>& graph_dist_km, int nrow)
 	{
 		in >> val;
 		graph_idx_dep.push_back(val);
-		dout << "val dep: " << val << endl;
+        dout(cout  << "val dep: " << val << endl);
 	}
 	for (int i2=nrow; i2 < (nrow+nrow); i2++)
 	{
 		in >> val;
 		graph_idx_arr.push_back(val);
-		dout << "val arr: " << val << endl;
+        dout(cout  << "val arr: " << val << endl);
 	}
 	for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
 	{
@@ -378,8 +372,8 @@ void fill_from_code_area (istream& in, vector<int>& graph_point_code_area, int n
 		graph_point_code_area.push_back(val2);
 	}
 
-	dout << "read code area with "
-		<< graph_point_code_area.size() << " nodes" << endl << flush;
+    dout (cout << "read code area with "
+        << graph_point_code_area.size() << " nodes" << endl << flush);
 }
 
 
@@ -414,16 +408,16 @@ void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double>
 			percent_szgroup_per_age_matrix[i][j] = val;
 		}
 	}
-	dout << "read size matrix percent_age_per_szgroup"  << endl << flush;
+    dout(cout  << "read size matrix percent_age_per_szgroup"  << endl << flush);
 	for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
 	{
 		for(unsigned int j = 0; j < percent_szgroup_per_age_matrix[i].size(); j++)
 		{
-			dout << percent_szgroup_per_age_matrix[i][j] << " ";
+            dout(cout  << percent_szgroup_per_age_matrix[i][j] << " ");
 		}
-		dout << endl;
+        dout(cout  << endl);
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 }
 
@@ -443,16 +437,16 @@ void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double>
 			percent_age_per_szgroup_matrix[i][j] = val;
 		}
 	}
-	dout << "read size matrix percent_age_per_szgroup"  << endl << flush;
+    dout(cout  << "read size matrix percent_age_per_szgroup"  << endl << flush);
 	for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
 	{
 		for(unsigned int j = 0; j < percent_age_per_szgroup_matrix[i].size(); j++)
 		{
-			dout << percent_age_per_szgroup_matrix[i][j] << " ";
+            dout(cout  << percent_age_per_szgroup_matrix[i][j] << " ");
 		}
-		dout << endl;
+        dout(cout  << endl);
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 }
 
@@ -472,16 +466,16 @@ void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_tr
 			growth_transition[i][j] = val;
 		}
 	}
-	dout << "read size matrix transition"  << endl << flush;
+    dout(cout  << "read size matrix transition"  << endl << flush);
 	for(unsigned int i = 0; i < growth_transition.size(); i++)
 	{
 		for(unsigned int j = 0; j < growth_transition[i].size(); j++)
 		{
-			dout << growth_transition[i][j] << " ";
+            dout(cout  << growth_transition[i][j] << " ");
 		}
-		dout << endl;
+        dout(cout  << endl);
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 }
 
@@ -498,13 +492,13 @@ void fill_in_param_sr (istream& in, vector<double>& param_sr)
 		in>> val;
 		param_sr[i] = val;
 	}
-	dout << "read param_sr"  << endl << flush;
+    dout(cout  << "read param_sr"  << endl << flush);
 
 	for(unsigned int i = 0; i < param_sr.size(); i++)
 	{
-		dout << param_sr[i] << " ";
+        dout(cout  << param_sr[i] << " ");
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 }
 
@@ -521,13 +515,13 @@ void fill_in_initial_tac (istream& in, vector<double>& initial_tac)
 		in>> val;
 		initial_tac[i] = val;
 	}
-	dout << "read initial_tac"  << endl << flush;
+    dout(cout  << "read initial_tac"  << endl << flush);
 
 	for(unsigned int i = 0; i < initial_tac.size(); i++)
 	{
-		dout << initial_tac[i] << " ";
+        dout(cout  << initial_tac[i] << " ");
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 }
 
@@ -544,13 +538,13 @@ void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max)
 		in>> val;
 		fbar_ages_min_max[i] = val;
 	}
-	dout << "read fbar_ages_min_max"  << endl << flush;
+    dout(cout  << "read fbar_ages_min_max"  << endl << flush);
 
 	for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
 	{
-		dout << fbar_ages_min_max[i] << " ";
+        dout(cout  << fbar_ages_min_max[i] << " ");
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 }
 
@@ -571,7 +565,7 @@ void fill_from_metier_specifications (istream& in, multimap<string, double>& inf
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the metier ogive specification  " << endl << flush;
+    dout(cout  << "read and set up the metier ogive specification  " << endl << flush);
 }
 
 
@@ -638,7 +632,7 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
         mult_fuelcons_when_returning.push_back(strtod(fuelconsreturning.c_str(),0));
         mult_fuelcons_when_inactive.push_back(strtod(fuelconsinactive.c_str(),0));		
 	}
-	dout << "read and set up the general features of each vessel...OK" << endl << flush;
+    dout(cout  << "read and set up the general features of each vessel...OK" << endl << flush);
 
 }
 
@@ -666,7 +660,7 @@ vector<double>& lane_ids)
 		vcruises.push_back(strtod(vcruise.c_str(),0));
 		lane_ids.push_back(strtod(lane_id.c_str(),0));
 	}
-	dout << "read and set up the general features of each ship...OK" << endl << flush;
+    dout(cout  << "read and set up the general features of each ship...OK" << endl << flush);
 
 }
 
@@ -687,7 +681,7 @@ void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai)
 		in >> val;
 		avai[key]=val;
 	}
-	dout << "read pop avaibility per node " << endl << flush;
+    dout(cout  << "read pop avaibility per node " << endl << flush);
 }
 
 
@@ -707,7 +701,7 @@ void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& 
 		in >> val;
 		avai.insert(make_pair(key,val));
 	}
-	dout << "read the availability at szgroup " << endl << flush;
+    dout(cout  << "read the availability at szgroup " << endl << flush);
 }
 
 
@@ -727,7 +721,7 @@ void fill_from_oth_land (istream& in, map<int, double>& oth_land)
 		in >> val;
 		oth_land.insert(make_pair(key,val));
 	}
-	dout << "read oth land " << endl << flush;
+    dout(cout  << "read oth land " << endl << flush);
 }
 
 
@@ -747,7 +741,7 @@ void fill_from_relative_stability (istream& in, map<string, double>& relative_st
 		in >> val;
 		relative_stability.insert(make_pair(key,val));
 	}
-	dout << "read relative stability " << endl << flush;
+    dout(cout  << "read relative stability " << endl << flush);
 }
 
 
@@ -767,7 +761,7 @@ void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map)
 		in >> val;
 		a_map.insert(make_pair(key,val));
 	}
-	dout << "read a map <int,int> " << endl << flush;
+    dout(cout  << "read a map <int,int> " << endl << flush);
 }
 
 
@@ -787,7 +781,7 @@ void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map)
 		in >> val;
 		a_map.insert(make_pair(key,val));
 	}
-	dout << "read a map <int,string> " << endl << flush;
+    dout(cout  << "read a map <int,string> " << endl << flush);
 }
 
 
@@ -807,7 +801,7 @@ void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_poly
 		in >> val;
 		nodes_in_polygons.insert(make_pair(key,val));
 	}
-	dout << "read nodes_in_polygons " << endl << flush;
+    dout(cout  << "read nodes_in_polygons " << endl << flush);
 }
 
 
@@ -827,7 +821,7 @@ void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& 
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification <string, integer> " << endl << flush;
+    dout(cout  << "read and set up the specification <string, integer> " << endl << flush);
 
 	// TO DO: test if infos.count(key) = NBSZGROUP
 }
@@ -849,7 +843,7 @@ void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double>& 
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification <int, double> " << endl << flush;
+    dout(cout  << "read and set up the specification <int, double> " << endl << flush);
 
 	// TO DO: test if infos.count(key) = NBSZGROUP
 }
@@ -871,7 +865,7 @@ void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification <string, double> " << endl << flush;
+    dout(cout  << "read and set up the specification <string, double> " << endl << flush);
 
 	// TO DO: test if infos.count(key) = NBSZGROUP
 }
@@ -893,7 +887,7 @@ void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& 
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification <int, string> " << endl << flush;
+    dout(cout  << "read and set up the specification <int, string> " << endl << flush);
 
 	// TO DO: test if infos.count(key) = NBSZGROUP
 }
@@ -915,7 +909,7 @@ void fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& inf
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification multimap<int, int> " << endl << flush;
+    dout(cout  << "read and set up the specification multimap<int, int> " << endl << flush);
 
 	// TO DO: test if infos.count(key) = NBSZGROUP
 }
@@ -927,6 +921,8 @@ fill in the vessel attributes into a map <int, int>
 */
 void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput)
 {
+    UNUSED(namefolderinput);
+
 	string line;
 	while(!getline(in, line).eof())
 	{
@@ -936,7 +932,7 @@ void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification map<int, int> " << endl << flush;
+    dout(cout  << "read and set up the specification map<int, int> " << endl << flush);
 
 	// TO DO: test if infos.count(key) = NBSZGROUP
 }
@@ -948,6 +944,7 @@ fill in the vessel attributes into a map <int, int>
 */
 void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, string namefolderinput)
 {
+    UNUSED(namefolderinput);
 
 	string line;
 	while(!getline(in, line).eof())
@@ -958,7 +955,7 @@ void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, str
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification map<int, double> " << endl << flush;
+    dout(cout  << "read and set up the specification map<int, double> " << endl << flush);
 
 }
 
@@ -969,6 +966,7 @@ fill in the vessel attributes into a map <int, int>
 */
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput)
 {
+    UNUSED(namefolderinput);
 
 	string line;
 	while(!getline(in, line).eof())
@@ -979,7 +977,7 @@ void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, str
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification map<int, string> " << endl << flush;
+    dout(cout  << "read and set up the specification map<int, string> " << endl << flush);
 
 }
 
@@ -1000,7 +998,7 @@ void fill_map_from_specifications_s_d (istream& in, map<string, double>& infos)
 		in >> val;
 		infos.insert(make_pair(key,val));
 	}
-	dout << "read and set up the specification map<int, double> " << endl << flush;
+    dout(cout  << "read and set up the specification map<int, double> " << endl << flush);
 
 }
 
@@ -1092,7 +1090,7 @@ vector<string> find_entries_i_s (multimap<int, string>& infos, int intg)
 
 void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval)
 {
-	dout << "set_entries_d...BEGIN" << endl;
+    dout(cout  << "set_entries_d...BEGIN" << endl);
 
 	multimap<int, double>::iterator lower
 		= infos.lower_bound(itr);
@@ -1106,7 +1104,7 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 		pos->second = newval[i];
 		i++;
 	}
-	dout << "set_entries_d...END" << endl;
+    dout(cout  << "set_entries_d...END" << endl);
 
 }
 
@@ -1136,7 +1134,7 @@ vector<int> grounds)
 	{
 		vertex_t vx = grounds.at(i);
 		distance_fgrounds.push_back(min_distance[vx]);
-		dout << "distance to fishing ground " << min_distance[vx] << endl;
+        dout(cout  << "distance to fishing ground " << min_distance[vx] << endl);
 	}
 	return(distance_fgrounds);
 }
@@ -1144,10 +1142,9 @@ vector<int> grounds)
 
 vector<double> scale_a_vector_to_1(vector<double> a_vector)
 {
-
 	// do the cumul....
 	double cum_a_vector=0;
-	for(int a_element = 0; a_element < a_vector.size(); a_element++)
+    for(unsigned int a_element = 0; a_element < a_vector.size(); a_element++)
 	{
 								 //
 		cum_a_vector +=a_vector.at(a_element);
@@ -1157,11 +1154,11 @@ vector<double> scale_a_vector_to_1(vector<double> a_vector)
 	vector <double> freq_a_vector (a_vector.size());
 	if(cum_a_vector!=0)
 	{
-		for(int a_node = 0; a_node < a_vector.size(); a_node++)
+        for(unsigned int a_node = 0; a_node < a_vector.size(); a_node++)
 		{
 			if(a_vector.at(a_node)==0)  cout << "a_vector.at(a_node) at 0 !! " << endl;
 			freq_a_vector.at(a_node)= a_vector.at(a_node) / cum_a_vector;
-			dout << "scaled a_vector is then " << freq_a_vector.at(a_node) << endl;
+            dout(cout  << "scaled a_vector is then " << freq_a_vector.at(a_node) << endl);
 		}
 	}
 	else
@@ -1184,13 +1181,13 @@ map<string, int>& external_states, map<string, int>& internal_states)
 
 	vector<string> a_split_string;
 
-	//dout << tree << endl;
-	//dout << "the first delimiter is " << direction[0] << endl;
+    //dout(cout  << tree << endl);
+    //dout(cout  << "the first delimiter is " << direction[0] << endl);
 	//if(direction.size() != (external_states.size()+internal_states.size()))
 	//{
-	//    dout << "pble: check the reading_direction object..." << endl;
+    //    dout(cout  << "pble: check the reading_direction object..." << endl);
 	//}
-	for (int i=0; i<direction.size(); i++)
+    for (unsigned int i=0; i<direction.size(); i++)
 	{
 		string a_delimiter =direction[i];
 		int a_state;

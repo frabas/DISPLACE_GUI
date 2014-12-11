@@ -7,7 +7,7 @@ INCLUDEPATH=../include
 
 include ("$$top_srcdir/localconfig.pri")
 
-LIBS+=
+LIBS+= -L.. -ldisplacecommons
 
 macx {
     CONFIG -= app_bundle
@@ -25,20 +25,7 @@ CONFIG(debug,debug|release) {
 }
 
 
-SOURCES= main.cpp \
-    ../commons/readdata.cpp \
-    ../commons/myutils.cpp \
-    ../commons/Population.cpp \
-    ../commons/Node.cpp \
-    ../commons/Tac.cpp \
-    ../commons/Benthos.cpp \
-    ../commons/Harbour.cpp \
-    ../commons/Ship.cpp \
-    ../commons/Vessel.cpp \
-    ../commons/Metier.cpp \
-    ../commons/myRutils.cpp \
-    ../commons/mkpath.cpp
-
+SOURCES= main.cpp
 
 HEADERS= \
     ../include/readdata.h \

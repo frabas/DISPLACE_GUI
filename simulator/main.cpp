@@ -38,13 +38,8 @@
 /**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
 /**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
 
-
-//this is how we can able/disable cout in C++:
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
+#include <assert.h>
 
 // for Windows
 #ifdef _WIN32
@@ -95,6 +90,7 @@
 
 #include "readdata.h"
 #include "myutils.h"
+#include <memoryinfo.h>
 
 #ifdef DEBUG
 #define PROFILE
@@ -137,6 +133,8 @@ double mLoadPopulationProfileResult;
 double mLoadGraphProfileResult;
 #endif
 
+MemoryInfo memInfo;
+
 /* GUI Protocol
  *
  * All cout strings that begins by the control character "=", will be treated as GUI protocol strings.
@@ -158,6 +156,8 @@ double mLoadGraphProfileResult;
  *                  stat,tstep,first,number,data...
  *              stat can be:
  *                  cumftime
+ * =Dvxxx yyy ...   Debug / Profile information.
+ *                      m: Memory info, RSS values (kb), Peak (kb)
  */
 
 /* Command line arguments
@@ -177,6 +177,12 @@ void guiSendVesselLogbook(const std::string &line)
 {
     if (use_gui)
         std::cout << "=v" << line;
+}
+
+void guiSendMemoryInfo(const MemoryInfo &info)
+{
+    if (use_gui)
+        std::cout << "=Dm" << info.rss() << " " << info.peakRss() << endl;
 }
 
 /**---------------------------------------------------------------**/
@@ -200,8 +206,8 @@ int main(int argc, char* argv[])
 	string inputfolder="DISPLACE_input";
 	string namesimu="sim1";
 	int nbsteps=10;
-	double dparam=10.0;
-	bool use_gnuplot=false;
+    double dparam=10.0;
+    bool use_gnuplot=false;
 	int create_a_path_shop=1;	 //used to speed-up the simus by calculating all the possible paths BEFORE the simu starts
 	int read_preexisting_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
 	int export_vmslike=1;
@@ -217,6 +223,9 @@ int main(int argc, char* argv[])
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -o 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because need much more computation time...
 
     // --use-gui => emits machine parsable data to stdout
+
+    memInfo.update();
+    guiSendMemoryInfo(memInfo);
 
 	int optind=1;
 	// decode arguments
@@ -283,10 +292,12 @@ int main(int argc, char* argv[])
 			selected_vessels_only = atoi(argv[optind]);
 		}
 		else
-			dout << "Unknown switch: "
-				<< argv[optind] << endl;
+            dout (cout << "Unknown switch: "
+                << argv[optind] << endl);
 		optind++;
 	}
+
+    UNUSED(dparam);
 
     cwd = std::string(getcwd(buf, MAXPATH));
 
@@ -409,7 +420,7 @@ int main(int argc, char* argv[])
 
 	// check if config reading OK
 	cout << nbpops << endl;
-	for (int a_pop=0; a_pop<implicit_pops.size(); a_pop++)
+    for (unsigned int a_pop=0; a_pop<implicit_pops.size(); a_pop++)
 	{
 		cout <<" " <<  implicit_pops.at(a_pop);
 	}
@@ -430,12 +441,12 @@ int main(int argc, char* argv[])
 	}
 	cout << endl;
 
-	for (int i=0; i<dyn_alloc_sce.size(); i++)
+    for (unsigned int i=0; i<dyn_alloc_sce.size(); i++)
 	{
 		cout <<" " <<  dyn_alloc_sce.at(i);
 	}
 	cout << endl;
-	for (int i=0; i<dyn_pop_sce.size(); i++)
+    for (unsigned int i=0; i<dyn_pop_sce.size(); i++)
 	{
 		cout <<" " <<  dyn_pop_sce.at(i);
 	}
@@ -681,37 +692,38 @@ int main(int argc, char* argv[])
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
 	export_individual_tacs.open(filename.c_str());
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " TEST MY R UTILS           " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " TEST MY R UTILS           " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 	// Seed the random-number generator with current time so that
 	// the numbers will be different every time we run.
 	int seed = (int)time(NULL);	 // random seed
+    UNUSED(seed);
 
-	dout << " check do_sample() " << endl;
+    dout(cout  << " check do_sample() " << endl);
 	int val[4]= {12,13,14,15};
 	double p[4]= {0.01,0.200,0.300,0.490};
 								 // draw 100 numbers from these 4 values, see myRutils.cpp
 	vector<int> res = do_sample(100, 4, val, p);
 	for(unsigned int i=0; i<res.size(); i++)
 	{
-		dout << " " << res[i];
+        dout(cout  << " " << res[i]);
 	}
-	dout << endl;
+    dout(cout  << endl);
 
-	dout << " check rgamma() " << endl;
+    dout(cout  << " check rgamma() " << endl);
 	double a_shape=1;
 	double a_scale=60;
 	vector<double> a_res;
 	for(int i =0; i<100; i++)
 	{
 		a_res.push_back( rgamma(a_shape, a_scale) );
-		dout << " " << a_res[i];
+        dout(cout  << " " << a_res[i]);
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 	// test the splitting of trees
 	// (NOTE: this method will fail if the same variables are present in several branches...use a data.frame instead?)
@@ -727,23 +739,25 @@ int main(int argc, char* argv[])
 	print( a_split_string );
 	//system("PAUSE");
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " NODE-RELATED STUFFS      " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " NODE-RELATED STUFFS      " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 #ifdef PROFILE
+    memInfo.update();
+    guiSendMemoryInfo(memInfo);
     mLoadProfile.start();
 #endif
 
 	// check the class Node
 	Node node (1, 1.0, 1.0, 0, 0, 0, nbpops, 5);
-	dout << "is the node at 1,1? "
-		<< node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl;
+    dout (cout << "is the node at 1,1? "
+        << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
-	dout << "is the node now at 2,2? "
-		<< node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl;
+    dout (cout << "is the node now at 2,2? "
+        << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 
 	// input data, coord nodes of the graph
 	ifstream coord_graph;
@@ -793,9 +807,9 @@ int main(int argc, char* argv[])
 	// check inputs
 	for (unsigned int i=0; i<graph_coord_harbour.size(); i++)
 	{
-		dout << graph_coord_harbour[i] << " ";
+        dout(cout  << graph_coord_harbour[i] << " ");
 	}
-	dout << endl;
+    dout(cout  << endl);
 
 	// check inputs
 	for (unsigned int i=0; i<graph_point_code_area.size(); i++)
@@ -831,11 +845,12 @@ int main(int argc, char* argv[])
 
 			map<string,double> init_fuelprices;
 			multimap<int, double> fishprices_each_species_per_cat;
-			if(a_name!="none" && a_point== i)
+            if(a_name!="none" && a_point== (int)i)
 			{
 				cout << "load prices for port " << a_name << " which is point " << a_point << endl;
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 								 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
+                assert(er2 == 0);
 				cout << "....OK" << endl;
 			}
 			else
@@ -843,6 +858,7 @@ int main(int argc, char* argv[])
 				cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 
+                assert(er2 == 0);
 			}
 
 			// read fuel price (vessel size dependent for the time being)
@@ -894,8 +910,8 @@ int main(int argc, char* argv[])
 				graph_point_code_landscape[i],
 				nbpops,
 				NBSZGROUP));
-			dout <<  nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
-				<< " " << nodes[i]->get_code_area() << endl;
+            dout (cout <<  nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
+                << " " << nodes[i]->get_code_area() << endl);
 
 		}
 	}
@@ -908,14 +924,17 @@ int main(int argc, char* argv[])
 	}
 
 #ifdef PROFILE
+    memInfo.update();
+    guiSendMemoryInfo(memInfo);
+
     mLoadNodesProfileResult = mLoadProfile.elapsed_ms();
 #endif
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " BENTHOS-RELATED STUFFS    " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " BENTHOS-RELATED STUFFS    " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 	// read estimates
     multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  "../"+inputfolder);
@@ -970,10 +989,10 @@ int main(int argc, char* argv[])
 	}
 
 	// check
-	for(int a_idx=0; a_idx<nodes.size(); a_idx++)
+    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
 	{
-		dout << "this node " << nodes.at(a_idx)->get_idx_node() <<
-			" nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl;
+        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
+            " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
 		if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=2)
 		{
@@ -1009,11 +1028,11 @@ int main(int argc, char* argv[])
 	//cout <<"...and the biomass this node this func. grp is "  <<
 	//     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " POPULATION-RELATED STUFFS " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " POPULATION-RELATED STUFFS " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -1067,7 +1086,7 @@ int main(int argc, char* argv[])
 	// FOR-LOOP OVER POP
 	for (unsigned int sp=0; sp<populations.size(); sp++)
 	{
-		dout << endl;
+        dout(cout  << endl);
 
 		cout << "pop_name: " <<  sp << endl;
 
@@ -1239,7 +1258,7 @@ int main(int argc, char* argv[])
 			// init avai on each node (we know the presence...) for this pop for selected szgroup
 			for (unsigned int n=0; n< nodes_with_presence.size(); n++)
 			{
-				dout << ".";
+                dout(cout  << ".");
 				vector<double> spat_avai_per_selected_szgroup = find_entries_i_d (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
 				if(!spat_avai_per_selected_szgroup.empty())
 				{
@@ -1359,11 +1378,11 @@ int main(int argc, char* argv[])
 	}
 	*/
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " METIER-RELATED STUFFS     " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " METIER-RELATED STUFFS     " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 	//input data, metier characteristics: selectivty ogives, beta per pop
     multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, "../"+inputfolder);
@@ -1432,11 +1451,11 @@ int main(int argc, char* argv[])
 	cout << endl;
 	*/
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " SHIP-RELATED STUFFS       " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " SHIP-RELATED STUFFS       " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 	// read general ship features
 	vector<string> shipids;
@@ -1493,7 +1512,7 @@ int main(int argc, char* argv[])
 
 								 //here
 	vector <Ship*> ships(shipids.size());
-	for (int i=0; i<shipids.size(); i++)
+    for (unsigned int i=0; i<shipids.size(); i++)
 	{
 		cout<<"create ship " << i << endl;
 								 // North Sea - resund - Bornholm
@@ -1507,11 +1526,11 @@ int main(int argc, char* argv[])
 
 	}
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " VESSEL-RELATED STUFFS     " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " VESSEL-RELATED STUFFS     " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -1591,7 +1610,7 @@ int main(int argc, char* argv[])
 
 								 //here
 	vector <Vessel*> vessels(vesselids.size());
-	for (int i=0; i<vesselids.size(); i++)
+    for (unsigned int i=0; i<vesselids.size(); i++)
 		//vector <Vessel*> vessels(7); //here
 		//vesselids.erase (vesselids.begin());
 		//for (int i=0; i<7; i++)
@@ -1733,7 +1752,7 @@ int main(int argc, char* argv[])
 		vessels.at(i)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
 								 // init the vector of vector with Os
 		vessels.at(i)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
-		for (int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
+        for (unsigned int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
 		{
 								 // look into the multimap...
 			vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
@@ -1763,18 +1782,18 @@ int main(int argc, char* argv[])
 			expected_cpue_this_pop.at(pop)=0;
 
 			// compute cpue on nodes
-			for(int f = 0; f < fgrounds.size(); f++)
+            for(unsigned int f = 0; f < fgrounds.size(); f++)
 			{
 								 // look into the vector of vector....
 				double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
 								 // look into the vector of vector....
 				double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
 				cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
-				//if( vessels[i]->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
-				dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
+                //if( vessels[i]->get_idx() ==2) dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
+                dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
 			}
 			// compute the average cpue for this pop across all nodes
-			for(int f = 0; f < fgrounds.size(); f++)
+            for(unsigned int f = 0; f < fgrounds.size(); f++)
 			{
 				expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
 			}
@@ -1785,11 +1804,11 @@ int main(int argc, char* argv[])
 			expected_cpue+= expected_cpue_this_pop.at(pop);
 		}
 
-		dout << "expected_cpue for this vessel is " <<expected_cpue << endl;
+        dout(cout  << "expected_cpue for this vessel is " <<expected_cpue << endl);
 
 		// init at 0 cumcatch and cumeffort per trip,
 		// init at best guest the experiencedcpue_fgrounds
-		dout << "init dynamic object related to fgrounds" << endl;
+        dout(cout  << "init dynamic object related to fgrounds" << endl);
 		vector<double > freq_fgrounds= vessels.at(i)->get_freq_fgrounds();
 		vector<double > init_for_fgrounds(fgrounds.size());
 		vector<double > cumeffort_fgrounds= init_for_fgrounds;
@@ -1799,7 +1818,7 @@ int main(int argc, char* argv[])
 		vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 		vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 		vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-		for(int f = 0; f < fgrounds.size(); f++)
+        for(unsigned int f = 0; f < fgrounds.size(); f++)
 		{
 			cumcatch_fgrounds[f] = 0;
 			cumeffort_fgrounds[f] = 0;
@@ -1808,8 +1827,8 @@ int main(int argc, char* argv[])
 			// first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
 			// second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
 			// third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
-			dout << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << endl;
-			dout << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl;
+            dout(cout  << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << endl);
+            dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl);
 
 			// init the ones per pop
 			for(int pop = 0; pop < nbpops; pop++)
@@ -1861,7 +1880,7 @@ int main(int argc, char* argv[])
 	//check vessel specifications
 	cout << " vessel"<< vessels[0]->get_idx()  <<" have the specific harbours:" << endl;
 	vector<int> harbs = vessels[0]->get_harbours();
-	for (int i=0; i<harbs.size(); i++)
+    for (unsigned int i=0; i<harbs.size(); i++)
 	{
 		cout <<  harbs[i] << " "  << endl;
 	}
@@ -1869,7 +1888,7 @@ int main(int argc, char* argv[])
 	//check vessel specifications
 	cout << " vessel"<< vessels[0]->get_idx()  <<" have the specfic grounds:" << endl;
 	vector<int> grds = vessels[0]->get_fgrounds();
-	for (int i=0; i<grds.size(); i++)
+    for (unsigned int i=0; i<grds.size(); i++)
 	{
 		cout <<  grds[i] << " "  << endl;
 	}
@@ -1892,12 +1911,12 @@ int main(int argc, char* argv[])
 
 	  // check the update of a node (will be useful for the pop model and removals of catches)
 	  vector<int> tab2= nodes[old_node]->get_vid();
-	  dout << "idx vessel(s) on this node " << nodes[old_node]->get_idx_node() << endl;
+      dout(cout  << "idx vessel(s) on this node " << nodes[old_node]->get_idx_node() << endl);
 	  for (int i=0; i<tab2.size(); i++)
 	  {
-		  dout << tab2[i] << " ";
+          dout(cout  << tab2[i] << " ");
 	  }
-	  dout << endl;
+      dout(cout  << endl);
 
 	*/
 
@@ -1908,11 +1927,11 @@ int main(int argc, char* argv[])
 
 
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " TEST GRAPH-RELATED STUFFS " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " TEST GRAPH-RELATED STUFFS " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 	/* input data, graph connections and distance */
 	// CAUTION INDEXATION C++ from 0 to n while in R from 1 to n+1
@@ -1934,7 +1953,7 @@ int main(int argc, char* argv[])
 	adjacency_map_t adjacency_map;
 	vector<string> vertex_names;
 
-	for (int i=0; i<graph_coord_x.size(); i++)
+    for (unsigned int i=0; i<graph_coord_x.size(); i++)
 	{
 		string s;
 		stringstream out;
@@ -1945,16 +1964,16 @@ int main(int argc, char* argv[])
 
 	// the graph is non-oriented so need to inform in both ways i.e. dep->arr, arr->dep....
 								 // col 1
-	for(int i=0; i<graph_idx_dep.size(); i++)
+    for(unsigned int i=0; i<graph_idx_dep.size(); i++)
 	{
 		adjacency_map[graph_idx_dep[i]].push_back(edge(graph_idx_arr[i],  graph_dist_km[i]));
-		dout << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << endl;
+        dout(cout  << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << endl);
 	}
 								 // col 2
-	for(int i=0; i<graph_idx_dep.size(); i++)
+    for(unsigned int i=0; i<graph_idx_dep.size(); i++)
 	{
 		adjacency_map[graph_idx_arr[i]].push_back(edge(graph_idx_dep[i],  graph_dist_km[i]));
-		dout << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << endl;
+        dout(cout  << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << endl);
 	}
 
 	// then need to remove the duplicates if any.....
@@ -2049,11 +2068,11 @@ int main(int argc, char* argv[])
 
 	}							 // end test
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " BUILD A PATHS_SHOP        " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " BUILD A PATHS_SHOP        " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
 #ifdef PROFILE
     mLoadProfile.start();
@@ -2118,7 +2137,7 @@ int main(int argc, char* argv[])
 
 	// check
 	cout << "harbour nodes: " << endl;
-	for( int i=0; i<all_harbour_nodes.size(); i++)
+    for(unsigned int i=0; i<all_harbour_nodes.size(); i++)
 	{
 		cout << all_harbour_nodes.at(i) << " " ;
 	}
@@ -2164,7 +2183,7 @@ int main(int argc, char* argv[])
 
 	// check
 	cout << "fgrounds nodes: " << endl;
-	for( int i=0; i<all_fgrounds_nodes.size(); i++)
+    for(unsigned int i=0; i<all_fgrounds_nodes.size(); i++)
 	{
 		cout << all_fgrounds_nodes.at(i) << " " ;
 	}
@@ -2177,7 +2196,7 @@ int main(int argc, char* argv[])
 
 	// check
 	cout << "relevant nodes: " << endl;
-	for( int i=0; i<relevant_nodes.size(); i++)
+    for(unsigned int i=0; i<relevant_nodes.size(); i++)
 	{
 		cout << relevant_nodes.at(i) << " " ;
 	}
@@ -2203,19 +2222,19 @@ int main(int argc, char* argv[])
 		min_distance.clear();
 		previous.clear();
 		//for (int i=3100; i<relevant_nodes.size(); i++) // change for this to debug in case the creation fails...
-		for (int i=0; i<relevant_nodes.size(); i++)
+        for (unsigned int i=0; i<relevant_nodes.size(); i++)
 		{
 			cout << ".";
-			dout << "i: "<< i << "max size: " << relevant_nodes.size() << endl;
+            dout(cout  << "i: "<< i << "max size: " << relevant_nodes.size() << endl);
 
 								 // this is a programs argument option
 			if(read_preexisting_paths)
 			{
 
-				dout << "existing paths for the node: "<< relevant_nodes.at(i) << endl;
+                dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i) << endl);
 								 // these maps come from SimplifyThePreviousMap()
                 previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
-				dout << ":: "<<  endl;
+                dout(cout  << ":: "<<  endl);
 								 // these maps come from SimplifyThePreviousMap()
                 min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
 
@@ -2314,11 +2333,11 @@ int main(int argc, char* argv[])
 
 	vector <double> dist_to_ports;
 
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
-	dout << " SETTING UP GNUPLOT        " << endl;
-	dout << "---------------------------" << endl;
-	dout << "---------------------------" << endl;
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " SETTING UP GNUPLOT        " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
     // short note on the R code to get a map.dat file
     // for coastline map:
@@ -2347,7 +2366,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			dout << "gnuplot opened...." << endl;
+            dout(cout  << "gnuplot opened...." << endl);
 		}
 		fprintf(pipe2, "set terminal windows 0 size 400,400 position 100,100\n");
 								 // i.e. canadian
@@ -2375,11 +2394,11 @@ int main(int argc, char* argv[])
 	}
 	#endif
 
-	dout << "---------------------------------" << endl;
-	dout << "---------------------------------" << endl;
-	dout << " THE FOR-LOOP OVER TIME STEPS    " << endl;
-	dout << "---------------------------------" << endl;
-	dout << "---------------------------------" << endl;
+    dout(cout  << "---------------------------------" << endl);
+    dout(cout  << "---------------------------------" << endl);
+    dout(cout  << " THE FOR-LOOP OVER TIME STEPS    " << endl);
+    dout(cout  << "---------------------------------" << endl);
+    dout(cout  << "---------------------------------" << endl);
 
 	ofstream vmslike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
@@ -2480,7 +2499,7 @@ int main(int argc, char* argv[])
 	// get a vector v filled in with 1 to n
 	int nbvessels = vessels.size();
 	vector<int> ve(nbvessels);
-	for (int idx =0; idx < ve.size(); idx++)
+    for (unsigned int idx =0; idx < ve.size(); idx++)
 	{
 		ve[idx] =  idx ;
 	}
@@ -2492,16 +2511,16 @@ int main(int argc, char* argv[])
 	//srand ( time(NULL) );
 	cout << "coucou1" << endl;
 	// write down initial pop number in popdyn
-	for (int sp=0; sp<populations.size(); sp++)
+    for (unsigned int sp=0; sp<populations.size(); sp++)
 	{
-		dout << "write down the popdyn...";
+        dout(cout  << "write down the popdyn...");
 								 // get total N from summing up N over nodes
 		populations.at(sp)->aggregate_N();
 		popdyn_N << setprecision(0) << fixed;
 		// tstep / pop / tot N at szgroup
 		popdyn_N << 0 << " " << sp << " ";
 		vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
-		for(int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
+        for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
 		{
 								 // output in thousands of individuals
 			popdyn_N  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
@@ -2513,10 +2532,11 @@ int main(int argc, char* argv[])
     guiSendUpdateCommand(popdyn_N_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
-	if(namefolderinput!="fake") for (int n=0; n<nodes.size(); n++)
-	{
-		nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
-	}
+    if(namefolderinput!="fake") {
+        for (unsigned int n=0; n<nodes.size(); n++) {
+            nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+        }
+    }
     popnodes_start.flush();
 
     // signals the gui that the filename has been updated.
@@ -2535,15 +2555,15 @@ int main(int argc, char* argv[])
         mLoopProfile.start();
 #endif
 
-		dout << endl;
-		dout << endl;
-		dout << "---------------" << endl;
+        dout(cout  << endl);
+        dout(cout  << endl);
+        dout(cout  << "---------------" << endl);
 
         if (use_gui)
             cout << "=S" << tstep << endl;      /* use gui */
 
 		cout << "tstep " << tstep << endl;
-		dout << "---------------" << endl;
+        dout(cout  << "---------------" << endl);
 
 		if(use_gnuplot)
 		{
@@ -2615,7 +2635,7 @@ int main(int argc, char* argv[])
 		}
 		for (unsigned int sp=0; sp<sample_pops.size(); sp++)
 		{
-			dout << "write down re-read pop in the popdyn_test2 file for checking...";
+            dout(cout  << "write down re-read pop in the popdyn_test2 file for checking...");
 								 // get total N from summing up N over nodes
 			populations.at( sample_pops.at(sp) )->aggregate_N();
 			popdyn_test2 << setprecision(0) << fixed;
@@ -2637,7 +2657,7 @@ int main(int argc, char* argv[])
 		//cout << "Pause: type a number to continue";
 		// cin >> a;
 
-		dout << "BEGIN: POP MODEL TASKS----------" << endl;
+        dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
         if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 		{
 
@@ -2661,18 +2681,20 @@ int main(int argc, char* argv[])
 					int a_source_node_idx=0;
 					for(unsigned int n=0; n<a_list_nodes.size(); n++)
 					{
-						dout<< a_list_nodes.at(n)->get_idx_node() << " ";
+                        dout(cout << a_list_nodes.at(n)->get_idx_node() << " ");
 
 						// a check
 						vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
 						vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(9);
-						if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) cout << "N_at_szgroup before oth_land" << endl;
-						for(int i=0; i<N_at_szgroup.size(); i++)
+                        if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)
+                            cout << "N_at_szgroup before oth_land" << endl;
+                        for(unsigned int i=0; i<N_at_szgroup.size(); i++)
 						{
 							if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)    cout << N_at_szgroup.at(i) << endl;
 						}
-						if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) cout << "removals_per_szgroup before oth_land" << endl;
-						for(int i=0; i<removals_per_szgroup.size(); i++)
+                        if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)
+                            cout << "removals_per_szgroup before oth_land" << endl;
+                        for(unsigned int i=0; i<removals_per_szgroup.size(); i++)
 						{
 							if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)    cout << removals_per_szgroup.at(i) << endl;
 						}
@@ -2689,12 +2711,12 @@ int main(int argc, char* argv[])
 						{
                             // lognormal error
 							double a_rnorm = rlnorm(0,0.25);
-							dout << "a_rnorm " << a_rnorm << endl;
+                            dout(cout  << "a_rnorm " << a_rnorm << endl);
 							oth_land_this_pop_this_node= oth_land_this_pop_this_node*a_rnorm;
 						}
 
-						dout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node()
-							<< ": " << oth_land_this_pop_this_node << endl;
+                        dout (cout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node()
+                            << ": " << oth_land_this_pop_this_node << endl);
 
 						if(oth_land_this_pop_this_node!=0)
 						{
@@ -2716,7 +2738,7 @@ int main(int argc, char* argv[])
 								{
 									polygons.push_back(pos->first);
 									polygon_nodes.push_back(pos->second);
-									dout << " a polygon node is " << pos->second << endl;
+                                    dout(cout  << " a polygon node is " << pos->second << endl);
 								}
 								sort (polygon_nodes.begin(), polygon_nodes.end());
 
@@ -2724,8 +2746,8 @@ int main(int argc, char* argv[])
 								{
 									// then, this is a closed node!
 									cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node;
-									dout << " this is a polygon node ! " << a_list_nodes.at(n)->get_idx_node() << endl;
-									dout << " the cumul to be displaced for this pop is " << cumul_oth_land_to_be_displaced << endl;
+                                    dout(cout  << " this is a polygon node ! " << a_list_nodes.at(n)->get_idx_node() << endl);
+                                    dout(cout  << " the cumul to be displaced for this pop is " << cumul_oth_land_to_be_displaced << endl);
 								 // the relative node idx with oth_land to be displaced....
 									a_source_node_idx = n;
 
@@ -2742,7 +2764,7 @@ int main(int argc, char* argv[])
 									if(dist_to_this_node<200)
 									{
 										oth_land_this_pop_this_node+= cumul_oth_land_to_be_displaced;
-										dout <<  cumul_oth_land_to_be_displaced << " oth_land displaced on " << a_list_nodes.at(n)->get_idx_node()  << endl;
+                                        dout(cout  <<  cumul_oth_land_to_be_displaced << " oth_land displaced on " << a_list_nodes.at(n)->get_idx_node()  << endl);
 
 								 // reinit
 										cumul_oth_land_to_be_displaced=0.0;
@@ -2764,7 +2786,7 @@ int main(int argc, char* argv[])
                                 // needed to impact the availability
 								vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
 								a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
-								dout << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl;
+                                dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
 							}
 						}
@@ -2775,16 +2797,16 @@ int main(int argc, char* argv[])
 
 					}
 
-					dout << "THE IMPACT FROM PRESSURE ON STOCK ABUNDANCE----------" << endl;
+                    dout(cout  << "THE IMPACT FROM PRESSURE ON STOCK ABUNDANCE----------" << endl);
 					// impact computed for the last month from N at the start month
 					// over the removals (from catches + oth_land) during this month....
                     // caution with terminology: here we named "pressure" what is actually "impact"
                     // i.e. a ratio, (to do: need correction...)
-					dout << "pop " << name_pop << endl;
+                    dout(cout  << "pop " << name_pop << endl);
 					vector <double>wsz = populations[name_pop]->get_weight_at_szgroup();
 					for (unsigned int n=0; n<a_list_nodes.size(); n++)
 					{
-						dout << "node" << a_list_nodes.at(n)->get_idx_node() << endl;
+                        dout(cout  << "node" << a_list_nodes.at(n)->get_idx_node() << endl);
 						vector <double> N_at_szgroup_at_month_start= a_list_nodes.at(n)->get_Ns_pops_at_szgroup_at_month_start(name_pop);
 						vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(name_pop);
 						vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(name_pop);
@@ -2794,12 +2816,12 @@ int main(int argc, char* argv[])
 						if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 						{
 							cout << "N_at_szgroup_at_month_start" << endl;
-							for(int i=0; i<N_at_szgroup_at_month_start.size(); i++)
+                            for(unsigned int i=0; i<N_at_szgroup_at_month_start.size(); i++)
 							{
 								cout << N_at_szgroup_at_month_start.at(i) << endl;
 							}
 							cout << "removals_per_szgroup" << endl;
-							for(int i=0; i<removals_per_szgroup.size(); i++)
+                            for(unsigned int i=0; i<removals_per_szgroup.size(); i++)
 							{
 								cout << removals_per_szgroup.at(i) << endl;
 							}
@@ -2807,7 +2829,7 @@ int main(int argc, char* argv[])
 
 						double tot_removals=0;
 						double tot_B=0;
-						for(int szgroup=0; szgroup<N_at_szgroup_at_month_start.size(); szgroup++)
+                        for(unsigned int szgroup=0; szgroup<N_at_szgroup_at_month_start.size(); szgroup++)
 						{
 							// compute the impact as proportion of the removals
 							// in ratio to total N available at the start of the month:
@@ -2826,7 +2848,7 @@ int main(int argc, char* argv[])
 						if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 						{
 							cout << "N_at_szgroup" << endl;
-							for(int i=0; i<N_at_szgroup.size(); i++)
+                            for(unsigned int i=0; i<N_at_szgroup.size(); i++)
 							{
 								cout << N_at_szgroup.at(i) << endl;
 							}
@@ -2839,7 +2861,7 @@ int main(int argc, char* argv[])
 							if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 							{
 								cout << "pressure_per_szgroup_pop" << endl;
-								for(int i=0; i<pressure_per_szgroup_pop.size(); i++)
+                                for(unsigned int i=0; i<pressure_per_szgroup_pop.size(); i++)
 								{
 									cout << pressure_per_szgroup_pop.at(i) << endl;
 								}
@@ -2876,7 +2898,7 @@ int main(int argc, char* argv[])
 								impact_on_pop=0;
 							}
 							a_list_nodes.at(n)->set_impact_on_pops(name_pop, impact_on_pop);
-							dout << "impact_on_pop " << impact_on_pop << endl;
+                            dout(cout  << "impact_on_pop " << impact_on_pop << endl);
 
 							// update, export and clear for the next time...
 							if(impact_on_pop!=0)
@@ -2892,7 +2914,7 @@ int main(int argc, char* argv[])
 					cout << "landings so far for this pop " << sp << ", after applying oth_land " <<
 						populations.at(name_pop)->get_landings_so_far() << endl;
 
-					dout << endl;
+                    dout(cout  << endl);
 
 					// At the aggregated population scale,
 					// first, sum up the N over node and overwrite tot_N_at_szgroup....
@@ -2919,7 +2941,7 @@ int main(int argc, char* argv[])
 					// (and no need of mortality_at_szgroup in the equ. because applied independently after)
 					// remember that at init t=0, N_minus_1 = N...
 					// N_minus_1 is updated AT THE VERY END of the pop model of this time step for the next
-					dout << "compute this month the cumulated F_at_age on the whole pop..." << endl;
+                    dout(cout  << "compute this month the cumulated F_at_age on the whole pop..." << endl);
 					populations.at(sp)->compute_tot_N_and_F_and_M_and_W_at_age();
 
 				}
@@ -2936,7 +2958,7 @@ int main(int argc, char* argv[])
 				// check for cod
 				vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
 				cout << "before" << endl;
-				for(int sz=0; sz<Ns.size(); sz++)
+                for(unsigned int sz=0; sz<Ns.size(); sz++)
 				{
 					cout << Ns.at(sz) << " ";
 				}
@@ -3030,7 +3052,7 @@ int main(int argc, char* argv[])
 					// check for cod
 					vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
 					cout << "after" << endl;
-					for(int sz=0; sz<Ns.size(); sz++)
+                    for(unsigned int sz=0; sz<Ns.size(); sz++)
 					{
 						cout << Ns.at(sz) << " ";
 					}
@@ -3108,7 +3130,7 @@ int main(int argc, char* argv[])
 							double sum_N_start_current_year;
 							vector <double> N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
 							vector <double> N_at_szgroup_year_minus_1=populations.at(sp)->get_tot_N_at_szgroup_year_minus_1();
-							for(int sz=0; sz<N_at_szgroup.size(); sz++)
+                            for(unsigned int sz=0; sz<N_at_szgroup.size(); sz++)
 							{
 								sum_N_start_current_year+=N_at_szgroup.at(sz);
 								sum_N_year_minus_1+=N_at_szgroup_year_minus_1.at(sz);
@@ -3118,7 +3140,7 @@ int main(int argc, char* argv[])
 							populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, 0.7));
 							// e.g. have a look at plot(seq(500,3000,500)/1000,(seq(500,3000,500)/1000)^0.7)
 
-							dout<< "the cpue_multiplier is " << populations.at(sp)->get_cpue_multiplier() << endl;
+                            dout(cout << "the cpue_multiplier is " << populations.at(sp)->get_cpue_multiplier() << endl);
 
 							// to be used the next year
 							populations.at(sp)->set_tot_N_at_szgroup_year_minus_1( N_at_szgroup );
@@ -3315,9 +3337,9 @@ int main(int argc, char* argv[])
             mPopExportProfile.elapsed_ms();
 #endif
         }
-		dout << "END: POP MODEL TASKS----------" << endl;
+        dout(cout  << "END: POP MODEL TASKS----------" << endl);
 
-		dout << "RE-READ DATA----------" << endl;
+        dout(cout  << "RE-READ DATA----------" << endl);
 
 		// RE-READ VESSEL DATA
 		// fill in with new input files for fgrounds and harbours, etc.
@@ -3381,7 +3403,7 @@ int main(int argc, char* argv[])
             freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
             vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
-			dout << "re-read data...OK" << endl;
+            dout(cout  << "re-read data...OK" << endl);
 
             // LOOP OVER VESSELS
 			for (unsigned int v=0; v<vessels.size(); v++)
@@ -3447,7 +3469,7 @@ int main(int argc, char* argv[])
 				vessels.at(v)->init_gshape_cpue_nodes_species(nbnodes, nbpops);
 								 // init the vector of vector with Os
 				vessels.at(v)->init_gscale_cpue_nodes_species(nbnodes, nbpops);
-				for (int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
+                for (unsigned int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
 				{
 								 // look into the multimap...
 					vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
@@ -3476,17 +3498,17 @@ int main(int argc, char* argv[])
 					expected_cpue_this_pop.at(pop)=0;
 
 					// compute cpue on nodes
-					for(int g = 0; g < fgrounds.size(); g++)
+                    for(unsigned int g = 0; g < fgrounds.size(); g++)
 					{
 								 // look into the vector of vector....
 						double a_shape = gshape_cpue_nodes_species.at(g).at(pop);
 								 // look into the vector of vector....
 						double a_scale = gscale_cpue_nodes_species.at(g).at(pop);
 						cpue_per_fground.at(g) = rgamma(a_shape, a_scale);
-						dout << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl;
+                        dout(cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl);
 					}
 					// compute the average cpue for this pop across all nodes
-					for(int g = 0; g < fgrounds.size(); g++)
+                    for(unsigned int g = 0; g < fgrounds.size(); g++)
 					{
 						expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(g);
 					}
@@ -3497,11 +3519,11 @@ int main(int argc, char* argv[])
 					expected_cpue+= expected_cpue_this_pop.at(pop);
 				}
 
-				dout << "expected_cpue for this vessel is " <<expected_cpue << endl;
+                dout(cout  << "expected_cpue for this vessel is " <<expected_cpue << endl);
 
 				// init at 0 cumcatch and cumeffort per trip,
 				// init at best guest the experiencedcpue_fgrounds
-				dout << "init dynamic object related to fgrounds" << endl;
+                dout(cout  << "init dynamic object related to fgrounds" << endl);
 				vector<double > a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
 				vector<double > a_init_for_fgrounds(fgrounds.size());
 				vector<double > a_cumeffort_fgrounds= init_for_fgrounds;
@@ -3512,7 +3534,7 @@ int main(int argc, char* argv[])
 				vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 
-				for(int g = 0; g < fgrounds.size(); g++)
+                for(unsigned int g = 0; g < fgrounds.size(); g++)
 				{
 					a_cumcatch_fgrounds[g] = 0;
 					a_cumeffort_fgrounds[g] = 0;
@@ -3521,7 +3543,7 @@ int main(int argc, char* argv[])
 					// first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
 					// second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
 					// third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
-					dout << "a_experiencedcpue_fgrounds" <<a_experiencedcpue_fgrounds[g] << endl;
+                    dout(cout  << "a_experiencedcpue_fgrounds" <<a_experiencedcpue_fgrounds[g] << endl);
 					// init the ones per pop
 					for(int pop = 0; pop < nbpops; pop++)
 					{
@@ -3559,12 +3581,12 @@ int main(int argc, char* argv[])
 								 // message 1 means: "please, change of grounds as soon as possible"
 				vessels.at(v)->receive_message(1);
 
-				dout << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "OK" << endl;
+                dout(cout  << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "OK" << endl);
 			}					 // end a_vesselid
 
 			// RE-read for metiers
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
-			for (int m=0; m<metiers.size(); m++)
+            for (unsigned int m=0; m<metiers.size(); m++)
 			{
 				// casting m into a string
 				//stringstream out;
@@ -3594,11 +3616,11 @@ int main(int argc, char* argv[])
 
 			// CHECK...CHECK...CHECK...
 			// write done  pop number in popdyn_test
-			for (int sp=0; sp<populations.size(); sp++)
+            for (unsigned int sp=0; sp<populations.size(); sp++)
 			{
 				if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
 				{
-					dout << "write down (BEFORE re-read pop) in the popdyn_test file for checking...";
+                    dout(cout  << "write down (BEFORE re-read pop) in the popdyn_test file for checking...");
 								 // get total N from summing up N over nodes
 					populations.at(sp)->aggregate_N();
 					popdyn_test << setprecision(0) << fixed;
@@ -3671,9 +3693,9 @@ int main(int argc, char* argv[])
 					for(unsigned int n=0; n<list_nodes.size(); n++)
 					{
 						list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
-						dout  << list_nodes[n]->get_idx_node() << " ";
+                        dout(cout   << list_nodes[n]->get_idx_node() << " ");
 					}
-					dout << endl;
+                    dout(cout  << endl);
 
 					// distribute tot_N_at_szgroup on nodes knowing the avai spatial key
 					// i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
@@ -3704,7 +3726,7 @@ int main(int argc, char* argv[])
 					// 2. init avai on each node (we know the presence...) for this pop for selected szgroup
 					for (unsigned int n=0; n< nodes_with_presence.size(); n++)
 					{
-						dout << ".";
+                        dout(cout  << ".");
 						vector<double> spat_avai_per_selected_szgroup = find_entries_i_d (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
 						if(!spat_avai_per_selected_szgroup.empty())
 						{
@@ -3720,7 +3742,7 @@ int main(int argc, char* argv[])
 				}				 // end if not implicit
 			}
 
-			dout << "re-read data for this period...OK" << endl;
+            dout(cout  << "re-read data for this period...OK" << endl);
 
 			// CHECK...CHECK...CHECK...
 			// write done  pop number in popdyn_test
@@ -3729,7 +3751,7 @@ int main(int argc, char* argv[])
 				if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
 				{
 
-					dout << "write down AFTER re-read pop in the popdyn_test file for checking...";
+                    dout(cout  << "write down AFTER re-read pop in the popdyn_test file for checking...");
 								 // get total N from summing up N over nodes
 					populations.at(sp)->aggregate_N();
 					popdyn_test << setprecision(0) << fixed;
@@ -3747,7 +3769,7 @@ int main(int argc, char* argv[])
 
 		}						 // END RE-READ DATA FOR POP...
 
-		dout << "THE VESSEL LOOP----------" << endl;
+        dout(cout  << "THE VESSEL LOOP----------" << endl);
 		// get a random order for acting vessels
         // random permutation
 		random_shuffle(ve.begin(),ve.end());
@@ -3779,9 +3801,9 @@ int main(int argc, char* argv[])
 		for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
 		{
 
-			dout << "----------" << endl;
+            dout(cout  << "----------" << endl);
 			int index_v =  ve[idx_v];
-			dout <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl;
+            dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
 
 			// check roadmap
 			if(vessels[ index_v ]->get_roadmap().empty())
@@ -3790,10 +3812,10 @@ int main(int argc, char* argv[])
                 // (when at least one possible metier within this quarter)
 				if(vessels[ index_v ]->get_possible_metiers().size()>1)
 				{
-					dout << "ROADMAP EMPTY" << endl;
+                    dout(cout  << "ROADMAP EMPTY" << endl);
 					if(vessels[ index_v ]->get_inharbour())
 					{
-						dout << "IN HARB" << endl;
+                        dout(cout  << "IN HARB" << endl);
 
 						// LAND the catches when arriving in port and DECLARE IN LOGBOOK
 						// i.e. write this trip down in the logbook output file
@@ -3823,7 +3845,7 @@ int main(int argc, char* argv[])
 						{
 
 							//go fishing
-							dout << "GO FISHING" << endl;
+                            dout(cout  << "GO FISHING" << endl);
 							vessels[ index_v ]->choose_a_ground_and_go_fishing(
 								tstep,
 								dyn_alloc_sce, create_a_path_shop,
@@ -3839,18 +3861,18 @@ int main(int argc, char* argv[])
 						else
 						{
 							//have some rest in the harbour
-							dout << "STAY IN HARBOUR" << endl;
+                            dout(cout  << "STAY IN HARBOUR" << endl);
                             // and decrease the rest time...
 							vessels[ index_v ]-> set_timeforrest( vessels[ index_v ]-> get_timeforrest() - PING_RATE );
 							vessels[ index_v ]-> set_next_xy( vessels[index_v ]->get_x(), vessels[ index_v ]->get_y() );
-							dout << "...for the next " << vessels[ index_v ]-> get_timeforrest() << " steps" << endl;
+                            dout(cout  << "...for the next " << vessels[ index_v ]-> get_timeforrest() << " steps" << endl);
 
 						}
 
 					}
 					else
 					{
-						dout << "NOT IN HARB...SO ON A FISHING GROUND!" << endl;
+                        dout(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
 
 						// ***************make a decision************************************
 						map<string,int> external_states_relevant_for_stopping_fishing;
@@ -3869,7 +3891,7 @@ int main(int argc, char* argv[])
 							dist_to_ports);
 
 						//....unless we got a message (e.g. at the end of a year-quarter)
-						dout << "message: " << vessels[ index_v ]->read_message() << endl;
+                        dout(cout  << "message: " << vessels[ index_v ]->read_message() << endl);
 						bool force_another_ground=false;
                         // check my mailbox: Am I forced to change of ground?...
 						if(vessels[ index_v ]->read_message()==1)
@@ -3899,7 +3921,7 @@ int main(int argc, char* argv[])
 								 // ...but not on this ground!
 							if(another_ground || force_another_ground )
 							{
-								dout << "CHANGE OF GROUND, GUYS! "  << endl;
+                                dout(cout  << "CHANGE OF GROUND, GUYS! "  << endl);
 								vessels[ index_v ]->choose_another_ground_and_go_fishing(
 									tstep,
 									dyn_alloc_sce, create_a_path_shop,
@@ -3910,16 +3932,16 @@ int main(int argc, char* argv[])
 									metiers,
 									freq_cpue, freq_distance
 									);
-								dout << "GOOD JOB, GUYS! "  << endl;
+                                dout(cout  << "GOOD JOB, GUYS! "  << endl);
 
 							}
 							// ***************implement a decision************************************
 							else // Yes, keep go on catching on this ground...
 							{
-								dout << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl;
+                                dout(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
 								//#pragma omp critical(docatch)
 								{
-									dout << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl;
+                                    dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
 									vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res);
 
 									// check
@@ -3943,29 +3965,29 @@ int main(int argc, char* argv[])
 								{
 									//trawling (type 1)
 									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_fishing();
-									dout << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl;
+                                    dout(cout  << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
 								}
 								else
 								{
 									// gillnetting, seining (type 2)
 									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_inactive();
-									dout << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl;
+                                    dout(cout  << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
 								}
 								vessels[ index_v ]->set_cumfuelcons(cumfuelcons);
 
 								// add for cum. effort on this node
 								vessels[ index_v ]->get_loc()->add_to_cumftime(PING_RATE);
 
-								dout << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl;
-								dout << "my comsumed fuel so far is " << cumfuelcons << endl;
-								dout << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl;
+                                dout(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
+                                dout(cout  << "my comsumed fuel so far is " << cumfuelcons << endl);
+                                dout(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
 
 							}
 						}
 						// ***************implement a decision************************************
 						else
 						{
-							dout << "RETURN TO PORT, NOW! "  << endl;
+                            dout(cout  << "RETURN TO PORT, NOW! "  << endl);
 							vessels[ index_v ]->choose_a_port_and_then_return(
 								tstep,
 								dyn_alloc_sce, create_a_path_shop,
@@ -3987,30 +4009,30 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
-				dout << "roadmap is not empty... ";
+                dout(cout  << "roadmap is not empty... ");
 				// display the road map
 				//list<int>::iterator pos;
-				//dout << "roadmap (in): ";
+                //dout(cout  << "roadmap (in): ");
 				//for(pos=lst.begin(); pos!=lst.end(); pos++)
 				//{
-				//    dout << *pos << " ";
+                //    dout(cout  << *pos << " ");
 				//}
-				//dout << endl;
+                //dout(cout  << endl);
 
 				// find.next.pt.on.the.graph()
 				vessels[ index_v ]->find_next_point_on_the_graph(nodes);
 
-				dout << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl;
+                dout(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
 
-				//dout << "roadmap (out): ";
+                //dout(cout  << "roadmap (out): ");
 				//lst = vessels[ index_v ]->get_roadmap();
 				//for(pos=lst.begin(); pos!=lst.end(); pos++)
 				//{
-				//    dout << *pos << " ";
+                //    dout(cout  << *pos << " ");
 				//}
 
 			}
-			dout << endl;
+            dout(cout  << endl);
 
 			// write this movement in the output  file (hourly data if PING=1)
 			// (setprecision is 6 in c++ by default)
@@ -4063,7 +4085,7 @@ int main(int argc, char* argv[])
         }*/
 
 		// move the ships along the ship lanes
-		for(int s=0; s<ships.size(); s++)
+        for(unsigned int s=0; s<ships.size(); s++)
 		{
 			//  ships[ s ]->move();
 		}
@@ -4101,6 +4123,12 @@ int main(int argc, char* argv[])
 
 #ifdef PROFILE
         mLoopProfile.elapsed_ms();
+
+        if ((mLoopProfile.runs() % 50) == 0) {
+            memInfo.update();
+            guiSendMemoryInfo(memInfo);
+        }
+
         if ((mLoopProfile.runs() % 500) == 0)
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
 #endif
@@ -4115,6 +4143,9 @@ int main(int argc, char* argv[])
     cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
     cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
     cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
+
+    memInfo.update();
+    std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb";
 #endif
 
 	// close all....

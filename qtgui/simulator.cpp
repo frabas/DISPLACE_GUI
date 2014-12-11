@@ -199,11 +199,28 @@ bool Simulator::processCodedLine(QString line)
         emit nodesStatsUpdate(line.mid(2));
         break;
 
+    case 'D':
+        parseDebug(args);
+        break;
+
     default:
         return false;
     }
 
     return true;
+}
+
+void Simulator::parseDebug(QStringList fields)
+{
+    switch (fields[0].at(0).toLatin1()) {
+    case 'm':
+        if (fields.size() > 1) {
+            long rss = fields[0].mid(1).toDouble();
+            long peak = fields[1].toDouble();
+            emit debugMemoryStats(rss,peak);
+        }
+        break;
+    }
 }
 
 void Simulator::parseUpdateVessel(QStringList fields)

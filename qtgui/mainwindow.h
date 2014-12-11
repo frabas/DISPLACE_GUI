@@ -24,7 +24,7 @@
 #include <outputfileparser.h>
 #include <statscontroller.h>
 
-#include <utils/memoryinfo.h>
+#include <memoryinfo.h>
 
 #include <QMainWindow>
 #include <QProcess>
@@ -74,6 +74,7 @@ private slots:
     void simulatorProcessStateChanged (QProcess::ProcessState oldstate, QProcess::ProcessState newstate);
     void simulatorProcessStepChanged (int step);
     void simulatorNodeStatsUpdate(QString);
+    void simulatorDebugMemoryStats(long,long);
 
     void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
     void updateModelState();

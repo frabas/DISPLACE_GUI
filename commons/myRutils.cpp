@@ -320,6 +320,10 @@ double fmin2(double x, double y)
 }
 
 
+// disable warnings
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 //----------------------------------
 //----------------------------------
 //----------------------------------
@@ -462,6 +466,7 @@ double norm_rand(void)
 
 }
 
+#pragma GCC diagnostic pop
 
 //#include "nmath.h"
 //a=>shape

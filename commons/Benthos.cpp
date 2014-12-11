@@ -18,14 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-//this is how we can able/disable cout in C++:
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
-
 #include "Benthos.h"
+#include <helpers.h>
 
 Benthos::Benthos(int _marine_landscape,
 const vector<Node *> &_nodes,
@@ -36,7 +30,7 @@ const vector<double> &_tot_biomass)
 
 	cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ";
 	vector<Node* > p_spe_nodes;
-	for(int n=0; n<_nodes.size(); n++)
+    for(unsigned int n=0; n<_nodes.size(); n++)
 	{
 		if(_nodes[n]->get_marine_landscape()== marine_landscape)
 		{
@@ -45,16 +39,16 @@ const vector<double> &_tot_biomass)
 		}
 	}
 	cout << endl;
-	for(int i=0; i<p_spe_nodes.size(); i++)
+    for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);
-		for(int funcgr=0; funcgr<tot_biomass.size();funcgr++)
+        for(unsigned int funcgr=0; funcgr<tot_biomass.size();funcgr++)
 		{
 								 // put an estimate of biomass per cell
 			p_spe_nodes[i]->add_benthos_tot_biomass_on_node(tot_biomass.at(funcgr) );
 		}
-		dout << "nb func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
-			"this marine landscape " << marine_landscape << " is " << tot_biomass.size() << endl;
+        dout (cout << "nb func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
+            "this marine landscape " << marine_landscape << " is " << tot_biomass.size() << endl);
 
 	}
 

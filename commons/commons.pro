@@ -18,7 +18,8 @@ SOURCES= \
     Vessel.cpp \
     Metier.cpp \
     myRutils.cpp \
-    mkpath.cpp
+    mkpath.cpp \
+    memoryinfo.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -33,7 +34,9 @@ HEADERS= \
     ../include/Metier.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
-    ../include/m_constants.h
+    ../include/m_constants.h \
+    ../include/memoryinfo.h \
+    ../include/helpers.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

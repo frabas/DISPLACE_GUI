@@ -59,7 +59,8 @@ bool InputFileParser::parseHarbourFile(const QString &path, QList<std::shared_pt
 
 bool InputFileParser::parseShortestPath(const QString &path, int nodeid, QList<QPair<int, int> > &graph)
 {
-
+    // TODO: must be implemented.
+    return false;
 }
 
 bool InputFileParser::isShortestPathPresent(const QString &path, int nodeid)

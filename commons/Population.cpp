@@ -303,67 +303,67 @@ double Population::get_avai7_beta() const
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup() const
+const vector<double>& Population::get_tot_N_at_szgroup() const
 {
 	return(tot_N_at_szgroup);
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup_just_after_redistribution() const
+const vector<double>& Population::get_tot_N_at_szgroup_just_after_redistribution() const
 {
 	return(tot_N_at_szgroup_just_after_redistribution);
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup_month_minus_1() const
+const vector<double>& Population::get_tot_N_at_szgroup_month_minus_1() const
 {
 	return(tot_N_at_szgroup_month_minus_1);
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup_year_minus_1() const
+const vector<double>& Population::get_tot_N_at_szgroup_year_minus_1() const
 {
 	return(tot_N_at_szgroup_year_minus_1);
 }
 
 
-vector<double> Population::get_tot_F_at_age() const
+const vector<double>& Population::get_tot_F_at_age() const
 {
 	return(tot_F_at_age);
 }
 
 
-vector<double> Population::get_tot_F_at_age_last_quarter() const
+const vector<double>& Population::get_tot_F_at_age_last_quarter() const
 {
 	return(tot_F_at_age_last_quarter);
 }
 
 
-vector<double> Population::get_tot_N_at_age() const
+const vector<double>& Population::get_tot_N_at_age() const
 {
 	return(tot_N_at_age);
 }
 
 
-vector<double> Population::get_tot_M_at_age() const
+const vector<double>& Population::get_tot_M_at_age() const
 {
 	return(tot_M_at_age);
 }
 
 
-vector<double> Population::get_tot_W_at_age() const
+const vector<double>& Population::get_tot_W_at_age() const
 {
 	return(tot_W_at_age);
 }
 
 
-vector<double> Population::get_fbar_ages_min_max() const
+const vector<double>& Population::get_fbar_ages_min_max() const
 {
 	return(fbar_ages_min_max);
 }
 
 
-vector<double> Population::get_weight_at_szgroup() const
+const vector<double>& Population::get_weight_at_szgroup() const
 {
 	return(weight_at_szgroup);
 }
@@ -375,25 +375,25 @@ vector<int> Population::get_comcat_at_szgroup() const
 }
 
 
-vector<double> Population::get_maturity_at_szgroup() const
+const vector<double>& Population::get_maturity_at_szgroup() const
 {
 	return(maturity_at_szgroup);
 }
 
 
-vector<double> Population::get_fecundity_at_szgroup() const
+const vector<double>& Population::get_fecundity_at_szgroup() const
 {
 	return(fecundity_at_szgroup);
 }
 
 
-vector<double> Population::get_M_at_szgroup() const
+const vector<double>& Population::get_M_at_szgroup() const
 {
 	return(M_at_szgroup);
 }
 
 
-vector<double> Population::get_proprecru_at_szgroup() const
+const vector<double>& Population::get_proprecru_at_szgroup() const
 {
 	return(proprecru_at_szgroup);
 }
@@ -411,7 +411,7 @@ double Population::get_landings_so_far() const
 }
 
 
-vector<double> Population::get_param_sr() const
+const vector<double>& Population::get_param_sr() const
 {
 	return(param_sr);
 }
@@ -510,70 +510,70 @@ void Population::set_cpue_multiplier(double _cpue_multiplier)
 }
 
 
-void Population::set_tot_N_at_szgroup(vector<double> _N_at_szgroup)
+void Population::set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup)
 {
 	tot_N_at_szgroup =_N_at_szgroup;
 
 }
 
 
-void Population::set_tot_N_at_szgroup_just_after_redistribution(vector<double> _N_at_szgroup_just_after_redistribution)
+void Population::set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution)
 {
 	tot_N_at_szgroup_just_after_redistribution =_N_at_szgroup_just_after_redistribution;
 
 }
 
 
-void Population::set_tot_N_at_szgroup_month_minus_1(vector<double> _N_at_szgroup_month_minus_1)
+void Population::set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1)
 {
 	tot_N_at_szgroup_month_minus_1 =_N_at_szgroup_month_minus_1;
 
 }
 
 
-void Population::set_tot_N_at_szgroup_year_minus_1(vector<double> _N_at_szgroup_year_minus_1)
+void Population::set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1)
 {
 	tot_N_at_szgroup_year_minus_1 =_N_at_szgroup_year_minus_1;
 
 }
 
 
-void Population::set_tot_N_at_age(vector<double> _tot_N_at_age)
+void Population::set_tot_N_at_age(const vector<double>& _tot_N_at_age)
 {
 	tot_N_at_age =_tot_N_at_age;
 
 }
 
 
-void Population::set_tot_F_at_age(vector<double> _tot_F_at_age)
+void Population::set_tot_F_at_age(const vector<double>& _tot_F_at_age)
 {
 	tot_F_at_age =_tot_F_at_age;
 
 }
 
 
-void Population::set_tot_F_at_age_last_quarter(vector<double> _tot_F_at_age_last_quarter)
+void Population::set_tot_F_at_age_last_quarter(const vector<double>& _tot_F_at_age_last_quarter)
 {
 	tot_F_at_age_last_quarter =_tot_F_at_age_last_quarter;
 
 }
 
 
-void Population::set_tot_M_at_age(vector<double> _tot_M_at_age)
+void Population::set_tot_M_at_age(const vector<double>& _tot_M_at_age)
 {
 	tot_M_at_age =_tot_M_at_age;
 
 }
 
 
-void Population::set_tot_W_at_age(vector<double> _tot_W_at_age)
+void Population::set_tot_W_at_age(const vector<double>& _tot_W_at_age)
 {
 	tot_W_at_age =_tot_W_at_age;
 
 }
 
 
-void Population::set_maturity_at_szgroup(vector<double> _maturity_at_szgroup)
+void Population::set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_maturity_at_szgroup.size(); sz++)
 	{
@@ -583,7 +583,7 @@ void Population::set_maturity_at_szgroup(vector<double> _maturity_at_szgroup)
 }
 
 
-void Population::set_fecundity_at_szgroup(vector<double> _fecundity_at_szgroup)
+void Population::set_fecundity_at_szgroup(const vector<double>& _fecundity_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_fecundity_at_szgroup.size(); sz++)
 	{
@@ -615,7 +615,7 @@ void Population::set_comcat_at_szgroup(vector<int> _comcat_at_szgroup)
 }
 
 
-void Population::set_M_at_szgroup(vector<double> _M_at_szgroup)
+void Population::set_M_at_szgroup(const vector<double>& _M_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_M_at_szgroup.size(); sz++)
 	{
@@ -625,7 +625,7 @@ void Population::set_M_at_szgroup(vector<double> _M_at_szgroup)
 }
 
 
-void Population::set_proprecru_at_szgroup(vector<double> _proprecru_at_szgroup)
+void Population::set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_proprecru_at_szgroup.size(); sz++)
 	{
@@ -647,7 +647,7 @@ void Population::set_landings_so_far(double _landings_so_far)
 }
 
 
-void Population::set_param_sr(vector<double> _param_sr)
+void Population::set_param_sr(const vector<double>& _param_sr)
 {
 
 	for(unsigned int i =0; i<_param_sr.size(); i++)

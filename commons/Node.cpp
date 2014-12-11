@@ -183,7 +183,7 @@ bool Node::get_is_harbour () const
 }
 
 
-vector<double>  Node::get_Ns_pops_at_szgroup(int name_pop) const
+vector<double> Node::get_Ns_pops_at_szgroup(int name_pop) const
 {
 
 	vector<double> a_Ns_pops_at_szgroup;
@@ -197,7 +197,7 @@ vector<double>  Node::get_Ns_pops_at_szgroup(int name_pop) const
 }
 
 
-vector<double>  Node::get_Ns_pops_at_szgroup_at_month_start(int name_pop) const
+vector<double> Node::get_Ns_pops_at_szgroup_at_month_start(int name_pop) const
 {
 
 	vector<double> a_Ns_pops_at_szgroup_at_month_start;
@@ -211,7 +211,7 @@ vector<double>  Node::get_Ns_pops_at_szgroup_at_month_start(int name_pop) const
 }
 
 
-vector<double>  Node::get_removals_pops_at_szgroup(int name_pop) const
+vector<double> Node::get_removals_pops_at_szgroup(int name_pop) const
 {
 
 	vector<double> a_removals_pops_at_szgroup;
@@ -260,7 +260,7 @@ double  Node::get_benthos_tot_biomass(int funcgr) const
 }
 
 
-vector <double>  Node::get_benthos_tot_biomass() const
+const vector <double> &Node::get_benthos_tot_biomass() const
 {
 
 	return(benthos_tot_biomass);
@@ -292,7 +292,7 @@ vector<int> Node::get_pop_names_on_node ()
 }
 
 
-vector<double> Node::get_impact_on_pops ()
+const vector<double>& Node::get_impact_on_pops ()
 {
 	return(impact_on_pops);
 }
@@ -370,7 +370,7 @@ void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroup
 }
 
 
-void Node::set_Ns_pops_at_szgroup(int name_pop, vector<double> newval)
+void Node::set_Ns_pops_at_szgroup(int name_pop, const vector<double>& newval)
 {
 	for(unsigned int j = 0; j < Ns_pops_at_szgroup[name_pop].size(); j++)
 	{
@@ -380,7 +380,7 @@ void Node::set_Ns_pops_at_szgroup(int name_pop, vector<double> newval)
 }
 
 
-void Node::set_Ns_pops_at_szgroup_at_month_start(int name_pop, vector<double> newval)
+void Node::set_Ns_pops_at_szgroup_at_month_start(int name_pop, const vector<double>& newval)
 {
 	for(unsigned int j = 0; j < Ns_pops_at_szgroup_at_month_start[name_pop].size(); j++)
 	{
@@ -390,7 +390,7 @@ void Node::set_Ns_pops_at_szgroup_at_month_start(int name_pop, vector<double> ne
 }
 
 
-void Node::set_removals_pops_at_szgroup(int name_pop, vector<double> newval)
+void Node::set_removals_pops_at_szgroup(int name_pop, const vector<double>& newval)
 {
 	for(unsigned int j = 0; j < removals_pops_at_szgroup[name_pop].size(); j++)
 	{
@@ -400,7 +400,7 @@ void Node::set_removals_pops_at_szgroup(int name_pop, vector<double> newval)
 }
 
 
-void Node::set_pressure_pops_at_szgroup(int name_pop, vector<double> newval)
+void Node::set_pressure_pops_at_szgroup(int name_pop, const vector<double>& newval)
 {
 	for(unsigned int j = 0; j < pressure_pops_at_szgroup[name_pop].size(); j++)
 	{
@@ -410,7 +410,7 @@ void Node::set_pressure_pops_at_szgroup(int name_pop, vector<double> newval)
 }
 
 
-void Node::set_avai_pops_at_selected_szgroup(int name_pop, vector<double> newval)
+void Node::set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>& newval)
 {
 	for(unsigned int j = 0; j < avai_pops_at_selected_szgroup[name_pop].size(); j++)
 	{
@@ -496,7 +496,7 @@ void Node::clear_avai_pops_at_selected_szgroup()
 }
 
 
-void Node::apply_natural_mortality_at_node(int name_pop, vector<double> M_at_szgroup)
+void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
@@ -517,7 +517,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, vector<double> M_at_szg
 
 
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
-vector<double>  weight_at_szgroup, vector<double> totN)
+                          const vector<double>&  weight_at_szgroup, const vector<double>& totN)
 {
 	//cout << "BEGIN: apply_oth_land()" << endl;
 

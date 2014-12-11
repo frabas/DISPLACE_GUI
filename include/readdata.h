@@ -24,6 +24,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <options.h>
+
 using namespace std;
 
 std::string getLastErrorMessage();
@@ -42,7 +44,7 @@ int read_scenario_config_file(
     string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
-    vector<string>& dyn_alloc_sce,
+    DynAllocOptions& dyn_alloc_sce,
     vector<string>& dyn_pop_sce,
     string& biolsce,
     int& a_graph,

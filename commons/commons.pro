@@ -19,7 +19,8 @@ SOURCES= \
     Metier.cpp \
     myRutils.cpp \
     mkpath.cpp \
-    memoryinfo.cpp
+    memoryinfo.cpp \
+    options.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -36,7 +37,8 @@ HEADERS= \
     ../include/mkpath.h \
     ../include/m_constants.h \
     ../include/memoryinfo.h \
-    ../include/helpers.h
+    ../include/helpers.h \
+    ../include/options.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

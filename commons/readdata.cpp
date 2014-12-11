@@ -127,11 +127,10 @@ int read_config_file (string folder_name_parameterization,
 read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-int read_scenario_config_file (
-    string folder_name_parameterization,
+int read_scenario_config_file (string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
-    vector<string>& dyn_alloc_sce,
+    DynAllocOptions &dyn_alloc_sce,
     vector<string>& dyn_pop_sce,
     string& biolsce,
     int& a_graph,
@@ -161,7 +160,8 @@ int read_scenario_config_file (
 			string val;
 			while(linestream >> val)
 			{
-				dyn_alloc_sce.push_back(val);
+                dyn_alloc_sce.setOption(val);
+//				dyn_alloc_sce.push_back(val);
 			}
 		}
 		if(counter==4)

@@ -2623,7 +2623,7 @@ ofstream& freq_distance)
 
 void Vessel::choose_a_ground_and_go_fishing(
         int tstep,
-        vector<string>& dyn_alloc_sce,
+        const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
         vector <int>& idx_path_shop,
         deque<map<vertex_t, vertex_t> >& path_shop,
@@ -2652,9 +2652,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	int ground;
 
 	// ************focus_on_high_previous_cpue********************//
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-								 // dyn sce.
-		"focus_on_high_previous_cpue"))
+    if (dyn_alloc_sce.option(Options::focus_on_high_previous_cpue))
 	{
 
 		this->alloc_on_high_previous_cpue(tstep,
@@ -2662,9 +2660,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	}
 
 	// ************focus_on_high_profit_grounds********************//
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-								 // dyn sce.
-		"focus_on_high_profit_grounds"))
+    if (dyn_alloc_sce.option(Options::focus_on_high_profit_grounds))
 	{
 
 		this->alloc_on_high_profit_grounds(tstep,
@@ -2675,9 +2671,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	}
 
 	// ********realloc among the 3 more used grounds to save 20%*******//
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-								 // dyn sce.
-		"fuelprice_plus20percent"))
+    if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
 	{
 
 		// update freq only if starting from a port different from the last one.
@@ -2697,8 +2691,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 
 	}
 	// ****************closer_grounds**********************************//
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-		"closer_grounds"))		 // dyn sce.
+    if (dyn_alloc_sce.option(Options::loser_grounds))		 // dyn sce.
 	{
 		this->alloc_on_closer_grounds(tstep,
 			idx_path_shop,
@@ -2708,8 +2701,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	}
 
 	// ****************area_closure**********************************//
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-		"area_closure"))		 // area-based sce
+    if (dyn_alloc_sce.option(Options::area_closure))		 // area-based sce
 	{
 		this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
 		// compliance => 0.0001
@@ -2749,7 +2741,7 @@ void Vessel::choose_a_ground_and_go_fishing(
     dout(cout  << "distance to fishing ground " << vertex_names[vx] << ": " << min_distance[vx] << endl);
 
 	// check for area_closure
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "area_closure") )
+    if (dyn_alloc_sce.option(Options::area_closure) )
 	{
 		vector<int> polygons;
 		vector<int> polygon_nodes;
@@ -2843,9 +2835,8 @@ void Vessel::choose_a_ground_and_go_fishing(
 }
 
 
-void Vessel::choose_another_ground_and_go_fishing(
-        int tstep,
-        vector<string>& dyn_alloc_sce,
+void Vessel::choose_another_ground_and_go_fishing(int tstep,
+        const DynAllocOptions &dyn_alloc_sce,
         int create_a_path_shop,
         vector <int>& idx_path_shop,
         deque<map<vertex_t, vertex_t> >& path_shop,
@@ -2901,7 +2892,7 @@ void Vessel::choose_another_ground_and_go_fishing(
 	// check for area_closure
 	vector<int> polygons;
 	vector<int> polygon_nodes;
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "area_closure"))
+    if (dyn_alloc_sce.option(Options::area_closure))
 	{
 
 		for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -2922,7 +2913,7 @@ void Vessel::choose_another_ground_and_go_fishing(
         dout(cout  << "distance to other grounds " << vertex_names[vx] << ": " << min_distance[vx] << endl);
 
 		// check for area_closure
-		if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "area_closure"))
+        if (dyn_alloc_sce.option(Options::area_closure))
 		{
 
 			if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
@@ -2999,7 +2990,7 @@ void Vessel::choose_another_ground_and_go_fishing(
         dout(cout  << "GO FISHING ON THE 2nd CLOSEST: " << vertex_names[next_ground] << endl);
 
 		// check for area_closure
-		if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "area_closure"))
+        if (dyn_alloc_sce.option(Options::area_closure))
 		{
 
 			vector<int> polygons;
@@ -3091,9 +3082,8 @@ void Vessel::choose_another_ground_and_go_fishing(
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::choose_a_port_and_then_return(
-        int tstep,
-        vector<string>& dyn_alloc_sce,
+void Vessel::choose_a_port_and_then_return(int tstep,
+        const DynAllocOptions &dyn_alloc_sce,
         int create_a_path_shop,
         vector <int>& idx_path_shop,
         deque<map<vertex_t, vertex_t> >& path_shop,
@@ -3144,8 +3134,7 @@ void Vessel::choose_a_port_and_then_return(
 	vertex_t arr;
 
 	//*************************closer_port**************************//
-	if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-		"closer_port"))			 // dyn sce.
+    if (dyn_alloc_sce.option(Options::closer_port))			 // dyn sce.
 	{
 		for (unsigned int i =0; i< harbs.size(); i++)
 		{
@@ -3610,7 +3599,7 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 
 int Vessel::should_i_stop_fishing(map<string,int>& external_states, bool use_the_tree,
                                   int tstep,
-                                  vector<string>& dyn_alloc_sce,
+                                  const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
                                   vector <int>& idx_path_shop,
                                   deque<map<vertex_t, vertex_t> >& path_shop,

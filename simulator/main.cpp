@@ -318,7 +318,7 @@ int main(int argc, char* argv[])
 	string filename;
 
 	// scenarios for dynamic allocation of effort and biol sce
-	vector<string> dyn_alloc_sce;
+    DynAllocOptions dyn_alloc_sce;
 	vector<string> dyn_pop_sce;
 	string biolsce;				 // default is 1
 
@@ -449,11 +449,7 @@ int main(int argc, char* argv[])
 	}
 	cout << endl;
 
-    for (unsigned int i=0; i<dyn_alloc_sce.size(); i++)
-	{
-		cout <<" " <<  dyn_alloc_sce.at(i);
-	}
-	cout << endl;
+    cout << dyn_alloc_sce.toString() << endl;
     for (unsigned int i=0; i<dyn_pop_sce.size(); i++)
 	{
 		cout <<" " <<  dyn_pop_sce.at(i);
@@ -870,8 +866,7 @@ int main(int argc, char* argv[])
 			}
 
 			// read fuel price (vessel size dependent for the time being)
-			if (!binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-				"fuelprice_plus20percent"))
+            if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
 			{
                 read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, "../"+inputfolder);
 			}
@@ -1712,7 +1707,7 @@ int main(int argc, char* argv[])
 
 		// for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
 								 // dyn sce.
-		if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_10percent"))
+        if (dyn_alloc_sce.option(Options::reduced_speed_10percent))
 		{
 								 // a decrease by 10%...
 			vessels[i]->set_speed(  vessels[i]->get_speed()*0.9   );
@@ -1722,7 +1717,7 @@ int main(int argc, char* argv[])
 			// e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
 		}
 								 // dyn sce.
-		if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_20percent"))
+        if (dyn_alloc_sce.option(Options::reduced_speed_20percent))
 		{
 								 // a decrease by 20%...
 			vessels[i]->set_speed(  vessels[i]->get_speed()*0.8   );
@@ -1732,7 +1727,7 @@ int main(int argc, char* argv[])
 			// e.g. assuming a v at 10, the fuel conso is lowered by (in %) =>  (1- (((seq(0.1,1,by=0.1)*10)^3 ) / (1*10^3)) )*100
 		}
 								 // dyn sce.
-		if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_30percent"))
+        if (dyn_alloc_sce.option(Options::reduced_speed_30percent))
 		{
 								 // a decrease by 30%...
 			vessels[i]->set_speed(  vessels[i]->get_speed()*0.7   );
@@ -2734,9 +2729,7 @@ int main(int argc, char* argv[])
 							// not farther than 200 km than a closed node.
 							// pseudocode: if a closed node then cumul otherwise apply oth_land + cumul if <200km otherwise apply oth_land only and continue the cumul
 							//
-							if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
-								 // area-based sce
-								"area_closure"))
+                            if (dyn_alloc_sce.option(Options::area_closure))
 							{
 
 								vector<int> polygons;

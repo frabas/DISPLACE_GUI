@@ -19,13 +19,7 @@
 // --------------------------------------------------------------------------
 
 #include "Harbour.h"
-
-//#define VERBOSE
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 Harbour::Harbour(int idx,
 double xval,
@@ -88,15 +82,15 @@ double Harbour::get_prices(string met, int pop)
 	//print_d(spe_prices);
 	if(!spe_prices.empty())
 	{
-		dout << "hi there..." << endl;
+        dout(cout  << "hi there..." << endl);
 		a_price=spe_prices.at(pop);
 	}
 	else
 	{
-		dout << "no price info for this met on this harbour..." << endl;
+        dout(cout  << "no price info for this met on this harbour..." << endl);
 		// then, replace by taking another met eg the first met as it comes...
 		multimap<string, double>::iterator it = mean_fish_price_per_met_per_pop.begin(); it++; // why it.begin() is void?
-		dout << "instead, get met " << it->first << endl;
+        dout(cout  << "instead, get met " << it->first << endl);
 		vector <double> spe_prices = find_entries_s_d(mean_fish_price_per_met_per_pop,
 									 it->first);
 		a_price=spe_prices.at(pop);
@@ -114,18 +108,18 @@ double Harbour::get_prices_per_cat(int pop, int cat)
 	//print_d(spe_prices);
 	if(!spe_prices.empty())
 	{
-		dout << "harbour "<< this->get_name() << endl;
+        dout(cout  << "harbour "<< this->get_name() << endl);
 								 // caution to relative vector index here....
 		a_price=spe_prices.at(cat);
 
 	}
 	else
 	{
-		dout << "no price info for this pop on this harbour..." << endl;
+        dout(cout  << "no price info for this pop on this harbour..." << endl);
 		// then, replace by taking another met eg the first met as it comes...
 								 //it++; // why it.begin() is void?
 		multimap<int, double>::iterator it = mean_fish_price_per_pop_per_cat.begin();
-		dout << "instead, get pop " << it->first << endl;
+        dout(cout  << "instead, get pop " << it->first << endl);
 		vector <double> spe_prices = find_entries_i_d(mean_fish_price_per_pop_per_cat,
 			it->first);
 		a_price=spe_prices.at(cat);

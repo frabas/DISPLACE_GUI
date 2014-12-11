@@ -35,7 +35,8 @@ HEADERS= \
     ../include/myRutils.h \
     ../include/mkpath.h \
     ../include/m_constants.h \
-    ../include/memoryinfo.h
+    ../include/memoryinfo.h \
+    ../include/helpers.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

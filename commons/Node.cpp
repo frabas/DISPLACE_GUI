@@ -24,13 +24,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
-
-//#define VERBOSE
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 #define NBSZGROUP 14
 
@@ -58,10 +52,13 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 
 
 Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
-    const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
-    const vector<int> &graph_point_marine_landscape, int nbpops, int nbszgroups)
+           const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
+           const vector<int> &graph_point_marine_landscape, int nbpops, int nbszgroups)
 {
-	idx_node= idx;
+    UNUSED(nbpops);
+    UNUSED(nbszgroups);
+
+    idx_node= idx;
 	x=graph_coord_x[idx];
 	y=graph_coord_y[idx];
 	cumftime=0;
@@ -147,12 +144,17 @@ double Node::get_prices(string met, int pop)
 
 double Node::get_prices_per_cat(int pop, int cat)
 {
+    UNUSED(pop);
+    UNUSED(cat);
+
 	return(0);
 }
 
 
 double Node::get_fuelprices(string vsize)
 {
+    UNUSED(vsize);
+
 	return(0);
 }
 
@@ -324,25 +326,23 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
 {
 
 	// init at 0 the matrix of Ns
-	dout << "init matrix of Ns" << endl;
+    dout(cout  << "init matrix of Ns" << endl);
 	vector< vector<double> > init_Ns_pops_at_szgroup(nbpops, vector<double>(nbszgroups));
 	Ns_pops_at_szgroup= init_Ns_pops_at_szgroup;
 	Ns_pops_at_szgroup_at_month_start= init_Ns_pops_at_szgroup;
 	removals_pops_at_szgroup= init_Ns_pops_at_szgroup;
 	pressure_pops_at_szgroup= init_Ns_pops_at_szgroup;
-	for(unsigned int i = 0; i < nbpops; i++)
+    for(int i = 0; i < nbpops; i++)
 	{
-
-		for(unsigned int j = 0; j < nbszgroups; j++)
+        for(int j = 0; j < nbszgroups; j++)
 		{
-
 			Ns_pops_at_szgroup.at(i).at(j) = 0;
 			Ns_pops_at_szgroup_at_month_start.at(i).at(j) = 0;
-			dout << Ns_pops_at_szgroup[i][j] << " ";
+            dout(cout  << Ns_pops_at_szgroup[i][j] << " ");
 			pressure_pops_at_szgroup.at(i).at(j) = 0;
 			removals_pops_at_szgroup.at(i).at(j) = 0;
 		}
-		dout << endl;
+        dout(cout  << endl);
 
 		impact_on_pops.push_back(0);
 	}
@@ -354,19 +354,17 @@ void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroup
 {
 
 	// init at 0 the matrix of Ns
-	dout << "init matrix of Ns" << endl;
+    dout(cout  << "init matrix of Ns" << endl);
 	vector< vector<double> > init_avai_pops_at_selected_szgroup(nbpops, vector<double>(selected_nbszgroups));
 	avai_pops_at_selected_szgroup= init_avai_pops_at_selected_szgroup;
-	for(unsigned int i = 0; i < nbpops; i++)
+    for(int i = 0; i < nbpops; i++)
 	{
-
-		for(unsigned int j = 0; j < selected_nbszgroups; j++)
+        for(int j = 0; j < selected_nbszgroups; j++)
 		{
-
 			avai_pops_at_selected_szgroup.at(i).at(j) = 0;
-			dout << avai_pops_at_selected_szgroup[i][j] << " ";
+            dout(cout  << avai_pops_at_selected_szgroup[i][j] << " ");
 		}
-		dout << endl;
+        dout(cout  << endl);
 	}
 
 }
@@ -451,7 +449,7 @@ void  Node::set_benthos_tot_biomass(int funcgr, double value)
 
 void Node::clear_Ns_pops_at_szgroup()
 {
-	dout << "clear pop on nodes..." << endl;
+    dout(cout  << "clear pop on nodes..." << endl);
 	for(unsigned int i = 0; i < Ns_pops_at_szgroup.size(); i++)
 	{
 		for(unsigned int j = 0; j < Ns_pops_at_szgroup[i].size(); j++)
@@ -464,7 +462,7 @@ void Node::clear_Ns_pops_at_szgroup()
 
 void Node::clear_removals_pops_at_szgroup()
 {
-	dout << "clear removals on nodes..." << endl;
+    dout(cout  << "clear removals on nodes..." << endl);
 	for(unsigned int i = 0; i < removals_pops_at_szgroup.size(); i++)
 	{
 		for(unsigned int j = 0; j < removals_pops_at_szgroup[i].size(); j++)
@@ -477,7 +475,7 @@ void Node::clear_removals_pops_at_szgroup()
 
 void Node::clear_impact_on_pops()
 {
-	for(int i=0; i<impact_on_pops.size(); i++)
+    for(unsigned int i=0; i<impact_on_pops.size(); i++)
 	{
 		impact_on_pops.at(i)=0;
 	}
@@ -487,7 +485,7 @@ void Node::clear_impact_on_pops()
 
 void Node::clear_avai_pops_at_selected_szgroup()
 {
-	dout << "clear pop on nodes..." << endl;
+    dout(cout  << "clear pop on nodes..." << endl);
 	for(unsigned int i = 0; i < avai_pops_at_selected_szgroup.size(); i++)
 	{
 		for(unsigned int j = 0; j < avai_pops_at_selected_szgroup[i].size(); j++)
@@ -500,7 +498,7 @@ void Node::clear_avai_pops_at_selected_szgroup()
 
 void Node::apply_natural_mortality_at_node(int name_pop, vector<double> M_at_szgroup)
 {
-	//dout << "BEGIN: apply_natural_mortality_at_node()" << endl;
+    //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
 	vector <double> a_Ns_at_szgroup = get_Ns_pops_at_szgroup(name_pop);
 	for(unsigned int i=0; i<a_Ns_at_szgroup.size(); i++)
@@ -514,7 +512,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, vector<double> M_at_szg
 
 	set_Ns_pops_at_szgroup(name_pop, a_Ns_at_szgroup);
 
-	//dout << "END: apply_natural_mortality_at_node()" << endl;
+    //dout(cout  << "END: apply_natural_mortality_at_node()" << endl);
 }
 
 
@@ -582,9 +580,9 @@ vector<double>  weight_at_szgroup, vector<double> totN)
 		avail_biomass[szgroup]=  Ns_at_szgroup_pop[szgroup]*weight_at_szgroup[szgroup]*sel_ogive[szgroup];
 								 // cumul
 		tot = tot+avail_biomass[szgroup];
-		dout << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl;
+        dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
 	}
-	dout << "tot biomass available" << tot << endl;
+    dout(cout  << "tot biomass available" << tot << endl);
 
 	if(tot!=0)
 	{
@@ -598,7 +596,7 @@ vector<double>  weight_at_szgroup, vector<double> totN)
 				// compute alloc key
 								 // proportion
 				alloc_key[szgroup]=avail_biomass[szgroup] /(tot);
-				dout << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl;
+                dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
 
 				// disaggregate total catch (in weight) for this pop according to the alloc key
 				catch_per_szgroup[szgroup]= oth_land_this_pop_this_node * alloc_key[szgroup];
@@ -618,10 +616,10 @@ vector<double>  weight_at_szgroup, vector<double> totN)
 				{
 
 					catch_per_szgroup[szgroup]=(Ns_at_szgroup_pop[szgroup])*weight_at_szgroup[szgroup];
-					dout << "the szgroup " << szgroup <<
+                    dout  (cout << "the szgroup " << szgroup <<
 						"for this pop " << name_pop << " is fully depleted on this node by other land. " <<
 						idx_node << "! catch is "<<
-						catch_per_szgroup[szgroup] << endl;
+                        catch_per_szgroup[szgroup] << endl);
 
 								 // take all...
 					removals_per_szgroup[szgroup]=new_Ns_at_szgroup_pop[szgroup];
@@ -689,13 +687,13 @@ vector<double>  weight_at_szgroup, vector<double> totN)
 		}
 
 		// additionally, impact the catches realized on this node
-		dout << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl;
+        dout(cout  << "oth_land this pop this node, before: "<<  oth_land_this_pop_this_node << endl);
 		oth_land_this_pop_this_node=0;
-		for(int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
+        for(unsigned int szgroup=0; szgroup < catch_per_szgroup.size(); szgroup++)
 		{
 			oth_land_this_pop_this_node+=catch_per_szgroup.at(szgroup);
 		}
-		dout << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl;
+        dout(cout  << "oth_land this pop this node, after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
 		this->set_Ns_pops_at_szgroup(name_pop, new_Ns_at_szgroup_pop);
 		this->set_removals_pops_at_szgroup(  name_pop, new_removals_at_szgroup_pop);
@@ -730,7 +728,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 	// note : pble with c++: circularity impossible then need to call init_weight_atszgroup
 	// instead of using population->get_weight_at_szgroup()
 
-	dout << "export biomass on nodes for use in e.g. a GIS engine" << endl;
+    dout(cout  << "export biomass on nodes for use in e.g. a GIS engine" << endl);
 
 	popnodes << setprecision(3) << fixed;
 	// tstep / node / long / lat / tot N sp0 / tot N sp1 /...
@@ -738,7 +736,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 		" " << this->get_x() << " " << this->get_y();
 
     double totN_this_pop, totW_this_pop;
-	for(int name_pop = 0; name_pop < Ns_pops_at_szgroup.size(); name_pop++)
+    for(unsigned int name_pop = 0; name_pop < Ns_pops_at_szgroup.size(); name_pop++)
 	{
 		totN_this_pop=0;		 // re-init
         totW_this_pop= 0.0;
@@ -748,7 +746,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 		for (multimap<int, double>::iterator pos=lower_init_we; pos != upper_init_we; pos++)
 			weight_at_szgroup.push_back(pos->second);
 
-		for(int sz = 0; sz < Ns_pops_at_szgroup[name_pop].size(); sz++)
+        for(unsigned int sz = 0; sz < Ns_pops_at_szgroup[name_pop].size(); sz++)
 		{
             totN_this_pop+= Ns_pops_at_szgroup[name_pop] [sz];
             totW_this_pop+= Ns_pops_at_szgroup[name_pop] [sz] * weight_at_szgroup.at(sz);
@@ -764,7 +762,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 {
 
-	dout << "export impact on nodes for use in e.g. a GIS engine" << endl;
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
@@ -778,7 +776,7 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop)
 {
 
-	dout << "export impact on nodes for use in e.g. a GIS engine" << endl;
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
 
 	vector<double> impact_per_szgroup=get_pressure_pops_at_szgroup(pop);
 
@@ -787,7 +785,7 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
 	popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
 		" " << this->get_x() << " " << this->get_y() ;
 
-	for(int sz = 0; sz < impact_on_pops.size(); sz++)
+    for(unsigned int sz = 0; sz < impact_on_pops.size(); sz++)
 	{
 		popnodes << " " << impact_on_pops.at(sz);
 	}
@@ -800,7 +798,7 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
 void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 {
 
-	dout << "export impact on nodes for use in e.g. a GIS engine" << endl;
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
@@ -828,14 +826,14 @@ void Node::set_is_harbour(int id)
 void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep)
 {
 
-	dout << "export benthos on nodes for use in e.g. a GIS engine" << endl;
+    dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
 
 	benthosnodes << setprecision(3) << fixed;
 	// pop/ tstep / node / long / lat /  impact sz0 / impact sz1 /...
 	benthosnodes << tstep << " " << this->get_idx_node() << " "<<
 		" " << this->get_x() << " " << this->get_y() ;
 
-	for(int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
+    for(unsigned int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
 	{
 		benthosnodes << " " << benthos_tot_biomass.at(funcgr);
 	}
@@ -851,9 +849,9 @@ void Node::recover_benthos_tot_biomass_per_funcgroup()
 	// i.e. 1% per month
 	// TO DO: INFORM WITH DATA.
 
-	dout << "the benthos recovering...." << endl;
+    dout(cout  << "the benthos recovering...." << endl);
 
-	for(int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
+    for(unsigned int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
 	{
 		benthos_tot_biomass.at(funcgr)=benthos_tot_biomass.at(funcgr)*1.01;
 	}

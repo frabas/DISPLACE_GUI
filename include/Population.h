@@ -65,7 +65,6 @@ class Population
 		Population();
 		virtual ~Population();
 								 // Copy constructor
-		Population(const Population& other);
 		int get_name() const;
         const vector<Node *> &get_list_nodes() const;
         const vector<int> &get_selected_szgroups() const;

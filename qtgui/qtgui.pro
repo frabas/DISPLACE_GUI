@@ -15,6 +15,7 @@ DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol
 
 CONFIG(debug,release|debug) {
+    DEFINES += DEBUG
     QMAPCONTROL_LIB=qmapcontrold
 }
 CONFIG(release,release|debug) {

@@ -21,9 +21,11 @@ win32 {
 }
 
 CONFIG(debug,debug|release) {
-    DEFINES += DEBUG
+    DEFINES += DEBUG PROFILE
 }
 
+# Force profiling in release
+DEFINES += PROFILE
 
 SOURCES= main.cpp
 

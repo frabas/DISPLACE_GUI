@@ -92,8 +92,7 @@
 #include "myutils.h"
 #include <memoryinfo.h>
 
-#ifdef DEBUG
-#define PROFILE
+#ifdef PROFILE
 #include <profiler.h>
 #endif
 

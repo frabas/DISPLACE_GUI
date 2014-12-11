@@ -1716,7 +1716,13 @@ void MainWindow::on_cmdProfileSave_clicked()
         strm << endl << endl << "--------" << endl;
         strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << endl;
         strm << models[0]->inputName() << " " << models[0]->outputName() << " " << models[0]->simulationName() << endl;
-        strm << models[0]->getSimulationSteps() << " total steps";
+        strm << models[0]->getSimulationSteps() << " total steps" << endl;
+        strm << "Linked database: " << models[0]->linkedDatabase() << endl;
+#ifdef DEBUG
+        strm << "Debug version" << endl;
+#else
+        strm << "Release version" << endl;
+#endif
         strm << endl;
         strm << ui->profilingOutput->toPlainText();
         strm << endl;

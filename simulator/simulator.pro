@@ -42,7 +42,9 @@ HEADERS= \
     ../include/Metier.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
-    ../include/m_constants.h
+    ../include/m_constants.h \
+    ../include/options.h \
+    ../include/profiler.h
 
 OTHER_FILES += \
     Makefile

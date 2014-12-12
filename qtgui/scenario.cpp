@@ -152,7 +152,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 {
     // scenarios for dynamic allocation of effort and biol sce
     DynAllocOptions dyn_alloc_sce;
-    vector<string> dyn_pop_sce;
+    PopSceOptions dyn_pop_sce;
     string biolsce;				 // default is 1
     int a_graph;
     int a_port;
@@ -180,11 +180,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     Scenario s;
 
     QStringList alsce = QString::fromStdString(dyn_alloc_sce.toString()).split(" ", QString::SkipEmptyParts);
-//    for (vector<string>::iterator it = dyn_alloc_sce.begin(); it != dyn_alloc_sce.end(); ++it)
-//        alsce << it->c_str();
-    QStringList popsce;
-    for (vector<string>::iterator it = dyn_pop_sce.begin(); it != dyn_pop_sce.end(); ++it)
-        popsce << it->c_str();
+    QStringList popsce = QString::fromStdString(dyn_pop_sce.toString()).split(" ", QString::SkipEmptyParts);
 
     s.setDyn_alloc_sce(alsce);
     s.setDyn_pop_sce(popsce);

@@ -40,12 +40,11 @@ vector<double>& a_vector_line8,
 vector<double>& a_vector_line10
 , vector<int> &interesting_harbours);
 
-int read_scenario_config_file(
-    string folder_name_parameterization,
+int read_scenario_config_file(string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
     DynAllocOptions& dyn_alloc_sce,
-    vector<string>& dyn_pop_sce,
+    PopSceOptions &dyn_pop_sce,
     string& biolsce,
     int& a_graph,
     int& nrow_coord,

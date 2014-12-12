@@ -315,7 +315,7 @@ int main(int argc, char* argv[])
 
 	// scenarios for dynamic allocation of effort and biol sce
     DynAllocOptions dyn_alloc_sce;
-	vector<string> dyn_pop_sce;
+    PopSceOptions dyn_pop_sce;
 	string biolsce;				 // default is 1
 
 	//for initial input data
@@ -446,11 +446,7 @@ int main(int argc, char* argv[])
 	cout << endl;
 
     cout << dyn_alloc_sce.toString() << endl;
-    for (unsigned int i=0; i<dyn_pop_sce.size(); i++)
-	{
-		cout <<" " <<  dyn_pop_sce.at(i);
-	}
-	cout << endl;
+    cout << dyn_pop_sce.toString() << endl;
 	cout << "biolsce " << biolsce << endl;
 	cout << "a_graph " << a_graph << endl;
 	cout << "a_graph_name " << a_graph_name << endl;
@@ -673,7 +669,7 @@ int main(int argc, char* argv[])
 	}
 
 	// special case for ramdom stochastic spatial pop distribution
-	if(binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "white_noise_on_avai"))
+    if(dyn_pop_sce.option(Options::white_noise_on_avai))
 	{
 								 // pick up a file name randomly later on
 		int rand_avai_file= (rand() % 50)+1;
@@ -2591,7 +2587,7 @@ int main(int argc, char* argv[])
 		vector<int> some_max_nb_ages (myints3, myints3 + sizeof(myints3) / sizeof(int) );
 
 								 // entry point for the SMS model
-		if(binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "use_SMS"))
+        if(dyn_pop_sce.option(Options::use_SMS))
 		{
 
 			if(tstep==0)
@@ -2706,7 +2702,7 @@ int main(int argc, char* argv[])
 
 						// magic number for a the below scenario: add a stochastic variation
                         // area-based sce
-						if (binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "with_stochast_oth_land"))
+                        if (dyn_pop_sce.option(Options::with_stochast_oth_land))
 						{
                             // lognormal error
 							double a_rnorm = rlnorm(0,0.25);
@@ -2949,7 +2945,7 @@ int main(int argc, char* argv[])
 			}					 // end sp
 
 								 // entry point for the SMS model
-			if(binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "use_SMS"))
+            if(dyn_pop_sce.option(Options::use_SMS))
 			{
 
 				// check for cod
@@ -3248,7 +3244,7 @@ int main(int argc, char* argv[])
 						}
 
                         // store N initial for the next year and reinit Fs
-						if(binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "use_SMS"))
+                        if(dyn_pop_sce.option(Options::use_SMS))
 						{
 
 							ofstream SMS_N_in;
@@ -3597,7 +3593,7 @@ int main(int argc, char* argv[])
 		}						 // END RE-READ DATA FOR VESSEL AND METIER...
 
 		bool is_re_read_pop_data=false;
-		if (binary_search (dyn_pop_sce.begin(), dyn_pop_sce.end(), "with_monthly_redistribution"))
+        if (dyn_pop_sce.option(Options::with_monthly_redistribution))
 		{
 
 			is_re_read_pop_data=binary_search (tsteps_months.begin(), tsteps_months.end(), tstep);

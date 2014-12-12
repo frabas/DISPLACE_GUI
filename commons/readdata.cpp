@@ -131,7 +131,7 @@ int read_scenario_config_file (string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
     DynAllocOptions &dyn_alloc_sce,
-    vector<string>& dyn_pop_sce,
+    PopSceOptions & dyn_pop_sce,
     string& biolsce,
     int& a_graph,
     int& nrow_coord,
@@ -161,7 +161,6 @@ int read_scenario_config_file (string folder_name_parameterization,
 			while(linestream >> val)
 			{
                 dyn_alloc_sce.setOption(val);
-//				dyn_alloc_sce.push_back(val);
 			}
 		}
 		if(counter==4)
@@ -169,7 +168,7 @@ int read_scenario_config_file (string folder_name_parameterization,
 			string val;
 			while(linestream >> val)
 			{
-				dyn_pop_sce.push_back(val);
+                dyn_pop_sce.setOption(val);
 			}
 		}
 

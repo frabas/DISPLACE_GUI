@@ -52,7 +52,7 @@ protected:
 namespace Options {
 
 enum Dyn_Alloc {
-    baseline,
+    alloc_baseline,
     focus_on_high_profit_grounds,
     area_closure,
     fuelprice_plus20percent,
@@ -70,12 +70,31 @@ enum Dyn_Alloc {
     Dyn_Alloc_last
 };
 
+enum Pop_Sce {
+    pop_baseline,
+    use_SMS,
+    baseline_slower_growth,
+    lower_pop_productivity,
+    use_SMS_slower_growth,
+    with_monthly_redistribution,
+    white_noise_on_avai,
+    with_stochast_oth_land,
+
+    Pop_Sce_last
+};
+
 } // namespace
 
 class DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last>
 {
 public:
     DynAllocOptions();
+};
+
+class PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last>
+{
+public:
+    PopSceOptions();
 };
 
 #endif // OPTIONS_H

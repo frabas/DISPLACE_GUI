@@ -192,6 +192,70 @@ void guiSendCapture(bool on)
         std::cout << "=Dc" << (on ? "+" : "-");
 }
 
+bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
+{
+    string filename=  inputfolder + "/vesselsspe_"+folder_name_parameterization+"/vesselsspe_" + ftype + "_" + a_quarter + ".dat";
+    ifstream in;
+    in.open(filename.c_str());
+    if(in.fail())
+    {
+        open_file_error(filename.c_str());
+        return false;
+    }
+
+    string line;
+    string vessel_name;
+    int node;
+    int n = 0;
+    while(!getline(in, line).eof())
+    {
+        ++n;
+        if (n == 1)
+            continue;
+        in >> vessel_name;
+        in >> node;
+        nodes.insert(node);
+    }
+
+    cout << "Loaded: " << filename << " " << n << " lines, " << nodes.size() << " relevant nodes";
+
+    in.close();
+    return true;
+}
+
+bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<int> &ret)
+{
+    set<int> nodes;
+
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter1", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter2", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter3", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter4", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter1", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter2", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter3", nodes))
+        return false;
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter4", nodes))
+        return false;
+
+    set<int>::iterator it = nodes.begin();
+    while (it != nodes.end()) {
+        ret.push_back(*it);
+        ++it;
+    }
+
+    sort(ret.begin(), ret.end());
+    return true;
+}
+
+
+
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
@@ -2074,120 +2138,17 @@ int main(int argc, char* argv[])
 #endif
 
 
-
-    // the idea is to avoid using DijkstraComputePaths() during live simulation
-    // in order to save a lot of computation time...
-    // indeed, using a shop of predefined objects 'previous' for each possible origin node,
-	// we will be able to use DijkstraGetShortestPathTo() only!
-
-	//...so we need one object 'previous' for each potential departure i.e. each
-	// harbour and each fishing ground nodes.
-	cout << "the following loading procedure will fail if any NA within the files..." << endl;
-    multimap<string, int> node_fgrounds_Q1 = read_fgrounds("quarter1", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_fgrounds_Q2 = read_fgrounds("quarter2", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_fgrounds_Q3 = read_fgrounds("quarter3", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_fgrounds_Q4 = read_fgrounds("quarter4", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_harbours_Q1 = read_harbours("quarter1", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_harbours_Q2 = read_harbours("quarter2", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_harbours_Q3 = read_harbours("quarter3", folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> node_harbours_Q4 = read_harbours("quarter4", folder_name_parameterization, "../"+inputfolder);
-
-	// get all possible node_harbours (for all quarters, caution!)
-	// from the multimap
-	vector<int> all_harbour_nodes;
-	// quarter1
-	for(multimap<string, int>::iterator iter=node_harbours_Q1.begin(); iter != node_harbours_Q1.end();
-		iter++ )
-	{
-		all_harbour_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_harbour_nodes.erase( all_harbour_nodes.begin() );
-	// quarter2
-	for(multimap<string, int>::iterator iter=node_harbours_Q2.begin(); iter != node_harbours_Q2.end();
-		iter++ )
-	{
-		all_harbour_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_harbour_nodes.erase( all_harbour_nodes.begin() );
-	// quarter3
-	for(multimap<string, int>::iterator iter=node_harbours_Q3.begin(); iter != node_harbours_Q3.end();
-		iter++ )
-	{
-		all_harbour_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_harbour_nodes.erase( all_harbour_nodes.begin() );
-	// quarter4
-	for(multimap<string, int>::iterator iter=node_harbours_Q4.begin(); iter != node_harbours_Q4.end();
-		iter++ )
-	{
-		all_harbour_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_harbour_nodes.erase( all_harbour_nodes.begin() );
-	// remove duplicates
-	remove_dups(all_harbour_nodes);
-
-	// check
-	cout << "harbour nodes: " << endl;
-    for(unsigned int i=0; i<all_harbour_nodes.size(); i++)
-	{
-		cout << all_harbour_nodes.at(i) << " " ;
-	}
-	cout << endl;
-
-	// get all possible all_fgrounds_nodes (for all quarters, caution!)
-	// from the multimap
-	vector<int> all_fgrounds_nodes;
-	// quarter1
-	for(multimap<string, int>::iterator iter=node_fgrounds_Q1.begin(); iter != node_fgrounds_Q1.end();
-		iter++)
-	{
-		all_fgrounds_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_fgrounds_nodes.erase( all_fgrounds_nodes.begin() );
-	// quarter2
-	for(multimap<string, int>::iterator iter=node_fgrounds_Q2.begin(); iter != node_fgrounds_Q2.end();
-		iter++)
-	{
-		all_fgrounds_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_fgrounds_nodes.erase( all_fgrounds_nodes.begin() );
-	// quarter3
-	for(multimap<string, int>::iterator iter=node_fgrounds_Q3.begin(); iter != node_fgrounds_Q3.end();
-		iter++)
-	{
-		all_fgrounds_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_fgrounds_nodes.erase( all_fgrounds_nodes.begin() );
-	// quarter4
-	for(multimap<string, int>::iterator iter=node_fgrounds_Q4.begin(); iter != node_fgrounds_Q4.end();
-		iter++)
-	{
-		all_fgrounds_nodes.push_back (iter->second);
-	}
-								 // erase first element which is blank....
-	all_fgrounds_nodes.erase( all_fgrounds_nodes.begin() );
-	// remove duplicates
-	remove_dups(all_fgrounds_nodes);
-
-	// check
-	cout << "fgrounds nodes: " << endl;
-    for(unsigned int i=0; i<all_fgrounds_nodes.size(); i++)
-	{
-		cout << all_fgrounds_nodes.at(i) << " " ;
-	}
-	cout << endl;
-
 	// bound the two vectors
 								 // copy
-	vector<int> relevant_nodes (all_harbour_nodes);
-	relevant_nodes.insert (relevant_nodes.end(), all_fgrounds_nodes.begin(), all_fgrounds_nodes.end());
+
+
+    vector<int> relevant_nodes;
+
+    if (!load_relevant_nodes(folder_name_parameterization, "../" + inputfolder, relevant_nodes)) {
+        cerr << "*** cannot load file." << endl;
+        return -1;
+    }
+
 
 	// check
 	cout << "relevant nodes: " << endl;

@@ -241,16 +241,13 @@ int main(int argc, char* argv[])
 		string sw = argv[optind];
 		if (sw=="--with-gnuplot")
 		{
-			optind++;
 			use_gnuplot=true;
 		}
         else if (sw=="--use-gui")
         {
-            optind++;
             use_gui = true;
         }
         else if (sw == "--no-gui-move-vessels") {
-            optind ++;
             gui_move_vessels = false;
         }
 		else if (sw=="-i")
@@ -4052,7 +4049,7 @@ int main(int argc, char* argv[])
 					<< vessels[ index_v ]->get_state() << " " <<  endl;
 			}
 
-            if (use_gui && gui_move_vessels && tstep < 8641) {
+            if (use_gui && gui_move_vessels) {
                 cout << "=V" << tstep << " "
                     << vessels[ index_v ]->get_idx() << " "
                     << vessels[ index_v ]->get_tstep_dep() << " "

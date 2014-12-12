@@ -55,6 +55,14 @@
 #define GetCurrentDir getcwd
 #endif
 
+#ifdef INSTRUMENTATION
+#include <valgrind/callgrind.h>
+#else
+#define CALLGRIND_START_INSTRUMENTATION
+#define CALLGRIND_STOP_INSTRUMENTATION
+#define CALLGRIND_DUMP_STATS
+#endif
+
 #include <iomanip>
 #include <iostream>
 #include <fstream>
@@ -217,7 +225,7 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
         nodes.insert(node);
     }
 
-    cout << "Loaded: " << filename << " " << n << " lines, " << nodes.size() << " relevant nodes";
+   outc(cout << "Loaded: " << filename << " " << n << " lines, " << nodes.size() << " relevant nodes");
 
     in.close();
     return true;
@@ -487,37 +495,37 @@ int main(int argc, char* argv[])
 	a_graph_name=a_graph_name+graphnum.str();
 
 	// check if config reading OK
-	cout << nbpops << endl;
+    outc(cout << nbpops << endl);
     for (unsigned int a_pop=0; a_pop<implicit_pops.size(); a_pop++)
 	{
-		cout <<" " <<  implicit_pops.at(a_pop);
+        outc(cout <<" " <<  implicit_pops.at(a_pop));
 	}
-	cout << endl;
+    outc(cout << endl);
 	for (int a_pop=0; a_pop<nbpops; a_pop++)
 	{
-		cout <<" " <<  calib_oth_landings.at(a_pop);
+       outc(cout <<" " <<  calib_oth_landings.at(a_pop));
 	}
-	cout << endl;
+    outc(cout << endl);
 	for (int a_pop=0; a_pop<nbpops; a_pop++)
 	{
-		cout <<" " <<  calib_weight_at_szgroup.at(a_pop);
+       outc(cout <<" " <<  calib_weight_at_szgroup.at(a_pop));
 	}
-	cout << endl;
+   outc(cout << endl);
 	for (int a_pop=0; a_pop<nbpops; a_pop++)
 	{
-		cout <<" " <<  calib_cpue_multiplier.at(a_pop);
+       outc(cout <<" " <<  calib_cpue_multiplier.at(a_pop));
 	}
-	cout << endl;
+   outc(cout << endl);
 
-    cout << dyn_alloc_sce.toString() << endl;
-    cout << dyn_pop_sce.toString() << endl;
-	cout << "biolsce " << biolsce << endl;
-	cout << "a_graph " << a_graph << endl;
-	cout << "a_graph_name " << a_graph_name << endl;
-	cout << "nrow_coord " << nrow_coord << endl;
-	cout << "nrow_graph " << nrow_graph << endl;
-	cout << "a_port " << a_port << endl;
-	cout << "graph res in km " << graph_res << endl;
+   outc(cout << dyn_alloc_sce.toString() << endl);
+   outc(cout << dyn_pop_sce.toString() << endl);
+   outc(cout << "biolsce " << biolsce << endl);
+   outc(cout << "a_graph " << a_graph << endl);
+   outc(cout << "a_graph_name " << a_graph_name << endl);
+   outc(cout << "nrow_coord " << nrow_coord << endl);
+   outc(cout << "nrow_graph " << nrow_graph << endl);
+   outc(cout << "a_port " << a_port << endl);
+   outc(cout << "graph res in km " << graph_res << endl);
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
 	// for which we do not have any info on the pops_N_at_szgroup because not assessed stock by ICES....
@@ -740,7 +748,7 @@ int main(int argc, char* argv[])
 		char buffer [100];
 		sprintf (buffer, "%03d", rand_avai_file);
 		str_rand_avai_file = buffer;
-		cout << "the avai file randomly chosen is indexed  " << str_rand_avai_file << endl;
+       outc(cout << "the avai file randomly chosen is indexed  " << str_rand_avai_file << endl);
 	}
 	else
 	{
@@ -874,9 +882,9 @@ int main(int argc, char* argv[])
 	// check inputs
 	for (unsigned int i=0; i<graph_point_code_area.size(); i++)
 	{
-		cout << graph_point_code_area[i] << " ";
+       outc(cout << graph_point_code_area[i] << " ");
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// read harbour specific files
     multimap<int, string> harbour_names = read_harbour_names(folder_name_parameterization, "../"+inputfolder);
@@ -907,15 +915,15 @@ int main(int argc, char* argv[])
 			multimap<int, double> fishprices_each_species_per_cat;
             if(a_name!="none" && a_point== (int)i)
 			{
-				cout << "load prices for port " << a_name << " which is point " << a_point << endl;
+               outc(cout << "load prices for port " << a_name << " which is point " << a_point << endl);
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 								 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 assert(er2 == 0);
-				cout << "....OK" << endl;
+               outc(cout << "....OK" << endl);
 			}
 			else
 			{
-				cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
+               outc(cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl);
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 
                 assert(er2 == 0);
@@ -938,7 +946,7 @@ int main(int argc, char* argv[])
 
 				for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
 				{
-					cout << pos->first << " " << pos->second;
+                   outc(cout << pos->first << " " << pos->second);
 				}
 
 			}
@@ -1008,28 +1016,28 @@ int main(int argc, char* argv[])
 	// creation of a vector of benthos community (one benthos community er landscape)
 	vector <Benthos* > benthoss(nbland);
 
-	cout << "nb of marine landscapes " << nbland << endl;
+   outc(cout << "nb of marine landscapes " << nbland << endl);
 
 	for(int landscape=0; landscape<nbland; landscape++)
 	{
 
 		int a_marine_landscape  =   graph_point_code_landscape.at(landscape);
 
-		cout << "a marine landscape " << a_marine_landscape << endl;
+       outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
 		multimap<int,double>::iterator lower_land = estimates_biomass_per_cell.lower_bound(a_marine_landscape);
 		multimap<int,double>::iterator upper_land = estimates_biomass_per_cell.upper_bound(a_marine_landscape);
 		vector<double> init_tot_biomass_per_group;
 		for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
 		{
-			cout << pos->second << endl;
+           outc(cout << pos->second << endl);
 								 // biomass per cell for this group specific to this landscape
 			init_tot_biomass_per_group.push_back(pos->second);
 		}
 
 		if(init_tot_biomass_per_group.size()==3 || init_tot_biomass_per_group.size()==1)
 		{
-			cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl;
+           outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
 			cin>>aa;
 		}
@@ -1042,8 +1050,8 @@ int main(int argc, char* argv[])
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
 			nodes,
 			init_tot_biomass_per_group);
-		//cout << "marine landscape for this benthos community is " << benthoss.at(landscape)->get_marine_landscape() << endl;
-		//cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl;
+        //out(cout << "marine landscape for this benthos community is " << benthoss.at(landscape)->get_marine_landscape() << endl);
+        //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 
 	}
 
@@ -1069,12 +1077,12 @@ int main(int argc, char* argv[])
 
 	// check the biomasses
 	vector<double> biomass_per_funcgr = benthoss[0]->get_tot_biomass();
-	cout << "check biomass per func. gr. for benthos community 0  " << endl;
+   outc(cout << "check biomass per func. gr. for benthos community 0  " << endl);
 	for(unsigned int i=0 ; i<biomass_per_funcgr.size();  i++)
 	{
-		cout << biomass_per_funcgr[i] << " " ;
+       outc(cout << biomass_per_funcgr[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// check the biomasses for benthos community 0 on the first node for the
 	// first functional group
@@ -1136,18 +1144,18 @@ int main(int argc, char* argv[])
 		iter = init_pops_per_szgroup.upper_bound( iter->first ) )
 	{
 		name_pops.push_back (iter->first);
-		cout << "pop " << iter->first << endl;
+       outc(cout << "pop " << iter->first << endl);
 
 	}
-	cout << "nb pops: " << name_pops.size() << endl;
-	cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl;
+   outc(cout << "nb pops: " << name_pops.size() << endl);
+   outc(cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl);
 
 	// FOR-LOOP OVER POP
 	for (unsigned int sp=0; sp<populations.size(); sp++)
 	{
         dout(cout  << endl);
 
-		cout << "pop_name: " <<  sp << endl;
+       outc(cout << "pop_name: " <<  sp << endl);
 
 		// avai0 beta for this particular pop
 		multimap<int,double>::iterator lower_0 = avai0_betas.lower_bound(sp);
@@ -1301,10 +1309,10 @@ int main(int argc, char* argv[])
 
 		if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
 		{
-			cout << "inform avai on nodes " << endl;
+           outc(cout << "inform avai on nodes " << endl);
 
             // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
-			cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl;
+           outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
 			vector <int> nodes_with_presence;
 			multimap<int,int>::iterator lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
 			multimap<int,int>::iterator upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
@@ -1313,7 +1321,7 @@ int main(int argc, char* argv[])
 				nodes_with_presence.push_back (a_pos->second);
 			}
 
-			cout << "...then attach avai to each node for this pop (this quarter)" << endl;
+           outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
 			// init avai on each node (we know the presence...) for this pop for selected szgroup
 			for (unsigned int n=0; n< nodes_with_presence.size(); n++)
 			{
@@ -1326,34 +1334,34 @@ int main(int argc, char* argv[])
 				else
 				{
 								 // inconsistence between lst_idx_nodes and avai files if this happen...
-					cout << nodes_with_presence.at(n) ;
+                   outc(cout << nodes_with_presence.at(n) );
 				}
 
 			}
 
 			// check
 			/*
-			cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << endl; // used in do_catch != the one used in distributeN()
+           outc(cout << "avai at selected szgroup for the pop " << sp << " on a given node xx:" << endl); // used in do_catch != the one used in distributeN()
 			vector<double> avai_pops_at_selected_szgroup = nodes[792]->get_avai_pops_at_selected_szgroup(sp);
 			vector<double>::iterator szgroup = avai_pops_at_selected_szgroup.begin();
 			for( ; szgroup != avai_pops_at_selected_szgroup.end(); szgroup++)
 			{
-				cout << *szgroup << " " ;
+               outc(cout << *szgroup << " " );
 			}
-			cout << endl;
+           outc(cout << endl);
 
 			// check
-			cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << endl;
+           outc(cout << "tot N at szgroup for the pop " << sp << "on a given node xx:" << endl);
 			vector<double> tot_N_at_szgroup = populations[sp]->get_tot_N_at_szgroup();
 			vector<double>::iterator szgroup2 = tot_N_at_szgroup.begin();
 			for( ; szgroup2 != tot_N_at_szgroup.end(); szgroup2++)
 			{
-				cout << *szgroup << " " ;
+               outc(cout << *szgroup << " " );
 			}
-			cout << endl;
+           outc(cout << endl);
 			*/
 
-			cout << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl;
+           outc(cout << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl);
 		}						 // end implicit pop
 	}							 // end pop
 
@@ -1365,51 +1373,51 @@ int main(int argc, char* argv[])
 
 	/*
 	// check on the node side
-	cout << "check on the node side e.g. for node 2579: " << endl;
+   outc(cout << "check on the node side e.g. for node 2579: " << endl);
 	vector<double> a_Ns_at_szgroup = nodes[2579]->get_Ns_pops_at_szgroup(0);
 	for(unsigned int i=0 ; i<a_Ns_at_szgroup.size();  i++)
 	{
-		cout << a_Ns_at_szgroup[i] << " " ;
+       outc(cout << a_Ns_at_szgroup[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// check the function for aggregation from nodes
 	populations[0]->aggregate_N();
 	vector<double> a_Ns_at_szgroup_pop0 = populations[0]->get_tot_N_at_szgroup();
-	cout << "check aggregate_N() " << endl;
+   outc(cout << "check aggregate_N() " << endl);
 	for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0.size();  i++)
 	{
-		cout << a_Ns_at_szgroup_pop0[i] << " " ;
+       outc(cout << a_Ns_at_szgroup_pop0[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// restore back and check on node side
 	populations[0]->distribute_N();
 	vector<double> a_Ns_at_szgroup_pop0_again = nodes[2579]->get_Ns_pops_at_szgroup(0);
-	cout << "check on the node side for the node 2579 " << endl;
+   outc(cout << "check on the node side for the node 2579 " << endl);
 	for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0_again.size();  i++)
 	{
-		cout << a_Ns_at_szgroup_pop0_again[i] << " " ;
+       outc(cout << a_Ns_at_szgroup_pop0_again[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	//  check on node side
 	vector<double> a_Ns_at_szgroup_pop0_2580 = nodes[2580]->get_Ns_pops_at_szgroup(0);
-	cout << "check on the node side for the node 2580 " << endl;
+   outc(cout << "check on the node side for the node 2580 " << endl);
 	for(unsigned int i=0 ; i<a_Ns_at_szgroup_pop0_2580.size();  i++)
 	{
-		cout << a_Ns_at_szgroup_pop0_2580[i] << " " ;
+       outc(cout << a_Ns_at_szgroup_pop0_2580[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// check the update of a node (will be useful for the pop model and removals of catches)
 	vector<int> names_on_node= nodes[2579]->get_pop_names_on_node();
-	cout << "pop names on this node " << nodes[2579]->get_idx_node() << endl;
+   outc(cout << "pop names on this node " << nodes[2579]->get_idx_node() << endl);
 	for (unsigned int i=0; i<names_on_node.size(); i++)
 	{
-		cout << names_on_node[i] << " ";
+       outc(cout << names_on_node[i] << " ");
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// check the tacs
 	for (unsigned int i=0; i<populations.size(); i++)
@@ -1425,15 +1433,15 @@ int main(int argc, char* argv[])
 	vector <double> N_at_szgroup_at_month_start= nodes.at(186)->get_Ns_pops_at_szgroup_at_month_start(1);
 	vector <double> removals_per_szgroup= nodes.at(186)->get_removals_pops_at_szgroup(1);
 
-	cout << "N_at_szgroup_at_month_start" << endl;
+   outc(cout << "N_at_szgroup_at_month_start" << endl);
 	for(int i=0; i<N_at_szgroup_at_month_start.size(); i++)
 	{
-		cout << N_at_szgroup_at_month_start.at(i) << endl;
+       outc(cout << N_at_szgroup_at_month_start.at(i) << endl);
 	}
-	cout << "removals_per_szgroup" << endl;
+   outc(cout << "removals_per_szgroup" << endl);
 	for(int i=0; i<removals_per_szgroup.size(); i++)
 	{
-		cout << removals_per_szgroup.at(i) << endl;
+       outc(cout << removals_per_szgroup.at(i) << endl);
 	}
 	*/
 
@@ -1460,9 +1468,9 @@ int main(int argc, char* argv[])
 		iter = sel_ogives.upper_bound( iter->first ) )
 	{
 		name_metiers.push_back (iter->first);
-		cout << "metier " << iter->first << endl;
+       outc(cout << "metier " << iter->first << endl);
 	}
-	cout << "nb metiers: " << name_metiers.size() << endl;
+   outc(cout << "nb metiers: " << name_metiers.size() << endl);
 
 	// creation of a vector of metier from input data...
 	vector <Metier*> metiers(name_metiers.size());
@@ -1493,21 +1501,21 @@ int main(int argc, char* argv[])
 	/*
 	// check selectivity
 	vector<double> ogive = metiers[0]->get_selectivity_ogive();
-	cout << "selectivity ogive of the metier 0" << endl;
+   outc(cout << "selectivity ogive of the metier 0" << endl);
 	for (unsigned int i=0; i<ogive.size(); i++)
 	{
-		cout  << " " << ogive[i] << " " ;
+       outc(cout  << " " << ogive[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// check metier betas
 	vector<double> met_betas = metiers[0]->get_betas_per_pop();
-	cout << "met_betas of the metier 0" << endl;
+   outc(cout << "met_betas of the metier 0" << endl);
 	for (int i=0; i<met_betas.size(); i++)
 	{
-		cout  << " " << met_betas[i] << " " ;
+       outc(cout  << " " << met_betas[i] << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 	*/
 
     dout(cout  << "---------------------------" << endl);
@@ -1573,7 +1581,7 @@ int main(int argc, char* argv[])
 	vector <Ship*> ships(shipids.size());
     for (unsigned int i=0; i<shipids.size(); i++)
 	{
-		cout<<"create ship " << i << endl;
+       outc(cout<<"create ship " << i << endl);
 								 // North Sea - resund - Bornholm
 		if(lane_ids[i]==1) ships[i]= new Ship(shipids[i], vmaxs[i], vcruises[i], longs1, lats1);
 								 // Kiel-Bornholm
@@ -1581,7 +1589,7 @@ int main(int argc, char* argv[])
 								 // North Sea - great Belt - Bornholm (RouteT: deep-water transit route in the Danish Waters)
 		if(lane_ids[i]==3) ships[i]= new Ship(shipids[i], vmaxs[i], vcruises[i], longs3, lats3);
 
-		cout<<"at (" << ships[i]->get_x() << "," << ships[i]->get_y()  << ") "   << endl;
+       outc(cout<<"at (" << ships[i]->get_x() << "," << ships[i]->get_y()  << ") "   << endl);
 
 	}
 
@@ -1713,12 +1721,12 @@ int main(int argc, char* argv[])
 		else
 		{
 			// if missing info for a given vessel for this quarter
-			cout << "no specified harbour in this quarter for this vessel..." << endl;
+           outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
 								 // CAUTION: LIKE A MAGIC NUMBER HERE!!!
 			start_harbour=find_entries_s_i(harbours, vesselids[0])[0];
 			spe_harbours.push_back(start_harbour);
 			spe_freq_harbours.push_back(1);
-			cout << "then take node: " << start_harbour << endl;
+           outc(cout << "then take node: " << start_harbour << endl);
 		}
 
 		vessels[i]= new Vessel(nodes[start_harbour],
@@ -1931,25 +1939,25 @@ int main(int argc, char* argv[])
 		//cout << "with selectivity ogive " << endl;
 		//for (int i=0; i<a_ogive.size(); i++)
 		//{
-		//    cout  << " " << a_ogive[i] << " " ;
+        //   outc(cout  << " " << a_ogive[i] << " " );
 		//}
-		//cout << endl; // well...nothing there because a metier is still not assigned at this stage...
+        //out(cout << endl); // well...nothing there because a metier is still not assigned at this stage...
 	}
 
 	//check vessel specifications
-	cout << " vessel"<< vessels[0]->get_idx()  <<" have the specific harbours:" << endl;
+   outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specific harbours:" << endl);
 	vector<int> harbs = vessels[0]->get_harbours();
     for (unsigned int i=0; i<harbs.size(); i++)
 	{
-		cout <<  harbs[i] << " "  << endl;
+       outc(cout <<  harbs[i] << " "  << endl);
 	}
 
 	//check vessel specifications
-	cout << " vessel"<< vessels[0]->get_idx()  <<" have the specfic grounds:" << endl;
+   outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specfic grounds:" << endl);
 	vector<int> grds = vessels[0]->get_fgrounds();
     for (unsigned int i=0; i<grds.size(); i++)
 	{
-		cout <<  grds[i] << " "  << endl;
+       outc(cout <<  grds[i] << " "  << endl);
 	}
 
 	//check vessel specifications
@@ -2074,24 +2082,24 @@ int main(int argc, char* argv[])
 		string a_file =pathoutput+"/DISPLACE_outputs/paths.dat";
 		paths.open(a_file.c_str());
 		vertex_t v = 12487;		 // destination
-		cout << "Distance to " << vertex_names[v] << ": " << min_distance[v] << endl;
+       outc(cout << "Distance to " << vertex_names[v] << ": " << min_distance[v] << endl);
 		list<vertex_t> path = DijkstraGetShortestPathTo(v, previous);
 		list<vertex_t>::iterator path_iter = path.begin();
 
-		cout << "Path: ";
+       outc(cout << "Path: ");
 		for( ; path_iter != path.end(); path_iter++)
 		{
-			cout << vertex_names[*path_iter] << " " ;
+           outc(cout << vertex_names[*path_iter] << " " );
 			paths << vertex_names[*path_iter] << " ";
 		}
-		cout << endl;
+       outc(cout << endl);
 
 		// check "previous" content
 		// std::map<vertex_t, vertex_t>::iterator prev;
 		// for ( prev=previous.begin() ; prev != previous.end(); prev++ )
 		// {
-		//   if((prev->first) ==1759)  cout << prev->first  <<" " << prev->second << std::endl;
-		//   if((prev->second) ==1759)  cout << prev->first  <<" " << prev->second << std::endl;
+        //   if((prev->first) ==1759) outc(cout << prev->first  <<" " << prev->second << std::endl);
+        //   if((prev->second) ==1759) outc(cout << prev->first  <<" " << prev->second << std::endl);
 		// }
 
         // store in path shops (avoiding recomputing all possible paths from a given departure!!!)
@@ -2108,7 +2116,7 @@ int main(int argc, char* argv[])
 		vector<int>::iterator it;
 		it = find (idx_paths_shop.begin(), idx_paths_shop.end(), 1);
 		int idx = it - idx_paths_shop.begin();
-		cout << "The element is found at idx " << idx << endl;
+       outc(cout << "The element is found at idx " << idx << endl);
 		// 2. then use this idx as index in the paths_shop to retrieve the object 'previous'
 		previous=paths_shop[idx];
 		min_distance=min_distances_shop[idx];
@@ -2116,12 +2124,12 @@ int main(int argc, char* argv[])
 		vertex_t v2 = 12487;	 // destination
 		list<vertex_t> path2 = DijkstraGetShortestPathTo(v2, previous);
 		list<vertex_t>::iterator path2_iter = path2.begin();
-		cout << "Path2: ";
+       outc(cout << "Path2: ");
 		for( ; path2_iter != path2.end(); path2_iter++)
 		{
-			cout << vertex_names[*path2_iter] << " " ;
+           outc(cout << vertex_names[*path2_iter] << " " );
 		}
-		cout << endl;
+       outc(cout << endl);
 		min_distance.clear();
 		previous.clear();
 
@@ -2151,12 +2159,12 @@ int main(int argc, char* argv[])
 
 
 	// check
-	cout << "relevant nodes: " << endl;
+   outc(cout << "relevant nodes: " << endl);
     for(unsigned int i=0; i<relevant_nodes.size(); i++)
 	{
-		cout << relevant_nodes.at(i) << " " ;
+       outc(cout << relevant_nodes.at(i) << " " );
 	}
-	cout << endl;
+   outc(cout << endl);
 
 	// initialize objects for a shop of paths
 	// list<map<vertex_t, vertex_t> > path_shop (relevant_nodes.size());
@@ -2167,11 +2175,11 @@ int main(int argc, char* argv[])
 
 	if(!create_a_path_shop)
 	{
-		cout << "you chose to do not create a path shop...the computation will take far more time." << endl;
+       outc(cout << "you chose to do not create a path shop...the computation will take far more time." << endl);
 	}
 	else
 	{
-		cout << "reading pre-existing path shop or compute them....";
+       outc(cout << "reading pre-existing path shop or compute them....");
 
 		// for-loop over potential departure node
 		// TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
@@ -2180,7 +2188,7 @@ int main(int argc, char* argv[])
 		//for (int i=3100; i<relevant_nodes.size(); i++) // change for this to debug in case the creation fails...
         for (unsigned int i=0; i<relevant_nodes.size(); i++)
 		{
-			cout << ".";
+           outc(cout << ".");
             dout(cout  << "i: "<< i << "max size: " << relevant_nodes.size() << endl);
 
 								 // this is a programs argument option
@@ -2197,13 +2205,13 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
-				cout << "compute all paths for the node: "<< relevant_nodes.at(i) << endl;
+               outc(cout << "compute all paths for the node: "<< relevant_nodes.at(i) << endl);
 								 // from the source to all nodes
 				DijkstraComputePaths(relevant_nodes.at(i), adjacency_map, min_distance, previous, relevant_nodes);
 
 				// remove unecessary entry keys in the map "previous" for optimisation and speed-up the simus
 				// (i.e. to increase the speed of the previous.find() algo...)
-				//cout << "simplify the map for the node: "<< relevant_nodes.at(i) << endl;
+                //out(cout << "simplify the map for the node: "<< relevant_nodes.at(i) << endl);
 								 // 'previous' is not modified but a new 'previous' is exported into a file here....
 				SimplifyThePreviousMap(relevant_nodes.at(i), previous,
 					relevant_nodes, min_distance,
@@ -2255,16 +2263,16 @@ int main(int argc, char* argv[])
 		}
 		it3 = find (idx_path_shop.begin(), idx_path_shop.end(), an_origin);
 		int idx3 = it3 - idx_path_shop.begin(); // tricky!
-		cout << "This element is found at idx " << idx3 << endl;
+       outc(cout << "This element is found at idx " << idx3 << endl);
 		// 2. then use this idx as index in the paths_shop to retrieve the object 'previous'
-		cout << "retrieve 'previous' for this element " << endl;
+       outc(cout << "retrieve 'previous' for this element " << endl);
 
 		previous=path_shop.at(idx3); // if the path_shop is a list
 		//std::list<map<int,int> >::iterator it_p = path_shop.begin(); // if the path_shop is a list
 		//advance(it_p, idx3-1);
 		//previous= *it_p;
 
-		cout << "retrieve 'min_distance' for this element " << endl;
+       outc(cout << "retrieve 'min_distance' for this element " << endl);
 
 		min_distance=min_distance_shop.at(idx3);
 		//std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
@@ -2274,13 +2282,13 @@ int main(int argc, char* argv[])
 		// 3....and compute a new path to a new destination from this same origin!
 		list<vertex_t> path3 = DijkstraGetShortestPathTo(v3, previous);
 		list<vertex_t>::iterator path3_iter = path3.begin();
-		cout << "Path3: ";
+       outc(cout << "Path3: ");
 		for( ; path3_iter != path3.end(); path3_iter++)
 		{
-			cout << vertex_names[*path3_iter] << " " ;
+           outc(cout << vertex_names[*path3_iter] << " " );
 		}
-		cout << "distance to the destination " << vertex_names[v3] << ": " << min_distance[v3] << endl;
-		cout << endl;
+       outc(cout << "distance to the destination " << vertex_names[v3] << ": " << min_distance[v3] << endl);
+       outc(cout << endl);
 		min_distance.clear();
 		previous.clear();
 		*/
@@ -2465,7 +2473,7 @@ int main(int argc, char* argv[])
 
 	// set seed
 	//srand ( time(NULL) );
-	cout << "coucou1" << endl;
+   outc(cout << "coucou1" << endl);
 	// write down initial pop number in popdyn
     for (unsigned int sp=0; sp<populations.size(); sp++)
 	{
@@ -2505,6 +2513,10 @@ int main(int argc, char* argv[])
 	//----------------------//
 	//----------------------//
 	//----------------------//
+
+    /* CALLGRING -- Instrument */
+    CALLGRIND_START_INSTRUMENTATION;
+
 	for (int tstep =0; tstep < nbsteps; ++tstep)
 	{
 #ifdef PROFILE
@@ -2518,7 +2530,7 @@ int main(int argc, char* argv[])
         if (use_gui)
             cout << "=S" << tstep << endl;      /* use gui */
 
-		cout << "tstep " << tstep << endl;
+        cout << "tstep " << tstep << endl;
         dout(cout  << "---------------" << endl);
 
 		if(use_gnuplot)
@@ -2610,7 +2622,7 @@ int main(int argc, char* argv[])
 		// TO CHECK: SSB-R
 		//populations[12]->add_recruits_from_SR();
 		//int a;
-		//cout << "Pause: type a number to continue";
+        //out(cout << "Pause: type a number to continue");
 		// cin >> a;
 
         dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
@@ -2623,7 +2635,7 @@ int main(int argc, char* argv[])
 				{
 
 					int name_pop =populations.at(sp)->get_name();
-					cout << "apply other land on nodes..." << endl;
+                   outc(cout << "apply other land on nodes..." << endl);
 					vector <double> M_at_szgroup      = populations.at(sp)->get_M_at_szgroup();
 					vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
 					vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
@@ -2643,16 +2655,16 @@ int main(int argc, char* argv[])
 						vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
 						vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(9);
                         if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)
-                            cout << "N_at_szgroup before oth_land" << endl;
+                           outc(cout << "N_at_szgroup before oth_land" << endl);
                         for(unsigned int i=0; i<N_at_szgroup.size(); i++)
 						{
-							if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)    cout << N_at_szgroup.at(i) << endl;
+                            if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)   outc(cout << N_at_szgroup.at(i) << endl);
 						}
                         if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)
-                            cout << "removals_per_szgroup before oth_land" << endl;
+                           outc(cout << "removals_per_szgroup before oth_land" << endl);
                         for(unsigned int i=0; i<removals_per_szgroup.size(); i++)
 						{
-							if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)    cout << removals_per_szgroup.at(i) << endl;
+                            if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)   outc(cout << removals_per_szgroup.at(i) << endl);
 						}
 
 						// apply "other" landings
@@ -2769,15 +2781,15 @@ int main(int argc, char* argv[])
 						// a check
 						if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 						{
-							cout << "N_at_szgroup_at_month_start" << endl;
+                           outc(cout << "N_at_szgroup_at_month_start" << endl);
                             for(unsigned int i=0; i<N_at_szgroup_at_month_start.size(); i++)
 							{
-								cout << N_at_szgroup_at_month_start.at(i) << endl;
+                               outc(cout << N_at_szgroup_at_month_start.at(i) << endl);
 							}
-							cout << "removals_per_szgroup" << endl;
+                           outc(cout << "removals_per_szgroup" << endl);
                             for(unsigned int i=0; i<removals_per_szgroup.size(); i++)
 							{
-								cout << removals_per_szgroup.at(i) << endl;
+                               outc(cout << removals_per_szgroup.at(i) << endl);
 							}
 						}
 
@@ -2801,10 +2813,10 @@ int main(int argc, char* argv[])
 						//check
 						if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 						{
-							cout << "N_at_szgroup" << endl;
+                           outc(cout << "N_at_szgroup" << endl);
                             for(unsigned int i=0; i<N_at_szgroup.size(); i++)
 							{
-								cout << N_at_szgroup.at(i) << endl;
+                               outc(cout << N_at_szgroup.at(i) << endl);
 							}
 						}
 
@@ -2814,18 +2826,18 @@ int main(int argc, char* argv[])
 							// check
 							if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 							{
-								cout << "pressure_per_szgroup_pop" << endl;
+                               outc(cout << "pressure_per_szgroup_pop" << endl);
                                 for(unsigned int i=0; i<pressure_per_szgroup_pop.size(); i++)
 								{
-									cout << pressure_per_szgroup_pop.at(i) << endl;
+                                   outc(cout << pressure_per_szgroup_pop.at(i) << endl);
 								}
 							}
 
 							// check
 							if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
 							{
-								cout << "tot_removals " << tot_removals << endl;
-								cout << "tot_B " << tot_B << endl;
+                               outc(cout << "tot_removals " << tot_removals << endl);
+                               outc(cout << "tot_B " << tot_B << endl);
 							}
 							// 2- per total
 							double impact_on_pop=0;
@@ -2901,7 +2913,7 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					cout << sp << ": implicit pop => no dynamic simulated..." << endl;
+                   outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
 				}
 			}					 // end sp
 
@@ -2911,12 +2923,12 @@ int main(int argc, char* argv[])
 
 				// check for cod
 				vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
-				cout << "before" << endl;
+               outc(cout << "before" << endl);
                 for(unsigned int sz=0; sz<Ns.size(); sz++)
 				{
-					cout << Ns.at(sz) << " ";
+                   outc(cout << Ns.at(sz) << " ");
 				}
-				cout << endl;
+               outc(cout << endl);
 
 				// convert and write as SMS input file
 				if(binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
@@ -2931,7 +2943,7 @@ int main(int argc, char* argv[])
 					}
 				}
 
-				cout << " run SMS?"<< endl;
+               outc(cout << " run SMS?"<< endl);
 				// run (at the very end of the current year) one year SMS forecast each year
                 // to deduce N_1stJan y+1 from N_1stJan y knowing Fs that occurred during the year y.
                 // start the second year only
@@ -2950,7 +2962,7 @@ int main(int argc, char* argv[])
 						{
 							return 1;
 						}
-						cout << "The current working directory is" <<  cCurrentPath << endl;
+                       outc(cout << "The current working directory is" <<  cCurrentPath << endl);
 
 						// change for the SMS folder where the SMS files are lying.
 						#ifdef WINDOWS
@@ -2968,7 +2980,7 @@ int main(int argc, char* argv[])
 						{
 							return 1;
 						}
-						cout << "The SMS working directory is " << cSMSPath << endl;
+                       outc(cout << "The SMS working directory is " << cSMSPath << endl);
 
 						// the system command line
 						#ifdef WINDOWS
@@ -2977,7 +2989,7 @@ int main(int argc, char* argv[])
 						string a_command = "~/ibm_vessels/displace_hpc_sh/"+namesimu+"/op -maxfn 0 -nohess";
                         system(a_command.c_str());						
 						#endif
-						cout << "SMS done" << endl;
+                       outc(cout << "SMS done" << endl);
 
 					}
 					else
@@ -3001,16 +3013,16 @@ int main(int argc, char* argv[])
 					{
 						return 1;
 					}
-					cout << "The current working directory is " << cCurrentPath << endl;
+                   outc(cout << "The current working directory is " << cCurrentPath << endl);
 					
 					// check for cod
 					vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
-					cout << "after" << endl;
+                   outc(cout << "after" << endl);
                     for(unsigned int sz=0; sz<Ns.size(); sz++)
 					{
-						cout << Ns.at(sz) << " ";
+                       outc(cout << Ns.at(sz) << " ");
 					}
-					cout << endl;
+                   outc(cout << endl);
 
 				}
 			}
@@ -3027,7 +3039,7 @@ int main(int argc, char* argv[])
                         // this is simply annual M divided by 12 because monthly time step...
 						//cout << "apply M on the whole pop..." << endl;
 						//populations.at(sp)->apply_natural_mortality(); // pble for using it if distribute_N() is not by month! i.e. the dead fish here are not removed from the nodes...
-						cout << "apply M on each node of the pop..." << endl;
+                       outc(cout << "apply M on each node of the pop..." << endl);
 						vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
 						for (unsigned int n=0; n<a_list_nodes.size(); n++)
 						{
@@ -3040,7 +3052,7 @@ int main(int argc, char* argv[])
 						//vector <double> a_Ns_at_szgroup_pop=  populations.at(sp)->get_tot_N_at_szgroup();
 						//for(unsigned int szgroup=0; szgroup <a_Ns_at_szgroup_pop.size(); szgroup++)
 						//{
-						//    cout << "a_Ns_at_szgroup_pop just after applying M is " << a_Ns_at_szgroup_pop.at(szgroup) << endl;
+                        //   outc(cout << "a_Ns_at_szgroup_pop just after applying M is " << a_Ns_at_szgroup_pop.at(szgroup) << endl);
 						//}
 
 						#ifdef _WIN32
@@ -3073,11 +3085,11 @@ int main(int argc, char* argv[])
                         // apply only at the beginning of the year (this is maybe not always relevant...)
 						if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 						{
-							cout<< "ADD RECRUITS" << endl;
+                           outc(cout<< "ADD RECRUITS" << endl);
 							//populations[sp]->add_recruits_from_eggs();
 							populations[sp]->add_recruits_from_SR();
 
-							cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl;
+                           outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl);
 							// compute the cpue_multiplier
 							// at the beginning of the year as N(y)/N(y-1)
 							double sum_N_year_minus_1;
@@ -3104,14 +3116,14 @@ int main(int argc, char* argv[])
                         // apply only by semester, to be consistent with the timeframe of the survey data
 						if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep))
 						{
-							cout<< "DO GROWTH TRANSITION" << endl;
+                           outc(cout<< "DO GROWTH TRANSITION" << endl);
 							populations[sp]->do_growth();
 						}
 
 					}
 					else
 					{
-						cout << sp << ": implicit pop => no dynamic simulated..." << endl;
+                       outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
 					}
 				}
 			}					 // end else not SMS
@@ -3149,7 +3161,7 @@ int main(int argc, char* argv[])
 					//}
 
 					//... and export for plotting.
-					cout << "write down the popdyn...";
+                   outc(cout << "write down the popdyn...");
 								 // N at szgroup
 					populations.at(sp)->export_popdyn_N (popdyn_N, tstep);
 								 // ...and F at age
@@ -3171,13 +3183,13 @@ int main(int argc, char* argv[])
 							// and a long-term management plan (LTMP)
 							populations.at(sp)->compute_TAC();
 
-							cout<< "initialize individual vessel TAC for this coming year" << endl;
+                           outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
 							// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
 							for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
 							{
 								vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 0.0);
 							}
-							cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl;
+                           outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
 							// to do next time oth_land will be applied: oth_land * TACy+1 / TACy
 							vector<double> ts_tac = populations.at(sp)->get_tac()->get_ts_tac();
 							double TAC_y_plus_1 = ts_tac.at(ts_tac.size()-1);
@@ -3187,7 +3199,7 @@ int main(int argc, char* argv[])
                                  // i.e. a trick to check if nan
 								populations.at(sp)->get_oth_land_multiplier())
 							{
-								cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
+                               outc(cout << "stop: check the c++ code for oth_land_multiplier"<< endl);
 								int ff;
 								cin >>ff;
 
@@ -3225,7 +3237,7 @@ int main(int argc, char* argv[])
 				}
 				else
 				{
-					cout << sp << ": implicit pop => no dynamic simulated..." << endl;
+                   outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
 				}
 
 			}
@@ -3318,7 +3330,7 @@ int main(int argc, char* argv[])
 			string a_quarter= "quarter" + strg1.str();
 			string a_semester= "semester" + strg2.str();
 
-			cout << "a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
+           outc(cout << "a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl);
 
 			// RE-read general vessel features: dont forget to clear the vectors!
 			// not-quarter specific, clear anyway...
@@ -3377,12 +3389,12 @@ int main(int argc, char* argv[])
 				if(spe_harbours.empty())
 				{
 					// if missing info for a given vessel for this quarter
-					cout << "no specified harbour in this quarter for this vessel..." << endl;
+                   outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
 								 // CAUTION: TAKE FROM PREVIOUS QUARTER!
 					int start_harbour=vessels.at(v)->get_harbours()[0];
 					spe_harbours.push_back(start_harbour);
 					spe_freq_harbours.push_back(1);
-					cout << "then take node: " << start_harbour << endl;
+                   outc(cout << "then take node: " << start_harbour << endl);
 				}
 
 				// RE-SET VESSELS..
@@ -3667,7 +3679,7 @@ int main(int argc, char* argv[])
 
 					// finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in do_catch)
 					// 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
-					cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl;
+                   outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
 					vector <int> nodes_with_presence;
 					multimap<int,int>::iterator lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
 					multimap<int,int>::iterator upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
@@ -3676,7 +3688,7 @@ int main(int argc, char* argv[])
 						nodes_with_presence.push_back (a_pos->second);
 					}
 
-					cout << "...then attach avai to each node for this pop (this quarter)" << endl;
+                   outc(cout << "...then attach avai to each node for this pop (this quarter)" << endl);
 					// 2. init avai on each node (we know the presence...) for this pop for selected szgroup
 					for (unsigned int n=0; n< nodes_with_presence.size(); n++)
 					{
@@ -3689,7 +3701,7 @@ int main(int argc, char* argv[])
 						else
 						{
 								 // inconsistence between lst_idx_nodes and avai files if this happen...
-							cout << nodes_with_presence.at(n) ;
+                           outc(cout << nodes_with_presence.at(n) );
 						}
 					}
 
@@ -4088,6 +4100,9 @@ int main(int argc, char* argv[])
 #endif
 	}							 // end FOR LOOP OVER TIME
 
+    CALLGRIND_STOP_INSTRUMENTATION;
+    CALLGRIND_DUMP_STATS;
+
 #ifdef PROFILE
     guiSendCapture(true);
 
@@ -4123,7 +4138,7 @@ int main(int argc, char* argv[])
 	#ifdef _WIN32
 	if(use_gnuplot)
 	{
-		cout << "type a char to close" << endl;
+       outc(cout << "type a char to close" << endl);
 		getchar();				 //This line keeps the gnuplot window open after the code runs through.
 		pclose(pipe2);
 		pclose(pipe3);

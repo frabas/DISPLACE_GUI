@@ -25,7 +25,7 @@ CONFIG(debug,debug|release) {
 }
 
 # Force profiling in release
-DEFINES += PROFILE
+DEFINES += PROFILE INSTRUMENTATION
 
 SOURCES= main.cpp
 

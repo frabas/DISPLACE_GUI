@@ -31,6 +31,12 @@
 #define dout(x)
 #endif
 
+#ifdef DEBUG_SIMU
+# define outc(x) x
+#else
+# define outc(x)
+#endif
+
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
 #endif // HELPERS_H

@@ -324,10 +324,31 @@ void Node::add_to_cumftime(int delta_time)
 	cumftime+=delta_time;
 }
 
+void Node::reinit(vector<double> &vec, unsigned int sz)
+{
+    if (vec.size() != sz)
+        vec.resize(sz, 0);
+    for (unsigned int i = 0; i < sz; ++i)
+        vec[i] = sz;
+}
+
+void Node::reinit(vector<vector<double> > &vec, unsigned int sz, unsigned int subsz)
+{
+    if (vec.size() != sz)
+        vec.resize(sz);
+    for (unsigned int i = 0; i < sz; ++i)
+        reinit(vec[i], subsz);
+}
 
 void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
 {
+    reinit (Ns_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (Ns_pops_at_szgroup_at_month_start, nbpops, nbszgroups);
+    reinit (removals_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
+    reinit (impact_on_pops, nbpops);
 
+#if 0
 	// init at 0 the matrix of Ns
     dout(cout  << "init matrix of Ns" << endl);
 	vector< vector<double> > init_Ns_pops_at_szgroup(nbpops, vector<double>(nbszgroups));
@@ -349,13 +370,14 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
 
 		impact_on_pops.push_back(0);
 	}
-
+#endif
 }
 
 
 void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroups)
 {
-
+    reinit(avai_pops_at_selected_szgroup, nbpops, selected_nbszgroups);
+#if 0
 	// init at 0 the matrix of Ns
     dout(cout  << "init matrix of Ns" << endl);
 	vector< vector<double> > init_avai_pops_at_selected_szgroup(nbpops, vector<double>(selected_nbszgroups));
@@ -369,7 +391,7 @@ void Node::init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroup
 		}
         dout(cout  << endl);
 	}
-
+#endif
 }
 
 

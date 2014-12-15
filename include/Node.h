@@ -108,7 +108,9 @@ class Node
         void set_idx_node(int idx);
 
 protected:
-	private:
+        void reinit(vector<double> &vec, unsigned int sz);
+        void reinit(vector<vector<double> > &vec, unsigned int sz, unsigned int subsz);
+private:
 		int idx_node;
 		double x;
 		double y;

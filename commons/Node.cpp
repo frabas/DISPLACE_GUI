@@ -183,9 +183,9 @@ bool Node::get_is_harbour () const
 }
 
 
-vector<double> Node::get_Ns_pops_at_szgroup(int name_pop) const
+const vector<double> &Node::get_Ns_pops_at_szgroup(int name_pop) const
 {
-
+#if 0
 	vector<double> a_Ns_pops_at_szgroup;
 
 	for(unsigned int j = 0; j < Ns_pops_at_szgroup[name_pop].size(); j++)
@@ -194,6 +194,9 @@ vector<double> Node::get_Ns_pops_at_szgroup(int name_pop) const
 	}
 
 	return(a_Ns_pops_at_szgroup);
+#endif
+
+    return Ns_pops_at_szgroup[name_pop];
 }
 
 

@@ -60,7 +60,7 @@ class Node
 		double get_y() const;
 		int get_harbour() const;
 		bool get_is_harbour() const;
-        vector<double> get_Ns_pops_at_szgroup(int name_pop) const;
+        const vector<double> &get_Ns_pops_at_szgroup(int name_pop) const;
         vector<double> get_Ns_pops_at_szgroup_at_month_start(int name_pop) const;
         vector<double> get_removals_pops_at_szgroup(int name_pop) const;
         vector<double> get_pressure_pops_at_szgroup(int name_pop) const;

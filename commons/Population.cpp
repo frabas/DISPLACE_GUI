@@ -745,7 +745,7 @@ void Population::aggregate_N()
 
 	// temporary objects
 	vector<double> agg_Ns_at_szgroup;
-	vector<double> Ns_this_node;
+//	vector<double> Ns_this_node;
 
 	// a for-loop over nodes specficic to this pop
 	for (unsigned int idx =0; idx < list_nodes.size(); idx++)
@@ -761,7 +761,7 @@ void Population::aggregate_N()
 		else
 		{
 			// get the Ns on this node and add to the agg
-			Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+            const vector<double> &Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
             for(unsigned int i=0; i<agg_Ns_at_szgroup.size(); i++)
 			{
 				agg_Ns_at_szgroup.at(i)= agg_Ns_at_szgroup.at(i)+Ns_this_node.at(i);

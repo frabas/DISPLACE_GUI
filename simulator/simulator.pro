@@ -25,7 +25,12 @@ CONFIG(debug,debug|release) {
 }
 
 # Force profiling in release
-DEFINES += PROFILE INSTRUMENTATION
+DEFINES += PROFILE
+
+# Force callgrind profiling
+#DEFINES += INSTRUMENTATION
+
+#QMAKE_CXXFLAGS += -g
 
 SOURCES= main.cpp
 

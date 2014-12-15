@@ -170,7 +170,7 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 }
 
 
-vector<int> do_sample( int n, int nval, int val[], double proba[])
+vector<int> do_sample( int n, int nval, const int val[], double proba[])
 {
 
 	vector<int> res(n);

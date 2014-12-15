@@ -1037,14 +1037,14 @@ vector<int> find_entries_s_i (multimap<string, int>& infos, string str)
 }
 
 
-vector<double> find_entries_i_d (multimap<int, double>& infos, int intg)
+vector<double> find_entries_i_d (const multimap<int, double>& infos, int intg)
 {
 
-	multimap<int, double>::iterator upper
+    multimap<int, double>::const_iterator upper
 		= infos.upper_bound(intg);
 	vector<double> result;
 
-	for(multimap<int, double>::iterator pos= infos.lower_bound(intg);
+    for(multimap<int, double>::const_iterator pos= infos.lower_bound(intg);
 		pos!=upper; pos++)
 	{
 		result.push_back(pos->second);
@@ -1054,15 +1054,15 @@ vector<double> find_entries_i_d (multimap<int, double>& infos, int intg)
 }
 
 
-vector<int> find_entries_i_i (multimap<int, int>& infos, int intg)
+vector<int> find_entries_i_i (const multimap<int, int>& infos, int intg)
 {
-	multimap<int, int>::iterator lower
+    multimap<int, int>::const_iterator lower
 		= infos.lower_bound(intg);
-	multimap<int, int>::iterator upper
+    multimap<int, int>::const_iterator upper
 		= infos.upper_bound(intg);
 	vector<int> result;
 
-	for(multimap<int, int>::iterator pos = lower;
+    for(multimap<int, int>::const_iterator pos = lower;
 		pos!=upper; pos++)
 	{
 		result.push_back(pos->second);

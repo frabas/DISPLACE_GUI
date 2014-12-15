@@ -2645,7 +2645,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	this->set_tstep_dep(tstep);	 // store departure date
 
 	// choose a fishing ground
-	vector <int> grds = this->get_fgrounds();
+    const vector <int> &grds = this->get_fgrounds();
 
 	// choose the ground, dyn sce. vs. baseline
 	int ground;
@@ -2707,7 +2707,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	}
 
 	// then, draw a ground from the frequencies (altered or not)...
-	vector <double> freq_grds = this->get_freq_fgrounds();
+    vector <double> freq_grds = this->get_freq_fgrounds();
 								 // need to convert in array, see myRutils.cpp
 	vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
 	ground=grounds[0];
@@ -2801,8 +2801,8 @@ void Vessel::choose_a_ground_and_go_fishing(
 
 		// for this vessel, select the metier specific to this particular fishing ground
 		// according to the observed frequency in data
-		multimap<int, int> poss_met        = this->get_possible_metiers();
-		multimap<int, double> freq_poss_met= this->get_freq_possible_metiers();
+        const multimap<int, int> &poss_met        = this->get_possible_metiers();
+        const multimap<int, double> &freq_poss_met= this->get_freq_possible_metiers();
 		vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
 		vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
 								 // need to convert in array, see myRutils.cpp
@@ -2820,7 +2820,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	}
 	else
 	{
-		cout << "pble calculating from " << from << " to " << ground << endl;
+        outc(cout << "pble calculating from " << from << " to " << ground << endl);
 		// e.g. graph 4, between 1530 and 1508...
 		// e.g. graph 6, between 395 and other nodes...because disconnected to the rest of the network!!
 		//this->move_to(nodes.at(1730)) ;// balticonly jump to another ground close to the disable one!!!!
@@ -2844,7 +2844,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         map<vertex_t, weight_t>& min_distance,
         map<vertex_t, vertex_t>& previous,
         vector <int>& relevant_nodes,
-        multimap<int, int>& nodes_in_polygons,
+        const multimap<int, int>& nodes_in_polygons,
         vector<string>& vertex_names,
         vector<Node* >& nodes,
         vector <Metier*>& metiers,
@@ -2860,7 +2860,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	bool finally_I_should_go_for_the_closest=false;
 	// => in case of area_closure: provoke oscillation at the border if the 2nd closest is inside a closed area
 
-	vector <int> grds = this->get_fgrounds();
+    const vector <int> &grds = this->get_fgrounds();
 	//int current_grd = this->get_loc()->get_idx_node();
 	//  if(grds.size()>2)
 	//  {
@@ -2894,7 +2894,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     if (dyn_alloc_sce.option(Options::area_closure))
 	{
 
-		for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+        for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
 		{
 			// get all values across the keys
 			polygons.push_back(pos->first);
@@ -2994,7 +2994,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 			vector<int> polygons;
 			vector<int> polygon_nodes;
-			for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+            for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
 			{
 				// get all values across the keys
 				polygons.push_back(pos->first);
@@ -3062,8 +3062,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 	// for this vessel, select the metier specific to this particular fishing ground
 	// according to the observed frequency in data
-	multimap<int, int> poss_met        = this->get_possible_metiers();
-	multimap<int, double> freq_poss_met= this->get_freq_possible_metiers();
+    const multimap<int, int> &poss_met        = this->get_possible_metiers();
+    const multimap<int, double> &freq_poss_met= this->get_freq_possible_metiers();
 	vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, next_ground );
 	vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, next_ground );
 								 // need to convert in array, see myRutils.cpp
@@ -3071,7 +3071,6 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	this->set_metier(  metiers[ a_met[0] ]  );
 	// find.next.pt.on.the.graph()
 	this->find_next_point_on_the_graph(nodes);
-
 }
 
 
@@ -3596,17 +3595,17 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 }
 
 
-int Vessel::should_i_stop_fishing(map<string,int>& external_states, bool use_the_tree,
+int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool use_the_tree,
                                   int tstep,
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
-                                  vector <int>& idx_path_shop,
+                                  const vector <int>& idx_path_shop,
                                   deque<map<vertex_t, vertex_t> >& path_shop,
                                   deque<map<vertex_t, weight_t> >& min_distance_shop,
                                   adjacency_map_t& adjacency_map,
                                   map<vertex_t, weight_t>& min_distance,
                                   map<vertex_t, vertex_t>& previous,
-                                  vector <int>& relevant_nodes,
+                                  const vector <int>& relevant_nodes,
                                   vector<string>& vertex_names,
                                   vector<Node* >& nodes,
                                   vector <Metier*>& metiers,
@@ -3656,7 +3655,7 @@ int Vessel::should_i_stop_fishing(map<string,int>& external_states, bool use_the
 								 // still in the day?
 			&& this->get_timeatsea() < 20)) )
 		{
-			vector <int> harbs = this->get_harbours();
+            const vector <int> &harbs = this->get_harbours();
 			int from = this->get_loc()->get_idx_node();
 			min_distance.clear();
 			previous.clear();
@@ -3668,7 +3667,7 @@ int Vessel::should_i_stop_fishing(map<string,int>& external_states, bool use_the
 			}
 			else				 // replaced by:
 			{
-				vector<int>::iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
+                vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
 								 // tricky!
 				int idx = it - idx_path_shop.begin();
 

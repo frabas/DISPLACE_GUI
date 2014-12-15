@@ -315,7 +315,7 @@ protected:
             map<vertex_t, weight_t>& min_distance,
             map<vertex_t, vertex_t>& previous,
             vector <int>& relevant_nodes,
-            multimap<int, int>& nodes_in_polygons,
+            const multimap<int, int> &nodes_in_polygons,
             vector<string>& vertex_names,
             vector<Node* >& nodes,
             vector <Metier*>& metiers,
@@ -344,23 +344,23 @@ protected:
 		int should_i_choose_this_ground(map<string, int>& external_states, bool use_the_tree);
 		int should_i_change_ground(map<string, int>& external_states, bool use_the_tree);
 								 //yes:1; no=0
-		int should_i_stop_fishing(map<string, int>& external_states, bool use_the_tree,
-			int tstep,
+        int should_i_stop_fishing(const map<string, int> &external_states, bool use_the_tree,
+            int tstep,
             const DynAllocOptions& dyn_alloc_sce,
-			int create_a_path_shop,
-			vector <int>& idx_path_shop,
-			deque<map<vertex_t, vertex_t> >& path_shop,
-			deque<map<vertex_t, weight_t> >& min_distance_shop,
-			adjacency_map_t& adjacency_map,
-			map<vertex_t, weight_t>& min_distance,
-			map<vertex_t, vertex_t>& previous,
-			vector <int>& relevant_nodes,
-			vector<string>& vertex_names,
-			vector<Node* >& nodes,
-			vector <Metier*>& metiers,
-			ofstream& freq_cpue,
-			ofstream& freq_distance,
-			vector <double>& dist_to_ports);
+            int create_a_path_shop,
+            const vector<int> &idx_path_shop,
+            deque<map<vertex_t, vertex_t> >& path_shop,
+            deque<map<vertex_t, weight_t> >& min_distance_shop,
+            adjacency_map_t& adjacency_map,
+            map<vertex_t, weight_t> &min_distance,
+            map<vertex_t, vertex_t> &previous,
+            const vector<int> &relevant_nodes,
+            vector<string>& vertex_names,
+            vector<Node* >& nodes,
+            vector <Metier*>& metiers,
+            ofstream& freq_cpue,
+            ofstream& freq_distance,
+            vector <double>& dist_to_ports);
 		int should_i_choose_this_port(map<string,int>& external_states, bool use_the_tree);
 
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);

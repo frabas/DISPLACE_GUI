@@ -177,8 +177,8 @@ void fill_map_from_specifications_s_d (istream& in, map<string, double>& a_map);
 
 vector<double> find_entries_s_d (multimap<string, double>& infos, string str);
 vector<int> find_entries_s_i (multimap<string, int>& infos, string vid);
-vector<double> find_entries_i_d (multimap<int, double>& infos, int intg);
-vector<int> find_entries_i_i (multimap<int, int>& infos, int intg);
+vector<double> find_entries_i_d (const multimap<int, double> &infos, int intg);
+vector<int> find_entries_i_i (const multimap<int, int> &infos, int intg);
 vector<string> find_entries_i_s (multimap<int, string>& infos, int intg);
 void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval);
 

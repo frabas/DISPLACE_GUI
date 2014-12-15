@@ -968,9 +968,8 @@ void Vessel::set_freq_experiencedcpue_fgrounds_per_pop (vector<vector<double> > 
 }
 
 
-void Vessel::set_roadmap (list<vertex_t> _roadmap)
+void Vessel::set_roadmap (const list<vertex_t> &_roadmap)
 {
-	roadmap.clear();
 	roadmap=_roadmap;
 }
 

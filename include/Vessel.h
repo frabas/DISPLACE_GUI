@@ -238,7 +238,7 @@ protected:
 		void set_freq_experiencedcpue_fgrounds(vector<double> newval);
 		void set_freq_experiencedcpue_fgrounds_per_pop(vector<vector<double> > newval);
 		void clear_idx_used_metiers_this_trip();
-		void set_roadmap (list<vertex_t> _roadmap);
+        void set_roadmap (const list<vertex_t> &_roadmap);
 		void set_inharbour (bool logic);
 		void set_inactive (bool logic);
 		void set_natio (bool logic);

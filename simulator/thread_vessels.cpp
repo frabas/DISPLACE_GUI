@@ -294,6 +294,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 else
                 {
                     dout(cout  << "RETURN TO PORT, NOW! "  << endl);
+                    pthread_mutex_lock(&glob_mutex);
                     vessels[ index_v ]->choose_a_port_and_then_return(
                         tstep,
                         dyn_alloc_sce, create_a_path_shop,
@@ -306,6 +307,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         dist_to_ports
                         );
 
+                    pthread_mutex_unlock(&glob_mutex);
                 }
 
             }
@@ -345,8 +347,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // for VMS, export the first year only because the file is growing too big otherwise....
     vessels[index_v]->lock();
 
-    pthread_mutex_lock(&mutex);
-    if(export_vmslike && tstep<8641) {
+    pthread_mutex_lock(&glob_mutex);
+    if(export_vmslike /*&& tstep<8641*/) {
         if( vessels[ index_v ]->get_state()!=3) {
             vmslike << tstep << " "
                        //<< vessels[ index_v ]->get_idx() << " "
@@ -361,7 +363,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     << vessels[ index_v ]->get_state() << " " <<  endl;
         }
     }
-    pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&glob_mutex);
 
     if (use_gui && gui_move_vessels) {
         pthread_mutex_lock(&glob_mutex);

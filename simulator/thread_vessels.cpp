@@ -363,7 +363,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     pthread_mutex_unlock(&mutex);
 
     if (use_gui && gui_move_vessels) {
-        pthread_mutex_lock(&mutex);
+        pthread_mutex_lock(&glob_mutex);
         cout << "=V" << tstep << " "
             << vessels[ index_v ]->get_idx() << " "
             << vessels[ index_v ]->get_tstep_dep() << " "
@@ -372,7 +372,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
             << setprecision(2) << fixed << vessels[ index_v ]->get_course() << " "
             << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
             << vessels[ index_v ]->get_state() <<  endl;
-        pthread_mutex_unlock(&mutex);
+        pthread_mutex_unlock(&glob_mutex);
     }
 
     // realtime gnuplot
@@ -397,6 +397,8 @@ static void *thread(void *args)
         while (works.size() == 0) {
             pthread_cond_wait(&work_cond, &mutex);
         }
+        if (completed_threads > 0)
+            --completed_threads;
 
         int nextidx = works.front();
         works.pop();
@@ -404,6 +406,9 @@ static void *thread(void *args)
 
         manage_vessel(data, nextidx);
 
+        pthread_mutex_lock (&mutex);
+        ++completed_threads;
+        pthread_mutex_unlock(&mutex);
         pthread_mutex_lock(&completion_mutex);
         pthread_cond_signal(&completion_cond);
         pthread_mutex_unlock(&completion_mutex);
@@ -445,15 +450,14 @@ void thread_vessel_wait_completed()
 {
     pthread_mutex_lock(&completion_mutex);
     pthread_mutex_lock(&mutex);
-    int n = works.size();
-    pthread_mutex_unlock(&mutex);
-    while (n > 0) {
+
+    while (works.size() > 0 && completed_threads < numthreads) {
+        pthread_mutex_unlock(&mutex);
         pthread_cond_wait(&completion_cond, &completion_mutex);
 
         pthread_mutex_lock(&mutex);
-        n = works.size();
-        pthread_mutex_unlock(&mutex);
     }
+    pthread_mutex_unlock(&mutex);
     pthread_mutex_unlock(&completion_mutex);
 }
 

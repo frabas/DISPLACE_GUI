@@ -232,28 +232,60 @@ vector <double> dist_to_ports;
  *
  * */
 
+void lock()
+{
+    pthread_mutex_lock(&glob_mutex);
+}
+
+void unlock()
+{
+    pthread_mutex_unlock(&glob_mutex);
+}
+
+void guiSendCurrentStep (unsigned int tstep)
+{
+    if (use_gui) {
+        pthread_mutex_lock(&glob_mutex);
+        cout << "=S" << tstep << endl;      /* use gui */
+        pthread_mutex_unlock(&glob_mutex);
+    }
+}
+
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
-    if (use_gui)
+    if (use_gui) {
+        pthread_mutex_lock(&glob_mutex);
         std::cout << "=U" << filename << " " << tstep << endl;
+        pthread_mutex_unlock(&glob_mutex);
+    }
 }
 
 void guiSendVesselLogbook(const std::string &line)
 {
-    if (use_gui)
+    if (use_gui) {
+        pthread_mutex_lock(&glob_mutex);
         std::cout << "=v" << line;
+        pthread_mutex_unlock(&glob_mutex);
+    }
 }
 
 void guiSendMemoryInfo(const MemoryInfo &info)
 {
-    if (use_gui)
+    if (use_gui) {
+        pthread_mutex_lock(&glob_mutex);
         std::cout << "=Dm" << info.rss() << " " << info.peakRss() << endl;
+        pthread_mutex_unlock(&glob_mutex);
+    }
+
 }
 
 void guiSendCapture(bool on)
 {
-    if (use_gui)
+    if (use_gui) {
+        pthread_mutex_lock(&glob_mutex);
         std::cout << "=Dc" << (on ? "+" : "-");
+        pthread_mutex_unlock(&glob_mutex);
+    }
 }
 
 bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
@@ -439,8 +471,10 @@ int main(int argc, char* argv[])
 
     cwd = std::string(getcwd(buf, MAXPATH));
 
+    lock();
 	cout << " nbsteps " << nbsteps
 		<< " namefolderinput " << namefolderinput <<" " << read_preexisting_paths << endl;
+    unlock();
 
 	if(namefolderinput=="fake") inputfolder="DISPLACE_input_test";
 
@@ -1010,9 +1044,10 @@ int main(int argc, char* argv[])
                 fishprices_each_species_per_cat,
 				init_fuelprices
 				));
-			cout << "Harbour " <<  nodes[i]->get_name() << " " <<
+
+            dout(cout << "Harbour " <<  nodes[i]->get_name() << " " <<
 				nodes[i]->get_x() << " " << nodes[i]->get_y() << " " <<
-				nodes[i]->get_is_harbour()<< " " <<endl;
+                nodes[i]->get_is_harbour()<< " " <<endl);
 		}
 		else
 		{
@@ -1112,7 +1147,7 @@ int main(int argc, char* argv[])
 
 		if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=2)
 		{
-			cout << "something wrong for benthos_tot_biomass here!" << endl;
+            cerr << "something wrong for benthos_tot_biomass here!" << endl;
 			int aa;
 			cin >> aa;
 		}
@@ -1689,14 +1724,18 @@ int main(int argc, char* argv[])
 	// debug
 	if(fgrounds.size() != freq_fgrounds.size())
 	{
-		cout<< "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << endl;
-		int tmp;
+        lock();
+        cout << "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << endl;
+        unlock();
+        int tmp;
 		cin >> tmp;				 // pause
-	}
+    }
 	if(harbours.size() != freq_harbours.size())
 	{
-		cout<< "please correct .dat files so that harbours and freq_harbours have same size!!!" << endl;
-		int tmp;
+        lock();
+        cout<< "please correct .dat files so that harbours and freq_harbours have same size!!!" << endl;
+        unlock();
+        int tmp;
 		cin >> tmp;				 // pause
 	}
 
@@ -1719,7 +1758,8 @@ int main(int argc, char* argv[])
 		//vesselids.erase (vesselids.begin());
 		//for (int i=0; i<7; i++)
 	{
-		cout<<"create vessel " << i << endl;
+        outc(cout<<"create vessel " << i << endl);
+
 		// read vessel and quarter specific multimap
 		// quarter specific to capture a piece of seasonality in the fishnig activity
         possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
@@ -1732,8 +1772,11 @@ int main(int argc, char* argv[])
 		// debug
 		if(possible_metiers.size() != freq_possible_metiers.size())
 		{
+            unlock();
 			cout<< "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
 				<< "for the vessel " << vesselids[i] << endl;
+            unlock();
+
 			int tmp;
 			cin >> tmp;			 // pause
 		}
@@ -1968,9 +2011,9 @@ int main(int argc, char* argv[])
 		}
 
 		// check
-		cout << "create vessel " << vessels[i]->get_idx()  << " " << vessels[i]->get_name() << " " << vessels[i]->get_nationality() <<" on "
+        outc(cout << "create vessel " << vessels[i]->get_idx()  << " " << vessels[i]->get_name() << " " << vessels[i]->get_nationality() <<" on "
 			<< vessels[i]->get_loc()->get_idx_node() << " with coordinates "
-			<< vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl;
+            << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl);
 		//   << " and metier " << vessels[i]->get_metier()->get_name() <<  endl;
 		//vector<double> a_ogive = vessels[i]->get_metier()->get_selectivity_ogive() ;
 		//cout << "with selectivity ogive " << endl;
@@ -1998,8 +2041,8 @@ int main(int argc, char* argv[])
 	}
 
 	//check vessel specifications
-	cout << " vessel"<< vessels[0]->get_idx()  <<" have a max speed of "
-		<< vessels[0]->get_speed() << " "  << endl;
+    outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have a max speed of "
+        << vessels[0]->get_speed() << " "  << endl);
 
 	/*  //check movement
 	  // (caution: take really care of this piece of code that is able to uncouple the vessel to the graph if altered,
@@ -2542,10 +2585,12 @@ int main(int argc, char* argv[])
         dout(cout  << endl);
         dout(cout  << "---------------" << endl);
 
-        if (use_gui)
-            cout << "=S" << tstep << endl;      /* use gui */
+        guiSendCurrentStep(tstep);
 
+        lock();
         cout << "tstep " << tstep << endl;
+        unlock();
+
         dout(cout  << "---------------" << endl);
 
 		if(use_gnuplot)
@@ -2656,8 +2701,8 @@ int main(int argc, char* argv[])
 					vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 					map<int,double> map_oth           = populations.at(sp)->get_oth_land();
 
-					cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
-						populations.at(name_pop)->get_landings_so_far() << endl;
+                    outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
+                        populations.at(name_pop)->get_landings_so_far() << endl);
 
                     // will be used in case of area_closure
 					double cumul_oth_land_to_be_displaced=0.0;
@@ -2868,10 +2913,18 @@ int main(int argc, char* argv[])
 								{
 								 // this is a proportion (of biomass)
 									impact_on_pop=tot_removals/tot_B;
-									if(tot_B<0) cout << "negative tot B!! for this pop " << name_pop << " " <<
+                                    if(tot_B<0) {
+                                        lock();
+                                        cout << "negative tot B!! for this pop " << name_pop << " " <<
 											"on node " << a_list_nodes.at(n)->get_idx_node() << endl;
-									if(tot_removals<0) cout << "negative tot_removals!! for this pop " << name_pop << " " <<
+                                        unlock();
+                                    }
+                                    if(tot_removals<0) {
+                                        lock();
+                                        cout << "negative tot_removals!! for this pop " << name_pop << " " <<
 											"on node " << a_list_nodes.at(n)->get_idx_node() << endl;
+                                        unlock();
+                                    }
 								}
 								else
 								{
@@ -2898,8 +2951,8 @@ int main(int argc, char* argv[])
 						a_list_nodes.at(n)->clear_impact_on_pops();
 					}
 
-					cout << "landings so far for this pop " << sp << ", after applying oth_land " <<
-						populations.at(name_pop)->get_landings_so_far() << endl;
+                    outc(cout << "landings so far for this pop " << sp << ", after applying oth_land " <<
+                        populations.at(name_pop)->get_landings_so_far() << endl);
 
                     dout(cout  << endl);
 
@@ -2991,7 +3044,7 @@ int main(int argc, char* argv[])
 						#else
 						string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+namesimu;
                         if (chdir(aFolder.c_str()) == -1) {
-                          cout << "chdir failed!!" << endl;
+                          cerr << "chdir failed!!" << endl;
                           // note that we cannot use ~/ibm_vessels in chdir!!!
                         }						
 						#endif
@@ -3015,14 +3068,14 @@ int main(int argc, char* argv[])
 					}
 					else
 					{
-						cout << "pble calling a system command" << endl;
+                        cerr << "pble calling a system command" << endl;
 						exit (EXIT_FAILURE);
 					}
 
                     // return back to the initial path
                     string aFolder2 = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh";
                         if (chdir(aFolder2.c_str()) == -1) {
-                          cout << "chdir failed!!" << endl;
+                          cerr << "chdir failed!!" << endl;
                           // note that we cannot use ~/ibm_vessels in chdir!!!
                         }
 					
@@ -3768,8 +3821,8 @@ int main(int argc, char* argv[])
 			for (unsigned int i =0; i < ve.size(); i++)
 			{
 				bool is_harbour = vessels[ i ]->get_loc()->get_is_harbour();
-				cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
-					<<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl;
+                outc(cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
+                    <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl);
 
 			}
 
@@ -3848,8 +3901,11 @@ int main(int argc, char* argv[])
             guiSendMemoryInfo(memInfo);
         }
 
-        if ((mLoopProfile.runs() % 500) == 0)
+        if ((mLoopProfile.runs() % 500) == 0) {
+            lock();
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
+            unlock();
+        }
 #endif
 	}							 // end FOR LOOP OVER TIME
 
@@ -3859,6 +3915,7 @@ int main(int argc, char* argv[])
 #ifdef PROFILE
     guiSendCapture(true);
 
+    lock();
     cout << "*** Profilers statistics ***\n";
     cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
     cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
@@ -3870,6 +3927,7 @@ int main(int argc, char* argv[])
 
     memInfo.update();
     std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
+    unlock();
 
     guiSendCapture(false);
 #endif

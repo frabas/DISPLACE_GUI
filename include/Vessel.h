@@ -30,6 +30,8 @@
 #include <myutils.h>
 #include <options.h>
 
+#include <pthread.h>
+
 typedef int vertex_t;
 
 class Vessel
@@ -103,6 +105,8 @@ class Vessel
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
+        pthread_mutex_t mutex;
+
 protected:
         void init();
 
@@ -124,6 +128,9 @@ protected:
            	);			
 		Vessel();
 		~Vessel();
+
+        void lock() { pthread_mutex_lock (&mutex); }
+        void unlock() { pthread_mutex_unlock (&mutex); }
 
 		//    friend std::ostream& operator<<(std::ostream& out, const Vessel &vessel)
 		//    {
@@ -276,24 +283,24 @@ protected:
 		void alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes_in_polygons);
 		void alloc_on_high_previous_cpue(int tstep,
 			ofstream& freq_cpue);
-		void alloc_on_high_profit_grounds(int tstep,vector <int>& idx_path_shop,
-			deque < map<vertex_t, vertex_t> >& path_shop,
-			deque < map<vertex_t, weight_t> >& min_distance_shop,
-			ofstream& freq_profit);
-		void alloc_while_saving_fuel(int tstep, vector <int>& idx_path_shop,
-			deque < map<vertex_t, vertex_t> >& path_shop,
-			deque < map<vertex_t, weight_t> >& min_distance_shop
-			);
-		void alloc_on_closer_grounds(int tstep, vector <int>& idx_path_shop,
-			deque<map<vertex_t, vertex_t> >& path_shop,
-			deque<map<vertex_t, weight_t> >& min_distance_shop,
-			ofstream& freq_distance);
+        void alloc_on_high_profit_grounds(int tstep, const vector<int> &idx_path_shop,
+            const deque<map<vertex_t, vertex_t> > &path_shop,
+            const deque<map<vertex_t, weight_t> > &min_distance_shop,
+            ofstream& freq_profit);
+        void alloc_while_saving_fuel(int tstep, const vector<int> &idx_path_shop,
+            const deque<map<vertex_t, vertex_t> > &path_shop,
+            const deque<map<vertex_t, weight_t> > &min_distance_shop
+            );
+        void alloc_on_closer_grounds(int tstep, const vector<int> &idx_path_shop,
+            const deque<map<vertex_t, vertex_t> > &path_shop,
+            const deque<map<vertex_t, weight_t> > &min_distance_shop,
+            ofstream& freq_distance);
         void choose_a_ground_and_go_fishing(int tstep,
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
-            vector <int>& idx_path_shop,
-            deque<map<vertex_t, vertex_t> >& path_shop,
-            deque<map<vertex_t, weight_t> >& min_distance_shop,
+            const vector <int>& idx_path_shop,
+            const deque<map<vertex_t, vertex_t> >& path_shop,
+            const deque<map<vertex_t, weight_t> >& min_distance_shop,
             adjacency_map_t& adjacency_map,
             map<vertex_t, weight_t>& min_distance,
             map<vertex_t, vertex_t>& previous,
@@ -308,9 +315,9 @@ protected:
         void choose_another_ground_and_go_fishing(int tstep,
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
-            vector <int>& idx_path_shop,
-            deque<map<vertex_t, vertex_t> >& path_shop,
-            deque<map<vertex_t, weight_t> >& min_distance_shop,
+            const vector <int>& idx_path_shop,
+            const deque<map<vertex_t, vertex_t> >& path_shop,
+            const deque<map<vertex_t, weight_t> >& min_distance_shop,
             adjacency_map_t& adjacency_map,
             map<vertex_t, weight_t>& min_distance,
             map<vertex_t, vertex_t>& previous,
@@ -324,9 +331,9 @@ protected:
         void choose_a_port_and_then_return(int tstep,
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
-            vector <int>& idx_path_shop,
-            deque<map<vertex_t, vertex_t> >& path_shop,
-            deque<map<vertex_t, weight_t> >& min_distance_shop,
+            const vector <int>& idx_path_shop,
+            const deque<map<vertex_t, vertex_t> >& path_shop,
+            const deque<map<vertex_t, weight_t> >& min_distance_shop,
             adjacency_map_t& adjacency_map,
             map<vertex_t, weight_t>& min_distance,
             map<vertex_t, vertex_t>& previous,
@@ -349,8 +356,8 @@ protected:
             const DynAllocOptions& dyn_alloc_sce,
             int create_a_path_shop,
             const vector<int> &idx_path_shop,
-            deque<map<vertex_t, vertex_t> >& path_shop,
-            deque<map<vertex_t, weight_t> >& min_distance_shop,
+            const deque<map<vertex_t, vertex_t> > &path_shop,
+            const deque<map<vertex_t, weight_t> > &min_distance_shop,
             adjacency_map_t& adjacency_map,
             map<vertex_t, weight_t> &min_distance,
             map<vertex_t, vertex_t> &previous,

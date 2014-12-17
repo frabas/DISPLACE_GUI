@@ -283,7 +283,10 @@ vector <vector <double> > Node::get_Ns_pops_at_szgroup() const
 
 vector<int> Node::get_vid ()
 {
-	return(vid);
+    lock();
+    vector<int> r = vid;
+    unlock();
+    return r;
 }
 
 

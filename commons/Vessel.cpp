@@ -51,6 +51,8 @@ Vessel::~Vessel()
 //Vessel::Vessel(boost::shared_ptr<Node> p_location, int idx, string a_name)
 Vessel::Vessel(Node* p_location, int idx, string a_name)
 {
+    pthread_mutex_init(&mutex,0);
+
 	m_location = p_location;
 	idx_vessel = idx;
 	p_location->set_vid(idx_vessel);
@@ -86,6 +88,8 @@ double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
 double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
 double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 {
+    pthread_mutex_init(&mutex,0);
+
 	m_location = p_location;
 	idx_vessel = a_idx_vessel;
 	p_location->set_vid(a_idx_vessel);
@@ -258,6 +262,7 @@ void Vessel::init()
 Vessel::Vessel(string name, Node* a_location)
 : name(name), m_location(a_location)
 {
+    pthread_mutex_init(&mutex,0);
 }
 
 
@@ -1162,7 +1167,7 @@ void  Vessel::erode_roadmap ()
 
 void Vessel::move_to(double nx, double ny)
 {
-	m_location->set_xy(nx, ny);
+    m_location->set_xy(nx, ny);
 }
 
 
@@ -1198,6 +1203,7 @@ void Vessel::set_metier(Metier* pnew_metier)
 
 void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
 {
+    lock();
 
 	list<vertex_t>::iterator pos = roadmap.begin();
 	list<vertex_t>::iterator pos2 = roadmap.end();
@@ -1390,6 +1396,7 @@ void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
     //    dout(cout  << "DEBUG!! VESSEL "<< this->get_name() << " TRYING TO REACH " << "BY LAND!!" << endl); // detect to correct the straight line symptom
 	// }
 
+    unlock();
 }
 
 
@@ -1401,6 +1408,8 @@ void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double& graph_res)
 {
+    lock();
+
     dout(cout  << "BEGIN do_catch()" << endl);
 
 	// check the matrix of catches
@@ -1996,6 +2005,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     //dout(cout  << "the active metier is " << met << endl);
 
     dout(cout  << "END do_catch()" << endl);
+
+    unlock();
 }
 
 
@@ -2236,9 +2247,9 @@ ofstream& freq_cpue)
 
 
 void Vessel::alloc_on_high_profit_grounds(int tstep,
-                                          vector <int>& idx_path_shop,
-                                          deque <map<vertex_t, vertex_t> >& path_shop,
-                                          deque <map<vertex_t, weight_t> >& min_distance_shop,
+                                          const vector <int>& idx_path_shop,
+                                          const deque <map<vertex_t, vertex_t> >& path_shop,
+                                          const deque <map<vertex_t, weight_t> >& min_distance_shop,
                                           ofstream& freq_profit)
 {
     UNUSED(tstep);
@@ -2383,9 +2394,9 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
 
 void Vessel::alloc_while_saving_fuel(int tstep,
-                                     vector <int>& idx_path_shop,
-                                     deque <map<vertex_t, vertex_t> >& path_shop,
-                                     deque <map<vertex_t, weight_t> >& min_distance_shop
+                                     const vector <int>& idx_path_shop,
+                                     const deque <map<vertex_t, vertex_t> >& path_shop,
+                                     const deque <map<vertex_t, weight_t> >& min_distance_shop
                                      )
 {
     UNUSED(tstep);
@@ -2543,9 +2554,9 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 }
 
 
-void Vessel::alloc_on_closer_grounds(int tstep, vector <int>& idx_path_shop,
-deque<map<vertex_t, vertex_t> >& path_shop,
-deque<map<vertex_t, weight_t> >& min_distance_shop,
+void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& idx_path_shop,
+const deque<map<vertex_t, vertex_t> >& path_shop,
+const deque<map<vertex_t, weight_t> >& min_distance_shop,
 ofstream& freq_distance)
 {
 	// this is implicitly minimizing the fuel cost i.e. redirect the
@@ -2620,13 +2631,12 @@ ofstream& freq_distance)
 }
 
 
-void Vessel::choose_a_ground_and_go_fishing(
-        int tstep,
+void Vessel::choose_a_ground_and_go_fishing(int tstep,
         const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
-        vector <int>& idx_path_shop,
-        deque<map<vertex_t, vertex_t> >& path_shop,
-        deque<map<vertex_t, weight_t> >& min_distance_shop,
+        const vector<int> &idx_path_shop,
+        const deque<map<vertex_t, vertex_t> > &path_shop,
+        const deque<map<vertex_t, weight_t> > &min_distance_shop,
         adjacency_map_t& adjacency_map,
         map<vertex_t, weight_t>& min_distance,
         map<vertex_t, vertex_t>& previous,
@@ -2728,7 +2738,7 @@ void Vessel::choose_a_ground_and_go_fishing(
 	}
 	else						 // replaced by:
 	{
-		vector<int>::iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
+        vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
 								 // tricky!
 		int idx = it - idx_path_shop.begin();
 
@@ -2837,9 +2847,9 @@ void Vessel::choose_a_ground_and_go_fishing(
 void Vessel::choose_another_ground_and_go_fishing(int tstep,
         const DynAllocOptions &dyn_alloc_sce,
         int create_a_path_shop,
-        vector <int>& idx_path_shop,
-        deque<map<vertex_t, vertex_t> >& path_shop,
-        deque<map<vertex_t, weight_t> >& min_distance_shop,
+        const vector<int> &idx_path_shop,
+        const deque<map<vertex_t, vertex_t> > &path_shop,
+        const deque<map<vertex_t, weight_t> > &min_distance_shop,
         adjacency_map_t& adjacency_map,
         map<vertex_t, weight_t>& min_distance,
         map<vertex_t, vertex_t>& previous,
@@ -2879,7 +2889,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	}
 	else						 // replaced by:
 	{
-		vector<int>::iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
+        vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
 								 // tricky!
 		int idx = it - idx_path_shop.begin();
 
@@ -3083,9 +3093,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 void Vessel::choose_a_port_and_then_return(int tstep,
         const DynAllocOptions &dyn_alloc_sce,
         int create_a_path_shop,
-        vector <int>& idx_path_shop,
-        deque<map<vertex_t, vertex_t> >& path_shop,
-        deque<map<vertex_t, weight_t> >& min_distance_shop,
+        const vector<int> &idx_path_shop,
+        const deque<map<vertex_t, vertex_t> > &path_shop,
+        const deque<map<vertex_t, weight_t> > &min_distance_shop,
         adjacency_map_t& adjacency_map,
         map<vertex_t, weight_t>& min_distance,
         map<vertex_t, vertex_t>& previous,
@@ -3119,7 +3129,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 	}
 	else						 // replaced by:
 	{
-		vector<int>::iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
+        vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
 								 // tricky!
 		int idx = it - idx_path_shop.begin();
 
@@ -3189,7 +3199,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 		}
 		else					 // replaced by:
 		{
-			vector<int>::iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), arr);
+            vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), arr);
 								 // tricky!
 			int idx = it - idx_path_shop.begin();
 
@@ -3462,6 +3472,7 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 
 int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_tree)
 {
+    lock();
 
 	// first of all, check if some remaining quotas
 	// note that, by default, only pops with informed global_tac_this_pop have non-zero individual_tac
@@ -3482,7 +3493,8 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 
 	// to avoid the vessel staying quayside while the vessel is actually not targeting the tac-informed species
 	// we need a small fix:
-	if(this->get_targeting_non_tac_pop_only()) still_some_quotas=1;
+    if(this->get_targeting_non_tac_pop_only())
+        still_some_quotas=1;
 
 	if(still_some_quotas)
 	{
@@ -3509,8 +3521,13 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 			//cout << "the_value " << the_value << endl;
 			// draw a random number [0,1) and compare with the value
 								 //GO!
-			if(unif_rand()<the_value) return(1);
-			else return(0);		 // DONT GO!
+            if(unif_rand()<the_value) {
+                unlock();
+                return(1);
+            } else {
+                unlock();
+                return(0);		 // DONT GO!
+            }
 		}
 		else
 		{
@@ -3519,14 +3536,20 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 			// by default, if rest time is over...GO!
 			// (assumption: note that this rest time, which is drawn from a gamma distrib,
 			//    do not change whatever the scenario, which can in some cases be weird?)
-			if(this->get_timeforrest()<1) return(1);
-			else return(0);
+            if(this->get_timeforrest()<1) {
+                unlock();
+                return(1);
+            } else {
+                unlock();
+                return(0);
+            }
 		}
 
 	}
 	else
 	{
         dout(cout  << "no quota left for this vessel " << this->get_name() << "...stay on quayside!" << endl);
+        unlock();
 		return(0);
 	}
 
@@ -3579,6 +3602,7 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 	}
 	else
 	{
+        lock();
 
 		// DEFAULT-------------------------
 		vector <bool> a_vect;
@@ -3590,6 +3614,7 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 			this->get_fgrounds().size()>2 &&
 			this->get_nbfpingspertrip() > 1;
 
+        unlock();
 		return(another_ground);
 	}
 }
@@ -3600,8 +3625,8 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
                                   const vector <int>& idx_path_shop,
-                                  deque<map<vertex_t, vertex_t> >& path_shop,
-                                  deque<map<vertex_t, weight_t> >& min_distance_shop,
+                                  const deque<map<vertex_t, vertex_t> >& path_shop,
+                                  const deque<map<vertex_t, weight_t> >& min_distance_shop,
                                   adjacency_map_t& adjacency_map,
                                   map<vertex_t, weight_t>& min_distance,
                                   map<vertex_t, vertex_t>& previous,
@@ -3630,6 +3655,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
 	}
 	else
 	{
+        lock();
 		// DEFAULT-------------------------
 
 		//assumptions:
@@ -3743,6 +3769,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
 		int stop_fishing =1;
 		if(flag1 && flag2 && flag3) stop_fishing =0;
 
+        unlock();
 		return(stop_fishing);
 	}
 }

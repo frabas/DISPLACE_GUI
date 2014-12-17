@@ -118,9 +118,9 @@ string inputfolder);
 
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
-vector<double> compute_distance_fgrounds(vector <int>& idx_path_shop,
-deque <map<vertex_t, vertex_t> >& path_shop,
-deque <map<vertex_t, weight_t> >& min_distance_shop,
+vector<double> compute_distance_fgrounds(const vector<int> &idx_path_shop,
+const deque<map<vertex_t, vertex_t> > &path_shop,
+const deque<map<vertex_t, weight_t> > &min_distance_shop,
 int from,
 vector<int> grounds);
 

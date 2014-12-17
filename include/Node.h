@@ -48,6 +48,9 @@ class Node
 		/**  destructor */
 		~Node();
 
+        void lock() { pthread_mutex_lock (&mutex); }
+        void unlock() { pthread_mutex_unlock (&mutex); }
+
 		int get_idx_node() const;
 		int get_code_area() const;
 		int get_marine_landscape() const;

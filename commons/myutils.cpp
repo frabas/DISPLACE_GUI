@@ -1109,13 +1109,13 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 }
 
 
-vector<double> compute_distance_fgrounds(vector <int>& idx_path_shop,
-deque<map<vertex_t, vertex_t> >& path_shop,
-deque<map<vertex_t, weight_t> >& min_distance_shop,
+vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
+const deque<map<vertex_t, vertex_t> >& path_shop,
+const deque<map<vertex_t, weight_t> >& min_distance_shop,
 int from,
 vector<int> grounds)
 {
-	vector<int>::iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
+    vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
 								 // tricky!
 	int idx = it - idx_path_shop.begin();
 

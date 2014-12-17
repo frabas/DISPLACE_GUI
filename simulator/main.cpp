@@ -63,6 +63,8 @@
 #define CALLGRIND_DUMP_STATS
 #endif
 
+#include <thread_vessels.h>
+
 #include <iomanip>
 #include <iostream>
 #include <fstream>
@@ -87,6 +89,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <values.h>
 #include "Node.h"
 #include "Benthos.h"
 #include "Metier.h"
@@ -104,16 +107,8 @@
 #include <profiler.h>
 #endif
 
-#define NAUTIC 1.852			 // 1 nautical mile=1.852 km
-#define PI 3.14159265
-
 using namespace std;
 
-#define NBSZGROUP 14
-#define SEL_NBSZGROUP 5			 // according to the R glm on cpue (see R code)
-#define NBAGE 11				 // nb age classes max
-#define PING_RATE 1				 // tstep=> 1 hour
-#define PI 3.14159265
 
 // global variables
 #ifdef _WIN32
@@ -128,6 +123,8 @@ std::string cwd;
 char buf[MAXPATH];
 bool use_gui = false;
 bool gui_move_vessels = true;
+bool use_gnuplot;
+int num_threads = 4;
 
 #ifdef PROFILE
 AverageProfiler mLoopProfile;
@@ -141,6 +138,63 @@ double mLoadGraphProfileResult;
 #endif
 
 MemoryInfo memInfo;
+
+
+vector<int> ve;
+vector <Vessel*> vessels;
+vector <Population* > populations;
+int tstep;
+int nbpops;
+int a_graph;
+int a_port;
+int nrow_coord;
+int nrow_graph;
+double graph_res;
+int export_vmslike;
+ofstream vmslike;
+vector <int> implicit_pops;
+vector <double> calib_oth_landings;
+vector <double> calib_weight_at_szgroup;
+vector <double> calib_cpue_multiplier;
+vector <int> int_harbours;
+ofstream loglike;
+DynAllocOptions dyn_alloc_sce;
+PopSceOptions dyn_pop_sce;
+string biolsce;
+int create_a_path_shop;
+deque<map<vertex_t, vertex_t> > path_shop;
+deque<map<vertex_t, weight_t> >  min_distance_shop;
+vector <int> idx_path_shop;
+adjacency_map_t adjacency_map;
+vector<string> vertex_names;
+vector<map<vertex_t, vertex_t> > paths_shop;
+vector<map<vertex_t, weight_t> > min_distances_shop;
+vector <int> idx_paths_shop;
+//map<vertex_t, weight_t> min_distance;
+//map<vertex_t, vertex_t> previous;
+vector<int> relevant_nodes;
+multimap<int, int> nodes_in_polygons;
+multimap<int, int> possible_metiers;
+multimap<int, double> freq_possible_metiers;
+multimap<int, double> gshape_cpue_per_stk_on_nodes;
+multimap<int, double> gscale_cpue_per_stk_on_nodes;
+vector<int> spe_fgrounds;
+vector<int> spe_harbours;
+vector<double> spe_freq_fgrounds;
+vector<double> spe_freq_harbours;
+vector<double> spe_vessel_betas_per_pop;
+vector<double> spe_percent_tac_per_pop;
+vector <Node* > nodes;
+multimap<int, string> harbour_names;
+vector<int> name_metiers;
+ofstream freq_cpue;
+ofstream freq_profit;
+ofstream freq_distance;
+ofstream vmslike2;
+ofstream vmslike3;
+vector <Metier*> metiers;
+ofstream export_individual_tacs;
+vector <double> dist_to_ports;
 
 /* GUI Protocol
  *
@@ -173,6 +227,7 @@ MemoryInfo memInfo;
  *
  * --use-gui                Enables the GUI protocol through stdout
  * --no-gui-move-vessels    Disables sending the Vessel position update command (=V) when using GUI
+ * --num_threads x          Parallelize jobs by spawning x threads
  *
  * */
 
@@ -264,6 +319,7 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
 
 
 
+
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
@@ -286,10 +342,10 @@ int main(int argc, char* argv[])
 	string namesimu="sim1";
 	int nbsteps=10;
     double dparam=10.0;
-    bool use_gnuplot=false;
-	int create_a_path_shop=1;	 //used to speed-up the simus by calculating all the possible paths BEFORE the simu starts
+    use_gnuplot=false;
+    create_a_path_shop=1;	 //used to speed-up the simus by calculating all the possible paths BEFORE the simu starts
 	int read_preexisting_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
-	int export_vmslike=1;
+    export_vmslike=1;
 	int selected_vessels_only=0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
 
 	// example for setting up options for the command line
@@ -367,13 +423,18 @@ int main(int argc, char* argv[])
 			optind++;
 			selected_vessels_only = atoi(argv[optind]);
 		}
-        else {
+        else if (sw == "--num_threads") {
+            optind++;
+            num_threads = atoi(argv[optind]);
+        } else {
             dout (cout << "Unknown switch: " << argv[optind] << endl);
         }
 		optind++;
 	}
 
     UNUSED(dparam);
+
+    thread_vessel_init(num_threads);
 
     cwd = std::string(getcwd(buf, MAXPATH));
 
@@ -386,9 +447,6 @@ int main(int argc, char* argv[])
 	string filename;
 
 	// scenarios for dynamic allocation of effort and biol sce
-    DynAllocOptions dyn_alloc_sce;
-    PopSceOptions dyn_pop_sce;
-	string biolsce;				 // default is 1
 
 	//for initial input data
 	string a_quarter= "quarter1";// start quarter
@@ -451,20 +509,9 @@ int main(int argc, char* argv[])
 
 	// nbpops, etc.: caution= config numbers here, read from config files.
 	// a mistake in these files are of great consequences.
-	int nbpops;
-	int a_graph;
-	int a_port;
-	int nrow_coord;
-	int nrow_graph;
 	string a_graph_name="a_graph";
-	double graph_res;
 
 	// config at the simusspe level
-	vector <int> implicit_pops;
-	vector <double> calib_oth_landings;
-	vector <double> calib_weight_at_szgroup;
-	vector <double> calib_cpue_multiplier;
-    vector <int> int_harbours;
     read_config_file (
 		folder_name_parameterization,
         "../"+inputfolder,
@@ -756,8 +803,8 @@ int main(int argc, char* argv[])
 		str_rand_avai_file = "baseline";
 	}
 
-	ofstream export_individual_tacs;
-	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
+
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
 	export_individual_tacs.open(filename.c_str());
 
     dout(cout  << "---------------------------" << endl);
@@ -887,13 +934,12 @@ int main(int argc, char* argv[])
    outc(cout << endl);
 
 	// read harbour specific files
-    multimap<int, string> harbour_names = read_harbour_names(folder_name_parameterization, "../"+inputfolder);
-
+    harbour_names = read_harbour_names(folder_name_parameterization, "../"+inputfolder);
 	// creation of a vector of nodes from coord
 	// and check with the coord in input.
 	// use inheritance i.e. a Harbour is child of a Node
 	// use polymorphism i.e. store either Harbour or Node in the vector of pointers 'nodes'
-	vector <Node* > nodes(graph_coord_x.size());
+    nodes = vector <Node* > (graph_coord_x.size());
 	// REPLACE boost::shared_ptr<Node> by Node* in every files if you want to remove boost
 	for (unsigned int i=0; i<graph_coord_x.size(); i++)
 	{
@@ -982,6 +1028,8 @@ int main(int argc, char* argv[])
 
 		}
 	}
+
+    assert(nodes.size() > 0);
 
 	// init
 	for (unsigned int i=0; i< nodes.size(); i++)
@@ -1134,7 +1182,7 @@ int main(int argc, char* argv[])
     map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, "../"+inputfolder);
 
 	// creation of a vector of populations
-	vector <Population* > populations(nbpops);
+    populations = vector <Population* > (nbpops);
 
 	// get the name of the pops
 	// copy only unique elements of init_pops_per_szgroup into name_pops
@@ -1463,7 +1511,6 @@ int main(int argc, char* argv[])
 	// get the name of the metiers
 	// copy only unique elements of sel_ogives into name_metiers
 	// TOO TRICKY: TO BE CHANGED!!!
-	vector<int> name_metiers;
 	for(multimap<int, double>::iterator iter=sel_ogives.begin(); iter != sel_ogives.end();
 		iter = sel_ogives.upper_bound( iter->first ) )
 	{
@@ -1473,9 +1520,9 @@ int main(int argc, char* argv[])
    outc(cout << "nb metiers: " << name_metiers.size() << endl);
 
 	// creation of a vector of metier from input data...
-	vector <Metier*> metiers(name_metiers.size());
+    metiers = vector <Metier*> (name_metiers.size());
 
-	for (unsigned int i=0; i<metiers.size(); i++)
+    for (unsigned int i=0; i<metiers.size(); i++)
 	{
 		int metier_name = i;
 		vector<double> selectivity                 = find_entries_i_d(sel_ogives, metier_name);
@@ -1653,7 +1700,7 @@ int main(int argc, char* argv[])
 	}
 
 	// read nodes in polygons for area-based management
-    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, "../"+inputfolder);
+    nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, "../"+inputfolder);
 
 	// check
 	//for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -1664,19 +1711,8 @@ int main(int argc, char* argv[])
 
 	//creation of a vector of vessels from vesselids, graph, harbours and fgrounds
 	// and check the start coord
-	multimap<int, int> possible_metiers;
-	multimap<int, double> freq_possible_metiers;
-	multimap<int, double> gshape_cpue_per_stk_on_nodes;
-	multimap<int, double> gscale_cpue_per_stk_on_nodes;
-	vector<int> spe_fgrounds;
-	vector<int> spe_harbours;
-	vector<double> spe_freq_fgrounds;
-	vector<double> spe_freq_harbours;
-	vector<double> spe_vessel_betas_per_pop;
-	vector<double> spe_percent_tac_per_pop;
-
 								 //here
-	vector <Vessel*> vessels(vesselids.size());
+    vessels = vector <Vessel*> (vesselids.size());
     for (unsigned int i=0; i<vesselids.size(); i++)
 		//vector <Vessel*> vessels(7); //here
 		//vesselids.erase (vesselids.begin());
@@ -2017,8 +2053,6 @@ int main(int argc, char* argv[])
 	fill_from_graph(graph, graph_idx_dep, graph_idx_arr, graph_dist_km, nrow_graph);
 
 	/* fill in an adjacency map */
-	adjacency_map_t adjacency_map;
-	vector<string> vertex_names;
 
     for (unsigned int i=0; i<graph_coord_x.size(); i++)
 	{
@@ -2059,15 +2093,8 @@ int main(int argc, char* argv[])
 	//closeSomeNodes(nodes_to_be_closed, adjacency_map);
 
 	// create a shop of paths
-	vector<map<vertex_t, vertex_t> > paths_shop;
-	vector<map<vertex_t, weight_t> > min_distances_shop;
-	vector <int> idx_paths_shop;
 
-	// get the shortest path between source and destination
-	// with the list of intermediate nodes
-	map<vertex_t, weight_t> min_distance;
-	map<vertex_t, vertex_t> previous;
-
+#if 0
 	bool do_it=false;
 	if(do_it)					 // test
 	{
@@ -2134,6 +2161,7 @@ int main(int argc, char* argv[])
 		previous.clear();
 
 	}							 // end test
+#endif
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
@@ -2148,10 +2176,6 @@ int main(int argc, char* argv[])
 
 	// bound the two vectors
 								 // copy
-
-
-    vector<int> relevant_nodes;
-
     if (!load_relevant_nodes(folder_name_parameterization, "../" + inputfolder, relevant_nodes)) {
         cerr << "*** cannot load file." << endl;
         return -1;
@@ -2169,9 +2193,6 @@ int main(int argc, char* argv[])
 	// initialize objects for a shop of paths
 	// list<map<vertex_t, vertex_t> > path_shop (relevant_nodes.size());
 	// list<map<vertex_t, weight_t> >  min_distance_shop(relevant_nodes.size());
-	deque<map<vertex_t, vertex_t> > path_shop;
-	deque<map<vertex_t, weight_t> >  min_distance_shop;
-	vector <int> idx_path_shop;
 
 	if(!create_a_path_shop)
 	{
@@ -2183,7 +2204,9 @@ int main(int argc, char* argv[])
 
 		// for-loop over potential departure node
 		// TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
-		min_distance.clear();
+        map<vertex_t, weight_t> min_distance;
+        map<vertex_t, vertex_t> previous;
+        min_distance.clear();
 		previous.clear();
 		//for (int i=3100; i<relevant_nodes.size(); i++) // change for this to debug in case the creation fails...
         for (unsigned int i=0; i<relevant_nodes.size(); i++)
@@ -2214,9 +2237,9 @@ int main(int argc, char* argv[])
                 //out(cout << "simplify the map for the node: "<< relevant_nodes.at(i) << endl);
 								 // 'previous' is not modified but a new 'previous' is exported into a file here....
 				SimplifyThePreviousMap(relevant_nodes.at(i), previous,
-					relevant_nodes, min_distance,
+                    relevant_nodes, min_distance,
                     namefolderinput, "../"+inputfolder, a_graph_name);
-				min_distance.clear();
+                min_distance.clear();
 				previous.clear();
 								 // these maps come from SimplifyThePreviousMap()
                 previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
@@ -2228,10 +2251,10 @@ int main(int argc, char* argv[])
 			// store in path shops (in order to avoid recomputing the all possible paths from a given departure!!!)
 			// ...and clean
 			path_shop.push_back(previous);
-			min_distance_shop.push_back(min_distance);
+            min_distance_shop.push_back(min_distance);
 			idx_path_shop.push_back(relevant_nodes.at(i));
 
-			min_distance.clear();
+            min_distance.clear();
 			previous.clear();
 
 		}
@@ -2294,8 +2317,6 @@ int main(int argc, char* argv[])
 		*/
 
 	}
-
-	vector <double> dist_to_ports;
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
@@ -2364,12 +2385,10 @@ int main(int argc, char* argv[])
     dout(cout  << "---------------------------------" << endl);
     dout(cout  << "---------------------------------" << endl);
 
-	ofstream vmslike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
 	vmslike.open(filename.c_str());
     std::string vmslike_filename = filename;
 
-	ofstream loglike;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
 	loglike.open(filename.c_str());
     std::string loglike_filename = filename;
@@ -2433,19 +2452,12 @@ int main(int argc, char* argv[])
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
 	benthosnodes.open(filename.c_str());
 
-	ofstream vmslike2;
-
-	ofstream vmslike3;
-
-	ofstream freq_cpue;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_cpue"+namesimu+".dat";
 	freq_cpue.open(filename.c_str());
 
-	ofstream freq_profit;
-	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_profit"+namesimu+".dat";
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_profit"+namesimu+".dat";
 	freq_profit.open(filename.c_str());
 
-	ofstream freq_distance;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_distance"+namesimu+".dat";
 	freq_distance.open(filename.c_str());
 
@@ -2462,7 +2474,7 @@ int main(int argc, char* argv[])
 
 	// get a vector v filled in with 1 to n
 	int nbvessels = vessels.size();
-	vector<int> ve(nbvessels);
+    ve = vector<int> (nbvessels);
     for (unsigned int idx =0; idx < ve.size(); idx++)
 	{
 		ve[idx] =  idx ;
@@ -2517,7 +2529,7 @@ int main(int argc, char* argv[])
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
 
-	for (int tstep =0; tstep < nbsteps; ++tstep)
+    for (tstep =0; tstep < nbsteps; ++tstep)
 	{
 #ifdef PROFILE
         mLoopProfile.start();
@@ -2654,17 +2666,23 @@ int main(int argc, char* argv[])
 						// a check
 						vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
 						vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(9);
-                        if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)
+                        if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
                            outc(cout << "N_at_szgroup before oth_land" << endl);
+                        }
                         for(unsigned int i=0; i<N_at_szgroup.size(); i++)
 						{
-                            if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)   outc(cout << N_at_szgroup.at(i) << endl);
+                            if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
+                                outc(cout << N_at_szgroup.at(i) << endl);
+                            }
 						}
-                        if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)
+                        if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
                            outc(cout << "removals_per_szgroup before oth_land" << endl);
+                        }
                         for(unsigned int i=0; i<removals_per_szgroup.size(); i++)
 						{
-                            if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9)   outc(cout << removals_per_szgroup.at(i) << endl);
+                            if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
+                                outc(cout << removals_per_szgroup.at(i) << endl);
+                            }
 						}
 
 						// apply "other" landings
@@ -3764,280 +3782,12 @@ int main(int argc, char* argv[])
         mVesselLoopProfile.start();
 #endif
 
+        thread_vessel_prepare();
 		for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
 		{
-
-            dout(cout  << "----------" << endl);
-			int index_v =  ve[idx_v];
-            dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
-
-			// check roadmap
-			if(vessels[ index_v ]->get_roadmap().empty())
-			{
-				// check if the vessel is actually active this quarter
-                // (when at least one possible metier within this quarter)
-				if(vessels[ index_v ]->get_possible_metiers().size()>1)
-				{
-                    dout(cout  << "ROADMAP EMPTY" << endl);
-					if(vessels[ index_v ]->get_inharbour())
-					{
-                        dout(cout  << "IN HARB" << endl);
-
-						// LAND the catches when arriving in port and DECLARE IN LOGBOOK
-						// i.e. write this trip down in the logbook output file
-                        // i.e. just arrived!
-						if(!vessels[ index_v ]-> get_inactive())
-						{
-                            std::ostringstream ss;
-                            vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
-                            loglike << ss.str();
-
-                            guiSendVesselLogbook(ss.str());
-
-							//vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
-							vessels[ index_v ]->reinit_after_a_trip();
-						}
-
-						// ***************make a decision************************************
-						map<string,int> external_states_relevant_for_going_fishing;
-						external_states_relevant_for_going_fishing.insert(make_pair(" fish_price_is ",1));
-						external_states_relevant_for_going_fishing.insert(make_pair(" weather_is ",0));
-						//if(tstep % 24 ==7){ // frequency of the decision e.g. every 7 a.m
-						int go_fishing= vessels[ index_v ]->should_i_go_fishing(
-							external_states_relevant_for_going_fishing, false);
-						//}
-                        // ***************implement a decision*******************************
-						if(go_fishing)
-						{
-
-							//go fishing
-                            dout(cout  << "GO FISHING" << endl);
-							vessels[ index_v ]->choose_a_ground_and_go_fishing(
-								tstep,
-								dyn_alloc_sce, create_a_path_shop,
-								idx_path_shop, path_shop, min_distance_shop,
-								adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-								vertex_names,
-								nodes,
-								metiers,
-								freq_cpue, freq_profit, freq_distance
-								);
-
-						}
-						else
-						{
-							//have some rest in the harbour
-                            dout(cout  << "STAY IN HARBOUR" << endl);
-                            // and decrease the rest time...
-							vessels[ index_v ]-> set_timeforrest( vessels[ index_v ]-> get_timeforrest() - PING_RATE );
-							vessels[ index_v ]-> set_next_xy( vessels[index_v ]->get_x(), vessels[ index_v ]->get_y() );
-                            dout(cout  << "...for the next " << vessels[ index_v ]-> get_timeforrest() << " steps" << endl);
-
-						}
-
-					}
-					else
-					{
-                        dout(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
-
-						// ***************make a decision************************************
-						map<string,int> external_states_relevant_for_stopping_fishing;
-						external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
-						int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
-							external_states_relevant_for_stopping_fishing,
-							false,
-							tstep,
-							dyn_alloc_sce, create_a_path_shop,
-							idx_path_shop, path_shop, min_distance_shop,
-							adjacency_map, min_distance, previous, relevant_nodes,
-							vertex_names,
-							nodes,
-							metiers,
-							freq_cpue, freq_distance,
-							dist_to_ports);
-
-						//....unless we got a message (e.g. at the end of a year-quarter)
-                        dout(cout  << "message: " << vessels[ index_v ]->read_message() << endl);
-						bool force_another_ground=false;
-                        // check my mailbox: Am I forced to change of ground?...
-						if(vessels[ index_v ]->read_message()==1)
-						{
-							if(vessels[ index_v ]->get_fgrounds().size()<3)
-							{
-								 //in this case, forced to go back to port instead!
-								stop_fishing=true;
-							}
-								 //in this case, forced to change!
-							force_another_ground=true;
-							// reset my mail box
-							vessels[ index_v ]->reset_message();
-						}
-
-						// ***************implement a decision************************************
-                        // go on fishing...
-						if(!stop_fishing)
-						{
-							// ***************make a decision************************************
-							map<string,int> external_states_relevant_for_change_ground;
-							external_states_relevant_for_change_ground.insert(make_pair(" none ",0));
-							int another_ground = vessels[ index_v ]->should_i_change_ground(
-								external_states_relevant_for_change_ground, false);
-
-							// ***************implement the decision************************************
-								 // ...but not on this ground!
-							if(another_ground || force_another_ground )
-							{
-                                dout(cout  << "CHANGE OF GROUND, GUYS! "  << endl);
-								vessels[ index_v ]->choose_another_ground_and_go_fishing(
-									tstep,
-									dyn_alloc_sce, create_a_path_shop,
-									idx_path_shop, path_shop, min_distance_shop,
-									adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-									vertex_names,
-									nodes,
-									metiers,
-									freq_cpue, freq_distance
-									);
-                                dout(cout  << "GOOD JOB, GUYS! "  << endl);
-
-							}
-							// ***************implement a decision************************************
-							else // Yes, keep go on catching on this ground...
-							{
-                                dout(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
-								//#pragma omp critical(docatch)
-								{
-                                    dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
-									vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res);
-
-									// check
-									//if(vessels[ index_v ]->get_loc()->get_idx_node()==430)
-									//{
-									//    vector <double> N_at_szgroup= vessels[ index_v ]->get_loc()->get_Ns_pops_at_szgroup(3);
-									//
-									//    for(int sz=0; sz<N_at_szgroup.size(); sz++)
-									//    {
-									//        cout << "HERE RIGHT AFTER do_catch sz " <<  N_at_szgroup.at(sz) << endl;
-									//    }
-									//}
-
-								}
-								// update
-								vessels[ index_v ]->set_timeatsea(vessels[ index_v ]->get_timeatsea()+ PING_RATE);
-								// note: no traveled_dist_this_trip cumulated here...might be changed.
-								vessels[ index_v ]-> set_state(1);
-								double cumfuelcons;
-								if(vessels[ index_v ]->get_metier()->get_metier_type()==1)
-								{
-									//trawling (type 1)
-									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_fishing();
-                                    dout(cout  << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
-								}
-								else
-								{
-									// gillnetting, seining (type 2)
-									cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_inactive();
-                                    dout(cout  << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
-								}
-								vessels[ index_v ]->set_cumfuelcons(cumfuelcons);
-
-								// add for cum. effort on this node
-								vessels[ index_v ]->get_loc()->add_to_cumftime(PING_RATE);
-
-                                dout(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
-                                dout(cout  << "my comsumed fuel so far is " << cumfuelcons << endl);
-                                dout(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
-
-							}
-						}
-						// ***************implement a decision************************************
-						else
-						{
-                            dout(cout  << "RETURN TO PORT, NOW! "  << endl);
-							vessels[ index_v ]->choose_a_port_and_then_return(
-								tstep,
-								dyn_alloc_sce, create_a_path_shop,
-								idx_path_shop, path_shop, min_distance_shop,
-								adjacency_map, min_distance, previous, relevant_nodes,
-								vertex_names,
-								nodes,
-								metiers,
-								freq_cpue, freq_distance,
-								dist_to_ports
-								);
-
-						}
-
-					}
-
-				}
-
-			}
-			else
-			{
-                dout(cout  << "roadmap is not empty... ");
-				// display the road map
-				//list<int>::iterator pos;
-                //dout(cout  << "roadmap (in): ");
-				//for(pos=lst.begin(); pos!=lst.end(); pos++)
-				//{
-                //    dout(cout  << *pos << " ");
-				//}
-                //dout(cout  << endl);
-
-				// find.next.pt.on.the.graph()
-				vessels[ index_v ]->find_next_point_on_the_graph(nodes);
-
-                dout(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
-
-                //dout(cout  << "roadmap (out): ");
-				//lst = vessels[ index_v ]->get_roadmap();
-				//for(pos=lst.begin(); pos!=lst.end(); pos++)
-				//{
-                //    dout(cout  << *pos << " ");
-				//}
-
-			}
-            dout(cout  << endl);
-
-			// write this movement in the output  file (hourly data if PING=1)
-			// (setprecision is 6 in c++ by default)
-			// for VMS, export the first year only because the file is growing too big otherwise....
-			if(export_vmslike && tstep<8641) if( vessels[ index_v ]->get_state()!=3)
-			{
-				vmslike << tstep << " "
-				//<< vessels[ index_v ]->get_idx() << " "
-					<< vessels[ index_v ]->get_name() << " "
-								 // can be used as a trip identifier
-					<< vessels[ index_v ]->get_tstep_dep() << " "
-					<< setprecision(3) << fixed << vessels[ index_v ]->get_x() << " "
-					<< setprecision(3) << fixed << vessels[ index_v ]->get_y() << " "
-					<< setprecision(0) << fixed << vessels[ index_v ]->get_course() << " "
-				//<< vessels[ index_v ]->get_inharbour() << " "
-					<< setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
-					<< vessels[ index_v ]->get_state() << " " <<  endl;
-			}
-
-            if (use_gui && gui_move_vessels) {
-                cout << "=V" << tstep << " "
-                    << vessels[ index_v ]->get_idx() << " "
-                    << vessels[ index_v ]->get_tstep_dep() << " "
-                    << setprecision(6) << fixed << vessels[ index_v ]->get_x() << " "
-                    << setprecision(6) << fixed << vessels[ index_v ]->get_y() << " "
-                    << setprecision(2) << fixed << vessels[ index_v ]->get_course() << " "
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
-                    << vessels[ index_v ]->get_state() <<  endl;
-            }
-
-			// realtime gnuplot
-			if(use_gnuplot)
-			{
-				vmslike2   << vessels[ index_v ]->get_x() << " "
-					<< vessels[ index_v ]->get_y() <<  endl;
-
-			}
-
+            thread_vessel_insert_job(idx_v);
 		}
+        thread_vessel_wait_completed();
 
 #ifdef PROFILE
         mVesselLoopProfile.elapsed_ms();

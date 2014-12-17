@@ -30,6 +30,7 @@
 
 Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, int nbpops, int nbszgroups)
 {
+    pthread_mutex_init(&mutex, 0);
 	idx_node= idx;
 	x=xval;
 	y=yval;
@@ -55,6 +56,8 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
            const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
            const vector<int> &graph_point_marine_landscape, int nbpops, int nbszgroups)
 {
+    pthread_mutex_init(&mutex, 0);
+
     UNUSED(nbpops);
     UNUSED(nbszgroups);
 
@@ -98,6 +101,7 @@ Node::Node()
       m_nbpops(0),
       m_nszgrp(0)
 {
+    pthread_mutex_init(&mutex, 0);
 }
 
 
@@ -303,7 +307,9 @@ const vector<double>& Node::get_impact_on_pops ()
 
 void Node::set_vid (int val)
 {
+    pthread_mutex_lock(&mutex);
     vid.push_back(val);
+    pthread_mutex_unlock(&mutex);
 }
 
 void Node::set_cumftime(int tot)

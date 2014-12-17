@@ -28,6 +28,8 @@
 #include "myutils.h"
 #include "myRutils.h"
 
+#include <pthread.h>
+
 using namespace std;
 
 class Node
@@ -134,5 +136,7 @@ private:
 
         int m_nbpops;
         int m_nszgrp;
+
+        pthread_mutex_t mutex;
 };
 #endif							 // NODE_H

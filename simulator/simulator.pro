@@ -7,7 +7,8 @@ INCLUDEPATH=../include
 
 include ("$$top_srcdir/localconfig.pri")
 
-LIBS+= -L.. -ldisplacecommons
+QMAKE_CXXFLAGS +=
+LIBS+= -L.. -ldisplacecommons -lpthread -lm -lrt
 
 macx {
     CONFIG -= app_bundle
@@ -28,11 +29,12 @@ CONFIG(debug,debug|release) {
 DEFINES += PROFILE
 
 # Force callgrind profiling
-#DEFINES += INSTRUMENTATION
+DEFINES += INSTRUMENTATION
 
 #QMAKE_CXXFLAGS += -g
 
-SOURCES= main.cpp
+SOURCES= main.cpp \
+    thread_vessels.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -49,7 +51,9 @@ HEADERS= \
     ../include/mkpath.h \
     ../include/m_constants.h \
     ../include/options.h \
-    ../include/profiler.h
+    ../include/profiler.h \
+    thread_vessels.h \
+    values.h
 
 OTHER_FILES += \
     Makefile

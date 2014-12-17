@@ -29,9 +29,9 @@ static unsigned int numthreads;
 static std::queue<int> works;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t work_cond = PTHREAD_COND_INITIALIZER;
-static pthread_mutex_t completion_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t work_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t completion_cond = PTHREAD_COND_INITIALIZER;
-static unsigned int completed_threads;
+static unsigned int uncompleted_works;
 
 static bool exit_flag;
 static thread_data_t *thread_data;
@@ -396,25 +396,23 @@ static void *thread(void *args)
     thread_data_t *data = (thread_data_t *)args;
 
     while (!exit_flag) {
-        pthread_mutex_lock(&mutex);
+        pthread_mutex_lock(&work_mutex);
         while (works.size() == 0) {
-            pthread_cond_wait(&work_cond, &mutex);
+            pthread_cond_wait(&work_cond, &work_mutex);
         }
-        if (completed_threads > 0)
-            --completed_threads;
 
         int nextidx = works.front();
         works.pop();
-        pthread_mutex_unlock(&mutex);
+//        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
+        pthread_mutex_unlock(&work_mutex);
 
         manage_vessel(data, nextidx);
 
-        pthread_mutex_lock (&mutex);
-        ++completed_threads;
-        pthread_mutex_unlock(&mutex);
-        pthread_mutex_lock(&completion_mutex);
+        pthread_mutex_lock(&work_mutex);
+        --uncompleted_works;
+//        cout << "Thr " << data->thread_idx << " Completed, " << uncompleted_works << " rem\n";
         pthread_cond_signal(&completion_cond);
-        pthread_mutex_unlock(&completion_mutex);
+        pthread_mutex_unlock(&work_mutex);
     }
 
     return 0;
@@ -436,39 +434,37 @@ void thread_vessel_init (int n)
 
 void thread_vessel_prepare()
 {
-    pthread_mutex_lock(&completion_mutex);
-    completed_threads = 0;
-    pthread_mutex_unlock(&completion_mutex);
+    pthread_mutex_lock(&work_mutex);
+    uncompleted_works = 0;
+    pthread_mutex_unlock(&work_mutex);
 }
 
 void thread_vessel_insert_job(int idx)
 {
-    pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&work_mutex);
     works.push(idx);
+    ++uncompleted_works;
     pthread_cond_signal(&work_cond);
-    pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&work_mutex);
 }
 
 void thread_vessel_wait_completed()
 {
-    pthread_mutex_lock(&completion_mutex);
-    pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&work_mutex);
 
-    while (works.size() > 0 && completed_threads < numthreads) {
-        pthread_mutex_unlock(&mutex);
-        pthread_cond_wait(&completion_cond, &completion_mutex);
-
-        pthread_mutex_lock(&mutex);
+    while (uncompleted_works > 0) {
+        pthread_cond_wait(&completion_cond, &work_mutex);
     }
-    pthread_mutex_unlock(&mutex);
-    pthread_mutex_unlock(&completion_mutex);
+
+//    cout << " MAIN: completed " << endl;
+    pthread_mutex_unlock(&work_mutex);
 }
 
 
 void thread_vessel_deinit()
 {
-    pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&work_mutex);
     works.empty();
     exit_flag = true;
-    pthread_mutex_unlock (&mutex);
+    pthread_mutex_unlock (&work_mutex);
 }

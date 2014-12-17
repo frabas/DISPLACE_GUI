@@ -103,7 +103,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // check roadmap
     vessels[index_v]->lock();
     bool roadmap_empty = vessels[ index_v ]->get_roadmap().empty();
-    bool possible_metiers_size = vessels[ index_v ]->get_possible_metiers().size();
+    int possible_metiers_size = vessels[ index_v ]->get_possible_metiers().size();
     bool inharbour = vessels[ index_v ]->get_inharbour();
     bool inactive = vessels[ index_v ]-> get_inactive();
     vessels[index_v]->unlock();

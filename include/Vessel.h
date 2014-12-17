@@ -109,6 +109,7 @@ class Vessel
 
 protected:
         void init();
+        void find_next_point_on_the_graph_unlocked(vector<Node* >& nodes);
 
 	public:
 		//Vessel(string name,  boost::shared_ptr<Node> a_location);
@@ -269,7 +270,7 @@ protected:
 		//void move_to(boost::shared_ptr<Node> next_node);
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
-		void find_next_point_on_the_graph(vector<Node* >& nodes);
+        void find_next_point_on_the_graph(vector<Node* >& nodes);
 		void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res);
 		void clear_catch_pop_at_szgroup();
 		void compute_experiencedcpue_fgrounds();

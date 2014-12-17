@@ -2473,10 +2473,12 @@ int main(int argc, char* argv[])
     popnodes_inc.open(filename.c_str());
     std::string popnodes_inc_filename = filename;
 
+    lock();
 	ofstream popnodes_end;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
 	popnodes_end.open(filename.c_str());
     std::string popnodes_end_filename = filename;
+    unlock();
 
 	ofstream popnodes_impact;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
@@ -3812,7 +3814,10 @@ int main(int argc, char* argv[])
         dout(cout  << "THE VESSEL LOOP----------" << endl);
 		// get a random order for acting vessels
         // random permutation
+
+        lock();
 		random_shuffle(ve.begin(),ve.end());
+        unlock();
 
 		// check that departure is done from harbours that are
 		// informed as such in graph_coord_harbour...if not then check spe_harbour

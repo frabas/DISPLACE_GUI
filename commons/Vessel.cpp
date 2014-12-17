@@ -1198,14 +1198,19 @@ void Vessel::move_to(Node* pnext_node)
 
 void Vessel::set_metier(Metier* pnew_metier)
 {
-	metier= pnew_metier;
+    metier= pnew_metier;
+}
+
+void Vessel::find_next_point_on_the_graph(vector<Node *> &nodes)
+{
+    lock();
+    find_next_point_on_the_graph_unlocked(nodes);
+    unlock();
 }
 
 
-void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
+void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 {
-    lock();
-
     assert(roadmap.size() > 0);
 
 	list<vertex_t>::iterator pos = roadmap.begin();
@@ -1398,8 +1403,6 @@ void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
     //    dout(cout  << "x "<< this->get_x() << " y "<< this->get_y() << endl);
     //    dout(cout  << "DEBUG!! VESSEL "<< this->get_name() << " TRYING TO REACH " << "BY LAND!!" << endl); // detect to correct the straight line symptom
 	// }
-
-    unlock();
 }
 
 
@@ -2792,7 +2795,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 		//    cout << endl;
 
 		// then, call to find.next.pt.on.the.graph()
-		this-> find_next_point_on_the_graph(nodes);
+        this-> find_next_point_on_the_graph_unlocked(nodes);
 
 		// decide on the rest duration for the next time (drawn from a gamma law)
 		double calib=1;
@@ -2869,6 +2872,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
     UNUSED(vertex_names);
+
+    lock();
 
 	bool finally_I_should_go_for_the_closest=false;
 	// => in case of area_closure: provoke oscillation at the border if the 2nd closest is inside a closed area
@@ -3083,7 +3088,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
 	this->set_metier(  metiers[ a_met[0] ]  );
 	// find.next.pt.on.the.graph()
-	this->find_next_point_on_the_graph(nodes);
+    this->find_next_point_on_the_graph_unlocked(nodes);
+    unlock();
 }
 
 

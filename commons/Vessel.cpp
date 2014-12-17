@@ -1395,7 +1395,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 		set_timeatsea(get_timeatsea()+ PING_RATE);
 		set_traveled_dist_this_trip (get_traveled_dist_this_trip() + this->get_speed() * PING_RATE * NAUTIC);
 		set_state(2);
-		this->set_roadmap(roadmap);
+//		this->set_roadmap(roadmap);
 	}
 
 	//if(this->get_x()>8 && this->get_x()<10 && this->get_y()<52 )

@@ -195,7 +195,7 @@ ofstream vmslike2;
 ofstream vmslike3;
 vector <Metier*> metiers;
 ofstream export_individual_tacs;
-vector <double> dist_to_ports;
+//vector <double> dist_to_ports;
 
 /* GUI Protocol
  *

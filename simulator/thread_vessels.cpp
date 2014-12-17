@@ -82,7 +82,7 @@ extern ofstream vmslike2;
 extern ofstream vmslike3;
 extern vector <Metier*> metiers;
 extern ofstream export_individual_tacs;
-extern vector <double> dist_to_ports;
+//extern vector <double> dist_to_ports;
 
 extern void guiSendVesselLogbook(const std::string &line);
 
@@ -92,6 +92,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
     map<vertex_t, weight_t> min_distance;
     map<vertex_t, vertex_t> previous;
+    vector <double> dist_to_ports;
 
     dout(cout  << "----------" << endl);
     pthread_mutex_lock (&glob_mutex);

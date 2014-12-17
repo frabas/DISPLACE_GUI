@@ -29,6 +29,7 @@
 
 #include "Vessel.h"
 #include <helpers.h>
+#include <assert.h>
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -1204,6 +1205,8 @@ void Vessel::set_metier(Metier* pnew_metier)
 void Vessel::find_next_point_on_the_graph(vector<Node* >& nodes)
 {
     lock();
+
+    assert(roadmap.size() > 0);
 
 	list<vertex_t>::iterator pos = roadmap.begin();
 	list<vertex_t>::iterator pos2 = roadmap.end();
@@ -2458,7 +2461,7 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 		// brute search along range of probas.
 								 // using a varying threshold to account for larger (defined as 5% of the conso)
 		double threshold_to_break=new_conso*0.01;
-		double p1, p2, p3;
+        double p1 = 0, p2 = 0, p3 = 0;
 		int a_max = max_proba+1;
 		for(int i=0; i< a_max; i++)
 		{

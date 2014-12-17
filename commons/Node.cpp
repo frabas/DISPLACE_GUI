@@ -330,7 +330,9 @@ void Node::set_xy(double xval, double yval)
 
 void Node::add_to_cumftime(int delta_time)
 {
+    lock();
 	cumftime+=delta_time;
+    unlock();
 }
 
 void Node::reinit(vector<double> &vec, unsigned int sz)

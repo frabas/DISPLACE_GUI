@@ -23,15 +23,12 @@ struct thread_data_t {
     pthread_t thread;
     int thread_idx;
     int thread_id;
-
-    map<vertex_t, weight_t> min_distance;
-    map<vertex_t, vertex_t> previous;
 };
 
 static unsigned int numthreads;
 static std::queue<int> works;
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-static sem_t sem;
+static pthread_cond_t work_cond = PTHREAD_COND_INITIALIZER;
 static pthread_mutex_t completion_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t completion_cond = PTHREAD_COND_INITIALIZER;
 static unsigned int completed_threads;
@@ -39,6 +36,7 @@ static unsigned int completed_threads;
 static bool exit_flag;
 static thread_data_t *thread_data;
 
+extern pthread_mutex_t glob_mutex;
 extern bool use_gui;
 extern bool use_gnuplot;
 extern bool gui_move_vessels;
@@ -90,26 +88,40 @@ extern void guiSendVesselLogbook(const std::string &line);
 
 static void manage_vessel(thread_data_t *dt, int idx_v)
 {
+    UNUSED(dt);
+
+    map<vertex_t, weight_t> min_distance;
+    map<vertex_t, vertex_t> previous;
+
     dout(cout  << "----------" << endl);
+    pthread_mutex_lock (&glob_mutex);
     int index_v =  ve[idx_v];
     dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
+    pthread_mutex_unlock (&glob_mutex);
 
     // check roadmap
-    if(vessels[ index_v ]->get_roadmap().empty())
+    vessels[index_v]->lock();
+    bool roadmap_empty = vessels[ index_v ]->get_roadmap().empty();
+    bool possible_metiers_size = vessels[ index_v ]->get_possible_metiers().size();
+    bool inharbour = vessels[ index_v ]->get_inharbour();
+    bool inactive = vessels[ index_v ]-> get_inactive();
+    vessels[index_v]->unlock();
+
+    if(roadmap_empty)
     {
         // check if the vessel is actually active this quarter
         // (when at least one possible metier within this quarter)
-        if(vessels[ index_v ]->get_possible_metiers().size()>1)
+        if(possible_metiers_size > 1)
         {
             dout(cout  << "ROADMAP EMPTY" << endl);
-            if(vessels[ index_v ]->get_inharbour())
+            if(inharbour)
             {
                 dout(cout  << "IN HARB" << endl);
 
                 // LAND the catches when arriving in port and DECLARE IN LOGBOOK
                 // i.e. write this trip down in the logbook output file
                 // i.e. just arrived!
-                if(!vessels[ index_v ]-> get_inactive())
+                if(!inactive)
                 {
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
@@ -118,7 +130,9 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     guiSendVesselLogbook(ss.str());
 
                     //vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
+                    vessels[index_v]->lock();
                     vessels[ index_v ]->reinit_after_a_trip();
+                    vessels[index_v]->unlock();
                 }
 
                 // ***************make a decision************************************
@@ -139,7 +153,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         tstep,
                         dyn_alloc_sce, create_a_path_shop,
                         idx_path_shop, path_shop, min_distance_shop,
-                        adjacency_map, dt->min_distance, dt->previous, relevant_nodes, nodes_in_polygons,
+                        adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
                         vertex_names,
                         nodes,
                         metiers,
@@ -172,7 +186,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     tstep,
                     dyn_alloc_sce, create_a_path_shop,
                     idx_path_shop, path_shop, min_distance_shop,
-                    adjacency_map, dt->min_distance, dt->previous, relevant_nodes,
+                    adjacency_map, min_distance, previous, relevant_nodes,
                     vertex_names,
                     nodes,
                     metiers,
@@ -215,7 +229,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                             tstep,
                             dyn_alloc_sce, create_a_path_shop,
                             idx_path_shop, path_shop, min_distance_shop,
-                            adjacency_map, dt->min_distance, dt->previous, relevant_nodes, nodes_in_polygons,
+                            adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
                             vertex_names,
                             nodes,
                             metiers,
@@ -246,6 +260,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
                         }
                         // update
+                        vessels[index_v]->lock();
                         vessels[ index_v ]->set_timeatsea(vessels[ index_v ]->get_timeatsea()+ PING_RATE);
                         // note: no traveled_dist_this_trip cumulated here...might be changed.
                         vessels[ index_v ]-> set_state(1);
@@ -266,6 +281,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
                         // add for cum. effort on this node
                         vessels[ index_v ]->get_loc()->add_to_cumftime(PING_RATE);
+                        vessels[index_v]->unlock();
 
                         dout(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
                         dout(cout  << "my comsumed fuel so far is " << cumfuelcons << endl);
@@ -281,7 +297,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         tstep,
                         dyn_alloc_sce, create_a_path_shop,
                         idx_path_shop, path_shop, min_distance_shop,
-                        adjacency_map, dt->min_distance, dt->previous, relevant_nodes,
+                        adjacency_map, min_distance, previous, relevant_nodes,
                         vertex_names,
                         nodes,
                         metiers,
@@ -326,22 +342,28 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // write this movement in the output  file (hourly data if PING=1)
     // (setprecision is 6 in c++ by default)
     // for VMS, export the first year only because the file is growing too big otherwise....
-    if(export_vmslike && tstep<8641) if( vessels[ index_v ]->get_state()!=3)
-    {
-        vmslike << tstep << " "
-        //<< vessels[ index_v ]->get_idx() << " "
-            << vessels[ index_v ]->get_name() << " "
-                         // can be used as a trip identifier
-            << vessels[ index_v ]->get_tstep_dep() << " "
-            << setprecision(3) << fixed << vessels[ index_v ]->get_x() << " "
-            << setprecision(3) << fixed << vessels[ index_v ]->get_y() << " "
-            << setprecision(0) << fixed << vessels[ index_v ]->get_course() << " "
-        //<< vessels[ index_v ]->get_inharbour() << " "
-            << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
-            << vessels[ index_v ]->get_state() << " " <<  endl;
+    vessels[index_v]->lock();
+
+    pthread_mutex_lock(&mutex);
+    if(export_vmslike && tstep<8641) {
+        if( vessels[ index_v ]->get_state()!=3) {
+            vmslike << tstep << " "
+                       //<< vessels[ index_v ]->get_idx() << " "
+                    << vessels[ index_v ]->get_name() << " "
+                       // can be used as a trip identifier
+                    << vessels[ index_v ]->get_tstep_dep() << " "
+                    << setprecision(3) << fixed << vessels[ index_v ]->get_x() << " "
+                    << setprecision(3) << fixed << vessels[ index_v ]->get_y() << " "
+                    << setprecision(0) << fixed << vessels[ index_v ]->get_course() << " "
+                       //<< vessels[ index_v ]->get_inharbour() << " "
+                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
+                    << vessels[ index_v ]->get_state() << " " <<  endl;
+        }
     }
+    pthread_mutex_unlock(&mutex);
 
     if (use_gui && gui_move_vessels) {
+        pthread_mutex_lock(&mutex);
         cout << "=V" << tstep << " "
             << vessels[ index_v ]->get_idx() << " "
             << vessels[ index_v ]->get_tstep_dep() << " "
@@ -350,15 +372,18 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
             << setprecision(2) << fixed << vessels[ index_v ]->get_course() << " "
             << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
             << vessels[ index_v ]->get_state() <<  endl;
+        pthread_mutex_unlock(&mutex);
     }
 
     // realtime gnuplot
     if(use_gnuplot)
     {
+        pthread_mutex_lock(&mutex);
         vmslike2   << vessels[ index_v ]->get_x() << " "
             << vessels[ index_v ]->get_y() <<  endl;
-
+        pthread_mutex_unlock(&mutex);
     }
+    vessels[index_v]->unlock();
 
 }
 
@@ -368,17 +393,13 @@ static void *thread(void *args)
     thread_data_t *data = (thread_data_t *)args;
 
     while (!exit_flag) {
-        sem_wait(&sem);
         pthread_mutex_lock(&mutex);
-
-        if (works.size() == 0) {
-            pthread_mutex_unlock(&mutex);
-            continue;
+        while (works.size() == 0) {
+            pthread_cond_wait(&work_cond, &mutex);
         }
 
         int nextidx = works.front();
         works.pop();
-//        cout << "THR" << data->thread_idx << " got work " << nextidx << endl;
         pthread_mutex_unlock(&mutex);
 
         manage_vessel(data, nextidx);
@@ -396,7 +417,6 @@ static void *thread(void *args)
 void thread_vessel_init (int n)
 {
     exit_flag = false;
-    sem_init(&sem, 0, 0);
 
     numthreads = n;
     thread_data = new thread_data_t[numthreads];
@@ -417,19 +437,24 @@ void thread_vessel_insert_job(int idx)
 {
     pthread_mutex_lock(&mutex);
     works.push(idx);
-    sem_post(&sem);
+    pthread_cond_signal(&work_cond);
     pthread_mutex_unlock(&mutex);
 }
 
 void thread_vessel_wait_completed()
 {
     pthread_mutex_lock(&completion_mutex);
-    while (works.size() > 0/*completed_threads < numthreads*/) {
+    pthread_mutex_lock(&mutex);
+    int n = works.size();
+    pthread_mutex_unlock(&mutex);
+    while (n > 0) {
         pthread_cond_wait(&completion_cond, &completion_mutex);
+
+        pthread_mutex_lock(&mutex);
+        n = works.size();
+        pthread_mutex_unlock(&mutex);
     }
     pthread_mutex_unlock(&completion_mutex);
-
-//    cout << "completed.." << endl;
 }
 
 
@@ -438,7 +463,5 @@ void thread_vessel_deinit()
     pthread_mutex_lock(&mutex);
     works.empty();
     exit_flag = true;
-    for (unsigned int i = 0; i < numthreads; ++i)
-        sem_post(&sem);
     pthread_mutex_unlock (&mutex);
 }

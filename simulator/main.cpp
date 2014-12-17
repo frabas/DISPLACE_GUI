@@ -140,6 +140,7 @@ double mLoadGraphProfileResult;
 MemoryInfo memInfo;
 
 
+pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
 vector<int> ve;
 vector <Vessel*> vessels;
 vector <Population* > populations;
@@ -2474,11 +2475,13 @@ int main(int argc, char* argv[])
 
 	// get a vector v filled in with 1 to n
 	int nbvessels = vessels.size();
+    pthread_mutex_lock (&glob_mutex);
     ve = vector<int> (nbvessels);
     for (unsigned int idx =0; idx < ve.size(); idx++)
 	{
 		ve[idx] =  idx ;
 	}
+    pthread_mutex_unlock (&glob_mutex);
 
 	// init
 	vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));

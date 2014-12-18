@@ -75,6 +75,7 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
             continue;
         }
         std::shared_ptr<OutputMessage> msg = mQueue.front();
+        mQueue.pop();
         exit = !msg->send();
         unlock();
     }

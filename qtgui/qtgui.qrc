@@ -35,5 +35,6 @@
         <file>icons/remove.png</file>
         <file>palettes/pop_colors.p2c</file>
         <file>resources/about.txt</file>
+        <file>icons/timer.png</file>
     </qresource>
 </RCC>

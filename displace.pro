@@ -5,5 +5,6 @@ SUBDIRS+=commons QMapControl qtgui simulator
 OTHER_FILES += \
     Readme.txt \
     COPYRIGHT.txt \
-    LICENSE.txt
+    LICENSE.txt \
+    setup.iss
 

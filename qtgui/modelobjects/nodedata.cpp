@@ -6,11 +6,11 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
     : mNode (nd),
       mModel(model),
       mDeleted(false),
+      mHarbourId(-1),
       mPop(0),
       mPopTot(0),
       mPopW(0),
-      mPopWTot(0),
-      mHarbourId(-1)
+      mPopWTot(0)
 {
     if (nd) {
         int N = nd->get_nbpops();

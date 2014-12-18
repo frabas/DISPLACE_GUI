@@ -29,7 +29,7 @@ using namespace std;
 void revsort(double *a, int *ib, int n);
 								 // in random.c
 void ProbSampleReplace(int n, double *p, int *perm, int nans, int *ans);
-vector<int> do_sample( int n, int nval, int val[], double proba[]);
+vector<int> do_sample( int n, int nval, const int val[], double proba[]);
 
 //svn.r-project.org/R/trunk/src/nmath/
 void set_seed(unsigned int i1, unsigned int i2);

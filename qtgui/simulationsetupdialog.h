@@ -46,6 +46,9 @@ public:
 
     void setMoveVesselsOption(bool x);
     bool getMoveVesselsOption() const;
+
+    int getNumThreads();
+    void setNumThreads(int n);
 private:
     Ui::SimulationSetupDialog *ui;
 };

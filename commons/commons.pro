@@ -6,6 +6,11 @@ include ("$$top_srcdir/localconfig.pri")
 
 INCLUDEPATH=../include/
 
+win32 {
+    # For GetProcessMemoryInfo()
+    LIBS += -lpsapi
+}
+
 SOURCES= \
     readdata.cpp \
     myutils.cpp \
@@ -18,7 +23,9 @@ SOURCES= \
     Vessel.cpp \
     Metier.cpp \
     myRutils.cpp \
-    mkpath.cpp
+    mkpath.cpp \
+    memoryinfo.cpp \
+    options.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -33,7 +40,10 @@ HEADERS= \
     ../include/Metier.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
-    ../include/m_constants.h
+    ../include/m_constants.h \
+    ../include/memoryinfo.h \
+    ../include/helpers.h \
+    ../include/options.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

@@ -23,12 +23,7 @@
 #include <fstream>
 #include <sstream>
 #include "Tac.h"
-
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,double> _relative_stability_key)
 {
@@ -57,6 +52,7 @@ Tac::~Tac()
 
 Tac::Tac(const Tac& other)
 {
+    UNUSED(other);
 	//copy ctor
 }
 
@@ -90,7 +86,7 @@ void Tac:: add_tac_y_plus_1(double a_tac)
 	current_tac=ts_tac.at(ts_tac.size()-1);
 	ts_tac.push_back(a_tac);
 	cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl;
-	for(int i=0; i<ts_tac.size(); i++)
+    for(unsigned int i=0; i<ts_tac.size(); i++)
 	{
 		cout << "tac: " << ts_tac.at(i) << endl;
 	}

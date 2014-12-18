@@ -19,13 +19,7 @@
 // --------------------------------------------------------------------------
 
 #include"readdata.h"
-
-//#define VERBOSE
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 #define NBSZGROUP 14
 #define NBAGE 11				 // nb age classes max
@@ -133,12 +127,11 @@ int read_config_file (string folder_name_parameterization,
 read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-int read_scenario_config_file (
-    string folder_name_parameterization,
+int read_scenario_config_file (string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
-    vector<string>& dyn_alloc_sce,
-    vector<string>& dyn_pop_sce,
+    DynAllocOptions &dyn_alloc_sce,
+    PopSceOptions & dyn_pop_sce,
     string& biolsce,
     int& a_graph,
     int& nrow_coord,
@@ -167,7 +160,7 @@ int read_scenario_config_file (
 			string val;
 			while(linestream >> val)
 			{
-				dyn_alloc_sce.push_back(val);
+                dyn_alloc_sce.setOption(val);
 			}
 		}
 		if(counter==4)
@@ -175,7 +168,7 @@ int read_scenario_config_file (
 			string val;
 			while(linestream >> val)
 			{
-				dyn_pop_sce.push_back(val);
+                dyn_pop_sce.setOption(val);
 			}
 		}
 
@@ -339,7 +332,7 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 
 	// check
 	cout << "tsteps_months: " << endl;
-	for(int i=0; i<tsteps_months.size(); i++)
+    for(unsigned int i=0; i<tsteps_months.size(); i++)
 	{
 		cout << tsteps_months[i] << " " << endl;
 	}
@@ -434,12 +427,13 @@ int selected_vessels_only)
                                      mult_fuelcons_when_returning, mult_fuelcons_when_inactive);
 	vessels_features.close();
 
+#ifdef VERBOSE
 	// check inputs
 	for (unsigned int i=0; i<speeds.size(); i++)
 	{
-		dout << speeds[i] << " ";
+        dout(cout << speeds[i] << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
 
 	// check inputs
 	for (unsigned int i=0; i<lengths.size(); i++)
@@ -458,9 +452,9 @@ int selected_vessels_only)
 	// check inputs
 	for (unsigned int i=0; i<vesselids.size(); i++)
 	{
-		dout << vesselids[i] << " ";
+        dout(cout << vesselids[i] << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
 
 	// check inputs
 	for (unsigned int i=0; i<vesselids.size(); i++)
@@ -472,31 +466,31 @@ int selected_vessels_only)
 	// check inputs
 	for (unsigned int i=0; i<vesselids.size(); i++)
 	{
-		dout << tankcapacities[i] << " ";
+        dout(cout << tankcapacities[i] << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
 
 	// check inputs
 	for (unsigned int i=0; i<vesselids.size(); i++)
 	{
-		dout << nbfpingspertrips[i] << " ";
+        dout(cout << nbfpingspertrips[i] << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
 
 	// check inputs
 	for (unsigned int i=0; i<vesselids.size(); i++)
 	{
-		dout << resttime_par1s[i] << " ";
+        dout(cout << resttime_par1s[i] << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
 
 	// check inputs
 	for (unsigned int i=0; i<vesselids.size(); i++)
 	{
-		dout << resttime_par2s[i] << " ";
+        dout(cout << resttime_par2s[i] << " ");
 	}
-	dout << endl;
-
+    dout(cout << endl);
+#endif
 }
 
 
@@ -574,6 +568,7 @@ string folder_name_parameterization, string inputfolder)
 		cout << "fail to load the file for price per met per pop for this port" << endl;
 		open_file_error(filename.c_str());
 
+        return -1;
 	}
 	else
 	{
@@ -635,6 +630,7 @@ int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter,
 		cout << "fail to load the file for price per pop per cat for this port" << endl;
 		open_file_error(filename.c_str());
 
+        return -1;
 	}
 	else
 	{
@@ -672,15 +668,18 @@ multimap<string, int> read_fgrounds(string a_quarter, string folder_name_paramet
 	fill_multimap_from_specifications_s_i(vessels_fgrounds,  fgrounds);
 	vessels_fgrounds.close();
 
-	// check input
-	multimap<string,int>::iterator lower_fg = fgrounds.lower_bound("DNK001");
+#ifdef VERBOSE
+    // check input
+    multimap<string,int>::iterator lower_fg = fgrounds.lower_bound("DNK001");
 	multimap<string,int>::iterator upper_fg = fgrounds.upper_bound("DNK001");
-	dout << "fishing grounds: ";
+
+    dout(cout << "fishing grounds: ");
 	for (multimap<string, int>::iterator pos=lower_fg; pos != upper_fg; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(fgrounds);
 }
@@ -702,15 +701,17 @@ multimap<string, int> read_harbours(string a_quarter, string folder_name_paramet
 	fill_multimap_from_specifications_s_i(vessels_harbours,  harbours);
 	vessels_harbours.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<string,int>::iterator lower2 = harbours.lower_bound("DNK001");
 	multimap<string,int>::iterator upper2 = harbours.upper_bound("DNK001");
-	dout << "specific harbours: ";
+    dout(cout << "specific harbours: ");
 	for (multimap<string, int>::iterator pos=lower2; pos != upper2; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(harbours);
 }
@@ -732,15 +733,18 @@ multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name
 	fill_multimap_from_specifications_s_d(vessels_freq_fgrounds,  freq_fgrounds);
 	vessels_freq_fgrounds.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<string,double>::iterator lower3 = freq_fgrounds.lower_bound("DNK001");
 	multimap<string,double>::iterator upper3 = freq_fgrounds.upper_bound("DNK001");
-	dout << "specific freq fgrounds: ";
+    dout(cout << "specific freq fgrounds: ");
 	for (multimap<string, double>::iterator pos=lower3; pos != upper3; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
+
 
 	return(freq_fgrounds);
 }
@@ -762,15 +766,17 @@ multimap<string, double> read_freq_harbours(string a_quarter, string folder_name
 	fill_multimap_from_specifications_s_d(vessels_freq_harbours,  freq_harbours);
 	vessels_freq_harbours.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<string,double>::iterator lower4 = freq_harbours.lower_bound("DNK001");
 	multimap<string,double>::iterator upper4 = freq_harbours.upper_bound("DNK001");
-	dout << "specific freq harbours: ";
+    dout(cout << "specific freq harbours: ");
 	for (multimap<string, double>::iterator pos=lower4; pos != upper4; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(freq_harbours);
 }
@@ -792,15 +798,17 @@ multimap<string, double> read_vessels_betas(string a_semester, string folder_nam
 	fill_multimap_from_specifications_s_d(vesselsspe_betas_file, vessels_betas);
 	vesselsspe_betas_file.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<string,double>::iterator lower5 = vessels_betas.lower_bound("DNK000004561");
 	multimap<string,double>::iterator upper5 = vessels_betas.upper_bound("DNK000004561");
-	dout << "specific catching power/skipper effect beta parameter per pop: ";
+    dout(cout << "specific catching power/skipper effect beta parameter per pop: ");
 	for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(vessels_betas);
 }
@@ -861,19 +869,21 @@ multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, stri
 	fill_multimap_from_specifications_i_i(vessels_possible_metiers,  possible_metiers);
 	vessels_possible_metiers.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	bool check = 0;
 	if(check)
 	{
 		multimap<int,int>::iterator lower_g = possible_metiers.lower_bound(1600);
 		multimap<int,int>::iterator upper_g = possible_metiers.upper_bound(1600);
-		dout << "for this vessel, possible metiers for this specific ground (1600): ";
+        dout(cout << "for this vessel, possible metiers for this specific ground (1600): ");
 		for (multimap<int, int>::iterator pos=lower_g; pos != upper_g; pos++)
 		{
-			dout << pos->second << " ";
+            dout(cout << pos->second << " ");
 		}
-		dout << endl;
+        dout(cout << endl);
 	}
+#endif
 
 	return(possible_metiers);
 }
@@ -896,19 +906,21 @@ multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vess
 	fill_multimap_from_specifications_i_d(vessels_freq_possible_metiers,  freq_possible_metiers);
 	vessels_freq_possible_metiers.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	bool check = 0;
 	if(check)
 	{
 		multimap<int,double>::iterator lower_gr = freq_possible_metiers.lower_bound(1600);
 		multimap<int,double>::iterator upper_gr = freq_possible_metiers.upper_bound(1600);
-		dout << "for this vessel, frequence of possible metiers for this specific ground (1600): ";
+        dout(cout << "for this vessel, frequence of possible metiers for this specific ground (1600): ");
 		for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
 		{
-			dout << pos2->second << " ";
+            dout(cout << pos2->second << " ");
 		}
-		dout << endl;
+        dout(cout << endl);
 	}
+#endif
 
 	return(freq_possible_metiers);
 }
@@ -931,19 +943,21 @@ multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vess
 	fill_multimap_from_specifications_i_d(vessels_cpue_per_stk_on_nodes,  cpue_per_stk_on_nodes);
 	vessels_cpue_per_stk_on_nodes.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	bool check = 0;
 	if(check)
 	{
 		multimap<int,double>::iterator lower_gr = cpue_per_stk_on_nodes.lower_bound(1600);
 		multimap<int,double>::iterator upper_gr = cpue_per_stk_on_nodes.upper_bound(1600);
-		dout << "for this vessel, frequence of possible metiers for this specific ground (1600): ";
+        dout(cout << "for this vessel, frequence of possible metiers for this specific ground (1600): ");
 		for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
 		{
-			dout << pos2->second << " ";
+            dout(cout << pos2->second << " ");
 		}
-		dout << endl;
+        dout(cout << endl);
 	}
+#endif
 
 	return(cpue_per_stk_on_nodes);
 }
@@ -966,19 +980,21 @@ multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string
 	fill_multimap_from_specifications_i_d(vessels_gshape_cpue_per_stk_on_nodes,  gshape_cpue_per_stk_on_nodes);
 	vessels_gshape_cpue_per_stk_on_nodes.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	bool check = 0;
 	if(check)
 	{
 		multimap<int,double>::iterator lower_gr = gshape_cpue_per_stk_on_nodes.lower_bound(1600);
 		multimap<int,double>::iterator upper_gr = gshape_cpue_per_stk_on_nodes.upper_bound(1600);
-		dout << "for this vessel,  for this specific ground (1600): ";
+        dout(cout << "for this vessel,  for this specific ground (1600): ");
 		for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
 		{
-			dout << pos2->second << " ";
+            dout(cout << pos2->second << " ");
 		}
-		dout << endl;
+        dout(cout << endl);
 	}
+#endif
 
 	return(gshape_cpue_per_stk_on_nodes);
 }
@@ -1001,19 +1017,21 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
 	fill_multimap_from_specifications_i_d(vessels_gscale_cpue_per_stk_on_nodes,  gscale_cpue_per_stk_on_nodes);
 	vessels_gscale_cpue_per_stk_on_nodes.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	bool check = 0;
 	if(check)
 	{
 		multimap<int,double>::iterator lower_gr = gscale_cpue_per_stk_on_nodes.lower_bound(1600);
 		multimap<int,double>::iterator upper_gr = gscale_cpue_per_stk_on_nodes.upper_bound(1600);
-		dout << "for this vessel,  for this specific ground (1600): ";
+        dout(cout << "for this vessel,  for this specific ground (1600): ");
 		for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
 		{
-			dout << pos2->second << " ";
+            dout(cout << pos2->second << " ");
 		}
-		dout << endl;
+        dout(cout << endl);
 	}
+#endif
 
 	return(gscale_cpue_per_stk_on_nodes);
 }
@@ -1253,15 +1271,17 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
 	// Here lies a deadly bug: remember very hard bug to find out due to non-unique pop names in the input files!
 	// was creating access violation from pointers misuse, etc.
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,double>::iterator lower_init = init_pops_per_szgroup.lower_bound(0);
 	multimap<int,double>::iterator upper_init = init_pops_per_szgroup.upper_bound(0);
-	dout << "initial N at szgroup for pop0: ";
+    dout(cout << "initial N at szgroup for pop0: ");
 	for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(init_pops_per_szgroup);
 }
@@ -1284,15 +1304,17 @@ multimap<int, double> read_init_maturity_per_szgroup(string folder_name_paramete
 	fill_multimap_from_specifications_i_d(file_init_maturity_per_szgroup,  init_maturity_per_szgroup);
 	file_init_maturity_per_szgroup.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,double>::iterator lower_init_mat = init_maturity_per_szgroup.lower_bound(0);
 	multimap<int,double>::iterator upper_init_mat = init_maturity_per_szgroup.upper_bound(0);
-	dout << "initial maturity at szgroup for pop0: ";
+    dout(cout << "initial maturity at szgroup for pop0: ");
 	for (multimap<int, double>::iterator pos=lower_init_mat; pos != upper_init_mat; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(init_maturity_per_szgroup);
 }
@@ -1315,15 +1337,17 @@ multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_paramet
 	fill_multimap_from_specifications_i_d(file_init_fecundity_per_szgroup,  init_fecundity_per_szgroup);
 	file_init_fecundity_per_szgroup.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(0);
 	multimap<int,double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(0);
-	dout << "initial fecundity at szgroup for pop0: ";
+    dout(cout << "initial fecundity at szgroup for pop0: ");
 	for (multimap<int, double>::iterator pos=lower_init_fec; pos != upper_init_fec; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(init_fecundity_per_szgroup);
 }
@@ -1346,15 +1370,17 @@ multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameteri
 	fill_multimap_from_specifications_i_d(file_init_weight_per_szgroup,  init_weight_per_szgroup);
 	file_init_weight_per_szgroup.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,double>::iterator lower_init_we = init_weight_per_szgroup.lower_bound(0);
 	multimap<int,double>::iterator upper_init_we = init_weight_per_szgroup.upper_bound(0);
-	dout << "initial weight at szgroup for pop0: ";
+    dout(cout << "initial weight at szgroup for pop0: ");
 	for (multimap<int, double>::iterator pos=lower_init_we; pos != upper_init_we; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(init_weight_per_szgroup);
 }
@@ -1408,15 +1434,17 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
 	fill_multimap_from_specifications_i_d(file_init_M_per_szgroup,  init_M_per_szgroup);
 	file_init_M_per_szgroup.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,double>::iterator lower_init_M = init_M_per_szgroup.lower_bound(0);
 	multimap<int,double>::iterator upper_init_M = init_M_per_szgroup.upper_bound(0);
-	dout << "initial M at szgroup for pop 0: ";
+    dout(cout << "initial M at szgroup for pop 0: ");
 	for (multimap<int, double>::iterator pos=lower_init_M; pos != upper_init_M; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(init_M_per_szgroup);
 }
@@ -1439,15 +1467,17 @@ multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_paramet
 	fill_multimap_from_specifications_i_d(file_init_proprecru_per_szgroup,  init_proprecru_per_szgroup);
 	file_init_proprecru_per_szgroup.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,double>::iterator lower_init_proprecru = init_proprecru_per_szgroup.lower_bound(0);
 	multimap<int,double>::iterator upper_init_proprecru = init_proprecru_per_szgroup.upper_bound(0);
-	dout << "initial proprecru at szgroup for pop 0: ";
+    dout(cout << "initial proprecru at szgroup for pop 0: ");
 	for (multimap<int, double>::iterator pos=lower_init_proprecru; pos != upper_init_proprecru; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(init_proprecru_per_szgroup);
 }
@@ -1479,15 +1509,17 @@ multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_n
 	fill_multimap_from_specifications_i_i(file_lst_idx_nodes_per_pop,  lst_idx_nodes_per_pop);
 	file_lst_idx_nodes_per_pop.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	multimap<int,int>::iterator lower_idx = lst_idx_nodes_per_pop.lower_bound(0);
 	multimap<int,int>::iterator upper_idx = lst_idx_nodes_per_pop.upper_bound(0);
-	dout << "lst idx nodes for pop 0: ";
+    dout(cout << "lst idx nodes for pop 0: ");
 	for (multimap<int, int>::iterator pos=lower_idx; pos != upper_idx; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	// TODO (fba#5#): remove possible replicates in the list of nodes per pop
 
@@ -1544,9 +1576,11 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
 	fill_map_from_specifications_i_i(file_tac_percent_simulated,  tac_percent_simulated);
 	file_tac_percent_simulated.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	for ( map<int,int>::iterator it=tac_percent_simulated.begin() ; it != tac_percent_simulated.end(); it++ )
-		dout << (*it).first << " => " << (*it).second << endl;
+        dout(cout << (*it).first << " => " << (*it).second << endl);
+#endif
 
 	return(tac_percent_simulated);
 }
@@ -1581,14 +1615,16 @@ map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, stri
 	fill_from_oth_land (file_oth_land, oth_land);
 	file_oth_land.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	map<int,double>::iterator pos;
-	dout << " oth_land " << endl;;
+    dout(cout << " oth_land " << endl);
 	for (pos=oth_land.begin(); pos != oth_land.end(); pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(oth_land);
 }
@@ -1623,14 +1659,16 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
 	fill_from_relative_stability (file_relative_stability, relative_stability);
 	file_relative_stability.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 	map<string,double>::iterator pos;
-	dout << " relative_stability " << endl;;
+    dout(cout << " relative_stability " << endl);
 	for (pos=relative_stability.begin(); pos != relative_stability.end(); pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
+    dout(cout << endl);
+#endif
 
 	return(relative_stability);
 }
@@ -1666,17 +1704,20 @@ string str_rand_avai_file)
 	fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, avai_szgroup_nodes_with_pop);
 	file_avai_szgroup_nodes_with_pop.close();
 
-	// check input
+#ifdef VERBOSE
+    // check input
 								 //node 1600
 	multimap<int,double>::iterator lower = avai_szgroup_nodes_with_pop.lower_bound(1600);
 	multimap<int,double>::iterator upper = avai_szgroup_nodes_with_pop.upper_bound(1600);
-	dout << "avai on node 1600: ";
+    dout(cout << "avai on node 1600: ");
 	for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
 	{
-		dout << pos->second << " ";
+        dout(cout << pos->second << " ");
 	}
-	dout << endl;
-	// TODO (fba#5#): check avai sum to 1 for a given szgroup
+    dout(cout << endl);
+#endif
+
+            // TODO (fba#5#): check avai sum to 1 for a given szgroup
 
 	return(avai_szgroup_nodes_with_pop);
 }
@@ -1874,7 +1915,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 
 map<int, int> read_maps_previous(int source, string namesimu,  string inputfolder, string a_graph_name)
 {
-	dout <<"BEGIN: read map previous" << endl;
+    dout(cout <<"BEGIN: read map previous" << endl);
 
 	stringstream out;
 	out << source;
@@ -1903,7 +1944,7 @@ map<int, int> read_maps_previous(int source, string namesimu,  string inputfolde
 
 	file_previous.close();
 
-	dout <<"END: read map previous" << endl;
+    dout(cout <<"END: read map previous" << endl);
 
 	return(previous);
 }
@@ -1912,7 +1953,7 @@ map<int, int> read_maps_previous(int source, string namesimu,  string inputfolde
 map<int, int> read_min_distance(int source, string namesimu, string inputfolder, string a_graph_name)
 {
 
-	dout <<"BEGIN: read min_distance" << endl;
+    dout(cout <<"BEGIN: read min_distance" << endl);
 
 	stringstream out;
 	out << source;
@@ -1934,7 +1975,7 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 
 	file_min_distance.close();
 
-	dout <<"END: read min_distance" << endl;
+    dout(cout <<"END: read min_distance" << endl);
 
 	return(min_distance);
 }
@@ -1942,6 +1983,7 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
 {
+    UNUSED(folder_name_parameterization);
 
     string filename = inputfolder+"/graphsspe/nodes_in_polygons_"+a_graph+"_"+a_quarter+".dat";
 
@@ -1981,7 +2023,7 @@ vector<int> some_max_nb_ages)
 	// furthermore SMS needs quartely-based Fs
 
 	SMS_N_in << setprecision(2) << fixed;
-	for (int i=0; i<stock_numbers.size(); i++)
+    for (unsigned int i=0; i<stock_numbers.size(); i++)
 	{
 
 		vector< vector<double> > percent_szgroup_per_age_matrix(NBSZGROUP, vector<double>(NBAGE));
@@ -1991,19 +2033,19 @@ vector<int> some_max_nb_ages)
 		vector<double> tot_N_at_szgroup=populations.at( stock_numbers.at(i) )->get_tot_N_at_szgroup();
 		vector<double> tot_N_at_age(some_max_nb_ages.at(i));
 		cout << "-- st" << stock_numbers.at(i)  << endl;
-		for(int sz=0; sz<tot_N_at_szgroup.size(); sz++)
+        for(unsigned int sz=0; sz<tot_N_at_szgroup.size(); sz++)
 		{
 			for(int a=0; a<some_max_nb_ages.at(i); a++)
 			{
 				tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * tot_N_at_szgroup[sz] ;
-				dout << tot_N_at_age[a] << "= " << percent_szgroup_per_age_matrix[sz][a] << " * " << tot_N_at_szgroup[sz] << endl;
+                dout(cout << tot_N_at_age[a] << "= " << percent_szgroup_per_age_matrix[sz][a] << " * " << tot_N_at_szgroup[sz] << endl);
 			}
 		}
 
 		// write N.in SMS files
 		cout << "write down the SMS n.in file...";
 
-		for(int a = 0; a < tot_N_at_age.size(); a++)
+        for(unsigned int a = 0; a < tot_N_at_age.size(); a++)
 		{
 			SMS_N_in  << tot_N_at_age.at(a) / some_units.at(i) << " " ;
 		}
@@ -2023,7 +2065,7 @@ vector<int> stock_numbers)
 	SMS_F_in << "# quarter: xx "<< endl;
 	int nb_ages_in_sms=8;		 // MAGIC NUMBER
 
-	for (int i=0; i<stock_numbers.size(); i++)
+    for (unsigned int i=0; i<stock_numbers.size(); i++)
 	{
 
 		vector <double> tot_F_at_age;
@@ -2053,11 +2095,12 @@ vector<int> stock_numbers)
 
 
 void read_SMS_OP_N_out_file(vector<Population* >& populations,
-vector<int> stock_numbers,
-vector<int> some_units,
-vector<int> some_max_nb_ages,
-string namesimu)
+                            vector<int> stock_numbers,
+                            vector<int> some_units,
+                            vector<int> some_max_nb_ages,
+                            string namesimu)
 {
+    UNUSED(some_max_nb_ages);
 
 	// read the input file
 	string filename=  namesimu+"/op_n.out";
@@ -2128,7 +2171,7 @@ string namesimu)
 	cout << "make nb of age classes consistent...OK" << endl << flush;
 
 	// assign to the population objects
-	for (int i=0; i<stock_numbers.size(); i++)
+    for (unsigned int i=0; i<stock_numbers.size(); i++)
 	{
 
 		vector<double> tot_N_at_age;
@@ -2144,9 +2187,9 @@ string namesimu)
 		// convert back to size classes
 		// (also accounting for the units.)
 		vector<double>N_at_szgroup(NBSZGROUP);
-		for(int a=0; a<tot_N_at_age.size(); a++)
+        for(unsigned int a=0; a<tot_N_at_age.size(); a++)
 		{
-			for(int sz=0; sz<N_at_szgroup.size(); sz++)
+            for(unsigned int sz=0; sz<N_at_szgroup.size(); sz++)
 			{
 				N_at_szgroup[sz]+=percent_age_per_szgroup_matrix[sz][a] *tot_N_at_age[a];
 

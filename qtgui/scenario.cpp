@@ -1,6 +1,7 @@
 #include "scenario.h"
 #include <readdata.h>
 #include <exceptions.h>
+#include <options.h>
 
 #include <QFile>
 #include <QTextStream>
@@ -150,8 +151,8 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
 Scenario Scenario::readFromFile(QString path, QString modelname, QString outputname)
 {
     // scenarios for dynamic allocation of effort and biol sce
-    vector<string> dyn_alloc_sce;
-    vector<string> dyn_pop_sce;
+    DynAllocOptions dyn_alloc_sce;
+    PopSceOptions dyn_pop_sce;
     string biolsce;				 // default is 1
     int a_graph;
     int a_port;
@@ -178,12 +179,8 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 
     Scenario s;
 
-    QStringList alsce;
-    for (vector<string>::iterator it = dyn_alloc_sce.begin(); it != dyn_alloc_sce.end(); ++it)
-        alsce << it->c_str();
-    QStringList popsce;
-    for (vector<string>::iterator it = dyn_pop_sce.begin(); it != dyn_pop_sce.end(); ++it)
-        popsce << it->c_str();
+    QStringList alsce = QString::fromStdString(dyn_alloc_sce.toString()).split(" ", QString::SkipEmptyParts);
+    QStringList popsce = QString::fromStdString(dyn_pop_sce.toString()).split(" ", QString::SkipEmptyParts);
 
     s.setDyn_alloc_sce(alsce);
     s.setDyn_pop_sce(popsce);

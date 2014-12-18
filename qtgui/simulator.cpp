@@ -5,7 +5,10 @@
 #include <outputfileparser.h>
 
 #include <QApplication>
+#include <QSettings>
 #include <QDebug>
+
+QString Simulator::SET_NUMTHREADS ("simul_numthreads");
 
 Simulator::Simulator()
     : mSimulation(0),
@@ -37,6 +40,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     mSimulation = new QProcess();
 
     QStringList arguments;
+    QSettings set;
 
     arguments.push_back("-f");
     arguments.push_back(name);
@@ -60,6 +64,9 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 
     if (!mMoveVesselOption)
         arguments.push_back("--no-gui-move-vessels");
+
+    arguments.push_back("--num_threads");
+    arguments.push_back(QString::number(set.value(SET_NUMTHREADS, 4).toInt()));
 
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));

@@ -730,18 +730,23 @@ void MainWindow::on_saveConsoleButton_clicked()
 
 void MainWindow::on_cmdSetup_clicked()
 {
+    QSettings set;
+
     SimulationSetupDialog dlg(this);
 
     dlg.setSimulationSteps(models[0]->getSimulationSteps());
     dlg.setSimulationName(models[0]->simulationName());
     dlg.setSimulationOutputName(models[0]->outputName());
     dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
+    dlg.setNumThreads(set.value(Simulator::SET_NUMTHREADS, 4).toInt());
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
 //        models[0]->setSimulationName(dlg.getSimulationName());
 //        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
+
+        set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
     }
 }
 

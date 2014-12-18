@@ -86,6 +86,9 @@ private:
     void parseUpdateVessel(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
     void parseDebug(QStringList fields);
+
+public:
+    static QString SET_NUMTHREADS;
 };
 
 #endif // SIMULATOR_H

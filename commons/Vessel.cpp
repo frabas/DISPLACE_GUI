@@ -3312,7 +3312,7 @@ void Vessel::reinit_after_a_trip()
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::export_loglike(ostream &loglike, vector<Population* >& populations, int tstep, int nbpops)
+void Vessel::export_loglike(ostream &loglike, const vector<Population* >& populations, int tstep, int nbpops)
 {
 
     dout(cout  << "write down the logbooks (trip-based data)...");

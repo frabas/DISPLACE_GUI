@@ -278,7 +278,7 @@ protected:
 		void clear_cumcatch_and_cumeffort();
 		void receive_message(int message);
 		void reset_message();
-        void export_loglike(ostream& loglike, vector<Population* >& populations, int tstep, int nbpops);
+        void export_loglike(ostream& loglike, const vector<Population *> &populations, int tstep, int nbpops);
 		void export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int nbpops);
 		void reinit_after_a_trip();
 		void alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes_in_polygons);

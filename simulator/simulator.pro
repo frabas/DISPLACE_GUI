@@ -38,7 +38,8 @@ DEFINES += INSTRUMENTATION
 SOURCES= main.cpp \
     thread_vessels.cpp \
     outputqueuemanager.cpp \
-    outputmessage.cpp
+    outputmessage.cpp \
+    messages/movevesseloutputmessage.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -59,7 +60,8 @@ HEADERS= \
     thread_vessels.h \
     values.h \
     outputqueuemanager.h \
-    outputmessage.h
+    outputmessage.h \
+    messages/movevesseloutputmessage.h
 
 OTHER_FILES += \
     Makefile

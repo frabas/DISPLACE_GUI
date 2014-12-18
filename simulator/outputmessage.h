@@ -12,6 +12,9 @@ public:
     virtual ~OutputMessage() {
     }
 
+    /** @brief the operation to perform.
+     * @return false if the outer queue loop should be shut down. Most of the classes will return true
+     * */
     virtual bool send() = 0;
 };
 

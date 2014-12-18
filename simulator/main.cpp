@@ -65,6 +65,7 @@
 
 #include <outputqueuemanager.h>
 #include <outputmessage.h>
+#include <messages/genericconsolestringoutputmessage.h>
 #include <thread_vessels.h>
 
 #include <iomanip>
@@ -247,36 +248,27 @@ void unlock()
 void guiSendCurrentStep (unsigned int tstep)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        cout << "=S" << tstep << endl;      /* use gui */
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=S" << tstep << endl;      /* use gui */
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=U" << filename << " " << tstep << endl;
-        pthread_mutex_unlock(&glob_mutex);
-    }
-}
-
-void guiSendVesselLogbook(const std::string &line)
-{
-    if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=v" << line;
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=U" << filename << " " << tstep << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
 void guiSendMemoryInfo(const MemoryInfo &info)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=Dm" << info.rss() << " " << info.peakRss() << endl;
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=Dm" << info.rss() << " " << info.peakRss() << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 
 }
@@ -284,9 +276,9 @@ void guiSendMemoryInfo(const MemoryInfo &info)
 void guiSendCapture(bool on)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=Dc" << (on ? "+" : "-") << endl;
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=Dc" << (on ? "+" : "-") << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
@@ -3917,30 +3909,32 @@ int main(int argc, char* argv[])
 #endif
 	}							 // end FOR LOOP OVER TIME
 
-    mOutQueue.finish();
-
     CALLGRIND_STOP_INSTRUMENTATION;
     CALLGRIND_DUMP_STATS;
 
 #ifdef PROFILE
     guiSendCapture(true);
 
-    lock();
-    cout << "*** Profilers statistics ***\n";
-    cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
-    cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
-    cout << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";
-    cout << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
-    cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
-    cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
-    cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
+    std::ostringstream ss;
+
+    ss << "*** Profilers statistics ***\n";
+    ss << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
+    ss << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
+    ss << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";
+    ss << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
+    ss << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
+    ss << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
+    ss << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
 
     memInfo.update();
-    std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
-    unlock();
+    ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
+    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     guiSendCapture(false);
 #endif
+
+    mOutQueue.finish();
+
 
 	// close all....
 	vmslike.close();

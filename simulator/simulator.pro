@@ -40,7 +40,9 @@ SOURCES= main.cpp \
     outputqueuemanager.cpp \
     outputmessage.cpp \
     messages/movevesseloutputmessage.cpp \
-    messages/exportvmslikeoutputmessage.cpp
+    messages/exportvmslikeoutputmessage.cpp \
+    messages/vessellogbookoutputmessage.cpp \
+    messages/genericconsolestringoutputmessage.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -63,7 +65,9 @@ HEADERS= \
     outputqueuemanager.h \
     outputmessage.h \
     messages/movevesseloutputmessage.h \
-    messages/exportvmslikeoutputmessage.h
+    messages/exportvmslikeoutputmessage.h \
+    messages/vessellogbookoutputmessage.h \
+    messages/genericconsolestringoutputmessage.h
 
 OTHER_FILES += \
     Makefile

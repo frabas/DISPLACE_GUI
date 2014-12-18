@@ -3312,6 +3312,7 @@ void Vessel::reinit_after_a_trip()
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
+#if 0
 void Vessel::export_loglike(ostream &loglike, const vector<Population* >& populations, int tstep, int nbpops)
 {
 
@@ -3439,7 +3440,7 @@ void Vessel::export_loglike(ostream &loglike, const vector<Population* >& popula
     dout(cout  << "done" << endl);
 
 }
-
+#endif
 
 void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int nbpops)
 {

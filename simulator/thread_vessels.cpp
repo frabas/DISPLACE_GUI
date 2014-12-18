@@ -15,6 +15,7 @@
 #include <outputqueuemanager.h>
 #include <messages/movevesseloutputmessage.h>
 #include <messages/exportvmslikeoutputmessage.h>
+#include <messages/vessellogbookoutputmessage.h>
 
 using namespace std;
 
@@ -130,12 +131,14 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // i.e. just arrived!
                 if(!inactive)
                 {
+                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
+#if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
                     loglike << ss.str();
 
                     guiSendVesselLogbook(ss.str());
-
+#endif
                     //vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
                     vessels[index_v]->lock();
                     vessels[ index_v ]->reinit_after_a_trip();

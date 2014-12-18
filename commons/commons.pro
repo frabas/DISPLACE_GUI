@@ -6,6 +6,11 @@ include ("$$top_srcdir/localconfig.pri")
 
 INCLUDEPATH=../include/
 
+win32 {
+    # For GetProcessMemoryInfo()
+    LIBS += -lpsapi
+}
+
 SOURCES= \
     readdata.cpp \
     myutils.cpp \

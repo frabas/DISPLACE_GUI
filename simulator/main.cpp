@@ -55,7 +55,7 @@
 #define GetCurrentDir getcwd
 #endif
 
-#ifdef INSTRUMENTATION
+#if !defined(__WIN32) && defined(INSTRUMENTATION)
 #include <valgrind/callgrind.h>
 #else
 #define CALLGRIND_START_INSTRUMENTATION

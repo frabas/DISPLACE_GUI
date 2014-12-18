@@ -8,7 +8,7 @@ INCLUDEPATH=../include
 include ("$$top_srcdir/localconfig.pri")
 
 QMAKE_CXXFLAGS +=
-LIBS+= -L.. -ldisplacecommons -lpthread -lm -lrt
+LIBS+= -L.. -ldisplacecommons -lpthread
 
 macx {
     CONFIG -= app_bundle

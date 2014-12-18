@@ -36,9 +36,6 @@ win32 {
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 
     INCLUDEPATH += c:/mingw/boost_1_57_0
-
-    # For GetProcessMemoryInfo()
-    LIBS += -lpsapi
 }
 
 DEFINES += HAVE_GEOGRAPHICLIB

@@ -63,6 +63,8 @@
 #define CALLGRIND_DUMP_STATS
 #endif
 
+#include <outputqueuemanager.h>
+#include <outputmessage.h>
 #include <thread_vessels.h>
 
 #include <iomanip>
@@ -139,7 +141,7 @@ double mLoadGraphProfileResult;
 
 MemoryInfo memInfo;
 
-
+OutputQueueManager mOutQueue;
 pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
 vector<int> ve;
 vector <Vessel*> vessels;
@@ -467,6 +469,7 @@ int main(int argc, char* argv[])
 
     UNUSED(dparam);
 
+    mOutQueue.start();
     thread_vessel_init(num_threads);
 
     cwd = std::string(getcwd(buf, MAXPATH));
@@ -3913,6 +3916,8 @@ int main(int argc, char* argv[])
         }
 #endif
 	}							 // end FOR LOOP OVER TIME
+
+    mOutQueue.finish();
 
     CALLGRIND_STOP_INSTRUMENTATION;
     CALLGRIND_DUMP_STATS;

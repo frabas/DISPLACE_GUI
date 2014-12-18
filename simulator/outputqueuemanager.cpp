@@ -5,6 +5,20 @@
 #include <mutexlocker.h>
 #include <helpers.h>
 
+#include <iostream>
+
+class QuitMessage : public OutputMessage {
+public:
+    QuitMessage() {
+    }
+    ~QuitMessage() {
+    }
+
+    bool send() {
+        return false;
+    }
+};
+
 OutputQueueManager::OutputQueueManager()
 {
     pthread_mutex_init(&mMutex, 0);
@@ -20,6 +34,14 @@ void OutputQueueManager::start()
     MutexLocker locker (&mMutex);
     UNUSED(locker);
     mThreadId = pthread_create(&mThread, 0, thread_trampoline, reinterpret_cast<void *>(args));
+}
+
+void OutputQueueManager::finish()
+{
+    enqueue(std::shared_ptr<OutputMessage>(new QuitMessage));
+
+    void *out;
+    pthread_join(mThread, &out);
 }
 
 void OutputQueueManager::enqueue(std::shared_ptr<OutputMessage> msg)

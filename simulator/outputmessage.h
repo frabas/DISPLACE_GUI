@@ -9,7 +9,8 @@ class OutputMessage
 {
 public:
     OutputMessage();
-    virtual ~OutputMessage() = 0;
+    virtual ~OutputMessage() {
+    }
 
     virtual bool send() = 0;
 };

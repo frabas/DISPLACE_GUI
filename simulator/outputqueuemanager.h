@@ -16,6 +16,7 @@ public:
     OutputQueueManager();
 
     void start();    
+    void finish();
 
     void lock() {
         pthread_mutex_lock(&mMutex);

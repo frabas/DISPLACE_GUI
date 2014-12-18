@@ -283,7 +283,7 @@ void guiSendCapture(bool on)
 {
     if (use_gui) {
         pthread_mutex_lock(&glob_mutex);
-        std::cout << "=Dc" << (on ? "+" : "-");
+        std::cout << "=Dc" << (on ? "+" : "-") << endl;
         pthread_mutex_unlock(&glob_mutex);
     }
 }

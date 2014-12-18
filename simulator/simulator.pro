@@ -7,7 +7,8 @@ INCLUDEPATH=../include
 
 include ("$$top_srcdir/localconfig.pri")
 
-LIBS+=
+QMAKE_CXXFLAGS +=
+LIBS+= -L.. -ldisplacecommons -lpthread
 
 macx {
     CONFIG -= app_bundle
@@ -21,24 +22,19 @@ win32 {
 }
 
 CONFIG(debug,debug|release) {
-    DEFINES += DEBUG
+    DEFINES += DEBUG PROFILE
 }
 
+# Force profiling in release
+DEFINES += PROFILE
+
+# Force callgrind profiling
+DEFINES += INSTRUMENTATION
+
+#QMAKE_CXXFLAGS += -g
 
 SOURCES= main.cpp \
-    ../commons/readdata.cpp \
-    ../commons/myutils.cpp \
-    ../commons/Population.cpp \
-    ../commons/Node.cpp \
-    ../commons/Tac.cpp \
-    ../commons/Benthos.cpp \
-    ../commons/Harbour.cpp \
-    ../commons/Ship.cpp \
-    ../commons/Vessel.cpp \
-    ../commons/Metier.cpp \
-    ../commons/myRutils.cpp \
-    ../commons/mkpath.cpp
-
+    thread_vessels.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -53,7 +49,11 @@ HEADERS= \
     ../include/Metier.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
-    ../include/m_constants.h
+    ../include/m_constants.h \
+    ../include/options.h \
+    ../include/profiler.h \
+    thread_vessels.h \
+    values.h
 
 OTHER_FILES += \
     Makefile

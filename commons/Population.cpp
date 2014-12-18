@@ -23,47 +23,44 @@
 #include <fstream>
 #include <sstream>
 #include "Population.h"
-
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 Population::Population(int a_name,
-double _avai0_beta,
-double _avai2_beta,
-double _avai3_beta,
-double _avai5_beta,
-double _avai7_beta,
-const vector<int> &_selected_szgroups,
-const vector<double> &init_tot_N_at_szgroup,
-const vector<double> &init_fecundity_at_szgroup,
-vector<double> init_weight_at_szgroup,
-const vector<int> &init_comcat_at_szgroup,
-const vector<double> &init_maturity_at_szgroup,
-vector<double> init_M_at_szgroup,
-const vector<double> &init_proprecru_at_szgroup,
-const vector<double> &_param_sr,
-const multimap<int, int> &lst_idx_nodes_per_pop,
-const multimap<int, double> &_full_spatial_availability,
-const map<int, double> &_oth_land,
-const map<string, double> &relative_stability_key,
-const vector<vector<double> > &_percent_szgroup_per_age_matrix,
-const vector<vector<double> > &_percent_age_per_szgroup_matrix,
-const vector<vector<double> > &_growth_transition_matrix,
-const vector<Node *> &nodes,
-const vector<double> &_fbar_ages_min_max,
-const vector<double> &init_tac,
-double tac_percent_simulated,
-double landings_so_far,
-double a_calib_cpue_multiplier,
-double a_calib_weight_at_szgroup)
+                       double _avai0_beta,
+                       double _avai2_beta,
+                       double _avai3_beta,
+                       double _avai5_beta,
+                       double _avai7_beta,
+                       const vector<int> &_selected_szgroups,
+                       const vector<double> &init_tot_N_at_szgroup,
+                       const vector<double> &init_fecundity_at_szgroup,
+                       vector<double> init_weight_at_szgroup,
+                       const vector<int> &init_comcat_at_szgroup,
+                       const vector<double> &init_maturity_at_szgroup,
+                       vector<double> init_M_at_szgroup,
+                       const vector<double> &init_proprecru_at_szgroup,
+                       const vector<double> &_param_sr,
+                       const multimap<int, int> &lst_idx_nodes_per_pop,
+                       const multimap<int, double> &_full_spatial_availability,
+                       const map<int, double> &_oth_land,
+                       const map<string, double> &relative_stability_key,
+                       const vector<vector<double> > &_percent_szgroup_per_age_matrix,
+                       const vector<vector<double> > &_percent_age_per_szgroup_matrix,
+                       const vector<vector<double> > &_growth_transition_matrix,
+                       const vector<Node *> &nodes,
+                       const vector<double> &_fbar_ages_min_max,
+                       const vector<double> &init_tac,
+                       double tac_percent_simulated,
+                       double landings_so_far,
+                       double a_calib_cpue_multiplier,
+                       double a_calib_weight_at_szgroup)
 {
+    UNUSED(lst_idx_nodes_per_pop);
+    UNUSED(landings_so_far);
 
-	name=a_name;
+    name=a_name;
 
-	cout << "create pop " << name << endl;
+    cout << "create pop " << name << endl;
 
 	full_spatial_availability= _full_spatial_availability;
 
@@ -156,7 +153,7 @@ double a_calib_weight_at_szgroup)
 	//if(a_name==7) calib =1/(4.1);
 	//if(a_name==10) calib =1/(4.2);
 
-	for(int i=0; i < init_weight_at_szgroup.size(); i++)
+    for(unsigned int i=0; i < init_weight_at_szgroup.size(); i++)
 	{
 		init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
 	}
@@ -173,7 +170,7 @@ double a_calib_weight_at_szgroup)
 	this->set_fecundity_at_szgroup(init_fecundity_at_szgroup);
 
 	// ...then fill in with start pop
-	for(int i=0; i < init_M_at_szgroup.size(); i++)
+    for(unsigned int i=0; i < init_M_at_szgroup.size(); i++)
 	{
 		init_M_at_szgroup.at(i)=init_M_at_szgroup.at(i);
 	}
@@ -205,19 +202,19 @@ double a_calib_weight_at_szgroup)
 		nodes[ iter->first ]->set_pop_names_on_node(a_name);;
 
 	}
-	for(int i=0; i<p_spe_nodes.size(); i++)
+    for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 		list_nodes.push_back(p_spe_nodes[i]);
 
 	// add these Ns to the multimap of the concerned nodes
-	dout << " lst nodes: " << endl;
+    dout(cout << " lst nodes: " << endl);
 	for(unsigned int i=0; i<list_nodes.size(); i++)
 	{
 								 // caution: here is tot N on the node! need to call distribute_N()
 		list_nodes.at(i)->set_Ns_pops_at_szgroup(a_name, tot_N_at_szgroup);
-		dout  << list_nodes.at(i)->get_idx_node() << " ";
+        dout(cout  << list_nodes.at(i)->get_idx_node() << " ");
 	}
 
-	dout << endl;
+    dout(cout << endl);
 
 	// distribute tot_N_at_szgroup on nodes knowing the avai spatial key
 	// i.e. update the multimap Ns_pops_at_szgroup of the nodes
@@ -251,13 +248,6 @@ Population::~Population()
 {
 	//dtor
 }
-
-
-Population::Population(const Population& other)
-{
-	//copy ctor
-}
-
 
 int Population::get_name() const
 {
@@ -313,67 +303,67 @@ double Population::get_avai7_beta() const
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup() const
+const vector<double>& Population::get_tot_N_at_szgroup() const
 {
 	return(tot_N_at_szgroup);
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup_just_after_redistribution() const
+const vector<double>& Population::get_tot_N_at_szgroup_just_after_redistribution() const
 {
 	return(tot_N_at_szgroup_just_after_redistribution);
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup_month_minus_1() const
+const vector<double>& Population::get_tot_N_at_szgroup_month_minus_1() const
 {
 	return(tot_N_at_szgroup_month_minus_1);
 }
 
 
-vector<double> Population::get_tot_N_at_szgroup_year_minus_1() const
+const vector<double>& Population::get_tot_N_at_szgroup_year_minus_1() const
 {
 	return(tot_N_at_szgroup_year_minus_1);
 }
 
 
-vector<double> Population::get_tot_F_at_age() const
+const vector<double>& Population::get_tot_F_at_age() const
 {
 	return(tot_F_at_age);
 }
 
 
-vector<double> Population::get_tot_F_at_age_last_quarter() const
+const vector<double>& Population::get_tot_F_at_age_last_quarter() const
 {
 	return(tot_F_at_age_last_quarter);
 }
 
 
-vector<double> Population::get_tot_N_at_age() const
+const vector<double>& Population::get_tot_N_at_age() const
 {
 	return(tot_N_at_age);
 }
 
 
-vector<double> Population::get_tot_M_at_age() const
+const vector<double>& Population::get_tot_M_at_age() const
 {
 	return(tot_M_at_age);
 }
 
 
-vector<double> Population::get_tot_W_at_age() const
+const vector<double>& Population::get_tot_W_at_age() const
 {
 	return(tot_W_at_age);
 }
 
 
-vector<double> Population::get_fbar_ages_min_max() const
+const vector<double>& Population::get_fbar_ages_min_max() const
 {
 	return(fbar_ages_min_max);
 }
 
 
-vector<double> Population::get_weight_at_szgroup() const
+const vector<double>& Population::get_weight_at_szgroup() const
 {
 	return(weight_at_szgroup);
 }
@@ -385,25 +375,25 @@ vector<int> Population::get_comcat_at_szgroup() const
 }
 
 
-vector<double> Population::get_maturity_at_szgroup() const
+const vector<double>& Population::get_maturity_at_szgroup() const
 {
 	return(maturity_at_szgroup);
 }
 
 
-vector<double> Population::get_fecundity_at_szgroup() const
+const vector<double>& Population::get_fecundity_at_szgroup() const
 {
 	return(fecundity_at_szgroup);
 }
 
 
-vector<double> Population::get_M_at_szgroup() const
+const vector<double>& Population::get_M_at_szgroup() const
 {
 	return(M_at_szgroup);
 }
 
 
-vector<double> Population::get_proprecru_at_szgroup() const
+const vector<double>& Population::get_proprecru_at_szgroup() const
 {
 	return(proprecru_at_szgroup);
 }
@@ -421,7 +411,7 @@ double Population::get_landings_so_far() const
 }
 
 
-vector<double> Population::get_param_sr() const
+const vector<double>& Population::get_param_sr() const
 {
 	return(param_sr);
 }
@@ -520,70 +510,70 @@ void Population::set_cpue_multiplier(double _cpue_multiplier)
 }
 
 
-void Population::set_tot_N_at_szgroup(vector<double> _N_at_szgroup)
+void Population::set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup)
 {
 	tot_N_at_szgroup =_N_at_szgroup;
 
 }
 
 
-void Population::set_tot_N_at_szgroup_just_after_redistribution(vector<double> _N_at_szgroup_just_after_redistribution)
+void Population::set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution)
 {
 	tot_N_at_szgroup_just_after_redistribution =_N_at_szgroup_just_after_redistribution;
 
 }
 
 
-void Population::set_tot_N_at_szgroup_month_minus_1(vector<double> _N_at_szgroup_month_minus_1)
+void Population::set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1)
 {
 	tot_N_at_szgroup_month_minus_1 =_N_at_szgroup_month_minus_1;
 
 }
 
 
-void Population::set_tot_N_at_szgroup_year_minus_1(vector<double> _N_at_szgroup_year_minus_1)
+void Population::set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1)
 {
 	tot_N_at_szgroup_year_minus_1 =_N_at_szgroup_year_minus_1;
 
 }
 
 
-void Population::set_tot_N_at_age(vector<double> _tot_N_at_age)
+void Population::set_tot_N_at_age(const vector<double>& _tot_N_at_age)
 {
 	tot_N_at_age =_tot_N_at_age;
 
 }
 
 
-void Population::set_tot_F_at_age(vector<double> _tot_F_at_age)
+void Population::set_tot_F_at_age(const vector<double>& _tot_F_at_age)
 {
 	tot_F_at_age =_tot_F_at_age;
 
 }
 
 
-void Population::set_tot_F_at_age_last_quarter(vector<double> _tot_F_at_age_last_quarter)
+void Population::set_tot_F_at_age_last_quarter(const vector<double>& _tot_F_at_age_last_quarter)
 {
 	tot_F_at_age_last_quarter =_tot_F_at_age_last_quarter;
 
 }
 
 
-void Population::set_tot_M_at_age(vector<double> _tot_M_at_age)
+void Population::set_tot_M_at_age(const vector<double>& _tot_M_at_age)
 {
 	tot_M_at_age =_tot_M_at_age;
 
 }
 
 
-void Population::set_tot_W_at_age(vector<double> _tot_W_at_age)
+void Population::set_tot_W_at_age(const vector<double>& _tot_W_at_age)
 {
 	tot_W_at_age =_tot_W_at_age;
 
 }
 
 
-void Population::set_maturity_at_szgroup(vector<double> _maturity_at_szgroup)
+void Population::set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_maturity_at_szgroup.size(); sz++)
 	{
@@ -593,7 +583,7 @@ void Population::set_maturity_at_szgroup(vector<double> _maturity_at_szgroup)
 }
 
 
-void Population::set_fecundity_at_szgroup(vector<double> _fecundity_at_szgroup)
+void Population::set_fecundity_at_szgroup(const vector<double>& _fecundity_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_fecundity_at_szgroup.size(); sz++)
 	{
@@ -625,7 +615,7 @@ void Population::set_comcat_at_szgroup(vector<int> _comcat_at_szgroup)
 }
 
 
-void Population::set_M_at_szgroup(vector<double> _M_at_szgroup)
+void Population::set_M_at_szgroup(const vector<double>& _M_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_M_at_szgroup.size(); sz++)
 	{
@@ -635,7 +625,7 @@ void Population::set_M_at_szgroup(vector<double> _M_at_szgroup)
 }
 
 
-void Population::set_proprecru_at_szgroup(vector<double> _proprecru_at_szgroup)
+void Population::set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup)
 {
 	for(unsigned int sz =0; sz<_proprecru_at_szgroup.size(); sz++)
 	{
@@ -657,7 +647,7 @@ void Population::set_landings_so_far(double _landings_so_far)
 }
 
 
-void Population::set_param_sr(vector<double> _param_sr)
+void Population::set_param_sr(const vector<double>& _param_sr)
 {
 
 	for(unsigned int i =0; i<_param_sr.size(); i++)
@@ -694,15 +684,15 @@ void Population::set_list_nodes(vector<Node* > _list_nodes)
 void Population::distribute_N()
 {
 
-	dout<< endl;
-	dout<< "BEGIN distribute_N(): distribute on nodes for the pop " << name << endl;
+    dout (cout<< endl);
+    dout(cout<< "BEGIN distribute_N(): distribute on nodes for the pop " << name << endl);
 
 	// save for later use i.e. in the erosion of the avai after each catch event
 	this->set_tot_N_at_szgroup_just_after_redistribution(tot_N_at_szgroup);
 
 	// update the nodes
 	//  N_at_szgroup on node x = N_at_szgroup for pop1 * avai on node x...
-	for (int idx =0; idx < list_nodes.size(); idx++)
+    for (unsigned int idx =0; idx < list_nodes.size(); idx++)
 	{
 
 		// get a node
@@ -729,20 +719,20 @@ void Population::distribute_N()
 
 		// distribute on node applying avai
 		vector <double> N_at_szgroup;
-		for(int i=0; i<tot_N_at_szgroup.size(); i++)
+        for(unsigned int i=0; i<tot_N_at_szgroup.size(); i++)
 			N_at_szgroup.push_back( tot_N_at_szgroup.at(i)*avai_this_node.at(i) );
 
-		dout << "N at szgroup on the node "<< idx_node<< ":" << endl;
+        dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl);
 		//for(int i=0; i<N_at_szgroup.size(); i++)
 		//   dout << N_at_szgroup[i] << " ";
-		dout << endl;
+        dout(cout << endl);
 
 		// set the new Ns for this specific pop in the multimap of this node
 		list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
 
 	}
-	dout<< "END distribute_N()"<< endl;
-	dout<< endl;
+    dout(cout<< "END distribute_N()"<< endl);
+    dout(cout<< endl);
 
 }
 
@@ -750,19 +740,18 @@ void Population::distribute_N()
 void Population::aggregate_N()
 {
 
-	dout<< endl;
-	dout<< "BEGIN aggregate_N(): aggregate from nodes for the pop " << name << endl;
+    dout(cout<< endl);
+    dout(cout<< "BEGIN aggregate_N(): aggregate from nodes for the pop " << name << endl);
 
 	// temporary objects
 	vector<double> agg_Ns_at_szgroup;
-	vector<double> Ns_this_node;
+//	vector<double> Ns_this_node;
 
 	// a for-loop over nodes specficic to this pop
 	for (unsigned int idx =0; idx < list_nodes.size(); idx++)
 	{
-
 		// get idx node (just for info)
-		int idx_node = list_nodes[idx]->get_idx_node();
+//		int idx_node = list_nodes[idx]->get_idx_node();
 
 		// init with the first node
 		if(idx==0)
@@ -772,8 +761,8 @@ void Population::aggregate_N()
 		else
 		{
 			// get the Ns on this node and add to the agg
-			Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
-			for(int i=0; i<agg_Ns_at_szgroup.size(); i++)
+            const vector<double> &Ns_this_node = list_nodes[idx]->get_Ns_pops_at_szgroup(name);
+            for(unsigned int i=0; i<agg_Ns_at_szgroup.size(); i++)
 			{
 				agg_Ns_at_szgroup.at(i)= agg_Ns_at_szgroup.at(i)+Ns_this_node.at(i);
 			}
@@ -794,11 +783,10 @@ void Population::aggregate_N()
 	//    }
 	//}
 
-	dout << endl;
+    dout(cout << endl);
 
-	dout<< "END aggregate_N()" << endl;
-	dout<< endl;
-
+    dout(cout<< "END aggregate_N()" << endl);
+    dout(cout<< endl);
 }
 
 
@@ -806,7 +794,7 @@ void Population::do_growth()
 {
 	cout << "BEGIN do_growth() "  << endl ;
 
-	int namepop = this->get_name();
+//	int namepop = this->get_name();
 
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
@@ -848,7 +836,7 @@ void Population::do_growth()
 
 void Population::add_recruits_from_SR()
 {
-	dout << "BEGIN add_recruits() form SR "  << endl ;
+    dout(cout << "BEGIN add_recruits() form SR "  << endl );
 
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
@@ -911,13 +899,13 @@ void Population::add_recruits_from_SR()
 	// redistribute on nodes
 	//distribute_N();
 
-	dout << "END add_recruits() "  << endl ;
+    dout(cout << "END add_recruits() "  << endl );
 }
 
 
 void Population::add_recruits_from_eggs()
 {
-	dout << "BEGIN add_recruits() from eggs "  << endl ;
+    dout(cout << "BEGIN add_recruits() from eggs "  << endl );
 
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
@@ -947,7 +935,7 @@ void Population::add_recruits_from_eggs()
 	// redistribute on nodes
 	//distribute_N();
 
-	dout << "END add_recruits() "  << endl ;
+    dout(cout << "END add_recruits() "  << endl);
 }
 
 
@@ -969,9 +957,9 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 	int nbages = percent_szgroup_per_age_matrix[0].size();
 
 	// apply size percent_szgroup_per_age_matrix to finds out N IN AGE!
-	for(unsigned int sz = 0; sz < nbsz; sz++)
+    for(int sz = 0; sz < nbsz; sz++)
 	{
-		for(unsigned int a = 0; a < nbages; a++)
+        for(int a = 0; a < nbages; a++)
 		{
 
 			// check
@@ -995,9 +983,9 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 	}
 
 	// apply a weighted mean for weight-at-age and mortality-at-age
-	for(unsigned int a = 0; a < nbages; a++)
+    for(int a = 0; a < nbages; a++)
 	{
-		for(unsigned int sz = 0; sz < nbsz; sz++)
+        for(int sz = 0; sz < nbsz; sz++)
 		{
 
 			// check
@@ -1038,10 +1026,10 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 			tot_F_at_age.at(a)+= 0;
 		}
 		// => cumul over months
-		dout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
-		dout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl;
-		dout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl;
-		dout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl;
+        dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
+        dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
+        dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl);
+        dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
 
 	}
 
@@ -1051,7 +1039,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 	this->set_tot_M_at_age(tot_M_at_age);
 	this->set_tot_W_at_age(tot_W_at_age);
 
-	dout << "END compute_tot_N_and_F_and_M_and_W_at_age() "  << endl ;
+    dout(cout << "END compute_tot_N_and_F_and_M_and_W_at_age() "  << endl);
 
 }
 
@@ -1077,7 +1065,7 @@ double Population::compute_fbar()
 		cout << "age_max at 0 for this pop??" << endl;
 		age_max=5;
 	}
-	for(unsigned int a = age_min; a < age_max; a++)
+    for(int a = age_min; a < age_max; a++)
 	{
 								 // sum...
 		fbar+=this->tot_F_at_age[a];
@@ -1124,7 +1112,7 @@ void Population::compute_TAC()
 	//a. for year y from y-1
 	cout << "the  N by age at the end of  y is " << endl;
 	vector <double> tot_N_at_age_end_previous_y = this->get_tot_N_at_age();
-	for (int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
+    for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
 	{
 		cout << "age" << i+1 << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
 	}
@@ -1132,14 +1120,14 @@ void Population::compute_TAC()
 	cout << "the forecast N by age for y (from y-1) is " << endl;
 								 // init
 	vector <double> forecast_tot_N_at_age_start_y(tot_N_at_age_end_previous_y.size());
-	for (int i=1; i < tot_N_at_age_end_previous_y.size(); i++)
+    for (unsigned int i=1; i < tot_N_at_age_end_previous_y.size(); i++)
 	{
 								 // class change from 31th of Dec to 1st of Jan
 		forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
 	}
 								 // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
 	forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
-	for (int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
+    for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
 	{
 		cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl;
 	}
@@ -1151,32 +1139,32 @@ void Population::compute_TAC()
 	vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
 								 //init
 	vector <double> tot_F_at_age_y_plus_1(tot_F_at_age_end_previous_y.size());
-	for (int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
+    for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
 	{
 								 // target for y+1
 		tot_F_at_age_y_plus_1.at(i) = tot_F_at_age_end_previous_y.at(i)*fmultiplier*fmultiplier;
 	}
-	for (int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
+    for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
 	{
 		cout << "age" << i+1 << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
 	}
 
 	cout << "and the forecast M by age for y+1 (from y) is " << endl;
 	vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
-	for (int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
+    for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
 	{
 		cout << "age" << i+1 << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
 	}
 
 	cout << "and the forecast W by age for y+1 (from y) is " << endl;
 	vector <double> tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
-	for (int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
+    for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
 	{
 		cout << "age" << i+1 << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
 	}
 
 	cout << "then, the forecast N by age for y+1 (from y) is " << endl;
-	for (int i=1; i < forecast_tot_N_at_age_start_y.size(); i++)
+    for (unsigned int i=1; i < forecast_tot_N_at_age_start_y.size(); i++)
 	{
 		forecast_tot_N_at_age_start_y_plus_1.at(i) =
 			forecast_tot_N_at_age_start_y.at(i-1)*
@@ -1186,7 +1174,7 @@ void Population::compute_TAC()
 	forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
 	// note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
 
-	for (int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+    for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
 	{
 		cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl;
 	}
@@ -1194,7 +1182,7 @@ void Population::compute_TAC()
 	// 4. compute the TAC (in tons) according to the forecast N (Baronovs equation)
 	// TAC per age and then sum over ages....
 	double tac_y_plus_1=0;
-	for (int i=1; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+    for (unsigned int i=1; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
 	{
 		tac_y_plus_1+=   (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
 			forecast_tot_N_at_age_start_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
@@ -1225,7 +1213,7 @@ void Population::compute_TAC()
 
 void Population::apply_natural_mortality()
 {
-	dout << "BEGIN apply_natural_mortality() "  << endl ;
+    dout(cout << "BEGIN apply_natural_mortality() "  << endl);
 
 								 // init
 	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
@@ -1248,7 +1236,7 @@ void Population::apply_natural_mortality()
 	// redistribute on nodes
 	//distribute_N();
 
-	dout << "END apply_natural_mortality() "  << endl ;
+    dout(cout << "END apply_natural_mortality() "  << endl);
 
 }
 

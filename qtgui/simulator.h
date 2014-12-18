@@ -60,6 +60,8 @@ signals:
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
     void outputFileUpdated(QString, int);
     void nodesStatsUpdate(QString);
+    void debugMemoryStats(long rss, long peak);
+    void debugCapture(QString);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -78,10 +80,15 @@ private:
     QString mSimuName;
     bool mMoveVesselOption;
     QProcess::ProcessState mProcessState;
+    bool mCapture;
 
     bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
+    void parseDebug(QStringList fields);
+
+public:
+    static QString SET_NUMTHREADS;
 };
 
 #endif // SIMULATOR_H

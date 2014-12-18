@@ -5,7 +5,10 @@
 #include <outputfileparser.h>
 
 #include <QApplication>
+#include <QSettings>
 #include <QDebug>
+
+QString Simulator::SET_NUMTHREADS ("simul_numthreads");
 
 Simulator::Simulator()
     : mSimulation(0),
@@ -15,7 +18,8 @@ Simulator::Simulator()
       mOutputName("baseline"),
       mSimuName("simu2"),
       mMoveVesselOption(true),
-      mProcessState(QProcess::NotRunning)
+      mProcessState(QProcess::NotRunning),
+      mCapture(false)
 {
 }
 
@@ -36,6 +40,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     mSimulation = new QProcess();
 
     QStringList arguments;
+    QSettings set;
 
     arguments.push_back("-f");
     arguments.push_back(name);
@@ -59,6 +64,9 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 
     if (!mMoveVesselOption)
         arguments.push_back("--no-gui-move-vessels");
+
+    arguments.push_back("--num_threads");
+    arguments.push_back(QString::number(set.value(SET_NUMTHREADS, 4).toInt()));
 
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
@@ -127,8 +135,12 @@ void Simulator::readyReadStandardOutput()
 
     while (mSimulation->readLine(buf, sizeof(buf)) > 0) {
         QString line (buf);
-        if (!processCodedLine(line))
+        if (!processCodedLine(line)) {
             emit log(line);
+            if (mCapture) {
+                emit debugCapture(line);
+            }
+        }
     }
 }
 
@@ -199,11 +211,35 @@ bool Simulator::processCodedLine(QString line)
         emit nodesStatsUpdate(line.mid(2));
         break;
 
+    case 'D':
+        parseDebug(args);
+        break;
+
     default:
         return false;
     }
 
     return true;
+}
+
+void Simulator::parseDebug(QStringList fields)
+{
+    switch (fields[0].at(0).toLatin1()) {
+    case 'm':
+        if (fields.size() > 1) {
+            long rss = fields[0].mid(1).toDouble();
+            long peak = fields[1].toDouble();
+            emit debugMemoryStats(rss,peak);
+        }
+        break;
+    case 'c':
+        if (fields[0].at(1) == '+') {
+            mCapture = true;
+        } else {
+            mCapture = false;
+        }
+        break;
+    }
 }
 
 void Simulator::parseUpdateVessel(QStringList fields)

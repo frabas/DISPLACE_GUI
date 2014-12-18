@@ -10,7 +10,9 @@ SOURCES= main.cpp \
 	../commons/Vessel.cpp \
 	../commons/Metier.cpp \
 	../commons/myRutils.cpp \
-	../commons/mkpath.cpp
+        ../commons/mkpath.cpp \
+        ../commons/memoryinfo.cpp \
+        ../commons/options.cpp
 
 
 HEADERS= \
@@ -26,7 +28,9 @@ HEADERS= \
 	../include/Metier.h \
 	../include/myRutils.h \
 	../include/mkpath.h \
-	../include/m_constants.h
+        ../include/m_constants.h \
+        ../include/memoryinfo.h \
+        ../include/options.h
 
 LIBS=
 CPPFLAGS=-O2 -I../include

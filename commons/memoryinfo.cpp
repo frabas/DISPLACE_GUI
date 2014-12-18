@@ -1,9 +1,5 @@
 #include "memoryinfo.h"
 
-#include <QString>
-#include <QStringList>
-#include <QProcess>
-
 /*
  * Author:  David Robert Nadeau
  * Site:    http://NadeauSoftware.com/

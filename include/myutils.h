@@ -118,9 +118,9 @@ string inputfolder);
 
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
-vector<double> compute_distance_fgrounds(vector <int>& idx_path_shop,
-deque <map<vertex_t, vertex_t> >& path_shop,
-deque <map<vertex_t, weight_t> >& min_distance_shop,
+vector<double> compute_distance_fgrounds(const vector<int> &idx_path_shop,
+const deque<map<vertex_t, vertex_t> > &path_shop,
+const deque<map<vertex_t, weight_t> > &min_distance_shop,
 int from,
 vector<int> grounds);
 
@@ -177,8 +177,8 @@ void fill_map_from_specifications_s_d (istream& in, map<string, double>& a_map);
 
 vector<double> find_entries_s_d (multimap<string, double>& infos, string str);
 vector<int> find_entries_s_i (multimap<string, int>& infos, string vid);
-vector<double> find_entries_i_d (multimap<int, double>& infos, int intg);
-vector<int> find_entries_i_i (multimap<int, int>& infos, int intg);
+vector<double> find_entries_i_d (const multimap<int, double> &infos, int intg);
+vector<int> find_entries_i_i (const multimap<int, int> &infos, int intg);
 vector<string> find_entries_i_s (multimap<int, string>& infos, int intg);
 void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval);
 

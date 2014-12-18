@@ -40,6 +40,7 @@
 
 #include <gdal/ogrsf_frmts.h>
 #include <GeographicLib/Geodesic.hpp>
+#include <version.h>    // Version.h should be included after GeographicLib because it undefines VERSION symbol
 
 #include <QBoxLayout>
 #include <QTextEdit>
@@ -117,6 +118,11 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
+    connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
+    connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
+
+    ui->cmdProfileEnable->setChecked(false);
+    ui->profilingOutput->setVisible(false);
 
     /* Setup graph controller */
     new GraphInteractionController(ui->plotHarbours, this);
@@ -316,6 +322,16 @@ void MainWindow::simulatorProcessStepChanged(int step)
 void MainWindow::simulatorNodeStatsUpdate(QString data)
 {
     models[0]->updateNodesStatFromSimu(data);
+}
+
+void MainWindow::simulatorDebugMemoryStats(long rss, long peak)
+{
+    mStatusInfoLabel->setText(QString("Simulator Memory RSS: %1Mb peak %2Mb").arg(rss/1024).arg(peak/1024));
+}
+
+void MainWindow::simulatorCaptureLine(QString line)
+{
+    ui->profilingOutput->appendPlainText(line);
 }
 
 void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, float fuel, int state)
@@ -564,6 +580,7 @@ void MainWindow::on_cmdStart_clicked()
                 return;
         }
 
+        ui->profilingOutput->clear();
         mLastRunSimulationName = models[0]->simulationName();
         mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->prepareDatabaseForSimulation();
@@ -713,18 +730,23 @@ void MainWindow::on_saveConsoleButton_clicked()
 
 void MainWindow::on_cmdSetup_clicked()
 {
+    QSettings set;
+
     SimulationSetupDialog dlg(this);
 
     dlg.setSimulationSteps(models[0]->getSimulationSteps());
     dlg.setSimulationName(models[0]->simulationName());
     dlg.setSimulationOutputName(models[0]->outputName());
     dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
+    dlg.setNumThreads(set.value(Simulator::SET_NUMTHREADS, 4).toInt());
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
 //        models[0]->setSimulationName(dlg.getSimulationName());
 //        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
+
+        set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
     }
 }
 
@@ -1676,4 +1698,43 @@ void MainWindow::on_actionAbout_displace_triggered()
 {
     AboutDialog dlg(this);
     dlg.exec();
+}
+
+void MainWindow::on_cmdProfileEnable_toggled(bool checked)
+{
+    ui->profilingOutput->setVisible(checked);
+}
+
+void MainWindow::on_cmdProfileSave_clicked()
+{
+    QSettings set;
+    QString defpos = set.value("report_path", QDir::homePath()).toString();
+    QString path = QFileDialog::getSaveFileName(this, tr("Append report to file"), defpos, tr("Text files (*.txt);;All files (*.*)"));
+    if (!path.isEmpty()) {
+        QFile f(path);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            QMessageBox::warning(this, tr("Save failed"), QString("Cannot save to %1: %2").arg(path).arg(f.errorString()));
+            return;
+        }
+
+        QTextStream strm(&f);
+        strm << endl << endl << "--------" << endl;
+        strm << QDateTime::currentDateTime().toLocalTime().toString() << " Version " << VERSION << endl;
+        strm << models[0]->inputName() << " " << models[0]->outputName() << " " << models[0]->simulationName() << endl;
+        strm << models[0]->getSimulationSteps() << " total steps" << endl;
+        strm << "Linked database: " << models[0]->linkedDatabase() << endl;
+#ifdef DEBUG
+        strm << "Debug version" << endl;
+#else
+        strm << "Release version" << endl;
+#endif
+        strm << endl;
+        strm << ui->profilingOutput->toPlainText();
+        strm << endl;
+
+        f.close();
+
+        QFileInfo info(path);
+        set.setValue("report_path", info.absolutePath());
+    }
 }

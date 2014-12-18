@@ -54,3 +54,13 @@ bool SimulationSetupDialog::getMoveVesselsOption() const
 {
     return ui->optMoveVessels->isChecked();
 }
+
+int SimulationSetupDialog::getNumThreads()
+{
+    return ui->threads->value();
+}
+
+void SimulationSetupDialog::setNumThreads(int n)
+{
+    ui->threads->setValue(n);
+}

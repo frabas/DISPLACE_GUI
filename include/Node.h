@@ -28,6 +28,8 @@
 #include "myutils.h"
 #include "myRutils.h"
 
+#include <pthread.h>
+
 using namespace std;
 
 class Node
@@ -46,6 +48,9 @@ class Node
 		/**  destructor */
 		~Node();
 
+        void lock() { pthread_mutex_lock (&mutex); }
+        void unlock() { pthread_mutex_unlock (&mutex); }
+
 		int get_idx_node() const;
 		int get_code_area() const;
 		int get_marine_landscape() const;
@@ -60,26 +65,26 @@ class Node
 		double get_y() const;
 		int get_harbour() const;
 		bool get_is_harbour() const;
-		vector<double> get_Ns_pops_at_szgroup(int name_pop) const;
-		vector<double> get_Ns_pops_at_szgroup_at_month_start(int name_pop) const;
-		vector<double> get_removals_pops_at_szgroup(int name_pop) const;
-		vector<double> get_pressure_pops_at_szgroup(int name_pop) const;
-		vector<double> get_avai_pops_at_selected_szgroup(int name_pop) const;
+        const vector<double> &get_Ns_pops_at_szgroup(int name_pop) const;
+        vector<double> get_Ns_pops_at_szgroup_at_month_start(int name_pop) const;
+        vector<double> get_removals_pops_at_szgroup(int name_pop) const;
+        vector<double> get_pressure_pops_at_szgroup(int name_pop) const;
+        vector<double> get_avai_pops_at_selected_szgroup(int name_pop) const;
 		double get_benthos_tot_biomass(int funcgr) const;
-		vector<double> get_benthos_tot_biomass() const;
+        const vector<double>& get_benthos_tot_biomass() const;
 		vector< vector<double> >  get_Ns_pops_at_szgroup() const;
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
-		vector<double> get_impact_on_pops ();
+        const vector<double>& get_impact_on_pops ();
 		int get_cumftime() const;
 		void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
-		void set_Ns_pops_at_szgroup(int name_pop, vector<double> val);
-		void set_Ns_pops_at_szgroup_at_month_start(int name_pop, vector<double> val);
-		void set_removals_pops_at_szgroup(int name_pop, vector<double> val);
-		void set_pressure_pops_at_szgroup(int name_pop, vector<double> val);
+        void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
+        void set_Ns_pops_at_szgroup_at_month_start(int name_pop, const vector<double>& val);
+        void set_removals_pops_at_szgroup(int name_pop, const vector<double>& val);
+        void set_pressure_pops_at_szgroup(int name_pop, const vector<double>& val);
 		void init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroups);
-		void set_avai_pops_at_selected_szgroup(int name_pop, vector<double> val);
+        void set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>& val);
 		void set_impact_on_pops(int name_pop, double val);
 		void set_vid(int val);
         void set_cumftime(int tot);
@@ -91,8 +96,8 @@ class Node
 		void clear_removals_pops_at_szgroup();
 		void clear_avai_pops_at_selected_szgroup();
 		void clear_impact_on_pops();
-		void apply_natural_mortality_at_node(int name_pop, vector<double> M_at_szgroup);
-		void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, vector<double>  weight_at_szgroup, vector<double> totN);
+        void apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup);
+        void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN);
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);
 		void export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop);
@@ -108,7 +113,9 @@ class Node
         void set_idx_node(int idx);
 
 protected:
-	private:
+        void reinit(vector<double> &vec, unsigned int sz);
+        void reinit(vector<vector<double> > &vec, unsigned int sz, unsigned int subsz);
+private:
 		int idx_node;
 		double x;
 		double y;
@@ -132,5 +139,7 @@ protected:
 
         int m_nbpops;
         int m_nszgrp;
+
+        pthread_mutex_t mutex;
 };
 #endif							 // NODE_H

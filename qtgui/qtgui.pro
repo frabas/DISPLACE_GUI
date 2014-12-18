@@ -15,6 +15,7 @@ DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol
 
 CONFIG(debug,release|debug) {
+    DEFINES += DEBUG
     QMAPCONTROL_LIB=qmapcontrold
 }
 CONFIG(release,release|debug) {
@@ -35,9 +36,6 @@ win32 {
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 
     INCLUDEPATH += c:/mingw/boost_1_57_0
-
-    # For GetProcessMemoryInfo()
-    LIBS += -lpsapi
 }
 
 DEFINES += HAVE_GEOGRAPHICLIB
@@ -99,7 +97,6 @@ SOURCES += \
     modelobjects/harbourdata.cpp \
     mapobjects/edgemapobject.cpp \
     mapobjects/edgelayer.cpp \
-    utils/memoryinfo.cpp \
     creategraphdialog.cpp \
     graphbuilder.cpp \
     calendar.cpp \
@@ -177,7 +174,7 @@ HEADERS += \
     modelobjects/harbourdata.h \
     mapobjects/edgemapobject.h \
     mapobjects/edgelayer.h \
-    utils/memoryinfo.h \
+    ../include/memoryinfo.h \
     creategraphdialog.h \
     graphbuilder.h \
     calendar.h \

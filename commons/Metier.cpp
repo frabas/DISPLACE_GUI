@@ -19,13 +19,7 @@
 // --------------------------------------------------------------------------
 
 #include "Metier.h"
-
-//#define VERBOSE
-#ifdef VERBOSE
-#define dout cout
-#else
-#define dout 0 && cout
-#endif
+#include <helpers.h>
 
 Metier::Metier(int _name,
 int _type,

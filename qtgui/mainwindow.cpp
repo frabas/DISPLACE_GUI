@@ -18,7 +18,6 @@
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
 #include <createshortestpathdialog.h>
-#include <version.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -41,6 +40,7 @@
 
 #include <gdal/ogrsf_frmts.h>
 #include <GeographicLib/Geodesic.hpp>
+#include <version.h>    // Version.h should be included after GeographicLib because it undefines VERSION symbol
 
 #include <QBoxLayout>
 #include <QTextEdit>

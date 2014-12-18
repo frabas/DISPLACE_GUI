@@ -14,6 +14,7 @@
 
 #include <outputqueuemanager.h>
 #include <messages/movevesseloutputmessage.h>
+#include <messages/exportvmslikeoutputmessage.h>
 
 using namespace std;
 
@@ -352,23 +353,11 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // for VMS, export the first year only because the file is growing too big otherwise....
     vessels[index_v]->lock();
 
-    pthread_mutex_lock(&glob_mutex);
     if(export_vmslike /*&& tstep<8641*/) {
         if( vessels[ index_v ]->get_state()!=3) {
-            vmslike << tstep << " "
-                       //<< vessels[ index_v ]->get_idx() << " "
-                    << vessels[ index_v ]->get_name() << " "
-                       // can be used as a trip identifier
-                    << vessels[ index_v ]->get_tstep_dep() << " "
-                    << setprecision(3) << fixed << vessels[ index_v ]->get_x() << " "
-                    << setprecision(3) << fixed << vessels[ index_v ]->get_y() << " "
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_course() << " "
-                       //<< vessels[ index_v ]->get_inharbour() << " "
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
-                    << vessels[ index_v ]->get_state() << " " <<  endl;
+            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
         }
     }
-    pthread_mutex_unlock(&glob_mutex);
 
     if (use_gui && gui_move_vessels) {
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));

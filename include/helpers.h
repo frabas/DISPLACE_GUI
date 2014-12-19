@@ -22,7 +22,7 @@
 #define HELPERS_H
 
 /* Hint: in Qt Creator you can fix the dout << "blablah"; with dout(cout<<"blablah"); using find/replace regexp
- * find: dout(.*);  replace: dout(cout \1);
+ * find: cout(.*);  replace: dout(cout \1);
  * */
 
 #ifdef VERBOSE

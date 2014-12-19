@@ -1,4 +1,6 @@
 CONFIG -= qt
+CONFIG += c++11
+
 TARGET=displace
 TEMPLATE=app
 
@@ -34,7 +36,13 @@ DEFINES += INSTRUMENTATION
 #QMAKE_CXXFLAGS += -g
 
 SOURCES= main.cpp \
-    thread_vessels.cpp
+    thread_vessels.cpp \
+    outputqueuemanager.cpp \
+    outputmessage.cpp \
+    messages/movevesseloutputmessage.cpp \
+    messages/exportvmslikeoutputmessage.cpp \
+    messages/vessellogbookoutputmessage.cpp \
+    messages/genericconsolestringoutputmessage.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -53,7 +61,13 @@ HEADERS= \
     ../include/options.h \
     ../include/profiler.h \
     thread_vessels.h \
-    values.h
+    values.h \
+    outputqueuemanager.h \
+    outputmessage.h \
+    messages/movevesseloutputmessage.h \
+    messages/exportvmslikeoutputmessage.h \
+    messages/vessellogbookoutputmessage.h \
+    messages/genericconsolestringoutputmessage.h
 
 OTHER_FILES += \
     Makefile

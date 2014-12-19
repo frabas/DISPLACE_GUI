@@ -636,7 +636,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 				// disaggregate total catch (in weight) for this pop according to the alloc key
 				catch_per_szgroup[szgroup]= oth_land_this_pop_this_node * alloc_key[szgroup];
-				if(idx_node==2436 && name_pop==9) cout << " catch_per_szgroup[szgroup] from oth land " << catch_per_szgroup[szgroup] << endl;
+                if(idx_node==2436 && name_pop==9) dout(cout << " catch_per_szgroup[szgroup] from oth land " << catch_per_szgroup[szgroup] << endl);
 
 				// catch_per_szgroup at this point are actually landings (see parameterisation)
 				// so we need to add the part of removals that are actually discarded by the sorting on board.
@@ -645,7 +645,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 				// then get the removals in terms of N
 				removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/weight_at_szgroup[szgroup];
-				if(idx_node==2436 && name_pop==9) cout << " removals_per_szgroup[szgroup] from oth land" << removals_per_szgroup[szgroup] << endl;
+                if(idx_node==2436 && name_pop==9) dout(cout << " removals_per_szgroup[szgroup] from oth land" << removals_per_szgroup[szgroup] << endl);
 
 				// do not allow negative abundance!
 				if(removals_per_szgroup[szgroup] > new_Ns_at_szgroup_pop[szgroup])
@@ -671,7 +671,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 					new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 								 // reverse back to get the landings only
 					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
-					//if(idx_node==430&& name_pop==3) cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl;
+                    //if(idx_node==430&& name_pop==3) dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl);
 
 					// update the availability to impact the future vessel cpue
 					double val=0;// init
@@ -705,12 +705,12 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 				}
 
 				// new removals cumul on this node
-				//if(idx_node==430&& name_pop==3) cout << " cumul_removals_at_szgroup_pop[szgroup] " << cumul_removals_at_szgroup_pop[szgroup] << endl;
-				//if(idx_node==430&& name_pop==3) cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl;
+                //if(idx_node==430&& name_pop==3) dout(cout << " cumul_removals_at_szgroup_pop[szgroup] " << cumul_removals_at_szgroup_pop[szgroup] << endl);
+                //if(idx_node==430&& name_pop==3) dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
 				new_removals_at_szgroup_pop[szgroup]=cumul_removals_at_szgroup_pop[szgroup]+removals_per_szgroup[szgroup];
 
-				//if(idx_node==430&& name_pop==3) cout << " new_removals_at_szgroup_pop[szgroup] after oth land" << new_removals_at_szgroup_pop[szgroup] << endl;
+                //if(idx_node==430&& name_pop==3) dout(cout << " new_removals_at_szgroup_pop[szgroup] after oth land" << new_removals_at_szgroup_pop[szgroup] << endl);
 
 			}
 			else
@@ -748,8 +748,8 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	//        cout << "inconsistency in node->apply_oth_land() for this pop " << name_pop <<
 	//                  " on this node " << idx_node <<
 	//                    " for this szgroup " <<  szgroup <<endl;
-	//        cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << endl;
-	//        cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << endl;
+    //        dout(cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << endl);
+    //        dout(cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << endl);
 	//        int a_int;
 	//        cin >> a_int; // pause
 	//    }

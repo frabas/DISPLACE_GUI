@@ -1626,7 +1626,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/wsz[szgroup];
 
                             dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
-							//if(idx_node==2436 && namepop==9) cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl;
+                            //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
 							// finally, impact the N...
 							// ...but do not allow negative abundance!
@@ -1657,7 +1657,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								/*
 								// check (before)
 								vector <double> a_avai_bef = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
-								cout << "a_avai bef: " << endl;
+                                dout(cout << "a_avai bef: " << endl);
 								for(int it=0; it<a_avai_bef.size(); it++)
 								{
                                     dout(cout  << a_avai_bef.at(it) << " " << endl);
@@ -1713,14 +1713,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								/*
 
 								// check (after)
-								cout << "a val " << val << " for this szgroup  " << szgroup << endl;
+                                dout(cout << "a val " << val << " for this szgroup  " << szgroup << endl);
 
 								// check (after)
 								vector <double> a_avai_aft = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
-								cout << "a_avai aft: " << endl;
+                                dout(cout << "a_avai aft: " << endl);
 								for(int it=0; it<a_avai_aft.size(); it++)
 								{
-									cout << a_avai_aft.at(it) << " " << endl;
+                                    dout(cout << a_avai_aft.at(it) << " " << endl);
 								}
 								*/
 
@@ -1729,7 +1729,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							vector <double>cumul_removals_at_szgroup_pop=this->get_loc()->get_removals_pops_at_szgroup(namepop);
 							removals_per_szgroup[szgroup]+=cumul_removals_at_szgroup_pop[szgroup];
 
-							//if(idx_node==186 && namepop==3) cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl;
+                            //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
 							// caution: cumul at the trip level
 							catch_pop_at_szgroup[pop][szgroup] += catch_per_szgroup[szgroup];
@@ -1761,15 +1761,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 						vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
 						vector <double> at_month_start= this->get_loc()->get_Ns_pops_at_szgroup_at_month_start(3);
 
-						for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "N_at_szgroup at the end of do_catch sz " <<  N_at_szgroup.at(sz) << endl;
-						for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "removals_at_szgroup at the end of do_catch sz " <<  removals_at_szgroup.at(sz) << endl;
-						for(int sz=0; sz<N_at_szgroup.size(); sz++) cout << "at_month_start at the end of do_catch sz " <<  at_month_start.at(sz) << endl;
+                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "N_at_szgroup at the end of do_catch sz " <<  N_at_szgroup.at(sz) << endl);
+                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "removals_at_szgroup at the end of do_catch sz " <<  removals_at_szgroup.at(sz) << endl);
+                        for(int sz=0; sz<N_at_szgroup.size(); sz++) dout(cout << "at_month_start at the end of do_catch sz " <<  at_month_start.at(sz) << endl);
 
 						for(int sz=0; sz<N_at_szgroup.size(); sz++)
 						{
 							if(removals_at_szgroup.at(sz)>at_month_start.at(sz))
 							{
-								cout << "something wrong here!..." << endl;
+                                dout(cout << "something wrong here!..." << endl);
 								int xx;
 								cin >>xx;
 							}
@@ -1876,19 +1876,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 						 if(new_Ns_at_szgroup_pop[i]!=new_Ns_at_szgroup_pop[i])  // c++ trick for like testing for is.nan
 						 {
 							 int a;
-							 cout << "namepop " <<namepop << endl;
-							 cout << "Ns_at_szgroup_pop[szgroup] " <<Ns_at_szgroup_pop[i] << endl;
-							 cout << "wsz[szgroup] " <<wsz[i] << endl;
-							 cout << "sel_ogive[szgroup] " <<sel_ogive[i] << endl;
-							 cout << "avail_biomass[szgroup] " <<avail_biomass[i] << endl;
-							 cout << "alloc_key[szgroup] " <<alloc_key[i] << endl;
-							 cout << " catch_per_szgroup[szgroup] " << catch_per_szgroup[i] << endl;
-							 cout << " weight_per_szgroup[szgroup] " << wsz[i] << endl;
-							 cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[i] << endl;
-							 cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[i] << endl;
+                             dout(cout << "namepop " <<namepop << endl);
+                             dout(cout << "Ns_at_szgroup_pop[szgroup] " <<Ns_at_szgroup_pop[i] << endl);
+                             dout(cout << "wsz[szgroup] " <<wsz[i] << endl);
+                             dout(cout << "sel_ogive[szgroup] " <<sel_ogive[i] << endl);
+                             dout(cout << "avail_biomass[szgroup] " <<avail_biomass[i] << endl);
+                             dout(cout << "alloc_key[szgroup] " <<alloc_key[i] << endl);
+                             dout(cout << " catch_per_szgroup[szgroup] " << catch_per_szgroup[i] << endl);
+                             dout(cout << " weight_per_szgroup[szgroup] " << wsz[i] << endl);
+                             dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[i] << endl);
+                             dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[i] << endl);
 
-							 cout << "here: nan detected" << endl;
-							 cout << "here: nan detected...Pause: type a number to continue";
+                             dout(cout << "here: nan detected" << endl);
+                             dout(cout << "here: nan detected...Pause: type a number to continue");
 							 cin >> a;
 						 }
 					 }
@@ -1898,7 +1898,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					//if(tot_catch_per_pop[pop]==0 || tot==0){
 					//   // make a pause and check...
 					//    int a;
-					//    cout << "Pause: type a number to continue";
+                    //    dout(cout << "Pause: type a number to continue");
 					//    cin >> a;
 					//}
 
@@ -1916,8 +1916,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 				//        cout << "inconsistency in vessel->do_catch() for this pop " << populations.at(pop)->get_name() <<
 				//             " on this node " << idx_node <<
 				//            " for this szgroup " <<  szgroup <<endl;
-				//        cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << endl;
-				//        cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << endl;
+                //        dout(cout << "new_Ns_at_szgroup_pop is " << new_Ns_at_szgroup_pop.at(szgroup) << endl);
+                //        dout(cout << "while init_Ns_at_szgroup_pop is " << init_Ns_at_szgroup_pop.at(szgroup) << endl);
 				//        int a_int;
 				//        cin >> a_int; // pause
 				//    }
@@ -1960,10 +1960,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 				/*
 				if(pop==21 && (this->get_name())=="DNK000012028"){
-					cout << "cpue " <<cpue << endl;
-					cout << "catch_pop_at_szgroup[pop][0] " <<catch_pop_at_szgroup[pop][0] << endl;
+                    dout(cout << "cpue " <<cpue << endl);
+                    dout(cout << "catch_pop_at_szgroup[pop][0] " <<catch_pop_at_szgroup[pop][0] << endl);
 						int a;
-						cout << "Pause: type a number to continue";
+                        dout(cout << "Pause: type a number to continue");
 						cin >> a;
 				}
 				*/
@@ -2002,7 +2002,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	// make a pause and check...
 	//if(a_cumul=0){
 	//  int a;
-	//  cout << "Pause: type a number to continue";
+    //  dout(cout << "Pause: type a number to continue");
 	//  cin >> a;
 	//  }
 
@@ -2184,7 +2184,7 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
 
 	}
 
-	if(count==the_grds.size()) cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << endl;
+    if(count==the_grds.size()) dout(cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << endl);
 	// => then this vessel will still fish on those grounds (with equal proba by the way), assuming non-compliance...
 	// need to think to an alternative model here....
 
@@ -2279,11 +2279,11 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 								 // vsize
 	string length_class =this->get_length_class();
 
-	//if(tstep>1) cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl;
+    //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
 
     for(unsigned int gr=0; gr<freq_grds.size(); gr++)
 	{
-		//if(tstep>1) cout << "...on this ground " << gr << endl;
+        //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
 
 		//1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
 		// and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
@@ -2299,16 +2299,16 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
             //if(tstep>1) dout(cout  <<  past_freq_cpue_grds_pops.at(gr).at(pop) << " * " << this->get_carrycapacity() << " * " << this->get_loc()->get_prices_per_cat(pop, 0) << endl);
             //if(tstep>1) dout(cout  << "the expected revenue is now " << revenue_per_fgrounds.at(gr) << endl);
 		}
-		//if(tstep>1) cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
+        //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
 
 		//2. compute the expected cost when steaming
 								 // time given the shortest distance divided by the speed...
 		double time_for_steaming=0;
 								 // *2 because WE NEED TO GO BACK TO PORT!
 		time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
-		//if(tstep>1) cout << "the expected time to reach this ground is " << time_for_steaming << endl;
+        //if(tstep>1) dout(cout << "the expected time to reach this ground is " << time_for_steaming << endl);
 		scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();		
-		//if(tstep>1) cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
+        //if(tstep>1) dout(cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl);
 
 		//3. compute the expected cost when fishing
 		double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
@@ -2316,7 +2316,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 		if(cpue_this_node!=0)
 		{
 			time_to_be_full_of_catches_if_infinite_fuel_tank = this->get_carrycapacity() / cpue_this_node;
-			//if(tstep>1) cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl;
+            //if(tstep>1) dout(cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl);
 		}
 		else
 		{
@@ -2326,23 +2326,23 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 		double time_for_fishing_given_fuel_tank= (this->get_tankcapacity() -
 			( time_for_steaming * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming())) /
 			(this->get_fuelcons()) ;// (tank - expected tot fuelcons when steaming) / conso per hour when fishing
-		//if(tstep>1) cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl;
+        //if(tstep>1) dout(cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl);
 
 		double time_for_fishing= min(time_to_be_full_of_catches_if_infinite_fuel_tank, time_for_fishing_given_fuel_tank);
-		//if(tstep>1) cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl;
+        //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
 
 		fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons();
-		//if(tstep>1) cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
+        //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
 
 		//4. then compute the expected profit for this ground
 		profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
 			scost_per_fgrounds.at(gr) -
 			fcost_per_fgrounds.at(gr);
-		//if(tstep>1) cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
+        //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
 
 	}
 
-	// if(tstep>1) cout << "an expected profit per ground has been estimated..." << endl;
+    // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << endl);
 
 	//  finally, scale to 1
 	double cum_profit=0;
@@ -2353,7 +2353,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
     for(unsigned int a_node = 0; a_node < profit_per_fgrounds.size(); a_node++)
 	{
 		profit_per_fgrounds.at(a_node)= profit_per_fgrounds.at(a_node) / cum_profit;
-		//if(tstep>1) cout << "scaled expected profit per ground is then " << profit_per_fgrounds.at(a_node) << endl;
+        //if(tstep>1) dout(cout << "scaled expected profit per ground is then " << profit_per_fgrounds.at(a_node) << endl);
 	}
 
 	// the update procedure...
@@ -2364,7 +2364,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 	//freq_profit << tstep << " " << idx_v << " ";
 	for(unsigned int ii = 0; ii < profit_per_fgrounds.size(); ii++)
 	{
-		//if(tstep>1) cout  << "observed frequency:" << profit_per_fgrounds.at(ii) << " " << endl;
+        //if(tstep>1) dout(cout  << "observed frequency:" << profit_per_fgrounds.at(ii) << " " << endl);
 		a_sum+= (profit_per_fgrounds.at(ii)*freq_grds.at(ii));
 		//freq_profit << profit_per_fgrounds.at(ii) << " " ;
 	}
@@ -2373,7 +2373,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
 	for(unsigned int ii = 0; ii < freq_grds.size(); ii++)
 	{
-		//if(tstep>1) cout  << "prior frequency:" << freq_grds.at(ii) << " " << endl;
+        //if(tstep>1) dout(cout  << "prior frequency:" << freq_grds.at(ii) << " " << endl);
 		//freq_profit << freq_grds.at(ii) << " " ;
 	}
 
@@ -2383,7 +2383,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 	{
 		// update freq with the bayes'formula P(H1/D)=P(D/H1)*P(H1) / (P(D/H1)*P(H1)  +  P(D/H2)*P(H2) + ....)
 		profit_per_fgrounds.at(ii)= (profit_per_fgrounds.at(ii)*freq_grds.at(ii)) / a_sum;
-		//if(tstep>1) cout  << "updated frequency:" << profit_per_fgrounds.at(ii) << " " << endl;
+        //if(tstep>1) dout(cout  << "updated frequency:" << profit_per_fgrounds.at(ii) << " " << endl);
 		a_sum2+=profit_per_fgrounds.at(ii);
 		//freq_profit << profit_per_fgrounds.at(ii) << " " ;
 
@@ -2546,10 +2546,10 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 		for(unsigned int ii = 0; ii < new_freq_per_fgrounds.size(); ii++)
 		{
 			new_freq_per_fgrounds.at(ii)= (new_freq_per_fgrounds.at(ii)) / a_sum;
-			// cout << " " << new_freq_per_fgrounds.at(ii) ;
+            // dout(cout << " " << new_freq_per_fgrounds.at(ii) );
 
 		}
-		// cout << endl;
+        // dout(cout << endl);
 
 		// update the prior for the next time (iterative bayesian process)
 								 // ...output
@@ -2787,12 +2787,12 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 		list<vertex_t>::iterator road_iter = road.begin();
 
 		// check path
-		//    cout << "path: ";
+        //    dout(cout << "path: ");
 		//    for( ; road_iter != road.end(); road_iter++)
 		//    {
-		//       cout << vertex_names[*road_iter] << " " ;
+        //       dout(cout << vertex_names[*road_iter] << " " );
 		//    }
-		//    cout << endl;
+        //    dout(cout << endl);
 
 		// then, call to find.next.pt.on.the.graph()
         this-> find_next_point_on_the_graph_unlocked(nodes);
@@ -2828,7 +2828,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 		//this->set_metier(  metiers[ metiers_on_grd[0] ]  );
 
 		// make a pause and check...
-		// cout <<  a_met[0] << " name: " << this->get_metier()->get_name() << endl;
+        // dout(cout <<  a_met[0] << " name: " << this->get_metier()->get_name() << endl);
 		// int a;
         //dout(cout  << "Pause: type a number to continue");
 		//cin >> a;
@@ -3048,17 +3048,17 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 	if(path.empty())
 	{
-		cout << this->get_name() << " when changing from "<< from << " to this new ground: " << next_ground << " you should stop here because my path is empty!";
+        dout(cout << this->get_name() << " when changing from "<< from << " to this new ground: " << next_ground << " you should stop here because my path is empty!");
 		// as we detected something wrong here, we try to recover(!):
         for(unsigned int i=0; i<grds.size(); i++)
 		{
 			next_ground = grds[i];
-			cout << "then try to change for this new ground: " << next_ground << endl;
+            dout(cout << "then try to change for this new ground: " << next_ground << endl);
 			path = DijkstraGetShortestPathTo(next_ground, previous);
 			path.pop_front();	 // delete the first node (departure) because we are lying in...
 			if(!path.empty())
 			{
-				cout << "this one is all right." << endl;
+                dout(cout << "this one is all right." << endl);
 				break;
 			}
 		}
@@ -3074,8 +3074,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	//list<vertex_t>::iterator pos;
 	//for(pos=path.begin(); pos!=path.end(); pos++)
 	//{
-	//    cout << *pos << " ";
-	//    cout << endl;
+    //    dout(cout << *pos << " ");
+    //    dout(cout << endl);
 	//}
 
 	// for this vessel, select the metier specific to this particular fishing ground
@@ -3189,7 +3189,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 	// list<int>::iterator pos;
 	//for(pos=path.begin(); pos!=path.end(); pos++)
 	//{
-	//    cout << *pos << " ";
+    //    dout(cout << *pos << " ");
 	//}
 	//cout << endl;
 
@@ -3224,7 +3224,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 		//list<int>::iterator pos;
 		//for(pos=path.begin(); pos!=path.end(); pos++)
 		//{c
-		//    cout << *pos << " ";
+        //    dout(cout << *pos << " ");
 		//}
 		//cout << endl;
 		// CAUTION => THIS IS ONLY A FIX!
@@ -3257,15 +3257,15 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 	previous.clear();
 	if(print_out)
 	{
-		cout << "new roadmap to port is: ";
+        dout(cout << "new roadmap to port is: ");
 		// check
 		list<int>::iterator pos;
 		list<vertex_t> lst = this->get_roadmap();
 		for(pos=lst.begin(); pos!=lst.end(); pos++)
 		{
-			cout << *pos << " ";
+            dout(cout << *pos << " ");
 		}
-		cout << endl;
+        dout(cout << endl);
 	}
 
 	// update
@@ -3311,135 +3311,6 @@ void Vessel::reinit_after_a_trip()
 // export...
 //------------------------------------------------------------//
 //------------------------------------------------------------//
-
-void Vessel::export_loglike(ostream &loglike, vector<Population* >& populations, int tstep, int nbpops)
-{
-
-    dout(cout  << "write down the logbooks (trip-based data)...");
-	// trip-based data i.e. no additional lines if change of day or ICES rectangle
-
-	loglike << setprecision(0) << fixed;
-	// vessel / date dep / date arr / reason to return to port / cum steaming in hours/
-	//    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
-	loglike << this->get_tstep_dep() << " " << tstep << " "
-		<< this->get_reason_to_go_back() << " "
-		<< this->get_cumsteaming() << " "
-		<< this->get_loc()->get_idx_node() << " "
-		<< this->get_idx() << " "
-		<< this->get_name() << " "
-		<< this->get_timeatsea() << " "
-		<< this->get_cumfuelcons() << " "
-		<< this->get_traveled_dist_this_trip() << " ";
-	vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
-	a_catch_pop_at_szgroup = this->get_catch_pop_at_szgroup();
-	double cumul;
-	double revenue=0.0;
-	string freq_metiers="";
-    for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
-	{
-		cumul=0;
-        for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
-		{
-			cumul = cumul+ a_catch_pop_at_szgroup[pop][sz];
-		}
-
-		/*
-		if(pop==21) {
-		cout << "cumul pop21 is " << cumul << endl;
-			 int a;
-		 cout << "Pause: type a number to continue";
-		 cin >> a;
-		}
-		*/
-
-		loglike  << cumul << " " ;
-
-		// add revenue from this stock to cumulated revenue from landings
-		if(cumul!=0)			 // if some landings for this pop
-		{
-			freq_metiers.clear();
-			//cout << " this pop " << pop << endl;
-			vector<int> vec = this->get_idx_used_metiers_this_trip();
-			typedef map<int, unsigned> counts_t;
-
-			// Create the histogram
-			counts_t histogram;
-			for (vector<int>::const_iterator i = vec.begin(); i != vec.end(); i++)
-			{
-				++histogram[*i];
-			}
-			// ... and display it: loop over metier
-			for (counts_t::const_iterator i = histogram.begin(); i != histogram.end(); i++)
-			{
-				int a_met = i->first;
-				//cout << " and this metier " << a_met << endl;
-				stringstream out;
-				out << a_met;
-								 // casting int to string
-				string a_met_s = out.str();
-				double freq_this_met = static_cast<double>(i->second) / vec.size();
-				//cout << "on the node " << this->get_loc()->get_idx_node() << endl;
-
-				//double price_this_stock = this->get_loc()->get_prices(a_met_s, pop);
-				// potential deadly bug here if no harbour_quarter.dat file found for this port location!...
-
-				// replaced by (Feb14):
-				double price_this_stock =0;
-
-								 // cumulated to revenue
-				revenue+= cumul*price_this_stock*freq_this_met;
-
-				//cout << "landings for this stock " << pop << " is " << cumul << endl;
-				//cout << "price for this stock " << pop << " and this metier " << a_met << " is " << price_this_stock << endl;
-				//cout << "freq_this_met " << freq_this_met << endl;
-				//cout << "then the cumulated revenue so far is " << revenue << endl;
-				out << ":" << freq_this_met;
-				freq_metiers+="_"+out.str();
-			}
-
-		}
-
-	}							 // end pop
-	loglike  << freq_metiers << " " << revenue << " " ;
-
-	double revenue_from_av_prices=0.0;
-    for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
-	{
-		vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
-
-        for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
-		{
-			//revenue_from_av_prices += a_catch_pop_at_szgroup[pop][sz] * this->get_loc()->get_prices_per_cat(pop, 0);
-
-			int comcat_this_size =comcat_at_szgroup.at(sz);
-
-            dout(cout  << "for this pop" << pop << " and this size " << sz << " comcat_this_size is " << comcat_this_size << endl);
-            dout(cout  << "then the corresponding price per kilo is: " << this->get_loc()->get_prices_per_cat(pop, comcat_this_size) << endl);
-			// caution: need to assign a a_port at the very beginning in case of ports with name "none" so that to have some prices available...
-
-			revenue_from_av_prices += a_catch_pop_at_szgroup[pop][sz] * this->get_loc()->get_prices_per_cat(pop, comcat_this_size);
-
-		}
-	}
-	loglike  << revenue_from_av_prices << " " ;
-
-	// compute fuel cost from consumption and (potentially harbour spe) fuel price
-	string length_class =this->get_length_class();
-	double fuelcost = this->get_cumfuelcons() * this->get_loc()->get_fuelprices(length_class);
-	loglike  << fuelcost << " " ;
-
-	// ...then deduce the gross value added (gav) for this trip
-	double gav=revenue-fuelcost;
-	loglike  << gav << " " ;
-
-	double gav2=revenue_from_av_prices-fuelcost;
-	loglike  << gav2 << " " ;
-
-	loglike << " " << endl;
-    dout(cout  << "done" << endl);
-
-}
-
 
 void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int nbpops)
 {

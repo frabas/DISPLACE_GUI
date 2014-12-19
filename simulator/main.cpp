@@ -63,6 +63,9 @@
 #define CALLGRIND_DUMP_STATS
 #endif
 
+#include <outputqueuemanager.h>
+#include <outputmessage.h>
+#include <messages/genericconsolestringoutputmessage.h>
 #include <thread_vessels.h>
 
 #include <iomanip>
@@ -139,7 +142,7 @@ double mLoadGraphProfileResult;
 
 MemoryInfo memInfo;
 
-
+OutputQueueManager mOutQueue;
 pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
 vector<int> ve;
 vector <Vessel*> vessels;
@@ -245,36 +248,27 @@ void unlock()
 void guiSendCurrentStep (unsigned int tstep)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        cout << "=S" << tstep << endl;      /* use gui */
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=S" << tstep << endl;      /* use gui */
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
 void guiSendUpdateCommand (const std::string &filename, int tstep)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=U" << filename << " " << tstep << endl;
-        pthread_mutex_unlock(&glob_mutex);
-    }
-}
-
-void guiSendVesselLogbook(const std::string &line)
-{
-    if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=v" << line;
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=U" << filename << " " << tstep << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
 void guiSendMemoryInfo(const MemoryInfo &info)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=Dm" << info.rss() << " " << info.peakRss() << endl;
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=Dm" << info.rss() << " " << info.peakRss() << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 
 }
@@ -282,9 +276,9 @@ void guiSendMemoryInfo(const MemoryInfo &info)
 void guiSendCapture(bool on)
 {
     if (use_gui) {
-        pthread_mutex_lock(&glob_mutex);
-        std::cout << "=Dc" << (on ? "+" : "-") << endl;
-        pthread_mutex_unlock(&glob_mutex);
+        ostringstream ss;
+        ss << "=Dc" << (on ? "+" : "-") << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
@@ -467,6 +461,7 @@ int main(int argc, char* argv[])
 
     UNUSED(dparam);
 
+    mOutQueue.start();
     thread_vessel_init(num_threads);
 
     cwd = std::string(getcwd(buf, MAXPATH));
@@ -881,12 +876,12 @@ int main(int argc, char* argv[])
 	vector<string> a_split_string;
 	string a_delimiter =" fish_price_is ";
 	split( a_split_string, a_string, a_delimiter, splitX::no_empties);
-	print( a_split_string );
+//	print( a_split_string );
 	// second split....
 	a_string=a_split_string[0];
 	a_delimiter =" weather_is ";
 	split( a_split_string, a_string, a_delimiter, splitX::no_empties);
-	print( a_split_string );
+//	print( a_split_string );
 	//system("PAUSE");
 
     dout(cout  << "---------------------------" << endl);
@@ -1721,6 +1716,7 @@ int main(int argc, char* argv[])
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization,"../"+ inputfolder);
 
+    /*
 	// debug
 	if(fgrounds.size() != freq_fgrounds.size())
 	{
@@ -1737,7 +1733,7 @@ int main(int argc, char* argv[])
         unlock();
         int tmp;
 		cin >> tmp;				 // pause
-	}
+    }*/
 
 	// read nodes in polygons for area-based management
     nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, "../"+inputfolder);
@@ -1745,7 +1741,7 @@ int main(int argc, char* argv[])
 	// check
 	//for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
 	//{
-	//    cout << " a polygon node is " << pos->second << endl;
+    //    dout(cout << " a polygon node is " << pos->second << endl);
 	//}
 	//cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
 
@@ -2556,10 +2552,8 @@ int main(int argc, char* argv[])
     guiSendUpdateCommand(popdyn_N_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
-    if(namefolderinput!="fake") {
-        for (unsigned int n=0; n<nodes.size(); n++) {
-            nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
-        }
+    for (unsigned int n=0; n<nodes.size(); n++) {
+        nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
     }
     popnodes_start.flush();
 
@@ -2589,9 +2583,9 @@ int main(int argc, char* argv[])
 
         guiSendCurrentStep(tstep);
 
-        lock();
-        cout << "tstep " << tstep << endl;
-        unlock();
+        ostringstream os;
+        os << "tstep " << tstep << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));
 
         dout(cout  << "---------------" << endl);
 
@@ -3906,11 +3900,12 @@ int main(int argc, char* argv[])
             guiSendMemoryInfo(memInfo);
         }
 
+        /*
         if ((mLoopProfile.runs() % 500) == 0) {
             lock();
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
             unlock();
-        }
+        }*/
 #endif
 	}							 // end FOR LOOP OVER TIME
 
@@ -3920,22 +3915,26 @@ int main(int argc, char* argv[])
 #ifdef PROFILE
     guiSendCapture(true);
 
-    lock();
-    cout << "*** Profilers statistics ***\n";
-    cout << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
-    cout << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
-    cout << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";
-    cout << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
-    cout << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
-    cout << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
-    cout << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
+    std::ostringstream ss;
+
+    ss << "*** Profilers statistics ***\n";
+    ss << "Node Load: " << (mLoadNodesProfileResult * 1000.0) << " ms\n";
+    ss << "Vessel load: " << (mLoadVesselProfileResult * 1000.0) << " ms\n";
+    ss << "Pop Load: " << (mLoadPopulationProfileResult * 1000.0) << " ms\n";
+    ss << "Graph Load: " << (mLoadGraphProfileResult * 1000.0) << " ms\n";
+    ss << "Loop performance after " << mLoopProfile.runs() << " runs: " << (mLoopProfile.avg() * 1000.0) << " ms " << mLoopProfile.total() << " s total\n";
+    ss << "Vessel Loop performance after " << mVesselLoopProfile.runs() << " runs: " << (mVesselLoopProfile.avg() * 1000.0) << " ms " << mVesselLoopProfile.total() << " s total\n";
+    ss << "Population Export performance after " << mPopExportProfile.runs() << " runs: " << (mPopExportProfile.avg() * 1000.0) << " ms " << mPopExportProfile.total() << " s total\n";
 
     memInfo.update();
-    std::cout << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
-    unlock();
+    ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
+    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     guiSendCapture(false);
 #endif
+
+    mOutQueue.finish();
+
 
 	// close all....
 	vmslike.close();

@@ -36,7 +36,7 @@ void remove_dups(vector<int>& seq)
 	seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
 }
 
-
+/*
 void print( vector <string> & v )
 {
 	for (size_t n = 0; n < v.size(); n++)
@@ -51,7 +51,7 @@ void print_d( vector <double> & v )
 		cout << "\"" << v[ n ] << "\"\n";
 	cout << endl;
 }
-
+*/
 
 //pair first less comparator>>=
 template <typename T1, typename T2>

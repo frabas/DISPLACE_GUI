@@ -43,7 +43,8 @@ HEADERS= \
     ../include/m_constants.h \
     ../include/memoryinfo.h \
     ../include/helpers.h \
-    ../include/options.h
+    ../include/options.h \
+    ../include/mutexlocker.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

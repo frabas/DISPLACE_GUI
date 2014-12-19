@@ -21,6 +21,8 @@
 #include "Benthos.h"
 #include <helpers.h>
 
+#include <helpers.h>
+
 Benthos::Benthos(int _marine_landscape,
 const vector<Node *> &_nodes,
 const vector<double> &_tot_biomass)
@@ -28,17 +30,17 @@ const vector<double> &_tot_biomass)
 	marine_landscape =_marine_landscape;
 	tot_biomass    =_tot_biomass;
 
-	cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ";
+    dout(cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ");
 	vector<Node* > p_spe_nodes;
     for(unsigned int n=0; n<_nodes.size(); n++)
 	{
 		if(_nodes[n]->get_marine_landscape()== marine_landscape)
 		{
 			p_spe_nodes.push_back (_nodes[  n  ]);
-			cout << _nodes[  n  ]->get_idx_node() << " ";
+            dout(cout << _nodes[  n  ]->get_idx_node() << " ");
 		}
 	}
-	cout << endl;
+    dout(cout << endl);
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);

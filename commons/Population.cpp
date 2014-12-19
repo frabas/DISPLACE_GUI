@@ -60,7 +60,7 @@ Population::Population(int a_name,
 
     name=a_name;
 
-    cout << "create pop " << name << endl;
+    dout(cout << "create pop " << name << endl);
 
 	full_spatial_availability= _full_spatial_availability;
 
@@ -708,13 +708,13 @@ void Population::distribute_N()
 		// check avai
 		//cout << "avai on node "<< idx_node<< ":" << endl;
 		//for(int i=0; i<avai_this_node.size(); i++)
-		//    cout << avai_this_node[i] << " ";
+        //    dout(cout << avai_this_node[i] << " ");
 		//cout << endl;
 
 		// check tot_N_at_szgroup
 		//cout << "tot_N_at_szgroup on node "<< idx_node<< ":" << endl;
 		//for(int i=0; i<tot_N_at_szgroup.size(); i++)
-		//    cout << tot_N_at_szgroup[i] << " ";
+        //    dout(cout << tot_N_at_szgroup[i] << " ");
 		//cout << endl;
 
 		// distribute on node applying avai
@@ -776,10 +776,10 @@ void Population::aggregate_N()
 	// check
 	//if(this->get_name()==10)
 	//{
-	//    cout << "in aggregate(): tot N at szgroup for the pop "<< this->get_name() << " after aggregation:"  << endl;
+    //    dout(cout << "in aggregate(): tot N at szgroup for the pop "<< this->get_name() << " after aggregation:"  << endl);
 	//    for(int i=0; i<tot_N_at_szgroup.size(); i++)
 	//    {
-	//        cout << tot_N_at_szgroup[i] << " ";
+    //        dout(cout << tot_N_at_szgroup[i] << " ");
 	//    }
 	//}
 
@@ -792,7 +792,7 @@ void Population::aggregate_N()
 
 void Population::do_growth()
 {
-	cout << "BEGIN do_growth() "  << endl ;
+    dout(cout << "BEGIN do_growth() "  << endl );
 
 //	int namepop = this->get_name();
 
@@ -815,10 +815,10 @@ void Population::do_growth()
 		{
 
 			//if(namepop==12) {
-			//     cout << "i is "<< i  << endl;
-			//     cout << "j is "<< j  << endl;
-			//     cout << "growth[i,j] is "<< growth_transition_matrix[i][j]  << endl;
-			//     cout << "tot_N_at_szgroup[i]  is "<< tot_N_at_szgroup[i]  << endl;
+            //     dout(cout << "i is "<< i  << endl);
+            //     dout(cout << "j is "<< j  << endl);
+            //     dout(cout << "growth[i,j] is "<< growth_transition_matrix[i][j]  << endl);
+            //     dout(cout << "tot_N_at_szgroup[i]  is "<< tot_N_at_szgroup[i]  << endl);
 			//}
 			new_tot_N_at_szgroup[i] +=  growth_transition_matrix[i][j] * tot_N_at_szgroup[j] ;
 		}
@@ -830,7 +830,7 @@ void Population::do_growth()
 	// redistribute on nodes
 	//distribute_N();
 
-	cout << "END do_growth() "  << endl ;
+    dout(cout << "END do_growth() "  << endl );
 }
 
 
@@ -853,10 +853,10 @@ void Population::add_recruits_from_SR()
 		// reminder: tot_N_at_szgroup are in thousand in input file
 		//  but in absolute numbers here because have been multiplied by 1000 when importing
 		SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
-		cout << "szgroup is " << i  << " " << endl ;
-		cout << "tot_N_at_szgroup is " << tot_N_at_szgroup.at(i)  << " " << endl ;
-		cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
-		cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
+        dout(cout << "szgroup is " << i  << " " << endl );
+        dout(cout << "tot_N_at_szgroup is " << tot_N_at_szgroup.at(i)  << " " << endl );
+        dout(cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl );
+        dout(cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl );
 
 	}
 	// ...then, cumul for getting tot SSB (here in kilos)
@@ -866,12 +866,12 @@ void Population::add_recruits_from_SR()
 		SSB +=  SSB_per_szgroup.at(i);
 	}
 	SSB= SSB/1000/2;			 // convert in tons for the SSB-R // divide by 2 when assuming sex ratio 50:50
-	cout << "SSB is " << SSB  << " tons" << endl ;
+    dout(cout << "SSB is " << SSB  << " tons" << endl );
 
 	// compute R from SSB-R relationship
 	// (caution: age dependent, e.g. SSB-R for cod 2532 is usually simulated for age2)...
 	double recruits =(param_sr[0]*SSB*exp(-param_sr[1]*SSB)) * 1000;
-	cout << "New recruits are " << recruits  << endl ;
+    dout(cout << "New recruits are " << recruits  << endl );
 
 	// add stochasticity on recruits (default: lognormal with CV at 10%)
 	// TO DO: use a stock-specific input there...
@@ -879,13 +879,13 @@ void Population::add_recruits_from_SR()
 	double rec_error=0;
 	rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
 	recruits= recruits * rec_error;
-	cout << "stochastic recruits are " << recruits  << endl ;
+    dout(cout << "stochastic recruits are " << recruits  << endl );
 
 	// ...then distribute among szgroup
 	for(unsigned int i = 0; i < tot_N_at_szgroup.size(); i++)
 	{
 		new_tot_N_at_szgroup[i] =  tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
-		cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl ;
+        dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
 	}
 
 	//if(this->get_name()==29){
@@ -941,7 +941,7 @@ void Population::add_recruits_from_eggs()
 
 void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 {
-	cout << "BEGIN compute_tot_N_and_F_and_M_and_W_at_age() "  << endl ;
+    dout(cout << "BEGIN compute_tot_N_and_F_and_M_and_W_at_age() "  << endl );
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
 								 // init
@@ -994,10 +994,10 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 			{
 				dout << "pop "<< this->get_name()  << endl;
 				dout << "percent_age_per_szgroup_matrix.size() "<< percent_age_per_szgroup_matrix.size()  << endl;
-				cout << "a is "<< a  << endl;
-				cout << "sz is "<< sz  << endl;
-				cout << "percent_age_per_szgroup_matrix[sz,a] is "<< percent_age_per_szgroup_matrix[sz][a]  << endl;
-				cout << "weight_at_szgroup[sz]  is "<< weight_at_szgroup[sz]  << endl;
+                dout(cout << "a is "<< a  << endl);
+                dout(cout << "sz is "<< sz  << endl);
+                dout(cout << "percent_age_per_szgroup_matrix[sz,a] is "<< percent_age_per_szgroup_matrix[sz][a]  << endl);
+                dout(cout << "weight_at_szgroup[sz]  is "<< weight_at_szgroup[sz]  << endl);
 			}
 			*/
 			tot_M_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * M_at_szgroup[sz] ;
@@ -1008,7 +1008,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 		/*
 		if(this->get_name()==10)
 		{
-			cout << "tot_W_at_age[a]  is "<< tot_W_at_age[a]  << endl;
+            dout(cout << "tot_W_at_age[a]  is "<< tot_W_at_age[a]  << endl);
 		}
 		*/
 	}
@@ -1056,13 +1056,13 @@ void Population::clear_tot_F_at_age()
 
 double Population::compute_fbar()
 {
-	cout<< "compute fbar..." << endl;
+    dout(cout<< "compute fbar..." << endl);
 	double fbar=0;
 	int age_min =this->fbar_ages_min_max.at(0);
 	int age_max =this->fbar_ages_min_max.at(1);
 	if(age_max==0 || (age_max < age_min))
 	{
-		cout << "age_max at 0 for this pop??" << endl;
+        dout(cout << "age_max at 0 for this pop??" << endl);
 		age_max=5;
 	}
     for(int a = age_min; a < age_max; a++)
@@ -1078,22 +1078,22 @@ double Population::compute_fbar()
 
 void Population::compute_TAC()
 {
-	cout<< "COMPUTE TAC for HCR (based on F) for this coming year" << endl;
+    dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year" << endl);
 	vector<double> fbar_ages_min_max =this-> get_fbar_ages_min_max();
 	int age_min = fbar_ages_min_max.at(0);
-	cout<< "age min:" << age_min << endl;
+    dout(cout<< "age min:" << age_min << endl);
 	int age_max = fbar_ages_min_max.at(1);
-	cout<< "age_max:" <<age_max << endl;
+    dout(cout<< "age_max:" <<age_max << endl);
 	double ftarget = fbar_ages_min_max.at(2);
-	cout<< "ftarget:" << ftarget << endl;
+    dout(cout<< "ftarget:" << ftarget << endl);
 	double Fpercent = fbar_ages_min_max.at(3);
-	cout<< "Fpercent:" << Fpercent << endl;
+    dout(cout<< "Fpercent:" << Fpercent << endl);
 	double TACpercent = fbar_ages_min_max.at(4);
-	cout<< "TACpercent:" << TACpercent << endl;
+    dout(cout<< "TACpercent:" << TACpercent << endl);
 	// 1. compute previous fbar
 								 // at the end of the last year, then for last year py...
 	double fbar_py= this->compute_fbar();
-	cout << "the fbar at y-1 for this pop is " << fbar_py << endl;
+    dout(cout << "the fbar at y-1 for this pop is " << fbar_py << endl);
 	// 2. compare with the target
 	double fmultiplier=1;
 	if(fbar_py > ftarget)
@@ -1110,14 +1110,14 @@ void Population::compute_TAC()
 	// 3. perform a short-term forecast on N with F * fmultipier * fmultiplier
 
 	//a. for year y from y-1
-	cout << "the  N by age at the end of  y is " << endl;
+    dout(cout << "the  N by age at the end of  y is " << endl);
 	vector <double> tot_N_at_age_end_previous_y = this->get_tot_N_at_age();
     for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
 	{
-		cout << "age" << i+1 << ": " << tot_N_at_age_end_previous_y.at(i) << endl;
+        dout(cout << "age" << i+1 << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
 	}
 
-	cout << "the forecast N by age for y (from y-1) is " << endl;
+    dout(cout << "the forecast N by age for y (from y-1) is " << endl);
 								 // init
 	vector <double> forecast_tot_N_at_age_start_y(tot_N_at_age_end_previous_y.size());
     for (unsigned int i=1; i < tot_N_at_age_end_previous_y.size(); i++)
@@ -1129,11 +1129,11 @@ void Population::compute_TAC()
 	forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
     for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
 	{
-		cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl;
+        dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl);
 	}
 
 	//b. for year y+1 from y
-	cout << "the forecast F by age for y+1 (from y) is " << endl;
+    dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
 								 //init
 	vector <double> forecast_tot_N_at_age_start_y_plus_1 (forecast_tot_N_at_age_start_y.size());
 	vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
@@ -1146,24 +1146,24 @@ void Population::compute_TAC()
 	}
     for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
 	{
-		cout << "age" << i+1 << ": " << tot_F_at_age_y_plus_1.at(i) << endl;
+        dout(cout << "age" << i+1 << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
 	}
 
-	cout << "and the forecast M by age for y+1 (from y) is " << endl;
+    dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
 	vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
     for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
 	{
-		cout << "age" << i+1 << ": " << tot_M_at_age_y_plus_1.at(i) << endl;
+        dout(cout << "age" << i+1 << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
 	}
 
-	cout << "and the forecast W by age for y+1 (from y) is " << endl;
+    dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
 	vector <double> tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
     for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
 	{
-		cout << "age" << i+1 << ": " << tot_W_at_age_y_plus_1.at(i) << endl;
+        dout(cout << "age" << i+1 << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
 	}
 
-	cout << "then, the forecast N by age for y+1 (from y) is " << endl;
+    dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
     for (unsigned int i=1; i < forecast_tot_N_at_age_start_y.size(); i++)
 	{
 		forecast_tot_N_at_age_start_y_plus_1.at(i) =
@@ -1176,7 +1176,7 @@ void Population::compute_TAC()
 
     for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
 	{
-		cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl;
+        dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl);
 	}
 
 	// 4. compute the TAC (in tons) according to the forecast N (Baronovs equation)
@@ -1190,7 +1190,7 @@ void Population::compute_TAC()
 			(1- (exp(-(tot_F_at_age_y_plus_1.at(i)+tot_M_at_age_y_plus_1.at(i)))))/ 1000;
 
 	}
-	cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
+    dout(cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl);
 
 	// 5. check if within the TAC range, otherwise force to keep the range.
 								 // i.e. at y

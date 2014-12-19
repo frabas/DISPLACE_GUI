@@ -60,6 +60,7 @@ HEADERS= \
     ../include/m_constants.h \
     ../include/options.h \
     ../include/profiler.h \
+    ../include/version.h \
     thread_vessels.h \
     values.h \
     outputqueuemanager.h \

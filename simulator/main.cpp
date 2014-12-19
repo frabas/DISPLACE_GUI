@@ -110,6 +110,8 @@
 #include <profiler.h>
 #endif
 
+#include <version.h>
+
 using namespace std;
 
 
@@ -385,6 +387,8 @@ int main(int argc, char* argv[])
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -o 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because need much more computation time...
 
     // --use-gui => emits machine parsable data to stdout
+
+    cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
 
     memInfo.update();
     guiSendMemoryInfo(memInfo);

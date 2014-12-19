@@ -191,7 +191,7 @@ HEADERS += \
     mousemode/movefilteringmousemodedecorator.h \
     mousemode/singleclickmousemode.h \
     mousemode/edgeaddmousemode.h \
-    version.h \
+    ../include/version.h \
     aboutdialog.h \
     createshortestpathdialog.h
 

@@ -105,6 +105,14 @@ $ ./configure -prefix /mingw/ -release -opensource -confirm-license -platform wi
 	-nomake tests -nomake examples -nomake tools -no-accessibility \
 	-skip webkit -skip connectivity -skip declarative -skip enginio -skip location \
 	-skip quick1 -skip sensors -skip serialport -skip svg -skip websockets -skip xmlpatterns	
+
+Use the following line if you plan to debug the app. this will build and install the debug version of the qt library too.
+
+$ ./configure -prefix /mingw/ -debug-and-release -opensource -confirm-license -platform win32-g++ -c++11 -opengl desktop \
+	-nomake tests -nomake examples -nomake tools -no-accessibility \
+	-skip webkit -skip connectivity -skip declarative -skip enginio -skip location \
+	-skip quick1 -skip sensors -skip serialport -skip svg -skip websockets -skip xmlpatterns	
+
 	
 $ mingw32-make -j12
 
@@ -118,6 +126,16 @@ At the end, you'll need to fix the installation, by creating a new file in the q
 
 [Paths]
 Prefix=..
+
+NOTE:
+To run the app from qtcreator, also add the following variable to the environment ( Projects > Run > RunEnvironment )
+
+QT_QPA_PLATFORM_PLUGIN_PATH   C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64\plugins\platforms
+
+Adding also the binary library path to PATH may be useful
+
+PATH			C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64\bin;....
+
 
 
 

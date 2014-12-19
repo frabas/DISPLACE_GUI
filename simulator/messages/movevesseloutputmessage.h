@@ -12,7 +12,8 @@ public:
     ~MoveVesselOutputMessage() {
     }
 
-    bool send();
+    bool send(std::ostream &strm);
+    bool sendBinary(std::ostream &);
 
 private:
     unsigned int tstep, tstep_dep;

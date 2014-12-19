@@ -14,12 +14,18 @@ public:
     ~QuitMessage() {
     }
 
-    bool send() {
+    bool send(std::ostream &) {
+        return false;
+    }
+
+    bool sendBinary(std::ostream &) {
         return false;
     }
 };
 
-OutputQueueManager::OutputQueueManager()
+OutputQueueManager::OutputQueueManager(std::ostream &stream, bool binary)
+    : mType (binary ? Binary : TextWithStdOut),
+      mOutStream (stream)
 {
     pthread_mutex_init(&mMutex, 0);
     sem_init(&mSemaphore, 0, 0);
@@ -76,8 +82,16 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
         }
         std::shared_ptr<OutputMessage> msg = mQueue.front();
         mQueue.pop();
-        exit = !msg->send();
         unlock();
+
+        switch (mType) {
+        case TextWithStdOut:
+            exit = !msg->send(mOutStream);
+            break;
+        case Binary:
+            exit = !msg->sendBinary(mOutStream);
+            break;
+        }
     }
 
     return 0;

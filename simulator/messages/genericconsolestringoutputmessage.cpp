@@ -10,10 +10,15 @@ GenericConsoleStringOutputMessage::GenericConsoleStringOutputMessage(const std::
 {
 }
 
-bool GenericConsoleStringOutputMessage::send()
+bool GenericConsoleStringOutputMessage::send(std::ostream &strm)
 {
     MutexLocker l(&glob_mutex);
-    std::cout << msg;
+    strm << msg;
 
+    return true;
+}
+
+bool GenericConsoleStringOutputMessage::sendBinary(std::ostream &)
+{
     return true;
 }

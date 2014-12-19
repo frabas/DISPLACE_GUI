@@ -144,7 +144,7 @@ double mLoadGraphProfileResult;
 
 MemoryInfo memInfo;
 
-OutputQueueManager mOutQueue;
+OutputQueueManager mOutQueue(std::cout, false);
 pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
 vector<int> ve;
 vector <Vessel*> vessels;

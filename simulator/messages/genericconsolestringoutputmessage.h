@@ -9,7 +9,8 @@ class GenericConsoleStringOutputMessage : public OutputMessage
 public:
     explicit GenericConsoleStringOutputMessage(const std::string &txt);
 
-    bool send();
+    bool send(std::ostream &strm);
+    bool sendBinary(std::ostream &);
 private:
     std::string msg;
 };

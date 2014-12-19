@@ -16,11 +16,11 @@ MoveVesselOutputMessage::MoveVesselOutputMessage(int _tstep, Vessel *vessel)
     state = vessel->get_state();
 }
 
-bool MoveVesselOutputMessage::send()
+bool MoveVesselOutputMessage::send(ostream &strm)
 {
     MutexLocker locker(&glob_mutex);
 
-    cout << "=V" << tstep << " "
+    strm << "=V" << tstep << " "
         << idx << " "
         << tstep_dep << " "
         << setprecision(6) << fixed << x << " "
@@ -29,5 +29,10 @@ bool MoveVesselOutputMessage::send()
         << setprecision(0) << fixed << cumfuelcons << " "
         << state <<  endl;
 
+    return true;
+}
+
+bool MoveVesselOutputMessage::sendBinary(ostream &)
+{
     return true;
 }

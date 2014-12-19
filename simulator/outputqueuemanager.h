@@ -6,6 +6,7 @@
 
 #include <queue>
 #include <memory>
+#include <ostream>
 
 class OutputMessage;
 
@@ -13,9 +14,9 @@ class OutputMessage;
 class OutputQueueManager
 {
 public:
-    OutputQueueManager();
+    explicit OutputQueueManager(std::ostream &stream, bool binary);
 
-    void start();    
+    void start();
     void finish();
 
     void lock() {
@@ -46,6 +47,10 @@ private:
     sem_t mSemaphore;
 
     std::queue<std::shared_ptr<OutputMessage> > mQueue;
+
+    enum ProtocolType { TextWithStdOut, Binary } mType;
+
+    std::ostream &mOutStream;        ///< File descriptor for socket/pipe (Binary protocol)
 };
 
 #endif // OUTPUQUEUEMANAGER_H

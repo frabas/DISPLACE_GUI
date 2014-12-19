@@ -83,7 +83,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     gav2=revenue_from_av_prices-fuelcost;
 }
 
-bool VesselLogbookOutputMessage::send()
+bool VesselLogbookOutputMessage::send(std::ostream &)
 {
     std::ostringstream ss;
 
@@ -115,5 +115,10 @@ bool VesselLogbookOutputMessage::send()
         std::cout << "=v" << ss.str();
     }
 
+    return true;
+}
+
+bool VesselLogbookOutputMessage::sendBinary(ostream &)
+{
     return true;
 }

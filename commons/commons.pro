@@ -44,7 +44,8 @@ HEADERS= \
     ../include/memoryinfo.h \
     ../include/helpers.h \
     ../include/options.h \
-    ../include/mutexlocker.h
+    ../include/mutexlocker.h \
+    ../include/guiproto_struct.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

@@ -254,6 +254,7 @@ vector <int> read_tsteps_quarters(string folder_name_parameterization, string in
 
 	}
 
+    /*
 	// check
 	cout << "tsteps_quarters: " << endl;
 	for(unsigned int i=0; i<tsteps_quarters.size(); i++)
@@ -261,6 +262,7 @@ vector <int> read_tsteps_quarters(string folder_name_parameterization, string in
 		cout << tsteps_quarters[i] << " " << endl;
 	}
 	cout << endl;
+    */
 
 	return(tsteps_quarters);
 }
@@ -292,6 +294,7 @@ vector <int> read_tsteps_semesters(string folder_name_parameterization, string i
 		}
 	}
 
+    /*
 	// check
 	cout << "tsteps_semesters: " << endl;
 	for(unsigned int i=0; i<tsteps_semesters.size(); i++)
@@ -299,6 +302,7 @@ vector <int> read_tsteps_semesters(string folder_name_parameterization, string i
 		cout << tsteps_semesters[i] << " " << endl;
 	}
 	cout << endl;
+    */
 
 	return(tsteps_semesters);
 }
@@ -330,6 +334,7 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 		}
 	}
 
+    /*
 	// check
 	cout << "tsteps_months: " << endl;
     for(unsigned int i=0; i<tsteps_months.size(); i++)
@@ -337,6 +342,7 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 		cout << tsteps_months[i] << " " << endl;
 	}
 	cout << endl;
+    */
 
 	return(tsteps_months);
 }
@@ -368,6 +374,7 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 		}
 	}
 
+    /*
 	// check
 	cout << "tsteps_years: " << endl;
 	for(unsigned int i=0; i<tsteps_years.size(); i++)
@@ -375,6 +382,7 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 		cout << tsteps_years[i] << " " << endl;
 	}
 	cout << endl;
+    */
 
 	return(tsteps_years);
 }
@@ -537,6 +545,7 @@ multimap<int, string> read_harbour_names(string folder_name_parameterization, st
 	fill_multimap_from_specifications_i_s(harbour_names_file,  harbour_names);
 	harbour_names_file.close();
 
+    /*
 	// check input
 	multimap<int,string>::iterator lower_g = harbour_names.lower_bound(2478);
 	multimap<int,string>::iterator upper_g = harbour_names.upper_bound(2478);
@@ -545,7 +554,7 @@ multimap<int, string> read_harbour_names(string folder_name_parameterization, st
 	{
 		cout << pos->second << " ";
 	}
-	cout << endl;
+    cout << endl;*/
 
 	return(harbour_names);
 }
@@ -838,6 +847,7 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
 	fill_multimap_from_specifications_s_d(vesselsspe_tacs_file, vessels_tacs);
 	vesselsspe_tacs_file.close();
 
+    /*
 	// check input
 	multimap<string,double>::iterator lower5 = vessels_tacs.lower_bound("DNK000001744");
 	multimap<string,double>::iterator upper5 = vessels_tacs.upper_bound("DNK000001744");
@@ -847,6 +857,7 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
 		cout << pos->second << " ";
 	}
 	cout << endl;
+    */
 
 	return(vessels_tacs);
 }
@@ -1403,6 +1414,7 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
 	fill_multimap_from_specifications_i_i(file_comcat_per_szgroup,  comcat_per_szgroup);
 	file_comcat_per_szgroup.close();
 
+    /*
 	// check input
 	multimap<int,int>::iterator lower_init_we = comcat_per_szgroup.lower_bound(0);
 	multimap<int,int>::iterator upper_init_we = comcat_per_szgroup.upper_bound(0);
@@ -1412,6 +1424,7 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
 		cout << pos->second << " ";
 	}
 	cout << endl;
+    */
 
 	return(comcat_per_szgroup);
 }
@@ -1545,6 +1558,7 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
 	fill_multimap_from_specifications_i_i(file_the_selected_szgroups,  the_selected_szgroups);
 	file_the_selected_szgroups.close();
 
+    /*
 	// check input
 	multimap<int,int>::iterator lower_idx = the_selected_szgroups.lower_bound(0);
 	multimap<int,int>::iterator upper_idx = the_selected_szgroups.upper_bound(0);
@@ -1553,7 +1567,7 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
 	{
 		cout << pos->second << " ";
 	}
-	cout << endl;
+    cout << endl;*/
 
 	return(the_selected_szgroups);
 }
@@ -2032,7 +2046,7 @@ vector<int> some_max_nb_ages)
 		// convert N from size to age
 		vector<double> tot_N_at_szgroup=populations.at( stock_numbers.at(i) )->get_tot_N_at_szgroup();
 		vector<double> tot_N_at_age(some_max_nb_ages.at(i));
-		cout << "-- st" << stock_numbers.at(i)  << endl;
+        dout(cout << "-- st" << stock_numbers.at(i)  << endl);
         for(unsigned int sz=0; sz<tot_N_at_szgroup.size(); sz++)
 		{
 			for(int a=0; a<some_max_nb_ages.at(i); a++)
@@ -2043,7 +2057,7 @@ vector<int> some_max_nb_ages)
 		}
 
 		// write N.in SMS files
-		cout << "write down the SMS n.in file...";
+        dout(cout << "write down the SMS n.in file...");
 
         for(unsigned int a = 0; a < tot_N_at_age.size(); a++)
 		{
@@ -2052,7 +2066,7 @@ vector<int> some_max_nb_ages)
 		SMS_N_in << endl;
 
 	}
-	cout << "OK...\n";
+    dout(cout << "OK...\n");
 
 }
 
@@ -2082,7 +2096,7 @@ vector<int> stock_numbers)
 		}
 
 		// write F.in SMS files
-		cout << "write down the SMS f.in file...";
+        dout(cout << "write down the SMS f.in file...");
 
 		for(int a = 0; a < nb_ages_in_sms; a++)
 		{
@@ -2152,7 +2166,7 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
 			}
 		}
 	}
-	cout << "read SMS op_n.out...OK" << endl << flush;
+    dout(cout << "read SMS op_n.out...OK" << endl << flush);
 
 	// caution: SMS OP provides 8 age classes while DISPLACE deals with NBAGE (e.g. 11 age classes)
 	// so, adjustment needed:
@@ -2168,7 +2182,7 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
 	{
 		a_vector_line4.push_back(0);
 	}
-	cout << "make nb of age classes consistent...OK" << endl << flush;
+    dout(cout << "make nb of age classes consistent...OK" << endl << flush);
 
 	// assign to the population objects
     for (unsigned int i=0; i<stock_numbers.size(); i++)
@@ -2193,11 +2207,12 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
 			{
 				N_at_szgroup[sz]+=percent_age_per_szgroup_matrix[sz][a] *tot_N_at_age[a];
 
+                /*
 				if(i==0)
 				{
-					cout << "age" << a << " sz" << sz << endl;
-					cout << N_at_szgroup[sz] << "+= " << percent_age_per_szgroup_matrix[sz][a] << " * " << tot_N_at_age[a] << endl;
-				}
+                    dout(cout << "age" << a << " sz" << sz << endl);
+                    dout(cout << N_at_szgroup[sz] << "+= " << percent_age_per_szgroup_matrix[sz][a] << " * " << tot_N_at_age[a] << endl);
+                }*/
 			}
 		}
 
@@ -2205,7 +2220,7 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
 		populations.at(stock_numbers.at(i))->set_tot_N_at_szgroup(N_at_szgroup);
 
 	}
-	cout << "set Ns at szgroup from the SMS outcomes...OK" << endl << flush;
+    dout(cout << "set Ns at szgroup from the SMS outcomes...OK" << endl << flush);
 
 }
 

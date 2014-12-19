@@ -12,6 +12,11 @@
 #include <Vessel.h>
 #include <Node.h>
 
+#include <outputqueuemanager.h>
+#include <messages/movevesseloutputmessage.h>
+#include <messages/exportvmslikeoutputmessage.h>
+#include <messages/vessellogbookoutputmessage.h>
+
 using namespace std;
 
 #include <pthread.h>
@@ -35,6 +40,8 @@ static unsigned int uncompleted_works;
 
 static bool exit_flag;
 static thread_data_t *thread_data;
+
+extern OutputQueueManager mOutQueue;
 
 extern pthread_mutex_t glob_mutex;
 extern bool use_gui;
@@ -124,12 +131,14 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // i.e. just arrived!
                 if(!inactive)
                 {
+                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
+#if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
                     loglike << ss.str();
 
                     guiSendVesselLogbook(ss.str());
-
+#endif
                     //vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
                     vessels[index_v]->lock();
                     vessels[ index_v ]->reinit_after_a_trip();
@@ -347,35 +356,14 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // for VMS, export the first year only because the file is growing too big otherwise....
     vessels[index_v]->lock();
 
-    pthread_mutex_lock(&glob_mutex);
     if(export_vmslike /*&& tstep<8641*/) {
         if( vessels[ index_v ]->get_state()!=3) {
-            vmslike << tstep << " "
-                       //<< vessels[ index_v ]->get_idx() << " "
-                    << vessels[ index_v ]->get_name() << " "
-                       // can be used as a trip identifier
-                    << vessels[ index_v ]->get_tstep_dep() << " "
-                    << setprecision(3) << fixed << vessels[ index_v ]->get_x() << " "
-                    << setprecision(3) << fixed << vessels[ index_v ]->get_y() << " "
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_course() << " "
-                       //<< vessels[ index_v ]->get_inharbour() << " "
-                    << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
-                    << vessels[ index_v ]->get_state() << " " <<  endl;
+            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
         }
     }
-    pthread_mutex_unlock(&glob_mutex);
 
     if (use_gui && gui_move_vessels) {
-        pthread_mutex_lock(&glob_mutex);
-        cout << "=V" << tstep << " "
-            << vessels[ index_v ]->get_idx() << " "
-            << vessels[ index_v ]->get_tstep_dep() << " "
-            << setprecision(6) << fixed << vessels[ index_v ]->get_x() << " "
-            << setprecision(6) << fixed << vessels[ index_v ]->get_y() << " "
-            << setprecision(2) << fixed << vessels[ index_v ]->get_course() << " "
-            << setprecision(0) << fixed << vessels[ index_v ]->get_cumfuelcons() << " "
-            << vessels[ index_v ]->get_state() <<  endl;
-        pthread_mutex_unlock(&glob_mutex);
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
     }
 
     // realtime gnuplot

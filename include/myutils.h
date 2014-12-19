@@ -45,8 +45,8 @@ using namespace std;
 
 void remove_dups(vector<int>& seq);
 
-void print( vector <string> & v );
-void print_d( vector <double> & v );
+//void print( vector <string> & v );
+//void print_d( vector <double> & v );
 
 struct splitX
 {

@@ -876,12 +876,12 @@ int main(int argc, char* argv[])
 	vector<string> a_split_string;
 	string a_delimiter =" fish_price_is ";
 	split( a_split_string, a_string, a_delimiter, splitX::no_empties);
-	print( a_split_string );
+//	print( a_split_string );
 	// second split....
 	a_string=a_split_string[0];
 	a_delimiter =" weather_is ";
 	split( a_split_string, a_string, a_delimiter, splitX::no_empties);
-	print( a_split_string );
+//	print( a_split_string );
 	//system("PAUSE");
 
     dout(cout  << "---------------------------" << endl);
@@ -1716,6 +1716,7 @@ int main(int argc, char* argv[])
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization,"../"+ inputfolder);
 
+    /*
 	// debug
 	if(fgrounds.size() != freq_fgrounds.size())
 	{
@@ -1732,7 +1733,7 @@ int main(int argc, char* argv[])
         unlock();
         int tmp;
 		cin >> tmp;				 // pause
-	}
+    }*/
 
 	// read nodes in polygons for area-based management
     nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, "../"+inputfolder);
@@ -1740,7 +1741,7 @@ int main(int argc, char* argv[])
 	// check
 	//for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
 	//{
-	//    cout << " a polygon node is " << pos->second << endl;
+    //    dout(cout << " a polygon node is " << pos->second << endl);
 	//}
 	//cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
 
@@ -2551,10 +2552,8 @@ int main(int argc, char* argv[])
     guiSendUpdateCommand(popdyn_N_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
-    if(namefolderinput!="fake") {
-        for (unsigned int n=0; n<nodes.size(); n++) {
-            nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
-        }
+    for (unsigned int n=0; n<nodes.size(); n++) {
+        nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
     }
     popnodes_start.flush();
 
@@ -2584,9 +2583,9 @@ int main(int argc, char* argv[])
 
         guiSendCurrentStep(tstep);
 
-        lock();
-        cout << "tstep " << tstep << endl;
-        unlock();
+        ostringstream os;
+        os << "tstep " << tstep << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));
 
         dout(cout  << "---------------" << endl);
 
@@ -3901,11 +3900,12 @@ int main(int argc, char* argv[])
             guiSendMemoryInfo(memInfo);
         }
 
+        /*
         if ((mLoopProfile.runs() % 500) == 0) {
             lock();
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
             unlock();
-        }
+        }*/
 #endif
 	}							 // end FOR LOOP OVER TIME
 

@@ -24,6 +24,8 @@
 #include <cmath>
 #include <pthread.h>
 
+#include <helpers.h>
+
 using namespace std;
 
 //----------------------------------
@@ -160,21 +162,21 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 	{
 		rU = unif_rand();
 		//rU = prUs[i];
-		cout<< "rU " << rU << "" << endl;
-		cout<< "proba[0] " << proba[0] << "" << endl;
+        dout(cout<< "rU " << rU << "" << endl);
+        dout(cout<< "proba[0] " << proba[0] << "" << endl);
 		for (j = 0; j < nm1; j++)
 		{
 			if (rU <= proba[j])
 				break;
 		}
-		cout<< "j " << j << "" << endl;
-		cout<< "perm[j] " << perm[j] << "" << endl;
+        dout(cout<< "j " << j << "" << endl);
+        dout(cout<< "perm[j] " << perm[j] << "" << endl);
 		ans[i] = perm[j];
-		cout<< "ans[i] " << ans[i] << "" << endl;
-		cout<< "*ans " << *ans << "" << endl;
+        dout(cout<< "ans[i] " << ans[i] << "" << endl);
+        dout(cout<< "*ans " << *ans << "" << endl);
 
 	}
-	cout<< "*ans? " << *ans << "" << endl;
+    dout(cout<< "*ans? " << *ans << "" << endl);
 
 }
 

@@ -28,7 +28,7 @@
 Tac::Tac(double init_tac, double _percent_for_simulated_vessels, map<string,double> _relative_stability_key)
 {
 
-	cout << "create tac "  << endl;
+    dout(cout << "create tac "  << endl);
 
 	percent_for_simulated_vessels=_percent_for_simulated_vessels;
 								 // % share per string country
@@ -85,10 +85,10 @@ void Tac:: add_tac_y_plus_1(double a_tac)
 {
 	current_tac=ts_tac.at(ts_tac.size()-1);
 	ts_tac.push_back(a_tac);
-	cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl;
+    dout(cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl);
     for(unsigned int i=0; i<ts_tac.size(); i++)
 	{
-		cout << "tac: " << ts_tac.at(i) << endl;
+        dout(cout << "tac: " << ts_tac.at(i) << endl);
 	}
 
 }

@@ -14,8 +14,12 @@ class VesselLogbookOutputMessage : public OutputMessage
 public:
     VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population *> &populations);
 
+    virtual int getType() const {
+        return 4;
+    }
+
     bool send(std::ostream &);
-    bool sendBinary(std::ostream &);
+    virtual int sendBinary(void *buffer, int maxlen);
 
 private:
     std::ostream &loglike;

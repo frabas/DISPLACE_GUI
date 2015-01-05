@@ -118,7 +118,7 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
     return true;
 }
 
-bool VesselLogbookOutputMessage::sendBinary(ostream &)
+int VesselLogbookOutputMessage::sendBinary(void *buffer, int maxlen)
 {
-    return true;
+    return 0;
 }

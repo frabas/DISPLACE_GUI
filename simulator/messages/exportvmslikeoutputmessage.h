@@ -13,8 +13,12 @@ class ExportVmslikeOutputMessage : public OutputMessage
 public:
     ExportVmslikeOutputMessage(ostream &strm, unsigned int _tstep, Vessel *vessel);
 
+    virtual int getType() const {
+        return 1;
+    }
+
     bool send(std::ostream &);
-    bool sendBinary(std::ostream &);
+    int sendBinary(void *buffer, int maxlen);
 
 private:
     std::ostream &vmslike;

@@ -2184,7 +2184,9 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
 
 	}
 
-    if(count==the_grds.size()) dout(cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << endl);
+    if(count==the_grds.size()) {
+        dout(cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << endl);
+    }
 	// => then this vessel will still fish on those grounds (with equal proba by the way), assuming non-compliance...
 	// need to think to an alternative model here....
 

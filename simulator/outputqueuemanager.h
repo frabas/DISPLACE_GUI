@@ -5,8 +5,18 @@
 #include <semaphore.h>
 
 #include <queue>
+#include <list>
 #include <memory>
 #include <ostream>
+
+#include <boost/interprocess/containers/list.hpp>
+#include <boost/interprocess/managed_heap_memory.hpp>
+#include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/interprocess/sync/interprocess_mutex.hpp>
+#include <boost/interprocess/sync/interprocess_condition.hpp>
+#include <boost/interprocess/containers/list.hpp>
+#include <boost/interprocess/containers/string.hpp>
+#include <cstddef>
 
 class OutputMessage;
 
@@ -14,7 +24,8 @@ class OutputMessage;
 class OutputQueueManager
 {
 public:
-    explicit OutputQueueManager(std::ostream &stream, bool binary);
+    explicit OutputQueueManager();
+    explicit OutputQueueManager(std::ostream &stream);
 
     void start();
     void finish();
@@ -47,6 +58,33 @@ private:
     sem_t mSemaphore;
 
     std::queue<std::shared_ptr<OutputMessage> > mQueue;
+
+    /* == shared structure == */
+
+    struct MessageManager {
+        boost::interprocess::interprocess_mutex mutex;
+        boost::interprocess::interprocess_condition cond;
+
+        char buffer[16*1024*1024];
+        int head;
+        int tail;
+        int size;
+
+        MessageManager()
+            : mutex(),
+              cond(),
+              head(0), tail(0),
+              size(sizeof(buffer))
+        {
+        }
+    };
+
+    static const size_t SharedMemorySize;
+    static const char *SharedListName;
+
+    boost::interprocess::managed_heap_memory sharedMemory;
+    boost::interprocess::managed_heap_memory::handle_t sharedHandle;
+    MessageManager *mManager;
 
     enum ProtocolType { TextWithStdOut, Binary } mType;
 

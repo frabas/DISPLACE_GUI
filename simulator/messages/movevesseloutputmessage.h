@@ -12,8 +12,12 @@ public:
     ~MoveVesselOutputMessage() {
     }
 
+    virtual int getType() const {
+        return 3;
+    }
+
     bool send(std::ostream &strm);
-    bool sendBinary(std::ostream &);
+    int sendBinary(void *buffer, int maxlen);
 
 private:
     unsigned int tstep, tstep_dep;

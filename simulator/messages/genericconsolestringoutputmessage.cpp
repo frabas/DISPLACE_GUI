@@ -18,7 +18,7 @@ bool GenericConsoleStringOutputMessage::send(std::ostream &strm)
     return true;
 }
 
-bool GenericConsoleStringOutputMessage::sendBinary(std::ostream &)
+int GenericConsoleStringOutputMessage::sendBinary(void *buffer, int maxlen)
 {
-    return true;
+    return 0;
 }

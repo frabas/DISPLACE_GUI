@@ -37,7 +37,7 @@ bool ExportVmslikeOutputMessage::send(std::ostream &)
     return true;
 }
 
-int ExportVmslikeOutputMessage::sendBinary(void *buffer, int maxlen)
+int ExportVmslikeOutputMessage::sendBinary(void *buffer, size_t maxlen)
 {
     return 0;
 }

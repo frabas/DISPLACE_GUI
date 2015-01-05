@@ -2,6 +2,7 @@
 
 #include <mutexlocker.h>
 #include <iostream>
+#include <algorithm>
 
 extern pthread_mutex_t glob_mutex;
 
@@ -18,7 +19,12 @@ bool GenericConsoleStringOutputMessage::send(std::ostream &strm)
     return true;
 }
 
-int GenericConsoleStringOutputMessage::sendBinary(void *buffer, int maxlen)
+int GenericConsoleStringOutputMessage::sendBinary(void *buffer, size_t maxlen)
 {
-    return 0;
+    size_t len = std::min(maxlen, msg.size());
+
+    for (size_t i = 0; i < len; ++i)
+        *((char *)buffer + i) = msg.at(i);
+
+    return len;
 }

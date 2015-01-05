@@ -19,7 +19,7 @@ public:
     }
 
     bool send(std::ostream &);
-    virtual int sendBinary(void *buffer, int maxlen);
+    virtual int sendBinary(void *buffer, size_t maxlen);
 
 private:
     std::ostream &loglike;

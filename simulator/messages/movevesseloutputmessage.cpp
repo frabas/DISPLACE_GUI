@@ -32,7 +32,7 @@ bool MoveVesselOutputMessage::send(ostream &strm)
     return true;
 }
 
-int MoveVesselOutputMessage::sendBinary(void *buffer, int maxlen)
+int MoveVesselOutputMessage::sendBinary(void *buffer, size_t maxlen)
 {
     return 0;
 }

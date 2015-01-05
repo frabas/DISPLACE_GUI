@@ -14,7 +14,7 @@ public:
     }
 
     bool send(std::ostream &strm);
-    int sendBinary(void *buffer, int maxlen);
+    int sendBinary(void *buffer, size_t maxlen);
 
 private:
     std::string msg;

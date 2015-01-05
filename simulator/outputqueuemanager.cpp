@@ -25,7 +25,7 @@ public:
         return false;
     }
 
-    int sendBinary(void *buffer, int maxlen){
+    int sendBinary(void *buffer, size_t maxlen){
         UNUSED(buffer);
         UNUSED(maxlen);
 

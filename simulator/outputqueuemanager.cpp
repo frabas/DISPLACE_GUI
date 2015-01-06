@@ -14,8 +14,8 @@ public:
     ~QuitMessage() {
     }
 
-    virtual int getType() const {
-        return -128;
+    virtual IpcMessageTypes getType() const {
+        return ForceExit;
     }
 
     bool send(std::ostream &) {
@@ -114,7 +114,9 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
             if (len == (size_t)-1) {
                 exit = true;
             } else if (len > 0) {
-                int t = msg->getType();
+                IpcMessageTypes t = msg->getType();
+                std::cout << "** Sending message type " << t << " length: " << len << std::endl;
+
                 ipcQueue.push(t,buffer, len);
             }
             break;

@@ -14,8 +14,8 @@ class VesselLogbookOutputMessage : public OutputMessage
 public:
     VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population *> &populations);
 
-    virtual int getType() const {
-        return 4;
+    virtual IpcMessageTypes getType() const {
+        return VesselLogbook;
     }
 
     bool send(std::ostream &);

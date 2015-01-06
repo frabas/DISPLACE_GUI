@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QProcess>
 
+#include <simulatoripcmanager.h>
 #include <Vessel.h>
 #include <memory>
 
@@ -73,6 +74,8 @@ private slots:
 
 private:
     QProcess *mSimulation;
+    QThread *mIpcThread;
+    SimulatorIpcManager *mIpcQueue;
     std::shared_ptr<DisplaceModel> mModel;
     int mSimSteps;
     int mLastStep;

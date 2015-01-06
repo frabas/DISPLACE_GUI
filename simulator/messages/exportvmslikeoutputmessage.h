@@ -13,8 +13,8 @@ class ExportVmslikeOutputMessage : public OutputMessage
 public:
     ExportVmslikeOutputMessage(ostream &strm, unsigned int _tstep, Vessel *vessel);
 
-    virtual int getType() const {
-        return 1;
+    virtual IpcMessageTypes getType() const {
+        return ExportVms;
     }
 
     bool send(std::ostream &);

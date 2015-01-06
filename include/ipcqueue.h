@@ -1,6 +1,7 @@
 #ifndef IPCQUEUE_H
 #define IPCQUEUE_H
 
+#include <ipcmsgtypes.h>
 #include <boost/interprocess/containers/list.hpp>
 #include <boost/interprocess/managed_heap_memory.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
@@ -10,13 +11,24 @@
 #include <boost/interprocess/containers/string.hpp>
 #include <cstddef>
 
+/** @brief implements a CircularBuffer to be used in a boost::interprocess::managed_heap_memory
+ * @note DO NOT implements ANY virtual method in this class! Pointers are not portable across processes!
+ */
 class IpcQueue
 {
 public:
     IpcQueue();
 
-    bool push(int type, void *buffer, size_t len);
+    bool push(IpcMessageTypes type, void *buffer, size_t len);
+    IpcMessageTypes pickOrWait(void *buffer, size_t maxlen, size_t *len);
+
 private:
+    bool empty() const;
+    bool full() const;
+    size_t available() const;
+    bool push (char byte);
+    char pop();
+
     struct MessageManager {
         boost::interprocess::interprocess_mutex mutex;
         boost::interprocess::interprocess_condition cond;

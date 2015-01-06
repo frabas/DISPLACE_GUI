@@ -12,6 +12,8 @@ QString Simulator::SET_NUMTHREADS ("simul_numthreads");
 
 Simulator::Simulator()
     : mSimulation(0),
+      mIpcThread(0),
+      mIpcQueue(0),
       mModel(),
       mSimSteps(8761),
       mLastStep(-1),
@@ -35,6 +37,22 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
         delete mSimulation;
         mSimulation = 0;
     }
+    if (mIpcThread != 0) {
+        delete mIpcThread;
+    }
+    if (mIpcQueue != 0) {
+        delete mIpcQueue;
+    }
+
+    mIpcThread = new QThread(this);
+    try {
+        mIpcQueue = new SimulatorIpcManager(mIpcThread);
+    } catch (boost::interprocess::bad_alloc &xc) {
+        qFatal("Can't allocate memory %s", xc.what());
+        return false;
+    }
+
+    mIpcThread->start();
 
     mSimuName = simul_name;
     mSimulation = new QProcess();

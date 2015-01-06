@@ -9,8 +9,8 @@ class GenericConsoleStringOutputMessage : public OutputMessage
 public:
     explicit GenericConsoleStringOutputMessage(const std::string &txt);
 
-    virtual int getType() const {
-        return 2;
+    virtual IpcMessageTypes getType() const {
+        return GenericConsole;
     }
 
     bool send(std::ostream &strm);

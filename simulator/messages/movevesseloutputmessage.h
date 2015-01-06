@@ -12,8 +12,8 @@ public:
     ~MoveVesselOutputMessage() {
     }
 
-    virtual int getType() const {
-        return 3;
+    virtual IpcMessageTypes getType() const {
+        return MoveVessel;
     }
 
     bool send(std::ostream &strm);

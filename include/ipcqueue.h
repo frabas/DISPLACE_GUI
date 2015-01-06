@@ -3,7 +3,7 @@
 
 #include <ipcmsgtypes.h>
 #include <boost/interprocess/containers/list.hpp>
-#include <boost/interprocess/managed_heap_memory.hpp>
+#include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
 #include <boost/interprocess/sync/interprocess_mutex.hpp>
 #include <boost/interprocess/sync/interprocess_condition.hpp>
@@ -33,7 +33,7 @@ private:
         boost::interprocess::interprocess_mutex mutex;
         boost::interprocess::interprocess_condition cond;
 
-        char buffer[16*1024*1024];
+        char buffer[512*1024];
         int head;
         int tail;
         int size;
@@ -50,8 +50,11 @@ private:
     static const size_t SharedMemorySize;
     static const char *SharedListName;
 
-    boost::interprocess::managed_heap_memory sharedMemory;
-    boost::interprocess::managed_heap_memory::handle_t sharedHandle;
+    boost::interprocess::shared_memory_object shmobj;
+    boost::interprocess::mapped_region mapreg;
+
+//    boost::interprocess::managed_shared_memory sharedMemory;
+//    boost::interprocess::managed_heap_memory::handle_t sharedHandle;
     MessageManager *mManager;
 };
 

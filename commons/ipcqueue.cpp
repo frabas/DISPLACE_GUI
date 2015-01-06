@@ -6,11 +6,15 @@ const size_t IpcQueue::SharedMemorySize = sizeof(MessageManager);    /* shared m
 const char* IpcQueue::SharedListName = "OutQueue";
 
 IpcQueue::IpcQueue()
-    : sharedMemory(sizeof(MessageManager))
+    : shmobj(boost::interprocess::open_or_create, "map", boost::interprocess::read_write)
+//      mapreg(shmobj, boost::interprocess::read_write)
+//    : sharedMemory(boost::interprocess::open_or_create, SharedListName, sizeof(MessageManager))
 {
-    //sharedList = sharedMemory.construct<SharedList>(SharedListName)(sharedMemory.get_segment_manager());
-    mManager = sharedMemory.find_or_construct<MessageManager>(SharedListName)();
-    sharedHandle = sharedMemory.get_handle_from_address(mManager);
+    shmobj.truncate(sizeof(MessageManager));
+    mapreg = boost::interprocess::mapped_region(shmobj, boost::interprocess::read_write);
+//    mManager = sharedMemory.find_or_construct<MessageManager>("out")();
+    void *addr = mapreg.get_address();
+    mManager = new (addr) IpcQueue::MessageManager;
 }
 
 bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
@@ -19,20 +23,10 @@ bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
 
     for (size_t i = 0; i < sizeof(type); ++i) {
         push (*(((char *)&type) + i));
-        /*
-        mManager->buffer[mManager->head] = *(((char *)&type) + i);
-        ++mManager->head;
-        if (mManager->head > mManager->size)
-            mManager->head = 0;*/
     }
 
     for (size_t i = 0; i < len; ++i) {
         push (*(((char *)&len) + i));
-        /*
-        mManager->buffer[mManager->head] = ;
-        ++mManager->head;
-        if (mManager->head > mManager->size)
-            mManager->head = 0;*/
     }
 
     for (size_t i = 0; i < len; ++i) {

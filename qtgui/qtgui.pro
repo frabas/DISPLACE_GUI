@@ -113,7 +113,8 @@ SOURCES += \
     mousemode/singleclickmousemode.cpp \
     mousemode/edgeaddmousemode.cpp \
     aboutdialog.cpp \
-    createshortestpathdialog.cpp
+    createshortestpathdialog.cpp \
+    simulatoripcmanager.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -193,7 +194,8 @@ HEADERS += \
     mousemode/edgeaddmousemode.h \
     ../include/version.h \
     aboutdialog.h \
-    createshortestpathdialog.h
+    createshortestpathdialog.h \
+    simulatoripcmanager.h
 
 RESOURCES += \
     qtgui.qrc

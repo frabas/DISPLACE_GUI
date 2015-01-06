@@ -25,7 +25,8 @@ SOURCES= \
     myRutils.cpp \
     mkpath.cpp \
     memoryinfo.cpp \
-    options.cpp
+    options.cpp \
+    ipcqueue.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -45,7 +46,8 @@ HEADERS= \
     ../include/helpers.h \
     ../include/options.h \
     ../include/mutexlocker.h \
-    ../include/guiproto_struct.h
+    ../include/guiproto_struct.h \
+    ../include/ipcqueue.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

@@ -7,9 +7,6 @@
 
 #include <iostream>
 
-const size_t OutputQueueManager::SharedMemorySize = sizeof(MessageManager);    /* shared memory size */
-const char* OutputQueueManager::SharedListName = "OutQueue";
-
 class QuitMessage : public OutputMessage {
 public:
     QuitMessage() {
@@ -36,14 +33,10 @@ public:
 };
 
 OutputQueueManager::OutputQueueManager()
-    : sharedMemory(SharedMemorySize),
+    : ipcQueue(),
       mType(Binary),
       mOutStream(std::cout)
 {
-    //sharedList = sharedMemory.construct<SharedList>(SharedListName)(sharedMemory.get_segment_manager());
-    mManager = sharedMemory.construct<MessageManager>(SharedListName)();
-    sharedHandle = sharedMemory.get_handle_from_address(mManager);
-
     pthread_mutex_init(&mMutex, 0);
     sem_init(&mSemaphore, 0, 0);
 }
@@ -121,32 +114,8 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
             if (len == (size_t)-1) {
                 exit = true;
             } else if (len > 0) {
-                mManager->mutex.lock();
-
                 int t = msg->getType();
-                for (size_t i = 0; i < sizeof(t); ++i) {
-                    mManager->buffer[mManager->head] = *(((char *)&t) + i);
-                    ++mManager->head;
-                    if (mManager->head > mManager->size)
-                        mManager->head = 0;
-                }
-
-                for (size_t i = 0; i < len; ++i) {
-                    mManager->buffer[mManager->head] = *(((char *)&len) + i);
-                    ++mManager->head;
-                    if (mManager->head > mManager->size)
-                        mManager->head = 0;
-                }
-
-                for (size_t i = 0; i < len; ++i) {
-                    mManager->buffer[mManager->head] = *(buffer + i);
-                    ++mManager->head;
-                    if (mManager->head > mManager->size)
-                        mManager->head = 0;
-                }
-
-                mManager->cond.notify_one();
-                mManager->mutex.unlock();
+                ipcQueue.push(t,buffer, len);
             }
             break;
         }

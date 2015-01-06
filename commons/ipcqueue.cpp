@@ -5,21 +5,46 @@
 const size_t IpcQueue::SharedMemorySize = sizeof(MessageManager);    /* shared memory size */
 const char* IpcQueue::SharedListName = "OutQueue";
 
+using namespace boost::interprocess;
+
 IpcQueue::IpcQueue()
-    : shmobj(boost::interprocess::open_or_create, "map", boost::interprocess::read_write)
-//      mapreg(shmobj, boost::interprocess::read_write)
-//    : sharedMemory(boost::interprocess::open_or_create, SharedListName, sizeof(MessageManager))
 {
-    shmobj.truncate(sizeof(MessageManager));
-    mapreg = boost::interprocess::mapped_region(shmobj, boost::interprocess::read_write);
-//    mManager = sharedMemory.find_or_construct<MessageManager>("out")();
-    void *addr = mapreg.get_address();
-    mManager = new (addr) IpcQueue::MessageManager;
+    bool first = false;
+    try {
+        shmobj = boost::interprocess::shared_memory_object(boost::interprocess::open_only, SharedListName, read_write);
+    } catch (interprocess_exception x) {
+        // not found, create it!
+        first = true;
+    }
+
+    if (first) {
+        shmobj = shared_memory_object(create_only, SharedListName, read_write);
+        shmobj.truncate(sizeof(MessageManager));
+        mapreg = boost::interprocess::mapped_region(shmobj, boost::interprocess::read_write);
+        void *addr = mapreg.get_address();
+        mManager = new (addr) IpcQueue::MessageManager;
+    } else {
+        // shmobj alrady there
+        mapreg = boost::interprocess::mapped_region(shmobj, boost::interprocess::read_write);
+        void *addr = mapreg.get_address();
+        mManager = reinterpret_cast<IpcQueue::MessageManager *>(addr);
+    }
+}
+
+IpcQueue::~IpcQueue()
+{
+    shmobj.remove(SharedListName);
 }
 
 bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
 {
-    mManager->mutex.lock();
+    std::cout << "push" << std::endl;
+
+    scoped_lock<interprocess_mutex> lock (mManager->mutex);
+    while (space_available() < len + sizeof(type) + sizeof(len)) {
+        std::cout << "Wait for space" << std::endl;
+        mManager->cond_notfull.wait(lock);
+    }
 
     for (size_t i = 0; i < sizeof(type); ++i) {
         push (*(((char *)&type) + i));
@@ -33,17 +58,20 @@ bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
         push(*(reinterpret_cast<char *>(buffer) + i));
     }
 
-    mManager->cond.notify_one();
-    mManager->mutex.unlock();
+    mManager->cond_notempty.notify_one();
 
     return true;
 }
 
 IpcMessageTypes IpcQueue::pickOrWait(void *buffer, size_t maxlen, size_t *len)
 {
+    std::cout << "pick" << std::endl;
+
     boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mManager->mutex);
-    if (empty())
-        mManager->cond.wait(lock);
+    if (empty()) {
+        std::cout << "Wait,data" << std::endl;
+        mManager->cond_notempty.wait(lock);
+    }
 
     IpcMessageTypes type;
     for (size_t i = 0; i < sizeof(type); ++i) {
@@ -58,7 +86,23 @@ IpcMessageTypes IpcQueue::pickOrWait(void *buffer, size_t maxlen, size_t *len)
         *(reinterpret_cast<char *>(buffer) + i) = pop();
     }
 
+    mManager->cond_notfull.notify_one();
+
     return type;
+}
+
+void IpcQueue::forceCleanup()
+{
+    bool found = true;
+    while (found) {
+        try {
+            boost::interprocess::shared_memory_object shmobj;
+            shmobj = boost::interprocess::shared_memory_object(boost::interprocess::open_only, SharedListName, read_write);
+            shared_memory_object::remove(SharedListName);
+        } catch (interprocess_exception) {
+            found = false;
+        }
+    }
 }
 
 bool IpcQueue::empty() const
@@ -69,6 +113,11 @@ bool IpcQueue::empty() const
 bool IpcQueue::full() const
 {
     return ((mManager->tail +1) % mManager->size) == mManager->head;
+}
+
+size_t IpcQueue::space_available() const
+{
+    return (mManager->head + mManager->size - mManager->tail -1) & mManager->size;
 }
 
 bool IpcQueue::push(char byte)

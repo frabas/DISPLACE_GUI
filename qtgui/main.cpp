@@ -2,6 +2,7 @@
 
 #include <QCoreApplication>
 #include <QApplication>
+#include <ipcqueue.h>
 
 #include <QMapControl/ImageManager.h>
 
@@ -14,6 +15,9 @@ int main (int argc, char *argv[])
     QCoreApplication::setOrganizationName("Studiofuga");
     QCoreApplication::setOrganizationDomain("studiofuga.com");
     QCoreApplication::setApplicationName("displace");
+
+    // Cleanup the shm objets
+    IpcQueue::forceCleanup();
 
     QApplication app(argc, argv);
     MainWindow mw;

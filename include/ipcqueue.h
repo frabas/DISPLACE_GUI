@@ -18,20 +18,23 @@ class IpcQueue
 {
 public:
     IpcQueue();
+    ~IpcQueue();
 
     bool push(IpcMessageTypes type, void *buffer, size_t len);
     IpcMessageTypes pickOrWait(void *buffer, size_t maxlen, size_t *len);
 
+    static void forceCleanup();
 private:
     bool empty() const;
     bool full() const;
-    size_t available() const;
+    size_t space_available() const;
     bool push (char byte);
     char pop();
 
     struct MessageManager {
         boost::interprocess::interprocess_mutex mutex;
-        boost::interprocess::interprocess_condition cond;
+        boost::interprocess::interprocess_condition cond_notempty;
+        boost::interprocess::interprocess_condition cond_notfull;
 
         char buffer[512*1024];
         int head;
@@ -40,10 +43,12 @@ private:
 
         MessageManager()
             : mutex(),
-              cond(),
+              cond_notempty(),
+              cond_notfull(),
               head(0), tail(0),
               size(sizeof(buffer))
         {
+            
         }
     };
 

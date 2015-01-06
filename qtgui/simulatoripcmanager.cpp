@@ -15,11 +15,13 @@ void SimulatorIpcManager::threadStarted()
 {
     char buffer[1024];
 
+    qDebug() << "Thread Started";
     size_t len;
     bool mExit = false;
     while (!mExit) {
         int type = mIpcQueue.pickOrWait(buffer, 1024, &len);
-        if (type != IpcQueue::ForceExit) {
+        qDebug() << "got message";
+        if (type != ForceExit) {
             switch (type) {
             default:
                 qDebug() << "***Got: Message Type " << type << " len " << len;
@@ -30,4 +32,6 @@ void SimulatorIpcManager::threadStarted()
             mExit = true;
         }
     }
+
+    qDebug() << "Thread ended.";
 }

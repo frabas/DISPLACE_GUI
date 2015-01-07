@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <ipcqueue.h>
+#include <modelobjects/vesseldata.h>
 
 class SimulatorIpcManager : public QObject
 {
@@ -15,6 +16,7 @@ public:
 signals:
     void receivedCodedLine(QString);
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
+    void vesselLogbookReceived (VesselStats);
 
 public slots:
 

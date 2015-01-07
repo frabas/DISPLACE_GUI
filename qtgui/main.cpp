@@ -8,6 +8,8 @@
 
 #include <gdal/ogrsf_frmts.h>
 
+#include <modelobjects/vesseldata.h>
+
 int main (int argc, char *argv[])
 {
     OGRRegisterAll();
@@ -18,6 +20,9 @@ int main (int argc, char *argv[])
 
     // Cleanup the shm objets
     IpcQueue::forceCleanup();
+
+    // Register here any qmetatype
+    qRegisterMetaType<VesselStats>("VesselStats");
 
     QApplication app(argc, argv);
     MainWindow mw;

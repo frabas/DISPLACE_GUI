@@ -2,6 +2,7 @@
 
 #include <QThread>
 #include <QDebug>
+#include <modelobjects/vesseldata.h>
 
 SimulatorIpcManager::SimulatorIpcManager(QThread *thread, QObject *parent) :
     QObject(parent),
@@ -39,6 +40,28 @@ void SimulatorIpcManager::threadStarted()
                 {
                     displace::ipc::MoveVesselMessage *data = reinterpret_cast<displace::ipc::MoveVesselMessage *>(buffer);
                     emit vesselMoved(data->tstep, data->idx, data->x, data->y, data->course, data->cumfuelcons, data->state);
+                }
+                break;
+            case VesselLogbook:
+                {
+                    displace::ipc::VesselLogbookMessage *data = reinterpret_cast<displace::ipc::VesselLogbookMessage *>(buffer);
+                    VesselStats stats;
+                    stats.tstep = data->tstep;
+                    stats.reasonToGoBack = data->rtbb;
+                    stats.lastHarbour = data->node;
+                    stats.vesselId = data->idx;
+                    stats.timeAtSea = data->timeatsea;
+                    stats.cumFuelCons = data->cumfcons;
+
+                    int pop = data->popnum;
+                    for (int i = 0; i < pop; ++i) {
+                        stats.mCatches.push_back(data->pop[i]);
+                    }
+                    stats.revenueAV = data->revenue_from_av_prices;
+                    stats.fuelCost = data->fuelcost;
+                    stats.gav = data->gav2;
+
+                    emit vesselLogbookReceived(stats);
                 }
                 break;
             default:

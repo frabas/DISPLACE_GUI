@@ -72,6 +72,7 @@ private slots:
     void started();
     void subprocessStateChanged(QProcess::ProcessState);
     bool processCodedLine(QString line);
+    void vesselLogbookReceived(VesselStats);
 
 private:
     QProcess *mSimulation;

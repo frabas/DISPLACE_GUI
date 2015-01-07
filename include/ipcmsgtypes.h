@@ -1,6 +1,8 @@
 #ifndef IPCMSGTYPES_H
 #define IPCMSGTYPES_H
 
+#include <stddef.h>
+
 enum IpcMessageTypes {
     ForceExit,
     GenericConsole,
@@ -23,6 +25,8 @@ struct VesselLogbookMessage {
     unsigned int tstep, tstepdep;
     int rtbb, node, idx;
     double cumstm, timeatsea,cumfcons,travdist, revenue, revenue_from_av_prices, fuelcost, gav,gav2;
+    size_t popnum;
+    double pop[];
 };
 
 }

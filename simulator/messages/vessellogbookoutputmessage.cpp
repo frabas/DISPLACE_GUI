@@ -147,6 +147,12 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
 size_t VesselLogbookOutputMessage::sendBinary(void *buffer, size_t maxlen)
 {
     UNUSED(maxlen);
+
+    logbook.popnum = cumul.size();
     size_t i = put(buffer, 0, logbook);
+    for (size_t n = 0; n < logbook.popnum; ++n) {
+        i = put(buffer, i, cumul[n]);
+    }
+
     return i;
 }

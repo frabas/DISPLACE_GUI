@@ -56,6 +56,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 
     connect (mIpcQueue, SIGNAL(receivedCodedLine(QString)), this, SLOT(processCodedLine(QString)));
     connect (mIpcQueue, SIGNAL(vesselMoved(int,int,float,float,float,float,int)), SIGNAL(vesselMoved(int,int,float,float,float,float,int)));
+    connect (mIpcQueue, SIGNAL(vesselLogbookReceived(VesselStats)), this, SLOT(vesselLogbookReceived(VesselStats)));
 
     mIpcThread->start();
 
@@ -246,6 +247,12 @@ bool Simulator::processCodedLine(QString line)
     return true;
 }
 
+void Simulator::vesselLogbookReceived(VesselStats v)
+{
+    if (mModel)
+        mModel->collectVesselStats(v.tstep, v);
+}
+
 void Simulator::parseDebug(QStringList fields)
 {
     switch (fields[0].at(0).toLatin1()) {
@@ -282,6 +289,5 @@ void Simulator::parseUpdateVesselStats(QStringList fields)
 {
     VesselStats v = OutputFileParser::parseVesselStatLine(fields);
 
-    if (mModel)
-        mModel->collectVesselStats(v.tstep, v);
+    vesselLogbookReceived(v);
 }

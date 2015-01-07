@@ -48,7 +48,8 @@ HEADERS= \
     ../include/mutexlocker.h \
     ../include/guiproto_struct.h \
     ../include/ipcqueue.h \
-    ../include/ipcmsgtypes.h
+    ../include/ipcmsgtypes.h \
+    ../include/version.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

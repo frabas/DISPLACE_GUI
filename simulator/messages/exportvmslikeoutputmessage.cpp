@@ -37,7 +37,10 @@ bool ExportVmslikeOutputMessage::send(std::ostream &)
     return true;
 }
 
+/** @note this functions just call send() to output data to a file, so it returns 0 */
 size_t ExportVmslikeOutputMessage::sendBinary(void *buffer, size_t maxlen)
 {
+    send(std::cout);
+
     return 0;
 }

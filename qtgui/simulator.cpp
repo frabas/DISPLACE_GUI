@@ -45,12 +45,14 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     }
 
     mIpcThread = new QThread(this);
-//    try {
+    mIpcThread->setObjectName("IpcThread");
+
+    try {
         mIpcQueue = new SimulatorIpcManager(mIpcThread);
-//    } catch (boost::interprocess::bad_alloc &xc) {
-//        qFatal("Can't allocate memory %s", xc.what());
-//        return false;
-//    }
+    } catch (boost::interprocess::bad_alloc &xc) {
+        qFatal("Can't allocate memory %s", xc.what());
+        return false;
+    }
 
     mIpcThread->start();
 
@@ -134,6 +136,7 @@ void Simulator::error(QProcess::ProcessError error)
 
 void Simulator::finished(int code, QProcess::ExitStatus status)
 {
+    mIpcQueue->forceExit();
     emit log(QString("Process exited %1 with exit status %2")
              .arg(status == QProcess::NormalExit ? "normally" : "by crash")
              .arg(code));

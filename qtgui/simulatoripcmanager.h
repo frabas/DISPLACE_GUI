@@ -10,6 +10,7 @@ class SimulatorIpcManager : public QObject
 public:
     explicit SimulatorIpcManager(QThread *thread, QObject *parent = 0);
 
+    void forceExit();
 signals:
 
 public slots:
@@ -19,6 +20,7 @@ private slots:
 
 private:
     IpcQueue mIpcQueue;
+    QThread *mThread;
 };
 
 #endif // SIMULATORIPCMANAGER_H

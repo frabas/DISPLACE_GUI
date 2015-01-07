@@ -5,10 +5,16 @@
 
 SimulatorIpcManager::SimulatorIpcManager(QThread *thread, QObject *parent) :
     QObject(parent),
-    mIpcQueue()
+    mIpcQueue(),
+    mThread(thread)
 {
     connect (thread, SIGNAL(started()), this, SLOT(threadStarted()));
     moveToThread(thread);
+}
+
+void SimulatorIpcManager::forceExit()
+{
+    mIpcQueue.push(ForceExit, 0, 0);
 }
 
 void SimulatorIpcManager::threadStarted()
@@ -20,7 +26,6 @@ void SimulatorIpcManager::threadStarted()
     bool mExit = false;
     while (!mExit) {
         int type = mIpcQueue.pickOrWait(buffer, 1024, &len);
-        qDebug() << "got message";
         if (type != ForceExit) {
             switch (type) {
             default:
@@ -34,4 +39,6 @@ void SimulatorIpcManager::threadStarted()
     }
 
     qDebug() << "Thread ended.";
+
+    mThread->terminate();
 }

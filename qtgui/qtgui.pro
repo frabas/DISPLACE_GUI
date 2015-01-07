@@ -34,8 +34,6 @@ macx {
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
-
-    INCLUDEPATH += c:/mingw/boost_1_57_0
 }
 
 DEFINES += HAVE_GEOGRAPHICLIB

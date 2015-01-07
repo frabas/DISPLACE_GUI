@@ -4,7 +4,7 @@ DESTDIR=../
 
 include ("$$top_srcdir/localconfig.pri")
 
-INCLUDEPATH=../include/
+INCLUDEPATH +=../include/
 
 win32 {
     # For GetProcessMemoryInfo()

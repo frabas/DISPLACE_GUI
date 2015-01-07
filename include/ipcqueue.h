@@ -36,7 +36,9 @@ private:
         boost::interprocess::interprocess_condition cond_notempty;
         boost::interprocess::interprocess_condition cond_notfull;
 
-        char buffer[512*1024];
+        static const size_t BufferSize = 512*1024;
+
+        char buffer[BufferSize];
         int head;
         int tail;
         int size;
@@ -46,7 +48,7 @@ private:
               cond_notempty(),
               cond_notfull(),
               head(0), tail(0),
-              size(sizeof(buffer))
+              size(BufferSize)
         {
             
         }

@@ -38,19 +38,19 @@ IpcQueue::~IpcQueue()
 
 bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
 {
-    std::cout << "push" << std::endl;
-
     scoped_lock<interprocess_mutex> lock (mManager->mutex);
+    //    std::cout << "Push (Available: " << space_available() << " needed: " << (len + sizeof(type) + sizeof(len)) << ")" << std::endl;
     while (space_available() < len + sizeof(type) + sizeof(len)) {
-        std::cout << "Wait for space" << std::endl;
+        //        std::cout<<"Wait for space"<< std::endl;
         mManager->cond_notfull.wait(lock);
+        //        std::cout << "Push (Available: " << space_available() << " needed: " << (len + sizeof(type) + sizeof(len)) << ")" << std::endl;
     }
 
     for (size_t i = 0; i < sizeof(type); ++i) {
         push (*(((char *)&type) + i));
     }
 
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < sizeof(len); ++i) {
         push (*(((char *)&len) + i));
     }
 
@@ -58,6 +58,7 @@ bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
         push(*(reinterpret_cast<char *>(buffer) + i));
     }
 
+    //    std::cout << "At end Available: " << space_available() << std::endl;
     mManager->cond_notempty.notify_one();
 
     return true;
@@ -65,12 +66,13 @@ bool IpcQueue::push(IpcMessageTypes type, void *buffer, size_t len)
 
 IpcMessageTypes IpcQueue::pickOrWait(void *buffer, size_t maxlen, size_t *len)
 {
-    std::cout << "pick" << std::endl;
+    //    std::cout << "pick" << std::endl;
 
     boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mManager->mutex);
     if (empty()) {
-        std::cout << "Wait,data" << std::endl;
+        //        std::cout << "Wait,data" << std::endl;
         mManager->cond_notempty.wait(lock);
+        //        std::cout << "Got data" << std::endl;
     }
 
     IpcMessageTypes type;
@@ -117,7 +119,7 @@ bool IpcQueue::full() const
 
 size_t IpcQueue::space_available() const
 {
-    return (mManager->head + mManager->size - mManager->tail -1) & mManager->size;
+    return (mManager->head + mManager->size - mManager->tail -1) % mManager->size;
 }
 
 bool IpcQueue::push(char byte)

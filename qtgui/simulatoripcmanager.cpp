@@ -31,8 +31,14 @@ void SimulatorIpcManager::threadStarted()
             case GenericConsole:
                 {
                     QString msg = QString::fromUtf8(buffer, len);
-                    qDebug() << "String message:" << msg;
+                    //                    qDebug() << "String message:" << msg;
                     emit receivedCodedLine(msg);
+                }
+                break;
+            case MoveVessel:
+                {
+                    displace::ipc::MoveVesselMessage *data = reinterpret_cast<displace::ipc::MoveVesselMessage *>(buffer);
+                    emit vesselMoved(data->tstep, data->idx, data->x, data->y, data->course, data->cumfuelcons, data->state);
                 }
                 break;
             default:

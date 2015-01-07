@@ -27,7 +27,15 @@ public:
      * @arg maxlen the maximum size of the block
      * @return lenght of the block, or -1 if the process should exit (due to error, or other)
     */
-    virtual int sendBinary(void *buffer, size_t maxlen) = 0;
+    virtual size_t sendBinary(void *buffer, size_t maxlen) = 0;
+
+    template <typename T>
+    size_t put (void *buffer, size_t index, T v) {
+        for (size_t i = 0; i < sizeof(T); ++i) {
+            *((char *)buffer +i) = *((char *)&v + i);
+        }
+        return index + sizeof(T);
+    }
 };
 
 #endif // OUTPUTMESSAGE_H

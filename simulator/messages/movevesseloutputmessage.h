@@ -2,6 +2,7 @@
 #define MOVEVESSELOUTPUTMESSAGE_H
 
 #include <outputmessage.h>
+#include <ipcmsgtypes.h>
 
 class Vessel;
 
@@ -17,13 +18,10 @@ public:
     }
 
     bool send(std::ostream &strm);
-    int sendBinary(void *buffer, size_t maxlen);
+    size_t sendBinary(void *buffer, size_t maxlen);
 
 private:
-    unsigned int tstep, tstep_dep;
-    unsigned int idx;
-    double x,y,course,cumfuelcons;
-    int state;
+    displace::ipc::MoveVesselMessage data;
 };
 
 #endif // MOVEVESSELOUTPUTMESSAGE_H

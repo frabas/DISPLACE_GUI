@@ -18,7 +18,7 @@ public:
     }
 
     bool send(std::ostream &);
-    int sendBinary(void *buffer, size_t maxlen);
+    size_t sendBinary(void *buffer, size_t maxlen);
 
 private:
     std::ostream &vmslike;

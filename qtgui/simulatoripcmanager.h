@@ -14,6 +14,7 @@ public:
 
 signals:
     void receivedCodedLine(QString);
+    void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
 
 public slots:
 

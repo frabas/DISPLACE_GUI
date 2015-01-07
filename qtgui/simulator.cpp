@@ -55,6 +55,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     }
 
     connect (mIpcQueue, SIGNAL(receivedCodedLine(QString)), this, SLOT(processCodedLine(QString)));
+    connect (mIpcQueue, SIGNAL(vesselMoved(int,int,float,float,float,float,int)), SIGNAL(vesselMoved(int,int,float,float,float,float,int)));
 
     mIpcThread->start();
 

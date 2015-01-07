@@ -19,7 +19,7 @@ bool GenericConsoleStringOutputMessage::send(std::ostream &strm)
     return true;
 }
 
-int GenericConsoleStringOutputMessage::sendBinary(void *buffer, size_t maxlen)
+size_t GenericConsoleStringOutputMessage::sendBinary(void *buffer, size_t maxlen)
 {
     size_t len = std::min(maxlen, msg.size());
 

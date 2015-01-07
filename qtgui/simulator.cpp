@@ -54,6 +54,8 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
         return false;
     }
 
+    connect (mIpcQueue, SIGNAL(receivedCodedLine(QString)), this, SLOT(processCodedLine(QString)));
+
     mIpcThread->start();
 
     mSimuName = simul_name;

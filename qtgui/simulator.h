@@ -71,6 +71,7 @@ private slots:
     void readyReadStandardOutput();
     void started();
     void subprocessStateChanged(QProcess::ProcessState);
+    bool processCodedLine(QString line);
 
 private:
     QProcess *mSimulation;
@@ -85,7 +86,6 @@ private:
     QProcess::ProcessState mProcessState;
     bool mCapture;
 
-    bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
     void parseDebug(QStringList fields);

@@ -28,6 +28,13 @@ void SimulatorIpcManager::threadStarted()
         int type = mIpcQueue.pickOrWait(buffer, 1024, &len);
         if (type != ForceExit) {
             switch (type) {
+            case GenericConsole:
+                {
+                    QString msg = QString::fromUtf8(buffer, len);
+                    qDebug() << "String message:" << msg;
+                    emit receivedCodedLine(msg);
+                }
+                break;
             default:
                 qDebug() << "***Got: Message Type " << type << " len " << len;
                 break;

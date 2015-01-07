@@ -11,7 +11,9 @@ public:
     explicit SimulatorIpcManager(QThread *thread, QObject *parent = 0);
 
     void forceExit();
+
 signals:
+    void receivedCodedLine(QString);
 
 public slots:
 

@@ -17,8 +17,13 @@ public:
 
     virtual IpcMessageTypes getType() const = 0;
 
+    /** @brief perform an operation non related to the gui feedback channel
+     * @return false if the calling function should exit. True otherwise.
+     */
+    virtual bool process() = 0;
+
     /** @brief the operation to perform.
-     * @return false if the outer queue loop should be shut down. Most of the classes will return true
+     * @return false if error.
      * */
     virtual bool send(std::ostream &) = 0;
 

@@ -13,6 +13,7 @@ public:
         return GenericConsole;
     }
 
+    bool process();
     bool send(std::ostream &strm);
     size_t sendBinary(void *buffer, size_t maxlen);
 

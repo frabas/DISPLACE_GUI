@@ -8,16 +8,8 @@
 #include <ostream>
 #include <string>
 
-/** @brief an helper function to output data to the vmslike file
- *
- * This class shouldn't be used in the ipc queue, because it ignores the ipc paradigm.
- * It ignore the format used, so in the prospective of roles-responsibilities, it should be
- * used in another thread, not in the IPC thread.
- * It is used here as an heritage from the previous ipc mechanism that used streams (cout)
- * instead of the boost::interprocess method.
- *
- * @todo Reorganize this to be used in a separate thread.
- * */
+/** @brief Output Vessel data to the vmslike file
+ */
 class ExportVmslikeOutputMessage : public OutputMessage
 {
 public:
@@ -27,6 +19,7 @@ public:
         return ExportVms;
     }
 
+    bool process();
     bool send(std::ostream &);
     size_t sendBinary(void *buffer, size_t maxlen);
 

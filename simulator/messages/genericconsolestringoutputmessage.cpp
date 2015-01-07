@@ -11,6 +11,11 @@ GenericConsoleStringOutputMessage::GenericConsoleStringOutputMessage(const std::
 {
 }
 
+bool GenericConsoleStringOutputMessage::process()
+{
+    return true;
+}
+
 bool GenericConsoleStringOutputMessage::send(std::ostream &strm)
 {
     MutexLocker l(&glob_mutex);

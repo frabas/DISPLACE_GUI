@@ -17,6 +17,11 @@ MoveVesselOutputMessage::MoveVesselOutputMessage(int _tstep, Vessel *vessel)
     data.state = vessel->get_state();
 }
 
+bool MoveVesselOutputMessage::process()
+{
+    return true;
+}
+
 bool MoveVesselOutputMessage::send(ostream &strm)
 {
     MutexLocker locker(&glob_mutex);

@@ -83,7 +83,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     gav2=revenue_from_av_prices-fuelcost;
 }
 
-bool VesselLogbookOutputMessage::send(std::ostream &)
+bool VesselLogbookOutputMessage::process()
 {
     std::ostringstream ss;
 
@@ -111,6 +111,34 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
     MutexLocker l(&glob_mutex);
 
     loglike << ss.str();
+    return true;
+}
+
+bool VesselLogbookOutputMessage::send(std::ostream &)
+{
+    std::ostringstream ss;
+
+    ss << setprecision(0) << fixed;
+    // vessel / date dep / date arr / reason to return to port / cum steaming in hours/
+    //    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
+    ss << tstepdep << " " << tstep << " "
+        << rtbb << " "
+        << cumstm << " "
+        << node << " "
+        << idx << " "
+        << name << " "
+        << timeatsea << " "
+        << cumfcons << " "
+        << travdist << " ";
+    for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
+        ss  << *it << " " ;
+    ss  << freq_metiers << " " << revenue << " " ;
+    ss  << revenue_from_av_prices << " " ;
+    ss  << fuelcost << " " ;
+    ss  << gav << " " ;
+    ss  << gav2 << " " ;
+    ss  << " " << std::endl;
+
     if (use_gui) {
         std::cout << "=v" << ss.str();
     }

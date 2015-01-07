@@ -18,6 +18,10 @@ public:
         return ForceExit;
     }
 
+    bool process() {
+        return false;
+    }
+
     bool send(std::ostream &) {
         return false;
     }
@@ -105,21 +109,24 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
         mQueue.pop();
         unlock();
 
-        switch (mType) {
-        case TextWithStdOut:
-            exit = !msg->send(mOutStream);
-            break;
-        case Binary:
-            len = msg->sendBinary(buffer, 1024);
-            if (len == (size_t)-1) {
-                exit = true;
-            } else if (len > 0) {
-                IpcMessageTypes t = msg->getType();
-//                std::cout << "** Sending message type " << t << " length: " << len << std::endl;
+        exit = !msg->process();
 
-                ipcQueue.push(t,buffer, len);
+        if (!exit) {
+            switch (mType) {
+            case TextWithStdOut:
+                exit = !msg->send(mOutStream);
+                break;
+            case Binary:
+                len = msg->sendBinary(buffer, 1024);
+                if (len == (size_t)-1) {
+                    exit = true;
+                } else if (len > 0) {
+                    IpcMessageTypes t = msg->getType();
+                    //                std::cout << "** Sending message type " << t << " length: " << len << std::endl;
+                    ipcQueue.push(t,buffer, len);
+                }
+                break;
             }
-            break;
         }
     }
 

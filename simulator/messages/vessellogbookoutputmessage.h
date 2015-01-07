@@ -18,6 +18,7 @@ public:
         return VesselLogbook;
     }
 
+    bool process();
     bool send(std::ostream &);
     virtual size_t sendBinary(void *buffer, size_t maxlen);
 

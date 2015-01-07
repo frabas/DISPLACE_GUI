@@ -2,6 +2,8 @@
 #define VESSELLOGBOOKOUTPUTMESSAGE_H
 
 #include <outputmessage.h>
+#include <ipcmsgtypes.h>
+
 #include <ostream>
 #include <string>
 #include <vector>
@@ -25,9 +27,7 @@ public:
 private:
     std::ostream &loglike;
 
-    unsigned int tstep, tstepdep;
-    int rtbb, node, idx;
-    double cumstm, timeatsea,cumfcons,travdist, revenue, revenue_from_av_prices, fuelcost, gav,gav2;
+    displace::ipc::VesselLogbookMessage logbook;
     std::string name, freq_metiers, length_class;
 
     std::vector<double> cumul;

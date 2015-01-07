@@ -19,6 +19,12 @@ struct MoveVesselMessage {
     int state;
 };
 
+struct VesselLogbookMessage {
+    unsigned int tstep, tstepdep;
+    int rtbb, node, idx;
+    double cumstm, timeatsea,cumfcons,travdist, revenue, revenue_from_av_prices, fuelcost, gav,gav2;
+};
+
 }
 }
 

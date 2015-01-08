@@ -247,7 +247,7 @@ bool DisplaceModel::prepareDatabaseForSimulation()
 bool DisplaceModel::clearStats()
 {
     mStatsPopulations.clear();
-    for (int i = 0; i < mStatsNationsCollected.size(); ++i) {
+    for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
         mStatsPopulationsCollected[i].clear();
     }
 

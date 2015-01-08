@@ -32,7 +32,7 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mInterestingPop(),
-      mInterestingSizeTotal(true),
+      mInterestingSizeTotal(false),
       mInterestingSizeAvg(true),
       mInterestingSizeMin(false),
       mInterestingSizeMax(false),

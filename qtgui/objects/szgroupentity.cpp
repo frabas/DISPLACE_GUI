@@ -43,7 +43,7 @@ int SzGroupEntity::rowCount() const
 {
     if (model->getModel() != 0 && model->getModelIdx() != -1) {
         if (mGroupIndex == -1)
-            return model->getModel()->getSzGrupsCount() + 1;
+            return model->getModel()->getSzGrupsCount() + 4;    // Total, Average
     }
 
     return 0;

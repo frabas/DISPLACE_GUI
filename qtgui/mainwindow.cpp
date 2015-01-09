@@ -600,16 +600,23 @@ void MainWindow::on_cmdStop_clicked()
 
 void MainWindow::on_actionScenario_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+    if (!currentModel || currentModel->modelType() == DisplaceModel::OfflineModelType)
         return;
 
+    bool askForReload = (currentModel->modelType() == DisplaceModel::LiveModelType);
+    openScenarioDialog(currentModel->fullpath(), askForReload);
+}
+
+void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload)
+{
     if (currentModel) {
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
-        dlg.setScenarioPath(currentModel->fullpath());
+        dlg.setScenarioPath(suggestedPath);
         if (dlg.exec() == QDialog::Accepted) {
             int r = QMessageBox::question(this, tr("Saving scenario"),
-                                          tr("The scenario file must be saved and the model reloaded. Proceed?"),
+                                          QString(tr("The scenario file must be saved%1. Proceed?"))
+                                            .arg(askForReload ? " and the model reloaded" : ""),
                                           QMessageBox::No, QMessageBox::Yes);
             if (r == QMessageBox::Yes) {
                 currentModel->setScenario(dlg.getScenario());
@@ -631,9 +638,10 @@ void MainWindow::on_actionScenario_triggered()
                     return;
                 }
 
-                Loader *loader = new Loader(this,currentModel->fullpath());
-
-                startBackgroundOperation(loader,0);
+                if (askForReload) {
+                    Loader *loader = new Loader(this,currentModel->fullpath());
+                    startBackgroundOperation(loader,0);
+                }
             }
         }
     }
@@ -872,7 +880,7 @@ int MainWindow::newEditorModel(QString name)
     return i;
 }
 
-void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *waitdialog)
+void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *waitdialog, QObject *receiver, const char *onEndSlot)
 {
     QThread *thread = new QThread(this);
 
@@ -893,6 +901,8 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
     connect (work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
     connect (work, SIGNAL(warning(QString,QString)), this, SLOT(showWarningMessageBox(QString,QString)));
+    if (onEndSlot)
+        connect (work, SIGNAL(completed(bool)), receiver, onEndSlot);
 
     thread->start();
 }
@@ -1360,8 +1370,10 @@ public:
         setAbortEnabled(true);
         int n = 0;
         foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
-            if (aborted())
+            if (aborted()) {
+                setFail(tr("Aborted by user"));
                 break;
+            }
             setProgress(n);
 
             builder.create(node, mModel->linkedShortestPathFolder());
@@ -1422,8 +1434,22 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         builder->setRelevantNodes(l);
     }
 
-    startBackgroundOperation(builder, dialog);
+    startBackgroundOperation(builder, dialog, this, SLOT(end_ShortestPathCreated(bool)));
 }
+
+void MainWindow::end_ShortestPathCreated(bool completed)
+{
+    if (completed) {
+        QString outname = currentModel->outputName();
+        QString path = currentModel->fullpath();
+        path = path.replace(outname + ".dat", outname + "_XX.dat");
+        currentModel->setOutputName(outname + "_XX");
+        openScenarioDialog(path, false);
+    } else {
+        QMessageBox::warning(this, tr("Shortest path creation failed."), tr("Process was not completed."));
+    }
+}
+
 
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
 {

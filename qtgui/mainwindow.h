@@ -151,8 +151,10 @@ private slots:
     void on_actionAbort_Operation_triggered();
     void on_actionAbout_displace_triggered();
     void on_cmdProfileEnable_toggled(bool checked);
-
     void on_cmdProfileSave_clicked();
+
+public slots:
+    void end_ShortestPathCreated(bool);
 
 signals:
     void modelStateChanged();
@@ -177,12 +179,14 @@ protected:
 
     int newEditorModel(QString name);
 
-    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog);
+    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog, QObject *receiver = 0, const char *onEndSlot = 0);
     void startBackgroundOperation (BackgroundWorkerWithWaitDialog *work);
     void startMouseMode (MouseMode *);
     void endMouseMode (bool success = true);
 
     bool isEditorModel();
+
+    void openScenarioDialog(QString suggestedPath, bool askForReload);
 
 private:
     Ui::MainWindow *ui;

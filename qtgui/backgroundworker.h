@@ -42,6 +42,7 @@ signals:
     void workEnded();
     void progress(int n);
     void warning(QString,QString);
+    void completed (bool success);
 
 public slots:
     void process();

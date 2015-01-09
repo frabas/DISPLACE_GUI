@@ -1,6 +1,8 @@
 #include "simulationsetupdialog.h"
 #include "ui_simulationsetupdialog.h"
 
+#include <QThread>
+
 SimulationSetupDialog::SimulationSetupDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SimulationSetupDialog)
@@ -8,6 +10,9 @@ SimulationSetupDialog::SimulationSetupDialog(QWidget *parent) :
     ui->setupUi(this);
 
     ui->outName->setReadOnly(true);
+
+    int x = QThread::idealThreadCount() - 4;
+    ui->labelThreadHint->setText(QString(tr("The suggested number of thread for this processor is %1")).arg(x >= 1 ? x : 1));
 }
 
 SimulationSetupDialog::~SimulationSetupDialog()

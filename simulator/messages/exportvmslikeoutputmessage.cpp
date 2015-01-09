@@ -18,7 +18,7 @@ ExportVmslikeOutputMessage::ExportVmslikeOutputMessage(ostream &strm, unsigned i
     state = vessel->get_state();
 }
 
-bool ExportVmslikeOutputMessage::send()
+bool ExportVmslikeOutputMessage::process()
 {
     MutexLocker l(&glob_mutex);
 
@@ -35,4 +35,14 @@ bool ExportVmslikeOutputMessage::send()
             << state << " " <<  endl;
 
     return true;
+}
+
+bool ExportVmslikeOutputMessage::send(std::ostream &)
+{
+    return true;
+}
+
+size_t ExportVmslikeOutputMessage::sendBinary(void *buffer, size_t maxlen)
+{
+    return 0;
 }

@@ -1,7 +1,7 @@
 #include "vessellogbookoutputmessage.h"
 
 #include <Vessel.h>
-
+#include <helpers.h>
 #include <mutexlocker.h>
 
 extern pthread_mutex_t glob_mutex;
@@ -10,20 +10,20 @@ extern bool use_gui;
 VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations)
     : loglike(strm)
 {
-    tstep = _tstep;
-    tstepdep = v->get_tstep_dep();
-    rtbb = v->get_reason_to_go_back();
-    cumstm = v->get_cumsteaming();
-    node = v->get_loc()->get_idx_node();
-    idx = v->get_idx();
+    logbook.tstep = _tstep;
+    logbook.tstepdep = v->get_tstep_dep();
+    logbook.rtbb = v->get_reason_to_go_back();
+    logbook.cumstm = v->get_cumsteaming();
+    logbook.node = v->get_loc()->get_idx_node();
+    logbook.idx = v->get_idx();
     name = v->get_name();
-    timeatsea = v->get_timeatsea();
-    cumfcons = v->get_cumfuelcons();
-    travdist = v->get_traveled_dist_this_trip();
+    logbook.timeatsea = v->get_timeatsea();
+    logbook.cumfcons = v->get_cumfuelcons();
+    logbook.travdist = v->get_traveled_dist_this_trip();
 
     vector< vector<double> > a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
     cumul.resize(a_catch_pop_at_szgroup.size(), 0);
-    revenue=0.0;
+    logbook.revenue=0.0;
     freq_metiers="";
     for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
@@ -58,14 +58,14 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
                 double price_this_stock =0;
 
                                  // cumulated to revenue
-                revenue+= cumul[pop]*price_this_stock*freq_this_met;
+                logbook.revenue+= cumul[pop]*price_this_stock*freq_this_met;
                 out << ":" << freq_this_met;
                 freq_metiers+="_"+out.str();
             }
         }
     }							 // end pop
 
-    revenue_from_av_prices=0.0;
+    logbook.revenue_from_av_prices=0.0;
     for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
         vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
@@ -73,47 +73,86 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
-            revenue_from_av_prices += a_catch_pop_at_szgroup[pop][sz] * v->get_loc()->get_prices_per_cat(pop, comcat_this_size);
+            logbook.revenue_from_av_prices += a_catch_pop_at_szgroup[pop][sz] * v->get_loc()->get_prices_per_cat(pop, comcat_this_size);
         }
     }
 
     length_class =v->get_length_class();
-    fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
-    gav=revenue-fuelcost;
-    gav2=revenue_from_av_prices-fuelcost;
+    logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
+    logbook.gav=logbook.revenue-logbook.fuelcost;
+    logbook.gav2=logbook.revenue_from_av_prices-logbook.fuelcost;
 }
 
-bool VesselLogbookOutputMessage::send()
+bool VesselLogbookOutputMessage::process()
 {
     std::ostringstream ss;
 
     ss << setprecision(0) << fixed;
     // vessel / date dep / date arr / reason to return to port / cum steaming in hours/
     //    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
-    ss << tstepdep << " " << tstep << " "
-        << rtbb << " "
-        << cumstm << " "
-        << node << " "
-        << idx << " "
+    ss << logbook.tstepdep << " " << logbook.tstep << " "
+        << logbook.rtbb << " "
+        << logbook.cumstm << " "
+        << logbook.node << " "
+        << logbook.idx << " "
         << name << " "
-        << timeatsea << " "
-        << cumfcons << " "
-        << travdist << " ";
+        << logbook.timeatsea << " "
+        << logbook.cumfcons << " "
+        << logbook.travdist << " ";
     for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
         ss  << *it << " " ;
-    ss  << freq_metiers << " " << revenue << " " ;
-    ss  << revenue_from_av_prices << " " ;
-    ss  << fuelcost << " " ;
-    ss  << gav << " " ;
-    ss  << gav2 << " " ;
+    ss  << freq_metiers << " " << logbook.revenue << " " ;
+    ss  << logbook.revenue_from_av_prices << " " ;
+    ss  << logbook.fuelcost << " " ;
+    ss  << logbook.gav << " " ;
+    ss  << logbook.gav2 << " " ;
     ss  << " " << std::endl;
 
     MutexLocker l(&glob_mutex);
 
     loglike << ss.str();
-    if (use_gui) {
-        std::cout << "=v" << ss.str();
-    }
+    return true;
+}
+
+bool VesselLogbookOutputMessage::send(std::ostream &)
+{
+    std::ostringstream ss;
+
+    ss << setprecision(0) << fixed;
+    // vessel / date dep / date arr / reason to return to port / cum steaming in hours/
+    //    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
+    ss << logbook.tstepdep << " " << logbook.tstep << " "
+        << logbook.rtbb << " "
+        << logbook.cumstm << " "
+        << logbook.node << " "
+        << logbook.idx << " "
+        << name << " "
+        << logbook.timeatsea << " "
+        << logbook.cumfcons << " "
+        << logbook.travdist << " ";
+    for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
+        ss  << *it << " " ;
+    ss  << freq_metiers << " " << logbook.revenue << " " ;
+    ss  << logbook.revenue_from_av_prices << " " ;
+    ss  << logbook.fuelcost << " " ;
+    ss  << logbook.gav << " " ;
+    ss  << logbook.gav2 << " " ;
+    ss  << " " << std::endl;
+
+    std::cout << "=v" << ss.str();
 
     return true;
+}
+
+size_t VesselLogbookOutputMessage::sendBinary(void *buffer, size_t maxlen)
+{
+    UNUSED(maxlen);
+
+    logbook.popnum = cumul.size();
+    size_t i = put(buffer, 0, logbook);
+    for (size_t n = 0; n < logbook.popnum; ++n) {
+        i = put(buffer, i, cumul[n]);
+    }
+
+    return i;
 }

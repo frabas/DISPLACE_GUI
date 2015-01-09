@@ -1,10 +1,11 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.7.1.0"
-#define VERSION_COMMA 0,7,1,0
+#define VERSION "0.7.2"
+#define VERSION_BUILD 1001
+#define VERSION_COMMA 0,7,2,VERSION_BUILD
 
-#define VER_PRODUCTVERSION_STR      "0.7.1\0"
+#define VER_PRODUCTVERSION_STR      "0.7.2\0"
 
 #define VER_FILEVERSION             VERSION_COMMA
 #define VER_FILEVERSION_STR         VERSION "\0"

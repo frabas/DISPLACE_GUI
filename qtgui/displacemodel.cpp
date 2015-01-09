@@ -32,7 +32,7 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mInterestingPop(),
-      mInterestingSizeTotal(true),
+      mInterestingSizeTotal(false),
       mInterestingSizeAvg(true),
       mInterestingSizeMin(false),
       mInterestingSizeMax(false),
@@ -247,7 +247,7 @@ bool DisplaceModel::prepareDatabaseForSimulation()
 bool DisplaceModel::clearStats()
 {
     mStatsPopulations.clear();
-    for (int i = 0; i < mStatsNationsCollected.size(); ++i) {
+    for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
         mStatsPopulationsCollected[i].clear();
     }
 
@@ -409,15 +409,17 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
-
         mVesselsStatsDirty = false;
     }
 
-    /* Clear cum stats on new years, independently of the dirty status */
     if (mCalendar && mCalendar->isYear(tstep)) {
         mStatsNationsCollected.clear();
         mStatsHarboursCollected.clear();
-        mStatsPopulationsCollected.clear();
+#if 0       // Not sure if this is needed. Disabling it for now.
+        for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
+            mStatsPopulationsCollected[i].clear();
+        }
+#endif
     }
 
 

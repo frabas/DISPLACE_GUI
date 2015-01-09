@@ -9,7 +9,14 @@ class GenericConsoleStringOutputMessage : public OutputMessage
 public:
     explicit GenericConsoleStringOutputMessage(const std::string &txt);
 
-    bool send();
+    virtual IpcMessageTypes getType() const {
+        return GenericConsole;
+    }
+
+    bool process();
+    bool send(std::ostream &strm);
+    size_t sendBinary(void *buffer, size_t maxlen);
+
 private:
     std::string msg;
 };

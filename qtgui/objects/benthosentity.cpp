@@ -2,6 +2,7 @@
 
 #include <objecttreemodel.h>
 #include <displacemodel.h>
+#include <mapobjectscontroller.h>
 
 namespace objecttree {
 
@@ -42,6 +43,8 @@ QVariant BenthosEntity::data(const QModelIndex &index, int role) const
     if (mId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
             return QString("%1").arg(model->getModel()->getBenthosList()[mId]->getId());
+        if (role == Qt::TextColorRole)
+            return model->getMapControl()->getPalette(model->getModelIdx(), PopulationRole).color(mId);
         /*
         if (role == Qt::ToolTipRole) {
             Vessel *v = model->getModel()->getVesselList()[mVesselId];

@@ -747,6 +747,8 @@ void MainWindow::on_cmdSetup_clicked()
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
 
         set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
+
+        updateModelList();
     }
 }
 

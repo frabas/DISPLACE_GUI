@@ -97,7 +97,6 @@
     <addaction name="actionLoad_Harbours"/>
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="separator"/>
-    <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionCreate_Shortest_Path"/>
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
@@ -947,7 +946,7 @@
   </action>
   <action name="actionCreate_Shortest_Path">
    <property name="text">
-    <string>Create Shortest Path</string>
+    <string>Create Shortest Path...</string>
    </property>
   </action>
   <action name="actionAdd_Penalty_from_File">

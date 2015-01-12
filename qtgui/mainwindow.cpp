@@ -742,7 +742,7 @@ void MainWindow::on_cmdSetup_clicked()
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
-//        models[0]->setSimulationName(dlg.getSimulationName());
+        models[0]->setSimulationName(dlg.getSimulationName());
 //        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
 
@@ -1330,7 +1330,7 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 
     lastpath = sets.value("last_spath", QDir::homePath()).toString();
 
-    QString fn = QFileDialog::getExistingDirectory(this, tr("Import Harbours file"), lastpath);
+    QString fn = QFileDialog::getExistingDirectory(this, tr("Link shortest path folder"), lastpath);
     if (!fn.isEmpty()) {
         currentModel->linkShortestPathFolder(fn);
         sets.setValue("last_spath", fn);

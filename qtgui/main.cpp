@@ -2,10 +2,13 @@
 
 #include <QCoreApplication>
 #include <QApplication>
+#include <ipcqueue.h>
 
 #include <QMapControl/ImageManager.h>
 
 #include <gdal/ogrsf_frmts.h>
+
+#include <modelobjects/vesseldata.h>
 
 int main (int argc, char *argv[])
 {
@@ -14,6 +17,12 @@ int main (int argc, char *argv[])
     QCoreApplication::setOrganizationName("Studiofuga");
     QCoreApplication::setOrganizationDomain("studiofuga.com");
     QCoreApplication::setApplicationName("displace");
+
+    // Cleanup the shm objets
+    IpcQueue::forceCleanup();
+
+    // Register here any qmetatype
+    qRegisterMetaType<VesselStats>("VesselStats");
 
     QApplication app(argc, argv);
     MainWindow mw;

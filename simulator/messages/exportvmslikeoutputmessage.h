@@ -8,12 +8,20 @@
 #include <ostream>
 #include <string>
 
+/** @brief Output Vessel data to the vmslike file
+ */
 class ExportVmslikeOutputMessage : public OutputMessage
 {
 public:
-    ExportVmslikeOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *vessel);
+    ExportVmslikeOutputMessage(ostream &strm, unsigned int _tstep, Vessel *vessel);
 
-    bool send();
+    virtual IpcMessageTypes getType() const {
+        return ExportVms;
+    }
+
+    bool process();
+    bool send(std::ostream &);
+    size_t sendBinary(void *buffer, size_t maxlen);
 
 private:
     std::ostream &vmslike;

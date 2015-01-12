@@ -74,7 +74,7 @@ class Vessel
 		vector< vector<double> > cpue_nodes_species;
 		vector< vector<double> > gshape_cpue_nodes_species;
 		vector< vector<double> > gscale_cpue_nodes_species;
-		list<vertex_t> roadmap;
+        std::list<vertex_t> roadmap;
 								 // because movement is semi-continuous...
 		double x, y, prev_x, prev_y, next_x, next_y, course;
 								 // fixed
@@ -165,7 +165,7 @@ protected:
         const vector<int> &get_idx_used_metiers_this_trip ();
         const multimap<int,int> &get_possible_metiers () const;
         const multimap<int,double> &get_freq_possible_metiers () const;
-        const list<vertex_t> &get_roadmap () const;
+        const std::list<vertex_t> &get_roadmap () const;
 		bool get_inharbour() const;
 		bool get_inactive() const;
 		bool get_natio() const;
@@ -246,7 +246,7 @@ protected:
 		void set_freq_experiencedcpue_fgrounds(vector<double> newval);
 		void set_freq_experiencedcpue_fgrounds_per_pop(vector<vector<double> > newval);
 		void clear_idx_used_metiers_this_trip();
-        void set_roadmap (const list<vertex_t> &_roadmap);
+        void set_roadmap (const std::list<vertex_t> &_roadmap);
 		void set_inharbour (bool logic);
 		void set_inactive (bool logic);
 		void set_natio (bool logic);

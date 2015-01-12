@@ -4,7 +4,7 @@ DESTDIR=../
 
 include ("$$top_srcdir/localconfig.pri")
 
-INCLUDEPATH=../include/
+INCLUDEPATH +=../include/
 
 win32 {
     # For GetProcessMemoryInfo()
@@ -25,7 +25,8 @@ SOURCES= \
     myRutils.cpp \
     mkpath.cpp \
     memoryinfo.cpp \
-    options.cpp
+    options.cpp \
+    ipcqueue.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -44,7 +45,11 @@ HEADERS= \
     ../include/memoryinfo.h \
     ../include/helpers.h \
     ../include/options.h \
-    ../include/mutexlocker.h
+    ../include/mutexlocker.h \
+    ../include/guiproto_struct.h \
+    ../include/ipcqueue.h \
+    ../include/ipcmsgtypes.h \
+    ../include/version.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

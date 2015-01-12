@@ -10,7 +10,13 @@ INCLUDEPATH=../include
 include ("$$top_srcdir/localconfig.pri")
 
 QMAKE_CXXFLAGS +=
-LIBS+= -L.. -ldisplacecommons -lpthread
+LIBS+= -L.. -ldisplacecommons
+
+unix {
+    LIBS += -lrt
+}
+
+LIBS += -lpthread
 
 macx {
     CONFIG -= app_bundle
@@ -60,6 +66,7 @@ HEADERS= \
     ../include/m_constants.h \
     ../include/options.h \
     ../include/profiler.h \
+    ../include/version.h \
     thread_vessels.h \
     values.h \
     outputqueuemanager.h \

@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QProcess>
 
+#include <simulatoripcmanager.h>
 #include <Vessel.h>
 #include <memory>
 
@@ -70,9 +71,13 @@ private slots:
     void readyReadStandardOutput();
     void started();
     void subprocessStateChanged(QProcess::ProcessState);
+    bool processCodedLine(QString line);
+    void vesselLogbookReceived(VesselStats);
 
 private:
     QProcess *mSimulation;
+    QThread *mIpcThread;
+    SimulatorIpcManager *mIpcQueue;
     std::shared_ptr<DisplaceModel> mModel;
     int mSimSteps;
     int mLastStep;
@@ -82,7 +87,6 @@ private:
     QProcess::ProcessState mProcessState;
     bool mCapture;
 
-    bool processCodedLine(QString line);
     void parseUpdateVessel(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
     void parseDebug(QStringList fields);

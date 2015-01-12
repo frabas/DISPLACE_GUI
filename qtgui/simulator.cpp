@@ -12,6 +12,8 @@ QString Simulator::SET_NUMTHREADS ("simul_numthreads");
 
 Simulator::Simulator()
     : mSimulation(0),
+      mIpcThread(0),
+      mIpcQueue(0),
       mModel(),
       mSimSteps(8761),
       mLastStep(-1),
@@ -35,6 +37,28 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
         delete mSimulation;
         mSimulation = 0;
     }
+    if (mIpcThread != 0) {
+        delete mIpcThread;
+    }
+    if (mIpcQueue != 0) {
+        delete mIpcQueue;
+    }
+
+    mIpcThread = new QThread(this);
+    mIpcThread->setObjectName("IpcThread");
+
+    try {
+        mIpcQueue = new SimulatorIpcManager(mIpcThread);
+    } catch (boost::interprocess::bad_alloc &xc) {
+        qFatal("Can't allocate memory %s", xc.what());
+        return false;
+    }
+
+    connect (mIpcQueue, SIGNAL(receivedCodedLine(QString)), this, SLOT(processCodedLine(QString)));
+    connect (mIpcQueue, SIGNAL(vesselMoved(int,int,float,float,float,float,int)), SIGNAL(vesselMoved(int,int,float,float,float,float,int)));
+    connect (mIpcQueue, SIGNAL(vesselLogbookReceived(VesselStats)), this, SLOT(vesselLogbookReceived(VesselStats)));
+
+    mIpcThread->start();
 
     mSimuName = simul_name;
     mSimulation = new QProcess();
@@ -116,6 +140,7 @@ void Simulator::error(QProcess::ProcessError error)
 
 void Simulator::finished(int code, QProcess::ExitStatus status)
 {
+    mIpcQueue->forceExit();
     emit log(QString("Process exited %1 with exit status %2")
              .arg(status == QProcess::NormalExit ? "normally" : "by crash")
              .arg(code));
@@ -222,6 +247,12 @@ bool Simulator::processCodedLine(QString line)
     return true;
 }
 
+void Simulator::vesselLogbookReceived(VesselStats v)
+{
+    if (mModel)
+        mModel->collectVesselStats(v.tstep, v);
+}
+
 void Simulator::parseDebug(QStringList fields)
 {
     switch (fields[0].at(0).toLatin1()) {
@@ -258,6 +289,5 @@ void Simulator::parseUpdateVesselStats(QStringList fields)
 {
     VesselStats v = OutputFileParser::parseVesselStatLine(fields);
 
-    if (mModel)
-        mModel->collectVesselStats(v.tstep, v);
+    vesselLogbookReceived(v);
 }

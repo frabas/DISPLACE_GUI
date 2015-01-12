@@ -34,8 +34,6 @@ macx {
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
-
-    INCLUDEPATH += c:/mingw/boost_1_57_0
 }
 
 DEFINES += HAVE_GEOGRAPHICLIB
@@ -113,7 +111,8 @@ SOURCES += \
     mousemode/singleclickmousemode.cpp \
     mousemode/edgeaddmousemode.cpp \
     aboutdialog.cpp \
-    createshortestpathdialog.cpp
+    createshortestpathdialog.cpp \
+    simulatoripcmanager.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -191,9 +190,10 @@ HEADERS += \
     mousemode/movefilteringmousemodedecorator.h \
     mousemode/singleclickmousemode.h \
     mousemode/edgeaddmousemode.h \
-    version.h \
+    ../include/version.h \
     aboutdialog.h \
-    createshortestpathdialog.h
+    createshortestpathdialog.h \
+    simulatoripcmanager.h
 
 RESOURCES += \
     qtgui.qrc

@@ -1,11 +1,15 @@
 #ifndef OUTPUQUEUEMANAGER_H
 #define OUTPUQUEUEMANAGER_H
 
+#include <ipcqueue.h>
+
 #include <pthread.h>
 #include <semaphore.h>
 
 #include <queue>
+#include <list>
 #include <memory>
+#include <ostream>
 
 class OutputMessage;
 
@@ -13,9 +17,10 @@ class OutputMessage;
 class OutputQueueManager
 {
 public:
-    OutputQueueManager();
+    explicit OutputQueueManager();
+    explicit OutputQueueManager(std::ostream &stream);
 
-    void start();    
+    void start();
     void finish();
 
     void lock() {
@@ -46,6 +51,11 @@ private:
     sem_t mSemaphore;
 
     std::queue<std::shared_ptr<OutputMessage> > mQueue;
+
+    IpcQueue ipcQueue;
+    enum ProtocolType { TextWithStdOut, Binary } mType;
+
+    std::ostream &mOutStream;        ///< File descriptor for socket/pipe (Binary protocol)
 };
 
 #endif // OUTPUQUEUEMANAGER_H

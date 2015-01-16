@@ -37,7 +37,7 @@ public:
     template <typename T>
     size_t put (void *buffer, size_t index, T v) {
         for (size_t i = 0; i < sizeof(T); ++i) {
-            *((char *)buffer +i) = *((char *)&v + i);
+            *((char *)buffer + index + i) = *((char *)&v + i);
         }
         return index + sizeof(T);
     }

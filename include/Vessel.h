@@ -373,5 +373,6 @@ protected:
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
 
+        static std::string nationalityFromName (const std::string &name);
 };
 #endif							 // VESSEL_H

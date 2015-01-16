@@ -110,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mMemoryWatchTimer.start(2500);
 
     mSimulation = new Simulator();
+    mSimulation->setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState,QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState,QProcess::ProcessState)));
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
@@ -747,6 +748,7 @@ void MainWindow::on_cmdSetup_clicked()
     dlg.setSimulationOutputName(models[0]->outputName());
     dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
     dlg.setNumThreads(set.value(Simulator::SET_NUMTHREADS, 4).toInt());
+    dlg.setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
@@ -755,6 +757,9 @@ void MainWindow::on_cmdSetup_clicked()
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
 
         set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
+        set.setValue(Simulator::SET_VERBOSITY, dlg.getVerbosityLevel());
+        if (mSimulation)
+            mSimulation->setVerbosityLevel(dlg.getVerbosityLevel());
 
         updateModelList();
     }

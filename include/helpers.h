@@ -25,17 +25,11 @@
  * find: cout(.*);  replace: dout(cout \1);
  * */
 
-#ifdef VERBOSE
-#define dout(x) x
-#else
-#define dout(x)
-#endif
+extern int verbosity;
+#define outv(l,x) { if (verbosity >= l) { x; } }
 
-#ifdef DEBUG_SIMU
-# define outc(x) x
-#else
-# define outc(x)
-#endif
+#define dout(x) outv(3,x)
+#define outc(x) outv(1,x)
 
 #define UNUSED(expr) do { (void)(expr); } while (0)
 

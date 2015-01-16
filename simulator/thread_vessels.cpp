@@ -431,7 +431,7 @@ void thread_vessel_init (int n)
         tparam.__sched_priority -=2;
         policy = SCHED_RR;
 #else
-        tparam.__sched_priority = -2;
+        tparam.sched_priority = -2;
         policy = 0;
 #endif
 

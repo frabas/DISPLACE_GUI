@@ -81,7 +81,11 @@ void SimulationSetupDialog::setVerbosityLevel(int value)
 
 void SimulationSetupDialog::updateMessages()
 {
+#ifdef __unix
     int x = QThread::idealThreadCount() - 4;
+#else
+    int x = QThread::idealThreadCount();
+#endif
 
     if (x != ui->threads->value())
         ui->labelThreadHint->setText(QString(tr("The suggested number of thread for this processor is %1")).arg(x >= 1 ? x : 1));

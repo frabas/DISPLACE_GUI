@@ -18,6 +18,7 @@
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
 #include <createshortestpathdialog.h>
+#include <workers/shortestpathbuilderworker.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -1355,39 +1356,6 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 
 }
 
-class ShortestPathBuilderWorker : public BackgroundWorkerWithWaitDialog {
-    DisplaceModel *mModel;
-    QList<std::shared_ptr<NodeData> > mRelevantNodes;
-public:
-    ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
-        : BackgroundWorkerWithWaitDialog(main, dialog), mModel(model) {
-    }
-
-    void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes) {
-        mRelevantNodes = nodes;
-    }
-
-    void execute() override {
-        ShortestPathBuilder builder(mModel);
-
-        setText("Building shortest paths");
-        setProgressMax(mRelevantNodes.size());
-        setAbortEnabled(true);
-        int n = 0;
-        foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
-            if (aborted()) {
-                setFail(tr("Aborted by user"));
-                break;
-            }
-            setProgress(n);
-
-            builder.create(node, mModel->linkedShortestPathFolder());
-            ++n;
-        }
-        setProgress(n);
-    }
-};
-
 void MainWindow::on_actionCreate_Shortest_Path_triggered()
 {
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
@@ -1401,7 +1369,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
     currentModel->linkShortestPathFolder(dlg.getShortestPathFolder());
 
     WaitDialog *dialog = new WaitDialog(this);
-    ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
+    displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
     dialog->setProgress(true, 0);
 
     if (dlg.isAllNodesAreRelevantChecked()) {

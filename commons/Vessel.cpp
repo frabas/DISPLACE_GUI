@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -67,16 +67,15 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 	cumfuelcons=0;
 	cumcatches=0;
 	consotogetthere=0;
-	carrycapacity=2000;			 // TO BE FILLED FROM DATA
-	tankcapacity=20000;			 // TO BE FILLED FROM DATA
-	nbfpingspertrip=3;			 // TO BE FILLED FROM DATA
+    carrycapacity=2000;
+    tankcapacity=20000;
+    nbfpingspertrip=3;
 	message=0;
 
     init();
 }
 
 
-//Vessel::Vessel(boost::shared_ptr<Node> p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
 Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
 const vector<int> &_harbours, const vector<int> &_fgrounds,
 const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds,
@@ -234,7 +233,6 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 }
 
 
-//Vessel::Vessel(string name, boost::shared_ptr<Node> a_location)
 void Vessel::init()
 {
     // deduce the vessel nationality from the vessel name
@@ -291,7 +289,6 @@ string Vessel::get_name () const
 }
 
 
-//boost::shared_ptr<Node> Vessel::get_loc() const
 Node* Vessel::get_loc() const
 {
 	return(m_location);
@@ -1647,7 +1644,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								 // ...and reverse back to get the landings only for the logbook declaration.
 								catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
 
-							}
+                            // TO DO: use integrate.cpp instead
+                            }
 							else
 							{
 								new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
@@ -1932,7 +1930,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 		else
 		{
             dout(cout  << "this pop " << populations.at(pop)->get_name() << " is implicit (or outside the range)...catch knowing cpue only! " << endl);
-			// tips: put tot catch into the first bin...we dont care of szgroup here...
+            // tips: put tot catch into the first bin...we don´t care which szgroup here...
 			//vector<double> cpues = find_entries_i_d (cpue_per_stk_on_nodes, idx_node);
 			vector <int> grds = this->get_fgrounds();
 								 // relative node index to this vessel
@@ -2039,7 +2037,7 @@ void Vessel::compute_experiencedcpue_fgrounds()
 {
 	double cum_cpue=0;
 
-	// note taht at the tstep=0, no one node has been visited, experiencedcpue_fgrounds is full a guesses !
+    // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full a guesses !
 	// but there are qualified guesses: actually cpue from the frequency given by the input data...
 
     dout(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
@@ -2079,7 +2077,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
 {
 	vector<double> cum_cpue_over_pop;
 
-	// note taht at the tstep=0, no one node has been visited, experiencedcpue_fgrounds is full of guesses!
+    // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full a guesses !
 	// but there are qualified guesses: actually cpue from the frequency given by the input data...
 
     dout(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
@@ -2163,7 +2161,7 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
 
 	// here a code to cancel (or at least lower down) the visit into the regulated polygons:
 	// screen and put very low proba of visit eg 0.0001 if grounds inside the polygons
-	// (if >0 then assuming not total compliance here...)
+    // (if >0 then not assuming a total compliance here...)
 	// (this is also convenient to avoid dividing  0 by something!!)
 	double cumul=0;
     unsigned int count=0;
@@ -2188,7 +2186,7 @@ void Vessel::alter_freq_fgrounds_for_nodes_in_polygons(multimap <int, int> nodes
         dout(cout << "all grounds are included in the restricted polygons (!) for this vessel " << this->get_name() << endl);
     }
 	// => then this vessel will still fish on those grounds (with equal proba by the way), assuming non-compliance...
-	// need to think to an alternative model here....
+    // TO DO: need to think to an alternative model here....
 
 	// then re-scale to 1
     for(unsigned int n=0; n<the_grds.size(); n++)
@@ -2574,11 +2572,11 @@ ofstream& freq_distance)
 	// so, again, the 'end of trip' trigger events is a crucial assumption......
 	// simulation will then poorly mimick the reality if most of the vessels
 	// have fixed duration of trips whatever the catches they perform....
-	// unfortunately this should have been asked via the questionnaire,
-	// but could also be investigated by analysing patterns of trip duration vessel by vessel...TO DO
+    // unfortunately this should be asked via the questionnaire,
+    // but could also be investigated by analysing patterns of trip duration vessel by vessel...
 
 	// in the same tracks, one could imagine to compute the expected catches and then the revenue and gav
-	// even before going visiting the ground, if the vessel was ommiscient....and base the choice of
+    // even before going visiting the ground (assuming the the vessel is ommiscient)....and base the choice of
 	// the ground on this.
 
 								 // input...
@@ -2810,12 +2808,12 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 		double a_shape = this-> get_resttime_par1();
 		double a_scale = this-> get_resttime_par2()  *calib;
         dout(cout  << "TIME FOR REST WHEN WE WILL BE AT PORT AFTER OUR TRIP"  << endl);
-								 // FILLED FROM DATA...
+
 		this-> set_timeforrest( rgamma(a_shape, a_scale) );
 		// set inactive
 		this-> set_inactive(false);
 		// set vessel nationality
-		this-> set_natio(true);	 // TO BE FILLED FROM DATA...
+        this-> set_natio(true);
 
 		// for this vessel, select the metier specific to this particular fishing ground
 		// according to the observed frequency in data
@@ -2843,7 +2841,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 		// e.g. graph 6, between 395 and other nodes...because disconnected to the rest of the network!!
 		//this->move_to(nodes.at(1730)) ;// balticonly jump to another ground close to the disable one!!!!
 								 // balticonly jump to another ground close to the disable one!!!!
-		this->move_to(nodes.at(686)) ;
+        this->move_to(nodes.at(686)) ; // MAGIC NUMBER
 		//    this->move_to(nodes.at(410)); // canadian: jump to another ground close to the disable one!!!!
 
 		// CAUTION: DANGEROUS FIX THERE! possibly the straight line symptom...
@@ -3197,7 +3195,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
 	if(path.size()==1)			 // i.e no path has been found...
 	{
-		// fix the fact that, in very few cases, certain paths are not found in a given direction (likely to come from imcomplete adjacency matrix?)
+        // fix the fact that, in very few cases, certain paths are not found in a given direction (likely to come from imcomplete adjacency matrix)
 		// so tips: use the inversed path instead! i.e. 'from' begin 'arr' while 'arr' begin 'from'
 		// and finally the path is inverted.
 
@@ -3247,7 +3245,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
 		//...or jump!
 								 // balticonly
-		this->move_to(nodes.at(685)) ;
+        this->move_to(nodes.at(685)) ; // MAGIC NUMBER
 
 	}
 
@@ -3548,7 +3546,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
 		// we then assume that the skipper choose a flexible trip duration and do not
 		// go back to port for other reasons (eg opening hours for delivery)
 		// (i.e. if timeatsea>20 he will NOT go back with bad catches or if still some fuel left)
-		// (caution: those assumptions have not been verified by questionnaire!!...we then dont know if it is true!!)
+        // (caution: those assumptions would need a check with questionnaires...)
 		// another important assumption is the carrying capacity which is actually
 		// the best observed historic catches...which create a somehow artificial ceiling for tot catches....
 

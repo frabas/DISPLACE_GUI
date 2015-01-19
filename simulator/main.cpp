@@ -391,6 +391,11 @@ int main(int argc, char* argv[])
     // -V xxx  Sets level of verbosity  (default: 0)
     // --use-gui => emits machine parsable data to stdout
 
+    /* debug with:
+      C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\build\release>displace -f "balticonly" -f2 "baseline" -s
+      "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
+    */
+
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
 
     memInfo.update();

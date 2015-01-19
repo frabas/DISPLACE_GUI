@@ -1,5 +1,5 @@
 TEMPLATE=app
-QT += core gui network sql xml printsupport
+QT += core gui network sql xml printsupport concurrent
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

@@ -1,36 +1,60 @@
 #include "shortestpathbuilderworker.h"
-#include <shortestpathbuilder.h>
+
+#include <waitdialog.h>
+
+#include <QtConcurrent>
+#include <QFuture>
 
 using namespace displace::workers;
 
-ShortestPathBuilderWorker::ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
-    : BackgroundWorkerWithWaitDialog(main, dialog), mModel(model)
+ShortestPathBuilderWorker::ShortestPathBuilderWorker(QObject *main, WaitDialog *dialog, DisplaceModel *model)
+    : QObject(main),
+      mWaitDialog(dialog),
+      mModel(model),
+      mFutureWatcher(),
+      mBuilder(mModel)
 {
 }
 
 void ShortestPathBuilderWorker::setRelevantNodes(const QList<std::shared_ptr<NodeData> > &nodes)
 {
-    mRelevantNodes = nodes;
+    foreach (std::shared_ptr<NodeData> n, nodes) {
+        arg a;
+        a.node = n;
+        a.me = this;
+        mRelevantNodes.push_back(a);
+    }
 }
 
-void ShortestPathBuilderWorker::execute()
+void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 {
-    ShortestPathBuilder builder(mModel);
+    mWaitDialog->setProgress(true, mRelevantNodes.size());
+    mWaitDialog->enableAbort(true);
+    mWaitDialog->show();
 
-    setText("Building shortest paths");
-    setProgressMax(mRelevantNodes.size());
-    setAbortEnabled(true);
-    int n = 0;
-    foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
-        if (aborted()) {
-            setFail(tr("Aborted by user"));
-            break;
-        }
-        setProgress(n);
+    QFuture<void> future = QtConcurrent::map(mRelevantNodes, doStep);
 
-        builder.create(node, mModel->linkedShortestPathFolder());
-        ++n;
-    }
-    setProgress(n);
+    mFutureWatcher.setFuture(future);
+    connect (&mFutureWatcher, SIGNAL(finished()), this, SLOT(completed()));
+    connect (&mFutureWatcher, SIGNAL(canceled()), this, SLOT(cancelled()));
+    connect (this, SIGNAL(finished(bool)), obj, slot);
+    connect (&mFutureWatcher, SIGNAL(progressValueChanged(int)), mWaitDialog, SLOT(setProgression(int)));
+}
+
+void ShortestPathBuilderWorker::doStep(arg a)
+{
+    a.me->mBuilder.create(a.node, a.me->mModel->linkedShortestPathFolder());
+}
+
+void ShortestPathBuilderWorker::completed()
+{
+    mWaitDialog->close();
+    emit finished(true);
+}
+
+void ShortestPathBuilderWorker::cancelled()
+{
+    mWaitDialog->close();
+    emit finished(false);
 }
 

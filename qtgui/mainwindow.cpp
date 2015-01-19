@@ -52,6 +52,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QInputDialog>
+#include <QtConcurrent>
+#include <QFuture>
+#include <QFutureWatcher>
 
 const int MainWindow::maxModels = MAX_MODELS;
 const QString MainWindow::dbSuffix = ".db";
@@ -1370,7 +1373,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
     WaitDialog *dialog = new WaitDialog(this);
     displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
-    dialog->setProgress(true, 0);
+//    dialog->setProgress(true, 0);
 
     if (dlg.isAllNodesAreRelevantChecked()) {
         builder->setRelevantNodes(currentModel->getNodesList());
@@ -1404,10 +1407,12 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         foreach (int i, nodes) {
             l.push_back(currentModel->getNodesList()[i]);
         }
-        builder->setRelevantNodes(l);
+//        builder->setRelevantNodes(l);
     }
 
-    startBackgroundOperation(builder, dialog, this, SLOT(end_ShortestPathCreated(bool)));
+//    startBackgroundOperation(builder, dialog, this, SLOT(end_ShortestPathCreated(bool)));
+
+    builder->run(this,SLOT(end_ShortestPathCreated(bool)) );
 }
 
 void MainWindow::end_ShortestPathCreated(bool completed)

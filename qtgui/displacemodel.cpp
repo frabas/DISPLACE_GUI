@@ -581,7 +581,10 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         }
     }
 
+    mScenario.setNrow_coord(cntr);
+
     cntr = 0;
+    int numedges = 0;
     foreach(GraphBuilder::Node node, nodes) {
         if (node.good) {
             std::shared_ptr<NodeData> nodedata = mNodes[nodeidx + cntr];
@@ -590,10 +593,13 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 if (nodes[adidx].good) {
                     addEdge(nodedata, translated_nodes[adidx], node.weight.size() > i ? node.weight[i] : 0.0);
                 }
+                ++numedges;
             }
             ++cntr;
         }
     }
+
+    mScenario.setNrow_graph(numedges);
 
     foreach(std::shared_ptr<NodeData> node, newnodes) {
         if (!node->mNode->get_harbour())
@@ -631,6 +637,7 @@ int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, d
 
     mNodesLayer->CreateFeature(e);
 
+    mScenario.setNrow_graph(mScenario.getNrow_graph()+1);
     return i;
 }
 

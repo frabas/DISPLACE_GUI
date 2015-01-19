@@ -186,7 +186,7 @@ protected:
 
     bool isEditorModel();
 
-    void openScenarioDialog(QString suggestedPath, bool askForReload);
+    void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
 
 private:
     Ui::MainWindow *ui;

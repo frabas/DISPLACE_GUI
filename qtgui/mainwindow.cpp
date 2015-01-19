@@ -609,15 +609,17 @@ void MainWindow::on_actionScenario_triggered()
         return;
 
     bool askForReload = (currentModel->modelType() == DisplaceModel::LiveModelType);
-    openScenarioDialog(currentModel->fullpath(), askForReload);
+    openScenarioDialog(currentModel->fullpath(), askForReload, false);
 }
 
-void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload)
+void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename)
 {
     if (currentModel) {
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
         dlg.setScenarioPath(suggestedPath);
+        if (forceRename)
+            dlg.setForceRename();
         if (dlg.exec() == QDialog::Accepted) {
             int r = QMessageBox::question(this, tr("Saving scenario"),
                                           QString(tr("The scenario file must be saved%1. Proceed?"))
@@ -1418,7 +1420,7 @@ void MainWindow::end_ShortestPathCreated(bool completed)
         QString path = currentModel->fullpath();
         path = path.replace(outname + ".dat", outname + "_XX.dat");
         currentModel->setOutputName(outname + "_XX");
-        openScenarioDialog(path, false);
+        openScenarioDialog(path, false, true);
     } else {
         QMessageBox::warning(this, tr("Shortest path creation failed."), tr("Process was not completed."));
     }

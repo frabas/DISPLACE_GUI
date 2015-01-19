@@ -37,7 +37,6 @@ signals:
 
 private slots:
     void completed();
-    void cancelled();
 
 private:
     WaitDialog *mWaitDialog;

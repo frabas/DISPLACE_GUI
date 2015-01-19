@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QFileDialog>
 #include <QSettings>
+#include <QMessageBox>
 
 static const char *dyn_alloc_options[] = {
     "baseline",
@@ -31,7 +32,8 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ScenarioDialog),
     mScen(scenario),
-    mRenamed(false)
+    mRenamed(false),
+    mForceRenamed(false)
 {
     ui->setupUi(this);
 
@@ -142,4 +144,21 @@ void ScenarioDialog::on_rename_clicked()
         sets.setValue("lastpath", s);
         mRenamed = true;
     }
+}
+
+void ScenarioDialog::on_apply_clicked()
+{
+    if (mScenarioPath.isEmpty()) {
+        QMessageBox::warning(this, tr("Rename Scenario"),
+                             tr("The scenario name cannot be empty."));
+        return;
+    }
+
+    if (mForceRenamed && !mRenamed) {
+        QMessageBox::warning(this, tr("Rename Scenario"),
+                             tr("You must rename the scenario before continuing."));
+        return;
+    }
+
+    accept();
 }

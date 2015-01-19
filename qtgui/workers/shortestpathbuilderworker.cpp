@@ -35,10 +35,10 @@ void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 
     mFutureWatcher.setFuture(future);
     connect (&mFutureWatcher, SIGNAL(finished()), this, SLOT(completed()));
-    connect (&mFutureWatcher, SIGNAL(canceled()), this, SLOT(cancelled()));
     connect (this, SIGNAL(finished(bool)), obj, slot);
     connect (&mFutureWatcher, SIGNAL(progressValueChanged(int)), mWaitDialog, SLOT(setProgression(int)));
     connect (&mFutureWatcher, SIGNAL(progressRangeChanged(int,int)), mWaitDialog, SLOT(setProgress(int,int)));
+    connect (mWaitDialog, SIGNAL(aborted()), &mFutureWatcher, SLOT(cancel()));
 }
 
 void ShortestPathBuilderWorker::doStep(arg a)
@@ -49,12 +49,8 @@ void ShortestPathBuilderWorker::doStep(arg a)
 void ShortestPathBuilderWorker::completed()
 {
     mWaitDialog->close();
-    emit finished(true);
+    if (mFutureWatcher.isCanceled())
+        emit finished(false);
+    else
+        emit finished(true);
 }
-
-void ShortestPathBuilderWorker::cancelled()
-{
-    mWaitDialog->close();
-    emit finished(false);
-}
-

@@ -45,9 +45,12 @@ public:
     void setScenarioPath(const QString &value);
     bool isRenamed() const { return mRenamed; }
 
+    void setForceRename() { mForceRenamed = true; }
 private slots:
     void on_ScenarioDialog_accepted();
     void on_rename_clicked();
+
+    void on_apply_clicked();
 
 private:
     void setDynPop(const QStringList &text);
@@ -60,7 +63,7 @@ private:
     QList<QCheckBox *> optPop;
     QList<QCheckBox *> optAll;
     QString mScenarioPath;
-    bool mRenamed;
+    bool mRenamed, mForceRenamed;
 };
 
 #endif // SCENARIODIALOG_H

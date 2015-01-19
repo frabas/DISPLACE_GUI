@@ -28,7 +28,6 @@ void ShortestPathBuilderWorker::setRelevantNodes(const QList<std::shared_ptr<Nod
 
 void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 {
-    mWaitDialog->setProgress(true, mRelevantNodes.size());
     mWaitDialog->enableAbort(true);
     mWaitDialog->show();
 
@@ -39,6 +38,7 @@ void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
     connect (&mFutureWatcher, SIGNAL(canceled()), this, SLOT(cancelled()));
     connect (this, SIGNAL(finished(bool)), obj, slot);
     connect (&mFutureWatcher, SIGNAL(progressValueChanged(int)), mWaitDialog, SLOT(setProgression(int)));
+    connect (&mFutureWatcher, SIGNAL(progressRangeChanged(int,int)), mWaitDialog, SLOT(setProgress(int,int)));
 }
 
 void ShortestPathBuilderWorker::doStep(arg a)

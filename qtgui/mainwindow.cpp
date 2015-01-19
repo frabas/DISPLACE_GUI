@@ -1373,7 +1373,6 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
     WaitDialog *dialog = new WaitDialog(this);
     displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
-//    dialog->setProgress(true, 0);
 
     if (dlg.isAllNodesAreRelevantChecked()) {
         builder->setRelevantNodes(currentModel->getNodesList());
@@ -1407,10 +1406,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         foreach (int i, nodes) {
             l.push_back(currentModel->getNodesList()[i]);
         }
-//        builder->setRelevantNodes(l);
     }
-
-//    startBackgroundOperation(builder, dialog, this, SLOT(end_ShortestPathCreated(bool)));
 
     builder->run(this,SLOT(end_ShortestPathCreated(bool)) );
 }

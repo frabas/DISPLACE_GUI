@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -122,11 +122,9 @@ Population::Population(int a_name,
 								 // set the pop-specific beta from glm for szgroup7
 	this->set_avai7_beta(_avai7_beta);
 
-	// ...then fill in with avai0_beta
-	// CALIB: if increased then improve the catch rate of te simulated vessels....
-	//double calib =1;
-	//if(a_name==3) calib =2.0;
-	//if(a_name==7) calib =2.0;
+    // CALIB: if increased then improve the catch rate of the simulated vessels....
+    // look at the config.dat for calibration values
+
 								 // set to 1 the first year
 	this->set_cpue_multiplier(1*a_calib_cpue_multiplier);
 
@@ -148,10 +146,7 @@ Population::Population(int a_name,
 
 	// ...then fill in with start pop
 	// CALIB: if decreased then smaller fish then higher F because numbers of fish for a given TAC increased....
-	//calib =1;
-	//if(a_name==3) calib =1/(2.6);
-	//if(a_name==7) calib =1/(4.1);
-	//if(a_name==10) calib =1/(4.2);
+    // look at the config.dat for calibration values
 
     for(unsigned int i=0; i < init_weight_at_szgroup.size(); i++)
 	{
@@ -873,7 +868,7 @@ void Population::add_recruits_from_SR()
 	double recruits =(param_sr[0]*SSB*exp(-param_sr[1]*SSB)) * 1000;
     dout(cout << "New recruits are " << recruits  << endl );
 
-	// add stochasticity on recruits (default: lognormal with CV at 10%)
+    // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 10%)
 	// TO DO: use a stock-specific input there...
 	double sd=0.1;
 	double rec_error=0;

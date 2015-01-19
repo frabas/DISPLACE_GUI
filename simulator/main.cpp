@@ -1,42 +1,24 @@
-/* --------------------------------------------------------------------------
- * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
- * AND EFFORT DISPLACEMENT
- * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
- *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License along
- *    with this program; if not, write to the Free Software Foundation, Inc.,
- *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * --------------------------------------------------------------------------
- */
+// --------------------------------------------------------------------------
+// DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
+// AND EFFORT DISPLACEMENT
+// Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
 
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**'''''DISPLACE'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**'Dynamic Individual Spatial fishing PLAnning for modelling effort displaCEment''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
-/**''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''**/
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+// --------------------------------------------------------------------------
+
+
 
 #include <helpers.h>
 #include <assert.h>
@@ -390,6 +372,11 @@ int main(int argc, char* argv[])
 
     // -V xxx  Sets level of verbosity  (default: 0)
     // --use-gui => emits machine parsable data to stdout
+
+    /* run in command line with:
+      C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\build\release>displace -f "balticonly" -f2 "baseline" -s
+      "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot -V 2 --num_threads 1 > output.txt
+    */
 
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
 
@@ -980,7 +967,6 @@ int main(int argc, char* argv[])
 	// use inheritance i.e. a Harbour is child of a Node
 	// use polymorphism i.e. store either Harbour or Node in the vector of pointers 'nodes'
     nodes = vector <Node* > (graph_coord_x.size());
-	// REPLACE boost::shared_ptr<Node> by Node* in every files if you want to remove boost
 	for (unsigned int i=0; i<graph_coord_x.size(); i++)
 	{
 
@@ -1102,7 +1088,7 @@ int main(int argc, char* argv[])
 	graph_point_code_landscape.resize( std::distance(graph_point_code_landscape.begin(),it) );
 	int nbland = graph_point_code_landscape.size();
 
-	// creation of a vector of benthos community (one benthos community er landscape)
+    // creation of a vector of benthos community (one benthos community per landscape)
 	vector <Benthos* > benthoss(nbland);
 
    outc(cout << "nb of marine landscapes " << nbland << endl);
@@ -2537,9 +2523,6 @@ int main(int argc, char* argv[])
 	// init
 	vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
 
-	// set seed
-	//srand ( time(NULL) );
-   outc(cout << "coucou1" << endl);
 	// write down initial pop number in popdyn
     for (unsigned int sp=0; sp<populations.size(); sp++)
 	{
@@ -3152,7 +3135,7 @@ int main(int argc, char* argv[])
 
 							// second pop, szgroup 1,2,3
 							fflush( pipe4 );
-								 // used when sometimes the simulation is too quick to be captured by gnuplot
+                            // used when sometimes the simulation is too quick to be captured by gnuplot:
 							Sleep( 50 );
 							fprintf(pipe4, "set terminal windows 2 size 400,400 position 100,1000\n");
 							string command2 = "plot '"+pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat' every 24::1 using 1:3 with lines lc rgbcolor '#80A000', '"+pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/popdyn_"+namesimu+".dat' every 24::1 using 1:4 with lines lc rgbcolor '#74C6D5', 'outputs/"+namefolderinput+"/popdyn_"+namesimu+".dat' every 24::1 using 1:5 with lines lc rgbcolor '#A2CAD1'\n";
@@ -3412,7 +3395,7 @@ int main(int argc, char* argv[])
 
            outc(cout << "a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl);
 
-			// RE-read general vessel features: dont forget to clear the vectors!
+            // RE-read general vessel features: do not forget to clear the vectors!
 			// not-quarter specific, clear anyway...
 			// actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
 			vesselids.clear();
@@ -3470,7 +3453,7 @@ int main(int argc, char* argv[])
 				{
 					// if missing info for a given vessel for this quarter
                    outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
-								 // CAUTION: TAKE FROM PREVIOUS QUARTER!
+                                 // CAUTION: TAKEN FROM THE PREVIOUS QUARTER!
 					int start_harbour=vessels.at(v)->get_harbours()[0];
 					spe_harbours.push_back(start_harbour);
 					spe_freq_harbours.push_back(1);
@@ -3585,7 +3568,7 @@ int main(int argc, char* argv[])
 					a_cumcatch_fgrounds[g] = 0;
 					a_cumeffort_fgrounds[g] = 0;
 					a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
-					// this should be init so that it constitutes a good qualified guess to be a prior in the baysian formula...
+                    // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
 					// first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
 					// second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
 					// third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel

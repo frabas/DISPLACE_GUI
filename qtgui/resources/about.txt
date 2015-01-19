@@ -1,1 +1,138 @@
-<html><head/><body><p align="center"><span style=" font-size:16pt;">Displace</span></p><p align="center">version $VERSION</p><p align="center"><br/></p><p align="justify"/></body></html>
+<html><head/>
+<body>
+<p align="center"><span style=" font-size:16pt;">DISPLACE</span></p>
+<p align="center">version $VERSION</p><p align="center"><br/></p><p align="justify"/>
+
+Copyright
+<br/>
+=============
+<br/>
+<br/>
+
+ * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
+ * AND EFFORT DISPLACEMENT
+<br/>
+ * Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
+<br/>
+ *
+<br/>
+ *    This program is free software; you can redistribute it and/or modify
+<br/>
+ *    it under the terms of the GNU General Public License as published by
+<br/>
+ *    the Free Software Foundation; either version 2 of the License, or
+<br/>
+ *    (at your option) any later version.
+<br/>
+ *
+<br/>
+ *    This program is distributed in the hope that it will be useful,
+<br/>
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+<br/>
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<br/>
+ *    GNU General Public License for more details.
+<br/>
+ *
+<br/>
+ *    You should have received a copy of the GNU General Public License along
+<br/>
+ *    with this program; if not, write to the Free Software Foundation, Inc.,
+<br/>
+ *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+<br/>
+<br/>
+
+Rationale
+<br/>
+============
+
+<br/>
+Dynamic Individual vessel-based Spatial fishing PLAnning and effort displaCEment
+<br/>
+<br/>
+DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement –
+integrating underlying fish population models, check out the paper 2014 in 
+Canadian Journal of Fisheries and Aquatic Sciences
+<br/>
+<br/>
+The DISPLACE project develops and provides a platform primarily for research purposes 
+to transform the fishermen’s detailed knowledge into models, evaluation tools, and methods 
+that can provide the fisheries with research and advice. 
+The model intends to serve as a basis for decision support tools for (fishery) managers.
+<br/>
+<br/>
+Among other goals, economic benefit of stock replenishment and sustainable harvesting 
+can be demonstrated. This contributes to evaluate the combined ecological and economic impacts 
+of fishery management before its implementation (i.e. impact assessment).
+<br/>
+<br/>
+An individual-based model (IBM) on a per-vessel basis covering several fisheries and stocks 
+is a benchmark tool capable of integrating fishermen’s decision-making processes 
+when they face changes in fishery management, economic factors influencing the fishery, 
+economic viability, and underlying stock conditions, including spatial and 
+seasonal patterns in resource availability.
+<br/>
+<br/>
+DISPLACE operates with high resolution in time and space (spatio-temporal explicit). 
+It allows contributing to marine/maritime spatial planning for e.g. evaluating 
+the effects of smaller and larger marine area restrictions on stocks and fisheries, 
+i.e. impact assessment on stocks and fisheries of broader marine management. 
+The economic evaluation includes evaluation of spatial restrictions for the fishery 
+with particular emphasis to test if there are any economic benefits or 
+consequences from different area restrictions caused by e.g. renewable energy, conservation, etc.
+Also it evaluates whether these benefits compensate the additional costs of 
+the effort displaced to surrounding or new areas, i.e. the bio-economic consequences 
+of fishing effort displacement.
+<br/>
+<br/>
+This ultimately incorporates other utilization of the sea such as energy production, 
+transport, recreational use, etc., e.g. offshore windmill farms, 
+large marine constructions, NATURA 2000 areas, transport routes of 
+commercial shipping, pipelines, cables, etc.
+<br/>
+<br/>
+Fishermen communities have an obvious stake in using the sea to ensure food supply with seafood 
+and should not then be left out the maritime spatial planning process. 
+As a stakeholder once said <if you are not at the table, you are on the menu!> 
+While fishermen are therefore likely to gain at designing their own priorities areas, 
+the DISPLACE model should be a support for evaluating and balance these important areas 
+against other potential uses and the economic consequences 
+of spatial plans on fishermen s living conditions.
+<br/>
+<br/>
+
+How to cite
+<br/>
+============
+<br/>
+<br/>
+* Bastardie F, Nielsen JR, Miethe T. 2014. DISPLACE: a dynamic, individual-based model for 
+spatial fishing planning and effort displacement - integrating underlying 
+fish population models. Canadian Journal of Fisheries and Aquatic Sciences. 71(3):366-386. 
+Available from: 10.1139/cjfas-2013-0126
+<br/>
+<br/>
+* Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
+Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
+under spatial restrictions. – ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.
+<br/>
+<br/>
+
+Developers
+<br/>
+============
+<br/>
+<br/>
+
+* Francois Bastardie (core model)
+<br/>
+* Federico Fuga (user interface)
+
+<br/>
+<br/>
+
+
+</body>
+</html>

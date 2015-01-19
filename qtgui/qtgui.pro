@@ -201,7 +201,7 @@ RESOURCES += \
 OTHER_FILES += \
     qtgui.rc \
     ../docs/output_fileformats.txt \
-    palettes/iso1996_2.p2c \
+    palettes/heat_colors_12.p2c \
     ../docs/database.txt \
     ../docs/dbstruct.sh \
     palettes/pop_colors.p2c \

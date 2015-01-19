@@ -104,7 +104,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     dout(cout  << "----------" << endl);
     pthread_mutex_lock (&glob_mutex);
     int index_v =  ve[idx_v];
-    dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
+    //dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
+    outc(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
     pthread_mutex_unlock (&glob_mutex);
 
     // check roadmap
@@ -121,10 +122,10 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
         // (when at least one possible metier within this quarter)
         if(possible_metiers_size > 1)
         {
-            dout(cout  << "ROADMAP EMPTY" << endl);
+            outc(cout  << "ROADMAP EMPTY" << endl);
             if(inharbour)
             {
-                dout(cout  << "IN HARB" << endl);
+                outc(cout  << "IN HARB" << endl);
 
                 // LAND the catches when arriving in port and DECLARE IN LOGBOOK
                 // i.e. write this trip down in the logbook output file
@@ -158,7 +159,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 {
 
                     //go fishing
-                    dout(cout  << "GO FISHING" << endl);
+                    outc(cout  << "GO FISHING" << endl);
                     vessels[ index_v ]->choose_a_ground_and_go_fishing(
                         tstep,
                         dyn_alloc_sce, create_a_path_shop,
@@ -174,7 +175,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 else
                 {
                     //have some rest in the harbour
-                    dout(cout  << "STAY IN HARBOUR" << endl);
+                    outc(cout  << "STAY IN HARBOUR" << endl);
                     // and decrease the rest time...
                     vessels[ index_v ]-> set_timeforrest( vessels[ index_v ]-> get_timeforrest() - PING_RATE );
                     vessels[ index_v ]-> set_next_xy( vessels[index_v ]->get_x(), vessels[ index_v ]->get_y() );
@@ -185,7 +186,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
             }
             else
             {
-                dout(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
+                outc(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
 
                 // ***************make a decision************************************
                 map<string,int> external_states_relevant_for_stopping_fishing;
@@ -234,7 +235,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                          // ...but not on this ground!
                     if(another_ground || force_another_ground )
                     {
-                        dout(cout  << "CHANGE OF GROUND, GUYS! "  << endl);
+                        outc(cout  << "CHANGE OF GROUND, GUYS! "  << endl);
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(
                             tstep,
                             dyn_alloc_sce, create_a_path_shop,
@@ -245,13 +246,13 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                             metiers,
                             freq_cpue, freq_distance
                             );
-                        dout(cout  << "GOOD JOB, GUYS! "  << endl);
+                        outc(cout  << "GOOD JOB, GUYS! "  << endl);
 
                     }
                     // ***************implement a decision************************************
                     else // Yes, keep go on catching on this ground...
                     {
-                        dout(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
+                        outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
                         //#pragma omp critical(docatch)
                         {
                             dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
@@ -279,13 +280,13 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         {
                             //trawling (type 1)
                             cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_fishing();
-                            dout(cout  << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
+                            outc(cout  << "fuel cons for trawlers (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
                         }
                         else
                         {
                             // gillnetting, seining (type 2)
                             cumfuelcons = vessels[ index_v ]->get_cumfuelcons()+ vessels[ index_v ]->get_fuelcons()*PING_RATE*vessels[ index_v ]->get_mult_fuelcons_when_inactive();
-                            dout(cout  << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
+                            outc(cout  << "fuel cons for gillnetters or seiners (metier " << vessels[ index_v ]->get_metier()->get_name() << ")" << endl);
                         }
                         vessels[ index_v ]->set_cumfuelcons(cumfuelcons);
 
@@ -293,16 +294,16 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         vessels[ index_v ]->get_loc()->add_to_cumftime(PING_RATE);
                         vessels[index_v]->unlock();
 
-                        dout(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
-                        dout(cout  << "my comsumed fuel so far is " << cumfuelcons << endl);
-                        dout(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
+                        outc(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
+                        outc(cout  << "my comsumed fuel so far is " << cumfuelcons << endl);
+                        outc(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
 
                     }
                 }
                 // ***************implement a decision************************************
                 else
                 {
-                    dout(cout  << "RETURN TO PORT, NOW! "  << endl);
+                    outc(cout  << "RETURN TO PORT, NOW! "  << endl);
                     pthread_mutex_lock(&glob_mutex);
                     vessels[ index_v ]->choose_a_port_and_then_return(
                         tstep,
@@ -326,7 +327,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     }
     else
     {
-        dout(cout  << "roadmap is not empty... ");
+        outc(cout  << "roadmap is not empty... ");
         // display the road map
         //list<int>::iterator pos;
         //dout(cout  << "roadmap (in): ");
@@ -339,7 +340,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
         // find.next.pt.on.the.graph()
         vessels[ index_v ]->find_next_point_on_the_graph(nodes);
 
-        dout(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
+        outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
 
         //dout(cout  << "roadmap (out): ");
         //lst = vessels[ index_v ]->get_roadmap();
@@ -349,7 +350,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
         //}
 
     }
-    dout(cout  << endl);
+    outc(cout  << endl);
 
     // write this movement in the output  file (hourly data if PING=1)
     // (setprecision is 6 in c++ by default)
@@ -431,7 +432,7 @@ void thread_vessel_init (int n)
         tparam.__sched_priority -=2;
         policy = SCHED_RR;
 #else
-        tparam.__sched_priority = -2;
+        tparam.sched_priority = -2;
         policy = 0;
 #endif
 

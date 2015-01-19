@@ -9,6 +9,7 @@
 #include <QDebug>
 
 QString Simulator::SET_NUMTHREADS ("simul_numthreads");
+QString Simulator::SET_VERBOSITY ("simulator_verbosity");
 
 Simulator::Simulator()
     : mSimulation(0),
@@ -21,7 +22,8 @@ Simulator::Simulator()
       mSimuName("simu2"),
       mMoveVesselOption(true),
       mProcessState(QProcess::NotRunning),
-      mCapture(false)
+      mCapture(false),
+      mVerbosity(0)
 {
 }
 
@@ -85,6 +87,8 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     arguments.push_back("0"); // Changeme
     arguments.push_back("--without-gnuplot");
     arguments.push_back("--use-gui");
+    arguments.push_back("-V");
+    arguments.push_back(QString::number(mVerbosity));
 
     if (!mMoveVesselOption)
         arguments.push_back("--no-gui-move-vessels");

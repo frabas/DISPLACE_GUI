@@ -417,6 +417,25 @@ void thread_vessel_init (int n)
     for (unsigned int i = 0; i < numthreads; ++i) {
         thread_data[i].thread_idx = i;
         thread_data[i].thread_id = pthread_create(&thread_data[i].thread, 0, thread, (void *)&thread_data[i]);
+
+        struct sched_param tparam;
+        int policy;
+
+        int ret = pthread_getschedparam(thread_data[i].thread, &policy, &tparam);
+        if (ret < 0) {
+            perror ("getschedparam");
+            exit (1);
+        }
+
+#ifdef __unix__
+        tparam.__sched_priority -=2;
+        policy = SCHED_RR;
+#else
+        tparam.sched_priority = -2;
+        policy = 0;
+#endif
+
+        pthread_setschedparam(thread_data[i].thread, policy, &tparam);
     }
 }
 

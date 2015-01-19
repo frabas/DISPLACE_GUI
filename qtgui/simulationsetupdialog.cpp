@@ -1,6 +1,8 @@
 #include "simulationsetupdialog.h"
 #include "ui_simulationsetupdialog.h"
 
+#include <QThread>
+
 SimulationSetupDialog::SimulationSetupDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SimulationSetupDialog)
@@ -8,6 +10,8 @@ SimulationSetupDialog::SimulationSetupDialog(QWidget *parent) :
     ui->setupUi(this);
 
     ui->outName->setReadOnly(true);
+
+    updateMessages();
 }
 
 SimulationSetupDialog::~SimulationSetupDialog()
@@ -63,4 +67,40 @@ int SimulationSetupDialog::getNumThreads()
 void SimulationSetupDialog::setNumThreads(int n)
 {
     ui->threads->setValue(n);
+}
+
+int SimulationSetupDialog::getVerbosityLevel()
+{
+    return ui->verbosity->value();
+}
+
+void SimulationSetupDialog::setVerbosityLevel(int value)
+{
+    ui->verbosity->setValue(value);
+}
+
+void SimulationSetupDialog::updateMessages()
+{
+    int x = QThread::idealThreadCount() - 4;
+
+    if (x != ui->threads->value())
+        ui->labelThreadHint->setText(QString(tr("The suggested number of thread for this processor is %1")).arg(x >= 1 ? x : 1));
+    else
+        ui->labelThreadHint->clear();
+
+    if (ui->verbosity->value() > 0 && ui->threads->value() != 1)
+        ui->labelVerbosityWarning->setText(QString(tr("Warning: if verbosity messages are enabled and multiple threads are running, messages can be mixed and be unreadable.")));
+    else
+        ui->labelVerbosityWarning->clear();
+
+}
+
+void SimulationSetupDialog::on_verbosity_valueChanged(int)
+{
+    updateMessages();
+}
+
+void SimulationSetupDialog::on_threads_valueChanged(int)
+{
+    updateMessages();
 }

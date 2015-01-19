@@ -46,6 +46,7 @@ public:
     QProcess::ProcessState processState() const;
 
     void setSimSteps(int value);
+    void setVerbosityLevel(int value) { mVerbosity = value; }
 
     bool getMoveVesselOption() const;
     void setMoveVesselOption(bool value);
@@ -86,6 +87,7 @@ private:
     bool mMoveVesselOption;
     QProcess::ProcessState mProcessState;
     bool mCapture;
+    int mVerbosity;
 
     void parseUpdateVessel(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
@@ -93,6 +95,7 @@ private:
 
 public:
     static QString SET_NUMTHREADS;
+    static QString SET_VERBOSITY;
 };
 
 #endif // SIMULATOR_H

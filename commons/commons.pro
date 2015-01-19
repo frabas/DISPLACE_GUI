@@ -26,7 +26,8 @@ SOURCES= \
     mkpath.cpp \
     memoryinfo.cpp \
     options.cpp \
-    ipcqueue.cpp
+    ipcqueue.cpp \
+    statics.cpp
 
 HEADERS= \
     ../include/readdata.h \

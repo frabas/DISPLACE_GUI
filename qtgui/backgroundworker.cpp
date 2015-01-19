@@ -7,7 +7,9 @@
 
 BackgroundWorker::BackgroundWorker(MainWindow *main) :
     QObject(0),
-    mMain(main)
+    mMain(main),
+    mResult(true),
+    mError()
 {
 }
 
@@ -18,6 +20,7 @@ void BackgroundWorker::process()
     execute();
 
     emit workEnded();
+    emit completed(mResult);
 }
 
 

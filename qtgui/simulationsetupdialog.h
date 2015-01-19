@@ -49,8 +49,20 @@ public:
 
     int getNumThreads();
     void setNumThreads(int n);
+
+    int getVerbosityLevel();
+    void setVerbosityLevel(int value);
+
+
+private slots:
+    void on_verbosity_valueChanged(int arg1);
+
+    void on_threads_valueChanged(int arg1);
+
 private:
     Ui::SimulationSetupDialog *ui;
+
+    void updateMessages();
 };
 
 #endif // SIMULATIONSETUPDIALOG_H

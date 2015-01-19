@@ -388,6 +388,7 @@ int main(int argc, char* argv[])
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 1 -o 0 -e 1 -v 0 --with-gnuplot    // create the path shop
 	// -f "balticonly" -f2 "baseline"  -s "simu2" -i 8761 -p 0 -o 0 -e 1 -v 0 --with-gnuplot    // here, dynamic path building: use with care because need much more computation time...
 
+    // -V xxx  Sets level of verbosity  (default: 0)
     // --use-gui => emits machine parsable data to stdout
 
     cout << "This is displace, version " << VERSION << " build " << VERSION_BUILD << endl;
@@ -456,7 +457,10 @@ int main(int argc, char* argv[])
 			optind++;
 			selected_vessels_only = atoi(argv[optind]);
 		}
-        else if (sw == "--num_threads") {
+        else if (sw=="-V") {
+            optind++;
+            verbosity = atoi(argv[optind]);
+        } else if (sw == "--num_threads") {
             optind++;
             num_threads = atoi(argv[optind]);
         } else {

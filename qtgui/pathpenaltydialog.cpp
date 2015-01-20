@@ -6,6 +6,8 @@ PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
     ui(new Ui::PathPenaltyDialog)
 {
     ui->setupUi(this);
+
+    on_shapefile_currentIndexChanged(0);
 }
 
 PathPenaltyDialog::~PathPenaltyDialog()
@@ -32,4 +34,17 @@ QString PathPenaltyDialog::selectedShapefile() const
 double PathPenaltyDialog::weight() const
 {
     return ui->weight->value();
+}
+
+void PathPenaltyDialog::on_ok_clicked()
+{
+    if (ui->shapefile->currentIndex() == -1)
+        return;
+
+    accept();
+}
+
+void PathPenaltyDialog::on_shapefile_currentIndexChanged(int)
+{
+    ui->ok->setEnabled(ui->shapefile->currentIndex() != -1);
 }

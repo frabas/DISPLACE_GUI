@@ -1263,6 +1263,8 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
         mMapController->redraw();
     }
+
+    QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
 }
 
 bool MainWindow::loadLiveModel(QString path, QString *error)
@@ -1478,6 +1480,8 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         }
 
         mMapController->redraw();
+
+        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
     }
 }
 

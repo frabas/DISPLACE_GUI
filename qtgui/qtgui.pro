@@ -209,6 +209,11 @@ OTHER_FILES += \
     palettes/pop_colors.p2c \
     ../docs/input_fileformats.txt
 
+TRANSLATIONS += \
+    translations/displace_it.ts \
+    translations/displace_fr.ts \
+    translations/displace_de.ts
+
 
 target.path=$${PREFIX}/bin
 

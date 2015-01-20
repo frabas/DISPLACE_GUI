@@ -25,6 +25,16 @@ int main (int argc, char *argv[])
     qRegisterMetaType<VesselStats>("VesselStats");
 
     QApplication app(argc, argv);
+
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_" + QLocale::system().name(),
+                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtTranslator);
+
+    QTranslator myappTranslator;
+    myappTranslator.load("displace_" + QLocale::system().name());
+    app.installTranslator(&myappTranslator);
+
     MainWindow mw;
 
     mw.show();

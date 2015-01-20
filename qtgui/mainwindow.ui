@@ -768,6 +768,10 @@
    </property>
   </action>
   <action name="actionScenario">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/scenario.png</normaloff>:/icons/scenario.png</iconset>
+   </property>
    <property name="text">
     <string>Scenario...</string>
    </property>
@@ -818,6 +822,10 @@
    </property>
   </action>
   <action name="actionConfiguration">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/config.png</normaloff>:/icons/config.png</iconset>
+   </property>
    <property name="text">
     <string>Configuration...</string>
    </property>
@@ -844,11 +852,19 @@
    </property>
   </action>
   <action name="actionPalettes">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Values...</string>
    </property>
   </action>
   <action name="actionPopulations">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Populations...</string>
    </property>
@@ -952,7 +968,7 @@
   </action>
   <action name="actionAdd_Penalty_from_File">
    <property name="text">
-    <string>Add Penalty from File...</string>
+    <string>Add Penalty from Shapefile...</string>
    </property>
   </action>
   <action name="actionAdd_Penalty_on_Polygon">

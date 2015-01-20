@@ -36,5 +36,8 @@
         <file>palettes/pop_colors.p2c</file>
         <file>resources/about.txt</file>
         <file>icons/timer.png</file>
+        <file>icons/scenario.png</file>
+        <file>icons/config.png</file>
+        <file>icons/colors.png</file>
     </qresource>
 </RCC>

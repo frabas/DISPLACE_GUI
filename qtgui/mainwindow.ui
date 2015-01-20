@@ -98,6 +98,7 @@
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Shortest_Path"/>
+    <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
    </widget>

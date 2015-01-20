@@ -302,6 +302,10 @@ public:
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
     QString linkedShortestPathFolder() const { return mShortestPathFolder; }
 
+    bool isGraphFolderLinked() const { return !mGraphFolder.isEmpty(); }
+    void linkGraphFolder(QString path) { mGraphFolder = path; }
+    QString linkedGraphFolder() const { return mGraphFolder; }
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -383,6 +387,7 @@ private:
     OGRSpatialReference *mSpatialRef;
 
     QString mShortestPathFolder;
+    QString mGraphFolder;
 };
 
 #endif // DISPLACEMODEL_H

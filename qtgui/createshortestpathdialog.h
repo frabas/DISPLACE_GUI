@@ -40,12 +40,17 @@ public:
     void setRelevantNodesFolder(QString);
     QString getRelevantNodesFolder() const;
     bool isAllNodesAreRelevantChecked() const;
+    QString getOutputFolder() const;
+    void setOutputFolder (const QString &folder);
+    QString getGraphName() const;
+    void setGraphName(const QString &folder);
 
 private slots:
     void on_browseShortestFolder_clicked();
     void on_browseRelevantFolder_clicked();
-
     void on_ok_clicked();
+    void on_browseOutFolder_clicked();
+    void on_graphName_textChanged(const QString &);
 
 private:
     Ui::CreateShortestPathDialog *ui;

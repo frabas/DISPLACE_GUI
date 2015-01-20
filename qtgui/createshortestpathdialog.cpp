@@ -10,6 +10,9 @@ CreateShortestPathDialog::CreateShortestPathDialog(QWidget *parent) :
     ui(new Ui::CreateShortestPathDialog)
 {
     ui->setupUi(this);
+
+    ui->graphName->setValidator(new QIntValidator);
+    on_graphName_textChanged("");
 }
 
 CreateShortestPathDialog::~CreateShortestPathDialog()
@@ -40,6 +43,26 @@ QString CreateShortestPathDialog::getRelevantNodesFolder() const
 bool CreateShortestPathDialog::isAllNodesAreRelevantChecked() const
 {
     return ui->checkAllRelevantNodes->isChecked();
+}
+
+QString CreateShortestPathDialog::getOutputFolder() const
+{
+    return ui->outFolder->text();
+}
+
+void CreateShortestPathDialog::setOutputFolder(const QString &folder)
+{
+    ui->outFolder->setText(folder);
+}
+
+QString CreateShortestPathDialog::getGraphName() const
+{
+    return ui->graphName->text();
+}
+
+void CreateShortestPathDialog::setGraphName(const QString &name)
+{
+    ui->graphName->setText(name);
 }
 
 void CreateShortestPathDialog::on_browseShortestFolder_clicked()
@@ -75,4 +98,23 @@ void CreateShortestPathDialog::on_ok_clicked()
     }
 
     accept();
+}
+
+void CreateShortestPathDialog::on_browseOutFolder_clicked()
+{
+    QSettings sets;
+    QString lastpath = sets.value("last_spath", QDir::homePath()).toString();
+
+    QString path = QFileDialog::getExistingDirectory(this, tr("Select Graph output folder") , lastpath );
+    if (!path.isEmpty()) {
+        setOutputFolder(path);
+        if (ui->shortestFolder->text().isEmpty())
+            setShortestPathFolder(path);
+        sets.setValue("last_spath", path);
+    }
+}
+
+void CreateShortestPathDialog::on_graphName_textChanged(const QString &)
+{
+    ui->ok->setEnabled(!ui->graphName->text().isEmpty());
 }

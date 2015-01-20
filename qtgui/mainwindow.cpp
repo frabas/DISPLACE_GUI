@@ -146,6 +146,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (map, SIGNAL(mouseEventReleaseCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
     connect (map, SIGNAL(mouseEventMoveCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
 
+    map->setBackgroundColour(Qt::white);
+
     QPixmap pixmap;
     pixmap.fill( Qt::white );
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
@@ -1368,13 +1370,30 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
     CreateShortestPathDialog dlg(this);
     dlg.setShortestPathFolder(currentModel->linkedShortestPathFolder());
+    dlg.setOutputFolder(currentModel->linkedGraphFolder());
+    dlg.setGraphName(QString::number(currentModel->scenario().getGraph()));
     if (dlg.exec() != QDialog::Accepted)
         return;
 
     currentModel->linkShortestPathFolder(dlg.getShortestPathFolder());
+    currentModel->linkGraphFolder(dlg.getOutputFolder());
+    Scenario sce = currentModel->scenario();
+    sce.setGraph(dlg.getGraphName().toInt());
+    currentModel->setScenario(sce);
 
     WaitDialog *dialog = new WaitDialog(this);
     displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
+
+    QString graphpath = QString("%1/graph%2.dat").arg(dlg.getOutputFolder()).arg(sce.getGraph());
+    QString coordspath = QString("%1/coord%2.dat").arg(dlg.getOutputFolder()).arg(sce.getGraph());
+
+    QString error;
+    InputFileExporter exporter;
+    if (exporter.exportGraph(graphpath, coordspath, currentModel.get(), &error)) {
+    } else {
+        QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
+        return;
+    }
 
     if (dlg.isAllNodesAreRelevantChecked()) {
         builder->setRelevantNodes(currentModel->getNodesList());

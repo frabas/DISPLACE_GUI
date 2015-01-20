@@ -13,6 +13,7 @@ CreateShortestPathDialog::CreateShortestPathDialog(QWidget *parent) :
 
     ui->graphName->setValidator(new QIntValidator);
     on_graphName_textChanged("");
+    on_checkAllRelevantNodes_toggled(false);
 }
 
 CreateShortestPathDialog::~CreateShortestPathDialog()
@@ -97,6 +98,21 @@ void CreateShortestPathDialog::on_ok_clicked()
         return;
     }
 
+
+    if (!isAllNodesAreRelevantChecked()) {
+        QString refpath = ui->relevantFolder->text();
+        QRegExp regexp("(.*)/vesselsspe_([^/_]+)_([^/]+).dat");
+
+        if (regexp.indexIn(refpath) == -1) {
+            QMessageBox::warning(this, tr("Relevant Nodes template check failed"),
+                                 tr("The relevant nodes file name should fit the template: vesselsspe_XXX_YYY.dat.\n"
+                                    "Please select a compliant file instead."));
+            return;
+
+        }
+
+    }
+
     accept();
 }
 
@@ -117,4 +133,9 @@ void CreateShortestPathDialog::on_browseOutFolder_clicked()
 void CreateShortestPathDialog::on_graphName_textChanged(const QString &)
 {
     ui->ok->setEnabled(!ui->graphName->text().isEmpty());
+}
+
+void CreateShortestPathDialog::on_checkAllRelevantNodes_toggled(bool)
+{
+    ui->relevantFolder->setEnabled(ui->checkAllRelevantNodes->isEnabled());
 }

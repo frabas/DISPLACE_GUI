@@ -51,6 +51,7 @@ private slots:
     void on_ok_clicked();
     void on_browseOutFolder_clicked();
     void on_graphName_textChanged(const QString &);
+    void on_checkAllRelevantNodes_toggled(bool);
 
 private:
     Ui::CreateShortestPathDialog *ui;

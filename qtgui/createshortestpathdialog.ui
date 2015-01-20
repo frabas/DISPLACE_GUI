@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>521</width>
+    <height>255</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,11 @@
     <widget class="QLineEdit" name="shortestFolder"/>
    </item>
    <item row="4" column="1">
-    <widget class="QLineEdit" name="relevantFolder"/>
+    <widget class="QLineEdit" name="relevantFolder">
+     <property name="placeholderText">
+      <string>vesselsspe_*_quarter*.dat</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_2">

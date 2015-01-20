@@ -242,5 +242,5 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
     double d = earthRadius * c;
 #endif
 
-    nodes[source].weight.push_back(d / 1000);
+    nodes[source].weight.push_back(std::floor(d / 1000 + 0.5));
 }

@@ -1429,6 +1429,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         foreach (int i, nodes) {
             l.push_back(currentModel->getNodesList()[i]);
         }
+        builder->setRelevantNodes(l);
     }
 
     builder->run(this,SLOT(end_ShortestPathCreated(bool)) );

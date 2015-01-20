@@ -137,5 +137,7 @@ void CreateShortestPathDialog::on_graphName_textChanged(const QString &)
 
 void CreateShortestPathDialog::on_checkAllRelevantNodes_toggled(bool)
 {
-    ui->relevantFolder->setEnabled(ui->checkAllRelevantNodes->isEnabled());
+    bool en = !ui->checkAllRelevantNodes->isChecked();
+    ui->relevantFolder->setEnabled(en);
+    ui->browseRelevantFolder->setEnabled(en);
 }

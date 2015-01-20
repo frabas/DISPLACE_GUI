@@ -159,7 +159,11 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="scenarioPath"/>
+    <widget class="QLineEdit" name="scenarioPath">
+     <property name="placeholderText">
+      <string>.../simulsspe/name.dat</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="group_dyn_pop_sce">

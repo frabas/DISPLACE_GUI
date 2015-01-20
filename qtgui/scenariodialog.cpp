@@ -154,6 +154,15 @@ void ScenarioDialog::on_apply_clicked()
         return;
     }
 
+    QRegExp regexp("(.*)/simusspe_([^/]+)/([^/]+).dat");
+
+    if (regexp.indexIn(mScenarioPath) == -1) {
+        QMessageBox::warning(this, tr("Wrong Scenario name/path"),
+                             tr("The scenario name must fit the following template:\n"
+                                ".../simusspe_*/*.dat"));
+        return;
+    }
+
     if (mForceRenamed && !mRenamed) {
         QMessageBox::warning(this, tr("Rename Scenario"),
                              tr("You must rename the scenario before continuing."));

@@ -39,5 +39,6 @@
         <file>icons/scenario.png</file>
         <file>icons/config.png</file>
         <file>icons/colors.png</file>
+        <file>icons/csv.png</file>
     </qresource>
 </RCC>

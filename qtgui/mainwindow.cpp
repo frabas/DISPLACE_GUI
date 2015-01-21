@@ -18,6 +18,7 @@
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
 #include <createshortestpathdialog.h>
+#include <csveditor.h>
 #include <workers/shortestpathbuilderworker.h>
 
 #include <mousemode.h>
@@ -1765,4 +1766,12 @@ void MainWindow::on_cmdProfileSave_clicked()
         QFileInfo info(path);
         set.setValue("report_path", info.absolutePath());
     }
+}
+
+void MainWindow::on_actionCSV_Editor_triggered()
+{
+    CsvEditor *editor = new CsvEditor(this);
+    connect (editor, SIGNAL(destroyed()), editor, SLOT(deleteLater()));
+
+    editor->show();
 }

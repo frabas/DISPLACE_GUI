@@ -102,10 +102,17 @@
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
    </widget>
+   <widget class="QMenu" name="menuUtilities">
+    <property name="title">
+     <string>Utilities</string>
+    </property>
+    <addaction name="actionCSV_Editor"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
    <addaction name="menuGraph"/>
    <addaction name="menu_Editor"/>
+   <addaction name="menuUtilities"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="objectMapView">
@@ -1002,6 +1009,15 @@
   <action name="actionAbout_displace">
    <property name="text">
     <string>About displace...</string>
+   </property>
+  </action>
+  <action name="actionCSV_Editor">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/csv.png</normaloff>:/icons/csv.png</iconset>
+   </property>
+   <property name="text">
+    <string>CSV Editor...</string>
    </property>
   </action>
  </widget>

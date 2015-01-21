@@ -113,7 +113,10 @@ SOURCES += \
     aboutdialog.cpp \
     createshortestpathdialog.cpp \
     simulatoripcmanager.cpp \
-    workers/shortestpathbuilderworker.cpp
+    workers/shortestpathbuilderworker.cpp \
+    csveditor.cpp \
+    utils/csvtablemodel.cpp \
+    utils/csvimporter.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -127,7 +130,8 @@ FORMS += \
     pathpenaltydialog.ui \
     linkharboursdialog.ui \
     aboutdialog.ui \
-    createshortestpathdialog.ui
+    createshortestpathdialog.ui \
+    csveditor.ui
 
 HEADERS += \
     mainwindow.h \
@@ -195,7 +199,10 @@ HEADERS += \
     aboutdialog.h \
     createshortestpathdialog.h \
     simulatoripcmanager.h \
-    workers/shortestpathbuilderworker.h
+    workers/shortestpathbuilderworker.h \
+    csveditor.h \
+    utils/csvtablemodel.h \
+    utils/csvimporter.h
 
 RESOURCES += \
     qtgui.qrc

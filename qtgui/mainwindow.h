@@ -153,6 +153,8 @@ private slots:
     void on_cmdProfileEnable_toggled(bool checked);
     void on_cmdProfileSave_clicked();
 
+    void on_actionCSV_Editor_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

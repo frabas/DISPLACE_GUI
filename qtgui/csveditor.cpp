@@ -3,7 +3,7 @@
 
 #include <utils/csvimporter.h>
 
-#include <QFuture>
+#include <QtConcurrent>
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
@@ -12,7 +12,12 @@ CsvEditor::CsvEditor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CsvEditor),
     mModel(0),
-    mData()
+    mData(),
+    mFilename(),
+    mWorkLoading(),
+    mWorkLoadingWatcher(),
+    mWaitDialog(0),
+    mImporter()
 {
     ui->setupUi(this);
 
@@ -26,11 +31,36 @@ CsvEditor::CsvEditor(QWidget *parent) :
     restoreState(set.value("CsvEditor.mainState").toByteArray());
 
     updateCheckState(set.value("CsvEditor.headersShown", false).toBool());
+
+    connect (&mWorkLoadingWatcher, SIGNAL(finished()), this, SLOT(onLoadFinished()));
 }
 
 CsvEditor::~CsvEditor()
 {
     delete ui;
+}
+
+void CsvEditor::onLoadFinished()
+{
+    try {
+        mWaitDialog->close();
+        QList<QStringList> res = mWorkLoading.result();
+
+        mData = std::shared_ptr<QList<QStringList>>( new QList<QStringList>(res));
+        mModel->setSource(mData);
+
+        QSettings set;
+        QFileInfo info(mFilename);
+
+        updateCheckState(set.value("CsvEditor.headersShown", false).toBool());
+
+        setWindowTitle(QString(tr("CsvEditor - %1 in %2", "1: filename 2: path"))
+                       .arg(info.fileName())
+                       .arg(info.path()));
+    } catch (CsvImporter::Exception &x) {
+        QMessageBox::warning(this, tr("Cannot load csv file"), x.what());
+    }
+
 }
 
 void CsvEditor::on_action_Open_triggered()
@@ -44,26 +74,20 @@ void CsvEditor::on_action_Open_triggered()
                                                 &filter);
 
     if (!file.isEmpty()) {
-        CsvImporter importer;
+        mFilename = file;
 
-        try {
-            QList<QStringList> res = importer.import(file);
+        mWorkLoading = QtConcurrent::run(&mImporter, &CsvImporter::import, file);
+        mWorkLoadingWatcher.setFuture(mWorkLoading);
 
-            mData = std::shared_ptr<QList<QStringList>>( new QList<QStringList>(res));
-            mModel->setSource(mData);
+        mWaitDialog = new WaitDialog(this);
+        mWaitDialog->setText(tr("Loading file..."));
+        mWaitDialog->setModal(true);
+        mWaitDialog->show();
+        connect (mWaitDialog, SIGNAL(destroyed()), mWaitDialog, SLOT(deleteLater()));
 
-            QFileInfo info(file);
-            set.setValue("CsvEditor.LastPath", info.absoluteFilePath());
-            set.setValue("CsvEditor.filter", filter);
-
-            updateCheckState(set.value("CsvEditor.headersShown", false).toBool());
-
-            setWindowTitle(QString(tr("CsvEditor - %1 in %2", "1: filename 2: path"))
-                           .arg(info.fileName())
-                           .arg(info.path()));
-        } catch (CsvImporter::Exception &x) {
-            QMessageBox::warning(this, tr("Cannot load csv file"), x.what());
-        }
+        QFileInfo info(file);
+        set.setValue("CsvEditor.LastPath", info.absoluteFilePath());
+        set.setValue("CsvEditor.filter", filter);
     }
 }
 

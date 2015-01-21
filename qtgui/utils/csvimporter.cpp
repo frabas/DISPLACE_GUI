@@ -22,6 +22,8 @@ QList<QStringList> CsvImporter::import(QString filename)
     QList<QStringList> list;
     while (!stream.atEnd()) {
         QString line = stream.readLine();
+        if (line.isNull())
+            break;
         list.push_back(line.split(mSeparator, mSplitBehaviour));
     }
 

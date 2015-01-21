@@ -22,6 +22,11 @@ WaitDialog::~WaitDialog()
     delete ui;
 }
 
+void WaitDialog::setFormat(QString format)
+{
+    ui->progress->setFormat(format);
+}
+
 void WaitDialog::setText(QString text)
 {
     ui->text->setText(text);

@@ -76,7 +76,21 @@ private:
     QMutex mutex;
 
     bool doWork(QString in, QString out);
-    void processLine (QList<QString> &result, QStringList entry, QPointF pt, int col_pt_graph, bool colpresent);
+
+    struct ProcessData {
+        QList<QString> *result;
+        QStringList entry;
+        QPointF pt;
+        int col_pt_graph;
+        bool colpresent;
+
+        ProcessData(QList<QString> *_result, QStringList _entry,
+            QPointF _pt, int _col_pt_graph, bool _colpresent)
+            : result(_result), entry(_entry), pt(_pt), col_pt_graph(_col_pt_graph), colpresent(_colpresent) {
+        }
+    };
+
+    void processLine (ProcessData data);
 };
 
 } // ns workers

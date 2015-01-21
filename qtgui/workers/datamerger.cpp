@@ -123,15 +123,17 @@ bool DataMerger::doWork(QString in, QString out)
     bool ok;
     double lat,lon;
     int row=1;
-    size_t read = 0;
 
     mExit = false;
-    QFutureSynchronizer<void> works;
 
+    QFutureWatcher<void> watcher;
+
+    if (mWaitDialog)
+        mWaitDialog->setFormat(tr("Reading file: %p%"));
+    QList<ProcessData> processQueue;
     while (!instream.atEnd() && !mExit) {
         line = instream.readLine();
         if (mWaitDialog) {
-            read = row;
             mWaitDialog->setProgression(row);
         }
         ++row;
@@ -146,16 +148,32 @@ bool DataMerger::doWork(QString in, QString out)
         if (!ok)
             (new Exception(in, QString(tr("Error parsing field %1 line %2 - not a double")).arg(col_lon).arg(row)))->raise();
 
-        QFuture<void> work = QtConcurrent::run(this, &DataMerger::processLine, data,entry, QPointF(lon, lat), col_pt_graph, colpresent);
-        works.addFuture(work);
-//        processLine(data,entry, lon, lat, col_pt_graph, colpresent);
+        ProcessData d(&data,entry, QPointF(lon, lat), col_pt_graph, colpresent);
+        processQueue.push_back(d);
     }
 
-    works.waitForFinished();
     infile.close();
+
+    if (mWaitDialog)
+        mWaitDialog->setFormat(tr("Processed %v lines of %m"));
+
+    // lambda
+    QFuture<void> work = QtConcurrent::map(processQueue, [this](ProcessData data) { this->processLine(data);});
+    watcher.setFuture(work);
+    if (mWaitDialog) {
+        watcher.moveToThread(mWaitDialog->thread());
+        connect (&watcher, SIGNAL(progressRangeChanged(int,int)), mWaitDialog, SLOT(setProgress(int,int)));
+        connect (&watcher, SIGNAL(progressValueChanged(int)), mWaitDialog, SLOT(setProgression(int)));
+    }
+
+    watcher.waitForFinished();
 
     if (mExit)
         return false;
+
+    if (mWaitDialog) {
+        mWaitDialog->setText(tr("Saving file"));
+    }
 
     QFile outfile(out);
 
@@ -165,15 +183,26 @@ bool DataMerger::doWork(QString in, QString out)
     QTextStream outstream(&outfile);
 
     outstream << fields.join(FieldSeparator) << endl;
-    foreach (QString line, data)
+
+    row = 0;
+    if (mWaitDialog) {
+        mWaitDialog->setFormat(tr("%p%"));
+        mWaitDialog->setProgress(0, data.size());
+    }
+
+    foreach (QString line, data) {
         outstream << line << endl;
+        ++row;
+        if (mWaitDialog)
+            mWaitDialog->setProgression(row);
+    }
 
     outfile.close();
 
     return true;
 }
 
-void DataMerger::processLine(QList<QString> &data, QStringList entry, QPointF pt, int col_pt_graph, bool colpresent)
+void DataMerger::processLine(ProcessData data)
 {
     int idx = -1;
 
@@ -183,11 +212,9 @@ void DataMerger::processLine(QList<QString> &data, QStringList entry, QPointF pt
         const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
-//    mutex.lock();
-    QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(pt, mDist);
-//    mutex.unlock();
+    QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(data.pt, mDist);
 
-    double maxdist = 1e90;
+    double mindist = 1e90;
     double dist;
     std::shared_ptr<NodeData> nearestNode;
     foreach (std::shared_ptr<NodeData> node, nodes) {
@@ -196,10 +223,10 @@ void DataMerger::processLine(QList<QString> &data, QStringList entry, QPointF pt
         if (mType == Ping && !node->get_is_harbour())
             continue;
 
-        geod.Inverse(node->get_y(), node->get_x(), pt.y(), pt.x(), dist);
-        if (dist < maxdist) {
+        geod.Inverse(node->get_y(), node->get_x(), data.pt.y(), data.pt.x(), dist);
+        if (dist < mindist) {
             nearestNode = node;
-            maxdist = dist;
+            mindist = dist;
         }
     }
 
@@ -207,14 +234,14 @@ void DataMerger::processLine(QList<QString> &data, QStringList entry, QPointF pt
         idx = nearestNode->get_idx_node();
 
     // update the field.
-    while (entry.size() < col_pt_graph)
-        entry.push_back(".");
+    while (data.entry.size() < data.col_pt_graph)
+        data.entry.push_back(".");
 
-    if (!colpresent)
-        entry.insert(col_pt_graph, ".");
-    entry[col_pt_graph] = QString::number(idx);
+    if (!data.colpresent)
+        data.entry.insert(data.col_pt_graph, ".");
+    data.entry[data.col_pt_graph] = QString::number(idx);
 
     mutex.lock();
-    data.push_back(entry.join(FieldSeparator));
+    data.result->push_back(data.entry.join(FieldSeparator));
     mutex.unlock();
 }

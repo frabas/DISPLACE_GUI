@@ -46,6 +46,7 @@ public:
     }
 
 public slots:
+    void setFormat(QString format);
     void setText(QString text);
     void setProgress(bool shown, int max);
     void setProgress(int pos, int max);

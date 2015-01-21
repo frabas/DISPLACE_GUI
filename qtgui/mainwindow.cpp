@@ -1784,7 +1784,7 @@ void MainWindow::on_actionMergeWeights_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
-    MergeDataDialog dlg;
+    MergeDataDialog dlg(this);
     dlg.setWindowTitle(tr("Merge Weights file"));
     if (dlg.exec()) {
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Weights, currentModel.get());

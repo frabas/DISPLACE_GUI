@@ -39,6 +39,7 @@
 #include <QList>
 #include <QMap>
 #include <QThread>
+#include <QMutex>
 
 #include <memory>
 
@@ -329,6 +330,8 @@ signals:
     void errorParsingStatsFile(QString);
 
 private:
+    mutable QMutex mMutex;
+
     ModelType mModelType;
     DbHelper *mDb;
     std::shared_ptr<Calendar> mCalendar;

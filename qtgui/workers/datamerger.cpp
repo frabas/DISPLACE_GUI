@@ -3,6 +3,7 @@
 #include <QtConcurrent>
 #include <QFile>
 #include <QTextStream>
+#include <QFutureSynchronizer>
 
 #include <modelobjects/nodedata.h>
 
@@ -117,6 +118,8 @@ bool DataMerger::doWork(QString in, QString out)
     size_t read = 0;
 
     mExit = false;
+    QFutureSynchronizer<void> works;
+
     while (!instream.atEnd() && !mExit) {
         line = instream.readLine();
         if (mWaitDialog) {
@@ -135,9 +138,12 @@ bool DataMerger::doWork(QString in, QString out)
         if (!ok)
             (new Exception(in, QString(tr("Error parsing field %1 line %2 - not a double")).arg(col_lon).arg(row)))->raise();
 
-        processLine(data,entry, lon, lat, col_pt_graph, colpresent);
+        QFuture<void> work = QtConcurrent::run(this, &DataMerger::processLine, data,entry, QPointF(lon, lat), col_pt_graph, colpresent);
+        works.addFuture(work);
+//        processLine(data,entry, lon, lat, col_pt_graph, colpresent);
     }
 
+    works.waitForFinished();
     infile.close();
 
     if (mExit)
@@ -159,7 +165,7 @@ bool DataMerger::doWork(QString in, QString out)
     return true;
 }
 
-void DataMerger::processLine(QList<QString> &data, QStringList entry, double lon, double lat, int col_pt_graph, bool colpresent)
+void DataMerger::processLine(QList<QString> &data, QStringList entry, QPointF pt, int col_pt_graph, bool colpresent)
 {
     int idx = -1;
 
@@ -169,7 +175,10 @@ void DataMerger::processLine(QList<QString> &data, QStringList entry, double lon
         const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
-    QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(QPointF(lon,lat), mDist);
+//    mutex.lock();
+    QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(pt, mDist);
+//    mutex.unlock();
+
     double maxdist = 1e90;
     double dist;
     std::shared_ptr<NodeData> nearestNode;
@@ -179,7 +188,7 @@ void DataMerger::processLine(QList<QString> &data, QStringList entry, double lon
         if (mType == Ping && !node->get_is_harbour())
             continue;
 
-        geod.Inverse(node->get_y(), node->get_x(), lat, lon, dist);
+        geod.Inverse(node->get_y(), node->get_x(), pt.y(), pt.x(), dist);
         if (dist < maxdist) {
             nearestNode = node;
             maxdist = dist;
@@ -197,6 +206,7 @@ void DataMerger::processLine(QList<QString> &data, QStringList entry, double lon
         entry.insert(col_pt_graph, ".");
     entry[col_pt_graph] = QString::number(idx);
 
+    mutex.lock();
     data.push_back(entry.join(FieldSeparator));
-
+    mutex.unlock();
 }

@@ -338,6 +338,7 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
     geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist_km * 1000, my, d);
     geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist_km * 1000, d, mx);
 
+    mMutex.lock();
     mNodesLayer->ResetReading();
     mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);
     OGRFeature *f;
@@ -347,6 +348,7 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
             nodes.push_back(mNodes[nodeid]);
         }
     }
+    mMutex.unlock();
 
     return nodes;
 }

@@ -73,9 +73,10 @@ private:
     QFuture<bool> mWork;
     QFutureWatcher<bool> *mWatcher;
     WaitDialog *mWaitDialog;
+    QMutex mutex;
 
     bool doWork(QString in, QString out);
-    void processLine (QList<QString> &result, QStringList entry, double lon, double lat, int col_pt_graph, bool colpresent);
+    void processLine (QList<QString> &result, QStringList entry, QPointF pt, int col_pt_graph, bool colpresent);
 };
 
 } // ns workers

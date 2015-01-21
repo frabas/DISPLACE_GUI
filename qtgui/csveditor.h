@@ -31,6 +31,8 @@ private slots:
     void on_action_Open_triggered();
     void on_actionFirst_line_as_Headers_toggled(bool);
 
+    void on_action_Save_triggered();
+
 protected:
     void closeEvent(QCloseEvent *);
 

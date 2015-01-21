@@ -116,7 +116,8 @@ SOURCES += \
     workers/shortestpathbuilderworker.cpp \
     csveditor.cpp \
     utils/csvtablemodel.cpp \
-    utils/csvimporter.cpp
+    utils/csvimporter.cpp \
+    utils/csvexporter.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -202,7 +203,8 @@ HEADERS += \
     workers/shortestpathbuilderworker.h \
     csveditor.h \
     utils/csvtablemodel.h \
-    utils/csvimporter.h
+    utils/csvimporter.h \
+    utils/csvexporter.h
 
 RESOURCES += \
     qtgui.qrc

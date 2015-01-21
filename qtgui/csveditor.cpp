@@ -2,6 +2,7 @@
 #include "ui_csveditor.h"
 
 #include <utils/csvimporter.h>
+#include <utils/csvexporter.h>
 
 #include <QtConcurrent>
 #include <QFileDialog>
@@ -112,4 +113,24 @@ void CsvEditor::closeEvent(QCloseEvent *)
 void CsvEditor::updateCheckState(bool state)
 {
     ui->actionFirst_line_as_Headers->setChecked(state);
+}
+
+void CsvEditor::on_action_Save_triggered()
+{
+    QSettings set;
+    QString dir = set.value("CsvEditor.LastPath", QDir::homePath()).toString();
+    QString filter = set.value("CsvEditor.filter", "").toString();
+
+    QString file = QFileDialog::getSaveFileName(this, tr("Save CSV file"),
+                                                dir, tr("CSV Files (*.csv);;Text Files (*.txt);;Dat Files (*.dat);;All Files (*.*)"),
+                                                &filter);
+
+    if (!file.isEmpty()) {
+        CsvExporter exporter;
+        exporter.exportFile(file, *mData);
+
+        QFileInfo info(file);
+        set.setValue("CsvEditor.LastPath", info.absoluteFilePath());
+        set.setValue("CsvEditor.filter", filter);
+    }
 }

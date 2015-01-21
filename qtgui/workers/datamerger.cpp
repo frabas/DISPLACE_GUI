@@ -74,9 +74,17 @@ bool DataMerger::doWork(QString in, QString out)
     if (!infile.open(QIODevice::ReadOnly))
         (new Exception(in, infile.errorString()))->raise();
 
-    if (mWaitDialog)
-        mWaitDialog->setProgress(true, infile.size() / 1000);
+    QTextStream picker(&infile);
+    size_t rows = 0;
+    while (!picker.atEnd()) {
+        picker.readLine();
+        ++rows;
+    }
 
+    if (mWaitDialog)
+        mWaitDialog->setProgress(true, rows);
+
+    infile.seek(0);
     QTextStream instream(&infile);
     QList<QString> data;
     QString line;
@@ -123,8 +131,8 @@ bool DataMerger::doWork(QString in, QString out)
     while (!instream.atEnd() && !mExit) {
         line = instream.readLine();
         if (mWaitDialog) {
-            read = instream.pos();
-            mWaitDialog->setProgression(read / 1000);
+            read = row;
+            mWaitDialog->setProgression(row);
         }
         ++row;
 

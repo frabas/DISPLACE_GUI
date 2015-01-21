@@ -40,7 +40,7 @@ void CsvEditor::on_action_Open_triggered()
     QString filter = set.value("CsvEditor.filter", "").toString();
 
     QString file = QFileDialog::getOpenFileName(this, tr("Open CSV file"),
-                                                dir, tr("CSV Files (*.csv);;Text Files (*.txt);;All Files (*.*)"),
+                                                dir, tr("CSV Files (*.csv);;Text Files (*.txt);;Dat Files (*.dat);;All Files (*.*)"),
                                                 &filter);
 
     if (!file.isEmpty()) {
@@ -57,6 +57,10 @@ void CsvEditor::on_action_Open_triggered()
             set.setValue("CsvEditor.filter", filter);
 
             updateCheckState(set.value("CsvEditor.headersShown", false).toBool());
+
+            setWindowTitle(QString(tr("CsvEditor - %1 in %2", "1: filename 2: path"))
+                           .arg(info.fileName())
+                           .arg(info.path()));
         } catch (CsvImporter::Exception &x) {
             QMessageBox::warning(this, tr("Cannot load csv file"), x.what());
         }

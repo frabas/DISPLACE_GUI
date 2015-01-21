@@ -1799,6 +1799,27 @@ void MainWindow::on_actionMergeWeights_triggered()
     }
 }
 
+/// \todo: This is duplicated code - see MainWindow::on_actionMergeWeights_triggered(). Must be simplified and unified.
+void MainWindow::on_actionMergePings_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    MergeDataDialog dlg(this);
+    dlg.setWindowTitle(tr("Merge Ping file"));
+    if (dlg.exec()) {
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Ping, currentModel.get());
+        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+
+        if (mWaitDialog != 0) delete mWaitDialog;
+        mWaitDialog = new WaitDialog(this);
+        merger->setWaitDialog(mWaitDialog);
+        merger->setDistance(dlg.getDistance());
+        merger->start(dlg.getInputFile(), dlg.getOutputFile());
+
+    }
+}
+
 void MainWindow::mergeCompleted(DataMerger *merger)
 {
     try {

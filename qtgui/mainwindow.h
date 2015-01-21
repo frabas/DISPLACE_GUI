@@ -165,6 +165,8 @@ private slots:
     void on_actionCSV_Editor_triggered();
     void on_actionMergeWeights_triggered();
 
+    void on_actionMergePings_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

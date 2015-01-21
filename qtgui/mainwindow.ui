@@ -101,6 +101,10 @@
     <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
+    <addaction name="separator"/>
+    <addaction name="actionMergeWeights"/>
+    <addaction name="actionMergePings"/>
+    <addaction name="actionCalcPopDistribution"/>
    </widget>
    <widget class="QMenu" name="menuUtilities">
     <property name="title">
@@ -1018,6 +1022,21 @@
    </property>
    <property name="text">
     <string>CSV Editor...</string>
+   </property>
+  </action>
+  <action name="actionMergeWeights">
+   <property name="text">
+    <string>Merge Weights on fishing points...</string>
+   </property>
+  </action>
+  <action name="actionMergePings">
+   <property name="text">
+    <string>Merge Pings on Harbours...</string>
+   </property>
+  </action>
+  <action name="actionCalcPopDistribution">
+   <property name="text">
+    <string>Calculate Population Distribution...</string>
    </property>
   </action>
  </widget>

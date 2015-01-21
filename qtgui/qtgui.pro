@@ -117,7 +117,9 @@ SOURCES += \
     csveditor.cpp \
     utils/csvtablemodel.cpp \
     utils/csvimporter.cpp \
-    utils/csvexporter.cpp
+    utils/csvexporter.cpp \
+    mergedatadialog.cpp \
+    workers/datamerger.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -132,7 +134,8 @@ FORMS += \
     linkharboursdialog.ui \
     aboutdialog.ui \
     createshortestpathdialog.ui \
-    csveditor.ui
+    csveditor.ui \
+    mergedatadialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -204,7 +207,9 @@ HEADERS += \
     csveditor.h \
     utils/csvtablemodel.h \
     utils/csvimporter.h \
-    utils/csvexporter.h
+    utils/csvexporter.h \
+    mergedatadialog.h \
+    workers/datamerger.h
 
 RESOURCES += \
     qtgui.qrc

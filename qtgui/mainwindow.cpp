@@ -19,7 +19,10 @@
 #include <aboutdialog.h>
 #include <createshortestpathdialog.h>
 #include <csveditor.h>
+#include <mergedatadialog.h>
+
 #include <workers/shortestpathbuilderworker.h>
+#include <workers/datamerger.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -1774,4 +1777,38 @@ void MainWindow::on_actionCSV_Editor_triggered()
     connect (editor, SIGNAL(destroyed()), editor, SLOT(deleteLater()));
 
     editor->show();
+}
+
+void MainWindow::on_actionMergeWeights_triggered()
+{
+    MergeDataDialog dlg;
+    dlg.setWindowTitle(tr("Merge Weights file"));
+    if (dlg.exec()) {
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Weights);
+        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+
+        if (mWaitDialog != 0) delete mWaitDialog;
+        mWaitDialog = new WaitDialog(this);
+        merger->setWaitDialog(mWaitDialog);
+        merger->start(dlg.getInputFile(), dlg.getOutputFile());
+
+    }
+}
+
+void MainWindow::mergeCompleted(DataMerger *merger)
+{
+    try {
+        merger->checkResult();
+    } catch (DataMerger::Exception &x) {
+        QMessageBox::warning(this, tr("Error merging files"),
+                             QString(tr("An error occurred while merging files %1: %2"))
+                             .arg(x.file())
+                             .arg(x.message()));
+    }
+
+    mWaitDialog->close();
+    delete mWaitDialog;
+    mWaitDialog = 0;
+
+    delete merger;
 }

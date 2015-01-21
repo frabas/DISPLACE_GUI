@@ -1,5 +1,7 @@
 #include "csvtablemodel.h"
 
+#include <QDebug>
+
 CsvTableModel::CsvTableModel(std::shared_ptr<QList<QStringList> > data, QObject *parent) :
     QAbstractTableModel(parent),
     mHeaders(false),
@@ -12,7 +14,7 @@ CsvTableModel::CsvTableModel(std::shared_ptr<QList<QStringList> > data, QObject 
 
 QVariant CsvTableModel::data(const QModelIndex &index, int role) const
 {
-    if (role != Qt::DisplayRole)
+    if (role != Qt::DisplayRole && role != Qt::EditRole)
         return QVariant();
 
     int idx = mHeaders ? index.row() +1 : index.row();
@@ -21,6 +23,17 @@ QVariant CsvTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     return mData->at(idx).at(index.column());
+}
+
+bool CsvTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (role != Qt::EditRole)
+        return false;
+
+    int row = mHeaders ? index.row() + 1 : index.row();
+    (*mData)[row][index.column()] = value.toString();
+    emit dataChanged(index, index);
+    return true;
 }
 
 QVariant CsvTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -32,16 +45,18 @@ QVariant CsvTableModel::headerData(int section, Qt::Orientation orientation, int
         return section;
     } else {
         if (mHeaders) {
-            if (mData->at(0).size() < section)
+            if (mData->size() < 1 || mData->at(0).size() <= section)
                 return section;
             return mData->at(0).at(section);
         }
     }
+
+    return QVariant();
 }
 
 Qt::ItemFlags CsvTableModel::flags(const QModelIndex &index) const
 {
-    return QAbstractTableModel::flags(index);
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
 void CsvTableModel::setSource(std::shared_ptr<QList<QStringList> > data)

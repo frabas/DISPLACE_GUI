@@ -75,6 +75,7 @@ private:
     WaitDialog *mWaitDialog;
 
     bool doWork(QString in, QString out);
+    void processLine (QList<QString> &result, QStringList entry, double lon, double lat, int col_pt_graph, bool colpresent);
 };
 
 } // ns workers

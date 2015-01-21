@@ -116,12 +116,6 @@ bool DataMerger::doWork(QString in, QString out)
     int row=1;
     size_t read = 0;
 
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
-        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
-
     mExit = false;
     while (!instream.atEnd() && !mExit) {
         line = instream.readLine();
@@ -141,38 +135,7 @@ bool DataMerger::doWork(QString in, QString out)
         if (!ok)
             (new Exception(in, QString(tr("Error parsing field %1 line %2 - not a double")).arg(col_lon).arg(row)))->raise();
 
-        int idx = -1;
-        // TODO: Calculate idx here
-
-        QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(QPointF(lon,lat), mDist);
-        double maxdist = 1e90;
-        double dist;
-        std::shared_ptr<NodeData> nearestNode;
-        foreach (std::shared_ptr<NodeData> node, nodes) {
-            if (mType == Weights && node->get_is_harbour())
-                continue;
-            if (mType == Ping && !node->get_is_harbour())
-                continue;
-
-            geod.Inverse(node->get_y(), node->get_x(), lat, lon, dist);
-            if (dist < maxdist) {
-                nearestNode = node;
-                maxdist = dist;
-            }
-        }
-
-        if (nearestNode)
-            idx = nearestNode->get_idx_node();
-
-        // update the field.
-        while (entry.size() < col_pt_graph)
-            entry.push_back(".");
-
-        if (!colpresent)
-            entry.insert(col_pt_graph, ".");
-        entry[col_pt_graph] = QString::number(idx);
-
-        data.push_back(entry.join(FieldSeparator));
+        processLine(data,entry, lon, lat, col_pt_graph, colpresent);
     }
 
     infile.close();
@@ -194,4 +157,46 @@ bool DataMerger::doWork(QString in, QString out)
     outfile.close();
 
     return true;
+}
+
+void DataMerger::processLine(QList<QString> &data, QStringList entry, double lon, double lat, int col_pt_graph, bool colpresent)
+{
+    int idx = -1;
+
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+        const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
+
+    QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(QPointF(lon,lat), mDist);
+    double maxdist = 1e90;
+    double dist;
+    std::shared_ptr<NodeData> nearestNode;
+    foreach (std::shared_ptr<NodeData> node, nodes) {
+        if (mType == Weights && node->get_is_harbour())
+            continue;
+        if (mType == Ping && !node->get_is_harbour())
+            continue;
+
+        geod.Inverse(node->get_y(), node->get_x(), lat, lon, dist);
+        if (dist < maxdist) {
+            nearestNode = node;
+            maxdist = dist;
+        }
+    }
+
+    if (nearestNode)
+        idx = nearestNode->get_idx_node();
+
+    // update the field.
+    while (entry.size() < col_pt_graph)
+        entry.push_back(".");
+
+    if (!colpresent)
+        entry.insert(col_pt_graph, ".");
+    entry[col_pt_graph] = QString::number(idx);
+
+    data.push_back(entry.join(FieldSeparator));
+
 }

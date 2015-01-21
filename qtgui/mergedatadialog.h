@@ -17,6 +17,7 @@ public:
 
     QString getInputFile() const;
     QString getOutputFile() const;
+    double getDistance() const;
 
 private slots:
     void on_ok_clicked();
@@ -25,6 +26,8 @@ private slots:
 
 private:
     Ui::MergeDataDialog *ui;
+
+    static double lastDistance;
 };
 
 #endif // MERGEDATADIALOG_H

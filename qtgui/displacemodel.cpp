@@ -322,7 +322,7 @@ QString DisplaceModel::getNodeId(int idx) const
     return QString::fromStdString(mNodes.at(idx)->get_name());
 }
 
-QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist) const
+QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist_km) const
 {
     QList<std::shared_ptr<NodeData> > nodes;
 
@@ -333,10 +333,10 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
 #endif
 
     double mx, my, Mx, My, d;
-    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist * 1000, My, d);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist * 1000, d, Mx);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist * 1000, my, d);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist * 1000, d, mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist_km * 1000, My, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist_km * 1000, d, Mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist_km * 1000, my, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist_km * 1000, d, mx);
 
     mNodesLayer->ResetReading();
     mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);

@@ -119,7 +119,7 @@ public:
     const QList<std::shared_ptr<NodeData> > &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
-    QList<std::shared_ptr<NodeData> > getAllNodesWithin (const QPointF &centerpoint, double dist) const;
+    QList<std::shared_ptr<NodeData> > getAllNodesWithin (const QPointF &centerpoint, double dist_km) const;
 
     /** \brief receive a Stats update for nodes from the Simulator
      *

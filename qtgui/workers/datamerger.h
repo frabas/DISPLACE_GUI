@@ -7,6 +7,8 @@
 #include <QFutureWatcher>
 #include <waitdialog.h>
 
+#include <displacemodel.h>
+
 namespace displace {
 namespace workers {
 
@@ -18,11 +20,14 @@ public:
         Weights, Ping
     };
 
-    explicit DataMerger(MergeType type);
+    explicit DataMerger(MergeType type, DisplaceModel *model);
     ~DataMerger();
 
     void setWaitDialog (WaitDialog *dlg) {
         mWaitDialog = dlg;
+    }
+    void setDistance (double km) {
+        mDist = km;
     }
 
     void start(QString in, QString out);
@@ -48,6 +53,8 @@ public:
     };
 
     static const char *const MergedField;
+    static const char *const LatField;
+    static const char *const LongField;
     static const char FieldSeparator;
 
 signals:
@@ -55,9 +62,13 @@ signals:
 
 private slots:
     void workCompleted();
+    void aborted();
 
 private:
     MergeType mType;
+    DisplaceModel *mModel;
+    double mDist;
+    bool mExit;
 
     QFuture<bool> mWork;
     QFutureWatcher<bool> *mWatcher;

@@ -1781,15 +1781,19 @@ void MainWindow::on_actionCSV_Editor_triggered()
 
 void MainWindow::on_actionMergeWeights_triggered()
 {
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
     MergeDataDialog dlg;
     dlg.setWindowTitle(tr("Merge Weights file"));
     if (dlg.exec()) {
-        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Weights);
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Weights, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
 
         if (mWaitDialog != 0) delete mWaitDialog;
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
+        merger->setDistance(dlg.getDistance());
         merger->start(dlg.getInputFile(), dlg.getOutputFile());
 
     }

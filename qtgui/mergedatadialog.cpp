@@ -4,11 +4,15 @@
 #include <QFileDialog>
 #include <QSettings>
 
+double MergeDataDialog::lastDistance = 50.0;
+
 MergeDataDialog::MergeDataDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MergeDataDialog)
 {
     ui->setupUi(this);
+
+    ui->distance->setValue(lastDistance);
 }
 
 MergeDataDialog::~MergeDataDialog()
@@ -26,11 +30,17 @@ QString MergeDataDialog::getOutputFile() const
     return ui->fileOut->text();
 }
 
+double MergeDataDialog::getDistance() const
+{
+    return ui->distance->value();
+}
+
 void MergeDataDialog::on_ok_clicked()
 {
     if (ui->fileIn->text().isEmpty() || ui->fileOut->text().isEmpty())
         return;
 
+    lastDistance = ui->distance->value();
     accept();
 }
 

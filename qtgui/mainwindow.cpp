@@ -1773,7 +1773,7 @@ void MainWindow::on_cmdProfileSave_clicked()
 
 void MainWindow::on_actionCSV_Editor_triggered()
 {
-    CsvEditor *editor = new CsvEditor(this);
+    CsvEditor *editor = new CsvEditor();
     connect (editor, SIGNAL(destroyed()), editor, SLOT(deleteLater()));
 
     editor->show();

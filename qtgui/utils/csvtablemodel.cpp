@@ -17,7 +17,7 @@ QVariant CsvTableModel::data(const QModelIndex &index, int role) const
 
     int idx = mHeaders ? index.row() +1 : index.row();
 
-    if (mData->at(idx).size() < index.column())
+    if (mData->at(idx).size() <= index.column())
         return QVariant();
 
     return mData->at(idx).at(index.column());

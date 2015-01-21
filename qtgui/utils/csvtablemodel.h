@@ -22,6 +22,9 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    bool insertRows(int row, int count, const QModelIndex &parent);
+    bool removeRows(int row, int count, const QModelIndex &parent);
+
     void setSource (std::shared_ptr<QList<QStringList> > data);
     void setFirstLineHeaders(bool x);
 signals:

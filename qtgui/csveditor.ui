@@ -48,7 +48,16 @@
     <addaction name="separator"/>
     <addaction name="menuOptions"/>
    </widget>
+   <widget class="QMenu" name="menu_Table">
+    <property name="title">
+     <string>&amp;Table</string>
+    </property>
+    <addaction name="action_Insert_row_at_current_position"/>
+    <addaction name="action_Insert_row_after"/>
+    <addaction name="action_Remove_current_row"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Table"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -63,6 +72,9 @@
    </attribute>
    <addaction name="action_Open"/>
    <addaction name="action_Save"/>
+   <addaction name="separator"/>
+   <addaction name="action_Insert_row_at_current_position"/>
+   <addaction name="action_Remove_current_row"/>
    <addaction name="separator"/>
   </widget>
   <action name="action_Open">
@@ -89,6 +101,29 @@
    </property>
    <property name="text">
     <string>First line as Headers</string>
+   </property>
+  </action>
+  <action name="action_Insert_row_after">
+   <property name="text">
+    <string>Insert row &amp;after current position</string>
+   </property>
+  </action>
+  <action name="action_Insert_row_at_current_position">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Insert row at current position</string>
+   </property>
+  </action>
+  <action name="action_Remove_current_row">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Remove current row</string>
    </property>
   </action>
  </widget>

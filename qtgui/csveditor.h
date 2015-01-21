@@ -33,6 +33,12 @@ private slots:
 
     void on_action_Save_triggered();
 
+    void on_action_Insert_row_after_triggered();
+
+    void on_action_Insert_row_at_current_position_triggered();
+
+    void on_action_Remove_current_row_triggered();
+
 protected:
     void closeEvent(QCloseEvent *);
 

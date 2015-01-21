@@ -31,6 +31,9 @@ bool CsvTableModel::setData(const QModelIndex &index, const QVariant &value, int
         return false;
 
     int row = mHeaders ? index.row() + 1 : index.row();
+    while (mData->at(row).size() <= index.column())
+        (*mData)[row].insert(mData->at(row).size(), QString());
+
     (*mData)[row][index.column()] = value.toString();
     emit dataChanged(index, index);
     return true;
@@ -57,6 +60,28 @@ QVariant CsvTableModel::headerData(int section, Qt::Orientation orientation, int
 Qt::ItemFlags CsvTableModel::flags(const QModelIndex &index) const
 {
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+}
+
+bool CsvTableModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    int hdr = mHeaders ? 1 : 0;
+    beginInsertRows(parent, row+hdr, row+count+hdr-1);
+    for (int i = 0; i < count; ++i)
+        mData->insert(row + hdr + i, QStringList());
+    endInsertRows();
+
+    return true;
+}
+
+bool CsvTableModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    int hdr = mHeaders ? 1 : 0;
+    beginRemoveRows(parent, row+hdr, row+count+hdr-1);
+    for (int i = 0; i < count; ++i)
+        mData->removeAt(row+hdr);
+    endRemoveRows();
+
+    return true;
 }
 
 void CsvTableModel::setSource(std::shared_ptr<QList<QStringList> > data)

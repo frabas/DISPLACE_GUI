@@ -134,3 +134,23 @@ void CsvEditor::on_action_Save_triggered()
         set.setValue("CsvEditor.filter", filter);
     }
 }
+
+void CsvEditor::on_action_Insert_row_after_triggered()
+{
+    int idx = ui->table->currentIndex().row();
+    mModel->insertRows(idx+1, 1, QModelIndex());
+}
+
+void CsvEditor::on_action_Insert_row_at_current_position_triggered()
+{
+    int idx = ui->table->currentIndex().row();
+    if (idx < 0) idx = 0;
+    mModel->insertRows(idx, 1, QModelIndex());
+}
+
+void CsvEditor::on_action_Remove_current_row_triggered()
+{
+    int idx = ui->table->currentIndex().row();
+    if (idx < 0) idx = 0;
+    mModel->removeRows(idx, 1, QModelIndex());
+}

@@ -22,6 +22,7 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
       mDist(50.0),
       mWork(),
       mWatcher(0),
+      mInternalWatcher(0),
       mWaitDialog(0)
 {
 }
@@ -29,6 +30,7 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
 DataMerger::~DataMerger()
 {
     if (mWatcher) delete mWatcher;
+    if (mInternalWatcher) delete mInternalWatcher;
 }
 
 void DataMerger::start(QString in, QString out)
@@ -55,6 +57,8 @@ void DataMerger::start(QString in, QString out)
  * */
 bool DataMerger::checkResult()
 {
+    if (mWork.isCanceled())
+        return false;
     return mWork.result();
 }
 
@@ -66,10 +70,13 @@ void DataMerger::workCompleted()
 void DataMerger::aborted()
 {
     mExit = true;
+    mInternalWatcher->cancel();
 }
 
 bool DataMerger::doWork(QString in, QString out)
 {
+    mExit = false;
+
     QFile infile (in);
     if (!infile.open(QIODevice::ReadOnly))
         (new Exception(in, infile.errorString()))->raise();
@@ -119,14 +126,15 @@ bool DataMerger::doWork(QString in, QString out)
         col_pt_graph = fields.size()-1;
     }
 
+    if (mExit) {
+        infile.close();
+        return false;
+    }
+
     // Read the input file and calculate the field.
     bool ok;
     double lat,lon;
     int row=1;
-
-    mExit = false;
-
-    QFutureWatcher<void> watcher;
 
     if (mWaitDialog)
         mWaitDialog->setFormat(tr("Reading file: %p%"));
@@ -152,21 +160,28 @@ bool DataMerger::doWork(QString in, QString out)
         processQueue.push_back(d);
     }
 
+    if (mExit) {
+        infile.close();
+        return false;
+    }
+
     infile.close();
 
     if (mWaitDialog)
         mWaitDialog->setFormat(tr("Processed %v lines of %m"));
 
+    mInternalWatcher = new QFutureWatcher<void>;
+
     // lambda
     QFuture<void> work = QtConcurrent::map(processQueue, [this](ProcessData data) { this->processLine(data);});
-    watcher.setFuture(work);
+    mInternalWatcher->setFuture(work);
     if (mWaitDialog) {
-        watcher.moveToThread(mWaitDialog->thread());
-        connect (&watcher, SIGNAL(progressRangeChanged(int,int)), mWaitDialog, SLOT(setProgress(int,int)));
-        connect (&watcher, SIGNAL(progressValueChanged(int)), mWaitDialog, SLOT(setProgression(int)));
+        mInternalWatcher->moveToThread(mWaitDialog->thread());
+        connect (mInternalWatcher, SIGNAL(progressRangeChanged(int,int)), mWaitDialog, SLOT(setProgress(int,int)));
+        connect (mInternalWatcher, SIGNAL(progressValueChanged(int)), mWaitDialog, SLOT(setProgression(int)));
     }
 
-    watcher.waitForFinished();
+    mInternalWatcher->waitForFinished();
 
     if (mExit)
         return false;
@@ -195,6 +210,9 @@ bool DataMerger::doWork(QString in, QString out)
         ++row;
         if (mWaitDialog)
             mWaitDialog->setProgression(row);
+
+        if (mExit)
+            break;
     }
 
     outfile.close();

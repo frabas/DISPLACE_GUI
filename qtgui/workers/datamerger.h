@@ -72,6 +72,7 @@ private:
 
     QFuture<bool> mWork;
     QFutureWatcher<bool> *mWatcher;
+    QFutureWatcher<void> *mInternalWatcher;
     WaitDialog *mWaitDialog;
     QMutex mutex;
 

@@ -119,7 +119,8 @@ SOURCES += \
     utils/csvimporter.cpp \
     utils/csvexporter.cpp \
     mergedatadialog.cpp \
-    workers/datamerger.cpp
+    workers/datamerger.cpp \
+    utils/imageformathelpers.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -209,7 +210,8 @@ HEADERS += \
     utils/csvimporter.h \
     utils/csvexporter.h \
     mergedatadialog.h \
-    workers/datamerger.h
+    workers/datamerger.h \
+    utils/imageformathelpers.h
 
 RESOURCES += \
     qtgui.qrc

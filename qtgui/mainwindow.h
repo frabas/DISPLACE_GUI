@@ -164,8 +164,11 @@ private slots:
     void on_cmdProfileSave_clicked();
     void on_actionCSV_Editor_triggered();
     void on_actionMergeWeights_triggered();
-
     void on_actionMergePings_triggered();
+    void on_actionExport_Map_triggered();
+    void on_actionExport_Harbours_triggered();
+    void on_actionExport_Populations_triggered();
+    void on_actionExport_Nations_triggered();
 
 public slots:
     void end_ShortestPathCreated(bool);
@@ -201,6 +204,7 @@ protected:
     bool isEditorModel();
 
     void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
+    void exportGraphics(QString label, QWidget *widget);
 
 private:
     Ui::MainWindow *ui;

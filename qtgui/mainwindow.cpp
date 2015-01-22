@@ -20,6 +20,7 @@
 #include <createshortestpathdialog.h>
 #include <csveditor.h>
 #include <mergedatadialog.h>
+#include <utils/imageformathelpers.h>
 
 #include <workers/shortestpathbuilderworker.h>
 #include <workers/datamerger.h>
@@ -1836,4 +1837,66 @@ void MainWindow::mergeCompleted(DataMerger *merger)
     mWaitDialog = 0;
 
     delete merger;
+}
+
+void MainWindow::exportGraphics(QString label, QWidget *widget)
+{
+    QSettings set;
+    QString defpos = set.value("ImageExport", QDir::homePath()).toString();
+    QString lastform = set.value("ImageExport.format", "png").toString();
+    QStringList filter = displace::helpers::images::supportedFormatsOnWriteAsFilter();
+    QString deffilter;
+    int idx = displace::helpers::images::supportedFormatsOnWrite().indexOf(lastform);
+    if (idx != -1)
+        deffilter = filter[idx];
+
+    QString path = QFileDialog::getSaveFileName(this, QString(tr("Export %1 Image")).arg(label),
+                                                defpos, filter.join(";;"), &deffilter);
+    if (!path.isEmpty()) {
+        int idx = path.lastIndexOf(QString("."));
+        QString extension = (idx != -1 ? path.mid(idx+1) : "");
+        if (extension.isEmpty()) {
+            idx = filter.indexOf(deffilter);
+            if (idx != -1) {
+                extension = displace::helpers::images::supportedFormatsOnWrite().at(idx);
+                if (!path.endsWith('.'))
+                    path.append(".");
+                path.append(extension);
+            }
+        }
+
+        QFileInfo info(path);
+        set.setValue("ImageExport", info.path());
+
+        if(widget->grab().save(path)) {
+            set.setValue("ImageExport.format", extension.toLower());
+
+            QMessageBox::information(this, tr("Image saved"),
+                                     QString(tr("Image saved: %1")).arg(path));
+        } else {
+            QMessageBox::warning(this, tr("Image save failed."),
+                                 QString(tr("Cannot save image: %1")).arg(path));
+        }
+    }
+
+}
+
+void MainWindow::on_actionExport_Map_triggered()
+{
+    exportGraphics(tr("Map"), map);
+}
+
+void MainWindow::on_actionExport_Harbours_triggered()
+{
+    exportGraphics(tr("Harbours Plot"), ui->plotHarbours);
+}
+
+void MainWindow::on_actionExport_Populations_triggered()
+{
+    exportGraphics(tr("Populations Plot"), ui->plotPopulations);
+}
+
+void MainWindow::on_actionExport_Nations_triggered()
+{
+    exportGraphics(tr("Nations Plot"), ui->plotNations);
 }

@@ -147,6 +147,8 @@ bool DataMerger::doWork(QString in, QString out)
         ++row;
 
         QStringList entry = line.split(FieldSeparator, QString::SkipEmptyParts);
+        if (entry.size() < col_lat || entry.size() < col_lon)  // Skip empty / incorrect lines
+            continue;
 
         lat = entry.at(col_lat).toDouble(&ok);
         if (!ok)
@@ -186,10 +188,6 @@ bool DataMerger::doWork(QString in, QString out)
     if (mExit)
         return false;
 
-    if (mWaitDialog) {
-        mWaitDialog->setText(tr("Saving file"));
-    }
-
     QFile outfile(out);
 
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -201,15 +199,12 @@ bool DataMerger::doWork(QString in, QString out)
 
     row = 0;
     if (mWaitDialog) {
-        mWaitDialog->setFormat(tr("%p%"));
-        mWaitDialog->setProgress(0, data.size());
+        mWaitDialog->setText(tr("Saving file..."));
     }
 
     foreach (QString line, data) {
         outstream << line << endl;
         ++row;
-        if (mWaitDialog)
-            mWaitDialog->setProgression(row);
 
         if (mExit)
             break;

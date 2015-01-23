@@ -20,6 +20,7 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
     : mType (type),
       mModel(model),
       mDist(50.0),
+      mSeparator(FieldSeparator),
       mWork(),
       mWatcher(0),
       mInternalWatcher(0),
@@ -98,7 +99,7 @@ bool DataMerger::doWork(QString in, QString out)
 
     // First: read the headers
     line = instream.readLine();
-    QStringList fields = line.split(FieldSeparator, QString::SkipEmptyParts);
+    QStringList fields = line.split(mSeparator, QString::SkipEmptyParts);
 
     // Search for the proper column
     bool colpresent = true;
@@ -146,7 +147,7 @@ bool DataMerger::doWork(QString in, QString out)
         }
         ++row;
 
-        QStringList entry = line.split(FieldSeparator, QString::SkipEmptyParts);
+        QStringList entry = line.split(mSeparator, QString::SkipEmptyParts);
         if (entry.size() < col_lat || entry.size() < col_lon)  // Skip empty / incorrect lines
             continue;
 
@@ -195,7 +196,7 @@ bool DataMerger::doWork(QString in, QString out)
 
     QTextStream outstream(&outfile);
 
-    outstream << fields.join(FieldSeparator) << endl;
+    outstream << fields.join(mSeparator) << endl;
 
     row = 0;
     if (mWaitDialog) {
@@ -255,6 +256,6 @@ void DataMerger::processLine(ProcessData data)
     data.entry[data.col_pt_graph] = QString::number(idx);
 
     mutex.lock();
-    data.result->push_back(data.entry.join(FieldSeparator));
+    data.result->push_back(data.entry.join(mSeparator));
     mutex.unlock();
 }

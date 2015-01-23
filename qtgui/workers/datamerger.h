@@ -33,6 +33,8 @@ public:
     void start(QString in, QString out);
     bool checkResult();
 
+    void setSeparator(QChar sep) { mSeparator = sep; }
+
     class Exception : public QException {
     public:
         explicit Exception (QString orffile, QString what)
@@ -68,6 +70,7 @@ private:
     MergeType mType;
     DisplaceModel *mModel;
     double mDist;
+    QChar mSeparator;
     bool mExit;
 
     QFuture<bool> mWork;

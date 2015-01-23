@@ -1795,6 +1795,7 @@ void MainWindow::on_actionMergeWeights_triggered()
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
         merger->setDistance(dlg.getDistance());
+        merger->setSeparator(dlg.separator());
         merger->start(dlg.getInputFile(), dlg.getOutputFile());
 
     }

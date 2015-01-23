@@ -49,6 +49,14 @@ class QMapControl;
 class PointWorldCoord;
 }
 
+namespace displace {
+namespace workers {
+class DataMerger;
+}
+}
+
+using namespace displace::workers;
+
 class ObjectTreeModel;
 class DisplaceModel;
 class Simulator;
@@ -104,6 +112,8 @@ private slots:
     void editorAddNode(QPointF);
     void editorAddEdge(int from, int to);
 
+    void mergeCompleted(DataMerger *merger);
+
     void on_action_Load_triggered();
     void on_modelSelector_currentIndexChanged(int index);
     void on_cmdStart_clicked();
@@ -152,6 +162,13 @@ private slots:
     void on_actionAbout_displace_triggered();
     void on_cmdProfileEnable_toggled(bool checked);
     void on_cmdProfileSave_clicked();
+    void on_actionCSV_Editor_triggered();
+    void on_actionMergeWeights_triggered();
+    void on_actionMergePings_triggered();
+    void on_actionExport_Map_triggered();
+    void on_actionExport_Harbours_triggered();
+    void on_actionExport_Populations_triggered();
+    void on_actionExport_Nations_triggered();
 
 public slots:
     void end_ShortestPathCreated(bool);
@@ -186,7 +203,8 @@ protected:
 
     bool isEditorModel();
 
-    void openScenarioDialog(QString suggestedPath, bool askForReload);
+    void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
+    void exportGraphics(QString label, QWidget *widget);
 
 private:
     Ui::MainWindow *ui;

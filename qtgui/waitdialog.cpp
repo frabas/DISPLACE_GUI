@@ -22,6 +22,11 @@ WaitDialog::~WaitDialog()
     delete ui;
 }
 
+void WaitDialog::setFormat(QString format)
+{
+    ui->progress->setFormat(format);
+}
+
 void WaitDialog::setText(QString text)
 {
     ui->text->setText(text);
@@ -31,6 +36,13 @@ void WaitDialog::setProgress(bool shown, int max)
 {
     ui->progress->setVisible(shown);
     ui->progress->setMinimum(0);
+    ui->progress->setMaximum(max);
+}
+
+void WaitDialog::setProgress(int pos, int max)
+{
+    ui->progress->setVisible(true);
+    ui->progress->setMinimum(pos);
     ui->progress->setMaximum(max);
 }
 

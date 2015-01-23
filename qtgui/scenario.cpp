@@ -8,9 +8,9 @@
 
 
 Scenario::Scenario()
-    : dyn_alloc_sce(),
-      dyn_pop_sce(),
-      biolsce(),
+    : dyn_alloc_sce("baseline"),
+      dyn_pop_sce("baseline"),
+      biolsce("1"),
       graph(0),
       nrow_coord(0),
       nrow_graph(0),

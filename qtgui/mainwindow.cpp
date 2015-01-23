@@ -18,6 +18,12 @@
 #include <creategraphdialog.h>
 #include <aboutdialog.h>
 #include <createshortestpathdialog.h>
+#include <csveditor.h>
+#include <mergedatadialog.h>
+#include <utils/imageformathelpers.h>
+
+#include <workers/shortestpathbuilderworker.h>
+#include <workers/datamerger.h>
 
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
@@ -51,6 +57,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QInputDialog>
+#include <QtConcurrent>
+#include <QFuture>
+#include <QFutureWatcher>
 
 const int MainWindow::maxModels = MAX_MODELS;
 const QString MainWindow::dbSuffix = ".db";
@@ -141,6 +150,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (map, SIGNAL(mouseEventPressCoordinate(QMouseEvent*,PointWorldCoord)), this, SLOT(mapMousePress(QMouseEvent*,PointWorldCoord)));
     connect (map, SIGNAL(mouseEventReleaseCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseRelease(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
     connect (map, SIGNAL(mouseEventMoveCoordinate(QMouseEvent*,PointWorldCoord,PointWorldCoord)), this, SLOT(mapMouseMove(QMouseEvent*,PointWorldCoord,PointWorldCoord)));
+
+    map->setBackgroundColour(Qt::white);
 
     QPixmap pixmap;
     pixmap.fill( Qt::white );
@@ -605,15 +616,17 @@ void MainWindow::on_actionScenario_triggered()
         return;
 
     bool askForReload = (currentModel->modelType() == DisplaceModel::LiveModelType);
-    openScenarioDialog(currentModel->fullpath(), askForReload);
+    openScenarioDialog(currentModel->fullpath(), askForReload, false);
 }
 
-void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload)
+void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename)
 {
     if (currentModel) {
         Scenario d = currentModel->scenario();
         ScenarioDialog dlg (d, this);
         dlg.setScenarioPath(suggestedPath);
+        if (forceRename)
+            dlg.setForceRename();
         if (dlg.exec() == QDialog::Accepted) {
             int r = QMessageBox::question(this, tr("Saving scenario"),
                                           QString(tr("The scenario file must be saved%1. Proceed?"))
@@ -1255,6 +1268,8 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
         mMapController->redraw();
     }
+
+    QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
 }
 
 bool MainWindow::loadLiveModel(QString path, QString *error)
@@ -1355,39 +1370,6 @@ void MainWindow::on_actionLink_Shortest_Path_Folder_triggered()
 
 }
 
-class ShortestPathBuilderWorker : public BackgroundWorkerWithWaitDialog {
-    DisplaceModel *mModel;
-    QList<std::shared_ptr<NodeData> > mRelevantNodes;
-public:
-    ShortestPathBuilderWorker(MainWindow *main, WaitDialog *dialog, DisplaceModel *model)
-        : BackgroundWorkerWithWaitDialog(main, dialog), mModel(model) {
-    }
-
-    void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes) {
-        mRelevantNodes = nodes;
-    }
-
-    void execute() override {
-        ShortestPathBuilder builder(mModel);
-
-        setText("Building shortest paths");
-        setProgressMax(mRelevantNodes.size());
-        setAbortEnabled(true);
-        int n = 0;
-        foreach (std::shared_ptr<NodeData> node, mRelevantNodes) {
-            if (aborted()) {
-                setFail(tr("Aborted by user"));
-                break;
-            }
-            setProgress(n);
-
-            builder.create(node, mModel->linkedShortestPathFolder());
-            ++n;
-        }
-        setProgress(n);
-    }
-};
-
 void MainWindow::on_actionCreate_Shortest_Path_triggered()
 {
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
@@ -1395,14 +1377,30 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
     CreateShortestPathDialog dlg(this);
     dlg.setShortestPathFolder(currentModel->linkedShortestPathFolder());
+    dlg.setOutputFolder(currentModel->linkedGraphFolder());
+    dlg.setGraphName(QString::number(currentModel->scenario().getGraph()));
     if (dlg.exec() != QDialog::Accepted)
         return;
 
     currentModel->linkShortestPathFolder(dlg.getShortestPathFolder());
+    currentModel->linkGraphFolder(dlg.getOutputFolder());
+    Scenario sce = currentModel->scenario();
+    sce.setGraph(dlg.getGraphName().toInt());
+    currentModel->setScenario(sce);
 
     WaitDialog *dialog = new WaitDialog(this);
-    ShortestPathBuilderWorker *builder = new ShortestPathBuilderWorker(this, dialog, currentModel.get());
-    dialog->setProgress(true, 0);
+    displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
+
+    QString graphpath = QString("%1/graph%2.dat").arg(dlg.getOutputFolder()).arg(sce.getGraph());
+    QString coordspath = QString("%1/coord%2.dat").arg(dlg.getOutputFolder()).arg(sce.getGraph());
+
+    QString error;
+    InputFileExporter exporter;
+    if (exporter.exportGraph(graphpath, coordspath, currentModel.get(), &error)) {
+    } else {
+        QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
+        return;
+    }
 
     if (dlg.isAllNodesAreRelevantChecked()) {
         builder->setRelevantNodes(currentModel->getNodesList());
@@ -1439,7 +1437,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         builder->setRelevantNodes(l);
     }
 
-    startBackgroundOperation(builder, dialog, this, SLOT(end_ShortestPathCreated(bool)));
+    builder->run(this,SLOT(end_ShortestPathCreated(bool)) );
 }
 
 void MainWindow::end_ShortestPathCreated(bool completed)
@@ -1449,7 +1447,7 @@ void MainWindow::end_ShortestPathCreated(bool completed)
         QString path = currentModel->fullpath();
         path = path.replace(outname + ".dat", outname + "_XX.dat");
         currentModel->setOutputName(outname + "_XX");
-        openScenarioDialog(path, false);
+        openScenarioDialog(path, false, true);
     } else {
         QMessageBox::warning(this, tr("Shortest path creation failed."), tr("Process was not completed."));
     }
@@ -1488,6 +1486,8 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         }
 
         mMapController->redraw();
+
+        QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
     }
 }
 
@@ -1770,4 +1770,133 @@ void MainWindow::on_cmdProfileSave_clicked()
         QFileInfo info(path);
         set.setValue("report_path", info.absolutePath());
     }
+}
+
+void MainWindow::on_actionCSV_Editor_triggered()
+{
+    CsvEditor *editor = new CsvEditor();
+    connect (editor, SIGNAL(destroyed()), editor, SLOT(deleteLater()));
+
+    editor->show();
+}
+
+void MainWindow::on_actionMergeWeights_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    MergeDataDialog dlg(this);
+    dlg.setWindowTitle(tr("Merge Weights file"));
+    if (dlg.exec()) {
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Weights, currentModel.get());
+        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+
+        if (mWaitDialog != 0) delete mWaitDialog;
+        mWaitDialog = new WaitDialog(this);
+        merger->setWaitDialog(mWaitDialog);
+        merger->setDistance(dlg.getDistance());
+        merger->start(dlg.getInputFile(), dlg.getOutputFile());
+
+    }
+}
+
+/// \todo: This is duplicated code - see MainWindow::on_actionMergeWeights_triggered(). Must be simplified and unified.
+void MainWindow::on_actionMergePings_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    MergeDataDialog dlg(this);
+    dlg.setWindowTitle(tr("Merge Ping file"));
+    if (dlg.exec()) {
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Ping, currentModel.get());
+        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+
+        if (mWaitDialog != 0) delete mWaitDialog;
+        mWaitDialog = new WaitDialog(this);
+        merger->setWaitDialog(mWaitDialog);
+        merger->setDistance(dlg.getDistance());
+        merger->start(dlg.getInputFile(), dlg.getOutputFile());
+
+    }
+}
+
+void MainWindow::mergeCompleted(DataMerger *merger)
+{
+    try {
+        merger->checkResult();
+    } catch (DataMerger::Exception &x) {
+        QMessageBox::warning(this, tr("Error merging files"),
+                             QString(tr("An error occurred while merging files %1: %2"))
+                             .arg(x.file())
+                             .arg(x.message()));
+    }
+
+    mWaitDialog->close();
+    delete mWaitDialog;
+    mWaitDialog = 0;
+
+    delete merger;
+}
+
+void MainWindow::exportGraphics(QString label, QWidget *widget)
+{
+    QSettings set;
+    QString defpos = set.value("ImageExport", QDir::homePath()).toString();
+    QString lastform = set.value("ImageExport.format", "png").toString();
+    QStringList filter = displace::helpers::images::supportedFormatsOnWriteAsFilter();
+    QString deffilter;
+    int idx = displace::helpers::images::supportedFormatsOnWrite().indexOf(lastform);
+    if (idx != -1)
+        deffilter = filter[idx];
+
+    QString path = QFileDialog::getSaveFileName(this, QString(tr("Export %1 Image")).arg(label),
+                                                defpos, filter.join(";;"), &deffilter);
+    if (!path.isEmpty()) {
+        int idx = path.lastIndexOf(QString("."));
+        QString extension = (idx != -1 ? path.mid(idx+1) : "");
+        if (extension.isEmpty()) {
+            idx = filter.indexOf(deffilter);
+            if (idx != -1) {
+                extension = displace::helpers::images::supportedFormatsOnWrite().at(idx);
+                if (!path.endsWith('.'))
+                    path.append(".");
+                path.append(extension);
+            }
+        }
+
+        QFileInfo info(path);
+        set.setValue("ImageExport", info.path());
+
+        if(widget->grab().save(path)) {
+            set.setValue("ImageExport.format", extension.toLower());
+
+            QMessageBox::information(this, tr("Image saved"),
+                                     QString(tr("Image saved: %1")).arg(path));
+        } else {
+            QMessageBox::warning(this, tr("Image save failed."),
+                                 QString(tr("Cannot save image: %1")).arg(path));
+        }
+    }
+
+}
+
+void MainWindow::on_actionExport_Map_triggered()
+{
+    exportGraphics(tr("Map"), map);
+}
+
+void MainWindow::on_actionExport_Harbours_triggered()
+{
+    exportGraphics(tr("Harbours Plot"), ui->plotHarbours);
+}
+
+void MainWindow::on_actionExport_Populations_triggered()
+{
+    exportGraphics(tr("Populations Plot"), ui->plotPopulations);
+}
+
+void MainWindow::on_actionExport_Nations_triggered()
+{
+    exportGraphics(tr("Nations Plot"), ui->plotNations);
 }

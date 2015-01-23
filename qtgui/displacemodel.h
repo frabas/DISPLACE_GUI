@@ -39,6 +39,7 @@
 #include <QList>
 #include <QMap>
 #include <QThread>
+#include <QMutex>
 
 #include <memory>
 
@@ -119,7 +120,7 @@ public:
     const QList<std::shared_ptr<NodeData> > &getNodesList() const { return mNodes; }
     int getNodesCount() const;
     QString getNodeId(int idx) const;
-    QList<std::shared_ptr<NodeData> > getAllNodesWithin (const QPointF &centerpoint, double dist) const;
+    QList<std::shared_ptr<NodeData> > getAllNodesWithin (const QPointF &centerpoint, double dist_km) const;
 
     /** \brief receive a Stats update for nodes from the Simulator
      *
@@ -302,6 +303,10 @@ public:
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
     QString linkedShortestPathFolder() const { return mShortestPathFolder; }
 
+    bool isGraphFolderLinked() const { return !mGraphFolder.isEmpty(); }
+    void linkGraphFolder(QString path) { mGraphFolder = path; }
+    QString linkedGraphFolder() const { return mGraphFolder; }
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -325,6 +330,8 @@ signals:
     void errorParsingStatsFile(QString);
 
 private:
+    mutable QMutex mMutex;
+
     ModelType mModelType;
     DbHelper *mDb;
     std::shared_ptr<Calendar> mCalendar;
@@ -383,6 +390,7 @@ private:
     OGRSpatialReference *mSpatialRef;
 
     QString mShortestPathFolder;
+    QString mGraphFolder;
 };
 
 #endif // DISPLACEMODEL_H

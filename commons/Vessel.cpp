@@ -151,26 +151,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	targeting_non_tac_pop_only=1;// init at 1
 
 	// deduce the vessel nationality from the vessel name
-	string vessel_name = this->get_name();
-	string str_den("DNK");
-	std::size_t found = vessel_name.find(str_den);
-	if (found==std::string::npos)
-	{
-		string str_swe("SWE");
-		std::size_t found = vessel_name.find(str_swe);
-		if (found==std::string::npos)
-		{
-			nationality="DEU";
-		}
-		else
-		{
-			nationality="SWE";
-		}
-	}
-	else
-	{
-		nationality="DNK";
-	}
+    nationality = nationalityFromName(get_name());
 
 	// init individual tac
 	for(int i = 0; i < nbpops; i++)
@@ -235,27 +216,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 void Vessel::init()
 {
-    // deduce the vessel nationality from the vessel name
-    string vessel_name = this->get_name();
-    string str_den("DNK");
-    std::size_t found = vessel_name.find(str_den);
-    if (found==std::string::npos)
-    {
-        string str_swe("SWE");
-        std::size_t found = vessel_name.find(str_swe);
-        if (found==std::string::npos)
-        {
-            nationality="DEU";
-        }
-        else
-        {
-            nationality="SWE";
-        }
-    }
-    else
-    {
-        nationality="DNK";
-    }
+    nationality = nationalityFromName(get_name());
 }
 
 Vessel::Vessel(string name, Node* a_location)
@@ -1133,7 +1094,12 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
 
 void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
 {
-	targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
+    targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
+}
+
+string Vessel::nationalityFromName(const string &name)
+{
+    return name.substr(0, 3);
 }
 
 
@@ -2799,11 +2765,10 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 
 		// decide on the rest duration for the next time (drawn from a gamma law)
 		double calib=1;
-		string vessel_name = this->get_name();
-		string str("SWE");
-		std::size_t found = vessel_name.find(str);
-								 // only if a NOT a Swedish vessel
-		if (found==std::string::npos)  calib =2;
+
+        // only if a NOT a Swedish vessel
+        if (nationality != "SWE")
+            calib = 2;
 
 		double a_shape = this-> get_resttime_par1();
 		double a_scale = this-> get_resttime_par2()  *calib;

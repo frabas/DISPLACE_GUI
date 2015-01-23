@@ -1,11 +1,11 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION "0.7.5"
-#define VERSION_BUILD 5
-#define VERSION_COMMA 0,7,5,VERSION_BUILD
+#define VERSION "0.7.7"
+#define VERSION_BUILD 7
+#define VERSION_COMMA 0,7,7,VERSION_BUILD
 
-#define VER_PRODUCTVERSION_STR      "0.7.5\0"
+#define VER_PRODUCTVERSION_STR      "0.7.7\0"
 
 #define VER_FILEVERSION             VERSION_COMMA
 #define VER_FILEVERSION_STR         VERSION "\0"
@@ -15,7 +15,7 @@
 #define VER_COMPANYNAME_STR         "Displace-project"
 #define VER_FILEDESCRIPTION_STR     "DisplaceGui"
 #define VER_INTERNALNAME_STR        "DisplaceGui.exe"
-#define VER_LEGALCOPYRIGHT_STR      "Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>"
+#define VER_LEGALCOPYRIGHT_STR      "Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>"
 #define VER_LEGALTRADEMARKS1_STR    "All Rights Reserved"
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
 #define VER_ORIGINALFILENAME_STR    "displacegui.exe"

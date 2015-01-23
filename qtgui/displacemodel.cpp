@@ -31,6 +31,9 @@ DisplaceModel::DisplaceModel()
       mLastStats(-1),
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
+      mVesselsStatsDirty(false),
+      mScenario(),
+      mConfig(),
       mInterestingPop(),
       mInterestingSizeTotal(false),
       mInterestingSizeAvg(true),
@@ -319,7 +322,7 @@ QString DisplaceModel::getNodeId(int idx) const
     return QString::fromStdString(mNodes.at(idx)->get_name());
 }
 
-QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist) const
+QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist_km) const
 {
     QList<std::shared_ptr<NodeData> > nodes;
 
@@ -330,11 +333,12 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
 #endif
 
     double mx, my, Mx, My, d;
-    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist * 1000, My, d);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist * 1000, d, Mx);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist * 1000, my, d);
-    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist * 1000, d, mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 0, dist_km * 1000, My, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 90, dist_km * 1000, d, Mx);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 180, dist_km * 1000, my, d);
+    geod.Direct(centerpoint.y(), centerpoint.x(), 270, dist_km * 1000, d, mx);
 
+    mMutex.lock();
     mNodesLayer->ResetReading();
     mNodesLayer->SetSpatialFilterRect(mx, my, Mx, My);
     OGRFeature *f;
@@ -344,6 +348,7 @@ QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF
             nodes.push_back(mNodes[nodeid]);
         }
     }
+    mMutex.unlock();
 
     return nodes;
 }
@@ -581,7 +586,10 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
         }
     }
 
+    mScenario.setNrow_coord(cntr);
+
     cntr = 0;
+    int numedges = 0;
     foreach(GraphBuilder::Node node, nodes) {
         if (node.good) {
             std::shared_ptr<NodeData> nodedata = mNodes[nodeidx + cntr];
@@ -590,10 +598,13 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 if (nodes[adidx].good) {
                     addEdge(nodedata, translated_nodes[adidx], node.weight.size() > i ? node.weight[i] : 0.0);
                 }
+                ++numedges;
             }
             ++cntr;
         }
     }
+
+    mScenario.setNrow_graph(numedges);
 
     foreach(std::shared_ptr<NodeData> node, newnodes) {
         if (!node->mNode->get_harbour())
@@ -631,6 +642,7 @@ int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, d
 
     mNodesLayer->CreateFeature(e);
 
+    mScenario.setNrow_graph(mScenario.getNrow_graph()+1);
     return i;
 }
 

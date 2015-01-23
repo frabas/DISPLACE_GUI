@@ -40,6 +40,10 @@ public:
     QString selectedShapefile() const;
 
     double weight() const;
+private slots:
+    void on_ok_clicked();
+    void on_shapefile_currentIndexChanged(int);
+
 private:
     Ui::PathPenaltyDialog *ui;
 };

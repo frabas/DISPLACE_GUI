@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>327</height>
+    <height>362</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -159,7 +159,11 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="scenarioPath"/>
+    <widget class="QLineEdit" name="scenarioPath">
+     <property name="placeholderText">
+      <string>.../simulsspe/name.dat</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0" colspan="2">
     <widget class="QGroupBox" name="group_dyn_pop_sce">
@@ -188,30 +192,14 @@
  <resources/>
  <connections>
   <connection>
-   <sender>apply</sender>
-   <signal>clicked()</signal>
-   <receiver>ScenarioDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>302</x>
-     <y>302</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>398</x>
-     <y>284</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>cancel</sender>
    <signal>clicked()</signal>
    <receiver>ScenarioDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>212</x>
-     <y>300</y>
+     <x>265</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
      <x>130</x>

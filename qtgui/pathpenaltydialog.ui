@@ -17,6 +17,13 @@
    <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="QPushButton" name="cancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -33,6 +40,9 @@
       <widget class="QPushButton" name="ok">
        <property name="text">
         <string>Ok</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -84,18 +94,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>ok</sender>
+   <sender>cancel</sender>
    <signal>clicked()</signal>
    <receiver>PathPenaltyDialog</receiver>
-   <slot>accept()</slot>
+   <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>339</x>
-     <y>142</y>
+     <x>77</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
-     <x>175</x>
-     <y>94</y>
+     <x>94</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>

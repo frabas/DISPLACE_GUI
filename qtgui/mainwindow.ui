@@ -98,13 +98,35 @@
     <addaction name="actionLink_Harbours_to_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Shortest_Path"/>
+    <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
+    <addaction name="separator"/>
+    <addaction name="actionMergeWeights"/>
+    <addaction name="actionMergePings"/>
+    <addaction name="actionCalcPopDistribution"/>
+   </widget>
+   <widget class="QMenu" name="menuUtilities">
+    <property name="title">
+     <string>Utilities</string>
+    </property>
+    <widget class="QMenu" name="menuExport_Graph_Image">
+     <property name="title">
+      <string>Export Graph Image</string>
+     </property>
+     <addaction name="actionExport_Harbours"/>
+     <addaction name="actionExport_Populations"/>
+     <addaction name="actionExport_Nations"/>
+    </widget>
+    <addaction name="actionCSV_Editor"/>
+    <addaction name="actionExport_Map"/>
+    <addaction name="menuExport_Graph_Image"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
    <addaction name="menuGraph"/>
    <addaction name="menu_Editor"/>
+   <addaction name="menuUtilities"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="objectMapView">
@@ -767,6 +789,10 @@
    </property>
   </action>
   <action name="actionScenario">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/scenario.png</normaloff>:/icons/scenario.png</iconset>
+   </property>
    <property name="text">
     <string>Scenario...</string>
    </property>
@@ -817,6 +843,10 @@
    </property>
   </action>
   <action name="actionConfiguration">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/config.png</normaloff>:/icons/config.png</iconset>
+   </property>
    <property name="text">
     <string>Configuration...</string>
    </property>
@@ -843,11 +873,19 @@
    </property>
   </action>
   <action name="actionPalettes">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Values...</string>
    </property>
   </action>
   <action name="actionPopulations">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Populations...</string>
    </property>
@@ -951,7 +989,7 @@
   </action>
   <action name="actionAdd_Penalty_from_File">
    <property name="text">
-    <string>Add Penalty from File...</string>
+    <string>Add Penalty from Shapefile...</string>
    </property>
   </action>
   <action name="actionAdd_Penalty_on_Polygon">
@@ -985,6 +1023,50 @@
   <action name="actionAbout_displace">
    <property name="text">
     <string>About displace...</string>
+   </property>
+  </action>
+  <action name="actionCSV_Editor">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/csv.png</normaloff>:/icons/csv.png</iconset>
+   </property>
+   <property name="text">
+    <string>CSV Editor...</string>
+   </property>
+  </action>
+  <action name="actionMergeWeights">
+   <property name="text">
+    <string>Merge Weights on fishing points...</string>
+   </property>
+  </action>
+  <action name="actionMergePings">
+   <property name="text">
+    <string>Merge Pings on Harbours...</string>
+   </property>
+  </action>
+  <action name="actionCalcPopDistribution">
+   <property name="text">
+    <string>Calculate Population Distribution...</string>
+   </property>
+  </action>
+  <action name="actionExport_Map">
+   <property name="text">
+    <string>Export Map Image...</string>
+   </property>
+  </action>
+  <action name="actionExport_Harbours">
+   <property name="text">
+    <string>Harbours</string>
+   </property>
+  </action>
+  <action name="actionExport_Populations">
+   <property name="text">
+    <string>Populations</string>
+   </property>
+  </action>
+  <action name="actionExport_Nations">
+   <property name="text">
+    <string>Nations</string>
    </property>
   </action>
  </widget>

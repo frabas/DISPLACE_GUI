@@ -56,7 +56,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath, Displ
         for (int i = 0; i < n; ++i) {
             int m = currentModel->getNodesList()[i]->getAdiacencyCount();
             for (int j = 0; j < m; ++j) {
-                gstrm << currentModel->getNodesList()[i]->getAdiacencyWeight(j) << endl;
+                gstrm << static_cast<int>(std::floor(currentModel->getNodesList()[i]->getAdiacencyWeight(j) + 0.5)) << endl;
             }
         }
 

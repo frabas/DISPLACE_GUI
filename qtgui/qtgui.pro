@@ -1,5 +1,5 @@
 TEMPLATE=app
-QT += core gui network sql xml printsupport
+QT += core gui network sql xml printsupport concurrent
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -112,7 +112,15 @@ SOURCES += \
     mousemode/edgeaddmousemode.cpp \
     aboutdialog.cpp \
     createshortestpathdialog.cpp \
-    simulatoripcmanager.cpp
+    simulatoripcmanager.cpp \
+    workers/shortestpathbuilderworker.cpp \
+    csveditor.cpp \
+    utils/csvtablemodel.cpp \
+    utils/csvimporter.cpp \
+    utils/csvexporter.cpp \
+    mergedatadialog.cpp \
+    workers/datamerger.cpp \
+    utils/imageformathelpers.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -126,7 +134,9 @@ FORMS += \
     pathpenaltydialog.ui \
     linkharboursdialog.ui \
     aboutdialog.ui \
-    createshortestpathdialog.ui
+    createshortestpathdialog.ui \
+    csveditor.ui \
+    mergedatadialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -193,7 +203,15 @@ HEADERS += \
     ../include/version.h \
     aboutdialog.h \
     createshortestpathdialog.h \
-    simulatoripcmanager.h
+    simulatoripcmanager.h \
+    workers/shortestpathbuilderworker.h \
+    csveditor.h \
+    utils/csvtablemodel.h \
+    utils/csvimporter.h \
+    utils/csvexporter.h \
+    mergedatadialog.h \
+    workers/datamerger.h \
+    utils/imageformathelpers.h
 
 RESOURCES += \
     qtgui.qrc
@@ -206,6 +224,11 @@ OTHER_FILES += \
     ../docs/dbstruct.sh \
     palettes/pop_colors.p2c \
     ../docs/input_fileformats.txt
+
+TRANSLATIONS += \
+    translations/displace_it.ts \
+    translations/displace_fr.ts \
+    translations/displace_de.ts
 
 
 target.path=$${PREFIX}/bin

@@ -7,7 +7,7 @@
 PaletteManager *PaletteManager::mInstance = 0;
 
 const QString PaletteManager::defaultPaletteFileNames[] = {
-    ":/palettes/iso1996_2.p2c",
+    ":/palettes/heat_colors_12.p2c",
     ":/palettes/pop_colors.p2c"
 };
 

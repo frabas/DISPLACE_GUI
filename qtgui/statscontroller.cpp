@@ -253,12 +253,12 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
 
     switch (mSelectedPopStat) {
     case Aggregate:
-        mPlotPopulations->xAxis->setLabel("Time (h)");
-        mPlotPopulations->yAxis->setLabel("Numbers");
+        mPlotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlotPopulations->yAxis->setLabel(QObject::tr("Numbers"));
         break;
     case Mortality:
-        mPlotPopulations->xAxis->setLabel("Time (h)");
-        mPlotPopulations->yAxis->setLabel("F");
+        mPlotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlotPopulations->yAxis->setLabel(QObject::tr("F"));
         break;
     }
 
@@ -319,28 +319,28 @@ void StatsController::updateNationStats(DisplaceModel *model)
                 switch (mSelectedNationsStat) {
                 case Catches:
                     valueData << it.value().at(ip).mTotCatches;
-                    mPlotNations->xAxis->setLabel("Time (h)");
-                    mPlotNations->yAxis->setLabel("Landings (kg)");
+                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
                 case Earnings:
                     valueData << it.value().at(ip).mRevenues;
-                    mPlotNations->xAxis->setLabel("Time (h)");
-                    mPlotNations->yAxis->setLabel("Revenue (Euro)");
+                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
                 case TimeAtSea:
                     valueData << it.value().at(ip).mTimeAtSea;
-                    mPlotNations->xAxis->setLabel("Time (h)");
-                    mPlotNations->yAxis->setLabel("Time at sea (h)");
+                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
                     break;
                 case Gav:
                     valueData << it.value().at(ip).mGav;
-                    mPlotNations->xAxis->setLabel("Time (h)");
-                    mPlotNations->yAxis->setLabel("GAV (Euro)");
+                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotNations->yAxis->setLabel(QObject::tr("GAV (Euro)"));
                     break;
                 case Vpuf:
                     valueData << it.value().at(ip).mVpuf;
-                    mPlotNations->xAxis->setLabel("Time (h)");
-                    mPlotNations->yAxis->setLabel("VPUF (Euro per litre)");
+                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
                     break;
                 }
             }
@@ -397,23 +397,23 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
                 switch (mSelectedHarboursStat) {
                 case H_Catches:
                     valueData << it.value().at(ip).mCumCatches;
-                    mPlotHarbours->xAxis->setLabel("Time (h)");
-                    mPlotHarbours->yAxis->setLabel("Landings (kg)");
+                    mPlotHarbours->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotHarbours->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
                 case H_Earnings:
                     valueData << it.value().at(ip).mCumProfit;
-                    mPlotHarbours->xAxis->setLabel("Time (h)");
-                    mPlotHarbours->yAxis->setLabel("Revenue (Euro)");
+                    mPlotHarbours->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotHarbours->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
                 case H_Gav:
                     valueData << it.value().at(ip).mGav;
-                    mPlotHarbours->xAxis->setLabel("Time (h)");
-                    mPlotHarbours->yAxis->setLabel("GAV (Euro)");
+                    mPlotHarbours->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotHarbours->yAxis->setLabel(QObject::tr("GAV (Euro)"));
                     break;
                 case H_Vpuf:
                     valueData << it.value().at(ip).mVpuf;
-                    mPlotHarbours->xAxis->setLabel("Time (h)");
-                    mPlotHarbours->yAxis->setLabel("VPUF (Euro per litre)");
+                    mPlotHarbours->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotHarbours->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
                     break;
                 }
             }

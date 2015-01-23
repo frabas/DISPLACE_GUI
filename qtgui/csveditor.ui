@@ -43,10 +43,23 @@
      </property>
      <addaction name="actionFirst_line_as_Headers"/>
     </widget>
+    <widget class="QMenu" name="menuFieldSeparator">
+     <property name="title">
+      <string>Field Separator</string>
+     </property>
+     <property name="icon">
+      <iconset resource="qtgui.qrc">
+       <normaloff>:/icons/separator.png</normaloff>:/icons/separator.png</iconset>
+     </property>
+     <addaction name="actionSpace"/>
+     <addaction name="actionComma"/>
+     <addaction name="actionSemi_colon"/>
+    </widget>
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
     <addaction name="separator"/>
     <addaction name="menuOptions"/>
+    <addaction name="menuFieldSeparator"/>
    </widget>
    <widget class="QMenu" name="menu_Table">
     <property name="title">
@@ -124,6 +137,30 @@
    </property>
    <property name="text">
     <string>&amp;Remove current row</string>
+   </property>
+  </action>
+  <action name="actionSpace">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="actionComma">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Comma</string>
+   </property>
+  </action>
+  <action name="actionSemi_colon">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Semi-colon</string>
    </property>
   </action>
  </widget>

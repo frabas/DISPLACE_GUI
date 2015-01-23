@@ -40,5 +40,6 @@
         <file>icons/colors.png</file>
         <file>icons/csv.png</file>
         <file>palettes/heat_colors_12.p2c</file>
+        <file>icons/separator.png</file>
     </qresource>
 </RCC>

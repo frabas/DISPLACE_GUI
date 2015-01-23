@@ -25,8 +25,9 @@ public:
 
     QList<QStringList> import (QString filename);
 
+    void setSeparator (QChar sep) { mSeparator = sep; }
 protected:
-    QString mSeparator;
+    QChar mSeparator;
     QString::SplitBehavior mSplitBehaviour;
 };
 

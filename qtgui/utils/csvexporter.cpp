@@ -4,7 +4,7 @@
 #include <QTextStream>
 
 CsvExporter::CsvExporter()
-    : mSeparator(' ')
+    : mSeparator(',')
 {
 }
 

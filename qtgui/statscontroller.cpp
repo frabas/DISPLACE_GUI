@@ -250,6 +250,19 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
         graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
 
+
+    switch (mSelectedPopStat) {
+    case Aggregate:
+        mPlotPopulations->xAxis->setLabel("Time (h)");
+        mPlotPopulations->yAxis->setLabel("Numbers");
+        break;
+    case Mortality:
+        mPlotPopulations->xAxis->setLabel("Time (h)");
+        mPlotPopulations->yAxis->setLabel("F");
+        break;
+    }
+
+
     mPlotPopulations->rescaleAxes();
     mPlotPopulations->replot();
 }
@@ -306,18 +319,28 @@ void StatsController::updateNationStats(DisplaceModel *model)
                 switch (mSelectedNationsStat) {
                 case Catches:
                     valueData << it.value().at(ip).mTotCatches;
+                    mPlotNations->xAxis->setLabel("Time (h)");
+                    mPlotNations->yAxis->setLabel("Landings (kg)");
                     break;
                 case Earnings:
                     valueData << it.value().at(ip).mRevenues;
+                    mPlotNations->xAxis->setLabel("Time (h)");
+                    mPlotNations->yAxis->setLabel("Revenue (Euro)");
                     break;
                 case TimeAtSea:
                     valueData << it.value().at(ip).mTimeAtSea;
+                    mPlotNations->xAxis->setLabel("Time (h)");
+                    mPlotNations->yAxis->setLabel("Time at sea (h)");
                     break;
                 case Gav:
                     valueData << it.value().at(ip).mGav;
+                    mPlotNations->xAxis->setLabel("Time (h)");
+                    mPlotNations->yAxis->setLabel("GAV (Euro)");
                     break;
                 case Vpuf:
                     valueData << it.value().at(ip).mVpuf;
+                    mPlotNations->xAxis->setLabel("Time (h)");
+                    mPlotNations->yAxis->setLabel("VPUF (Euro per litre)");
                     break;
                 }
             }
@@ -374,15 +397,23 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
                 switch (mSelectedHarboursStat) {
                 case H_Catches:
                     valueData << it.value().at(ip).mCumCatches;
+                    mPlotHarbours->xAxis->setLabel("Time (h)");
+                    mPlotHarbours->yAxis->setLabel("Landings (kg)");
                     break;
                 case H_Earnings:
                     valueData << it.value().at(ip).mCumProfit;
+                    mPlotHarbours->xAxis->setLabel("Time (h)");
+                    mPlotHarbours->yAxis->setLabel("Revenue (Euro)");
                     break;
                 case H_Gav:
                     valueData << it.value().at(ip).mGav;
+                    mPlotHarbours->xAxis->setLabel("Time (h)");
+                    mPlotHarbours->yAxis->setLabel("GAV (Euro)");
                     break;
                 case H_Vpuf:
                     valueData << it.value().at(ip).mVpuf;
+                    mPlotHarbours->xAxis->setLabel("Time (h)");
+                    mPlotHarbours->yAxis->setLabel("VPUF (Euro per litre)");
                     break;
                 }
             }

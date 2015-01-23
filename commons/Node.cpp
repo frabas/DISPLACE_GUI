@@ -582,6 +582,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 	// (rough) assumption for selectivity ogive of others => 1,1,1,1,1,1,etc.
 	//vector <double> sel_ogive (NBSZGROUP, 1);
+    // MAGIC NUMBERS
 	double clupeid_sel_ogive [ ] =
 	{
 		0.000601409471228288, 0.00929350798322286, 0.127575084407118,

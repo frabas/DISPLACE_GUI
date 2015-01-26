@@ -35,6 +35,18 @@ double MergeDataDialog::getDistance() const
     return ui->distance->value();
 }
 
+QChar MergeDataDialog::separator() const
+{
+    if (ui->spaces->isChecked())
+        return QChar(' ');
+    else if (ui->semicolon->isChecked())
+        return QChar(';');
+    else if (ui->commas->isChecked())
+        return QChar(',');
+
+    return QChar(';');  // default
+}
+
 void MergeDataDialog::on_ok_clicked()
 {
     if (ui->fileIn->text().isEmpty() || ui->fileOut->text().isEmpty())

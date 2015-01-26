@@ -7,6 +7,7 @@
 #include <QtConcurrent>
 #include <QFileDialog>
 #include <QSettings>
+#include <QActionGroup>
 #include <QMessageBox>
 
 CsvEditor::CsvEditor(QWidget *parent) :
@@ -22,7 +23,16 @@ CsvEditor::CsvEditor(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QActionGroup *grp = new QActionGroup(this);
+    grp->addAction(ui->actionSpace);
+    grp->addAction(ui->actionComma);
+    grp->addAction(ui->actionSemi_colon);
+    connect (grp, SIGNAL(triggered(QAction*)), this, SLOT(separatorChanged(QAction *)));
+
+    ui->actionComma->setChecked(true);
+
     ui->toolBar->addAction(ui->menuOptions->menuAction());
+    ui->toolBar->addAction(ui->menuFieldSeparator->menuAction());
 
     mModel = new CsvTableModel(0, this);
     ui->table->setModel(mModel);
@@ -64,6 +74,28 @@ void CsvEditor::onLoadFinished()
 
 }
 
+void CsvEditor::separatorChanged(QAction *)
+{
+    QChar sep = mSeparator;
+
+    if (ui->actionComma->isChecked())
+        mSeparator = ',';
+    else if (ui->actionSpace->isChecked())
+        mSeparator = ' ';
+    else if (ui->actionSemi_colon->isChecked())
+        mSeparator = ';';
+
+    if (sep != mSeparator && !mFilename.isEmpty()) {
+        int res = QMessageBox::question(this, tr("Separator has changed"),
+                                      tr("Do you want to reload the current file?"),
+                                      QMessageBox::Yes, QMessageBox::No);
+
+        if (res == QMessageBox::Yes) {
+            load (mFilename);
+        }
+    }
+}
+
 void CsvEditor::on_action_Open_triggered()
 {
     QSettings set;
@@ -77,14 +109,7 @@ void CsvEditor::on_action_Open_triggered()
     if (!file.isEmpty()) {
         mFilename = file;
 
-        mWorkLoading = QtConcurrent::run(&mImporter, &CsvImporter::import, file);
-        mWorkLoadingWatcher.setFuture(mWorkLoading);
-
-        mWaitDialog = new WaitDialog(this);
-        mWaitDialog->setText(tr("Loading file..."));
-        mWaitDialog->setModal(true);
-        mWaitDialog->show();
-        connect (mWaitDialog, SIGNAL(destroyed()), mWaitDialog, SLOT(deleteLater()));
+        load(mFilename);
 
         QFileInfo info(file);
         set.setValue("CsvEditor.LastPath", info.absoluteFilePath());
@@ -110,6 +135,19 @@ void CsvEditor::closeEvent(QCloseEvent *)
     sets.setValue("CsvEditor.mainState", saveState());
 }
 
+void CsvEditor::load(QString file)
+{
+    mImporter.setSeparator(mSeparator);
+    mWorkLoading = QtConcurrent::run(&mImporter, &CsvImporter::import, file);
+    mWorkLoadingWatcher.setFuture(mWorkLoading);
+
+    mWaitDialog = new WaitDialog(this);
+    mWaitDialog->setText(tr("Loading file..."));
+    mWaitDialog->setModal(true);
+    mWaitDialog->show();
+    connect (mWaitDialog, SIGNAL(destroyed()), mWaitDialog, SLOT(deleteLater()));
+}
+
 void CsvEditor::updateCheckState(bool state)
 {
     ui->actionFirst_line_as_Headers->setChecked(state);
@@ -127,6 +165,7 @@ void CsvEditor::on_action_Save_triggered()
 
     if (!file.isEmpty()) {
         CsvExporter exporter;
+        exporter.setSeparator(mSeparator);
         exporter.exportFile(file, *mData);
 
         QFileInfo info(file);

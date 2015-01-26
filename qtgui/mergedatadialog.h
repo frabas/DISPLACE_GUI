@@ -19,6 +19,7 @@ public:
     QString getOutputFile() const;
     double getDistance() const;
 
+    QChar separator() const;
 private slots:
     void on_ok_clicked();
     void on_browseIn_clicked();

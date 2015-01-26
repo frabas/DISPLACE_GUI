@@ -24,6 +24,7 @@ public:
     CsvExporter();
 
     bool exportFile(QString filename, const QList<QStringList> & list);
+    void setSeparator (QChar sep) { mSeparator = sep; }
 
 private:
     QChar mSeparator;

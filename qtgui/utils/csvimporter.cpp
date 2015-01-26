@@ -5,7 +5,7 @@
 
 
 CsvImporter::CsvImporter()
-    : mSeparator(" "),
+    : mSeparator(','),
       mSplitBehaviour(QString::SkipEmptyParts)
 {
 }

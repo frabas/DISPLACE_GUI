@@ -3833,7 +3833,8 @@ int main(int argc, char* argv[])
         thread_vessel_prepare();
 		for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
 		{
-            thread_vessel_insert_job(idx_v);
+          int index_v = ve[idx_v];
+            thread_vessel_insert_job(index_v);
 		}
         thread_vessel_wait_completed();
 

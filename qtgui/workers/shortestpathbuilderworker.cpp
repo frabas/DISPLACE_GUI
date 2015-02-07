@@ -11,8 +11,7 @@ ShortestPathBuilderWorker::ShortestPathBuilderWorker(QObject *main, WaitDialog *
     : QObject(main),
       mWaitDialog(dialog),
       mModel(model),
-      mFutureWatcher(),
-      mBuilder(mModel)
+      mFutureWatcher()
 {
 }
 
@@ -43,7 +42,8 @@ void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 
 void ShortestPathBuilderWorker::doStep(arg a)
 {
-    a.me->mBuilder.create(a.node, a.me->mModel->linkedShortestPathFolder());
+    ShortestPathBuilder builder (a.me->mModel);
+    builder.create(a.node, a.me->mModel->linkedShortestPathFolder());
 }
 
 void ShortestPathBuilderWorker::completed()

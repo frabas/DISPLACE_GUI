@@ -43,7 +43,6 @@ private:
     DisplaceModel *mModel;
     QList<arg> mRelevantNodes;
     QFutureWatcher<void> mFutureWatcher;
-    ShortestPathBuilder mBuilder;
 };
 
 } // workers

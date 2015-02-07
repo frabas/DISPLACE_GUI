@@ -1267,9 +1267,9 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
     if (dlg.exec() == QDialog::Accepted) {
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
         mMapController->redraw();
+        QMessageBox::warning(this, tr("Penalties applied"),
+                             tr("Graph weights are changed, you'll need to recreate the shortest path."));
     }
-
-    QMessageBox::warning(this, tr("Penalties applied"), tr("Graph weights are changed, you'll need to recreate the shortest path."));
 }
 
 bool MainWindow::loadLiveModel(QString path, QString *error)

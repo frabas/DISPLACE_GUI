@@ -60,8 +60,10 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
         boost::graph_traits < graph_t >::edge_descriptor e = *ei;
         boost::graph_traits < graph_t >::vertex_descriptor u = source(e, mGraph), v = target(e, mGraph);
 
-        strm_prev << v << " " << u << endl;
-        strm_min << v << " " << get(mWeightmap, e) << endl;
+        if (mPredecessors[v] == u) {
+            strm_prev << v << " " << u << endl;
+            strm_min << v << " " << get(mWeightmap, e) << endl;
+        }
     }
 
 #if 0

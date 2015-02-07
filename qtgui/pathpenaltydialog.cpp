@@ -38,7 +38,7 @@ double PathPenaltyDialog::weight() const
 
 void PathPenaltyDialog::on_ok_clicked()
 {
-    if (ui->shapefile->currentIndex() == -1)
+    if (ui->shapefile->isVisible() && ui->shapefile->currentIndex() == -1)
         return;
 
     accept();
@@ -46,5 +46,5 @@ void PathPenaltyDialog::on_ok_clicked()
 
 void PathPenaltyDialog::on_shapefile_currentIndexChanged(int)
 {
-    ui->ok->setEnabled(ui->shapefile->currentIndex() != -1);
+    ui->ok->setEnabled(!ui->shapefile->isVisible() || ui->shapefile->currentIndex() != -1);
 }

@@ -32,7 +32,8 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
     mDistances = std::vector<int> (num_vertices(mGraph));
 }
 
-void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
+void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
+                                 const QList<std::shared_ptr<NodeData> > &relevantNodes)
 {
     vertex_descriptor s;
 
@@ -40,6 +41,19 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
     dijkstra_shortest_paths(mGraph, s,
                              predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
                              distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
+
+    if (simplify) {
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+            vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
+
+            while (mPredecessors[nd] != nd) {
+                mGraph[nd].flag = true;
+                nd = mPredecessors[nd];
+            }
+
+            mGraph[nd].flag = true;
+        }
+    }
 
     QString mindist = QString("%1/min_distance_%2.dat").arg(path).arg(node->get_idx_node());
     QString prev = QString("%1/previous_%2.dat").arg(path).arg(node->get_idx_node());
@@ -61,8 +75,10 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
         boost::graph_traits < graph_t >::vertex_descriptor u = source(e, mGraph), v = target(e, mGraph);
 
         if (mPredecessors[v] == u) {
-            strm_prev << v << " " << u << endl;
-            strm_min << v << " " << get(mWeightmap, e) << endl;
+            if (!simplify || mGraph[v].flag ) {
+                strm_prev << v << " " << u << endl;
+                strm_min << v << " " << get(mWeightmap, e) << endl;
+            }
         }
     }
 

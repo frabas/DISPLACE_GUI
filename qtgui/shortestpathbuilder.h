@@ -35,26 +35,34 @@ class DisplaceModel;
 
 class ShortestPathBuilder
 {
+    struct flag_t {
+        typedef boost::edge_property_tag kind;
+
+        bool flag;
+
+        flag_t() : flag(false) {}
+    };
+
     typedef boost::adjacency_list < boost::vecS, boost::vecS, boost::directedS,
-      boost::no_property, boost::property < boost::edge_weight_t, double > > graph_t;
+        flag_t,
+        boost::property < boost::edge_weight_t, double > > graph_t;
     typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_descriptor;
     typedef std::pair<int, int> Edge;
 
     DisplaceModel *mModel;
 
-    graph_t g;
+    graph_t mGraph;
     std::vector<Edge> mEdges;
     std::vector<double> mWeights;
 
-    boost::property_map<graph_t, boost::edge_weight_t>::type weightmap;
-    std::vector<vertex_descriptor> p;
-    std::vector<int> d;
-    vertex_descriptor s;
+    boost::property_map<graph_t, boost::edge_weight_t>::type mWeightmap;
+    std::vector<vertex_descriptor> mPredecessors;
+    std::vector<int> mDistances;
 
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);
 
-    void create(std::shared_ptr<NodeData> node, QString path);
+    void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes);
 };
 
 #endif // SHORTESTPATHBUILDER_H

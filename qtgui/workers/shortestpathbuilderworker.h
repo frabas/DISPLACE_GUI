@@ -41,9 +41,9 @@ private slots:
 private:
     WaitDialog *mWaitDialog;
     DisplaceModel *mModel;
-    QList<arg> mRelevantNodes;
+    QList<std::shared_ptr<NodeData>> mRelevantNodes;
+    QList<arg> mArgumentList;
     QFutureWatcher<void> mFutureWatcher;
-    ShortestPathBuilder mBuilder;
 };
 
 } // workers

@@ -249,7 +249,7 @@ bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
     bool ok;
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
         int nd = fields[1].toInt(&ok);
         if (!ok) {
             qWarning() << "Error parsing file" << file << " at line " << linenum;

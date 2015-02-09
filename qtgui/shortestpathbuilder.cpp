@@ -26,18 +26,34 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
         }
     }
 
-    g = graph_t(mEdges.begin(), mEdges.end(), mWeights.begin(), nodes.size());
-    weightmap = get(boost::edge_weight, g);
-    p = std::vector<vertex_descriptor> (num_vertices(g));
-    d = std::vector<int> (num_vertices(g));
+    mGraph = graph_t(mEdges.begin(), mEdges.end(), mWeights.begin(), nodes.size());
+    mWeightmap = get(boost::edge_weight, mGraph);
+    mPredecessors = std::vector<vertex_descriptor> (num_vertices(mGraph));
+    mDistances = std::vector<int> (num_vertices(mGraph));
 }
 
-void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
+void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
+                                 const QList<std::shared_ptr<NodeData> > &relevantNodes)
 {
-    s = vertex(node->get_idx_node(), g);
-    dijkstra_shortest_paths(g, s,
-                             predecessor_map(boost::make_iterator_property_map(p.begin(), get(boost::vertex_index, g))).
-                             distance_map(boost::make_iterator_property_map(d.begin(), get(boost::vertex_index, g))));
+    vertex_descriptor s;
+
+    s = vertex(node->get_idx_node(), mGraph);
+    dijkstra_shortest_paths(mGraph, s,
+                             predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
+                             distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
+
+    if (simplify) {
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+            vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
+
+            while (mPredecessors[nd] != nd) {
+                mGraph[nd].flag = true;
+                nd = mPredecessors[nd];
+            }
+
+            mGraph[nd].flag = true;
+        }
+    }
 
     QString mindist = QString("%1/min_distance_%2.dat").arg(path).arg(node->get_idx_node());
     QString prev = QString("%1/previous_%2.dat").arg(path).arg(node->get_idx_node());
@@ -54,12 +70,16 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
     strm_min << " key  value" << endl;
 
     boost::graph_traits < graph_t >::edge_iterator ei, ei_end;
-    for (boost::tie(ei, ei_end) = edges(g); ei != ei_end; ++ei) {
+    for (boost::tie(ei, ei_end) = edges(mGraph); ei != ei_end; ++ei) {
         boost::graph_traits < graph_t >::edge_descriptor e = *ei;
-        boost::graph_traits < graph_t >::vertex_descriptor u = source(e, g), v = target(e, g);
+        boost::graph_traits < graph_t >::vertex_descriptor u = source(e, mGraph), v = target(e, mGraph);
 
-        strm_prev << v << " " << u << endl;
-        strm_min << v << " " << get(weightmap, e) << endl;
+        if (mPredecessors[v] == u) {
+            if (!simplify || mGraph[v].flag ) {
+                strm_prev << v << " " << u << endl;
+                strm_min << v << " " << get(mWeightmap, e) << endl;
+            }
+        }
     }
 
 #if 0
@@ -71,13 +91,13 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path)
        << "  ratio=\"fill\"\n"
        << "  edge[style=\"bold\"]\n" << "  node[shape=\"circle\"]\n";
 
-     for (boost::tie(ei, ei_end) = edges(g); ei != ei_end; ++ei) {
+     for (boost::tie(ei, ei_end) = edges(mGraph); ei != ei_end; ++ei) {
        boost::graph_traits < graph_t >::edge_descriptor e = *ei;
        boost::graph_traits < graph_t >::vertex_descriptor
-         u = boost::source(e, g), v = boost::target(e, g);
+         u = boost::source(e, mGraph), v = boost::target(e, mGraph);
        dot_file << u << " -> " << v
-         << "[label=\"" << get(weightmap, e) << "\"";
-       if (p[v] == u)
+         << "[label=\"" << get(mWeightmap, e) << "\"";
+       if (mPredecessors[v] == u)
          dot_file << ", color=\"black\"";
        else
          dot_file << ", color=\"grey\"";

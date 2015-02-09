@@ -11,18 +11,18 @@ ShortestPathBuilderWorker::ShortestPathBuilderWorker(QObject *main, WaitDialog *
     : QObject(main),
       mWaitDialog(dialog),
       mModel(model),
-      mFutureWatcher(),
-      mBuilder(mModel)
+      mFutureWatcher()
 {
 }
 
 void ShortestPathBuilderWorker::setRelevantNodes(const QList<std::shared_ptr<NodeData> > &nodes)
 {
+    mRelevantNodes = nodes;
     foreach (std::shared_ptr<NodeData> n, nodes) {
         arg a;
         a.node = n;
         a.me = this;
-        mRelevantNodes.push_back(a);
+        mArgumentList.push_back(a);
     }
 }
 
@@ -31,7 +31,7 @@ void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
     mWaitDialog->enableAbort(true);
     mWaitDialog->show();
 
-    QFuture<void> future = QtConcurrent::map(mRelevantNodes, doStep);
+    QFuture<void> future = QtConcurrent::map(mArgumentList, doStep);
 
     mFutureWatcher.setFuture(future);
     connect (&mFutureWatcher, SIGNAL(finished()), this, SLOT(completed()));
@@ -43,7 +43,8 @@ void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 
 void ShortestPathBuilderWorker::doStep(arg a)
 {
-    a.me->mBuilder.create(a.node, a.me->mModel->linkedShortestPathFolder());
+    ShortestPathBuilder builder (a.me->mModel);
+    builder.create(a.node, a.me->mModel->linkedShortestPathFolder(), true, a.me->mRelevantNodes);
 }
 
 void ShortestPathBuilderWorker::completed()

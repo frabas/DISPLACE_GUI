@@ -104,6 +104,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mStatusInfoLabel = new QLabel(this);
     statusBar()->addWidget(mStatusInfoLabel, 3);
 
+    ui->menuWindows->addAction(ui->statsView->toggleViewAction());
+    ui->menuWindows->addAction(ui->objectMapView->toggleViewAction());
+    ui->menuWindows->addAction(ui->dockWidget->toggleViewAction());
+    ui->menuWindows->addAction(ui->consoleView->toggleViewAction());
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());

@@ -199,13 +199,14 @@ bool InputFileParser::parseGraph(const QString &graphpath, const QString &coords
 
         for (int i = 0; i < graphedges; ++i) {
             line = gstrm.readLine();
-            int w = line.toInt(&ok);
+            double w = line.toDouble(&ok);
 
             if (!ok) {
                 if (error)
                     *error = QString(QObject::tr("Parse of line %1 of file %2 failed.")).arg(linenum).arg(graphpath);
             }
 
+            Q_ASSERT(w > 0.0001);
             nodes[srcs[i]].adiacencies.push_back(dsts[i]);
             nodes[srcs[i]].weight.push_back(w);
 

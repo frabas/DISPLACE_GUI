@@ -122,11 +122,17 @@
     <addaction name="actionExport_Map"/>
     <addaction name="menuExport_Graph_Image"/>
    </widget>
+   <widget class="QMenu" name="menuWindows">
+    <property name="title">
+     <string>Windows</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Model"/>
    <addaction name="menuGraph"/>
    <addaction name="menu_Editor"/>
    <addaction name="menuUtilities"/>
+   <addaction name="menuWindows"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="objectMapView">

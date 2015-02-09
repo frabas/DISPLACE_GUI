@@ -104,6 +104,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mStatusInfoLabel = new QLabel(this);
     statusBar()->addWidget(mStatusInfoLabel, 3);
 
+    ui->menuWindows->addAction(ui->statsView->toggleViewAction());
+    ui->menuWindows->addAction(ui->objectMapView->toggleViewAction());
+    ui->menuWindows->addAction(ui->dockWidget->toggleViewAction());
+    ui->menuWindows->addAction(ui->consoleView->toggleViewAction());
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
@@ -489,10 +494,23 @@ void MainWindow::editorAddEdge(int from, int to)
         return;
     }
 
-    qDebug() << "EDGE" << from << to;
+    double d;
 
-    int id1 = currentModel->addEdge(from, to, 0);
-    int id2 = currentModel->addEdge(to, from, 0);
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
+
+    std::shared_ptr<NodeData> fn = currentModel->getNodesList()[from];
+    std::shared_ptr<NodeData> tn = currentModel->getNodesList()[to];
+
+    geod.Inverse(fn->get_y(), fn->get_x(), tn->get_y(), tn->get_x(), d);
+
+    qDebug() << "EDGE" << from << to << d;
+
+    int id1 = currentModel->addEdge(from, to, d / 1000.0);
+    int id2 = currentModel->addEdge(to, from, d / 1000.0);
 
     mMapController->addEdge(currentModelIdx, id1, currentModel->getNodesList()[from], true);
     mMapController->addEdge(currentModelIdx, id2, currentModel->getNodesList()[to], true);

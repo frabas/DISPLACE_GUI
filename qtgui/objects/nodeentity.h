@@ -25,8 +25,10 @@
 
 namespace objecttree {
 
-class NodeEntity : public ObjectTreeEntity
+class NodeEntity : public QObject, public ObjectTreeEntity
 {
+    Q_OBJECT
+
     int mNodeId;
 
 public:
@@ -45,6 +47,14 @@ public:
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     int getNodeId() const { return mNodeId; }
+
+    virtual QMenu *contextMenu() const override ;
+
+public slots:
+    void onActionSearchById();
+
+private:
+    mutable QMenu *mContextMenu;
 };
 
 }

@@ -42,19 +42,6 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
                              predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
                              distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
 
-    if (simplify) {
-        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-            vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
-
-            while (mPredecessors[nd] != nd) {
-                mGraph[nd].flag = true;
-                nd = mPredecessors[nd];
-            }
-
-            mGraph[nd].flag = true;
-        }
-    }
-
     QString mindist = QString("%1/min_distance_%2.dat").arg(path).arg(node->get_idx_node());
     QString prev = QString("%1/previous_%2.dat").arg(path).arg(node->get_idx_node());
     QFile mindist_file(mindist);
@@ -69,17 +56,23 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
     strm_prev << " key  value" << endl;
     strm_min << " key  value" << endl;
 
-    boost::graph_traits < graph_t >::edge_iterator ei, ei_end;
-    for (boost::tie(ei, ei_end) = edges(mGraph); ei != ei_end; ++ei) {
-        boost::graph_traits < graph_t >::edge_descriptor e = *ei;
-        boost::graph_traits < graph_t >::vertex_descriptor u = source(e, mGraph), v = target(e, mGraph);
+    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+        vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
 
-        if (mPredecessors[v] == u) {
-            if (!simplify || mGraph[v].flag ) {
-                strm_prev << v << " " << u << endl;
-                strm_min << v << " " << get(mWeightmap, e) << endl;
+        while (mPredecessors[nd] != nd) {
+            if (!mGraph[nd].flag) {
+                auto edg = boost::edge(mPredecessors[nd], nd, mGraph);
+                auto ed = edg.first;
+
+                strm_prev << nd << " " << mPredecessors[nd] << endl;
+                strm_min << nd << " " << get(mWeightmap, ed) << endl;
             }
+
+            mGraph[nd].flag = true;
+            nd = mPredecessors[nd];
         }
+
+        mGraph[nd].flag = true;
     }
 
 #if 0

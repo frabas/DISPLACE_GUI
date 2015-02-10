@@ -3,6 +3,7 @@
 #include <mapobjectscontroller.h>
 #include <objects/objecttreeentity.h>
 #include <objects/layerentity.h>
+#include <objects/shapefilelayerentity.h>
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
@@ -43,7 +44,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
             entityTemplates.push_back(0);
 
         entityTemplates[Layers] = new objecttree::LayerEntity(Layers, this);
-        entityTemplates[ShapefileLayers] = new objecttree::LayerEntity(ShapefileLayers, this);
+        entityTemplates[ShapefileLayers] = new objecttree::ShapefileLayerEntity(this);
         entityTemplates[OutputLayers] = new objecttree::LayerEntity(OutputLayers, this);
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
         entityTemplates[Nodes] = new objecttree::NodeEntity(this);

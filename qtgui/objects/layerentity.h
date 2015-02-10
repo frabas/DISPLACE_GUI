@@ -25,10 +25,16 @@
 
 namespace objecttree {
 
+/** \brief Generic Entity for layer management.
+ *
+ * \note Any subclass MUST reimplement the index() method!
+ */
+
 class LayerEntity : public QObject, public ObjectTreeEntity
 {
     Q_OBJECT
 
+private:
     int mLayerEntityIndex;
     ObjectTreeModel::Category mLayerEntityType;
 
@@ -37,7 +43,7 @@ public:
     virtual ~LayerEntity();
 
     virtual ObjectTreeModel::Category getCategory() const {
-        return ObjectTreeModel::Layers;
+        return mLayerEntityType;
     }
 
     virtual QModelIndex parent (const QModelIndex &parent) const;
@@ -48,13 +54,8 @@ public:
     virtual Qt::ItemFlags flags(Qt::ItemFlags defflags, const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-    virtual QMenu *contextMenu() const override ;
-
-public slots:
-    void onActionShapeColor();
-
-private:
-    mutable QMenu *mContextMenu;
+    int layerEntityIndex() const { return mLayerEntityIndex; }
+    ObjectTreeModel::Category layerEntityType() const { return mLayerEntityType; }
 };
 
 }

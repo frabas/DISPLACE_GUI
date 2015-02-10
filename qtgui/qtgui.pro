@@ -120,7 +120,8 @@ SOURCES += \
     utils/csvexporter.cpp \
     mergedatadialog.cpp \
     workers/datamerger.cpp \
-    utils/imageformathelpers.cpp
+    utils/imageformathelpers.cpp \
+    objects/shapefilelayerentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -211,7 +212,8 @@ HEADERS += \
     utils/csvexporter.h \
     mergedatadialog.h \
     workers/datamerger.h \
-    utils/imageformathelpers.h
+    utils/imageformathelpers.h \
+    objects/shapefilelayerentity.h
 
 RESOURCES += \
     qtgui.qrc

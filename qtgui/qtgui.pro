@@ -121,7 +121,8 @@ SOURCES += \
     mergedatadialog.cpp \
     workers/datamerger.cpp \
     utils/imageformathelpers.cpp \
-    objects/shapefilelayerentity.cpp
+    objects/shapefilelayerentity.cpp \
+    utils/fileformathelper.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -213,7 +214,8 @@ HEADERS += \
     mergedatadialog.h \
     workers/datamerger.h \
     utils/imageformathelpers.h \
-    objects/shapefilelayerentity.h
+    objects/shapefilelayerentity.h \
+    utils/fileformathelper.h
 
 RESOURCES += \
     qtgui.qrc

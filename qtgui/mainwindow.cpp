@@ -973,6 +973,7 @@ void MainWindow::endMouseMode(bool success)
 
     if (success) {
         mMouseMode->endMode(success);
+        treemodel->refresh();
     }
 
     ui->actionAbort_Operation->setEnabled(false);
@@ -1567,6 +1568,7 @@ void MainWindow::on_actionLoad_Graph_triggered()
         }
 
         sets.setValue("last_graphpath", fn);
+        treemodel->refresh();
     }
 
 }

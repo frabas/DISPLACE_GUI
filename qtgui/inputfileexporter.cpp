@@ -2,6 +2,7 @@
 
 #include <displacemodel.h>
 #include <modelobjects/nodedata.h>
+#include <utils/fileformathelper.h>
 
 InputFileExporter::InputFileExporter()
 {
@@ -16,6 +17,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath, Displ
         return false;
     }
 
+    // Coord Stream file
     QTextStream cstrm(&cfile);
 
     int n = currentModel->getNodesCount();
@@ -39,6 +41,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath, Displ
             return false;
         }
 
+        // Graph stream file
         QTextStream gstrm(&gfile);
 
         for (int i = 0; i < n; ++i) {
@@ -56,7 +59,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath, Displ
         for (int i = 0; i < n; ++i) {
             int m = currentModel->getNodesList()[i]->getAdiacencyCount();
             for (int j = 0; j < m; ++j) {
-                gstrm << static_cast<int>(std::floor(currentModel->getNodesList()[i]->getAdiacencyWeight(j) + 0.5)) << endl;
+                gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << endl;
             }
         }
 

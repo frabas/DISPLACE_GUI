@@ -29,7 +29,7 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
     mGraph = graph_t(mEdges.begin(), mEdges.end(), mWeights.begin(), nodes.size());
     mWeightmap = get(boost::edge_weight, mGraph);
     mPredecessors = std::vector<vertex_descriptor> (num_vertices(mGraph));
-    mDistances = std::vector<int> (num_vertices(mGraph));
+    mDistances = std::vector<double> (num_vertices(mGraph));
 }
 
 void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
@@ -61,11 +61,8 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
-                auto edg = boost::edge(mPredecessors[nd], nd, mGraph);
-                auto ed = edg.first;
-
                 strm_prev << nd << " " << mPredecessors[nd] << endl;
-                strm_min << nd << " " << get(mWeightmap, ed) << endl;
+                strm_min << nd << " " << mDistances[nd] << endl;
             }
 
             mGraph[nd].flag = true;

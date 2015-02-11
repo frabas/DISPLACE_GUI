@@ -57,7 +57,7 @@ class ShortestPathBuilder
 
     boost::property_map<graph_t, boost::edge_weight_t>::type mWeightmap;
     std::vector<vertex_descriptor> mPredecessors;
-    std::vector<int> mDistances;
+    std::vector<double> mDistances;
 
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);

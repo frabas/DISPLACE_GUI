@@ -3028,8 +3028,17 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 		}
 	}
 
-	this->set_roadmap(path);
-	min_distance.clear();
+    if(path.empty())
+    {
+    // still empty!!
+    outc(cout << "pble calculating from " << from << " to " << next_ground << endl);
+    this->move_to(nodes.at(from)) ;
+    // no path found: assume the vessel stucks at its current location
+    } else{
+        this->set_roadmap(path);
+    }
+
+    min_distance.clear();
 	previous.clear();
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground << endl);

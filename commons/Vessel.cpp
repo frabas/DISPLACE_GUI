@@ -1174,6 +1174,11 @@ void Vessel::find_next_point_on_the_graph(vector<Node *> &nodes)
 
 void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 {
+    if(roadmap.size()==0)
+    {
+        cout << "DEBUG !! " << this->get_name() << endl;
+    }
+
     assert(roadmap.size() > 0);
 
 	list<vertex_t>::iterator pos = roadmap.begin();
@@ -2802,15 +2807,9 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 	else
 	{
         outc(cout << "pble calculating from " << from << " to " << ground << endl);
-		// e.g. graph 4, between 1530 and 1508...
-		// e.g. graph 6, between 395 and other nodes...because disconnected to the rest of the network!!
-		//this->move_to(nodes.at(1730)) ;// balticonly jump to another ground close to the disable one!!!!
-								 // balticonly jump to another ground close to the disable one!!!!
-        this->move_to(nodes.at(686)) ; // MAGIC NUMBER
-		//    this->move_to(nodes.at(410)); // canadian: jump to another ground close to the disable one!!!!
-
-		// CAUTION: DANGEROUS FIX THERE! possibly the straight line symptom...
-	}
+        this->move_to(nodes.at(from)) ;
+        // no path found: assume the vessel stucks at its current location
+    }
 
 }
 
@@ -3208,9 +3207,9 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 		//DijkstraComputePaths(arr, adjacency_map, min_distance, previous, relevant_nodes); // from the source to all nodes
 		//print_out=true;
 
-		//...or jump!
-								 // balticonly
-        this->move_to(nodes.at(685)) ; // MAGIC NUMBER
+        this->move_to(nodes.at(from)) ;
+        // no path found: assume the vessel stucks at its current location
+
 
 	}
 

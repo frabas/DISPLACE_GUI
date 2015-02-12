@@ -1513,7 +1513,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
     }
 }
 
-void MainWindow::assignCodesFromShapefileGen (QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
     std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
@@ -1554,11 +1554,11 @@ void MainWindow::assignCodesFromShapefileGen (QString shp, const char *const fie
     mMapController->redraw();
 
     if (n_nofield > 0) {
-        QMessageBox::warning(this, tr("Set Landscape codes"),
+        QMessageBox::warning(this, title,
                              QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
                              .arg(n_nofield).arg(fieldname));
     } else {
-        QMessageBox::information(this, tr("Set Landscape codes"),
+        QMessageBox::information(this, title,
                                  QString("%1 features were correctly processed.")
                                  .arg(nftr));
     }
@@ -1567,21 +1567,43 @@ void MainWindow::assignCodesFromShapefileGen (QString shp, const char *const fie
 
 void MainWindow::on_actionAssign_Landscape_codes_triggered()
 {
+    QString title = tr("Set Landscape codes");
+
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
     ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "grid_code";
+        const char * fieldname = "landscape_code";
         QString shp = dlg.selectedShapefile();
 
-        assignCodesFromShapefileGen(shp, fieldname, [&](OGRGeometry *geom, int code) {
+        assignCodesFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
             currentModel->setLandscapeCodesFromFeature(geom, code); } );
     }
 }
 
+void MainWindow::on_actionAssign_Area_codes_triggered()
+{
+    QString title = tr("Set Area codes");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "node_code";
+        QString shp = dlg.selectedShapefile();
+
+        assignCodesFromShapefileGen(title,shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setAreaCodesFromFeature(geom, code); } );
+    }
+}
 
 void MainWindow::on_actionLoad_Graph_triggered()
 {
@@ -1994,4 +2016,3 @@ void MainWindow::on_actionExport_Nations_triggered()
 {
     exportGraphics(tr("Nations Plot"), ui->plotNations);
 }
-

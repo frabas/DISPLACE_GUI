@@ -175,6 +175,8 @@ private slots:
 
     void on_actionAssign_Landscape_codes_triggered();
 
+    void on_actionAssign_Area_codes_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 
@@ -211,7 +213,7 @@ protected:
     void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
     void exportGraphics(QString label, QWidget *widget);
 
-    void assignCodesFromShapefileGen(QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 private:
     Ui::MainWindow *ui;
 

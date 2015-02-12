@@ -101,6 +101,8 @@
     <addaction name="actionLink_Shortest_Path_Folder"/>
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
+    <addaction name="actionAssign_Landscape_codes"/>
+    <addaction name="actionAssign_Area_codes"/>
     <addaction name="separator"/>
     <addaction name="actionMergeWeights"/>
     <addaction name="actionMergePings"/>
@@ -1073,6 +1075,16 @@
   <action name="actionExport_Nations">
    <property name="text">
     <string>Nations</string>
+   </property>
+  </action>
+  <action name="actionAssign_Landscape_codes">
+   <property name="text">
+    <string>Assign Landscape codes...</string>
+   </property>
+  </action>
+  <action name="actionAssign_Area_codes">
+   <property name="text">
+    <string>Assign Area codes...</string>
    </property>
   </action>
  </widget>

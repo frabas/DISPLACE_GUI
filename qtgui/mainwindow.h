@@ -170,6 +170,8 @@ private slots:
     void on_actionExport_Populations_triggered();
     void on_actionExport_Nations_triggered();
 
+    void on_actionAssign_Landscape_codes_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

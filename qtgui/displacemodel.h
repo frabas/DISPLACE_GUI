@@ -307,6 +307,8 @@ public:
     void linkGraphFolder(QString path) { mGraphFolder = path; }
     QString linkedGraphFolder() const { return mGraphFolder; }
 
+    void setLandscapeCodesFromFeature(OGRGeometry *geometry, int code);
+
 protected:
     bool loadNodes();
     bool loadVessels();

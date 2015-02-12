@@ -47,7 +47,11 @@ public:
     /* Proxy functions to avoid change too much code */
     int get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
+    void setMarineLandscape(int id) { mNode->setMarineLandscape(id); }
+
     int get_code_area() const { return mNode->get_code_area(); }
+    void setCodeArea(int id) { mNode->setCodeArea(id); }
+
     virtual string get_name() const { return mNode->get_name(); }
     double get_x() const { return mNode->get_x(); }
     double get_y() const { return mNode->get_y(); }

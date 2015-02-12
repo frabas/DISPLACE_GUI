@@ -710,6 +710,22 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     delete gpoly;
 }
 
+void DisplaceModel::setLandscapeCodesFromFeature (OGRGeometry *geometry, int code)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            nd->setMarineLandscape(code);
+            break;
+        }
+    }
+}
+
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight)
 {
     mNodesLayer->ResetReading();

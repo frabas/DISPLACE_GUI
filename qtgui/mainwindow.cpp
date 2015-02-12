@@ -40,6 +40,7 @@
 #include <shortestpathbuilder.h>
 #include <pathpenaltydialog.h>
 #include <linkharboursdialog.h>
+#include <shapefileoperationdialog.h>
 
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
@@ -1510,6 +1511,69 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
     }
 }
 
+void MainWindow::on_actionAssign_Landscape_codes_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        char *fieldname = "grid_code";
+
+        QString shp = dlg.selectedShapefile();
+        std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+        if (ds.get() == nullptr) {
+            // not opened. get a new
+
+            ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        }
+
+        if (ds.get() == nullptr) {
+            QMessageBox::warning(this, tr("Failed opening file"),
+                                 tr("Cannot open/get the selected shapefile. The file may be not readable."));
+            return;
+        }
+
+        int nftr = 0;
+        int n_nofield = 0;
+        int n = ds->GetLayerCount();
+        for (int i = 0; i < n ;  ++i) {
+            OGRLayer *lr = ds->GetLayer(i);
+            lr->SetSpatialFilter(0);
+            lr->ResetReading();
+
+            OGRFeature *feature;
+            while ((feature = lr->GetNextFeature())) {
+                int fld = feature->GetFieldIndex(fieldname);
+
+                if (fld != -1) {
+                    int code = feature->GetFieldAsInteger(fld);
+                    currentModel->setLandscapeCodesFromFeature(feature->GetGeometryRef(), code);
+                } else {
+                    ++n_nofield;
+                }
+
+                ++nftr;
+            }
+        }
+
+        mMapController->redraw();
+
+        if (n_nofield > 0) {
+            QMessageBox::warning(this, tr("Set Landscape codes"),
+                                 QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                                 .arg(n_nofield).arg(fieldname));
+        } else {
+            QMessageBox::information(this, tr("Set Landscape codes"),
+                                     QString("%1 features were correctly processed.")
+                                     .arg(nftr));
+        }
+    }
+}
+
+
 void MainWindow::on_actionLoad_Graph_triggered()
 {
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
@@ -1921,3 +1985,4 @@ void MainWindow::on_actionExport_Nations_triggered()
 {
     exportGraphics(tr("Nations Plot"), ui->plotNations);
 }
+

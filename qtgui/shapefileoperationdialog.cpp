@@ -9,6 +9,8 @@ ShapefileOperationDialog::ShapefileOperationDialog(QWidget *parent) :
     ui(new Ui::ShapefileOperationDialog)
 {
     ui->setupUi(this);
+
+    ui->radioImportShapefile->setChecked(true);
 }
 
 ShapefileOperationDialog::~ShapefileOperationDialog()
@@ -18,7 +20,10 @@ ShapefileOperationDialog::~ShapefileOperationDialog()
 
 void ShapefileOperationDialog::setShapefileList(QStringList list)
 {
-    ui->selectShapefile->addItems(list);
+    if (list.size() > 0) {
+        ui->selectShapefile->addItems(list);
+        ui->radioSelectShapefile->setChecked(true);
+    }
 }
 
 QString ShapefileOperationDialog::selectedShapefile() const

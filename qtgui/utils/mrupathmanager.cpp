@@ -3,7 +3,8 @@
 #include <QDir>
 
 const char *MruPathManager::codes[] = {
-    "shapefiles"
+    "shapefiles",
+    "graph"
 };
 
 MruPathManager::MruPathManager()

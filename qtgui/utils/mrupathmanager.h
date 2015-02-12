@@ -8,6 +8,7 @@ class MruPathManager
 public:
     enum MRUType {
         ShapefileFolder,
+        GraphFolder,
         N
     };
 

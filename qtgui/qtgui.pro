@@ -122,7 +122,10 @@ SOURCES += \
     workers/datamerger.cpp \
     utils/imageformathelpers.cpp \
     objects/shapefilelayerentity.cpp \
-    utils/fileformathelper.cpp
+    utils/fileformathelper.cpp \
+    shapefileoperationdialog.cpp \
+    utils/mrupathmanager.cpp \
+    savegraphdialog.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -138,7 +141,9 @@ FORMS += \
     aboutdialog.ui \
     createshortestpathdialog.ui \
     csveditor.ui \
-    mergedatadialog.ui
+    mergedatadialog.ui \
+    shapefileoperationdialog.ui \
+    savegraphdialog.ui
 
 HEADERS += \
     mainwindow.h \
@@ -215,7 +220,10 @@ HEADERS += \
     workers/datamerger.h \
     utils/imageformathelpers.h \
     objects/shapefilelayerentity.h \
-    utils/fileformathelper.h
+    utils/fileformathelper.h \
+    shapefileoperationdialog.h \
+    utils/mrupathmanager.h \
+    savegraphdialog.h
 
 RESOURCES += \
     qtgui.qrc

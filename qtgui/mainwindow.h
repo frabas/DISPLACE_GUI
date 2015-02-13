@@ -31,6 +31,8 @@
 #include <QTimer>
 
 #include <memory>
+#include <functional>
+
 #include <QMapControl/Point.h>
 
 #include <graphbuilder.h>
@@ -63,6 +65,7 @@ class Simulator;
 class MapObjectsController;
 class WaitDialog;
 class MouseMode;
+class OGRGeometry;
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -170,6 +173,10 @@ private slots:
     void on_actionExport_Populations_triggered();
     void on_actionExport_Nations_triggered();
 
+    void on_actionAssign_Landscape_codes_triggered();
+
+    void on_actionAssign_Area_codes_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 
@@ -206,6 +213,7 @@ protected:
     void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
     void exportGraphics(QString label, QWidget *widget);
 
+    void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 private:
     Ui::MainWindow *ui;
 

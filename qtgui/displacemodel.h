@@ -42,6 +42,7 @@
 #include <QMutex>
 
 #include <memory>
+#include <functional>
 
 #include <gdal/ogrsf_frmts.h>
 
@@ -50,6 +51,7 @@
 class DbHelper;
 class MapObjectsController;
 class Calendar;
+
 
 class DisplaceModel : public QObject
 {
@@ -307,6 +309,9 @@ public:
     void linkGraphFolder(QString path) { mGraphFolder = path; }
     QString linkedGraphFolder() const { return mGraphFolder; }
 
+    void setLandscapeCodesFromFeature(OGRGeometry *geometry, int code);
+    void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
+
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -323,6 +328,8 @@ protected:
     void checkStatsCollection(int tstep);
 
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
+
+    void setCodeFromFeature(OGRGeometry *geometry, int code, std::function<void (std::shared_ptr<NodeData>, int)> func);
 
 signals:
     void parseOutput(QString, int);

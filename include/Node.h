@@ -53,7 +53,14 @@ class Node
 
 		int get_idx_node() const;
 		int get_code_area() const;
+        void setCodeArea(int id) {
+            code_area = id;
+        }
+
 		int get_marine_landscape() const;
+        void setMarineLandscape(int id) {
+            marine_landscape = id;
+        }
 								 // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 		virtual string get_name() const;
 		//virtual double get_prices(string met, int pop) ; // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour

@@ -11,12 +11,46 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->optAreaCodes->setChecked(true);
+    ui->optLandscape->setChecked(true);
+    ui->optCustomize->setChecked(true); // force updating
     ui->optCustomize->setChecked(false);
+    ui->graphName->setText("0");
 }
 
 SaveGraphDialog::~SaveGraphDialog()
 {
     delete ui;
+}
+
+void SaveGraphDialog::setName(QString name)
+{
+    ui->graphName->setText(name);
+}
+
+void SaveGraphDialog::setOutputFolder(QString path)
+{
+    ui->outputFolder->setText(path);
+}
+
+QString SaveGraphDialog::getGraphFilename() const
+{
+    return ui->outputFolder->text() + "/" + ui->graphFileName->text();
+}
+
+QString SaveGraphDialog::getCoordsFilename() const
+{
+    return ui->outputFolder->text() + "/" + ui->coordFileName->text();
+}
+
+QString SaveGraphDialog::getLandscapeFilename() const
+{
+    return ui->outputFolder->text() + "/" + ui->landscapeFileName->text();
+}
+
+QString SaveGraphDialog::getAreacodesFilename() const
+{
+    return ui->outputFolder->text() + "/" + ui->areaCodeFileName->text();
 }
 
 void SaveGraphDialog::on_optCustomize_toggled(bool checked)

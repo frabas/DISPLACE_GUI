@@ -15,11 +15,16 @@ public:
     explicit SaveGraphDialog(QWidget *parent = 0);
     ~SaveGraphDialog();
 
+    void setName(QString name);
+    void setOutputFolder(QString path);
+    QString getGraphFilename() const;
+    QString getCoordsFilename() const;
+    QString getLandscapeFilename() const;
+    QString getAreacodesFilename() const;
+
 private slots:
     void on_optCustomize_toggled(bool checked);
-
     void on_graphName_textChanged(const QString &arg1);
-
     void on_cmdBrowse_clicked();
 
 private:

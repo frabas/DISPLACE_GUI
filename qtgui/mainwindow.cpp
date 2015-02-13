@@ -1586,7 +1586,7 @@ void MainWindow::on_actionAssign_Landscape_codes_triggered()
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "landscape_code";
+        const char * fieldname = "hab_code";
         QString shp = dlg.selectedShapefile();
 
         assignCodesFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
@@ -1606,7 +1606,7 @@ void MainWindow::on_actionAssign_Area_codes_triggered()
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "node_code";
+        const char * fieldname = "area_code";
         QString shp = dlg.selectedShapefile();
 
         assignCodesFromShapefileGen(title,shp, fieldname, [&](OGRGeometry *geom, int code) {

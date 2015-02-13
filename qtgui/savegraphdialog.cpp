@@ -63,8 +63,8 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
 
 void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
 {
-    ui->graphFileName->setText(QString("coord%1.dat").arg(gn));
-    ui->coordFileName->setText(QString("graph%1.dat").arg(gn));
+    ui->coordFileName->setText(QString("coord%1.dat").arg(gn));
+    ui->graphFileName->setText(QString("graph%1.dat").arg(gn));
     ui->areaCodeFileName->setText(QString("code_area_for_graph%1_points.dat").arg(gn));
     ui->landscapeFileName->setText(QString("coord%1_with_landscape.dat").arg(gn));
 }

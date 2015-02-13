@@ -48,17 +48,23 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
 
     int n = currentModel->getNodesCount();
     for (int i = 0; i < n; ++i) {
-        cstrm << currentModel->getNodesList()[i]->get_x() << endl;
+        double x = currentModel->getNodesList()[i]->get_x();
+        cstrm << x << endl;
         if (acfile.isOpen())
-            acstream << currentModel->getNodesList()[i]->get_code_area() << endl;
+            acstream << x << endl;
         if (landfile.isOpen())
             landstream << currentModel->getNodesList()[i]->get_marine_landscape() << endl;
     }
     for (int i = 0; i < n; ++i) {
-        cstrm << currentModel->getNodesList()[i]->get_y() << endl;
+        double y = currentModel->getNodesList()[i]->get_y();
+        cstrm << y << endl;
+        if (acfile.isOpen())
+            acstream << y << endl;
     }
     for (int i = 0; i < n; ++i) {
         cstrm << currentModel->getNodesList()[i]->get_harbour() << endl;
+        if (acfile.isOpen())
+            acstream << currentModel->getNodesList()[i]->get_code_area() << endl;
     }
 
     cfile.close();

@@ -298,8 +298,11 @@ public:
     int addEdge(int srcidx, int targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
-    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight);
-    void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight);
+    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing);
+    void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing);
+
+    int countPenaltyPolygons() const { return mPenaltyNodes.size(); }
+    const QList<int> getPenaltyPolygonsAt (int ndx) const { return mPenaltyNodes.at(ndx); }
 
     bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
@@ -365,6 +368,7 @@ private:
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
+    QList<QList<int>> mPenaltyNodes;
 
     QList<std::shared_ptr<HarbourData>> mHarbours;
     QList<std::shared_ptr<NodeData> > mNodes;

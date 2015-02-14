@@ -9,7 +9,7 @@ InputFileExporter::InputFileExporter()
 }
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
-                                    QString landpath, QString areacodepath,
+                                    QString landpath, QString areacodepath, QString closedpath,
                                     DisplaceModel *currentModel, QString *error)
 {
     QFile cfile(coordspath);
@@ -44,6 +44,18 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             return false;
         }
         acstream.setDevice(&acfile);
+    }
+
+    QFile clsfile(closedpath);
+    QTextStream clsstream;
+    if (!closedpath.isEmpty()) {
+        if (!clsfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
+                    .arg(closedpath).arg(clsfile.errorString());
+            return false;
+        }
+        clsstream.setDevice(&clsfile);
     }
 
     int n = currentModel->getNodesCount();
@@ -103,6 +115,16 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
 
         gfile.close();
     }
+
+    if (clsfile.isOpen()) {
+        int N = currentModel->countPenaltyPolygons();
+        for (int i = 0; i < N; ++i) {
+            foreach (int ndx, currentModel->getPenaltyPolygonsAt(i)) {
+                clsstream << (i+1) << ndx << endl;
+            }
+        }
+    }
+    clsfile.close();
 
     return true;
 

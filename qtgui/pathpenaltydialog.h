@@ -38,7 +38,7 @@ public:
     void showShapefileOptions(bool show);
     void setShapefileList(QStringList files);
     QString selectedShapefile() const;
-
+    bool isClosedForFishing();
     double weight() const;
 private slots:
     void on_ok_clicked();

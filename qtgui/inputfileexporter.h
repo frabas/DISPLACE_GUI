@@ -30,7 +30,8 @@ class InputFileExporter
 public:
     InputFileExporter();
 
-    bool exportGraph(QString graphpath, QString coordspath, QString landpath, QString areacodepath, DisplaceModel *currentModel, QString *error);
+    bool exportGraph(QString graphpath, QString coordspath, QString landpath, QString areacodepath,
+                     QString closedpath, DisplaceModel *currentModel, QString *error);
 };
 
 #endif // INPUTFILEEXPORTER_H

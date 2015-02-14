@@ -13,6 +13,7 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
 
     ui->optAreaCodes->setChecked(true);
     ui->optLandscape->setChecked(true);
+    ui->optClosedPoly->setChecked(true);
     ui->optCustomize->setChecked(true); // force updating
     ui->optCustomize->setChecked(false);
     ui->graphName->setText("0");
@@ -53,12 +54,18 @@ QString SaveGraphDialog::getAreacodesFilename() const
     return ui->outputFolder->text() + "/" + ui->areaCodeFileName->text();
 }
 
+QString SaveGraphDialog::getClosedPolygonFilename() const
+{
+    return ui->outputFolder->text() + "/" + ui->closedPolyFilename->text();
+}
+
 void SaveGraphDialog::on_optCustomize_toggled(bool checked)
 {
     ui->graphFileName->setEnabled(checked);
     ui->coordFileName->setEnabled(checked);
     ui->areaCodeFileName->setEnabled(checked);
     ui->landscapeFileName->setEnabled(checked);
+    ui->closedPolyFilename->setEnabled(checked);
 }
 
 void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
@@ -67,6 +74,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->graphFileName->setText(QString("graph%1.dat").arg(gn));
     ui->areaCodeFileName->setText(QString("code_area_for_graph%1_points.dat").arg(gn));
     ui->landscapeFileName->setText(QString("coord%1_with_landscape.dat").arg(gn));
+    ui->closedPolyFilename->setText(QString("nodes_in_polygons_a_graph%1_quarter?.dat").arg(gn));
 }
 
 void SaveGraphDialog::on_cmdBrowse_clicked()

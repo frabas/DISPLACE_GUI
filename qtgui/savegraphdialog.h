@@ -21,6 +21,7 @@ public:
     QString getCoordsFilename() const;
     QString getLandscapeFilename() const;
     QString getAreacodesFilename() const;
+    QString getClosedPolygonFilename() const;
 
 private slots:
     void on_optCustomize_toggled(bool checked);

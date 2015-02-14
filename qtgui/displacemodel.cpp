@@ -693,7 +693,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
     return true;
 }
 
-void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight)
+void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing)
 {
     OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
 
@@ -705,7 +705,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     OGRPolygon *gpoly = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
     gpoly->addRing(gring);
 
-    addPenaltyToNodesByAddWeight(gpoly, weight);
+    addPenaltyToNodesByAddWeight(gpoly, weight, closed_for_fishing);
 
     delete gpoly;
 }
@@ -740,26 +740,27 @@ void DisplaceModel::setCodeFromFeature (OGRGeometry *geometry, int code, std::fu
     }
 }
 
-void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight)
+void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing)
 {
+    QList<int> penaltyNodes;
+
     mNodesLayer->ResetReading();
     mNodesLayer->SetSpatialFilter(geometry);
     OGRFeature *ftr;
     while (( ftr = mNodesLayer->GetNextFeature())) {
         switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
         case OgrTypeNode:
-            // don't do this: it will sum the weight twice.
-#if 0
             if (true) {
                 int id = ftr->GetFieldAsInteger(FLD_NODEID);
-                qDebug() << "Node " << id;
+                penaltyNodes.push_back(id);
 
+#if 0
                 std::shared_ptr<NodeData> nd = mNodes[id];
                 for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
                     nd->setAdiacencyWeight(i, nd->getAdiacencyWeight(i) + weight);
                 }
-            }
 #endif
+            }
             break;
         case OgrTypeEdge:
             if (true) {
@@ -767,7 +768,6 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
                 int edgeid = ftr->GetFieldAsInteger(FLD_EDGEID);
 
                 if (mNodes[nodeid]->getAdiacencyCount() > edgeid) {
-//                    qDebug() << "Node id" << nodeid << " edge" << edgeid << "to node" << mNodes[nodeid]->getAdiacencyByIdx(edgeid);
                     mNodes[nodeid]->setAdiacencyWeight(edgeid, mNodes[nodeid]->getAdiacencyWeight(edgeid) + weight);
                 } else {
                     qWarning() << "NodeID" << nodeid << " has only " << mNodes[nodeid]->getAdiacencyCount() << " but edge" << edgeid << " requested." << __FILE__ << __LINE__;
@@ -776,6 +776,9 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
             break;
         }
     }
+
+    if (closed_for_fishing && penaltyNodes.size() > 0)
+        mPenaltyNodes.push_back(penaltyNodes);
 }
 
 int DisplaceModel::getVesselCount() const

@@ -17,7 +17,7 @@ class DataMerger : public QObject
     Q_OBJECT
 public:
     enum MergeType {
-        Weights, Ping
+        Weights, Ping, PopulationDistribution
     };
 
     explicit DataMerger(MergeType type, DisplaceModel *model);
@@ -29,14 +29,24 @@ public:
     void setDistance (double km) {
         mDist = km;
     }
+    double distance() const { return mDist; }
 
     void start(QString in, QString out);
     bool checkResult();
 
     void setSeparator(QChar sep) { mSeparator = sep; }
+    QChar separator() const { return mSeparator; }
+
+    bool mustExit() const { return mExit; }
+
+    QList<std::shared_ptr<NodeData>> getAllNodesWithin(QPointF pt, double dist) const;
 
     class Exception : public QException {
     public:
+        explicit Exception (QString what)
+            : mWhat(what) {
+        }
+
         explicit Exception (QString orffile, QString what)
             : mFile(orffile), mWhat(what) {
         }
@@ -54,9 +64,6 @@ public:
         QString mFile, mWhat;
     };
 
-    static const char *const MergedField;
-    static const char *const LatField;
-    static const char *const LongField;
     static const char FieldSeparator;
 
 signals:
@@ -65,6 +72,16 @@ signals:
 private slots:
     void workCompleted();
     void aborted();
+
+public:
+    class Strategy {
+    public:
+        virtual ~Strategy() {}
+        virtual bool processHeaderField(QString field, int i) = 0;
+        virtual bool postHeaderProcessed() = 0;
+        virtual void processLine (QString line) = 0;
+        virtual bool saveOutput(QString out) = 0;
+    };
 
 private:
     MergeType mType;
@@ -77,24 +94,10 @@ private:
     QFutureWatcher<bool> *mWatcher;
     QFutureWatcher<void> *mInternalWatcher;
     WaitDialog *mWaitDialog;
-    QMutex mutex;
+
+    Strategy *mStrategy;
 
     bool doWork(QString in, QString out);
-
-    struct ProcessData {
-        QList<QString> *result;
-        QStringList entry;
-        QPointF pt;
-        int col_pt_graph;
-        bool colpresent;
-
-        ProcessData(QList<QString> *_result, QStringList _entry,
-            QPointF _pt, int _col_pt_graph, bool _colpresent)
-            : result(_result), entry(_entry), pt(_pt), col_pt_graph(_col_pt_graph), colpresent(_colpresent) {
-        }
-    };
-
-    void processLine (ProcessData data);
 };
 
 } // ns workers

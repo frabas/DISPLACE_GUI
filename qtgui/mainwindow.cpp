@@ -1288,7 +1288,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
     dlg.showShapefileOptions(false);
 
     if (dlg.exec() == QDialog::Accepted) {
-        currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight());
+        currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.isClosedForFishing());
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
                              tr("Graph weights are changed, you'll need to recreate the shortest path."));
@@ -1423,10 +1423,11 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString coordspath = savedlg.getCoordsFilename();
         QString landpath = savedlg.getLandscapeFilename();
         QString acpath = savedlg.getAreacodesFilename();
+        QString polypath = savedlg.getClosedPolygonFilename();
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;
@@ -1512,7 +1513,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
             OGRFeature *feature;
             while ((feature = lr->GetNextFeature())) {
-                currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight);
+                currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing());
             }
         }
 
@@ -1689,10 +1690,11 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString coordspath = dlg.getCoordsFilename();
         QString landpath = dlg.getLandscapeFilename();
         QString acpath = dlg.getAreacodesFilename();
+        QString polypath = dlg.getClosedPolygonFilename();
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;

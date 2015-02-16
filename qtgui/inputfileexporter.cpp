@@ -9,7 +9,7 @@ InputFileExporter::InputFileExporter()
 }
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
-                                    QString landpath, QString areacodepath,
+                                    QString landpath, QString areacodepath, QString closedpath,
                                     DisplaceModel *currentModel, QString *error)
 {
     QFile cfile(coordspath);
@@ -46,19 +46,37 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         acstream.setDevice(&acfile);
     }
 
+    QFile clsfile(closedpath);
+    QTextStream clsstream;
+    if (!closedpath.isEmpty()) {
+        if (!clsfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
+                    .arg(closedpath).arg(clsfile.errorString());
+            return false;
+        }
+        clsstream.setDevice(&clsfile);
+    }
+
     int n = currentModel->getNodesCount();
     for (int i = 0; i < n; ++i) {
-        cstrm << currentModel->getNodesList()[i]->get_x() << endl;
+        double x = currentModel->getNodesList()[i]->get_x();
+        cstrm << x << endl;
         if (acfile.isOpen())
-            acstream << currentModel->getNodesList()[i]->get_code_area() << endl;
+            acstream << x << endl;
         if (landfile.isOpen())
             landstream << currentModel->getNodesList()[i]->get_marine_landscape() << endl;
     }
     for (int i = 0; i < n; ++i) {
-        cstrm << currentModel->getNodesList()[i]->get_y() << endl;
+        double y = currentModel->getNodesList()[i]->get_y();
+        cstrm << y << endl;
+        if (acfile.isOpen())
+            acstream << y << endl;
     }
     for (int i = 0; i < n; ++i) {
         cstrm << currentModel->getNodesList()[i]->get_harbour() << endl;
+        if (acfile.isOpen())
+            acstream << currentModel->getNodesList()[i]->get_code_area() << endl;
     }
 
     cfile.close();
@@ -97,6 +115,16 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
 
         gfile.close();
     }
+
+    if (clsfile.isOpen()) {
+        int N = currentModel->countPenaltyPolygons();
+        for (int i = 0; i < N; ++i) {
+            foreach (int ndx, currentModel->getPenaltyPolygonsAt(i)) {
+                clsstream << (i+1) << ndx << endl;
+            }
+        }
+    }
+    clsfile.close();
 
     return true;
 

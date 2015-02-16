@@ -31,6 +31,11 @@ QString PathPenaltyDialog::selectedShapefile() const
     return ui->shapefile->currentText();
 }
 
+bool PathPenaltyDialog::isClosedForFishing()
+{
+    return ui->optClosedForFishing->isChecked();
+}
+
 double PathPenaltyDialog::weight() const
 {
     return ui->weight->value();

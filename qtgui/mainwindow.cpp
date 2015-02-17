@@ -1905,8 +1905,28 @@ void MainWindow::on_actionMergePings_triggered()
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
         merger->setDistance(dlg.getDistance());
+        merger->setSeparator(dlg.separator());
         merger->start(dlg.getInputFile(), dlg.getOutputFile());
+    }
+}
 
+void MainWindow::on_actionCalcPopDistribution_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    MergeDataDialog dlg(this);
+    dlg.setWindowTitle(tr("Calculate Population distribution"));
+    if (dlg.exec()) {
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::PopulationDistribution, currentModel.get());
+        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+
+        if (mWaitDialog != 0) delete mWaitDialog;
+        mWaitDialog = new WaitDialog(this);
+        merger->setWaitDialog(mWaitDialog);
+        merger->setDistance(dlg.getDistance());
+        merger->setSeparator(dlg.separator());
+        merger->start(dlg.getInputFile(), dlg.getOutputFile());
     }
 }
 
@@ -1989,3 +2009,4 @@ void MainWindow::on_actionExport_Nations_triggered()
 {
     exportGraphics(tr("Nations Plot"), ui->plotNations);
 }
+

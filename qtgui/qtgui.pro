@@ -125,7 +125,8 @@ SOURCES += \
     utils/fileformathelper.cpp \
     shapefileoperationdialog.cpp \
     utils/mrupathmanager.cpp \
-    savegraphdialog.cpp
+    savegraphdialog.cpp \
+    workers/populationdistributiondatamergerstrategy.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -223,7 +224,8 @@ HEADERS += \
     utils/fileformathelper.h \
     shapefileoperationdialog.h \
     utils/mrupathmanager.h \
-    savegraphdialog.h
+    savegraphdialog.h \
+    workers/populationdistributiondatamergerstrategy.h
 
 RESOURCES += \
     qtgui.qrc

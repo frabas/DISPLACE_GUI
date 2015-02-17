@@ -79,6 +79,9 @@ public:
         virtual ~Strategy() {}
         virtual bool processHeaderField(QString field, int i) = 0;
         virtual bool postHeaderProcessed() = 0;
+        /** \brief process a single line of the file
+         * \note this is executed from within multiple thread, so it must be thread-safe.
+         * */
         virtual void processLine (QString line) = 0;
         virtual bool saveOutput(QString out) = 0;
     };

@@ -177,6 +177,8 @@ private slots:
 
     void on_actionAssign_Area_codes_triggered();
 
+    void on_actionCalcPopDistribution_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

@@ -1,5 +1,7 @@
 #include "datamerger.h"
 
+#include "populationdistributiondatamergerstrategy.h"
+
 #include <QtConcurrent>
 #include <QFile>
 #include <QTextStream>
@@ -10,6 +12,8 @@
 #include <GeographicLib/Geodesic.hpp>
 
 using namespace displace::workers;
+
+const char DataMerger::FieldSeparator = ' ';
 
 class MergerStrategy : public DataMerger::Strategy
 {
@@ -42,10 +46,6 @@ const char *const MergerStrategy::MergedField = "PT_GRAPH";
 const char *const MergerStrategy::LatField = "SI_LATI";
 const char *const MergerStrategy::LongField = "SI_LONG";
 
-const char DataMerger::FieldSeparator = ' ';
-
-
-
 DataMerger::DataMerger(MergeType type, DisplaceModel *model)
     : mType (type),
       mModel(model),
@@ -62,6 +62,11 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
     case Weights:
         mStrategy = new MergerStrategy(this, mType);
         break;
+    case PopulationDistribution:
+        mStrategy = new PopulationDistributionDataMergerStrategy(this);
+        break;
+    default:
+        (new Exception("Program error - Undefined strategy in DataMerger constructor"))->raise();
     }
 }
 

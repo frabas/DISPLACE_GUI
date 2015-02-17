@@ -55,6 +55,7 @@ public slots:
 
 signals:
     void aborted();
+    void self_set_progression(int);
 
 private slots:
     void on_cmdAbort_clicked();

@@ -63,7 +63,7 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
         mStrategy = new MergerStrategy(this, mType);
         break;
     case PopulationDistribution:
-        mStrategy = new PopulationDistributionDataMergerStrategy(this);
+        mStrategy = new PopulationDistributionDataMergerStrategy(this, mModel);
         break;
     default:
         (new Exception("Program error - Undefined strategy in DataMerger constructor"))->raise();

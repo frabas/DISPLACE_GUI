@@ -13,10 +13,12 @@ const char *const PopulationDistributionDataMergerStrategy::LongField = "ShootLo
 const char *const PopulationDistributionDataMergerStrategy::StockField = "Stock";
 const char *const PopulationDistributionDataMergerStrategy::IndivFieldPattern = "nb_indiv.";
 
-PopulationDistributionDataMergerStrategy::PopulationDistributionDataMergerStrategy (DataMerger *owner)
+PopulationDistributionDataMergerStrategy::PopulationDistributionDataMergerStrategy (DataMerger *owner, DisplaceModel *model)
     : DataMerger::Strategy(),
-      mOwner(owner)
+      mOwner(owner),
+      mModel(model)
 {
+    mStockNames = mModel->getStockNames();
 }
 
 bool PopulationDistributionDataMergerStrategy::processHeaderField(QString field, int i)

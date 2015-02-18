@@ -9,7 +9,7 @@ namespace workers {
 class PopulationDistributionDataMergerStrategy : public DataMerger::Strategy
 {
 public:
-    PopulationDistributionDataMergerStrategy(DataMerger *owner);
+    PopulationDistributionDataMergerStrategy(DataMerger *owner, DisplaceModel *model);
 
     bool processHeaderField(QString field, int i) override;
     bool postHeaderProcessed() override;
@@ -24,6 +24,7 @@ public:
     static const char *const IndivFieldPattern;
 private:
     DataMerger *mOwner;
+    DisplaceModel *mModel;
 
     QStringList mFields;
     QMutex mutex;

@@ -12,6 +12,15 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath, QString areacodepath, QString closedpath,
                                     DisplaceModel *currentModel, QString *error)
 {
+    bool multiple_closed_path = false;
+    QString curr_clspath = closedpath;
+    if (closedpath.contains("?")) {
+        closedpath = closedpath.replace("?", "%1");
+        multiple_closed_path = true;
+
+        curr_clspath = closedpath.arg(1);
+    }
+
     QFile cfile(coordspath);
     if (!cfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         if (error)
@@ -46,7 +55,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         acstream.setDevice(&acfile);
     }
 
-    QFile clsfile(closedpath);
+    QFile clsfile(curr_clspath);
     QTextStream clsstream;
     if (!closedpath.isEmpty()) {
         if (!clsfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -120,11 +129,19 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         int N = currentModel->countPenaltyPolygons();
         for (int i = 0; i < N; ++i) {
             foreach (int ndx, currentModel->getPenaltyPolygonsAt(i)) {
-                clsstream << (i+1) << ndx << endl;
+                clsstream << (i+1) << " " << ndx << endl;
             }
         }
     }
     clsfile.close();
+
+    if (multiple_closed_path) {
+        QFile src (curr_clspath);
+
+        for (int i = 2; i < 4; ++i) {
+            src.copy(closedpath.arg(i));
+        }
+    }
 
     return true;
 

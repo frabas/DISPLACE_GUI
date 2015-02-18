@@ -57,6 +57,9 @@ public:
         QString message() const {
             return mWhat;
         }
+        const char *what() const _GLIBCXX_USE_NOEXCEPT {
+            return mWhat.toStdString().c_str();
+        }
         QString file() const {
              return mFile;
         }

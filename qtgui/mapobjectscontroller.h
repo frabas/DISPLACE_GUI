@@ -21,6 +21,8 @@
 #ifndef MAPOBJECTSCONTROLLER_H
 #define MAPOBJECTSCONTROLLER_H
 
+#include <modelobjects/nodedata.h>
+
 #include <QObject>
 #include <QList>
 #include <QVector>
@@ -53,7 +55,6 @@ class NodeMapObject;
 class VesselMapObject;
 class EdgeLayer;
 class EdgeMapObject;
-class NodeData;
 class HarbourData;
 
 QT_BEGIN_NAMESPACE
@@ -249,7 +250,7 @@ public:
     void clearAllNodes(int model_n);
     void addNode(int model_n, std::shared_ptr<NodeData> nd, bool disable_redraw = false);
     void addHarbour(int model_n, std::shared_ptr<HarbourData> nd, bool disable_redraw = false);
-    void addEdge (int model_n, int adj_id, std::shared_ptr<NodeData> node, bool disable_redraw);
+    void addEdge (int model_n, std::shared_ptr<NodeData::Edge> edge, bool disable_redraw);
 
     void clearEditorLayer();
     void addEditorLayerGeometry (std::shared_ptr<qmapcontrol::Geometry> geometry);

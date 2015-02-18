@@ -361,13 +361,13 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-        addEdge(model_n,i, nd, disable_redraw);
+        addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }
 }
 
-void MapObjectsController::addEdge (int model_n, int adj_id, std::shared_ptr<NodeData> node, bool disable_redraw)
+void MapObjectsController::addEdge (int model_n, std::shared_ptr<NodeData::Edge> _edge, bool disable_redraw)
 {
-    EdgeMapObject *edge = new EdgeMapObject(this, adj_id, node.get());
+    EdgeMapObject *edge = new EdgeMapObject(this, _edge);
 
     connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
@@ -384,7 +384,7 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
 
     std::shared_ptr<NodeData> nd = mModels[model_n]->getNodesList()[h->mHarbour->get_idx_node()];
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-        addEdge(model_n,i, nd, disable_redraw);
+        addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }
 }
 
@@ -401,8 +401,8 @@ void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geom
 void MapObjectsController::delSelectedEdges(int model)
 {
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
-        NodeData* nd = edge->node();
-        NodeData* tg = edge->target();
+        std::shared_ptr<NodeData> nd = edge->node();
+        std::shared_ptr<NodeData> tg = edge->target();
 
 //        int nodeid1 = nd->get_idx_node();
 
@@ -412,9 +412,11 @@ void MapObjectsController::delSelectedEdges(int model)
 //        NodeData *nd2 = mModels[model]->getNodesList()[nodeid2];
 //        nd2->removeAdiacencyByTarget(nodeid1);
 //        nd->removeAdiacencyByIdx(eid1);
-        nd->removeAdiacencyByTarget(tg->get_idx_node());
+        if (nd.get() != nullptr && tg != nullptr) {
+            nd->removeAdiacencyByTarget(tg);
 
-        mEdgesLayer[model]->removeEdge(edge);
+            mEdgesLayer[model]->removeEdge(edge);
+        }
     }
 
     mEdgeSelection[model].clear();

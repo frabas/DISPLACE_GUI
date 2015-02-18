@@ -518,8 +518,8 @@ void MainWindow::editorAddEdge(int from, int to)
     int id1 = currentModel->addEdge(from, to, d / 1000.0);
     int id2 = currentModel->addEdge(to, from, d / 1000.0);
 
-    mMapController->addEdge(currentModelIdx, id1, currentModel->getNodesList()[from], true);
-    mMapController->addEdge(currentModelIdx, id2, currentModel->getNodesList()[to], true);
+    mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[from]->getAdiacencyByIdx(id1), true);
+    mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[to]->getAdiacencyByIdx(id2), true);
 
     completeMouseMode();
 }
@@ -1778,8 +1778,8 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                         int nodeid = snodes[i].node->get_idx_node();
                         int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
                         int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                        mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
-                        mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid]->getAdiacencyByIdx(he_id), true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid]->getAdiacencyByIdx(te_id), true);
                     }
                 }
             } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());

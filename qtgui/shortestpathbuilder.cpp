@@ -21,8 +21,12 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
 
     foreach (std::shared_ptr<NodeData> node, nodes) {
         for (int n = 0; n < node->getAdiacencyCount(); ++n) {
-            mEdges.push_back(Edge(node->get_idx_node(), node->getAdiacencyByIdx(n)));
-            mWeights.push_back(node->getAdiacencyWeight(n));
+            std::shared_ptr<NodeData::Edge> edge = node->getAdiacencyByIdx(n);
+            std::shared_ptr<NodeData> tg = edge->target.lock();
+            if (tg.get() != nullptr) {
+                mEdges.push_back(Edge(node->get_idx_node(), tg->get_idx_node()));
+                mWeights.push_back(edge->weight);
+            }
         }
     }
 

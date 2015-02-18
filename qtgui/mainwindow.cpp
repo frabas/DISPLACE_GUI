@@ -21,6 +21,8 @@
 #include <csveditor.h>
 #include <mergedatadialog.h>
 #include <utils/imageformathelpers.h>
+#include <utils/mrupathmanager.h>
+#include <utils/displaceexception.h>
 
 #include <workers/shortestpathbuilderworker.h>
 #include <workers/datamerger.h>
@@ -2010,3 +2012,24 @@ void MainWindow::on_actionExport_Nations_triggered()
     exportGraphics(tr("Nations Plot"), ui->plotNations);
 }
 
+void MainWindow::on_actionLoadStockNames_triggered()
+{
+    MruPathManager mru;
+    QString file = QFileDialog::getOpenFileName(this, tr("Load stock names"), mru.getMru(MruPathManager::StockNamesFile),
+                                                tr("Dat,Txt files (*.dat *.txt);;All files (*.*)"));
+
+    if (!file.isEmpty()) {
+        InputFileParser parser;
+        QMap<QString,int> stocks;
+        try {
+            parser.parseStockNamesFile(file, stocks);
+        } catch (displace::DisplaceException &ex) {
+            QMessageBox::warning(this, tr("Load stock names"), tr("An error occured while loading the stock names: %1 file %2 line %3")
+                                 .arg(ex.message()).arg(ex.file()).arg(ex.line()));
+            return;
+        }
+        currentModel->setStockNames(stocks);
+        mru.setMru(MruPathManager::StockNamesFile, file);
+        QMessageBox::information(this, tr("Load stock names"), tr("Stock names loaded correctly."));
+    }
+}

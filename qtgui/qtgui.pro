@@ -225,7 +225,8 @@ HEADERS += \
     shapefileoperationdialog.h \
     utils/mrupathmanager.h \
     savegraphdialog.h \
-    workers/populationdistributiondatamergerstrategy.h
+    workers/populationdistributiondatamergerstrategy.h \
+    utils/displaceexception.h
 
 RESOURCES += \
     qtgui.qrc

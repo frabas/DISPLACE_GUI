@@ -179,6 +179,8 @@ private slots:
 
     void on_actionCalcPopDistribution_triggered();
 
+    void on_actionLoadStockNames_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

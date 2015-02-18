@@ -266,11 +266,12 @@ std::shared_ptr<ESRIShapefile> MapObjectsController::getShapefile(int model_idx,
     return mShapefileLayers[model_idx].layers[idx]->getShapefile(0);
 }
 
-std::shared_ptr<OGRDataSource> MapObjectsController::getShapefileDatasource(int model_idx, const QString &name)
+std::shared_ptr<OGRDataSource> MapObjectsController::cloneShapefileDatasource(int model_idx, const QString &name)
 {
     for (int i = 0; i < mShapefileLayers[model_idx].getCount(); ++i) {
         if (mShapefileLayers[model_idx].getName(i) == name) {
-            return mShapefiles[model_idx].at(i);
+            const QString &fullpath = mShapefileLayers[model_idx].fullpath.at(i);
+            return std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(fullpath.toStdString().c_str(), FALSE));
         }
     }
 
@@ -327,7 +328,7 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
     mMap->addLayer(layer);
-    mShapefileLayers[model].add(layer, show);
+    mShapefileLayers[model].add(layer, QString::fromLatin1(datasource->GetName()), show);
     mShapefiles[model].append(datasource);
 }
 

@@ -140,9 +140,11 @@ private:
 
         QList<std::shared_ptr<L> > layers;
         QVector<bool> visibility;
+        QStringList fullpath;
 
         virtual int getCount() const { return layers.size(); }
         virtual QString getName(int idx) const { return QString::fromStdString(layers[idx]->getName()); }
+        virtual QString getFullPath(int idx) const { return fullpath.at(idx); }
         virtual bool isVisible(int idx) const { return layers[idx] != 0 && layers[idx]->isVisible(); }
 
         virtual void setVisible(int idx, bool v) { visibility[idx] = v; layers[idx]->setVisible(v); }
@@ -153,9 +155,10 @@ private:
             }
         }
 
-        virtual bool add(std::shared_ptr<L> layer, bool show = true) {
+        virtual bool add(std::shared_ptr<L> layer, QString _fullpath, bool show = true) {
             layers.push_back(layer);
             visibility.push_back(show);
+            fullpath.push_back(_fullpath);
 
             return true;
         }
@@ -233,7 +236,7 @@ public:
     bool importShapefile(int model_idx, QString path, QString layername);
     QStringList getShapefilesList(int model_idx) const;
     std::shared_ptr<qmapcontrol::ESRIShapefile> getShapefile(int model_idx, int idx);
-    std::shared_ptr<OGRDataSource> getShapefileDatasource(int model_idx, const QString &name);
+    std::shared_ptr<OGRDataSource> cloneShapefileDatasource(int model_idx, const QString &name);
 
     void setEditorMode (EditorModes mode);
     EditorModes getEditorMode() const { return mEditorMode; }

@@ -1266,7 +1266,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
 
         QString s = dlg.getSelectedShapefile();
         if (!s.isEmpty())
-            gb->setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
+            gb->setShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
 
         WaitDialog *wdlg = new WaitDialog(this);
         wdlg->setText(tr("Wait while graph is created..."));
@@ -1503,7 +1503,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
     if (dlg.exec() == QDialog::Accepted) {
         double weight = dlg.weight();
         QString shp = dlg.selectedShapefile();
-        std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+        std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
 
         int n = ds->GetLayerCount();
         for (int i = 0; i < n ;  ++i) {
@@ -1525,7 +1525,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
 void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 

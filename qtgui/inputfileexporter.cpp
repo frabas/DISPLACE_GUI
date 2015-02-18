@@ -138,8 +138,10 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     if (multiple_closed_path) {
         QFile src (curr_clspath);
 
-        for (int i = 2; i < 4; ++i) {
-            src.copy(closedpath.arg(i));
+        for (int i = 2; i <= 4; ++i) {
+            QString dst(closedpath.arg(i));
+            QFile::remove(dst);
+            src.copy(dst);
         }
     }
 

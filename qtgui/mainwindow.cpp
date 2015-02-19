@@ -21,6 +21,8 @@
 #include <csveditor.h>
 #include <mergedatadialog.h>
 #include <utils/imageformathelpers.h>
+#include <utils/mrupathmanager.h>
+#include <utils/displaceexception.h>
 
 #include <workers/shortestpathbuilderworker.h>
 #include <workers/datamerger.h>
@@ -516,8 +518,8 @@ void MainWindow::editorAddEdge(int from, int to)
     int id1 = currentModel->addEdge(from, to, d / 1000.0);
     int id2 = currentModel->addEdge(to, from, d / 1000.0);
 
-    mMapController->addEdge(currentModelIdx, id1, currentModel->getNodesList()[from], true);
-    mMapController->addEdge(currentModelIdx, id2, currentModel->getNodesList()[to], true);
+    mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[from]->getAdiacencyByIdx(id1), true);
+    mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[to]->getAdiacencyByIdx(id2), true);
 
     completeMouseMode();
 }
@@ -1266,7 +1268,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
 
         QString s = dlg.getSelectedShapefile();
         if (!s.isEmpty())
-            gb->setShapefile(mMapController->getShapefileDatasource(currentModelIdx, s));
+            gb->setShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
 
         WaitDialog *wdlg = new WaitDialog(this);
         wdlg->setText(tr("Wait while graph is created..."));
@@ -1503,7 +1505,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
     if (dlg.exec() == QDialog::Accepted) {
         double weight = dlg.weight();
         QString shp = dlg.selectedShapefile();
-        std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+        std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
 
         int n = ds->GetLayerCount();
         for (int i = 0; i < n ;  ++i) {
@@ -1525,7 +1527,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
 void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->getShapefileDatasource(currentModelIdx, shp);
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
@@ -1776,8 +1778,8 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                         int nodeid = snodes[i].node->get_idx_node();
                         int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
                         int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                        mMapController->addEdge(currentModelIdx, he_id, currentModel->getNodesList()[harbid], true);
-                        mMapController->addEdge(currentModelIdx, te_id, currentModel->getNodesList()[nodeid], true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid]->getAdiacencyByIdx(he_id), true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid]->getAdiacencyByIdx(te_id), true);
                     }
                 }
             } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());
@@ -1905,8 +1907,36 @@ void MainWindow::on_actionMergePings_triggered()
         mWaitDialog = new WaitDialog(this);
         merger->setWaitDialog(mWaitDialog);
         merger->setDistance(dlg.getDistance());
+        merger->setSeparator(dlg.separator());
         merger->start(dlg.getInputFile(), dlg.getOutputFile());
+    }
+}
 
+void MainWindow::on_actionCalcPopDistribution_triggered()
+{
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    if (currentModel->getStockNames().size() == 0) {
+        int r = QMessageBox::question(this, tr("Calculate Population distribution"),
+                                      tr("No Stock names were loaded. Names will be automatically assigned. Do you want to proceed?"),
+                                      QMessageBox::No, QMessageBox::Yes);
+        if (r == QMessageBox::No)
+            return;
+    }
+
+    MergeDataDialog dlg(this);
+    dlg.setWindowTitle(tr("Calculate Population distribution"));
+    if (dlg.exec()) {
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::PopulationDistribution, currentModel.get());
+        connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
+
+        if (mWaitDialog != 0) delete mWaitDialog;
+        mWaitDialog = new WaitDialog(this);
+        merger->setWaitDialog(mWaitDialog);
+        merger->setDistance(dlg.getDistance());
+        merger->setSeparator(dlg.separator());
+        merger->start(dlg.getInputFile(), dlg.getOutputFile());
     }
 }
 
@@ -1988,4 +2018,26 @@ void MainWindow::on_actionExport_Populations_triggered()
 void MainWindow::on_actionExport_Nations_triggered()
 {
     exportGraphics(tr("Nations Plot"), ui->plotNations);
+}
+
+void MainWindow::on_actionLoadStockNames_triggered()
+{
+    MruPathManager mru;
+    QString file = QFileDialog::getOpenFileName(this, tr("Load stock names"), mru.getMru(MruPathManager::StockNamesFile),
+                                                tr("Dat,Txt files (*.dat *.txt);;All files (*.*)"));
+
+    if (!file.isEmpty()) {
+        InputFileParser parser;
+        QMap<QString,int> stocks;
+        try {
+            parser.parseStockNamesFile(file, stocks);
+        } catch (displace::DisplaceException &ex) {
+            QMessageBox::warning(this, tr("Load stock names"), tr("An error occured while loading the stock names: %1 file %2 line %3")
+                                 .arg(ex.message()).arg(ex.file()).arg(ex.line()));
+            return;
+        }
+        currentModel->setStockNames(stocks);
+        mru.setMru(MruPathManager::StockNamesFile, file);
+        QMessageBox::information(this, tr("Load stock names"), tr("Stock names loaded correctly."));
+    }
 }

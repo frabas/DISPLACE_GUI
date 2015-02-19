@@ -1,5 +1,7 @@
 #include "datamerger.h"
 
+#include "populationdistributiondatamergerstrategy.h"
+
 #include <QtConcurrent>
 #include <QFile>
 #include <QTextStream>
@@ -11,10 +13,38 @@
 
 using namespace displace::workers;
 
-const char *const DataMerger::MergedField = "PT_GRAPH";
-const char *const DataMerger::LatField = "SI_LATI";
-const char *const DataMerger::LongField = "SI_LONG";
 const char DataMerger::FieldSeparator = ' ';
+
+class MergerStrategy : public DataMerger::Strategy
+{
+public:
+    MergerStrategy (DataMerger *owner, DataMerger::MergeType type);
+    bool processHeaderField(QString field, int i) override;
+    bool postHeaderProcessed() override;
+    void processLine (QString line) override;
+    bool saveOutput(QString out) override;
+
+    static const char *const MergedField;
+    static const char *const LatField;
+    static const char *const LongField;
+
+private:
+    DataMerger *mOwner;
+    DataMerger::MergeType mType;
+
+    bool colpresent = true;
+    int col_pt_graph = -1;
+    int col_lat = -1;
+    int col_lon = -1;
+
+    QStringList mFields;
+    QStringList mResults;
+    QMutex mutex;
+};
+
+const char *const MergerStrategy::MergedField = "PT_GRAPH";
+const char *const MergerStrategy::LatField = "SI_LATI";
+const char *const MergerStrategy::LongField = "SI_LONG";
 
 DataMerger::DataMerger(MergeType type, DisplaceModel *model)
     : mType (type),
@@ -24,8 +54,20 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
       mWork(),
       mWatcher(0),
       mInternalWatcher(0),
-      mWaitDialog(0)
+      mWaitDialog(0),
+      mStrategy(0)
 {
+    switch (mType) {
+    case Ping:
+    case Weights:
+        mStrategy = new MergerStrategy(this, mType);
+        break;
+    case PopulationDistribution:
+        mStrategy = new PopulationDistributionDataMergerStrategy(this, mModel);
+        break;
+    default:
+        (new Exception("Program error - Undefined strategy in DataMerger constructor"))->raise();
+    }
 }
 
 DataMerger::~DataMerger()
@@ -63,6 +105,11 @@ bool DataMerger::checkResult()
     return mWork.result();
 }
 
+QList<std::shared_ptr<NodeData> > DataMerger::getAllNodesWithin(QPointF pt, double dist) const
+{
+    return mModel->getAllNodesWithin(pt, dist);
+}
+
 void DataMerger::workCompleted()
 {
     emit completed(this);
@@ -97,34 +144,19 @@ bool DataMerger::doWork(QString in, QString out)
     QList<QString> data;
     QString line;
 
+    try {
     // First: read the headers
-    line = instream.readLine();
-    QStringList fields = line.split(mSeparator, QString::SkipEmptyParts);
+        line = instream.readLine();
+        QStringList fields = line.split(mSeparator, QString::SkipEmptyParts);
 
-    // Search for the proper column
-    bool colpresent = true;
-    int col_pt_graph = -1;
-    int col_lat = -1;
-    int col_lon = -1;
-    for (int i = 0; i < fields.size(); ++i) {
-        if (fields.at(i) == MergedField) {
-            col_pt_graph = i;
-        } else if(fields.at(i) == LatField) {
-            col_lat = i;
-        } else if (fields.at(i) == LongField) {
-            col_lon = i;
+        // Search for the proper column
+        for (int i = 0; i < fields.size(); ++i) {
+            mStrategy->processHeaderField(fields[i], i);
         }
-    }
 
-    if (col_lat == -1 || col_lon == -1) {
-        (new Exception(in, QString(tr("%1 or %2 fields are missing"))
-                       .arg(LatField).arg(LongField)))->raise();
-    }
-
-    if (col_pt_graph == -1) {
-        colpresent = false;
-        fields.push_back(MergedField);
-        col_pt_graph = fields.size()-1;
+        mStrategy->postHeaderProcessed();
+    } catch (Exception ex) {
+        throw new Exception (in, ex.what());
     }
 
     if (mExit) {
@@ -133,13 +165,12 @@ bool DataMerger::doWork(QString in, QString out)
     }
 
     // Read the input file and calculate the field.
-    bool ok;
-    double lat,lon;
     int row=1;
 
     if (mWaitDialog)
         mWaitDialog->setFormat(tr("Reading file: %p%"));
-    QList<ProcessData> processQueue;
+
+    QStringList processQueue;
     while (!instream.atEnd() && !mExit) {
         line = instream.readLine();
         if (mWaitDialog) {
@@ -147,20 +178,7 @@ bool DataMerger::doWork(QString in, QString out)
         }
         ++row;
 
-        QStringList entry = line.split(mSeparator, QString::SkipEmptyParts);
-        if (entry.size() < col_lat || entry.size() < col_lon)  // Skip empty / incorrect lines
-            continue;
-
-        lat = entry.at(col_lat).toDouble(&ok);
-        if (!ok)
-            (new Exception(in, QString(tr("Error parsing field %1 line %2 - not a double")).arg(col_lat).arg(row)))->raise();
-
-        lon = entry.at(col_lon).toDouble(&ok);
-        if (!ok)
-            (new Exception(in, QString(tr("Error parsing field %1 line %2 - not a double")).arg(col_lon).arg(row)))->raise();
-
-        ProcessData d(&data,entry, QPointF(lon, lat), col_pt_graph, colpresent);
-        processQueue.push_back(d);
+        processQueue.push_back(line);
     }
 
     if (mExit) {
@@ -176,7 +194,7 @@ bool DataMerger::doWork(QString in, QString out)
     mInternalWatcher = new QFutureWatcher<void>;
 
     // lambda
-    QFuture<void> work = QtConcurrent::map(processQueue, [this](ProcessData data) { this->processLine(data);});
+    QFuture<void> work = QtConcurrent::map(processQueue, [this](QString line) { this->mStrategy->processLine(line);});
     mInternalWatcher->setFuture(work);
     if (mWaitDialog) {
         mInternalWatcher->moveToThread(mWaitDialog->thread());
@@ -189,26 +207,75 @@ bool DataMerger::doWork(QString in, QString out)
     if (mExit)
         return false;
 
-    QFile outfile(out);
-
-    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        (new Exception(out, outfile.errorString()))->raise();
-
-    QTextStream outstream(&outfile);
-
-    outstream << fields.join(mSeparator) << endl;
-
-    row = 0;
     if (mWaitDialog) {
         mWaitDialog->setText(tr("Saving file..."));
     }
+    try {
+        mStrategy->saveOutput(out);
+    } catch (Exception ex) {
+        (new Exception (out, ex.what()))->raise();
+    }
 
-    foreach (QString line, data) {
+    return true;
+}
+
+MergerStrategy::MergerStrategy(DataMerger *owner, DataMerger::MergeType type)
+    : Strategy(),
+      mOwner(owner),
+      mType(type)
+{
+}
+
+bool MergerStrategy::processHeaderField(QString field, int i)
+{
+    if (field == MergedField) {
+        col_pt_graph = i;
+    } else if(field == LatField) {
+        col_lat = i;
+    } else if (field == LongField) {
+        col_lon = i;
+    }
+
+    mFields.push_back(field);
+    return true;
+}
+
+bool MergerStrategy::postHeaderProcessed()
+{
+    if (col_lat == -1 || col_lon == -1) {
+        (new DataMerger::Exception(QString(QObject::tr("%1 or %2 fields are missing"))
+                       .arg(LatField).arg(LongField)))->raise();
+    }
+
+    if (col_pt_graph == -1) {
+        colpresent = false;
+        mFields.push_back(MergedField);
+        col_pt_graph = mFields.size()-1;
+    }
+
+    return true;
+}
+
+bool MergerStrategy::saveOutput(QString out)
+{
+    QFile outfile(out);
+
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        (new DataMerger::Exception(outfile.errorString()))->raise();
+
+    QTextStream outstream(&outfile);
+
+    outstream << mFields.join(mOwner->separator()) << endl;
+
+    int row = 0;
+    foreach (QString line, mResults) {
         outstream << line << endl;
         ++row;
 
-        if (mExit)
-            break;
+        if (mOwner->mustExit()) {
+            outfile.close();
+            return false;
+        }
     }
 
     outfile.close();
@@ -216,8 +283,22 @@ bool DataMerger::doWork(QString in, QString out)
     return true;
 }
 
-void DataMerger::processLine(ProcessData data)
+void MergerStrategy::processLine (QString line)
 {
+    bool ok;
+
+    QStringList entry = line.split(mOwner->separator(), QString::SkipEmptyParts);
+    if (entry.size() < col_lat || entry.size() < col_lon)  // Skip empty / incorrect lines
+        return;
+
+    double lat = entry.at(col_lat).toDouble(&ok);
+    if (!ok)
+        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_lat)))->raise();
+
+    double lon = entry.at(col_lon).toDouble(&ok);
+    if (!ok)
+        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_lon)))->raise();
+
     int idx = -1;
 
 #if GEOGRAPHICLIB_VERSION_MINOR > 25
@@ -226,18 +307,18 @@ void DataMerger::processLine(ProcessData data)
         const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
-    QList<std::shared_ptr<NodeData>> nodes = mModel->getAllNodesWithin(data.pt, mDist);
+    QList<std::shared_ptr<NodeData>> nodes = mOwner->getAllNodesWithin(QPointF(lon,lat), mOwner->distance());
 
     double mindist = 1e90;
     double dist;
     std::shared_ptr<NodeData> nearestNode;
     foreach (std::shared_ptr<NodeData> node, nodes) {
-        if (mType == Weights && node->get_is_harbour())
+        if (mType == DataMerger::Weights && node->get_is_harbour())
             continue;
-        if (mType == Ping && !node->get_is_harbour())
+        if (mType == DataMerger::Ping && !node->get_is_harbour())
             continue;
 
-        geod.Inverse(node->get_y(), node->get_x(), data.pt.y(), data.pt.x(), dist);
+        geod.Inverse(node->get_y(), node->get_x(), lat, lon, dist);
         if (dist < mindist) {
             nearestNode = node;
             mindist = dist;
@@ -248,14 +329,15 @@ void DataMerger::processLine(ProcessData data)
         idx = nearestNode->get_idx_node();
 
     // update the field.
-    while (data.entry.size() < data.col_pt_graph)
-        data.entry.push_back(".");
+    while (entry.size() < col_pt_graph)
+        entry.push_back(".");
 
-    if (!data.colpresent)
-        data.entry.insert(data.col_pt_graph, ".");
-    data.entry[data.col_pt_graph] = QString::number(idx);
+    if (!colpresent)
+        entry.insert(col_pt_graph, ".");
+    entry[col_pt_graph] = QString::number(idx);
 
     mutex.lock();
-    data.result->push_back(data.entry.join(mSeparator));
+    mResults.push_back(entry.join(mOwner->separator()));
     mutex.unlock();
+
 }

@@ -41,10 +41,9 @@ class EdgeGraphics;
 class EdgeGraphics : public qmapcontrol::GeometryLineString {
     static QPen mNormalPen, mSelectedPen;
 
-    NodeData *node;
-    int edgeIdx;
+    std::shared_ptr<NodeData::Edge> mEdge;
 public:
-    explicit EdgeGraphics(const std::vector<qmapcontrol::PointWorldCoord>& points, NodeData *nd, int edge);
+    explicit EdgeGraphics(const std::vector<qmapcontrol::PointWorldCoord>& points, std::shared_ptr<NodeData::Edge> edge);
 
     virtual void draw(QPainter& painter, const qmapcontrol::RectWorldCoord& backbuffer_rect_coord, const int& controller_zoom);
 
@@ -59,7 +58,7 @@ class EdgeMapObject : public QObject, public MapObject
     Q_OBJECT
 
 public:
-    EdgeMapObject(MapObjectsController *controller, int indx, NodeData *node);
+    EdgeMapObject(MapObjectsController *controller, std::shared_ptr<NodeData::Edge> edge);
 
     std::shared_ptr<qmapcontrol::Geometry> getGeometryEntity() const {
         return mGeometry;
@@ -69,8 +68,8 @@ public:
 
     bool selected() const { return mGeometry->selected(); }
 
-    NodeData* node() const { return mNode; }
-    NodeData* target() const { return mTarget; }
+    std::shared_ptr<NodeData> node() const { return mEdge->source.lock(); }
+    std::shared_ptr<NodeData> target() const { return mEdge->target.lock(); }
 protected:
 
 private slots:
@@ -79,9 +78,8 @@ signals:
     void edgeSelectionHasChanged(EdgeMapObject *object);
 
 private:
-
     MapObjectsController *mController;
-    NodeData* mNode, *mTarget;
+    std::shared_ptr<NodeData::Edge> mEdge;
 
     std::shared_ptr<EdgeGraphics> mGeometry;
     NodeDetailsWidget *mWidget;

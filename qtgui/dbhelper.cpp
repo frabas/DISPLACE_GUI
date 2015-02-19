@@ -701,11 +701,11 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             curnationsdata[nid].mRevenues += rev;
             curnationsdata[nid].mTimeAtSea += timeatsea;
             curnationsdata[nid].mGav += gav;
-            curnationsdata[nid].mVpuf += vpuf;
+            curnationsdata[nid].mVpuf = vpuf;
             //curHarbourData[hidx].mCumCatches += catches;
             curHarbourData[hidx].mCumProfit += rev;
             curHarbourData[hidx].mGav += gav;
-            curHarbourData[hidx].mVpuf += vpuf;
+            curHarbourData[hidx].mVpuf = vpuf;
         }
 
         nations.push_back(curnationsdata);

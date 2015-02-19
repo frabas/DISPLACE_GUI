@@ -266,11 +266,12 @@ std::shared_ptr<ESRIShapefile> MapObjectsController::getShapefile(int model_idx,
     return mShapefileLayers[model_idx].layers[idx]->getShapefile(0);
 }
 
-std::shared_ptr<OGRDataSource> MapObjectsController::getShapefileDatasource(int model_idx, const QString &name)
+std::shared_ptr<OGRDataSource> MapObjectsController::cloneShapefileDatasource(int model_idx, const QString &name)
 {
     for (int i = 0; i < mShapefileLayers[model_idx].getCount(); ++i) {
         if (mShapefileLayers[model_idx].getName(i) == name) {
-            return mShapefiles[model_idx].at(i);
+            const QString &fullpath = mShapefileLayers[model_idx].fullpath.at(i);
+            return std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(fullpath.toStdString().c_str(), FALSE));
         }
     }
 
@@ -327,7 +328,7 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
     mMap->addLayer(layer);
-    mShapefileLayers[model].add(layer, show);
+    mShapefileLayers[model].add(layer, QString::fromLatin1(datasource->GetName()), show);
     mShapefiles[model].append(datasource);
 }
 
@@ -360,13 +361,13 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-        addEdge(model_n,i, nd, disable_redraw);
+        addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }
 }
 
-void MapObjectsController::addEdge (int model_n, int adj_id, std::shared_ptr<NodeData> node, bool disable_redraw)
+void MapObjectsController::addEdge (int model_n, std::shared_ptr<NodeData::Edge> _edge, bool disable_redraw)
 {
-    EdgeMapObject *edge = new EdgeMapObject(this, adj_id, node.get());
+    EdgeMapObject *edge = new EdgeMapObject(this, _edge);
 
     connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
@@ -383,7 +384,7 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
 
     std::shared_ptr<NodeData> nd = mModels[model_n]->getNodesList()[h->mHarbour->get_idx_node()];
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
-        addEdge(model_n,i, nd, disable_redraw);
+        addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }
 }
 
@@ -400,8 +401,8 @@ void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geom
 void MapObjectsController::delSelectedEdges(int model)
 {
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
-        NodeData* nd = edge->node();
-        NodeData* tg = edge->target();
+        std::shared_ptr<NodeData> nd = edge->node();
+        std::shared_ptr<NodeData> tg = edge->target();
 
 //        int nodeid1 = nd->get_idx_node();
 
@@ -411,9 +412,11 @@ void MapObjectsController::delSelectedEdges(int model)
 //        NodeData *nd2 = mModels[model]->getNodesList()[nodeid2];
 //        nd2->removeAdiacencyByTarget(nodeid1);
 //        nd->removeAdiacencyByIdx(eid1);
-        nd->removeAdiacencyByTarget(tg->get_idx_node());
+        if (nd.get() != nullptr && tg != nullptr) {
+            nd->removeAdiacencyByTarget(tg);
 
-        mEdgesLayer[model]->removeEdge(edge);
+            mEdgesLayer[model]->removeEdge(edge);
+        }
     }
 
     mEdgeSelection[model].clear();

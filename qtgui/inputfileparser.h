@@ -27,6 +27,7 @@
 #include <QString>
 #include <QPair>
 #include <QSet>
+#include <QMap>
 
 #include <graphbuilder.h>
 
@@ -45,6 +46,8 @@ public:
 
     bool pathParseRelevantNodes (const QString &refpath, QString &fnodePath, QString &harbPath);
     bool parseRelevantNodes (const QString &file, QSet<int> &nodes);
+
+    bool parseStockNamesFile (const QString &path, QMap<QString,int> &names);
 };
 
 #endif // INPUTFILEPARSER_H

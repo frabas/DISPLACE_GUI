@@ -46,17 +46,23 @@ QString SaveGraphDialog::getCoordsFilename() const
 
 QString SaveGraphDialog::getLandscapeFilename() const
 {
-    return ui->outputFolder->text() + "/" + ui->landscapeFileName->text();
+    if (ui->optLandscape->isChecked())
+        return ui->outputFolder->text() + "/" + ui->landscapeFileName->text();
+    return QString();
 }
 
 QString SaveGraphDialog::getAreacodesFilename() const
 {
-    return ui->outputFolder->text() + "/" + ui->areaCodeFileName->text();
+    if (ui->optAreaCodes->isChecked())
+        return ui->outputFolder->text() + "/" + ui->areaCodeFileName->text();
+    return QString();
 }
 
 QString SaveGraphDialog::getClosedPolygonFilename() const
 {
-    return ui->outputFolder->text() + "/" + ui->closedPolyFilename->text();
+    if (ui->optClosedPoly->isChecked())
+        return ui->outputFolder->text() + "/" + ui->closedPolyFilename->text();
+    return QString();
 }
 
 void SaveGraphDialog::on_optCustomize_toggled(bool checked)
@@ -82,6 +88,8 @@ void SaveGraphDialog::on_cmdBrowse_clicked()
     MruPathManager man;
 
     QString path = QFileDialog::getExistingDirectory(this, tr("Output Folder"), man.getMru(MruPathManager::GraphFolder));
-    if (!path.isEmpty())
+    if (!path.isEmpty()) {
+        man.setMru(MruPathManager::GraphFolder, path);
         ui->outputFolder->setText(path);
+    }
 }

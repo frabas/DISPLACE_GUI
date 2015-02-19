@@ -14,18 +14,20 @@ const double EdgeGraphics::minZoom = 7;
 const double EdgeGraphics::maxZoom = 17;
 const double EdgeGraphics::minTextZoom = 11;
 
-EdgeMapObject::EdgeMapObject(MapObjectsController *controller, int indx, NodeData *node)
+EdgeMapObject::EdgeMapObject(MapObjectsController *controller, std::shared_ptr<NodeData::Edge> edge)
     : QObject(),
       mController(controller),
-      mNode(node)
+      mEdge(edge)
 {
+    // use of member functions is not recommended.
+    std::shared_ptr<NodeData> src = mEdge->source.lock();
+    std::shared_ptr<NodeData> tgt = mEdge->target.lock();
+
     std::vector<qmapcontrol::PointWorldCoord> line;
-    line.push_back(qmapcontrol::PointWorldCoord(mNode->get_x(), mNode->get_y()));
+    line.push_back(qmapcontrol::PointWorldCoord(src->get_x(), src->get_y()));
+    line.push_back(qmapcontrol::PointWorldCoord(tgt->get_x(), tgt->get_y()));
 
-    mTarget = mNode->getModel()->getNodesList()[mNode->getAdiacencyByIdx(indx)].get();
-    line.push_back(qmapcontrol::PointWorldCoord(mTarget->get_x(), mTarget->get_y()));
-
-    mGeometry = std::shared_ptr<EdgeGraphics>(new EdgeGraphics(line, mNode, indx));
+    mGeometry = std::shared_ptr<EdgeGraphics>(new EdgeGraphics(line, mEdge));
     mGeometry->setFlags(qmapcontrol::Geometry::IsSelectable);
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 }
@@ -35,9 +37,9 @@ void EdgeMapObject::onSelectionChanged()
     emit edgeSelectionHasChanged(this);
 }
 
-EdgeGraphics::EdgeGraphics(const std::vector<PointWorldCoord> &points, NodeData *nd, int edge)
+EdgeGraphics::EdgeGraphics(const std::vector<PointWorldCoord> &points, std::shared_ptr<NodeData::Edge> edge)
     : qmapcontrol::GeometryLineString(minZoom, maxZoom),
-      node(nd), edgeIdx(edge)
+      mEdge(edge)
 {
     buildArrow(points[0], points[1]);
 
@@ -46,6 +48,9 @@ EdgeGraphics::EdgeGraphics(const std::vector<PointWorldCoord> &points, NodeData 
 
 void EdgeGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &backbuffer_rect_coord, const int &controller_zoom)
 {
+    if (mEdge->source.expired() || mEdge->target.expired())
+        return;
+
     setPen(selected() ? mSelectedPen : mNormalPen);
 
     qmapcontrol::GeometryLineString::draw(painter, backbuffer_rect_coord, controller_zoom);
@@ -56,7 +61,7 @@ void EdgeGraphics::draw(QPainter &painter, const qmapcontrol::RectWorldCoord &ba
 
         QPointF mid (p1.x() + 0.3 * (p2.x() - p1.x()) , p1.y() + 0.3 * (p2.y() - p1.y()));
 
-        painter.drawText(mid, QString::number(node->getAdiacencyWeight(edgeIdx)));
+        painter.drawText(mid, QString::number(mEdge->weight));
     }
 }
 

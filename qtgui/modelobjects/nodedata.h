@@ -33,11 +33,24 @@ class DisplaceModel;
 /** \brief an extension class for Node
  *
  * */
-class NodeData
+class NodeData : public std::enable_shared_from_this<NodeData>
 {
 public:
-    typedef QVector<int> AdiacencyList;
-    typedef QVector<double> AdiacencyWeightList;
+    struct Edge {
+        Edge()
+            : source(), target(), weight(0.0) {
+        }
+
+        Edge(std::shared_ptr<NodeData> src, std::shared_ptr<NodeData> nd, double wt)
+            : source(src), target(nd), weight(wt) {
+        }
+
+        std::weak_ptr<NodeData> source;
+        std::weak_ptr<NodeData> target;
+        double weight;
+    };
+
+    typedef QVector<std::shared_ptr<Edge>> AdiacencyList;
 
     std::shared_ptr<Node> mNode;    /* This is crap. But we have no other choice */
 
@@ -90,12 +103,12 @@ public:
     void setHarbourId(int value);
 
     /* Adiacency functions */
-    int appendAdiancency(int to_id, double weight);
+    int appendAdiancency(std::shared_ptr<NodeData> target, double weight);
     void removeAdiacencyByIdx(int idx);
-    void removeAdiacencyByTarget(int target);
+    void removeAdiacencyByTarget(std::shared_ptr<NodeData> target);
     void removeAllAdiacencies();
     int getAdiacencyCount() const;
-    int getAdiacencyByIdx(int idx) const;
+    std::shared_ptr<Edge> getAdiacencyByIdx(int idx) const;
     double getAdiacencyWeight(int idx) const;
     void setAdiacencyWeight (int idx, double w);
 
@@ -114,7 +127,6 @@ private:
     double *mImpact;
 
     AdiacencyList mAdiacency;
-    AdiacencyWeightList mWeights;
 };
 
 #endif // NODEDATA_H

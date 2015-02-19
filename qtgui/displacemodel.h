@@ -205,6 +205,11 @@ public:
     Config config() const;
     void setConfig(const Config &config);
 
+    /* Stock names */
+
+    const QMap<QString, int> getStockNames() const { return mStockNames; }
+    void setStockNames (const QMap<QString,int> &names) { mStockNames = names; }
+
     /* Live Simulation data */
 
     void setCurrentStep(int step);
@@ -384,6 +389,7 @@ private:
     HarboursStats mStatsHarboursCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
+    QMap<QString, int> mStockNames;
 
     // --- Working objects
 

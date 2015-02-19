@@ -96,9 +96,12 @@ void NodeMapObject::updateProperties()
         }
         text += QString("<br/><b>Adjacencies</b><br/>");
         for (int i = 0; i < mNode->getAdiacencyCount(); ++i) {
-            text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
-                    .arg(mNode->getAdiacencyByIdx(i))
-                    .arg(mNode->getAdiacencyWeight(i));
+            std::shared_ptr<NodeData::Edge> e = mNode->getAdiacencyByIdx(i);
+            std::shared_ptr<NodeData> t = e->target.lock();
+            if (t.get() != nullptr)
+                text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
+                        .arg(t->get_idx_node())
+                        .arg(e->weight);
         }
         break;
 

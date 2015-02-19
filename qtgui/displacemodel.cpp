@@ -628,7 +628,8 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
  */
 int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight)
 {
-    int i = nodedata->appendAdiancency(targetidx, weight);
+    std::shared_ptr<NodeData> tg = mNodes.at(targetidx);
+    int i = nodedata->appendAdiancency(tg, weight);
 
     OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
     e->SetField(FLD_TYPE, (int)OgrTypeEdge);
@@ -1518,7 +1519,7 @@ bool DisplaceModel::loadGraphs()
 
     /* file has been read. Now feed the data! */
     foreach (data d, datas) {
-        mNodes[d.from]->appendAdiancency(d.to, d.weight);
+        mNodes[d.from]->appendAdiancency(mNodes.at(d.to), d.weight);
     }
 
     return true;

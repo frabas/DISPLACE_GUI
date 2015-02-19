@@ -2,6 +2,8 @@
 #include "ui_waitdialog.h"
 
 #include <QDebug>
+#include <QApplication>
+#include <QThread>
 
 WaitDialog::WaitDialog(QWidget *parent) :
     QDialog(parent),
@@ -15,6 +17,8 @@ WaitDialog::WaitDialog(QWidget *parent) :
     ui->progress->setVisible(false);
     ui->progress->setValue(0);
     ui->cmdAbort->setVisible(false);
+
+    connect (this, SIGNAL(self_set_progression(int)), this, SLOT(setProgression(int)), Qt::QueuedConnection);
 }
 
 WaitDialog::~WaitDialog()
@@ -56,7 +60,10 @@ void WaitDialog::enableAbort(bool enable)
 
 void WaitDialog::setProgression(int level)
 {
-    ui->progress->setValue(level);
+    if (QApplication::instance()->thread() != QThread::currentThread())
+        emit self_set_progression(level);
+    else
+        ui->progress->setValue(level);
 }
 
 void WaitDialog::on_cmdAbort_clicked()

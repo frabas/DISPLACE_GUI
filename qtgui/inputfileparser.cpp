@@ -6,6 +6,7 @@
 
 #include <Harbour.h>
 #include <modelobjects/harbourdata.h>
+#include <utils/displaceexception.h>
 
 #include <QRegExp>
 #include <QDebug>
@@ -256,6 +257,37 @@ bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
             qWarning() << "Error parsing file" << file << " at line " << linenum;
         } else {
             nodes.insert(nd);
+        }
+        ++linenum;
+    }
+
+    infile.close();
+    return true;
+}
+
+bool InputFileParser::parseStockNamesFile(const QString &path, QMap<QString, int> &names)
+{
+    QFile infile (path);
+    if (!infile.open(QIODevice::ReadOnly)) {
+        (new displace::DisplaceException(infile.errorString(), path));
+        qDebug() << "Can't read" << path <<": " << infile.errorString();
+        return false;
+    }
+
+    QTextStream stream(&infile);
+    QString line;
+
+    line = stream.readLine();  // ignore the first line
+
+    bool ok;
+    int linenum = 1;
+    while (!(line = stream.readLine()).isNull()) {
+        QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        int nd = fields[1].toInt(&ok);
+        if (!ok) {
+            (new displace::DisplaceException(QObject::tr("Failed to parse field #2"), path, linenum))->raise();
+        } else {
+            names.insert(fields[0], nd);
         }
         ++linenum;
     }

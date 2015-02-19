@@ -96,6 +96,7 @@
     <addaction name="actionCreate_Graph"/>
     <addaction name="actionLoad_Harbours"/>
     <addaction name="actionLink_Harbours_to_Graph"/>
+    <addaction name="actionLoadStockNames"/>
     <addaction name="separator"/>
     <addaction name="actionCreate_Shortest_Path"/>
     <addaction name="actionLink_Shortest_Path_Folder"/>
@@ -1085,6 +1086,11 @@
   <action name="actionAssign_Area_codes">
    <property name="text">
     <string>Assign Area codes...</string>
+   </property>
+  </action>
+  <action name="actionLoadStockNames">
+   <property name="text">
+    <string>Load stock names...</string>
    </property>
   </action>
  </widget>

@@ -112,29 +112,31 @@ void NodeData::setHarbourId(int value)
  * @param weight
  * @return Index of the appended adiacency
  */
-int NodeData::appendAdiancency(int to_id, double weight)
+int NodeData::appendAdiancency(std::shared_ptr<NodeData> target, double weight)
 {
-    mAdiacency.push_back(to_id);
-    mWeights.push_back(weight);
+    mAdiacency.push_back(std::shared_ptr<Edge>(new Edge(shared_from_this(), target, weight)));
     return mAdiacency.size() -1;
 }
 
 void NodeData::removeAdiacencyByIdx(int idx)
 {
     mAdiacency.removeAt(idx);
-    mWeights.removeAt(idx);
 }
 
-void NodeData::removeAdiacencyByTarget(int target)
+void NodeData::removeAdiacencyByTarget(std::shared_ptr<NodeData> target)
 {
-    int idx = mAdiacency.indexOf(target);
-    removeAdiacencyByIdx(idx);
+    for (int i = 0; i < mAdiacency.size(); ++i) {
+        std::shared_ptr<NodeData> tg = mAdiacency.at(i)->target.lock();
+        if (tg == target) {
+            removeAdiacencyByIdx(i);
+            return;
+        }
+    }
 }
 
 void NodeData::removeAllAdiacencies()
 {
     mAdiacency.clear();
-    mWeights.clear();
 }
 
 int NodeData::getAdiacencyCount() const
@@ -142,19 +144,19 @@ int NodeData::getAdiacencyCount() const
     return mAdiacency.size();
 }
 
-int NodeData::getAdiacencyByIdx(int idx) const
+std::shared_ptr<NodeData::Edge> NodeData::getAdiacencyByIdx(int idx) const
 {
     return mAdiacency.at(idx);
 }
 
 double NodeData::getAdiacencyWeight(int idx) const
 {
-    return mWeights.at(idx);
+    return mAdiacency.at(idx)->weight;
 }
 
 void NodeData::setAdiacencyWeight(int idx, double w)
 {
-    mWeights[idx] = w;
+    mAdiacency[idx]->weight = w;
 }
 
 bool NodeData::isDeleted() const

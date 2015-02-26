@@ -1116,6 +1116,27 @@ map<int, int> read_metiers_types(string folder_name_parameterization, string inp
 
 
 // FOR METIER
+map<int, double> read_metiers_fspeed(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_fspeed.dat";
+
+    ifstream metier_fspeed;
+    metier_fspeed.open(filename.c_str());
+    if(metier_fspeed.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    map<int, double> fspeed;
+    fill_map_from_specifications_i_d (metier_fspeed,  fspeed, folder_name_parameterization);
+    metier_fspeed.close();
+
+    return(fspeed);
+}
+
+
+// FOR METIER
 map<int, double> read_gear_widths_param_a(string folder_name_parameterization, string inputfolder)
 {
 

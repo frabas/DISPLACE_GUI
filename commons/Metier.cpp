@@ -26,6 +26,7 @@ int _type,
 vector<double> _selectivity,
 vector<double> _discards,
 vector<double> _betas_per_pop,
+double _fspeed,
 double _gear_width_a,
 double _gear_width_b,
 string _gear_width_model,
@@ -36,7 +37,8 @@ multimap<int, double> _loss_after_1_passage)
 	selectivity=_selectivity;
 	discards=_discards;
 	betas_per_pop=_betas_per_pop;
-	gear_width_a=_gear_width_a;
+    fspeed= _fspeed;
+    gear_width_a=_gear_width_a;
 	gear_width_b=_gear_width_b;
 	gear_width_model=_gear_width_model;
 	loss_after_1_passage=_loss_after_1_passage;
@@ -95,6 +97,11 @@ vector<double> Metier::get_betas_per_pop()
 	return(betas_per_pop);
 }
 
+double Metier::get_fspeed()
+{
+
+    return(fspeed);
+}
 
 double Metier::get_gear_width_a()
 {

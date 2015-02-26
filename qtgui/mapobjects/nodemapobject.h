@@ -50,6 +50,7 @@ public:
         GraphNodeWithPopStatsRole,
         GraphNodeWithBiomass,
         GraphNodeWithCumFTimeRole,
+        GraphNodeWithCumSweptAreaRole,
         GraphNodeWithPopImpact,
     };
 

@@ -84,7 +84,8 @@ class Node
 		vector<int> get_pop_names_on_node();
         const vector<double>& get_impact_on_pops ();
 		int get_cumftime() const;
-		void set_xy(double xval, double yval);
+        int get_cumsweptarea() const;
+        void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
         void set_Ns_pops_at_szgroup_at_month_start(int name_pop, const vector<double>& val);
@@ -95,8 +96,11 @@ class Node
 		void set_impact_on_pops(int name_pop, double val);
 		void set_vid(int val);
         void set_cumftime(int tot);
-		void add_to_cumftime(int delta_time);
-		void set_pop_names_on_node(int name_pop);
+        void set_cumsweptarea(double tot);
+        void add_to_cumftime(int delta_time);
+        void add_to_cumsweptarea(double sweptarea);
+        void add_to_sweptarea(int sweptarea);
+        void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);
 		void clear_pop_names_on_node();
 		void clear_Ns_pops_at_szgroup();
@@ -111,7 +115,8 @@ class Node
 		void export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep);
 		void recover_benthos_tot_biomass_per_funcgroup();
 		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
-		void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
+        void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
+        void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
         int get_nbpops() const { return m_nbpops; }
         int get_nszgroups() const { return m_nszgrp; }
@@ -131,7 +136,8 @@ private:
 		int marine_landscape;
 		bool is_harbour;
 		int cumftime;
-		vector< vector<double> > Ns_pops_at_szgroup;
+        double cumsweptarea;
+        vector< vector<double> > Ns_pops_at_szgroup;
 		vector< vector<double> > Ns_pops_at_szgroup_at_month_start;
 		vector< vector<double> > removals_pops_at_szgroup;
 								 //i.e. impact

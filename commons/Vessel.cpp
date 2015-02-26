@@ -1424,6 +1424,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 		<< "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
 		<< ", swept area this fishing event is then:" << swept_area
         << " compared to the cell area which is " << graph_res*graph_res << endl);
+    this->get_loc()->add_to_cumsweptarea(swept_area);
+
 
 	// FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
 	// (TO DO...PER FUNCTIONAL GROUPS?)

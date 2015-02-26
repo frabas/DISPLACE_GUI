@@ -5,7 +5,7 @@ TABLE: Metadata
 Schema: CREATE TABLE Metadata(key VARCHAR(16) PRIMARY KEY,value VARCHAR(16));
  
 TABLE: NodesStats
-Schema: CREATE TABLE NodesStats(statid INTEGER PRIMARY KEY AUTOINCREMENT,nodeid INTEGER,tstep INTEGER,cumftime REAL,totpop REAL,totpopw REAL);
+Schema: CREATE TABLE NodesStats(statid INTEGER PRIMARY KEY AUTOINCREMENT,nodeid INTEGER,tstep INTEGER,cumftime REAL,cumsweptarea REAL,totpop REAL,totpopw REAL);
  
 TABLE: PopStats
 Schema: CREATE TABLE PopStats(statid INTEGER AUTO_INCREMENT PRIMARY KEY,tstep INTEGER,popid INTEGER,N REAL,F REAL);

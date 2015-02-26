@@ -35,7 +35,8 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 	x=xval;
 	y=yval;
 	cumftime=0;
-	harbour=_harbour;
+    cumsweptarea=0;
+    harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
 	if(_harbour!=0)
@@ -64,8 +65,9 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
     idx_node= idx;
 	x=graph_coord_x[idx];
 	y=graph_coord_y[idx];
-	cumftime=0;
-	harbour=graph_coord_harbour[idx];
+    cumftime=0;
+    cumsweptarea=0;
+    harbour=graph_coord_harbour[idx];
 	code_area=graph_point_code_area[idx];
 	marine_landscape=graph_point_marine_landscape[idx];
 	if(harbour!=0)
@@ -89,6 +91,7 @@ Node::Node()
       marine_landscape(0),
       is_harbour(false),
       cumftime(0),
+      cumsweptarea(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
@@ -295,6 +298,11 @@ int Node::get_cumftime () const
 	return(cumftime);
 }
 
+int Node::get_cumsweptarea () const
+{
+    return(cumsweptarea);
+}
+
 
 vector<int> Node::get_pop_names_on_node ()
 {
@@ -320,6 +328,11 @@ void Node::set_cumftime(int tot)
     cumftime = tot;
 }
 
+void Node::set_cumsweptarea(double tot)
+{
+    cumsweptarea = tot;
+}
+
 
 void Node::set_xy(double xval, double yval)
 {
@@ -332,6 +345,13 @@ void Node::add_to_cumftime(int delta_time)
 {
     lock();
 	cumftime+=delta_time;
+    unlock();
+}
+
+void Node::add_to_cumsweptarea(double sweptarea)
+{
+    lock();
+    cumsweptarea+=sweptarea;
     unlock();
 }
 
@@ -842,6 +862,19 @@ void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 	popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		cumftime << " " <<  endl;
+
+}
+
+void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export swept area on nodes for use in e.g. a GIS engine" << endl);
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  swept area
+    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        cumsweptarea << " " <<  endl;
 
 }
 

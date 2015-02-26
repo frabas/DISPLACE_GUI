@@ -2489,7 +2489,12 @@ int main(int argc, char* argv[])
 	popnodes_cumftime.open(filename.c_str());
     std::string popnodes_cumftime_filename = filename;
 
-	ofstream benthosnodes;
+    ofstream popnodes_cumsweptarea;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumsweptarea_"+namesimu+".dat";
+    popnodes_cumsweptarea.open(filename.c_str());
+    std::string popnodes_cumsweptarea_filename = filename;
+
+    ofstream benthosnodes;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
 	benthosnodes.open(filename.c_str());
 
@@ -3333,6 +3338,7 @@ int main(int argc, char* argv[])
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
+                nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
                 nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
 			}
 
@@ -3351,7 +3357,9 @@ int main(int argc, char* argv[])
             /* Flush and updates all statistics */
             if (use_gui) {
                 popnodes_cumftime.flush();
+                popnodes_cumsweptarea.flush();
                 guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
+                guiSendUpdateCommand(popnodes_cumsweptarea_filename, tstep);
 
                 popnodes_impact.flush();
                 guiSendUpdateCommand(popnodes_impact_filename, tstep);

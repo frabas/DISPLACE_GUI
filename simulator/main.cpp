@@ -1531,6 +1531,7 @@ int main(int argc, char* argv[])
     multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, "../"+inputfolder);
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, "../"+inputfolder);
+    map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, "../"+inputfolder);
     map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, "../"+inputfolder);
@@ -1556,7 +1557,8 @@ int main(int argc, char* argv[])
 		vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name);
 		vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
 		int metier_type                            = metiers_types[ i ];
-		double gear_width_a                        = metiers_gear_widths_param_a[ i ];
+        double fspeed                              = metiers_fspeed[ i ];
+        double gear_width_a                        = metiers_gear_widths_param_a[ i ];
 		double gear_width_b                        = metiers_gear_widths_param_b[ i ];
 		string gear_width_model                    = metiers_gear_widths_model_type[ i ];
         multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, "../"+inputfolder);
@@ -1566,7 +1568,8 @@ int main(int argc, char* argv[])
 			selectivity,
 			discards,
 			metier_betas,
-			gear_width_a,
+            fspeed,
+            gear_width_a,
 			gear_width_b,
 			gear_width_model,
 			loss_after_1_passage);
@@ -2486,7 +2489,12 @@ int main(int argc, char* argv[])
 	popnodes_cumftime.open(filename.c_str());
     std::string popnodes_cumftime_filename = filename;
 
-	ofstream benthosnodes;
+    ofstream popnodes_cumsweptarea;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumsweptarea_"+namesimu+".dat";
+    popnodes_cumsweptarea.open(filename.c_str());
+    std::string popnodes_cumsweptarea_filename = filename;
+
+    ofstream benthosnodes;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
 	benthosnodes.open(filename.c_str());
 
@@ -3330,6 +3338,7 @@ int main(int argc, char* argv[])
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
+                nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
                 nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
 			}
 
@@ -3348,7 +3357,9 @@ int main(int argc, char* argv[])
             /* Flush and updates all statistics */
             if (use_gui) {
                 popnodes_cumftime.flush();
+                popnodes_cumsweptarea.flush();
                 guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
+                guiSendUpdateCommand(popnodes_cumsweptarea_filename, tstep);
 
                 popnodes_impact.flush();
                 guiSendUpdateCommand(popnodes_impact_filename, tstep);

@@ -122,3 +122,14 @@ void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumftime()));
     painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
 }
+
+
+void NodeWithCumSweptAreaGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumsweptarea()));
+    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+}
+
+

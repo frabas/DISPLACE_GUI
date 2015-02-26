@@ -54,6 +54,14 @@ Content:
 Format:
 tstep   node   long    lat    cumftime
 
+* popnodes_cumsweptarea
+--------------------
+Written by: Node::export_popnodes()
+See: commons/Node.cpp
+Content:
+Format:
+tstep   node   long    lat    cumsweptarea
+
 * loglike_*.dat
 ---------------
 Written by: Vessel::export_loglike()

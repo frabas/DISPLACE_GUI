@@ -94,6 +94,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
+    mStatsLayerCumsweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Swept Area")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerCumSweptArea, mStatsLayerCumsweptarea[model_n],type != DisplaceModel::LiveModelType ? false : true);
+
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {
         addHarbour(model_n, h, true);
@@ -302,6 +305,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mGraphLayer[model_n]->clearGeometries();
     mStatsLayerBiomass[model_n]->clearGeometries();
     mStatsLayerCumftime[model_n]->clearGeometries();
+    mStatsLayerCumsweptarea[model_n]->clearGeometries();
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
     mEdgesLayer[model_n]->clear();
@@ -351,6 +355,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
     mNodeObjects[model_n].append(obj);
     mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
+    mNodeObjects[model_n].append(obj);
+    mStatsLayerCumsweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].append(obj);

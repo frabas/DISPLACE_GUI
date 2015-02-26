@@ -1406,7 +1406,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	vector<double> dis_ogive        = this->get_metier()->get_discards_ogive();
 	vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
 	vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
-	double gear_width_a             = this->get_metier()->get_gear_width_a();
+    double fspeed                   = this->get_metier()->get_fspeed();
+    double gear_width_a             = this->get_metier()->get_gear_width_a();
 	double gear_width_b             = this->get_metier()->get_gear_width_b();
 	string gear_width_model         = this->get_metier()->get_gear_width_model();
 
@@ -1417,12 +1418,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	if(gear_width_model=="a*(kW^b)")   gear_width=gear_width_a* pow(v_kw,gear_width_b);
 	if(gear_width_model=="(a*LOA)+b")  gear_width=(gear_width_a*v_vsize) +gear_width_b;
 	if(gear_width_model=="(a*kW)+b")   gear_width=(gear_width_a*v_kw) +gear_width_b;
-								 // converted to the right unit i.e. km2 and assuming fishing at 4knots
-	swept_area = gear_width/1000 * PING_RATE * 4*NAUTIC;
+                                 // converted to the right unit i.e. km2 and assuming fishing at fspeed knots
+    swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC;
     dout( cout << " for this model " << gear_width_model << " the gear width is " << gear_width
 		<< "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
 		<< ", swept area this fishing event is then:" << swept_area
         << " compared to the cell area which is " << graph_res*graph_res << endl);
+    this->get_loc()->add_to_cumsweptarea(swept_area);
+
 
 	// FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
 	// (TO DO...PER FUNCTIONAL GROUPS?)
@@ -3028,8 +3031,17 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 		}
 	}
 
-	this->set_roadmap(path);
-	min_distance.clear();
+    if(path.empty())
+    {
+    // still empty!!
+    outc(cout << "pble calculating from " << from << " to " << next_ground << endl);
+    this->move_to(nodes.at(from)) ;
+    // no path found: assume the vessel stucks at its current location
+    } else{
+        this->set_roadmap(path);
+    }
+
+    min_distance.clear();
 	previous.clear();
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground << endl);

@@ -38,7 +38,8 @@ class Metier
 		vector<double> selectivity;
 		vector<double> discards;
 		vector<double> betas_per_pop;
-		double gear_width_a;
+        double fspeed;
+        double gear_width_a;
 		double gear_width_b;
 		string gear_width_model;
 		multimap<int, double> loss_after_1_passage;
@@ -50,7 +51,8 @@ class Metier
 			vector<double> selectivity,
 			vector<double> discards,
 			vector<double> metier_betas_per_pop,
-			double gear_width_a,
+            double fspeed,
+            double gear_width_a,
 			double gear_width_b,
 			string gear_width_model,
 			multimap<int, double> loss_after_1_passage
@@ -61,7 +63,8 @@ class Metier
 		double get_target_factor();
 		vector<double> get_selectivity_ogive();
 		vector<double> get_discards_ogive();
-		double  get_gear_width_a();
+        double  get_fspeed();
+        double  get_gear_width_a();
 		double  get_gear_width_b();
 		string  get_gear_width_model();
 		multimap<int, double>  get_loss_after_1_passage();

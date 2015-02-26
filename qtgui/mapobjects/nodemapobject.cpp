@@ -46,6 +46,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithCumFTimeGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithCumSweptAreaRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithCumSweptAreaGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -116,8 +121,13 @@ void NodeMapObject::updateProperties()
         break;
 
     case GraphNodeWithCumFTimeRole:
-        text += QString("<br/><b>Fishing Effort:</b> %1<br/>")
+        text += QString("<br/><b>Fishing Effort (hours):</b> %1<br/>")
                 .arg(mNode->get_cumftime());
+        break;
+
+    case GraphNodeWithCumSweptAreaRole:
+        text += QString("<br/><b>Swept area (km2):</b> %1<br/>")
+                .arg(mNode->get_cumsweptarea());
         break;
     }
 

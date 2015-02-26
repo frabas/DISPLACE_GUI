@@ -39,6 +39,8 @@ void OutputFileParser::parse(QString path, int tstep)
         parsePopStart(&file, tstep, mModel);
     } else if (name.startsWith("popnodes_cumftime_")) {
         parsePopCumftime(&file, tstep, mModel);
+    } else if (name.startsWith("popnodes_cumsweptarea_")) {
+        parsePopCumsweptarea(&file, tstep, mModel);
     } else if (name.startsWith("popnodes_impact_")) {
         parsePopImpact(&file, tstep, mModel);
     } else if (name.startsWith("popdyn_F_")) {
@@ -118,6 +120,24 @@ void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *m
         }
     }
 }
+
+void OutputFileParser::parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model)
+{
+    QTextStream strm (file);
+
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            int id = fields[1].toInt();
+            double cumsweptarea = fields[4].toDouble();
+            model->collectPopCumsweptarea (step, id, cumsweptarea);
+        }
+    }
+}
+
 
 void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *model)
 {

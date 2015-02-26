@@ -298,7 +298,7 @@ int Node::get_cumftime () const
 	return(cumftime);
 }
 
-int Node::get_cumsweptarea () const
+double Node::get_cumsweptarea() const
 {
     return(cumsweptarea);
 }

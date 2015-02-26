@@ -84,7 +84,7 @@ class Node
 		vector<int> get_pop_names_on_node();
         const vector<double>& get_impact_on_pops ();
 		int get_cumftime() const;
-        int get_cumsweptarea() const;
+        double get_cumsweptarea() const;
         void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);

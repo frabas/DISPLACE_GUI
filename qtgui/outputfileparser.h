@@ -49,6 +49,7 @@ signals:
 protected:
     void parsePopStart(QFile *file, int tstep, DisplaceModel *model);
     void parsePopCumftime(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model);
     void parsePopImpact(QFile *file, int tstep, DisplaceModel *model);
     void parsePopdynF(QFile *file, int tstep, DisplaceModel *model);
     void parsePopdyn(QFile *file, int tstep, DisplaceModel *model);

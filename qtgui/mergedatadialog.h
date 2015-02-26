@@ -17,6 +17,13 @@ public:
 
     QString getInputFile() const;
     QString getOutputFile() const;
+    void setDefaultOutputToInput(bool yes) {
+        mDefaultOutToIn = yes;
+    }
+    void setOutputRequiresTemplate(int numtemplates) {
+        mOutRequiresTemplate = numtemplates;
+    }
+
     double getDistance() const;
 
     QChar separator() const;
@@ -27,6 +34,9 @@ private slots:
 
 private:
     Ui::MergeDataDialog *ui;
+
+    bool mDefaultOutToIn = true;
+    int mOutRequiresTemplate = 0;
 
     static double lastDistance;
 };

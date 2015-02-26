@@ -52,26 +52,24 @@ bool PopulationDistributionDataMergerStrategy::postHeaderProcessed()
             col_stock == -1 ||
             col_indiv == -1) {
         qDebug() << " ERRORRRRRR" << col_yr << col_sem << col_lat << col_lon << col_stock << col_indiv;
-        (new DataMerger::Exception(QString(QObject::tr("Some required field is missing. Please check the input file."))))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Some required field is missing. Please check the input file."))))->raise();
     }
     return true;
 }
 
-void PopulationDistributionDataMergerStrategy::processLine (QString line)
+void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString line)
 {
-//    qDebug() << "Processing: " << line;
-
     bool ok;
 
     QStringList entry = line.split(mOwner->separator(), QString::SkipEmptyParts);
 
     double lat = entry.at(col_lat).toDouble(&ok);
     if (!ok)
-        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_lat)))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
     double lon = entry.at(col_lon).toDouble(&ok);
     if (!ok)
-        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_lon)))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
 #if GEOGRAPHICLIB_VERSION_MINOR > 25
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
@@ -87,16 +85,16 @@ void PopulationDistributionDataMergerStrategy::processLine (QString line)
     Result res(num_col_indiv);
     res.year = entry.at(col_yr).toInt(&ok);
     if (!ok)
-        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_yr)))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
     res.semester = entry.at(col_sem).toInt(&ok);
     if (!ok)
-        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_sem)))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
     res.stock = getStockName(entry.at(col_stock));
 
-    if (nodes.size() > 0)
-        qDebug() << res.year << res.semester << res.stock << lat << lon << "Nodes: " << nodes.size();
+//    if (nodes.size() > 0)
+//        qDebug() << res.year << res.semester << res.stock << lat << lon << "Nodes: " << nodes.size();
 
     foreach (std::shared_ptr<NodeData> node, nodes) {
         QMutexLocker lock(&mutex);
@@ -112,9 +110,9 @@ void PopulationDistributionDataMergerStrategy::processLine (QString line)
 
             res.centered = true;
             for (int i = 0; i < num_col_indiv; ++i) {
-                res.population[i] = entry.at(col_indiv + i).toInt(&ok);
+                res.population[i] = entry.at(col_indiv + i).toDouble(&ok);
                 if (!ok)
-                    (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_indiv + i)))->raise();
+                    (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
                 res.weights[i] = -1;    // not valid, not needed - see flag
             }
 
@@ -126,9 +124,9 @@ void PopulationDistributionDataMergerStrategy::processLine (QString line)
                 vals = mResults.insert(key,res);       // weights and populations are initialized to 0, so it's ok to sum
             }
             for (int i = 0; i < num_col_indiv; ++i) {
-                res.population[i] = entry.at(col_indiv + i).toInt(&ok) + vals.value().population[i];
+                res.population[i] = entry.at(col_indiv + i).toDouble(&ok) + vals.value().population[i];
                 if (!ok)
-                    (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_indiv + i)))->raise();
+                    (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
                 res.weights[i] = 1.0/dist + vals.value().weights[i];
             }
 
@@ -150,7 +148,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
                 qDebug() << "Save Output:"  << f->fileName();
 
                 if (!f->open(QIODevice::WriteOnly | QIODevice::Truncate))
-                    (new DataMerger::Exception(f->errorString()))->raise();
+                    (new displace::DisplaceException(f->errorString()))->raise();
                 outfiles [2*stkit.value() + s] = f;
                 outstream[2*stkit.value() + s] = new QTextStream(outfiles[2*stkit.value() + s]);
 

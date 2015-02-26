@@ -1926,6 +1926,8 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     }
 
     MergeDataDialog dlg(this);
+    dlg.setOutputRequiresTemplate(2);
+    dlg.setDefaultOutputToInput(false);
     dlg.setWindowTitle(tr("Calculate Population distribution"));
     if (dlg.exec()) {
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::PopulationDistribution, currentModel.get());
@@ -1942,18 +1944,24 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
 
 void MainWindow::mergeCompleted(DataMerger *merger)
 {
+    mWaitDialog->close();
+    delete mWaitDialog;
+    mWaitDialog = 0;
+
     try {
-        merger->checkResult();
-    } catch (DataMerger::Exception &x) {
+        if (merger->checkResult()) {
+            QMessageBox::information(this, tr("Data merged"),
+                                     tr("Data has been processed correctly."));
+        } else {
+            QMessageBox::warning(this, tr("Data merge aborted"),
+                                 tr("Data merging was stopped by user request"));
+        }
+    } catch (displace::DisplaceException &x) {
         QMessageBox::warning(this, tr("Error merging files"),
                              QString(tr("An error occurred while merging files %1: %2"))
                              .arg(x.file())
                              .arg(x.message()));
     }
-
-    mWaitDialog->close();
-    delete mWaitDialog;
-    mWaitDialog = 0;
 
     delete merger;
 }

@@ -7,6 +7,7 @@
 #include <QFutureWatcher>
 #include <waitdialog.h>
 
+#include <utils/displaceexception.h>
 #include <displacemodel.h>
 
 namespace displace {
@@ -32,7 +33,7 @@ public:
     double distance() const { return mDist; }
 
     void start(QString in, QString out);
-    bool checkResult();
+    bool checkResult() throw (displace::DisplaceException);
 
     void setSeparator(QChar sep) { mSeparator = sep; }
     QChar separator() const { return mSeparator; }
@@ -40,32 +41,6 @@ public:
     bool mustExit() const { return mExit; }
 
     QList<std::shared_ptr<NodeData>> getAllNodesWithin(QPointF pt, double dist) const;
-
-    class Exception : public QException {
-    public:
-        explicit Exception (QString what)
-            : mWhat(what) {
-        }
-
-        explicit Exception (QString orffile, QString what)
-            : mFile(orffile), mWhat(what) {
-        }
-
-        void raise() const { throw *this; }
-        Exception *clone() const { return new Exception(*this); }
-
-        QString message() const {
-            return mWhat;
-        }
-        const char *what() const _GLIBCXX_USE_NOEXCEPT {
-            return mWhat.toStdString().c_str();
-        }
-        QString file() const {
-             return mFile;
-        }
-    protected:
-        QString mFile, mWhat;
-    };
 
     static const char FieldSeparator;
 
@@ -85,7 +60,7 @@ public:
         /** \brief process a single line of the file
          * \note this is executed from within multiple thread, so it must be thread-safe.
          * */
-        virtual void processLine (QString line) = 0;
+        virtual void processLine (int linenum, QString line) = 0;
         virtual bool saveOutput(QString out) = 0;
     };
 

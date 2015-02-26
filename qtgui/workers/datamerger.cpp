@@ -21,7 +21,7 @@ public:
     MergerStrategy (DataMerger *owner, DataMerger::MergeType type);
     bool processHeaderField(QString field, int i) override;
     bool postHeaderProcessed() override;
-    void processLine (QString line) override;
+    void processLine (int linenum, QString line) override;
     bool saveOutput(QString out) override;
 
     static const char *const MergedField;
@@ -66,7 +66,7 @@ DataMerger::DataMerger(MergeType type, DisplaceModel *model)
         mStrategy = new PopulationDistributionDataMergerStrategy(this, mModel);
         break;
     default:
-        (new Exception("Program error - Undefined strategy in DataMerger constructor"))->raise();
+        (new displace::DisplaceException("Program error - Undefined strategy in DataMerger constructor"))->raise();
     }
 }
 
@@ -96,13 +96,16 @@ void DataMerger::start(QString in, QString out)
 }
 
 /** \brief this function returns true.
- * The purpose of this function is simply calling QFuture::result() to check whether an exception was raised.
+ * The purpose of this function is simply calling QFuture::result() to check whether an displace::DisplaceException was raised.
  * */
-bool DataMerger::checkResult()
+bool DataMerger::checkResult() throw (displace::DisplaceException)
 {
+    // Note: mWork.result() will throw if an displace::DisplaceException has been raised. So it must be called before
+    // any other operation that returns values.
+    bool res = mWork.result();
     if (mWork.isCanceled())
         return false;
-    return mWork.result();
+    return res;
 }
 
 QList<std::shared_ptr<NodeData> > DataMerger::getAllNodesWithin(QPointF pt, double dist) const
@@ -127,7 +130,10 @@ bool DataMerger::doWork(QString in, QString out)
 
     QFile infile (in);
     if (!infile.open(QIODevice::ReadOnly))
-        (new Exception(in, infile.errorString()))->raise();
+        (new displace::DisplaceException(in, infile.errorString()))->raise();
+
+    if (mWaitDialog)
+        mWaitDialog->setFormat(tr("Reading file: %p%"));
 
     QTextStream picker(&infile);
     size_t rows = 0;
@@ -141,7 +147,6 @@ bool DataMerger::doWork(QString in, QString out)
 
     infile.seek(0);
     QTextStream instream(&infile);
-    QList<QString> data;
     QString line;
 
     try {
@@ -155,8 +160,8 @@ bool DataMerger::doWork(QString in, QString out)
         }
 
         mStrategy->postHeaderProcessed();
-    } catch (Exception ex) {
-        throw new Exception (in, ex.what());
+    } catch (displace::DisplaceException ex) {
+        throw new displace::DisplaceException (in, ex.what());
     }
 
     if (mExit) {
@@ -167,18 +172,20 @@ bool DataMerger::doWork(QString in, QString out)
     // Read the input file and calculate the field.
     int row=1;
 
-    if (mWaitDialog)
-        mWaitDialog->setFormat(tr("Reading file: %p%"));
+    struct Line {
+        int n;
+        QString str;
+    };
 
-    QStringList processQueue;
+    QList<Line> processQueue;
     while (!instream.atEnd() && !mExit) {
         line = instream.readLine();
-        if (mWaitDialog) {
-            mWaitDialog->setProgression(row);
-        }
         ++row;
 
-        processQueue.push_back(line);
+        Line l;
+        l.n = row;
+        l.str = line;
+        processQueue.push_back(l);
     }
 
     if (mExit) {
@@ -194,7 +201,7 @@ bool DataMerger::doWork(QString in, QString out)
     mInternalWatcher = new QFutureWatcher<void>;
 
     // lambda
-    QFuture<void> work = QtConcurrent::map(processQueue, [this](QString line) { this->mStrategy->processLine(line);});
+    QFuture<void> work = QtConcurrent::map(processQueue, [this](Line line) { this->mStrategy->processLine(line.n, line.str);});
     mInternalWatcher->setFuture(work);
     if (mWaitDialog) {
         mInternalWatcher->moveToThread(mWaitDialog->thread());
@@ -204,16 +211,17 @@ bool DataMerger::doWork(QString in, QString out)
 
     mInternalWatcher->waitForFinished();
 
-    if (mExit)
+    if (mExit) {
         return false;
+    }
 
     if (mWaitDialog) {
         mWaitDialog->setText(tr("Saving file..."));
     }
     try {
         mStrategy->saveOutput(out);
-    } catch (Exception ex) {
-        (new Exception (out, ex.what()))->raise();
+    } catch (displace::DisplaceException ex) {
+        (new displace::DisplaceException (out, ex.what()))->raise();
     }
 
     return true;
@@ -243,7 +251,7 @@ bool MergerStrategy::processHeaderField(QString field, int i)
 bool MergerStrategy::postHeaderProcessed()
 {
     if (col_lat == -1 || col_lon == -1) {
-        (new DataMerger::Exception(QString(QObject::tr("%1 or %2 fields are missing"))
+        (new displace::DisplaceException(QString(QObject::tr("%1 or %2 fields are missing"))
                        .arg(LatField).arg(LongField)))->raise();
     }
 
@@ -261,7 +269,7 @@ bool MergerStrategy::saveOutput(QString out)
     QFile outfile(out);
 
     if (!outfile.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        (new DataMerger::Exception(outfile.errorString()))->raise();
+        (new displace::DisplaceException(outfile.errorString()))->raise();
 
     QTextStream outstream(&outfile);
 
@@ -283,7 +291,7 @@ bool MergerStrategy::saveOutput(QString out)
     return true;
 }
 
-void MergerStrategy::processLine (QString line)
+void MergerStrategy::processLine (int linenum, QString line)
 {
     bool ok;
 
@@ -293,11 +301,11 @@ void MergerStrategy::processLine (QString line)
 
     double lat = entry.at(col_lat).toDouble(&ok);
     if (!ok)
-        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_lat)))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
     double lon = entry.at(col_lon).toDouble(&ok);
     if (!ok)
-        (new DataMerger::Exception(QString(QObject::tr("Error parsing field %1, not a double")).arg(col_lon)))->raise();
+        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
     int idx = -1;
 

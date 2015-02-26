@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QSettings>
+#include <QMessageBox>
 
 double MergeDataDialog::lastDistance = 50.0;
 
@@ -52,6 +53,14 @@ void MergeDataDialog::on_ok_clicked()
     if (ui->fileIn->text().isEmpty() || ui->fileOut->text().isEmpty())
         return;
 
+    QString tpl = QString("%") + QString::number(mOutRequiresTemplate);
+    if (mOutRequiresTemplate > 0 && !ui->fileOut->text().contains(tpl)) {
+        QMessageBox::warning(this, tr("Bad Output filename"),
+                             QString(tr("Output file names must be a template, i.e. it requires %%1 to %%2 placeholder for progressive numbers"))
+                             .arg(1).arg(mOutRequiresTemplate));
+        return;
+    }
+
     lastDistance = ui->distance->value();
     accept();
 }
@@ -70,7 +79,7 @@ void MergeDataDialog::on_browseIn_clicked()
 
     if (!file.isEmpty()) {
         ui->fileIn->setText(file);
-        if (ui->fileOut->text().isEmpty())
+        if (ui->fileOut->text().isEmpty() && mDefaultOutToIn)
             ui->fileOut->setText(file);
 
         QFileInfo info (file);

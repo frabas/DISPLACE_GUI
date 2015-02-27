@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QSettings>
+#include <QMessageBox>
 
 double MergeDataDialog::lastDistance = 50.0;
 
@@ -52,6 +53,14 @@ void MergeDataDialog::on_ok_clicked()
     if (ui->fileIn->text().isEmpty() || ui->fileOut->text().isEmpty())
         return;
 
+    QString tpl = QString("%") + QString::number(mOutRequiresTemplate);
+    if (mOutRequiresTemplate > 0 && !ui->fileOut->text().contains(tpl)) {
+        QMessageBox::warning(this, tr("Bad Output filename"),
+                             QString(tr("Output file names must be a template, i.e. it requires %%1 to %%2 placeholder for progressive numbers"))
+                             .arg(1).arg(mOutRequiresTemplate));
+        return;
+    }
+
     lastDistance = ui->distance->value();
     accept();
 }
@@ -59,7 +68,7 @@ void MergeDataDialog::on_ok_clicked()
 void MergeDataDialog::on_browseIn_clicked()
 {
     QSettings set;
-    QString dir = set.value("MergeData.path", QDir::homePath()).toString();
+    QString dir = set.value("MergeDataIn.path", QDir::homePath()).toString();
 
     if (!ui->fileIn->text().isEmpty())
         dir = ui->fileIn->text();
@@ -70,11 +79,11 @@ void MergeDataDialog::on_browseIn_clicked()
 
     if (!file.isEmpty()) {
         ui->fileIn->setText(file);
-        if (ui->fileOut->text().isEmpty())
+        if (ui->fileOut->text().isEmpty() && mDefaultOutToIn)
             ui->fileOut->setText(file);
 
         QFileInfo info (file);
-        set.setValue("MergeData.path", info.path());
+        set.setValue("MergeDataIn.path", info.path());
     }
 }
 
@@ -82,7 +91,7 @@ void MergeDataDialog::on_browseIn_clicked()
 void MergeDataDialog::on_browseOut_clicked()
 {
     QSettings set;
-    QString dir = set.value("MergeData.path", QDir::homePath()).toString();
+    QString dir = set.value("MergeDataOut.path", QDir::homePath()).toString();
 
     if (!ui->fileOut->text().isEmpty())
         dir = ui->fileOut->text();
@@ -92,9 +101,26 @@ void MergeDataDialog::on_browseOut_clicked()
                                                 dir, tr("Text files (*.txt *.dat);;All files (*.*)"));
 
     if (!file.isEmpty()) {
+        QString tpl = QString("%") + QString::number(mOutRequiresTemplate);
+        if (mOutRequiresTemplate > 0 && !file.contains(tpl)) {
+            int r = QMessageBox::question(this, tr("Template is required"),
+                                          tr("A template for multiple files is required. Do you want me to append the template placeholder to the selected file name?"),
+                                          QMessageBox::Yes, QMessageBox::No);
+            if (r == QMessageBox::Yes) {
+                QFileInfo info(file);
+                QString path = info.path();
+                QString name = info.fileName();
+
+                int pos = name.lastIndexOf(".");
+                name = name.left(pos) + "-%1.%2" + name.mid(pos);
+
+                file = path + QDir::separator() + name;
+            }
+        }
+
         ui->fileOut->setText(file);
 
         QFileInfo info (file);
-        set.setValue("MergeData.path", info.path());
+        set.setValue("MergeDataOut.path", info.path());
     }
 }

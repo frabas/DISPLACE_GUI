@@ -13,7 +13,7 @@ public:
 
     bool processHeaderField(QString field, int i) override;
     bool postHeaderProcessed() override;
-    void processLine (QString line) override;
+    void processLine (int linenum, QString line) override;
     bool saveOutput(QString out) override;
 
     static const char *const YearField;

@@ -1,4 +1,12 @@
 SOURCES= main.cpp \
+        outputmessage.cpp \
+        outputqueuemanager.cpp \
+        thread_vessels.cpp \
+        messages/exportvmslikeoutputmessage.cpp \
+        messages/movevesseloutputmessage.cpp \
+        messages/genericconsolestringoutputmessage.cpp \
+        messages/vessellogbookoutputmessage.cpp \
+        ../commons/ipcqueue.cpp \
 	../commons/readdata.cpp \
 	../commons/myutils.cpp \
 	../commons/Population.cpp \
@@ -12,11 +20,20 @@ SOURCES= main.cpp \
 	../commons/myRutils.cpp \
         ../commons/mkpath.cpp \
         ../commons/memoryinfo.cpp \
-        ../commons/options.cpp
-
+        ../commons/options.cpp \
+        ../commons/statics.cpp
 
 HEADERS= \
-	../include/readdata.h \
+        outputmessage.h \
+        outputqueuemanager.h \
+        thread_vessels.h \
+        values.h \
+        messages/exportvmslikeoutputmessage.h \
+        messages/movevesseloutputmessage.h \
+        messages/genericconsolestringoutputmessage.h \
+        messages/vessellogbookoutputmessage.h \
+        ../include/ipcqueue.h \
+        ../include/readdata.h \
 	../include/myutils.h \
 	../include/Population.h \
 	../include/Node.h \
@@ -32,12 +49,11 @@ HEADERS= \
         ../include/memoryinfo.h \
         ../include/options.h
 
-LIBS=
-CPPFLAGS=-O2 -I../include
+LIBS=-lpthread -lrt
+CPPFLAGS=-O2 -std=c++11 -I../include -I.
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
 
 displace: ${OBJS}
-	${CXX} -o $@ ${LDFLAGS} $^
-
+	${CXX} ${LDFLAGS} -o $@ $^ ${LIBS}

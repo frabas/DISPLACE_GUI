@@ -139,6 +139,19 @@ Make uninstall is used the same way.
 NOTE: 
 Be sure to use qmake for Qt5. In case of Ubuntu 14.10, be sure to install qt5-default to automatically select qmake for qt5, otherwise qmake will point to the qt4 version.
 
+* Compilation of simulator only / without QT
+
+It is possible to compile the simulation module without QT, for example on an HPC.
+
+Just enter the simulation directory and run make:
+
+$ cd simulation
+$ make
+
+Installation need to be done manually, by copying the binary into the destination directory
+
+$ sudo install -m 0755 displace /usr/local/bin/
+
 Windows
 -------
 

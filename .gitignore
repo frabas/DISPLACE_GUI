@@ -3,7 +3,7 @@
 debug/
 release/
 *.pro.user*
-simulator/*.o
+*.o
 /build
 /install
 *~

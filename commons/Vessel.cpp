@@ -1419,7 +1419,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	if(gear_width_model=="(a*LOA)+b")  gear_width=(gear_width_a*v_vsize) +gear_width_b;
 	if(gear_width_model=="(a*kW)+b")   gear_width=(gear_width_a*v_kw) +gear_width_b;
                                  // converted to the right unit i.e. km2 and assuming fishing at fspeed knots
-    swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC;
+    if(this->get_metier()->get_metier_type()==1){
+    swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC; // for trawlers
+    } else{
+    swept_area =  PI*pow((gear_width/(2*PI)),2);  // seiners and gillnetters
+    }
+
     dout( cout << " for this model " << gear_width_model << " the gear width is " << gear_width
 		<< "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
 		<< ", swept area this fishing event is then:" << swept_area

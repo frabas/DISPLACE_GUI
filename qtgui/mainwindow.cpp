@@ -1579,7 +1579,7 @@ void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const 
 
 void MainWindow::on_actionAssign_Landscape_codes_triggered()
 {
-    QString title = tr("Set Landscape codes");
+    QString title = tr("Set Landscape codes ('hab_code' field required)");
 
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
@@ -1599,7 +1599,7 @@ void MainWindow::on_actionAssign_Landscape_codes_triggered()
 
 void MainWindow::on_actionAssign_Area_codes_triggered()
 {
-    QString title = tr("Set Area codes");
+    QString title = tr("Set Area codes ('area_code' field required)");
 
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;

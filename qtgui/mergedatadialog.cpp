@@ -84,6 +84,8 @@ void MergeDataDialog::on_browseIn_clicked()
 
         QFileInfo info (file);
         set.setValue("MergeDataIn.path", info.path());
+
+        inputFileSelected();
     }
 }
 
@@ -123,4 +125,12 @@ void MergeDataDialog::on_browseOut_clicked()
         QFileInfo info (file);
         set.setValue("MergeDataOut.path", info.path());
     }
+}
+
+void MergeDataDialog::insertPluggableComponent(QWidget *widget)
+{
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    ui->componentContainer->setLayout(layout);
+
+    layout->addWidget(widget);
 }

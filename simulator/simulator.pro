@@ -9,7 +9,7 @@ INCLUDEPATH=../include
 
 include ("$$top_srcdir/localconfig.pri")
 
-QMAKE_CXXFLAGS +=
+QMAKE_CXXFLAGS += -fpermissive
 LIBS+= -L.. -ldisplacecommons
 
 unix {

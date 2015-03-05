@@ -1,5 +1,5 @@
 CONFIG -= qt
-CONFIG += c++11
+CONFIG +=
 
 TARGET=displace
 TEMPLATE=app

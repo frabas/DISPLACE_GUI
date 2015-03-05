@@ -132,7 +132,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // i.e. just arrived!
                 if(!inactive)
                 {
-                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
+                    mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
 #if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
@@ -359,12 +359,12 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
     if(export_vmslike /*&& tstep<8641*/) {
         if( vessels[ index_v ]->get_state()!=3) {
-            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
+            mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
         }
     }
 
     if (use_gui && gui_move_vessels) {
-        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
+        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
     }
 
     // realtime gnuplot

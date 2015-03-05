@@ -20,6 +20,7 @@
 #include <createshortestpathdialog.h>
 #include <csveditor.h>
 #include <mergedatadialog.h>
+#include <mergepopulationdatadialog.h>
 #include <utils/imageformathelpers.h>
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
@@ -1933,7 +1934,7 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
             return;
     }
 
-    MergeDataDialog dlg(this);
+    MergePopulationDataDialog dlg(this);
     dlg.setOutputRequiresTemplate(2);
     dlg.setDefaultOutputToInput(false);
     dlg.setWindowTitle(tr("Calculate Population distribution"));

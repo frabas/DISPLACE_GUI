@@ -31,6 +31,8 @@
 #include <memory>
 #include <ostream>
 
+#include <boost/shared_ptr.hpp>
+
 class OutputMessage;
 
 /** @brief A manager for the outputs from all the other simulator threads. */
@@ -51,7 +53,7 @@ public:
         pthread_mutex_unlock(&mMutex);
     }
 
-    void enqueue(std::shared_ptr<OutputMessage> msg);
+    void enqueue(boost::shared_ptr<OutputMessage> msg);
 private:
     /** @brief The pthread-style entry point to the thread. */
     static void *thread_trampoline(void *);
@@ -70,7 +72,7 @@ private:
     pthread_mutex_t mMutex;
     sem_t mSemaphore;
 
-    std::queue<std::shared_ptr<OutputMessage> > mQueue;
+    std::queue<boost::shared_ptr<OutputMessage> > mQueue;
 
     IpcQueue ipcQueue;
     enum ProtocolType { TextWithStdOut, Binary } mType;

@@ -34,6 +34,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <math.h>
 
 #include <cstddef>
 
@@ -42,6 +43,26 @@ using namespace std;
 //---------------------------------------//
 // general util.
 //---------------------------------------//
+
+
+template<double f(double, double, double)>
+double simpson(double a, double b, int n, double S1, double S2){
+double h=(b-a)/n;
+double sum=f(a, S1, S2)*0.5;
+for (int i=1; i<n; i++) sum+=f(a+i*h, S1, S2);
+sum+= f(b, S1, S2)*0.5;
+
+double summid=0.0;
+for(int i=1; i<=n; i++) summid+=f(a+ (i-0.5)*h, S1, S2);
+
+return (sum + 2*summid)*h/3.0;
+}
+
+
+
+double trapezoidal(double a, double b, vector <double> sel);
+double myintegrand(double x, double S1, double S2);
+
 
 void remove_dups(vector<int>& seq);
 

@@ -881,7 +881,81 @@ int main(int argc, char* argv[])
 //	print( a_split_string );
 	//system("PAUSE");
 
+
     dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " TEST MY UTILS             " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+
+    double MLS=40;
+    double L75= 46.4;
+    double L50= 27.4;
+    double S1  =L50*log(3) / (L75 - L50);
+    double S2  = S1/L50;
+    double result1 = simpson<myintegrand>(20, MLS, 100, S1, S2); // discards
+    double result2 = simpson<myintegrand>(MLS, 70, 100, S1, S2); // landings
+    dout(cout << result1 << "  " << result2 << endl);
+
+
+    vector<double> sel;
+     sel.push_back(0.4015599);
+     sel.push_back(0.4155306);
+     sel.push_back(0.4296385);
+     sel.push_back(0.4438615);
+     sel.push_back(0.4581772);
+     sel.push_back(0.4725623);
+     sel.push_back(0.4869931);
+     sel.push_back(0.5014455);
+     sel.push_back(0.5158956);
+     sel.push_back(0.5303191);
+     sel.push_back(0.5446922);
+     sel.push_back(0.5589912);
+     sel.push_back(0.5731930);
+     sel.push_back(0.5872752);
+     sel.push_back(0.6012159);
+     sel.push_back(0.6149945);
+     sel.push_back(0.6285911);
+     sel.push_back(0.6419871);
+     sel.push_back(0.6551650);
+     sel.push_back(0.6681085);
+     sel.push_back(0.6808029);
+     sel.push_back(0.6932348);
+     sel.push_back(0.7053919);
+     sel.push_back(0.7172638);
+     sel.push_back(0.7288412);
+     sel.push_back(0.7401162);
+     sel.push_back(0.7510826);
+     sel.push_back(0.7617352);
+     sel.push_back(0.7720702);
+     sel.push_back(0.7820852);
+     sel.push_back(0.7917788);
+     sel.push_back(0.8011509);
+     sel.push_back(0.8102022);
+     sel.push_back(0.8189347);
+     sel.push_back(0.8273510);
+     sel.push_back(0.8354546);
+     sel.push_back(0.8432500);
+     sel.push_back(0.8507421);
+     sel.push_back(0.8579364);
+     sel.push_back(0.8648390);
+     sel.push_back(0.8714565);
+     sel.push_back(0.8777957);
+     sel.push_back(0.8838640);
+     sel.push_back(0.8896689);
+     sel.push_back(0.8952180);
+     sel.push_back(0.9005192);
+     sel.push_back(0.9055805);
+     sel.push_back(0.9104099);
+     sel.push_back(0.9150155);
+     sel.push_back(0.9194053);
+     sel.push_back(0.9235872);
+     double result3 = trapezoidal(20-20, MLS-20, sel); // landings
+     double result4 = trapezoidal(MLS-20, 70-20, sel); // landings
+     cout << result3 << "  " << result4 << endl;
+
+
+     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
     dout(cout  << " NODE-RELATED STUFFS      " << endl);
     dout(cout  << "---------------------------" << endl);

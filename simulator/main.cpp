@@ -1604,6 +1604,7 @@ int main(int argc, char* argv[])
     multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, "../"+inputfolder);
     multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, "../"+inputfolder);
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
+    multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, "../"+inputfolder);
@@ -1630,7 +1631,8 @@ int main(int argc, char* argv[])
 		vector<double> selectivity                 = find_entries_i_d(sel_ogives, metier_name);
 		vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name);
 		vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
-		int metier_type                            = metiers_types[ i ];
+        vector<int> metier_mls_cat                 = find_entries_i_i(metiers_mls_cat, metier_name);
+        int metier_type                            = metiers_types[ i ];
         double fspeed                              = metiers_fspeed[ i ];
         double gear_width_a                        = metiers_gear_widths_param_a[ i ];
 		double gear_width_b                        = metiers_gear_widths_param_b[ i ];
@@ -1642,6 +1644,7 @@ int main(int argc, char* argv[])
 			selectivity,
 			discards,
 			metier_betas,
+            metier_mls_cat,
             fspeed,
             gear_width_a,
 			gear_width_b,
@@ -3700,6 +3703,7 @@ int main(int argc, char* argv[])
 
 			// RE-read for metiers
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
+            metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
             for (unsigned int m=0; m<metiers.size(); m++)
 			{
 				// casting m into a string
@@ -3707,7 +3711,8 @@ int main(int argc, char* argv[])
 				//out << m;
 				//string a_met = "met" + out.str();
 				vector<double> metier_betas = find_entries_i_d(metiers_betas, m);
-				metiers[m]->set_betas_per_pop(metier_betas);
+                vector<int>    metier_mls_cat = find_entries_i_i(metiers_mls_cat, m);
+                metiers[m]->set_betas_per_pop(metier_betas);
 
 			}					 // end a_met
 

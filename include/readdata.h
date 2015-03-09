@@ -102,6 +102,7 @@ map<int, int> read_metiers_types(string folder_name_parameterization, string inp
 multimap<int, double> read_sel_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_dis_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
+multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder) ;
 map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder);
 map<int, double> read_metiers_fspeed(string folder_name_parameterization, string inputfolder);
 map<int, double> read_gear_widths_param_a(string folder_name_parameterization, string inputfolder);

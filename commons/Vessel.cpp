@@ -1406,6 +1406,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	vector<double> dis_ogive        = this->get_metier()->get_discards_ogive();
 	vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
 	vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
+    vector<int> m_mls_cat_per_pop  = this->get_metier()->get_mls_cat_per_pop();
     double fspeed                   = this->get_metier()->get_fspeed();
     double gear_width_a             = this->get_metier()->get_gear_width_a();
 	double gear_width_b             = this->get_metier()->get_gear_width_b();
@@ -1577,11 +1578,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive
-                    // int MLS=populations[pop]->get_MLS();
-                    // double left_to_MLS = trapezoidal(20-20, MLS-20, sel); // landings
-                    // double right_to_MLS = trapezoidal(MLS-20, 70-20, sel); // landings
-                    // tot_landings_per_pop=tot_catch_per_pop
-                    // tot_discards_per_pop=tot_catch_per_pop* left_to_MLS/right_to_MLS
+                    // int MLS_cat=m_mls_cat_per_pop[pop];
+                    // double left_to_MLS  = trapezoidal(0, MLS_cat, sel_ogive); // landings
+                    // double right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, sel_ogive); // landings
+                    // tot_landings_per_pop=tot_catch_per_pop;
+                    // tot_discards_per_pop=tot_catch_per_pop* left_to_MLS/right_to_MLS;
                     // then disagregate per szgroup....
 
 

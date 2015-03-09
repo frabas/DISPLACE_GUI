@@ -1240,6 +1240,27 @@ multimap<int, double> read_metiers_betas(string a_semester, string folder_name_p
 }
 
 
+
+multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_mls_cat_"+a_semester+".dat";
+
+    ifstream metierspe_mls_cat_file;
+    metierspe_mls_cat_file.open(filename.c_str());
+    if(metierspe_mls_cat_file.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, int> metierspe_mls_cat;
+    fill_multimap_from_specifications_i_i(metierspe_mls_cat_file,  metierspe_mls_cat);
+    metierspe_mls_cat_file.close();
+
+    return(metierspe_mls_cat);
+}
+
+
 // FOR BENTHOS
 multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder)
 {
@@ -1619,6 +1640,7 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
 
 	return(tac_percent_simulated);
 }
+
 
 
 map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder)

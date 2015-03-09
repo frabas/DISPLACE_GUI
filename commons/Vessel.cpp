@@ -1423,7 +1423,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     if(this->get_metier()->get_metier_type()==1){
     swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC; // for trawlers
     } else{
-    swept_area =  PI*pow((gear_width/(2*PI)),2);  // seiners and gillnetters
+    swept_area =  PI*pow(((gear_width/1000)/(2*PI)),2);  // seiners and gillnetters
     }
 
     dout( cout << " for this model " << gear_width_model << " the gear width is " << gear_width
@@ -1477,6 +1477,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 			{
                 dout(cout  << "this pop " << populations.at(pop)->get_name() << " is present on this node... " << endl);
 
+
 				/*
 				// check
 				if(this->get_loc()->get_idx_node()==186 && namepop==3)
@@ -1508,13 +1509,20 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								 // init
 				vector <double>catch_per_szgroup     = Ns_at_szgroup_pop;
 								 // init
-				vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
+                vector <double>landings_per_szgroup     = Ns_at_szgroup_pop;
+                                 // init
+                vector <double>discards_per_szgroup     = Ns_at_szgroup_pop;
+                                 // init
+                vector <double>removals_per_szgroup  = Ns_at_szgroup_pop;
 								 // init
 				vector <double>pressure_per_szgroup_pop  = Ns_at_szgroup_pop;
 								 // init
 				vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
 								 //init
-				double tot            = 0;
+                double tot                          = 0;
+                double tot_avai_for_land            = 0;
+                double tot_avai_for_disc            = 0;
+                int    MLS_cat                      = m_mls_cat_per_pop[pop];
 
 				// compute available biomass via selectivity
                 for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
@@ -1522,7 +1530,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					avail_biomass[szgroup]=  Ns_at_szgroup_pop[szgroup]*wsz[szgroup]*sel_ogive[szgroup];
 								 // cumul
 					tot = tot+avail_biomass[szgroup];
-                    dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
+                    if(szgroup >=MLS_cat) {
+                        tot_avai_for_land= tot_avai_for_land+avail_biomass[szgroup];
+                    } else{
+                        tot_avai_for_disc= tot_avai_for_disc+avail_biomass[szgroup];
+                    }
+                        dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
                     dout(cout  << "sel_ogive[szgroup] " <<sel_ogive[szgroup] << endl);
                     dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
 				}
@@ -1578,53 +1591,89 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive
-                    // int MLS_cat=m_mls_cat_per_pop[pop];
-                    // double left_to_MLS  = trapezoidal(0, MLS_cat, sel_ogive); // landings
-                    // double right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, sel_ogive); // landings
-                    // tot_landings_per_pop=tot_catch_per_pop;
-                    // tot_discards_per_pop=tot_catch_per_pop* left_to_MLS/right_to_MLS;
+                     double left_to_MLS  = trapezoidal(0, MLS_cat, sel_ogive); // discards
+                     double right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, sel_ogive); // landings
+                     double tot_landings_this_pop=tot_catch_per_pop[pop];
+                     double tot_discards_this_pop=tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS;
                     // then disagregate per szgroup....
 
 
-
-                    // 3. DISSAGREGATE TOTAL CATCH IN WEIGHT INTO SZGROUP
+                    // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
 					//  AND CONVERT INTO REMOVALS IN NUMBER
 					vector <double> totN = populations[pop]->get_tot_N_at_szgroup_just_after_redistribution();
 								 // init
 					vector<double> new_avai_pops_at_selected_szgroup=avai_pops_at_selected_szgroup;
 
+
+
                     for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
 					{
 						if(avail_biomass[szgroup]!=0)
 						{
-							// compute alloc key
-								 // proportion
-							alloc_key[szgroup]=avail_biomass[szgroup] /(tot);
-                            dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
+                        // compute alloc key
+                        // proportion
+                        if(szgroup>=MLS_cat){
+                                alloc_key[szgroup]=avail_biomass[szgroup] /(tot_avai_for_land);
+                            } else{
+                                alloc_key[szgroup]=0;
+                            }
+
+                                dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
 							// disaggregate total catch (in weight) for this pop according to the alloc key
-							catch_per_szgroup[szgroup]= tot_catch_per_pop[pop]*alloc_key[szgroup];
+                            landings_per_szgroup[szgroup]= tot_landings_this_pop*alloc_key[szgroup];
 
-							// catch_per_szgroup at this point are actually landings (remenber that the R GLM was made on landings data)
-							// so we need to add the part of removals that are actually discarded by the sorting on board.
-							// TO DO HERE. discard ogive over size e.g. 98%, 98%, 50%, 10%, 0%, 0%...........
-								 // raise to account for the discard part of the catches in the removals...
+                            dout(cout << " sz " << szgroup <<
+                                    " pop " << pop <<
+                                    " tot landings this pop " << tot_landings_this_pop <<
+                                    " landings per sz "      <<  landings_per_szgroup[szgroup] << endl);
 
-                            catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
+                           //catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
+                           // replaced by: (9 March 2015)
 
-                            dout(cout  << " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << endl);
-							// then get the removals in terms of N
-							removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/wsz[szgroup];
+                       // 3bis. DISAGREGATE TOTAL DISCARDS IN WEIGHT INTO SZGROUP
+                       //  AND CONVERT INTO REMOVALS IN NUMBER
 
-                            dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
-                            //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
+                       // compute alloc key
+                       // proportion
+                       if(szgroup<MLS_cat){
+                             alloc_key[szgroup]=avail_biomass[szgroup] /(tot_avai_for_disc);
+                       } else{
+                             alloc_key[szgroup]=0;
+                       }
 
-							// finally, impact the N...
+                       dout(cout  << "alloc_key[szgroup] " <<alloc_key[szgroup] << endl);
+                       // disaggregate total catch (in weight) for this pop according to the alloc key
+                       discards_per_szgroup[szgroup]= tot_discards_this_pop*alloc_key[szgroup];
+
+                      dout(cout << " sz " << szgroup <<
+                              " pop " << pop <<
+                              " tot discards this pop " << tot_discards_this_pop <<
+                              " discards per sz "      << discards_per_szgroup[szgroup] << endl);
+
+
+                       catch_per_szgroup[szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup];
+                       dout(cout  << " sz " << szgroup <<
+                                " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << endl);
+
+                       // then get the removals in terms of N
+                       removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/wsz[szgroup];
+
+                       dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
+                       //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
+
+                       // finally, impact the N...
 							// ...but do not allow negative abundance!
 							// then correct the catches accordingly.
 							if(removals_per_szgroup[szgroup]>Ns_at_szgroup_pop[szgroup])
 							{
 								catch_per_szgroup[szgroup]=
 									(Ns_at_szgroup_pop[szgroup])*wsz[szgroup];
+                                if(szgroup>=MLS_cat){
+                                    landings_per_szgroup[szgroup]=
+                                        (Ns_at_szgroup_pop[szgroup])*wsz[szgroup];
+
+                                }
+
                                 dout (cout << "the szgroup " << szgroup <<
 									"for this pop " << pop << " is fully depleted on this node " <<
 									idx_node << "! catch is "<<
@@ -1634,16 +1683,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								// this correction (13-12-12) is needed to adjust the actual catches to this case....
 								 // nothing left!
 								new_Ns_at_szgroup_pop[szgroup]=0;
-								 // ...and reverse back to get the landings only for the logbook declaration.
-								catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
 
-                            // TO DO: use integrate.cpp instead
                             }
 							else
 							{
 								new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
-								 // ...and reverse back to get the landings only for the logbook declaration.
-								catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
 
 								/*
 								// check (before)
@@ -1722,8 +1766,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                             //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
-							// caution: cumul at the trip level
-							catch_pop_at_szgroup[pop][szgroup] += catch_per_szgroup[szgroup];
+                            // caution: cumul landings at the trip level
+                            catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup];
 
 						}
 						else
@@ -1731,13 +1775,22 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             dout(cout  << "no biomass for this szgroup to fish there! " << endl);
 							new_Ns_at_szgroup_pop[szgroup]=0;
 							catch_per_szgroup[szgroup]=0;
-							removals_per_szgroup[szgroup]=0;
+                            landings_per_szgroup[szgroup]=0;
+                            discards_per_szgroup[szgroup]=0;
+                            removals_per_szgroup[szgroup]=0;
 							// add the preexisting removals (from other vessels) on this node for this szgroup
 							vector <double>cumul_removals_at_szgroup_pop=this->get_loc()->get_removals_pops_at_szgroup(namepop);
 							removals_per_szgroup[szgroup]+=cumul_removals_at_szgroup_pop[szgroup];
 						}
 
-					}
+                    } // end szgroup
+
+   //if(tot_landings_this_pop>1000){
+   //int aa;
+   //cin >> aa;
+   //}
+
+
 					// new Ns on this node= old Ns - removals
 					this->get_loc()->set_Ns_pops_at_szgroup(  namepop, new_Ns_at_szgroup_pop);
 

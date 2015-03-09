@@ -23,6 +23,22 @@
 #include <stdlib.h>
 #include <helpers.h>
 
+
+
+double myintegrand(double x, double S1, double S2){
+return 1/(1+exp((S1-S2*x)));
+}
+
+
+double trapezoidal(double a, double b, vector <double> sel){
+double sum=sel[a]*0.5;
+for (int i=a+1; i<b; i++) sum +=sel[i];
+sum+=sel[b]*0.5;
+return sum;
+}
+
+
+
 template <typename T, size_t N>
 T* end(T (&pArray)[N])
 {

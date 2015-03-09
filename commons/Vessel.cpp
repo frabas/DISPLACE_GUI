@@ -1574,7 +1574,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					//cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
 					//}
 
-					// 3. DISSAGREGATE TOTAL CATCH IN WEIGHT INTO SZGROUP
+
+                    // compute the landings vs. discard part
+                    // in function of MLS and gear selectivity ogive
+                    // int MLS=populations[pop]->get_MLS();
+                    // double left_to_MLS = trapezoidal(20-20, MLS-20, sel); // landings
+                    // double right_to_MLS = trapezoidal(MLS-20, 70-20, sel); // landings
+                    // tot_landings_per_pop=tot_catch_per_pop
+                    // tot_discards_per_pop=tot_catch_per_pop* left_to_MLS/right_to_MLS
+                    // then disagregate per szgroup....
+
+
+
+                    // 3. DISSAGREGATE TOTAL CATCH IN WEIGHT INTO SZGROUP
 					//  AND CONVERT INTO REMOVALS IN NUMBER
 					vector <double> totN = populations[pop]->get_tot_N_at_szgroup_just_after_redistribution();
 								 // init
@@ -1595,7 +1607,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							// so we need to add the part of removals that are actually discarded by the sorting on board.
 							// TO DO HERE. discard ogive over size e.g. 98%, 98%, 50%, 10%, 0%, 0%...........
 								 // raise to account for the discard part of the catches in the removals...
-							catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
+
+                            catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
 
                             dout(cout  << " catch_per_szgroup[szgroup] " << catch_per_szgroup[szgroup] << endl);
 							// then get the removals in terms of N

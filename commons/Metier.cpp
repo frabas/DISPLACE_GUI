@@ -26,6 +26,7 @@ int _type,
 vector<double> _selectivity,
 vector<double> _discards,
 vector<double> _betas_per_pop,
+vector<int>    _mls_cat_per_pop,
 double _fspeed,
 double _gear_width_a,
 double _gear_width_b,
@@ -37,6 +38,7 @@ multimap<int, double> _loss_after_1_passage)
 	selectivity=_selectivity;
 	discards=_discards;
 	betas_per_pop=_betas_per_pop;
+    mls_cat_per_pop=_mls_cat_per_pop;
     fspeed= _fspeed;
     gear_width_a=_gear_width_a;
 	gear_width_b=_gear_width_b;
@@ -97,6 +99,13 @@ vector<double> Metier::get_betas_per_pop()
 	return(betas_per_pop);
 }
 
+vector<int> Metier::get_mls_cat_per_pop()
+{
+
+    return(mls_cat_per_pop);
+}
+
+
 double Metier::get_fspeed()
 {
 
@@ -136,3 +145,11 @@ void Metier::set_betas_per_pop(vector<double> metier_betas_per_pop)
 
 	betas_per_pop=metier_betas_per_pop;
 }
+
+
+void Metier::set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop)
+{
+
+    mls_cat_per_pop=metier_mls_cat_per_pop;
+}
+

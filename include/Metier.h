@@ -38,6 +38,7 @@ class Metier
 		vector<double> selectivity;
 		vector<double> discards;
 		vector<double> betas_per_pop;
+        vector<int> mls_cat_per_pop;
         double fspeed;
         double gear_width_a;
 		double gear_width_b;
@@ -51,6 +52,7 @@ class Metier
 			vector<double> selectivity,
 			vector<double> discards,
 			vector<double> metier_betas_per_pop,
+            vector<int> metier_mls_cat_per_pop,
             double fspeed,
             double gear_width_a,
 			double gear_width_b,
@@ -69,7 +71,9 @@ class Metier
 		string  get_gear_width_model();
 		multimap<int, double>  get_loss_after_1_passage();
 		vector<double> get_betas_per_pop();
-		void set_betas_per_pop(vector<double> metier_betas_per_pop);
+        vector<int> get_mls_cat_per_pop();
+        void set_betas_per_pop(vector<double> metier_betas_per_pop);
+        void set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop);
 
 };
 #endif							 // METIER_H

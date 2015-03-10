@@ -36,6 +36,26 @@ bool PathPenaltyDialog::isClosedForFishing()
     return ui->optClosedForFishing->isChecked();
 }
 
+bool PathPenaltyDialog::isPenaltyQ1()
+{
+    return ui->optPenaltyQ1->isChecked();
+}
+
+bool PathPenaltyDialog::isPenaltyQ2()
+{
+    return ui->optPenaltyQ2->isChecked();
+}
+
+bool PathPenaltyDialog::isPenaltyQ3()
+{
+    return ui->optPenaltyQ3->isChecked();
+}
+
+bool PathPenaltyDialog::isPenaltyQ4()
+{
+    return ui->optPenaltyQ4->isChecked();
+}
+
 double PathPenaltyDialog::weight() const
 {
     return ui->weight->value();

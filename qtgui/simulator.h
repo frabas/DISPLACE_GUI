@@ -46,6 +46,8 @@ public:
     QProcess::ProcessState processState() const;
 
     void setSimSteps(int value);
+    void setUseStaticPaths(int value);
+    void setPreexistingPathsShop(int value);
     void setVerbosityLevel(int value) { mVerbosity = value; }
 
     bool getMoveVesselOption() const;
@@ -81,6 +83,8 @@ private:
     SimulatorIpcManager *mIpcQueue;
     std::shared_ptr<DisplaceModel> mModel;
     int mSimSteps;
+    int useStaticPaths;
+    int preexistingPathsShop;
     int mLastStep;
     QString mOutputName;
     QString mSimuName;

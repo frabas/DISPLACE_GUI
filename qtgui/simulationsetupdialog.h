@@ -36,7 +36,11 @@ public:
     ~SimulationSetupDialog();
 
     void setSimulationSteps(int steps);
+    void setUseStaticPaths(int yesno);
+    void setPreexistingPathsShop(int yesno);
     int getSimulationSteps() const;
+    int getUseStaticPaths() const;
+    int getPreexistingPathsShop() const;
 
     void setSimulationOutputName(QString name);
     QString getSimulationOutputName() const;

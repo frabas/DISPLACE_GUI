@@ -732,7 +732,8 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
     return true;
 }
 
-void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing)
+void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing,
+                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4)
 {
     OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
 
@@ -744,7 +745,8 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     OGRPolygon *gpoly = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
     gpoly->addRing(gring);
 
-    addPenaltyToNodesByAddWeight(gpoly, weight, closed_for_fishing);
+    addPenaltyToNodesByAddWeight(gpoly, weight, closed_for_fishing,
+                                  onQ1, onQ2, onQ3, onQ4);
 
     delete gpoly;
 }
@@ -779,7 +781,8 @@ void DisplaceModel::setCodeFromFeature (OGRGeometry *geometry, int code, std::fu
     }
 }
 
-void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing)
+void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,
+                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4)
 {
     QList<int> penaltyNodes;
 
@@ -818,7 +821,22 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
 
     if (closed_for_fishing && penaltyNodes.size() > 0)
         mPenaltyNodes.push_back(penaltyNodes);
+
+    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ1)
+        mPenaltyNodesQ1.push_back(penaltyNodes);
+
+    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ2)
+        mPenaltyNodesQ2.push_back(penaltyNodes);
+
+    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ3)
+        mPenaltyNodesQ3.push_back(penaltyNodes);
+
+    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ4)
+        mPenaltyNodesQ4.push_back(penaltyNodes);
+
 }
+
+
 
 int DisplaceModel::getVesselCount() const
 {

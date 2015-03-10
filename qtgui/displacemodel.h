@@ -112,6 +112,10 @@ public:
 
     int getSimulationSteps() const;
     void setSimulationSteps(int value);
+    int getUseStaticPaths() const;
+    void setUseStaticPaths(int value);
+    int getPreexistingPathsShop() const;
+    void setPreexistingPathsShop(int value);
 
     /* Graphs operation */
 
@@ -360,6 +364,8 @@ private:
     int mIndex;
 
     int mSimulSteps;
+    int mUseStaticPaths;
+    int mPreexistingPathsShop;
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;

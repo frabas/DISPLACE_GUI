@@ -17,6 +17,8 @@ Simulator::Simulator()
       mIpcQueue(0),
       mModel(),
       mSimSteps(8761),
+      useStaticPaths(1),
+      preexistingPathsShop(1),
       mLastStep(-1),
       mOutputName("baseline"),
       mSimuName("simu2"),
@@ -78,9 +80,9 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     arguments.push_back("-i");
     arguments.push_back(QString::number(mSimSteps));
     arguments.push_back("-p");
-    arguments.push_back("1"); // Changeme
+    arguments.push_back(QString::number(useStaticPaths)); // Changeme
     arguments.push_back("-o");
-    arguments.push_back("1"); // Changeme
+    arguments.push_back(QString::number(preexistingPathsShop)); // Changeme
     arguments.push_back("-e");
     arguments.push_back("1"); // Changeme       // export vmslike
     arguments.push_back("-v");
@@ -210,6 +212,17 @@ void Simulator::setSimSteps(int value)
 {
     mSimSteps = value;
 }
+
+void Simulator::setUseStaticPaths(int value)
+{
+    useStaticPaths = value;
+}
+
+void Simulator::setPreexistingPathsShop(int value)
+{
+    preexistingPathsShop = value;
+}
+
 
 bool Simulator::processCodedLine(QString line)
 {

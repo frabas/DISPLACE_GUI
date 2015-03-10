@@ -29,6 +29,29 @@ int SimulationSetupDialog::getSimulationSteps() const
     return ui->simSteps->value();
 }
 
+void SimulationSetupDialog::setUseStaticPaths(int yesno)
+{
+    ui->useStaticPaths->setValue(yesno);
+}
+
+void SimulationSetupDialog::setPreexistingPathsShop(int yesno)
+{
+    ui->preexistingPathsShop->setValue(yesno);
+}
+
+
+
+int SimulationSetupDialog::getUseStaticPaths() const
+{
+    return ui->useStaticPaths->value();
+}
+
+int SimulationSetupDialog::getPreexistingPathsShop() const
+{
+    return ui->preexistingPathsShop->value();
+}
+
+
 void SimulationSetupDialog::setSimulationOutputName(QString name)
 {
     ui->outName->setText(name);

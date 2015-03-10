@@ -27,6 +27,8 @@ DisplaceModel::DisplaceModel()
       mLinkedDbName(),
       mIndex(-1),
       mSimulSteps(8761),
+      mUseStaticPaths(1),
+      mPreexistingPathsShop(1),
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
@@ -369,6 +371,26 @@ int DisplaceModel::getSimulationSteps() const
 void DisplaceModel::setSimulationSteps(int value)
 {
     mSimulSteps = value;
+}
+
+int DisplaceModel::getUseStaticPaths() const
+{
+    return mUseStaticPaths;
+}
+
+void DisplaceModel::setUseStaticPaths(int value)
+{
+    mUseStaticPaths = value;
+}
+
+int DisplaceModel::getPreexistingPathsShop() const
+{
+    return mPreexistingPathsShop;
+}
+
+void DisplaceModel::setPreexistingPathsShop(int value)
+{
+    mPreexistingPathsShop = value;
 }
 
 

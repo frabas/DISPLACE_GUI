@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/dteditor.png</file>
+        <file>icons/attributes.png</file>
+        <file>icons/tools.png</file>
+    </qresource>
+</RCC>

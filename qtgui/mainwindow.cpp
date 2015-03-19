@@ -2063,3 +2063,10 @@ void MainWindow::on_actionLoadStockNames_triggered()
         QMessageBox::information(this, tr("Load stock names"), tr("Stock names loaded correctly."));
     }
 }
+
+void MainWindow::on_actionDecision_Trees_Editor_triggered()
+{
+    QProcess *ed = new QProcess;
+    QString app = qApp->applicationDirPath() + "/dtreeeditor";
+    ed->start(app);
+}

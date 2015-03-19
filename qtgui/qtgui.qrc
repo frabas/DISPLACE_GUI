@@ -43,5 +43,6 @@
         <file>icons/separator.png</file>
         <file>icons/checks.png</file>
         <file>icons/more-vert.png</file>
+        <file>icons/dteditor.png</file>
     </qresource>
 </RCC>

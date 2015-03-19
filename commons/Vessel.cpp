@@ -1503,7 +1503,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 				vector <int>selected_szgroups        = populations[pop]->get_selected_szgroups();
 				vector <double>wsz                   = populations[pop]->get_weight_at_szgroup();
 								 // init
-				vector <double>avail_biomass         = Ns_at_szgroup_pop;
+                vector <double>all_biomass         = Ns_at_szgroup_pop;
+                                 // init
+                vector <double>avail_biomass         = Ns_at_szgroup_pop;
 								 // init
 				vector <double>alloc_key             = Ns_at_szgroup_pop;
 								 // init
@@ -1527,13 +1529,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 				// compute available biomass via selectivity
                 for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
 				{
-					avail_biomass[szgroup]=  Ns_at_szgroup_pop[szgroup]*wsz[szgroup]*sel_ogive[szgroup];
+                    all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
+                    avail_biomass[szgroup] =  all_biomass[szgroup]      *sel_ogive[szgroup]; // available for landings only
 								 // cumul
 					tot = tot+avail_biomass[szgroup];
                     if(szgroup >=MLS_cat) {
                         tot_avai_for_land= tot_avai_for_land+avail_biomass[szgroup];
                     } else{
-                        tot_avai_for_disc= tot_avai_for_disc+avail_biomass[szgroup];
+                        tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
                     }
                         dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
                     dout(cout  << "sel_ogive[szgroup] " <<sel_ogive[szgroup] << endl);
@@ -1590,9 +1593,31 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
                     // compute the landings vs. discard part
-                    // in function of MLS and gear selectivity ogive
-                     double left_to_MLS  = trapezoidal(0, MLS_cat, sel_ogive); // discards
-                     double right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, sel_ogive); // landings
+                    // in function of MLS and gear selectivity ogive and the N
+                    vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
+                    vector<int>::const_iterator max_num;
+                    for(int sizgroup=0; sizgroup<Ns_at_szgroup_pop.size(); sizgroup++) {
+                        Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
+                                 *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
+                    }
+                    int inter=0;
+                    int a_szgroup=0;
+                    while(a_szgroup<=MLS_cat){
+                       inter = a_szgroup;
+                       a_szgroup+=1;
+                    }
+                    double left_to_MLS=0;
+                    double right_to_MLS=0;
+                    if(sel_ogive.at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
+                        left_to_MLS  = trapezoidal(0, inter, sel_ogive) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
+                        right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
+
+                      } else{
+                        left_to_MLS  = trapezoidal(0, MLS_cat, sel_ogive); // discards
+                        right_to_MLS = trapezoidal(MLS_cat, inter, sel_ogive)+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
+
+                    }
+
                      double tot_landings_this_pop=tot_catch_per_pop[pop];
                      double tot_discards_this_pop=tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS;
                     // then disagregate per szgroup....
@@ -1608,7 +1633,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
 					{
-						if(avail_biomass[szgroup]!=0)
+                        if(all_biomass[szgroup]!=0)
 						{
                         // compute alloc key
                         // proportion
@@ -1622,10 +1647,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							// disaggregate total catch (in weight) for this pop according to the alloc key
                             landings_per_szgroup[szgroup]= tot_landings_this_pop*alloc_key[szgroup];
 
-                            dout(cout << " sz " << szgroup <<
+                            outc(cout << " sz " << szgroup <<
                                     " pop " << pop <<
                                     " tot landings this pop " << tot_landings_this_pop <<
-                                    " landings per sz "      <<  landings_per_szgroup[szgroup] << endl);
+                                    " landings per sz "      <<  landings_per_szgroup[szgroup] << endl
+                                       );
 
                            //catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
                            // replaced by: (9 March 2015)
@@ -1636,7 +1662,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                        // compute alloc key
                        // proportion
                        if(szgroup<MLS_cat){
-                             alloc_key[szgroup]=avail_biomass[szgroup] /(tot_avai_for_disc);
+                             alloc_key[szgroup]=all_biomass[szgroup] /(tot_avai_for_disc);
                        } else{
                              alloc_key[szgroup]=0;
                        }
@@ -1645,10 +1671,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                        // disaggregate total catch (in weight) for this pop according to the alloc key
                        discards_per_szgroup[szgroup]= tot_discards_this_pop*alloc_key[szgroup];
 
-                      dout(cout << " sz " << szgroup <<
+                      outc(
+                             cout << " sz " << szgroup <<
                               " pop " << pop <<
                               " tot discards this pop " << tot_discards_this_pop <<
-                              " discards per sz "      << discards_per_szgroup[szgroup] << endl);
+                              " discards per sz "      << discards_per_szgroup[szgroup] << endl
+                                  );
 
 
                        catch_per_szgroup[szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup];

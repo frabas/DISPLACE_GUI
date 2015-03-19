@@ -1,0 +1,18 @@
+#include "node.h"
+
+using namespace dtree;
+
+Node::Node(boost::shared_ptr<DecisionTree> node)
+    : mTree(node)
+{
+}
+
+int Node::getChildrenCount() const
+{
+    return mNodes.size();
+}
+
+boost::shared_ptr<Node> Node::getChild(int idx)
+{
+    return mNodes.at(idx);
+}

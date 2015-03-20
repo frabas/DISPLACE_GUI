@@ -3,7 +3,10 @@
 using namespace dtree;
 
 Node::Node(boost::shared_ptr<DecisionTree> node)
-    : mTree(node)
+    : mTree(node),
+      mNodes(),
+      mExtra(),
+      mVariable(VarUndefined)
 {
 }
 

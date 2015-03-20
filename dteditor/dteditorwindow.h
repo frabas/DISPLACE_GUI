@@ -24,6 +24,7 @@ protected:
 private slots:
     void on_action_Add_Node_triggered();
     void evt_scene_node_added(QPointF);
+    void evt_scene_selection_changed();
 
 private:
     Ui::DtEditorWindow *ui;

@@ -29,7 +29,8 @@ SOURCES= \
     ipcqueue.cpp \
     statics.cpp \
     dtree/decisiontree.cpp \
-    dtree/node.cpp
+    dtree/node.cpp \
+    dtree/variables.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -55,7 +56,8 @@ HEADERS= \
     ../include/version.h \
     dtree/decisiontree.h \
     dtree/node.h \
-    dtree/nodeextra.h
+    dtree/nodeextra.h \
+    dtree/variables.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

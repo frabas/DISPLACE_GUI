@@ -2,6 +2,9 @@
 #define DTEDITORWINDOW_H
 
 #include <QMainWindow>
+#include <boost/shared_ptr.hpp>
+#include <dtree/decisiontree.h>
+#include <dtgraphicsscene.h>
 
 namespace Ui {
 class DtEditorWindow;
@@ -18,8 +21,15 @@ public:
 protected:
     void closeEvent(QCloseEvent *event);
 
+private slots:
+    void on_action_Add_Node_triggered();
+    void evt_scene_node_added(QPointF);
+
 private:
     Ui::DtEditorWindow *ui;
+
+    boost::shared_ptr<dtree::DecisionTree> mTree;
+    DtGraphicsScene *mScene;
 };
 
 #endif // DTEDITORWINDOW_H

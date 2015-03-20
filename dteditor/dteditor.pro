@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = dtreeeditor
 
-INCLUDEPATH+=../include/
+INCLUDEPATH+=../include/  ../commons/
 
 include ("$$top_srcdir/localconfig.pri")
 
@@ -33,13 +33,19 @@ LIBS+=-L.. -ldisplacecommons
 
 SOURCES += \
     dteditor.cpp \
-    dteditorwindow.cpp
+    dteditorwindow.cpp \
+    graphnodeextra.cpp \
+    dtgraphicsscene.cpp \
+    graphnodeitem.cpp
 
 FORMS += \
     dteditorwindow.ui
 
 HEADERS += \
-    dteditorwindow.h
+    dteditorwindow.h \
+    graphnodeextra.h \
+    dtgraphicsscene.h \
+    graphnodeitem.h
 
 RESOURCES += \
     dteditor.qrc

@@ -16,3 +16,13 @@ boost::shared_ptr<Node> Node::getChild(int idx)
 {
     return mNodes.at(idx);
 }
+
+void Node::setExtra(boost::shared_ptr<NodeExtra> extra)
+{
+    mExtra = extra;
+}
+
+boost::shared_ptr<NodeExtra> Node::extra() const
+{
+    return mExtra;
+}

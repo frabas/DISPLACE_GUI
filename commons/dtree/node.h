@@ -8,6 +8,7 @@
 namespace dtree {
 
 class DecisionTree;
+class NodeExtra;
 
 class Node
 {
@@ -16,10 +17,13 @@ public:
 
     int getChildrenCount() const;
     boost::shared_ptr<Node> getChild(int idx);
+    void setExtra(boost::shared_ptr<NodeExtra> extra);
+    boost::shared_ptr<NodeExtra> extra() const;
 
 private:
     boost::weak_ptr<DecisionTree> mTree;
     std::vector<boost::shared_ptr<Node> > mNodes;
+    boost::shared_ptr<NodeExtra> mExtra;
 };
 
 }

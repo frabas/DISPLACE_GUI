@@ -54,7 +54,8 @@ HEADERS= \
     ../include/ipcmsgtypes.h \
     ../include/version.h \
     dtree/decisiontree.h \
-    dtree/node.h
+    dtree/node.h \
+    dtree/nodeextra.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

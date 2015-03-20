@@ -23,6 +23,8 @@ public slots:
 private:
     boost::weak_ptr<dtree::Node> mNode;
     QPolygonF mPoly;
+
+    static double sDefWidth, sDefHeight;
 };
 
 #endif // GRAPHNODEITEM_H

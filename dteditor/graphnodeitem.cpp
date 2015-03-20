@@ -1,12 +1,15 @@
 #include "graphnodeitem.h"
 
+double GraphNodeItem::sDefWidth = 100.;
+double GraphNodeItem::sDefHeight = 60.;
+
 GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, QGraphicsItem *parent)
     : QGraphicsPolygonItem(parent),
       mNode(node)
 {
-    mPoly << QPointF(-100, -100) << QPointF(100, -100)
-          << QPointF(100, 100) << QPointF(-100, 100)
-          << QPointF(-100, -100);
+    mPoly << QPointF(-sDefWidth/2, -sDefHeight/2) << QPointF(sDefWidth/2, -sDefHeight/2)
+          << QPointF(sDefWidth/2, sDefHeight/2) << QPointF(-sDefWidth/2, sDefHeight/2)
+          << QPointF(-sDefWidth/2, -sDefHeight/2);
 
     setPolygon(mPoly);
     setFlag(QGraphicsItem::ItemIsMovable, true);

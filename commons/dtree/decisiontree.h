@@ -16,6 +16,9 @@ public:
     boost::shared_ptr<Node> root() const { return mRoot; }
     boost::shared_ptr<Node> createNode() ;
 
+    void setRoot(boost::shared_ptr<Node> root);
+
+    bool isEmpty() const { return mRoot.get() == 0; }
 private:
     boost::shared_ptr<Node> mRoot;
 };

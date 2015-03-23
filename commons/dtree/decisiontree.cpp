@@ -14,3 +14,8 @@ boost::shared_ptr<Node> DecisionTree::createNode()
     return node;
 }
 
+void DecisionTree::setRoot(boost::shared_ptr<Node> root)
+{
+    mRoot = root;
+}
+

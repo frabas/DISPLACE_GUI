@@ -19,10 +19,10 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     }
     ui->nodepropVariable->setCurrentIndex(-1);
 
-    mScene = new DtGraphicsScene;
-    mScene->setSceneRect(QRectF(0, 0, 5000, 5000));
-
     mTree = boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree);
+
+    mScene = new DtGraphicsScene(mTree);
+    mScene->setSceneRect(QRectF(0, 0, 5000, 5000));
 
     connect (mScene, SIGNAL(nodeAddCompleted(QPointF)), this, SLOT(evt_scene_node_added(QPointF)));
     connect (mScene, SIGNAL(selectionChanged()), this, SLOT(evt_scene_selection_changed()));
@@ -54,18 +54,15 @@ void DtEditorWindow::closeEvent(QCloseEvent *event)
 
 void DtEditorWindow::on_action_Add_Node_triggered()
 {
-    mScene->startAddNode();
-}
-
-void DtEditorWindow::evt_scene_node_added(QPointF pt)
-{
     boost::shared_ptr<dtree::Node> newnode = mTree->createNode();
     boost::shared_ptr<dtree::GraphNodeExtra> newextra (new dtree::GraphNodeExtra);
 
     newnode->setExtra(newextra);
+    mScene->startAddNode(newnode);
+}
 
-    // add the node to the unconnected list. It will be added to tree once connected.
-    mScene->addUnconnectedNode(newnode, pt);
+void DtEditorWindow::evt_scene_node_added(QPointF pt)
+{
 }
 
 void DtEditorWindow::evt_scene_selection_changed()

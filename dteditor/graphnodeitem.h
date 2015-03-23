@@ -36,8 +36,11 @@ public:
     void childHoverExited();
 
     void update();
+
 protected:
+    void createArrow();
     QPointF getChildrenArrowLocation(int idx) const;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
     DtGraphicsScene *mScene;

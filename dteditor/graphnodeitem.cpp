@@ -11,7 +11,10 @@ double GraphNodeItem::sDefHeight = 60.;
 GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent)
     : QGraphicsItemGroup(parent),
       mScene(scene),
+      mParent(0),
+      mChildrenItems(),
       mNode(node),
+      mChildrenId(-1),
       mArrow(0),
       mHoveredChild(-1)
 {
@@ -51,7 +54,6 @@ GraphNodeItem *GraphNodeItem::getChild(int idx)
 
 void GraphNodeItem::setChild(int idx, GraphNodeItem *child)
 {
-    mChildrenId = idx;
     mChildrenItems[idx] = child;
 }
 
@@ -70,14 +72,13 @@ void GraphNodeItem::connectAsChild(GraphNodeItem *item, int idx)
 {
     setParent(item);
     item->setChild(idx, this);
+    mChildrenId = idx;
 }
 
 void GraphNodeItem::moveArrow(QPointF pt)
 {
     if (mArrow == 0) {
-        mArrow = new QGraphicsLineItem;
-        mArrow->setVisible(false);
-        scene()->addItem(mArrow);
+        createArrow();
     }
 
     QPointF p1 = mapToScene(0, -sDefHeight/2);
@@ -104,23 +105,48 @@ void GraphNodeItem::childHoverExited()
 
 void GraphNodeItem::update()
 {
-    if (getChildrenId() != -1) {
+    if (mArrow == 0)
+        createArrow();
+
+    if (getChildrenId() != -1 && mParent) {
         QPointF p1 = mapToScene(0, -sDefHeight/2);
         QPointF p2 = mParent->mapToScene(mParent->getChildrenArrowLocation(getChildrenId()));
 
         QLineF line (p1, p2);
         mArrow->setLine(line);
         mArrow->setVisible(true);
-
-        mArrow->setVisible(true);
     } else {
         mArrow->setVisible(false);
     }
 }
 
+void GraphNodeItem::createArrow()
+{
+    mArrow = new QGraphicsLineItem;
+    scene()->addItem(mArrow);
+    mArrow->setVisible(false);
+}
+
 QPointF GraphNodeItem::getChildrenArrowLocation(int idx) const
 {
     return QPointF(mChildrenBoxes[idx]->rect().center().x(), mChildrenBoxes[idx]->rect().bottom());
+}
+
+QVariant GraphNodeItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    switch (change) {
+    case ItemPositionChange:
+        foreach (GraphNodeItem*item, mChildrenItems) {
+            if (item)
+                item->update();
+        }
+        update();
+        break;
+    default:
+        break;
+    }
+
+    return QGraphicsItemGroup::itemChange(change, value);
 }
 
 QBrush GraphNodeChildBoxItem::mNormalBrush(Qt::transparent);

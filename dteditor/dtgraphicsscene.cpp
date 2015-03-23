@@ -62,8 +62,8 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     case None:
         break;
     case AddNode:
-        mAddingItem->setPos(event->scenePos());
         addItem(mAddingItem);
+        mAddingItem->setPos(event->scenePos());
 
         if (!mTree->isEmpty()) {
             mMode = AddNodeConnect;
@@ -80,6 +80,7 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (mHoveringNode != 0 && mHoveringNodeChild != -1 && ( nd = mHoveringNode->getNode()).get() != 0 && nd != mAddingNode) {
             mTree->connect(mAddingNode, nd, mHoveringNodeChild);
             mAddingItem->connectAsChild(mHoveringNode, mHoveringNodeChild);
+            mAddingItem->update();
             mAddingNode.reset();
             endMode();
         }

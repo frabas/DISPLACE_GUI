@@ -1,7 +1,7 @@
 #ifndef GRAPHNODEITEM_H
 #define GRAPHNODEITEM_H
 
-#include <QGraphicsPolygonItem>
+#include <QGraphicsItemGroup>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -9,7 +9,7 @@ namespace dtree {
     class Node;
 }
 
-class GraphNodeItem : public QGraphicsPolygonItem
+class GraphNodeItem : public QGraphicsItemGroup
 {
 public:
     explicit GraphNodeItem(boost::shared_ptr<dtree::Node> node, QGraphicsItem *parent = 0);
@@ -22,7 +22,8 @@ public slots:
 
 private:
     boost::weak_ptr<dtree::Node> mNode;
-    QPolygonF mPoly;
+    QGraphicsRectItem *mRect;
+    QVector<QGraphicsRectItem *> mChildren;
 
     static double sDefWidth, sDefHeight;
 };

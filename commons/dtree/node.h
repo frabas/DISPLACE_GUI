@@ -19,13 +19,20 @@ public:
 
     int getChildrenCount() const;
     boost::shared_ptr<Node> getChild(int idx);
+    void setChild(int idx, boost::shared_ptr<Node> child);
+
     void setExtra(boost::shared_ptr<NodeExtra> extra);
     boost::shared_ptr<NodeExtra> extra() const;
 
     Variable variable() const { return mVariable; }
     void setVariable(Variable var) { mVariable = var; }
+
+    void setParent(boost::weak_ptr<Node> node) { mParent = node; }
+    boost::weak_ptr<Node> parent() const { return mParent; }
+
 private:
     boost::weak_ptr<DecisionTree> mTree;
+    boost::weak_ptr<Node> mParent;
     std::vector<boost::shared_ptr<Node> > mNodes;
     boost::shared_ptr<NodeExtra> mExtra;
 

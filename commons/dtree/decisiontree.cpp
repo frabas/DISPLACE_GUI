@@ -17,5 +17,12 @@ boost::shared_ptr<Node> DecisionTree::createNode()
 void DecisionTree::setRoot(boost::shared_ptr<Node> root)
 {
     mRoot = root;
+//    mNodes.insert(root);
+}
+
+void DecisionTree::connect(boost::shared_ptr<Node> node, boost::shared_ptr<Node> parent, int childId)
+{
+    node->setParent(parent);
+    parent->setChild(childId, node);
 }
 

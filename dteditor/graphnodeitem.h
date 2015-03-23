@@ -19,14 +19,39 @@ public:
 
     boost::shared_ptr<dtree::Node> getNode() const { return mNode.lock(); }
 
+    // These mimics the Node's counterparts.
+    int getChildrenCount() const;
+    GraphNodeItem *getChild(int idx);
+    void setChild(int idx, GraphNodeItem *child);
+    void setParent(GraphNodeItem *child);
+    int getChildrenId() const { return mChildrenId; }
+
+    void connectAsParent(GraphNodeItem *item, int idx);
+    void connectAsChild(GraphNodeItem *item, int idx);
+
     void moveArrow(QPointF pt);
+
+    bool requiresChildrenHighlight() const;
+    void childHoverEntered(int id);
+    void childHoverExited();
+
+    void update();
+protected:
+    QPointF getChildrenArrowLocation(int idx) const;
 
 private:
     DtGraphicsScene *mScene;
+    GraphNodeItem *mParent;
+    QVector<GraphNodeItem *> mChildrenItems;
+
     boost::weak_ptr<dtree::Node> mNode;
+
     QGraphicsRectItem *mRect;
-    QVector<GraphNodeChildBoxItem *> mChildren;
+    int mChildrenId;
+    QVector<GraphNodeChildBoxItem *> mChildrenBoxes;
     QGraphicsLineItem *mArrow;
+
+    int mHoveredChild;
 
     static double sDefWidth, sDefHeight;
 };
@@ -34,13 +59,14 @@ private:
 class GraphNodeChildBoxItem : public QGraphicsRectItem
 {
 public:
-    explicit GraphNodeChildBoxItem(QRectF r, DtGraphicsScene *scene);
+    explicit GraphNodeChildBoxItem(QRectF r, GraphNodeItem *parent, int id);
 
 protected:
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-    DtGraphicsScene *mScene;
+    GraphNodeItem *mParent;
+    int mId;
 
     static QBrush mNormalBrush, mHighlightBrush;
 };

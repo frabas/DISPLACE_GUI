@@ -20,9 +20,10 @@ class DtGraphicsScene : public QGraphicsScene
 public:
     explicit DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent = 0);
 
-//    void addUnconnectedNode(boost::shared_ptr<dtree::Node> node, QPointF pos);
-
     bool requiresChildrenHighlight() const;
+
+    void nodeChildEntered (GraphNodeItem *item, int childId);
+    void nodeChildExited();
 
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -44,11 +45,14 @@ private:
     Mode mMode = None;
 
     boost::shared_ptr<dtree::DecisionTree> mTree;
-//    std::set<boost::shared_ptr<dtree::Node> > mUnconnectedNodes;
+    GraphNodeItem *mRoot;
 
     //////
     boost::shared_ptr<dtree::Node> mAddingNode;
     GraphNodeItem *mAddingItem;
+
+    GraphNodeItem *mHoveringNode;
+    int mHoveringNodeChild;
 };
 
 #endif // DTGRAPHICSSCENE_H

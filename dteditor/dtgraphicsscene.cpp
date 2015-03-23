@@ -7,13 +7,29 @@
 
 DtGraphicsScene::DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent) :
     QGraphicsScene(parent),
-    mTree(tree)
+    mTree(tree),
+    mAddingNode(),
+    mAddingItem(),
+    mHoveringNode(0),
+    mHoveringNodeChild(-1)
 {
 }
 
 bool DtGraphicsScene::requiresChildrenHighlight() const
 {
     return mMode == AddNodeConnect;
+}
+
+void DtGraphicsScene::nodeChildEntered(GraphNodeItem *item, int childId)
+{
+    mHoveringNode = item;
+    mHoveringNodeChild = childId;
+}
+
+void DtGraphicsScene::nodeChildExited()
+{
+    mHoveringNode = 0;
+    mHoveringNodeChild = -1;
 }
 
 #if 0
@@ -52,6 +68,7 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (!mTree->isEmpty()) {
             mMode = AddNodeConnect;
         } else {
+            mRoot = mAddingItem;
             mTree->setRoot(mAddingNode);
             mAddingNode.reset();
             endMode();
@@ -59,8 +76,13 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         break;
     case AddNodeConnect:
         // connect the nodes
-        mAddingNode.reset();
-        endMode();
+        boost::shared_ptr<dtree::Node> nd;
+        if (mHoveringNode != 0 && mHoveringNodeChild != -1 && ( nd = mHoveringNode->getNode()).get() != 0 && nd != mAddingNode) {
+            mTree->connect(mAddingNode, nd, mHoveringNodeChild);
+            mAddingItem->connectAsChild(mHoveringNode, mHoveringNodeChild);
+            mAddingNode.reset();
+            endMode();
+        }
         break;
     }
 

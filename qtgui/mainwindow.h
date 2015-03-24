@@ -181,8 +181,6 @@ private slots:
 
     void on_actionLoadStockNames_triggered();
 
-    void on_actionDecision_Trees_Editor_triggered();
-
 public slots:
     void end_ShortestPathCreated(bool);
 

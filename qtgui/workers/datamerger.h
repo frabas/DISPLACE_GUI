@@ -17,20 +17,11 @@ class DataMerger : public QObject
 {
     Q_OBJECT
 public:
-    class Strategy {
-    public:
-        virtual ~Strategy() {}
-        virtual void attach(DataMerger *merger) = 0;
-        virtual bool processHeaderField(QString field, int i) = 0;
-        virtual bool postHeaderProcessed() = 0;
-        /** \brief process a single line of the file
-         * \note this is executed from within multiple thread, so it must be thread-safe.
-         * */
-        virtual void processLine (int linenum, QString line) = 0;
-        virtual bool saveOutput(QString out) = 0;
+    enum MergeType {
+        Weights, Ping, PopulationDistribution
     };
 
-    explicit DataMerger(Strategy *strategy, DisplaceModel *model);
+    explicit DataMerger(MergeType type, DisplaceModel *model);
     ~DataMerger();
 
     void setWaitDialog (WaitDialog *dlg) {
@@ -61,8 +52,20 @@ private slots:
     void aborted();
 
 public:
+    class Strategy {
+    public:
+        virtual ~Strategy() {}
+        virtual bool processHeaderField(QString field, int i) = 0;
+        virtual bool postHeaderProcessed() = 0;
+        /** \brief process a single line of the file
+         * \note this is executed from within multiple thread, so it must be thread-safe.
+         * */
+        virtual void processLine (int linenum, QString line) = 0;
+        virtual bool saveOutput(QString out) = 0;
+    };
 
 private:
+    MergeType mType;
     DisplaceModel *mModel;
     double mDist;
     QChar mSeparator;

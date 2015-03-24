@@ -20,9 +20,6 @@
 #include <createshortestpathdialog.h>
 #include <csveditor.h>
 #include <mergedatadialog.h>
-#include <mergepopulationdatadialog.h>
-#include <workers/populationdistributiondatamergerstrategy.h>
-#include <workers/mergerstrategy.h>
 #include <utils/imageformathelpers.h>
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
@@ -1889,8 +1886,7 @@ void MainWindow::on_actionMergeWeights_triggered()
     MergeDataDialog dlg(this);
     dlg.setWindowTitle(tr("Merge Weights file"));
     if (dlg.exec()) {
-        displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(displace::workers::MergerStrategy::Weights);
-        displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Weights, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
 
         if (mWaitDialog != 0) delete mWaitDialog;
@@ -1912,8 +1908,7 @@ void MainWindow::on_actionMergePings_triggered()
     MergeDataDialog dlg(this);
     dlg.setWindowTitle(tr("Merge Ping file"));
     if (dlg.exec()) {
-        displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(displace::workers::MergerStrategy::Ping);
-        displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::Ping, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
 
         if (mWaitDialog != 0) delete mWaitDialog;
@@ -1938,13 +1933,12 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
             return;
     }
 
-    MergePopulationDataDialog dlg(this);
+    MergeDataDialog dlg(this);
     dlg.setOutputRequiresTemplate(2);
     dlg.setDefaultOutputToInput(false);
     dlg.setWindowTitle(tr("Calculate Population distribution"));
     if (dlg.exec()) {
-        displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());
-        displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
+        displace::workers::DataMerger *merger = new displace::workers::DataMerger(displace::workers::DataMerger::PopulationDistribution, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
 
         if (mWaitDialog != 0) delete mWaitDialog;
@@ -2062,11 +2056,4 @@ void MainWindow::on_actionLoadStockNames_triggered()
         mru.setMru(MruPathManager::StockNamesFile, file);
         QMessageBox::information(this, tr("Load stock names"), tr("Stock names loaded correctly."));
     }
-}
-
-void MainWindow::on_actionDecision_Trees_Editor_triggered()
-{
-    QProcess *ed = new QProcess;
-    QString app = qApp->applicationDirPath() + "/dtreeeditor";
-    ed->start(app);
 }

@@ -122,7 +122,6 @@
      <addaction name="actionExport_Nations"/>
     </widget>
     <addaction name="actionCSV_Editor"/>
-    <addaction name="actionDecision_Trees_Editor"/>
     <addaction name="actionExport_Map"/>
     <addaction name="menuExport_Graph_Image"/>
    </widget>
@@ -1094,15 +1093,6 @@
     <string>Load stock names...</string>
    </property>
   </action>
-  <action name="actionDecision_Trees_Editor">
-   <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
-     <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
-   </property>
-   <property name="text">
-    <string>Decision Trees Editor...</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1119,7 +1109,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../dteditor/dteditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

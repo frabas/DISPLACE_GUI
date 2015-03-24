@@ -15,12 +15,12 @@ Rationale
 
 Dynamic Individual vessel-based Spatial fishing PLAnning and effort displaCEment
 
-DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement Â–
+DISPLACE: a dynamic, individual-based model for spatial fishing planning and effort displacement –
 integrating underlying fish population models, check out the paper 2014 in 
 Canadian Journal of Fisheries and Aquatic Sciences
 
 The DISPLACE project develops and provides a platform primarily for research purposes 
-to transform the fishermenÂ’s detailed knowledge into models, evaluation tools, and methods 
+to transform the fishermen’s detailed knowledge into models, evaluation tools, and methods 
 that can provide the fisheries with research and advice. 
 The model intends to serve as a basis for decision support tools for (fishery) managers.
 
@@ -29,7 +29,7 @@ can be demonstrated. This contributes to evaluate the combined ecological and ec
 of fishery management before its implementation (i.e. impact assessment).
 
 An individual-based model (IBM) on a per-vessel basis covering several fisheries and stocks 
-is a benchmark tool capable of integrating fishermenÂ’s decision-making processes 
+is a benchmark tool capable of integrating fishermen’s decision-making processes 
 when they face changes in fishery management, economic factors influencing the fishery, 
 economic viability, and underlying stock conditions, including spatial and 
 seasonal patterns in resource availability.
@@ -52,11 +52,11 @@ commercial shipping, pipelines, cables, etc.
 
 Fishermen communities have an obvious stake in using the sea to ensure food supply with seafood 
 and should not then be left out the maritime spatial planning process. 
-As a stakeholder once said Â“if you are not at the table, you are on the menu!Â” 
+As a stakeholder once said “if you are not at the table, you are on the menu!” 
 While fishermen are therefore likely to gain at designing their own priorities areas, 
 the DISPLACE model should be a support for evaluating and balance these important areas 
 against other potential uses and the economic consequences 
-of spatial plans on fishermenÂ´s living conditions.
+of spatial plans on fishermen´s living conditions.
 
 
 How to cite
@@ -69,7 +69,7 @@ Available from: 10.1139/cjfas-2013-0126
 
 * Bastardie, F., Nielsen, J. R., Eigaard, O. R., Fock, H. O., Jonsson, P., and Bartolino, V. 
 Competition for marine space: modelling the Baltic Sea fisheries and effort displacement 
-under spatial restrictions. Â– ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.
+under spatial restrictions. – ICES Journal of Marine Science, doi: 10.1093/icesjms/fsu215.
 
 
 How to install

@@ -236,7 +236,7 @@ void guiSendCurrentStep (unsigned int tstep)
     if (use_gui) {
         ostringstream ss;
         ss << "=S" << tstep << endl;      /* use gui */
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
@@ -245,7 +245,7 @@ void guiSendUpdateCommand (const std::string &filename, int tstep)
     if (use_gui) {
         ostringstream ss;
         ss << "=U" << filename << " " << tstep << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
@@ -254,7 +254,7 @@ void guiSendMemoryInfo(const MemoryInfo &info)
     if (use_gui) {
         ostringstream ss;
         ss << "=Dm" << info.rss() << " " << info.peakRss() << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 
 }
@@ -264,7 +264,7 @@ void guiSendCapture(bool on)
     if (use_gui) {
         ostringstream ss;
         ss << "=Dc" << (on ? "+" : "-") << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }
 
@@ -2663,7 +2663,7 @@ int main(int argc, char* argv[])
 
         ostringstream os;
         os << "tstep " << tstep << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));
 
         dout(cout  << "---------------" << endl);
 
@@ -4013,7 +4013,7 @@ int main(int argc, char* argv[])
     memInfo.update();
     ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
-    mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     guiSendCapture(false);
 #endif
 

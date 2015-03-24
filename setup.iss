@@ -44,7 +44,6 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 
 [Files]
 Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\dtreeeditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qmapcontrol1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion

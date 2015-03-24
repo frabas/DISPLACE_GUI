@@ -9,9 +9,8 @@ namespace workers {
 class PopulationDistributionDataMergerStrategy : public DataMerger::Strategy
 {
 public:
-    PopulationDistributionDataMergerStrategy(DisplaceModel *model);
+    PopulationDistributionDataMergerStrategy(DataMerger *owner, DisplaceModel *model);
 
-    void attach(DataMerger *merger);
     bool processHeaderField(QString field, int i) override;
     bool postHeaderProcessed() override;
     void processLine (int linenum, QString line) override;

@@ -9,10 +9,10 @@ class DecisionTree;
 
 class DtGraphicsScene;
 
-class DtCsvExporter
+class DtCsvWriter
 {
 public:
-    DtCsvExporter();
+    DtCsvWriter();
 
     bool exportTree (QTextStream &stream, dtree::DecisionTree *tree, DtGraphicsScene *scene);
 };

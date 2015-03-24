@@ -3,7 +3,7 @@
 #include <dtree/dtnode.h>
 #include <graphnodeextra.h>
 #include <graphnodeitem.h>
-#include <dtcsvexporter.h>
+#include <dtcsvwriter.h>
 
 #include <QCloseEvent>
 #include <QSettings>
@@ -56,7 +56,7 @@ void DtEditorWindow::save(QString filename)
     }
 
     QTextStream strm(&file);
-    DtCsvExporter exporter;
+    DtCsvWriter exporter;
 
     if (!exporter.exportTree(strm, mTree.get(), mScene)) {
         QMessageBox::warning(this, tr("Save failed"),

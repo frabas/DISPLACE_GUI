@@ -1,4 +1,4 @@
-#include "dtcsvexporter.h"
+#include "dtcsvwriter.h"
 #include <graphnodeitem.h>
 
 #include <QQueue>
@@ -6,11 +6,11 @@
 #include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
 
-DtCsvExporter::DtCsvExporter()
+DtCsvWriter::DtCsvWriter()
 {
 }
 
-bool DtCsvExporter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtGraphicsScene *scene)
+bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtGraphicsScene *scene)
 {
     QQueue<GraphNodeItem*>queue;
     QQueue<int> queueid;

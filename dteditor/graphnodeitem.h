@@ -50,6 +50,7 @@ private:
     boost::weak_ptr<dtree::Node> mNode;
 
     QGraphicsRectItem *mRect;
+    QGraphicsTextItem *mText;
     int mChildrenId;
     QVector<GraphNodeChildBoxItem *> mChildrenBoxes;
     QGraphicsLineItem *mArrow;

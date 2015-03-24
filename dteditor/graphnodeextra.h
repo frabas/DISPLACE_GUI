@@ -1,7 +1,7 @@
 #ifndef GRAPHNODEEXTRA_H
 #define GRAPHNODEEXTRA_H
 
-#include <dtree/nodeextra.h>
+#include <dtree/dtnodeextra.h>
 
 namespace dtree {
 

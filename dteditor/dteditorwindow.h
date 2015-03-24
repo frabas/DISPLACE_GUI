@@ -26,6 +26,8 @@ private slots:
     void evt_scene_node_added(QPointF);
     void evt_scene_selection_changed();
 
+    void on_nodepropVariable_currentIndexChanged(int index);
+
 private:
     Ui::DtEditorWindow *ui;
 

@@ -1,5 +1,5 @@
 #include "graphnodeitem.h"
-#include <dtree/node.h>
+#include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
 
 #include <QGraphicsScene>
@@ -21,6 +21,8 @@ GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScen
     mRect = new QGraphicsRectItem();
     mRect->setRect(-sDefWidth/2, -sDefHeight/2, sDefWidth, sDefHeight - sDefHeight/3);
     addToGroup(mRect);
+
+    mText = new QGraphicsTextItem(mRect);
 
     for (int i = 0; i < node->getChildrenCount(); ++i) {
         QRectF r( -sDefWidth/2 + i*sDefWidth/node->getChildrenCount(),
@@ -118,6 +120,17 @@ void GraphNodeItem::update()
     } else {
         mArrow->setVisible(false);
     }
+
+    boost::shared_ptr<dtree::Node> node = getNode();
+    if (node && node->variable() != dtree::Variable::VarUndefined) {
+        mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
+    } else {
+        mText->setPlainText("");
+    }
+
+    double r = mText->textWidth();
+    QRectF p = mRect->rect();
+    mText->setPos(-(p.width() - r) / 2, p.top());
 }
 
 void GraphNodeItem::createArrow()

@@ -1,6 +1,6 @@
 #include "dteditorwindow.h"
 #include "ui_dteditorwindow.h"
-#include <dtree/node.h>
+#include <dtree/dtnode.h>
 #include <graphnodeextra.h>
 #include <graphnodeitem.h>
 
@@ -9,7 +9,9 @@
 
 DtEditorWindow::DtEditorWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::DtEditorWindow)
+    ui(new Ui::DtEditorWindow),
+    mTree(),
+    mScene(0)
 {
     ui->setupUi(this);
 
@@ -90,6 +92,26 @@ void DtEditorWindow::evt_scene_selection_changed()
 
                 }
             }
+        }
+    }
+}
+
+void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
+{
+    if (!mScene) return;
+
+    QList<QGraphicsItem *> selection = mScene->selectedItems();
+
+    foreach (QGraphicsItem *i, selection) {
+        GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(i);
+
+        // don't like this - TODO: fix it without using downcasting
+        if (item) {
+            boost::shared_ptr<dtree::Node> node = item->getNode();
+            if (node.get() != 0) {
+                node->setVariable(static_cast<dtree::Variable>(index));
+            }
+            item->update();
         }
     }
 }

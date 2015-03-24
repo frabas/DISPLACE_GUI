@@ -1,4 +1,5 @@
 #include "dtcsvexporter.h"
+#include <graphnodeitem.h>
 
 #include <QQueue>
 #include <dtree/decisiontree.h>
@@ -11,27 +12,32 @@ DtCsvExporter::DtCsvExporter()
 
 bool DtCsvExporter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtGraphicsScene *scene)
 {
-    QQueue<boost::shared_ptr<dtree::Node> >queue;
+    QQueue<GraphNodeItem*>queue;
     QQueue<int> queueid;
 
-    boost::shared_ptr<dtree::Node> node = tree->root();
-    if (!node)
+    GraphNodeItem *gnode = scene->root();
+    if (!gnode)
         return false;
 
-    queue.push_back(node);
+    queue.push_back(gnode);
     queueid.push_back(0);
 
     int id = 0, nid = 0;
     while (!queue.isEmpty()) {
-        node = queue.front();
+        gnode = queue.front();
         queue.pop_front();
         id = queueid.front();
         queueid.pop_front();
 
+        boost::shared_ptr<dtree::Node> node = gnode->getNode();
         stream << id << "," << dtree::VariableNames::variableName(node->variable()) << ",";
-        for (int i = 0; i < node->getChildrenCount(); ++i) {
+        // Other data
+        QPointF pos = gnode->pos();
+        stream << pos.x() << "," << pos.y() << ",";
+
+        for (int i = 0; i < gnode->getChildrenCount(); ++i) {
             ++nid;
-            boost::shared_ptr<dtree::Node> chld = node->getChild(i);
+            GraphNodeItem *chld = gnode->getChild(i);
             if (chld) {
                 stream << nid;
                 queue.push_back(chld);

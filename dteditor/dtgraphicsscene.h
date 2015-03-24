@@ -25,6 +25,8 @@ public:
     void nodeChildEntered (GraphNodeItem *item, int childId);
     void nodeChildExited();
 
+    GraphNodeItem *root() const { return mRoot; }
+
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

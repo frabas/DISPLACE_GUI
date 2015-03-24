@@ -1,5 +1,5 @@
 #include "decisiontree.h"
-#include <dtree/node.h>
+#include <dtree/dtnode.h>
 
 using namespace dtree;
 

@@ -36,7 +36,8 @@ SOURCES += \
     dteditorwindow.cpp \
     graphnodeextra.cpp \
     dtgraphicsscene.cpp \
-    graphnodeitem.cpp
+    graphnodeitem.cpp \
+    dtcsvexporter.cpp
 
 FORMS += \
     dteditorwindow.ui
@@ -45,7 +46,8 @@ HEADERS += \
     dteditorwindow.h \
     graphnodeextra.h \
     dtgraphicsscene.h \
-    graphnodeitem.h
+    graphnodeitem.h \
+    dtcsvexporter.h
 
 RESOURCES += \
     dteditor.qrc

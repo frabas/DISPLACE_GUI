@@ -3,9 +3,12 @@
 #include <dtree/dtnode.h>
 #include <graphnodeextra.h>
 #include <graphnodeitem.h>
+#include <dtcsvexporter.h>
 
 #include <QCloseEvent>
 #include <QSettings>
+#include <QFileDialog>
+#include <QMessageBox>
 
 DtEditorWindow::DtEditorWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,6 +44,24 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
 DtEditorWindow::~DtEditorWindow()
 {
     delete ui;
+}
+
+void DtEditorWindow::save(QString filename)
+{
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QMessageBox::warning(this, tr("Save failed"),
+                             QString(tr("Error writing to file: %1")).arg(file.errorString()));
+        return;
+    }
+
+    QTextStream strm(&file);
+    DtCsvExporter exporter;
+
+    if (!exporter.exportTree(strm, mTree.get(), mScene)) {
+        QMessageBox::warning(this, tr("Save failed"),
+                             QString(tr("Cannot export to csv file.")));
+    }
 }
 
 void DtEditorWindow::closeEvent(QCloseEvent *event)
@@ -114,4 +135,12 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
             item->update();
         }
     }
+}
+
+void DtEditorWindow::on_actionSave_as_triggered()
+{
+    QString file = QFileDialog::getSaveFileName(this, tr("Exporting to CSV file"));
+
+    if (!file.isEmpty())
+        save(file);
 }

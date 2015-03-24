@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -44,7 +44,7 @@
     <addaction name="action_New"/>
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
-    <addaction name="actionSa_ve_as"/>
+    <addaction name="actionSave_as"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -113,8 +113,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>86</width>
-          <height>228</height>
+          <width>79</width>
+          <height>227</height>
          </rect>
         </property>
         <attribute name="label">
@@ -126,8 +126,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>98</width>
-          <height>28</height>
+          <width>79</width>
+          <height>227</height>
          </rect>
         </property>
         <attribute name="label">
@@ -177,7 +177,7 @@
     <string>&amp;Save</string>
    </property>
   </action>
-  <action name="actionSa_ve_as">
+  <action name="actionSave_as">
    <property name="icon">
     <iconset resource="../qtgui/qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>

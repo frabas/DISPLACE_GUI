@@ -27,7 +27,10 @@ SOURCES= \
     memoryinfo.cpp \
     options.cpp \
     ipcqueue.cpp \
-    statics.cpp
+    statics.cpp \
+    dtree/decisiontree.cpp \
+    dtree/node.cpp \
+    dtree/variables.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -50,7 +53,11 @@ HEADERS= \
     ../include/guiproto_struct.h \
     ../include/ipcqueue.h \
     ../include/ipcmsgtypes.h \
-    ../include/version.h
+    ../include/version.h \
+    dtree/decisiontree.h \
+    dtree/node.h \
+    dtree/nodeextra.h \
+    dtree/variables.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

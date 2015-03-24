@@ -27,10 +27,16 @@ public:
     double getDistance() const;
 
     QChar separator() const;
+
 private slots:
     void on_ok_clicked();
     void on_browseIn_clicked();
     void on_browseOut_clicked();
+
+protected:
+    void insertPluggableComponent (QWidget *widget);
+
+    virtual void inputFileSelected() {}
 
 private:
     Ui::MergeDataDialog *ui;

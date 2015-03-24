@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DtEditorWindow</class>
+ <widget class="QMainWindow" name="DtEditorWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Decision Trees Editor</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../qtgui/qtgui.qrc">
+    <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QGraphicsView" name="treeView">
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_New"/>
+    <addaction name="action_Open"/>
+    <addaction name="action_Save"/>
+    <addaction name="actionSa_ve_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuTree">
+    <property name="title">
+     <string>&amp;Tree</string>
+    </property>
+    <addaction name="action_Add_Node"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menuTree"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QDockWidget" name="propertiesWidget">
+   <property name="windowIcon">
+    <iconset resource="dteditor.qrc">
+     <normaloff>:/icons/attributes.png</normaloff>:/icons/attributes.png</iconset>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="windowTitle">
+    <string>Node properties</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,1">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Variable</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="nodepropVariable"/>
+     </item>
+     <item>
+      <widget class="QWidget" name="nodepropDetailsContainer" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="toolsWidget">
+   <property name="windowIcon">
+    <iconset resource="dteditor.qrc">
+     <normaloff>:/icons/tools.png</normaloff>:/icons/tools.png</iconset>
+   </property>
+   <property name="windowTitle">
+    <string>Tools</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QToolBox" name="toolBox">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="colorPage">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>86</width>
+          <height>228</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Color</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="backgroundColor">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>98</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Background</string>
+        </attribute>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_Open"/>
+   <addaction name="action_Save"/>
+   <addaction name="separator"/>
+   <addaction name="action_Add_Node"/>
+  </widget>
+  <action name="action_New">
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="action_Open">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionSa_ve_as">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Sa&amp;ve as...</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="action_Add_Node">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Add Node</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../qtgui/qtgui.qrc"/>
+  <include location="dteditor.qrc"/>
+ </resources>
+ <connections/>
+</ui>

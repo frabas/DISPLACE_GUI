@@ -1,6 +1,8 @@
 #ifndef DTREEVARIABLES_H
 #define DTREEVARIABLES_H
 
+#include <string>
+
 namespace dtree {
 
 enum Variable {
@@ -15,6 +17,7 @@ enum Variable {
 class VariableNames {
 public:
     static const char *variableName(Variable);
+    static Variable variableCode (const std::string &name);
 
 private:
     static const char *const names[];

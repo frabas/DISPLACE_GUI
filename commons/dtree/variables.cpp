@@ -18,3 +18,15 @@ const char *VariableNames::variableName(Variable id)
 
     return names[id];
 }
+
+Variable VariableNames::variableCode(const std::string &name)
+{
+    int i = 0;
+    while (names[i] != 0) {
+        if (names[i] == name)
+            return static_cast<Variable>(i);
+        ++i;
+    }
+
+    return VarUndefined;
+}

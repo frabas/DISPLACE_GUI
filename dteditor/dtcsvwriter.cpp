@@ -34,6 +34,7 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
         // Other data
         QPointF pos = gnode->pos();
         stream << pos.x() << "," << pos.y() << ",";
+        stream << gnode->getChildrenCount() << ",";
 
         for (int i = 0; i < gnode->getChildrenCount(); ++i) {
             ++nid;

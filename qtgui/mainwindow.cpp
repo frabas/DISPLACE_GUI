@@ -2068,5 +2068,10 @@ void MainWindow::on_actionDecision_Trees_Editor_triggered()
 {
     QProcess *ed = new QProcess;
     QString app = qApp->applicationDirPath() + "/dtreeeditor";
+
+#ifdef __WINNT
+    app += ".exe";
+#endif
+
     ed->start(app);
 }

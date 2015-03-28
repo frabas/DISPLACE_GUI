@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/dteditor.png</file>
+        <file>icons/attributes.png</file>
+        <file>icons/tools.png</file>
+        <file>icons/add.png</file>
+        <file>icons/info.png</file>
+        <file>icons/load.png</file>
+        <file>icons/quit.png</file>
+        <file>icons/remove.png</file>
+        <file>icons/save.png</file>
+    </qresource>
+</RCC>

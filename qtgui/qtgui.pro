@@ -126,7 +126,10 @@ SOURCES += \
     shapefileoperationdialog.cpp \
     utils/mrupathmanager.cpp \
     savegraphdialog.cpp \
-    workers/populationdistributiondatamergerstrategy.cpp
+    workers/populationdistributiondatamergerstrategy.cpp \
+    mergepopulationdatadialog.cpp \
+    mergepopulationplugincomponent.cpp \
+    workers/mergerstrategy.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -144,7 +147,8 @@ FORMS += \
     csveditor.ui \
     mergedatadialog.ui \
     shapefileoperationdialog.ui \
-    savegraphdialog.ui
+    savegraphdialog.ui \
+    mergepopulationplugincomponent.ui
 
 HEADERS += \
     mainwindow.h \
@@ -226,7 +230,10 @@ HEADERS += \
     utils/mrupathmanager.h \
     savegraphdialog.h \
     workers/populationdistributiondatamergerstrategy.h \
-    utils/displaceexception.h
+    utils/displaceexception.h \
+    mergepopulationdatadialog.h \
+    mergepopulationplugincomponent.h \
+    workers/mergerstrategy.h
 
 RESOURCES += \
     qtgui.qrc

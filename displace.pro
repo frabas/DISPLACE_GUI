@@ -1,6 +1,6 @@
 TEMPLATE=subdirs
 CONFIG+=ordered
-SUBDIRS+=commons QMapControl qtgui simulator
+SUBDIRS+=commons QMapControl qtgui simulator dteditor
 
 OTHER_FILES += \
     Readme.txt \

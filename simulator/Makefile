@@ -50,7 +50,7 @@ HEADERS= \
         ../include/options.h
 
 LIBS=-lpthread -lrt
-CPPFLAGS=-O2 -std=c++11 -I../include -I.
+CPPFLAGS=-O2 -fpermissive -I../include -I.
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

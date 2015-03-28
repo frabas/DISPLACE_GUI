@@ -1,5 +1,5 @@
 CONFIG -= qt
-CONFIG += c++11
+CONFIG +=
 
 TARGET=displace
 TEMPLATE=app
@@ -9,7 +9,7 @@ INCLUDEPATH=../include
 
 include ("$$top_srcdir/localconfig.pri")
 
-QMAKE_CXXFLAGS +=
+QMAKE_CXXFLAGS += -fpermissive
 LIBS+= -L.. -ldisplacecommons
 
 unix {

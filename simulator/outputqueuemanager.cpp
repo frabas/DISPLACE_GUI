@@ -66,13 +66,13 @@ void OutputQueueManager::start()
 
 void OutputQueueManager::finish()
 {
-    enqueue(std::shared_ptr<OutputMessage>(new QuitMessage));
+    enqueue(boost::shared_ptr<OutputMessage>(new QuitMessage));
 
     void *out;
     pthread_join(mThread, &out);
 }
 
-void OutputQueueManager::enqueue(std::shared_ptr<OutputMessage> msg)
+void OutputQueueManager::enqueue(boost::shared_ptr<OutputMessage> msg)
 {
     MutexLocker locker(&mMutex);
 
@@ -105,7 +105,7 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
             unlock();
             continue;
         }
-        std::shared_ptr<OutputMessage> msg = mQueue.front();
+        boost::shared_ptr<OutputMessage> msg = mQueue.front();
         mQueue.pop();
         unlock();
 

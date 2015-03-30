@@ -4,6 +4,7 @@
 #include <graphnodeextra.h>
 #include <graphnodeitem.h>
 #include <dtcsvwriter.h>
+#include <dtcsvreader.h>
 
 #include <QCloseEvent>
 #include <QSettings>
@@ -62,6 +63,29 @@ void DtEditorWindow::save(QString filename)
         QMessageBox::warning(this, tr("Save failed"),
                              QString(tr("Cannot export to csv file.")));
     }
+}
+
+void DtEditorWindow::open(QString filename)
+{
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, tr("Open failed"),
+                             QString(tr("Error Opening file: %1")).arg(file.errorString()));
+        return;
+    }
+
+    QTextStream strm(&file);
+    DtCsvReader reader;
+
+    boost::shared_ptr<dtree::DecisionTree> tree;
+    if (!reader.readTree(strm, &tree, mScene)) {
+        QMessageBox::warning(this, tr("Load failed"),
+                             QString(tr("Cannot export to csv file.")));
+        return;
+    }
+    mTree = tree;
+
+
 }
 
 void DtEditorWindow::closeEvent(QCloseEvent *event)
@@ -143,4 +167,12 @@ void DtEditorWindow::on_actionSave_as_triggered()
 
     if (!file.isEmpty())
         save(file);
+}
+
+void DtEditorWindow::on_action_Open_triggered()
+{
+    QString file = QFileDialog::getOpenFileName(this, tr("Exporting to CSV file"));
+
+    if (!file.isEmpty())
+        open(file);
 }

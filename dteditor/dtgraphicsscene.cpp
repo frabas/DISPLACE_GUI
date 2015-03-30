@@ -8,6 +8,7 @@
 DtGraphicsScene::DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent) :
     QGraphicsScene(parent),
     mTree(tree),
+    mRoot(0),
     mAddingNode(),
     mAddingItem(),
     mHoveringNode(0),
@@ -30,6 +31,12 @@ void DtGraphicsScene::nodeChildExited()
 {
     mHoveringNode = 0;
     mHoveringNodeChild = -1;
+}
+
+void DtGraphicsScene::addItemAsRoot(GraphNodeItem *item)
+{
+    addItem(item);
+    mRoot = item;
 }
 
 #if 0
@@ -62,17 +69,17 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     case None:
         break;
     case AddNode:
-        addItem(mAddingItem);
-        mAddingItem->setPos(event->scenePos());
-
         if (!mTree->isEmpty()) {
+            addItem(mAddingItem);
             mMode = AddNodeConnect;
         } else {
+            addItemAsRoot(mAddingItem);
             mRoot = mAddingItem;
             mTree->setRoot(mAddingNode);
             mAddingNode.reset();
             endMode();
         }
+        mAddingItem->setPos(event->scenePos());
         break;
     case AddNodeConnect:
         // connect the nodes

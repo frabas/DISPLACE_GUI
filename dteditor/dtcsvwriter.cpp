@@ -22,6 +22,7 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
         return false;
 
     stream << "#DTreeVersion: " << VERSION << endl;
+    stream << "# id,variable,posx,posy,nchld,children..." << endl;
 
     queue.push_back(gnode);
     queueid.push_back(0);

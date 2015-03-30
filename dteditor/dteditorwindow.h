@@ -20,6 +20,7 @@ public:
 
 protected:
     void save(QString filename);
+    void open(QString filename);
     void closeEvent(QCloseEvent *event);
 
 private slots:
@@ -28,6 +29,8 @@ private slots:
     void evt_scene_selection_changed();
     void on_nodepropVariable_currentIndexChanged(int index);
     void on_actionSave_as_triggered();
+
+    void on_action_Open_triggered();
 
 private:
     Ui::DtEditorWindow *ui;

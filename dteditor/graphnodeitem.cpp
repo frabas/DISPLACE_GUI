@@ -68,6 +68,7 @@ void GraphNodeItem::connectAsParent(GraphNodeItem *item, int idx)
 {
     setChild(idx, item);
     item->setParent(this);
+    item->mChildrenId = idx;
 }
 
 void GraphNodeItem::connectAsChild(GraphNodeItem *item, int idx)
@@ -136,7 +137,7 @@ void GraphNodeItem::update()
 void GraphNodeItem::createArrow()
 {
     mArrow = new QGraphicsLineItem;
-    scene()->addItem(mArrow);
+    mScene->addItem(mArrow);
     mArrow->setVisible(false);
 }
 

@@ -22,8 +22,6 @@ public:
     // These mimics the Node's counterparts.
     int getChildrenCount() const;
     GraphNodeItem *getChild(int idx);
-    void setChild(int idx, GraphNodeItem *child);
-    void setParent(GraphNodeItem *child);
     int getChildrenId() const { return mChildrenId; }
 
     void connectAsParent(GraphNodeItem *item, int idx);
@@ -38,6 +36,9 @@ public:
     void update();
 
 protected:
+    void setChild(int idx, GraphNodeItem *child);
+    void setParent(GraphNodeItem *child);
+
     void createArrow();
     QPointF getChildrenArrowLocation(int idx) const;
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);

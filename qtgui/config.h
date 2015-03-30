@@ -27,6 +27,7 @@
 class Config
 {
     int nbpops;
+    int nbbenthospops;
     int szGroups;
 
     QList <int> m_implicit_pops;
@@ -46,6 +47,8 @@ public:
 
     int getNbpops() const;
     void setNbpops(int value);
+    int getNbbenthospops() const;
+    void setNbbenthospops(int value);
     const QList<int> &implicit_pops() const;
     void setImplicit_pops(const QList<int> &implicit_pops);
     const QList<double> &calib_oth_landings() const;

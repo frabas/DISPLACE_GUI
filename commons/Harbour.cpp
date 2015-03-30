@@ -28,12 +28,13 @@ int _harbour,
 int _code_area,
 int _code_landscape,
 int nbpops,
+int nbbenthospops,
 int nbszgroups,
 string _name,
 //multimap<string, double> _mean_fish_price_per_met_per_pop,
 multimap<int, double> _mean_fish_price_per_pop_per_cat,
 map<string, double> _fuelprice)
-: Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, nbpops, nbszgroups)
+: Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
 	//mean_fish_price_per_met_per_pop= _mean_fish_price_per_met_per_pop;
@@ -55,7 +56,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(int idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0)
 {
 
 }

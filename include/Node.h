@@ -38,12 +38,12 @@ class Node
 
 		/**  constructor */
 		Node ();
-		Node (int idx_node, double xval, double yval, int _harbour, int _code_area, int _marine_landscape, int nbpops, int nbszgroups);
+        Node (int idx_node, double xval, double yval, int _harbour, int _code_area, int _marine_landscape, int nbpops, int nbbenthospops,  int nbszgroups);
         Node (int idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
             const vector<int> &graph_point_code_area,
             const vector<int> &graph_marine_landscape,
-            int nbpops,  int nbszgroups);
+            int nbpops,  int nbbenthospops, int nbszgroups);
 
 		/**  destructor */
 		~Node();
@@ -119,6 +119,7 @@ class Node
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
         int get_nbpops() const { return m_nbpops; }
+        int get_nbbenthospops() const { return m_nbbenthospops; }
         int get_nszgroups() const { return m_nszgrp; }
 
         void set_is_harbour(int id);
@@ -151,6 +152,7 @@ private:
 		vector<double> benthos_tot_biomass;
 
         int m_nbpops;
+        int m_nbbenthospops;
         int m_nszgrp;
 
         pthread_mutex_t mutex;

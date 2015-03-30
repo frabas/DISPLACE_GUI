@@ -52,6 +52,7 @@ public:
         GraphNodeWithCumFTimeRole,
         GraphNodeWithCumSweptAreaRole,
         GraphNodeWithPopImpact,
+        GraphNodeWithBenthosBiomass
     };
 
     NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node);

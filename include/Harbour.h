@@ -42,7 +42,8 @@ class Harbour : public Node
 			int _code_area,
 			int _code_landscape,
 			int nbpops,
-			int nbszgroups,
+            int nbbenthospops,
+            int nbszgroups,
 			string _name,
 		//multimap<string, double> mean_fish_price_per_met_per_pop,
 			multimap<int, double> mean_fish_price_per_pop_per_cat,
@@ -64,24 +65,6 @@ class Harbour : public Node
 		//multimap<string, double> mean_fish_price_per_met_per_pop;
 		multimap<int, double> mean_fish_price_per_pop_per_cat;
 
-		// serialization in xml with boost
-		/*
-		   friend class boost::serialization::access;
-					  template<class Archive>
-					  void serialize(Archive & ar, const unsigned int version)
-					  {
-					  // method 1 : invoke base class serialization
-					  boost::serialization::base_object<Node>(*this);
-					  // method 2 : explicitly register base/derived relationship
-					  //boost::serialization::void_cast_register<Harbour, Node>(
-					  // static_cast<Node *>(NULL),
-					  //  static_cast<Harbour *>(NULL)
-					 //);
-
-					   ar & boost::serialization::make_nvp("fuelprice", fuelprice);
-					   ar & boost::serialization::make_nvp("mean_fish_price_per_met_per_pop", mean_fish_price_per_met_per_pop);
-					  }
-		*/
 
 };
 #endif							 // HARBOUR_H

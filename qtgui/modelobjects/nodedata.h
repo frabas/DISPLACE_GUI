@@ -80,6 +80,7 @@ public:
     DisplaceModel *getModel() const { return mModel; }
 
     int getPopCount() const;
+    int getBenthosPopCount() const;
     void setPop(int pop, double v);
     void setPopTot(double tot);
     void setPop(QList<double> v, double tot);
@@ -99,6 +100,11 @@ public:
     void setImpact(int pop, double impact);
     double getImpact(int pop) const {
         return mImpact[pop];
+    }
+
+    void setBenthosBiomass(int func, double benthosbiomass);
+    double getBenthosBiomass(int func) const {
+        return mBenthosBiomass[func];
     }
 
     int getHarbourId() const;
@@ -127,6 +133,7 @@ private:
     double mPopWTot;
 
     double *mImpact;
+    double *mBenthosBiomass;
 
     AdiacencyList mAdiacency;
 };

@@ -130,6 +130,7 @@ bool DisplaceModel::load(QString path)
         }
         mInterestingHarb = mConfig.m_interesting_harbours;
 
+
         loadNodes();
         loadVessels();
         loadGraphs();
@@ -505,6 +506,14 @@ void DisplaceModel::collectPopImpact(int step, int node_idx, int popid, double i
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBenthosBiomass(funcid, benthosbiomass);
+    mNodesStatsDirty = true;
+}
+
+
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
     checkStatsCollection(step);
@@ -606,7 +615,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -871,6 +880,11 @@ int DisplaceModel::getPopulationsCount() const
     return mConfig.getNbpops();
 }
 
+int DisplaceModel::getBenthosPopulationsCount() const
+{
+    return mConfig.getNbbenthospops();
+}
+
 HarbourStats DisplaceModel::retrieveHarbourIdxStatAtStep(int idx, int step)
 {
     if (mModelType != OfflineModelType || !mDb) {
@@ -989,6 +1003,7 @@ bool DisplaceModel::loadNodes()
     int a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
+    int nbbenthospops = mConfig.getNbbenthospops();
     string a_quarter= "quarter1";// start quarter
 
     // input data, coord nodes of the graph
@@ -1112,7 +1127,6 @@ bool DisplaceModel::loadNodes()
                 }
 
             }
-
             std::shared_ptr<Harbour> h (new Harbour(i,
                                        graph_coord_x[i],
                                        graph_coord_y[i],
@@ -1120,6 +1134,7 @@ bool DisplaceModel::loadNodes()
                                        graph_point_code_area[i],
                                        graph_point_code_landscape[i],
                                        nbpops,
+                                       nbbenthospops,
                                        NBSZGROUP,
                                        a_name,
                                        //prices,
@@ -1142,6 +1157,7 @@ bool DisplaceModel::loadNodes()
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
                                  nbpops,
+                                 nbbenthospops,
                                  NBSZGROUP));
             std::shared_ptr<NodeData> n(new NodeData(nd, this));
 

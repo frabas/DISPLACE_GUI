@@ -22,6 +22,7 @@ const QString DbHelper::TBL_META = "Metadata";
 const QString DbHelper::TBL_NODES = "Nodes";
 const QString DbHelper::TBL_NODES_STATS = "NodesStats";
 const QString DbHelper::TBL_POPNODES_STATS = "PopNodesStats";
+const QString DbHelper::TBL_BENTHOSPOPNODES_STATS = "BenthosPopNodesStats";
 const QString DbHelper::TBL_POP_STATS = "PopStats";
 const QString DbHelper::TBL_POPSZ_STATS = "PopStatsSz";
 const QString DbHelper::TBL_VESSELS = "VesselsNames";
@@ -107,18 +108,23 @@ void DbHelper::removeAllNodesDetails()
 
 void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > &nodes)
 {
-    QSqlQuery q(mDb), sq(mDb);
+    QSqlQuery q(mDb), sq(mDb), sq2(mDb);
+    cout << "hello" << endl;
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
               + "(nodeid,tstep,cumftime,cumsweptarea, totpop,totpopw) "
-              + "VALUES (?,?,?,?,?)");
+              + "VALUES (?,?,?,?,?,?)");
 
     DB_ASSERT(r,q);
 
     r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
         + "(statid,tstep,nodeid,popid,pop,popw,impact) VALUES(?,?,?,?,?,?,?)");
     DB_ASSERT(r,sq);
+
+    r = sq2.prepare("INSERT INTO " + TBL_BENTHOSPOPNODES_STATS
+        + "(statid,tstep,nodeid,benthosbiomass) VALUES(?,?,?,?)");
+    DB_ASSERT(r,sq2);
 
     foreach (std::shared_ptr<NodeData> n, nodes) {
         q.addBindValue(n->get_idx_node());
@@ -142,8 +148,20 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
             sq.addBindValue(n->getPopW(i));
             sq.addBindValue(n->getImpact(i));
 
+
             res = sq.exec();
             DB_ASSERT(res,sq);
+        }
+
+
+        for (int j = 0; j < n->getBenthosPopCount(); ++j) {
+            sq2.addBindValue(statid);
+            sq2.addBindValue(tstep);
+            sq2.addBindValue(n->get_idx_node());
+            sq2.addBindValue(n->getBenthosBiomass(j));
+
+            res = sq2.exec();
+            DB_ASSERT(res,sq2);
         }
     }
 }
@@ -294,6 +312,8 @@ void DbHelper::removeAllStatsData()
     DB_ASSERT(res,q);
     res = q.exec("DELETE FROM " + TBL_POPNODES_STATS);
     DB_ASSERT(res,q);
+    res = q.exec("DELETE FROM " + TBL_BENTHOSPOPNODES_STATS);
+    DB_ASSERT(res,q);
     res = q.exec("DELETE FROM " + TBL_POP_STATS);
     DB_ASSERT(res,q);
     res = q.exec("DELETE FROM " + TBL_POPSZ_STATS);
@@ -432,6 +452,7 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         int landscape = q.value(5).toInt();
 
         int nbpops = model->getNBPops();
+        int nbbenthospops = model->getNBBenthosPops();
         int szgroup = model->getSzGrupsCount();
         QString name = q.value(6).toString();
 
@@ -442,9 +463,9 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;
         if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, szgroup, name.toStdString(),a,b));
+            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, nbbenthospops, szgroup, name.toStdString(),a,b));
         } else {
-            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape, nbpops, szgroup));
+            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape, nbpops, nbbenthospops,  szgroup));
         }
         std::shared_ptr<NodeData> n(new NodeData(nd, model));
 
@@ -542,7 +563,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         }
     }
 
-    q.prepare ("SELECT nodeid,popid,pop,popw,impact FROM " + TBL_POPNODES_STATS
+    q.prepare ("SELECT nodeid,popid,pop,popw,impact, benthosbiomass FROM " + TBL_POPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -554,11 +575,13 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double val = q.value(2).toDouble();
         double valw = q.value(3).toDouble();
         double impact = q.value(4).toDouble();
+        double benthosbiomass = q.value(5).toDouble();
 
         if (nid < nodes.size()) {
             nodes.at(nid)->setPop(pid,val);
             nodes.at(nid)->setPopW(pid,valw);
             nodes.at(nid)->setImpact(pid,impact);
+            nodes.at(nid)->setBenthosBiomass(0,benthosbiomass);
         }
     }
     return true;
@@ -926,7 +949,8 @@ bool DbHelper::checkNodesStats(int version)
                + "popid INTEGER,"
                + "pop REAL,"
                + "popw REAL,"
-               + "impact REAL"
+               + "impact REAL,"
+               + "benthosbiomass REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }

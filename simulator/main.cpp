@@ -538,6 +538,8 @@ int main(int argc, char* argv[])
 	// a mistake in these files are of great consequences.
 	string a_graph_name="a_graph";
 
+    int nbbenthospops = 1;
+
 	// config at the simusspe level
     read_config_file (
 		folder_name_parameterization,
@@ -968,7 +970,7 @@ int main(int argc, char* argv[])
 #endif
 
 	// check the class Node
-	Node node (1, 1.0, 1.0, 0, 0, 0, nbpops, 5);
+    Node node (1, 1.0, 1.0, 0, 0, 0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
         << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
@@ -1097,6 +1099,7 @@ int main(int argc, char* argv[])
 
 			}
 
+
 			nodes[i] =    (new Harbour(i,
 				graph_coord_x[i],
 				graph_coord_y[i],
@@ -1104,6 +1107,7 @@ int main(int argc, char* argv[])
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
 				nbpops,
+                nbbenthospops,
 				NBSZGROUP,
 				a_name,
                 fishprices_each_species_per_cat,
@@ -1123,6 +1127,7 @@ int main(int argc, char* argv[])
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
 				nbpops,
+                nbbenthospops,
 				NBSZGROUP));
             dout (cout <<  nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
                 << " " << nodes[i]->get_code_area() << endl);
@@ -2574,6 +2579,7 @@ int main(int argc, char* argv[])
     ofstream benthosnodes;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
 	benthosnodes.open(filename.c_str());
+    std::string popnodes_benthos_filename = filename;
 
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_cpue"+namesimu+".dat";
 	freq_cpue.open(filename.c_str());
@@ -3440,6 +3446,9 @@ int main(int argc, char* argv[])
 
                 popnodes_impact.flush();
                 guiSendUpdateCommand(popnodes_impact_filename, tstep);
+
+                benthosnodes.flush();
+                guiSendUpdateCommand(popnodes_benthos_filename, tstep);
 
                 popnodes_inc.flush();
                 guiSendUpdateCommand(popnodes_inc_filename, tstep);

@@ -14,6 +14,7 @@
 
 Config::Config()
     : nbpops(0),
+      nbbenthospops(0),
       szGroups(0),
       m_implicit_pops(),
       m_calib_oth_landings(),
@@ -70,6 +71,17 @@ void Config::setNbpops(int value)
 {
     nbpops = value;
 }
+
+int Config::getNbbenthospops() const
+{
+    return nbbenthospops;
+}
+
+void Config::setNbbenthospops(int value)
+{
+    nbbenthospops = value;
+}
+
 
 int Config::getSzGroups() const
 {
@@ -133,6 +145,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     Config config;
 
     config.szGroups = NBSZGROUP;
+    config.nbbenthospops = 1;
 
     std::vector <int> implicit_pops;
     std::vector <int> implicit_harbours;

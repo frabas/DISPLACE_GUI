@@ -150,6 +150,7 @@ private:
     static const QString TBL_NODES;
     static const QString TBL_NODES_STATS;
     static const QString TBL_POPNODES_STATS;
+    static const QString TBL_BENTHOSPOPNODES_STATS;
     static const QString TBL_POP_STATS;
     static const QString TBL_POPSZ_STATS;
     static const QString TBL_VESSELS;

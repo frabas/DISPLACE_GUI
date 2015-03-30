@@ -28,7 +28,7 @@
 
 #define NBSZGROUP 14
 
-Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, int nbpops, int nbszgroups)
+Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, int nbpops,int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
 	idx_node= idx;
@@ -49,17 +49,19 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 	}
 
     m_nbpops = nbpops;
+    m_nbbenthospops = nbbenthospops;
     m_nszgrp = nbszgroups;
 }
 
 
 Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
            const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
-           const vector<int> &graph_point_marine_landscape, int nbpops, int nbszgroups)
+           const vector<int> &graph_point_marine_landscape, int nbpops, int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
 
     UNUSED(nbpops);
+    UNUSED(nbbenthospops);
     UNUSED(nbszgroups);
 
     idx_node= idx;
@@ -102,6 +104,7 @@ Node::Node()
       pop_names_on_node(),
       benthos_tot_biomass(),
       m_nbpops(0),
+      m_nbbenthospops(0),
       m_nszgrp(0)
 {
     pthread_mutex_init(&mutex, 0);

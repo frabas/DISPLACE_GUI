@@ -106,6 +106,9 @@ public:
     int getNBPops() const {
         return mConfig.getNbpops();
     }
+    int getNBBenthosPops() const {
+        return mConfig.getNbbenthospops();
+    }
     int getSzGrupsCount() const {
         return mConfig.getSzGroups();
     }
@@ -146,6 +149,7 @@ public:
 
     /* Access to Population statistics */
     int getPopulationsCount() const;
+    int getBenthosPopulationsCount() const;
     const PopulationData &getPopulationsAtStep (int step, int idx) const {
         if (idx >= mStatsPopulations.getValue(step).size()) {
             qDebug() << step << idx << mStatsPopulations.getValue(step).size();
@@ -294,6 +298,7 @@ public:
     void collectPopCumftime(int step, int node_idx, double cumftime);
     void collectPopCumsweptarea(int step, int node_idx, double cumsweptarea);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
+    void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);

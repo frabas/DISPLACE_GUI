@@ -14,14 +14,20 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
 {
     if (nd) {
         int N = nd->get_nbpops();
+        int N2 = nd->get_nbbenthospops();
         mPop = new double[N] ;
         mPopW = new double[N] ;
         mImpact = new double[N];
+        mBenthosBiomass = new double[N2];
         for (int i = 0; i < N; ++i) {
             mPop[i] = 0.0;
             mPopW[i] = 0.0;
             mImpact[i] = 0.0;
         }
+        for (int j = 0; j < N2; ++j) {
+            mBenthosBiomass[j] = 0.0;
+        }
+
     }
 }
 
@@ -30,12 +36,19 @@ NodeData::~NodeData()
     delete []mPop;
     delete []mPopW;
     delete []mImpact;
+    delete []mBenthosBiomass;
 }
 
 int NodeData::getPopCount() const
 {
     return mNode->get_nbpops();
 }
+
+int NodeData::getBenthosPopCount() const
+{
+    return mNode->get_nbbenthospops();
+}
+
 
 void NodeData::setPop(int pop, double v)
 {
@@ -94,6 +107,11 @@ double NodeData::getPopW(int pop) const
 void NodeData::setImpact(int pop, double impact)
 {
     mImpact[pop] = impact;
+}
+
+void NodeData::setBenthosBiomass(int func, double benthosbiomass)
+{
+    mBenthosBiomass[func] = benthosbiomass;
 }
 
 int NodeData::getHarbourId() const

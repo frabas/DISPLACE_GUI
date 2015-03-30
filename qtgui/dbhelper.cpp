@@ -563,7 +563,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         }
     }
 
-    q.prepare ("SELECT nodeid,popid,pop,popw,impact, benthosbiomass FROM " + TBL_POPNODES_STATS
+    q.prepare ("SELECT nodeid,popid,pop,popw,impact FROM " + TBL_POPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -575,15 +575,32 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double val = q.value(2).toDouble();
         double valw = q.value(3).toDouble();
         double impact = q.value(4).toDouble();
-        double benthosbiomass = q.value(5).toDouble();
 
         if (nid < nodes.size()) {
             nodes.at(nid)->setPop(pid,val);
             nodes.at(nid)->setPopW(pid,valw);
             nodes.at(nid)->setImpact(pid,impact);
+        }
+    }
+
+    q.prepare ("SELECT nodeid,benthosbiomass FROM " + TBL_BENTHOSPOPNODES_STATS
+               + " WHERE tstep=?");
+    DB_ASSERT(res,q);
+
+    q.addBindValue(step);
+    res = q.exec();
+    while (q.next()) {
+        int nid = q.value(0).toInt();
+        //int funcid = q.value(1).toInt();
+        double benthosbiomass = q.value(5).toDouble();
+        // TO DO: change the output format for benthosnodes_tot_biomasses.dat to get the funcid by row!
+        if (nid < nodes.size()) {
+            //nodes.at(nid)->setBenthosBiomass(funcid,benthosbiomass);
             nodes.at(nid)->setBenthosBiomass(0,benthosbiomass);
         }
     }
+
+
     return true;
 }
 

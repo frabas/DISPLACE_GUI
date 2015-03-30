@@ -6,6 +6,8 @@
 #include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
 
+const int DtCsvWriter::VERSION = 1;
+
 DtCsvWriter::DtCsvWriter()
 {
 }
@@ -18,6 +20,8 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
     GraphNodeItem *gnode = scene->root();
     if (!gnode)
         return false;
+
+    stream << "#DTreeVersion: " << VERSION << endl;
 
     queue.push_back(gnode);
     queueid.push_back(0);

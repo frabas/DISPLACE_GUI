@@ -12,6 +12,8 @@ class DtGraphicsScene;
 class DtCsvWriter
 {
 public:
+    static const int VERSION;
+
     DtCsvWriter();
 
     bool exportTree (QTextStream &stream, dtree::DecisionTree *tree, DtGraphicsScene *scene);

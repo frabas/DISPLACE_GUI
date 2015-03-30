@@ -15,6 +15,8 @@ class DtGraphicsScene;
 class DtCsvReader
 {
 public:
+    static const int VERSION;
+
     DtCsvReader();
     bool readTree (QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> *tree, DtGraphicsScene *scene)
     throw (std::invalid_argument);

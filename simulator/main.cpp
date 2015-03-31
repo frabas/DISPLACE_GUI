@@ -1190,7 +1190,7 @@ int main(int argc, char* argv[])
 			init_tot_biomass_per_group.push_back(pos->second);
 		}
 
-		if(init_tot_biomass_per_group.size()==3 || init_tot_biomass_per_group.size()==1)
+        if(init_tot_biomass_per_group.size()!=nbbenthospops)
 		{
            outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
@@ -1216,7 +1216,7 @@ int main(int argc, char* argv[])
         dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
             " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
-		if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=2)
+        if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=nbbenthospops)
 		{
             cerr << "something wrong for benthos_tot_biomass here!" << endl;
 			int aa;

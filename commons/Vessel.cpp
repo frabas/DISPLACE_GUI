@@ -1434,26 +1434,24 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 	// FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
-	// (TO DO...PER FUNCTIONAL GROUPS?)
-	int a_landscape = this->get_loc()->get_marine_landscape();
-	multimap<int,double> loss=this->get_metier()->get_loss_after_1_passage();
+    int a_landscape =           this->get_loc()->get_marine_landscape();
+    multimap<int,double> loss=  this->get_metier()->get_loss_after_1_passage();
 	vector<double> loss_after_1_passage_per_func_group=find_entries_i_d (loss,  a_landscape);
-	double decrease_factor_on_benthos_funcgroup0 = 1-(1-(loss_after_1_passage_per_func_group.at(0)*(swept_area/(graph_res*graph_res)) ) );
-    dout (cout << "the loss_after_1_passage_per_func_group is " << loss_after_1_passage_per_func_group.at(0) << " for this landscape "<< a_landscape
-        << ", then decrease_factor_on_benthos_funcgroup0 this fishing event is:" << decrease_factor_on_benthos_funcgroup0 << endl);
 
-	double decrease_factor_on_benthos_funcgroup1 = 1-(1-(loss_after_1_passage_per_func_group.at(1)*(swept_area/(graph_res*graph_res)) ) );
-    dout (cout << "the loss_after_1_passage_per_func_group is " << loss_after_1_passage_per_func_group.at(1) << " for this landscape "<< a_landscape
-        << ", then decrease_factor_on_benthos_funcgroup1 this fishing event is:" << decrease_factor_on_benthos_funcgroup1 << endl);
 
-	// THEN, DEPLETE THE UNDERLYING BENTHOS ON THIS NODE...
-	// TO DO...
-    dout(cout  << "size benthos_tot_biomass is " << this->get_loc()->get_benthos_tot_biomass().size() << endl);
-
-    dout(cout  << "before " << this->get_loc()->get_benthos_tot_biomass(1));
-	this->get_loc()->set_benthos_tot_biomass(0, this->get_loc()->get_benthos_tot_biomass(0)*(1-decrease_factor_on_benthos_funcgroup0));
-	this->get_loc()->set_benthos_tot_biomass(1, this->get_loc()->get_benthos_tot_biomass(1)*(1-decrease_factor_on_benthos_funcgroup1));
-    dout(cout  << "after " << this->get_loc()->get_benthos_tot_biomass(1));
+    // THEN, DEPLETE THE UNDERLYING BENTHOS ON THIS NODE...
+    double decrease_factor_on_benthos_funcgroup;
+    for (unsigned int funcid=0; funcid< this->get_loc()->get_benthos_tot_biomass().size(); funcid++)
+    {
+         dout(cout  << "before " << this->get_loc()->get_benthos_tot_biomass(funcid));
+         decrease_factor_on_benthos_funcgroup= 1-(1-(loss_after_1_passage_per_func_group.at(funcid)*(swept_area/(graph_res*graph_res)) ) );
+         outc (cout << "for this func " << funcid << " the loss_after_1_passage_per_func_group is "
+                    << loss_after_1_passage_per_func_group.at(funcid) << " for this landscape "<< a_landscape
+                    << ", then decrease_factor_on_benthos_funcgroup this fishing event is: "
+                    << decrease_factor_on_benthos_funcgroup << endl);
+         this->get_loc()->set_benthos_tot_biomass(funcid, this->get_loc()->get_benthos_tot_biomass(funcid)*(1-decrease_factor_on_benthos_funcgroup));
+         dout(cout  << "after " << this->get_loc()->get_benthos_tot_biomass(funcid));
+    }
 
 	// NODE ATTRIBUTES
 	vector <int> pop_names = this->get_loc()->get_pop_names_on_node();
@@ -1595,7 +1593,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive and the N
                     vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
-                    vector<int>::const_iterator max_num;
                     for(int sizgroup=0; sizgroup<Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                  *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));

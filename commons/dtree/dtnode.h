@@ -25,7 +25,7 @@ public:
     boost::shared_ptr<NodeExtra> extra() const;
 
     Variable variable() const { return mVariable; }
-    void setVariable(Variable var) { mVariable = var; }
+    void setVariable(Variable var);
 
     void setParent(boost::weak_ptr<Node> node) { mParent = node; }
     boost::weak_ptr<Node> parent() const { return mParent; }

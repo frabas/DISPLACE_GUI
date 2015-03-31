@@ -8,9 +8,6 @@ Node::Node(boost::shared_ptr<DecisionTree> node)
       mExtra(),
       mVariable(VarUndefined)
 {
-    // Note: binary node
-    mNodes.push_back(boost::shared_ptr<Node> ());
-    mNodes.push_back(boost::shared_ptr<Node> ());
 }
 
 int Node::getChildrenCount() const
@@ -36,4 +33,17 @@ void Node::setExtra(boost::shared_ptr<NodeExtra> extra)
 boost::shared_ptr<NodeExtra> Node::extra() const
 {
     return mExtra;
+}
+
+void Node::setVariable(Variable var)
+{
+    if (mVariable != var) {
+        mNodes.clear();
+        // Note: binary node
+        if (var != VarUndefined) {
+            mNodes.push_back(boost::shared_ptr<Node> ());
+            mNodes.push_back(boost::shared_ptr<Node> ());
+        }
+        mVariable = var;
+    }
 }

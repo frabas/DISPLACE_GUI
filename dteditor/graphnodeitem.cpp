@@ -24,19 +24,6 @@ GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScen
 
     mText = new QGraphicsTextItem(mRect);
 
-    for (int i = 0; i < node->getChildrenCount(); ++i) {
-        QRectF r( -sDefWidth/2 + i*sDefWidth/node->getChildrenCount(),
-                  sDefHeight/2 - sDefHeight/3,
-                  sDefWidth / node->getChildrenCount(),
-                  sDefHeight/3);
-
-        GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
-        mChildrenBoxes.append(newch);
-        mChildrenItems.append(0);
-
-        addToGroup(newch);
-    }
-
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
@@ -123,10 +110,29 @@ void GraphNodeItem::update()
     }
 
     boost::shared_ptr<dtree::Node> node = getNode();
-    if (node && node->variable() != dtree::Variable::VarUndefined) {
-        mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
-    } else {
-        mText->setPlainText("");
+    if (node) {
+        int cn = mChildrenBoxes.size();
+        if (cn != node->getChildrenCount()) {
+            mChildrenBoxes.clear();
+            for (int i = 0; i < node->getChildrenCount(); ++i) {
+                QRectF r( -sDefWidth/2 + i*sDefWidth/node->getChildrenCount(),
+                          sDefHeight/2 - sDefHeight/3,
+                          sDefWidth / node->getChildrenCount(),
+                          sDefHeight/3);
+
+                GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
+                mChildrenBoxes.append(newch);
+                mChildrenItems.append(0);
+
+                addToGroup(newch);
+            }
+        }
+
+        if (node->variable() != dtree::Variable::VarUndefined) {
+            mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
+        } else {
+            mText->setPlainText("");
+        }
     }
 
     double r = mText->textWidth();

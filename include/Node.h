@@ -112,7 +112,7 @@ class Node
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);
 		void export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop);
-		void export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep);
+        void export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep, int funcgroup);
 		void recover_benthos_tot_biomass_per_funcgroup();
 		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);

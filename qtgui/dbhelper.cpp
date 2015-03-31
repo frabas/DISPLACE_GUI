@@ -583,7 +583,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         }
     }
 
-    q.prepare ("SELECT nodeid,benthosbiomass FROM " + TBL_BENTHOSPOPNODES_STATS
+    q.prepare ("SELECT nodeid,funcid,benthosbiomass FROM " + TBL_BENTHOSPOPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -591,12 +591,10 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
     res = q.exec();
     while (q.next()) {
         int nid = q.value(0).toInt();
-        //int funcid = q.value(1).toInt();
-        double benthosbiomass = q.value(5).toDouble();
-        // TO DO: change the output format for benthosnodes_tot_biomasses.dat to get the funcid by row!
+        int funcid = q.value(1).toInt();
+        double benthosbiomass = q.value(2).toDouble();
         if (nid < nodes.size()) {
-            //nodes.at(nid)->setBenthosBiomass(funcid,benthosbiomass);
-            nodes.at(nid)->setBenthosBiomass(0,benthosbiomass);
+            nodes.at(nid)->setBenthosBiomass(funcid,benthosbiomass);
         }
     }
 

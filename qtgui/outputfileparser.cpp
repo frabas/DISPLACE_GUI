@@ -170,9 +170,9 @@ void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceMo
         int step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
-            int funcid = 0;
-            int nodeid = fields[1].toInt();
-            double benthosbiomass = fields[4].toDouble();
+            int funcid = fields[0].toInt();
+            int nodeid = fields[2].toInt();
+            double benthosbiomass = fields[5].toDouble();
             model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
         }
     }

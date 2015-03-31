@@ -3428,8 +3428,10 @@ int main(int argc, char* argv[])
 			//...and export the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
-				nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep);
-			}
+                for(unsigned int funcgroup=0;funcgroup<nbbenthospops; funcgroup++){
+                   nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep, funcgroup);
+                }
+            }
 
 			// a recovery of the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)

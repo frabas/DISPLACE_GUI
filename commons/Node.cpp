@@ -896,24 +896,18 @@ void Node::set_is_harbour(int id)
 }
 
 
-void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep)
+void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep, int funcgr)
 {
 
     dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
 
 	benthosnodes << setprecision(3) << fixed;
-	// pop/ tstep / node / long / lat /  impact sz0 / impact sz1 /...
-	benthosnodes << tstep << " " << this->get_idx_node() << " "<<
-		" " << this->get_x() << " " << this->get_y() ;
-
-    for(unsigned int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
-	{
-		benthosnodes << " " << benthos_tot_biomass.at(funcgr);
-	}
-
-	benthosnodes << " " <<  endl;
+    // pop/ tstep / node / long / lat / biomass func group id
+    benthosnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_biomass.at(funcgr) << " " <<  endl;
 
 }
+
 
 
 void Node::recover_benthos_tot_biomass_per_funcgroup()

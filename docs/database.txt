@@ -17,8 +17,11 @@ TABLE: Nodes
 Schema: CREATE TABLE Nodes(_id INTEGER PRIMARY KEY,x REAL,y REAL,harbour INTEGER,areacode INTEGER,landscape INTEGER,name VARCHAR(32));
  
 TABLE: PopNodesStats
-Schema: CREATE TABLE PopNodesStats(statid INTEGER,tstep INTEGER,nodeid INTEGER,popid INTEGER,pop REAL,popw REAL,impact REAL, benthosbio REAL);
+Schema: CREATE TABLE PopNodesStats(statid INTEGER,tstep INTEGER,nodeid INTEGER,popid INTEGER,pop REAL,popw REAL,impact REAL);
  
+TABLE: BenthosPopNodesStats
+Schema: CREATE TABLE BenthosPopNodesStats(statid INTEGER,tstep INTEGER,nodeid INTEGER,funcid,benthosbiomass REAL);
+
 TABLE: PopStatsSz
 Schema: CREATE TABLE PopStatsSz(statid INTEGER AUTO_INCREMENT PRIMARY KEY,tstep INTEGER,popid INTEGER,szgroup INTEGER,N REAL,F REAL);
  

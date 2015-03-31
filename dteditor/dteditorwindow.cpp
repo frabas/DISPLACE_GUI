@@ -163,16 +163,31 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
 
 void DtEditorWindow::on_actionSave_as_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this, tr("Exporting to CSV file"));
+    QSettings s;
+    QString last = s.value("last_tree").toString();
+    QString file = QFileDialog::getSaveFileName(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dtcsv);;All files (*.*)"));
 
-    if (!file.isEmpty())
+    if (!file.isEmpty()) {
         save(file);
+        QFileInfo info(file);
+        s.setValue("last_tree", info.path());
+    }
 }
 
 void DtEditorWindow::on_action_Open_triggered()
 {
-    QString file = QFileDialog::getOpenFileName(this, tr("Exporting to CSV file"));
+    QSettings s;
+    QString last = s.value("last_tree").toString();
+    QString file = QFileDialog::getOpenFileName(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dtcsv);;All files (*.*)"));
 
-    if (!file.isEmpty())
-        open(file);
+    if (!file.isEmpty()) {
+        try {
+            open(file);
+            QFileInfo info(file);
+            s.setValue("last_tree", info.path());
+        } catch (std::exception &x) {
+            QMessageBox::warning(this, tr("Cannot load tree"), QString::fromStdString(x.what()));
+            return;
+        }
+    }
 }

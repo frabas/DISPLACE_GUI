@@ -18,7 +18,8 @@ Config::Config()
       szGroups(0),
       m_implicit_pops(),
       m_calib_oth_landings(),
-      m_calib_weight_at_szgroup()
+      m_calib_weight_at_szgroup(),
+      m_calib_cpue_multiplier()
 {
 }
 
@@ -109,6 +110,8 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
 
     stream << "# nbpops"<< endl << nbpops << endl;
 
+    stream << "# nbbenthospops"<< endl << nbbenthospops << endl;
+
     stream <<"# implicit stocks"<< endl;
     foreach (int a, m_implicit_pops)
         stream << a << " ";
@@ -145,7 +148,6 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     Config config;
 
     config.szGroups = NBSZGROUP;
-    config.nbbenthospops = 1;
 
     std::vector <int> implicit_pops;
     std::vector <int> implicit_harbours;
@@ -157,6 +159,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         path.toStdString(),
         modelname.toStdString(),
         config.nbpops,
+        config.nbbenthospops,
         implicit_pops,
         calib_oth_landings,
         calib_weight_at_szgroup,

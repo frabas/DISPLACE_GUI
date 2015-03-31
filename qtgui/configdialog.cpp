@@ -60,7 +60,8 @@ bool ConfigDialog::get(Config &config) const
     }
 
     config.setNbpops(ui->nbpops->value());
-    config.setSzGroups(ui->nbpops->value());
+    config.setNbbenthospops(ui->nbbenthospops->value());
+    config.setSzGroups(ui->szGroups->value());
     config.setImplicit_pops(impl);
     config.setCalib_oth_landings(cal1);
     config.setCalib_weight_at_szgroup(cal2);
@@ -73,6 +74,7 @@ bool ConfigDialog::get(Config &config) const
 void ConfigDialog::set(const Config &config)
 {
     ui->nbpops->setValue(config.getNbpops());
+    ui->nbbenthospops->setValue(config.getNbbenthospops());
     ui->szGroups->setValue(config.getSzGroups());
 
     QList<int> l1 = config.implicit_pops();

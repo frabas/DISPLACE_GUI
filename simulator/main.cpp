@@ -135,6 +135,7 @@ vector <Vessel*> vessels;
 vector <Population* > populations;
 int tstep;
 int nbpops;
+int nbbenthospops;
 int a_graph;
 int a_port;
 int nrow_coord;
@@ -538,18 +539,18 @@ int main(int argc, char* argv[])
 	// a mistake in these files are of great consequences.
 	string a_graph_name="a_graph";
 
-    int nbbenthospops = 1;
 
 	// config at the simusspe level
     read_config_file (
 		folder_name_parameterization,
         "../"+inputfolder,
 		nbpops,
+        nbbenthospops,
 		implicit_pops,
 		calib_oth_landings,
 		calib_weight_at_szgroup,
         calib_cpue_multiplier,
-                int_harbours
+        int_harbours
 		);
 
 	read_scenario_config_file (

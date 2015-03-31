@@ -34,11 +34,12 @@ void open_file_error(string filename);
 int read_config_file (string folder_name_parameterization,
 string inputfolder,
 int& a_int_line2,
-vector<int>& a_vector_line4,
-vector<double>& a_vector_line6,
+int& a_int_line4,
+vector<int>& a_vector_line6,
 vector<double>& a_vector_line8,
-vector<double>& a_vector_line10
-, vector<int> &interesting_harbours);
+vector<double>& a_vector_line10,
+vector<double>& a_vector_line12,
+vector<int> &interesting_harbours);
 
 int read_scenario_config_file(string folder_name_parameterization,
     string inputfolder,

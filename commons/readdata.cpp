@@ -46,10 +46,11 @@ read the settings for the siums given the case study
 int read_config_file (string folder_name_parameterization,
     string inputfolder,
     int& a_int_line2,
-    vector<int>& a_vector_line4,
-    vector<double>& a_vector_line6,
+    int& a_int_line4,
+    vector<int>& a_vector_line6,
     vector<double>& a_vector_line8,
     vector<double>& a_vector_line10,
+    vector<double>& a_vector_line12,
                       vector<int> &interesting_harbours)
 {
 
@@ -75,40 +76,46 @@ int read_config_file (string folder_name_parameterization,
 			linestream >> val;
 			a_int_line2 =val;
 		}
-		if(counter==4)
+        if(counter==4)
+        {
+            int val;
+            linestream >> val;
+            a_int_line4 =val;
+        }
+        if(counter==6)
 		{
 			int val;
 			while(linestream >> val)
 			{
-				a_vector_line4.push_back(val);
+                a_vector_line6.push_back(val);
 			}
 		}
 
-		if(counter==6)
+        if(counter==8)
 		{
 			double val;
 			while(linestream >> val)
 			{
-				a_vector_line6.push_back(val);
+                a_vector_line8.push_back(val);
 			}
 		}
-		if(counter==8)
+        if(counter==10)
 		{
 			double val;
 			while(linestream >> val)
 			{
-				a_vector_line8.push_back(val);
-			}
-		}
-		if(counter==10)
-		{
-			double val;
-			while(linestream >> val)
-			{
-				a_vector_line10.push_back(val);
+                a_vector_line10.push_back(val);
 			}
 		}
         if(counter==12)
+		{
+			double val;
+			while(linestream >> val)
+			{
+                a_vector_line12.push_back(val);
+			}
+		}
+        if(counter==14)
         {
             double val;
             while(linestream >> val)

@@ -71,6 +71,7 @@ bool DbHelper::attachDb(QString file)
     checkMetadataTable();
     checkNodesTable(mVersion);
     checkNodesStats(mVersion);
+    checkNodesStats(mVersion);
     checkVesselsPosTable(mVersion);
     checkVesselsTable(mVersion);
     checkStatsTable(mVersion);
@@ -109,7 +110,7 @@ void DbHelper::removeAllNodesDetails()
 void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > &nodes)
 {
     QSqlQuery q(mDb), sq(mDb), sq2(mDb);
-    cout << "hello" << endl;
+
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
@@ -123,7 +124,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
     DB_ASSERT(r,sq);
 
     r = sq2.prepare("INSERT INTO " + TBL_BENTHOSPOPNODES_STATS
-        + "(statid,tstep,nodeid,benthosbiomass) VALUES(?,?,?,?)");
+        + "(statid,tstep,nodeid,funcid, benthosbiomass) VALUES(?,?,?,?,?)");
     DB_ASSERT(r,sq2);
 
     foreach (std::shared_ptr<NodeData> n, nodes) {
@@ -158,6 +159,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
             sq2.addBindValue(statid);
             sq2.addBindValue(tstep);
             sq2.addBindValue(n->get_idx_node());
+            sq2.addBindValue(j);
             sq2.addBindValue(n->getBenthosBiomass(j));
 
             res = sq2.exec();
@@ -330,6 +332,7 @@ void DbHelper::removeAllStatsData()
 bool DbHelper::loadConfig(Config &cfg)
 {
     cfg.setNbpops(getMetadata("config::nbpops").toInt());
+    cfg.setNbbenthospops(getMetadata("config::nbbenthospops").toInt());
     cfg.setSzGroups(getMetadata("config::szgroups").toInt());
 
     QList<int> ipops;
@@ -354,7 +357,7 @@ bool DbHelper::loadConfig(Config &cfg)
     cfg.setCalib_weight_at_szgroup(vl);
 
     vl.clear();
-    lsi = getMetadata("config::calib_cpue_multi").split(" ");
+    lsi = getMetadata("config::calib_cpue_multiplier").split(" ");
     foreach (QString i, lsi) {
         vl.push_back(i.toDouble());
     }
@@ -397,7 +400,7 @@ bool DbHelper::saveConfig(const Config &cfg)
     dl = cfg.calib_cpue_multiplier();
     foreach (double d, dl)
         str.push_back(QString::number(d));
-    setMetadata("config::calib_cpue_multi", str.join(" "));
+    setMetadata("config::calib_cpue_multiplier", str.join(" "));
 
     str.clear();
     il = cfg.m_interesting_harbours;
@@ -840,6 +843,7 @@ void DbHelper::createIndexes()
     qDebug() << "Create Indexes";
     Profiler pr;
     createIndexOnTstepForTable(TBL_NODES_STATS);
+    createIndexOnTstepForTable(TBL_BENTHOSPOPNODES_STATS);
     createIndexOnTstepForTable(TBL_POPNODES_STATS);
     createIndexOnTstepForTable(TBL_VESSELS_POS);
     qDebug() << "Indexes created in " << pr.elapsed_ms() << " ms";
@@ -964,12 +968,24 @@ bool DbHelper::checkNodesStats(int version)
                + "popid INTEGER,"
                + "pop REAL,"
                + "popw REAL,"
-               + "impact REAL,"
-               + "benthosbiomass REAL"
+               + "impact REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }
 
+
+    if (!mDb.tables().contains(TBL_BENTHOSPOPNODES_STATS)) {
+        QSqlQuery q(mDb);
+        bool r =
+        q.exec("CREATE TABLE " + TBL_BENTHOSPOPNODES_STATS + "("
+               + "statid INTEGER,"
+               + "tstep INTEGER,"
+               + "nodeid INTEGER,"
+               + "funcid INTEGER,"
+               + "benthosbiomass REAL"
+               + ");");
+        Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
+    }
 
     if (version < 2) {
 

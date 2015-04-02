@@ -165,11 +165,18 @@ void DtEditorWindow::on_actionSave_as_triggered()
 {
     QSettings s;
     QString last = s.value("last_tree").toString();
-    QString file = QFileDialog::getSaveFileName(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dtcsv);;All files (*.*)"));
+    QFileDialog dlg(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dtcsv);;All files (*.*)"));
+    dlg.setDefaultSuffix("dtcsv");
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
 
-    if (!file.isEmpty()) {
-        save(file);
-        QFileInfo info(file);
+    if (dlg.exec() == QDialog::Accepted) {
+        QStringList file = dlg.selectedFiles();
+        if (file.size() != 1) {
+            return;
+        }
+        save(file[0]);
+        QFileInfo info(file[0]);
         s.setValue("last_tree", info.path());
     }
 }

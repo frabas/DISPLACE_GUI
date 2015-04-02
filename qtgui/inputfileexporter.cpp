@@ -12,14 +12,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath, QString areacodepath, QString closedpath,
                                     DisplaceModel *currentModel, QString *error)
 {
-    bool multiple_closed_path = false;
-    QString curr_clspath = closedpath;
-    if (closedpath.contains("?")) {
-        closedpath = closedpath.replace("?", "%1");
-        multiple_closed_path = true;
-
-        curr_clspath = closedpath.arg(1);
-    }
+    closedpath = closedpath.replace("?", "%1");
 
     QFile cfile(coordspath);
     if (!cfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -55,16 +48,19 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         acstream.setDevice(&acfile);
     }
 
-    QFile clsfile(curr_clspath);
     QTextStream clsstream;
+    QFile clsfile[4];
     if (!closedpath.isEmpty()) {
-        if (!clsfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            if (error)
-                *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
-                    .arg(closedpath).arg(clsfile.errorString());
-            return false;
+        for (int i = 0; i < 4; ++i) {
+            QString fn = closedpath.arg(i);
+            clsfile[i].setFileName(fn);
+            if (!clsfile[i].open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                if (error)
+                    *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
+                        .arg(fn).arg(clsfile[i].errorString());
+                return false;
+            }
         }
-        clsstream.setDevice(&clsfile);
     }
 
     int n = currentModel->getNodesCount();
@@ -127,23 +123,16 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         gfile.close();
     }
 
-    if (clsfile.isOpen()) {
-        int N = currentModel->countPenaltyPolygons();
-        for (int i = 0; i < N; ++i) {
-            foreach (int ndx, currentModel->getPenaltyPolygonsAt(i)) {
-                clsstream << (i+1) << " " << ndx << endl;
+    for (int q = 0; q < 4; ++q) {
+        if (clsfile[q].isOpen()) {
+            clsstream.setDevice(&clsfile[q]);
+            int N = currentModel->countPenaltyPolygons(q);
+            for (int i = 0; i < N; ++i) {
+                foreach (int ndx, currentModel->getPenaltyPolygonsAt(q,i)) {
+                    clsstream << (i+1) << " " << ndx << endl;
+                }
             }
-        }
-    }
-    clsfile.close();
-
-    if (multiple_closed_path) {
-        QFile src (curr_clspath);
-
-        for (int i = 2; i <= 4; ++i) {
-            QString dst(closedpath.arg(i));
-            QFile::remove(dst);
-            src.copy(dst);
+            clsfile[q].close();
         }
     }
 

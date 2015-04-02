@@ -819,9 +819,6 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         }
     }
 
-    if (closed_for_fishing && penaltyNodes.size() > 0)
-        mPenaltyNodes.push_back(penaltyNodes);
-
     if (closed_for_fishing && penaltyNodes.size() > 0 && onQ1)
         mPenaltyNodesQ1.push_back(penaltyNodes);
 
@@ -834,6 +831,38 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
     if (closed_for_fishing && penaltyNodes.size() > 0 && onQ4)
         mPenaltyNodesQ4.push_back(penaltyNodes);
 
+}
+
+int DisplaceModel::countPenaltyPolygons(int quarter) const
+{
+    switch(quarter) {
+    case 0:
+        return mPenaltyNodesQ1.size();
+    case 1:
+        return mPenaltyNodesQ2.size();
+    case 2:
+        return mPenaltyNodesQ3.size();
+    case 3:
+        return mPenaltyNodesQ4.size();
+    default:
+        throw std::runtime_error("Unhandled case in countPenaltyPolygons");
+    }
+}
+
+const QList<int> DisplaceModel::getPenaltyPolygonsAt(int quarter, int ndx) const
+{
+    switch(quarter) {
+    case 0:
+        return mPenaltyNodesQ1.at(ndx);
+    case 1:
+        return mPenaltyNodesQ2.at(ndx);
+    case 2:
+        return mPenaltyNodesQ3.at(ndx);
+    case 3:
+        return mPenaltyNodesQ4.at(ndx);
+    default:
+        throw std::runtime_error("Unhandled case in getPenaltyPolygonsAt");
+    }
 }
 
 

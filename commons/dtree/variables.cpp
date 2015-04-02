@@ -23,6 +23,27 @@ const char *const VariableNames::names[] = {
     0
 };
 
+#if ((__cplusplus >= 201103L))
+const std::vector<std::string> VariableNames::bins[] = {
+    { "yes", "no" },
+    { "low", "high" },
+    { "low", "high" },
+    { "near", "far" },
+    { "yes", "no" },
+    { "yes", "no" },
+    { "low", "high" },
+    { "low", "high" },
+    { "yes", "no" },
+    { "good", "bad" },
+    { "good", "bad" },
+    { "low", "high" },
+    { "low", "high" },
+    { "good", "bad" },
+
+    { },  // probability
+    // keep this last
+};
+#endif
 
 const char *VariableNames::variableName(Variable id)
 {

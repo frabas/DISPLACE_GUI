@@ -55,6 +55,7 @@ void GraphNodeItem::setVariable(dtree::Variable var)
             delete item;
 
         mChildrenBoxes.clear();
+        mChildrenBoxText.clear();
         for (int i = 0; i < n; ++i) {
             if (i < v.size())
                 mChildrenItems.push_back(v[i]);
@@ -66,11 +67,19 @@ void GraphNodeItem::setVariable(dtree::Variable var)
                       sDefWidth / n,
                       sDefHeight/3);
 
-            GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(mapRectToScene(r), this, i);
+            r = mapRectToScene(r);
+            GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
             mChildrenBoxes.append(newch);
+            QGraphicsTextItem *ti = new QGraphicsTextItem(newch);
+            ti->setPos(r.topLeft());
+            mChildrenBoxText.push_back(ti);
 
             addToGroup(newch);
         }
+    }
+
+    for (int i = 0; i < mChildrenBoxText.size(); ++i) {
+        mChildrenBoxText[i]->setPlainText(QString::fromLatin1(dtree::VariableNames::variableBin(var, i)));
     }
 }
 

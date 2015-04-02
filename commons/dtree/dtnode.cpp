@@ -23,8 +23,8 @@ boost::shared_ptr<Node> Node::getChild(int idx)
 
 void Node::setChild(int idx, boost::shared_ptr<Node> child)
 {
-    mNodes[idx] = child;
-}
+    mNodes[idx] = child; /*VariableNames::Bin*/
+} /*VariableNames::Bin*/
 
 void Node::setExtra(boost::shared_ptr<NodeExtra> extra)
 {
@@ -41,10 +41,8 @@ void Node::setVariable(Variable var)
     if (mVariable != var) {
         mNodes.clear();
         // Note: binary node
-        if (var != VarUndefined && var != VarLeaf) {
+        for (int i = 0; i < VariableNames::variableBinCount(var); ++i)
             mNodes.push_back(boost::shared_ptr<Node> ());
-            mNodes.push_back(boost::shared_ptr<Node> ());
-        }
         mVariable = var;
     }
 }

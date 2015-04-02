@@ -56,6 +56,7 @@ private:
     QGraphicsTextItem *mText;
     int mChildrenId;
     QVector<GraphNodeChildBoxItem *> mChildrenBoxes;
+    QVector<QGraphicsTextItem *> mChildrenBoxText;
     QGraphicsLineItem *mArrow;
 
     int mHoveredChild;

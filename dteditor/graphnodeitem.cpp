@@ -98,29 +98,20 @@ void GraphNodeItem::update()
     if (mArrow == 0)
         createArrow();
 
-    if (getChildrenId() != -1 && mParent) {
-        QPointF p1 = mapToScene(0, -sDefHeight/2);
-        QPointF p2 = mParent->mapToScene(mParent->getChildrenArrowLocation(getChildrenId()));
-
-        QLineF line (p1, p2);
-        mArrow->setLine(line);
-        mArrow->setVisible(true);
-    } else {
-        mArrow->setVisible(false);
-    }
-
     boost::shared_ptr<dtree::Node> node = getNode();
     if (node) {
+        int cc = node->getChildrenCount();
         int cn = mChildrenBoxes.size();
-        if (cn != node->getChildrenCount()) {
+        if (cn != cc) {
             mChildrenBoxes.clear();
+            mChildrenItems.clear();
             for (int i = 0; i < node->getChildrenCount(); ++i) {
-                QRectF r( -sDefWidth/2 + i*sDefWidth/node->getChildrenCount(),
+                QRectF r( -sDefWidth/2 + i*sDefWidth/cc,
                           sDefHeight/2 - sDefHeight/3,
-                          sDefWidth / node->getChildrenCount(),
+                          sDefWidth / cc,
                           sDefHeight/3);
 
-                GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
+                GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(mapRectToScene(r), this, i);
                 mChildrenBoxes.append(newch);
                 mChildrenItems.append(0);
 
@@ -133,6 +124,17 @@ void GraphNodeItem::update()
         } else {
             mText->setPlainText("");
         }
+    }
+
+    if (getChildrenId() != -1 && mParent) {
+        QPointF p1 = mapToScene(0, -sDefHeight/2);
+        QPointF p2 = mParent->getChildrenArrowLocation(getChildrenId());
+
+        QLineF line (p1, p2);
+        mArrow->setLine(line);
+        mArrow->setVisible(true);
+    } else {
+        mArrow->setVisible(false);
     }
 
     double r = mText->textWidth();

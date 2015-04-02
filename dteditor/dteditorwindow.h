@@ -32,6 +32,8 @@ private slots:
 
     void on_action_Open_triggered();
 
+    void on_nodeValue_valueChanged(double value);
+
 private:
     Ui::DtEditorWindow *ui;
 

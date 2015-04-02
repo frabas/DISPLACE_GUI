@@ -119,10 +119,15 @@ void GraphNodeItem::update()
             }
         }
 
-        if (node->variable() != dtree::Variable::VarUndefined) {
-            mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
-        } else {
+        switch (node->variable()) {
+        case dtree::Variable::VarUndefined:
+            mText->setPlainText(QString());
+            break;
+        case dtree::Variable::VarLeaf:
             mText->setPlainText(QString("%1").arg(node->value(),0,'f',3));
+            break;
+        default:
+            mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
         }
     }
 

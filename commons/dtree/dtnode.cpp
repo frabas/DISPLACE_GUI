@@ -41,7 +41,7 @@ void Node::setVariable(Variable var)
     if (mVariable != var) {
         mNodes.clear();
         // Note: binary node
-        if (var != VarUndefined) {
+        if (var != VarUndefined && var != VarLeaf) {
             mNodes.push_back(boost::shared_ptr<Node> ());
             mNodes.push_back(boost::shared_ptr<Node> ());
         }

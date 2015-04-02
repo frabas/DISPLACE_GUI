@@ -120,6 +120,8 @@ void DtEditorWindow::evt_scene_selection_changed()
         // hide properties and disable controls
         ui->nodepropVariable->setEnabled(false);
         ui->nodepropVariable->setCurrentIndex(-1);
+        ui->nodeValue->setEnabled(false);
+        ui->nodeValue->setValue(0);
         //        ui->nodepropDetailsContainer->hide();
     } else {
         ui->nodepropVariable->setEnabled(true);
@@ -131,6 +133,14 @@ void DtEditorWindow::evt_scene_selection_changed()
             if (node.get() != 0) {
                 dtree::Variable var = node->variable();
                 ui->nodepropVariable->setCurrentIndex(var);
+
+                if (var == dtree::Variable::VarLeaf) {
+                    ui->nodeValue->setEnabled(true);
+                    ui->nodeValue->setValue(node->value());
+                } else {
+                    ui->nodeValue->setEnabled(false);
+                    ui->nodeValue->setValue(0);
+                }
 
                 boost::shared_ptr<dtree::NodeExtra> extra = node->extra();
                 if (extra.get() != 0) {
@@ -154,7 +164,35 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
         if (item) {
             boost::shared_ptr<dtree::Node> node = item->getNode();
             if (node.get() != 0) {
-                node->setVariable(static_cast<dtree::Variable>(index));
+                dtree::Variable var = static_cast<dtree::Variable>(index);
+                node->setVariable(var);
+                if (var == dtree::Variable::VarLeaf) {
+                    ui->nodeValue->setEnabled(true);
+                    ui->nodeValue->setValue(node->value());
+                } else {
+                    ui->nodeValue->setEnabled(false);
+                    ui->nodeValue->setValue(0);
+                }
+            }
+            item->update();
+        }
+    }
+}
+
+void DtEditorWindow::on_nodeValue_valueChanged(double value)
+{
+    if (!mScene) return;
+
+    QList<QGraphicsItem *> selection = mScene->selectedItems();
+
+    foreach (QGraphicsItem *i, selection) {
+        GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(i);
+
+        // don't like this - TODO: fix it without using downcasting
+        if (item) {
+            boost::shared_ptr<dtree::Node> node = item->getNode();
+            if (node.get() != 0) {
+                node->setValue(value);
             }
             item->update();
         }

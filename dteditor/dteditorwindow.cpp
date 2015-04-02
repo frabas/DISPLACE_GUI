@@ -88,6 +88,16 @@ void DtEditorWindow::open(QString filename)
 
 }
 
+void DtEditorWindow::updateTitleBar()
+{
+    if (mFilename.isEmpty()) {
+        setWindowTitle(tr("Decision Tree Editor"));
+    } else {
+        QFileInfo info (mFilename);
+        setWindowTitle(QString(tr("Decision Tree Editor - %1")).arg(info.fileName()));
+    }
+}
+
 void DtEditorWindow::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
@@ -217,8 +227,11 @@ void DtEditorWindow::on_actionSave_as_triggered()
             return;
         }
         save(file[0]);
+        mFilename = file[0];
         QFileInfo info(file[0]);
         s.setValue("last_tree", info.path());
+
+        updateTitleBar();
     }
 }
 
@@ -233,9 +246,21 @@ void DtEditorWindow::on_action_Open_triggered()
             open(file);
             QFileInfo info(file);
             s.setValue("last_tree", info.path());
+            mFilename = file;
+            updateTitleBar();
         } catch (std::exception &x) {
             QMessageBox::warning(this, tr("Cannot load tree"), QString::fromStdString(x.what()));
             return;
         }
+    }
+}
+
+void DtEditorWindow::on_action_Save_triggered()
+{
+    if (mFilename.isEmpty()) {
+        on_actionSave_as_triggered();
+    } else {
+        save(mFilename);
+        updateTitleBar();
     }
 }

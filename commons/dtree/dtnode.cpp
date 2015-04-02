@@ -6,7 +6,8 @@ Node::Node(boost::shared_ptr<DecisionTree> node)
     : mTree(node),
       mNodes(),
       mExtra(),
-      mVariable(VarUndefined)
+      mVariable(VarUndefined),
+      mValue(0.0)
 {
 }
 

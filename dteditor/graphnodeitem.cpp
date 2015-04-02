@@ -122,7 +122,7 @@ void GraphNodeItem::update()
         if (node->variable() != dtree::Variable::VarUndefined) {
             mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
         } else {
-            mText->setPlainText("");
+            mText->setPlainText(QString("%1").arg(node->value(),0,'f',3));
         }
     }
 

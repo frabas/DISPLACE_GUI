@@ -30,6 +30,9 @@ public:
     void setParent(boost::weak_ptr<Node> node) { mParent = node; }
     boost::weak_ptr<Node> parent() const { return mParent; }
 
+    double value() const { return mValue; }
+    void setValue(double v) { mValue = v; }
+
 private:
     boost::weak_ptr<DecisionTree> mTree;
     boost::weak_ptr<Node> mParent;
@@ -37,6 +40,7 @@ private:
     boost::shared_ptr<NodeExtra> mExtra;
 
     Variable mVariable;
+    double mValue;
 };
 
 }

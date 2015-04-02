@@ -7,8 +7,20 @@ namespace dtree {
 
 enum Variable {
     VarUndefined = -1,
-    VarWeatherIs = 0,
-    VarPriceIs,
+    arrived_on_the_ground,
+    bycatch_risk,
+    catch_volume,
+    distance_to_port,
+    feeling_for_higher_catches_elsewhere,
+    fish_detection_with_echosounder,
+    fish_price,
+    fish_price_is,
+    high_potential_catch,
+    last_trip_on_the_ground,
+    last_trip_was,
+    remaining_quota_is,
+    suitable_bottom_detection,
+    weather_is,
 
     VarLeaf,     // this is a leaf node
     // keep this last

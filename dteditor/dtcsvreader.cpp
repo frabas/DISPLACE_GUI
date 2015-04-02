@@ -8,7 +8,7 @@
 #include <QQueue>
 #include <QDebug>
 
-const int DtCsvReader::VERSION = 1;
+const int DtCsvReader::VERSION = 2;
 
 DtCsvReader::DtCsvReader()
 {
@@ -72,8 +72,10 @@ throw (std::invalid_argument)
         while (data[idx].children.size() < nc)
             data[idx].children.push_back(-1);
 
+        int fldnum = 5;
         for (int i = 0; i < nc; ++i) {
             int cidx = fields[5+i].toInt(&ok);
+            ++fldnum;
             if (!ok) continue;
 
             data[idx].children[i] = cidx;
@@ -82,6 +84,10 @@ throw (std::invalid_argument)
                 data.push_back(Data());
             data[cidx].parent = idx;
         }
+
+        double v = fields[fldnum++].toDouble(&ok);
+        if (!ok) throw std::invalid_argument("Error parsing value field");
+        data[idx].node->setValue(v);
     }
 
     for (int di = 0; di < data.size(); ++di) {

@@ -24,19 +24,6 @@ GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScen
 
     mText = new QGraphicsTextItem(mRect);
 
-    for (int i = 0; i < node->getChildrenCount(); ++i) {
-        QRectF r( -sDefWidth/2 + i*sDefWidth/node->getChildrenCount(),
-                  sDefHeight/2 - sDefHeight/3,
-                  sDefWidth / node->getChildrenCount(),
-                  sDefHeight/3);
-
-        GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
-        mChildrenBoxes.append(newch);
-        mChildrenItems.append(0);
-
-        addToGroup(newch);
-    }
-
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
@@ -54,6 +41,39 @@ GraphNodeItem *GraphNodeItem::getChild(int idx)
     return mChildrenItems[idx];
 }
 
+void GraphNodeItem::setVariable(dtree::Variable var)
+{
+    Q_UNUSED(var);
+
+    boost::shared_ptr<dtree::Node> node = getNode();
+    int n = node->getChildrenCount();
+
+    if (n != mChildrenItems.size()) {
+        QVector<GraphNodeItem *> v = mChildrenItems;
+        mChildrenItems.clear();
+        foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
+            delete item;
+
+        mChildrenBoxes.clear();
+        for (int i = 0; i < n; ++i) {
+            if (i < v.size())
+                mChildrenItems.push_back(v[i]);
+            else
+                mChildrenItems.push_back(0);
+
+            QRectF r( -sDefWidth/2 + i*sDefWidth/n,
+                      sDefHeight/2 - sDefHeight/3,
+                      sDefWidth / n,
+                      sDefHeight/3);
+
+            GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(mapRectToScene(r), this, i);
+            mChildrenBoxes.append(newch);
+
+            addToGroup(newch);
+        }
+    }
+}
+
 void GraphNodeItem::setChild(int idx, GraphNodeItem *child)
 {
     mChildrenItems[idx] = child;
@@ -68,6 +88,7 @@ void GraphNodeItem::connectAsParent(GraphNodeItem *item, int idx)
 {
     setChild(idx, item);
     item->setParent(this);
+    item->mChildrenId = idx;
 }
 
 void GraphNodeItem::connectAsChild(GraphNodeItem *item, int idx)
@@ -110,22 +131,29 @@ void GraphNodeItem::update()
     if (mArrow == 0)
         createArrow();
 
+    boost::shared_ptr<dtree::Node> node = getNode();
+    if (node) {
+        switch (node->variable()) {
+        case dtree::Variable::VarUndefined:
+            mText->setPlainText(QString());
+            break;
+        case dtree::Variable::VarLeaf:
+            mText->setPlainText(QString("%1").arg(node->value(),0,'f',3));
+            break;
+        default:
+            mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
+        }
+    }
+
     if (getChildrenId() != -1 && mParent) {
         QPointF p1 = mapToScene(0, -sDefHeight/2);
-        QPointF p2 = mParent->mapToScene(mParent->getChildrenArrowLocation(getChildrenId()));
+        QPointF p2 = mParent->getChildrenArrowLocation(getChildrenId());
 
         QLineF line (p1, p2);
         mArrow->setLine(line);
         mArrow->setVisible(true);
     } else {
         mArrow->setVisible(false);
-    }
-
-    boost::shared_ptr<dtree::Node> node = getNode();
-    if (node && node->variable() != dtree::Variable::VarUndefined) {
-        mText->setPlainText(dtree::VariableNames::variableName(node->variable()));
-    } else {
-        mText->setPlainText("");
     }
 
     double r = mText->textWidth();
@@ -136,13 +164,13 @@ void GraphNodeItem::update()
 void GraphNodeItem::createArrow()
 {
     mArrow = new QGraphicsLineItem;
-    scene()->addItem(mArrow);
+    mScene->addItem(mArrow);
     mArrow->setVisible(false);
 }
 
 QPointF GraphNodeItem::getChildrenArrowLocation(int idx) const
 {
-    return QPointF(mChildrenBoxes[idx]->rect().center().x(), mChildrenBoxes[idx]->rect().bottom());
+    return mChildrenBoxes[idx]->mapToScene(mChildrenBoxes[idx]->rect().center().x(), mChildrenBoxes[idx]->rect().bottom());
 }
 
 QVariant GraphNodeItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)

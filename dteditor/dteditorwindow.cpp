@@ -4,6 +4,7 @@
 #include <graphnodeextra.h>
 #include <graphnodeitem.h>
 #include <dtcsvwriter.h>
+#include <dtcsvreader.h>
 
 #include <QCloseEvent>
 #include <QSettings>
@@ -64,6 +65,29 @@ void DtEditorWindow::save(QString filename)
     }
 }
 
+void DtEditorWindow::open(QString filename)
+{
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, tr("Open failed"),
+                             QString(tr("Error Opening file: %1")).arg(file.errorString()));
+        return;
+    }
+
+    QTextStream strm(&file);
+    DtCsvReader reader;
+
+    boost::shared_ptr<dtree::DecisionTree> tree;
+    if (!reader.readTree(strm, &tree, mScene)) {
+        QMessageBox::warning(this, tr("Load failed"),
+                             QString(tr("Cannot export to csv file.")));
+        return;
+    }
+    mTree = tree;
+
+
+}
+
 void DtEditorWindow::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
@@ -96,6 +120,8 @@ void DtEditorWindow::evt_scene_selection_changed()
         // hide properties and disable controls
         ui->nodepropVariable->setEnabled(false);
         ui->nodepropVariable->setCurrentIndex(-1);
+        ui->nodeValue->setEnabled(false);
+        ui->nodeValue->setValue(0);
         //        ui->nodepropDetailsContainer->hide();
     } else {
         ui->nodepropVariable->setEnabled(true);
@@ -107,6 +133,14 @@ void DtEditorWindow::evt_scene_selection_changed()
             if (node.get() != 0) {
                 dtree::Variable var = node->variable();
                 ui->nodepropVariable->setCurrentIndex(var);
+
+                if (var == dtree::Variable::VarLeaf) {
+                    ui->nodeValue->setEnabled(true);
+                    ui->nodeValue->setValue(node->value());
+                } else {
+                    ui->nodeValue->setEnabled(false);
+                    ui->nodeValue->setValue(0);
+                }
 
                 boost::shared_ptr<dtree::NodeExtra> extra = node->extra();
                 if (extra.get() != 0) {
@@ -130,7 +164,36 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
         if (item) {
             boost::shared_ptr<dtree::Node> node = item->getNode();
             if (node.get() != 0) {
-                node->setVariable(static_cast<dtree::Variable>(index));
+                dtree::Variable var = static_cast<dtree::Variable>(index);
+                node->setVariable(var);
+                item->setVariable(var);
+                if (var == dtree::Variable::VarLeaf) {
+                    ui->nodeValue->setEnabled(true);
+                    ui->nodeValue->setValue(node->value());
+                } else {
+                    ui->nodeValue->setEnabled(false);
+                    ui->nodeValue->setValue(0);
+                }
+            }
+            item->update();
+        }
+    }
+}
+
+void DtEditorWindow::on_nodeValue_valueChanged(double value)
+{
+    if (!mScene) return;
+
+    QList<QGraphicsItem *> selection = mScene->selectedItems();
+
+    foreach (QGraphicsItem *i, selection) {
+        GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(i);
+
+        // don't like this - TODO: fix it without using downcasting
+        if (item) {
+            boost::shared_ptr<dtree::Node> node = item->getNode();
+            if (node.get() != 0) {
+                node->setValue(value);
             }
             item->update();
         }
@@ -139,8 +202,38 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
 
 void DtEditorWindow::on_actionSave_as_triggered()
 {
-    QString file = QFileDialog::getSaveFileName(this, tr("Exporting to CSV file"));
+    QSettings s;
+    QString last = s.value("last_tree").toString();
+    QFileDialog dlg(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dt.csv);;All files (*.*)"));
+    dlg.setDefaultSuffix("dt.csv");
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
 
-    if (!file.isEmpty())
-        save(file);
+    if (dlg.exec() == QDialog::Accepted) {
+        QStringList file = dlg.selectedFiles();
+        if (file.size() != 1) {
+            return;
+        }
+        save(file[0]);
+        QFileInfo info(file[0]);
+        s.setValue("last_tree", info.path());
+    }
+}
+
+void DtEditorWindow::on_action_Open_triggered()
+{
+    QSettings s;
+    QString last = s.value("last_tree").toString();
+    QString file = QFileDialog::getOpenFileName(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dt.csv);;All files (*.*)"));
+
+    if (!file.isEmpty()) {
+        try {
+            open(file);
+            QFileInfo info(file);
+            s.setValue("last_tree", info.path());
+        } catch (std::exception &x) {
+            QMessageBox::warning(this, tr("Cannot load tree"), QString::fromStdString(x.what()));
+            return;
+        }
+    }
 }

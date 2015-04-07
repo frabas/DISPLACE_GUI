@@ -6,6 +6,7 @@ const char *const VariableNames::names[] = {
     "weather_is",
     "price_is",
 
+    "probability",
     // keep this last
     0
 };

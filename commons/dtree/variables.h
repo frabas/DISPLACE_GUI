@@ -10,6 +10,7 @@ enum Variable {
     VarWeatherIs = 0,
     VarPriceIs,
 
+    VarLeaf,     // this is a leaf node
     // keep this last
     VarLast
 };

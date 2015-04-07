@@ -14,7 +14,7 @@
    <string>Decision Trees Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../qtgui/qtgui.qrc">
+   <iconset resource="dteditor.qrc">
     <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -73,7 +73,7 @@
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,1">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -83,6 +83,23 @@
      </item>
      <item>
       <widget class="QComboBox" name="nodepropVariable"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Value</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="nodeValue">
+       <property name="maximum">
+        <double>1.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.100000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QWidget" name="nodepropDetailsContainer" native="true"/>
@@ -113,8 +130,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>79</width>
-          <height>227</height>
+          <width>86</width>
+          <height>228</height>
          </rect>
         </property>
         <attribute name="label">
@@ -126,8 +143,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>79</width>
-          <height>227</height>
+          <width>98</width>
+          <height>28</height>
          </rect>
         </property>
         <attribute name="label">
@@ -161,7 +178,7 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="../qtgui/qtgui.qrc">
+    <iconset resource="dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -170,7 +187,7 @@
   </action>
   <action name="action_Save">
    <property name="icon">
-    <iconset resource="../qtgui/qtgui.qrc">
+    <iconset resource="dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -179,7 +196,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset resource="../qtgui/qtgui.qrc">
+    <iconset resource="dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -188,7 +205,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../qtgui/qtgui.qrc">
+    <iconset resource="dteditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -197,7 +214,7 @@
   </action>
   <action name="action_Add_Node">
    <property name="icon">
-    <iconset resource="../qtgui/qtgui.qrc">
+    <iconset resource="dteditor.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -206,7 +223,6 @@
   </action>
  </widget>
  <resources>
-  <include location="../qtgui/qtgui.qrc"/>
   <include location="dteditor.qrc"/>
  </resources>
  <connections/>

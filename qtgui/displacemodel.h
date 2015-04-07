@@ -316,16 +316,8 @@ public:
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing, bool onQ1, bool onQ2, bool onQ3, bool onQ4);
     void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,  bool onQ1, bool onQ2, bool onQ3, bool onQ4);
 
-    int countPenaltyPolygons() const { return mPenaltyNodes.size(); }
-    int countQ1PenaltyPolygons() const { return mPenaltyNodesQ1.size(); }
-    int countQ2PenaltyPolygons() const { return mPenaltyNodesQ2.size(); }
-    int countQ3PenaltyPolygons() const { return mPenaltyNodesQ3.size(); }
-    int countQ4PenaltyPolygons() const { return mPenaltyNodesQ4.size(); }
-    const QList<int> getPenaltyPolygonsAt (int ndx) const { return mPenaltyNodes.at(ndx); }
-    const QList<int> getQ1PenaltyPolygonsAt (int ndx) const { return mPenaltyNodesQ1.at(ndx); }
-    const QList<int> getQ2PenaltyPolygonsAt (int ndx) const { return mPenaltyNodesQ2.at(ndx); }
-    const QList<int> getQ3PenaltyPolygonsAt (int ndx) const { return mPenaltyNodesQ3.at(ndx); }
-    const QList<int> getQ4PenaltyPolygonsAt (int ndx) const { return mPenaltyNodesQ4.at(ndx); }
+    int countPenaltyPolygons(int quarter) const;
+    const QList<int> getPenaltyPolygonsAt (int quarter, int ndx) const ;
 
     bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
@@ -352,9 +344,7 @@ protected:
     bool loadHistoricalStatsFromDb();
 
     void checkStatsCollection(int tstep);
-
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
-
     void setCodeFromFeature(OGRGeometry *geometry, int code, std::function<void (std::shared_ptr<NodeData>, int)> func);
 
 signals:
@@ -393,7 +383,7 @@ private:
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
-    QList<QList<int>> mPenaltyNodes;
+//    QList<QList<int>> mPenaltyNodes;
     QList<QList<int>> mPenaltyNodesQ1;
     QList<QList<int>> mPenaltyNodesQ2;
     QList<QList<int>> mPenaltyNodesQ3;

@@ -25,10 +25,13 @@ public:
     boost::shared_ptr<NodeExtra> extra() const;
 
     Variable variable() const { return mVariable; }
-    void setVariable(Variable var) { mVariable = var; }
+    void setVariable(Variable var);
 
     void setParent(boost::weak_ptr<Node> node) { mParent = node; }
     boost::weak_ptr<Node> parent() const { return mParent; }
+
+    double value() const { return mValue; }
+    void setValue(double v) { mValue = v; }
 
 private:
     boost::weak_ptr<DecisionTree> mTree;
@@ -37,6 +40,7 @@ private:
     boost::shared_ptr<NodeExtra> mExtra;
 
     Variable mVariable;
+    double mValue;
 };
 
 }

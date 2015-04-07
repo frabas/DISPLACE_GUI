@@ -4,6 +4,7 @@
 using namespace dtree;
 
 DecisionTree::DecisionTree()
+    : mRoot()
 {
 }
 

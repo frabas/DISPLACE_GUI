@@ -59,6 +59,7 @@ throw (std::invalid_argument)
 
         dtree::Variable var = dtree::VariableNames::variableCode(fields[1].toStdString());
         data[idx].node->setVariable(var);
+        data[idx].item->setVariable(var);
 
         double x = fields[2].toDouble(&ok);
         if (!ok) throw std::invalid_argument("invalid field");

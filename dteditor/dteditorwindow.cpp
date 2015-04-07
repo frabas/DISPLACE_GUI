@@ -166,6 +166,7 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
             if (node.get() != 0) {
                 dtree::Variable var = static_cast<dtree::Variable>(index);
                 node->setVariable(var);
+                item->setVariable(var);
                 if (var == dtree::Variable::VarLeaf) {
                     ui->nodeValue->setEnabled(true);
                     ui->nodeValue->setValue(node->value());

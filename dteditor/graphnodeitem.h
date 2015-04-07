@@ -4,6 +4,7 @@
 #include <QGraphicsItemGroup>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <dtree/variables.h>
 
 namespace dtree {
     class Node;
@@ -23,6 +24,7 @@ public:
     int getChildrenCount() const;
     GraphNodeItem *getChild(int idx);
     int getChildrenId() const { return mChildrenId; }
+    void setVariable(dtree::Variable var);
 
     void connectAsParent(GraphNodeItem *item, int idx);
     void connectAsChild(GraphNodeItem *item, int idx);

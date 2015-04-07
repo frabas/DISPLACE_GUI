@@ -41,6 +41,39 @@ GraphNodeItem *GraphNodeItem::getChild(int idx)
     return mChildrenItems[idx];
 }
 
+void GraphNodeItem::setVariable(dtree::Variable var)
+{
+    Q_UNUSED(var);
+
+    boost::shared_ptr<dtree::Node> node = getNode();
+    int n = node->getChildrenCount();
+
+    if (n != mChildrenItems.size()) {
+        QVector<GraphNodeItem *> v = mChildrenItems;
+        mChildrenItems.clear();
+        foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
+            delete item;
+
+        mChildrenBoxes.clear();
+        for (int i = 0; i < n; ++i) {
+            if (i < v.size())
+                mChildrenItems.push_back(v[i]);
+            else
+                mChildrenItems.push_back(0);
+
+            QRectF r( -sDefWidth/2 + i*sDefWidth/n,
+                      sDefHeight/2 - sDefHeight/3,
+                      sDefWidth / n,
+                      sDefHeight/3);
+
+            GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(mapRectToScene(r), this, i);
+            mChildrenBoxes.append(newch);
+
+            addToGroup(newch);
+        }
+    }
+}
+
 void GraphNodeItem::setChild(int idx, GraphNodeItem *child)
 {
     mChildrenItems[idx] = child;
@@ -100,25 +133,6 @@ void GraphNodeItem::update()
 
     boost::shared_ptr<dtree::Node> node = getNode();
     if (node) {
-        int cc = node->getChildrenCount();
-        int cn = mChildrenBoxes.size();
-        if (cn != cc) {
-            mChildrenBoxes.clear();
-            mChildrenItems.clear();
-            for (int i = 0; i < node->getChildrenCount(); ++i) {
-                QRectF r( -sDefWidth/2 + i*sDefWidth/cc,
-                          sDefHeight/2 - sDefHeight/3,
-                          sDefWidth / cc,
-                          sDefHeight/3);
-
-                GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(mapRectToScene(r), this, i);
-                mChildrenBoxes.append(newch);
-                mChildrenItems.append(0);
-
-                addToGroup(newch);
-            }
-        }
-
         switch (node->variable()) {
         case dtree::Variable::VarUndefined:
             mText->setPlainText(QString());
@@ -156,7 +170,7 @@ void GraphNodeItem::createArrow()
 
 QPointF GraphNodeItem::getChildrenArrowLocation(int idx) const
 {
-    return QPointF(mChildrenBoxes[idx]->rect().center().x(), mChildrenBoxes[idx]->rect().bottom());
+    return mChildrenBoxes[idx]->mapToScene(mChildrenBoxes[idx]->rect().center().x(), mChildrenBoxes[idx]->rect().bottom());
 }
 
 QVariant GraphNodeItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)

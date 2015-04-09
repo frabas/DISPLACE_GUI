@@ -76,11 +76,12 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             addItemAsRoot(mAddingItem);
             mRoot = mAddingItem;
             mTree->setRoot(mAddingNode);
+            emit nodeAdded(mAddingItem);
             mAddingNode.reset();
             endMode();
         }
         mAddingItem->setPos(event->scenePos());
-        break;
+        return;
     case AddNodeConnect:
         // connect the nodes
         boost::shared_ptr<dtree::Node> nd;
@@ -88,8 +89,10 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             mTree->connect(mAddingNode, nd, mHoveringNodeChild);
             mAddingItem->connectAsChild(mHoveringNode, mHoveringNodeChild);
             mAddingItem->update();
+            emit nodeAdded(mAddingItem);
             mAddingNode.reset();
             endMode();
+            return;
         }
         break;
     }

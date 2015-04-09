@@ -33,7 +33,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
-    void nodeAddRootCompleted(QPointF);
+    void nodeAdded(GraphNodeItem *);
     void mouseModeEnded();
 
 public slots:

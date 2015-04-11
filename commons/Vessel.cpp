@@ -32,7 +32,7 @@
 #include <assert.h>
 
 #include <dtree/dtnode.h>
-#include <decisiontreemanager.h>
+#include <dtree/decisiontreemanager.h>
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//

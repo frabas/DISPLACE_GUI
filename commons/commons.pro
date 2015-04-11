@@ -32,7 +32,7 @@ SOURCES= \
     dtree/decisiontree.cpp \
     dtree/variables.cpp \
     dtree/dtnode.cpp \
-    decisiontreemanager.cpp
+    dtree/decisiontreemanager.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -60,7 +60,7 @@ HEADERS= \
     dtree/variables.h \
     dtree/dtnode.h \
     dtree/dtnodeextra.h \
-    decisiontreemanager.h
+    dtree/decisiontreemanager.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

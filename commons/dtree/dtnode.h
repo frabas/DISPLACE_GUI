@@ -1,5 +1,5 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef DTNODE_H
+#define DTNODE_H
 
 #include <dtree/variables.h>
 

@@ -245,7 +245,8 @@ OTHER_FILES += \
     ../docs/database.txt \
     ../docs/dbstruct.sh \
     palettes/pop_colors.p2c \
-    ../docs/input_fileformats.txt
+    ../docs/input_fileformats.txt \
+    ../Doxyfile
 
 TRANSLATIONS += \
     translations/displace_it.ts \

@@ -1,8 +1,12 @@
 #ifndef DECISIONTREEMANAGER_H
 #define DECISIONTREEMANAGER_H
 
-#include <dtree/decisiontree.h>
+#include <string>
 #include <vector>
+
+namespace dtree {
+class DecisionTree;
+}
 
 /** \brief A class that implements a Singleton for managing the Decision Trees for vessels
  *
@@ -18,6 +22,8 @@ public:
 
     /** \brief An enumerated type to identify which tree to refer. */
     enum TreeType {
+        InvalidTreeType = -1,   // this is a special code, do not change this value
+
         GoFishing, ChooseGround,
         StartFishing, ChangeGround, StopFishing,
         ChoosePort,
@@ -37,10 +43,15 @@ public:
         return mInstance;
     }
 
+    static std::string treeTypeCode(TreeType type);
+    static TreeType treeTypeFromCode (std::string code);
+
 private:
     std::vector<dtree::DecisionTree *> mTrees;
 
     static DecisionTreeManager *mInstance;
+
+    static const char * const mCodes[];
 };
 
 #endif // DECISIONTREEMANAGER_H

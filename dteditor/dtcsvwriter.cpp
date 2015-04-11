@@ -6,7 +6,7 @@
 #include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
 
-const int DtCsvWriter::VERSION = 2;
+const int DtCsvWriter::VERSION = 3;
 
 DtCsvWriter::DtCsvWriter()
 {
@@ -23,7 +23,8 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
     if (!gnode)
         return false;
 
-    stream << "#DTreeVersion: " << VERSION << endl;
+    stream << "#TreeVersion: " << VERSION << endl;
+    stream << "#TreeType: " << QString::fromStdString(DecisionTreeManager::treeTypeCode(tree->type())) << endl;
     stream << "# id,variable,posx,posy,nchld,children...,value" << endl;
 
     queue.push_back(gnode);

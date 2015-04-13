@@ -2668,6 +2668,7 @@ int main(int argc, char* argv[])
 
         guiSendCurrentStep(tstep);
 
+        tout(cout << "tstep: " << tstep << endl);
         ostringstream os;
         os << "tstep " << tstep << endl;
         mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));

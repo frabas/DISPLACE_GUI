@@ -29,7 +29,8 @@ extern int verbosity;
 #define outv(l,x) { if (verbosity >= l) { x; } }
 
 #define dout(x) outv(3,x)
-#define outc(x) outv(1,x)
+#define outc(x) outv(2,x)
+#define tout(x) outv(1,x)
 
 #define UNUSED(expr) do { (void)(expr); } while (0)
 

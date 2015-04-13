@@ -459,6 +459,9 @@ int main(int argc, char* argv[])
 
     UNUSED(dparam);
 
+    if (!use_gui)
+        mOutQueue.disableIpcQueue();
+
     mOutQueue.start();
     thread_vessel_init(num_threads);
 

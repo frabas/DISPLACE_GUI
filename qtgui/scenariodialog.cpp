@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QFileDialog>
 #include <QSettings>
+#include <QTextStream>
 #include <QMessageBox>
 
 static const char *dyn_alloc_options[] = {
@@ -170,4 +171,69 @@ void ScenarioDialog::on_apply_clicked()
     }
 
     accept();
+}
+
+void ScenarioDialog::on_graphBrowse_clicked()
+{
+    QSettings sets;
+    QString lastpath = sets.value("lastpath", QDir::homePath()).toString();
+    QFileDialog dlg(this,tr("Select graph file"),lastpath);
+    QStringList filt;
+
+    /** \bug the following line seems to trigger a Qt5 bug. The default filter is not selected as expected. */
+    filt << tr("Graph files (graph*.dat)") << tr("All files (*.*)");
+
+    dlg.setNameFilters(filt);
+    if (dlg.exec() == QDialog::Accepted) {
+        QString nm = dlg.selectedFiles()[0];
+
+        QRegExp r("graph([0-9]+).dat");
+        if (r.indexIn(nm) == -1) {
+            QMessageBox::warning(this, tr("Wrong Graph file name"),
+                    tr("The graph file you selected cannot be parsed correctly, and the graph code cannot be retrieved."));
+            return;
+        }
+
+        int nmv = r.cap(1).toInt();
+        ui->agraph->setValue(nmv);
+
+        QFileInfo info(nm);
+        QString gf = info.path() + QString("/graph%1.dat").arg(nmv);
+
+        QFile gff (gf);
+        if (!gff.open(QIODevice::ReadOnly)) {
+            QMessageBox::warning(this, tr("Cannot read graph file name"),
+                    QString(tr("The graph file you selected cannot be read: %1")).arg(gff.errorString()));
+            return;
+        }
+
+        int nr = 0;
+        QTextStream strm (&gff);
+        while (!strm.atEnd()) {
+            strm.readLine();
+            ++nr;
+        }
+        gff.close();
+
+        ui->nrowgraph->setValue(nr/3);
+
+        QString cf = info.path() + QString("/coord%1.dat").arg(nmv);
+
+        QFile cff (cf);
+        if (!cff.open(QIODevice::ReadOnly)) {
+            QMessageBox::warning(this, tr("Cannot read coord file name"),
+                    QString(tr("The coord file you selected cannot be read: %1")).arg(gff.errorString()));
+            return;
+        }
+
+        nr = 0;
+        QTextStream cstrm (&cff);
+        while (!cstrm.atEnd()) {
+            cstrm.readLine();
+            ++nr;
+        }
+        cff.close();
+
+        ui->nrowcoord->setValue(nr/3);
+    }
 }

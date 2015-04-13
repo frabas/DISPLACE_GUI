@@ -52,6 +52,8 @@ private slots:
 
     void on_apply_clicked();
 
+    void on_graphBrowse_clicked();
+
 private:
     void setDynPop(const QStringList &text);
     void setDynAlloc(const QStringList &options);

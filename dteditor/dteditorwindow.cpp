@@ -30,7 +30,7 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     mScene = new DtGraphicsScene(mTree);
     mScene->setSceneRect(QRectF(0, 0, 5000, 5000));
 
-    connect (mScene, SIGNAL(nodeAddCompleted(QPointF)), this, SLOT(evt_scene_node_added(QPointF)));
+    connect (mScene, SIGNAL(nodeAdded(GraphNodeItem*)), this, SLOT(evt_scene_node_added(GraphNodeItem*)));
     connect (mScene, SIGNAL(selectionChanged()), this, SLOT(evt_scene_selection_changed()));
 
     ui->treeView->setScene(mScene);
@@ -108,8 +108,10 @@ void DtEditorWindow::on_action_Add_Node_triggered()
     mScene->startAddNode(newnode);
 }
 
-void DtEditorWindow::evt_scene_node_added(QPointF pt)
+void DtEditorWindow::evt_scene_node_added(GraphNodeItem *node)
 {
+    mScene->clearSelection();
+    node->setSelected(true);
 }
 
 void DtEditorWindow::evt_scene_selection_changed()

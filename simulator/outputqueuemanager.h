@@ -42,6 +42,7 @@ public:
     explicit OutputQueueManager();
     explicit OutputQueueManager(std::ostream &stream);
 
+    void disableIpcQueue();
     void start();
     void finish();
 
@@ -54,6 +55,7 @@ public:
     }
 
     void enqueue(boost::shared_ptr<OutputMessage> msg);
+
 private:
     /** @brief The pthread-style entry point to the thread. */
     static void *thread_trampoline(void *);
@@ -75,7 +77,7 @@ private:
     std::queue<boost::shared_ptr<OutputMessage> > mQueue;
 
     IpcQueue ipcQueue;
-    enum ProtocolType { TextWithStdOut, Binary } mType;
+    enum ProtocolType { TextWithStdOut, Binary, None } mType;
 
     std::ostream &mOutStream;        ///< File descriptor for socket/pipe (Binary protocol)
 };

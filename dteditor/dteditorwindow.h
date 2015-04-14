@@ -25,7 +25,7 @@ protected:
 
 private slots:
     void on_action_Add_Node_triggered();
-    void evt_scene_node_added(QPointF);
+    void evt_scene_node_added(GraphNodeItem *);
     void evt_scene_selection_changed();
     void on_nodepropVariable_currentIndexChanged(int index);
     void on_actionSave_as_triggered();

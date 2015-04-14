@@ -459,6 +459,9 @@ int main(int argc, char* argv[])
 
     UNUSED(dparam);
 
+    if (!use_gui)
+        mOutQueue.disableIpcQueue();
+
     mOutQueue.start();
     thread_vessel_init(num_threads);
 
@@ -2668,6 +2671,7 @@ int main(int argc, char* argv[])
 
         guiSendCurrentStep(tstep);
 
+        tout(cout << "tstep: " << tstep << endl);
         ostringstream os;
         os << "tstep " << tstep << endl;
         mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));

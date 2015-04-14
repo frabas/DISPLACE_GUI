@@ -53,6 +53,11 @@ OutputQueueManager::OutputQueueManager(std::ostream &stream)
     sem_init(&mSemaphore, 0, 0);
 }
 
+void OutputQueueManager::disableIpcQueue ()
+{
+    mType = None;
+}
+
 void OutputQueueManager::start()
 {
     ThreadArgs *args = new ThreadArgs();
@@ -113,6 +118,8 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
 
         if (!exit) {
             switch (mType) {
+            case None:
+                break;
             case TextWithStdOut:
                 exit = !msg->send(mOutStream);
                 break;

@@ -22,6 +22,7 @@ protected:
     void save(QString filename);
     void open(QString filename);
     void updateTitleBar();
+    void updateGui();
     void closeEvent(QCloseEvent *event);
 
 private slots:
@@ -33,6 +34,7 @@ private slots:
     void on_action_Open_triggered();
     void on_nodeValue_valueChanged(double value);
     void on_action_Save_triggered();
+    void on_treeType_currentIndexChanged(int index);
 
 private:
     Ui::DtEditorWindow *ui;

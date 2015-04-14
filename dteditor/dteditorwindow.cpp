@@ -1,6 +1,7 @@
 #include "dteditorwindow.h"
 #include "ui_dteditorwindow.h"
 #include <dtree/dtnode.h>
+#include <dtree/decisiontreemanager.h>
 #include <graphnodeextra.h>
 #include <graphnodeitem.h>
 #include <dtcsvwriter.h>
@@ -24,6 +25,11 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
         ui->nodepropVariable->addItem(dtree::VariableNames::variableName(static_cast<dtree::Variable>(i)));
     }
     ui->nodepropVariable->setCurrentIndex(-1);
+
+    for (int i = 0; i < dtree::DecisionTreeManager::SIZE; ++i) {
+        ui->treeType->addItem(QString::fromStdString(dtree::DecisionTreeManager::manager()->treeTypeCode(static_cast<dtree::DecisionTreeManager::TreeType>(i))));
+    }
+    ui->treeType->setCurrentIndex(-1);
 
     mTree = boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree);
 
@@ -85,7 +91,7 @@ void DtEditorWindow::open(QString filename)
     }
     mTree = tree;
 
-
+    updateGui();
 }
 
 void DtEditorWindow::updateTitleBar()
@@ -95,6 +101,13 @@ void DtEditorWindow::updateTitleBar()
     } else {
         QFileInfo info (mFilename);
         setWindowTitle(QString(tr("Decision Tree Editor - %1")).arg(info.fileName()));
+    }
+}
+
+void DtEditorWindow::updateGui()
+{
+    if (mTree) {
+        ui->treeType->setCurrentIndex(static_cast<int>(mTree->type()));
     }
 }
 
@@ -263,4 +276,10 @@ void DtEditorWindow::on_action_Save_triggered()
         save(mFilename);
         updateTitleBar();
     }
+}
+
+void DtEditorWindow::on_treeType_currentIndexChanged(int index)
+{
+    if (mTree)
+        mTree->setType(static_cast<dtree::DecisionTreeManager::TreeType>(index));
 }

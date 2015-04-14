@@ -1500,12 +1500,18 @@ void MainWindow::end_ShortestPathCreated(bool completed)
 
 void MainWindow::on_actionAdd_Penalty_on_Polygon_triggered()
 {
+    if (!currentModel ||
+            (currentModel->modelType() != DisplaceModel::EditorModelType &&
+             currentModel->modelType() != DisplaceModel::LiveModelType))
+        return;
     startMouseMode(new DrawPenaltyPolygon(this, mMapController));
 }
 
 void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel ||
+            (currentModel->modelType() != DisplaceModel::EditorModelType &&
+             currentModel->modelType() != DisplaceModel::LiveModelType))
         return;
 
     PathPenaltyDialog dlg(this);

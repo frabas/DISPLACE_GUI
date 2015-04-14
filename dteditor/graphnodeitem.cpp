@@ -120,9 +120,9 @@ void GraphNodeItem::moveArrow(QPointF pt)
     mArrow->setVisible(true);
 }
 
-bool GraphNodeItem::requiresChildrenHighlight() const
+bool GraphNodeItem::requiresChildrenHighlight(int childid) const
 {
-    return mScene->requiresChildrenHighlight();
+    return mScene->requiresChildrenHighlight() && mChildrenItems[childid] == 0;
 }
 
 void GraphNodeItem::childHoverEntered(int id)
@@ -212,7 +212,7 @@ GraphNodeChildBoxItem::GraphNodeChildBoxItem(QRectF r, GraphNodeItem *parent, in
 
 void GraphNodeChildBoxItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (mParent->requiresChildrenHighlight()) {
+    if (mParent->requiresChildrenHighlight(mId)) {
         setBrush(mHighlightBrush);
         mParent->childHoverEntered(mId);
     }

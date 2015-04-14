@@ -31,7 +31,7 @@ public:
 
     void moveArrow(QPointF pt);
 
-    bool requiresChildrenHighlight() const;
+    bool requiresChildrenHighlight(int childid) const;
     void childHoverEntered(int id);
     void childHoverExited();
 

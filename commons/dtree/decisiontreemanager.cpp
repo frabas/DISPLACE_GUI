@@ -3,6 +3,8 @@
 #include <dtree/decisiontree.h>
 #include <string.h>
 
+using namespace dtree;
+
 const char * const DecisionTreeManager::mCodes[] = {
     "GoFishing", "ChooseGround",
     "StartFishing", "ChangeGround", "StopFishing",

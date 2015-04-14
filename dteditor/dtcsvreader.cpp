@@ -32,7 +32,7 @@ throw (std::invalid_argument)
     QVector<Data> data;
     bool ok;
     int version = 0;
-    DecisionTreeManager::TreeType treeType = DecisionTreeManager::InvalidTreeType;
+    dtree::DecisionTreeManager::TreeType treeType = dtree::DecisionTreeManager::InvalidTreeType;
 
     while (!stream.atEnd()) {
         line = stream.readLine();
@@ -46,8 +46,8 @@ throw (std::invalid_argument)
                 if (version > VERSION)
                     throw std::invalid_argument("Unsupported version");
             } else if (fields[0] == "#TreeType:") {
-                treeType = DecisionTreeManager::treeTypeFromCode(fields[1].toStdString());
-                if (treeType == DecisionTreeManager::InvalidTreeType)
+                treeType = dtree::DecisionTreeManager::treeTypeFromCode(fields[1].toStdString());
+                if (treeType == dtree::DecisionTreeManager::InvalidTreeType)
                     throw std::invalid_argument("Unsupported #TreeType token");
             }
             continue;

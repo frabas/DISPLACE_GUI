@@ -6,7 +6,6 @@
 
 namespace dtree {
 class DecisionTree;
-}
 
 /** \brief A class that implements a Singleton for managing the Decision Trees for vessels
  *
@@ -53,5 +52,7 @@ private:
 
     static const char * const mCodes[];
 };
+
+} // ns
 
 #endif // DECISIONTREEMANAGER_H

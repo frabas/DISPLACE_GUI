@@ -49,6 +49,7 @@
 #include <outputmessage.h>
 #include <messages/genericconsolestringoutputmessage.h>
 #include <thread_vessels.h>
+#include <dtree/decisiontreemanager.h>
 
 #include <iomanip>
 #include <iostream>
@@ -464,6 +465,11 @@ int main(int argc, char* argv[])
 
     mOutQueue.start();
     thread_vessel_init(num_threads);
+
+    if (dtree::DecisionTreeManager::manager()->readFromDirectory("../"+inputfolder+"/dtrees") <= 0) {
+        std::cerr << "Cannot read decision trees, aborting." << std::endl;
+        return -1;
+    }
 
     cwd = std::string(getcwd(buf, MAXPATH));
 

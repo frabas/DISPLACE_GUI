@@ -45,11 +45,15 @@ public:
     static std::string treeTypeCode(TreeType type);
     static TreeType treeTypeFromCode (std::string code);
 
+protected:
+    bool readFile(std::string filename);
+
 private:
     std::vector<dtree::DecisionTree *> mTrees;
 
     static DecisionTreeManager *mInstance;
 
+    static const int VERSION;
     static const char * const mCodes[];
 };
 

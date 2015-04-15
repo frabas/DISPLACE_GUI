@@ -3485,8 +3485,8 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 								 // TO DO: retrieve from the state of the vessel
 			internal_states.insert(make_pair(" last_trip_was ",0));
 
-            dtree::DecisionTree *tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
-            double the_value = traverseDtree(tree);
+            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+            double the_value = traverseDtree(tree.get());
 
             //								 // get the genotype!
 //			string tree = this->get_decision_tree_for_go_fishing();

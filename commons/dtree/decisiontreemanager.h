@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/shared_ptr.hpp>
+
 namespace dtree {
 class DecisionTree;
 
@@ -31,7 +33,7 @@ public:
     };
 
     int readFromDirectory(std::string path);
-    dtree::DecisionTree *tree (TreeType);
+    boost::shared_ptr<dtree::DecisionTree> tree (TreeType type);
 
     /** \brief returns the instance of the singleton.
      * Uses lazy initialization to proper initialize the instance.
@@ -49,7 +51,7 @@ protected:
     bool readFile(std::string filename);
 
 private:
-    std::vector<dtree::DecisionTree *> mTrees;
+    std::vector<boost::shared_ptr<dtree::DecisionTree> > mTrees;
 
     static DecisionTreeManager *mInstance;
 

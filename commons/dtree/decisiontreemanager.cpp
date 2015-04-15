@@ -27,7 +27,7 @@ DecisionTreeManager::DecisionTreeManager()
     : mTrees()
 {
     for (int i = 0; i < SIZE; ++i)
-        mTrees.push_back(new dtree::DecisionTree());
+        mTrees.push_back(boost::shared_ptr<dtree::DecisionTree>());
 }
 
 /** \brief Read all the dtrees in a directory, returning the number of loaded trees.
@@ -148,14 +148,16 @@ bool DecisionTreeManager::readFile (std::string filename)
         tree->setRoot(nodes[0].node);
     }
 
+    mTrees[static_cast<int>(treeType)] = tree;
+
     return true;
 }
 
 /** \brief Returns a reference to the specified tree
  */
-dtree::DecisionTree *DecisionTreeManager::tree(DecisionTreeManager::TreeType)
+boost::shared_ptr<dtree::DecisionTree> DecisionTreeManager::tree(DecisionTreeManager::TreeType type)
 {
-    return 0;
+    return mTrees[static_cast<int>(type)];
 }
 
 std::string DecisionTreeManager::treeTypeCode(DecisionTreeManager::TreeType type)

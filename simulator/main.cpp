@@ -3427,7 +3427,7 @@ int main(int argc, char* argv[])
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
                 nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
-                nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
+                if(export_vmslike) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
 			}
 
 			//...and export the benthos biomasses on node

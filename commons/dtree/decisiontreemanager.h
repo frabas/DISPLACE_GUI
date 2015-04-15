@@ -21,7 +21,10 @@ private:
     ~DecisionTreeManager();
 public:
 
-    /** \brief An enumerated type to identify which tree to refer. */
+    /** \brief An enumerated type to identify which tree to refer.
+     * They are internally used as index to various container classes (mostly vectors) so don't change
+     * the integer values, especially for InvalidTreeType and SIZE (that must be the last).
+     */
     enum TreeType {
         InvalidTreeType = -1,   // this is a special code, do not change this value
 

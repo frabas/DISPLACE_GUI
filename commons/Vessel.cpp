@@ -1115,6 +1115,9 @@ double Vessel::traverseDtree(dtree::DecisionTree *tree)
             bin = node->getChildrenCount()-1;
         node = node->getChild(bin);
     }
+
+    // if here, we may have a problem.
+    throw std::runtime_error("Invalid null node reached while traversing decision tree.");
 }
 
 string Vessel::nationalityFromName(const string &name)
@@ -1545,7 +1548,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 int    MLS_cat                      = m_mls_cat_per_pop[pop];
 
 				// compute available biomass via selectivity
-                for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
+                for(int szgroup=0; szgroup < (int)avail_biomass.size(); szgroup++)
 				{
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *sel_ogive[szgroup]; // available for landings only
@@ -1613,7 +1616,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive and the N
                     vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
-                    for(int sizgroup=0; sizgroup<Ns_at_szgroup_pop.size(); sizgroup++) {
+                    for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                  *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
                     }
@@ -1648,7 +1651,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
-                    for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
+                    for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
 					{
                         if(all_biomass[szgroup]!=0)
 						{

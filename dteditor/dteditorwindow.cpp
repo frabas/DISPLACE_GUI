@@ -147,7 +147,7 @@ void DtEditorWindow::evt_scene_selection_changed()
 
     ui->action_Delete_Nodes->setEnabled(selection.size() > 0);
 
-    if (selection.size() != 1) {
+    if (selection.size() == 0) {
         // hide properties and disable controls
         ui->nodepropVariable->setEnabled(false);
         ui->nodepropVariable->setCurrentIndex(-1);

@@ -4,6 +4,7 @@
 #include <dtree/dtnode.h>
 #include <string.h>
 #include <dirent.h>
+#include <iostream>
 #include <fstream>
 
 #include <boost/algorithm/string.hpp>
@@ -41,7 +42,11 @@ int DecisionTreeManager::readFromDirectory(std::string path)
     dir = opendir(path.c_str());
     if (dir) {
         while ((dirent = readdir(dir))) {
-            if (dirent->d_type == DT_REG) {
+            bool isfile = true;
+#ifndef __WIN32
+            isfile = dirent->d_type == DT_REG;
+#endif
+            if (isfile) {
                 if (readFile (path + "/" + std::string(dirent->d_name))) {
                     ++nr;
                 } else {

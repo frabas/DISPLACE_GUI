@@ -34,11 +34,7 @@
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
 
-//------------------------------------------------------------//
-//------------------------------------------------------------//
-// creator methods...
-//------------------------------------------------------------//
-//------------------------------------------------------------//
+#include <stdexcept>
 
 Vessel::Vessel()
 {
@@ -51,8 +47,6 @@ Vessel::~Vessel()
 
 }
 
-
-//Vessel::Vessel(boost::shared_ptr<Node> p_location, int idx, string a_name)
 Vessel::Vessel(Node* p_location, int idx, string a_name)
 {
     pthread_mutex_init(&mutex,0);
@@ -587,79 +581,6 @@ const vector<vector<double> > &Vessel::get_gscale_cpue_nodes_species() const
 	return(gscale_cpue_nodes_species);
 
 }
-
-#if 0
-string Vessel::get_decision_tree_for_go_fishing () const
-{
-	return(decision_tree_for_go_fishing);
-}
-
-
-string Vessel::get_decision_tree_for_choose_ground () const
-{
-	return(decision_tree_for_choose_ground);
-}
-
-
-string Vessel::get_decision_tree_for_start_fishing () const
-{
-	return(decision_tree_for_start_fishing);
-}
-
-
-string Vessel::get_decision_tree_for_change_ground () const
-{
-	return(decision_tree_for_change_ground);
-}
-
-
-string Vessel::get_decision_tree_for_stop_fishing () const
-{
-	return(decision_tree_for_stop_fishing);
-}
-
-
-string Vessel::get_decision_tree_for_choose_port () const
-{
-	return(decision_tree_for_choose_port);
-}
-
-
-const vector <string> &Vessel::get_reading_direction_go_fishing () const
-{
-	return(reading_direction_go_fishing);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_choose_ground() const
-{
-	return(reading_direction_choose_ground);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_start_fishing() const
-{
-	return(reading_direction_start_fishing);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_change_ground() const
-{
-	return(reading_direction_change_ground);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_stop_fishing() const
-{
-	return(reading_direction_stop_fishing);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_choose_port() const
-{
-	return(reading_direction_choose_port);
-}
-#endif
 
 int Vessel::get_individual_tac (int sp) const
 {
@@ -3491,14 +3412,7 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
             boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
             double the_value = traverseDtree(tree.get());
 
-            //								 // get the genotype!
-//			string tree = this->get_decision_tree_for_go_fishing();
-//								 // get the order of the drivers, i.e. the nodes of the tree
-//			vector <string> direction= this->get_reading_direction_go_fishing();
-
-//			double the_value = decode_the_tree(tree, direction, external_states, internal_states);
-			//cout << "the_value " << the_value << endl;
-			// draw a random number [0,1) and compare with the value
+        // draw a random number [0,1) and compare with the value
 
             //GO!
             if(unif_rand()<the_value) {

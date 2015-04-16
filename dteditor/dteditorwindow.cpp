@@ -7,6 +7,8 @@
 #include <dtcsvwriter.h>
 #include <dtcsvreader.h>
 
+#include <commands/settreetypecommand.h>
+
 #include <QCloseEvent>
 #include <QSettings>
 #include <QFileDialog>
@@ -348,8 +350,10 @@ bool DtEditorWindow::checkForDTreeBeforeSaving()
 
 void DtEditorWindow::on_treeType_currentIndexChanged(int index)
 {
-    if (mTree)
-        mTree->setType(static_cast<dtree::DecisionTreeManager::TreeType>(index));
+    if (mTree) {
+        boost::shared_ptr<Command> command (new SetTreeTypeCommand(mTree, static_cast<dtree::DecisionTreeManager::TreeType>(index)));
+        execute(command);
+    }
 }
 
 void DtEditorWindow::on_action_Delete_Nodes_triggered()

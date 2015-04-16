@@ -2,6 +2,7 @@
 #include <dtree/decisiontree.h>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 #include <graphnodeitem.h>
 #include <QDebug>
 
@@ -114,6 +115,22 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void DtGraphicsScene::keyPressEvent(QKeyEvent *keyEvent)
+{
+    switch (keyEvent->key()) {
+    case Qt::Key_Escape:
+        if (mMode == AddNode || mMode == AddNodeConnect) {
+            // Abort add nodes
+            mAddingNode.reset();
+            if (mAddingItem)
+                delete mAddingItem;
+            mAddingItem = 0;
+            endMode();
+        }
+        break;
+    }
 }
 
 void DtGraphicsScene::startAddNode(boost::shared_ptr<dtree::Node> node)

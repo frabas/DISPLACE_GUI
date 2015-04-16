@@ -17,6 +17,7 @@ class GraphNodeItem : public QGraphicsItemGroup
 {
 public:
     explicit GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent = 0);
+    virtual ~GraphNodeItem();
 
     boost::shared_ptr<dtree::Node> getNode() const { return mNode.lock(); }
 

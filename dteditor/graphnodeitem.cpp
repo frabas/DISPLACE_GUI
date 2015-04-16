@@ -31,6 +31,23 @@ GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScen
     setHandlesChildEvents(false);
 }
 
+GraphNodeItem::~GraphNodeItem()
+{
+    if (mRect)
+        delete mRect;
+    /* no: mText is children of mRect
+    if (mText)
+        delete mText;*/
+    if (mArrow)
+        delete mArrow;
+
+    foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
+        delete item;
+
+    foreach(QGraphicsTextItem *item, mChildrenBoxText)
+        delete item;
+}
+
 int GraphNodeItem::getChildrenCount() const
 {
     return mChildrenItems.size();

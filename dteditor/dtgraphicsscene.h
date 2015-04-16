@@ -32,6 +32,7 @@ public:
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void keyPressEvent(QKeyEvent * keyEvent) override;
 
 signals:
     void nodeAdded(GraphNodeItem *);

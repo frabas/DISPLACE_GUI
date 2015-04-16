@@ -60,9 +60,12 @@ QString SaveGraphDialog::getAreacodesFilename() const
 
 QString SaveGraphDialog::getClosedPolygonFilename() const
 {
-    if (ui->optClosedPoly->isChecked())
-        return ui->outputFolder->text() + "/" + ui->closedPolyFilename->text();
-    return QString();
+    return ui->outputFolder->text() + "/" + ui->closedPolyFilename->text();
+}
+
+bool SaveGraphDialog::isClosedPolygonExportChecked() const
+{
+    return ui->optClosedPoly->isChecked();
 }
 
 void SaveGraphDialog::on_optCustomize_toggled(bool checked)

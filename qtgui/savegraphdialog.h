@@ -22,6 +22,7 @@ public:
     QString getLandscapeFilename() const;
     QString getAreacodesFilename() const;
     QString getClosedPolygonFilename() const;
+    bool isClosedPolygonExportChecked() const;
 
 private slots:
     void on_optCustomize_toggled(bool checked);

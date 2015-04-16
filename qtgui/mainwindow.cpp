@@ -306,6 +306,20 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionNode_Editor->setEnabled(e);
     ui->actionProperties->setEnabled(e);
     ui->actionAbort_Operation->setEnabled(false);
+
+    ui->actionCreate_Graph->setEnabled(e);
+    ui->actionLoad_Harbours->setEnabled(e);
+    ui->actionLink_Harbours_to_Graph->setEnabled(e);
+    ui->actionLoadStockNames->setEnabled(e);
+    ui->actionCreate_Shortest_Path->setEnabled(e);
+    ui->actionLink_Shortest_Path_Folder->setEnabled(e);
+    ui->actionAdd_Penalty_from_File->setEnabled(e);
+    ui->actionAdd_Penalty_on_Polygon->setEnabled(e);
+    ui->actionAssign_Landscape_codes->setEnabled(e);
+    ui->actionAssign_Area_codes->setEnabled(e);
+    ui->actionMergeWeights->setEnabled(e);
+    ui->actionMergePings->setEnabled(e);
+    ui->actionCalcPopDistribution->setEnabled(e);
 }
 
 void MainWindow::simulatorLogging(QString msg)
@@ -1436,10 +1450,11 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString landpath = savedlg.getLandscapeFilename();
         QString acpath = savedlg.getAreacodesFilename();
         QString polypath = savedlg.getClosedPolygonFilename();
+        bool export_poly = savedlg.isClosedPolygonExportChecked();
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;
@@ -1710,10 +1725,11 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString landpath = dlg.getLandscapeFilename();
         QString acpath = dlg.getAreacodesFilename();
         QString polypath = dlg.getClosedPolygonFilename();
+        bool export_poly = dlg.isClosedPolygonExportChecked();
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;

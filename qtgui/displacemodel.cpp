@@ -575,6 +575,10 @@ void DisplaceModel::clearAllNodes()
 {
     mNodes.clear();
     mHarbours.clear();
+    mPenaltyNodesQ1.clear();
+    mPenaltyNodesQ2.clear();
+    mPenaltyNodesQ3.clear();
+    mPenaltyNodesQ4.clear();
     mDataSource->DeleteLayer(mNodesLayerIndex);
     createFeaturesLayer();
 }

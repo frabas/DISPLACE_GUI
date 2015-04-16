@@ -1687,7 +1687,7 @@ void MainWindow::on_actionLoad_Graph_triggered()
             currentModel->addGraph(nodes, mMapController);
 //            currentModel->importGraph (graphpath, coordspath);
         } else {
-            QMessageBox::warning(this, tr("Error loading greph/coords file"), error);
+            QMessageBox::warning(this, tr("Error loading greph/coords file. Please check that graph parameters (especially nrow) are correct in the scenario file."), error);
             return;
         }
 

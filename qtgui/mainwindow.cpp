@@ -1217,6 +1217,7 @@ void MainWindow::on_actionEdge_Edit_toggled(bool en)
     if (en) {
         map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectLine, false);
         mMapController->setEditorMode(MapObjectsController::EdgeEditorMode);
+        mMapController->setLayerVisibility(currentModelIdx, ObjectTreeModel::Layers, MapObjectsController::LayerEdges, true);
     }
 }
 
@@ -1225,6 +1226,7 @@ void MainWindow::on_actionNode_Editor_toggled(bool en)
     if (en) {
         map->setMouseButtonRight(QMapControl::MouseButtonMode::SelectBox, false);
         mMapController->setEditorMode(MapObjectsController::NodeEditorMode);
+        mMapController->setLayerVisibility(currentModelIdx, ObjectTreeModel::Layers, MapObjectsController::LayerGraph, true);
     }
 }
 

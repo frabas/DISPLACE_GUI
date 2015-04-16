@@ -46,9 +46,9 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
         stream << gnode->getChildrenCount() << ",";
 
         for (int i = 0; i < gnode->getChildrenCount(); ++i) {
-            ++nid;
             GraphNodeItem *chld = gnode->getChild(i);
             if (chld) {
+                ++nid;
                 stream << nid;
                 queue.push_back(chld);
                 queueid.push_back(nid);

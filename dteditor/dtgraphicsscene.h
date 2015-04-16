@@ -29,6 +29,8 @@ public:
     GraphNodeItem *root() const { return mRoot; }
     void addItemAsRoot(GraphNodeItem *item);
 
+    void removeNodes (QList<GraphNodeItem *>items);
+
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

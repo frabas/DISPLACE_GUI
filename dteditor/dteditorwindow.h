@@ -39,6 +39,8 @@ private slots:
     void on_action_Save_triggered();
     void on_treeType_currentIndexChanged(int index);
 
+    void on_action_Delete_Nodes_triggered();
+
 private:
     Ui::DtEditorWindow *ui;
 

@@ -41,11 +41,16 @@ GraphNodeItem::~GraphNodeItem()
     if (mArrow)
         delete mArrow;
 
-    foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
-        delete item;
+    foreach (GraphNodeChildBoxItem *item, mChildrenBoxes) {
+        if (item)
+            delete item;
+    }
 
-    foreach(QGraphicsTextItem *item, mChildrenBoxText)
-        delete item;
+    /* no mChildrenBoxText: is child of mChildrenBox
+    foreach(QGraphicsTextItem *item, mChildrenBoxText) {
+        if (item)
+            delete item;
+    }*/
 }
 
 int GraphNodeItem::getChildrenCount() const
@@ -122,6 +127,16 @@ void GraphNodeItem::connectAsChild(GraphNodeItem *item, int idx)
     setParent(item);
     item->setChild(idx, this);
     mChildrenId = idx;
+}
+
+void GraphNodeItem::unlinkParent()
+{
+    mParent = 0;
+}
+
+void GraphNodeItem::unlinkChild(int idx)
+{
+    mChildrenItems[idx] = 0;
 }
 
 void GraphNodeItem::moveArrow(QPointF pt)

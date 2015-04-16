@@ -53,6 +53,7 @@
      <string>&amp;Tree</string>
     </property>
     <addaction name="action_Add_Node"/>
+    <addaction name="action_Delete_Nodes"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuTree"/>
@@ -131,6 +132,7 @@
    <addaction name="action_Save"/>
    <addaction name="separator"/>
    <addaction name="action_Add_Node"/>
+   <addaction name="action_Delete_Nodes"/>
   </widget>
   <widget class="QDockWidget" name="dockProperties">
    <property name="windowTitle">
@@ -217,9 +219,19 @@
     <string>&amp;Add Node</string>
    </property>
   </action>
+  <action name="action_Delete_Nodes">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/delete.png</normaloff>:/icons/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Delete Nodes</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="dteditor.qrc"/>
+  <include location="../qtgui/qtgui.qrc"/>
  </resources>
  <connections/>
 </ui>

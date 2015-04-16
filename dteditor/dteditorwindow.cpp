@@ -145,13 +145,14 @@ void DtEditorWindow::evt_scene_selection_changed()
 {
     QList<QGraphicsItem *> selection = mScene->selectedItems();
 
+    ui->action_Delete_Nodes->setEnabled(selection.size() > 0);
+
     if (selection.size() != 1) {
         // hide properties and disable controls
         ui->nodepropVariable->setEnabled(false);
         ui->nodepropVariable->setCurrentIndex(-1);
         ui->nodeValue->setEnabled(false);
         ui->nodeValue->setValue(0);
-        //        ui->nodepropDetailsContainer->hide();
     } else {
         ui->nodepropVariable->setEnabled(true);
         GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(selection[0]);
@@ -302,4 +303,28 @@ void DtEditorWindow::on_treeType_currentIndexChanged(int index)
 {
     if (mTree)
         mTree->setType(static_cast<dtree::DecisionTreeManager::TreeType>(index));
+}
+
+void DtEditorWindow::on_action_Delete_Nodes_triggered()
+{
+    QList<QGraphicsItem *> selection = mScene->selectedItems();
+
+    if (selection.size() > 0) {
+        if (QMessageBox::information(this, tr("Confirm nodes removal"),
+                                     tr("You're about to remove the selected nodes and all their descendents. Do you want to proceed?"),
+                                     QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+
+            QList<GraphNodeItem *>nodeitems;
+            std::list<boost::shared_ptr<dtree::Node> > nodes;
+            foreach (QGraphicsItem * item, selection) {
+                GraphNodeItem *nodeitem = dynamic_cast<GraphNodeItem*>(item);
+                if (nodeitem) {
+                    nodeitems.push_back(nodeitem);
+                    nodes.push_back(nodeitem->getNode());
+                }
+            }
+            mScene->removeNodes(nodeitems);
+            mTree->removeNodes(nodes);
+        }
+    }
 }

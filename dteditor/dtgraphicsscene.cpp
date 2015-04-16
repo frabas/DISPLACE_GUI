@@ -2,6 +2,7 @@
 #include <dtree/decisiontree.h>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QQueue>
 #include <QKeyEvent>
 #include <graphnodeitem.h>
 #include <QDebug>
@@ -50,6 +51,45 @@ void DtGraphicsScene::addItemAsRoot(GraphNodeItem *item)
 {
     addItem(item);
     mRoot = item;
+}
+
+void DtGraphicsScene::removeNodes(QList<GraphNodeItem *> items)
+{
+    // Zero: collect unique objects
+    QQueue<GraphNodeItem *> queue;
+    queue.append(items);
+
+    QSet<GraphNodeItem *> nodes_to_remove;
+    while (!queue.empty()) {
+        GraphNodeItem *node = queue.front();
+        queue.pop_front();
+
+        nodes_to_remove.insert(node);
+        for (int i = 0; i < node->getChildrenCount(); ++i) {
+            GraphNodeItem *ch = node->getChild(i);
+            if (ch) {
+                queue.push_back(ch);
+            }
+        }
+    }
+
+    foreach (GraphNodeItem *node, nodes_to_remove) {
+        // First, cut the parent
+        if (node->getParent()) {
+            node->getParent()->unlinkChild(node->getChildrenId());
+            node->unlinkParent();
+        } else {
+            mRoot = 0;
+        }
+        // Second, cut the children
+        for (int i = 0; i < node->getChildrenCount(); ++i) {
+            node->unlinkChild(i);
+        }
+    }
+
+    foreach (GraphNodeItem *node, nodes_to_remove) {
+        delete node;
+    }
 }
 
 #if 0

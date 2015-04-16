@@ -2,7 +2,7 @@
 #define DECISIONTREE_H
 
 #include <dtree/decisiontreemanager.h>
-#include <set>
+#include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
@@ -30,6 +30,7 @@ public:
     }
     DecisionTreeManager::TreeType type() const { return mType; }
 
+    void removeNodes(std::list<boost::shared_ptr<Node> > nodes);
 private:
     boost::shared_ptr<Node> mRoot;
 

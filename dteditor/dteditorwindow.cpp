@@ -37,6 +37,7 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
 
+    updateUndoGuiStatus();
     evt_scene_selection_changed();
 }
 
@@ -55,6 +56,50 @@ void DtEditorWindow::createScene(boost::shared_ptr<dtree::DecisionTree> tree)
     connect (mScene, SIGNAL(selectionChanged()), this, SLOT(evt_scene_selection_changed()));
 
     ui->treeView->setScene(mScene);
+}
+
+void DtEditorWindow::undo()
+{
+    if (!mUndoList.empty()) {
+        boost::shared_ptr<Command> command = mUndoList.pop();
+        if (command->undo()) {
+            mRedoList.push(command);
+        }
+    }
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::redo()
+{
+    if (!mRedoList.empty()) {
+        boost::shared_ptr<Command> command = mRedoList.pop();
+        if (command->redo()) {
+            mUndoList.push(command);
+        }
+    }
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::execute(boost::shared_ptr<Command> command)
+{
+    if (command->execute()) {
+        mUndoList.push(command);
+        mRedoList.clear();
+    }
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::clearUndoRedoStacks()
+{
+    mUndoList.clear();
+    mRedoList.clear();
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::updateUndoGuiStatus()
+{
+    ui->actionUndo->setEnabled(mUndoList.size() > 0);
+    ui->actionRedo->setEnabled(mRedoList.size() > 0);
 }
 
 void DtEditorWindow::save(QString filename)
@@ -83,6 +128,8 @@ void DtEditorWindow::open(QString filename)
                              QString(tr("Error Opening file: %1")).arg(file.errorString()));
         return;
     }
+
+    clearUndoRedoStacks();
 
     QTextStream strm(&file);
     DtCsvReader reader;
@@ -327,4 +374,14 @@ void DtEditorWindow::on_action_Delete_Nodes_triggered()
             mTree->removeNodes(nodes);
         }
     }
+}
+
+void DtEditorWindow::on_actionUndo_triggered()
+{
+    undo();
+}
+
+void DtEditorWindow::on_actionRedo_triggered()
+{
+    redo();
 }

@@ -91,20 +91,6 @@ class Vessel
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
-        /*
-		string decision_tree_for_go_fishing;
-		string decision_tree_for_choose_ground;
-		string decision_tree_for_start_fishing;
-		string decision_tree_for_change_ground;
-		string decision_tree_for_stop_fishing;
-		string decision_tree_for_choose_port;
-		vector<string> reading_direction_go_fishing;
-		vector<string> reading_direction_choose_ground;
-		vector<string> reading_direction_start_fishing;
-		vector<string> reading_direction_change_ground;
-		vector<string> reading_direction_stop_fishing;
-		vector<string> reading_direction_choose_port;
-        */
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
@@ -136,15 +122,8 @@ protected:
         void lock() { pthread_mutex_lock (&mutex); }
         void unlock() { pthread_mutex_unlock (&mutex); }
 
-		//    friend std::ostream& operator<<(std::ostream& out, const Vessel &vessel)
-		//    {
-		//       out << vessel.m_strName.c_str() << " is at " << vessel.location;
-		//      return out;
-		// }
-
 		int get_idx () const;
 		string get_name () const;
-		//boost::shared_ptr<Node> get_loc() const;
 		Node* get_loc() const;
 		Metier* get_metier() const;
 		double get_speed () const;
@@ -202,18 +181,6 @@ protected:
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
 		int read_message() const;
 		int get_previous_harbour_idx() const;
-//		string get_decision_tree_for_go_fishing() const;
-//		string get_decision_tree_for_choose_ground() const;
-//		string get_decision_tree_for_start_fishing() const;
-//		string get_decision_tree_for_change_ground() const;
-//		string get_decision_tree_for_stop_fishing() const;
-//		string get_decision_tree_for_choose_port() const;
-//        const vector<string> &get_reading_direction_go_fishing() const;
-//        const vector<string> &get_reading_direction_choose_ground() const;
-//        const vector<string> &get_reading_direction_start_fishing() const;
-//        const vector<string> &get_reading_direction_change_ground() const;
-//        const vector<string> &get_reading_direction_stop_fishing() const;
-//        const vector<string> &get_reading_direction_choose_port() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
 		void set_speed (double val);
@@ -270,7 +237,6 @@ protected:
 		void set_next_xy (double nx, double ny);
 		void erode_roadmap ();
 		void move_to(double nx, double ny);
-		//void move_to(boost::shared_ptr<Node> next_node);
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(vector<Node* >& nodes);

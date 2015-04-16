@@ -44,7 +44,7 @@ int DecisionTreeManager::readFromDirectory(std::string path)
         while ((dirent = readdir(dir))) {
             bool isfile = true;
 #ifndef __WIN32
-            bool isfile = dirent->d_type == DT_REG
+            isfile = dirent->d_type == DT_REG;
 #endif
             if (isfile) {
                 if (readFile (path + "/" + std::string(dirent->d_name))) {

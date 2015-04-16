@@ -142,7 +142,7 @@ void ScenarioDialog::on_rename_clicked()
         }
 
         setScenarioPath(s);
-        sets.setValue("lastpath", s);
+        sets.setValue("lastpath", info.path());
         mRenamed = true;
     }
 }
@@ -179,8 +179,6 @@ void ScenarioDialog::on_graphBrowse_clicked()
     QString lastpath = sets.value("lastpath", QDir::homePath()).toString();
     QFileDialog dlg(this,tr("Select graph file"),lastpath);
     QStringList filt;
-
-    /** \bug the following line seems to trigger a Qt5 bug. The default filter is not selected as expected. */
     filt << tr("Graph files (graph*.dat)") << tr("All files (*.*)");
 
     dlg.setNameFilters(filt);

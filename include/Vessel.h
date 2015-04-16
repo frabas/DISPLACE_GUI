@@ -29,6 +29,7 @@
 #include <Population.h>
 #include <myutils.h>
 #include <options.h>
+#include <dtree/decisiontree.h>
 
 #include <pthread.h>
 
@@ -90,6 +91,7 @@ class Vessel
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
+        /*
 		string decision_tree_for_go_fishing;
 		string decision_tree_for_choose_ground;
 		string decision_tree_for_start_fishing;
@@ -102,6 +104,7 @@ class Vessel
 		vector<string> reading_direction_change_ground;
 		vector<string> reading_direction_stop_fishing;
 		vector<string> reading_direction_choose_port;
+        */
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
@@ -199,18 +202,18 @@ protected:
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
 		int read_message() const;
 		int get_previous_harbour_idx() const;
-		string get_decision_tree_for_go_fishing() const;
-		string get_decision_tree_for_choose_ground() const;
-		string get_decision_tree_for_start_fishing() const;
-		string get_decision_tree_for_change_ground() const;
-		string get_decision_tree_for_stop_fishing() const;
-		string get_decision_tree_for_choose_port() const;
-        const vector<string> &get_reading_direction_go_fishing() const;
-        const vector<string> &get_reading_direction_choose_ground() const;
-        const vector<string> &get_reading_direction_start_fishing() const;
-        const vector<string> &get_reading_direction_change_ground() const;
-        const vector<string> &get_reading_direction_stop_fishing() const;
-        const vector<string> &get_reading_direction_choose_port() const;
+//		string get_decision_tree_for_go_fishing() const;
+//		string get_decision_tree_for_choose_ground() const;
+//		string get_decision_tree_for_start_fishing() const;
+//		string get_decision_tree_for_change_ground() const;
+//		string get_decision_tree_for_stop_fishing() const;
+//		string get_decision_tree_for_choose_port() const;
+//        const vector<string> &get_reading_direction_go_fishing() const;
+//        const vector<string> &get_reading_direction_choose_ground() const;
+//        const vector<string> &get_reading_direction_start_fishing() const;
+//        const vector<string> &get_reading_direction_change_ground() const;
+//        const vector<string> &get_reading_direction_stop_fishing() const;
+//        const vector<string> &get_reading_direction_choose_port() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
 		void set_speed (double val);
@@ -372,6 +375,12 @@ protected:
 
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
+
+        double traverseDtree (dtree::DecisionTree *tree);
+
+        /** \brief the Set of internal states, normalized in the range [0,1]
+         * */
+        std::vector<double> mNormalizedInternalStates;
 
         static std::string nationalityFromName (const std::string &name);
 };

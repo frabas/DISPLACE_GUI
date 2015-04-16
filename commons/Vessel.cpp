@@ -31,6 +31,9 @@
 #include <helpers.h>
 #include <assert.h>
 
+#include <dtree/dtnode.h>
+#include <dtree/decisiontreemanager.h>
+
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 // creator methods...
@@ -189,6 +192,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	// the  trick: use iteratively split() on those strings
 	// and keep left or right branch at each step depending on the state values
 	// the reading_direction give the order for splitting.
+#if 0
 	decision_tree_for_go_fishing="0.0 last_trip_was 0.3 weather_is 0.5 fish_price_is 0.2 last_trip_was 0.8 remaining_quota_is 0.9";
 	decision_tree_for_choose_ground="0.3 high_potential_catch 0.4 last_trip_on_the_ground 0.99";
 	decision_tree_for_start_fishing="0.2 fish_detection_with_echosounder 0.4 arrived_on_the_ground 0.9 bycatch_risk 0.2 suitable_bottom_detection 0.8";
@@ -209,6 +213,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	reading_direction_stop_fishing.push_back(" catch_volume ");
 	reading_direction_choose_port.push_back(" distance_to_port ");
 	reading_direction_choose_port.push_back(" fish_price ");
+#endif
 
     dout(cout <<"vessel creator...OK" << endl);
 }
@@ -583,7 +588,7 @@ const vector<vector<double> > &Vessel::get_gscale_cpue_nodes_species() const
 
 }
 
-
+#if 0
 string Vessel::get_decision_tree_for_go_fishing () const
 {
 	return(decision_tree_for_go_fishing);
@@ -654,7 +659,7 @@ const vector<string> &Vessel::get_reading_direction_choose_port() const
 {
 	return(reading_direction_choose_port);
 }
-
+#endif
 
 int Vessel::get_individual_tac (int sp) const
 {
@@ -1097,6 +1102,24 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
+double Vessel::traverseDtree(dtree::DecisionTree *tree)
+{
+    boost::shared_ptr<dtree::Node> node = tree->root();
+    while (node.get()) {
+        if (node->getChildrenCount() == 0) // is a leaf node
+            return node->value();
+
+        int bin = std::floor(mNormalizedInternalStates[static_cast<int>(node->variable())] * node->getChildrenCount());
+        if (bin < 0) bin = 0;
+        if (bin > node->getChildrenCount()-1)
+            bin = node->getChildrenCount()-1;
+        node = node->getChild(bin);
+    }
+
+    // if here, we may have a problem.
+    throw std::runtime_error("Invalid null node reached while traversing decision tree.");
+}
+
 string Vessel::nationalityFromName(const string &name)
 {
     return name.substr(0, 3);
@@ -1525,7 +1548,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 int    MLS_cat                      = m_mls_cat_per_pop[pop];
 
 				// compute available biomass via selectivity
-                for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
+                for(int szgroup=0; szgroup < (int)avail_biomass.size(); szgroup++)
 				{
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *sel_ogive[szgroup]; // available for landings only
@@ -1593,7 +1616,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive and the N
                     vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
-                    for(int sizgroup=0; sizgroup<Ns_at_szgroup_pop.size(); sizgroup++) {
+                    for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                  *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
                     }
@@ -1628,7 +1651,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
-                    for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
+                    for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
 					{
                         if(all_biomass[szgroup]!=0)
 						{
@@ -3465,15 +3488,19 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 								 // TO DO: retrieve from the state of the vessel
 			internal_states.insert(make_pair(" last_trip_was ",0));
 
-								 // get the genotype!
-			string tree = this->get_decision_tree_for_go_fishing();
-								 // get the order of the drivers, i.e. the nodes of the tree
-			vector <string> direction= this->get_reading_direction_go_fishing();
+            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+            double the_value = traverseDtree(tree.get());
 
-			double the_value = decode_the_tree(tree, direction, external_states, internal_states);
+            //								 // get the genotype!
+//			string tree = this->get_decision_tree_for_go_fishing();
+//								 // get the order of the drivers, i.e. the nodes of the tree
+//			vector <string> direction= this->get_reading_direction_go_fishing();
+
+//			double the_value = decode_the_tree(tree, direction, external_states, internal_states);
 			//cout << "the_value " << the_value << endl;
 			// draw a random number [0,1) and compare with the value
-								 //GO!
+
+            //GO!
             if(unif_rand()<the_value) {
                 unlock();
                 return(1);

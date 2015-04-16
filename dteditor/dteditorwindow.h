@@ -21,6 +21,8 @@ public:
 protected:
     void save(QString filename);
     void open(QString filename);
+    void updateTitleBar();
+    void updateGui();
     void closeEvent(QCloseEvent *event);
 
 private slots:
@@ -29,16 +31,18 @@ private slots:
     void evt_scene_selection_changed();
     void on_nodepropVariable_currentIndexChanged(int index);
     void on_actionSave_as_triggered();
-
     void on_action_Open_triggered();
-
     void on_nodeValue_valueChanged(double value);
+    void on_action_Save_triggered();
+    void on_treeType_currentIndexChanged(int index);
 
 private:
     Ui::DtEditorWindow *ui;
 
     boost::shared_ptr<dtree::DecisionTree> mTree;
     DtGraphicsScene *mScene;
+
+    QString mFilename;
 };
 
 #endif // DTEDITORWINDOW_H

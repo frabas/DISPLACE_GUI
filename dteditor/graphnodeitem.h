@@ -31,7 +31,7 @@ public:
 
     void moveArrow(QPointF pt);
 
-    bool requiresChildrenHighlight() const;
+    bool requiresChildrenHighlight(int childid) const;
     void childHoverEntered(int id);
     void childHoverExited();
 
@@ -56,6 +56,7 @@ private:
     QGraphicsTextItem *mText;
     int mChildrenId;
     QVector<GraphNodeChildBoxItem *> mChildrenBoxes;
+    QVector<QGraphicsTextItem *> mChildrenBoxText;
     QGraphicsLineItem *mArrow;
 
     int mHoveredChild;

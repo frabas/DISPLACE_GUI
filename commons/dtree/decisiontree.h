@@ -1,6 +1,7 @@
 #ifndef DECISIONTREE_H
 #define DECISIONTREE_H
 
+#include <dtree/decisiontreemanager.h>
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -21,9 +22,16 @@ public:
     void connect (boost::shared_ptr<Node> node, boost::shared_ptr<Node> parent, int childId);
 
     bool isEmpty() const { return mRoot.get() == 0; }
+
+    void setType(DecisionTreeManager::TreeType t) {
+        mType = t;
+    }
+    DecisionTreeManager::TreeType type() const { return mType; }
+
 private:
     boost::shared_ptr<Node> mRoot;
-//    std::set<boost::shared_ptr> mNodes;
+
+    DecisionTreeManager::TreeType mType;
 };
 
 }

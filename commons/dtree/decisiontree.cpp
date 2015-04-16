@@ -1,4 +1,4 @@
-#include "decisiontree.h"
+#include <dtree/decisiontree.h>
 #include <dtree/dtnode.h>
 
 using namespace dtree;

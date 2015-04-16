@@ -24,6 +24,7 @@ protected:
     void updateTitleBar();
     void updateGui();
     bool checkForDTreeBeforeSaving();
+    void createScene(boost::shared_ptr<dtree::DecisionTree> tree);
 
     void closeEvent(QCloseEvent *event);
 

@@ -16,6 +16,18 @@ DtGraphicsScene::DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QO
 {
 }
 
+void DtGraphicsScene::clear()
+{
+    mRoot = 0;
+    mAddingNode.reset();
+    if (mAddingItem) delete mAddingItem;
+    mAddingItem = 0;
+    mHoveringNode = 0;
+    mHoveringNodeChild = -1;
+
+    QGraphicsScene::clear();
+}
+
 bool DtGraphicsScene::requiresChildrenHighlight() const
 {
     return mMode == AddNodeConnect;
@@ -71,16 +83,18 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     case AddNode:
         if (!mTree->isEmpty()) {
             addItem(mAddingItem);
+            mAddingItem->setPos(event->scenePos());
             mMode = AddNodeConnect;
         } else {
             addItemAsRoot(mAddingItem);
+            mAddingItem->setPos(event->scenePos());
             mRoot = mAddingItem;
             mTree->setRoot(mAddingNode);
             emit nodeAdded(mAddingItem);
             mAddingNode.reset();
+            mAddingItem = 0;
             endMode();
         }
-        mAddingItem->setPos(event->scenePos());
         return;
     case AddNodeConnect:
         // connect the nodes
@@ -91,6 +105,8 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             mAddingItem->update();
             emit nodeAdded(mAddingItem);
             mAddingNode.reset();
+            mAddingItem = 0;
+
             endMode();
             return;
         }

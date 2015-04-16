@@ -20,6 +20,7 @@ class DtGraphicsScene : public QGraphicsScene
 public:
     explicit DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent = 0);
 
+    void clear();
     bool requiresChildrenHighlight() const;
 
     void nodeChildEntered (GraphNodeItem *item, int childId);

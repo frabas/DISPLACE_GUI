@@ -9,6 +9,12 @@ DecisionTree::DecisionTree()
 {
 }
 
+void DecisionTree::clear()
+{
+    mRoot.reset();
+    mType = DecisionTreeManager::InvalidTreeType;
+}
+
 boost::shared_ptr<Node> DecisionTree::createNode()
 {
     boost::shared_ptr<Node> node(new Node(shared_from_this()));

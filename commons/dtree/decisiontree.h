@@ -15,6 +15,8 @@ class DecisionTree : public boost::enable_shared_from_this<DecisionTree>
 public:
     DecisionTree();
 
+    void clear();
+
     boost::shared_ptr<Node> root() const { return mRoot; }
     boost::shared_ptr<Node> createNode() ;
 

@@ -31,15 +31,7 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     }
     ui->treeType->setCurrentIndex(-1);
 
-    mTree = boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree);
-
-    mScene = new DtGraphicsScene(mTree);
-    mScene->setSceneRect(QRectF(0, 0, 5000, 5000));
-
-    connect (mScene, SIGNAL(nodeAdded(GraphNodeItem*)), this, SLOT(evt_scene_node_added(GraphNodeItem*)));
-    connect (mScene, SIGNAL(selectionChanged()), this, SLOT(evt_scene_selection_changed()));
-
-    ui->treeView->setScene(mScene);
+    createScene(boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree));
 
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
@@ -51,6 +43,18 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
 DtEditorWindow::~DtEditorWindow()
 {
     delete ui;
+}
+
+void DtEditorWindow::createScene(boost::shared_ptr<dtree::DecisionTree> tree)
+{
+    mTree = tree;
+    mScene = new DtGraphicsScene(mTree);
+    mScene->setSceneRect(QRectF(0, 0, 5000, 5000));
+
+    connect (mScene, SIGNAL(nodeAdded(GraphNodeItem*)), this, SLOT(evt_scene_node_added(GraphNodeItem*)));
+    connect (mScene, SIGNAL(selectionChanged()), this, SLOT(evt_scene_selection_changed()));
+
+    ui->treeView->setScene(mScene);
 }
 
 void DtEditorWindow::save(QString filename)
@@ -83,13 +87,13 @@ void DtEditorWindow::open(QString filename)
     QTextStream strm(&file);
     DtCsvReader reader;
 
-    boost::shared_ptr<dtree::DecisionTree> tree;
-    if (!reader.readTree(strm, &tree, mScene)) {
+    mScene->clear();
+    mTree->clear();
+    if (!reader.readTree(strm, mTree, mScene)) {
         QMessageBox::warning(this, tr("Load failed"),
                              QString(tr("Cannot export to csv file.")));
         return;
     }
-    mTree = tree;
 
     updateGui();
 }

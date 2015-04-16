@@ -227,6 +227,9 @@ void DtEditorWindow::on_nodeValue_valueChanged(double value)
 
 void DtEditorWindow::on_actionSave_as_triggered()
 {
+    if (!checkForDTreeBeforeSaving())
+        return;
+
     QSettings s;
     QString last = s.value("last_tree").toString();
     QFileDialog dlg(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dt.csv);;All files (*.*)"));
@@ -270,12 +273,25 @@ void DtEditorWindow::on_action_Open_triggered()
 
 void DtEditorWindow::on_action_Save_triggered()
 {
+    if (!checkForDTreeBeforeSaving())
+        return;
+
     if (mFilename.isEmpty()) {
         on_actionSave_as_triggered();
     } else {
         save(mFilename);
         updateTitleBar();
     }
+}
+
+bool DtEditorWindow::checkForDTreeBeforeSaving()
+{
+    if (mTree->type() == dtree::DecisionTreeManager::InvalidTreeType) {
+        QMessageBox::warning(this, tr("Invalid DTree"),
+                             tr("Cannot save Decision Tree: first assign a type to the tree."));
+        return false;
+    }
+    return true;
 }
 
 void DtEditorWindow::on_treeType_currentIndexChanged(int index)

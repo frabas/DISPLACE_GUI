@@ -23,6 +23,8 @@ protected:
     void open(QString filename);
     void updateTitleBar();
     void updateGui();
+    bool checkForDTreeBeforeSaving();
+
     void closeEvent(QCloseEvent *event);
 
 private slots:

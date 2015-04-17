@@ -159,11 +159,10 @@ void DtEditorWindow::updateTitleBar()
 
 void DtEditorWindow::updateGui()
 {
-    blockSignals(true);
     if (mTree) {
+        const QSignalBlocker block(ui->treeType);
         ui->treeType->setCurrentIndex(static_cast<int>(mTree->type()));
     }
-    blockSignals(false);
 }
 
 void DtEditorWindow::closeEvent(QCloseEvent *event)

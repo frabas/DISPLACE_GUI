@@ -8,6 +8,10 @@ namespace Ui {
 class MergePopulationPluginComponent;
 }
 
+/** \brief a "pluggable" Widget to extends the MergeDataDialog
+ * This class extends the functionalities of MergeDataDialog, it is created and hosted in the main UI component.
+ * \see MergeDataDialog
+ * */
 class MergePopulationPluginComponent : public QWidget
 {
     Q_OBJECT

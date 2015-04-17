@@ -7,6 +7,11 @@ namespace Ui {
 class MergeDataDialog;
 }
 
+/** \brief Implements the functionalities for mergedatadialog.ui
+ *
+ * This UI can be extended by derived classes by "plugging" additional components through the protected function insertPluggableComponent().
+ * See for example \see MergePopulationDataDialog .
+ * */
 class MergeDataDialog : public QDialog
 {
     Q_OBJECT

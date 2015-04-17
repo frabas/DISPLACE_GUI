@@ -44,5 +44,7 @@
         <file>icons/checks.png</file>
         <file>icons/more-vert.png</file>
         <file>icons/dteditor.png</file>
+        <file>icons/down.png</file>
+        <file>icons/up.png</file>
     </qresource>
 </RCC>

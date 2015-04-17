@@ -7,7 +7,12 @@ MergePopulationDataDialog::MergePopulationDataDialog(QWidget *parent) :
     insertPluggableComponent(mComponent);
 }
 
+void MergePopulationDataDialog::setSizeGroupCount(int cnt)
+{
+    mComponent->setSizeGroupsCount(cnt);
+}
+
 void MergePopulationDataDialog::inputFileSelected()
 {
-    mComponent->load(getInputFile(), separator());
+    mComponent->loadStocks(getInputFile(), separator());
 }

@@ -15,6 +15,7 @@ class MergePopulationDataDialog : public MergeDataDialog
 public:
     explicit MergePopulationDataDialog(QWidget *parent = 0);
 
+    void setSizeGroupCount (int cnt);
 signals:
 
 public slots:

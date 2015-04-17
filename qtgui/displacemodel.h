@@ -383,7 +383,6 @@ private:
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
-//    QList<QList<int>> mPenaltyNodes;
     QList<QList<int>> mPenaltyNodesQ1;
     QList<QList<int>> mPenaltyNodesQ2;
     QList<QList<int>> mPenaltyNodesQ3;

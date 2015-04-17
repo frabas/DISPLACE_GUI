@@ -8,6 +8,7 @@
 #include <dtcsvreader.h>
 
 #include <commands/settreetypecommand.h>
+#include <commands/setnodevaluecommand.h>
 
 #include <QCloseEvent>
 #include <QSettings>
@@ -266,18 +267,8 @@ void DtEditorWindow::on_nodeValue_valueChanged(double value)
 
     QList<QGraphicsItem *> selection = mScene->selectedItems();
 
-    foreach (QGraphicsItem *i, selection) {
-        GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(i);
-
-        // don't like this - TODO: fix it without using downcasting
-        if (item) {
-            boost::shared_ptr<dtree::Node> node = item->getNode();
-            if (node.get() != 0) {
-                node->setValue(value);
-            }
-            item->update();
-        }
-    }
+    boost::shared_ptr<SetNodeValueCommand> command(new SetNodeValueCommand(selection, value));
+    execute(command);
 }
 
 void DtEditorWindow::on_actionSave_as_triggered()

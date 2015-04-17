@@ -706,7 +706,7 @@ void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bo
 
 void MainWindow::on_actionConfiguration_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+    if (!currentModel || (currentModel->modelType() != DisplaceModel::LiveModelType && currentModel->modelType() != DisplaceModel::EditorModelType))
         return;
 
     if (currentModel) {

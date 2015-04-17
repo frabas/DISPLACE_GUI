@@ -5,6 +5,9 @@
 #include <boost/shared_ptr.hpp>
 #include <dtree/decisiontree.h>
 #include <dtgraphicsscene.h>
+#include <commands/command.h>
+#include <boost/shared_ptr.hpp>
+#include <QStack>
 
 namespace Ui {
 class DtEditorWindow;
@@ -23,6 +26,15 @@ protected:
     void open(QString filename);
     void updateTitleBar();
     void updateGui();
+    bool checkForDTreeBeforeSaving();
+    void createScene(boost::shared_ptr<dtree::DecisionTree> tree);
+
+    void undo();
+    void redo();
+    void execute(boost::shared_ptr<Command> command);
+    void clearUndoRedoStacks();
+    void updateUndoGuiStatus();
+
     void closeEvent(QCloseEvent *event);
 
 private slots:
@@ -35,6 +47,9 @@ private slots:
     void on_nodeValue_valueChanged(double value);
     void on_action_Save_triggered();
     void on_treeType_currentIndexChanged(int index);
+    void on_action_Delete_Nodes_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
 
 private:
     Ui::DtEditorWindow *ui;
@@ -42,6 +57,7 @@ private:
     boost::shared_ptr<dtree::DecisionTree> mTree;
     DtGraphicsScene *mScene;
 
+    QStack<boost::shared_ptr<Command>> mUndoList, mRedoList;
     QString mFilename;
 };
 

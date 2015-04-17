@@ -14,10 +14,10 @@ DtCsvReader::DtCsvReader()
 {
 }
 
-bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> *res_tree, DtGraphicsScene *scene)
+bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
 throw (std::invalid_argument)
 {
-    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
+//    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
 
     QString line;
 
@@ -120,7 +120,7 @@ throw (std::invalid_argument)
     }
 
     tree->setType(treeType);
-    *res_tree = tree;
+//    *res_tree = tree;
 
     QQueue<GraphNodeItem *> q;
     q.push_back(scene->root());

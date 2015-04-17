@@ -17,6 +17,7 @@ class GraphNodeItem : public QGraphicsItemGroup
 {
 public:
     explicit GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent = 0);
+    virtual ~GraphNodeItem();
 
     boost::shared_ptr<dtree::Node> getNode() const { return mNode.lock(); }
 
@@ -24,10 +25,14 @@ public:
     int getChildrenCount() const;
     GraphNodeItem *getChild(int idx);
     int getChildrenId() const { return mChildrenId; }
+    GraphNodeItem *getParent() const { return mParent; }
+
     void setVariable(dtree::Variable var);
 
     void connectAsParent(GraphNodeItem *item, int idx);
     void connectAsChild(GraphNodeItem *item, int idx);
+    void unlinkParent();
+    void unlinkChild(int idx);
 
     void moveArrow(QPointF pt);
 

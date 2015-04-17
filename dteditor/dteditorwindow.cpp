@@ -7,6 +7,8 @@
 #include <dtcsvwriter.h>
 #include <dtcsvreader.h>
 
+#include <commands/settreetypecommand.h>
+
 #include <QCloseEvent>
 #include <QSettings>
 #include <QFileDialog>
@@ -31,8 +33,24 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     }
     ui->treeType->setCurrentIndex(-1);
 
-    mTree = boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree);
+    createScene(boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree));
 
+    QSettings set;
+    restoreGeometry(set.value("mainGeometry").toByteArray());
+    restoreState(set.value("mainState").toByteArray());
+
+    updateUndoGuiStatus();
+    evt_scene_selection_changed();
+}
+
+DtEditorWindow::~DtEditorWindow()
+{
+    delete ui;
+}
+
+void DtEditorWindow::createScene(boost::shared_ptr<dtree::DecisionTree> tree)
+{
+    mTree = tree;
     mScene = new DtGraphicsScene(mTree);
     mScene->setSceneRect(QRectF(0, 0, 5000, 5000));
 
@@ -40,17 +58,50 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     connect (mScene, SIGNAL(selectionChanged()), this, SLOT(evt_scene_selection_changed()));
 
     ui->treeView->setScene(mScene);
-
-    QSettings set;
-    restoreGeometry(set.value("mainGeometry").toByteArray());
-    restoreState(set.value("mainState").toByteArray());
-
-    evt_scene_selection_changed();
 }
 
-DtEditorWindow::~DtEditorWindow()
+void DtEditorWindow::undo()
 {
-    delete ui;
+    if (!mUndoList.empty()) {
+        boost::shared_ptr<Command> command = mUndoList.pop();
+        if (command->undo()) {
+            mRedoList.push(command);
+        }
+    }
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::redo()
+{
+    if (!mRedoList.empty()) {
+        boost::shared_ptr<Command> command = mRedoList.pop();
+        if (command->redo()) {
+            mUndoList.push(command);
+        }
+    }
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::execute(boost::shared_ptr<Command> command)
+{
+    if (command->execute()) {
+        mUndoList.push(command);
+        mRedoList.clear();
+    }
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::clearUndoRedoStacks()
+{
+    mUndoList.clear();
+    mRedoList.clear();
+    updateUndoGuiStatus();
+}
+
+void DtEditorWindow::updateUndoGuiStatus()
+{
+    ui->actionUndo->setEnabled(mUndoList.size() > 0);
+    ui->actionRedo->setEnabled(mRedoList.size() > 0);
 }
 
 void DtEditorWindow::save(QString filename)
@@ -80,16 +131,18 @@ void DtEditorWindow::open(QString filename)
         return;
     }
 
+    clearUndoRedoStacks();
+
     QTextStream strm(&file);
     DtCsvReader reader;
 
-    boost::shared_ptr<dtree::DecisionTree> tree;
-    if (!reader.readTree(strm, &tree, mScene)) {
+    mScene->clear();
+    mTree->clear();
+    if (!reader.readTree(strm, mTree, mScene)) {
         QMessageBox::warning(this, tr("Load failed"),
                              QString(tr("Cannot export to csv file.")));
         return;
     }
-    mTree = tree;
 
     updateGui();
 }
@@ -141,13 +194,14 @@ void DtEditorWindow::evt_scene_selection_changed()
 {
     QList<QGraphicsItem *> selection = mScene->selectedItems();
 
-    if (selection.size() != 1) {
+    ui->action_Delete_Nodes->setEnabled(selection.size() > 0);
+
+    if (selection.size() == 0) {
         // hide properties and disable controls
         ui->nodepropVariable->setEnabled(false);
         ui->nodepropVariable->setCurrentIndex(-1);
         ui->nodeValue->setEnabled(false);
         ui->nodeValue->setValue(0);
-        //        ui->nodepropDetailsContainer->hide();
     } else {
         ui->nodepropVariable->setEnabled(true);
         GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(selection[0]);
@@ -227,6 +281,9 @@ void DtEditorWindow::on_nodeValue_valueChanged(double value)
 
 void DtEditorWindow::on_actionSave_as_triggered()
 {
+    if (!checkForDTreeBeforeSaving())
+        return;
+
     QSettings s;
     QString last = s.value("last_tree").toString();
     QFileDialog dlg(this, tr("Exporting to CSV file"), last, tr("Tree files (*.dt.csv);;All files (*.*)"));
@@ -270,6 +327,9 @@ void DtEditorWindow::on_action_Open_triggered()
 
 void DtEditorWindow::on_action_Save_triggered()
 {
+    if (!checkForDTreeBeforeSaving())
+        return;
+
     if (mFilename.isEmpty()) {
         on_actionSave_as_triggered();
     } else {
@@ -278,8 +338,54 @@ void DtEditorWindow::on_action_Save_triggered()
     }
 }
 
+bool DtEditorWindow::checkForDTreeBeforeSaving()
+{
+    if (mTree->type() == dtree::DecisionTreeManager::InvalidTreeType) {
+        QMessageBox::warning(this, tr("Invalid DTree"),
+                             tr("Cannot save Decision Tree: first assign a type to the tree."));
+        return false;
+    }
+    return true;
+}
+
 void DtEditorWindow::on_treeType_currentIndexChanged(int index)
 {
-    if (mTree)
-        mTree->setType(static_cast<dtree::DecisionTreeManager::TreeType>(index));
+    if (mTree) {
+        boost::shared_ptr<Command> command (new SetTreeTypeCommand(mTree, static_cast<dtree::DecisionTreeManager::TreeType>(index)));
+        execute(command);
+    }
+}
+
+void DtEditorWindow::on_action_Delete_Nodes_triggered()
+{
+    QList<QGraphicsItem *> selection = mScene->selectedItems();
+
+    if (selection.size() > 0) {
+        if (QMessageBox::information(this, tr("Confirm nodes removal"),
+                                     tr("You're about to remove the selected nodes and all their descendents. Do you want to proceed?"),
+                                     QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+
+            QList<GraphNodeItem *>nodeitems;
+            std::list<boost::shared_ptr<dtree::Node> > nodes;
+            foreach (QGraphicsItem * item, selection) {
+                GraphNodeItem *nodeitem = dynamic_cast<GraphNodeItem*>(item);
+                if (nodeitem) {
+                    nodeitems.push_back(nodeitem);
+                    nodes.push_back(nodeitem->getNode());
+                }
+            }
+            mScene->removeNodes(nodeitems);
+            mTree->removeNodes(nodes);
+        }
+    }
+}
+
+void DtEditorWindow::on_actionUndo_triggered()
+{
+    undo();
+}
+
+void DtEditorWindow::on_actionRedo_triggered()
+{
+    redo();
 }

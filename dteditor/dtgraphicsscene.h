@@ -20,6 +20,7 @@ class DtGraphicsScene : public QGraphicsScene
 public:
     explicit DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent = 0);
 
+    void clear();
     bool requiresChildrenHighlight() const;
 
     void nodeChildEntered (GraphNodeItem *item, int childId);
@@ -28,9 +29,12 @@ public:
     GraphNodeItem *root() const { return mRoot; }
     void addItemAsRoot(GraphNodeItem *item);
 
+    void removeNodes (QList<GraphNodeItem *>items);
+
 protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void keyPressEvent(QKeyEvent * keyEvent) override;
 
 signals:
     void nodeAdded(GraphNodeItem *);

@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Configuration</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -20,9 +20,6 @@
       <string>Number of populations</string>
      </property>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QSpinBox" name="nbpops"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_8">
@@ -38,28 +35,12 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QSpinBox" name="szGroups">
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="value">
-      <number>14</number>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Implicit Stocks</string>
      </property>
     </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="m_implicit_pops"/>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_4">
@@ -68,9 +49,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QLineEdit" name="m_calib_oth_landings"/>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
@@ -78,18 +56,12 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QLineEdit" name="m_calib_weight_at_szgroup"/>
-   </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>calib the cpue multiplier per stock</string>
      </property>
     </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QLineEdit" name="m_calib_cpue_multiplier"/>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_7">
@@ -114,19 +86,6 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QSpinBox" name="nbbenthospops"/>
-   </item>
    <item row="7" column="2">
     <widget class="QToolButton" name="readFromTree">
      <property name="text">
@@ -137,6 +96,47 @@
        <normaloff>:/icons/database.png</normaloff>:/icons/database.png</iconset>
      </property>
     </widget>
+   </item>
+   <item row="9" column="0" colspan="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="2">
+    <widget class="QLineEdit" name="m_calib_cpue_multiplier"/>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="QLineEdit" name="m_calib_weight_at_szgroup"/>
+   </item>
+   <item row="4" column="1" colspan="2">
+    <widget class="QLineEdit" name="m_calib_oth_landings"/>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLineEdit" name="m_implicit_pops"/>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QSpinBox" name="szGroups">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>14</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QSpinBox" name="nbbenthospops"/>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="QSpinBox" name="nbpops"/>
    </item>
   </layout>
  </widget>

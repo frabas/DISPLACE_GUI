@@ -2640,13 +2640,14 @@ int main(int argc, char* argv[])
     guiSendUpdateCommand(popdyn_N_filename, 0);
 
 	//AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
-    for (unsigned int n=0; n<nodes.size(); n++) {
-        nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+    if (export_vmslike) {
+        for (unsigned int n=0; n<nodes.size(); n++) {
+            nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+        }
+        popnodes_start.flush();
+        // signals the gui that the filename has been updated.
+        guiSendUpdateCommand(popnodes_start_filename, 0);
     }
-    popnodes_start.flush();
-
-    // signals the gui that the filename has been updated.
-    guiSendUpdateCommand(popnodes_start_filename, 0);
 
 	//----------------------//
 	//----------------------//
@@ -3406,13 +3407,15 @@ int main(int argc, char* argv[])
 			{
 				// export spatial distribution of biomass pop on nodes for mapping e.g. in GIS
 				// pay attention to compare a start of a year with another start of a year...(because avai key is quarter spe)
-				for (unsigned int n=0; n<nodes.size(); n++)
-				{
-					nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
-                }
-                if (use_gui) {
-                    popnodes_end.flush();
-                    guiSendUpdateCommand(popnodes_end_filename, tstep);
+                if (export_vmslike) {
+                    for (unsigned int n=0; n<nodes.size(); n++)
+                    {
+                        nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
+                    }
+                    if (use_gui) {
+                        popnodes_end.flush();
+                        guiSendUpdateCommand(popnodes_end_filename, tstep);
+                    }
                 }
             }
 
@@ -3427,7 +3430,9 @@ int main(int argc, char* argv[])
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
                 nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
-                nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
+                if (export_vmslike) {
+                    nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
+                }
 			}
 
 			//...and export the benthos biomasses on node
@@ -3457,8 +3462,10 @@ int main(int argc, char* argv[])
                 benthosnodes.flush();
                 guiSendUpdateCommand(popnodes_benthos_filename, tstep);
 
-                popnodes_inc.flush();
-                guiSendUpdateCommand(popnodes_inc_filename, tstep);
+                if (export_vmslike) {
+                    popnodes_inc.flush();
+                    guiSendUpdateCommand(popnodes_inc_filename, tstep);
+                }
 
                 popdyn_F.flush();
                 guiSendUpdateCommand(popdyn_F_filename, tstep);

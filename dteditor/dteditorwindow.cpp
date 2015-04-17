@@ -159,9 +159,11 @@ void DtEditorWindow::updateTitleBar()
 
 void DtEditorWindow::updateGui()
 {
+    blockSignals(true);
     if (mTree) {
         ui->treeType->setCurrentIndex(static_cast<int>(mTree->type()));
     }
+    blockSignals(false);
 }
 
 void DtEditorWindow::closeEvent(QCloseEvent *event)
@@ -351,7 +353,7 @@ bool DtEditorWindow::checkForDTreeBeforeSaving()
 void DtEditorWindow::on_treeType_currentIndexChanged(int index)
 {
     if (mTree) {
-        boost::shared_ptr<Command> command (new SetTreeTypeCommand(mTree, static_cast<dtree::DecisionTreeManager::TreeType>(index)));
+        boost::shared_ptr<Command> command (new SetTreeTypeCommand(this, mTree, static_cast<dtree::DecisionTreeManager::TreeType>(index)));
         execute(command);
     }
 }

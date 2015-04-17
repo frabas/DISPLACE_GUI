@@ -21,11 +21,12 @@ public:
     explicit DtEditorWindow(QWidget *parent = 0);
     ~DtEditorWindow();
 
+    void updateGui();
+
 protected:
     void save(QString filename);
     void open(QString filename);
     void updateTitleBar();
-    void updateGui();
     bool checkForDTreeBeforeSaving();
     void createScene(boost::shared_ptr<dtree::DecisionTree> tree);
 

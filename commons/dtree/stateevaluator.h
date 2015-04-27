@@ -11,7 +11,7 @@ public:
     StateEvaluator();
     virtual ~StateEvaluator();
 
-    virtual double operator() = 0;
+    virtual double evaluate() = 0;
 };
 
 } // ns dtree

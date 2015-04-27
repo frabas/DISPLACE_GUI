@@ -30,6 +30,7 @@
 #include <myutils.h>
 #include <options.h>
 #include <dtree/decisiontree.h>
+#include <dtree/stateevaluator.h>
 
 #include <pthread.h>
 
@@ -83,6 +84,9 @@ class Vessel
 								 // dynamic
 		double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
+
+        /// \todo Calculate last_trip_compared_avg and normalize it, divide it by 2 so the variable as a 0.5 threshold (above/below).
+        double last_trip_compared_avg;
 		string length_class, nationality;
 		int message;
 		int state;
@@ -344,9 +348,22 @@ protected:
 
         double traverseDtree (dtree::DecisionTree *tree);
 
+        class InternalStateAsDoubleVariable : public dtree::StateEvaluator {
+        public:
+            double &mVariable;
+
+            InternalStateAsDoubleVariable(double &var)
+                : dtree::StateEvaluator(), mVariable(var) {
+            }
+
+            double evaluate() {
+                return mVariable;
+            }
+        };
+
         /** \brief the Set of internal states, normalized in the range [0,1]
          * */
-        std::vector<double> mNormalizedInternalStates;
+        std::vector<dtree::StateEvaluator *> mNormalizedInternalStates;
 
         static std::string nationalityFromName (const std::string &name);
 };

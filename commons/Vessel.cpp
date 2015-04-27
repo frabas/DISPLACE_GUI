@@ -216,6 +216,13 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 void Vessel::init()
 {
     nationality = nationalityFromName(get_name());
+
+    for (int i = 0; i < dtree::Variable::VarLast; ++i) {
+        mNormalizedInternalStates.push_back(0);
+    }
+
+    // Add here the variables associations
+    mNormalizedInternalStates[dtree::last_trip_was] = new InternalStateAsDoubleVariable(last_trip_compared_avg);
 }
 
 Vessel::Vessel(string name, Node* a_location)
@@ -1030,7 +1037,14 @@ double Vessel::traverseDtree(dtree::DecisionTree *tree)
         if (node->getChildrenCount() == 0) // is a leaf node
             return node->value();
 
-        int bin = std::floor(mNormalizedInternalStates[static_cast<int>(node->variable())] * node->getChildrenCount());
+        double value = 0.0;
+        if (mNormalizedInternalStates[static_cast<int>(node->variable())] != 0) {
+            value = mNormalizedInternalStates[static_cast<int>(node->variable())]->evaluate();
+        } else {
+            throw std::runtime_error("Unsupported variable evaulation requested.");
+        }
+
+        int bin = std::floor(value * node->getChildrenCount());
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;

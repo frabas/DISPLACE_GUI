@@ -33,6 +33,7 @@
 
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
+#include <dtree/externalstatemanager.h>
 
 #include <stdexcept>
 
@@ -223,6 +224,9 @@ void Vessel::init()
 
     // Add here the variables associations
     mNormalizedInternalStates[dtree::last_trip_was] = new InternalStateAsDoubleVariable(last_trip_compared_avg);
+
+    // External states
+    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);
 }
 
 Vessel::Vessel(string name, Node* a_location)

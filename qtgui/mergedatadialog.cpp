@@ -129,7 +129,8 @@ void MergeDataDialog::on_browseOut_clicked()
 
 void MergeDataDialog::insertPluggableComponent(QWidget *widget)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->setMargin(0);
     ui->componentContainer->setLayout(layout);
 
     layout->addWidget(widget);

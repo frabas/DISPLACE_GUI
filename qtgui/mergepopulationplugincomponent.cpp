@@ -16,10 +16,13 @@ MergePopulationPluginComponent::MergePopulationPluginComponent(QWidget *parent) 
     ui->setupUi(this);
 
     on_expand_toggled(ui->expand->isChecked());
+    on_expandSizes_toggled(ui->expandSizes->isChecked());
     on_optGeneratePopFile_toggled(false);
 
-    mModel = new TableModel(this);
-    ui->stocks->setModel(mModel);
+    mModelStocks = new TableModel(this, TableModel::Stocks);
+    ui->stocks->setModel(mModelStocks);
+    mModelSizes = new TableModel(this, TableModel::Sizes);
+    ui->sizes->setModel(mModelSizes);
 }
 
 MergePopulationPluginComponent::~MergePopulationPluginComponent()
@@ -27,9 +30,17 @@ MergePopulationPluginComponent::~MergePopulationPluginComponent()
     delete ui;
 }
 
-void MergePopulationPluginComponent::load(QString file, QChar separator)
+void MergePopulationPluginComponent::loadStocks(QString file, QChar separator)
 {
-    mModel->load(file, separator);
+    mModelStocks->load(file, separator);
+}
+
+void MergePopulationPluginComponent::setSizeGroupsCount(int n)
+{
+    QStringList data;
+    for (int i = 0; i < n; ++i)
+        data.push_back(QString(tr("Size/group #%1")).arg(i+1));
+    mModelSizes->setDataCollection(data);
 }
 
 bool MergePopulationPluginComponent::isOutputStocksChecked() const
@@ -39,12 +50,24 @@ bool MergePopulationPluginComponent::isOutputStocksChecked() const
 
 QStringList MergePopulationPluginComponent::getSelectedStocks() const
 {
-    return mModel->getSelectedStocks();
+    return mModelStocks->getSelection();
 }
 
-void MergePopulationPluginComponent::selectedNumberChanged()
+QStringList MergePopulationPluginComponent::getSelectedSizes() const
 {
-    ui->componentsResume->setText(QString(tr("%1 stocks selected")).arg(mModel->getSelectionNumber()));
+    return mModelSizes->getSelection();
+}
+
+void MergePopulationPluginComponent::selectedStocksNumberChanged(TableModel::Type type)
+{
+    switch (type) {
+    case TableModel::Stocks:
+        ui->componentsResume->setText(QString(tr("%1 stocks selected")).arg(mModelStocks->getSelectionCount()));
+        break;
+    case TableModel::Sizes:
+        ui->sizeResume->setText(QString(tr("%1 sizes selected")).arg(mModelSizes->getSelectionCount()));
+        break;
+    }
 }
 
 void MergePopulationPluginComponent::on_browsePopOut_clicked()
@@ -63,6 +86,11 @@ void MergePopulationPluginComponent::on_expand_toggled(bool checked)
     ui->stocks->setVisible(checked);
 }
 
+void MergePopulationPluginComponent::on_expandSizes_toggled(bool checked)
+{
+    ui->sizes->setVisible(checked);
+}
+
 void MergePopulationPluginComponent::on_optGeneratePopFile_toggled(bool)
 {
     bool v = ui->optGeneratePopFile->isChecked();
@@ -70,8 +98,8 @@ void MergePopulationPluginComponent::on_optGeneratePopFile_toggled(bool)
     ui->browsePopOut->setEnabled(v);
 }
 
-MergePopulationPluginComponent::TableModel::TableModel(MergePopulationPluginComponent *owner, QObject *parent)
-    : QAbstractTableModel(parent), mOwner(owner)
+MergePopulationPluginComponent::TableModel::TableModel(MergePopulationPluginComponent *owner, Type type, QObject *parent)
+    : QAbstractTableModel(parent), mOwner(owner), mType(type)
 {
 }
 
@@ -113,7 +141,7 @@ bool MergePopulationPluginComponent::TableModel::setData(const QModelIndex &inde
                 --mNumSelected;
             }
             emit dataChanged(index, index);
-            emit selectionNumberChanged();
+            emit stockSelectionNumberChanged();
         }
         break;
     }
@@ -136,7 +164,12 @@ QVariant MergePopulationPluginComponent::TableModel::headerData(int section, Qt:
         */
         case 1:
             if (role == Qt::DisplayRole) {
-                return tr("Stock");
+                switch (mType) {
+                case Stocks:
+                    return tr("Stock");
+                case Sizes:
+                    return tr("Sizes");
+                }
             }
             break;
         }
@@ -161,7 +194,7 @@ void MergePopulationPluginComponent::TableModel::load(QString filename, QChar se
     mList.clear();
     mListSelection.clear();
     mNumSelected = 0;
-    emit selectionNumberChanged();
+    emit stockSelectionNumberChanged();
     endResetModel();
 
     QFile file(filename);
@@ -212,15 +245,28 @@ void MergePopulationPluginComponent::TableModel::load(QString filename, QChar se
     qSort(mList);
     endResetModel();
 
-    emit selectionNumberChanged();
+    emit stockSelectionNumberChanged();
 }
 
-int MergePopulationPluginComponent::TableModel::getSelectionNumber() const
+void MergePopulationPluginComponent::TableModel::setDataCollection(QStringList list)
+{
+    beginResetModel();
+    mList = list;
+    mListSelection.clear();
+    for (int i = 0; i < mList.size(); ++i)
+        mListSelection.push_back(true);
+    mNumSelected = mList.size();
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+int MergePopulationPluginComponent::TableModel::getSelectionCount() const
 {
     return mNumSelected;
 }
 
-QStringList MergePopulationPluginComponent::TableModel::getSelectedStocks() const
+QStringList MergePopulationPluginComponent::TableModel::getSelection() const
 {
     QStringList r;
 
@@ -232,7 +278,8 @@ QStringList MergePopulationPluginComponent::TableModel::getSelectedStocks() cons
     return r;
 }
 
-void MergePopulationPluginComponent::TableModel::selectionNumberChanged()
+void MergePopulationPluginComponent::TableModel::stockSelectionNumberChanged()
 {
-    mOwner->selectedNumberChanged();
+    mOwner->selectedStocksNumberChanged(mType);
 }
+

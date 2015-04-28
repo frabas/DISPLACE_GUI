@@ -706,7 +706,7 @@ void MainWindow::openScenarioDialog(QString suggestedPath, bool askForReload, bo
 
 void MainWindow::on_actionConfiguration_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::LiveModelType)
+    if (!currentModel || (currentModel->modelType() != DisplaceModel::LiveModelType && currentModel->modelType() != DisplaceModel::EditorModelType))
         return;
 
     if (currentModel) {
@@ -1965,6 +1965,7 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     MergePopulationDataDialog dlg(this);
     dlg.setOutputRequiresTemplate(2);
     dlg.setDefaultOutputToInput(false);
+    dlg.setSizeGroupCount(currentModel->getSzGrupsCount());
     dlg.setWindowTitle(tr("Calculate Population distribution"));
     if (dlg.exec()) {
         displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());

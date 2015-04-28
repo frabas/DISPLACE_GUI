@@ -14,5 +14,5 @@ void MergePopulationDataDialog::setSizeGroupCount(int cnt)
 
 void MergePopulationDataDialog::inputFileSelected()
 {
-    mComponent->loadStocks(getInputFile(), separator());
+    mComponent->loadStocksAndSizes(getInputFile(), separator());
 }

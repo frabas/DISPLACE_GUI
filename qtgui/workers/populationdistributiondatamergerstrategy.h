@@ -23,6 +23,7 @@ public:
     static const char *const LongField;
     static const char *const StockField;
     static const char *const IndivFieldPattern;
+    static const char *const SizeFieldBeginning;
 private:
     DataMerger *mOwner;
     DisplaceModel *mModel;

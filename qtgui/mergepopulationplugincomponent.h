@@ -20,7 +20,7 @@ public:
     explicit MergePopulationPluginComponent(QWidget *parent = 0);
     ~MergePopulationPluginComponent();
 
-    void loadStocks (QString file, QChar separator);
+    void loadStocksAndSizes (QString file, QChar separator);
     void setSizeGroupsCount(int n);
 
     bool isOutputStocksChecked() const;
@@ -50,7 +50,7 @@ protected:
 
         Qt::ItemFlags flags(const QModelIndex &index) const;
 
-        void load(QString file, QChar separator);
+        void load(QStringList list, QList<bool> selection);
         void setDataCollection (QStringList list);
 
         int getSelectionCount() const;

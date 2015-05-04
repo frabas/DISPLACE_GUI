@@ -1954,14 +1954,6 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
 
-    if (currentModel->getStockNames().size() == 0) {
-        int r = QMessageBox::question(this, tr("Calculate Population distribution"),
-                                      tr("No Stock names were loaded. Names will be automatically assigned. Do you want to proceed?"),
-                                      QMessageBox::No, QMessageBox::Yes);
-        if (r == QMessageBox::No)
-            return;
-    }
-
     MergePopulationDataDialog dlg(this);
     dlg.setOutputRequiresTemplate(2);
     dlg.setDefaultOutputToInput(false);

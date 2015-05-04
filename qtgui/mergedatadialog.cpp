@@ -132,7 +132,7 @@ void MergeDataDialog::on_browseOut_clicked()
                 }
                 tname.append(ext);
 
-                file = path + QDir::separator() + tname;
+                file = path + "/" + tname;
             }
         }
 

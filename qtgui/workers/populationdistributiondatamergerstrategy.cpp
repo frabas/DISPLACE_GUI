@@ -255,7 +255,7 @@ int PopulationDistributionDataMergerStrategy::getStockName(QString nm)
 
 bool PopulationDistributionDataMergerStrategy::isGroupSelected(int idx)
 {
-    return mGroups[idx];
+    return (idx < mGroups.size() ? mGroups[idx] : false);
 }
 
 PopulationDistributionDataMergerStrategy::ResultKey PopulationDistributionDataMergerStrategy::genResultKey(const PopulationDistributionDataMergerStrategy::Result &result)

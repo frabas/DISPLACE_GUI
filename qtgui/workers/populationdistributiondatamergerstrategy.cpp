@@ -148,7 +148,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         QMap<QString, int>::const_iterator stkit = mStockNames.begin();
         while (stkit != mStockNames.end()) {
             for (int s = 0; s < 2; ++s) {
-                QFile *f = new QFile(out.arg(stkit.value()).arg(s));
+                QFile *f = new QFile(out.arg(stkit.value()).arg(s+1));
 
                 qDebug() << "Save Output:"  << f->fileName();
 

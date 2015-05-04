@@ -204,6 +204,21 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         throw;
     }
 
+    if (!mPopOutFileName.isEmpty()) {
+        QFile f(mPopOutFileName);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            (new displace::DisplaceException(f.errorString()))->raise();
+        }
+
+        QTextStream ps (&f);
+
+        QList<QString> keys = mStockNames.keys();
+        for (int i = 0; i < keys.size(); ++i) {
+            ps << i << " " << keys[i] << endl;
+        }
+        f.close();
+    }
+
     foreach (QFile *f, outfiles) {
         f->close();
         delete f;
@@ -231,6 +246,11 @@ void PopulationDistributionDataMergerStrategy::setGroups(QList<int> groups)
             mGroups.push_back(false);
         mGroups[i] = true;
     }
+}
+
+void PopulationDistributionDataMergerStrategy::setPopulationOutputFileName(QString name)
+{
+    mPopOutFileName = name;
 }
 
 int PopulationDistributionDataMergerStrategy::getStockName(QString nm)

@@ -27,6 +27,8 @@ public:
     QStringList getSelectedStocks() const;
     QList<int> getSelectedSizes() const;
 
+    QString getOutputStockFilename() const;
+
 private slots:
     void on_browsePopOut_clicked();
     void on_expand_toggled(bool checked);

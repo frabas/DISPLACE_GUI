@@ -116,6 +116,11 @@ QList<int> MergePopulationPluginComponent::getSelectedSizes() const
     return mModelSizes->getSelectionIndexes();
 }
 
+QString MergePopulationPluginComponent::getOutputStockFilename() const
+{
+    return ui->filePopOut->text();
+}
+
 void MergePopulationPluginComponent::selectedStocksNumberChanged(TableModel::Type type)
 {
     switch (type) {

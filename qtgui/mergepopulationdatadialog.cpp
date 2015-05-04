@@ -22,6 +22,16 @@ QList<int> MergePopulationDataDialog::getSelectedGroupsIndexes()
     return mComponent->getSelectedSizes();
 }
 
+bool MergePopulationDataDialog::isPopulationOutChecked()
+{
+    return mComponent->isOutputStocksChecked();
+}
+
+QString MergePopulationDataDialog::getPopulationOutFileName()
+{
+    return mComponent->getOutputStockFilename();
+}
+
 void MergePopulationDataDialog::inputFileSelected()
 {
     mComponent->loadStocksAndSizes(getInputFile(), separator());

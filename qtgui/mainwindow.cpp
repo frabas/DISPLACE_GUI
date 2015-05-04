@@ -1964,6 +1964,8 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
 
         strategy->setStocks(dlg.getSelectedStocks());
         strategy->setGroups(dlg.getSelectedGroupsIndexes());
+        if (dlg.isPopulationOutChecked())
+            strategy->setPopulationOutputFileName(dlg.getPopulationOutFileName());
 
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));

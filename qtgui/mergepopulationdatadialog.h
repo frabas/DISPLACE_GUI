@@ -18,6 +18,9 @@ public:
     void setSizeGroupCount (int cnt);
     QStringList getSelectedStocks();
     QList<int> getSelectedGroupsIndexes();
+
+    bool isPopulationOutChecked();
+    QString getPopulationOutFileName();
 signals:
 
 public slots:

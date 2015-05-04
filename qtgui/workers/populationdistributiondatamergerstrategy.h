@@ -19,6 +19,7 @@ public:
 
     void setStocks(QStringList stocks);
     void setGroups(QList<int> groups);
+    void setPopulationOutputFileName(QString name);
 
     static const char *const YearField;
     static const char *const SemesterField;
@@ -40,6 +41,8 @@ private:
     QMap<QString, int> mStockNames;
     QList<int> mGroups;
     bool mFilterStocks;
+
+    QString mPopOutFileName;
 
     int getStockName(QString nm);
     bool isGroupSelected(int idx);

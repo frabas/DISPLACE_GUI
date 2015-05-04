@@ -17,6 +17,8 @@ public:
     void processLine (int linenum, QString line) override;
     bool saveOutput(QString out) override;
 
+    void setStocks(QStringList stocks);
+
     static const char *const YearField;
     static const char *const SemesterField;
     static const char *const LatField;
@@ -35,6 +37,7 @@ private:
     int num_col_indiv = 0;
 
     QMap<QString, int> mStockNames;
+    bool mFilterStocks;
 
     int getStockName(QString nm);
 

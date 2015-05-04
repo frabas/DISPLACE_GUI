@@ -16,7 +16,8 @@ const char *const PopulationDistributionDataMergerStrategy::IndivFieldPattern = 
 PopulationDistributionDataMergerStrategy::PopulationDistributionDataMergerStrategy (DisplaceModel *model)
     : DataMerger::Strategy(),
       mOwner(nullptr),
-      mModel(model)
+      mModel(model),
+      mFilterStocks(true)
 {
     mStockNames = mModel->getStockNames();
 }
@@ -82,8 +83,6 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
-    QList<std::shared_ptr<NodeData>> nodes = mOwner->getAllNodesWithin(QPointF(lon,lat), mOwner->distance());
-
     // COLLECT NODE + Y/SEM/STOCK => u(x) w(x) per pop
     // See: http://en.wikipedia.org/wiki/Inverse_distance_weighting
 
@@ -92,14 +91,20 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
     if (!ok)
         (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
-    res.semester = entry.at(col_sem).toInt(&ok);
+    res.semester = entry.at(col_sem).toInt(&ok) -1;     // Semester is one-based on file.
     if (!ok)
         (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
-    res.stock = getStockName(entry.at(col_stock));
+    int stockid = getStockName(entry.at(col_stock));
+    if (stockid == -1) // filter out unselected stocks
+        return;
+
+    res.stock = stockid;
 
 //    if (nodes.size() > 0)
 //        qDebug() << res.year << res.semester << res.stock << lat << lon << "Nodes: " << nodes.size();
+
+    QList<std::shared_ptr<NodeData>> nodes = mOwner->getAllNodesWithin(QPointF(lon,lat), mOwner->distance());
 
     foreach (std::shared_ptr<NodeData> node, nodes) {
         QMutexLocker lock(&mutex);
@@ -148,7 +153,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         QMap<QString, int>::const_iterator stkit = mStockNames.begin();
         while (stkit != mStockNames.end()) {
             for (int s = 0; s < 2; ++s) {
-                QFile *f = new QFile(out.arg(stkit.value()).arg(s+1));
+                QFile *f = new QFile(out.arg(stkit.key()).arg(s+1));
 
                 qDebug() << "Save Output:"  << f->fileName();
 
@@ -204,17 +209,29 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
 
 }
 
+void PopulationDistributionDataMergerStrategy::setStocks(QStringList stocks)
+{
+    foreach (QString stock, stocks) {
+        int res = mStockNames.size();
+        mStockNames.insert(stock, res);
+    }
+}
+
 int PopulationDistributionDataMergerStrategy::getStockName(QString nm)
 {
     QMutexLocker lock(&mutex);
     auto it = mStockNames.find(nm);
 
     if (it == mStockNames.end()) {
-        // not found: put it
-        int res = mStockNames.size();
-        mStockNames.insert(nm, res);
-        qDebug() << "New Stock " << nm << res;
-        return res;
+        if (!mFilterStocks) {
+            // not found: put it
+            int res = mStockNames.size();
+            mStockNames.insert(nm, res);
+            qDebug() << "New Stock " << nm << res;
+            return res;
+        } else {
+            return -1;
+        }
     } else {
         return it.value();
     }

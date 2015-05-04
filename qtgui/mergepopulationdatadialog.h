@@ -16,6 +16,7 @@ public:
     explicit MergePopulationDataDialog(QWidget *parent = 0);
 
     void setSizeGroupCount (int cnt);
+    QStringList getSelectedStocks();
 signals:
 
 public slots:

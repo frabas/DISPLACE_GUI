@@ -1969,6 +1969,9 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     dlg.setWindowTitle(tr("Calculate Population distribution"));
     if (dlg.exec()) {
         displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());
+
+        strategy->setStocks(dlg.getSelectedStocks());
+
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));
 

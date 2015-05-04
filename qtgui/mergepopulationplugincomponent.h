@@ -32,6 +32,12 @@ private slots:
     void on_expand_toggled(bool checked);
     void on_optGeneratePopFile_toggled(bool checked);
     void on_expandSizes_toggled(bool checked);
+    void on_allStocks_clicked();
+    void on_noStocks_clicked();
+    void on_invStocks_clicked();
+    void on_allGroups_clicked();
+    void on_noGroups_clicked();
+    void on_invGroups_clicked();
 
 private:
     Ui::MergePopulationPluginComponent *ui;
@@ -58,6 +64,9 @@ protected:
 
         void stockSelectionNumberChanged();
 
+        void selectAll();
+        void selectNone();
+        void invSelection();
     protected:
         MergePopulationPluginComponent *mOwner = 0;
         Type mType;

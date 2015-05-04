@@ -282,8 +282,86 @@ QStringList MergePopulationPluginComponent::TableModel::getSelection() const
     return r;
 }
 
+QList<int> MergePopulationPluginComponent::TableModel::getSelectionIndexes() const
+{
+    QList<int> r;
+
+    for (int i =0; i < mList.size(); ++i) {
+        if (mListSelection.at(i))
+            r.append(i);
+    }
+
+    return r;
+}
+
 void MergePopulationPluginComponent::TableModel::stockSelectionNumberChanged()
 {
     mOwner->selectedStocksNumberChanged(mType);
 }
 
+void MergePopulationPluginComponent::TableModel::selectAll()
+{
+    beginResetModel();
+    for (int i = 0; i < mListSelection.size(); ++i) {
+        mListSelection[i]=true;
+    }
+    mNumSelected=mListSelection.size();
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+void MergePopulationPluginComponent::TableModel::selectNone()
+{
+    beginResetModel();
+    for (int i = 0; i < mListSelection.size(); ++i) {
+        mListSelection[i]=false;
+    }
+    mNumSelected=0;
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+void MergePopulationPluginComponent::TableModel::invSelection()
+{
+    beginResetModel();
+    for (int i = 0; i < mListSelection.size(); ++i) {
+        mListSelection[i]=!mListSelection[i];
+    }
+    mNumSelected=mListSelection.size() - mNumSelected;
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+
+void MergePopulationPluginComponent::on_allStocks_clicked()
+{
+    mModelStocks->selectAll();
+}
+
+void MergePopulationPluginComponent::on_noStocks_clicked()
+{
+    mModelStocks->selectNone();
+}
+
+void MergePopulationPluginComponent::on_invStocks_clicked()
+{
+    mModelStocks->invSelection();
+}
+
+void MergePopulationPluginComponent::on_allGroups_clicked()
+{
+    mModelSizes->selectAll();
+}
+
+void MergePopulationPluginComponent::on_noGroups_clicked()
+{
+    mModelSizes->selectNone();
+}
+
+void MergePopulationPluginComponent::on_invGroups_clicked()
+{
+    mModelSizes->invSelection();
+}

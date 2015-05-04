@@ -1971,6 +1971,7 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
         displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());
 
         strategy->setStocks(dlg.getSelectedStocks());
+        strategy->setGroups(dlg.getSelectedGroupsIndexes());
 
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
         connect (merger, SIGNAL(completed(DataMerger*)), this, SLOT(mergeCompleted(DataMerger*)));

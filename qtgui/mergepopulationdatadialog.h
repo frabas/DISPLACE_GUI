@@ -17,6 +17,7 @@ public:
 
     void setSizeGroupCount (int cnt);
     QStringList getSelectedStocks();
+    QList<int> getSelectedGroupsIndexes();
 signals:
 
 public slots:

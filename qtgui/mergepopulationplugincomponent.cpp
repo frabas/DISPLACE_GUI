@@ -25,6 +25,9 @@ MergePopulationPluginComponent::MergePopulationPluginComponent(QWidget *parent) 
     ui->stocks->setModel(mModelStocks);
     mModelSizes = new TableModel(this, TableModel::Sizes);
     ui->sizes->setModel(mModelSizes);
+
+    selectedStocksNumberChanged(TableModel::Stocks);
+    selectedStocksNumberChanged(TableModel::Sizes);
 }
 
 MergePopulationPluginComponent::~MergePopulationPluginComponent()
@@ -108,9 +111,9 @@ QStringList MergePopulationPluginComponent::getSelectedStocks() const
     return mModelStocks->getSelection();
 }
 
-QStringList MergePopulationPluginComponent::getSelectedSizes() const
+QList<int> MergePopulationPluginComponent::getSelectedSizes() const
 {
-    return mModelSizes->getSelection();
+    return mModelSizes->getSelectionIndexes();
 }
 
 void MergePopulationPluginComponent::selectedStocksNumberChanged(TableModel::Type type)
@@ -138,12 +141,12 @@ void MergePopulationPluginComponent::on_browsePopOut_clicked()
 
 void MergePopulationPluginComponent::on_expand_toggled(bool checked)
 {
-    ui->stocks->setVisible(checked);
+    ui->stocksContainer->setVisible(checked);
 }
 
 void MergePopulationPluginComponent::on_expandSizes_toggled(bool checked)
 {
-    ui->sizes->setVisible(checked);
+    ui->sizesContainer->setVisible(checked);
 }
 
 void MergePopulationPluginComponent::on_optGeneratePopFile_toggled(bool)

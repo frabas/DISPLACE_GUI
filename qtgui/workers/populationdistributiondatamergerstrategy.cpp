@@ -120,9 +120,11 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
 
             res.centered = true;
             for (int i = 0; i < num_col_indiv; ++i) {
-                res.population[i] = entry.at(col_indiv + i).toDouble(&ok);
-                if (!ok)
-                    (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
+                if (isGroupSelected(i)) {
+                    res.population[i] = entry.at(col_indiv + i).toDouble(&ok);
+                    if (!ok)
+                        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
+                }
                 res.weights[i] = -1;    // not valid, not needed - see flag
             }
 
@@ -134,10 +136,12 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
                 vals = mResults.insert(key,res);       // weights and populations are initialized to 0, so it's ok to sum
             }
             for (int i = 0; i < num_col_indiv; ++i) {
-                res.population[i] = entry.at(col_indiv + i).toDouble(&ok) + vals.value().population[i];
-                if (!ok)
-                    (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
-                res.weights[i] = 1.0/dist + vals.value().weights[i];
+                if (isGroupSelected(i)) {
+                    res.population[i] = entry.at(col_indiv + i).toDouble(&ok) + vals.value().population[i];
+                    if (!ok)
+                        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
+                    res.weights[i] = 1.0/dist + vals.value().weights[i];
+                }
             }
 
             mResults.insert(key,res);
@@ -173,12 +177,15 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         while (resl != mResults.end()) {
             double sumpop = 0;
             for (int i = 0; i < num_col_indiv; ++i) {
-                sumpop += resl.value().population[i] / resl.value().weights[i];
+                if (isGroupSelected(i))
+                    sumpop += resl.value().population[i] / resl.value().weights[i];
             }
 
             for (int i = 0; i < num_col_indiv; ++i) {
-                double v = (std::abs(sumpop < 1e-5) ? 0 : resl.value().population[i] / sumpop);
-                *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << endl;
+                if (isGroupSelected(i)) {
+                    double v = (std::abs(sumpop < 1e-5) ? 0 : resl.value().population[i] / sumpop);
+                    *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << endl;
+                }
             }
 
             ++resl;
@@ -217,6 +224,15 @@ void PopulationDistributionDataMergerStrategy::setStocks(QStringList stocks)
     }
 }
 
+void PopulationDistributionDataMergerStrategy::setGroups(QList<int> groups)
+{
+    foreach (int i, groups) {
+        while (mGroups.size() <= i)
+            mGroups.push_back(false);
+        mGroups[i] = true;
+    }
+}
+
 int PopulationDistributionDataMergerStrategy::getStockName(QString nm)
 {
     QMutexLocker lock(&mutex);
@@ -235,6 +251,11 @@ int PopulationDistributionDataMergerStrategy::getStockName(QString nm)
     } else {
         return it.value();
     }
+}
+
+bool PopulationDistributionDataMergerStrategy::isGroupSelected(int idx)
+{
+    return mGroups[idx];
 }
 
 PopulationDistributionDataMergerStrategy::ResultKey PopulationDistributionDataMergerStrategy::genResultKey(const PopulationDistributionDataMergerStrategy::Result &result)

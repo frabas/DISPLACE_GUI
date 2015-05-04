@@ -18,6 +18,7 @@ public:
     bool saveOutput(QString out) override;
 
     void setStocks(QStringList stocks);
+    void setGroups(QList<int> groups);
 
     static const char *const YearField;
     static const char *const SemesterField;
@@ -37,9 +38,11 @@ private:
     int num_col_indiv = 0;
 
     QMap<QString, int> mStockNames;
+    QList<int> mGroups;
     bool mFilterStocks;
 
     int getStockName(QString nm);
+    bool isGroupSelected(int idx);
 
     /* Result will be put in a set for processing */
 

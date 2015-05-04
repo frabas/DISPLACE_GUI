@@ -17,6 +17,11 @@ QStringList MergePopulationDataDialog::getSelectedStocks()
     return mComponent->getSelectedStocks();
 }
 
+QList<int> MergePopulationDataDialog::getSelectedGroupsIndexes()
+{
+    return mComponent->getSelectedSizes();
+}
+
 void MergePopulationDataDialog::inputFileSelected()
 {
     mComponent->loadStocksAndSizes(getInputFile(), separator());

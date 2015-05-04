@@ -25,7 +25,7 @@ public:
 
     bool isOutputStocksChecked() const;
     QStringList getSelectedStocks() const;
-    QStringList getSelectedSizes() const;
+    QList<int> getSelectedSizes() const;
 
 private slots:
     void on_browsePopOut_clicked();
@@ -61,6 +61,7 @@ protected:
 
         int getSelectionCount() const;
         QStringList getSelection() const;
+        QList<int> getSelectionIndexes() const;
 
         void stockSelectionNumberChanged();
 

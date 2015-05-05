@@ -358,19 +358,6 @@ public:
 
         double traverseDtree (dtree::DecisionTree *tree);
 
-        class InternalStateAsDoubleVariable : public dtree::StateEvaluator {
-        public:
-            double &mVariable;
-
-            InternalStateAsDoubleVariable(double &var)
-                : dtree::StateEvaluator(), mVariable(var) {
-            }
-
-            double evaluate() {
-                return mVariable;
-            }
-        };
-
         /** \brief the Set of internal states, normalized in the range [0,1]
          * */
         std::vector<dtree::StateEvaluator *> mNormalizedInternalStates;

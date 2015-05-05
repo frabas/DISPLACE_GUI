@@ -97,6 +97,8 @@ class Vessel
         double lastTrip_profit;
         double cumRevenues;
         double cumProfit;
+        double avgRevenues;
+        double avgProfit;
         int numTrips;
 								 // dynamic
 		bool inharbour, inactive, natio;
@@ -356,13 +358,13 @@ public:
             return lastTrip_revenues;
         }
         double getAvgTripRevenues() const {
-            return cumRevenues / numTrips;
+            return avgRevenues;
         }
         double getLastTripProfit() const {
             return lastTrip_profit;
         }
         double getAvgTripProfit() const {
-            return cumProfit / numTrips;
+            return avgProfit;
         }
         int getNumTrips() const {
             return numTrips;

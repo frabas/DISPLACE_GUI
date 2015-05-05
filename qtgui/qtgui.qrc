@@ -46,5 +46,9 @@
         <file>icons/dteditor.png</file>
         <file>icons/down.png</file>
         <file>icons/up.png</file>
+        <file>icons/allselect.png</file>
+        <file>icons/invselect.png</file>
+        <file>icons/noneselect.png</file>
+        <file>icons/more-horz.png</file>
     </qresource>
 </RCC>

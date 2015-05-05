@@ -98,11 +98,16 @@ void MergeDataDialog::on_browseOut_clicked()
     if (!ui->fileOut->text().isEmpty())
         dir = ui->fileOut->text();
 
-    QString file = QFileDialog::getOpenFileName(this,
-                                                tr("Output file name"),
-                                                dir, tr("Text files (*.txt *.dat);;All files (*.*)"));
+    QFileDialog dlg (this,
+                     tr("Output file name"),
+                     dir, tr("Text files (*.txt *.dat);;All files (*.*)"));
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setAcceptMode(QFileDialog::AcceptSave);
+    dlg.setDefaultSuffix("txt");
 
-    if (!file.isEmpty()) {
+    if (dlg.exec() == QDialog::Accepted) {
+        QString file = dlg.selectedFiles().at(0);
+
         QString tpl = QString("%") + QString::number(mOutRequiresTemplate);
         if (mOutRequiresTemplate > 0 && !file.contains(tpl)) {
             int r = QMessageBox::question(this, tr("Template is required"),
@@ -114,9 +119,20 @@ void MergeDataDialog::on_browseOut_clicked()
                 QString name = info.fileName();
 
                 int pos = name.lastIndexOf(".");
-                name = name.left(pos) + "-%1.%2" + name.mid(pos);
+                QString ext;
+                if (pos != -1) {
+                    ext = name.mid(pos);
+                }
 
-                file = path + QDir::separator() + name;
+                QString tname = name.left(pos) + "-";
+                for (int i = 0; i < mOutRequiresTemplate; ++i) {
+                    if (i > 0)
+                        tname.append(".");
+                   tname.append("%").append(QString::number((i+1)));
+                }
+                tname.append(ext);
+
+                file = path + "/" + tname;
             }
         }
 

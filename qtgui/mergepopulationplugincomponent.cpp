@@ -1,6 +1,8 @@
 #include "mergepopulationplugincomponent.h"
 #include "ui_mergepopulationplugincomponent.h"
 
+#include <workers/populationdistributiondatamergerstrategy.h>
+
 #include <utils/mrupathmanager.h>
 #include <QFileDialog>
 #include <QFile>
@@ -23,6 +25,9 @@ MergePopulationPluginComponent::MergePopulationPluginComponent(QWidget *parent) 
     ui->stocks->setModel(mModelStocks);
     mModelSizes = new TableModel(this, TableModel::Sizes);
     ui->sizes->setModel(mModelSizes);
+
+    selectedStocksNumberChanged(TableModel::Stocks);
+    selectedStocksNumberChanged(TableModel::Sizes);
 }
 
 MergePopulationPluginComponent::~MergePopulationPluginComponent()
@@ -30,9 +35,62 @@ MergePopulationPluginComponent::~MergePopulationPluginComponent()
     delete ui;
 }
 
-void MergePopulationPluginComponent::loadStocks(QString file, QChar separator)
+void MergePopulationPluginComponent::loadStocksAndSizes(QString filename, QChar separator)
 {
-    mModelStocks->load(file, separator);
+    qDebug() << "Loading: " << filename << " sep: " << separator;
+
+    QStringList stocklist;
+    QStringList sizelist;
+    QList<bool> stocksel, sizesel;
+
+    QFile file(filename);
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Cannot load: " << file.errorString();
+        return;
+    }
+
+    QString line;
+
+    QTextStream strm(&file);
+
+    line = strm.readLine();
+    QStringList fields = line.split(separator, QString::SkipEmptyParts);
+
+    int stock_fld = -1;
+    for (int i = 0; i < fields.size(); ++i) {
+        if (fields.at(i) == displace::workers::PopulationDistributionDataMergerStrategy::StockField) {
+            stock_fld = i;
+            break;
+        } else if (fields.at(i).startsWith(displace::workers::PopulationDistributionDataMergerStrategy::IndivFieldPattern)) {
+            sizelist << fields.at(i);
+            sizesel << true;
+        }
+    }
+
+    if (stock_fld == -1) {
+        qDebug() << "No field.";
+        return;
+    }
+
+    QSet<QString> stocks;
+    while (!strm.atEnd()) {
+        line = strm.readLine();
+        fields = line.split(separator, QString::SkipEmptyParts);
+        if (stock_fld < fields.size()) {
+            stocks.insert(fields.at(stock_fld));
+        }
+    }
+
+    foreach(QString stock, stocks) {
+        stocklist << stock;
+        stocksel << true;
+    }
+
+    qSort(stocklist);
+
+    mModelStocks->load(stocklist, stocksel);
+    mModelSizes->load(sizelist, sizesel);
 }
 
 void MergePopulationPluginComponent::setSizeGroupsCount(int n)
@@ -53,9 +111,14 @@ QStringList MergePopulationPluginComponent::getSelectedStocks() const
     return mModelStocks->getSelection();
 }
 
-QStringList MergePopulationPluginComponent::getSelectedSizes() const
+QList<int> MergePopulationPluginComponent::getSelectedSizes() const
 {
-    return mModelSizes->getSelection();
+    return mModelSizes->getSelectionIndexes();
+}
+
+QString MergePopulationPluginComponent::getOutputStockFilename() const
+{
+    return ui->filePopOut->text();
 }
 
 void MergePopulationPluginComponent::selectedStocksNumberChanged(TableModel::Type type)
@@ -83,12 +146,12 @@ void MergePopulationPluginComponent::on_browsePopOut_clicked()
 
 void MergePopulationPluginComponent::on_expand_toggled(bool checked)
 {
-    ui->stocks->setVisible(checked);
+    ui->stocksContainer->setVisible(checked);
 }
 
 void MergePopulationPluginComponent::on_expandSizes_toggled(bool checked)
 {
-    ui->sizes->setVisible(checked);
+    ui->sizesContainer->setVisible(checked);
 }
 
 void MergePopulationPluginComponent::on_optGeneratePopFile_toggled(bool)
@@ -186,63 +249,12 @@ Qt::ItemFlags MergePopulationPluginComponent::TableModel::flags(const QModelInde
     return QAbstractTableModel::flags(index);
 }
 
-void MergePopulationPluginComponent::TableModel::load(QString filename, QChar separator)
+void MergePopulationPluginComponent::TableModel::load(QStringList list, QList<bool> selection)
 {
-    qDebug() << "Loading: " << filename << " sep: " << separator;
-
     beginResetModel();
-    mList.clear();
-    mListSelection.clear();
-    mNumSelected = 0;
-    emit stockSelectionNumberChanged();
-    endResetModel();
-
-    QFile file(filename);
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Cannot load: " << file.errorString();
-        return;
-    }
-
-    QString line;
-
-    QTextStream strm(&file);
-
-    line = strm.readLine();
-    QStringList fields = line.split(separator, QString::SkipEmptyParts);
-
-    int stock_fld = -1;
-    for (int i = 0; i < fields.size(); ++i) {
-        if (fields.at(i) == "Stock") {
-            stock_fld = i;
-            break;
-        }
-    }
-
-    if (stock_fld == -1) {
-        qDebug() << "No field.";
-        return;
-    }
-
-    QSet<QString> stocks;
-    while (!strm.atEnd()) {
-        line = strm.readLine();
-        fields = line.split(separator, QString::SkipEmptyParts);
-        if (stock_fld < fields.size()) {
-            stocks.insert(fields.at(stock_fld));
-        }
-    }
-
-    beginResetModel();
-    foreach(QString stock, stocks) {
-        mList.append(stock);
-        mListSelection.append(true);
-        ++mNumSelected;
-    }
-
-    qDebug() << mList.size() << " loaded";
-
-    qSort(mList);
+    mList = list;
+    mListSelection = selection;
+    mNumSelected = mListSelection.count(true);
     endResetModel();
 
     emit stockSelectionNumberChanged();
@@ -278,8 +290,86 @@ QStringList MergePopulationPluginComponent::TableModel::getSelection() const
     return r;
 }
 
+QList<int> MergePopulationPluginComponent::TableModel::getSelectionIndexes() const
+{
+    QList<int> r;
+
+    for (int i =0; i < mList.size(); ++i) {
+        if (mListSelection.at(i))
+            r.append(i);
+    }
+
+    return r;
+}
+
 void MergePopulationPluginComponent::TableModel::stockSelectionNumberChanged()
 {
     mOwner->selectedStocksNumberChanged(mType);
 }
 
+void MergePopulationPluginComponent::TableModel::selectAll()
+{
+    beginResetModel();
+    for (int i = 0; i < mListSelection.size(); ++i) {
+        mListSelection[i]=true;
+    }
+    mNumSelected=mListSelection.size();
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+void MergePopulationPluginComponent::TableModel::selectNone()
+{
+    beginResetModel();
+    for (int i = 0; i < mListSelection.size(); ++i) {
+        mListSelection[i]=false;
+    }
+    mNumSelected=0;
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+void MergePopulationPluginComponent::TableModel::invSelection()
+{
+    beginResetModel();
+    for (int i = 0; i < mListSelection.size(); ++i) {
+        mListSelection[i]=!mListSelection[i];
+    }
+    mNumSelected=mListSelection.size() - mNumSelected;
+    endResetModel();
+
+    emit stockSelectionNumberChanged();
+}
+
+
+void MergePopulationPluginComponent::on_allStocks_clicked()
+{
+    mModelStocks->selectAll();
+}
+
+void MergePopulationPluginComponent::on_noStocks_clicked()
+{
+    mModelStocks->selectNone();
+}
+
+void MergePopulationPluginComponent::on_invStocks_clicked()
+{
+    mModelStocks->invSelection();
+}
+
+void MergePopulationPluginComponent::on_allGroups_clicked()
+{
+    mModelSizes->selectAll();
+}
+
+void MergePopulationPluginComponent::on_noGroups_clicked()
+{
+    mModelSizes->selectNone();
+}
+
+void MergePopulationPluginComponent::on_invGroups_clicked()
+{
+    mModelSizes->invSelection();
+}

@@ -20,18 +20,26 @@ public:
     explicit MergePopulationPluginComponent(QWidget *parent = 0);
     ~MergePopulationPluginComponent();
 
-    void loadStocks (QString file, QChar separator);
+    void loadStocksAndSizes (QString file, QChar separator);
     void setSizeGroupsCount(int n);
 
     bool isOutputStocksChecked() const;
     QStringList getSelectedStocks() const;
-    QStringList getSelectedSizes() const;
+    QList<int> getSelectedSizes() const;
+
+    QString getOutputStockFilename() const;
 
 private slots:
     void on_browsePopOut_clicked();
     void on_expand_toggled(bool checked);
     void on_optGeneratePopFile_toggled(bool checked);
     void on_expandSizes_toggled(bool checked);
+    void on_allStocks_clicked();
+    void on_noStocks_clicked();
+    void on_invStocks_clicked();
+    void on_allGroups_clicked();
+    void on_noGroups_clicked();
+    void on_invGroups_clicked();
 
 private:
     Ui::MergePopulationPluginComponent *ui;
@@ -50,14 +58,18 @@ protected:
 
         Qt::ItemFlags flags(const QModelIndex &index) const;
 
-        void load(QString file, QChar separator);
+        void load(QStringList list, QList<bool> selection);
         void setDataCollection (QStringList list);
 
         int getSelectionCount() const;
         QStringList getSelection() const;
+        QList<int> getSelectionIndexes() const;
 
         void stockSelectionNumberChanged();
 
+        void selectAll();
+        void selectNone();
+        void invSelection();
     protected:
         MergePopulationPluginComponent *mOwner = 0;
         Type mType;

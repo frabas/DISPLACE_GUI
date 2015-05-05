@@ -16,7 +16,8 @@ const char *const PopulationDistributionDataMergerStrategy::IndivFieldPattern = 
 PopulationDistributionDataMergerStrategy::PopulationDistributionDataMergerStrategy (DisplaceModel *model)
     : DataMerger::Strategy(),
       mOwner(nullptr),
-      mModel(model)
+      mModel(model),
+      mFilterStocks(true)
 {
     mStockNames = mModel->getStockNames();
 }
@@ -82,8 +83,6 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
 #endif
 
-    QList<std::shared_ptr<NodeData>> nodes = mOwner->getAllNodesWithin(QPointF(lon,lat), mOwner->distance());
-
     // COLLECT NODE + Y/SEM/STOCK => u(x) w(x) per pop
     // See: http://en.wikipedia.org/wiki/Inverse_distance_weighting
 
@@ -92,14 +91,20 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
     if (!ok)
         (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
-    res.semester = entry.at(col_sem).toInt(&ok);
+    res.semester = entry.at(col_sem).toInt(&ok) -1;     // Semester is one-based on file.
     if (!ok)
         (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
 
-    res.stock = getStockName(entry.at(col_stock));
+    int stockid = getStockName(entry.at(col_stock));
+    if (stockid == -1) // filter out unselected stocks
+        return;
+
+    res.stock = stockid;
 
 //    if (nodes.size() > 0)
 //        qDebug() << res.year << res.semester << res.stock << lat << lon << "Nodes: " << nodes.size();
+
+    QList<std::shared_ptr<NodeData>> nodes = mOwner->getAllNodesWithin(QPointF(lon,lat), mOwner->distance());
 
     foreach (std::shared_ptr<NodeData> node, nodes) {
         QMutexLocker lock(&mutex);
@@ -115,9 +120,11 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
 
             res.centered = true;
             for (int i = 0; i < num_col_indiv; ++i) {
-                res.population[i] = entry.at(col_indiv + i).toDouble(&ok);
-                if (!ok)
-                    (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
+                if (isGroupSelected(i)) {
+                    res.population[i] = entry.at(col_indiv + i).toDouble(&ok);
+                    if (!ok)
+                        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
+                }
                 res.weights[i] = -1;    // not valid, not needed - see flag
             }
 
@@ -129,10 +136,12 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
                 vals = mResults.insert(key,res);       // weights and populations are initialized to 0, so it's ok to sum
             }
             for (int i = 0; i < num_col_indiv; ++i) {
-                res.population[i] = entry.at(col_indiv + i).toDouble(&ok) + vals.value().population[i];
-                if (!ok)
-                    (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
-                res.weights[i] = 1.0/dist + vals.value().weights[i];
+                if (isGroupSelected(i)) {
+                    res.population[i] = entry.at(col_indiv + i).toDouble(&ok) + vals.value().population[i];
+                    if (!ok)
+                        (new displace::DisplaceException(QString(QObject::tr("Error parsing line %1 field %2")).arg(linenum).arg(col_lat)))->raise();
+                    res.weights[i] = 1.0/dist + vals.value().weights[i];
+                }
             }
 
             mResults.insert(key,res);
@@ -148,7 +157,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         QMap<QString, int>::const_iterator stkit = mStockNames.begin();
         while (stkit != mStockNames.end()) {
             for (int s = 0; s < 2; ++s) {
-                QFile *f = new QFile(out.arg(stkit.value()).arg(s));
+                QFile *f = new QFile(out.arg(stkit.key()).arg(s+1));
 
                 qDebug() << "Save Output:"  << f->fileName();
 
@@ -168,12 +177,15 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         while (resl != mResults.end()) {
             double sumpop = 0;
             for (int i = 0; i < num_col_indiv; ++i) {
-                sumpop += resl.value().population[i] / resl.value().weights[i];
+                if (isGroupSelected(i))
+                    sumpop += resl.value().population[i] / resl.value().weights[i];
             }
 
             for (int i = 0; i < num_col_indiv; ++i) {
-                double v = (std::abs(sumpop < 1e-5) ? 0 : resl.value().population[i] / sumpop);
-                *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << endl;
+                if (isGroupSelected(i)) {
+                    double v = (std::abs(sumpop < 1e-5) ? 0 : resl.value().population[i] / sumpop);
+                    *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << endl;
+                }
             }
 
             ++resl;
@@ -192,6 +204,21 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
         throw;
     }
 
+    if (!mPopOutFileName.isEmpty()) {
+        QFile f(mPopOutFileName);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            (new displace::DisplaceException(f.errorString()))->raise();
+        }
+
+        QTextStream ps (&f);
+
+        QList<QString> keys = mStockNames.keys();
+        for (int i = 0; i < keys.size(); ++i) {
+            ps << i << " " << keys[i] << endl;
+        }
+        f.close();
+    }
+
     foreach (QFile *f, outfiles) {
         f->close();
         delete f;
@@ -204,20 +231,51 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
 
 }
 
+void PopulationDistributionDataMergerStrategy::setStocks(QStringList stocks)
+{
+    foreach (QString stock, stocks) {
+        int res = mStockNames.size();
+        mStockNames.insert(stock, res);
+    }
+}
+
+void PopulationDistributionDataMergerStrategy::setGroups(QList<int> groups)
+{
+    foreach (int i, groups) {
+        while (mGroups.size() <= i)
+            mGroups.push_back(false);
+        mGroups[i] = true;
+    }
+}
+
+void PopulationDistributionDataMergerStrategy::setPopulationOutputFileName(QString name)
+{
+    mPopOutFileName = name;
+}
+
 int PopulationDistributionDataMergerStrategy::getStockName(QString nm)
 {
     QMutexLocker lock(&mutex);
     auto it = mStockNames.find(nm);
 
     if (it == mStockNames.end()) {
-        // not found: put it
-        int res = mStockNames.size();
-        mStockNames.insert(nm, res);
-        qDebug() << "New Stock " << nm << res;
-        return res;
+        if (!mFilterStocks) {
+            // not found: put it
+            int res = mStockNames.size();
+            mStockNames.insert(nm, res);
+            qDebug() << "New Stock " << nm << res;
+            return res;
+        } else {
+            return -1;
+        }
     } else {
         return it.value();
     }
+}
+
+bool PopulationDistributionDataMergerStrategy::isGroupSelected(int idx)
+{
+    return (idx < mGroups.size() ? mGroups[idx] : false);
 }
 
 PopulationDistributionDataMergerStrategy::ResultKey PopulationDistributionDataMergerStrategy::genResultKey(const PopulationDistributionDataMergerStrategy::Result &result)

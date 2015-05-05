@@ -196,6 +196,9 @@ MainWindow::MainWindow(QWidget *parent) :
     int idx = newEditorModel("new model");
     ui->modelSelector->setCurrentIndex(idx);
     updateModelList();
+
+    /* hide unneeded menu items */
+    ui->actionLoadStockNames->setVisible(false);
 }
 
 MainWindow::~MainWindow()

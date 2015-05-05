@@ -218,6 +218,9 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 void Vessel::init()
 {
+    lastTrip_revenues = lastTrip_profit = cumRevenues = cumProfit = 0;
+    numTrips = 0;
+
     nationality = nationalityFromName(get_name());
 
     for (int i = 0; i < dtree::Variable::VarLast; ++i) {
@@ -225,7 +228,7 @@ void Vessel::init()
     }
 
     // Add here the variables associations
-    mNormalizedInternalStates[dtree::last_trip_was] = new dtree::TwoArgumentsOperatorStateEvaluator<std::less<double> >(
+    mNormalizedInternalStates[dtree::last_trip_was] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
                 new dtree::VariableReferenceStateEvaluator<double>(last_trip_compared_avg),
                 std::less<double>());
@@ -1039,9 +1042,10 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
-double Vessel::calcTripRevenuesFromAvPrices(const std::vector<Population* >& populations) const
+void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
 {
-    double revenues = 0.0;
+    lastTrip_revenues = 0.0;
+    lastTrip_profit = 0.0;
     const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
     for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
@@ -1050,10 +1054,16 @@ double Vessel::calcTripRevenuesFromAvPrices(const std::vector<Population* >& pop
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
-            revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
         }
     }
-    return revenues;
+
+    double fuelcost = get_cumfuelcons() * get_loc()->get_fuelprices(length_class);
+    lastTrip_profit = lastTrip_revenues - fuelcost;
+
+    ++numTrips;
+    cumRevenues += lastTrip_revenues;
+    cumProfit += lastTrip_profit;
 }
 
 double Vessel::traverseDtree(dtree::DecisionTree *tree)

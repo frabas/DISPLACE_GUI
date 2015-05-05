@@ -92,7 +92,12 @@ class Vessel
 		int state;
 		int tstep_dep;
 		int previous_harbour_idx;
+
         double lastTrip_revenues;
+        double lastTrip_profit;
+        double cumRevenues;
+        double cumProfit;
+        int numTrips;
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
@@ -347,14 +352,23 @@ public:
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
 
-        double getLastTripRevenuesFromAvPrices() const {
+        double getLastTripRevenues() const {
             return lastTrip_revenues;
         }
-        void setLastTripRevenuesFromAvPrices(double revenues) {
-            lastTrip_revenues = revenues;
+        double getAvgTripRevenues() const {
+            return cumRevenues / numTrips;
+        }
+        double getLastTripProfit() const {
+            return lastTrip_profit;
+        }
+        double getAvgTripProfit() const {
+            return cumProfit / numTrips;
+        }
+        int getNumTrips() const {
+            return numTrips;
         }
 
-        double calcTripRevenuesFromAvPrices(const std::vector<Population *> &populations) const;
+        void updateTripsStatistics(const std::vector<Population *> &populations);
 
         double traverseDtree (dtree::DecisionTree *tree);
 

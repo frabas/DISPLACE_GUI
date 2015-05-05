@@ -21,7 +21,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     logbook.cumfcons = v->get_cumfuelcons();
     logbook.travdist = v->get_traveled_dist_this_trip();
 
-    logbook.revenue_from_av_prices=v->getLastTripRevenuesFromAvPrices();
+    logbook.revenue_from_av_prices=v->getLastTripRevenues();
 
     length_class =v->get_length_class();
     logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);

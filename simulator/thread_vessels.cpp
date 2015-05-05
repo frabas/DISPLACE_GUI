@@ -132,6 +132,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // i.e. just arrived!
                 if(!inactive)
                 {
+                    double revenues = vessels[index_v]->calcTripRevenuesFromAvPrices(populations);
+                    vessels[index_v]->setLastTripRevenuesFromAvPrices(revenues);
                     mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
 #if 0
                     std::ostringstream ss;

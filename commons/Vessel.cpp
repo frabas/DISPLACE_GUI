@@ -1034,6 +1034,23 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
+double Vessel::calcTripRevenuesFromAvPrices(const std::vector<Population* >& populations) const
+{
+    double revenues = 0.0;
+    const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
+    for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    {
+        vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
+
+        for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+        {
+            int comcat_this_size =comcat_at_szgroup.at(sz);
+            revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+        }
+    }
+    return revenues;
+}
+
 double Vessel::traverseDtree(dtree::DecisionTree *tree)
 {
     boost::shared_ptr<dtree::Node> node = tree->root();

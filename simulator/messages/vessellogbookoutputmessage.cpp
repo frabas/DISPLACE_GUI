@@ -21,21 +21,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     logbook.cumfcons = v->get_cumfuelcons();
     logbook.travdist = v->get_traveled_dist_this_trip();
 
-    vector< vector<double> > a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
-    cumul.resize(a_catch_pop_at_szgroup.size(), 0);
-    freq_metiers="";
-
-    logbook.revenue_from_av_prices=0.0;
-    for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
-    {
-        vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
-
-        for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
-        {
-            int comcat_this_size =comcat_at_szgroup.at(sz);
-            logbook.revenue_from_av_prices += a_catch_pop_at_szgroup[pop][sz] * v->get_loc()->get_prices_per_cat(pop, comcat_this_size);
-        }
-    }
+    logbook.revenue_from_av_prices=v->getLastTripRevenuesFromAvPrices();
 
     length_class =v->get_length_class();
     logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);

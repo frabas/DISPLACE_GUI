@@ -92,6 +92,7 @@ class Vessel
 		int state;
 		int tstep_dep;
 		int previous_harbour_idx;
+        int lastTrip_revenues;
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
@@ -104,7 +105,7 @@ protected:
         void init();
         void find_next_point_on_the_graph_unlocked(vector<Node* >& nodes);
 
-	public:
+public:
 		//Vessel(string name,  boost::shared_ptr<Node> a_location);
 		Vessel(string name,  Node* a_location);
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name);
@@ -345,6 +346,15 @@ protected:
 
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
+
+        double getLastTripRevenuesFromAvPrices() const {
+            return lastTrip_revenues;
+        }
+        void setLastTripRevenuesFromAvPrices(double revenues) {
+            lastTrip_revenues = revenues;
+        }
+
+        double calcTripRevenuesFromAvPrices(const std::vector<Population *> &populations) const;
 
         double traverseDtree (dtree::DecisionTree *tree);
 

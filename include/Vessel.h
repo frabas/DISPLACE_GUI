@@ -92,7 +92,7 @@ class Vessel
 		int state;
 		int tstep_dep;
 		int previous_harbour_idx;
-        int lastTrip_revenues;
+        double lastTrip_revenues;
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;

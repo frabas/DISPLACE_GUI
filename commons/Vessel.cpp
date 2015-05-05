@@ -230,7 +230,7 @@ void Vessel::init()
     // Add here the variables associations
     mNormalizedInternalStates[dtree::last_trip_was] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
-                new dtree::VariableReferenceStateEvaluator<double>(avgRevenues),
+                new AverageRevenueStateEvaluator(this),
                 std::less<double>());
 
     // External states
@@ -1064,9 +1064,6 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
     ++numTrips;
     cumRevenues += lastTrip_revenues;
     cumProfit += lastTrip_profit;
-
-    avgProfit = cumProfit / numTrips;
-    avgRevenues = cumRevenues / numTrips;
 }
 
 double Vessel::traverseDtree(dtree::DecisionTree *tree)

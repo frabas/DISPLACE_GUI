@@ -218,7 +218,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 void Vessel::init()
 {
-    lastTrip_revenues = lastTrip_profit = cumRevenues = cumProfit = 0;
+    lastTrip_revenues = lastTrip_profit = avgRevenues = avgProfit = 0;
     numTrips = 0;
 
     nationality = nationalityFromName(get_name());
@@ -230,7 +230,7 @@ void Vessel::init()
     // Add here the variables associations
     mNormalizedInternalStates[dtree::last_trip_was] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
-                new AverageRevenueStateEvaluator(this),
+                new dtree::VariableReferenceStateEvaluator<double>(avgRevenues),
                 std::less<double>());
 
     // External states
@@ -1044,6 +1044,16 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
 
 void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
 {
+    double cumProfit = avgProfit * numTrips;
+    double cumRevenues = avgRevenues * numTrips;
+
+    if (numTrips > 2) {
+        avgRevenues += (cumRevenues + lastTrip_revenues) / numTrips;
+        avgProfit += (cumProfit + lastTrip_profit) / numTrips;
+    } else {
+        avgRevenues = avgProfit = 0.0;
+    }
+
     lastTrip_revenues = 0.0;
     lastTrip_profit = 0.0;
     const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
@@ -1062,8 +1072,6 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
     lastTrip_profit = lastTrip_revenues - fuelcost;
 
     ++numTrips;
-    cumRevenues += lastTrip_revenues;
-    cumProfit += lastTrip_profit;
 }
 
 double Vessel::traverseDtree(dtree::DecisionTree *tree)

@@ -95,8 +95,8 @@ class Vessel
 
         double lastTrip_revenues;
         double lastTrip_profit;
-        double cumRevenues;
-        double cumProfit;
+        double avgRevenues;
+        double avgProfit;
         int numTrips;
 								 // dynamic
 		bool inharbour, inactive, natio;
@@ -356,38 +356,17 @@ public:
             return lastTrip_revenues;
         }
         double getAvgTripRevenues() const {
-            return cumRevenues / numTrips;
+            return avgRevenues;
         }
         double getLastTripProfit() const {
             return lastTrip_profit;
         }
         double getAvgTripProfit() const {
-            return cumProfit / numTrips;
+            return avgProfit;
         }
         int getNumTrips() const {
             return numTrips;
         }
-
-        class AverageRevenueStateEvaluator : public dtree::StateEvaluator {
-            Vessel *mVessel;
-        public:
-            AverageRevenueStateEvaluator(Vessel *v)
-                : mVessel(v) {
-            }
-            double evaluate() {
-                return mVessel->getAvgTripRevenues();
-            }
-        };
-        class AverageProfitStateEvaluator : public dtree::StateEvaluator {
-            Vessel *mVessel;
-        public:
-            AverageProfitStateEvaluator(Vessel *v)
-                : mVessel(v) {
-            }
-            double evaluate() {
-                return mVessel->getAvgTripProfit();
-            }
-        };
 
         void updateTripsStatistics(const std::vector<Population *> &populations);
 

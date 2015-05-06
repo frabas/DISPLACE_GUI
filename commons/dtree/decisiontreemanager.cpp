@@ -22,7 +22,7 @@ const char * const DecisionTreeManager::mCodes[] = {
 
 DecisionTreeManager *DecisionTreeManager::mInstance = 0;
 
-const int DecisionTreeManager::VERSION = 3;
+const int DecisionTreeManager::VERSION = 4;
 
 DecisionTreeManager::DecisionTreeManager()
     : mTrees()

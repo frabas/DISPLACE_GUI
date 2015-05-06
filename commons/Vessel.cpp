@@ -259,9 +259,13 @@ void Vessel::init()
     }
 
     // Add here the variables associations
-    mNormalizedInternalStates[dtree::last_trip_was] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+    mNormalizedInternalStates[dtree::lastTripRevenueIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
                 new dtree::vessels::AverageRevenuesStateEvaluator(this),
+                std::less<double>());
+    mNormalizedInternalStates[dtree::lastTripProfitIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                new dtree::VariableReferenceStateEvaluator<double>(lastTrip_profit),
+                new dtree::vessels::AverageProfitStateEvaluator(this),
                 std::less<double>());
 
     // External states

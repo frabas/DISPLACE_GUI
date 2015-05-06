@@ -39,6 +39,37 @@
 #include <functional>
 #include <stdexcept>
 
+namespace dtree {
+namespace vessels {
+class AverageProfitStateEvaluator : public dtree::StateEvaluator {
+private:
+    Vessel *vessel;
+public:
+    AverageProfitStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
+    double evaluate() {
+        if (vessel->getNumTrips() > 2)
+            return vessel->getAvgTripProfit();
+        else
+            return 0.0;
+    }
+};
+
+class AverageRevenuesStateEvaluator : public dtree::StateEvaluator {
+private:
+    Vessel *vessel;
+public:
+    AverageRevenuesStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
+    double evaluate() {
+        if (vessel->getNumTrips() > 2)
+            return vessel->getAvgTripRevenues();
+        else
+            return 0.0;
+    }
+};
+
+}
+}
+
 Vessel::Vessel()
 {
 	idx_vessel = 0;
@@ -230,7 +261,7 @@ void Vessel::init()
     // Add here the variables associations
     mNormalizedInternalStates[dtree::last_trip_was] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
-                new dtree::VariableReferenceStateEvaluator<double>(avgRevenues),
+                new dtree::vessels::AverageRevenuesStateEvaluator(this),
                 std::less<double>());
 
     // External states
@@ -1047,7 +1078,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
     double cumProfit = avgProfit * numTrips;
     double cumRevenues = avgRevenues * numTrips;
 
-    if (numTrips > 2) {
+    if (numTrips > 0) {
         avgRevenues += (cumRevenues + lastTrip_revenues) / numTrips;
         avgProfit += (cumProfit + lastTrip_profit) / numTrips;
     } else {

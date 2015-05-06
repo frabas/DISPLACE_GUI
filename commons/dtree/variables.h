@@ -31,6 +31,8 @@ enum Variable {
 
 class VariableNames {
 public:
+    static const int VERSION;
+
     static const char *variableName(Variable);
     static Variable variableCode (const std::string &name);
 

@@ -58,7 +58,6 @@ private:
 
     static DecisionTreeManager *mInstance;
 
-    static const int VERSION;
     static const char * const mCodes[];
 };
 

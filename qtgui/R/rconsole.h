@@ -18,6 +18,8 @@ public:
 private slots:
     void on_execute_clicked();
 
+    void on_action_Close_triggered();
+
 private:
     Ui::RConsole *ui;
 };

@@ -6,6 +6,8 @@ RConsole::RConsole(QWidget *parent) :
     ui(new Ui::RConsole)
 {
     ui->setupUi(this);
+
+    ui->result->setReadOnly(true);
 }
 
 RConsole::~RConsole()
@@ -21,4 +23,9 @@ void RConsole::on_execute_clicked()
     } catch (std::exception &exc) {
         ui->result->appendPlainText("** ERROR: " + QString::fromStdString(exc.what()));
     }
+}
+
+void RConsole::on_action_Close_triggered()
+{
+    close();
 }

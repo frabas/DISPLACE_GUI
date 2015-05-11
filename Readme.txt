@@ -99,12 +99,24 @@ The following libraries, with development files, are required to compile under l
 Gdal library 1.10
 Boost Graph library 1.55 
 GeographicLib 
+R with Rcpp and RInside modules
 
 To install prerequisites under Ubuntu 14.10:
 
 $ sudo apt-get install libgdal1-dev
 $ sudo apt-get install libboost-graph1.55-dev
 $ sudo apt-get install libgeographiclib-dev
+$ sudo apt-get install r-cran-rcpp
+
+The latter command installs all the required packages to run R.
+To install RInside, first configure the mirror and packages
+
+$ sudo R
+> update.packages()
+
+and then run install.packages
+
+> install.packages(c("RInside"))
 
 * Compilation under linux
 
@@ -161,6 +173,7 @@ Since version 0.5.0, Displace requires GDAL library, with GEOS support
 Since version 0.5.4, Displace supports builds under 64bit MinGW.
 Since version 0.6.0, Displace requires the Boost (Graph) Library.
 Since version 0.6.1, Displace depends on GeographicLib (http://geographiclib.sourceforge.net/)
+Since version 0.8.0, Displace requires R with Rcpp and RInside
 
 You can find the instructions for GDAL installation and 64bit mingw in a section below.
 

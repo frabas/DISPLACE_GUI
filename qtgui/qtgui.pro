@@ -10,6 +10,7 @@ INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")
+include ("$$top_srcdir/R.pri")
 
 DESTDIR = ../
 QMAPCONTROL_LIB=qmapcontrol

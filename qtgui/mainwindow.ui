@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>23</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -127,6 +127,8 @@
     </widget>
     <addaction name="actionCSV_Editor"/>
     <addaction name="actionDecision_Trees_Editor"/>
+    <addaction name="actionR_Console"/>
+    <addaction name="separator"/>
     <addaction name="actionExport_Map"/>
     <addaction name="menuExport_Graph_Image"/>
    </widget>
@@ -1118,6 +1120,15 @@
   <action name="actionClean_Selection">
    <property name="text">
     <string>Clear Selection</string>
+   </property>
+  </action>
+  <action name="actionR_Console">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>R Console...</string>
    </property>
   </action>
  </widget>

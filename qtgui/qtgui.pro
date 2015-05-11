@@ -138,7 +138,8 @@ SOURCES += \
     mergepopulationplugincomponent.cpp \
     workers/mergerstrategy.cpp \
     workers/graphbuilderworker.cpp \
-    algo/isolatedsubgraphchecker.cpp
+    algo/isolatedsubgraphchecker.cpp \
+    R/rconsole.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -157,7 +158,8 @@ FORMS += \
     mergedatadialog.ui \
     shapefileoperationdialog.ui \
     savegraphdialog.ui \
-    mergepopulationplugincomponent.ui
+    mergepopulationplugincomponent.ui \
+    R/rconsole.ui
 
 HEADERS += \
     mainwindow.h \
@@ -245,7 +247,8 @@ HEADERS += \
     workers/mergerstrategy.h \
     workers/graphbuilderworker.h \
     algo/isolatedsubgraphchecker.h \
-    mapobjects/mapobjectcontainer.h
+    mapobjects/mapobjectcontainer.h \
+    R/rconsole.h
 
 RESOURCES += \
     qtgui.qrc

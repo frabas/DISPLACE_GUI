@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -123,6 +123,8 @@
     </widget>
     <addaction name="actionCSV_Editor"/>
     <addaction name="actionDecision_Trees_Editor"/>
+    <addaction name="actionR_Console"/>
+    <addaction name="separator"/>
     <addaction name="actionExport_Map"/>
     <addaction name="menuExport_Graph_Image"/>
    </widget>
@@ -208,7 +210,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="qtgui.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -252,7 +254,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="qtgui.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -809,7 +811,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -818,7 +820,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -827,7 +829,7 @@
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -923,7 +925,7 @@
   </action>
   <action name="actionAdd">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -944,7 +946,7 @@
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -970,7 +972,7 @@
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1009,7 +1011,7 @@
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1023,7 +1025,7 @@
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1101,6 +1103,15 @@
    </property>
    <property name="text">
     <string>Decision Trees Editor...</string>
+   </property>
+  </action>
+  <action name="actionR_Console">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>R Console...</string>
    </property>
   </action>
  </widget>

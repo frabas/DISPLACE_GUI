@@ -48,6 +48,8 @@
 #include <shapefileoperationdialog.h>
 #include <savegraphdialog.h>
 
+#include <R/rconsole.h>
+
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
@@ -2100,4 +2102,10 @@ void MainWindow::on_actionDecision_Trees_Editor_triggered()
 #endif
 
     ed->start(app);
+}
+
+void MainWindow::on_actionR_Console_triggered()
+{
+    RConsole *console = new RConsole();
+    console->show();
 }

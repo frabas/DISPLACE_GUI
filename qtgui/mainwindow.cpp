@@ -1294,6 +1294,12 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setDistance(dlg.step() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
+        if (dlg.isInsideRemoval()) {
+            gb->setShapefileRemoval(GraphBuilder::Inside);
+        } else if (dlg.isOutsideRemoval()) {
+            gb->setShapefileRemoval(GraphBuilder::Outside);
+        }
+
         QString s = dlg.getSelectedShapefile();
         if (!s.isEmpty())
             gb->setShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));

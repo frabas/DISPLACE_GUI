@@ -52,6 +52,8 @@ private slots:
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
 
+    void on_actionQuit_triggered();
+
 private:
     Ui::DtEditorWindow *ui;
 

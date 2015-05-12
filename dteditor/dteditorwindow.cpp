@@ -381,3 +381,13 @@ void DtEditorWindow::on_actionRedo_triggered()
 {
     redo();
 }
+
+void DtEditorWindow::on_actionQuit_triggered()
+{
+    int r = QMessageBox::question(this, tr("Quit"), tr("Really quit?"),
+                                  QMessageBox::No, QMessageBox::Yes);
+    if (r == QMessageBox::No)
+        return;
+
+    close();
+}

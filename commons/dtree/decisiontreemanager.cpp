@@ -22,8 +22,6 @@ const char * const DecisionTreeManager::mCodes[] = {
 
 DecisionTreeManager *DecisionTreeManager::mInstance = 0;
 
-const int DecisionTreeManager::VERSION = 3;
-
 DecisionTreeManager::DecisionTreeManager()
     : mTrees()
 {
@@ -97,7 +95,7 @@ bool DecisionTreeManager::readFile (std::string filename)
             boost::split(fields, line, boost::is_any_of(" "));
             if (fields[0] == "#TreeVersion:") {
                 int v = atoi(fields[1].c_str());
-                if (v != VERSION) {
+                if (v != VariableNames::VERSION) {
                     std::cerr << "Incompatible version." << std::endl;
                     return false;
                 }

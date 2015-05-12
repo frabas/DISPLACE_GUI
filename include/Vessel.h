@@ -30,6 +30,7 @@
 #include <myutils.h>
 #include <options.h>
 #include <dtree/decisiontree.h>
+#include <dtree/stateevaluator.h>
 
 #include <pthread.h>
 
@@ -83,11 +84,20 @@ class Vessel
 								 // dynamic
 		double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
+
+        /// \todo Calculate last_trip_compared_avg and normalize it, divide it by 2 so the variable as a 0.5 threshold (above/below).
+        double last_trip_compared_avg;
 		string length_class, nationality;
 		int message;
 		int state;
 		int tstep_dep;
 		int previous_harbour_idx;
+
+        double lastTrip_revenues;
+        double lastTrip_profit;
+        double avgRevenues;
+        double avgProfit;
+        int numTrips;
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
@@ -100,7 +110,7 @@ protected:
         void init();
         void find_next_point_on_the_graph_unlocked(vector<Node* >& nodes);
 
-	public:
+public:
 		//Vessel(string name,  boost::shared_ptr<Node> a_location);
 		Vessel(string name,  Node* a_location);
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name);
@@ -342,11 +352,29 @@ protected:
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
 
+        double getLastTripRevenues() const {
+            return lastTrip_revenues;
+        }
+        double getAvgTripRevenues() const {
+            return avgRevenues;
+        }
+        double getLastTripProfit() const {
+            return lastTrip_profit;
+        }
+        double getAvgTripProfit() const {
+            return avgProfit;
+        }
+        int getNumTrips() const {
+            return numTrips;
+        }
+
+        void updateTripsStatistics(const std::vector<Population *> &populations);
+
         double traverseDtree (dtree::DecisionTree *tree);
 
         /** \brief the Set of internal states, normalized in the range [0,1]
          * */
-        std::vector<double> mNormalizedInternalStates;
+        std::vector<dtree::StateEvaluator *> mNormalizedInternalStates;
 
         static std::string nationalityFromName (const std::string &name);
 };

@@ -18,7 +18,8 @@ enum Variable {
     fish_price_is,
     high_potential_catch,
     last_trip_on_the_ground,
-    last_trip_was,
+    lastTripProfitIs,
+    lastTripRevenueIs,
     remaining_quota_is,
     suitable_bottom_detection,
     weather_is,
@@ -30,6 +31,8 @@ enum Variable {
 
 class VariableNames {
 public:
+    static const int VERSION;
+
     static const char *variableName(Variable);
     static Variable variableCode (const std::string &name);
 

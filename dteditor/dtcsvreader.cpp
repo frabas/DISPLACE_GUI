@@ -8,7 +8,7 @@
 #include <QQueue>
 #include <QDebug>
 
-const int DtCsvReader::VERSION = 3;
+const int DtCsvReader::VERSION = 4;
 
 DtCsvReader::DtCsvReader()
 {

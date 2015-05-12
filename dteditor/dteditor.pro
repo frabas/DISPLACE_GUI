@@ -40,7 +40,8 @@ SOURCES += \
     dtcsvreader.cpp \
     dtcsvwriter.cpp \
     commands/command.cpp \
-    commands/settreetypecommand.cpp
+    commands/settreetypecommand.cpp \
+    commands/setnodevaluecommand.cpp
 
 FORMS += \
     dteditorwindow.ui
@@ -53,7 +54,8 @@ HEADERS += \
     dtcsvreader.h \
     dtcsvwriter.h \
     commands/command.h \
-    commands/settreetypecommand.h
+    commands/settreetypecommand.h \
+    commands/setnodevaluecommand.h
 
 RESOURCES += \
     dteditor.qrc

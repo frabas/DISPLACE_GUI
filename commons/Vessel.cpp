@@ -33,8 +33,42 @@
 
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
+#include <dtree/externalstatemanager.h>
+#include <dtree/commonstateevaluators.h>
 
+#include <functional>
 #include <stdexcept>
+
+namespace dtree {
+namespace vessels {
+class AverageProfitStateEvaluator : public dtree::StateEvaluator {
+private:
+    Vessel *vessel;
+public:
+    AverageProfitStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
+    double evaluate() {
+        if (vessel->getNumTrips() > 2)
+            return vessel->getAvgTripProfit();
+        else
+            return 0.0;
+    }
+};
+
+class AverageRevenuesStateEvaluator : public dtree::StateEvaluator {
+private:
+    Vessel *vessel;
+public:
+    AverageRevenuesStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
+    double evaluate() {
+        if (vessel->getNumTrips() > 2)
+            return vessel->getAvgTripRevenues();
+        else
+            return 0.0;
+    }
+};
+
+}
+}
 
 Vessel::Vessel()
 {
@@ -215,7 +249,27 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 void Vessel::init()
 {
+    lastTrip_revenues = lastTrip_profit = avgRevenues = avgProfit = 0;
+    numTrips = 0;
+
     nationality = nationalityFromName(get_name());
+
+    for (int i = 0; i < dtree::Variable::VarLast; ++i) {
+        mNormalizedInternalStates.push_back(0);
+    }
+
+    // Add here the variables associations
+    mNormalizedInternalStates[dtree::lastTripRevenueIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
+                new dtree::vessels::AverageRevenuesStateEvaluator(this),
+                std::less<double>());
+    mNormalizedInternalStates[dtree::lastTripProfitIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                new dtree::VariableReferenceStateEvaluator<double>(lastTrip_profit),
+                new dtree::vessels::AverageProfitStateEvaluator(this),
+                std::less<double>());
+
+    // External states
+    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);
 }
 
 Vessel::Vessel(string name, Node* a_location)
@@ -1023,6 +1077,38 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
+void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
+{
+    double cumProfit = avgProfit * numTrips;
+    double cumRevenues = avgRevenues * numTrips;
+
+    if (numTrips > 0) {
+        avgRevenues += (cumRevenues + lastTrip_revenues) / numTrips;
+        avgProfit += (cumProfit + lastTrip_profit) / numTrips;
+    } else {
+        avgRevenues = avgProfit = 0.0;
+    }
+
+    lastTrip_revenues = 0.0;
+    lastTrip_profit = 0.0;
+    const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
+    for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    {
+        vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
+
+        for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+        {
+            int comcat_this_size =comcat_at_szgroup.at(sz);
+            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+        }
+    }
+
+    double fuelcost = get_cumfuelcons() * get_loc()->get_fuelprices(length_class);
+    lastTrip_profit = lastTrip_revenues - fuelcost;
+
+    ++numTrips;
+}
+
 double Vessel::traverseDtree(dtree::DecisionTree *tree)
 {
     boost::shared_ptr<dtree::Node> node = tree->root();
@@ -1030,7 +1116,14 @@ double Vessel::traverseDtree(dtree::DecisionTree *tree)
         if (node->getChildrenCount() == 0) // is a leaf node
             return node->value();
 
-        int bin = std::floor(mNormalizedInternalStates[static_cast<int>(node->variable())] * node->getChildrenCount());
+        double value = 0.0;
+        if (mNormalizedInternalStates[static_cast<int>(node->variable())] != 0) {
+            value = mNormalizedInternalStates[static_cast<int>(node->variable())]->evaluate();
+        } else {
+            throw std::runtime_error("Unsupported variable evaulation requested.");
+        }
+
+        int bin = std::floor(value * node->getChildrenCount());
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;

@@ -2,6 +2,12 @@
 
 using namespace dtree ;
 
+const int VariableNames::VERSION = 4;
+
+/** \brief The names if the variables, as used in the decision tree files.
+ * When changing this array, changes must account relative changes to VariableNames::bins and Variable .
+ * \note The name must not contain spaces or other character used as separator by the parsers.
+ * */
 const char *const VariableNames::names[] = {
     "arrived_on_the_ground",
     "bycatch_risk",
@@ -13,7 +19,8 @@ const char *const VariableNames::names[] = {
     "fish_price_is",
     "high_potential_catch",
     "last_trip_on_the_ground",
-    "last_trip_was",
+    "lastTripProfitIs",
+    "lastTripRevenueIs",
     "remaining_quota_is",
     "suitable_bottom_detection",
     "weather_is",
@@ -35,7 +42,8 @@ const std::vector<std::string> VariableNames::bins[] = {
     { "low", "high" },
     { "yes", "no" },
     { "good", "bad" },
-    { "good", "bad" },
+    { "below", "above"},    //lastTripProfitIs
+    { "below", "above"},    //lastTripRevenueIs
     { "low", "high" },
     { "low", "high" },
     { "good", "bad" },

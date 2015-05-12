@@ -183,6 +183,8 @@ private slots:
 
     void on_actionDecision_Trees_Editor_triggered();
 
+    void on_actionR_Console_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

@@ -24,6 +24,7 @@ static const char *dyn_alloc_options[] = {
 static const char *dyn_pop_options[] = {
     "baseline",
     "use_SMS",
+    "use_SMS_single",
     "baseline_slower_growth", "lower_pop_productivity",
     "use_SMS_slower_growth","lower_pop_productivity",
     "with_monthly_redistribution",

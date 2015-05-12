@@ -354,7 +354,8 @@ int main(int argc, char* argv[])
 	string namefolderoutput="baseline";
 	string inputfolder="DISPLACE_input";
 	string namesimu="sim1";
-	int nbsteps=10;
+    string sms_folder="sms-op-multi";
+    int nbsteps=10;
     double dparam=10.0;
     use_gnuplot=false;
     create_a_path_shop=1;	 //used to speed-up the simus by calculating all the possible paths BEFORE the simu starts
@@ -2706,17 +2707,19 @@ int main(int argc, char* argv[])
 		vector<int> some_max_nb_ages (myints3, myints3 + sizeof(myints3) / sizeof(int) );
 
 								 // entry point for the SMS model
-        if(dyn_pop_sce.option(Options::use_SMS))
+        if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_single))
 		{
+
+           if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="sms-op-single";
 
 			if(tstep==0)
 			{
-				filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
+                filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_n.in";
 				SMS_N_in.open(filename.c_str());
 				write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 				SMS_N_in.close();
 
-				filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
+                filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_f.in";
 				SMS_F_in.open(filename.c_str());
 				SMS_F_in << "# data by quarter, area, species and age"<< endl;
 
@@ -3078,10 +3081,12 @@ int main(int argc, char* argv[])
 			}					 // end sp
 
 								 // entry point for the SMS model
-            if(dyn_pop_sce.option(Options::use_SMS))
+            if(dyn_pop_sce.option(Options::use_SMS)  || dyn_pop_sce.option(Options::use_SMS_single))
 			{
 
-				// check for cod
+                if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="op-sms-single";
+
+                // check for cod
 				vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
                outc(cout << "before" << endl);
                 for(unsigned int sz=0; sz<Ns.size(); sz++)
@@ -3128,7 +3133,7 @@ int main(int argc, char* argv[])
 						#ifdef WINDOWS
 						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh/");
 						#else
-						string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+namesimu;
+                        string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+sms_folder+"/"+namesimu;
                         if (chdir(aFolder.c_str()) == -1) {
                           cerr << "chdir failed!!" << endl;
                           // note that we cannot use ~/ibm_vessels in chdir!!!
@@ -3146,7 +3151,7 @@ int main(int argc, char* argv[])
 						#ifdef WINDOWS
 						system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\op -maxfn 0 -nohess");
 						#else
-						string a_command = "~/ibm_vessels/displace_hpc_sh/"+namesimu+"/op -maxfn 0 -nohess";
+                        string a_command = "~/ibm_vessels/displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op -maxfn 0 -nohess";
                         system(a_command.c_str());						
 						#endif
                        outc(cout << "SMS done" << endl);
@@ -3377,17 +3382,18 @@ int main(int argc, char* argv[])
 						}
 
                         // store N initial for the next year and reinit Fs
-                        if(dyn_pop_sce.option(Options::use_SMS))
+                        if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_single))
 						{
+                            if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="sms-op-single";
 
 							ofstream SMS_N_in;
-							filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
+                            filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_n.in";
 							SMS_N_in.open(filename.c_str(), ios::trunc);
 							write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 							SMS_N_in.close();
 
 							ofstream SMS_F_in;
-							filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
+                            filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_f.in";
 							SMS_F_in.open(filename.c_str(), ios::trunc);
 
 						}

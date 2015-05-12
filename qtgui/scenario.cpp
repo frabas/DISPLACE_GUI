@@ -2,6 +2,7 @@
 #include <readdata.h>
 #include <exceptions.h>
 #include <options.h>
+#include <comstructs.h>
 
 #include <QFile>
 #include <QTextStream>
@@ -156,47 +157,38 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
 
 Scenario Scenario::readFromFile(QString path, QString modelname, QString outputname)
 {
-    // scenarios for dynamic allocation of effort and biol sce
-    DynAllocOptions dyn_alloc_sce;
-    PopSceOptions dyn_pop_sce;
-    string biolsce;				 // default is 1
-    int a_graph;
-    int a_port;
-    int nrow_coord;
-    int nrow_graph;
-    double graph_res = 0.0;
+    displace::commons::Scenario scenario;
 
     if (read_scenario_config_file (        
-        path.toStdString(),
-        modelname.toStdString(),
-        outputname.toStdString(),
-        dyn_alloc_sce,
-        dyn_pop_sce,
-        biolsce,
-        a_graph,
-        nrow_coord,
-        nrow_graph,
-        a_port,
-        graph_res
-        ) < 0)
+                path.toStdString(),
+                modelname.toStdString(),
+                outputname.toStdString(),
+                scenario) < 0)
         throw DisplaceException(QString(QObject::tr("Cannot load scenario file: %1 - %2"))
                                 .arg(::getLastErrorMessage().c_str())
                                 .arg(strerror(errno)));
 
     Scenario s;
 
-    QStringList alsce = QString::fromStdString(dyn_alloc_sce.toString()).split(" ", QString::SkipEmptyParts);
-    QStringList popsce = QString::fromStdString(dyn_pop_sce.toString()).split(" ", QString::SkipEmptyParts);
+    QStringList alsce = QString::fromStdString(scenario.dyn_alloc_sce.toString()).split(" ", QString::SkipEmptyParts);
+    QStringList popsce = QString::fromStdString(scenario.dyn_pop_sce.toString()).split(" ", QString::SkipEmptyParts);
 
     s.setDyn_alloc_sce(alsce);
     s.setDyn_pop_sce(popsce);
-    s.setBiolsce(QString(biolsce.c_str()));
-    s.setGraph(a_graph);
-    s.setNrow_coord(nrow_coord);
-    s.setNrow_graph(nrow_graph);
-    if (graph_res > 1e-3)
-        s.setGraph_res(graph_res);
-    s.setA_port(a_port);
+    s.setBiolsce(QString(scenario.biolsce.c_str()));
+    s.setGraph(scenario.a_graph);
+    s.setNrow_coord(scenario.nrow_coord);
+    s.setNrow_graph(scenario.nrow_graph);
+    if (scenario.graph_res > 1e-3)
+        s.setGraph_res(scenario.graph_res);
+    s.setA_port(scenario.a_port);
+
+    s.setDtGoFishing(QString::fromStdString(scenario.dt_go_fishing));
+    s.setDtChooseGround(QString::fromStdString(scenario.dt_choose_ground));
+    s.setDtStartFishing(QString::fromStdString(scenario.dt_start_fishing));
+    s.setDtChangeGround(QString::fromStdString(scenario.dt_change_ground));
+    s.setDtStopFishing(QString::fromStdString(scenario.dt_stop_fishing));
+    s.setDtChangePort(QString::fromStdString(scenario.dt_change_port));
 
     return s;
 }

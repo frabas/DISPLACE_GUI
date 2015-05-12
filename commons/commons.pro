@@ -65,7 +65,8 @@ HEADERS= \
     dtree/decisiontreemanager.h \
     dtree/stateevaluator.h \
     dtree/externalstatemanager.h \
-    dtree/commonstateevaluators.h
+    dtree/commonstateevaluators.h \
+    ../include/comstructs.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

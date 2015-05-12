@@ -50,6 +50,7 @@
 #include <messages/genericconsolestringoutputmessage.h>
 #include <thread_vessels.h>
 #include <dtree/decisiontreemanager.h>
+#include <comstructs.h>
 
 #include <iomanip>
 #include <iostream>
@@ -562,19 +563,22 @@ int main(int argc, char* argv[])
         int_harbours
 		);
 
+    displace::commons::Scenario scenario;
+
 	read_scenario_config_file (
         folder_name_parameterization,
         "../"+inputfolder,
 		namefolderoutput,
-		dyn_alloc_sce,
-		dyn_pop_sce,
-		biolsce,
-		a_graph,
-		nrow_coord,
-		nrow_graph,
-		a_port,
-		graph_res
-		);
+        scenario);
+
+    dyn_alloc_sce = scenario.dyn_alloc_sce;
+    dyn_pop_sce  = scenario.dyn_pop_sce;
+    biolsce = scenario.biolsce;
+    a_graph = scenario.a_graph;
+    nrow_coord = scenario.nrow_coord;
+    nrow_graph = scenario.nrow_graph;
+    a_port = scenario.a_graph;
+    graph_res = scenario.graph_res;
 
 	stringstream graphnum;
 	graphnum << a_graph;

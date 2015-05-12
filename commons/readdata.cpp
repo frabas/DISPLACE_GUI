@@ -135,16 +135,9 @@ read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
 int read_scenario_config_file (string folder_name_parameterization,
-    string inputfolder,
-    string namefolderoutput,
-    DynAllocOptions &dyn_alloc_sce,
-    PopSceOptions & dyn_pop_sce,
-    string& biolsce,
-    int& a_graph,
-    int& nrow_coord,
-    int& nrow_graph,
-    int& a_port,
-    double& graph_res )
+                               string inputfolder,
+                               string namefolderoutput,
+                               displace::commons::Scenario &scenario)
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
 
@@ -167,15 +160,15 @@ int read_scenario_config_file (string folder_name_parameterization,
 			string val;
 			while(linestream >> val)
 			{
-                dyn_alloc_sce.setOption(val);
+                scenario.dyn_alloc_sce.setOption(val);
 			}
-		}
+        }
 		if(counter==4)
 		{
 			string val;
 			while(linestream >> val)
-			{
-                dyn_pop_sce.setOption(val);
+            {
+                scenario.dyn_pop_sce.setOption(val);
 			}
 		}
 
@@ -184,7 +177,7 @@ int read_scenario_config_file (string folder_name_parameterization,
 			string val;
 			while(linestream >> val)
 			{
-				biolsce=val;
+                scenario.biolsce=val;
 			}
 		}
 		if(counter==8)
@@ -192,7 +185,7 @@ int read_scenario_config_file (string folder_name_parameterization,
 			int val;
 			while(linestream >> val)
 			{
-				a_graph=val;
+                scenario.a_graph=val;
 			}
 		}
 		if(counter==10)
@@ -200,7 +193,7 @@ int read_scenario_config_file (string folder_name_parameterization,
 			int val;
 			while(linestream >> val)
 			{
-				nrow_coord=val;
+                scenario.nrow_coord=val;
 			}
 		}
 		if(counter==12)
@@ -208,7 +201,7 @@ int read_scenario_config_file (string folder_name_parameterization,
 			int val;
 			while(linestream >> val)
 			{
-				nrow_graph=val;
+                scenario.nrow_graph=val;
 			}
 		}
 		if(counter==14)
@@ -216,7 +209,7 @@ int read_scenario_config_file (string folder_name_parameterization,
 			int val;
 			while(linestream >> val)
 			{
-				a_port=val;
+                scenario.a_port=val;
 			}
 		}
 		if(counter==16)
@@ -224,9 +217,57 @@ int read_scenario_config_file (string folder_name_parameterization,
 			double val;
 			while(linestream >> val)
 			{
-				graph_res=val;
+                scenario.graph_res=val;
 			}
 		}
+        if(counter==18)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_go_fishing=val;
+            }
+        }
+        if(counter==20)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_choose_ground=val;
+            }
+        }
+        if(counter==22)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_start_fishing=val;
+            }
+        }
+        if(counter==24)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_change_ground=val;
+            }
+        }
+        if(counter==26)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_stop_fishing=val;
+            }
+        }
+        if(counter==28)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_change_port=val;
+            }
+        }
 
 	}
 	cout << "read config file...OK" << endl << flush;

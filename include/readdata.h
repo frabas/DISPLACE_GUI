@@ -25,6 +25,7 @@
 #include <sstream>
 
 #include <options.h>
+#include <comstructs.h>
 
 using namespace std;
 
@@ -44,14 +45,7 @@ vector<int> &interesting_harbours);
 int read_scenario_config_file(string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
-    DynAllocOptions& dyn_alloc_sce,
-    PopSceOptions &dyn_pop_sce,
-    string& biolsce,
-    int& a_graph,
-    int& nrow_coord,
-    int& nrow_graph,
-    int& a_port,
-    double& graph_res );
+    displace::commons::Scenario &scenario);
 
 // vessel specific
 void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,

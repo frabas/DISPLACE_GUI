@@ -6,7 +6,6 @@
 #include <QFile>
 #include <QTextStream>
 
-
 Scenario::Scenario()
     : dyn_alloc_sce("baseline"),
       dyn_pop_sce("baseline"),
@@ -144,6 +143,13 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << "# a_port\n" << a_port << endl;
     stream << "# grid res km\n" << graph_res << endl;
 
+    stream << "# Go Fishing DTree\n" << mDtGoFishing << endl;
+    stream << "# Choose Ground DTree\n" << mDtChooseGround<< endl;
+    stream << "# Start Fishing DTree\n" << mDtStartFishing<< endl;
+    stream << "# Change Ground DTree\n" << mDtChangeGround<< endl;
+    stream << "# Stop Fishing DTree\n" << mDtStopFishing<< endl;
+    stream << "# Change Port DTree\n" << mDtChangePort<< endl;
+
     file.close();
     return true;
 }
@@ -193,4 +199,64 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setA_port(a_port);
 
     return s;
+}
+
+QString Scenario::getDtGoFishing() const
+{
+    return mDtGoFishing;
+}
+
+void Scenario::setDtGoFishing(const QString &dtGoFishing)
+{
+    mDtGoFishing = dtGoFishing;
+}
+
+QString Scenario::getDtChooseGround() const
+{
+    return mDtChooseGround;
+}
+
+void Scenario::setDtChooseGround(const QString &dtChooseGround)
+{
+    mDtChooseGround = dtChooseGround;
+}
+
+QString Scenario::getDtStartFishing() const
+{
+    return mDtStartFishing;
+}
+
+void Scenario::setDtStartFishing(const QString &dtStartFishing)
+{
+    mDtStartFishing = dtStartFishing;
+}
+
+QString Scenario::getDtChangeGround() const
+{
+    return mDtChangeGround;
+}
+
+void Scenario::setDtChangeGround(const QString &dtChangeGround)
+{
+    mDtChangeGround = dtChangeGround;
+}
+
+QString Scenario::getDtStopFishing() const
+{
+    return mDtStopFishing;
+}
+
+void Scenario::setDtStopFishing(const QString &dtStopFishing)
+{
+    mDtStopFishing = dtStopFishing;
+}
+
+QString Scenario::getDtChangePort() const
+{
+    return mDtChangePort;
+}
+
+void Scenario::setDtChangePort(const QString &dtChangePort)
+{
+    mDtChangePort = dtChangePort;
 }

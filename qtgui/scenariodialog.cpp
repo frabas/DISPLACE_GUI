@@ -8,6 +8,8 @@
 #include <QTextStream>
 #include <QMessageBox>
 
+#include <QDebug>
+
 static const char *dyn_alloc_options[] = {
     "baseline",
     "focus_on_high_profit_grounds" ,
@@ -38,7 +40,6 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
 {
     ui->setupUi(this);
 
-
     setDynPop(mScen.getDyn_pop_sce());
     setDynAlloc(mScen.getDyn_alloc_sce());
     ui->biol_sce->setText(mScen.getBiolsce());
@@ -49,6 +50,27 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->nrowgraph->setValue(mScen.getNrow_graph());
 
     ui->scenarioPath->setReadOnly(true);
+
+    qDebug() << "Go Fish" << mScen.getDtGoFishing() << mScen.getDtGoFishing().isEmpty();
+
+    ui->dt_enable_go_fishing->setChecked(!mScen.getDtGoFishing().isEmpty());
+    on_dt_enable_go_fishing_toggled(!mScen.getDtGoFishing().isEmpty());
+    ui->dt_go_fishing->setText(mScen.getDtGoFishing());
+    ui->dt_enable_choose_ground->setChecked(!mScen.getDtChooseGround().isEmpty());
+    on_dt_enable_choose_ground_toggled(!mScen.getDtGoFishing().isEmpty());
+    ui->dt_choose_ground->setText(mScen.getDtChooseGround());
+    ui->dt_enable_start_fishing->setChecked(!mScen.getDtStartFishing().isEmpty());
+    on_dt_enable_start_fishing_toggled(!mScen.getDtGoFishing().isEmpty());
+    ui->dt_start_fishing->setText(mScen.getDtStartFishing());
+    ui->dt_enable_change_ground->setChecked(!mScen.getDtChangeGround().isEmpty());
+    on_dt_enable_change_ground_toggled(!mScen.getDtGoFishing().isEmpty());
+    ui->dt_change_ground->setText(mScen.getDtChangeGround());
+    ui->dt_enable_stop_fishing->setChecked(!mScen.getDtStopFishing().isEmpty());
+    on_dt_enable_stop_fishing_toggled(!mScen.getDtGoFishing().isEmpty());
+    ui->dt_stop_fishing->setText(mScen.getDtStopFishing());
+    ui->dt_enable_change_port->setChecked(!mScen.getDtChangePort().isEmpty());
+    on_dt_enable_change_port_toggled(!mScen.getDtGoFishing().isEmpty());
+    ui->dt_change_port->setText(mScen.getDtChangePort());
 }
 
 ScenarioDialog::~ScenarioDialog()
@@ -127,6 +149,13 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setGraph_res(ui->gridres->value());
     mScen.setNrow_coord(ui->nrowcoord->value());
     mScen.setNrow_graph(ui->nrowgraph->value());
+
+    mScen.setDtGoFishing(ui->dt_go_fishing->text());
+    mScen.setDtChooseGround(ui->dt_choose_ground->text());
+    mScen.setDtStartFishing(ui->dt_start_fishing->text());
+    mScen.setDtChangeGround(ui->dt_change_ground->text());
+    mScen.setDtStopFishing(ui->dt_stop_fishing->text());
+    mScen.setDtChangePort(ui->dt_change_port->text());
 }
 
 void ScenarioDialog::on_rename_clicked()
@@ -234,4 +263,87 @@ void ScenarioDialog::on_graphBrowse_clicked()
 
         ui->nrowcoord->setValue(nr/3);
     }
+}
+
+void ScenarioDialog::on_dt_enable_go_fishing_toggled(bool checked)
+{
+    ui->dt_browse_go_fishing->setEnabled(checked);
+    ui->dt_go_fishing->setEnabled(checked);
+}
+
+
+void ScenarioDialog::on_dt_enable_choose_ground_toggled(bool checked)
+{
+    ui->dt_browse_choose_ground->setEnabled(checked);
+    ui->dt_choose_ground->setEnabled(checked);
+}
+
+void ScenarioDialog::on_dt_enable_start_fishing_toggled(bool checked)
+{
+    ui->dt_browse_start_fishing->setEnabled(checked);
+    ui->dt_start_fishing->setEnabled(checked);
+}
+
+void ScenarioDialog::on_dt_enable_change_ground_toggled(bool checked)
+{
+    ui->dt_browse_change_ground->setEnabled(checked);
+    ui->dt_change_ground->setEnabled(checked);
+}
+
+void ScenarioDialog::on_dt_enable_stop_fishing_toggled(bool checked)
+{
+    ui->dt_browse_stop_fishing->setEnabled(checked);
+    ui->dt_stop_fishing->setEnabled(checked);
+}
+
+void ScenarioDialog::on_dt_enable_change_port_toggled(bool checked)
+{
+    ui->dt_browse_change_port->setEnabled(checked);
+    ui->dt_change_port->setEnabled(checked);
+}
+
+void ScenarioDialog::browse(QString title, QLineEdit *ed)
+{
+    QSettings sets;
+    QString lastpath = sets.value("last_dtree_path", QDir::homePath()).toString();
+
+    QFileDialog dlg(this, title, lastpath, tr("Dat files (*.dt.csv);;All files (*)"));
+    dlg.setDefaultSuffix(".dt.csv");
+    if (dlg.exec() == QDialog::Accepted) {
+        QFileInfo in(dlg.selectedFiles()[0]);
+
+        ed->setText(in.fileName());
+
+        sets.setValue("last_dtree_path", in.filePath());
+    }
+}
+
+void ScenarioDialog::on_dt_browse_go_fishing_clicked()
+{
+    browse(tr("Go Fishing"), ui->dt_go_fishing);
+}
+
+void ScenarioDialog::on_dt_browse_choose_ground_clicked()
+{
+    browse(tr("Chose Ground"), ui->dt_choose_ground);
+}
+
+void ScenarioDialog::on_dt_browse_start_fishing_clicked()
+{
+    browse(tr("Start Fishing"), ui->dt_start_fishing);
+}
+
+void ScenarioDialog::on_dt_browse_change_ground_clicked()
+{
+    browse(tr("Change Ground"), ui->dt_change_ground);
+}
+
+void ScenarioDialog::on_dt_browse_stop_fishing_clicked()
+{
+    browse(tr("Stop Fishing"), ui->dt_stop_fishing);
+}
+
+void ScenarioDialog::on_dt_browse_change_port_clicked()
+{
+    browse(tr("Change Port"), ui->dt_change_port);
 }

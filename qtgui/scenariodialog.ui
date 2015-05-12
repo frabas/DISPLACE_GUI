@@ -6,39 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>362</height>
+    <width>635</width>
+    <height>561</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Scenario</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0" columnminimumwidth="0,0,0">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Scenario file:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLineEdit" name="scenarioPath">
-     <property name="placeholderText">
-      <string>.../simulsspe/name.dat</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QGroupBox" name="group_dyn_alloc_sce">
-     <property name="title">
-      <string>Dyn Alloc Sce</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QGroupBox" name="group_dyn_pop_sce">
-     <property name="title">
-      <string>Dyn Pop Sce</string>
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0,0" columnminimumwidth="0,0,0,0">
+   <item row="5" column="1" colspan="2">
+    <widget class="QSpinBox" name="nrowcoord">
+     <property name="maximum">
+      <number>1000000</number>
      </property>
     </widget>
    </item>
@@ -49,8 +28,12 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QLineEdit" name="biol_sce"/>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Grid Resolution:</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_4">
@@ -59,49 +42,10 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QSpinBox" name="agraph">
-     <property name="maximum">
-      <number>100000</number>
-     </property>
-    </widget>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLineEdit" name="biol_sce"/>
    </item>
-   <item row="4" column="2">
-    <widget class="QToolButton" name="graphBrowse">
-     <property name="text">
-      <string>...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>N Row Coord</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>N Row Graph</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>A Port</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Grid Resolution:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
+   <item row="11" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -114,7 +58,14 @@
      </property>
     </spacer>
    </item>
-   <item row="10" column="0" colspan="2">
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>N Row Graph</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="rename">
@@ -152,10 +103,44 @@
      </item>
     </layout>
    </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="QSpinBox" name="nrowcoord">
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>N Row Coord</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1" colspan="2">
+    <widget class="QDoubleSpinBox" name="gridres">
+     <property name="suffix">
+      <string> km</string>
+     </property>
      <property name="maximum">
-      <number>1000000</number>
+      <double>10000.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.500000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QToolButton" name="graphBrowse">
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSpinBox" name="agraph">
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QGroupBox" name="group_dyn_pop_sce">
+     <property name="title">
+      <string>Dyn Pop Sce</string>
      </property>
     </widget>
    </item>
@@ -173,17 +158,143 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1" colspan="2">
-    <widget class="QDoubleSpinBox" name="gridres">
-     <property name="suffix">
-      <string> km</string>
+   <item row="0" column="1" colspan="2">
+    <widget class="QLineEdit" name="scenarioPath">
+     <property name="placeholderText">
+      <string>.../simulsspe/name.dat</string>
      </property>
-     <property name="maximum">
-      <double>10000.000000000000000</double>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Scenario file:</string>
      </property>
-     <property name="singleStep">
-      <double>0.500000000000000</double>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>A Port</string>
      </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QGroupBox" name="group_dyn_alloc_sce">
+     <property name="title">
+      <string>Dyn Alloc Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Decision Trees</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="dt_enable_go_fishing">
+        <property name="text">
+         <string>Use Go Fishing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="dt_enable_stop_fishing">
+        <property name="text">
+         <string>Use Stop Fishing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="dt_enable_start_fishing">
+        <property name="text">
+         <string>Use Start Fishing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="dt_go_fishing"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="dt_enable_choose_ground">
+        <property name="text">
+         <string>Use Choose Ground</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="dt_browse_go_fishing">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="dt_enable_change_ground">
+        <property name="text">
+         <string>Use Change Ground</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="dt_enable_change_port">
+        <property name="text">
+         <string>Use Change Port</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="dt_choose_ground"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="dt_start_fishing"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="dt_change_ground"/>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="dt_stop_fishing"/>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="dt_change_port"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="dt_browse_choose_ground">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="dt_browse_start_fishing">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="dt_browse_change_ground">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QPushButton" name="dt_browse_stop_fishing">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QPushButton" name="dt_browse_change_port">
+        <property name="text">
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
@@ -204,8 +315,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>265</x>
-     <y>351</y>
+     <x>485</x>
+     <y>550</y>
     </hint>
     <hint type="destinationlabel">
      <x>130</x>

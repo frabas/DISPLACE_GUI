@@ -269,7 +269,7 @@ void Vessel::init()
                 std::less<double>());
 
     // External states
-    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);
+//    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);
 }
 
 Vessel::Vessel(string name, Node* a_location)

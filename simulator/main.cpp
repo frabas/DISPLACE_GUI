@@ -1203,7 +1203,7 @@ int main(int argc, char* argv[])
 			init_tot_biomass_per_group.push_back(pos->second);
 		}
 
-        if(init_tot_biomass_per_group.size()!=nbbenthospops)
+        if(init_tot_biomass_per_group.size()!=(size_t)nbbenthospops)
 		{
            outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
@@ -1229,7 +1229,7 @@ int main(int argc, char* argv[])
         dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
             " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
-        if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=nbbenthospops)
+        if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=(size_t)nbbenthospops)
 		{
             cerr << "something wrong for benthos_tot_biomass here!" << endl;
 			int aa;
@@ -3443,7 +3443,7 @@ int main(int argc, char* argv[])
 			//...and export the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
-                for(unsigned int funcgroup=0;funcgroup<nbbenthospops; funcgroup++){
+                for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++){
                    nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep, funcgroup);
                 }
             }

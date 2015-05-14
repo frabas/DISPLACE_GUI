@@ -46,7 +46,7 @@ private:
     Vessel *vessel;
 public:
     AverageProfitStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
-    double evaluate() {
+    double evaluate() const {
         if (vessel->getNumTrips() > 2)
             return vessel->getAvgTripProfit();
         else
@@ -59,7 +59,7 @@ private:
     Vessel *vessel;
 public:
     AverageRevenuesStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
-    double evaluate() {
+    double evaluate() const {
         if (vessel->getNumTrips() > 2)
             return vessel->getAvgTripRevenues();
         else

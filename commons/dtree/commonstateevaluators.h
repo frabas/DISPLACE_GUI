@@ -19,8 +19,8 @@ public:
         : StateEvaluator(), mVariable(var) {
     }
 
-    T evaluate() {
-        return mVariable;
+    double evaluate() const {
+        return static_cast<double>(mVariable);
     }
 };
 
@@ -36,8 +36,8 @@ public:
         : StateEvaluator(), mConst(var) {
     }
 
-    double evaluate() {
-        return mConst;
+    double evaluate() const {
+        return static_cast<double>(mConst);
     }
 };
 
@@ -69,8 +69,9 @@ public:
         : StateEvaluator(), mOp1(op1), mOp2(op2), mOperator(oper) {
     }
 
-    /** Returns 1.0 if operator returns true, 0.0 if false */
-    double evaluate() {
+    /** \brief Overridden method. Apply an operator (passed as template parameter) to two other evaluators.
+     * \return 1.0 if operator returns true, 0.0 if false */
+    double evaluate() const {
         if (mOperator(mOp1->evaluate(), mOp2->evaluate())) {
             return 1.0;
         } else {

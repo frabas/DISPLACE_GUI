@@ -1109,6 +1109,9 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
     ++numTrips;
 }
 
+/** \brief Starting from the dtree root, traverse it evaluating any node and the relative Variable.
+ * The return value from StateEvaluator::evaluate() is rounded and casted to int to define the next node
+ * */
 double Vessel::traverseDtree(dtree::DecisionTree *tree)
 {
     boost::shared_ptr<dtree::Node> node = tree->root();
@@ -1123,7 +1126,7 @@ double Vessel::traverseDtree(dtree::DecisionTree *tree)
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
 
-        int bin = std::floor(value * node->getChildrenCount());
+        int bin = static_cast<int>(std::floor(value + 0.5));
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;

@@ -209,11 +209,22 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	}
 
 	// length class
-	if(length<15) length_class = "u15m";
-	if(length>=15 && length <18) length_class = "15-18m";
-	if(length>=18 && length <24) length_class = "18-24m";
-	if(length>=24 && length <40) length_class = "24-40m";
-	if(length>=40) length_class = "o40m";
+    if(length<15) {
+        length_class = "u15m";
+        mLengthClassId = Under15;
+    } else if(length>=15 && length <18) {
+        length_class = "15-18m";
+        mLengthClassId = Between15and18;
+    } else if(length>=18 && length <24) {
+        length_class = "18-24m";
+        mLengthClassId = Between18and24;
+    } else if(length>=24 && length <40) {
+        length_class = "24-40m";
+        mLengthClassId = Between24and40;
+    } else if(length>=40) {
+        length_class = "o40m";
+        mLengthClassId = Over40;
+    }
 
 	//  set of decision trees by default (from the questionnaire)
 	// principle of the encodage:
@@ -261,6 +272,7 @@ void Vessel::init()
     }
 
     // Add here the variables associations
+    mStateEvaluators[dtree::vesselSizeIs] = boost::make_shared<dtree::VariableReferenceStateEvaluator<LengthClass> >(mLengthClassId);
     mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_revenues),
                 boost::make_shared<dtree::vessels::AverageRevenuesStateEvaluator>(this),

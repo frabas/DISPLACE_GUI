@@ -39,6 +39,10 @@ typedef int vertex_t;
 class Vessel
 {
 	private:
+    enum LengthClass {
+        Under15 = 0, Between15and18, Between18and24, Between24and40, Over40
+    };
+
 		string name;
 		int idx_vessel;
 		//boost::shared_ptr<Node> m_location;
@@ -88,6 +92,7 @@ class Vessel
         /// \todo Calculate last_trip_compared_avg and normalize it, divide it by 2 so the variable as a 0.5 threshold (above/below).
         double last_trip_compared_avg;
 		string length_class, nationality;
+        LengthClass mLengthClassId;
 		int message;
 		int state;
 		int tstep_dep;

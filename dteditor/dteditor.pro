@@ -38,7 +38,10 @@ SOURCES += \
     dtgraphicsscene.cpp \
     graphnodeitem.cpp \
     dtcsvreader.cpp \
-    dtcsvwriter.cpp
+    dtcsvwriter.cpp \
+    commands/command.cpp \
+    commands/settreetypecommand.cpp \
+    commands/setnodevaluecommand.cpp
 
 FORMS += \
     dteditorwindow.ui
@@ -49,7 +52,10 @@ HEADERS += \
     dtgraphicsscene.h \
     graphnodeitem.h \
     dtcsvreader.h \
-    dtcsvwriter.h
+    dtcsvwriter.h \
+    commands/command.h \
+    commands/settreetypecommand.h \
+    commands/setnodevaluecommand.h
 
 RESOURCES += \
     dteditor.qrc

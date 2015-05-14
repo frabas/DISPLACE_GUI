@@ -49,6 +49,8 @@
 #include <outputmessage.h>
 #include <messages/genericconsolestringoutputmessage.h>
 #include <thread_vessels.h>
+#include <dtree/decisiontreemanager.h>
+#include <comstructs.h>
 
 #include <iomanip>
 #include <iostream>
@@ -556,23 +558,32 @@ int main(int argc, char* argv[])
         int_harbours
 		);
 
+    displace::commons::Scenario scenario;
+
 	read_scenario_config_file (
         folder_name_parameterization,
         "../"+inputfolder,
 		namefolderoutput,
-		dyn_alloc_sce,
-		dyn_pop_sce,
-		biolsce,
-		a_graph,
-		nrow_coord,
-		nrow_graph,
-		a_port,
-		graph_res
-		);
+        scenario);
+
+    dyn_alloc_sce = scenario.dyn_alloc_sce;
+    dyn_pop_sce  = scenario.dyn_pop_sce;
+    biolsce = scenario.biolsce;
+    a_graph = scenario.a_graph;
+    nrow_coord = scenario.nrow_coord;
+    nrow_graph = scenario.nrow_graph;
+    a_port = scenario.a_graph;
+    graph_res = scenario.graph_res;
 
 	stringstream graphnum;
 	graphnum << a_graph;
 	a_graph_name=a_graph_name+graphnum.str();
+
+    // Load dtrees
+    if (dtree::DecisionTreeManager::manager()->readFromScenario("../"+inputfolder+"/dtrees", scenario) <= 0) {
+        std::cerr << "Cannot read decision trees, aborting." << std::endl;
+        return -1;
+    }
 
 	// check if config reading OK
     outc(cout << nbpops << endl);
@@ -1193,7 +1204,7 @@ int main(int argc, char* argv[])
 			init_tot_biomass_per_group.push_back(pos->second);
 		}
 
-        if(init_tot_biomass_per_group.size()!=nbbenthospops)
+        if(init_tot_biomass_per_group.size()!=(size_t)nbbenthospops)
 		{
            outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
@@ -1219,7 +1230,7 @@ int main(int argc, char* argv[])
         dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
             " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
-        if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=nbbenthospops)
+        if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=(size_t)nbbenthospops)
 		{
             cerr << "something wrong for benthos_tot_biomass here!" << endl;
 			int aa;
@@ -3438,7 +3449,7 @@ int main(int argc, char* argv[])
 			//...and export the benthos biomasses on node
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
-                for(unsigned int funcgroup=0;funcgroup<nbbenthospops; funcgroup++){
+                for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++){
                    nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep, funcgroup);
                 }
             }

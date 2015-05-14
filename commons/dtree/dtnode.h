@@ -1,5 +1,5 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef DTNODE_H
+#define DTNODE_H
 
 #include <dtree/variables.h>
 
@@ -32,7 +32,6 @@ public:
 
     double value() const { return mValue; }
     void setValue(double v) { mValue = v; }
-
 private:
     boost::weak_ptr<DecisionTree> mTree;
     boost::weak_ptr<Node> mParent;

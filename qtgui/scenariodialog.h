@@ -30,6 +30,7 @@ class ScenarioDialog;
 
 QT_BEGIN_NAMESPACE
 class QCheckBox;
+class QLineEdit;
 QT_END_NAMESPACE
 
 class ScenarioDialog : public QDialog
@@ -54,6 +55,30 @@ private slots:
 
     void on_graphBrowse_clicked();
 
+    void on_dt_enable_go_fishing_toggled(bool checked);
+
+    void on_dt_enable_choose_ground_toggled(bool checked);
+
+    void on_dt_enable_start_fishing_toggled(bool checked);
+
+    void on_dt_enable_change_ground_toggled(bool checked);
+
+    void on_dt_enable_stop_fishing_toggled(bool checked);
+
+    void on_dt_enable_change_port_toggled(bool checked);
+
+    void on_dt_browse_go_fishing_clicked();
+
+    void on_dt_browse_choose_ground_clicked();
+
+    void on_dt_browse_start_fishing_clicked();
+
+    void on_dt_browse_change_ground_clicked();
+
+    void on_dt_browse_stop_fishing_clicked();
+
+    void on_dt_browse_change_port_clicked();
+
 private:
     void setDynPop(const QStringList &text);
     void setDynAlloc(const QStringList &options);
@@ -66,6 +91,7 @@ private:
     QList<QCheckBox *> optAll;
     QString mScenarioPath;
     bool mRenamed, mForceRenamed;
+    void browse(QString title, QLineEdit *ed);
 };
 
 #endif // SCENARIODIALOG_H

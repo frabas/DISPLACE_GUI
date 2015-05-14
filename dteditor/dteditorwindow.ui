@@ -52,7 +52,11 @@
     <property name="title">
      <string>&amp;Tree</string>
     </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
     <addaction name="action_Add_Node"/>
+    <addaction name="action_Delete_Nodes"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuTree"/>
@@ -73,7 +77,7 @@
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,1">
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,0">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -102,56 +106,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="nodepropDetailsContainer" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="toolsWidget">
-   <property name="windowIcon">
-    <iconset resource="dteditor.qrc">
-     <normaloff>:/icons/tools.png</normaloff>:/icons/tools.png</iconset>
-   </property>
-   <property name="windowTitle">
-    <string>Tools</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QToolBox" name="toolBox">
-       <property name="currentIndex">
-        <number>0</number>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QWidget" name="colorPage">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>86</width>
-          <height>228</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Color</string>
-        </attribute>
-       </widget>
-       <widget class="QWidget" name="backgroundColor">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>98</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Background</string>
-        </attribute>
-       </widget>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
@@ -169,7 +134,45 @@
    <addaction name="action_Open"/>
    <addaction name="action_Save"/>
    <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
    <addaction name="action_Add_Node"/>
+   <addaction name="action_Delete_Nodes"/>
+  </widget>
+  <widget class="QDockWidget" name="dockProperties">
+   <property name="windowTitle">
+    <string>Tree properties</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Tree Type</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="treeType"/>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="action_New">
    <property name="text">
@@ -219,6 +222,45 @@
    </property>
    <property name="text">
     <string>&amp;Add Node</string>
+   </property>
+   <property name="shortcut">
+    <string>Ins</string>
+   </property>
+  </action>
+  <action name="action_Delete_Nodes">
+   <property name="icon">
+    <iconset resource="dteditor.qrc">
+     <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Delete Nodes</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="dteditor.qrc">
+     <normaloff>:/icons/undo.png</normaloff>:/icons/undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="dteditor.qrc">
+     <normaloff>:/icons/redo.png</normaloff>:/icons/redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
    </property>
   </action>
  </widget>

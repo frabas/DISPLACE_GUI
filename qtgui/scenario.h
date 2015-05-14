@@ -37,6 +37,13 @@ private:
     int a_port;
     double graph_res;
 
+    QString mDtGoFishing;
+    QString mDtChooseGround;
+    QString mDtStartFishing;
+    QString mDtChangeGround;
+    QString mDtStopFishing;
+    QString mDtChangePort;
+
 public:
     Scenario();
 
@@ -64,6 +71,19 @@ public:
     bool save (QString path, QString modelname, QString outputname, QString *error);
 
     static Scenario readFromFile (QString path, QString modelname, QString outputname);
+
+    QString getDtGoFishing() const;
+    void setDtGoFishing(const QString &dtGoFishing);
+    QString getDtChooseGround() const;
+    void setDtChooseGround(const QString &dtChooseGround);
+    QString getDtStartFishing() const;
+    void setDtStartFishing(const QString &dtStartFishing);
+    QString getDtChangeGround() const;
+    void setDtChangeGround(const QString &dtChangeGround);
+    QString getDtStopFishing() const;
+    void setDtStopFishing(const QString &dtStopFishing);
+    QString getDtChangePort() const;
+    void setDtChangePort(const QString &dtChangePort);
 };
 
 #endif // SCENARIO_H

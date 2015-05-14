@@ -29,6 +29,8 @@
 #include <Population.h>
 #include <myutils.h>
 #include <options.h>
+#include <dtree/decisiontree.h>
+#include <dtree/stateevaluator.h>
 
 #include <pthread.h>
 
@@ -37,6 +39,10 @@ typedef int vertex_t;
 class Vessel
 {
 	private:
+    enum LengthClass {
+        Under15 = 0, Between15and18, Between18and24, Between24and40, Over40
+    };
+
 		string name;
 		int idx_vessel;
 		//boost::shared_ptr<Node> m_location;
@@ -82,26 +88,24 @@ class Vessel
 								 // dynamic
 		double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
+
+        /// \todo Calculate last_trip_compared_avg and normalize it, divide it by 2 so the variable as a 0.5 threshold (above/below).
+        double last_trip_compared_avg;
 		string length_class, nationality;
+        LengthClass mLengthClassId;
 		int message;
 		int state;
 		int tstep_dep;
 		int previous_harbour_idx;
+
+        double lastTrip_revenues;
+        double lastTrip_profit;
+        double avgRevenues;
+        double avgProfit;
+        int numTrips;
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
-		string decision_tree_for_go_fishing;
-		string decision_tree_for_choose_ground;
-		string decision_tree_for_start_fishing;
-		string decision_tree_for_change_ground;
-		string decision_tree_for_stop_fishing;
-		string decision_tree_for_choose_port;
-		vector<string> reading_direction_go_fishing;
-		vector<string> reading_direction_choose_ground;
-		vector<string> reading_direction_start_fishing;
-		vector<string> reading_direction_change_ground;
-		vector<string> reading_direction_stop_fishing;
-		vector<string> reading_direction_choose_port;
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
@@ -111,7 +115,7 @@ protected:
         void init();
         void find_next_point_on_the_graph_unlocked(vector<Node* >& nodes);
 
-	public:
+public:
 		//Vessel(string name,  boost::shared_ptr<Node> a_location);
 		Vessel(string name,  Node* a_location);
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name);
@@ -133,15 +137,8 @@ protected:
         void lock() { pthread_mutex_lock (&mutex); }
         void unlock() { pthread_mutex_unlock (&mutex); }
 
-		//    friend std::ostream& operator<<(std::ostream& out, const Vessel &vessel)
-		//    {
-		//       out << vessel.m_strName.c_str() << " is at " << vessel.location;
-		//      return out;
-		// }
-
 		int get_idx () const;
 		string get_name () const;
-		//boost::shared_ptr<Node> get_loc() const;
 		Node* get_loc() const;
 		Metier* get_metier() const;
 		double get_speed () const;
@@ -199,18 +196,6 @@ protected:
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
 		int read_message() const;
 		int get_previous_harbour_idx() const;
-		string get_decision_tree_for_go_fishing() const;
-		string get_decision_tree_for_choose_ground() const;
-		string get_decision_tree_for_start_fishing() const;
-		string get_decision_tree_for_change_ground() const;
-		string get_decision_tree_for_stop_fishing() const;
-		string get_decision_tree_for_choose_port() const;
-        const vector<string> &get_reading_direction_go_fishing() const;
-        const vector<string> &get_reading_direction_choose_ground() const;
-        const vector<string> &get_reading_direction_start_fishing() const;
-        const vector<string> &get_reading_direction_change_ground() const;
-        const vector<string> &get_reading_direction_stop_fishing() const;
-        const vector<string> &get_reading_direction_choose_port() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
 		void set_speed (double val);
@@ -267,7 +252,6 @@ protected:
 		void set_next_xy (double nx, double ny);
 		void erode_roadmap ();
 		void move_to(double nx, double ny);
-		//void move_to(boost::shared_ptr<Node> next_node);
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(vector<Node* >& nodes);
@@ -372,6 +356,30 @@ protected:
 
 		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
+
+        double getLastTripRevenues() const {
+            return lastTrip_revenues;
+        }
+        double getAvgTripRevenues() const {
+            return avgRevenues;
+        }
+        double getLastTripProfit() const {
+            return lastTrip_profit;
+        }
+        double getAvgTripProfit() const {
+            return avgProfit;
+        }
+        int getNumTrips() const {
+            return numTrips;
+        }
+
+        void updateTripsStatistics(const std::vector<Population *> &populations);
+
+        double traverseDtree (dtree::DecisionTree *tree);
+
+        /** \brief the Set of internal states, normalized in the range [0,1]
+         * */
+        std::vector<boost::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
 
         static std::string nationalityFromName (const std::string &name);
 };

@@ -5,7 +5,7 @@ TARGET=displace
 TEMPLATE=app
 
 DESTDIR = ../
-INCLUDEPATH=../include
+INCLUDEPATH=../include ../commons
 
 include ("$$top_srcdir/localconfig.pri")
 

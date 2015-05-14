@@ -8,16 +8,16 @@
 #include <QQueue>
 #include <QDebug>
 
-const int DtCsvReader::VERSION = 2;
+const int DtCsvReader::VERSION = 5;
 
 DtCsvReader::DtCsvReader()
 {
 }
 
-bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> *res_tree, DtGraphicsScene *scene)
+bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
 throw (std::invalid_argument)
 {
-    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
+//    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
 
     QString line;
 
@@ -32,18 +32,23 @@ throw (std::invalid_argument)
     QVector<Data> data;
     bool ok;
     int version = 0;
+    dtree::DecisionTreeManager::TreeType treeType = dtree::DecisionTreeManager::InvalidTreeType;
 
     while (!stream.atEnd()) {
         line = stream.readLine();
 
         if (line.startsWith('#')) {
             QStringList fields = line.split(' ');
-            if (fields[0] == "#DTreeVersion:") {
+            if (fields[0] == "#TreeVersion:") {
                 version = fields[1].toInt(&ok);
                 if (!ok)
                     throw std::invalid_argument("Invalid version token");
                 if (version > VERSION)
                     throw std::invalid_argument("Unsupported version");
+            } else if (fields[0] == "#TreeType:") {
+                treeType = dtree::DecisionTreeManager::treeTypeFromCode(fields[1].toStdString());
+                if (treeType == dtree::DecisionTreeManager::InvalidTreeType)
+                    throw std::invalid_argument("Unsupported #TreeType token");
             }
             continue;
         }
@@ -114,7 +119,8 @@ throw (std::invalid_argument)
         d.item->setPos(d.position);
     }
 
-    *res_tree = tree;
+    tree->setType(treeType);
+//    *res_tree = tree;
 
     QQueue<GraphNodeItem *> q;
     q.push_back(scene->root());

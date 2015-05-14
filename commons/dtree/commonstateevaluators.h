@@ -3,6 +3,8 @@
 
 #include <dtree/stateevaluator.h>
 
+#include <boost/shared_ptr.hpp>
+
 namespace dtree {
 
 /** \brief A templated class to evaluate a static variable
@@ -61,11 +63,11 @@ public:
 template <typename Operator>
 class TwoArgumentsComparatorStateEvaluator : public StateEvaluator {
 private:
-    StateEvaluator *mOp1, *mOp2;
+    boost::shared_ptr<StateEvaluator> mOp1, mOp2;
     Operator mOperator;
 
 public:
-    TwoArgumentsComparatorStateEvaluator (StateEvaluator *op1, StateEvaluator *op2, Operator oper)
+    TwoArgumentsComparatorStateEvaluator (boost::shared_ptr<StateEvaluator> op1, boost::shared_ptr<StateEvaluator> op2, Operator oper)
         : StateEvaluator(), mOp1(op1), mOp2(op2), mOperator(oper) {
     }
 

@@ -36,6 +36,8 @@
 #include <dtree/externalstatemanager.h>
 #include <dtree/commonstateevaluators.h>
 
+#include <boost/make_shared.hpp>
+
 #include <functional>
 #include <stdexcept>
 
@@ -259,14 +261,14 @@ void Vessel::init()
     }
 
     // Add here the variables associations
-    mStateEvaluators[dtree::lastTripRevenueIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
-                new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
-                new dtree::vessels::AverageRevenuesStateEvaluator(this),
-                std::less<double>());
-    mStateEvaluators[dtree::lastTripProfitIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
-                new dtree::VariableReferenceStateEvaluator<double>(lastTrip_profit),
-                new dtree::vessels::AverageProfitStateEvaluator(this),
-                std::less<double>());
+    mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_revenues),
+                boost::make_shared<dtree::vessels::AverageRevenuesStateEvaluator>(this),
+                std::less<double>()));
+    mStateEvaluators[dtree::lastTripProfitIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_profit),
+                boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(this),
+                std::less<double>()));
 
     // External states
 //    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);
@@ -3465,6 +3467,8 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 
 int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_tree)
 {
+    UNUSED(external_states);
+
     lock();
 
 	// first of all, check if some remaining quotas

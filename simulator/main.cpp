@@ -467,11 +467,6 @@ int main(int argc, char* argv[])
     mOutQueue.start();
     thread_vessel_init(num_threads);
 
-    if (dtree::DecisionTreeManager::manager()->readFromDirectory("../"+inputfolder+"/dtrees") <= 0) {
-        std::cerr << "Cannot read decision trees, aborting." << std::endl;
-        return -1;
-    }
-
     cwd = std::string(getcwd(buf, MAXPATH));
 
     lock();
@@ -583,6 +578,12 @@ int main(int argc, char* argv[])
 	stringstream graphnum;
 	graphnum << a_graph;
 	a_graph_name=a_graph_name+graphnum.str();
+
+    // Load dtrees
+    if (dtree::DecisionTreeManager::manager()->readFromScenario("../"+inputfolder+"/dtrees", scenario) <= 0) {
+        std::cerr << "Cannot read decision trees, aborting." << std::endl;
+        return -1;
+    }
 
 	// check if config reading OK
     outc(cout << nbpops << endl);

@@ -2,6 +2,9 @@
 
 #include <dtree/decisiontree.h>
 #include <dtree/dtnode.h>
+
+#include <comstructs.h>
+
 #include <string.h>
 #include <dirent.h>
 #include <iostream>
@@ -58,6 +61,28 @@ int DecisionTreeManager::readFromDirectory(std::string path)
         std::cerr << "Can't open " << path << std::endl;
     }
     return nr;
+}
+
+int DecisionTreeManager::readFromScenario(std::string path, displace::commons::Scenario scenario)
+{
+    readScenarioFileIfAvailable(path, scenario.dt_go_fishing);
+    readScenarioFileIfAvailable(path, scenario.dt_choose_ground);
+    readScenarioFileIfAvailable(path, scenario.dt_start_fishing);
+    readScenarioFileIfAvailable(path, scenario.dt_change_ground);
+    readScenarioFileIfAvailable(path, scenario.dt_stop_fishing);
+    readScenarioFileIfAvailable(path, scenario.dt_change_port);
+
+    return 1;
+}
+
+void DecisionTreeManager::readScenarioFileIfAvailable(std::string path, std::string scenarioname)
+{
+    if (scenarioname.length() > 0 && scenarioname.compare(0, 1, std::string("-")) != 0) {
+        if (!readFile(path + "/" + scenarioname)) {
+            std::cerr << "Can't read " << scenarioname << std::endl;
+            throw std::runtime_error("Can't read scenario file " +scenarioname);
+        }
+    }
 }
 
 /** \brief Loads a specific file, creating the dtree and allocating it to the type specified in the file

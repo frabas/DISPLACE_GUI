@@ -255,15 +255,15 @@ void Vessel::init()
     nationality = nationalityFromName(get_name());
 
     for (int i = 0; i < dtree::Variable::VarLast; ++i) {
-        mNormalizedInternalStates.push_back(0);
+        mStateEvaluators.push_back(0);
     }
 
     // Add here the variables associations
-    mNormalizedInternalStates[dtree::lastTripRevenueIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+    mStateEvaluators[dtree::lastTripRevenueIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues),
                 new dtree::vessels::AverageRevenuesStateEvaluator(this),
                 std::less<double>());
-    mNormalizedInternalStates[dtree::lastTripProfitIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+    mStateEvaluators[dtree::lastTripProfitIs] = new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 new dtree::VariableReferenceStateEvaluator<double>(lastTrip_profit),
                 new dtree::vessels::AverageProfitStateEvaluator(this),
                 std::less<double>());
@@ -1117,8 +1117,8 @@ double Vessel::traverseDtree(dtree::DecisionTree *tree)
             return node->value();
 
         double value = 0.0;
-        if (mNormalizedInternalStates[static_cast<int>(node->variable())] != 0) {
-            value = mNormalizedInternalStates[static_cast<int>(node->variable())]->evaluate();
+        if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
+            value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate();
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }

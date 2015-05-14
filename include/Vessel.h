@@ -374,7 +374,7 @@ public:
 
         /** \brief the Set of internal states, normalized in the range [0,1]
          * */
-        std::vector<dtree::StateEvaluator *> mNormalizedInternalStates;
+        std::vector<dtree::StateEvaluator *> mStateEvaluators;
 
         static std::string nationalityFromName (const std::string &name);
 };

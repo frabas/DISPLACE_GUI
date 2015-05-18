@@ -37,6 +37,11 @@ void Node::setMapping(int idx, int remapped)
     mGroups[idx] = remapped;
 }
 
+int Node::getMapping(int idx) const
+{
+    return mGroups[idx];
+}
+
 void Node::setExtra(boost::shared_ptr<NodeExtra> extra)
 {
     mExtra = extra;
@@ -51,6 +56,7 @@ void Node::setVariable(Variable var)
 {
     if (mVariable != var) {
         mNodes.clear();
+        mGroups.clear();
         // Note: binary node
         for (int i = 0; i < VariableNames::variableBinCount(var); ++i) {
             mNodes.push_back(boost::shared_ptr<Node> ());

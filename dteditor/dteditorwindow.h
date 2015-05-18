@@ -54,6 +54,8 @@ private slots:
 
     void on_actionQuit_triggered();
 
+    void on_actionMappings_triggered();
+
 private:
     Ui::DtEditorWindow *ui;
 

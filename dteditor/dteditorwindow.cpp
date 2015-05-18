@@ -7,6 +7,8 @@
 #include <dtcsvwriter.h>
 #include <dtcsvreader.h>
 
+#include <nodemappingsdialog.h>
+
 #include <commands/settreetypecommand.h>
 #include <commands/setnodevaluecommand.h>
 
@@ -197,6 +199,7 @@ void DtEditorWindow::evt_scene_selection_changed()
     QList<QGraphicsItem *> selection = mScene->selectedItems();
 
     ui->action_Delete_Nodes->setEnabled(selection.size() > 0);
+    ui->actionMappings->setEnabled(selection.size() == 1);
 
     if (selection.size() == 0) {
         // hide properties and disable controls
@@ -390,4 +393,22 @@ void DtEditorWindow::on_actionQuit_triggered()
         return;
 
     close();
+}
+
+void DtEditorWindow::on_actionMappings_triggered()
+{
+    QList<QGraphicsItem *> selection = mScene->selectedItems();
+
+    if (selection.size() != 1) {
+        return;
+    }
+
+    QGraphicsItem *item = selection.at(0);
+    boost::shared_ptr<dtree::Node> node = dynamic_cast<GraphNodeItem *>(item)->getNode();
+
+    NodeMappingsDialog dlg(node, this);
+
+    if (dlg.exec() == QDialog::Accepted) {
+
+    }
 }

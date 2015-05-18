@@ -32,6 +32,7 @@ public:
     void setChild(int idx, boost::shared_ptr<Node> child);
 
     void setMapping (int idx, int remapped);
+    int getMapping(int idx) const;
 
     void setExtra(boost::shared_ptr<NodeExtra> extra);
     boost::shared_ptr<NodeExtra> extra() const;

@@ -41,10 +41,12 @@ SOURCES += \
     dtcsvwriter.cpp \
     commands/command.cpp \
     commands/settreetypecommand.cpp \
-    commands/setnodevaluecommand.cpp
+    commands/setnodevaluecommand.cpp \
+    nodemappingsdialog.cpp
 
 FORMS += \
-    dteditorwindow.ui
+    dteditorwindow.ui \
+    nodemappingsdialog.ui
 
 HEADERS += \
     dteditorwindow.h \
@@ -55,7 +57,8 @@ HEADERS += \
     dtcsvwriter.h \
     commands/command.h \
     commands/settreetypecommand.h \
-    commands/setnodevaluecommand.h
+    commands/setnodevaluecommand.h \
+    nodemappingsdialog.h
 
 RESOURCES += \
     dteditor.qrc

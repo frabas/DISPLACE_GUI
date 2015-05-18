@@ -14,7 +14,7 @@
    <string>Decision Trees Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="dteditor.qrc">
+   <iconset>
     <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -57,6 +57,7 @@
     <addaction name="separator"/>
     <addaction name="action_Add_Node"/>
     <addaction name="action_Delete_Nodes"/>
+    <addaction name="actionMappings"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuTree"/>
@@ -64,7 +65,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="propertiesWidget">
    <property name="windowIcon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/attributes.png</normaloff>:/icons/attributes.png</iconset>
    </property>
    <property name="features">
@@ -181,7 +182,7 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -190,7 +191,7 @@
   </action>
   <action name="action_Save">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -199,7 +200,7 @@
   </action>
   <action name="actionSave_as">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -208,7 +209,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -217,7 +218,7 @@
   </action>
   <action name="action_Add_Node">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -229,7 +230,7 @@
   </action>
   <action name="action_Delete_Nodes">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -241,7 +242,7 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/undo.png</normaloff>:/icons/undo.png</iconset>
    </property>
    <property name="text">
@@ -253,7 +254,7 @@
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset resource="dteditor.qrc">
+    <iconset>
      <normaloff>:/icons/redo.png</normaloff>:/icons/redo.png</iconset>
    </property>
    <property name="text">
@@ -263,9 +264,12 @@
     <string>Ctrl+Shift+Z</string>
    </property>
   </action>
+  <action name="actionMappings">
+   <property name="text">
+    <string>&amp;Mappings...</string>
+   </property>
+  </action>
  </widget>
- <resources>
-  <include location="dteditor.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

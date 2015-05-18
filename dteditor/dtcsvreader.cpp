@@ -8,7 +8,7 @@
 #include <QQueue>
 #include <QDebug>
 
-const int DtCsvReader::VERSION = 5;
+const int DtCsvReader::VERSION = 6;
 
 DtCsvReader::DtCsvReader()
 {
@@ -27,6 +27,7 @@ throw (std::invalid_argument)
         int parent;
         QPointF position;
         QVector<int> children;
+        QVector<int> mapping;
     };
 
     QVector<Data> data;
@@ -75,16 +76,24 @@ throw (std::invalid_argument)
 
         int nc = fields[4].toInt(&ok);
         if (!ok) throw std::invalid_argument("invalid field");
-        while (data[idx].children.size() < nc)
+        while (data[idx].children.size() < nc) {
             data[idx].children.push_back(-1);
+            data[idx].mapping.push_back(-1);
+        }
 
+        bool ok2;
         int fldnum = 5;
         for (int i = 0; i < nc; ++i) {
-            int cidx = fields[5+i].toInt(&ok);
+            int cidx = fields[fldnum].toInt(&ok);
             ++fldnum;
-            if (!ok) continue;
+            int mapn = fields[fldnum].toInt(&ok2);
+            ++fldnum;
+            if (!ok && !ok2) continue;
 
-            data[idx].children[i] = cidx;
+            if (ok)
+               data[idx].children[i] = cidx;
+            if (ok2)
+            data[idx].mapping[i] = mapn;
 
             while (data.size() <= cidx)
                 data.push_back(Data());
@@ -115,6 +124,7 @@ throw (std::invalid_argument)
                 tree->connect(data[chl].node, d.node, i);
                 d.item->connectAsParent(data[chl].item, i);
             }
+            d.node->setMapping(i,d.mapping[i]);
         }
         d.item->setPos(d.position);
     }

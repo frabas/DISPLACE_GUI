@@ -6,7 +6,7 @@
 #include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
 
-const int DtCsvWriter::VERSION = 5;
+const int DtCsvWriter::VERSION = 6;
 
 DtCsvWriter::DtCsvWriter()
 {
@@ -53,7 +53,7 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
                 queue.push_back(chld);
                 queueid.push_back(nid);
             }
-            stream << ",";
+            stream << "," << gnode->getNode()->getMapping(i) << ",";
         }
 
         stream << node->value();

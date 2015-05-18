@@ -18,13 +18,24 @@ int Node::getChildrenCount() const
 
 boost::shared_ptr<Node> Node::getChild(int idx)
 {
+    return mNodes.at(mGroups[idx]);
+}
+
+boost::shared_ptr<Node> Node::getUnmappedChild(int idx)
+{
     return mNodes.at(idx);
 }
 
 void Node::setChild(int idx, boost::shared_ptr<Node> child)
 {
     mNodes[idx] = child; /*VariableNames::Bin*/
-} /*VariableNames::Bin*/
+}
+
+void Node::setMapping(int idx, int remapped)
+{
+    mNodes[idx].reset();
+    mGroups[idx] = remapped;
+}
 
 void Node::setExtra(boost::shared_ptr<NodeExtra> extra)
 {
@@ -41,8 +52,10 @@ void Node::setVariable(Variable var)
     if (mVariable != var) {
         mNodes.clear();
         // Note: binary node
-        for (int i = 0; i < VariableNames::variableBinCount(var); ++i)
+        for (int i = 0; i < VariableNames::variableBinCount(var); ++i) {
             mNodes.push_back(boost::shared_ptr<Node> ());
+            mGroups.push_back(i);
+        }
         mVariable = var;
     }
 }

@@ -409,6 +409,10 @@ void DtEditorWindow::on_actionMappings_triggered()
     NodeMappingsDialog dlg(node, this);
 
     if (dlg.exec() == QDialog::Accepted) {
+        int n = node->getChildrenCount();
 
+        for (int i = 0; i < n; ++i) {
+            node->setMapping(i, dlg.getMappingForIndex(i));
+        }
     }
 }

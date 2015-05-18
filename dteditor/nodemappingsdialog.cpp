@@ -37,7 +37,7 @@ void NodeMappingsDialog::setupMappings()
 {
     int n = mNode->getChildrenCount();
 
-    int mx = 2;
+    int mx = 1;
     for (int i = 0; i < n; ++i) {
         QLabel *label = new QLabel();
         label->setText(tr("Output %1").arg(i));

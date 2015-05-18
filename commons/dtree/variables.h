@@ -8,7 +8,7 @@ namespace dtree {
 
 enum Variable {
     VarUndefined = -1,
-//    vesselMetierIs,      // goFishing
+    vesselMetierIs,      // goFishing
     vesselSizeIs,             // goFishing
     lastTripProfitIs,          // goFishing
     lastTripRevenueIs,         // goFishing

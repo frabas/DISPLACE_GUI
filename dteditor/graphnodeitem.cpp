@@ -71,7 +71,7 @@ void GraphNodeItem::setVariable(dtree::Variable var)
 
     QVector<int> nummaps(node->getChildrenCount(), 0);
 
-    int mx = 1;
+    int mx = -1;
     int n = node->getChildrenCount();
     for (int i = 0; i < n; ++i) {
         int m = node->getMapping(i);
@@ -80,47 +80,56 @@ void GraphNodeItem::setVariable(dtree::Variable var)
     }
 
     n = mx+1;
-    if (n != mChildrenItems.size()) {
-        QVector<GraphNodeItem *> v = mChildrenItems;
-        for (int i = mx; i < v.size(); ++i) {
-            delete v[i];
+    QVector<GraphNodeItem *> v = mChildrenItems;
+    for (int i = n; i < v.size(); ++i) {
+        delete v[i];
+    }
+
+    mChildrenItems.clear();
+    foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
+        delete item;
+    mChildrenBoxes.clear();
+
+    mChildrenBoxText.clear(); // are children of mChilderBoxes.
+
+    int twidth = 0;
+    for (int i = 0; i < n; ++i) {
+        if (i < v.size())
+            mChildrenItems.push_back(v[i]);
+        else
+            mChildrenItems.push_back(0);
+
+        QRectF r( -sDefWidth/2 + twidth,
+                  sDefHeight/2 - sDefHeight/3,
+                  sDefWidth / n,
+                  sDefHeight/3);
+
+        r = mapRectToScene(r);
+        GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
+        mChildrenBoxes.append(newch);
+        QGraphicsTextItem *ti = new QGraphicsTextItem(newch);
+        ti->setPos(r.topLeft());
+        mChildrenBoxText.push_back(ti);
+
+        QString label;
+        if (nummaps[i] > 1) {
+            label = QString(QObject::tr("%1")).arg(i);
+        } else {
+            label = QString::fromLatin1(dtree::VariableNames::variableBin(var, i));
         }
+        ti->setPlainText(label);
 
-        mChildrenItems.clear();
-        foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
-            delete item;
-        mChildrenBoxes.clear();
+        addToGroup(newch);
 
-        mChildrenBoxText.clear(); // are children of mChilderBoxes.
+        r.setWidth(ti->boundingRect().width());
+        newch->setRect(r);
+        twidth += ti->boundingRect().width();
+    }
 
-        for (int i = 0; i < n; ++i) {
-            if (i < v.size())
-                mChildrenItems.push_back(v[i]);
-            else
-                mChildrenItems.push_back(0);
-
-            QRectF r( -sDefWidth/2 + i*sDefWidth/n,
-                      sDefHeight/2 - sDefHeight/3,
-                      sDefWidth / n,
-                      sDefHeight/3);
-
-            r = mapRectToScene(r);
-            GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
-            mChildrenBoxes.append(newch);
-            QGraphicsTextItem *ti = new QGraphicsTextItem(newch);
-            ti->setPos(r.topLeft());
-            mChildrenBoxText.push_back(ti);
-
-            QString label;
-            if (nummaps[i] > 1) {
-                label = QString(QObject::tr("%1")).arg(i);
-            } else {
-                label = QString::fromLatin1(dtree::VariableNames::variableBin(var, i));
-            }
-            ti->setPlainText(label);
-
-            addToGroup(newch);
-        }
+    if (twidth > 0) {
+        QRectF r= mRect->rect();
+        r.setWidth(twidth);
+        mRect->setRect(r);
     }
 }
 
@@ -218,7 +227,7 @@ void GraphNodeItem::update()
 
     double r = mText->textWidth();
     QRectF p = mRect->rect();
-    mText->setPos(-(p.width() - r) / 2, p.top());
+    mText->setPos(p.left(), p.top());
 }
 
 void GraphNodeItem::createArrow()

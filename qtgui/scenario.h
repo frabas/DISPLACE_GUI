@@ -36,6 +36,7 @@ private:
     int nrow_graph;
     int a_port;
     double graph_res;
+    double is_individual_vessel_quotas;
 
 public:
     Scenario();
@@ -60,6 +61,8 @@ public:
     void setA_port(int value);
     double getGraph_res() const;
     void setGraph_res(double value);
+    double getIs_individual_vessel_quotas() const;
+    void setIs_individual_vessel_quotas(double value);
 
     bool save (QString path, QString modelname, QString outputname, QString *error);
 

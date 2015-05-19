@@ -271,7 +271,7 @@ protected:
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(vector<Node* >& nodes);
-		void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res);
+        void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res, int &is_individual_vessel_quotas);
 		void clear_catch_pop_at_szgroup();
 		void compute_experiencedcpue_fgrounds();
 		void compute_experiencedcpue_fgrounds_per_pop();
@@ -370,7 +370,7 @@ protected:
             vector <double>& dist_to_ports);
 		int should_i_choose_this_port(map<string,int>& external_states, bool use_the_tree);
 
-		void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards);
+        void set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, int init, double a_tac);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
 
         static std::string nationalityFromName (const std::string &name);

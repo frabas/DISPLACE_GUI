@@ -51,7 +51,8 @@ int read_scenario_config_file(string folder_name_parameterization,
     int& nrow_coord,
     int& nrow_graph,
     int& a_port,
-    double& graph_res );
+    double& graph_res,
+    int& is_individual_vessel_quotas);
 
 // vessel specific
 void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
@@ -154,5 +155,5 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
 // SMS
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
 void write_SMS_OP_F_in_file(ofstream& SMS_F_in, vector<Population* >& populations, vector<int> stock_numbers);
-void read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages, string namesimu);
+void read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages, string sms_folder, string namesimu);
  

@@ -144,7 +144,8 @@ int read_scenario_config_file (string folder_name_parameterization,
     int& nrow_coord,
     int& nrow_graph,
     int& a_port,
-    double& graph_res )
+    double& graph_res,
+    int& is_individual_vessel_quotas)
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
 
@@ -227,6 +228,14 @@ int read_scenario_config_file (string folder_name_parameterization,
 				graph_res=val;
 			}
 		}
+        if(counter==18)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                is_individual_vessel_quotas=val;
+            }
+        }
 
 	}
 	cout << "read config file...OK" << endl << flush;
@@ -2162,14 +2171,16 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
                             vector<int> stock_numbers,
                             vector<int> some_units,
                             vector<int> some_max_nb_ages,
+                            string sms_folder,
                             string namesimu)
 {
     UNUSED(some_max_nb_ages);
 
 	// read the input file
-	string filename=  namesimu+"/op_n.out";
+    string filename=  sms_folder+"/"+namesimu+"/op_n.out";
 
-	ifstream in;
+
+    ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
 	{

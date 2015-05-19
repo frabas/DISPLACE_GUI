@@ -46,6 +46,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->agraph->setValue(mScen.getGraph());
     ui->aport->setValue(mScen.getA_port());
     ui->gridres->setValue(mScen.getGraph_res());
+    ui->isvesselquotas->setValue(mScen.getIs_individual_vessel_quotas());
     ui->nrowcoord->setValue(mScen.getNrow_coord());
     ui->nrowgraph->setValue(mScen.getNrow_graph());
 
@@ -126,6 +127,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setGraph(ui->agraph->value());
     mScen.setA_port(ui->aport->value());
     mScen.setGraph_res(ui->gridres->value());
+    mScen.setIs_individual_vessel_quotas(ui->isvesselquotas->value());
     mScen.setNrow_coord(ui->nrowcoord->value());
     mScen.setNrow_graph(ui->nrowgraph->value());
 }

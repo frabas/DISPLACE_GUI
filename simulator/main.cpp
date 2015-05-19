@@ -141,6 +141,7 @@ int a_port;
 int nrow_coord;
 int nrow_graph;
 double graph_res;
+int is_individual_vessel_quotas;
 int export_vmslike;
 ofstream vmslike;
 vector <int> implicit_pops;
@@ -568,7 +569,8 @@ int main(int argc, char* argv[])
 		nrow_coord,
 		nrow_graph,
 		a_port,
-		graph_res
+        graph_res,
+        is_individual_vessel_quotas
 		);
 
 	stringstream graphnum;
@@ -607,6 +609,7 @@ int main(int argc, char* argv[])
    outc(cout << "nrow_graph " << nrow_graph << endl);
    outc(cout << "a_port " << a_port << endl);
    outc(cout << "graph res in km " << graph_res << endl);
+   outc(cout << "graph res in km " << is_individual_vessel_quotas << endl);
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
 	// for which we do not have any info on the pops_N_at_szgroup because not assessed stock by ICES....
@@ -2089,7 +2092,7 @@ int main(int argc, char* argv[])
 		// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
 		for (unsigned int sp=0; sp<populations.size(); sp++)
 		{
-			vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 0.0);
+            vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 1, 0.0);
 		}
 
 		// check
@@ -3171,7 +3174,7 @@ int main(int argc, char* argv[])
                         }
 					
 					// read .out SMS files and fill in
-					read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages, namesimu);
+                    read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages, sms_folder, namesimu);
 					
 					// check
 					if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
@@ -3352,7 +3355,7 @@ int main(int argc, char* argv[])
 							// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
 							for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
 							{
-								vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 0.0);
+                                vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
 							}
                            outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
 							// to do next time oth_land will be applied: oth_land * TACy+1 / TACy

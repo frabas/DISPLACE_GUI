@@ -403,9 +403,12 @@ void DtEditorWindow::on_actionMappings_triggered()
         return;
     }
 
-    QGraphicsItem *item = selection.at(0);
-    boost::shared_ptr<dtree::Node> node = dynamic_cast<GraphNodeItem *>(item)->getNode();
+    GraphNodeItem *item = dynamic_cast<GraphNodeItem *>(selection.at(0));
 
+    if (!item)
+        return;
+
+    boost::shared_ptr<dtree::Node> node = item->getNode();
     NodeMappingsDialog dlg(node, this);
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -414,5 +417,7 @@ void DtEditorWindow::on_actionMappings_triggered()
         for (int i = 0; i < n; ++i) {
             node->setMapping(i, dlg.getMappingForIndex(i));
         }
+
+        item->setVariable(node->variable());
     }
 }

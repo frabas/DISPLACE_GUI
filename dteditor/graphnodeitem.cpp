@@ -68,16 +68,31 @@ void GraphNodeItem::setVariable(dtree::Variable var)
     Q_UNUSED(var);
 
     boost::shared_ptr<dtree::Node> node = getNode();
-    int n = node->getChildrenCount();
 
+    QVector<int> nummaps(node->getChildrenCount(), 0);
+
+    int mx = 1;
+    int n = node->getChildrenCount();
+    for (int i = 0; i < n; ++i) {
+        int m = node->getMapping(i);
+        mx = std::max(mx, m);
+        ++nummaps[m];
+    }
+
+    n = mx+1;
     if (n != mChildrenItems.size()) {
         QVector<GraphNodeItem *> v = mChildrenItems;
+        for (int i = mx; i < v.size(); ++i) {
+            delete v[i];
+        }
+
         mChildrenItems.clear();
         foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
             delete item;
-
         mChildrenBoxes.clear();
-        mChildrenBoxText.clear();
+
+        mChildrenBoxText.clear(); // are children of mChilderBoxes.
+
         for (int i = 0; i < n; ++i) {
             if (i < v.size())
                 mChildrenItems.push_back(v[i]);
@@ -96,12 +111,16 @@ void GraphNodeItem::setVariable(dtree::Variable var)
             ti->setPos(r.topLeft());
             mChildrenBoxText.push_back(ti);
 
+            QString label;
+            if (nummaps[i] > 1) {
+                label = QString(QObject::tr("%1")).arg(i);
+            } else {
+                label = QString::fromLatin1(dtree::VariableNames::variableBin(var, i));
+            }
+            ti->setPlainText(label);
+
             addToGroup(newch);
         }
-    }
-
-    for (int i = 0; i < mChildrenBoxText.size(); ++i) {
-        mChildrenBoxText[i]->setPlainText(QString::fromLatin1(dtree::VariableNames::variableBin(var, i)));
     }
 }
 

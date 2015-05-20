@@ -2,7 +2,7 @@
 
 using namespace dtree ;
 
-const int VariableNames::VERSION = 5;
+const int VariableNames::VERSION = 6;
 
 /** \brief The names if the variables, as used in the decision tree files.
  * When changing this array, changes must account relative changes to VariableNames::bins and Variable .

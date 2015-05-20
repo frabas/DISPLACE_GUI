@@ -104,6 +104,7 @@ bool DecisionTreeManager::readFile (std::string filename)
         dtree::Variable variable;
         double value;
         std::vector<int> children;
+        std::vector<int> mapping;
         boost::shared_ptr<dtree::Node> node;
     };
     std::vector<NodePrototype> nodes;
@@ -138,9 +139,26 @@ bool DecisionTreeManager::readFile (std::string filename)
             prt.variable = dtree::VariableNames::variableCode(fields[1]);
             // fields 2 and 3 are ignored (posx,posy)
             int n = atoi(fields[4].c_str());
+            int fldnum = 5;
             for (int i = 0; i < n; ++i) {
-                int ch = atoi(fields[5+i].c_str());
+                // read the child
+                int ch;
+                std::string fld = fields[fldnum++];
+                if (fld.empty()) {
+                    ch = -1;
+                } else {
+                    ch = atoi(fld.c_str());
+                }
                 prt.children.push_back(ch);
+
+                // read the map
+                fld = fields[fldnum++];
+                if (fld.empty()) {
+                    ch = -1;
+                } else {
+                    ch = atoi(fld.c_str());
+                }
+                prt.mapping.push_back(ch);
             }
             prt.value = atof(fields[5+n].c_str());
             prt.node = boost::shared_ptr<dtree::Node>(new dtree::Node(tree));
@@ -167,8 +185,14 @@ bool DecisionTreeManager::readFile (std::string filename)
             n->setValue(nodes[i].value);
             for (size_t j = 0; j < nodes[i].children.size(); ++j) {
                 int chld = nodes[i].children[j];
-                n->setChild(j, nodes[chld].node);
-                nodes[chld].node->setParent(n);
+                if (chld != -1) {
+                    n->setChild(j, nodes[chld].node);
+                    nodes[chld].node->setParent(n);
+                }
+                inf map = nodes[i].mapping[j];
+                if (map != -1) {
+                    n->setMapping(j, map);
+                }
             }
         }
 

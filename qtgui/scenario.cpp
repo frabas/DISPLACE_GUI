@@ -155,6 +155,7 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << "# nrow_graph\n" << nrow_graph << endl;
     stream << "# a_port\n" << a_port << endl;
     stream << "# grid res km\n" << graph_res << endl;
+    stream << "# is_individual_vessel_quotas\n" << is_individual_vessel_quotas << endl;
 
     stream << "# Go Fishing DTree\n" << mDtGoFishing << endl;
     stream << "# Choose Ground DTree\n" << mDtChooseGround<< endl;

@@ -418,6 +418,7 @@ bool DbHelper::loadScenario(Scenario &sce)
     sce.setNrow_coord(getMetadata("sce::nrow_coord").toInt());
     sce.setA_port(getMetadata("sce::aport").toInt());
     sce.setGraph_res(getMetadata("sce::graph_res").toDouble());
+    sce.setIs_individual_vessel_quotas(getMetadata("sce::is_individual_vessel_quotas").toDouble());
     sce.setDyn_alloc_sce(getMetadata("sce::dyn_alloc_sce").split(" "));
     sce.setDyn_pop_sce(getMetadata("sce::dyn_pop_sce").split(" "));
     sce.setBiolsce(getMetadata("sce::biol_sce"));
@@ -432,6 +433,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     setMetadata("sce::nrow_coord", QString::number(sce.getNrow_coord()));
     setMetadata("sce::aport", QString::number(sce.getA_port()));
     setMetadata("sce::graph_res", QString::number(sce.getGraph_res()));
+    setMetadata("sce::is_individual_vessel_quotas", QString::number(sce.getIs_individual_vessel_quotas()));
     setMetadata("sce::dyn_alloc_sce", sce.getDyn_alloc_sce().join(" "));
     setMetadata("sce::dyn_pop_sce", sce.getDyn_pop_sce().join(" "));
     setMetadata("sce::biol_sce", sce.getBiolsce());

@@ -222,18 +222,18 @@ int read_scenario_config_file (string folder_name_parameterization,
 		}
         if(counter==18)
         {
-            string val;
+            int val;
             while(linestream >> val)
             {
-                scenario.dt_go_fishing=val;
+                scenario.is_individual_vessel_quotas=val;
             }
         }
-        if(counter==20)
+        if (counter == 20)
         {
             string val;
             while(linestream >> val)
             {
-                scenario.dt_choose_ground=val;
+                scenario.dt_go_fishing=val;
             }
         }
         if(counter==22)
@@ -241,7 +241,7 @@ int read_scenario_config_file (string folder_name_parameterization,
             string val;
             while(linestream >> val)
             {
-                scenario.dt_start_fishing=val;
+                scenario.dt_choose_ground=val;
             }
         }
         if(counter==24)
@@ -249,7 +249,7 @@ int read_scenario_config_file (string folder_name_parameterization,
             string val;
             while(linestream >> val)
             {
-                scenario.dt_change_ground=val;
+                scenario.dt_start_fishing=val;
             }
         }
         if(counter==26)
@@ -257,10 +257,18 @@ int read_scenario_config_file (string folder_name_parameterization,
             string val;
             while(linestream >> val)
             {
-                scenario.dt_stop_fishing=val;
+                scenario.dt_change_ground=val;
             }
         }
         if(counter==28)
+        {
+            string val;
+            while(linestream >> val)
+            {
+                scenario.dt_stop_fishing=val;
+            }
+        }
+        if(counter==30)
         {
             string val;
             while(linestream >> val)
@@ -2203,14 +2211,16 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
                             vector<int> stock_numbers,
                             vector<int> some_units,
                             vector<int> some_max_nb_ages,
+                            string sms_folder,
                             string namesimu)
 {
     UNUSED(some_max_nb_ages);
 
 	// read the input file
-	string filename=  namesimu+"/op_n.out";
+    string filename=  sms_folder+"/"+namesimu+"/op_n.out";
 
-	ifstream in;
+
+    ifstream in;
 	in.open(filename.c_str());
 	if(in.fail())
 	{

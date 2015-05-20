@@ -27,6 +27,7 @@ PopSceOptions::PopSceOptions()
 {
     M(mMap,"baseline", pop_baseline);
     O(mMap,use_SMS);
+    O(mMap,use_SMS_single);
     O(mMap,baseline_slower_growth);
     O(mMap,lower_pop_productivity);
     O(mMap,use_SMS_slower_growth);

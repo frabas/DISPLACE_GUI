@@ -1028,10 +1028,10 @@ void Vessel::set_nbfpingspertrip(int _nbfpingpertrip)
 }
 
 
-void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, double someDiscards)
+void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, int init, double a_tac)
 {
 
-	if(someDiscards==0.0)
+    if(init)
 	{
 								 // individual vessel share
 		vector<double> percent_tac_per_pop = this->get_percent_tac_per_pop ();
@@ -1047,12 +1047,12 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
 			percent_simulated_tac_this_pop/100 *
 			percent_tac_per_pop.at(pop)/100 *
 			relative_key[this->get_nationality()]/100;
-        dout (cout << "this vessel: individual TAC set to " << individual_tac_per_pop.at(pop) <<
+        cout << "this vessel: individual TAC set to " << individual_tac_per_pop.at(pop) <<
 			" for this pop " << pop <<
 			" from global tac " << global_tac_this_pop <<
 			" percent_simulated_tac_this_pop " << percent_simulated_tac_this_pop <<
 			" percent_tac_per_pop " << percent_tac_per_pop.at(pop) <<
-            " relative key " << relative_key[this->get_nationality()] << endl);
+            " relative key " << relative_key[this->get_nationality()] << endl;
 
 		// inform if this vessel is actually linked with the management under investigation...
 		// (if not then the vessel will not be forced to stay on quayside when TACs exhausted)
@@ -1067,22 +1067,30 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
 			individual_tac_per_pop.at(pop) << " " <<
 			discard_all << endl;
 
-	}
-	else
-	{
-		// export: caution, here export discards
-		int discard_all =1;
-		export_individual_tacs << setprecision(0) << fixed;
-		export_individual_tacs << tstep << " " <<
+    }
+    else
+    {
+            if(a_tac!=0.0)
+            {
+                individual_tac_per_pop.at(pop) =a_tac;
+                // the new tac is likely to be the initial tac decreased by the vessel catches so far.
+            }
+            else
+            {
+
+            // export: caution, here export discards
+            int discard_all =1;
+            export_individual_tacs << setprecision(0) << fixed;
+            export_individual_tacs << tstep << " " <<
 			this->get_name() << " " <<
 			pop << " " <<
-			someDiscards << " " <<
+            a_tac << " " <<
 			discard_all << endl;
 
-		// e.g. if discard for this vessel this pop then force a 0:
-		individual_tac_per_pop.at(pop) = 0;
-	}
-
+            // e.g. if discard for this vessel this pop then force a 0:
+            individual_tac_per_pop.at(pop) = 0;
+            }
+  }
 }
 
 
@@ -1434,7 +1442,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double& graph_res)
+void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes,
+                      vector<int>& implicit_pops, int& tstep, double& graph_res, int& is_individual_vessel_quotas)
 {
     lock();
 
@@ -1547,8 +1556,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 				// 1. COMPUTE TOTAL AVAILABLE BIOMASS
 				// ON THIS NODE FOR THIS POP
-								 // ON THIS NODE
-				vector<double>  Ns_at_szgroup_pop = this->get_loc()->get_Ns_pops_at_szgroup(namepop );
+                vector<double>  Ns_at_szgroup_pop = this->get_loc()->get_Ns_pops_at_szgroup(namepop );
 								 // just a copy to check for consistency at the end...
 				vector<double>  init_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
 
@@ -1590,7 +1598,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     } else{
                         tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
                     }
-                        dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
+                    dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
                     dout(cout  << "sel_ogive[szgroup] " <<sel_ogive[szgroup] << endl);
                     dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
 				}
@@ -1607,7 +1615,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 				if(tot!=0)
 				{
-					// remeber that metier at NA in parameterisation (see the Rcode) have been set to -20
+                    // remember that metier at NA in parameterisation (see the Rcode) have been set to -20
 					// in order to avoid (potentially high!) catches with the wrong metier
 
 					// 2. COMPUTE TOTAL CATCH IN WEIGHT as the response from the glm model on cpue
@@ -1759,8 +1767,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                     catch_per_szgroup[szgroup] << endl);
 								 // everything is caught...
 								removals_per_szgroup[szgroup]=Ns_at_szgroup_pop[szgroup];
-								// this correction (13-12-12) is needed to adjust the actual catches to this case....
-								 // nothing left!
+                                 // nothing left!
 								new_Ns_at_szgroup_pop[szgroup]=0;
 
                             }
@@ -1902,7 +1909,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					*/
 
 					// then, the vessel catches for this pop so far is...
-					// (indeed, this might not correpond to 'tot_catch_per_pop' when no biomass
+                    // (indeed, this might not correspond to 'tot_catch_per_pop' when no biomass
 					//   or when removals > than that is actually available)
 					double a_cumul_weight_this_pop_this_vessel=0;
                     for(unsigned int a_szgroup = 0; a_szgroup < catch_per_szgroup.size(); a_szgroup++)
@@ -1910,25 +1917,24 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 						a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup];
 					}
 
-					//unabled the following block if the canadian paper
-								 // because the first year is the calibration year.
-					if(tstep>8761)
+                    // the management is not applied the first year, because the first year is the calibration year.
+                    if(tstep>8761 && is_individual_vessel_quotas)
 					{
 						// MANAGEMENT MEASURE:
 						// THE TAC: check against first the individual quota, then the global tac...
 						// 1. get the individual vessel tac for this pop
-						int individual_tac_this_pop = this->get_individual_tac(pop);
+                        int remaining_individual_tac_this_pop = this->get_individual_tac(pop);
 						// 2. compare (AT THE VESSEL SCALE)
-						if(a_cumul_weight_this_pop_this_vessel>individual_tac_this_pop)
+                        if(a_cumul_weight_this_pop_this_vessel>remaining_individual_tac_this_pop)
 						{
-                            dout(cout  << this->get_name()  << ": individual quota is "<< individual_tac_this_pop << " for this pop: overshooted" << endl);
+                            dout(cout  << this->get_name()  << ": individual quota is "<< remaining_individual_tac_this_pop << " for this pop: overshooted" << endl);
 
 							// reaction = discard
-                            dout (cout << "...then this vessel (with quota " << individual_tac_this_pop << ") now discards all (" <<
+                            dout (cout << "...then this vessel (with quota " << remaining_individual_tac_this_pop << ") now discards all (" <<
                                 a_cumul_weight_this_pop_this_vessel <<") for this pop " << pop << "!!! " << endl);
 
 								 // force a zero quota on this pop. (and export discards)
-							this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, a_cumul_weight_this_pop_this_vessel);
+                            this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0, a_cumul_weight_this_pop_this_vessel);
 							// => if all quotas at 0 then the vessel will stay on quayside in should_i_go_fishing()...
 								 // what a waste !!...
 							a_cumul_weight_this_pop_this_vessel=0.0;
@@ -1936,8 +1942,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 						}
 						else
 						{
-                            dout(cout  << "individual quota this pop: ok" << endl);
-						}
+                            dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
+                            this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
+                                                              remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
+                        }
 					}
 					// 3. get the global tac for this pop
                     dout(cout  << "BEFORE " << populations.at(pop)->get_landings_so_far());

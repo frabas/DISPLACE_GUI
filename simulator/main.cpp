@@ -143,6 +143,7 @@ int a_port;
 int nrow_coord;
 int nrow_graph;
 double graph_res;
+int is_individual_vessel_quotas;
 int export_vmslike;
 ofstream vmslike;
 vector <int> implicit_pops;
@@ -356,7 +357,8 @@ int main(int argc, char* argv[])
 	string namefolderoutput="baseline";
 	string inputfolder="DISPLACE_input";
 	string namesimu="sim1";
-	int nbsteps=10;
+    string sms_folder="sms-op-multi";
+    int nbsteps=10;
     double dparam=10.0;
     use_gnuplot=false;
     create_a_path_shop=1;	 //used to speed-up the simus by calculating all the possible paths BEFORE the simu starts
@@ -574,6 +576,7 @@ int main(int argc, char* argv[])
     nrow_graph = scenario.nrow_graph;
     a_port = scenario.a_graph;
     graph_res = scenario.graph_res;
+    is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
 
 	stringstream graphnum;
 	graphnum << a_graph;
@@ -617,6 +620,7 @@ int main(int argc, char* argv[])
    outc(cout << "nrow_graph " << nrow_graph << endl);
    outc(cout << "a_port " << a_port << endl);
    outc(cout << "graph res in km " << graph_res << endl);
+   outc(cout << "graph res in km " << is_individual_vessel_quotas << endl);
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
 	// for which we do not have any info on the pops_N_at_szgroup because not assessed stock by ICES....
@@ -2099,7 +2103,7 @@ int main(int argc, char* argv[])
 		// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
 		for (unsigned int sp=0; sp<populations.size(); sp++)
 		{
-			vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 0.0);
+            vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 1, 0.0);
 		}
 
 		// check
@@ -2717,17 +2721,19 @@ int main(int argc, char* argv[])
 		vector<int> some_max_nb_ages (myints3, myints3 + sizeof(myints3) / sizeof(int) );
 
 								 // entry point for the SMS model
-        if(dyn_pop_sce.option(Options::use_SMS))
+        if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_single))
 		{
+
+           if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="sms-op-single";
 
 			if(tstep==0)
 			{
-				filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
+                filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_n.in";
 				SMS_N_in.open(filename.c_str());
 				write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 				SMS_N_in.close();
 
-				filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
+                filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_f.in";
 				SMS_F_in.open(filename.c_str());
 				SMS_F_in << "# data by quarter, area, species and age"<< endl;
 
@@ -3089,10 +3095,12 @@ int main(int argc, char* argv[])
 			}					 // end sp
 
 								 // entry point for the SMS model
-            if(dyn_pop_sce.option(Options::use_SMS))
+            if(dyn_pop_sce.option(Options::use_SMS)  || dyn_pop_sce.option(Options::use_SMS_single))
 			{
 
-				// check for cod
+                if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="op-sms-single";
+
+                // check for cod
 				vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
                outc(cout << "before" << endl);
                 for(unsigned int sz=0; sz<Ns.size(); sz++)
@@ -3139,7 +3147,7 @@ int main(int argc, char* argv[])
 						#ifdef WINDOWS
 						chdir ("C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh/");
 						#else
-						string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+namesimu;
+                        string aFolder = "/zhome/fe/8/43283/ibm_vessels/displace_hpc_sh/"+sms_folder+"/"+namesimu;
                         if (chdir(aFolder.c_str()) == -1) {
                           cerr << "chdir failed!!" << endl;
                           // note that we cannot use ~/ibm_vessels in chdir!!!
@@ -3157,7 +3165,7 @@ int main(int argc, char* argv[])
 						#ifdef WINDOWS
 						system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\op -maxfn 0 -nohess");
 						#else
-						string a_command = "~/ibm_vessels/displace_hpc_sh/"+namesimu+"/op -maxfn 0 -nohess";
+                        string a_command = "~/ibm_vessels/displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op -maxfn 0 -nohess";
                         system(a_command.c_str());						
 						#endif
                        outc(cout << "SMS done" << endl);
@@ -3177,7 +3185,7 @@ int main(int argc, char* argv[])
                         }
 					
 					// read .out SMS files and fill in
-					read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages, namesimu);
+                    read_SMS_OP_N_out_file(populations, stock_numbers, some_units, some_max_nb_ages, sms_folder, namesimu);
 					
 					// check
 					if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
@@ -3358,7 +3366,7 @@ int main(int argc, char* argv[])
 							// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
 							for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
 							{
-								vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 0.0);
+                                vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
 							}
                            outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
 							// to do next time oth_land will be applied: oth_land * TACy+1 / TACy
@@ -3388,17 +3396,18 @@ int main(int argc, char* argv[])
 						}
 
                         // store N initial for the next year and reinit Fs
-                        if(dyn_pop_sce.option(Options::use_SMS))
+                        if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_single))
 						{
+                            if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="sms-op-single";
 
 							ofstream SMS_N_in;
-							filename="../displace_hpc_sh/"+namesimu+"/op_n.in";
+                            filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_n.in";
 							SMS_N_in.open(filename.c_str(), ios::trunc);
 							write_SMS_OP_N_in_file(SMS_N_in, populations, stock_numbers, some_units, some_max_nb_ages);
 							SMS_N_in.close();
 
 							ofstream SMS_F_in;
-							filename="../displace_hpc_sh/"+namesimu+"/op_f.in";
+                            filename="../displace_hpc_sh/"+sms_folder+"/"+namesimu+"/op_f.in";
 							SMS_F_in.open(filename.c_str(), ios::trunc);
 
 						}
@@ -3441,9 +3450,7 @@ int main(int argc, char* argv[])
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
                 nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
-                if (export_vmslike) {
-                    nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep);
-                }
+                if(export_vmslike) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
 			}
 
 			//...and export the benthos biomasses on node

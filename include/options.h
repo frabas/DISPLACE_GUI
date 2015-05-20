@@ -93,6 +93,7 @@ enum Dyn_Alloc {
 enum Pop_Sce {
     pop_baseline,
     use_SMS,
+    use_SMS_single,
     baseline_slower_growth,
     lower_pop_productivity,
     use_SMS_slower_growth,

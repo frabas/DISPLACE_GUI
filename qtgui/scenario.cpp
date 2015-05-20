@@ -15,7 +15,8 @@ Scenario::Scenario()
       nrow_coord(0),
       nrow_graph(0),
       a_port(0),
-      graph_res(10)
+      graph_res(10),
+      is_individual_vessel_quotas(0)
 {
 }
 
@@ -115,6 +116,17 @@ void Scenario::setGraph_res(double value)
     graph_res = value;
 }
 
+double Scenario::getIs_individual_vessel_quotas() const
+{
+    return is_individual_vessel_quotas;
+}
+
+void Scenario::setIs_individual_vessel_quotas(double value)
+{
+    is_individual_vessel_quotas = value;
+}
+
+
 bool Scenario::save(QString path, QString modelname, QString outputname, QString *error)
 {
     QString realpath = path + "/simusspe_" + modelname +"/" + outputname + ".dat";
@@ -189,6 +201,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setDtChangeGround(QString::fromStdString(scenario.dt_change_ground));
     s.setDtStopFishing(QString::fromStdString(scenario.dt_stop_fishing));
     s.setDtChangePort(QString::fromStdString(scenario.dt_change_port));
+    s.setIs_individual_vessel_quotas(scenario.is_individual_vessel_quotas);
 
     return s;
 }

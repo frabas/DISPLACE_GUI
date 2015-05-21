@@ -276,6 +276,14 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_change_port=val;
             }
         }
+        if(counter==32)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.use_dtrees=(val != 0);
+            }
+        }
 
 	}
 	cout << "read config file...OK" << endl << flush;

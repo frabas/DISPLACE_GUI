@@ -16,6 +16,7 @@ struct Scenario {
     int a_port;
     double graph_res;
     bool is_individual_vessel_quotas;
+    bool use_dtrees;
 
     std::string dt_go_fishing;
     std::string dt_choose_ground;

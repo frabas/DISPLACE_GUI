@@ -73,6 +73,8 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->dt_enable_change_port->setChecked(!mScen.getDtChangePort().isEmpty());
     on_dt_enable_change_port_toggled(!mScen.getDtGoFishing().isEmpty());
     ui->dt_change_port->setText(mScen.getDtChangePort());
+
+    ui->useDTree->setChecked(mScen.isDtreesEnabled());
 }
 
 ScenarioDialog::~ScenarioDialog()
@@ -159,6 +161,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setDtChangeGround(ui->dt_change_ground->text());
     mScen.setDtStopFishing(ui->dt_stop_fishing->text());
     mScen.setDtChangePort(ui->dt_change_port->text());
+    mScen.setDtreesEnabled(ui->useDTree->isChecked());
 }
 
 void ScenarioDialog::on_rename_clicked()

@@ -37,6 +37,7 @@ private:
     int a_port;
     double graph_res;
     bool is_individual_vessel_quotas;
+    bool use_dtrees;
 
     QString mDtGoFishing;
     QString mDtChooseGround;
@@ -70,6 +71,8 @@ public:
     void setGraph_res(double value);
     bool getIs_individual_vessel_quotas() const;
     void setIs_individual_vessel_quotas(bool value);
+    bool isDtreesEnabled() const { return use_dtrees; }
+    void setDtreesEnabled(bool en) { use_dtrees = en; }
 
     bool save (QString path, QString modelname, QString outputname, QString *error);
 

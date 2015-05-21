@@ -164,6 +164,7 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << "# Stop Fishing DTree\n" << mDtStopFishing<< endl;
     stream << "# Change Port DTree\n" << mDtChangePort<< endl;
 
+    stream << "# Use Dtrees\n" << (use_dtrees ? "1" : "0") << endl;
     file.close();
     return true;
 }

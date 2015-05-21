@@ -45,6 +45,7 @@ extern OutputQueueManager mOutQueue;
 
 extern pthread_mutex_t glob_mutex;
 extern bool use_gui;
+extern bool use_dtrees;
 extern bool use_gnuplot;
 extern bool gui_move_vessels;
 extern vector<int> ve;
@@ -154,7 +155,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 external_states_relevant_for_going_fishing.insert(make_pair(" weather_is ",0));
                 //if(tstep % 24 ==7){ // frequency of the decision e.g. every 7 a.m
                 int go_fishing= vessels[ index_v ]->should_i_go_fishing(
-                    external_states_relevant_for_going_fishing, false);
+                    external_states_relevant_for_going_fishing, use_dtrees);
                 //}
                 // ***************implement a decision*******************************
                 if(go_fishing)

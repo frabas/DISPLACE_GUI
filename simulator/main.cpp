@@ -143,7 +143,7 @@ int a_port;
 int nrow_coord;
 int nrow_graph;
 double graph_res;
-int is_individual_vessel_quotas;
+bool is_individual_vessel_quotas;
 int export_vmslike;
 ofstream vmslike;
 vector <int> implicit_pops;

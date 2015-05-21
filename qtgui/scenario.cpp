@@ -116,12 +116,12 @@ void Scenario::setGraph_res(double value)
     graph_res = value;
 }
 
-double Scenario::getIs_individual_vessel_quotas() const
+bool Scenario::getIs_individual_vessel_quotas() const
 {
     return is_individual_vessel_quotas;
 }
 
-void Scenario::setIs_individual_vessel_quotas(double value)
+void Scenario::setIs_individual_vessel_quotas(bool value)
 {
     is_individual_vessel_quotas = value;
 }

@@ -51,10 +51,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Scenario file:</string>
+      <string>N Row Graph</string>
      </property>
     </widget>
    </item>
@@ -65,10 +65,10 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_5">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>N Row Graph</string>
+      <string>Scenario file:</string>
      </property>
     </widget>
    </item>
@@ -79,55 +79,24 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Individual quotas</string>
+      <string>Grid Resolution:</string>
      </property>
     </widget>
-   </item>
-   <item row="13" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="rename">
-       <property name="text">
-        <string>Rename...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancel">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="apply">
-       <property name="text">
-        <string>Save and Close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item row="1" column="0" colspan="3">
     <widget class="QGroupBox" name="group_dyn_alloc_sce">
      <property name="title">
       <string>Dyn Alloc Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QToolButton" name="graphBrowse">
+     <property name="text">
+      <string>...</string>
      </property>
     </widget>
    </item>
@@ -242,17 +211,10 @@
      </layout>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_7">
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Grid Resolution:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QToolButton" name="graphBrowse">
-     <property name="text">
-      <string>...</string>
+      <string>AGraph</string>
      </property>
     </widget>
    </item>
@@ -260,13 +222,6 @@
     <widget class="QSpinBox" name="nrowcoord">
      <property name="maximum">
       <number>1000000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>AGraph</string>
      </property>
     </widget>
    </item>
@@ -304,8 +259,59 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="1" colspan="2">
-    <widget class="QDoubleSpinBox" name="isvesselquotas"/>
+   <item row="13" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="rename">
+       <property name="text">
+        <string>Rename...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="apply">
+       <property name="text">
+        <string>Save and Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="9" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Options</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="individualQuotas">
+        <property name="text">
+         <string>Individual Quotas</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

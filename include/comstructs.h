@@ -15,7 +15,7 @@ struct Scenario {
     int nrow_graph;
     int a_port;
     double graph_res;
-    double is_individual_vessel_quotas;
+    bool is_individual_vessel_quotas;
 
     std::string dt_go_fishing;
     std::string dt_choose_ground;

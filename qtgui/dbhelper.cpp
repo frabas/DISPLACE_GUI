@@ -433,7 +433,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     setMetadata("sce::nrow_coord", QString::number(sce.getNrow_coord()));
     setMetadata("sce::aport", QString::number(sce.getA_port()));
     setMetadata("sce::graph_res", QString::number(sce.getGraph_res()));
-    setMetadata("sce::is_individual_vessel_quotas", QString::number(sce.getIs_individual_vessel_quotas()));
+    setMetadata("sce::is_individual_vessel_quotas", (sce.getIs_individual_vessel_quotas() ? "1" : "0"));
     setMetadata("sce::dyn_alloc_sce", sce.getDyn_alloc_sce().join(" "));
     setMetadata("sce::dyn_pop_sce", sce.getDyn_pop_sce().join(" "));
     setMetadata("sce::biol_sce", sce.getBiolsce());

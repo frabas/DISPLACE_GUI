@@ -189,7 +189,7 @@ bool DecisionTreeManager::readFile (std::string filename)
                     n->setChild(j, nodes[chld].node);
                     nodes[chld].node->setParent(n);
                 }
-                inf map = nodes[i].mapping[j];
+                int map = nodes[i].mapping[j];
                 if (map != -1) {
                     n->setMapping(j, map);
                 }

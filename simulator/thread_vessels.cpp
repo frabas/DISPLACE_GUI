@@ -133,6 +133,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // i.e. just arrived!
                 if(!inactive)
                 {
+                    vessels[index_v]->updateTripsStatistics(populations);
                     mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
 #if 0
                     std::ostringstream ss;

@@ -1,10 +1,11 @@
 TEMPLATE= lib
 TARGET=displacecommons
 DESTDIR=../
+CONFIG += c++11
 
 include ("$$top_srcdir/localconfig.pri")
 
-INCLUDEPATH +=../include/
+INCLUDEPATH +=../include/ .
 
 win32 {
     # For GetProcessMemoryInfo()
@@ -30,7 +31,10 @@ SOURCES= \
     statics.cpp \
     dtree/decisiontree.cpp \
     dtree/variables.cpp \
-    dtree/dtnode.cpp
+    dtree/dtnode.cpp \
+    dtree/decisiontreemanager.cpp \
+    dtree/stateevaluator.cpp \
+    dtree/externalstatemanager.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -57,7 +61,12 @@ HEADERS= \
     dtree/decisiontree.h \
     dtree/variables.h \
     dtree/dtnode.h \
-    dtree/dtnodeextra.h
+    dtree/dtnodeextra.h \
+    dtree/decisiontreemanager.h \
+    dtree/stateevaluator.h \
+    dtree/externalstatemanager.h \
+    dtree/commonstateevaluators.h \
+    ../include/comstructs.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

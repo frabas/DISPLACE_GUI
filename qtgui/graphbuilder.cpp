@@ -14,6 +14,7 @@ const double GraphBuilder::earthRadius = 6378137;   // ...
 
 GraphBuilder::GraphBuilder()
     : mType(Hex),
+      mRemoval(Inside),
       mStep(0),
       mLatMin(0), mLatMax(0),
       mLonMin(0), mLonMax(0),
@@ -81,7 +82,20 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                     layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-                    if (layer->GetNextFeature() == 0)
+                    bool mustRemove = false;
+                    switch (mRemoval) {
+                    case Inside:
+                        mustRemove = (layer->GetNextFeature() != 0);
+                        break;
+                    case Outside:
+                        mustRemove = !(layer->GetNextFeature() != 0);
+                        break;
+                    default:
+                        // Not handled, throw an exception
+                        throw std::runtime_error("Unknown removal method in GraphBuilder::buildGraph()");
+                    }
+
+                    if (mustRemove)
                         n.good = false;
 #if 0
                     OGRFeature *ftr;

@@ -31,11 +31,46 @@
 #include <helpers.h>
 #include <assert.h>
 
-//------------------------------------------------------------//
-//------------------------------------------------------------//
-// creator methods...
-//------------------------------------------------------------//
-//------------------------------------------------------------//
+#include <dtree/dtnode.h>
+#include <dtree/decisiontreemanager.h>
+#include <dtree/externalstatemanager.h>
+#include <dtree/commonstateevaluators.h>
+
+#include <boost/make_shared.hpp>
+
+#include <functional>
+#include <stdexcept>
+
+namespace dtree {
+namespace vessels {
+class AverageProfitStateEvaluator : public dtree::StateEvaluator {
+private:
+    Vessel *vessel;
+public:
+    AverageProfitStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
+    double evaluate() const {
+        if (vessel->getNumTrips() > 2)
+            return vessel->getAvgTripProfit();
+        else
+            return 0.0;
+    }
+};
+
+class AverageRevenuesStateEvaluator : public dtree::StateEvaluator {
+private:
+    Vessel *vessel;
+public:
+    AverageRevenuesStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
+    double evaluate() const {
+        if (vessel->getNumTrips() > 2)
+            return vessel->getAvgTripRevenues();
+        else
+            return 0.0;
+    }
+};
+
+}
+}
 
 Vessel::Vessel()
 {
@@ -48,8 +83,6 @@ Vessel::~Vessel()
 
 }
 
-
-//Vessel::Vessel(boost::shared_ptr<Node> p_location, int idx, string a_name)
 Vessel::Vessel(Node* p_location, int idx, string a_name)
 {
     pthread_mutex_init(&mutex,0);
@@ -176,11 +209,22 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	}
 
 	// length class
-	if(length<15) length_class = "u15m";
-	if(length>=15 && length <18) length_class = "15-18m";
-	if(length>=18 && length <24) length_class = "18-24m";
-	if(length>=24 && length <40) length_class = "24-40m";
-	if(length>=40) length_class = "o40m";
+    if(length<15) {
+        length_class = "u15m";
+        mLengthClassId = Under15;
+    } else if(length>=15 && length <18) {
+        length_class = "15-18m";
+        mLengthClassId = Between15and18;
+    } else if(length>=18 && length <24) {
+        length_class = "18-24m";
+        mLengthClassId = Between18and24;
+    } else if(length>=24 && length <40) {
+        length_class = "24-40m";
+        mLengthClassId = Between24and40;
+    } else if(length>=40) {
+        length_class = "o40m";
+        mLengthClassId = Over40;
+    }
 
 	//  set of decision trees by default (from the questionnaire)
 	// principle of the encodage:
@@ -189,6 +233,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	// the  trick: use iteratively split() on those strings
 	// and keep left or right branch at each step depending on the state values
 	// the reading_direction give the order for splitting.
+#if 0
 	decision_tree_for_go_fishing="0.0 last_trip_was 0.3 weather_is 0.5 fish_price_is 0.2 last_trip_was 0.8 remaining_quota_is 0.9";
 	decision_tree_for_choose_ground="0.3 high_potential_catch 0.4 last_trip_on_the_ground 0.99";
 	decision_tree_for_start_fishing="0.2 fish_detection_with_echosounder 0.4 arrived_on_the_ground 0.9 bycatch_risk 0.2 suitable_bottom_detection 0.8";
@@ -209,6 +254,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	reading_direction_stop_fishing.push_back(" catch_volume ");
 	reading_direction_choose_port.push_back(" distance_to_port ");
 	reading_direction_choose_port.push_back(" fish_price ");
+#endif
 
     dout(cout <<"vessel creator...OK" << endl);
 }
@@ -216,7 +262,28 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 void Vessel::init()
 {
+    lastTrip_revenues = lastTrip_profit = avgRevenues = avgProfit = 0;
+    numTrips = 0;
+
     nationality = nationalityFromName(get_name());
+
+    for (int i = 0; i < dtree::Variable::VarLast; ++i) {
+        mStateEvaluators.push_back(0);
+    }
+
+    // Add here the variables associations
+    mStateEvaluators[dtree::vesselSizeIs] = boost::make_shared<dtree::VariableReferenceStateEvaluator<LengthClass> >(mLengthClassId);
+    mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_revenues),
+                boost::make_shared<dtree::vessels::AverageRevenuesStateEvaluator>(this),
+                std::less<double>()));
+    mStateEvaluators[dtree::lastTripProfitIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
+                boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_profit),
+                boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(this),
+                std::less<double>()));
+
+    // External states
+//    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);
 }
 
 Vessel::Vessel(string name, Node* a_location)
@@ -582,79 +649,6 @@ const vector<vector<double> > &Vessel::get_gscale_cpue_nodes_species() const
 	return(gscale_cpue_nodes_species);
 
 }
-
-
-string Vessel::get_decision_tree_for_go_fishing () const
-{
-	return(decision_tree_for_go_fishing);
-}
-
-
-string Vessel::get_decision_tree_for_choose_ground () const
-{
-	return(decision_tree_for_choose_ground);
-}
-
-
-string Vessel::get_decision_tree_for_start_fishing () const
-{
-	return(decision_tree_for_start_fishing);
-}
-
-
-string Vessel::get_decision_tree_for_change_ground () const
-{
-	return(decision_tree_for_change_ground);
-}
-
-
-string Vessel::get_decision_tree_for_stop_fishing () const
-{
-	return(decision_tree_for_stop_fishing);
-}
-
-
-string Vessel::get_decision_tree_for_choose_port () const
-{
-	return(decision_tree_for_choose_port);
-}
-
-
-const vector <string> &Vessel::get_reading_direction_go_fishing () const
-{
-	return(reading_direction_go_fishing);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_choose_ground() const
-{
-	return(reading_direction_choose_ground);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_start_fishing() const
-{
-	return(reading_direction_start_fishing);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_change_ground() const
-{
-	return(reading_direction_change_ground);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_stop_fishing() const
-{
-	return(reading_direction_stop_fishing);
-}
-
-
-const vector<string> &Vessel::get_reading_direction_choose_port() const
-{
-	return(reading_direction_choose_port);
-}
-
 
 int Vessel::get_individual_tac (int sp) const
 {
@@ -1105,6 +1099,66 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
+void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
+{
+    double cumProfit = avgProfit * numTrips;
+    double cumRevenues = avgRevenues * numTrips;
+
+    if (numTrips > 0) {
+        avgRevenues += (cumRevenues + lastTrip_revenues) / numTrips;
+        avgProfit += (cumProfit + lastTrip_profit) / numTrips;
+    } else {
+        avgRevenues = avgProfit = 0.0;
+    }
+
+    lastTrip_revenues = 0.0;
+    lastTrip_profit = 0.0;
+    const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
+    for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    {
+        vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
+
+        for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+        {
+            int comcat_this_size =comcat_at_szgroup.at(sz);
+            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+        }
+    }
+
+    double fuelcost = get_cumfuelcons() * get_loc()->get_fuelprices(length_class);
+    lastTrip_profit = lastTrip_revenues - fuelcost;
+
+    ++numTrips;
+}
+
+/** \brief Starting from the dtree root, traverse it evaluating any node and the relative Variable.
+ * The return value from StateEvaluator::evaluate() is rounded and casted to int to define the next node
+ * */
+double Vessel::traverseDtree(dtree::DecisionTree *tree)
+{
+    boost::shared_ptr<dtree::Node> node = tree->root();
+    while (node.get()) {
+        if (node->getChildrenCount() == 0) // is a leaf node
+            return node->value();
+
+        double value = 0.0;
+        if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
+            value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate();
+        } else {
+            throw std::runtime_error("Unsupported variable evaulation requested.");
+        }
+
+        int bin = static_cast<int>(std::floor(value + 0.5));
+        if (bin < 0) bin = 0;
+        if (bin > node->getChildrenCount()-1)
+            bin = node->getChildrenCount()-1;
+        node = node->getChild(bin);
+    }
+
+    // if here, we may have a problem.
+    throw std::runtime_error("Invalid null node reached while traversing decision tree.");
+}
+
 string Vessel::nationalityFromName(const string &name)
 {
     return name.substr(0, 3);
@@ -1533,7 +1587,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 int    MLS_cat                      = m_mls_cat_per_pop[pop];
 
 				// compute available biomass via selectivity
-                for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
+                for(int szgroup=0; szgroup < (int)avail_biomass.size(); szgroup++)
 				{
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *sel_ogive[szgroup]; // available for landings only
@@ -1601,7 +1655,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // compute the landings vs. discard part
                     // in function of MLS and gear selectivity ogive and the N
                     vector<double> Ns_at_szgroup_pop_scaled = Ns_at_szgroup_pop; // init
-                    for(int sizgroup=0; sizgroup<Ns_at_szgroup_pop.size(); sizgroup++) {
+                    for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                  *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
                     }
@@ -1636,7 +1690,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
-                    for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
+                    for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
 					{
                         if(all_biomass[szgroup]!=0)
 						{
@@ -3433,6 +3487,8 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 
 int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_tree)
 {
+    UNUSED(external_states);
+
     lock();
 
 	// first of all, check if some remaining quotas
@@ -3473,15 +3529,12 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 								 // TO DO: retrieve from the state of the vessel
 			internal_states.insert(make_pair(" last_trip_was ",0));
 
-								 // get the genotype!
-			string tree = this->get_decision_tree_for_go_fishing();
-								 // get the order of the drivers, i.e. the nodes of the tree
-			vector <string> direction= this->get_reading_direction_go_fishing();
+            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+            double the_value = traverseDtree(tree.get());
 
-			double the_value = decode_the_tree(tree, direction, external_states, internal_states);
-			//cout << "the_value " << the_value << endl;
-			// draw a random number [0,1) and compare with the value
-								 //GO!
+        // draw a random number [0,1) and compare with the value
+
+            //GO!
             if(unif_rand()<the_value) {
                 unlock();
                 return(1);

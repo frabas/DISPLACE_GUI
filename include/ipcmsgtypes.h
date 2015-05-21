@@ -44,7 +44,7 @@ struct MoveVesselMessage {
 struct VesselLogbookMessage {
     unsigned int tstep, tstepdep;
     int rtbb, node, idx;
-    double cumstm, timeatsea,cumfcons,travdist, revenue, revenue_from_av_prices, fuelcost, gav,gav2;
+    double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, fuelcost, gav2;
     size_t popnum;
     double pop[];
 };

@@ -31,6 +31,28 @@ GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScen
     setHandlesChildEvents(false);
 }
 
+GraphNodeItem::~GraphNodeItem()
+{
+    if (mRect)
+        delete mRect;
+    /* no: mText is children of mRect
+    if (mText)
+        delete mText;*/
+    if (mArrow)
+        delete mArrow;
+
+    foreach (GraphNodeChildBoxItem *item, mChildrenBoxes) {
+        if (item)
+            delete item;
+    }
+
+    /* no mChildrenBoxText: is child of mChildrenBox
+    foreach(QGraphicsTextItem *item, mChildrenBoxText) {
+        if (item)
+            delete item;
+    }*/
+}
+
 int GraphNodeItem::getChildrenCount() const
 {
     return mChildrenItems.size();
@@ -46,31 +68,68 @@ void GraphNodeItem::setVariable(dtree::Variable var)
     Q_UNUSED(var);
 
     boost::shared_ptr<dtree::Node> node = getNode();
+
+    QVector<int> nummaps(node->getChildrenCount(), 0);
+
+    int mx = -1;
     int n = node->getChildrenCount();
+    for (int i = 0; i < n; ++i) {
+        int m = node->getMapping(i);
+        mx = std::max(mx, m);
+        ++nummaps[m];
+    }
 
-    if (n != mChildrenItems.size()) {
-        QVector<GraphNodeItem *> v = mChildrenItems;
-        mChildrenItems.clear();
-        foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
-            delete item;
+    n = mx+1;
+    QVector<GraphNodeItem *> v = mChildrenItems;
+    for (int i = n; i < v.size(); ++i) {
+        delete v[i];
+    }
 
-        mChildrenBoxes.clear();
-        for (int i = 0; i < n; ++i) {
-            if (i < v.size())
-                mChildrenItems.push_back(v[i]);
-            else
-                mChildrenItems.push_back(0);
+    mChildrenItems.clear();
+    foreach (GraphNodeChildBoxItem *item, mChildrenBoxes)
+        delete item;
+    mChildrenBoxes.clear();
 
-            QRectF r( -sDefWidth/2 + i*sDefWidth/n,
-                      sDefHeight/2 - sDefHeight/3,
-                      sDefWidth / n,
-                      sDefHeight/3);
+    mChildrenBoxText.clear(); // are children of mChilderBoxes.
 
-            GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(mapRectToScene(r), this, i);
-            mChildrenBoxes.append(newch);
+    int twidth = 0;
+    for (int i = 0; i < n; ++i) {
+        if (i < v.size())
+            mChildrenItems.push_back(v[i]);
+        else
+            mChildrenItems.push_back(0);
 
-            addToGroup(newch);
+        QRectF r( -sDefWidth/2 + twidth,
+                  sDefHeight/2 - sDefHeight/3,
+                  sDefWidth / n,
+                  sDefHeight/3);
+
+        r = mapRectToScene(r);
+        GraphNodeChildBoxItem *newch = new GraphNodeChildBoxItem(r, this, i);
+        mChildrenBoxes.append(newch);
+        QGraphicsTextItem *ti = new QGraphicsTextItem(newch);
+        ti->setPos(r.topLeft());
+        mChildrenBoxText.push_back(ti);
+
+        QString label;
+        if (nummaps[i] > 1) {
+            label = QString(QObject::tr("%1")).arg(i);
+        } else {
+            label = QString::fromLatin1(dtree::VariableNames::variableBin(var, i));
         }
+        ti->setPlainText(label);
+
+        addToGroup(newch);
+
+        r.setWidth(ti->boundingRect().width());
+        newch->setRect(r);
+        twidth += ti->boundingRect().width();
+    }
+
+    if (twidth > 0) {
+        QRectF r= mRect->rect();
+        r.setWidth(twidth);
+        mRect->setRect(r);
     }
 }
 
@@ -98,6 +157,16 @@ void GraphNodeItem::connectAsChild(GraphNodeItem *item, int idx)
     mChildrenId = idx;
 }
 
+void GraphNodeItem::unlinkParent()
+{
+    mParent = 0;
+}
+
+void GraphNodeItem::unlinkChild(int idx)
+{
+    mChildrenItems[idx] = 0;
+}
+
 void GraphNodeItem::moveArrow(QPointF pt)
 {
     if (mArrow == 0) {
@@ -111,9 +180,9 @@ void GraphNodeItem::moveArrow(QPointF pt)
     mArrow->setVisible(true);
 }
 
-bool GraphNodeItem::requiresChildrenHighlight() const
+bool GraphNodeItem::requiresChildrenHighlight(int childid) const
 {
-    return mScene->requiresChildrenHighlight();
+    return mScene->requiresChildrenHighlight() && mChildrenItems[childid] == 0;
 }
 
 void GraphNodeItem::childHoverEntered(int id)
@@ -158,7 +227,7 @@ void GraphNodeItem::update()
 
     double r = mText->textWidth();
     QRectF p = mRect->rect();
-    mText->setPos(-(p.width() - r) / 2, p.top());
+    mText->setPos(p.left(), p.top());
 }
 
 void GraphNodeItem::createArrow()
@@ -203,7 +272,7 @@ GraphNodeChildBoxItem::GraphNodeChildBoxItem(QRectF r, GraphNodeItem *parent, in
 
 void GraphNodeChildBoxItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (mParent->requiresChildrenHighlight()) {
+    if (mParent->requiresChildrenHighlight(mId)) {
         setBrush(mHighlightBrush);
         mParent->childHoverEntered(mId);
     }

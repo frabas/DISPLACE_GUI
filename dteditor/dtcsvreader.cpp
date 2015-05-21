@@ -8,16 +8,16 @@
 #include <QQueue>
 #include <QDebug>
 
-const int DtCsvReader::VERSION = 2;
+const int DtCsvReader::VERSION = 6;
 
 DtCsvReader::DtCsvReader()
 {
 }
 
-bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> *res_tree, DtGraphicsScene *scene)
+bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
 throw (std::invalid_argument)
 {
-    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
+//    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
 
     QString line;
 
@@ -27,23 +27,29 @@ throw (std::invalid_argument)
         int parent;
         QPointF position;
         QVector<int> children;
+        QVector<int> mapping;
     };
 
     QVector<Data> data;
     bool ok;
     int version = 0;
+    dtree::DecisionTreeManager::TreeType treeType = dtree::DecisionTreeManager::InvalidTreeType;
 
     while (!stream.atEnd()) {
         line = stream.readLine();
 
         if (line.startsWith('#')) {
             QStringList fields = line.split(' ');
-            if (fields[0] == "#DTreeVersion:") {
+            if (fields[0] == "#TreeVersion:") {
                 version = fields[1].toInt(&ok);
                 if (!ok)
                     throw std::invalid_argument("Invalid version token");
                 if (version > VERSION)
                     throw std::invalid_argument("Unsupported version");
+            } else if (fields[0] == "#TreeType:") {
+                treeType = dtree::DecisionTreeManager::treeTypeFromCode(fields[1].toStdString());
+                if (treeType == dtree::DecisionTreeManager::InvalidTreeType)
+                    throw std::invalid_argument("Unsupported #TreeType token");
             }
             continue;
         }
@@ -70,16 +76,24 @@ throw (std::invalid_argument)
 
         int nc = fields[4].toInt(&ok);
         if (!ok) throw std::invalid_argument("invalid field");
-        while (data[idx].children.size() < nc)
+        while (data[idx].children.size() < nc) {
             data[idx].children.push_back(-1);
+            data[idx].mapping.push_back(-1);
+        }
 
+        bool ok2;
         int fldnum = 5;
         for (int i = 0; i < nc; ++i) {
-            int cidx = fields[5+i].toInt(&ok);
+            int cidx = fields[fldnum].toInt(&ok);
             ++fldnum;
-            if (!ok) continue;
+            int mapn = fields[fldnum].toInt(&ok2);
+            ++fldnum;
+            if (!ok && !ok2) continue;
 
-            data[idx].children[i] = cidx;
+            if (ok)
+               data[idx].children[i] = cidx;
+            if (ok2)
+            data[idx].mapping[i] = mapn;
 
             while (data.size() <= cidx)
                 data.push_back(Data());
@@ -110,11 +124,13 @@ throw (std::invalid_argument)
                 tree->connect(data[chl].node, d.node, i);
                 d.item->connectAsParent(data[chl].item, i);
             }
+            d.node->setMapping(i,d.mapping[i]);
         }
         d.item->setPos(d.position);
     }
 
-    *res_tree = tree;
+    tree->setType(treeType);
+//    *res_tree = tree;
 
     QQueue<GraphNodeItem *> q;
     q.push_back(scene->root());

@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
-INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/
+INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")
@@ -245,7 +245,8 @@ OTHER_FILES += \
     ../docs/database.txt \
     ../docs/dbstruct.sh \
     palettes/pop_colors.p2c \
-    ../docs/input_fileformats.txt
+    ../docs/input_fileformats.txt \
+    ../Doxyfile
 
 TRANSLATIONS += \
     translations/displace_it.ts \

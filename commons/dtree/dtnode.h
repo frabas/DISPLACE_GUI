@@ -1,5 +1,5 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef DTNODE_H
+#define DTNODE_H
 
 #include <dtree/variables.h>
 
@@ -12,14 +12,27 @@ namespace dtree {
 class DecisionTree;
 class NodeExtra;
 
+/** \brief a decision tree node.
+ *
+ */
 class Node
 {
 public:
     explicit Node(boost::shared_ptr<DecisionTree> node);
 
     int getChildrenCount() const;
+
+    /** \brief Returns the children pointer indexed by the argument
+     * If the children has been remapped using setMapping(), it returns the remapped pointer.
+     */
     boost::shared_ptr<Node> getChild(int idx);
+
+    /** \brief Returns the children pointer indexed by the argument, ignoring any mapping. */
+    boost::shared_ptr<Node> getUnmappedChild(int idx);
     void setChild(int idx, boost::shared_ptr<Node> child);
+
+    void setMapping (int idx, int remapped);
+    int getMapping(int idx) const;
 
     void setExtra(boost::shared_ptr<NodeExtra> extra);
     boost::shared_ptr<NodeExtra> extra() const;
@@ -37,6 +50,7 @@ private:
     boost::weak_ptr<DecisionTree> mTree;
     boost::weak_ptr<Node> mParent;
     std::vector<boost::shared_ptr<Node> > mNodes;
+    std::vector<int> mGroups;
     boost::shared_ptr<NodeExtra> mExtra;
 
     Variable mVariable;

@@ -196,6 +196,9 @@ MainWindow::MainWindow(QWidget *parent) :
     int idx = newEditorModel("new model");
     ui->modelSelector->setCurrentIndex(idx);
     updateModelList();
+
+    /* hide unneeded menu items */
+    ui->actionLoadStockNames->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -1290,6 +1293,12 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setType(dlg.getType());
         gb->setDistance(dlg.step() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+
+        if (dlg.isInsideRemoval()) {
+            gb->setShapefileRemoval(GraphBuilder::Inside);
+        } else if (dlg.isOutsideRemoval()) {
+            gb->setShapefileRemoval(GraphBuilder::Outside);
+        }
 
         QString s = dlg.getSelectedShapefile();
         if (!s.isEmpty())

@@ -7,20 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>404</width>
-    <height>300</height>
+    <height>344</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Create Graph</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Features Shapefile</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="2">
     <widget class="QDoubleSpinBox" name="long2">
      <property name="decimals">
@@ -41,7 +34,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="2" colspan="3">
+   <item row="7" column="2" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="cmdCancel">
@@ -96,6 +89,13 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Lat:</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="4">
     <widget class="QDoubleSpinBox" name="lat1">
      <property name="decimals">
@@ -106,13 +106,6 @@
      </property>
      <property name="maximum">
       <double>90.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Lat:</string>
      </property>
     </widget>
    </item>
@@ -136,7 +129,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="3">
+   <item row="6" column="3">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -148,9 +141,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="4" column="2" colspan="3">
-    <widget class="QComboBox" name="shapefile"/>
    </item>
    <item row="3" column="0" colspan="5">
     <widget class="QGroupBox" name="groupBox">
@@ -204,6 +194,42 @@
      </property>
     </widget>
    </item>
+   <item row="5" column="0" colspan="5">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Nodes removal</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Features Shapefile</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="shapefile"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="removeInside">
+        <property name="text">
+         <string>Inside</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QRadioButton" name="removeOutside">
+        <property name="text">
+         <string>Outside</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
  <tabstops>
@@ -213,7 +239,6 @@
   <tabstop>lat2</tabstop>
   <tabstop>distance</tabstop>
   <tabstop>hex</tabstop>
-  <tabstop>shapefile</tabstop>
   <tabstop>cmdCancel</tabstop>
   <tabstop>cmdOk</tabstop>
  </tabstops>

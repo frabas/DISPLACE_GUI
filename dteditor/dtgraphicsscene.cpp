@@ -2,6 +2,8 @@
 #include <dtree/decisiontree.h>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QQueue>
+#include <QKeyEvent>
 #include <graphnodeitem.h>
 #include <QDebug>
 
@@ -14,6 +16,18 @@ DtGraphicsScene::DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QO
     mHoveringNode(0),
     mHoveringNodeChild(-1)
 {
+}
+
+void DtGraphicsScene::clear()
+{
+    mRoot = 0;
+    mAddingNode.reset();
+    if (mAddingItem) delete mAddingItem;
+    mAddingItem = 0;
+    mHoveringNode = 0;
+    mHoveringNodeChild = -1;
+
+    QGraphicsScene::clear();
 }
 
 bool DtGraphicsScene::requiresChildrenHighlight() const
@@ -37,6 +51,45 @@ void DtGraphicsScene::addItemAsRoot(GraphNodeItem *item)
 {
     addItem(item);
     mRoot = item;
+}
+
+void DtGraphicsScene::removeNodes(QList<GraphNodeItem *> items)
+{
+    // Zero: collect unique objects
+    QQueue<GraphNodeItem *> queue;
+    queue.append(items);
+
+    QSet<GraphNodeItem *> nodes_to_remove;
+    while (!queue.empty()) {
+        GraphNodeItem *node = queue.front();
+        queue.pop_front();
+
+        nodes_to_remove.insert(node);
+        for (int i = 0; i < node->getChildrenCount(); ++i) {
+            GraphNodeItem *ch = node->getChild(i);
+            if (ch) {
+                queue.push_back(ch);
+            }
+        }
+    }
+
+    foreach (GraphNodeItem *node, nodes_to_remove) {
+        // First, cut the parent
+        if (node->getParent()) {
+            node->getParent()->unlinkChild(node->getChildrenId());
+            node->unlinkParent();
+        } else {
+            mRoot = 0;
+        }
+        // Second, cut the children
+        for (int i = 0; i < node->getChildrenCount(); ++i) {
+            node->unlinkChild(i);
+        }
+    }
+
+    foreach (GraphNodeItem *node, nodes_to_remove) {
+        delete node;
+    }
 }
 
 #if 0
@@ -71,16 +124,18 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     case AddNode:
         if (!mTree->isEmpty()) {
             addItem(mAddingItem);
+            mAddingItem->setPos(event->scenePos());
             mMode = AddNodeConnect;
         } else {
             addItemAsRoot(mAddingItem);
+            mAddingItem->setPos(event->scenePos());
             mRoot = mAddingItem;
             mTree->setRoot(mAddingNode);
             emit nodeAdded(mAddingItem);
             mAddingNode.reset();
+            mAddingItem = 0;
             endMode();
         }
-        mAddingItem->setPos(event->scenePos());
         return;
     case AddNodeConnect:
         // connect the nodes
@@ -91,6 +146,8 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             mAddingItem->update();
             emit nodeAdded(mAddingItem);
             mAddingNode.reset();
+            mAddingItem = 0;
+
             endMode();
             return;
         }
@@ -98,6 +155,22 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void DtGraphicsScene::keyPressEvent(QKeyEvent *keyEvent)
+{
+    switch (keyEvent->key()) {
+    case Qt::Key_Escape:
+        if (mMode == AddNode || mMode == AddNodeConnect) {
+            // Abort add nodes
+            mAddingNode.reset();
+            if (mAddingItem)
+                delete mAddingItem;
+            mAddingItem = 0;
+            endMode();
+        }
+        break;
+    }
 }
 
 void DtGraphicsScene::startAddNode(boost::shared_ptr<dtree::Node> node)

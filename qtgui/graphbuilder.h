@@ -37,6 +37,7 @@ public:
     };
 
     enum Type { Hex, Quad };
+    enum Removal { Inside, Outside };
 
     class Node {
     public:
@@ -55,6 +56,10 @@ public:
 
     void setType (Type type) {
         mType = type;
+    }
+
+    void setShapefileRemoval (Removal rem) {
+        mRemoval = rem;
     }
 
     void setDistance (double distance) {
@@ -78,6 +83,7 @@ private:
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
+    Removal mRemoval;
     double mStep;
     double mLatMin, mLatMax, mLonMin, mLonMax;
 

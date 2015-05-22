@@ -1917,7 +1917,7 @@ void MainWindow::on_actionMergeWeights_triggered()
         return;
 
     MergeDataDialog dlg(this);
-    dlg.setWindowTitle(tr("Merge Weights file"));
+    dlg.setWindowTitle(tr("Merge geodata file to graph nodes at sea (SI_LATI, SI_LONG input fields required)"));
     if (dlg.exec()) {
         displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(displace::workers::MergerStrategy::Weights);
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
@@ -1940,7 +1940,7 @@ void MainWindow::on_actionMergePings_triggered()
         return;
 
     MergeDataDialog dlg(this);
-    dlg.setWindowTitle(tr("Merge Ping file"));
+    dlg.setWindowTitle(tr("Merge geodata file to harbour nodes (SI_LATI, SI_LONG input fields required)"));
     if (dlg.exec()) {
         displace::workers::MergerStrategy *strategy = new displace::workers::MergerStrategy(displace::workers::MergerStrategy::Ping);
         displace::workers::DataMerger *merger = new displace::workers::DataMerger(strategy, currentModel.get());
@@ -1964,7 +1964,7 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     dlg.setOutputRequiresTemplate(2);
     dlg.setDefaultOutputToInput(false);
     dlg.setSizeGroupCount(currentModel->getSzGrupsCount());
-    dlg.setWindowTitle(tr("Calculate Population distribution"));
+    dlg.setWindowTitle(tr("Calculate population distribution on at-sea graph nodes"));
     if (dlg.exec()) {
         displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());
 

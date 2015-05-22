@@ -43,15 +43,22 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
         // Other data
         QPointF pos = gnode->pos();
         stream << pos.x() << "," << pos.y() << ",";
-        stream << gnode->getChildrenCount() << ",";
+        stream << node->getChildrenCount() << ",";
 
-        for (int i = 0; i < gnode->getChildrenCount(); ++i) {
-            GraphNodeItem *chld = gnode->getChild(i);
-            if (chld) {
-                ++nid;
-                stream << nid;
-                queue.push_back(chld);
-                queueid.push_back(nid);
+        std::set<int> set;
+        for (int i = 0; i < node->getChildrenCount(); ++i) {
+            int mapnode = node->getMapping(i);
+
+            std::set<int>::iterator it = set.find(mapnode);
+            if (it == set.end()) {
+                GraphNodeItem *chld = gnode->getChild(mapnode);
+                if (chld) {
+                    ++nid;
+                    stream << nid;
+                    queue.push_back(chld);
+                    queueid.push_back(nid);
+                }
+                set.insert(mapnode);
             }
             stream << "," << gnode->getNode()->getMapping(i) << ",";
         }

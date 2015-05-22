@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -1046,12 +1046,12 @@
   </action>
   <action name="actionMergeWeights">
    <property name="text">
-    <string>Merge Weights on fishing points...</string>
+    <string>Merge Geodata to At-Sea Nodes...</string>
    </property>
   </action>
   <action name="actionMergePings">
    <property name="text">
-    <string>Merge Pings on Harbours...</string>
+    <string>Merge Geodata to Harbour Nodes...</string>
    </property>
   </action>
   <action name="actionCalcPopDistribution">
@@ -1096,7 +1096,7 @@
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -1119,7 +1119,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../dteditor/dteditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

@@ -86,14 +86,23 @@ throw (std::invalid_argument)
         for (int i = 0; i < nc; ++i) {
             int cidx = fields[fldnum].toInt(&ok);
             ++fldnum;
-            int mapn = fields[fldnum].toInt(&ok2);
-            ++fldnum;
+
+            ok2 = true;
+            int mapn = -1;
+            if (version > 5) { // backward compatibility
+                mapn = fields[fldnum].toInt(&ok2);
+                ++fldnum;
+            }
             if (!ok && !ok2) continue;
 
             if (ok)
                data[idx].children[i] = cidx;
-            if (ok2)
-            data[idx].mapping[i] = mapn;
+            if (ok2) {
+                if (mapn != -1)
+                    data[idx].mapping[i] = mapn;
+                else
+                    data[idx].mapping[i] = i;
+            }
 
             while (data.size() <= cidx)
                 data.push_back(Data());
@@ -121,6 +130,10 @@ throw (std::invalid_argument)
         for(int i = 0; i < d.children.size(); ++i) {
             int chl = d.children[i];
             if (chl != -1) { // children is valid
+                if (data[chl].node == nullptr || d.node == nullptr) {
+                    throw std::invalid_argument("Malformed file, some node in the tree is referred but missing");
+                }
+
                 tree->connect(data[chl].node, d.node, i);
                 d.item->connectAsParent(data[chl].item, i);
             }

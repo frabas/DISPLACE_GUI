@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 DtEditorWindow::DtEditorWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -244,6 +245,8 @@ void DtEditorWindow::evt_scene_selection_changed()
                 if (extra.get() != 0) {
 
                 }
+            } else {
+                qWarning() << "Selected graph " << item << " has null node!";
             }
         }
     }

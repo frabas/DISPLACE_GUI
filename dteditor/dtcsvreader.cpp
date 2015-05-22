@@ -88,7 +88,7 @@ throw (std::invalid_argument)
             ++fldnum;
 
             ok2 = true;
-            int mapn = -1;
+            int mapn = i;
             if (version > 5) { // backward compatibility
                 mapn = fields[fldnum].toInt(&ok2);
                 ++fldnum;
@@ -98,15 +98,14 @@ throw (std::invalid_argument)
             if (ok)
                data[idx].children[i] = cidx;
             if (ok2) {
-                if (mapn != -1)
-                    data[idx].mapping[i] = mapn;
-                else
-                    data[idx].mapping[i] = i;
+                data[idx].mapping[i] = mapn;
             }
 
             while (data.size() <= cidx)
                 data.push_back(Data());
-            data[cidx].parent = idx;
+
+            if (ok)
+                data[cidx].parent = idx;
         }
 
         double v = fields[fldnum++].toDouble(&ok);
@@ -119,6 +118,8 @@ throw (std::invalid_argument)
 
         Q_ASSERT(d.node.get());
         Q_ASSERT(d.item);
+        Q_ASSERT(d.item->getNode());
+
         if (tree->isEmpty()) {
             tree->setRoot(d.node);
             scene->addItemAsRoot(d.item);
@@ -134,16 +135,17 @@ throw (std::invalid_argument)
                     throw std::invalid_argument("Malformed file, some node in the tree is referred but missing");
                 }
 
-                tree->connect(data[chl].node, d.node, i);
-                d.item->connectAsParent(data[chl].item, i);
+                tree->connect(data[chl].node, d.node, d.mapping[i]);
+                d.item->connectAsParent(data[chl].item, d.mapping[i]);
             }
             d.node->setMapping(i,d.mapping[i]);
         }
         d.item->setPos(d.position);
+
+        d.item->setVariable(d.node->variable());
     }
 
     tree->setType(treeType);
-//    *res_tree = tree;
 
     QQueue<GraphNodeItem *> q;
     q.push_back(scene->root());
@@ -152,7 +154,9 @@ throw (std::invalid_argument)
         q.pop_front();
         if (item) {
             for (int i = 0; i < item->getChildrenCount(); ++i) {
-                q.push_back(item->getChild(i));
+                GraphNodeItem *n = item->getChild(i);
+                if (n)
+                    q.push_back(n);
             }
             item->update();
         }

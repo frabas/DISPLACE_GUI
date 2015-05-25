@@ -43,11 +43,9 @@ public:
     double maxLat() const;
     GraphBuilder::Type getType() const;
 
-    bool isInsideRemoval() const;
-    bool isOutsideRemoval() const;
-
     void setShapefileList(QStringList list);
-    QString getSelectedShapefile() const ;
+    QString getIncludingSelectedShapefile() const ;
+    QString getExcludingSelectedShapefile() const ;
 
 public slots:
     void done(int) override;

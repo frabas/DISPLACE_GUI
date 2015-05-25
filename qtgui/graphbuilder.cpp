@@ -14,11 +14,10 @@ const double GraphBuilder::earthRadius = 6378137;   // ...
 
 GraphBuilder::GraphBuilder()
     : mType(Hex),
-      mRemoval(Inside),
       mStep(0),
       mLatMin(0), mLatMax(0),
       mLonMin(0), mLonMax(0),
-      mShapefile(),
+      mShapefileInc(), mShapefileExc(),
       mFeedback(0)
 {
 }
@@ -31,9 +30,14 @@ void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double
     mLonMax = std::max(lonMin, lonMax) * M_PI / 180.0;
 }
 
-void GraphBuilder::setShapefile(std::shared_ptr<OGRDataSource> src)
+void GraphBuilder::setIncludingShapefile(std::shared_ptr<OGRDataSource> src)
 {
-    mShapefile = src;
+    mShapefileInc = src;
+}
+
+void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
+{
+    mShapefileExc = src;
 }
 
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
@@ -75,39 +79,42 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
             n.good = true;
 
-            if (mShapefile.get()) {
-                OGRPoint point (n.point.x(), n.point.y());
-                for (int lr = 0; lr < mShapefile->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = mShapefile->GetLayer(lr);
+            bool removePoint = false;
+
+            OGRPoint point (n.point.x(), n.point.y());
+
+            // Check for shapefile inclusion
+            if (mShapefileInc.get()) {
+                removePoint = true;     // Set remove by default
+
+                for (int lr = 0; lr < mShapefileInc->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileInc->GetLayer(lr);
                     layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-                    bool mustRemove = false;
-                    switch (mRemoval) {
-                    case Inside:
-                        mustRemove = (layer->GetNextFeature() != 0);
+                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                        removePoint = false;
                         break;
-                    case Outside:
-                        mustRemove = !(layer->GetNextFeature() != 0);
-                        break;
-                    default:
-                        // Not handled, throw an exception
-                        throw std::runtime_error("Unknown removal method in GraphBuilder::buildGraph()");
                     }
-
-                    if (mustRemove)
-                        n.good = false;
-#if 0
-                    OGRFeature *ftr;
-                    while (( ftr = layer->GetNextFeature()) != 0) {
-                        if (point.Within(ftr->GetGeometryRef())) {
-                            n.good = false;
-                            break;
-                        }
-                    }
-#endif
                 }
             }
+
+            // Check for point exclusion
+            if (mShapefileExc.get()) {
+                for (int lr = 0; lr < mShapefileExc->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileExc->GetLayer(lr);
+                    layer->ResetReading();
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+
+                    if (layer->GetNextFeature() != 0) {     // found: exclude this point
+                        removePoint = true;
+                        break;
+                    }
+                }
+            }
+
+            if (removePoint)
+                n.good = false;
 
             res.append(n);
             idx0.push_back(res.size()-1);

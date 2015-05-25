@@ -197,33 +197,26 @@
    <item row="5" column="0" colspan="5">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Nodes removal</string>
+      <string>Shapefiles</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
+       <widget class="QComboBox" name="shapefileIncluding"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="shapefileExcluding"/>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Features Shapefile</string>
+         <string>Inclusion shapefile</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="shapefile"/>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="removeInside">
+       <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Inside</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QRadioButton" name="removeOutside">
-        <property name="text">
-         <string>Outside</string>
+         <string>Exclusion Shapefile</string>
         </property>
        </widget>
       </item>

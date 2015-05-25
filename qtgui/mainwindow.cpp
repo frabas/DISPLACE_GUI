@@ -1294,15 +1294,13 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setDistance(dlg.step() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
-        if (dlg.isInsideRemoval()) {
-            gb->setShapefileRemoval(GraphBuilder::Inside);
-        } else if (dlg.isOutsideRemoval()) {
-            gb->setShapefileRemoval(GraphBuilder::Outside);
-        }
-
-        QString s = dlg.getSelectedShapefile();
+        QString s = dlg.getIncludingSelectedShapefile();
         if (!s.isEmpty())
-            gb->setShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+            gb->setIncludingShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+
+        s = dlg.getExcludingSelectedShapefile();
+        if (!s.isEmpty())
+            gb->setExcludingShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
 
         WaitDialog *wdlg = new WaitDialog(this);
         wdlg->setText(tr("Wait while graph is created..."));

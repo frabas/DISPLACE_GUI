@@ -37,7 +37,6 @@ public:
     };
 
     enum Type { Hex, Quad };
-    enum Removal { Inside, Outside };
 
     class Node {
     public:
@@ -58,10 +57,6 @@ public:
         mType = type;
     }
 
-    void setShapefileRemoval (Removal rem) {
-        mRemoval = rem;
-    }
-
     void setDistance (double distance) {
         mStep = distance;
     }
@@ -71,7 +66,8 @@ public:
     }
 
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
-    void setShapefile (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile (std::shared_ptr<OGRDataSource> src);
+    void setExcludingShapefile (std::shared_ptr<OGRDataSource> src);
 
     QList<Node> buildGraph();
 
@@ -83,11 +79,11 @@ private:
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
-    Removal mRemoval;
     double mStep;
     double mLatMin, mLatMax, mLonMin, mLonMax;
 
-    std::shared_ptr<OGRDataSource> mShapefile;
+    std::shared_ptr<OGRDataSource> mShapefileInc;
+    std::shared_ptr<OGRDataSource> mShapefileExc;
 
     Feedback *mFeedback;
 };

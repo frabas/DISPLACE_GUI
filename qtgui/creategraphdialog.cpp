@@ -48,24 +48,20 @@ GraphBuilder::Type CreateGraphDialog::getType() const
         return GraphBuilder::Hex;
 }
 
-bool CreateGraphDialog::isInsideRemoval() const
-{
-    return ui->removeInside->isChecked();
-}
-
-bool CreateGraphDialog::isOutsideRemoval() const
-{
-    return ui->removeOutside->isChecked();
-}
-
 void CreateGraphDialog::setShapefileList(QStringList list)
 {
-    ui->shapefile->addItems(list);
+    ui->shapefileIncluding->addItems(list);
+    ui->shapefileExcluding->addItems(list);
 }
 
-QString CreateGraphDialog::getSelectedShapefile() const
+QString CreateGraphDialog::getIncludingSelectedShapefile() const
 {
-    return ui->shapefile->currentText();
+    return ui->shapefileIncluding->currentText();
+}
+
+QString CreateGraphDialog::getExcludingSelectedShapefile() const
+{
+    return ui->shapefileExcluding->currentText();
 }
 
 void CreateGraphDialog::done(int r)

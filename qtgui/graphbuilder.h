@@ -85,6 +85,7 @@ public:
 
 private:
     void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
+    void createAdiacencies2(QList<GraphBuilder::Node> &node);
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;

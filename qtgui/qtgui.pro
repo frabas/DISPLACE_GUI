@@ -39,8 +39,9 @@ win32 {
 DEFINES += HAVE_GEOGRAPHICLIB
 LIBS += -lGeographic
 
+QMAKE_CXXFLAGS += -frounding-math
 DEFINES += PROFILE
-LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
+LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB -lCGAL -lgmp
 
 
 # Add GDAL include path.

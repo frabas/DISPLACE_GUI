@@ -57,8 +57,16 @@ public:
         mType = type;
     }
 
-    void setDistance (double distance) {
+    void setDefaultDistance (double distance) {
         mStep = distance;
+    }
+
+    void setDistance1 (double distance) {
+        mStep1 = distance;
+    }
+
+    void setDistance2 (double distance) {
+        mStep2 = distance;
     }
 
     void setFeedback (Feedback *feedback) {
@@ -66,7 +74,8 @@ public:
     }
 
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
-    void setIncludingShapefile (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile1 (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile2 (std::shared_ptr<OGRDataSource> src);
     void setExcludingShapefile (std::shared_ptr<OGRDataSource> src);
 
     QList<Node> buildGraph();
@@ -79,10 +88,11 @@ private:
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
-    double mStep;
+    double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
 
-    std::shared_ptr<OGRDataSource> mShapefileInc;
+    std::shared_ptr<OGRDataSource> mShapefileInc1;
+    std::shared_ptr<OGRDataSource> mShapefileInc2;
     std::shared_ptr<OGRDataSource> mShapefileExc;
 
     Feedback *mFeedback;

@@ -36,7 +36,9 @@ public:
     explicit CreateGraphDialog(QWidget *parent = 0);
     ~CreateGraphDialog();
 
-    double step() const;
+    double defaultStep() const;
+    double step1() const;
+    double step2() const;
     double minLon() const;
     double minLat() const;
     double maxLon() const;
@@ -44,7 +46,8 @@ public:
     GraphBuilder::Type getType() const;
 
     void setShapefileList(QStringList list);
-    QString getIncludingSelectedShapefile() const ;
+    QString getIncludingSelectedShapefile1() const ;
+    QString getIncludingSelectedShapefile2() const ;
     QString getExcludingSelectedShapefile() const ;
 
 public slots:

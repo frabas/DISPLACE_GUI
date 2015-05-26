@@ -14,10 +14,10 @@ const double GraphBuilder::earthRadius = 6378137;   // ...
 
 GraphBuilder::GraphBuilder()
     : mType(Hex),
-      mStep(0),
+      mStep(0), mStep1(0), mStep2(0),
       mLatMin(0), mLatMax(0),
       mLonMin(0), mLonMax(0),
-      mShapefileInc(), mShapefileExc(),
+      mShapefileInc1(), mShapefileInc2(), mShapefileExc(),
       mFeedback(0)
 {
 }
@@ -30,9 +30,14 @@ void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double
     mLonMax = std::max(lonMin, lonMax) * M_PI / 180.0;
 }
 
-void GraphBuilder::setIncludingShapefile(std::shared_ptr<OGRDataSource> src)
+void GraphBuilder::setIncludingShapefile1(std::shared_ptr<OGRDataSource> src)
 {
-    mShapefileInc = src;
+    mShapefileInc1 = src;
+}
+
+void GraphBuilder::setIncludingShapefile2(std::shared_ptr<OGRDataSource> src)
+{
+    mShapefileInc2 = src;
 }
 
 void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
@@ -69,9 +74,19 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
     }
 
+    bool removePoint;
     double flon = mLonMin;
+    double xs = 0.0, ys = 0.0;
     int nr = 0, nc = 0;
+    int xi, yi;
+
+    int s = std::floor(mStep / 100.0);
+    int s1 = std::floor(mStep1 / 100.0);
+    int s2 = std::floor(mStep2 / 100.0);
+
+    ys = 0.0;
     while (lat <= mLatMax) {
+        xs = 0.0;
         nc = 0;
         flon = p1.x();
         while (p1.x() <= mLonMax) {
@@ -79,21 +94,32 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
             n.good = true;
 
-            bool removePoint = false;
+            int zone = 0;
 
             OGRPoint point (n.point.x(), n.point.y());
 
             // Check for shapefile inclusion
-            if (mShapefileInc.get()) {
-                removePoint = true;     // Set remove by default
-
-                for (int lr = 0; lr < mShapefileInc->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = mShapefileInc->GetLayer(lr);
+            if (mShapefileInc1.get()) {
+                for (int lr = 0; lr < mShapefileInc1->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileInc1->GetLayer(lr);
                     layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
                     if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
-                        removePoint = false;
+                        zone = 1;
+                        break;
+                    }
+                }
+            }
+
+            if (mShapefileInc2.get()) {
+                for (int lr = 0; lr < mShapefileInc2->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileInc2->GetLayer(lr);
+                    layer->ResetReading();
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+
+                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                        zone = 2;
                         break;
                     }
                 }
@@ -107,10 +133,29 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
                     if (layer->GetNextFeature() != 0) {     // found: exclude this point
-                        removePoint = true;
+                        zone = 3;
                         break;
                     }
                 }
+            }
+
+
+            xi = static_cast<int>(xs / 100.0);
+            yi = static_cast<int>(ys / 100.0);
+
+            switch (zone) {
+            case 0: // outside zone
+                removePoint = ((xi % s) != 0) || ((yi % s) != 0);
+                break;
+            case 1: // Include Zone 1
+                removePoint = ((xi % s1) != 0) || ((yi % s1) != 0);
+                break;
+            case 2: // Include Zone 2
+                removePoint = ((xi % s2) != 0) || ((yi % s2) != 0);
+                break;
+            case 3: // Exclude Zone
+                removePoint = true;
+                break;
             }
 
             if (removePoint)
@@ -122,6 +167,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             pointSumWithBearing(p1, stepx, M_PI_2, p2);
             p1 = p2;
 
+            xs += stepx;
             ++nc;
         }
 
@@ -136,6 +182,8 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         lat = p2.y();
         ++nr;
         p1=p2;
+
+        ys += stepx;
 
         idx2 = idx1;
         idx1 = idx0;

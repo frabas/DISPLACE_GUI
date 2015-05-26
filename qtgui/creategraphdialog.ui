@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>404</width>
-    <height>344</height>
+    <width>695</width>
+    <height>351</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -168,55 +168,124 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="2" colspan="3">
-    <widget class="QDoubleSpinBox" name="distance">
-     <property name="suffix">
-      <string> km</string>
-     </property>
-     <property name="minimum">
-      <double>0.500000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>1000.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>10.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Distance</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0" colspan="5">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Shapefiles</string>
+      <string>Zones</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="1">
-       <widget class="QComboBox" name="shapefileIncluding"/>
-      </item>
+     <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1,0,1">
       <item row="1" column="1">
+       <widget class="QComboBox" name="shapefileIncluding1"/>
+      </item>
+      <item row="3" column="1">
        <widget class="QComboBox" name="shapefileExcluding"/>
       </item>
-      <item row="0" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Inclusion shapefile</string>
+         <string>1st Inclusion Shapefile</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Exclusion Shapefile</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QDoubleSpinBox" name="step1">
+        <property name="suffix">
+         <string> km</string>
+        </property>
+        <property name="minimum">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="value">
+         <double>10.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Step</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>2nd Inclusion Shapefile</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="shapefileIncluding2"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Step</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QDoubleSpinBox" name="step2">
+        <property name="suffix">
+         <string> km</string>
+        </property>
+        <property name="minimum">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="value">
+         <double>5.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QDoubleSpinBox" name="step">
+        <property name="suffix">
+         <string> km</string>
+        </property>
+        <property name="minimum">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.500000000000000</double>
+        </property>
+        <property name="value">
+         <double>2.500000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>Include points outside all shapefiles</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>Step</string>
         </property>
        </widget>
       </item>
@@ -230,7 +299,6 @@
   <tabstop>lat1</tabstop>
   <tabstop>long2</tabstop>
   <tabstop>lat2</tabstop>
-  <tabstop>distance</tabstop>
   <tabstop>hex</tabstop>
   <tabstop>cmdCancel</tabstop>
   <tabstop>cmdOk</tabstop>

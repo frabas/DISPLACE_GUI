@@ -15,9 +15,19 @@ CreateGraphDialog::~CreateGraphDialog()
     delete ui;
 }
 
-double CreateGraphDialog::step() const
+double CreateGraphDialog::defaultStep() const
 {
-    return ui->distance->value();
+    return ui->step->value();
+}
+
+double CreateGraphDialog::step1() const
+{
+    return ui->step1->value();
+}
+
+double CreateGraphDialog::step2() const
+{
+    return ui->step2->value();
 }
 
 double CreateGraphDialog::minLon() const
@@ -50,14 +60,21 @@ GraphBuilder::Type CreateGraphDialog::getType() const
 
 void CreateGraphDialog::setShapefileList(QStringList list)
 {
-    ui->shapefileIncluding->addItems(list);
+    ui->shapefileIncluding1->addItems(list);
+    ui->shapefileIncluding2->addItems(list);
     ui->shapefileExcluding->addItems(list);
 }
 
-QString CreateGraphDialog::getIncludingSelectedShapefile() const
+QString CreateGraphDialog::getIncludingSelectedShapefile1() const
 {
-    return ui->shapefileIncluding->currentText();
+    return ui->shapefileIncluding1->currentText();
 }
+
+QString CreateGraphDialog::getIncludingSelectedShapefile2() const
+{
+    return ui->shapefileIncluding2->currentText();
+}
+
 
 QString CreateGraphDialog::getExcludingSelectedShapefile() const
 {
@@ -69,7 +86,7 @@ void CreateGraphDialog::done(int r)
     if (r == QDialog::Accepted) {
         if (std::abs(ui->lat1->value() - ui->lat2->value()) < 1e-5 ||
                 std::abs(ui->long1->value() - ui->long2->value()) < 1e-5 ||
-            ui->distance->value() < 0.5) {
+            ui->step->value() < 0.5) {
             QMessageBox::warning(this, tr("Invalid values"), tr("The fields contain some invalid value."));
         } else {
             QDialog::done(r);

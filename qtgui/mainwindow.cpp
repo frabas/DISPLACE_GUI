@@ -1291,12 +1291,18 @@ void MainWindow::on_actionCreate_Graph_triggered()
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder *gb = new GraphBuilder();
         gb->setType(dlg.getType());
-        gb->setDistance(dlg.step() * 1000);
+        gb->setDefaultDistance(dlg.defaultStep() * 1000);
+        gb->setDistance1(dlg.step1() * 1000);
+        gb->setDistance2(dlg.step2() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
 
-        QString s = dlg.getIncludingSelectedShapefile();
+        QString s = dlg.getIncludingSelectedShapefile1();
         if (!s.isEmpty())
-            gb->setIncludingShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+            gb->setIncludingShapefile1(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+
+        s = dlg.getIncludingSelectedShapefile2();
+        if (!s.isEmpty())
+            gb->setIncludingShapefile2(mMapController->cloneShapefileDatasource(currentModelIdx, s));
 
         s = dlg.getExcludingSelectedShapefile();
         if (!s.isEmpty())

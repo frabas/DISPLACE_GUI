@@ -30,6 +30,7 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Delaunay_triangulation_2.h>
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <utility>
 
 class GraphBuilder
@@ -94,11 +95,19 @@ public:
 private:
     typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
     typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
-    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
-    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;
-    typedef Delaunay::Point                                             Point;
 
-    void fillWithNodes(QList<Node> &res, std::vector<std::pair<Point, unsigned> > &points,
+    /*
+    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
+    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;*/
+
+    typedef CGAL::Constrained_triangulation_face_base_2<K>           Fb;
+    typedef CGAL::Triangulation_data_structure_2<Vb,Fb>              TDS;
+    typedef CGAL::Exact_predicates_tag                               Itag;
+    typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag> CDT;
+
+    typedef CDT::Point                                             Point;
+
+    void fillWithNodes(QList<Node> &res, CDT &tri,
                        double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside);
     void pushAd(QList<Node> &node, int source, int target);
 

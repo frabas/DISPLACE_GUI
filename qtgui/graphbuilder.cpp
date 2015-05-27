@@ -48,7 +48,7 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 {
     QList<Node> res;
-    Delaunay d;
+    CDT d;
 
     double stepy;
     double stepx;
@@ -70,40 +70,33 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
     }
 
-    std::vector<std::pair<Point,unsigned> > points;
-
-
     std::vector<std::shared_ptr<OGRDataSource> > include, exclude;
 
     if (mShapefileExc.get())
         exclude.push_back(mShapefileExc);
     if (mShapefileInc1.get()) {
         include.push_back(mShapefileInc1);
-        fillWithNodes(res, points, mStep1, fal, include, exclude, false);
+        fillWithNodes(res, d, mStep1, fal, include, exclude, false);
         include.clear();
         exclude.push_back(mShapefileInc1);
     }
     if (mShapefileInc2.get()) {
         include.push_back(mShapefileInc2);
-        fillWithNodes(res, points, mStep2, fal, include, exclude, false);
+        fillWithNodes(res, d, mStep2, fal, include, exclude, false);
         include.clear();
         exclude.push_back(mShapefileInc2);
     }
     if (mOutsideEnabled) {
-        fillWithNodes(res, points, mStep, 30, include, exclude, true);
+        fillWithNodes(res, d, mStep, 30, include, exclude, true);
     }
-
-    qDebug() << "Inserted: " << points.size() << res.size();
-
-    d.insert(points.begin(), points.end());
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
 
     int nv = 0, na =0;
-    Delaunay::Finite_vertices_iterator vrt = d.finite_vertices_begin();
+    CDT::Finite_vertices_iterator vrt = d.finite_vertices_begin();
     while (vrt != d.finite_vertices_end()) {
-        Delaunay::Vertex_circulator vc = d.incident_vertices((Delaunay::Vertex_handle)vrt);
-        Delaunay::Vertex_circulator done(vc);
+        CDT::Vertex_circulator vc = d.incident_vertices((CDT::Vertex_handle)vrt);
+        CDT::Vertex_circulator done(vc);
 
         do {
             if (vc != d.infinite_vertex()) {
@@ -155,7 +148,7 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
 #endif
 }
 
-void GraphBuilder::fillWithNodes (QList<Node> &res, std::vector<std::pair<Point,unsigned> > &points,
+void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
                                   double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside)
 {
     double flon = mLonMin;
@@ -164,9 +157,12 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, std::vector<std::pair<Point,
 
     QPointF p1(mLonMin, mLatMin), p2;
 
+    CDT::Vertex_handle lastHandle;
+
     while (lat <= mLatMax) {
         nc = 0;
         flon = p1.x();
+        lastHandle = CDT::Vertex_handle();
         while (p1.x() <= mLonMax) {
             Node n;
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
@@ -206,10 +202,21 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, std::vector<std::pair<Point,
 
             if (zone == 3) {
                 n.good = false;
+                lastHandle = CDT::Vertex_handle();
             } else {
-                Point pt (n.point.x(), n.point.y());
-                points.push_back(std::make_pair(pt, res.size()));
-                res.push_back(n);
+                CDT::Point pt(n.point.x(), n.point.y());
+
+                CDT::Face_handle hint;
+                CDT::Vertex_handle v_hint = tri.insert(pt, hint);
+                if (v_hint!=CDT::Vertex_handle()){
+                    v_hint->info()=res.size();
+                    hint=v_hint->face();
+
+                    if (lastHandle != CDT::Vertex_handle())
+                        tri.insert_constraint(lastHandle, v_hint);
+                    lastHandle = v_hint;
+                    res.push_back(n);
+                }
             }
 
             pointSumWithBearing(p1, stepx, M_PI_2, p2);
@@ -233,6 +240,46 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, std::vector<std::pair<Point,
     }
 
 }
+
+#if 0
+CDT::Vertex_handle GraphBuilder::insert_with_info(CDT &cdt, Point pt, unsigned info)
+{
+    Face_handle hint;
+    Vertex_handle v_hint = cdt.insert(pt, hint);
+    v_hint->info()=info;
+    hint=v_hint->face();
+
+
+  std::vector<std::ptrdiff_t> indices;
+  std::vector<Point> points;
+  std::vector<typename Tds::Vertex::Info> infos;
+  std::ptrdiff_t index=0;
+  for (InputIterator it=first;it!=last;++it){
+    Tuple_or_pair value=*it;
+    points.push_back( top_get_first(value)  );
+    infos.push_back ( top_get_second(value) );
+    indices.push_back(index++);
+  }
+
+  typedef Spatial_sort_traits_adapter_2<Geom_traits,Point*> Search_traits;
+
+  spatial_sort(indices.begin(),indices.end(),Search_traits(&(points[0]),geom_traits()));
+
+  Vertex_handle v_hint;
+  Face_handle hint;
+  for (typename std::vector<std::ptrdiff_t>::const_iterator
+    it = indices.begin(), end = indices.end();
+    it != end; ++it){
+    v_hint = insert(points[*it], hint);
+    if (v_hint!=Vertex_handle()){
+      v_hint->info()=infos[*it];
+      hint=v_hint->face();
+    }
+  }
+
+  return this->number_of_vertices() - n;
+}
+#endif
 
 void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
 {

@@ -1093,6 +1093,7 @@ int main(int argc, char* argv[])
 			else
 			{
                outc(cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl);
+               outc(cout << "...then go for the port: " << a_port  << " instead" <<  endl);
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
 
                 assert(er2 == 0);
@@ -1307,6 +1308,7 @@ int main(int argc, char* argv[])
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
 
     map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, "../"+inputfolder);
+    map<int, double> hyperstability_param= read_hyperstability_param(folder_name_parameterization, "../"+inputfolder);
 
 	// creation of a vector of populations
     populations = vector <Population* > (nbpops);
@@ -1447,7 +1449,9 @@ int main(int argc, char* argv[])
 		// input data, initial tac
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, "../"+inputfolder);
 		double tac_percent_simulated_this_pop= tac_percent_simulated[sp];
-		double landings_so_far=0;
+        double hyperstability_param_this_pop= hyperstability_param[sp];
+
+        double landings_so_far=0;
 
 		double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
 		double a_calib_weight_at_szgroup=calib_weight_at_szgroup.at(sp);
@@ -1478,6 +1482,7 @@ int main(int argc, char* argv[])
 			fbar_ages_min_max_and_ftarget_this_pop,
 			tac_this_pop,
 			tac_percent_simulated_this_pop,
+            hyperstability_param_this_pop,
 			landings_so_far,
 			a_calib_cpue_multiplier,
 			a_calib_weight_at_szgroup));
@@ -3283,8 +3288,9 @@ int main(int argc, char* argv[])
 								sum_N_year_minus_1+=N_at_szgroup_year_minus_1.at(sz);
 							}
 
-                            // MAGIC NUMBER HERE! see Harley et al 2001 Canadian Journal
-							populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, 0.7));
+                            //  see Harley et al 2001 Canadian Journal for the hyperstability b param (CPUE=qN_t^b)
+                            double a_hyperstability_param = populations.at(sp)->get_hyperstability_param();
+                            populations.at(sp)->set_cpue_multiplier(pow(sum_N_start_current_year/sum_N_year_minus_1, a_hyperstability_param));
 							// e.g. have a look at plot(seq(500,3000,500)/1000,(seq(500,3000,500)/1000)^0.7)
 
                             dout(cout << "the cpue_multiplier is " << populations.at(sp)->get_cpue_multiplier() << endl);

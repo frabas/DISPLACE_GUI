@@ -51,6 +51,7 @@ Population::Population(int a_name,
                        const vector<double> &_fbar_ages_min_max,
                        const vector<double> &init_tac,
                        double tac_percent_simulated,
+                       double hyperstability_param,
                        double landings_so_far,
                        double a_calib_cpue_multiplier,
                        double a_calib_weight_at_szgroup)
@@ -229,6 +230,10 @@ Population::Population(int a_name,
 
 	// init related to F
 	fbar_ages_min_max=_fbar_ages_min_max;
+
+    // hyperstability
+    this->set_hyperstability_param(hyperstability_param);
+
 
 }
 
@@ -447,6 +452,11 @@ double  Population::get_oth_land_multiplier() const
 	return(oth_land_multiplier);
 }
 
+double  Population::get_hyperstability_param() const
+{
+    return(hyperstability_param);
+}
+
 
 Tac* Population::get_tac() const
 {
@@ -501,6 +511,13 @@ void Population::set_cpue_multiplier(double _cpue_multiplier)
 {
 
 	cpue_multiplier =_cpue_multiplier;
+
+}
+
+void Population::set_hyperstability_param(double _hyperstability_param)
+{
+
+    hyperstability_param =_hyperstability_param;
 
 }
 

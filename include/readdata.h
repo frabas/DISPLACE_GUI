@@ -128,6 +128,7 @@ vector<double> read_param_sr(int a_pop,  string folder_name_parameterization, st
 vector<double> read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name_parameterization, string inputfolder);
 vector<double> read_initial_tac(int a_pop,  string folder_name_parameterization, string inputfolder);
 map<int, int> read_tac_percent_simulated(string folder_name_parameterization, string inputfolder);
+map<int, double> read_hyperstability_param(string folder_name_parameterization, string inputfolder);
 map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 map<string, double> read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);

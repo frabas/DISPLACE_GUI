@@ -1676,7 +1676,7 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
 
     string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/percent_landings_from_simulated_vessels.dat";
 
-	//input data, pop characteristics: weight_at_szgroup
+    //input data, pop characteristics: percent_landings
 	ifstream file_tac_percent_simulated;
 	file_tac_percent_simulated.open(filename.c_str());
 	if(file_tac_percent_simulated.fail())
@@ -1695,6 +1695,33 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
 #endif
 
 	return(tac_percent_simulated);
+}
+
+
+map<int, double> read_hyperstability_param(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/hyperstability_param.dat";
+
+    //input data, pop characteristics: hyperstability
+    ifstream file_hyperstability_param;
+    file_hyperstability_param.open(filename.c_str());
+    if(file_hyperstability_param.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    map<int, double> hyperstability_param;
+    fill_map_from_specifications_i_d(file_hyperstability_param,  hyperstability_param, folder_name_parameterization);
+    file_hyperstability_param.close();
+
+#ifdef VERBOSE
+    // check input
+    for ( map<int,double>::iterator it=hyperstability_param.begin() ; it != hyperstability_param.end(); it++ )
+        dout(cout << (*it).first << " => " << (*it).second << endl);
+#endif
+
+    return(hyperstability_param);
 }
 
 

@@ -58,6 +58,7 @@ class Population
             const vector<double> &fbar_ages_min_max,
             const vector<double> &init_tac,
             double tac_percent_simulated,
+            double hyperstability_param,
             double landings_so_far,
             double a_calib_cpue_multiplier,
             double a_calib_weight_at_szgroup);
@@ -98,9 +99,9 @@ class Population
 		vector< vector <double> >get_percent_age_per_szgroup_matrix() const;
 		multimap<int,double> get_full_spatial_availability() const;
 		map<int,double> get_oth_land() const;
-		double get_oth_land_multiplier() const;
-		double get_catchability() const;
-		Tac* get_tac() const;
+        double get_hyperstability_param() const;
+        double get_oth_land_multiplier() const;
+        Tac* get_tac() const;
 		double get_landings_so_far() const;
 		void set_selected_szgroups(vector<int> selected_szgroups);
 		void set_avai0_beta(double _avai0_beta);
@@ -109,6 +110,7 @@ class Population
 		void set_avai5_beta(double _avai5_beta);
 		void set_avai7_beta(double _avai7_beta);
 		void set_cpue_multiplier(double _cpue_multiplier);
+        void set_hyperstability_param(double _hyperstability_param);
         void set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup);
         void set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution);
         void set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1);
@@ -203,8 +205,8 @@ class Population
 		vector< vector<double> > percent_szgroup_per_age_matrix;
 		vector< vector<double> > percent_age_per_szgroup_matrix;
 		vector< vector<double> > growth_transition_matrix;
-		double catchability;	 // scaling factor in the catch equation...
-		vector<double> fbar_ages_min_max;
+        double hyperstability_param;	 // power curve shape param for cpue~abundance relationship
+        vector<double> fbar_ages_min_max;
 		Tac *tac;
 		double landings_so_far;	 // global landings, reinit each start of the year...
 								 // init at 1. Will change according to the next TAC.

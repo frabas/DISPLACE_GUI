@@ -1297,6 +1297,11 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
         gb->setOutsideEnabled(dlg.isOutsideEnabled());
 
+        if (dlg.isRemoveLongEdgesEnabled())
+            gb->setLinkLimits(dlg.removeLongEdgesLimit());
+        else
+            gb->setLinkLimits(-1.0);
+
         QString s = dlg.getIncludingSelectedShapefile1();
         if (!s.isEmpty())
             gb->setIncludingShapefile1(mMapController->cloneShapefileDatasource(currentModelIdx, s));

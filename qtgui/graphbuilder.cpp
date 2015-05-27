@@ -283,7 +283,6 @@ CDT::Vertex_handle GraphBuilder::insert_with_info(CDT &cdt, Point pt, unsigned i
 
 void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
 {
-    nodes[source].adiacencies.push_back(target);
 
 #ifdef HAVE_GEOGRAPHICLIB
     double d;
@@ -312,8 +311,12 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
     double d = earthRadius * c;
 #endif
 
-    nodes[source].weight.push_back(std::floor(d / 1000 + 0.5));
+    if (mLinkLimits < 1e-3 || d < mLinkLimits) {
+        nodes[source].adiacencies.push_back(target);
+        nodes[source].weight.push_back(std::floor(d / 1000 + 0.5));
+    }
 }
+
 bool GraphBuilder::outsideEnabled() const
 {
     return mOutsideEnabled;
@@ -322,5 +325,10 @@ bool GraphBuilder::outsideEnabled() const
 void GraphBuilder::setOutsideEnabled(bool outsideEnabled)
 {
     mOutsideEnabled = outsideEnabled;
+}
+
+void GraphBuilder::setLinkLimits(double limit_km)
+{
+    mLinkLimits = limit_km * 1000;
 }
 

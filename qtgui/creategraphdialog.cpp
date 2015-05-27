@@ -86,6 +86,16 @@ bool CreateGraphDialog::isOutsideEnabled() const
     return ui->enableOutside->isChecked();
 }
 
+bool CreateGraphDialog::isRemoveLongEdgesEnabled() const
+{
+    return ui->removesLongEdges->isChecked();
+}
+
+double CreateGraphDialog::removeLongEdgesLimit() const
+{
+    return ui->longEdgesLimit->value();
+}
+
 void CreateGraphDialog::done(int r)
 {
     if (r == QDialog::Accepted) {

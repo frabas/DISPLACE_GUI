@@ -91,6 +91,7 @@ public:
 
     bool outsideEnabled() const;
     void setOutsideEnabled(bool outsideEnabled);
+    void setLinkLimits(double limit_km);
 
 private:
     typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
@@ -115,6 +116,7 @@ private:
     bool mOutsideEnabled;
     double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
+    double mLinkLimits;
 
     std::shared_ptr<OGRDataSource> mShapefileInc1;
     std::shared_ptr<OGRDataSource> mShapefileInc2;

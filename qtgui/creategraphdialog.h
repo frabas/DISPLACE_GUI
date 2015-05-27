@@ -50,6 +50,7 @@ public:
     QString getIncludingSelectedShapefile2() const ;
     QString getExcludingSelectedShapefile() const ;
 
+    bool isOutsideEnabled() const;
 public slots:
     void done(int) override;
 

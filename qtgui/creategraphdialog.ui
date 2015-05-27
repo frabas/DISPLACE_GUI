@@ -276,9 +276,12 @@
        </widget>
       </item>
       <item row="0" column="0" colspan="2">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="enableOutside">
         <property name="text">
          <string>Include points outside all shapefiles</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

@@ -81,6 +81,11 @@ QString CreateGraphDialog::getExcludingSelectedShapefile() const
     return ui->shapefileExcluding->currentText();
 }
 
+bool CreateGraphDialog::isOutsideEnabled() const
+{
+    return ui->enableOutside->isChecked();
+}
+
 void CreateGraphDialog::done(int r)
 {
     if (r == QDialog::Accepted) {

@@ -83,12 +83,16 @@ public:
     static void pointSumWithBearing (const QPointF &p1, double dist, double bearing, QPointF &p2);
     static const double earthRadius;
 
+    bool outsideEnabled() const;
+    void setOutsideEnabled(bool outsideEnabled);
+
 private:
     void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
     void createAdiacencies2(QList<GraphBuilder::Node> &node);
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
+    bool mOutsideEnabled;
     double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
 

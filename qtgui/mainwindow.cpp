@@ -1295,6 +1295,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setDistance1(dlg.step1() * 1000);
         gb->setDistance2(dlg.step2() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+        gb->setOutsideEnabled(dlg.isOutsideEnabled());
 
         QString s = dlg.getIncludingSelectedShapefile1();
         if (!s.isEmpty())

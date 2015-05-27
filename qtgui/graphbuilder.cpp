@@ -107,7 +107,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
             n.good = true;
 
-            int zone = 0;
+            int zone = (mOutsideEnabled ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
             OGRPoint point (n.point.x(), n.point.y());
 
@@ -346,3 +346,13 @@ void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int targ
 
     nodes[source].weight.push_back(std::floor(d / 1000 + 0.5));
 }
+bool GraphBuilder::outsideEnabled() const
+{
+    return mOutsideEnabled;
+}
+
+void GraphBuilder::setOutsideEnabled(bool outsideEnabled)
+{
+    mOutsideEnabled = outsideEnabled;
+}
+

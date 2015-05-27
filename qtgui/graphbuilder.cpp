@@ -9,11 +9,6 @@
 #include <GeographicLib/Geodesic.hpp>
 #endif
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include <CGAL/Triangulation_vertex_base_with_info_2.h>
-#include <CGAL/Delaunay_triangulation_2.h>
-#include <utility>
-
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
 
@@ -53,19 +48,11 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 {
     QList<Node> res;
+    Delaunay d;
 
-    double lat = mLatMin;
     double stepy;
     double stepx;
     double fal;
-
-    typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
-    typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
-    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
-    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;
-    typedef Delaunay::Point                                             Point;
-
-    Delaunay d;
 
     switch (mType) {
     case Hex:
@@ -79,127 +66,31 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         break;
     }
 
-    QPointF p1(mLonMin, mLatMin), p2;
-
     if (mFeedback) {
         mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
     }
 
-    bool removePoint;
-    double flon = mLonMin;
-    double xs = 0.0, ys = 0.0;
-    int nr = 0, nc = 0;
-    int xi, yi;
-
-    int s = std::floor(mStep / 100.0);
-    int s1 = std::floor(mStep1 / 100.0);
-    int s2 = std::floor(mStep2 / 100.0);
-
     std::vector<std::pair<Point,unsigned> > points;
 
-    ys = 0.0;
-    while (lat <= mLatMax) {
-        xs = 0.0;
-        nc = 0;
-        flon = p1.x();
-        while (p1.x() <= mLonMax) {
-            Node n;
-            n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
-            n.good = true;
 
-            int zone = (mOutsideEnabled ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
+    std::vector<std::shared_ptr<OGRDataSource> > include, exclude;
 
-            OGRPoint point (n.point.x(), n.point.y());
-
-            // Check for shapefile inclusion
-            if (mShapefileInc1.get()) {
-                for (int lr = 0; lr < mShapefileInc1->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = mShapefileInc1->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
-
-                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
-                        zone = 1;
-                        break;
-                    }
-                }
-            }
-
-            if (mShapefileInc2.get()) {
-                for (int lr = 0; lr < mShapefileInc2->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = mShapefileInc2->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
-
-                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
-                        zone = 2;
-                        break;
-                    }
-                }
-            }
-
-            // Check for point exclusion
-            if (mShapefileExc.get()) {
-                for (int lr = 0; lr < mShapefileExc->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = mShapefileExc->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
-
-                    if (layer->GetNextFeature() != 0) {     // found: exclude this point
-                        zone = 3;
-                        break;
-                    }
-                }
-            }
-
-
-            xi = static_cast<int>(xs / 100.0);
-            yi = static_cast<int>(ys / 100.0);
-
-            switch (zone) {
-            case 0: // outside zone
-                removePoint = ((xi % s) != 0) || ((yi % s) != 0);
-                break;
-            case 1: // Include Zone 1
-                removePoint = ((xi % s1) != 0) || ((yi % s1) != 0);
-                break;
-            case 2: // Include Zone 2
-                removePoint = ((xi % s2) != 0) || ((yi % s2) != 0);
-                break;
-            case 3: // Exclude Zone
-                removePoint = true;
-                break;
-            }
-
-            if (removePoint) {
-                n.good = false;
-            } else {
-                Point pt (n.point.x(), n.point.y());
-                points.push_back(std::make_pair(pt, res.size()));
-                res.append(n);
-            }
-
-            pointSumWithBearing(p1, stepx, M_PI_2, p2);
-            p1 = p2;
-
-            xs += stepx;
-            ++nc;
-        }
-
-        if ((nr % 2) == 1) {
-            pointSumWithBearing(QPointF(flon, lat), mStep, -fal * M_PI / 180, p2);
-        } else {
-            pointSumWithBearing(QPointF(flon, lat), mStep, fal * M_PI / 180, p2);
-        }
-
-        lat = p2.y();
-        ++nr;
-        p1=p2;
-
-        ys += stepx;
-
-        if (mFeedback)
-            mFeedback->setStep(nr);
+    if (mShapefileExc.get())
+        exclude.push_back(mShapefileExc);
+    if (mShapefileInc1.get()) {
+        include.push_back(mShapefileInc1);
+        fillWithNodes(res, points, mStep1, fal, include, exclude, false);
+        include.clear();
+        exclude.push_back(mShapefileInc1);
+    }
+    if (mShapefileInc2.get()) {
+        include.push_back(mShapefileInc2);
+        fillWithNodes(res, points, mStep2, fal, include, exclude, false);
+        include.clear();
+        exclude.push_back(mShapefileInc2);
+    }
+    if (mOutsideEnabled) {
+        fillWithNodes(res, points, mStep, 30, include, exclude, true);
     }
 
     qDebug() << "Inserted: " << points.size() << res.size();
@@ -264,53 +155,83 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
 #endif
 }
 
-void GraphBuilder::createAdiacencies(QList<GraphBuilder::Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index)
+void GraphBuilder::fillWithNodes (QList<Node> &res, std::vector<std::pair<Point,unsigned> > &points,
+                                  double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside)
 {
-    for (int i = 0; i < idx.size(); ++i) {
-        // current node is nodes[i]
+    double flon = mLonMin;
+    int nr = 0, nc = 0;
+    double lat = mLatMin;
 
-        if (i > 0)
-            pushAd(nodes, idx[i], idx[i-1]);     // left node
-        if (i < idx.size()-1)
-            pushAd(nodes, idx[i], idx[i+1]);     // right node
+    QPointF p1(mLonMin, mLatMin), p2;
 
-        if ((row_index % 2) == 0) {     // even
-            if (i > 0 && i-1 < pidx.size())
-                pushAd(nodes, idx[i], pidx[i-1]);
-            if (i < pidx.size())
-                pushAd(nodes, idx[i], pidx[i]);
+    while (lat <= mLatMax) {
+        nc = 0;
+        flon = p1.x();
+        while (p1.x() <= mLonMax) {
+            Node n;
+            n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
+            n.good = true;
 
-            if (i > 0 && i-1 < nidx.size())
-                pushAd(nodes, idx[i], nidx[i-1]);
-            if (i < nidx.size())
-                pushAd(nodes, idx[i], nidx[i]);
+            int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
-            if (mType == Quad) {
-                if (i+1 < pidx.size())
-                    pushAd(nodes, idx[i], pidx[i+1]);
-                if (i+1 < nidx.size())
-                    pushAd(nodes, idx[i], nidx[i+1]);
+            OGRPoint point (n.point.x(), n.point.y());
+
+            // Check for shapefile inclusion
+
+            for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end(); ++it) {
+                for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = (*it)->GetLayer(lr);
+                    layer->ResetReading();
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+
+                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                        zone = 1;
+                        break;
+                    }
+                }
             }
 
-        } else {    // odd
-            if (i < pidx.size())
-                pushAd(nodes, idx[i], pidx[i]);
-            if (i+1 < pidx.size())
-                pushAd(nodes, idx[i], pidx[i+1]);
+            for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end(); ++it) {
+                for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = (*it)->GetLayer(lr);
+                    layer->ResetReading();
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-            if (i < nidx.size())
-                pushAd(nodes, idx[i], nidx[i]);
-            if (i+1 < nidx.size())
-                pushAd(nodes, idx[i], nidx[i+1]);
-
-            if (mType == Quad) {
-                if (i > 0 && i-1 < pidx.size())
-                    pushAd(nodes, idx[i], pidx[i-1]);
-                if (i > 0 && i-1 < nidx.size())
-                    pushAd(nodes, idx[i], nidx[i-1]);
+                    if (layer->GetNextFeature() != 0) {     // found: exclude this point
+                        zone = 3;
+                        break;
+                    }
+                }
             }
+
+            if (zone == 3) {
+                n.good = false;
+            } else {
+                Point pt (n.point.x(), n.point.y());
+                points.push_back(std::make_pair(pt, res.size()));
+                res.push_back(n);
+            }
+
+            pointSumWithBearing(p1, stepx, M_PI_2, p2);
+            p1 = p2;
+
+            ++nc;
         }
+
+        if ((nr % 2) == 1) {
+            pointSumWithBearing(QPointF(flon, lat), stepx, -fal * M_PI / 180, p2);
+        } else {
+            pointSumWithBearing(QPointF(flon, lat), stepx, fal * M_PI / 180, p2);
+        }
+
+        lat = p2.y();
+        ++nr;
+        p1=p2;
+
+        if (mFeedback)
+            mFeedback->setStep(nr);
     }
+
 }
 
 void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)

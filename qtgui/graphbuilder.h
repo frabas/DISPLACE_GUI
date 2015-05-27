@@ -27,6 +27,11 @@
 #include <memory>
 #include <gdal/ogrsf_frmts.h>
 
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Triangulation_vertex_base_with_info_2.h>
+#include <CGAL/Delaunay_triangulation_2.h>
+#include <utility>
+
 class GraphBuilder
 {
 public:
@@ -87,8 +92,14 @@ public:
     void setOutsideEnabled(bool outsideEnabled);
 
 private:
-    void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
-    void createAdiacencies2(QList<GraphBuilder::Node> &node);
+    typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
+    typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
+    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
+    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;
+    typedef Delaunay::Point                                             Point;
+
+    void fillWithNodes(QList<Node> &res, std::vector<std::pair<Point, unsigned> > &points,
+                       double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside);
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;

@@ -345,7 +345,7 @@ mv * gdal
 
 
 
-==== Compile GeographicLib
+=== Compile GeographicLib
 
 $ ./configure  --prefix=/usr/local
 
@@ -361,7 +361,7 @@ $ mingw32-make
 $ mingw32-make DESTDIR=/c/Users/YourUsers/Documents/Displace/install/extra install
 
 
-= Building boost
+=== Building boost
 
 Download boost and download the following patch
 
@@ -379,9 +379,46 @@ $ sh bootstrap.sh --with-toolset=mingw
 
 and compile
 
-$ b2 -j4 --prefix=$BOOST_PREFIX --disable-filesystem2 --with-graph  toolset=gcc /
+$ b2 -j4 --prefix=$BOOST_PREFIX --disable-filesystem2 --with-graph --with-thread --with-system toolset=gcc /
     address-model=64 variant=release link=shared threading=multi install
 	
+
+	
+=== Compiling GMP
+
+$ ./configure --prefix=/mingw
+$ make
+$ make install
+
+=== Compiling MPFR:
+
+Patch with the latest patches (allpatch.txt).
+
+$ ./configure --prefix=/mingw CFLAGS=-I/mingw/include CFLAGS=-I/mingw/include --disable-static --enable-shared
+	
+make 
+make install
+	
+=== Compiling CGAL
+
+Warning: CGAL requires two additional boost libraries: thread and system. If you are upgrading from a previous version, you'll need to install the missing components - see the boost section for details.
+
+First, create the proper makefiles, because the sources are by default set up to create NMake makefiles.
+
+$ cmake -g "mingw Makefiles"
+
+Then configure using cmake
+	
+$ cmake . -DCMAKE_INSTALL_PREFIX=/mingw
+
+Remove the CGAL_Qt3 and CGAL_Qt4 directories if the installer complains about missing QT3/QT4.
+
+then make and make install
+
+$ make
+$ make install
+
+DESTDIR can be used to change the destination directory.
 
 
 GDAL Notes

@@ -29,11 +29,18 @@ CONFIG(release,release|debug) {
 macx {
     CONFIG -= app_bundle
     ICON = icons/displace.icns
+
 }
 
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+
+    CGAL_LIBS= -lCGAL -lgmp -lboost_system-mgw49-mt-1_57
+}
+
+unix {
+    CGAL_LIBS= -lCGAL -lgmp
 }
 
 DEFINES += HAVE_GEOGRAPHICLIB
@@ -41,8 +48,7 @@ LIBS += -lGeographic
 
 QMAKE_CXXFLAGS += -frounding-math
 DEFINES += PROFILE
-LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB -lCGAL -lgmp
-
+LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL include path.
 INCLUDEPATH += $$QMC_GDAL_INC

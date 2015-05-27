@@ -43,6 +43,7 @@ Population::Population(int a_name,
                        const multimap<int, int> &lst_idx_nodes_per_pop,
                        const multimap<int, double> &_full_spatial_availability,
                        const map<int, double> &_oth_land,
+                       const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
                        const vector<vector<double> > &_percent_age_per_szgroup_matrix,
@@ -440,6 +441,12 @@ multimap<int,double>  Population::get_full_spatial_availability() const
 	return(full_spatial_availability);
 }
 
+multimap<int,double>  Population::get_overall_migration_fluxes() const
+{
+    return(overall_migration_fluxes);
+}
+
+
 
 map<int,double>  Population::get_oth_land() const
 {
@@ -675,6 +682,12 @@ void Population::set_full_spatial_availability(multimap<int,double> _full_spatia
 }
 
 
+void Population::set_overall_migration_fluxes(multimap<int,double> _overall_migration_fluxes)
+{
+    overall_migration_fluxes= _overall_migration_fluxes;
+}
+
+
 void Population::set_oth_land(map<int,double> _oth_land)
 {
 	oth_land= _oth_land;
@@ -844,6 +857,29 @@ void Population::do_growth()
 
     dout(cout << "END do_growth() "  << endl );
 }
+
+
+void Population::apply_overall_migration_fluxes(vector<Population* >& populations)
+{
+    dout(cout << "BEGIN overall_migration_fluxes() "  << endl );
+
+    // input
+    vector<double> N_at_szgroup= this->get_tot_N_at_szgroup();
+
+    multimap <int, double> migration_fluxes= this->get_overall_migration_fluxes();
+
+    // impact the Ns from emigration/immigration specified in the multimap
+    // TO DO
+
+    // output this pop
+    this->set_tot_N_at_szgroup(N_at_szgroup);
+
+    // output other pops
+    // TO DO
+
+    dout(cout << "END overall_migration_fluxes() "  << endl );
+}
+
 
 
 void Population::add_recruits_from_SR()

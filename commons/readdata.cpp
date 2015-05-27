@@ -1770,6 +1770,47 @@ map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, stri
 }
 
 
+
+
+
+multimap<int, double> read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce)
+{
+    // casting a_pop into a string
+    stringstream out;
+    out << a_pop;
+    string a_pop_s = out.str();
+
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/"+a_pop_s+"overall_migration_fluxes_"+a_semester+"_biolsce"+biolsce+".dat";
+
+    ifstream file_overall_migration_fluxes;
+    file_overall_migration_fluxes.open(filename.c_str());
+    if(file_overall_migration_fluxes.fail())
+    {
+        open_file_error(filename);
+        //return 1;
+    }
+    multimap<int, double> overall_migration_fluxes;
+    fill_from_overall_migration_fluxes (file_overall_migration_fluxes, overall_migration_fluxes);
+    file_overall_migration_fluxes.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<int,double>::iterator pos;
+    dout(cout << " overall_migration_fluxes " << endl);
+    for (pos=overall_migration_fluxes.begin(); pos != overall_migration_fluxes.end(); pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(overall_migration_fluxes);
+}
+
+
+
+
+
 map<string, double> read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder)
 {
 	// casting a_pop into a string
@@ -2351,6 +2392,9 @@ void read_SMS_OP_N_out_file(vector<Population* >& populations,
     dout(cout << "set Ns at szgroup from the SMS outcomes...OK" << endl << flush);
 
 }
+
+
+
 
 
 string getLastErrorMessage()

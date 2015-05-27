@@ -1449,6 +1449,9 @@ int main(int argc, char* argv[])
 		double tac_percent_simulated_this_pop= tac_percent_simulated[sp];
         double hyperstability_param_this_pop= hyperstability_param[sp];
 
+        // input data, read migration fluxes in proportion per size group (if any)
+        multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, "../"+inputfolder, biolsce);
+
         double landings_so_far=0;
 
 		double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
@@ -1472,6 +1475,7 @@ int main(int argc, char* argv[])
 			lst_idx_nodes_per_pop,
 			full_avai_szgroup_nodes_with_pop,
 			oth_land,
+            overall_migration_fluxes,
 			relative_stability_key,
 			percent_szgroup_per_age_matrix,
 			percent_age_per_szgroup_matrix,
@@ -1542,6 +1546,10 @@ int main(int argc, char* argv[])
            outc(cout << "if you have a problem of out of range here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl);
 		}						 // end implicit pop
 	}							 // end pop
+
+
+
+
 
 #ifdef PROFILE
     mLoadPopulationProfileResult = mLoadProfile.elapsed_ms();
@@ -3838,7 +3846,14 @@ int main(int argc, char* argv[])
                     map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, i, folder_name_parameterization,"../"+ inputfolder);
 					populations.at(i)->set_oth_land(oth_land);
 
-					//then, re-set the list_nodes and the pop_names_on_node
+                    // read migration fluxes in proportion per size group (if any)
+                    multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, "../"+inputfolder, biolsce);
+                    populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
+
+                    // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
+                    populations.at(i)->apply_overall_migration_fluxes(populations);
+
+                    //then, re-set the list_nodes and the pop_names_on_node
 					// from the new area distribution given by this new spatial avai
 					vector<Node* > list_nodes;
 					for(multimap<int, double>::iterator iter=avai_szgroup_nodes_with_pop.begin(); iter != avai_szgroup_nodes_with_pop.end();

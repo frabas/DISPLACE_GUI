@@ -184,6 +184,7 @@ vector<double>& lane_ids);
 void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
 void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);
 void fill_from_oth_land (istream& in, map<int, double>& oth_land);
+void fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
 void fill_from_relative_stability (istream& in, map<string, double>& relative_stability);
 void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
 

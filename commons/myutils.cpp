@@ -722,8 +722,8 @@ void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& 
 
 
 /**
-fill in the avai attributes into a multimap
-@param the avai specification file, ...
+fill in the oth_land attributes into a multimap
+@param the oth_land specification file, ...
 */
 void fill_from_oth_land (istream& in, map<int, double>& oth_land)
 {
@@ -738,6 +738,25 @@ void fill_from_oth_land (istream& in, map<int, double>& oth_land)
 		oth_land.insert(make_pair(key,val));
 	}
     dout(cout  << "read oth land " << endl << flush);
+}
+
+/**
+fill in the overall_migration_fluxes attributes into a multimap
+@param the overall_migration_fluxes specification file, ...
+*/
+void fill_from_overall_migration_fluxes (istream& in, multimap<int, double>& overall_migration_fluxes)
+{
+
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        overall_migration_fluxes.insert(make_pair(key,val));
+    }
+    dout(cout  << "read overall_migration_fluxes " << endl << flush);
 }
 
 

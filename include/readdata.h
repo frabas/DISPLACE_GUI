@@ -132,6 +132,7 @@ map<int, double> read_hyperstability_param(string folder_name_parameterization, 
 map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 map<string, double> read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
+multimap<int, double> read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
 
 // simu settings
 vector <int> read_tsteps_quarters(string folder_name_parameterization, string inputfolder);

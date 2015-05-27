@@ -143,8 +143,9 @@ int a_port;
 int nrow_coord;
 int nrow_graph;
 double graph_res;
-int is_individual_vessel_quotas;
+bool is_individual_vessel_quotas;
 int export_vmslike;
+bool use_dtrees;
 ofstream vmslike;
 vector <int> implicit_pops;
 vector <double> calib_oth_landings;
@@ -577,6 +578,7 @@ int main(int argc, char* argv[])
     a_port = scenario.a_port;
     graph_res = scenario.graph_res;
     is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
+    use_dtrees = scenario.use_dtrees;
 
 	stringstream graphnum;
 	graphnum << a_graph;

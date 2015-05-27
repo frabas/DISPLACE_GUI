@@ -9,16 +9,20 @@
 #include <GeographicLib/Geodesic.hpp>
 #endif
 
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Triangulation_vertex_base_with_info_2.h>
+#include <CGAL/Delaunay_triangulation_2.h>
+#include <utility>
+
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
 
 GraphBuilder::GraphBuilder()
     : mType(Hex),
-      mRemoval(Inside),
-      mStep(0),
+      mStep(0), mStep1(0), mStep2(0),
       mLatMin(0), mLatMax(0),
       mLonMin(0), mLonMax(0),
-      mShapefile(),
+      mShapefileInc1(), mShapefileInc2(), mShapefileExc(),
       mFeedback(0)
 {
 }
@@ -31,9 +35,19 @@ void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double
     mLonMax = std::max(lonMin, lonMax) * M_PI / 180.0;
 }
 
-void GraphBuilder::setShapefile(std::shared_ptr<OGRDataSource> src)
+void GraphBuilder::setIncludingShapefile1(std::shared_ptr<OGRDataSource> src)
 {
-    mShapefile = src;
+    mShapefileInc1 = src;
+}
+
+void GraphBuilder::setIncludingShapefile2(std::shared_ptr<OGRDataSource> src)
+{
+    mShapefileInc2 = src;
+}
+
+void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
+{
+    mShapefileExc = src;
 }
 
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
@@ -44,6 +58,14 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     double stepy;
     double stepx;
     double fal;
+
+    typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
+    typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
+    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
+    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;
+    typedef Delaunay::Point                                             Point;
+
+    Delaunay d;
 
     switch (mType) {
     case Hex:
@@ -59,15 +81,25 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     QPointF p1(mLonMin, mLatMin), p2;
 
-    QList<int> idx0, idx1, idx2;
-
     if (mFeedback) {
         mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
     }
 
+    bool removePoint;
     double flon = mLonMin;
+    double xs = 0.0, ys = 0.0;
     int nr = 0, nc = 0;
+    int xi, yi;
+
+    int s = std::floor(mStep / 100.0);
+    int s1 = std::floor(mStep1 / 100.0);
+    int s2 = std::floor(mStep2 / 100.0);
+
+    std::vector<std::pair<Point,unsigned> > points;
+
+    ys = 0.0;
     while (lat <= mLatMax) {
+        xs = 0.0;
         nc = 0;
         flon = p1.x();
         while (p1.x() <= mLonMax) {
@@ -75,50 +107,84 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
             n.good = true;
 
-            if (mShapefile.get()) {
-                OGRPoint point (n.point.x(), n.point.y());
-                for (int lr = 0; lr < mShapefile->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = mShapefile->GetLayer(lr);
+            int zone = 0;
+
+            OGRPoint point (n.point.x(), n.point.y());
+
+            // Check for shapefile inclusion
+            if (mShapefileInc1.get()) {
+                for (int lr = 0; lr < mShapefileInc1->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileInc1->GetLayer(lr);
                     layer->ResetReading();
                     layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-                    bool mustRemove = false;
-                    switch (mRemoval) {
-                    case Inside:
-                        mustRemove = (layer->GetNextFeature() != 0);
+                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                        zone = 1;
                         break;
-                    case Outside:
-                        mustRemove = !(layer->GetNextFeature() != 0);
-                        break;
-                    default:
-                        // Not handled, throw an exception
-                        throw std::runtime_error("Unknown removal method in GraphBuilder::buildGraph()");
                     }
-
-                    if (mustRemove)
-                        n.good = false;
-#if 0
-                    OGRFeature *ftr;
-                    while (( ftr = layer->GetNextFeature()) != 0) {
-                        if (point.Within(ftr->GetGeometryRef())) {
-                            n.good = false;
-                            break;
-                        }
-                    }
-#endif
                 }
             }
 
-            res.append(n);
-            idx0.push_back(res.size()-1);
+            if (mShapefileInc2.get()) {
+                for (int lr = 0; lr < mShapefileInc2->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileInc2->GetLayer(lr);
+                    layer->ResetReading();
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+
+                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                        zone = 2;
+                        break;
+                    }
+                }
+            }
+
+            // Check for point exclusion
+            if (mShapefileExc.get()) {
+                for (int lr = 0; lr < mShapefileExc->GetLayerCount(); ++lr) {
+                    OGRLayer *layer = mShapefileExc->GetLayer(lr);
+                    layer->ResetReading();
+                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+
+                    if (layer->GetNextFeature() != 0) {     // found: exclude this point
+                        zone = 3;
+                        break;
+                    }
+                }
+            }
+
+
+            xi = static_cast<int>(xs / 100.0);
+            yi = static_cast<int>(ys / 100.0);
+
+            switch (zone) {
+            case 0: // outside zone
+                removePoint = ((xi % s) != 0) || ((yi % s) != 0);
+                break;
+            case 1: // Include Zone 1
+                removePoint = ((xi % s1) != 0) || ((yi % s1) != 0);
+                break;
+            case 2: // Include Zone 2
+                removePoint = ((xi % s2) != 0) || ((yi % s2) != 0);
+                break;
+            case 3: // Exclude Zone
+                removePoint = true;
+                break;
+            }
+
+            if (removePoint) {
+                n.good = false;
+            } else {
+                Point pt (n.point.x(), n.point.y());
+                points.push_back(std::make_pair(pt, res.size()));
+                res.append(n);
+            }
 
             pointSumWithBearing(p1, stepx, M_PI_2, p2);
             p1 = p2;
 
+            xs += stepx;
             ++nc;
         }
-
-        createAdiacencies(res, idx2, idx1, idx0, nr-1);
 
         if ((nr % 2) == 1) {
             pointSumWithBearing(QPointF(flon, lat), mStep, -fal * M_PI / 180, p2);
@@ -130,16 +196,38 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         ++nr;
         p1=p2;
 
-        idx2 = idx1;
-        idx1 = idx0;
-        idx0.clear();
+        ys += stepx;
 
         if (mFeedback)
             mFeedback->setStep(nr);
     }
 
-    createAdiacencies(res, idx2, idx1, idx0, nr-1);
+    qDebug() << "Inserted: " << points.size() << res.size();
 
+    d.insert(points.begin(), points.end());
+
+    qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
+
+    int nv = 0, na =0;
+    Delaunay::Finite_vertices_iterator vrt = d.finite_vertices_begin();
+    while (vrt != d.finite_vertices_end()) {
+        Delaunay::Vertex_circulator vc = d.incident_vertices((Delaunay::Vertex_handle)vrt);
+        Delaunay::Vertex_circulator done(vc);
+
+        do {
+            if (vc != d.infinite_vertex()) {
+                pushAd(res, vrt->info(), vc->info());
+            }
+            ++vc;
+            ++na;
+        } while (vc != done);
+
+        ++vrt;
+        ++nv;
+    }
+
+
+    qDebug() << "NV:" << nv << "na: " << na;
     return res;
 }
 

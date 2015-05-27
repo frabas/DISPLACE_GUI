@@ -225,7 +225,7 @@ int read_scenario_config_file (string folder_name_parameterization,
             int val;
             while(linestream >> val)
             {
-                scenario.is_individual_vessel_quotas=val;
+                scenario.is_individual_vessel_quotas= (val != 0);
             }
         }
         if (counter == 20)
@@ -274,6 +274,14 @@ int read_scenario_config_file (string folder_name_parameterization,
             while(linestream >> val)
             {
                 scenario.dt_change_port=val;
+            }
+        }
+        if(counter==32)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.use_dtrees=(val != 0);
             }
         }
 

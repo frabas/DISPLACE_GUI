@@ -33,7 +33,8 @@ void Node::setChild(int idx, boost::shared_ptr<Node> child)
 
 void Node::setMapping(int idx, int remapped)
 {
-    mNodes[idx].reset();
+    if (idx != remapped)
+        mNodes[idx].reset();
     mGroups[idx] = remapped;
 }
 

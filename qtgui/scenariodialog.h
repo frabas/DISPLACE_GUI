@@ -50,33 +50,19 @@ public:
 private slots:
     void on_ScenarioDialog_accepted();
     void on_rename_clicked();
-
     void on_apply_clicked();
-
     void on_graphBrowse_clicked();
-
     void on_dt_enable_go_fishing_toggled(bool checked);
-
     void on_dt_enable_choose_ground_toggled(bool checked);
-
     void on_dt_enable_start_fishing_toggled(bool checked);
-
     void on_dt_enable_change_ground_toggled(bool checked);
-
     void on_dt_enable_stop_fishing_toggled(bool checked);
-
     void on_dt_enable_change_port_toggled(bool checked);
-
     void on_dt_browse_go_fishing_clicked();
-
     void on_dt_browse_choose_ground_clicked();
-
     void on_dt_browse_start_fishing_clicked();
-
     void on_dt_browse_change_ground_clicked();
-
     void on_dt_browse_stop_fishing_clicked();
-
     void on_dt_browse_change_port_clicked();
 
 private:

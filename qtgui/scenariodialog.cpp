@@ -45,7 +45,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->agraph->setValue(mScen.getGraph());
     ui->aport->setValue(mScen.getA_port());
     ui->gridres->setValue(mScen.getGraph_res());
-    ui->isvesselquotas->setValue(mScen.getIs_individual_vessel_quotas());
+    ui->individualQuotas->setChecked(mScen.getIs_individual_vessel_quotas());
     ui->nrowcoord->setValue(mScen.getNrow_coord());
     ui->nrowgraph->setValue(mScen.getNrow_graph());
 
@@ -71,6 +71,8 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->dt_enable_change_port->setChecked(!mScen.getDtChangePort().isEmpty());
     on_dt_enable_change_port_toggled(!mScen.getDtGoFishing().isEmpty());
     ui->dt_change_port->setText(mScen.getDtChangePort());
+
+    ui->useDTree->setChecked(mScen.isDtreesEnabled());
 }
 
 ScenarioDialog::~ScenarioDialog()
@@ -147,7 +149,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setGraph(ui->agraph->value());
     mScen.setA_port(ui->aport->value());
     mScen.setGraph_res(ui->gridres->value());
-    mScen.setIs_individual_vessel_quotas(ui->isvesselquotas->value());
+    mScen.setIs_individual_vessel_quotas(ui->individualQuotas->isChecked());
     mScen.setNrow_coord(ui->nrowcoord->value());
     mScen.setNrow_graph(ui->nrowgraph->value());
 
@@ -157,6 +159,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setDtChangeGround(ui->dt_change_ground->text());
     mScen.setDtStopFishing(ui->dt_stop_fishing->text());
     mScen.setDtChangePort(ui->dt_change_port->text());
+    mScen.setDtreesEnabled(ui->useDTree->isChecked());
 }
 
 void ScenarioDialog::on_rename_clicked()

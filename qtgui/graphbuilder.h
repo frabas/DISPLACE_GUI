@@ -37,7 +37,6 @@ public:
     };
 
     enum Type { Hex, Quad };
-    enum Removal { Inside, Outside };
 
     class Node {
     public:
@@ -58,12 +57,16 @@ public:
         mType = type;
     }
 
-    void setShapefileRemoval (Removal rem) {
-        mRemoval = rem;
+    void setDefaultDistance (double distance) {
+        mStep = distance;
     }
 
-    void setDistance (double distance) {
-        mStep = distance;
+    void setDistance1 (double distance) {
+        mStep1 = distance;
+    }
+
+    void setDistance2 (double distance) {
+        mStep2 = distance;
     }
 
     void setFeedback (Feedback *feedback) {
@@ -71,7 +74,9 @@ public:
     }
 
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
-    void setShapefile (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile1 (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile2 (std::shared_ptr<OGRDataSource> src);
+    void setExcludingShapefile (std::shared_ptr<OGRDataSource> src);
 
     QList<Node> buildGraph();
 
@@ -80,14 +85,16 @@ public:
 
 private:
     void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
+    void createAdiacencies2(QList<GraphBuilder::Node> &node);
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
-    Removal mRemoval;
-    double mStep;
+    double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
 
-    std::shared_ptr<OGRDataSource> mShapefile;
+    std::shared_ptr<OGRDataSource> mShapefileInc1;
+    std::shared_ptr<OGRDataSource> mShapefileInc2;
+    std::shared_ptr<OGRDataSource> mShapefileExc;
 
     Feedback *mFeedback;
 };

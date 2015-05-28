@@ -50,6 +50,9 @@ public:
     QString getIncludingSelectedShapefile2() const ;
     QString getExcludingSelectedShapefile() const ;
 
+    bool isOutsideEnabled() const;
+    bool isRemoveLongEdgesEnabled() const;
+    double removeLongEdgesLimit() const;
 public slots:
     void done(int) override;
 

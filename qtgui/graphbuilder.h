@@ -27,6 +27,12 @@
 #include <memory>
 #include <gdal/ogrsf_frmts.h>
 
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Triangulation_vertex_base_with_info_2.h>
+#include <CGAL/Delaunay_triangulation_2.h>
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
+#include <utility>
+
 class GraphBuilder
 {
 public:
@@ -83,14 +89,34 @@ public:
     static void pointSumWithBearing (const QPointF &p1, double dist, double bearing, QPointF &p2);
     static const double earthRadius;
 
+    bool outsideEnabled() const;
+    void setOutsideEnabled(bool outsideEnabled);
+    void setLinkLimits(double limit_km);
+
 private:
-    void createAdiacencies (QList<Node> &nodes, const QList<int> &pidx, const QList<int> &idx, const QList<int> &nidx, int row_index);
-    void createAdiacencies2(QList<GraphBuilder::Node> &node);
+    typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
+    typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
+
+    /*
+    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
+    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;*/
+
+    typedef CGAL::Constrained_triangulation_face_base_2<K>           Fb;
+    typedef CGAL::Triangulation_data_structure_2<Vb,Fb>              TDS;
+    typedef CGAL::Exact_predicates_tag                               Itag;
+    typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag> CDT;
+
+    typedef CDT::Point                                             Point;
+
+    void fillWithNodes(QList<Node> &res, CDT &tri,
+                       double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside);
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
+    bool mOutsideEnabled;
     double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
+    double mLinkLimits;
 
     std::shared_ptr<OGRDataSource> mShapefileInc1;
     std::shared_ptr<OGRDataSource> mShapefileInc2;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>695</width>
-    <height>351</height>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -276,9 +276,12 @@
        </widget>
       </item>
       <item row="0" column="0" colspan="2">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="enableOutside">
         <property name="text">
          <string>Include points outside all shapefiles</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -292,6 +295,16 @@
      </layout>
     </widget>
    </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QCheckBox" name="removesLongEdges">
+     <property name="text">
+      <string>Remove edges longer than</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QDoubleSpinBox" name="longEdgesLimit"/>
+   </item>
   </layout>
  </widget>
  <tabstops>
@@ -299,7 +312,17 @@
   <tabstop>lat1</tabstop>
   <tabstop>long2</tabstop>
   <tabstop>lat2</tabstop>
+  <tabstop>removesLongEdges</tabstop>
+  <tabstop>longEdgesLimit</tabstop>
   <tabstop>hex</tabstop>
+  <tabstop>quad</tabstop>
+  <tabstop>enableOutside</tabstop>
+  <tabstop>step</tabstop>
+  <tabstop>shapefileIncluding1</tabstop>
+  <tabstop>step1</tabstop>
+  <tabstop>shapefileIncluding2</tabstop>
+  <tabstop>step2</tabstop>
+  <tabstop>shapefileExcluding</tabstop>
   <tabstop>cmdCancel</tabstop>
   <tabstop>cmdOk</tabstop>
  </tabstops>
@@ -312,8 +335,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>314</x>
-     <y>280</y>
+     <x>684</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>385</x>
@@ -328,8 +351,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>234</x>
-     <y>270</y>
+     <x>480</x>
+     <y>409</y>
     </hint>
     <hint type="destinationlabel">
      <x>247</x>

@@ -49,8 +49,14 @@ namespace GraphBuilderInternal {
 
 struct LinkData {
     bool removed;
+    bool used;
     double weight;
     int id_from, id_to;
+
+    LinkData()
+        : removed(false), used(false), weight(0.0),
+          id_from(-1), id_to(-1) {
+    }
 };
 
 bool sortCriteria(const LinkData &l1, const LinkData &l2) {
@@ -155,6 +161,8 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
                 geod.Inverse(p1.y(), p1.x(), p2.y(), p2.x(), d);
                 ld.weight = d;
+                if (mLinkLimits > 1e-3 && ld.weight > mLinkLimits)  // remove the link longer than the max lenght, if enabled
+                    ld.removed = true;
 
                 links.push_back(ld);
             }
@@ -166,29 +174,53 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
         std::sort(links.begin(), links.end(), GraphBuilderInternal::sortCriteria);
 
-        int i = 0;
+        int nAdded = 0;
+        // first add the
         for (std::vector<GraphBuilderInternal::LinkData>::iterator it = links.begin(); it != links.end(); ++it) {
-            if (mLinkLimits > 1e-3 && it->weight > mLinkLimits)  // remove the link longer than the max lenght, if enabled
-                it->removed = true;
+            if (mMaxLinks > 0 && nAdded >= mMaxLinks)
+                break;
 
-            if (mMinLinks > 0 && i < mMinLinks)        // Keep a min number of links, if enabled
+            if (!it->removed) {
+                ++nAdded;
+                res[it->id_from].adiacencies.push_back(it->id_to);
+                res[it->id_from].weight.push_back(std::floor(it->weight / 1000 + 0.5));
+                it->used = true;
+            }
+        }
+        for (std::vector<GraphBuilderInternal::LinkData>::iterator it = links.begin(); it != links.end(); ++it) {
+            if (mMaxLinks > 0 && nAdded >= mMaxLinks)
+                break;
+
+            if (it->used)
+                continue;
+
+            if (mMinLinks > 0 && nAdded < mMinLinks)        // Keep a min number of links, if enabled
                 it->removed = false;
-            if (mMaxLinks > 0 && i >= mMaxLinks)        // Remove the links exceeding the max, if enabled
+            if (mMaxLinks > 0 && nAdded >= mMaxLinks)        // Remove the links exceeding the max, if enabled
                 it->removed = true;
 
             if (!it->removed) {
-                ++i;
+                ++nAdded;
                 res[it->id_from].adiacencies.push_back(it->id_to);
                 res[it->id_from].weight.push_back(std::floor(it->weight / 1000 + 0.5));
             }
         }
 
-        if (i < 4) {
-            qDebug() << "Removed " << i << " from " << links.size();
+#if 0   // DEBUG
+        if (nAdded < 4) {
+            qDebug() << "Added " << nAdded << " nodes from " << links.size() << "total.";
             for (int j = 0; j < links.size(); ++j) {
-                qDebug() << j << links[j].weight;
+                if (links[j].used) {
+                    qDebug() << j << links[j].weight << " Ok";
+                }
+            }
+            for (int j = 0; j < links.size(); ++j) {
+                if (!links[j].used) {
+                    qDebug() << j << links[j].weight << " REMOVED";
+                }
             }
         }
+#endif
 
         ++vrt;
         ++nv;

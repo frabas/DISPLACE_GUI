@@ -862,20 +862,60 @@ void Population::do_growth()
 void Population::apply_overall_migration_fluxes(vector<Population* >& populations)
 {
     dout(cout << "BEGIN overall_migration_fluxes() "  << endl );
-
-    // input
-    vector<double> N_at_szgroup= this->get_tot_N_at_szgroup();
+    // caution: the current implementation is biased by the reading order of pops...
 
     multimap <int, double> migration_fluxes= this->get_overall_migration_fluxes();
 
-    // impact the Ns from emigration/immigration specified in the multimap
-    // TO DO
+    if(!migration_fluxes.empty())
+    {
 
-    // output this pop
-    this->set_tot_N_at_szgroup(N_at_szgroup);
 
-    // output other pops
-    // TO DO
+        multimap<int, double>::iterator pos;
+
+       int sz=-1;
+       for(pos = migration_fluxes.begin(); pos != migration_fluxes.end(); ++pos)
+
+          if(sz>nb_szgroups) sz <- -1; // reinit because next pop
+
+          int arrival_pop = pos->first;
+          int flux_prop =pos->second;
+
+          sz +=1;
+
+ cout << "departure pop is " << this->get_name() << endl;
+ cout << "arrival_pop is " << arrival_pop << endl;
+ cout << "sz is " << sz << endl;
+ cout << "flux_prop is " << sz << endl;
+
+           // input
+          vector<double> N_at_szgroup_this_pop = this->get_tot_N_at_szgroup();
+          vector<double> N_at_szgroup_arr_pop  = populations.at(arrival_pop)->get_tot_N_at_szgroup();
+
+ cout << " before: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
+ cout << " before: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
+
+ // impact the Ns from emigration/immigration specified in the multimap
+          N_at_szgroup_arr_pop.at(sz)  = N_at_szgroup_arr_pop.at(sz)+(N_at_szgroup_this_pop.at(sz)*flux_prop);
+          N_at_szgroup_this_pop.at(sz) = N_at_szgroup_this_pop.at(sz)*(1-flux_prop);
+
+ cout << " after: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
+ cout << " after: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
+
+          // output this pop
+          this->set_tot_N_at_szgroup(N_at_szgroup_this_pop);
+
+
+          // output arrival pop
+          populations.at(arrival_pop)->set_tot_N_at_szgroup(N_at_szgroup_arr_pop);
+
+      } else{
+
+       dout(cout << "no migration for this pop"  << endl );
+
+       cout << "no migration for this pop"  << endl;
+
+    }
+
 
     dout(cout << "END overall_migration_fluxes() "  << endl );
 }

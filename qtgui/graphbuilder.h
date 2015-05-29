@@ -86,6 +86,12 @@ public:
     void setExcludeZoneEdgeRemovalEnabled (bool en) {
         mRemoveEdgesInExcludeZone = en;
     }
+    void setMaxLinks(int num = -1) {
+        mMaxLinks = num;
+    }
+    void setMinLinks(int num = -1) {
+        mMinLinks = num;
+    }
 
     QList<Node> buildGraph();
 
@@ -120,6 +126,7 @@ private:
     double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
     double mLinkLimits;
+    int mMaxLinks, mMinLinks;
 
     std::shared_ptr<OGRDataSource> mShapefileInc1;
     std::shared_ptr<OGRDataSource> mShapefileInc2;

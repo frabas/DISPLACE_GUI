@@ -45,6 +45,20 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
     mShapefileExc = src;
 }
 
+namespace GraphBuilderInternal {
+
+struct LinkData {
+    bool removed;
+    double weight;
+    int id_from, id_to;
+};
+
+bool sortCriteria(const LinkData &l1, const LinkData &l2) {
+    return l1.weight < l2.weight;
+}
+
+}
+
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 {
     QList<Node> res;
@@ -91,6 +105,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
+    qDebug() << "Removing nodes based on these parameters: " << mLinkLimits << mMinLinks << mMaxLinks;
 
     int nv = 0, na =0;
     CDT::Finite_vertices_iterator vrt = d.finite_vertices_begin();
@@ -98,25 +113,31 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         CDT::Vertex_circulator vc = d.incident_vertices((CDT::Vertex_handle)vrt);
         CDT::Vertex_circulator done(vc);
 
+        std::vector<GraphBuilderInternal::LinkData> links;
+
         do {
             if (vc != d.infinite_vertex()) {
-                bool remove = false;
+                QPointF p1 = res[vrt->info()].point;
+                QPointF p2 = res[vc->info()].point;
+
+                GraphBuilderInternal::LinkData ld;
+                ld.id_from = vrt->info();
+                ld.id_to = vc->info();
+                ld.removed = false;
+
                 if (mOutsideEnabled && mRemoveEdgesInExcludeZone) {
                     // look for edges intersecting the exclusion Zone
                     OGRLineString *line = (OGRLineString *)OGRGeometryFactory::createGeometry(wkbLineString);
-                    QPointF p = res[vrt->info()].point;
-                    line->addPoint(p.x(), p.y());
+                    line->addPoint(p1.x(), p1.y());
+                    line->addPoint(p2.x(), p2.y());
 
-                    p = res[vc->info()].point;
-                    line->addPoint(p.x(), p.y());
-
-                    for (int lr = 0; lr < mShapefileExc->GetLayerCount() && !remove; ++lr) {
+                    for (int lr = 0; lr < mShapefileExc->GetLayerCount() && !ld.removed; ++lr) {
                         OGRLayer *layer = mShapefileExc->GetLayer(lr);
                         layer->ResetReading();
                         layer->SetSpatialFilter(line); //getting only the feature intercepting the point
 
                         if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
-                            remove = true;
+                            ld.removed = true;
                             break;
                         }
                     }
@@ -124,17 +145,56 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                     OGRGeometryFactory::destroyGeometry(line);
                 }
 
-                if (!remove)
-                    pushAd(res, vrt->info(), vc->info());
+                double d;
+
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+                const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+                const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
+
+                geod.Inverse(p1.y(), p1.x(), p2.y(), p2.x(), d);
+                ld.weight = d;
+
+                links.push_back(ld);
             }
             ++vc;
             ++na;
         } while (vc != done);
 
+        // add links
+
+        std::sort(links.begin(), links.end(), GraphBuilderInternal::sortCriteria);
+
+        int i = 0;
+        for (std::vector<GraphBuilderInternal::LinkData>::iterator it = links.begin(); it != links.end(); ++it) {
+            if (mLinkLimits > 1e-3 && it->weight > mLinkLimits)  // remove the link longer than the max lenght, if enabled
+                it->removed = true;
+
+            if (mMinLinks > 0 && i < mMinLinks)        // Keep a min number of links, if enabled
+                it->removed = false;
+            if (mMaxLinks > 0 && i >= mMaxLinks)        // Remove the links exceeding the max, if enabled
+                it->removed = true;
+
+            if (!it->removed) {
+                ++i;
+                res[it->id_from].adiacencies.push_back(it->id_to);
+                res[it->id_from].weight.push_back(std::floor(it->weight / 1000 + 0.5));
+            }
+        }
+
+        if (i < 4) {
+            qDebug() << "Removed " << i << " from " << links.size();
+            for (int j = 0; j < links.size(); ++j) {
+                qDebug() << j << links[j].weight;
+            }
+        }
+
         ++vrt;
         ++nv;
     }
 
+    // TODO: check that nodes are connected bidirectionally!
 
     qDebug() << "NV:" << nv << "na: " << na;
     return res;

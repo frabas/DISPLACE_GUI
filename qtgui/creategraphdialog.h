@@ -54,6 +54,11 @@ public:
     bool isRemoveLongEdgesEnabled() const;
     bool isRemoveEdgesInExclusionZoneEnabled() const;
     double removeLongEdgesLimit() const;
+    bool isMaxLinksEnabled() const;
+    bool isMinLinksEnabled() const;
+    int getMaxLinks() const;
+    int getMinLinks() const;
+
 public slots:
     void done(int) override;
 

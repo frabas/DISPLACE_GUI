@@ -101,6 +101,26 @@ double CreateGraphDialog::removeLongEdgesLimit() const
     return ui->longEdgesLimit->value();
 }
 
+bool CreateGraphDialog::isMaxLinksEnabled() const
+{
+    return ui->maxLinksEnabled->isChecked();
+}
+
+bool CreateGraphDialog::isMinLinksEnabled() const
+{
+    return ui->minLinksEnabled->isChecked();
+}
+
+int CreateGraphDialog::getMaxLinks() const
+{
+    return ui->maxLinks->value();
+}
+
+int CreateGraphDialog::getMinLinks() const
+{
+    return ui->minLinks->value();
+}
+
 void CreateGraphDialog::done(int r)
 {
     if (r == QDialog::Accepted) {

@@ -266,46 +266,6 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
 
 }
 
-#if 0
-CDT::Vertex_handle GraphBuilder::insert_with_info(CDT &cdt, Point pt, unsigned info)
-{
-    Face_handle hint;
-    Vertex_handle v_hint = cdt.insert(pt, hint);
-    v_hint->info()=info;
-    hint=v_hint->face();
-
-
-  std::vector<std::ptrdiff_t> indices;
-  std::vector<Point> points;
-  std::vector<typename Tds::Vertex::Info> infos;
-  std::ptrdiff_t index=0;
-  for (InputIterator it=first;it!=last;++it){
-    Tuple_or_pair value=*it;
-    points.push_back( top_get_first(value)  );
-    infos.push_back ( top_get_second(value) );
-    indices.push_back(index++);
-  }
-
-  typedef Spatial_sort_traits_adapter_2<Geom_traits,Point*> Search_traits;
-
-  spatial_sort(indices.begin(),indices.end(),Search_traits(&(points[0]),geom_traits()));
-
-  Vertex_handle v_hint;
-  Face_handle hint;
-  for (typename std::vector<std::ptrdiff_t>::const_iterator
-    it = indices.begin(), end = indices.end();
-    it != end; ++it){
-    v_hint = insert(points[*it], hint);
-    if (v_hint!=Vertex_handle()){
-      v_hint->info()=infos[*it];
-      hint=v_hint->face();
-    }
-  }
-
-  return this->number_of_vertices() - n;
-}
-#endif
-
 void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
 {
 

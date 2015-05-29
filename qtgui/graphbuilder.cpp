@@ -45,6 +45,20 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
     mShapefileExc = src;
 }
 
+namespace GraphBuilderInternal {
+
+struct LinkData {
+    bool removed;
+    double weight;
+    int id_from, id_to;
+};
+
+bool sortCriteria(const LinkData &l1, const LinkData &l2) {
+    return l1.weight < l2.weight;
+}
+
+}
+
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 {
     QList<Node> res;
@@ -91,6 +105,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
+    qDebug() << "Removing nodes based on these parameters: " << mLinkLimits << mMinLinks << mMaxLinks;
 
     int nv = 0, na =0;
     CDT::Finite_vertices_iterator vrt = d.finite_vertices_begin();
@@ -98,18 +113,88 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         CDT::Vertex_circulator vc = d.incident_vertices((CDT::Vertex_handle)vrt);
         CDT::Vertex_circulator done(vc);
 
+        std::vector<GraphBuilderInternal::LinkData> links;
+
         do {
             if (vc != d.infinite_vertex()) {
-                pushAd(res, vrt->info(), vc->info());
+                QPointF p1 = res[vrt->info()].point;
+                QPointF p2 = res[vc->info()].point;
+
+                GraphBuilderInternal::LinkData ld;
+                ld.id_from = vrt->info();
+                ld.id_to = vc->info();
+                ld.removed = false;
+
+                if (mOutsideEnabled && mRemoveEdgesInExcludeZone) {
+                    // look for edges intersecting the exclusion Zone
+                    OGRLineString *line = (OGRLineString *)OGRGeometryFactory::createGeometry(wkbLineString);
+                    line->addPoint(p1.x(), p1.y());
+                    line->addPoint(p2.x(), p2.y());
+
+                    for (int lr = 0; lr < mShapefileExc->GetLayerCount() && !ld.removed; ++lr) {
+                        OGRLayer *layer = mShapefileExc->GetLayer(lr);
+                        layer->ResetReading();
+                        layer->SetSpatialFilter(line); //getting only the feature intercepting the point
+
+                        if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                            ld.removed = true;
+                            break;
+                        }
+                    }
+
+                    OGRGeometryFactory::destroyGeometry(line);
+                }
+
+                double d;
+
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+                const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+#else
+                const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
+#endif
+
+                geod.Inverse(p1.y(), p1.x(), p2.y(), p2.x(), d);
+                ld.weight = d;
+
+                links.push_back(ld);
             }
             ++vc;
             ++na;
         } while (vc != done);
 
+        // add links
+
+        std::sort(links.begin(), links.end(), GraphBuilderInternal::sortCriteria);
+
+        int i = 0;
+        for (std::vector<GraphBuilderInternal::LinkData>::iterator it = links.begin(); it != links.end(); ++it) {
+            if (mLinkLimits > 1e-3 && it->weight > mLinkLimits)  // remove the link longer than the max lenght, if enabled
+                it->removed = true;
+
+            if (mMinLinks > 0 && i < mMinLinks)        // Keep a min number of links, if enabled
+                it->removed = false;
+            if (mMaxLinks > 0 && i >= mMaxLinks)        // Remove the links exceeding the max, if enabled
+                it->removed = true;
+
+            if (!it->removed) {
+                ++i;
+                res[it->id_from].adiacencies.push_back(it->id_to);
+                res[it->id_from].weight.push_back(std::floor(it->weight / 1000 + 0.5));
+            }
+        }
+
+        if (i < 4) {
+            qDebug() << "Removed " << i << " from " << links.size();
+            for (int j = 0; j < links.size(); ++j) {
+                qDebug() << j << links[j].weight;
+            }
+        }
+
         ++vrt;
         ++nv;
     }
 
+    // TODO: check that nodes are connected bidirectionally!
 
     qDebug() << "NV:" << nv << "na: " << na;
     return res;
@@ -240,46 +325,6 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
     }
 
 }
-
-#if 0
-CDT::Vertex_handle GraphBuilder::insert_with_info(CDT &cdt, Point pt, unsigned info)
-{
-    Face_handle hint;
-    Vertex_handle v_hint = cdt.insert(pt, hint);
-    v_hint->info()=info;
-    hint=v_hint->face();
-
-
-  std::vector<std::ptrdiff_t> indices;
-  std::vector<Point> points;
-  std::vector<typename Tds::Vertex::Info> infos;
-  std::ptrdiff_t index=0;
-  for (InputIterator it=first;it!=last;++it){
-    Tuple_or_pair value=*it;
-    points.push_back( top_get_first(value)  );
-    infos.push_back ( top_get_second(value) );
-    indices.push_back(index++);
-  }
-
-  typedef Spatial_sort_traits_adapter_2<Geom_traits,Point*> Search_traits;
-
-  spatial_sort(indices.begin(),indices.end(),Search_traits(&(points[0]),geom_traits()));
-
-  Vertex_handle v_hint;
-  Face_handle hint;
-  for (typename std::vector<std::ptrdiff_t>::const_iterator
-    it = indices.begin(), end = indices.end();
-    it != end; ++it){
-    v_hint = insert(points[*it], hint);
-    if (v_hint!=Vertex_handle()){
-      v_hint->info()=infos[*it];
-      hint=v_hint->face();
-    }
-  }
-
-  return this->number_of_vertices() - n;
-}
-#endif
 
 void GraphBuilder::pushAd(QList<GraphBuilder::Node> &nodes, int source, int target)
 {

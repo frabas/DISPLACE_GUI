@@ -3849,7 +3849,7 @@ int main(int argc, char* argv[])
 					populations.at(i)->set_oth_land(oth_land);
 
                     // read migration fluxes in proportion per size group (if any)
-                    multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, "../"+inputfolder, biolsce);
+                    multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, i, folder_name_parameterization, "../"+inputfolder, biolsce);
                     populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                     // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)

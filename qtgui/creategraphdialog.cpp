@@ -91,6 +91,11 @@ bool CreateGraphDialog::isRemoveLongEdgesEnabled() const
     return ui->removesLongEdges->isChecked();
 }
 
+bool CreateGraphDialog::isRemoveEdgesInExclusionZoneEnabled() const
+{
+    return ui->removeEdgesExclusion->isChecked();
+}
+
 double CreateGraphDialog::removeLongEdgesLimit() const
 {
     return ui->longEdgesLimit->value();

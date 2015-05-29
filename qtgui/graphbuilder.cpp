@@ -100,7 +100,32 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
         do {
             if (vc != d.infinite_vertex()) {
-                pushAd(res, vrt->info(), vc->info());
+                bool remove = false;
+                if (mOutsideEnabled && mRemoveEdgesInExcludeZone) {
+                    // look for edges intersecting the exclusion Zone
+                    OGRLineString *line = (OGRLineString *)OGRGeometryFactory::createGeometry(wkbLineString);
+                    QPointF p = res[vrt->info()].point;
+                    line->addPoint(p.x(), p.y());
+
+                    p = res[vc->info()].point;
+                    line->addPoint(p.x(), p.y());
+
+                    for (int lr = 0; lr < mShapefileExc->GetLayerCount() && !remove; ++lr) {
+                        OGRLayer *layer = mShapefileExc->GetLayer(lr);
+                        layer->ResetReading();
+                        layer->SetSpatialFilter(line); //getting only the feature intercepting the point
+
+                        if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                            remove = true;
+                            break;
+                        }
+                    }
+
+                    OGRGeometryFactory::destroyGeometry(line);
+                }
+
+                if (!remove)
+                    pushAd(res, vrt->info(), vc->info());
             }
             ++vc;
             ++na;

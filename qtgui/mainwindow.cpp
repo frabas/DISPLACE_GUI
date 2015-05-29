@@ -1296,6 +1296,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
         gb->setDistance2(dlg.step2() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
         gb->setOutsideEnabled(dlg.isOutsideEnabled());
+        gb->setExcludeZoneEdgeRemovalEnabled(dlg.isRemoveEdgesInExclusionZoneEnabled());
 
         if (dlg.isRemoveLongEdgesEnabled())
             gb->setLinkLimits(dlg.removeLongEdgesLimit());

@@ -83,6 +83,9 @@ public:
     void setIncludingShapefile1 (std::shared_ptr<OGRDataSource> src);
     void setIncludingShapefile2 (std::shared_ptr<OGRDataSource> src);
     void setExcludingShapefile (std::shared_ptr<OGRDataSource> src);
+    void setExcludeZoneEdgeRemovalEnabled (bool en) {
+        mRemoveEdgesInExcludeZone = en;
+    }
 
     QList<Node> buildGraph();
 
@@ -113,7 +116,7 @@ private:
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
-    bool mOutsideEnabled;
+    bool mOutsideEnabled, mRemoveEdgesInExcludeZone;
     double mStep, mStep1, mStep2;
     double mLatMin, mLatMax, mLonMin, mLonMax;
     double mLinkLimits;

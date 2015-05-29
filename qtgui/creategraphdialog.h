@@ -52,6 +52,7 @@ public:
 
     bool isOutsideEnabled() const;
     bool isRemoveLongEdgesEnabled() const;
+    bool isRemoveEdgesInExclusionZoneEnabled() const;
     double removeLongEdgesLimit() const;
 public slots:
     void done(int) override;

@@ -1677,6 +1677,7 @@ int main(int argc, char* argv[])
 		double gear_width_b                        = metiers_gear_widths_param_b[ i ];
 		string gear_width_model                    = metiers_gear_widths_model_type[ i ];
         multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, "../"+inputfolder);
+        multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, "../"+inputfolder);
 
 		metiers[i] =  new Metier(metier_name,
 			metier_type,
@@ -1688,7 +1689,8 @@ int main(int argc, char* argv[])
             gear_width_a,
 			gear_width_b,
 			gear_width_model,
-			loss_after_1_passage);
+            loss_after_1_passage,
+            metier_target_stocks);
 	}
 
 	/*

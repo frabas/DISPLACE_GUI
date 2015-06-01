@@ -31,7 +31,8 @@ double _fspeed,
 double _gear_width_a,
 double _gear_width_b,
 string _gear_width_model,
-multimap<int, double> _loss_after_1_passage)
+multimap<int, double> _loss_after_1_passage,
+multimap<int, int> _metier_target_stocks)
 {
 	name=_name;
 	type=_type;
@@ -44,6 +45,7 @@ multimap<int, double> _loss_after_1_passage)
 	gear_width_b=_gear_width_b;
 	gear_width_model=_gear_width_model;
 	loss_after_1_passage=_loss_after_1_passage;
+    metier_target_stocks=_metier_target_stocks;
 }
 
 
@@ -137,6 +139,12 @@ multimap<int, double> Metier::get_loss_after_1_passage()
 {
 
 	return(loss_after_1_passage);
+}
+
+multimap<int, int> Metier::get_metier_target_stocks()
+{
+
+    return(metier_target_stocks);
 }
 
 

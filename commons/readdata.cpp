@@ -1158,6 +1158,32 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
 }
 
 
+multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/met_target_names.dat";
+
+    ifstream file_metier_target_stocks;
+    file_metier_target_stocks.open(filename.c_str());
+    if(file_metier_target_stocks.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, int> metier_target_stocks;
+    fill_multimap_from_specifications_i_i(file_metier_target_stocks,  metier_target_stocks);
+    file_metier_target_stocks.close();
+
+    return(metier_target_stocks);
+}
+
+
+
 // FOR METIER
 map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder)
 {

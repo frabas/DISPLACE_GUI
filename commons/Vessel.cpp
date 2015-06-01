@@ -2770,6 +2770,35 @@ ofstream& freq_distance)
 }
 
 
+
+void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
+
+    // caution: the likely metier is deduced from the proba of fishing grounds
+    // we might imagine to deduce it from market incentive, etc. instead
+
+    //1. draw a ground according to freq
+    const vector <int> &grds = this->get_fgrounds();
+    vector <double> freq_grds = this->get_freq_fgrounds();
+                                 // need to convert in array, see myRutils.cpp
+    vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
+    int ground=grounds[0];
+
+
+    //2. get possible metiers on this ground
+    const multimap<int, int> &poss_met        = this->get_possible_metiers();
+    const multimap<int, double> &freq_poss_met= this->get_freq_possible_metiers();
+    vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
+    vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
+                             // need to convert in array, see myRutils.cpp
+    vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+    this->set_metier(  metiers[ a_met[0] ]  );
+
+
+
+}
+
+
+
 void Vessel::choose_a_ground_and_go_fishing(int tstep,
         const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
@@ -2949,6 +2978,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 
 		// for this vessel, select the metier specific to this particular fishing ground
 		// according to the observed frequency in data
+        // (NOTE THAT, FINALLY, THE METIER CAN BE DIFFERENT FROM THE ONE FROM which_metier_should_i_go_for() )
         const multimap<int, int> &poss_met        = this->get_possible_metiers();
         const multimap<int, double> &freq_poss_met= this->get_freq_possible_metiers();
 		vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );

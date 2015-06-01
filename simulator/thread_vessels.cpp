@@ -148,8 +148,15 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     vessels[ index_v ]->reinit_after_a_trip();
                     vessels[index_v]->unlock();
                 }
+                // ***************make a probable decision*************************
+                vessels[ index_v ]->which_metier_should_i_go_for(metiers);
 
-                // ***************make a decision************************************
+                // the metier should help informing to which fish price time series the vessel will be look at
+                // if a decision on the fish price is used in the GoFishing dtree...
+                // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
+                // TO DO....
+
+                // ***************make a dtree decision****************************
                 map<string,int> external_states_relevant_for_going_fishing;
                 external_states_relevant_for_going_fishing.insert(make_pair(" fish_price_is ",1));
                 external_states_relevant_for_going_fishing.insert(make_pair(" weather_is ",0));
@@ -157,7 +164,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 int go_fishing= vessels[ index_v ]->should_i_go_fishing(
                     external_states_relevant_for_going_fishing, use_dtrees);
                 //}
-                // ***************implement a decision*******************************
+                // ***************implement a decision*****************************
                 if(go_fishing)
                 {
 

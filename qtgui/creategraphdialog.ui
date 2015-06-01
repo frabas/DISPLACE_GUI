@@ -311,17 +311,44 @@
       <string>Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
+      <item row="2" column="0">
        <widget class="QCheckBox" name="removesLongEdges">
         <property name="text">
          <string>Remove edges longer than</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="longEdgesLimit">
         <property name="suffix">
          <string> km</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="minLinksEnabled">
+        <property name="text">
+         <string>Leave at least n links to any node</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="minLinks">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="maxLinksEnabled">
+        <property name="text">
+         <string>Limit the number of links per node to</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -332,33 +359,6 @@
         </property>
         <property name="value">
          <number>6</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="maxLinksEnabled">
-        <property name="text">
-         <string>Limit the number of links per node to</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="minLinksEnabled">
-        <property name="text">
-         <string>Leave at least n links to any node</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QSpinBox" name="minLinks">
-        <property name="minimum">
-         <number>1</number>
         </property>
        </widget>
       </item>
@@ -381,6 +381,13 @@
   <tabstop>shapefileIncluding2</tabstop>
   <tabstop>step2</tabstop>
   <tabstop>shapefileExcluding</tabstop>
+  <tabstop>removeEdgesExclusion</tabstop>
+  <tabstop>minLinksEnabled</tabstop>
+  <tabstop>minLinks</tabstop>
+  <tabstop>maxLinksEnabled</tabstop>
+  <tabstop>maxLinks</tabstop>
+  <tabstop>removesLongEdges</tabstop>
+  <tabstop>longEdgesLimit</tabstop>
   <tabstop>cmdCancel</tabstop>
   <tabstop>cmdOk</tabstop>
  </tabstops>
@@ -394,7 +401,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>684</x>
-     <y>409</y>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>385</x>
@@ -410,7 +417,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>480</x>
-     <y>409</y>
+     <y>510</y>
     </hint>
     <hint type="destinationlabel">
      <x>247</x>

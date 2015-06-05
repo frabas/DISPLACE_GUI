@@ -74,6 +74,10 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     double stepx;
     double fal;
 
+    // sanitize
+    if (mShapefileExc.get() == 0)
+        mRemoveEdgesInExcludeZone = false;
+
     switch (mType) {
     case Hex:
         stepy = std::sqrt(3) / 2.0 * mStep;
@@ -248,6 +252,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             ++progress;
             if (mFeedback)
                 mFeedback->setStep(progress);
+            p3 = 0;
         }
 
     }

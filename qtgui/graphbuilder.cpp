@@ -86,28 +86,44 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         break;
     }
 
+    int total = 0;
+
+    if (mShapefileInc1.get()) {
+        total += ((mLatMax - mLatMin) / (std::sqrt(3) / 2.0 * mStep1 /earthRadius));
+    }
+    if (mShapefileInc2.get()) {
+        total += ((mLatMax - mLatMin) / (std::sqrt(3) / 2.0 * mStep2 /earthRadius));
+    }
+    if (mOutsideEnabled) {
+        total += ((mLatMax - mLatMin) / (std::sqrt(3) / 2.0 * mStep /earthRadius));
+    }
+
+    total += 50; // Node creation, links, removing.
+
     if (mFeedback) {
-        mFeedback->setMax((mLatMax - mLatMin) / (stepy /earthRadius));
+        mFeedback->setMax(total);
     }
 
     std::vector<std::shared_ptr<OGRDataSource> > include, exclude;
+
+    int progress = 0;
 
     if (mShapefileExc.get())
         exclude.push_back(mShapefileExc);
     if (mShapefileInc1.get()) {
         include.push_back(mShapefileInc1);
-        fillWithNodes(res, d, mStep1, fal, include, exclude, false);
+        fillWithNodes(res, d, mStep1, fal, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc1);
     }
     if (mShapefileInc2.get()) {
         include.push_back(mShapefileInc2);
-        fillWithNodes(res, d, mStep2, fal, include, exclude, false);
+        fillWithNodes(res, d, mStep2, fal, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc2);
     }
     if (mOutsideEnabled) {
-        fillWithNodes(res, d, mStep, 30, include, exclude, true);
+        fillWithNodes(res, d, mStep, 30, include, exclude, true, progress);
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
@@ -115,6 +131,8 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     int nv = 0, na =0;
     CDT::Finite_vertices_iterator vrt = d.finite_vertices_begin();
+    int p3 = 0;
+    int vt = d.number_of_vertices();
     while (vrt != d.finite_vertices_end()) {
         CDT::Vertex_circulator vc = d.incident_vertices((CDT::Vertex_handle)vrt);
         CDT::Vertex_circulator done(vc);
@@ -224,6 +242,14 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
         ++vrt;
         ++nv;
+
+        ++p3;
+        if (p3 > vt/50) {
+            ++progress;
+            if (mFeedback)
+                mFeedback->setStep(progress);
+        }
+
     }
 
     // TODO: check that nodes are connected bidirectionally!
@@ -266,7 +292,7 @@ void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double be
 }
 
 void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
-                                  double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside)
+                                  double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
 {
     double flon = mLonMin;
     int nr = 0, nc = 0;
@@ -350,10 +376,11 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
 
         lat = p2.y();
         ++nr;
+        ++progress;
         p1=p2;
 
         if (mFeedback)
-            mFeedback->setStep(nr);
+            mFeedback->setStep(progress);
     }
 
 }

@@ -70,22 +70,21 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     QList<Node> res;
     CDT d;
 
-    double stepy;
-    double stepx;
-    double fal;
 
     // sanitize
     if (mShapefileExc.get() == 0)
         mRemoveEdgesInExcludeZone = false;
 
+    double fal;
+    double f;
+
     switch (mType) {
     case Hex:
-        stepy = std::sqrt(3) / 2.0 * mStep;
-        stepx = mStep;
+        f = std::sqrt(3) / 2.0;
         fal = 30;
         break;
     case Quad:
-        stepy = stepx = mStep;
+        f = 1.0;
         fal = 0;
         break;
     }
@@ -93,13 +92,13 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     int total = 0;
 
     if (mShapefileInc1.get()) {
-        total += ((mLatMax - mLatMin) / (std::sqrt(3) / 2.0 * mStep1 /earthRadius));
+        total += ((mLatMax - mLatMin) / (f * mStep1 /earthRadius));
     }
     if (mShapefileInc2.get()) {
-        total += ((mLatMax - mLatMin) / (std::sqrt(3) / 2.0 * mStep2 /earthRadius));
+        total += ((mLatMax - mLatMin) / (f * mStep2 /earthRadius));
     }
     if (mOutsideEnabled) {
-        total += ((mLatMax - mLatMin) / (std::sqrt(3) / 2.0 * mStep /earthRadius));
+        total += ((mLatMax - mLatMin) / (f * mStep /earthRadius));
     }
 
     total += 50; // Node creation, links, removing.

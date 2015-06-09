@@ -289,6 +289,28 @@ void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
     mEditorMode = mode;
 }
 
+void MapObjectsController::clearNodeSelection(int model)
+{
+    for (QSet<NodeMapObject *>::iterator it = mNodeSelection[model].begin(); it != mNodeSelection[model].end(); ++it)
+        (*it)->setSelection(false);
+
+    mNodeSelection[model].clear();
+
+    redraw();
+    emit nodeSelectionChanged(mNodeSelection[model].size());
+}
+
+void MapObjectsController::selectNodes(int model, QList<int> nodes)
+{
+    foreach (int node, nodes) {
+        mNodeObjects[model].at(node)->setSelection(true);
+        mNodeSelection[model].insert(mNodeObjects[model].at(node));
+    }
+
+    redraw();
+    emit nodeSelectionChanged(mNodeSelection[model].size());
+}
+
 void MapObjectsController::delSelected(int model)
 {
     if (mEditorMode == NoEditorMode)

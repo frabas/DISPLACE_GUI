@@ -244,6 +244,8 @@ public:
     void setEditorMode (EditorModes mode);
     EditorModes getEditorMode() const { return mEditorMode; }
 
+    void clearNodeSelection(int model);
+    void selectNodes(int model, QList<int> nodes);
     void delSelected(int model);
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }

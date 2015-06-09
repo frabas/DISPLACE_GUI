@@ -43,7 +43,7 @@ void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(c);
+    painter.setBrush(mSelected ? QBrush(Qt::red) : c);
     painter.drawEllipse(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H);
     if (mSelected) {
         painter.setPen(QPen(QBrush(Qt::red), 3));

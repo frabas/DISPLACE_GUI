@@ -172,16 +172,12 @@ private slots:
     void on_actionExport_Harbours_triggered();
     void on_actionExport_Populations_triggered();
     void on_actionExport_Nations_triggered();
-
     void on_actionAssign_Landscape_codes_triggered();
-
     void on_actionAssign_Area_codes_triggered();
-
     void on_actionCalcPopDistribution_triggered();
-
     void on_actionLoadStockNames_triggered();
-
     void on_actionDecision_Trees_Editor_triggered();
+    void on_actionCheck_for_isolated_subgraphs_triggered();
 
 public slots:
     void end_ShortestPathCreated(bool);

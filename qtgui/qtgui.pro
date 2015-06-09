@@ -137,7 +137,8 @@ SOURCES += \
     mergepopulationdatadialog.cpp \
     mergepopulationplugincomponent.cpp \
     workers/mergerstrategy.cpp \
-    workers/graphbuilderworker.cpp
+    workers/graphbuilderworker.cpp \
+    algo/isolatedsubgraphchecker.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -242,7 +243,8 @@ HEADERS += \
     mergepopulationdatadialog.h \
     mergepopulationplugincomponent.h \
     workers/mergerstrategy.h \
-    workers/graphbuilderworker.h
+    workers/graphbuilderworker.h \
+    algo/isolatedsubgraphchecker.h
 
 RESOURCES += \
     qtgui.qrc

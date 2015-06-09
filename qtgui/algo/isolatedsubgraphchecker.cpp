@@ -68,8 +68,9 @@ bool IsolatedSubgraphChecker::process()
 
     boost::breadth_first_search (g, 0, visitor(vis));
 
+    mIsolatedNodes.clear();
     for (std::set<int>::iterator it = nodes.begin(); it != nodes.end(); ++it) {
-        qDebug() << *it;
+        mIsolatedNodes.push_back(*it);
     }
 
     return nodes.size() != 0;

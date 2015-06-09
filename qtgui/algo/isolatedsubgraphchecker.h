@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include <QVector>
+
 class DisplaceModel;
 
 class IsolatedSubgraphChecker
@@ -12,9 +14,15 @@ public:
     ~IsolatedSubgraphChecker();
 
     bool process();
+
+    QList<int> getIsolatedNodes() const {
+        return mIsolatedNodes;
+    }
+
 private:
 
     DisplaceModel *mModel;
+    QList <int> mIsolatedNodes;
 };
 
 #endif // ISOLATEDSUBGRAPHCHECKER_H

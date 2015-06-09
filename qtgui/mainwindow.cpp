@@ -28,6 +28,7 @@
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
 
+#include <algo/isolatedsubgraphchecker.h>
 #include <workers/shortestpathbuilderworker.h>
 #include <workers/datamerger.h>
 
@@ -2094,4 +2095,15 @@ void MainWindow::on_actionDecision_Trees_Editor_triggered()
 #endif
 
     ed->start(app);
+}
+
+void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
+{
+    IsolatedSubgraphChecker checker(currentModel.get());
+
+    if (checker.process()) {
+        QMessageBox::warning(this, tr("Subgraphs checking"), tr("There are isolated subgraphs."));
+    } else {
+        QMessageBox::information(this, tr("Subgraphs checking"), tr("No Isolated subgraphs. The graph is connected."));
+    }
 }

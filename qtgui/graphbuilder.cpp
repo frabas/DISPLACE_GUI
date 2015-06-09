@@ -256,9 +256,28 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     }
 
-    // TODO: check that nodes are connected bidirectionally!
+    // check that nodes are connected bidirectionally!
+    int bidi = 0;
+    for (int i = 0; i < res.size(); ++i) {
+        for (int j = 0; j < res[i].adiacencies.size(); ++j) {
+            int adn = res[i].adiacencies[j];
+            bool fnd = false;
+            for (int k = 0; k < res[adn].adiacencies.size(); ++k) {
+                if (res[adn].adiacencies[k] == i) {
+                    fnd = true;
+                    break;
+                }
+            }
 
-    qDebug() << "NV:" << nv << "na: " << na;
+            if (!fnd) {
+                res[adn].adiacencies.push_back(i);
+                res[adn].weight.push_back(res[i].weight[j]);
+                ++bidi;
+            }
+        }
+    }
+
+    qDebug() << "NV:" << nv << "na: " << na << " non bidi: " << bidi;
     return res;
 }
 

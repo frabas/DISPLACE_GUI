@@ -23,6 +23,7 @@
 #include <mergepopulationdatadialog.h>
 #include <workers/populationdistributiondatamergerstrategy.h>
 #include <workers/mergerstrategy.h>
+#include <workers/graphbuilderworker.h>
 #include <utils/imageformathelpers.h>
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
@@ -1250,32 +1251,6 @@ void MainWindow::on_actionClear_Graph_triggered()
         mMapController->redraw();
     }
 }
-
-class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedback {
-    GraphBuilder *builder;
-    WaitDialog *waitDialog;
-    QList<GraphBuilder::Node> result;
-public:
-    GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg)
-        : BackgroundWorker(win),
-          builder(b),
-          waitDialog(dlg) {
-    }
-
-    virtual void execute() override {
-        builder->setFeedback(this);
-        result = builder->buildGraph();
-        mMain->graphCreated(result);
-    }
-
-    void setMax (int m) {
-        waitDialog->setProgress(true, m);
-    }
-
-    void setStep(int step) {
-        emit progress(step);
-    }
-};
 
 void MainWindow::on_actionCreate_Graph_triggered()
 {

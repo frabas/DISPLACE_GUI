@@ -136,7 +136,8 @@ SOURCES += \
     workers/populationdistributiondatamergerstrategy.cpp \
     mergepopulationdatadialog.cpp \
     mergepopulationplugincomponent.cpp \
-    workers/mergerstrategy.cpp
+    workers/mergerstrategy.cpp \
+    workers/graphbuilderworker.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -240,7 +241,8 @@ HEADERS += \
     utils/displaceexception.h \
     mergepopulationdatadialog.h \
     mergepopulationplugincomponent.h \
-    workers/mergerstrategy.h
+    workers/mergerstrategy.h \
+    workers/graphbuilderworker.h
 
 RESOURCES += \
     qtgui.qrc

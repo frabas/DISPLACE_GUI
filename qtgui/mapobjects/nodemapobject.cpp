@@ -143,12 +143,6 @@ void NodeMapObject::updateProperties()
     mWidget->setText(text);
 }
 
-void NodeMapObject::onSelectionChanged()
-{
-    mGeometry->requestRedraw();
-    emit nodeSelectionHasChanged(this);
-}
-
 QString NodeMapObject::updateStatText(QString prefix)
 {
     QString text = "<br/>";

@@ -64,8 +64,6 @@ public:
     virtual bool showProperties();
     virtual void updateProperties();
 
-    void onSelectionChanged() override;
-
     bool selected() const { return mGeometry->selected(); }
     std::shared_ptr<NodeData> node() const { return mNode; }
 
@@ -75,9 +73,6 @@ protected:
 private slots:
     void toolButtonClicked();
     void widgetClosed();
-
-signals:
-    void nodeSelectionHasChanged(NodeMapObject *object);
 
 private:
     std::shared_ptr<NodeData> mNode;

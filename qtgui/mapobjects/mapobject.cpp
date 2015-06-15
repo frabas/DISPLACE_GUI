@@ -30,10 +30,4 @@ void MapObject::toggleSelection()
 void MapObject::setSelection(bool selection)
 {
     getGeometryEntity()->setSelected(selection);
-    onSelectionChanged();
-}
-
-void MapObject::onSelectionChanged()
-{
-
 }

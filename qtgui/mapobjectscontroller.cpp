@@ -368,7 +368,6 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
         return;
 
     NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
-    connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
     mNodeObjects[model_n].append(obj);
 
     mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
@@ -471,10 +470,26 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
             objPtr->object()->showProperties();
             break;
         case EdgeEditorMode:
-            objPtr->object()->toggleSelection();
+            do {
+                EdgeMapObject *emo = dynamic_cast<EdgeMapObject*>(objPtr->object());
+                if (emo != nullptr) {
+                    objPtr->object()->toggleSelection();
+                    edgeSelectionHasChanged(emo);
+                    emo->getGeometryEntity()->requestRedraw();
+                }
+            } while (false);
             break;
         case NodeEditorMode:
-            objPtr->object()->toggleSelection();
+            do {
+                NodeMapObject *nmo = dynamic_cast<NodeMapObject*>(objPtr->object());
+                if (nmo != nullptr) {
+                    objPtr->object()->toggleSelection();
+                    nodeSelectionHasChanged(nmo);
+                    nmo->getGeometryEntity()->requestRedraw();
+                }
+            } while (false);
+            break;
+        default:
             break;
         }
     }

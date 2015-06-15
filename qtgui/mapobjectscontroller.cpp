@@ -291,24 +291,23 @@ void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
 
 void MapObjectsController::clearNodeSelection(int model)
 {
-    for (QSet<NodeMapObject *>::iterator it = mNodeSelection[model].begin(); it != mNodeSelection[model].end(); ++it)
-        (*it)->setSelection(false);
-
-    mNodeSelection[model].clear();
-
-    redraw();
-    emit nodeSelectionChanged(mNodeSelection[model].size());
+    QSet<NodeMapObject *> tmp = mNodeSelection[model];
+    for (QSet<NodeMapObject *>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
+        NodeMapObject *nmo = *it;
+        nmo->setSelection(false);
+        nodeSelectionHasChanged(nmo);
+        nmo->getGeometryEntity()->requestRedraw();
+    }
 }
 
 void MapObjectsController::selectNodes(int model, QList<int> nodes)
 {
     foreach (int node, nodes) {
-        mNodeObjects[model].at(node)->setSelection(true);
-        mNodeSelection[model].insert(mNodeObjects[model].at(node));
+        NodeMapObject *nmo = mNodeObjects[model].at(node);
+        nmo->setSelection(true);
+        nodeSelectionHasChanged(nmo);
+        nmo->getGeometryEntity()->requestRedraw();
     }
-
-    redraw();
-    emit nodeSelectionChanged(mNodeSelection[model].size());
 }
 
 void MapObjectsController::delSelected(int model)

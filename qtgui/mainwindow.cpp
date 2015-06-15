@@ -2105,10 +2105,8 @@ void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
         QMessageBox::warning(this, tr("Subgraphs checking"), tr("There are isolated subgraphs."));
         QList<int> isn = checker.getIsolatedNodes();
 
-#if 0
         mMapController->clearNodeSelection(currentModelIdx);
         mMapController->selectNodes(currentModelIdx, isn);
-#endif
 
         std::shared_ptr<NodeData> nd = currentModel->getNodesList()[isn[0]];
         map->setMapFocusPoint(qmapcontrol::PointWorldCoord(nd->get_x(), nd->get_y()));

@@ -64,8 +64,6 @@ public:
         return mGeometry;
     }
 
-    void onSelectionChanged() override;
-
     bool selected() const { return mGeometry->selected(); }
 
     std::shared_ptr<NodeData> node() const { return mEdge->source.lock(); }

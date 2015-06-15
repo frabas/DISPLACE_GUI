@@ -575,7 +575,7 @@ int main(int argc, char* argv[])
     a_graph = scenario.a_graph;
     nrow_coord = scenario.nrow_coord;
     nrow_graph = scenario.nrow_graph;
-    a_port = scenario.a_graph;
+    a_port = scenario.a_port;
     graph_res = scenario.graph_res;
     is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
     use_dtrees = scenario.use_dtrees;

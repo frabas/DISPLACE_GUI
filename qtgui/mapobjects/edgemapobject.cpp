@@ -32,11 +32,6 @@ EdgeMapObject::EdgeMapObject(MapObjectsController *controller, std::shared_ptr<N
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 }
 
-void EdgeMapObject::onSelectionChanged()
-{
-    emit edgeSelectionHasChanged(this);
-}
-
 EdgeGraphics::EdgeGraphics(const std::vector<PointWorldCoord> &points, std::shared_ptr<NodeData::Edge> edge)
     : qmapcontrol::GeometryLineString(minZoom, maxZoom),
       mEdge(edge)

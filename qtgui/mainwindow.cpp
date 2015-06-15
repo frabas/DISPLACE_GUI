@@ -23,10 +23,12 @@
 #include <mergepopulationdatadialog.h>
 #include <workers/populationdistributiondatamergerstrategy.h>
 #include <workers/mergerstrategy.h>
+#include <workers/graphbuilderworker.h>
 #include <utils/imageformathelpers.h>
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
 
+#include <algo/isolatedsubgraphchecker.h>
 #include <workers/shortestpathbuilderworker.h>
 #include <workers/datamerger.h>
 
@@ -497,6 +499,8 @@ void MainWindow::waitEnd()
 
 void MainWindow::editorAddNode(QPointF point)
 {
+    ui->actionAdd->setChecked(false);
+
     if (!isEditorModel()) {
         abortMouseMode();
         return;
@@ -515,6 +519,8 @@ void MainWindow::editorAddNode(QPointF point)
 
 void MainWindow::editorAddEdge(int from, int to)
 {
+    ui->actionAdd->setChecked(false);
+
     if (!isEditorModel()) {
         abortMouseMode();
         return;
@@ -1251,32 +1257,6 @@ void MainWindow::on_actionClear_Graph_triggered()
     }
 }
 
-class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedback {
-    GraphBuilder *builder;
-    WaitDialog *waitDialog;
-    QList<GraphBuilder::Node> result;
-public:
-    GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg)
-        : BackgroundWorker(win),
-          builder(b),
-          waitDialog(dlg) {
-    }
-
-    virtual void execute() override {
-        builder->setFeedback(this);
-        result = builder->buildGraph();
-        mMain->graphCreated(result);
-    }
-
-    void setMax (int m) {
-        waitDialog->setProgress(true, m);
-    }
-
-    void setStep(int step) {
-        emit progress(step);
-    }
-};
-
 void MainWindow::on_actionCreate_Graph_triggered()
 {
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
@@ -1291,18 +1271,31 @@ void MainWindow::on_actionCreate_Graph_triggered()
     if (dlg.exec() == QDialog::Accepted) {
         GraphBuilder *gb = new GraphBuilder();
         gb->setType(dlg.getType());
-        gb->setDistance(dlg.step() * 1000);
+        gb->setDefaultDistance(dlg.defaultStep() * 1000);
+        gb->setDistance1(dlg.step1() * 1000);
+        gb->setDistance2(dlg.step2() * 1000);
         gb->setLimits(dlg.minLon(), dlg.maxLon(), dlg.minLat(), dlg.maxLat());
+        gb->setOutsideEnabled(dlg.isOutsideEnabled());
+        gb->setExcludeZoneEdgeRemovalEnabled(dlg.isRemoveEdgesInExclusionZoneEnabled());
+        gb->setMaxLinks(dlg.isMaxLinksEnabled() ? dlg.getMaxLinks() : -1);
+        gb->setMinLinks(dlg.isMinLinksEnabled() ? dlg.getMinLinks() : -1);
 
-        if (dlg.isInsideRemoval()) {
-            gb->setShapefileRemoval(GraphBuilder::Inside);
-        } else if (dlg.isOutsideRemoval()) {
-            gb->setShapefileRemoval(GraphBuilder::Outside);
-        }
+        if (dlg.isRemoveLongEdgesEnabled())
+            gb->setLinkLimits(dlg.removeLongEdgesLimit());
+        else
+            gb->setLinkLimits(-1.0);
 
-        QString s = dlg.getSelectedShapefile();
+        QString s = dlg.getIncludingSelectedShapefile1();
         if (!s.isEmpty())
-            gb->setShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+            gb->setIncludingShapefile1(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+
+        s = dlg.getIncludingSelectedShapefile2();
+        if (!s.isEmpty())
+            gb->setIncludingShapefile2(mMapController->cloneShapefileDatasource(currentModelIdx, s));
+
+        s = dlg.getExcludingSelectedShapefile();
+        if (!s.isEmpty())
+            gb->setExcludingShapefile(mMapController->cloneShapefileDatasource(currentModelIdx, s));
 
         WaitDialog *wdlg = new WaitDialog(this);
         wdlg->setText(tr("Wait while graph is created..."));
@@ -1841,6 +1834,7 @@ void MainWindow::on_actionAdd_triggered()
         break;
     case MapObjectsController::NodeEditorMode:
         if (true) {
+            ui->actionAdd->setChecked(true);
             SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));
             connect (mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
             startMouseMode(new MoveFilteringMouseModeDecorator(mode));
@@ -1848,6 +1842,7 @@ void MainWindow::on_actionAdd_triggered()
         break;
     case MapObjectsController::EdgeEditorMode:
         if (true) {
+            ui->actionAdd->setChecked(true);
             EdgeAddMouseMode *mode = new EdgeAddMouseMode(currentModel.get());
             connect (mode, SIGNAL(edgeAdded(int,int)), this, SLOT(editorAddEdge(int,int)));
             startMouseMode(new MoveFilteringMouseModeDecorator(mode));
@@ -2106,4 +2101,22 @@ void MainWindow::on_actionDecision_Trees_Editor_triggered()
 #endif
 
     ed->start(app);
+}
+
+void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
+{
+    IsolatedSubgraphChecker checker(currentModel.get());
+
+    if (checker.process()) {
+        QMessageBox::warning(this, tr("Subgraphs checking"), tr("There are isolated subgraphs."));
+        QList<int> isn = checker.getIsolatedNodes();
+
+        mMapController->clearNodeSelection(currentModelIdx);
+        mMapController->selectNodes(currentModelIdx, isn);
+
+        std::shared_ptr<NodeData> nd = currentModel->getNodesList()[isn[0]];
+        map->setMapFocusPoint(qmapcontrol::PointWorldCoord(nd->get_x(), nd->get_y()));
+    } else {
+        QMessageBox::information(this, tr("Subgraphs checking"), tr("No Isolated subgraphs. The graph is connected."));
+    }
 }

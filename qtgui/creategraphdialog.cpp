@@ -15,9 +15,19 @@ CreateGraphDialog::~CreateGraphDialog()
     delete ui;
 }
 
-double CreateGraphDialog::step() const
+double CreateGraphDialog::defaultStep() const
 {
-    return ui->distance->value();
+    return ui->step->value();
+}
+
+double CreateGraphDialog::step1() const
+{
+    return ui->step1->value();
+}
+
+double CreateGraphDialog::step2() const
+{
+    return ui->step2->value();
 }
 
 double CreateGraphDialog::minLon() const
@@ -48,24 +58,67 @@ GraphBuilder::Type CreateGraphDialog::getType() const
         return GraphBuilder::Hex;
 }
 
-bool CreateGraphDialog::isInsideRemoval() const
-{
-    return ui->removeInside->isChecked();
-}
-
-bool CreateGraphDialog::isOutsideRemoval() const
-{
-    return ui->removeOutside->isChecked();
-}
-
 void CreateGraphDialog::setShapefileList(QStringList list)
 {
-    ui->shapefile->addItems(list);
+    ui->shapefileIncluding1->addItems(list);
+    ui->shapefileIncluding2->addItems(list);
+    ui->shapefileExcluding->addItems(list);
 }
 
-QString CreateGraphDialog::getSelectedShapefile() const
+QString CreateGraphDialog::getIncludingSelectedShapefile1() const
 {
-    return ui->shapefile->currentText();
+    return ui->shapefileIncluding1->currentText();
+}
+
+QString CreateGraphDialog::getIncludingSelectedShapefile2() const
+{
+    return ui->shapefileIncluding2->currentText();
+}
+
+
+QString CreateGraphDialog::getExcludingSelectedShapefile() const
+{
+    return ui->shapefileExcluding->currentText();
+}
+
+bool CreateGraphDialog::isOutsideEnabled() const
+{
+    return ui->enableOutside->isChecked();
+}
+
+bool CreateGraphDialog::isRemoveLongEdgesEnabled() const
+{
+    return ui->removesLongEdges->isChecked();
+}
+
+bool CreateGraphDialog::isRemoveEdgesInExclusionZoneEnabled() const
+{
+    return ui->removeEdgesExclusion->isChecked();
+}
+
+double CreateGraphDialog::removeLongEdgesLimit() const
+{
+    return ui->longEdgesLimit->value();
+}
+
+bool CreateGraphDialog::isMaxLinksEnabled() const
+{
+    return ui->maxLinksEnabled->isChecked();
+}
+
+bool CreateGraphDialog::isMinLinksEnabled() const
+{
+    return ui->minLinksEnabled->isChecked();
+}
+
+int CreateGraphDialog::getMaxLinks() const
+{
+    return ui->maxLinks->value();
+}
+
+int CreateGraphDialog::getMinLinks() const
+{
+    return ui->minLinks->value();
 }
 
 void CreateGraphDialog::done(int r)
@@ -73,7 +126,7 @@ void CreateGraphDialog::done(int r)
     if (r == QDialog::Accepted) {
         if (std::abs(ui->lat1->value() - ui->lat2->value()) < 1e-5 ||
                 std::abs(ui->long1->value() - ui->long2->value()) < 1e-5 ||
-            ui->distance->value() < 0.5) {
+            ui->step->value() < 0.5) {
             QMessageBox::warning(this, tr("Invalid values"), tr("The fields contain some invalid value."));
         } else {
             QDialog::done(r);

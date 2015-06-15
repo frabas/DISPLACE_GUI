@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 DtEditorWindow::DtEditorWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -141,9 +142,23 @@ void DtEditorWindow::open(QString filename)
 
     mScene->clear();
     mTree->clear();
-    if (!reader.readTree(strm, mTree, mScene)) {
-        QMessageBox::warning(this, tr("Load failed"),
-                             QString(tr("Cannot export to csv file.")));
+
+    bool retv = false;
+    QString errmsg;
+    try {
+        retv = reader.readTree(strm, mTree, mScene);
+    } catch (std::invalid_argument x) {
+        errmsg = x.what();
+    }
+
+    if (!retv) {
+        QString msg;
+        if (errmsg.isEmpty()) {
+            msg = QString(tr("Cannot load tree file."));
+        } else {
+            msg = QString(tr("Cannot load tree file: %1")).arg(errmsg);
+        }
+        QMessageBox::warning(this, tr("Load failed"),msg);
         return;
     }
 
@@ -230,6 +245,8 @@ void DtEditorWindow::evt_scene_selection_changed()
                 if (extra.get() != 0) {
 
                 }
+            } else {
+                qWarning() << "Selected graph " << item << " has null node!";
             }
         }
     }

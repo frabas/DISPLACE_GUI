@@ -64,10 +64,10 @@ public:
     virtual bool showProperties();
     virtual void updateProperties();
 
-    void onSelectionChanged() override;
-
     bool selected() const { return mGeometry->selected(); }
     std::shared_ptr<NodeData> node() const { return mNode; }
+
+    Role getRole() const { return mRole; }
 
 protected:
     QString updateStatText(QString prefix);
@@ -75,9 +75,6 @@ protected:
 private slots:
     void toolButtonClicked();
     void widgetClosed();
-
-signals:
-    void nodeSelectionHasChanged(NodeMapObject *object);
 
 private:
     std::shared_ptr<NodeData> mNode;

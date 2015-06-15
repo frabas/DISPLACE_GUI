@@ -40,9 +40,6 @@ public:
 
     virtual void toggleSelection() final;
     virtual void setSelection(bool selection);
-
-    /** Called when the selection has changed. Override this if you want specific action to be performed */
-    virtual void onSelectionChanged();
 };
 
 #endif // MAPOBJECT_H

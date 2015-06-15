@@ -32,6 +32,7 @@
 #include <palettemanager.h>
 #include <objecttreemodel.h>
 #include <editorlayerinterface.h>
+#include <mapobjects/mapobjectcontainer.h>
 
 #include <gdal/ogrsf_frmts.h>
 
@@ -244,6 +245,8 @@ public:
     void setEditorMode (EditorModes mode);
     EditorModes getEditorMode() const { return mEditorMode; }
 
+    void clearNodeSelection(int model);
+    void selectNodes(int model, QList<int> nodes);
     void delSelected(int model);
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
@@ -286,10 +289,10 @@ private:
     qmapcontrol::QMapControl *mMap;
     std::shared_ptr<DisplaceModel> mModels[MAX_MODELS];
 
-    QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];
-    QList<NodeMapObject *> mNodeObjects[MAX_MODELS];
-    QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
-    QList<EdgeMapObject *> mEdgeObjects[MAX_MODELS];
+    MapObjectContainer<HarbourMapObject> mHarbourObjects[MAX_MODELS];
+    MapObjectContainer<NodeMapObject> mNodeObjects[MAX_MODELS];
+    MapObjectContainer<VesselMapObject> mVesselObjects[MAX_MODELS];
+    MapObjectContainer<EdgeMapObject> mEdgeObjects[MAX_MODELS];
 
 //    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
 

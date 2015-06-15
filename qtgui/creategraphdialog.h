@@ -36,18 +36,28 @@ public:
     explicit CreateGraphDialog(QWidget *parent = 0);
     ~CreateGraphDialog();
 
-    double step() const;
+    double defaultStep() const;
+    double step1() const;
+    double step2() const;
     double minLon() const;
     double minLat() const;
     double maxLon() const;
     double maxLat() const;
     GraphBuilder::Type getType() const;
 
-    bool isInsideRemoval() const;
-    bool isOutsideRemoval() const;
-
     void setShapefileList(QStringList list);
-    QString getSelectedShapefile() const ;
+    QString getIncludingSelectedShapefile1() const ;
+    QString getIncludingSelectedShapefile2() const ;
+    QString getExcludingSelectedShapefile() const ;
+
+    bool isOutsideEnabled() const;
+    bool isRemoveLongEdgesEnabled() const;
+    bool isRemoveEdgesInExclusionZoneEnabled() const;
+    double removeLongEdgesLimit() const;
+    bool isMaxLinksEnabled() const;
+    bool isMinLinksEnabled() const;
+    int getMaxLinks() const;
+    int getMinLinks() const;
 
 public slots:
     void done(int) override;

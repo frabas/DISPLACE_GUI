@@ -44,6 +44,7 @@ public:
     int readFromDirectory(std::string path);
     int readFromScenario (std::string path, displace::commons::Scenario scenario);
     boost::shared_ptr<dtree::DecisionTree> tree (TreeType type);
+    bool hasTree(TreeType type);
 
     /** \brief returns the instance of the singleton.
      * Uses lazy initialization to proper initialize the instance.

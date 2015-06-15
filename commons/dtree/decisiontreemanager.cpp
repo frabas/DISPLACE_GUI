@@ -212,6 +212,11 @@ boost::shared_ptr<dtree::DecisionTree> DecisionTreeManager::tree(DecisionTreeMan
     return mTrees[static_cast<int>(type)];
 }
 
+bool DecisionTreeManager::hasTree(DecisionTreeManager::TreeType type)
+{
+    return tree(type).get() != 0;
+}
+
 std::string DecisionTreeManager::treeTypeCode(DecisionTreeManager::TreeType type)
 {
     return std::string(mCodes[type]);

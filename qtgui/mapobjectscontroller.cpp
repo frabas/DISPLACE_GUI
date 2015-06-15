@@ -115,7 +115,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
     foreach (std::shared_ptr<VesselData> vsl, vessels) {
         VesselMapObject *obj = new VesselMapObject(this,vsl.get());
-        mVesselObjects[model_n].append(obj);
+        mVesselObjects[model_n].add(vsl->mVessel->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }
@@ -132,12 +132,14 @@ void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel 
 
 void MapObjectsController::updateVesselPosition(int model, int idx)
 {
-    mVesselObjects[model].at(idx)->vesselUpdated();
+    mVesselObjects[model].get(idx, 0)->vesselUpdated();
 }
 
 void MapObjectsController::updateNodes(int model)
 {
-    foreach (NodeMapObject *obj, mNodeObjects[model]) {
+    MapObjectContainer<NodeMapObject>::Iterator it = mNodeObjects[model].begin();
+    while (!mNodeObjects[model].atEnd(it)) {
+        NodeMapObject *obj = mNodeObjects[model].get(it, NodeMapObject::GraphNodeRole);
         obj->updateProperties();
         obj->getGeometryEntity()->requestRedraw();
     }
@@ -289,6 +291,27 @@ void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
     mEditorMode = mode;
 }
 
+void MapObjectsController::clearNodeSelection(int model)
+{
+    QSet<NodeMapObject *> tmp = mNodeSelection[model];
+    for (QSet<NodeMapObject *>::iterator it = tmp.begin(); it != tmp.end(); ++it) {
+        NodeMapObject *nmo = *it;
+        nmo->setSelection(false);
+        nodeSelectionHasChanged(nmo);
+        nmo->getGeometryEntity()->requestRedraw();
+    }
+}
+
+void MapObjectsController::selectNodes(int model, QList<int> nodes)
+{
+    foreach (int node, nodes) {
+        NodeMapObject *nmo = mNodeObjects[model].get(node, NodeMapObject::GraphNodeRole);
+        nmo->setSelection(true);
+        nodeSelectionHasChanged(nmo);
+        nmo->getGeometryEntity()->requestRedraw();
+    }
+}
+
 void MapObjectsController::delSelected(int model)
 {
     if (mEditorMode == NoEditorMode)
@@ -346,34 +369,33 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
         return;
 
     NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
-    connect(obj, SIGNAL(nodeSelectionHasChanged(NodeMapObject*)), this, SLOT(nodeSelectionHasChanged(NodeMapObject*)));
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
 
     mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     /* add here other roles */
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumsweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerImpact[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosBiomass, nd);
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
-    mNodeObjects[model_n].append(obj);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
@@ -387,14 +409,14 @@ void MapObjectsController::addEdge (int model_n, std::shared_ptr<NodeData::Edge>
 
     connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
-    mEdgeObjects[model_n].append(edge);
+    mEdgeObjects[model_n].add(-1, edge, 0);
     mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
 }
 
 void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> h, bool disable_redraw)
 {
     HarbourMapObject *obj = new HarbourMapObject(this, mModels[model_n].get(), h.get());
-    mHarbourObjects[model_n].append(obj);
+    mHarbourObjects[model_n].add(h->mHarbour->get_idx_node(), obj, 0);
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
@@ -416,6 +438,7 @@ void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geom
 
 void MapObjectsController::delSelectedEdges(int model)
 {
+    // TODO: Remove also the edge data from mEdgeObjects
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
         std::shared_ptr<NodeData> nd = edge->node();
         std::shared_ptr<NodeData> tg = edge->target();
@@ -449,10 +472,26 @@ void MapObjectsController::geometryClicked(const Geometry *geometry)
             objPtr->object()->showProperties();
             break;
         case EdgeEditorMode:
-            objPtr->object()->toggleSelection();
+            do {
+                EdgeMapObject *emo = dynamic_cast<EdgeMapObject*>(objPtr->object());
+                if (emo != nullptr) {
+                    objPtr->object()->toggleSelection();
+                    edgeSelectionHasChanged(emo);
+                    emo->getGeometryEntity()->requestRedraw();
+                }
+            } while (false);
             break;
         case NodeEditorMode:
-            objPtr->object()->toggleSelection();
+            do {
+                NodeMapObject *nmo = dynamic_cast<NodeMapObject*>(objPtr->object());
+                if (nmo != nullptr) {
+                    objPtr->object()->toggleSelection();
+                    nodeSelectionHasChanged(nmo);
+                    nmo->getGeometryEntity()->requestRedraw();
+                }
+            } while (false);
+            break;
+        default:
             break;
         }
     }

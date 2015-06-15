@@ -3521,7 +3521,7 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 
 		// read the vessel-specific decision tree
 		// (binary tree only, no/low/bad is 0 and yes/high/good is 1)
-		if(use_the_tree)
+        if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::GoFishing))
 		{
 			map<string,int> internal_states;
 								 // TO DO: retrieve from the state of the vessel

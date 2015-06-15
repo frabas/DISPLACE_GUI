@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.7.12"
+#define MyAppVersion "0.7.13"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -56,6 +56,11 @@ Source: install\extra\bin\libgeos-3-4-2.dll; DestDir: {app}; Flags: ignoreversio
 Source: install\extra\bin\libproj-0.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libstdc++-6.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libwinpthread-1.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\libCGAL.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\libgmp-10.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\lib\libboost_system-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\lib\libboost_thread-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
+
 Source: install\extra\bin\Qt5Core.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\Qt5Concurrent.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\Qt5Gui.dll; DestDir: {app}; Flags: ignoreversion

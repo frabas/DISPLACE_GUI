@@ -29,19 +29,26 @@ CONFIG(release,release|debug) {
 macx {
     CONFIG -= app_bundle
     ICON = icons/displace.icns
+
 }
 
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+
+    CGAL_LIBS= -lCGAL -lgmp -lboost_system-mgw49-mt-1_57
+}
+
+unix {
+    CGAL_LIBS= -lCGAL -lgmp
 }
 
 DEFINES += HAVE_GEOGRAPHICLIB
 LIBS += -lGeographic
 
+QMAKE_CXXFLAGS += -frounding-math
 DEFINES += PROFILE
-LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB
-
+LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL include path.
 INCLUDEPATH += $$QMC_GDAL_INC
@@ -129,7 +136,9 @@ SOURCES += \
     workers/populationdistributiondatamergerstrategy.cpp \
     mergepopulationdatadialog.cpp \
     mergepopulationplugincomponent.cpp \
-    workers/mergerstrategy.cpp
+    workers/mergerstrategy.cpp \
+    workers/graphbuilderworker.cpp \
+    algo/isolatedsubgraphchecker.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -233,7 +242,10 @@ HEADERS += \
     utils/displaceexception.h \
     mergepopulationdatadialog.h \
     mergepopulationplugincomponent.h \
-    workers/mergerstrategy.h
+    workers/mergerstrategy.h \
+    workers/graphbuilderworker.h \
+    algo/isolatedsubgraphchecker.h \
+    mapobjects/mapobjectcontainer.h
 
 RESOURCES += \
     qtgui.qrc

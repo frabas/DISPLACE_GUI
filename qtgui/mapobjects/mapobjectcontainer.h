@@ -22,7 +22,10 @@ public:
     ~MapObjectContainer() {
     }
 
-    void add (int id, Obj *object, int role) {
+    int add (int id, Obj *object, int role) {
+        if (id == -1)
+            id = mMap.size();
+
         typename QMap<int,ObjC *>::iterator it = mMap.find(id);
         ObjC *cont;
         if (it == mMap.end()) {
@@ -36,6 +39,8 @@ public:
         while (cont->mList.size() <= role)
             cont->mList.push_back(0);
         cont->mList[role] = object;
+
+        return id;
     }
 
     Obj *get(int id, int role) {

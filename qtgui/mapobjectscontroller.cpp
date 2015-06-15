@@ -115,7 +115,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     const QList<std::shared_ptr<VesselData> > &vessels = model->getVesselList();
     foreach (std::shared_ptr<VesselData> vsl, vessels) {
         VesselMapObject *obj = new VesselMapObject(this,vsl.get());
-        mVesselObjects[model_n].append(obj);
+        mVesselObjects[model_n].add(vsl->mVessel->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }
@@ -132,7 +132,7 @@ void MapObjectsController::updateMapObjectsFromModel(int model_n, DisplaceModel 
 
 void MapObjectsController::updateVesselPosition(int model, int idx)
 {
-    mVesselObjects[model].at(idx)->vesselUpdated();
+    mVesselObjects[model].get(idx, 0)->vesselUpdated();
 }
 
 void MapObjectsController::updateNodes(int model)
@@ -409,14 +409,14 @@ void MapObjectsController::addEdge (int model_n, std::shared_ptr<NodeData::Edge>
 
     connect (edge, SIGNAL(edgeSelectionHasChanged(EdgeMapObject*)), this, SLOT(edgeSelectionHasChanged(EdgeMapObject*)));
 
-    mEdgeObjects[model_n].append(edge);
+    mEdgeObjects[model_n].add(-1, edge, 0);
     mEdgesLayer[model_n]->addEdge(edge, disable_redraw);
 }
 
 void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> h, bool disable_redraw)
 {
     HarbourMapObject *obj = new HarbourMapObject(this, mModels[model_n].get(), h.get());
-    mHarbourObjects[model_n].append(obj);
+    mHarbourObjects[model_n].add(h->mHarbour->get_idx_node(), obj, 0);
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
@@ -438,6 +438,7 @@ void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geom
 
 void MapObjectsController::delSelectedEdges(int model)
 {
+    // TODO: Remove also the edge data from mEdgeObjects
     foreach (EdgeMapObject *edge, mEdgeSelection[model]) {
         std::shared_ptr<NodeData> nd = edge->node();
         std::shared_ptr<NodeData> tg = edge->target();

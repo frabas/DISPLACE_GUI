@@ -67,6 +67,8 @@ public:
     bool selected() const { return mGeometry->selected(); }
     std::shared_ptr<NodeData> node() const { return mNode; }
 
+    Role getRole() const { return mRole; }
+
 protected:
     QString updateStatText(QString prefix);
 

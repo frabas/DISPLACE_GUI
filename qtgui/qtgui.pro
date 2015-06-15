@@ -244,7 +244,8 @@ HEADERS += \
     mergepopulationplugincomponent.h \
     workers/mergerstrategy.h \
     workers/graphbuilderworker.h \
-    algo/isolatedsubgraphchecker.h
+    algo/isolatedsubgraphchecker.h \
+    mapobjects/mapobjectcontainer.h
 
 RESOURCES += \
     qtgui.qrc

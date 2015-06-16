@@ -37,8 +37,12 @@ void RConsole::on_actionExecute_triggered()
 {
     QString obj = QFileDialog::getOpenFileName(this, tr("Open R script"), QString(), tr("R scripts (*.R);;All files (*)"));
     if (!obj.isEmpty()) {
+        QFileInfo info(obj);
+
         mProcess = new QProcess;
+        mProcess->setWorkingDirectory(info.absolutePath());
         connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
+        connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
         QStringList args;
         args << obj;
 
@@ -52,4 +56,12 @@ void RConsole::readOutput()
 
     QString txt = QString::fromLatin1(out);
     ui->result->appendPlainText(txt);
+}
+
+void RConsole::readError()
+{
+    QByteArray out = mProcess->readAllStandardError();
+
+    QString txt = QString::fromLatin1(out);
+    ui->result->appendHtml("<font color=\"#aa0000\">" + txt + "</font>");
 }

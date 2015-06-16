@@ -24,6 +24,7 @@ private slots:
 
 public slots:
     void readOutput();
+    void readError();
 
 private:
     Ui::RConsole *ui;

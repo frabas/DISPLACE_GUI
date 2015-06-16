@@ -6,5 +6,7 @@ OTHER_FILES += \
     Readme.txt \
     COPYRIGHT.txt \
     LICENSE.txt \
-    setup.iss
+    setup.iss \
+    scripts/* \
+    data/*
 

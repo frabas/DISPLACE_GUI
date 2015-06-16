@@ -139,7 +139,8 @@ SOURCES += \
     workers/mergerstrategy.cpp \
     workers/graphbuilderworker.cpp \
     algo/isolatedsubgraphchecker.cpp \
-    R/rconsole.cpp
+    R/rconsole.cpp \
+    R/env.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -248,7 +249,8 @@ HEADERS += \
     workers/graphbuilderworker.h \
     algo/isolatedsubgraphchecker.h \
     mapobjects/mapobjectcontainer.h \
-    R/rconsole.h
+    R/rconsole.h \
+    R/env.h
 
 RESOURCES += \
     qtgui.qrc

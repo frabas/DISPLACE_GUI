@@ -126,7 +126,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         exclude.push_back(mShapefileInc2);
     }
     if (mOutsideEnabled) {
-        fillWithNodes(res, d, mStep, 30, include, exclude, true, progress);
+        fillWithNodes(res, d, mStep, fal, include, exclude, true, progress);
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();

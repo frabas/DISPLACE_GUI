@@ -266,6 +266,7 @@ protected:
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
+    void delSelectedNodes(int model);
 
 protected slots:
     void geometryClicked(const Geometry *);

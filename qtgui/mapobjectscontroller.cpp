@@ -321,6 +321,9 @@ void MapObjectsController::delSelected(int model)
     case EdgeEditorMode:
         delSelectedEdges(model);
         break;
+    case NodeEditorMode:
+        delSelectedNodes(model);
+        break;
     default:
         break;
     }
@@ -460,6 +463,41 @@ void MapObjectsController::delSelectedEdges(int model)
 
     mEdgeSelection[model].clear();
     emit edgeSelectionChanged(0);
+}
+
+void MapObjectsController::delSelectedNodes(int model)
+{
+    foreach (NodeMapObject *node, mNodeSelection[model]) {
+        std::shared_ptr<NodeData> nd = node->node();
+
+        // remove all adiacencies
+        for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
+            auto edge = nd->getAdiacencyByIdx(i);
+
+            std::shared_ptr<NodeData> tg = edge->target.lock();
+            if(tg.get()) {
+                tg->removeAdiacencyByTarget(nd);
+            }
+        }
+        // remove the node
+
+//        mGraphLayer[model]->removeGeometry();
+        QList<NodeMapObject *> objs = mNodeObjects[model].remove(nd->get_idx_node());
+        foreach (NodeMapObject *obj, objs) {
+            if (obj) {
+                std::shared_ptr<qmapcontrol::Geometry> geom = obj->getGeometryEntity();
+                qmapcontrol::LayerGeometry *layer = geom->layer();
+                if (layer)
+                    layer->removeGeometry(geom);
+                delete obj;
+            }
+        }
+
+        mModels[model]->removeNode(nd);
+    }
+
+    mNodeSelection[model].clear();
+    emit nodeSelectionChanged(0);
 }
 
 void MapObjectsController::geometryClicked(const Geometry *geometry)

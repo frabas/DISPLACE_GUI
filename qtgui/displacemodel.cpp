@@ -595,11 +595,11 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
     int cntr = 0;
     foreach(GraphBuilder::Node node, nodes) {
         if (node.good) {
-            int nodeid = mNodes.size();
+//            int nodeid = mNodes.size();
 
             OGRFeature *feature = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
             feature->SetField(FLD_TYPE, (int)OgrTypeNode);
-            feature->SetField(FLD_NODEID, nodeid);
+            feature->SetField(FLD_NODEID, nodeidx + cntr);     // was nodeid
 
             OGRPoint pt;
             pt.setX(node.point.x());
@@ -667,6 +667,28 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
     controller->redraw();
 
+    return true;
+}
+
+bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
+{
+    // remove from: mNodesLayer, mNodes,
+    // update scenario nrow_coord, nrow_graph
+    qDebug() << "1) Node " << node->get_idx_node() << " has " << node.use_count() << " instances";
+
+    mNodes[node->get_idx_node()].reset();       // removed
+    mNodesLayer->SetAttributeFilter(QString("%1 = %2").arg(FLD_NODEID).arg(node->get_idx_node()).toStdString().c_str());
+
+    OGRFeature *ftr;
+    while ((ftr = mNodesLayer->GetNextFeature())) {
+        mNodesLayer->DeleteFeature(ftr->GetFID());
+    }
+    mNodesLayer->ResetReading();
+
+    // TODO: Remove mPenaltyNodesQ1..4
+
+
+    qDebug() << "2) Node " << node->get_idx_node() << " has " << node.use_count() << " instances";
     return true;
 }
 

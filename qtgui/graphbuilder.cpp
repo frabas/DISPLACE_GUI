@@ -7,6 +7,8 @@
 
 #ifdef HAVE_GEOGRAPHICLIB
 #include <GeographicLib/Geodesic.hpp>
+#include <GeographicLib/GeodesicLine.hpp>
+#include <GeographicLib/Constants.hpp>
 #endif
 
 const double GraphBuilder::earthRadius = 6378137;   // ...
@@ -24,10 +26,10 @@ GraphBuilder::GraphBuilder()
 
 void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double latMax)
 {
-    mLatMin = std::min(latMin, latMax) * M_PI / 180.0;
-    mLatMax = std::max(latMin, latMax) * M_PI / 180.0;
-    mLonMin = std::min(lonMin, lonMax) * M_PI / 180.0;
-    mLonMax = std::max(lonMin, lonMax) * M_PI / 180.0;
+    mLatMin = std::min(latMin, latMax);//  * M_PI / 180.0;
+    mLatMax = std::max(latMin, latMax); // * M_PI / 180.0;
+    mLonMin = std::min(lonMin, lonMax);// * M_PI / 180.0;
+    mLonMax = std::max(lonMin, lonMax);// * M_PI / 180.0;
 }
 
 void GraphBuilder::setIncludingShapefile1(std::shared_ptr<OGRDataSource> src)
@@ -92,13 +94,13 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     int total = 0;
 
     if (mShapefileInc1.get()) {
-        total += ((mLatMax - mLatMin) / (f * mStep1 /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep1 /earthRadius));
     }
     if (mShapefileInc2.get()) {
-        total += ((mLatMax - mLatMin) / (f * mStep2 /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep2 /earthRadius));
     }
     if (mOutsideEnabled) {
-        total += ((mLatMax - mLatMin) / (f * mStep /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep /earthRadius));
     }
 
     total += 50; // Node creation, links, removing.
@@ -281,58 +283,42 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     return res;
 }
 
-void GraphBuilder::pointSumWithBearing(const QPointF &p1, double dist, double bearing, QPointF &p2)
-{
-
-#ifdef HAVE_GEOGRAPHICLIB
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
-#else
-    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84;
-#endif
-
-    double x,y;
-    geod.Direct(p1.y()/ M_PI * 180.0, p1.x()/ M_PI * 180.0, bearing / M_PI * 180.0, dist, y, x);
-
-    p2.setX(x* M_PI / 180.0);
-    p2.setY(y* M_PI / 180.0);
-
-#else
-    // φ Latitude λ Longitude d distance R earth radius [6371km], brng bearing (rad, north, clockwise)
-    // var φ2 = Math.asin( Math.sin(φ1)*Math.cos(d/R) +
-    //      Math.cos(φ1)*Math.sin(d/R)*Math.cos(brng) );
-    // var λ2 = λ1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(φ1),
-    //     Math.cos(d/R)-Math.sin(φ1)*Math.sin(φ2));
-
-    p2.setY(std::asin (
-                std::sin(p1.y()) * std::cos(dist / earthRadius) +
-                std::cos(p1.y()) * std::sin(dist / earthRadius) * std::cos(bearing)));
-    p2.setX(p1.x() +
-            std::atan2( std::sin(bearing) * std::sin(dist/earthRadius) * std::cos(p1.y()),
-                        std::cos(dist/earthRadius) - std::sin(p1.y()) * std::sin(p2.y()))
-            );
-#endif
-}
-
 void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
                                   double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
 {
-    double flon = mLonMin;
     int nr = 0, nc = 0;
-    double lat = mLatMin;
-
-    QPointF p1(mLonMin, mLatMin), p2;
 
     CDT::Vertex_handle lastHandle;
 
-    while (lat <= mLatMax) {
+    GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
+
+    double s12_y, azi1_y, azi2_y;
+    double a12_y = geod.Inverse(mLatMin, mLonMin, mLatMax, mLonMin, s12_y, azi1_y, azi2_y);
+    const GeographicLib::GeodesicLine line_y(geod, mLatMin, mLonMin, azi1_y);
+    int num_y = int(ceil(s12_y / stepx)); // The number of intervals
+    double da_y = a12_y / num_y;
+
+    for (int j = 0; j < num_y; ++j) {
+        double ylat,ylon;
+        line_y.ArcPosition(j*da_y, ylat, ylon);
         nc = 0;
-        flon = p1.x();
         lastHandle = CDT::Vertex_handle();
-        while (p1.x() <= mLonMax) {
+
+        double s12, azi1, azi2;
+        double a12 = geod.Inverse(ylat, mLonMin, ylat, mLonMax, s12, azi1, azi2);
+        const GeographicLib::GeodesicLine line(geod, ylat, mLonMin, azi1);
+        int num = int(ceil(s12 / stepx)); // The number of intervals
+        double da = a12 / num;
+
+        for (int i = 0; i <= num; ++i) {
+            double plat, plon;
+            line.ArcPosition(i * da, plat, plon);
+
             Node n;
-            n.point = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
+            n.point = QPointF(plon, plat);
             n.good = true;
+
+            qDebug() << nc << i << j << plat << plon;
 
             int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
@@ -385,22 +371,11 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
                 }
             }
 
-            pointSumWithBearing(p1, stepx, M_PI_2, p2);
-            p1 = p2;
-
             ++nc;
         }
 
-        if ((nr % 2) == 1) {
-            pointSumWithBearing(QPointF(flon, lat), stepx, -fal * M_PI / 180, p2);
-        } else {
-            pointSumWithBearing(QPointF(flon, lat), stepx, fal * M_PI / 180, p2);
-        }
-
-        lat = p2.y();
         ++nr;
         ++progress;
-        p1=p2;
 
         if (mFeedback)
             mFeedback->setStep(progress);

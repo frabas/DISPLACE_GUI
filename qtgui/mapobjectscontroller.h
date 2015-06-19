@@ -266,6 +266,7 @@ protected:
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
+    void delSelectedNodes(int model);
 
 protected slots:
     void geometryClicked(const Geometry *);
@@ -289,10 +290,10 @@ private:
     qmapcontrol::QMapControl *mMap;
     std::shared_ptr<DisplaceModel> mModels[MAX_MODELS];
 
-    QList<HarbourMapObject *> mHarbourObjects[MAX_MODELS];
+    MapObjectContainer<HarbourMapObject> mHarbourObjects[MAX_MODELS];
     MapObjectContainer<NodeMapObject> mNodeObjects[MAX_MODELS];
-    QList<VesselMapObject *> mVesselObjects[MAX_MODELS];
-    QList<EdgeMapObject *> mEdgeObjects[MAX_MODELS];
+    MapObjectContainer<VesselMapObject> mVesselObjects[MAX_MODELS];
+    MapObjectContainer<EdgeMapObject> mEdgeObjects[MAX_MODELS];
 
 //    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
 

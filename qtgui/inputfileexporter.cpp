@@ -64,23 +64,32 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
 
     int n = currentModel->getNodesCount();
     for (int i = 0; i < n; ++i) {
-        double x = currentModel->getNodesList()[i]->get_x();
-        cstrm << x << endl;
-        if (acfile.isOpen())
-            acstream << x << endl;
-        if (landfile.isOpen())
-            landstream << currentModel->getNodesList()[i]->get_marine_landscape() << endl;
+        auto nd = currentModel->getNodesList()[i];
+        if (nd) {
+            double x = nd->get_x();
+            cstrm << x << endl;
+            if (acfile.isOpen())
+                acstream << x << endl;
+            if (landfile.isOpen())
+                landstream << nd->get_marine_landscape() << endl;
+        }
     }
     for (int i = 0; i < n; ++i) {
-        double y = currentModel->getNodesList()[i]->get_y();
-        cstrm << y << endl;
-        if (acfile.isOpen())
-            acstream << y << endl;
+        auto nd = currentModel->getNodesList()[i];
+        if (nd) {
+            double y = nd->get_y();
+            cstrm << y << endl;
+            if (acfile.isOpen())
+                acstream << y << endl;
+        }
     }
     for (int i = 0; i < n; ++i) {
-        cstrm << currentModel->getNodesList()[i]->get_harbour() << endl;
-        if (acfile.isOpen())
-            acstream << currentModel->getNodesList()[i]->get_code_area() << endl;
+        auto nd = currentModel->getNodesList()[i];
+        if (nd) {
+            cstrm << nd->get_harbour() << endl;
+            if (acfile.isOpen())
+                acstream << nd->get_code_area() << endl;
+            }
     }
 
     cfile.close();
@@ -99,23 +108,32 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         QTextStream gstrm(&gfile);
 
         for (int i = 0; i < n; ++i) {
-            int m = currentModel->getNodesList()[i]->getAdiacencyCount();
-            for (int j = 0; j < m; ++j) {
-                gstrm << currentModel->getNodesList()[i]->get_idx_node() << endl;
+            auto nd = currentModel->getNodesList()[i];
+            if (nd) {
+                int m = nd->getAdiacencyCount();
+                for (int j = 0; j < m; ++j) {
+                    gstrm << nd->get_idx_node() << endl;
+                }
             }
         }
         for (int i = 0; i < n; ++i) {
-            int m = currentModel->getNodesList()[i]->getAdiacencyCount();
-            for (int j = 0; j < m; ++j) {
-                std::shared_ptr<NodeData> n = currentModel->getNodesList()[i]->getAdiacencyByIdx(j)->target.lock();
-                if (n.get() != nullptr)
-                    gstrm << n->get_idx_node() << endl;
+            auto nd = currentModel->getNodesList()[i];
+            if (nd) {
+                int m = nd->getAdiacencyCount();
+                for (int j = 0; j < m; ++j) {
+                    std::shared_ptr<NodeData> n = nd->getAdiacencyByIdx(j)->target.lock();
+                    if (n.get() != nullptr)
+                        gstrm << n->get_idx_node() << endl;
+                }
             }
         }
         for (int i = 0; i < n; ++i) {
-            int m = currentModel->getNodesList()[i]->getAdiacencyCount();
-            for (int j = 0; j < m; ++j) {
-                gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << endl;
+            auto nd = currentModel->getNodesList()[i];
+            if (nd) {
+                int m = nd->getAdiacencyCount();
+                for (int j = 0; j < m; ++j) {
+                    gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << endl;
+                }
             }
         }
 

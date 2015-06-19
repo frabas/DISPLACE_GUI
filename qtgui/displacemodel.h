@@ -309,6 +309,7 @@ public:
 
     void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
+    bool removeNode(std::shared_ptr<NodeData> node);
     int addEdge(std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
     int addEdge(int srcidx, int targetidx, double weight);
     bool exportGraph(const QString &path);

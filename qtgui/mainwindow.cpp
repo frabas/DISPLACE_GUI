@@ -499,6 +499,8 @@ void MainWindow::waitEnd()
 
 void MainWindow::editorAddNode(QPointF point)
 {
+    ui->actionAdd->setChecked(false);
+
     if (!isEditorModel()) {
         abortMouseMode();
         return;
@@ -517,6 +519,8 @@ void MainWindow::editorAddNode(QPointF point)
 
 void MainWindow::editorAddEdge(int from, int to)
 {
+    ui->actionAdd->setChecked(false);
+
     if (!isEditorModel()) {
         abortMouseMode();
         return;
@@ -1830,6 +1834,7 @@ void MainWindow::on_actionAdd_triggered()
         break;
     case MapObjectsController::NodeEditorMode:
         if (true) {
+            ui->actionAdd->setChecked(true);
             SingleClickMouseMode *mode = new SingleClickMouseMode(tr("Add Graph Node Mode"));
             connect (mode, SIGNAL(modeCompleted(QPointF)), this, SLOT(editorAddNode(QPointF)));
             startMouseMode(new MoveFilteringMouseModeDecorator(mode));
@@ -1837,6 +1842,7 @@ void MainWindow::on_actionAdd_triggered()
         break;
     case MapObjectsController::EdgeEditorMode:
         if (true) {
+            ui->actionAdd->setChecked(true);
             EdgeAddMouseMode *mode = new EdgeAddMouseMode(currentModel.get());
             connect (mode, SIGNAL(edgeAdded(int,int)), this, SLOT(editorAddEdge(int,int)));
             startMouseMode(new MoveFilteringMouseModeDecorator(mode));

@@ -79,9 +79,12 @@
     <addaction name="actionNode_Editor"/>
     <addaction name="actionEdge_Edit"/>
     <addaction name="separator"/>
+    <addaction name="actionClean_Selection"/>
+    <addaction name="separator"/>
     <addaction name="actionAdd"/>
     <addaction name="actionDelete"/>
     <addaction name="actionProperties"/>
+    <addaction name="separator"/>
     <addaction name="actionAbort_Operation"/>
    </widget>
    <widget class="QMenu" name="menuGraph">
@@ -923,6 +926,9 @@
    </property>
   </action>
   <action name="actionAdd">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
@@ -1107,6 +1113,11 @@
   <action name="actionCheck_for_isolated_subgraphs">
    <property name="text">
     <string>Check for isolated subgraphs...</string>
+   </property>
+  </action>
+  <action name="actionClean_Selection">
+   <property name="text">
+    <string>Clear Selection</string>
    </property>
   </action>
  </widget>

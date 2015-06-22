@@ -5,11 +5,12 @@
 
 #include <QDebug>
 
-#ifdef HAVE_GEOGRAPHICLIB
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/GeodesicLine.hpp>
 #include <GeographicLib/Constants.hpp>
-#endif
+
+#include <algo/geographicgridbuilder.h>
+#include <algo/simplegeodesiclinegraphbuilder.h>
 
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
@@ -80,7 +81,9 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     double fal;
     double f;
 
+    displace::graphbuilders::GeographicGridBuilder *builderInc1, *builderInc2, *builderOut;
     switch (mType) {
+    /*
     case Hex:
         f = std::sqrt(3) / 2.0;
         fal = 30;
@@ -88,6 +91,12 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     case Quad:
         f = 1.0;
         fal = 0;
+        break;
+    */
+    case Hex:
+        builderInc1 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(mLatMin, mLonMin, mLatMax, mLonMax, mStep);
         break;
     }
 
@@ -117,18 +126,18 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         exclude.push_back(mShapefileExc);
     if (mShapefileInc1.get()) {
         include.push_back(mShapefileInc1);
-        fillWithNodes(res, d, mStep1, fal, include, exclude, false, progress);
+        fillWithNodes(builderInc1, res, d, mStep1, fal, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc1);
     }
     if (mShapefileInc2.get()) {
         include.push_back(mShapefileInc2);
-        fillWithNodes(res, d, mStep2, fal, include, exclude, false, progress);
+        fillWithNodes(builderInc2, res, d, mStep2, fal, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc2);
     }
     if (mOutsideEnabled) {
-        fillWithNodes(res, d, mStep, fal, include, exclude, true, progress);
+        fillWithNodes(builderOut, res, d, mStep, fal, include, exclude, true, progress);
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
@@ -283,42 +292,21 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     return res;
 }
 
-void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
+void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri,
                                   double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
 {
     int nr = 0, nc = 0;
 
     CDT::Vertex_handle lastHandle;
 
-    GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
 
-    double s12_y, azi1_y, azi2_y;
-    double a12_y = geod.Inverse(mLatMin, mLonMin, mLatMax, mLonMin, s12_y, azi1_y, azi2_y);
-    const GeographicLib::GeodesicLine line_y(geod, mLatMin, mLonMin, azi1_y);
-    int num_y = int(ceil(s12_y / stepx)); // The number of intervals
-    double da_y = a12_y / num_y;
-
-    for (int j = 0; j < num_y; ++j) {
-        double ylat,ylon;
-        line_y.ArcPosition(j*da_y, ylat, ylon);
-        nc = 0;
-        lastHandle = CDT::Vertex_handle();
-
-        double s12, azi1, azi2;
-        double a12 = geod.Inverse(ylat, mLonMin, ylat, mLonMax, s12, azi1, azi2);
-        const GeographicLib::GeodesicLine line(geod, ylat, mLonMin, azi1);
-        int num = int(ceil(s12 / stepx)); // The number of intervals
-        double da = a12 / num;
-
-        for (int i = 0; i <= num; ++i) {
-            double plat, plon;
-            line.ArcPosition(i * da, plat, plon);
-
+    builder->beginCreateGrid();
+    while (!builder->atEnd()) {
             Node n;
-            n.point = QPointF(plon, plat);
+            n.point = builder->getNext();
             n.good = true;
 
-            qDebug() << nc << i << j << plat << plon;
+            qDebug() << nc << n.point.x() << n.point.y();
 
             int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
@@ -372,7 +360,7 @@ void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
             }
 
             ++nc;
-        }
+//        }
 
         ++nr;
         ++progress;

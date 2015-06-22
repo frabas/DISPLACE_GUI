@@ -5,11 +5,12 @@
 
 #include <QDebug>
 
-#ifdef HAVE_GEOGRAPHICLIB
 #include <GeographicLib/Geodesic.hpp>
 #include <GeographicLib/GeodesicLine.hpp>
 #include <GeographicLib/Constants.hpp>
-#endif
+
+#include <algo/geographicgridbuilder.h>
+#include <algo/simplegeodesiclinegraphbuilder.h>
 
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
@@ -77,30 +78,36 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     if (mShapefileExc.get() == 0)
         mRemoveEdgesInExcludeZone = false;
 
-    double fal;
-    double f;
-
+    displace::graphbuilders::GeographicGridBuilder *builderInc1, *builderInc2, *builderOut;
     switch (mType) {
     case Hex:
-        f = std::sqrt(3) / 2.0;
-        fal = 30;
+        builderInc1 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
         break;
     case Quad:
-        f = 1.0;
-        fal = 0;
+        builderInc1 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
         break;
     }
 
     int total = 0;
 
     if (mShapefileInc1.get()) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep1 /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep1 /earthRadius));
     }
     if (mShapefileInc2.get()) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep2 /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep2 /earthRadius));
     }
     if (mOutsideEnabled) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep /earthRadius));
     }
 
     total += 50; // Node creation, links, removing.
@@ -117,18 +124,18 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         exclude.push_back(mShapefileExc);
     if (mShapefileInc1.get()) {
         include.push_back(mShapefileInc1);
-        fillWithNodes(res, d, mStep1, fal, include, exclude, false, progress);
+        fillWithNodes(builderInc1, res, d, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc1);
     }
     if (mShapefileInc2.get()) {
         include.push_back(mShapefileInc2);
-        fillWithNodes(res, d, mStep2, fal, include, exclude, false, progress);
+        fillWithNodes(builderInc2, res, d, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc2);
     }
     if (mOutsideEnabled) {
-        fillWithNodes(res, d, mStep, fal, include, exclude, true, progress);
+        fillWithNodes(builderOut, res, d, include, exclude, true, progress);
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
@@ -283,102 +290,83 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     return res;
 }
 
-void GraphBuilder::fillWithNodes (QList<Node> &res, CDT &tri,
-                                  double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
+void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri,
+                                  std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
 {
     int nr = 0, nc = 0;
 
     CDT::Vertex_handle lastHandle;
 
-    GeographicLib::Geodesic geod(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
 
-    double s12_y, azi1_y, azi2_y;
-    double a12_y = geod.Inverse(mLatMin, mLonMin, mLatMax, mLonMin, s12_y, azi1_y, azi2_y);
-    const GeographicLib::GeodesicLine line_y(geod, mLatMin, mLonMin, azi1_y);
-    int num_y = int(ceil(s12_y / stepx)); // The number of intervals
-    double da_y = a12_y / num_y;
+    builder->beginCreateGrid();
+    while (!builder->atEnd()) {
+        if (builder->isAtLineStart())
+            lastHandle = CDT::Vertex_handle();
 
-    for (int j = 0; j < num_y; ++j) {
-        double ylat,ylon;
-        line_y.ArcPosition(j*da_y, ylat, ylon);
-        nc = 0;
-        lastHandle = CDT::Vertex_handle();
+        Node n;
+        n.point = builder->getNext();
+        n.good = true;
 
-        double s12, azi1, azi2;
-        double a12 = geod.Inverse(ylat, mLonMin, ylat, mLonMax, s12, azi1, azi2);
-        const GeographicLib::GeodesicLine line(geod, ylat, mLonMin, azi1);
-        int num = int(ceil(s12 / stepx)); // The number of intervals
-        double da = a12 / num;
+        int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
-        for (int i = 0; i <= num; ++i) {
-            double plat, plon;
-            line.ArcPosition(i * da, plat, plon);
+        OGRPoint point (n.point.x(), n.point.y());
 
-            Node n;
-            n.point = QPointF(plon, plat);
-            n.good = true;
+        // Check for shapefile inclusion
 
-            qDebug() << nc << i << j << plat << plon;
+        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end(); ++it) {
+            for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
+                OGRLayer *layer = (*it)->GetLayer(lr);
+                layer->ResetReading();
+                layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-            int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
-
-            OGRPoint point (n.point.x(), n.point.y());
-
-            // Check for shapefile inclusion
-
-            for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end(); ++it) {
-                for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = (*it)->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
-
-                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
-                        zone = 1;
-                        break;
-                    }
+                if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                    zone = 1;
+                    break;
                 }
             }
-
-            for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end(); ++it) {
-                for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = (*it)->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
-
-                    if (layer->GetNextFeature() != 0) {     // found: exclude this point
-                        zone = 3;
-                        break;
-                    }
-                }
-            }
-
-            if (zone == 3) {
-                n.good = false;
-                lastHandle = CDT::Vertex_handle();
-            } else {
-                CDT::Point pt(n.point.x(), n.point.y());
-
-                CDT::Face_handle hint;
-                CDT::Vertex_handle v_hint = tri.insert(pt, hint);
-                if (v_hint!=CDT::Vertex_handle()){
-                    v_hint->info()=res.size();
-                    hint=v_hint->face();
-
-                    if (lastHandle != CDT::Vertex_handle())
-                        tri.insert_constraint(lastHandle, v_hint);
-                    lastHandle = v_hint;
-                    res.push_back(n);
-                }
-            }
-
-            ++nc;
         }
 
-        ++nr;
-        ++progress;
+        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end(); ++it) {
+            for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
+                OGRLayer *layer = (*it)->GetLayer(lr);
+                layer->ResetReading();
+                layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-        if (mFeedback)
-            mFeedback->setStep(progress);
+                if (layer->GetNextFeature() != 0) {     // found: exclude this point
+                    zone = 3;
+                    break;
+                }
+            }
+        }
+
+        if (zone == 3) {
+            n.good = false;
+            lastHandle = CDT::Vertex_handle();
+        } else {
+            CDT::Point pt(n.point.x(), n.point.y());
+
+            CDT::Face_handle hint;
+            CDT::Vertex_handle v_hint = tri.insert(pt, hint);
+            if (v_hint!=CDT::Vertex_handle()){
+                v_hint->info()=res.size();
+                hint=v_hint->face();
+
+                if (lastHandle != CDT::Vertex_handle())
+                    tri.insert_constraint(lastHandle, v_hint);
+                lastHandle = v_hint;
+                res.push_back(n);
+            }
+        }
+
+        ++nc;
+
+        if (builder->isAtLineStart()) {
+            ++nr;
+            ++progress;
+
+            if (mFeedback)
+                mFeedback->setStep(progress);
+        }
     }
 
 }

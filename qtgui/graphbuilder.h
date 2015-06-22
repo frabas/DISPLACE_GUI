@@ -33,6 +33,12 @@
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <utility>
 
+namespace displace {
+namespace graphbuilders {
+class GeographicGridBuilder;
+}
+}
+
 class GraphBuilder
 {
 public:
@@ -117,8 +123,7 @@ private:
 
     typedef CDT::Point                                             Point;
 
-    void fillWithNodes(QList<Node> &res, CDT &tri,
-                       double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress);
+    void fillWithNodes(displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress);
     void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;

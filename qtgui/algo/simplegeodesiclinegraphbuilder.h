@@ -15,7 +15,9 @@ namespace graphbuilders {
 class SimpleGeodesicLineGraphBuilder : public GeographicGridBuilder
 {
 public:
-    SimpleGeodesicLineGraphBuilder(double latMin_deg, double lonMin_deg, double latMax_deg, double lonMax_deg, double step);
+    enum Type { Hex, Quad };
+
+    SimpleGeodesicLineGraphBuilder(Type type, double latMin_deg, double lonMin_deg, double latMax_deg, double lonMax_deg, double step);
 
     // GeographicGridBuilder interface
 public:
@@ -30,7 +32,8 @@ private:
 
     // Parameters
     double mLatMin, mLonMin, mLatMax, mLonMax;
-    double mStep;
+    double mStepX, mStepY;
+    bool mInterlace;
 
     // outer loop
     double s12_y, azi1_y, azi2_y, a12_y, da_y;

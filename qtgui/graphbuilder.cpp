@@ -83,20 +83,21 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     displace::graphbuilders::GeographicGridBuilder *builderInc1, *builderInc2, *builderOut;
     switch (mType) {
-    /*
     case Hex:
-        f = std::sqrt(3) / 2.0;
-        fal = 30;
+        builderInc1 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
         break;
     case Quad:
-        f = 1.0;
-        fal = 0;
-        break;
-    */
-    case Hex:
-        builderInc1 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
-        builderInc2 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
-        builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(mLatMin, mLonMin, mLatMax, mLonMax, mStep);
+        builderInc1 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
+                    displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
         break;
     }
 

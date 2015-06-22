@@ -2,7 +2,7 @@
 
 using namespace displace::graphbuilders;
 
-GeographicGridBuilder::GeographicGridBuilder()
+GeographicGridBuilder::~GeographicGridBuilder()
 {
 
 }

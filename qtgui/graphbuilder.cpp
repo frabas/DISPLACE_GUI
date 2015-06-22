@@ -78,9 +78,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     if (mShapefileExc.get() == 0)
         mRemoveEdgesInExcludeZone = false;
 
-    double fal;
-    double f;
-
     displace::graphbuilders::GeographicGridBuilder *builderInc1, *builderInc2, *builderOut;
     switch (mType) {
     case Hex:
@@ -104,13 +101,13 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     int total = 0;
 
     if (mShapefileInc1.get()) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep1 /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep1 /earthRadius));
     }
     if (mShapefileInc2.get()) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep2 /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep2 /earthRadius));
     }
     if (mOutsideEnabled) {
-        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (f * mStep /earthRadius));
+        total += ((mLatMax* M_PI / 180.0 - mLatMin* M_PI / 180.0) / (mStep /earthRadius));
     }
 
     total += 50; // Node creation, links, removing.
@@ -127,18 +124,18 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         exclude.push_back(mShapefileExc);
     if (mShapefileInc1.get()) {
         include.push_back(mShapefileInc1);
-        fillWithNodes(builderInc1, res, d, mStep1, fal, include, exclude, false, progress);
+        fillWithNodes(builderInc1, res, d, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc1);
     }
     if (mShapefileInc2.get()) {
         include.push_back(mShapefileInc2);
-        fillWithNodes(builderInc2, res, d, mStep2, fal, include, exclude, false, progress);
+        fillWithNodes(builderInc2, res, d, include, exclude, false, progress);
         include.clear();
         exclude.push_back(mShapefileInc2);
     }
     if (mOutsideEnabled) {
-        fillWithNodes(builderOut, res, d, mStep, fal, include, exclude, true, progress);
+        fillWithNodes(builderOut, res, d, include, exclude, true, progress);
     }
 
     qDebug() << "Vert: " << d.number_of_vertices() << " Faces: " << d.number_of_faces();
@@ -294,7 +291,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 }
 
 void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri,
-                                  double stepx, double fal, std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
+                                  std::vector<std::shared_ptr<OGRDataSource> >including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress)
 {
     int nr = 0, nc = 0;
 
@@ -306,68 +303,70 @@ void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder
         if (builder->isAtLineStart())
             lastHandle = CDT::Vertex_handle();
 
-            Node n;
-            n.point = builder->getNext();
-            n.good = true;
+        Node n;
+        n.point = builder->getNext();
+        n.good = true;
 
-            int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
+        int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
-            OGRPoint point (n.point.x(), n.point.y());
+        OGRPoint point (n.point.x(), n.point.y());
 
-            // Check for shapefile inclusion
+        // Check for shapefile inclusion
 
-            for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end(); ++it) {
-                for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = (*it)->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end(); ++it) {
+            for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
+                OGRLayer *layer = (*it)->GetLayer(lr);
+                layer->ResetReading();
+                layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-                    if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
-                        zone = 1;
-                        break;
-                    }
+                if (layer->GetNextFeature() != 0) { // found, point is included, skip this check.
+                    zone = 1;
+                    break;
                 }
             }
+        }
 
-            for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end(); ++it) {
-                for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
-                    OGRLayer *layer = (*it)->GetLayer(lr);
-                    layer->ResetReading();
-                    layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
+        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end(); ++it) {
+            for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
+                OGRLayer *layer = (*it)->GetLayer(lr);
+                layer->ResetReading();
+                layer->SetSpatialFilter(&point); //getting only the feature intercepting the point
 
-                    if (layer->GetNextFeature() != 0) {     // found: exclude this point
-                        zone = 3;
-                        break;
-                    }
+                if (layer->GetNextFeature() != 0) {     // found: exclude this point
+                    zone = 3;
+                    break;
                 }
             }
+        }
 
-            if (zone == 3) {
-                n.good = false;
-                lastHandle = CDT::Vertex_handle();
-            } else {
-                CDT::Point pt(n.point.x(), n.point.y());
+        if (zone == 3) {
+            n.good = false;
+            lastHandle = CDT::Vertex_handle();
+        } else {
+            CDT::Point pt(n.point.x(), n.point.y());
 
-                CDT::Face_handle hint;
-                CDT::Vertex_handle v_hint = tri.insert(pt, hint);
-                if (v_hint!=CDT::Vertex_handle()){
-                    v_hint->info()=res.size();
-                    hint=v_hint->face();
+            CDT::Face_handle hint;
+            CDT::Vertex_handle v_hint = tri.insert(pt, hint);
+            if (v_hint!=CDT::Vertex_handle()){
+                v_hint->info()=res.size();
+                hint=v_hint->face();
 
-                    if (lastHandle != CDT::Vertex_handle())
-                        tri.insert_constraint(lastHandle, v_hint);
-                    lastHandle = v_hint;
-                    res.push_back(n);
-                }
+                if (lastHandle != CDT::Vertex_handle())
+                    tri.insert_constraint(lastHandle, v_hint);
+                lastHandle = v_hint;
+                res.push_back(n);
             }
+        }
 
-            ++nc;
+        ++nc;
 
-        ++nr;
-        ++progress;
+        if (builder->isAtLineStart()) {
+            ++nr;
+            ++progress;
 
-        if (mFeedback)
-            mFeedback->setStep(progress);
+            if (mFeedback)
+                mFeedback->setStep(progress);
+        }
     }
 
 }

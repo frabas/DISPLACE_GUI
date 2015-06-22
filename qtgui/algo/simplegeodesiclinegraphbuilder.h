@@ -23,6 +23,7 @@ public:
     QPointF getNext();
     bool atEnd();
     bool endCreateGrid();
+    bool isAtLineStart();
 
 private:
     GeographicLib::Geodesic mGeodesic;

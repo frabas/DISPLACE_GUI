@@ -302,11 +302,12 @@ void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder
 
     builder->beginCreateGrid();
     while (!builder->atEnd()) {
+        if (builder->isAtLineStart())
+            lastHandle = CDT::Vertex_handle();
+
             Node n;
             n.point = builder->getNext();
             n.good = true;
-
-            qDebug() << nc << n.point.x() << n.point.y();
 
             int zone = (outside ? 0 : 3);       // if outside is not enabled, it is in the remove zone by default.
 
@@ -360,7 +361,6 @@ void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder
             }
 
             ++nc;
-//        }
 
         ++nr;
         ++progress;

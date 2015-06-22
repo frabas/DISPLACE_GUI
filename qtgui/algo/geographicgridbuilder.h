@@ -43,6 +43,11 @@ public:
      */
     virtual bool atEnd() = 0;
 
+    /** \brief Check if the loop is at the beginning of a "line"
+     * This is used to allow constrain creation for delaunay triangulation.
+     * */
+    virtual bool isAtLineStart() = 0;
+
     /** \brief Finalize the object when the loop is completed.
      *
      * after endCreateGrid() it should be possible to call beginCreateGrid() to start a new iteration loop.

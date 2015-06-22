@@ -3,6 +3,7 @@
 #include <GeographicLib/GeodesicLine.hpp>
 
 #include <QPointF>
+#include <QDebug>
 
 #include <cmath>
 
@@ -20,6 +21,7 @@ SimpleGeodesicLineGraphBuilder::SimpleGeodesicLineGraphBuilder(double latMin_deg
 bool SimpleGeodesicLineGraphBuilder::beginCreateGrid()
 {
     a12_y = mGeodesic.Inverse(mLatMin, mLonMin, mLatMax, mLonMin, s12_y, azi1_y, azi2_y);
+    line_y = GeographicLib::GeodesicLine(mGeodesic, mLatMin, mLonMin, azi1_y);
     num_y = int(std::ceil(s12_y / mStep)); // The number of intervals
     da_y = a12_y / num_y;
 
@@ -38,14 +40,12 @@ QPointF SimpleGeodesicLineGraphBuilder::getNext()
 
         a12 = mGeodesic.Inverse(ylat, mLonMin, ylat, mLonMax, s12, azi1, azi2);
         line = GeographicLib::GeodesicLine(mGeodesic, ylat, mLonMin, azi1);
-        int num = int(std::ceil(s12 / mStep)); // The number of intervals
+        num = int(std::ceil(s12 / mStep)); // The number of intervals
         da = a12 / num;
     }
 
     double plat, plon;
     line.ArcPosition(i * da, plat, plon);
-
-    // HERE
 
     ++i;
     if (i > num) {
@@ -53,6 +53,7 @@ QPointF SimpleGeodesicLineGraphBuilder::getNext()
         ++j;
     }
 
+    return QPointF(plon, plat);
 }
 
 bool SimpleGeodesicLineGraphBuilder::atEnd()
@@ -63,4 +64,9 @@ bool SimpleGeodesicLineGraphBuilder::atEnd()
 bool SimpleGeodesicLineGraphBuilder::endCreateGrid()
 {
     return true;
+}
+
+bool SimpleGeodesicLineGraphBuilder::isAtLineStart()
+{
+    return (i == 0);
 }

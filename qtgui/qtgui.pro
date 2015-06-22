@@ -138,7 +138,9 @@ SOURCES += \
     mergepopulationplugincomponent.cpp \
     workers/mergerstrategy.cpp \
     workers/graphbuilderworker.cpp \
-    algo/isolatedsubgraphchecker.cpp
+    algo/isolatedsubgraphchecker.cpp \
+    algo/geographicgridbuilder.cpp \
+    algo/simplegeodesiclinegraphbuilder.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -245,7 +247,9 @@ HEADERS += \
     workers/mergerstrategy.h \
     workers/graphbuilderworker.h \
     algo/isolatedsubgraphchecker.h \
-    mapobjects/mapobjectcontainer.h
+    mapobjects/mapobjectcontainer.h \
+    algo/geographicgridbuilder.h \
+    algo/simplegeodesiclinegraphbuilder.h
 
 RESOURCES += \
     qtgui.qrc

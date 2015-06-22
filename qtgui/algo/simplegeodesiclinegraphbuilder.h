@@ -24,7 +24,7 @@ public:
     bool atEnd();
     bool endCreateGrid();
 
-protected:
+private:
     GeographicLib::Geodesic mGeodesic;
 
     // Parameters

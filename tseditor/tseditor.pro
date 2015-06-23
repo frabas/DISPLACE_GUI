@@ -39,7 +39,8 @@ FORMS += \
 HEADERS += \
     tseditorwindow.h
 
-RESOURCES +=
+RESOURCES += \
+    tseditor.qrc
 
 OTHER_FILES += \
     tseditor.rc

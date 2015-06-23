@@ -128,8 +128,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../qtgui/qtgui.qrc">
-           <normaloff>:/icons/close.png</normaloff>:/icons/close.png</iconset>
+          <iconset resource="../dteditor/dteditor.qrc">
+           <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
          </property>
         </widget>
        </item>
@@ -187,6 +187,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../dteditor/dteditor.qrc"/>
   <include location="../qtgui/qtgui.qrc"/>
  </resources>
  <connections/>

@@ -10,11 +10,13 @@ DEFINES += QTCOMMONS_LIBRARY
 
 include ("$$top_srcdir/localconfig.pri")
 
-SOURCES += qcustomplot.cpp
+SOURCES += qcustomplot.cpp \
+        R/env.cpp
 
 HEADERS +=\
         qtcommons_global.h \
-        qcustomplot.h
+        qcustomplot.h \
+        R/env.h
 
 unix {
     target.path = /usr/lib

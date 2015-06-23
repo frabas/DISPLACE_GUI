@@ -1,12 +1,12 @@
 TEMPLATE=app
-QT += core gui
+QT += core gui printsupport
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = tsereditor
 
-INCLUDEPATH+=../include/  ../commons/
+INCLUDEPATH+=../include/  ../commons/ ../qtcommons
 
 include ("$$top_srcdir/localconfig.pri")
 
@@ -27,6 +27,7 @@ win32 {
     RC_FILE = tseditor.rc
 }
 
+LIBS += -L.. -lqtcommons
 
 SOURCES += \
     tseditor.cpp \

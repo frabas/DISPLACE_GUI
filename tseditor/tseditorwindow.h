@@ -2,6 +2,7 @@
 #define TSEDITORWINDOW_H
 
 #include <QMainWindow>
+#include <QProcess>
 
 #include <memory>
 
@@ -21,6 +22,13 @@ public:
 
 private slots:
     void on_action_Open_triggered();
+    void on_varSelect_currentIndexChanged(const QString &arg1);
+    void on_areaSelect_activated(const QString &arg1);
+    void on_adimSelect_activated(const QString &arg1);
+
+public slots:
+    void readOutput();
+    void readError();
 
 private:
     Ui::TsEditorWindow *ui;
@@ -31,8 +39,14 @@ private:
 
     int colVar, colArea, colADim;
 
+    QString mDestFile;
+    QProcess *mProcess;
+
     void load(QString filename);
     void updateKeys();
+    void genSampleFile();
+
+    void generate(QString dest, QString variable, QString area, QString adim);
 };
 
 #endif // TSEDITORWINDOW_H

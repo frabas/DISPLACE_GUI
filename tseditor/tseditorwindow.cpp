@@ -6,12 +6,15 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
+#include <QDebug>
 
 TsEditorWindow::TsEditorWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::TsEditorWindow)
+    ui(new Ui::TsEditorWindow),
+    mDestFile("ts")
 {
-    ui->setupUi(this);    
+    ui->setupUi(this);
 }
 
 TsEditorWindow::~TsEditorWindow()
@@ -99,4 +102,64 @@ void TsEditorWindow::updateKeys()
     vl.sort();
     ui->adimSelect->clear();
     ui->adimSelect->addItems(vl);
+}
+
+void TsEditorWindow::genSampleFile()
+{
+    QString v = ui->varSelect->currentText();
+    QString a = ui->areaSelect->currentText();
+    QString n = ui->adimSelect->currentText();
+
+    qDebug() << mDestFile << v << a << n;
+
+    if (v.isEmpty() || a.isEmpty() || n.isEmpty())
+        return;
+
+    generate(mDestFile, v, a, n);
+}
+
+void TsEditorWindow::generate(QString dest, QString variable, QString area, QString adim)
+{
+    QSettings set;
+    QString param_file = set.value("TsEditor.paramfile", qApp->applicationDirPath() + "/data/param_timeseries.dat").toString();
+    QString script_file = set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
+
+    mProcess = new QProcess;
+
+    //mProcess->setWorkingDirectory(info.absolutePath());
+    connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
+    connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
+
+    QStringList args;
+    args << script_file << dest << variable << area << adim << param_file;
+
+    mProcess->start("Rscript", args);
+
+}
+
+void TsEditorWindow::on_varSelect_currentIndexChanged(const QString &arg1)
+{
+    genSampleFile();
+}
+
+void TsEditorWindow::on_areaSelect_activated(const QString &arg1)
+{
+    genSampleFile();
+}
+
+void TsEditorWindow::on_adimSelect_activated(const QString &arg1)
+{
+    genSampleFile();
+}
+
+void TsEditorWindow::readOutput()
+{
+    QString t = mProcess->readAllStandardOutput();
+    qDebug() << t;
+}
+
+void TsEditorWindow::readError()
+{
+    QString t = mProcess->readAllStandardError();
+    qDebug() << "*** " << t;
 }

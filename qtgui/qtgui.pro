@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
-INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons
+INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")
@@ -48,7 +48,7 @@ LIBS += -lGeographic
 
 QMAKE_CXXFLAGS += -frounding-math
 DEFINES += PROFILE
-LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
+LIBS+=-L.. -ldisplacecommons -lqtcommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL include path.
 INCLUDEPATH += $$QMC_GDAL_INC
@@ -89,7 +89,6 @@ SOURCES += \
     mapobjects/nodegraphics.cpp \
     editpalettedialog.cpp \
     palettemanager.cpp \
-    qcustomplot.cpp \
     statscontroller.cpp \
     modelobjects/populationdata.cpp \
     objects/populationentity.cpp \
@@ -192,7 +191,6 @@ HEADERS += \
     mapobjects/nodegraphics.h \
     editpalettedialog.h \
     palettemanager.h \
-    qcustomplot.h \
     statscontroller.h \
     modelobjects/populationdata.h \
     objects/populationentity.h \

@@ -129,6 +129,7 @@ void TsEditorWindow::generate(QString dest, QString variable, QString area, QStr
     //mProcess->setWorkingDirectory(info.absolutePath());
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
     connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
+    connect(mProcess, SIGNAL(finished(int)), this, SLOT(processExit(int)));
 
     QStringList args;
     args << script_file << dest << variable << area << adim << param_file;
@@ -162,4 +163,13 @@ void TsEditorWindow::readError()
 {
     QString t = mProcess->readAllStandardError();
     qDebug() << "*** " << t;
+}
+
+void TsEditorWindow::processExit(int code)
+{
+    if (code == 0) {
+        // TODO update the graph
+    } else {
+        statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
+    }
 }

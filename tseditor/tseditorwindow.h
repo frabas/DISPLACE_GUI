@@ -29,6 +29,7 @@ private slots:
 public slots:
     void readOutput();
     void readError();
+    void processExit(int);
 
 private:
     Ui::TsEditorWindow *ui;

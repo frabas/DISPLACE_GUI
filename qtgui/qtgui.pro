@@ -121,9 +121,6 @@ SOURCES += \
     simulatoripcmanager.cpp \
     workers/shortestpathbuilderworker.cpp \
     csveditor.cpp \
-    utils/csvtablemodel.cpp \
-    utils/csvimporter.cpp \
-    utils/csvexporter.cpp \
     mergedatadialog.cpp \
     workers/datamerger.cpp \
     utils/imageformathelpers.cpp \
@@ -227,9 +224,6 @@ HEADERS += \
     simulatoripcmanager.h \
     workers/shortestpathbuilderworker.h \
     csveditor.h \
-    utils/csvtablemodel.h \
-    utils/csvimporter.h \
-    utils/csvexporter.h \
     mergedatadialog.h \
     workers/datamerger.h \
     utils/imageformathelpers.h \

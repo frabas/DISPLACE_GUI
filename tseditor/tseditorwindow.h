@@ -31,6 +31,9 @@ public slots:
     void readError();
     void processExit(int);
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     Ui::TsEditorWindow *ui;
 

@@ -15,11 +15,26 @@ TsEditorWindow::TsEditorWindow(QWidget *parent) :
     mDestFile("ts")
 {
     ui->setupUi(this);
+
+    QSettings set;
+    restoreGeometry(set.value("mainGeometry").toByteArray());
+    restoreState(set.value("mainState").toByteArray());
 }
 
 TsEditorWindow::~TsEditorWindow()
 {
     delete ui;
+}
+
+void TsEditorWindow::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event);
+
+    QSettings sets;
+    sets.setValue("mainGeometry", saveGeometry());
+    sets.setValue("mainState", saveState());
+
+    qApp->closeAllWindows();
 }
 
 void TsEditorWindow::on_action_Open_triggered()

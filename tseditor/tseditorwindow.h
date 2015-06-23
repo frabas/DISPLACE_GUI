@@ -46,6 +46,7 @@ private:
     void load(QString filename);
     void updateKeys();
     void genSampleFile();
+    void loadSampleFileGraph();
 
     void generate(QString dest, QString variable, QString area, QString adim);
 };

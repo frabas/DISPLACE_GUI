@@ -106,6 +106,8 @@ void TsEditorWindow::updateKeys()
 
 void TsEditorWindow::genSampleFile()
 {
+    ui->plot->clearGraphs();
+
     QString v = ui->varSelect->currentText();
     QString a = ui->areaSelect->currentText();
     QString n = ui->adimSelect->currentText();
@@ -116,6 +118,41 @@ void TsEditorWindow::genSampleFile()
         return;
 
     generate(mDestFile, v, a, n);
+}
+
+void TsEditorWindow::loadSampleFileGraph()
+{
+    QFile f(mDestFile);
+    if (!f.open(QIODevice::ReadOnly)) {
+        qDebug() << "***" << f.errorString();
+        return;
+    }
+
+    bool ok;
+    QTextStream strm(&f);
+    strm.readLine();        // drop the first line
+    QVector<double> dt, x;
+    while (!strm.atEnd()) {
+        QString l = strm.readLine();
+        double v = l.toDouble(&ok);
+        if (!ok) {
+            // error...
+            f.close();
+            qDebug() << "*** invalid conversion " << l;
+            return;
+        }
+
+        x.push_back(dt.size());
+        dt.push_back(v);
+    }
+
+    ui->plot->clearGraphs();
+    QCPGraph *graph = ui->plot->addGraph();
+    graph->setData(x,dt);
+    graph->rescaleAxes();
+    ui->plot->replot();
+
+    f.close();
 }
 
 void TsEditorWindow::generate(QString dest, QString variable, QString area, QString adim)
@@ -168,7 +205,7 @@ void TsEditorWindow::readError()
 void TsEditorWindow::processExit(int code)
 {
     if (code == 0) {
-        // TODO update the graph
+        loadSampleFileGraph();
     } else {
         statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
     }

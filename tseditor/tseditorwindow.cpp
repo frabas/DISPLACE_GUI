@@ -16,6 +16,9 @@ TsEditorWindow::TsEditorWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->action_Log_Window->setChecked(false);
+    ui->dockLogWindow->setVisible(false);
+
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
@@ -209,12 +212,16 @@ void TsEditorWindow::readOutput()
 {
     QString t = mProcess->readAllStandardOutput();
     qDebug() << t;
+
+    ui->logText->appendPlainText(t + "\n");
 }
 
 void TsEditorWindow::readError()
 {
     QString t = mProcess->readAllStandardError();
     qDebug() << "*** " << t;
+
+    ui->logText->appendHtml("<font color=\"#aa0000\">" + t + "</font>");
 }
 
 void TsEditorWindow::processExit(int code)
@@ -224,4 +231,20 @@ void TsEditorWindow::processExit(int code)
     } else {
         statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
     }
+}
+
+void TsEditorWindow::on_action_Log_Window_triggered()
+{
+    ui->dockLogWindow->setVisible(ui->action_Log_Window->isChecked());
+}
+
+void TsEditorWindow::on_clearLog_clicked()
+{
+    ui->logText->clear();
+}
+
+void TsEditorWindow::on_dockLogWindow_visibilityChanged(bool visible)
+{
+    QSignalBlocker b(ui->action_Log_Window);
+    ui->action_Log_Window->setChecked(visible);
 }

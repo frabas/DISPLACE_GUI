@@ -26,6 +26,12 @@ private slots:
     void on_areaSelect_activated(const QString &arg1);
     void on_adimSelect_activated(const QString &arg1);
 
+    void on_action_Log_Window_triggered();
+
+    void on_clearLog_clicked();
+
+    void on_dockLogWindow_visibilityChanged(bool visible);
+
 public slots:
     void readOutput();
     void readError();

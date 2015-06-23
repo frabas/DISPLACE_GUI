@@ -1,9 +1,18 @@
 # Generate Time Series, starting from the param file passed as argument
 #
-#
+# Usage:
+# Rscript gen_ts.R -- dest_file variable area a_dim param_file
 
-param_ts <- read.table(file=file.path('param_timeseries.dat'),
-                 header=TRUE, sep= " ")
+args <- commandArgs(trailingOnly = TRUE)
+
+dest_file <- args[1]
+variable <- args[2]
+area <- args[3]
+a_dim <- args[4]
+a_dim_as_int <- as.numeric(a_dim)
+param_file <- args[5]
+
+param_ts <- read.table(file=param_file, header=TRUE, sep= " ")
 
 daily_ts_generator <- function (param_ts, variable="wspeed", area="all_area", a_dim=0){
 
@@ -40,5 +49,5 @@ daily_ts_generator <- function (param_ts, variable="wspeed", area="all_area", a_
    return(ts_for_a_variable)
 }
 
-ts_for_a_variable <- daily_ts_generator(param_ts, variable="wspeed", area="all_area", a_dim=0)
-write.table(ts_for_a_variable, file=file.path("ts.dat"), header=TRUE, sep=" ")
+ts_for_a_variable <- daily_ts_generator(param_ts, variable=variable, area=area, a_dim=a_dim_as_int)
+write.table(ts_for_a_variable, file=dest_file, row.names=FALSE, col.names=TRUE, sep=" ")

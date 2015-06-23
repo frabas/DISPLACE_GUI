@@ -54,8 +54,12 @@ GraphBuilder::Type CreateGraphDialog::getType() const
 {
     if (ui->quad->isChecked())
         return GraphBuilder::Quad;
-    else
+    else if (ui->hex->isChecked())
         return GraphBuilder::Hex;
+    else if (ui->quad_planar->isChecked())
+        return GraphBuilder::QuadTrivial;
+    else
+        return GraphBuilder::HexTrivial;
 }
 
 void CreateGraphDialog::setShapefileList(QStringList list)

@@ -48,7 +48,7 @@ public:
         virtual void setStep(int step) = 0;
     };
 
-    enum Type { Hex, Quad };
+    enum Type { Hex, Quad, HexTrivial, QuadTrivial };
 
     class Node {
     public:

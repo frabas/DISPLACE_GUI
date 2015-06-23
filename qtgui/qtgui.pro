@@ -140,7 +140,8 @@ SOURCES += \
     workers/graphbuilderworker.cpp \
     algo/isolatedsubgraphchecker.cpp \
     algo/geographicgridbuilder.cpp \
-    algo/simplegeodesiclinegraphbuilder.cpp
+    algo/simplegeodesiclinegraphbuilder.cpp \
+    algo/simpleplanargraphbuilder.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -249,7 +250,8 @@ HEADERS += \
     algo/isolatedsubgraphchecker.h \
     mapobjects/mapobjectcontainer.h \
     algo/geographicgridbuilder.h \
-    algo/simplegeodesiclinegraphbuilder.h
+    algo/simplegeodesiclinegraphbuilder.h \
+    algo/simpleplanargraphbuilder.h
 
 RESOURCES += \
     qtgui.qrc

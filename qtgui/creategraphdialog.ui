@@ -151,7 +151,7 @@
       <item row="0" column="0">
        <widget class="QRadioButton" name="hex">
         <property name="text">
-         <string>Hex</string>
+         <string>Geodesic Hex</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -161,7 +161,21 @@
       <item row="0" column="1">
        <widget class="QRadioButton" name="quad">
         <property name="text">
-         <string>Quad</string>
+         <string>Geodesic Quad</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="hex_planar">
+        <property name="text">
+         <string>Planar Hex</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QRadioButton" name="quad_planar">
+        <property name="text">
+         <string>Planar Quad</string>
         </property>
        </widget>
       </item>

@@ -156,6 +156,7 @@ void TsEditorWindow::genSampleFile()
         return;
 
     CsvExporter exporter;
+    exporter.setSeparator(' ');
     exporter.exportFile(mParFile.fileName(),*mData);
 
     generate(mParFile.fileName(), mDestFile.fileName(), v, a, n);
@@ -259,10 +260,11 @@ void TsEditorWindow::processExit(int code)
 void TsEditorWindow::dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles)
 {
     bool need_refresh = false;
-    for (int row = from.row(); row < to.row(); ++row) {
-        if (mData->at(row).at(colArea) == ui->areaSelect->currentText() ||
-            mData->at(row).at(colADim) == ui->adimSelect->currentText() ||
-            mData->at(row).at(colVar) == ui->varSelect->currentText() )
+    for (int row = from.row(); row <= to.row(); ++row) {
+        // Notice: Headers are at row #0
+        if (mData->at(row+1).at(colArea) == ui->areaSelect->currentText() ||
+            mData->at(row+1).at(colADim) == ui->adimSelect->currentText() ||
+            mData->at(row+1).at(colVar) == ui->varSelect->currentText() )
             need_refresh = true;
     }
 

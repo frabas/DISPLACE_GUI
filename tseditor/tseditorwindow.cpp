@@ -327,3 +327,31 @@ void TsEditorWindow::on_actionQuit_triggered()
 {
     close();
 }
+
+void TsEditorWindow::on_action_Save_triggered()
+{
+    QSettings set;
+    QString dir = set.value("TsEditor.LastPath", QDir::homePath()).toString();
+    QString filter = set.value("TsEditor.filter", "").toString();
+
+    QString out = QFileDialog::getSaveFileName(this, tr("Save parameter file"),
+                                               dir, tr("Dat Files (*.dat);;CSV Files (*.csv);;Text Files (*.txt);;All Files (*.*)"),
+                                               &filter);
+    if (!out.isEmpty()) {
+        try {
+            CsvExporter exporter;
+            exporter.setSeparator(' ');
+            if (!exporter.exportFile(out, *mData)) {
+                QMessageBox::warning(this, tr("File save failed"), tr("The file couldn't be saved."));
+                return;
+            }
+        } catch (QException &exc) {
+            QMessageBox::warning(this, tr("File save failed"), tr("The file couldn't be saved: %1").arg(exc.what()));
+            return;
+        }
+
+        QFileInfo info(out);
+        set.setValue("TsEditor.LastPath", info.absoluteFilePath());
+        set.setValue("CTsEditor.filter", filter);
+    }
+}

@@ -34,6 +34,8 @@ private slots:
 
     void on_actionQuit_triggered();
 
+    void on_action_Save_triggered();
+
 signals:
     void dataDirty();
 

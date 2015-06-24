@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QProcess>
+#include <QTemporaryFile>
+#include <QModelIndex>
 
 #include <memory>
 
@@ -25,17 +27,15 @@ private slots:
     void on_varSelect_currentIndexChanged(const QString &arg1);
     void on_areaSelect_activated(const QString &arg1);
     void on_adimSelect_activated(const QString &arg1);
-
     void on_action_Log_Window_triggered();
-
     void on_clearLog_clicked();
-
     void on_dockLogWindow_visibilityChanged(bool visible);
 
 public slots:
     void readOutput();
     void readError();
     void processExit(int);
+    void dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -49,15 +49,15 @@ private:
 
     int colVar, colArea, colADim;
 
-    QString mDestFile;
     QProcess *mProcess;
+    QTemporaryFile mDestFile, mParFile;
 
     void load(QString filename);
     void updateKeys();
     void genSampleFile();
-    void loadSampleFileGraph();
+    void loadSampleFileGraph(QString name);
 
-    void generate(QString dest, QString variable, QString area, QString adim);
+    void generate(QString param_file, QString dest, QString variable, QString area, QString adim);
 };
 
 #endif // TSEDITORWINDOW_H

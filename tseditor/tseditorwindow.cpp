@@ -3,21 +3,37 @@
 
 #include <csv/csvimporter.h>
 #include <csv/csvtablemodel.h>
+#include <csv/csvexporter.h>
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
+#include <QModelIndex>
 #include <QDebug>
 
 TsEditorWindow::TsEditorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::TsEditorWindow),
-    mDestFile("ts")
+    mFilename(),
+    mData(),
+    mModel(0),
+    colVar(-1), colArea(-1), colADim(-1),
+    mProcess(0),
+    mDestFile("ts-XXXXXX.dat"),
+    mParFile("par-XXXXXX.dat")
 {
     ui->setupUi(this);
 
     ui->action_Log_Window->setChecked(false);
     ui->dockLogWindow->setVisible(false);
+
+    mDestFile.open();
+    mParFile.open();
+
+    mDestFile.close();
+    mParFile.close();
+
+    qDebug() << "Temporary files. " << mDestFile.fileName() << mParFile.fileName();
 
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
@@ -73,9 +89,13 @@ void TsEditorWindow::load(QString filename)
         return;
     }
 
+    if (mModel != nullptr)
+        delete mModel;
+
     mModel = new CsvTableModel(mData);
     mModel->setFirstLineHeaders(true);
     ui->table->setModel(mModel);
+    connect (mModel, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)), this, SLOT(dataChanged(QModelIndex,QModelIndex,QVector<int>)));
 
     colVar = colADim = colArea = -1;
     QStringList h = mData->at(0);
@@ -130,17 +150,20 @@ void TsEditorWindow::genSampleFile()
     QString a = ui->areaSelect->currentText();
     QString n = ui->adimSelect->currentText();
 
-    qDebug() << mDestFile << v << a << n;
+    qDebug() << mDestFile.fileName() << mParFile.fileName() << v << a << n;
 
     if (v.isEmpty() || a.isEmpty() || n.isEmpty())
         return;
 
-    generate(mDestFile, v, a, n);
+    CsvExporter exporter;
+    exporter.exportFile(mParFile.fileName(),*mData);
+
+    generate(mParFile.fileName(), mDestFile.fileName(), v, a, n);
 }
 
-void TsEditorWindow::loadSampleFileGraph()
+void TsEditorWindow::loadSampleFileGraph(QString name)
 {
-    QFile f(mDestFile);
+    QFile f(name);
     if (!f.open(QIODevice::ReadOnly)) {
         qDebug() << "***" << f.errorString();
         return;
@@ -173,10 +196,10 @@ void TsEditorWindow::loadSampleFileGraph()
     f.close();
 }
 
-void TsEditorWindow::generate(QString dest, QString variable, QString area, QString adim)
+void TsEditorWindow::generate(QString param_file, QString dest, QString variable, QString area, QString adim)
 {
     QSettings set;
-    QString param_file = set.value("TsEditor.paramfile", qApp->applicationDirPath() + "/data/param_timeseries.dat").toString();
+    //QString param_file = set.value("TsEditor.paramfile", qApp->applicationDirPath() + "/data/param_timeseries.dat").toString();
     QString script_file = set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
 
     mProcess = new QProcess;
@@ -227,10 +250,24 @@ void TsEditorWindow::readError()
 void TsEditorWindow::processExit(int code)
 {
     if (code == 0) {
-        loadSampleFileGraph();
+        loadSampleFileGraph(mDestFile.fileName());
     } else {
         statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
     }
+}
+
+void TsEditorWindow::dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles)
+{
+    bool need_refresh = false;
+    for (int row = from.row(); row < to.row(); ++row) {
+        if (mData->at(row).at(colArea) == ui->areaSelect->currentText() ||
+            mData->at(row).at(colADim) == ui->adimSelect->currentText() ||
+            mData->at(row).at(colVar) == ui->varSelect->currentText() )
+            need_refresh = true;
+    }
+
+    if (need_refresh)
+        genSampleFile();
 }
 
 void TsEditorWindow::on_action_Log_Window_triggered()

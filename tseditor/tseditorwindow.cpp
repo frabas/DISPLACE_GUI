@@ -20,9 +20,12 @@ TsEditorWindow::TsEditorWindow(QWidget *parent) :
     colVar(-1), colArea(-1), colADim(-1),
     mProcess(0),
     mDestFile("ts-XXXXXX.dat"),
-    mParFile("par-XXXXXX.dat")
+    mParFile("par-XXXXXX.dat"),
+    mDirty(false)
 {
     ui->setupUi(this);
+
+    connect (this, SIGNAL(dataDirty()), this, SLOT(dataDirtyChanged()));
 
     ui->action_Log_Window->setChecked(false);
     ui->dockLogWindow->setVisible(false);
@@ -33,7 +36,12 @@ TsEditorWindow::TsEditorWindow(QWidget *parent) :
     mDestFile.close();
     mParFile.close();
 
-    qDebug() << "Temporary files. " << mDestFile.fileName() << mParFile.fileName();
+    mDirtyIndicator = new QLabel;
+    QPixmap ic (":/icons/save.png");
+    mDirtyIndicator->setPixmap(ic.scaled(16,16));
+    statusBar()->addPermanentWidget(mDirtyIndicator);
+    mDirtyIndicator->setVisible(false);
+    emit dataDirty();
 
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
@@ -112,6 +120,9 @@ void TsEditorWindow::load(QString filename)
         QMessageBox::warning(this, tr("Cannot load file"), QString(tr("The header of the file is malformed.")));
         return;
     }
+
+    mDirty = false;
+    emit dataDirty();
 
     updateKeys();
 }
@@ -219,16 +230,19 @@ void TsEditorWindow::generate(QString param_file, QString dest, QString variable
 
 void TsEditorWindow::on_varSelect_currentIndexChanged(const QString &arg1)
 {
+    Q_UNUSED(arg1);
     genSampleFile();
 }
 
 void TsEditorWindow::on_areaSelect_activated(const QString &arg1)
 {
+    Q_UNUSED(arg1);
     genSampleFile();
 }
 
 void TsEditorWindow::on_adimSelect_activated(const QString &arg1)
 {
+    Q_UNUSED(arg1);
     genSampleFile();
 }
 
@@ -259,6 +273,11 @@ void TsEditorWindow::processExit(int code)
 
 void TsEditorWindow::dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles)
 {
+    Q_UNUSED(roles);
+
+    mDirty = true;
+    emit dataDirtyChanged();
+
     bool need_refresh = false;
     for (int row = from.row(); row <= to.row(); ++row) {
         // Notice: Headers are at row #0
@@ -270,6 +289,12 @@ void TsEditorWindow::dataChanged(QModelIndex from, QModelIndex to, QVector<int> 
 
     if (need_refresh)
         genSampleFile();
+}
+
+void TsEditorWindow::dataDirtyChanged()
+{
+    mDirtyIndicator->setVisible(mDirty);
+    ui->action_Save->setEnabled(mDirty);
 }
 
 void TsEditorWindow::on_action_Log_Window_triggered()

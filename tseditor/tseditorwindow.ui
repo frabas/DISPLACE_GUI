@@ -85,7 +85,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -93,6 +93,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="action_Open"/>
+    <addaction name="action_Save"/>
     <addaction name="actionSelect_Output_dir"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -155,16 +156,28 @@
    </widget>
   </widget>
   <action name="action_Open">
+   <property name="icon">
+    <iconset resource="../dteditor/dteditor.qrc">
+     <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open...</string>
    </property>
   </action>
   <action name="actionSelect_Output_dir">
+   <property name="icon">
+    <iconset resource="../qtgui/qtgui.qrc">
+     <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>
+   </property>
    <property name="text">
-    <string>&amp;Select Output dir...</string>
+    <string>Generate &amp;outputs...</string>
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="../dteditor/dteditor.qrc">
+     <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
+   </property>
    <property name="text">
     <string>Quit</string>
    </property>
@@ -175,6 +188,15 @@
    </property>
    <property name="text">
     <string>&amp;Log Window</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="icon">
+    <iconset resource="../dteditor/dteditor.qrc">
+     <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save...</string>
    </property>
   </action>
  </widget>

@@ -12,6 +12,7 @@ namespace Ui {
 class TsEditorWindow;
 }
 
+class QLabel;
 class CsvTableModel;
 
 class TsEditorWindow : public QMainWindow
@@ -31,11 +32,15 @@ private slots:
     void on_clearLog_clicked();
     void on_dockLogWindow_visibilityChanged(bool visible);
 
+signals:
+    void dataDirty();
+
 public slots:
     void readOutput();
     void readError();
     void processExit(int);
     void dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles);
+    void dataDirtyChanged();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -51,6 +56,9 @@ private:
 
     QProcess *mProcess;
     QTemporaryFile mDestFile, mParFile;
+
+    bool mDirty;
+    QLabel *mDirtyIndicator;
 
     void load(QString filename);
     void updateKeys();

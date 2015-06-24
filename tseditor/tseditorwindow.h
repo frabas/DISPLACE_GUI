@@ -32,6 +32,8 @@ private slots:
     void on_clearLog_clicked();
     void on_dockLogWindow_visibilityChanged(bool visible);
 
+    void on_actionQuit_triggered();
+
 signals:
     void dataDirty();
 

@@ -57,11 +57,21 @@ void TsEditorWindow::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event);
 
+    if (mDirty) {
+        int r = QMessageBox::question(this, tr("Close TimeSeriesEditor?"),
+                                      tr("The parameters file has unsaved changes. If you proceed, the changes will be lost. Proceed?"),
+                                      tr("No"), tr("Yes, Proceed and lose the changes"));
+        if (r == 0) {
+            event->ignore();
+            return;
+        }
+    }
+
     QSettings sets;
     sets.setValue("mainGeometry", saveGeometry());
     sets.setValue("mainState", saveState());
 
-    qApp->closeAllWindows();
+    event->accept();
 }
 
 void TsEditorWindow::on_action_Open_triggered()
@@ -311,4 +321,9 @@ void TsEditorWindow::on_dockLogWindow_visibilityChanged(bool visible)
 {
     QSignalBlocker b(ui->action_Log_Window);
     ui->action_Log_Window->setChecked(visible);
+}
+
+void TsEditorWindow::on_actionQuit_triggered()
+{
+    close();
 }

@@ -94,7 +94,7 @@
     </property>
     <addaction name="action_Open"/>
     <addaction name="action_Save"/>
-    <addaction name="actionSelect_Output_dir"/>
+    <addaction name="actionGenerate"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -164,7 +164,7 @@
     <string>&amp;Open...</string>
    </property>
   </action>
-  <action name="actionSelect_Output_dir">
+  <action name="actionGenerate">
    <property name="icon">
     <iconset resource="../qtgui/qtgui.qrc">
      <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>

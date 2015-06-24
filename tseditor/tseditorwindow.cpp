@@ -9,6 +9,8 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QModelIndex>
+#include <QtConcurrent>
+#include <QProgressDialog>
 #include <QDebug>
 
 TsEditorWindow::TsEditorWindow(QWidget *parent) :
@@ -29,6 +31,7 @@ TsEditorWindow::TsEditorWindow(QWidget *parent) :
 
     ui->action_Log_Window->setChecked(false);
     ui->dockLogWindow->setVisible(false);
+    ui->actionGenerate->setEnabled(false);
 
     mDestFile.open();
     mParFile.open();
@@ -133,6 +136,7 @@ void TsEditorWindow::load(QString filename)
 
     mDirty = false;
     emit dataDirty();
+    ui->actionGenerate->setEnabled(true);
 
     updateKeys();
 }
@@ -176,10 +180,7 @@ void TsEditorWindow::genSampleFile()
     if (v.isEmpty() || a.isEmpty() || n.isEmpty())
         return;
 
-    CsvExporter exporter;
-    exporter.setSeparator(' ');
-    exporter.exportFile(mParFile.fileName(),*mData);
-
+    saveTempParamFile();
     generate(mParFile.fileName(), mDestFile.fileName(), v, a, n);
 }
 
@@ -218,6 +219,13 @@ void TsEditorWindow::loadSampleFileGraph(QString name)
     f.close();
 }
 
+void TsEditorWindow::saveTempParamFile()
+{
+    CsvExporter exporter;
+    exporter.setSeparator(' ');
+    exporter.exportFile(mParFile.fileName(),*mData);
+}
+
 void TsEditorWindow::generate(QString param_file, QString dest, QString variable, QString area, QString adim)
 {
     QSettings set;
@@ -236,6 +244,73 @@ void TsEditorWindow::generate(QString param_file, QString dest, QString variable
 
     mProcess->start("Rscript", args);
 
+}
+
+void TsEditorWindow::generateAll(QString outpath)
+{
+    mExporterWorkerDialog = new QProgressDialog(this);
+    mExporterWorkerDialog->show();
+    connect (this, SIGNAL(exportProgress(int)), mExporterWorkerDialog, SLOT(setValue(int)));
+    connect (this, SIGNAL(exportTotalChanged(int)), mExporterWorkerDialog, SLOT(setMaximum(int)));
+
+    mExportWorker = QtConcurrent::run(this, &TsEditorWindow::generateAllWorker, outpath);
+    //mExportWorkerWatcher = QFutureWatcher<QString>();
+    connect (&mExportWorkerWatcher, SIGNAL(finished()), this, SLOT(exportFinished()));
+
+    mExportWorkerWatcher.setFuture(mExportWorker);
+}
+
+QString TsEditorWindow::generateAllWorker(QString outpath)
+{
+    saveTempParamFile();
+
+    QSettings set;
+    //QString param_file = set.value("TsEditor.paramfile", qApp->applicationDirPath() + "/data/param_timeseries.dat").toString();
+    QString script_file = set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
+
+    int n = ui->areaSelect->count() * ui->varSelect->count() * ui->adimSelect->count();
+    emit exportTotalChanged(n);
+
+    int ngood = 0;
+    n=0;
+    for (int var = 0; var < ui->varSelect->count(); ++var) {
+        for (int area = 0; area < ui->areaSelect->count(); ++area) {
+            for (int adim = 0; adim < ui->adimSelect->count(); ++adim) {
+                QString variable = ui->varSelect->itemText(var);
+                QString areas = ui->areaSelect->itemText(area);
+                QString adims = ui->adimSelect->itemText(adim);
+
+                QString outname = QString("%1-%2-%3.dat")
+                        .arg(variable)
+                        .arg(areas)
+                        .arg(adims);
+
+                QString dest = outpath + "/" + outname;
+
+                mProcess = new QProcess;
+
+                //mProcess->setWorkingDirectory(info.absolutePath());
+                connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
+                connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
+
+                QStringList args;
+                args << script_file << dest << variable << areas << adims << mParFile.fileName();
+
+                qDebug() << args;
+
+                mProcess->start("Rscript", args);
+                mProcess->waitForFinished(-1);
+
+                if (mProcess->exitCode() == 0)
+                    ++ngood;
+                ++n;
+                emit exportProgress(n);
+            }
+        }
+    }
+
+    mExporterWorkerDialog->close();
+    return tr("%1 files generated out of %2 possible combinations.").arg(ngood).arg(n);
 }
 
 void TsEditorWindow::on_varSelect_currentIndexChanged(const QString &arg1)
@@ -307,6 +382,19 @@ void TsEditorWindow::dataDirtyChanged()
     ui->action_Save->setEnabled(mDirty);
 }
 
+void TsEditorWindow::exportFinished()
+{
+    QString msg = mExportWorkerWatcher.result();
+    if (msg.isEmpty()) {
+        QMessageBox::information(this, tr("File export complete"), tr("All files has been generated."));
+    } else {
+        QMessageBox::warning(this, tr("File export complete"), tr("%1").arg(msg));
+    }
+
+    delete mExporterWorkerDialog;
+    mExporterWorkerDialog = 0;
+}
+
 void TsEditorWindow::on_action_Log_Window_triggered()
 {
     ui->dockLogWindow->setVisible(ui->action_Log_Window->isChecked());
@@ -353,5 +441,18 @@ void TsEditorWindow::on_action_Save_triggered()
         QFileInfo info(out);
         set.setValue("TsEditor.LastPath", info.absoluteFilePath());
         set.setValue("CTsEditor.filter", filter);
+    }
+}
+
+void TsEditorWindow::on_actionGenerate_triggered()
+{
+    QSettings set;
+    QString dir = set.value("TsEditor.LastOutPath", QDir::homePath()).toString();
+
+    QString outdir = QFileDialog::getExistingDirectory(this, tr("Select output directory"), dir);
+    if (!outdir.isEmpty()) {
+        generateAll(outdir);
+
+        set.setValue("TsEditor.LastOutPath", outdir);
     }
 }

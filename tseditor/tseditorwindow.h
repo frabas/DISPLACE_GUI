@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QProcess>
 #include <QTemporaryFile>
+#include <QFuture>
+#include <QFutureWatcher>
 #include <QModelIndex>
 
 #include <memory>
@@ -14,6 +16,7 @@ class TsEditorWindow;
 
 class QLabel;
 class CsvTableModel;
+class QProgressDialog;
 
 class TsEditorWindow : public QMainWindow
 {
@@ -31,13 +34,14 @@ private slots:
     void on_action_Log_Window_triggered();
     void on_clearLog_clicked();
     void on_dockLogWindow_visibilityChanged(bool visible);
-
     void on_actionQuit_triggered();
-
     void on_action_Save_triggered();
+    void on_actionGenerate_triggered();
 
 signals:
     void dataDirty();
+    void exportProgress(int value);
+    void exportTotalChanged(int total);
 
 public slots:
     void readOutput();
@@ -45,6 +49,7 @@ public slots:
     void processExit(int);
     void dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles);
     void dataDirtyChanged();
+    void exportFinished();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -64,12 +69,19 @@ private:
     bool mDirty;
     QLabel *mDirtyIndicator;
 
+    QFuture<QString> mExportWorker;
+    QFutureWatcher<QString> mExportWorkerWatcher;
+    QProgressDialog *mExporterWorkerDialog;
+
     void load(QString filename);
     void updateKeys();
     void genSampleFile();
     void loadSampleFileGraph(QString name);
 
+    void saveTempParamFile();
     void generate(QString param_file, QString dest, QString variable, QString area, QString adim);
+    void generateAll (QString outpath);
+    QString generateAllWorker(QString outpath);
 };
 
 #endif // TSEDITORWINDOW_H

@@ -50,5 +50,7 @@
         <file>icons/invselect.png</file>
         <file>icons/noneselect.png</file>
         <file>icons/more-horz.png</file>
+        <file>icons/Rlogo.png</file>
+        <file>icons/tseditor.png</file>
     </qresource>
 </RCC>

@@ -13,9 +13,14 @@ public:
         explicit Exception (QString what)
             : mWhat(what) {
         }
+        ~Exception() throw () {}
 
         void raise() const { throw *this; }
         Exception *clone() const { return new Exception(*this); }
+
+        const char *what() const _GLIBCXX_USE_NOEXCEPT {
+            return mWhat.toStdString().c_str();
+        }
 
     protected:
         QString mWhat;
@@ -23,7 +28,7 @@ public:
 
     CsvExporter();
 
-    bool exportFile(QString filename, const QList<QStringList> & list);
+    bool exportFile(QString filename, const QList<QStringList> & list) throw (Exception);
     void setSeparator (QChar sep) { mSeparator = sep; }
 
 private:

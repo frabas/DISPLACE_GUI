@@ -45,9 +45,13 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 [Files]
 Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\dtreeeditor.exe; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\tsereditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qmapcontrol1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\qtcommons.dll; DestDir: {app}; Flags: ignoreversion
+
+Source: scripts\gen_ts.R; DestDir: {app}\scripts; Flags: ignoreversion
 
 Source: install\extra\bin\libgcc_s_seh-1.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libgdal-1.dll; DestDir: {app}; Flags: ignoreversion
@@ -77,9 +81,11 @@ Source: install\extra\bin\platforms\qwindows.dll; DestDir: {app}\platforms; Flag
 Source: install\extra\bin\sqldrivers\qsqlite.dll; DestDir: {app}\sqldrivers; Flags: ignoreversion
 
 [Icons]
-Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
+Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon
+Name: {group}\Decision Tree Editor; Filename: {app}\dtreeeditor.exe; Tasks: ; Languages: 
+Name: {group}\Time Series Editor; Filename: {app}\tsereditor.exe
 
 [Run]
 ;Filename: {tmp}\vcredist_x86.exe; Parameters: /q; WorkingDir: {tmp}

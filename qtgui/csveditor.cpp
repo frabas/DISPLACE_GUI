@@ -1,8 +1,8 @@
 #include "csveditor.h"
 #include "ui_csveditor.h"
 
-#include <utils/csvimporter.h>
-#include <utils/csvexporter.h>
+#include <csv/csvimporter.h>
+#include <csv/csvexporter.h>
 
 #include <QtConcurrent>
 #include <QFileDialog>

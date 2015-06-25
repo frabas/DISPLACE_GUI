@@ -376,7 +376,6 @@ void TsEditorWindow::on_adimSelect_activated(const QString &arg1)
 
 void TsEditorWindow::processStarted()
 {
-    ui->logText->appendPlainText("\n");
     ui->logText->appendHtml(QString("<font color=\"#0000bb\">%1 %2</font>")
                             .arg(tr("Starting:"))
                             .arg(mProcess->arguments().join(" ")));
@@ -397,14 +396,21 @@ void TsEditorWindow::readError()
 void TsEditorWindow::processExit(int code)
 {
     if (mProcess->error() != 5) {
+        QString t(tr("Cannot start Rscript: %1").arg(mProcess->errorString()));
+        ui->logText->appendHtml("<font color=\"#aa0000\">" + t + "</font>");
         QMessageBox::warning(this, tr("Cannot start Rscript"),
                              tr("Cannot start Rscript: %1").arg(mProcess->errorString()));
     } else {
         if (code == 0) {
+            QString t(tr("Program exited with result code: %1").arg(code));
+            ui->logText->appendHtml("<font color=\"#0000aa\">" + t + "</font>");
             loadSampleFileGraph(mDestFile.fileName());
         } else {
+            QString t(tr("Program exited with result code: %1").arg(code));
+            ui->logText->appendHtml("<font color=\"#aa0000\">" + t + "</font>");
             statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
         }
+        ui->logText->appendPlainText("\n");
     }
 
     delete mProcess;

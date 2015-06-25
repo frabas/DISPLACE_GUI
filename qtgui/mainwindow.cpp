@@ -2102,6 +2102,7 @@ void MainWindow::on_actionDecision_Trees_Editor_triggered()
     app += ".exe";
 #endif
 
+    ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->start(app);
 }
 
@@ -2127,4 +2128,17 @@ void MainWindow::on_actionR_Console_triggered()
 {
     RConsole *console = new RConsole();
     console->show();
+}
+
+void MainWindow::on_actionTime_Series_Editor_triggered()
+{
+    QProcess *ed = new QProcess;
+    QString app = qApp->applicationDirPath() + "/tsereditor";
+
+#ifdef __WINNT
+    app += ".exe";
+#endif
+
+    ed->setWorkingDirectory(qApp->applicationDirPath());
+    ed->start(app);
 }

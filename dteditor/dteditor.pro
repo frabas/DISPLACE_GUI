@@ -24,7 +24,7 @@ macx {
 }
 
 win32 {
-    #RC_FILE = dteditor.rc
+    RC_FILE = dteditor.rc
 }
 
 LIBS+=-L.. -ldisplacecommons

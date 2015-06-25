@@ -17,9 +17,9 @@ Env::~Env()
 
 QProcessEnvironment Env::environment() const
 {
-    QProcessEnvironment env;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
-    QString home = getRSriptHome();
+    QString home = getRScriptHome();
     if (!home.isEmpty()) {
         QString path = env.value("PATH");
         path += home +";" + path;
@@ -31,7 +31,7 @@ QProcessEnvironment Env::environment() const
 
 QString Env::getRScriptExe() const
 {
-    QString base = getRSriptHome();
+    QString base = getRScriptHome();
 
 #ifdef __unix
     return base + "Rscript";
@@ -40,7 +40,7 @@ QString Env::getRScriptExe() const
 #endif
 }
 
-QString Env::getRSriptHome() const
+QString Env::getRScriptHome() const
 {
     QString base;
     if (set.contains(RSCRIPT_HOME_SETTING)) {

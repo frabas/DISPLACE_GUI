@@ -38,6 +38,10 @@ private slots:
     void on_action_Save_triggered();
     void on_actionGenerate_triggered();
 
+    void on_actionRScript_location_triggered();
+
+    void on_actionGen_Script_location_triggered();
+
 signals:
     void dataDirty();
     void exportProgress(int value);
@@ -72,6 +76,10 @@ private:
     QFuture<QString> mExportWorker;
     QFutureWatcher<QString> mExportWorkerWatcher;
     QProgressDialog *mExporterWorkerDialog;
+
+    void checkEnv();
+
+    QString getScriptPath();
 
     void load(QString filename);
     void updateKeys();

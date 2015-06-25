@@ -5,6 +5,8 @@
 #include <csv/csvtablemodel.h>
 #include <csv/csvexporter.h>
 
+#include <R/env.h>
+
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
@@ -49,6 +51,8 @@ TsEditorWindow::TsEditorWindow(QWidget *parent) :
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
     restoreState(set.value("mainState").toByteArray());
+
+    checkEnv();
 }
 
 TsEditorWindow::~TsEditorWindow()
@@ -77,6 +81,43 @@ void TsEditorWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+void TsEditorWindow::checkEnv()
+{
+    displace::R::Env env;
+
+    QProcess p;
+    QStringList args;
+    args << "--version";
+
+    // If process starts regularly, it will return error()==5 "unknown error".
+    // If it cannot start, it will return error() == 0 "Failed to start".
+
+    p.setEnvironment(env.environment().toStringList());
+    p.start(env.getRScriptExe(), args);
+    p.waitForFinished(-1);
+
+    if (p.error() != 5 || p.exitCode() == -1) {
+        QMessageBox::warning(this, tr("Time Series setup check"),
+                             tr("Couldn't start Rscript. Please setup the Rscript path properly in the Settings screen."));
+        return;
+    }
+
+    QFileInfo file(getScriptPath());
+
+    if (!file.exists() || !file.isReadable()) {
+        QMessageBox::warning(this, tr("Time Series setup check"),
+                             tr("Time Series generation script (%1) is not accessible or is missing. Please fix the path in the Settings screen.")
+                             .arg(file.fileName()));
+        return;
+    }
+}
+
+QString TsEditorWindow::getScriptPath()
+{
+    QSettings set;
+    return set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
+}
+
 void TsEditorWindow::on_action_Open_triggered()
 {
     QSettings set;
@@ -94,7 +135,7 @@ void TsEditorWindow::on_action_Open_triggered()
 
         QFileInfo info(file);
         set.setValue("TsEditor.LastPath", info.absoluteFilePath());
-        set.setValue("CTsEditor.filter", filter);
+        set.setValue("TsEditor.filter", filter);
     }
 }
 
@@ -228,9 +269,7 @@ void TsEditorWindow::saveTempParamFile()
 
 void TsEditorWindow::generate(QString param_file, QString dest, QString variable, QString area, QString adim)
 {
-    QSettings set;
-    //QString param_file = set.value("TsEditor.paramfile", qApp->applicationDirPath() + "/data/param_timeseries.dat").toString();
-    QString script_file = set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
+    QString script_file = getScriptPath();
 
     mProcess = new QProcess;
 
@@ -242,8 +281,12 @@ void TsEditorWindow::generate(QString param_file, QString dest, QString variable
     QStringList args;
     args << script_file << dest << variable << area << adim << param_file;
 
-    mProcess->start("Rscript", args);
+    displace::R::Env env;
+    mProcess->setEnvironment(env.environment().toStringList());
+    mProcess->setWorkingDirectory(env.getRScriptHome());
+    mProcess->start(env.getRScriptExe(), args);
 
+    qDebug() << "START:" << env.getRScriptExe() << args;
 }
 
 void TsEditorWindow::generateAll(QString outpath)
@@ -254,7 +297,6 @@ void TsEditorWindow::generateAll(QString outpath)
     connect (this, SIGNAL(exportTotalChanged(int)), mExporterWorkerDialog, SLOT(setMaximum(int)));
 
     mExportWorker = QtConcurrent::run(this, &TsEditorWindow::generateAllWorker, outpath);
-    //mExportWorkerWatcher = QFutureWatcher<QString>();
     connect (&mExportWorkerWatcher, SIGNAL(finished()), this, SLOT(exportFinished()));
 
     mExportWorkerWatcher.setFuture(mExportWorker);
@@ -264,12 +306,12 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
 {
     saveTempParamFile();
 
-    QSettings set;
-    //QString param_file = set.value("TsEditor.paramfile", qApp->applicationDirPath() + "/data/param_timeseries.dat").toString();
-    QString script_file = set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
+    QString script_file = getScriptPath();
 
     int n = ui->areaSelect->count() * ui->varSelect->count() * ui->adimSelect->count();
     emit exportTotalChanged(n);
+
+    displace::R::Env env;
 
     int ngood = 0;
     n=0;
@@ -298,7 +340,8 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
 
                 qDebug() << args;
 
-                mProcess->start("Rscript", args);
+                mProcess->setEnvironment(env.environment().toStringList());
+                mProcess->start(env.getRScriptExe(), args);
                 mProcess->waitForFinished(-1);
 
                 if (mProcess->exitCode() == 0)
@@ -309,7 +352,6 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
         }
     }
 
-    mExporterWorkerDialog->close();
     return tr("%1 files generated out of %2 possible combinations.").arg(ngood).arg(n);
 }
 
@@ -349,11 +391,25 @@ void TsEditorWindow::readError()
 
 void TsEditorWindow::processExit(int code)
 {
-    if (code == 0) {
-        loadSampleFileGraph(mDestFile.fileName());
-    } else {
-        statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
+    if (mExporterWorkerDialog) {
+        mExporterWorkerDialog->close();
+        delete mExporterWorkerDialog;
+        mExporterWorkerDialog = 0;
     }
+
+    if (mProcess->error() != 5) {
+        QMessageBox::warning(this, tr("Cannot start Rscript"),
+                             tr("Cannot start Rscript: %1").arg(mProcess->errorString()));
+    } else {
+        if (code == 0) {
+            loadSampleFileGraph(mDestFile.fileName());
+        } else {
+            statusBar()->showMessage(QString(tr("R Script exited with exit code %1")).arg(code), 5000);
+        }
+    }
+
+    delete mProcess;
+    mProcess = 0;
 }
 
 void TsEditorWindow::dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles)
@@ -440,7 +496,7 @@ void TsEditorWindow::on_action_Save_triggered()
 
         QFileInfo info(out);
         set.setValue("TsEditor.LastPath", info.absoluteFilePath());
-        set.setValue("CTsEditor.filter", filter);
+        set.setValue("TsEditor.filter", filter);
     }
 }
 
@@ -454,5 +510,36 @@ void TsEditorWindow::on_actionGenerate_triggered()
         generateAll(outdir);
 
         set.setValue("TsEditor.LastOutPath", outdir);
+    }
+}
+
+void TsEditorWindow::on_actionRScript_location_triggered()
+{
+    displace::R::Env env;
+
+    QString dir = env.getRScriptHome();
+    if (dir.isEmpty())
+        dir = qApp->applicationDirPath();
+
+    QString exe = QFileDialog::getOpenFileName(this, tr("Location of Rscript installation"), dir);
+    if (!exe.isEmpty()) {
+        QFileInfo info(exe);
+
+        env.setRScriptHome(info.absolutePath());
+        checkEnv();
+    }
+}
+
+void TsEditorWindow::on_actionGen_Script_location_triggered()
+{
+    QSettings set;
+    QString dir = set.value("TsEditor.script", qApp->applicationDirPath() + "/scripts/gen_ts.R").toString();
+    QFileInfo idir(dir);
+
+    QString script = QFileDialog::getOpenFileName(this, tr("Location of R script"), idir.absolutePath(),
+                                                  tr("R scripts (*.R *.r);;All files (*)"));
+    if (!script.isEmpty()) {
+        set.setValue("TsEditor.script", script);
+        checkEnv();
     }
 }

@@ -16,7 +16,7 @@ public:
 
     QProcessEnvironment environment() const;
     QString getRScriptExe() const;
-    QString getRSriptHome() const;
+    QString getRScriptHome() const;
     void setRScriptHome(QString home);
 
 private:

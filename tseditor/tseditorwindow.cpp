@@ -273,7 +273,7 @@ void TsEditorWindow::generate(QString param_file, QString dest, QString variable
 
     mProcess = new QProcess;
 
-    //mProcess->setWorkingDirectory(info.absolutePath());
+    connect(mProcess, SIGNAL(started()), this, SLOT(processStarted()));
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
     connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
     connect(mProcess, SIGNAL(finished(int)), this, SLOT(processExit(int)));
@@ -331,7 +331,7 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
 
                 mProcess = new QProcess;
 
-                //mProcess->setWorkingDirectory(info.absolutePath());
+                connect(mProcess, SIGNAL(started()), this, SLOT(processStarted()));
                 connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutput()));
                 connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
 
@@ -341,6 +341,7 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
                 qDebug() << args;
 
                 mProcess->setEnvironment(env.environment().toStringList());
+                mProcess->setWorkingDirectory(env.getRScriptHome());
                 mProcess->start(env.getRScriptExe(), args);
                 mProcess->waitForFinished(-1);
 
@@ -373,30 +374,28 @@ void TsEditorWindow::on_adimSelect_activated(const QString &arg1)
     genSampleFile();
 }
 
+void TsEditorWindow::processStarted()
+{
+    ui->logText->appendPlainText("\n");
+    ui->logText->appendHtml(QString("<font color=\"#0000bb\">%1 %2</font>")
+                            .arg(tr("Starting:"))
+                            .arg(mProcess->arguments().join(" ")));
+}
+
 void TsEditorWindow::readOutput()
 {
     QString t = mProcess->readAllStandardOutput();
-    qDebug() << t;
-
     ui->logText->appendPlainText(t + "\n");
 }
 
 void TsEditorWindow::readError()
 {
     QString t = mProcess->readAllStandardError();
-    qDebug() << "*** " << t;
-
     ui->logText->appendHtml("<font color=\"#aa0000\">" + t + "</font>");
 }
 
 void TsEditorWindow::processExit(int code)
 {
-    if (mExporterWorkerDialog) {
-        mExporterWorkerDialog->close();
-        delete mExporterWorkerDialog;
-        mExporterWorkerDialog = 0;
-    }
-
     if (mProcess->error() != 5) {
         QMessageBox::warning(this, tr("Cannot start Rscript"),
                              tr("Cannot start Rscript: %1").arg(mProcess->errorString()));
@@ -447,8 +446,11 @@ void TsEditorWindow::exportFinished()
         QMessageBox::warning(this, tr("File export complete"), tr("%1").arg(msg));
     }
 
-    delete mExporterWorkerDialog;
-    mExporterWorkerDialog = 0;
+    if (mExporterWorkerDialog) {
+        mExporterWorkerDialog->close();
+        delete mExporterWorkerDialog;
+        mExporterWorkerDialog = 0;
+    }
 }
 
 void TsEditorWindow::on_action_Log_Window_triggered()
@@ -543,3 +545,4 @@ void TsEditorWindow::on_actionGen_Script_location_triggered()
         checkEnv();
     }
 }
+

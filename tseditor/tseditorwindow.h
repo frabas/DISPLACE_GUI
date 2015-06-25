@@ -48,6 +48,7 @@ signals:
     void exportTotalChanged(int total);
 
 public slots:
+    void processStarted();
     void readOutput();
     void readError();
     void processExit(int);

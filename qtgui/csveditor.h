@@ -7,9 +7,9 @@
 #include <QFuture>
 #include <QFutureWatcher>
 
-#include <utils/csvtablemodel.h>
+#include <csv/csvtablemodel.h>
 #include <waitdialog.h>
-#include <utils/csvimporter.h>
+#include <csv/csvimporter.h>
 
 #include <memory>
 

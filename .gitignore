@@ -13,3 +13,4 @@ tmp/
 ui/
 qtgui/resources/qrc_qtgui.cpp
 docs/html
+docs/latex

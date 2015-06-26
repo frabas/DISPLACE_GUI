@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
-INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons
+INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")
@@ -48,7 +48,7 @@ LIBS += -lGeographic
 
 QMAKE_CXXFLAGS += -frounding-math
 DEFINES += PROFILE
-LIBS+=-L.. -ldisplacecommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
+LIBS+=-L.. -ldisplacecommons -lqtcommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL include path.
 INCLUDEPATH += $$QMC_GDAL_INC
@@ -89,7 +89,6 @@ SOURCES += \
     mapobjects/nodegraphics.cpp \
     editpalettedialog.cpp \
     palettemanager.cpp \
-    qcustomplot.cpp \
     statscontroller.cpp \
     modelobjects/populationdata.cpp \
     objects/populationentity.cpp \
@@ -122,9 +121,6 @@ SOURCES += \
     simulatoripcmanager.cpp \
     workers/shortestpathbuilderworker.cpp \
     csveditor.cpp \
-    utils/csvtablemodel.cpp \
-    utils/csvimporter.cpp \
-    utils/csvexporter.cpp \
     mergedatadialog.cpp \
     workers/datamerger.cpp \
     utils/imageformathelpers.cpp \
@@ -140,7 +136,9 @@ SOURCES += \
     workers/graphbuilderworker.cpp \
     algo/isolatedsubgraphchecker.cpp \
     algo/geographicgridbuilder.cpp \
-    algo/simplegeodesiclinegraphbuilder.cpp
+    algo/simplegeodesiclinegraphbuilder.cpp \
+    algo/simpleplanargraphbuilder.cpp \
+    R/rconsole.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -159,7 +157,8 @@ FORMS += \
     mergedatadialog.ui \
     shapefileoperationdialog.ui \
     savegraphdialog.ui \
-    mergepopulationplugincomponent.ui
+    mergepopulationplugincomponent.ui \
+    R/rconsole.ui
 
 HEADERS += \
     mainwindow.h \
@@ -191,7 +190,6 @@ HEADERS += \
     mapobjects/nodegraphics.h \
     editpalettedialog.h \
     palettemanager.h \
-    qcustomplot.h \
     statscontroller.h \
     modelobjects/populationdata.h \
     objects/populationentity.h \
@@ -229,9 +227,6 @@ HEADERS += \
     simulatoripcmanager.h \
     workers/shortestpathbuilderworker.h \
     csveditor.h \
-    utils/csvtablemodel.h \
-    utils/csvimporter.h \
-    utils/csvexporter.h \
     mergedatadialog.h \
     workers/datamerger.h \
     utils/imageformathelpers.h \
@@ -249,7 +244,9 @@ HEADERS += \
     algo/isolatedsubgraphchecker.h \
     mapobjects/mapobjectcontainer.h \
     algo/geographicgridbuilder.h \
-    algo/simplegeodesiclinegraphbuilder.h
+    algo/simplegeodesiclinegraphbuilder.h \
+    algo/simpleplanargraphbuilder.h \
+    R/rconsole.h
 
 RESOURCES += \
     qtgui.qrc

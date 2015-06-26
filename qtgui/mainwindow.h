@@ -178,6 +178,9 @@ private slots:
     void on_actionLoadStockNames_triggered();
     void on_actionDecision_Trees_Editor_triggered();
     void on_actionCheck_for_isolated_subgraphs_triggered();
+    void on_actionR_Console_triggered();
+
+    void on_actionTime_Series_Editor_triggered();
 
 public slots:
     void end_ShortestPathCreated(bool);

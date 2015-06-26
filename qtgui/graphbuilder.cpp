@@ -11,6 +11,7 @@
 
 #include <algo/geographicgridbuilder.h>
 #include <algo/simplegeodesiclinegraphbuilder.h>
+#include <algo/simpleplanargraphbuilder.h>
 
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
@@ -78,6 +79,8 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     if (mShapefileExc.get() == 0)
         mRemoveEdgesInExcludeZone = false;
 
+    qDebug() << "Type: " << mType;
+
     displace::graphbuilders::GeographicGridBuilder *builderInc1, *builderInc2, *builderOut;
     switch (mType) {
     case Hex:
@@ -95,6 +98,22 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                     displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
         builderOut = new displace::graphbuilders::SimpleGeodesicLineGraphBuilder(
                     displace::graphbuilders::SimpleGeodesicLineGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
+        break;
+    case HexTrivial:
+        builderInc1 = new displace::graphbuilders::SimplePlanarGraphBuilder(
+                    displace::graphbuilders::SimplePlanarGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimplePlanarGraphBuilder(
+                    displace::graphbuilders::SimplePlanarGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimplePlanarGraphBuilder(
+                    displace::graphbuilders::SimplePlanarGraphBuilder::Hex, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
+        break;
+    case QuadTrivial:
+        builderInc1 = new displace::graphbuilders::SimplePlanarGraphBuilder(
+                    displace::graphbuilders::SimplePlanarGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep1);
+        builderInc2 = new displace::graphbuilders::SimplePlanarGraphBuilder(
+                    displace::graphbuilders::SimplePlanarGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep2);
+        builderOut = new displace::graphbuilders::SimplePlanarGraphBuilder(
+                    displace::graphbuilders::SimplePlanarGraphBuilder::Quad, mLatMin, mLonMin, mLatMax, mLonMax, mStep);
         break;
     }
 

@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/remove.png</file>
+        <file>icons/Rlogo.png</file>
+        <file>icons/load.png</file>
+        <file>icons/quit.png</file>
+        <file>icons/save.png</file>
+        <file>icons/setup.png</file>
+    </qresource>
+</RCC>

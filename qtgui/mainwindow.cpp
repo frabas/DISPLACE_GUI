@@ -50,6 +50,8 @@
 #include <shapefileoperationdialog.h>
 #include <savegraphdialog.h>
 
+#include <R/rconsole.h>
+
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
@@ -2100,6 +2102,7 @@ void MainWindow::on_actionDecision_Trees_Editor_triggered()
     app += ".exe";
 #endif
 
+    ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->start(app);
 }
 
@@ -2119,4 +2122,23 @@ void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
     } else {
         QMessageBox::information(this, tr("Subgraphs checking"), tr("No Isolated subgraphs. The graph is connected."));
     }
+}
+
+void MainWindow::on_actionR_Console_triggered()
+{
+    RConsole *console = new RConsole();
+    console->show();
+}
+
+void MainWindow::on_actionTime_Series_Editor_triggered()
+{
+    QProcess *ed = new QProcess;
+    QString app = qApp->applicationDirPath() + "/tsereditor";
+
+#ifdef __WINNT
+    app += ".exe";
+#endif
+
+    ed->setWorkingDirectory(qApp->applicationDirPath());
+    ed->start(app);
 }

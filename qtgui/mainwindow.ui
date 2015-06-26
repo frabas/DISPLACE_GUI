@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -127,6 +127,9 @@
     </widget>
     <addaction name="actionCSV_Editor"/>
     <addaction name="actionDecision_Trees_Editor"/>
+    <addaction name="actionTime_Series_Editor"/>
+    <addaction name="actionR_Console"/>
+    <addaction name="separator"/>
     <addaction name="actionExport_Map"/>
     <addaction name="menuExport_Graph_Image"/>
    </widget>
@@ -1120,18 +1123,36 @@
     <string>Clear Selection</string>
    </property>
   </action>
+  <action name="actionR_Console">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
+   </property>
+   <property name="text">
+    <string>R Console...</string>
+   </property>
+  </action>
+  <action name="actionTime_Series_Editor">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/tseditor.png</normaloff>:/icons/tseditor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Time Series Editor...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>WrapperWidget</class>
-   <extends>QWidget</extends>
-   <header>wrapperwidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
    <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WrapperWidget</class>
+   <extends>QWidget</extends>
+   <header>wrapperwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

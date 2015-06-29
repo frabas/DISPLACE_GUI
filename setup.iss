@@ -10,6 +10,7 @@
 ; to debug:
 ;#define Build "debug"
 ;#define QT_DEBUG "d"
+
 #define Build "release"
 #define QT_DEBUG ""
 #define MINGW_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin"
@@ -47,7 +48,7 @@ Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\dtreeeditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\tsereditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\qmapcontrol1.dll; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qtcommons.dll; DestDir: {app}; Flags: ignoreversion
 
@@ -65,20 +66,20 @@ Source: install\extra\bin\libgmp-10.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\lib\libboost_system-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\lib\libboost_thread-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
 
-Source: install\extra\bin\Qt5Core.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Concurrent.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Gui.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Network.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5OpenGL.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5PrintSupport.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Sql.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Widgets.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Xml.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Concurrent{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5OpenGL{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5PrintSupport{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Sql{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\Qt5Xml{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion
 
-Source: install\extra\bin\platforms\qminimal.dll; DestDir: {app}\platforms; Flags: ignoreversion
-Source: install\extra\bin\platforms\qwindows.dll; DestDir: {app}\platforms; Flags: ignoreversion
-Source: install\extra\bin\sqldrivers\qsqlite.dll; DestDir: {app}\sqldrivers; Flags: ignoreversion
+Source: install\extra\bin\platforms\qminimal{#QT_DEBUG}.dll; DestDir: {app}\platforms; Flags: ignoreversion
+Source: install\extra\bin\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms; Flags: ignoreversion
+Source: install\extra\bin\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\sqldrivers; Flags: ignoreversion
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 

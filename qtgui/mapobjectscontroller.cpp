@@ -142,6 +142,8 @@ void MapObjectsController::updateNodes(int model)
         NodeMapObject *obj = mNodeObjects[model].get(it, NodeMapObject::GraphNodeRole);
         obj->updateProperties();
         obj->getGeometryEntity()->requestRedraw();
+
+        ++it;
     }
 }
 

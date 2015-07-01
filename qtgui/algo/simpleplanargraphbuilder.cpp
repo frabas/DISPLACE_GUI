@@ -1,5 +1,9 @@
 #include "simpleplanargraphbuilder.h"
 
+#include <cmath>
+#include <m_constants.h>
+
+
 #include <GeographicLib/Geodesic.hpp>
 
 #include <QDebug>

@@ -46,6 +46,9 @@ daily_ts_generator <- function (param_ts, variable="wspeed", area="all_area", a_
                         prob=c(prob_quartile1, prob_quartile2, prob_quartile3, prob_quartile4, prob_quartile5))
           )
    }
+ 
+  # ts_for_a_variable <- c(relevant_param[1,c("threshold1", "threshold2", "threshold3")], ts_for_a_variable)
+ 
    return(ts_for_a_variable)
 }
 

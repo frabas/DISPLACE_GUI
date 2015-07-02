@@ -241,6 +241,9 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     int another_ground = vessels[ index_v ]->should_i_change_ground(
                         external_states_relevant_for_change_ground, false);
 
+                    // TO DO: do not change of ground if nodes are too far from each other e.g. nsea in myfish app
+                    // so also need to test for current node code_area to see if vessel *allowed* to change grounds...
+
                     // ***************implement the decision************************************
                          // ...but not on this ground!
                     if(another_ground || force_another_ground )

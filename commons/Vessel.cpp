@@ -46,10 +46,9 @@ namespace dtree {
 namespace vessels {
 class AverageProfitStateEvaluator : public dtree::StateEvaluator {
 private:
-    Vessel *vessel;
 public:
-    AverageProfitStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
-    double evaluate() const {
+    AverageProfitStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
         if (vessel->getNumTrips() > 2)
             return vessel->getAvgTripProfit();
         else
@@ -59,10 +58,9 @@ public:
 
 class AverageRevenuesStateEvaluator : public dtree::StateEvaluator {
 private:
-    Vessel *vessel;
 public:
-    AverageRevenuesStateEvaluator(Vessel *_vessel) : vessel(_vessel) {}
-    double evaluate() const {
+    AverageRevenuesStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
         if (vessel->getNumTrips() > 2)
             return vessel->getAvgTripRevenues();
         else
@@ -276,11 +274,11 @@ void Vessel::init()
     mStateEvaluators[dtree::vesselSizeIs] = boost::make_shared<dtree::VariableReferenceStateEvaluator<LengthClass> >(mLengthClassId);
     mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_revenues),
-                boost::make_shared<dtree::vessels::AverageRevenuesStateEvaluator>(this),
+                boost::make_shared<dtree::vessels::AverageRevenuesStateEvaluator>(),
                 std::less<double>()));
     mStateEvaluators[dtree::lastTripProfitIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                 boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_profit),
-                boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(this),
+                boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(),
                 std::less<double>()));
 
     // External states
@@ -1135,7 +1133,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
 /** \brief Starting from the dtree root, traverse it evaluating any node and the relative Variable.
  * The return value from StateEvaluator::evaluate() is rounded and casted to int to define the next node
  * */
-double Vessel::traverseDtree(dtree::DecisionTree *tree)
+double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
 {
     boost::shared_ptr<dtree::Node> node = tree->root();
     while (node.get()) {
@@ -1144,7 +1142,7 @@ double Vessel::traverseDtree(dtree::DecisionTree *tree)
 
         double value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
-            value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate();
+            value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
@@ -3516,7 +3514,7 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_tree)
+int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, bool use_the_tree)
 {
     UNUSED(external_states);
 
@@ -3561,7 +3559,7 @@ int Vessel::should_i_go_fishing(map<string,int>& external_states, bool use_the_t
 			internal_states.insert(make_pair(" last_trip_was ",0));
 
             boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
-            double the_value = traverseDtree(tree.get());
+            double the_value = traverseDtree(tstep, tree.get());
 
         // draw a random number [0,1) and compare with the value
 

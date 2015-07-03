@@ -34,7 +34,6 @@ SOURCES= \
     dtree/variables.cpp \
     dtree/dtnode.cpp \
     dtree/decisiontreemanager.cpp \
-    dtree/stateevaluator.cpp \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp

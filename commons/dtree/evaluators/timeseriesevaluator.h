@@ -2,6 +2,7 @@
 #define TIMESERIESEVALUATOR_H
 
 #include <simulation.h>
+#include <Vessel.h>
 #include <dtree/stateevaluator.h>
 #include <tseries/timeseries.h>
 #include <tseries/timeseriesmanager.h>
@@ -12,13 +13,12 @@ namespace dtree {
 template <displace::simulation::TimeSeriesManager::Variables Var>
 class TimeSeriesEvaluator : public ::dtree::StateEvaluator
 {
-    int zone;
-    int adim;
 public:
     TimeSeriesEvaluator();
 
-    double evaluate() const {
-        displace::simulation::Simulation::instance()->getTimeSeries(Var, zone, adim);
+    double evaluate(int tstep, Vessel *v) const {
+        // NOTE: tstep must be converted to day!
+        return displace::simulation::Simulation::instance()->getTimeSeries(Var, 0, v->get_loc()->code_area)->evaluateThresholds(tstep % 365);
     }
 };
 

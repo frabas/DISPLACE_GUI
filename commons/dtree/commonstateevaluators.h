@@ -21,7 +21,7 @@ public:
         : StateEvaluator(), mVariable(var) {
     }
 
-    double evaluate() const {
+    double evaluate(int, Vessel *) const {
         return static_cast<double>(mVariable);
     }
 };
@@ -38,7 +38,7 @@ public:
         : StateEvaluator(), mConst(var) {
     }
 
-    double evaluate() const {
+    double evaluate(int, Vessel *) const {
         return static_cast<double>(mConst);
     }
 };
@@ -73,8 +73,8 @@ public:
 
     /** \brief Overridden method. Apply an operator (passed as template parameter) to two other evaluators.
      * \return 1.0 if operator returns true, 0.0 if false */
-    double evaluate() const {
-        if (mOperator(mOp1->evaluate(), mOp2->evaluate())) {
+    double evaluate(int tstep, Vessel *v) const {
+        if (mOperator(mOp1->evaluate(tstep, v), mOp2->evaluate(tstep, v))) {
             return 1.0;
         } else {
             return 0.0;

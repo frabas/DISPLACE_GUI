@@ -256,6 +256,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 #endif
 
     dout(cout <<"vessel creator...OK" << endl);
+    init();
 }
 
 
@@ -267,7 +268,7 @@ void Vessel::init()
     nationality = nationalityFromName(get_name());
 
     for (int i = 0; i < dtree::Variable::VarLast; ++i) {
-        mStateEvaluators.push_back(0);
+        mStateEvaluators.push_back(boost::shared_ptr<dtree::StateEvaluator>());
     }
 
     // Add here the variables associations
@@ -280,6 +281,7 @@ void Vessel::init()
                 boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_profit),
                 boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(),
                 std::less<double>()));
+    mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
 
     // External states
 //    mNormalizedInternalStates[dtree::fish_price] = ExternalStateManager::instance()->getStandardEvaluator(dtree::fish_price);

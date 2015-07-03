@@ -331,7 +331,7 @@ public:
             );
         void which_metier_should_i_go_for(vector <Metier*>& metiers);
                                  //yes:1; no=0
-        int should_i_go_fishing(map<string, int>& external_states, bool use_the_tree);
+        int should_i_go_fishing(int tstep, map<string, int>& external_states, bool use_the_tree);
 		int should_i_start_fishing(map<string, int>& external_states, bool use_the_tree);
 		int should_i_choose_this_ground(map<string, int>& external_states, bool use_the_tree);
 		int should_i_change_ground(map<string, int>& external_states, bool use_the_tree);
@@ -376,7 +376,7 @@ public:
 
         void updateTripsStatistics(const std::vector<Population *> &populations);
 
-        double traverseDtree (dtree::DecisionTree *tree);
+        double traverseDtree (int tstep, dtree::DecisionTree *tree);
 
         /** \brief the Set of internal states, normalized in the range [0,1]
          * */

@@ -37,9 +37,7 @@ private slots:
     void on_actionQuit_triggered();
     void on_action_Save_triggered();
     void on_actionGenerate_triggered();
-
     void on_actionRScript_location_triggered();
-
     void on_actionGen_Script_location_triggered();
 
 signals:
@@ -91,6 +89,8 @@ private:
     void generate(QString param_file, QString dest, QString variable, QString area, QString adim);
     void generateAll (QString outpath);
     QString generateAllWorker(QString outpath);
+
+    double parseThreshold(QString l) throw (std::invalid_argument);
 };
 
 #endif // TSEDITORWINDOW_H

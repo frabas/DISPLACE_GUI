@@ -236,6 +236,19 @@ void TsEditorWindow::loadSampleFileGraph(QString name)
     bool ok;
     QTextStream strm(&f);
     strm.readLine();        // drop the first line
+
+    // The first three lines are the thresholds.
+    double th1v,th2v,th3v;
+    try {
+        th1v = parseThreshold(strm.readLine());
+        th2v = parseThreshold(strm.readLine());
+        th3v = parseThreshold(strm.readLine());
+    } catch (std::invalid_argument &) {
+        f.close();
+        qDebug() << "*** invalid conversion of threshold.";
+        return;
+    }
+
     QVector<double> dt, x;
     while (!strm.atEnd()) {
         QString l = strm.readLine();
@@ -251,10 +264,36 @@ void TsEditorWindow::loadSampleFileGraph(QString name)
         dt.push_back(v);
     }
 
+    ui->plot->clearItems();
     ui->plot->clearGraphs();
     QCPGraph *graph = ui->plot->addGraph();
     graph->setData(x,dt);
     graph->rescaleAxes();
+
+    if (th1v != NAN) {
+        QCPItemLine *th1 = new QCPItemLine(ui->plot);
+        th1->start->setCoords(x.at(0), th1v);
+        th1->end->setCoords(x.at(x.size()-1), th1v);
+        th1->setPen(QPen(Qt::red));
+        ui->plot->addItem(th1);
+    }
+
+    if (th2v != NAN) {
+        QCPItemLine *th2 = new QCPItemLine(ui->plot);
+        th2->start->setCoords(x.at(0), th2v);
+        th2->end->setCoords(x.at(x.size()-1), th2v);
+        th2->setPen(QPen(Qt::magenta));
+        ui->plot->addItem(th2);
+    }
+
+    if (th3v != NAN) {
+        QCPItemLine *th3 = new QCPItemLine(ui->plot);
+        th3->start->setCoords(x.at(0), th3v);
+        th3->end->setCoords(x.at(x.size()-1), th3v);
+        th3->setPen(QPen(Qt::darkGreen));
+        ui->plot->addItem(th3);
+    }
+
     ui->plot->replot();
 
     f.close();
@@ -354,6 +393,22 @@ QString TsEditorWindow::generateAllWorker(QString outpath)
     }
 
     return tr("%1 files generated out of %2 possible combinations.").arg(ngood).arg(n);
+}
+
+double TsEditorWindow::parseThreshold(QString l) throw (std::invalid_argument)
+{
+    bool ok;
+    double th1v;
+    if (l.trimmed() != "NA") {
+        th1v = l.toDouble(&ok);
+        if (!ok) {
+            throw std::invalid_argument("");
+        }
+    } else {
+        th1v = NAN;
+    }
+
+    return th1v;
 }
 
 void TsEditorWindow::on_varSelect_currentIndexChanged(const QString &arg1)

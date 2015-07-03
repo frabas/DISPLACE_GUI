@@ -44,9 +44,13 @@ boost::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager
     }
 
     ADimContainer::iterator adcit = (it->second)->find(adim);
-    if (adcit == (it->second)->end())
-        return boost::shared_ptr<TimeSeries>();
-
+    if (adcit == (it->second)->end()) {
+        // not sure if that should work
+        adcit = (it->second)->find(0);
+        if (adcit == (it->second)->end())
+        // -- //
+            return boost::shared_ptr<TimeSeries>();
+    }
     return adcit->second;
 }
 

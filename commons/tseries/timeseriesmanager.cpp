@@ -31,3 +31,22 @@ void TimeSeriesManager::addTimeSerie(TimeSeriesManager::Variables var, int zone,
     adimc->insert(std::make_pair(adim, ts));
 }
 
+boost::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager::Variables var, int zone, int adim)
+{
+    ZoneContainer *zonec = mData.at(var);
+
+    ZoneContainer::iterator it = zonec->find(zone);
+    if (it == zonec->end()) {
+        // try with "all area"
+        it = zonec->find(ALL_ZONES);
+        if (it == zonec->end())
+            return boost::shared_ptr<TimeSeries>();
+    }
+
+    ADimContainer::iterator adcit = (it->second)->find(adim);
+    if (adcit == (it->second)->end())
+        return boost::shared_ptr<TimeSeries>();
+
+    return adcit->second;
+}
+

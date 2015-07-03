@@ -1,6 +1,7 @@
 #ifndef SCENARIO_H
 #define SCENARIO_H
 
+#include <tseries/timeseriesmanager.h>
 #include <string>
 
 #include <boost/lexical_cast.hpp>
@@ -8,8 +9,6 @@
 
 namespace displace {
 namespace simulation {
-
-class TimeSeriesManager;
 
 /** \brief a class to manage the simulation scenario
  *
@@ -30,6 +29,7 @@ public:
     static Simulation *instance();
 
     bool loadTimeSeries(std::string path, std::string tsscenario);
+    TimeSeries *getTimeSeries (TimeSeriesManager::Variables var, int zone, int adim);
 
 private:
     boost::shared_ptr<TimeSeriesManager> mTsManager;

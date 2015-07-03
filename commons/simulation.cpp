@@ -73,6 +73,11 @@ bool Simulation::loadTimeSeries(std::string path, std::string tsscenario)
     return true;
 }
 
+TimeSeries *Simulation::getTimeSeries(TimeSeriesManager::Variables var, int zone, int adim)
+{
+    return mTsManager->getTimeSeries(var, zone, adim).get();
+}
+
 bool Simulation::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
 {
     std::cout << "@DEBUG: Reading TimeSeries file " << filename << std::endl;

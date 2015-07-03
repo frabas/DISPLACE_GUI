@@ -35,6 +35,7 @@
 #include <dtree/decisiontreemanager.h>
 #include <dtree/externalstatemanager.h>
 #include <dtree/commonstateevaluators.h>
+#include <dtree/evaluators/timeseriesevaluator.h>
 
 #include <boost/make_shared.hpp>
 

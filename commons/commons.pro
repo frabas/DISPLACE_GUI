@@ -72,7 +72,8 @@ HEADERS= \
     dtree/commonstateevaluators.h \
     ../include/comstructs.h \
     tseries/timeseries.h \
-    tseries/timeseriesmanager.h
+    tseries/timeseriesmanager.h \
+    dtree/evaluators/timeseriesevaluator.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

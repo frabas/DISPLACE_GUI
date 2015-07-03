@@ -1290,14 +1290,14 @@ bool DisplaceModel::loadVessels()
     if(fgrounds.size() != freq_fgrounds.size())
     {
         cout<< "please correct .dat files so that fgrounds and freq_fgrounds have same size!!!" << endl;
-        int tmp;
-        cin >> tmp;				 // pause
+       // int tmp;
+       // cin >> tmp;				 // pause
     }
     if(harbours.size() != freq_harbours.size())
     {
         cout<< "please correct .dat files so that harbours and freq_harbours have same size!!!" << endl;
-        int tmp;
-        cin >> tmp;				 // pause
+       // int tmp;
+       // cin >> tmp;				 // pause
     }
 
     // read nodes in polygons for area-based management
@@ -1345,8 +1345,8 @@ bool DisplaceModel::loadVessels()
         {
             cout<< "please correct .dat files so that possible_metiers and freq_possible_metiers have same size!!!"
                 << "for the vessel " << vesselids[i] << endl;
-            int tmp;
-            cin >> tmp;			 // pause
+           // int tmp;
+           // cin >> tmp;			 // pause
         }
 
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
@@ -1485,6 +1485,7 @@ bool DisplaceModel::loadVessels()
             }
         }
 
+        cout << "is everything OK in the gshape_cpue_nodes_species and gscale_cpue_nodes_species file? if not check pop dim" << endl;
         // need to compute expected cpue (averaged over node but cumulated over species)
         // for this particular vessel, in order to scale the prior guess (see below)
         double expected_cpue=0;
@@ -1520,7 +1521,6 @@ bool DisplaceModel::loadVessels()
                                  // sum over pop
             expected_cpue+= expected_cpue_this_pop.at(pop);
         }
-
         // init at 0 cumcatch and cumeffort per trip,
         // init at best guest the experiencedcpue_fgrounds
         vector<double > freq_fgrounds= mVessels.at(i)->mVessel->get_freq_fgrounds();
@@ -1550,6 +1550,7 @@ bool DisplaceModel::loadVessels()
                 experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
             }
         }
+
         // per total...
         mVessels.at(i)->mVessel->set_cumcatch_fgrounds(cumcatch_fgrounds);
         mVessels.at(i)->mVessel->set_cumeffort_fgrounds(cumeffort_fgrounds);

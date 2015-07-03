@@ -1,4 +1,6 @@
 #include "scenario.h"
+#include <timeseriesmanager.h>
+#include <timeseries.h>
 
 #include <dirent.h>
 
@@ -7,6 +9,7 @@
 #include <fstream>
 
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
 using namespace displace::simulation;
@@ -14,6 +17,7 @@ using namespace displace::simulation;
 Scenario *Scenario::mInstance = 0;
 
 Scenario::Scenario()
+    : mTsManager(new TimeSeriesManager)
 {
 
 }
@@ -73,6 +77,40 @@ bool Scenario::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
 {
     std::cout << "@DEBUG: Reading TimeSeries file " << filename << std::endl;
 
+    int f = filename.find_last_of("/");
+    int e = filename.find_last_of(".");
+    std::string name = filename.substr(f+1, e-f-1);
+
+    // parse name to extract TS parameters
+    std::vector<std::string> fields;
+    boost::split(fields, name, boost::is_any_of("-"));
+
+    std::cout << "@DEBUG: " << fields.size();
+    for (int i = 0; i < fields.size(); ++i)
+        std::cout << " " << fields[i];
+    std::cout << std::endl;
+
+    displace::simulation::TimeSeriesManager::Variables var;
+    if (fields[0] == "fishprice")
+        var = displace::simulation::TimeSeriesManager::Fishprice;
+    else if (fields[0] == "fuelprice")
+        var = displace::simulation::TimeSeriesManager::Fuelprice;
+    else if (fields[0] == "wspeed")
+        var = displace::simulation::TimeSeriesManager::WSpeed;
+    else {
+        std::cerr << "Cannot parse file: variable field unknown " << fields[0] << std::endl;
+        return false;
+    }
+
+    int zone;
+    if (fields[1] == "all_area") {
+        zone = displace::simulation::TimeSeriesManager::ALL_ZONES;
+    } else {
+        zone = boost::lexical_cast<int>(fields[1]);
+    }
+
+    int adim = boost::lexical_cast<int>(fields[2]);
+
     std::ifstream stream;
     stream.open(filename.c_str(), std::ios_base::in);
     if (stream.fail()) {
@@ -80,6 +118,8 @@ bool Scenario::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
     }
 
     int val_line = 0;
+
+    boost::shared_ptr<TimeSeries> ts (new TimeSeries);
 
     while (!stream.eof()) {
         std::string line;
@@ -103,18 +143,24 @@ bool Scenario::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
 
             switch (val_line) {
             case 0: // threshold 0
+                ts->setThreshold(0, v);
                 break;
             case 1:
+                ts->setThreshold(1, v);
                 break;
             case 2:
+                ts->setThreshold(2, v);
                 break;
             default:
+                ts->appendValue(v);
                 break;
             }
 
             ++val_line;
         }
     }
+
+    mTsManager->addTimeSerie(var, zone, adim, ts);
 
     return true;
 }

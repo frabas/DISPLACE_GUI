@@ -13,7 +13,7 @@ class TimeSeries;
 class TimeSeriesManager
 {
 public:
-    enum Variables { Fishprice = 0, Fuelprice, Weather,
+    enum Variables { Fishprice = 0, Fuelprice, WSpeed,
                      VariablesLast }; // keep this at the end
 
     TimeSeriesManager();

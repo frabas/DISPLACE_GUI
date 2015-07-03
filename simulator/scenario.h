@@ -2,10 +2,14 @@
 #define SCENARIO_H
 
 #include <string>
+
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace displace {
 namespace simulation {
+
+class TimeSeriesManager;
 
 /** \brief a class to manage the simulation scenario
  *
@@ -28,6 +32,8 @@ public:
     bool loadTimeSeries(std::string path, std::string tsscenario);
 
 private:
+    boost::shared_ptr<TimeSeriesManager> mTsManager;
+
     bool readTsFile(std::string filename) throw (boost::bad_lexical_cast);
 };
 

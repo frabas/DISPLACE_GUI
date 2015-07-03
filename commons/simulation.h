@@ -19,15 +19,15 @@ class TimeSeriesManager;
  * manage all the data using a simulation Object.
  * So the interface is subject to change (at least the accessing functions).
  */
-class Scenario
+class Simulation
 {
 private:
-    Scenario();
-    ~Scenario(); // Avoids destroying. Not implemented.
+    Simulation();
+    ~Simulation(); // Avoids destroying. Not implemented.
 
-    static Scenario *mInstance;
+    static Simulation *mInstance;
 public:
-    static Scenario *instance();
+    static Simulation *instance();
 
     bool loadTimeSeries(std::string path, std::string tsscenario);
 

@@ -1,4 +1,4 @@
-#include "scenario.h"
+#include "simulation.h"
 #include <tseries/timeseriesmanager.h>
 #include <tseries/timeseries.h>
 
@@ -14,22 +14,22 @@
 
 using namespace displace::simulation;
 
-Scenario *Scenario::mInstance = 0;
+Simulation *Simulation::mInstance = 0;
 
-Scenario::Scenario()
+Simulation::Simulation()
     : mTsManager(new TimeSeriesManager)
 {
 
 }
 
-Scenario *Scenario::instance()
+Simulation *Simulation::instance()
 {
     if (mInstance == 0)
-        mInstance = new Scenario();
+        mInstance = new Simulation();
     return mInstance;
 }
 
-bool Scenario::loadTimeSeries(std::string path, std::string tsscenario)
+bool Simulation::loadTimeSeries(std::string path, std::string tsscenario)
 {
     std::string suffix = tsscenario + ".dat";
 
@@ -73,7 +73,7 @@ bool Scenario::loadTimeSeries(std::string path, std::string tsscenario)
     return true;
 }
 
-bool Scenario::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
+bool Simulation::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
 {
     std::cout << "@DEBUG: Reading TimeSeries file " << filename << std::endl;
 

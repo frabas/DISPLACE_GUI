@@ -29,6 +29,7 @@ SOURCES= \
     options.cpp \
     ipcqueue.cpp \
     statics.cpp \
+    simulation.cpp \
     dtree/decisiontree.cpp \
     dtree/variables.cpp \
     dtree/dtnode.cpp \
@@ -60,6 +61,7 @@ HEADERS= \
     ../include/ipcqueue.h \
     ../include/ipcmsgtypes.h \
     ../include/version.h \
+    simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \
     dtree/dtnode.h \

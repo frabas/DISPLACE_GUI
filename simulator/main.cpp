@@ -51,6 +51,8 @@
 #include <thread_vessels.h>
 #include <dtree/decisiontreemanager.h>
 #include <comstructs.h>
+#include <simulation.h>
+#include <tseries/timeseriesmanager.h>
 
 #include <iomanip>
 #include <iostream>
@@ -583,6 +585,13 @@ int main(int argc, char* argv[])
 	stringstream graphnum;
 	graphnum << a_graph;
 	a_graph_name=a_graph_name+graphnum.str();
+
+    // Create simulation scenario
+    displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
+    if (!sim_scenario->loadTimeSeries("../"+inputfolder+"/timeseries", "")) {
+        std::cerr << "Cannot read time series. aborting." <<std::endl;
+        return -1;
+    }
 
     // Load dtrees
     if (dtree::DecisionTreeManager::manager()->readFromScenario("../"+inputfolder+"/dtrees", scenario) <= 0) {

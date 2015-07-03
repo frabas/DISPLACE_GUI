@@ -889,7 +889,7 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
           vector<double> N_at_szgroup_this_pop = this->get_tot_N_at_szgroup();
           vector<double> N_at_szgroup_arr_pop  = populations.at(arrival_pop)->get_tot_N_at_szgroup();
 
-          if(sz>N_at_szgroup_this_pop.size()) sz <- -1; // reinit because next pop
+          if(sz>N_at_szgroup_this_pop.size()) sz = -1; // reinit because next pop
           sz +=1;
 
  cout << " before: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;

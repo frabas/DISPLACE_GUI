@@ -21,9 +21,9 @@ private:
     Scenario();
     ~Scenario(); // Avoids destroying. Not implemented.
 
-    Scenario *mInstance;
+    static Scenario *mInstance;
 public:
-    static Scenario instance();
+    static Scenario *instance();
 
     bool loadTimeSeries(std::string path, std::string tsscenario);
 

@@ -50,7 +50,8 @@ SOURCES= main.cpp \
     messages/vessellogbookoutputmessage.cpp \
     messages/genericconsolestringoutputmessage.cpp \
     scenario.cpp \
-    timeseries.cpp
+    timeseries.cpp \
+    timeseriesmanager.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -78,7 +79,8 @@ HEADERS= \
     messages/vessellogbookoutputmessage.h \
     messages/genericconsolestringoutputmessage.h \
     scenario.h \
-    timeseries.h
+    timeseries.h \
+    timeseriesmanager.h
 
 OTHER_FILES += \
     Makefile

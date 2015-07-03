@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
@@ -17,7 +18,7 @@ Scenario::Scenario()
 
 }
 
-Scenario Scenario::instance()
+Scenario *Scenario::instance()
 {
     if (mInstance == 0)
         mInstance = new Scenario();
@@ -73,7 +74,7 @@ bool Scenario::readTsFile (std::string filename) throw (boost::bad_lexical_cast)
     std::cout << "@DEBUG: Reading TimeSeries file " << filename << std::endl;
 
     std::ifstream stream;
-    stream.open(filename, std::ios_base::in);
+    stream.open(filename.c_str(), std::ios_base::in);
     if (stream.fail()) {
         return false;
     }

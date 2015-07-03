@@ -1,6 +1,6 @@
 #include "scenario.h"
-#include <timeseriesmanager.h>
-#include <timeseries.h>
+#include <tseries/timeseriesmanager.h>
+#include <tseries/timeseries.h>
 
 #include <dirent.h>
 

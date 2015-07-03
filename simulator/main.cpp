@@ -52,7 +52,7 @@
 #include <dtree/decisiontreemanager.h>
 #include <comstructs.h>
 #include <scenario.h>
-#include <timeseriesmanager.h>
+#include <tseries/timeseriesmanager.h>
 
 #include <iomanip>
 #include <iostream>

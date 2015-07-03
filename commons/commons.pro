@@ -34,7 +34,9 @@ SOURCES= \
     dtree/dtnode.cpp \
     dtree/decisiontreemanager.cpp \
     dtree/stateevaluator.cpp \
-    dtree/externalstatemanager.cpp
+    dtree/externalstatemanager.cpp \
+    tseries/timeseries.cpp \
+    tseries/timeseriesmanager.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -66,7 +68,9 @@ HEADERS= \
     dtree/stateevaluator.h \
     dtree/externalstatemanager.h \
     dtree/commonstateevaluators.h \
-    ../include/comstructs.h
+    ../include/comstructs.h \
+    tseries/timeseries.h \
+    tseries/timeseriesmanager.h
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

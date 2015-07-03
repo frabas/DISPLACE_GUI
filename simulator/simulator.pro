@@ -49,9 +49,7 @@ SOURCES= main.cpp \
     messages/exportvmslikeoutputmessage.cpp \
     messages/vessellogbookoutputmessage.cpp \
     messages/genericconsolestringoutputmessage.cpp \
-    scenario.cpp \
-    timeseries.cpp \
-    timeseriesmanager.cpp
+    scenario.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -78,9 +76,7 @@ HEADERS= \
     messages/exportvmslikeoutputmessage.h \
     messages/vessellogbookoutputmessage.h \
     messages/genericconsolestringoutputmessage.h \
-    scenario.h \
-    timeseries.h \
-    timeseriesmanager.h
+    scenario.h
 
 OTHER_FILES += \
     Makefile

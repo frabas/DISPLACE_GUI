@@ -14,11 +14,17 @@ template <displace::simulation::TimeSeriesManager::Variables Var>
 class TimeSeriesEvaluator : public ::dtree::StateEvaluator
 {
 public:
-    TimeSeriesEvaluator();
+    TimeSeriesEvaluator() {}
 
     double evaluate(int tstep, Vessel *v) const {
         // NOTE: tstep must be converted to day!
-        return displace::simulation::Simulation::instance()->getTimeSeries(Var, 0, v->get_loc()->code_area)->evaluateThresholds(tstep % 365);
+
+        displace::simulation::TimeSeries *ts = displace::simulation::Simulation::instance()->getTimeSeries(Var, 0, v->get_loc()->get_code_area());
+        if (!ts) {
+            std::cerr << "** ERROR: Time Series not found for: " << Var << " " << 0 << " " << v->get_loc()->get_code_area();
+            exit (1);
+        }
+        return ts->evaluateThresholds(tstep % 365);
     }
 };
 

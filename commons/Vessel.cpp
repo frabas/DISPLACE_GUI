@@ -281,6 +281,8 @@ void Vessel::init()
                 boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_profit),
                 boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(),
                 std::less<double>()));
+    mStateEvaluators[dtree::fuelPriceIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
+    mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
     mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
 
     // External states

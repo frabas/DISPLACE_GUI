@@ -378,10 +378,11 @@ public:
 
         double traverseDtree (int tstep, dtree::DecisionTree *tree);
 
-        /** \brief the Set of internal states, normalized in the range [0,1]
-         * */
-        std::vector<boost::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
-
+        /** \brief the State evaluators. Since the current vessel is passed as variable to evaluate()
+         * we can put a static instance and avoid wasting a lot of memory.
+         * The table is initialized once in init() (lazy initialization)
+         */
+        static std::vector<boost::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
         static std::string nationalityFromName (const std::string &name);
 };
 #endif							 // VESSEL_H

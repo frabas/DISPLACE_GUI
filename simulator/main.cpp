@@ -588,15 +588,18 @@ int main(int argc, char* argv[])
 
     // Create simulation scenario
     displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
-    if (!sim_scenario->loadTimeSeries("../"+inputfolder+"/timeseries", "")) {
-        std::cerr << "Cannot read time series. aborting." <<std::endl;
-        return -1;
-    }
 
-    // Load dtrees
-    if (dtree::DecisionTreeManager::manager()->readFromScenario("../"+inputfolder+"/dtrees", scenario) <= 0) {
-        std::cerr << "Cannot read decision trees, aborting." << std::endl;
-        return -1;
+    if (use_dtrees) {
+        if (!sim_scenario->loadTimeSeries("../"+inputfolder+"/timeseries", "")) {
+            std::cerr << "Cannot read time series. aborting." <<std::endl;
+            return -1;
+        }
+
+        // Load dtrees
+        if (dtree::DecisionTreeManager::manager()->readFromScenario("../"+inputfolder+"/dtrees", scenario) <= 0) {
+            std::cerr << "Cannot read decision trees, aborting." << std::endl;
+            return -1;
+        }
     }
 
 	// check if config reading OK

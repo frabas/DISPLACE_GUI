@@ -1464,6 +1464,13 @@ bool DisplaceModel::loadVessels()
             gshape_name_nodes_with_cpue.push_back (iter->first);
         }
 
+        // sort and unique
+        sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        std::vector<int>::iterator it;
+        it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
+
+
         // init cpue_nodes_species for this vessel
         int nbnodes=gshape_name_nodes_with_cpue.size();
                                  // init the vector of vector with Os

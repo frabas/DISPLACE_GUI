@@ -2027,6 +2027,13 @@ int main(int argc, char* argv[])
 			gshape_name_nodes_with_cpue.push_back (iter->first);
 		}
 
+        // sort and unique
+        sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        std::vector<int>::iterator it;
+        it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
+
+
 		// init cpue_nodes_species for this vessel
 		int nbnodes=gshape_name_nodes_with_cpue.size();
 								 // init the vector of vector with Os
@@ -3605,6 +3612,7 @@ int main(int argc, char* argv[])
             // LOOP OVER VESSELS
 			for (unsigned int v=0; v<vessels.size(); v++)
 			{
+                cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl;
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
@@ -3629,7 +3637,8 @@ int main(int argc, char* argv[])
 				}
 
 				// RE-SET VESSELS..
-				vessels.at(v)->set_resttime_par1(resttime_par1s.at(v));
+                cout << "re-set vessels step1..."  << endl;
+                vessels.at(v)->set_resttime_par1(resttime_par1s.at(v));
 				vessels.at(v)->set_resttime_par2(resttime_par2s.at(v));
 				vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
 
@@ -3654,12 +3663,19 @@ int main(int argc, char* argv[])
 				vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
 
 				// ...also for the particular cpue_nodes_species element
-				vector<int> gshape_name_nodes_with_cpue;
+                cout << "re-set vessels step2..."  << endl;
+                vector<int> gshape_name_nodes_with_cpue;
 				for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
 					iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
 				{
 					gshape_name_nodes_with_cpue.push_back (iter->first);
 				}
+                // sort and unique
+                sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+                std::vector<int>::iterator it;
+                it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+                gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
+
 				// init cpue_nodes_species for this vessel
 				int nbnodes=gshape_name_nodes_with_cpue.size();
 								 // init the vector of vector with Os
@@ -3683,7 +3699,8 @@ int main(int argc, char* argv[])
 
 				// need to compute expected cpue (averaged over node but cumulated over species)
 				// for this particular vessel, in order to scale the prior guess (see below)
-				double expected_cpue=0;
+                cout << "re-set vessels step3..."  << endl;
+                double expected_cpue=0;
 				vector <vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
 				vector <vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
 				vector <int> fgrounds= vessels.at(v)->get_fgrounds();
@@ -3703,7 +3720,11 @@ int main(int argc, char* argv[])
 						double a_scale = gscale_cpue_nodes_species.at(g).at(pop);
 						cpue_per_fground.at(g) = rgamma(a_shape, a_scale);
                         dout(cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl);
-					}
+                        //if(vessels.at(v)->get_name()=="DNK000041435") cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl;
+                    }
+
+                    //cout << "re-set vessels step3.1..."  << endl;
+
 					// compute the average cpue for this pop across all nodes
                     for(unsigned int g = 0; g < fgrounds.size(); g++)
 					{
@@ -3720,6 +3741,7 @@ int main(int argc, char* argv[])
 
 				// init at 0 cumcatch and cumeffort per trip,
 				// init at best guest the experiencedcpue_fgrounds
+                cout << "re-set vessels step4..."  << endl;
                 dout(cout  << "init dynamic object related to fgrounds" << endl);
 				vector<double > a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
 				vector<double > a_init_for_fgrounds(fgrounds.size());
@@ -3750,7 +3772,8 @@ int main(int argc, char* argv[])
 					}
 				}
 				// per total...
-				vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
+                cout << "re-set vessels step5..."  << endl;
+                vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
 				vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
 				vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
 				vessels.at(v)->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
@@ -3778,10 +3801,11 @@ int main(int argc, char* argv[])
 								 // message 1 means: "please, change of grounds as soon as possible"
 				vessels.at(v)->receive_message(1);
 
-                dout(cout  << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "OK" << endl);
+                cout  << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "...OK" << endl;
 			}					 // end a_vesselid
 
 			// RE-read for metiers
+            cout << "re-read metiers..."  << endl;
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
             metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
             for (unsigned int m=0; m<metiers.size(); m++)
@@ -3795,6 +3819,7 @@ int main(int argc, char* argv[])
                 metiers[m]->set_betas_per_pop(metier_betas);
 
 			}					 // end a_met
+            cout << "re-read metiers...OK"  << endl;
 
 		}						 // END RE-READ DATA FOR VESSEL AND METIER...
 

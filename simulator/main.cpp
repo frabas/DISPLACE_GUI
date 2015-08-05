@@ -2827,11 +2827,42 @@ int main(int argc, char* argv[])
 			popdyn_test2 << " " <<  endl;
 		}
 
-		// TO CHECK: SSB-R
-		//populations[12]->add_recruits_from_SR();
-		//int a;
-        //out(cout << "Pause: type a number to continue");
-		// cin >> a;
+        // TO CHECK: SSB
+        // compute SSB
+        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+        {
+            for (unsigned int sp=0; sp<populations.size(); sp++)
+            {
+                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
+                {
+                    vector <double> SSB_per_szgroup ( populations.at(sp)->get_tot_N_at_szgroup().size());
+                    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
+                    {
+
+                    // reminder: tot_N_at_szgroup are in thousand in input file
+                    //  but in absolute numbers here because have been multiplied by 1000 when importing
+                    SSB_per_szgroup.at(i) =  populations.at(sp)->get_weight_at_szgroup().at(i) *
+                                     populations.at(sp)->get_tot_N_at_szgroup().at(i) *
+                                     populations.at(sp)->get_maturity_at_szgroup().at(i);
+                    cout << "szgroup is " << i  << " " << endl ;
+                    cout << "tot_N_at_szgroup is " << populations.at(sp)->get_tot_N_at_szgroup().at(i)  << " " << endl ;
+                    cout << "maturity_at_szgroup is " << populations.at(sp)->get_maturity_at_szgroup().at(i)  << " " << endl ;
+                    cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
+
+                    }
+                 // ...then, cumul for getting tot SSB (here in kilos)
+                 double SSB=0;
+                 for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
+                 {
+                 SSB +=  SSB_per_szgroup.at(i);
+                 }
+                 SSB= SSB/1000;			 //
+                 cout << "The SSB is " << SSB  << " tons" << endl ;
+               }
+            }
+        }
+
+
 
         dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
         if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
@@ -3612,7 +3643,7 @@ int main(int argc, char* argv[])
             // LOOP OVER VESSELS
 			for (unsigned int v=0; v<vessels.size(); v++)
 			{
-                cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl;
+                dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
@@ -3637,7 +3668,7 @@ int main(int argc, char* argv[])
 				}
 
 				// RE-SET VESSELS..
-                cout << "re-set vessels step1..."  << endl;
+                dout(cout << "re-set vessels step1..."  << endl);
                 vessels.at(v)->set_resttime_par1(resttime_par1s.at(v));
 				vessels.at(v)->set_resttime_par2(resttime_par2s.at(v));
 				vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
@@ -3663,7 +3694,7 @@ int main(int argc, char* argv[])
 				vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
 
 				// ...also for the particular cpue_nodes_species element
-                cout << "re-set vessels step2..."  << endl;
+                dout(cout << "re-set vessels step2..."  << endl);
                 vector<int> gshape_name_nodes_with_cpue;
 				for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
 					iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
@@ -3699,7 +3730,7 @@ int main(int argc, char* argv[])
 
 				// need to compute expected cpue (averaged over node but cumulated over species)
 				// for this particular vessel, in order to scale the prior guess (see below)
-                cout << "re-set vessels step3..."  << endl;
+                dout(cout << "re-set vessels step3..."  << endl);
                 double expected_cpue=0;
 				vector <vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
 				vector <vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
@@ -3723,7 +3754,7 @@ int main(int argc, char* argv[])
                         //if(vessels.at(v)->get_name()=="DNK000041435") cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl;
                     }
 
-                    //cout << "re-set vessels step3.1..."  << endl;
+                    dout(cout << "re-set vessels step3.1..."  << endl);
 
 					// compute the average cpue for this pop across all nodes
                     for(unsigned int g = 0; g < fgrounds.size(); g++)
@@ -3741,7 +3772,7 @@ int main(int argc, char* argv[])
 
 				// init at 0 cumcatch and cumeffort per trip,
 				// init at best guest the experiencedcpue_fgrounds
-                cout << "re-set vessels step4..."  << endl;
+                dout(cout << "re-set vessels step4..."  << endl);
                 dout(cout  << "init dynamic object related to fgrounds" << endl);
 				vector<double > a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
 				vector<double > a_init_for_fgrounds(fgrounds.size());
@@ -3772,7 +3803,7 @@ int main(int argc, char* argv[])
 					}
 				}
 				// per total...
-                cout << "re-set vessels step5..."  << endl;
+                dout(cout << "re-set vessels step5..."  << endl);
                 vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
 				vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
 				vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
@@ -3801,11 +3832,11 @@ int main(int argc, char* argv[])
 								 // message 1 means: "please, change of grounds as soon as possible"
 				vessels.at(v)->receive_message(1);
 
-                cout  << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "...OK" << endl;
+                dout(cout  << "re-read data for this vessel..."<< vessels.at(v)->get_name() << "...OK" << endl);
 			}					 // end a_vesselid
 
 			// RE-read for metiers
-            cout << "re-read metiers..."  << endl;
+            dout(cout << "re-read metiers..."  << endl);
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
             metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
             for (unsigned int m=0; m<metiers.size(); m++)
@@ -3819,7 +3850,7 @@ int main(int argc, char* argv[])
                 metiers[m]->set_betas_per_pop(metier_betas);
 
 			}					 // end a_met
-            cout << "re-read metiers...OK"  << endl;
+            dout(cout << "re-read metiers...OK"  << endl);
 
 		}						 // END RE-READ DATA FOR VESSEL AND METIER...
 

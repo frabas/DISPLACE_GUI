@@ -870,7 +870,7 @@ void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double>& 
 {
 
 	string line;
-	while(!getline(in, line).eof())
+    while(!getline(in, line).eof())
 	{
 		int key;
 		in >> key;
@@ -892,8 +892,8 @@ void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double
 {
 
 	string line;
-	while(!getline(in, line).eof())
-	{
+    while(!getline(in, line).eof())
+    {
 		string key;
 		in >> key;
 		double val;

@@ -1048,12 +1048,12 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
 			percent_simulated_tac_this_pop/100 *
 			percent_tac_per_pop.at(pop)/100 *
 			relative_key[this->get_nationality()]/100;
-        cout << "this vessel: individual TAC set to " << individual_tac_per_pop.at(pop) <<
+        dout(cout << "this vessel: individual TAC set to " << individual_tac_per_pop.at(pop) <<
 			" for this pop " << pop <<
 			" from global tac " << global_tac_this_pop <<
 			" percent_simulated_tac_this_pop " << percent_simulated_tac_this_pop <<
 			" percent_tac_per_pop " << percent_tac_per_pop.at(pop) <<
-            " relative key " << relative_key[this->get_nationality()] << endl;
+            " relative key " << relative_key[this->get_nationality()] << endl);
 
 		// inform if this vessel is actually linked with the management under investigation...
 		// (if not then the vessel will not be forced to stay on quayside when TACs exhausted)

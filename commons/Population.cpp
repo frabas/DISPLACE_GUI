@@ -944,9 +944,9 @@ void Population::add_recruits_from_SR()
 		//  but in absolute numbers here because have been multiplied by 1000 when importing
 		SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
         dout(cout << "szgroup is " << i  << " " << endl );
-        dout(cout << "tot_N_at_szgroup is " << tot_N_at_szgroup.at(i)  << " " << endl );
-        dout(cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl );
-        dout(cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl );
+        cout << "tot_N_at_szgroup is " << tot_N_at_szgroup.at(i)  << " " << endl ;
+        cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
+        cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
 
 	}
 	// ...then, cumul for getting tot SSB (here in kilos)
@@ -955,8 +955,10 @@ void Population::add_recruits_from_SR()
 	{
 		SSB +=  SSB_per_szgroup.at(i);
 	}
-	SSB= SSB/1000/2;			 // convert in tons for the SSB-R // divide by 2 when assuming sex ratio 50:50
-    dout(cout << "SSB is " << SSB  << " tons" << endl );
+    //SSB= SSB/1000/2;			 // convert in tons for the SSB-R // divide by 2 when assuming sex ratio 50:50
+    SSB= SSB/1000;			 //
+    cout << "SSB is " << SSB  << " tons" << endl ;
+    //dout(cout << "SSB is " << SSB  << " tons" << endl );
 
 	// compute R from SSB-R relationship
 	// (caution: age dependent, e.g. SSB-R for cod 2532 is usually simulated for age2)...
@@ -969,14 +971,16 @@ void Population::add_recruits_from_SR()
 	double rec_error=0;
 	rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
 	recruits= recruits * rec_error;
-    dout(cout << "stochastic recruits are " << recruits  << endl );
+    //dout(cout << "stochastic recruits are " << recruits  << endl );
+    cout << "stochastic recruits are " << recruits  << endl ;
 
 	// ...then distribute among szgroup
 	for(unsigned int i = 0; i < tot_N_at_szgroup.size(); i++)
 	{
 		new_tot_N_at_szgroup[i] =  tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
-        dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
-	}
+        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << tot_N_at_szgroup.at(i) << endl ;
+        //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
+    }
 
 	//if(this->get_name()==29){
 	//int a_int;

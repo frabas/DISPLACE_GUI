@@ -204,6 +204,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setDtStopFishing(QString::fromStdString(scenario.dt_stop_fishing));
     s.setDtChangePort(QString::fromStdString(scenario.dt_change_port));
     s.setIs_individual_vessel_quotas(scenario.is_individual_vessel_quotas);
+    s.setDtreesEnabled(scenario.use_dtrees);
 
     return s;
 }

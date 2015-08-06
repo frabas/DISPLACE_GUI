@@ -22,7 +22,7 @@ public:
 
     int evaluateThresholds (int idx) {
         int i;
-        for (i = 0; i < mThresholds.size(); ++i) {
+        for (i = 0; i < (int)mThresholds.size(); ++i) {
             if (std::isnan(mThresholds[idx]) || mData.at(idx) < mThresholds[idx])
                 return i;
         }

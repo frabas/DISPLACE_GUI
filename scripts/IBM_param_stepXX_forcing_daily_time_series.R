@@ -115,9 +115,13 @@
  prices                 <- orderBy(~stock, data=prices) # library(doBy) # order from 0 to nbstock
 
 
- # subset for the best size category only
- min_cats                <- unlist(lapply(split(prices, f= prices$stock), function(x) min(x[,'size_sorting'], na.rm=TRUE)))
- cats_to_keep            <- paste(names(min_cats),".",min_cats, sep="")
+ # subset for the best size category only (or the most common one)
+ min_cats                       <- unlist(lapply(split(prices, f= prices$stock), function(x) min(x[,'size_sorting'], na.rm=TRUE)))
+ most_common_cat                <- unlist(lapply(split(prices, f= prices$stock), function(x) {tab <- table(x[,"size_sorting"]) ; names(tab)[which.max(tab)]} ))
+ 
+ 
+ #cats_to_keep            <- paste(names(min_cats),".",min_cats, sep="")
+ cats_to_keep            <- paste(names(most_common_cat),".",most_common_cat, sep="")
  prices_best_size_cat    <- prices[,c('harbor_name', 'month', 'stock', 'size_sorting', 'harbor_lon', 'harbor_lat', 'date2', 'price')]
  prices_best_size_cat$sp_size_sorting <-  paste(prices_best_size_cat[,'stock'],".",prices_best_size_cat[,'size_sorting'], sep="")
  prices_best_size_cat    <- prices_best_size_cat[prices_best_size_cat[,'sp_size_sorting'] %in% cats_to_keep,]
@@ -133,6 +137,15 @@
     }
  }
 
+
+ # fill in the gap with an average line
+ ...
+ for(st in levels(prices_best_size_cat$stock)) {
+       idx  <- which(is.na(rg_fishprice[[st]][,1]))
+       idx2 <- which(!is.na(rg_fishprice[[st]][,1]))[1]  # keep the first row without NAs...
+       for (i in idx) rg_fishprice[[st]][i,]  <- rg_fishprice[[st]][idx2,] #...and assign      
+ }
+ # caution => increasing prices required along the quantiles 
  
  #or...
  #rg_fishprice <- matrix(c(3.000,  1.200,  0.800,  3.200,  1.700,  1.400,  2.400,  2.500,  2.300,  1.800,  1.700,  1.500,  
@@ -149,7 +162,7 @@
 ##------------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------##
 
- fakefuelprice <- expand.grid(month=months, fuelprice=c(0.45,0.50,0.53,0.53,0.53,0.55,0.60))
+ fakefuelprice <- expand.grid(month=months, fuelprice=c(0.45,0.46, 0.47, 0.48, 0.49,0.50,0.50, 0.51,0.51, 0.52, 0.52, 0.53, 0.53, 0.53,0.53,0.54,0.54,0.55,0.55,0.55,0.56,0.57,0.58,0.59,0.60))
  
 
  rg_fuelprice <- matrix(0, ncol=5, nrow=12)
@@ -176,20 +189,26 @@
 ##------------------------------------------------------------------------------##
 
 param_ts <- rbind.data.frame(
-cbind.data.frame (value=as.vector(t(rg_wspeed)), limit=rep(c("0", "25", "50", "75", "max"), length=length(as.vector(t(rg_wspeed)))), month=rep(months,each=5), area="all_area",variable="wspeed", a_dim=0, a_min=0, a_max=18, a_res=0.1),
-cbind.data.frame (value=as.vector(t(rg_fuelprice)), limit=rep(c("0", "25", "50", "75", "max"), length=length(as.vector(t(rg_fuelprice)))), month=rep(months,each=5), area="all_area",variable="fuelprice", a_dim=0, a_min=0.4, a_max=1, a_res=0.05)
+cbind.data.frame (value=as.vector(t(rg_wspeed)), limit=rep(c("0", "25", "50", "75", "max"), length=length(as.vector(t(rg_wspeed)))), month=rep(months,each=5), area="all_area",variable="wspeed", a_dim=0, a_min=0, a_max=18, a_res=0.1, threshold1=5, threshold2=10, threshold3=NA),
+cbind.data.frame (value=as.vector(t(rg_fuelprice)), limit=rep(c("0", "25", "50", "75", "max"), length=length(as.vector(t(rg_fuelprice)))), month=rep(months,each=5), area="all_area",variable="fuelprice", a_dim=0, a_min=0.4, a_max=1, a_res=0.01, threshold1=0.5, threshold2=0.55, threshold3=NA)
 )
 
 for(st in 1: length(rg_fishprice)){
 a_stock <- names(rg_fishprice)[st]
 param_ts <- rbind.data.frame( param_ts,
-  cbind.data.frame (value=as.vector(t(rg_fishprice[[a_stock]])), limit=rep(c("0", "25", "50", "75", "max"), length=length(as.vector(t(rg_fishprice[[a_stock]])))),  month=rep(months,each=5), area="all_area",variable="fishprice", a_dim=a_stock, a_min=min(rg_fishprice[[a_stock]]), a_max=max(rg_fishprice[[a_stock]]), a_res=0.1)
+  cbind.data.frame (value=as.vector(t(rg_fishprice[[a_stock]])), limit=rep(c("0", "25", "50", "75", "max"), length=length(as.vector(t(rg_fishprice[[a_stock]])))),  month=rep(months,each=5), area="all_area",variable="fishprice", a_dim=a_stock, a_min=min(rg_fishprice[[a_stock]]), a_max=max(rg_fishprice[[a_stock]]), a_res=0.1, threshold1= mean(rg_fishprice[[a_stock]][,2]), threshold2=mean(rg_fishprice[[a_stock]][,4]), threshold3=NA)
  )
 }
+
+
+
+
 
 write.table(param_ts, file=file.path('C:','Users','fbas','Documents','GitHub','DISPLACE_input', 'externalforcing_balticonly', 'param_timeseries.dat'),
                  row.names=FALSE, col.names=TRUE, sep= " ", quote=FALSE)
 
+write.table(param_ts, file=file.path('C:','Users','fbas','Documents','GitHub','DISPLACE_input', 'externalforcing_myfish', 'param_timeseries.dat'),
+                 row.names=FALSE, col.names=TRUE, sep= " ", quote=FALSE)
 
 ##------------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------##
@@ -249,5 +268,12 @@ abline(h=10, col=2)
 
 ts_for_a_variable <- daily_ts_generator(param_ts, variable="fishprice", area="all_area", a_dim=10)
 plot(ts_for_a_variable, type="l")
-abline(h=5, col=2)
-abline(h=10, col=2)
+abline(h=param_ts[param_ts$a_dim==10,"threshold1"][1], col=2)
+abline(h=param_ts[param_ts$a_dim==10,"threshold2"][1], col=2)
+
+ts_for_a_variable <- daily_ts_generator(param_ts, variable="fishprice", area="all_area", a_dim=11)
+plot(ts_for_a_variable, type="l")
+abline(h=param_ts[param_ts$a_dim==11,"threshold1"][1], col=2)
+abline(h=param_ts[param_ts$a_dim==11,"threshold2"][1], col=2)
+
+

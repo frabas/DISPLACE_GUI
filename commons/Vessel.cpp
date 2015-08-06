@@ -3566,7 +3566,7 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
 			internal_states.insert(make_pair(" last_trip_was ",0));
 
             boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
-            int current_day_is= tstep%24;
+            int current_day_is= (int)(tstep/24);
             double the_value = traverseDtree(current_day_is, tree.get());
 
         // draw a random number [0,1) and compare with the value

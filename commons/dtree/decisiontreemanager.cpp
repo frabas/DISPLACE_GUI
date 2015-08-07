@@ -85,6 +85,15 @@ void DecisionTreeManager::readScenarioFileIfAvailable(std::string path, std::str
     }
 }
 
+struct NodePrototype {
+    int id;
+    Variable variable;
+    double value;
+    std::vector<int> children;
+    std::vector<int> mapping;
+    boost::shared_ptr<dtree::Node> node;
+};
+
 /** \brief Loads a specific file, creating the dtree and allocating it to the type specified in the file
  * */
 bool DecisionTreeManager::readFile (std::string filename)
@@ -92,21 +101,13 @@ bool DecisionTreeManager::readFile (std::string filename)
     std::cout << "@DEBUG: Reading file " << filename << std::endl;
 
     std::ifstream stream;
-    stream.open(filename, std::ios_base::in);
+    stream.open(filename.c_str(), std::ios_base::in);
     if (stream.fail()) {
         return false;
     }
 
     boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
 
-    struct NodePrototype {
-        int id;
-        dtree::Variable variable;
-        double value;
-        std::vector<int> children;
-        std::vector<int> mapping;
-        boost::shared_ptr<dtree::Node> node;
-    };
     std::vector<NodePrototype> nodes;
 
     DecisionTreeManager::TreeType treeType = DecisionTreeManager::InvalidTreeType;
@@ -136,7 +137,7 @@ bool DecisionTreeManager::readFile (std::string filename)
 
             NodePrototype prt;
             prt.id = atoi(fields[0].c_str());
-            prt.variable = dtree::VariableNames::variableCode(fields[1]);
+            prt.variable = VariableNames::variableCode(fields[1]);
             // fields 2 and 3 are ignored (posx,posy)
             int n = atoi(fields[4].c_str());
             int fldnum = 5;

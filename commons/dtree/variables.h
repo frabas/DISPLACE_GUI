@@ -56,17 +56,13 @@ public:
     static const char *variableName(Variable);
     static Variable variableCode (const std::string &name);
 
-#if ((__cplusplus >= 201103L))
-    static int variableBinCount(Variable var) { return bins[var].size(); }
-    static const char *variableBin(Variable var, int ndx) { return bins[var][ndx].c_str(); }
-#endif
+    static int variableBinCount(Variable var);
+    static const char *variableBin(Variable var, int ndx) { return bins[var][ndx]; }
 
 private:
     static const char *const names[];
 
-#if ((__cplusplus >= 201103L))
-    static const std::vector<std::string> bins[];
-#endif
+    static const char *const bins[][30];
 };
 
 }

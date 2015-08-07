@@ -1,17 +1,3 @@
-TEMPLATE= lib
-TARGET=displacecommons
-DESTDIR=../
-CONFIG += c++11
-
-include ("$$top_srcdir/localconfig.pri")
-
-INCLUDEPATH +=../include/ .
-
-win32 {
-    # For GetProcessMemoryInfo()
-    LIBS += -lpsapi
-}
-
 SOURCES= \
     readdata.cpp \
     myutils.cpp \
@@ -74,9 +60,17 @@ HEADERS= \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h
 
-OTHER_FILES += \
-    Makefile
+LIBS=-lpthread -lrt
+CPPFLAGS=-O2 -fpermissive -I../include -I../commons -I. -fpic
+LDFLAGS=
 
-target.path = $${PREFIX}/lib
-headers.path = $${PREFIX}/include/
-headers.files = $${HEADERS}
+OBJS=$(SOURCES:.cpp=.o)
+
+libcommons.so: ${OBJS}
+	${CXX} -shared ${LDFLAGS} -o $@ $^ ${LIBS}
+	
+	
+	
+clean:
+	@-rm ${OBJS} libcommons.so
+

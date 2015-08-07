@@ -49,11 +49,16 @@ HEADERS= \
         ../include/memoryinfo.h \
         ../include/options.h
 
-LIBS=-lpthread -lrt
-CPPFLAGS=-O2 -fpermissive -I../include -I.
+LIBS=-L../commons -lcommons -lpthread -lrt
+CPPFLAGS=-O2 -fpermissive -I../include -I../commons -I.
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
 
 displace: ${OBJS}
 	${CXX} ${LDFLAGS} -o $@ $^ ${LIBS}
+	
+	
+clean:
+	-@rm ${OBJS} displace
+

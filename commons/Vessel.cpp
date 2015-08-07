@@ -36,6 +36,7 @@
 #include <dtree/externalstatemanager.h>
 #include <dtree/commonstateevaluators.h>
 #include <dtree/evaluators/timeseriesevaluator.h>
+#include <dtree/variables.h>
 
 #include <boost/make_shared.hpp>
 
@@ -271,19 +272,20 @@ void Vessel::init()
 
     // Lazy initialization of the global State Evaluator.
     if (mStateEvaluators.size() == 0) {
-        for (int i = 0; i < dtree::Variable::VarLast; ++i) {
+        for (int i = 0; i < dtree::VarLast; ++i) {
             mStateEvaluators.push_back(boost::shared_ptr<dtree::StateEvaluator>());
         }
 
         // Add here the variables associations
-        mStateEvaluators[dtree::vesselSizeIs] = boost::make_shared<dtree::VariableReferenceStateEvaluator<LengthClass> >(mLengthClassId);
+        mStateEvaluators[dtree::vesselSizeIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<LengthClass>(mLengthClassId));
         mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
-                    boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_revenues),
-                    boost::make_shared<dtree::vessels::AverageRevenuesStateEvaluator>(),
+                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues)),
+                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesStateEvaluator()),
                     std::less<double>()));
         mStateEvaluators[dtree::lastTripProfitIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
-                    boost::make_shared<dtree::VariableReferenceStateEvaluator<double> >(lastTrip_profit),
-                    boost::make_shared<dtree::vessels::AverageProfitStateEvaluator>(),
+                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<double>(lastTrip_profit)),
+                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageProfitStateEvaluator()),
                     std::less<double>()));
         mStateEvaluators[dtree::fuelPriceIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
         mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());

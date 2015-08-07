@@ -1,6 +1,6 @@
 #include <dtree/variables.h>
 
-using namespace dtree ;
+using namespace dtree;
 
 const int VariableNames::VERSION = 6;
 
@@ -50,8 +50,7 @@ const char *const VariableNames::names[] = {
     0
 };
 
-#if ((__cplusplus >= 201103L))
-const std::vector<std::string> VariableNames::bins[] = {
+const char *const VariableNames::bins[][30] = {
     { "0", "1","2","3","4","5","6","7","8","9",
       "10", "11","12","13","14","15","16","17","18","19",
       "20", "21","22","23","24","25","26","27","28","29"  },
@@ -93,7 +92,6 @@ const std::vector<std::string> VariableNames::bins[] = {
     { },  // probability
     // keep this last
 };
-#endif
 
 const char *VariableNames::variableName(Variable id)
 {
@@ -113,4 +111,11 @@ Variable VariableNames::variableCode(const std::string &name)
     }
 
     return VarUndefined;
+}
+
+int VariableNames::variableBinCount(Variable var)
+{
+    int i = 0;
+    for (i = 0; bins[var][i] != 0; ++i);
+    return i;
 }

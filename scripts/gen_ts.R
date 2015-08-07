@@ -27,7 +27,7 @@ daily_ts_generator <- function (param_ts, variable="wspeed", area="all_area", a_
     a_res   <- relevant_param [1, "a_res"]
     variable <- seq(a_min,a_max, by=a_res)
 
-   ts_for_a_variable <- NULL
+   ts_for_a_variable <- c(relevant_param [1, "threshold1"], relevant_param [1, "threshold2"], relevant_param [1, "threshold3"])  # init with the 3 thresholds on top of the time series
    nbdays <- c(31, 28,31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
    months <- c('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12')
    for(m in 1 : length(months)) {
@@ -46,9 +46,6 @@ daily_ts_generator <- function (param_ts, variable="wspeed", area="all_area", a_
                         prob=c(prob_quartile1, prob_quartile2, prob_quartile3, prob_quartile4, prob_quartile5))
           )
    }
-
-   ts_for_a_variable <- c(relevant_param[1,"threshold1"], relevant_param[1,"threshold2"], relevant_param[1,"threshold3"],ts_for_a_variable)
- 
    return(ts_for_a_variable)
 }
 

@@ -4,7 +4,7 @@ ExternalStateManager *ExternalStateManager::sInstance = 0;
 
 ExternalStateManager::ExternalStateManager()
 {
-    for (int i = 0; i < dtree::Variable::VarLast; ++i)
+    for (int i = 0; i < dtree::VarLast; ++i)
         mStandardEvaluators.push_back(0);
 
     // build evaluators

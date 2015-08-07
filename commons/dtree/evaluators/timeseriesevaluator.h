@@ -24,8 +24,7 @@ public:
             std::cerr << "** ERROR: Time Series not found for: " << Var << " " << 0 << " " << v->get_loc()->get_code_area();
             exit (1);
         }
-       // return ts->evaluateThresholds(tstep % 365);
-         return ts->evaluateThresholds(tstep );
+         return ts->evaluateThresholds((tstep / 24) % 365);
     }
 };
 

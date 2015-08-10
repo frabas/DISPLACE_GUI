@@ -58,8 +58,8 @@ const char *const VariableNames::bins[][30] = {
     { "below av.", "above av." },   //lastTripProfitIs
     {  "below av.", "above av."},      //lastTripRevenueIs
     { "low", "medium", "large" }, // or { "<5knots", "5-10knots", ">10knots" },
-    { "low", "high" },
-    { "low", "high" },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targetted stock(s)
+    { "low","medium", "high" },
+    { "low", "medium", "high" },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targetted stock(s)
     { "low", "high" },
     { "ongoing", "ending" },
 

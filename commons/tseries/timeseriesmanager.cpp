@@ -2,7 +2,7 @@
 
 using namespace displace::simulation;
 
-const int TimeSeriesManager::ALL_ZONES = -1;
+const int TimeSeriesManager::ALL_ZONES = 0;
 
 TimeSeriesManager::TimeSeriesManager()
 {
@@ -37,7 +37,7 @@ boost::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager
 
     ZoneContainer::iterator it = zonec->find(zone);
     if (it == zonec->end()) {
-        // try with "all area"
+        // "all area" is supposed to be the 0 in code_area
         it = zonec->find(ALL_ZONES);
         if (it == zonec->end())
             return boost::shared_ptr<TimeSeries>();

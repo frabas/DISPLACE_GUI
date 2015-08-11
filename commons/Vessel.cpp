@@ -1152,6 +1152,7 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
         double value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
+            //cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
@@ -3569,6 +3570,7 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
 
             boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
             double the_value = traverseDtree(tstep, tree.get());
+            //cout <<"the value returned by traverseDtree is "<< the_value << endl;
 
         // draw a random number [0,1) and compare with the value
 

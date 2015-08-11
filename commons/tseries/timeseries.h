@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 namespace displace {
 namespace simulation {
@@ -23,7 +24,8 @@ public:
     int evaluateThresholds (int idx) {
         int i;
         for (i = 0; i < (int)mThresholds.size(); ++i) {
-            if (std::isnan(mThresholds[idx]) || mData.at(idx) < mThresholds[idx])
+         //std::cout << "in evaluateThresholds(), current data is " <<  mData.at(idx) << ", compared to threshold " << i << ": " << mThresholds[i] << std::endl;
+            if (std::isnan(mThresholds[i]) || mData.at(idx) < mThresholds[i])
                 return i;
         }
         return i;

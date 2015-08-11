@@ -1703,7 +1703,15 @@ int main(int argc, char* argv[])
         multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, "../"+inputfolder);
         multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, "../"+inputfolder);
 
-		metiers[i] =  new Metier(metier_name,
+        // metier_target_stocks for this particular metier
+        multimap<int,int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
+        multimap<int,int>::iterator upper_metier_target_stocks = metier_target_stocks.upper_bound(i);
+        vector<int> the_metier_target_stocks;
+        for (multimap<int, int>::iterator pos=lower_metier_target_stocks; pos != upper_metier_target_stocks; pos++)
+            the_metier_target_stocks.push_back(pos->second);
+
+
+        metiers[i] =  new Metier(metier_name,
 			metier_type,
 			selectivity,
 			discards,
@@ -1714,7 +1722,7 @@ int main(int argc, char* argv[])
 			gear_width_b,
 			gear_width_model,
             loss_after_1_passage,
-            metier_target_stocks);
+            the_metier_target_stocks);
 	}
 
 	/*

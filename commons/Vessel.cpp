@@ -94,6 +94,7 @@ public:
 Vessel::Vessel()
 {
 	idx_vessel = 0;
+    init();
 }
 
 

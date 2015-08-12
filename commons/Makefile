@@ -61,10 +61,15 @@ HEADERS= \
     dtree/evaluators/timeseriesevaluator.h
 
 LIBS=-lpthread -lrt
-CPPFLAGS=-O2 -fpermissive -I../include -I../commons -I. -fpic
+CPPFLAGS=${CPPDEBUG} -O2 -fpermissive -I../include -I../commons -I. -fpic
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
+
+all: libcommons.so
+
+debug:
+	${MAKE} all CPPDEBUG=-g
 
 libcommons.so: ${OBJS}
 	${CXX} -shared ${LDFLAGS} -o $@ $^ ${LIBS}

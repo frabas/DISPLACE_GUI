@@ -1,8 +1,7 @@
-QT=
-CONFIG=
-TARGET=unittest
-
 include ("$$top_srcdir/localconfig.pri")
+
+QT=
+TARGET=unittest
 
 DESTDIR = ../
 

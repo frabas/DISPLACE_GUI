@@ -20,6 +20,7 @@ unix {
     isEmpty(PREFIX) {
         PREFIX=/usr/local/
     }
+    #CONFIG += boost_test_included
 }
 
 DESTDIR=$$top_builddir

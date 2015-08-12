@@ -12,6 +12,8 @@ unit-test {
 
 OTHER_FILES += \
     Readme.txt \
+    Building.win Building.unix \
+    localconfig.pri \
     COPYRIGHT.txt \
     LICENSE.txt \
     setup.iss \

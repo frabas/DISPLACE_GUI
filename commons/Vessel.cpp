@@ -80,6 +80,18 @@ public:
     }
 };
 
+
+class VesselMetierStateEvaluator : public dtree::StateEvaluator {
+public:
+    VesselMetierStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+      //cout << vessel->get_name() << " with metier " << vessel->get_metier()->get_name() << endl;
+        return vessel->get_metier()->get_name();
+    }
+};
+
+
+
 }
 }
 
@@ -286,6 +298,8 @@ void Vessel::init()
         }
 
         // Add here the variables associations
+        mStateEvaluators[dtree::vesselMetierIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMetierStateEvaluator);
         mStateEvaluators[dtree::vesselSizeIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
         mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(

@@ -47,25 +47,25 @@ std::vector<boost::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
 
 namespace dtree {
 namespace vessels {
-class AverageProfitStateEvaluator : public dtree::StateEvaluator {
+class AverageProfitComparationsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
-    AverageProfitStateEvaluator() {}
+    AverageProfitComparationsStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
         if (vessel->getNumTrips() > 2)
-            return vessel->getAvgTripProfit();
+            return (vessel->getLastTripProfit() < vessel->getAvgTripProfit() ? 1.0 : 0.0);
         else
             return 0.0;
     }
 };
 
-class AverageRevenuesStateEvaluator : public dtree::StateEvaluator {
+class AverageRevenuesComparationStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
-    AverageRevenuesStateEvaluator() {}
+    AverageRevenuesComparationStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
         if (vessel->getNumTrips() > 2)
-            return vessel->getAvgTripRevenues();
+            return (vessel->getLastTripRevenues() < vessel->getAvgTripRevenues() ? 1.0 : 0.0);
         else
             return 0.0;
     }
@@ -76,6 +76,14 @@ public:
     VesselSizeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
         return vessel->get_length();
+    }
+};
+
+class MetierStateEvaluator : public dtree::StateEvaluator {
+public:
+    MetierStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+        return vessel->get_metier()->get_metier_type();
     }
 };
 
@@ -287,14 +295,12 @@ void Vessel::init()
         // Add here the variables associations
         mStateEvaluators[dtree::vesselSizeIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
-        mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
-                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues)),
-                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesStateEvaluator()),
-                    std::less<double>()));
-        mStateEvaluators[dtree::lastTripProfitIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
-                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<double>(lastTrip_profit)),
-                    boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageProfitStateEvaluator()),
-                    std::less<double>()));
+        mStateEvaluators[dtree::lastTripRevenueIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesComparationStateEvaluator());
+        mStateEvaluators[dtree::lastTripProfitIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageProfitComparationsStateEvaluator());
+        mStateEvaluators[dtree::vesselMetierIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator());
         mStateEvaluators[dtree::fuelPriceIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
         mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
         mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());

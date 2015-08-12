@@ -431,3 +431,17 @@ You can use ogr2ogr or the provided script in the scripts/ directory.
 $ ogr2ogr -t_srs WGS84 DEST.shp SRC.shp
 
 Note that DEST file is specified before the source!
+
+
+UNIT TESTING
+============
+
+Unit testing is performed using the Boost::Test framework. It can be compiled and linked in two ways:
+
+- Dynamic linked, using the system installed boost::test library. This option is enabled by default on Unix
+- Compiled in, using the boost/test/included/unit_test.hpp (included in main.cpp). This is suitable for Windows, where boost::test is not available with our version of mingw64. A standard installation of boost::test is required.
+
+The two methods can be selected by defining boost_test_included in the CONFIG line of the Qt Project. It is enabled by default on Windows (see localconfig.pri).
+
+If boost::test is not available in any form, it can be disabled by removing the units-test option from the CONFIG variable in the pro file.
+

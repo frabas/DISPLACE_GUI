@@ -12,6 +12,8 @@ win32 {
 
     INCLUDEPATH += $$SDK/include/ $$SDK/include/boost-1_57
     LIBS += -L$$SDK/lib
+    
+    CONFIG += boost_test_included
 }
 
 unix {

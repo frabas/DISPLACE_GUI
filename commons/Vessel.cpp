@@ -295,7 +295,7 @@ void Vessel::init()
 
         // Add here the variables associations
         mStateEvaluators[dtree::vesselMetierIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMetierStateEvaluator);
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator);
         mStateEvaluators[dtree::vesselSizeIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
         mStateEvaluators[dtree::lastTripRevenueIs] =

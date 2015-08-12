@@ -50,46 +50,46 @@ const char *const VariableNames::names[] = {
     0
 };
 
-const char *const VariableNames::bins[][30] = {
+const char *const VariableNames::bins[][40] = {
     { "0", "1","2","3","4","5","6","7","8","9",
       "10", "11","12","13","14","15","16","17","18","19",
-      "20", "21","22","23","24","25","26","27","28","29"  },
-    { "u15m", "15-18m", "18-24m", "24-40m", "o40m"},    // given by length_class in Vessel::Vessel()
-    { "below av.", "above av." },   //lastTripProfitIs
-    {  "below av.", "above av."},      //lastTripRevenueIs
-    { "low", "medium", "large" }, // or { "<5knots", "5-10knots", ">10knots" },
-    { "low","medium", "high" },
-    { "low", "medium", "high" },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targetted stock(s)
-    { "low", "high" },
-    { "ongoing", "ending" },
+      "20", "21","22","23","24","25","26","27","28","29", 0  },
+    { "u15m", "15-18m", "18-24m", "24-40m", "o40m", 0},    // given by length_class in Vessel::Vessel()
+    { "below av.", "above av.", 0 },   //lastTripProfitIs
+    {  "below av.", "above av.",0 },      //lastTripRevenueIs
+    { "low", "medium", "large",0 }, // or { "<5knots", "5-10knots", ">10knots" },
+    { "low","medium", "high",0 },
+    { "low", "medium", "high",0 },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targetted stock(s)
+    { "low", "high",0 },
+    { "ongoing", "ending",0 },
 
 
-    { "not expected", "expected" },
-    { "bad", "good"},
-    { "bad", "good"},
-    { "low", "high" },
+    { "not expected", "expected",0 },
+    { "bad", "good",0 },
+    { "bad", "good",0 },
+    { "low", "high",0 },
 
-    { "false", "true" },
-    { "false", "true" },
-    { "false", "true" },
-//    { "low", "high" },
-    { "no", "yes" },
+    { "false", "true",0 },
+    { "false", "true",0 },
+    { "false", "true",0 },
+//    { "low", "high",0 },
+    { "no", "yes",0 },
 
-    { "after 3 h", "after 6 h" },
-    { "no", "yes" },
+    { "after 3 h", "after 6 h",0 },
+    { "no", "yes",0 },
 
-    { "still ok", "fulfilled" },
-    { "still ok", "low" },
-    { "true", "false" },
-    { ">5", ">14" },  //or  {"short", "long" },
-    { "bad", "good" },
+    { "still ok", "fulfilled",0 },
+    { "still ok", "low",0 },
+    { "true", "false",0 },
+    { ">5", ">14",0 },  //or  {"short", "long" },
+    { "bad", "good",0 },
 
-    { "<10nm", "<100nm", ">100nm" },  // or { "near", "not that far", "far" },
-    { "low", "high" },
-    { "low", "high" },
-    { "not mine", "mine" },
+    { "<10nm", "<100nm", ">100nm",0 },  // or { "near", "not that far", "far" },
+    { "low", "high",0 },
+    { "low", "high",0 },
+    { "not mine", "mine",0 },
 
-    { },  // probability
+    { 0 },  // probability
     // keep this last
 };
 

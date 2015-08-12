@@ -62,7 +62,7 @@ public:
 private:
     static const char *const names[];
 
-    static const char *const bins[][30];
+    static const char *const bins[][40];
 };
 
 }

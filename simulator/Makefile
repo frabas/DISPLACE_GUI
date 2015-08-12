@@ -50,15 +50,19 @@ HEADERS= \
         ../include/options.h
 
 LIBS=-L../commons -lcommons -lpthread -lrt
-CPPFLAGS=-O2 -fpermissive -I../include -I../commons -I.
+CPPFLAGS=${CPPDEBUG} -O2 -fpermissive -I../include -I../commons -I.
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
 
+all: displace
+
 displace: ${OBJS}
 	${CXX} ${LDFLAGS} -o $@ $^ ${LIBS}
-	
-	
+
+debug:
+	${MAKE} all CPPDEBUG=-g
+
 clean:
 	-@rm ${OBJS} displace
 

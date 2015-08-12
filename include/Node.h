@@ -67,7 +67,7 @@ class Node
 								 // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 		virtual double get_prices_per_cat(int pop, int cat) ;
 								 // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
-		virtual double get_fuelprices(string vsize) ;
+        virtual double get_fuelprices(int vsize) ;
 		double get_x() const;
 		double get_y() const;
 		int get_harbour() const;

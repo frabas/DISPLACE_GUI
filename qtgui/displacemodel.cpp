@@ -1140,7 +1140,7 @@ bool DisplaceModel::loadNodes()
                 a_name= pos->second;
             }
 
-            map<string,double> init_fuelprices;
+            map<int,double> init_fuelprices;
             multimap<int, double> fishprices_each_species_per_cat;
             if(a_name!="none" && a_point== i)
             {
@@ -1171,7 +1171,7 @@ bool DisplaceModel::loadNodes()
             {
                 read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
 
-                map<string,double>::iterator pos;
+                map<int,double>::iterator pos;
                 for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
                 {
                     pos->second = (pos->second)*1.2;

@@ -33,7 +33,7 @@ int nbszgroups,
 string _name,
 //multimap<string, double> _mean_fish_price_per_met_per_pop,
 multimap<int, double> _mean_fish_price_per_pop_per_cat,
-map<string, double> _fuelprice)
+map<int, double> _fuelprice)
 : Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
@@ -130,7 +130,7 @@ double Harbour::get_prices_per_cat(int pop, int cat)
 }
 
 
-double Harbour::get_fuelprices(string vsize)
+double Harbour::get_fuelprices(int vsize)
 {
 	// search into the map 'prices per vsize'
 	double a_fuelprice= fuelprice.find(vsize)->second;

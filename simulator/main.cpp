@@ -1092,7 +1092,7 @@ int main(int argc, char* argv[])
 				a_name= pos->second;
 			}
 
-			map<string,double> init_fuelprices;
+            map<int,double> init_fuelprices;
 			multimap<int, double> fishprices_each_species_per_cat;
             if(a_name!="none" && a_point== (int)i)
 			{
@@ -1120,7 +1120,7 @@ int main(int argc, char* argv[])
 			{
                 read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, "../"+inputfolder);
 
-				map<string,double>::iterator pos;
+                map<int,double>::iterator pos;
 				for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
 				{
 					pos->second = (pos->second)*1.2;
@@ -1308,29 +1308,29 @@ int main(int argc, char* argv[])
 
 	// read other stuffs...
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
-    cout << "Are the pop files init_pops_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_pops_per_szgroup need a check?" << endl;
     multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
-    cout << "Are the pop files init_fecundity_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_fecundity_per_szgroup need a check?" << endl;
     multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
-    cout << "Are the pop files init_maturity_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_maturity_per_szgroup need a check?" << endl;
     multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
-    cout << "Are the pop files init_weight_per_szgroupneed a check?" << endl;
+    cout << "Do the pop files init_weight_per_szgroupneed a check?" << endl;
     multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
-    cout << "Are the pop files init_comcat_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_comcat_per_szgroup need a check?" << endl;
     multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization, "../"+inputfolder);
-    cout << "Are the pop files init_M_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_M_per_szgroup need a check?" << endl;
     multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
-    cout << "Are the pop files init_proprecru_per_szgroup need a check?" << endl;
+    cout << "Do the pop files init_proprecru_per_szgroup need a check?" << endl;
     multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
-    cout << "Are the pop files lst_idx_nodes_per_pop need a check?" << endl;
+    cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
     multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
-    cout << "Are the pop files selected_szgroups need a check?" << endl;
+    cout << "Do the pop files selected_szgroups need a check?" << endl;
     multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, "../"+inputfolder);
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
 
-    cout << "Are the pop files tac_percent_simulated  need a check?" << endl;
+    cout << "Does the pop file tac_percent_simulated need a check?" << endl;
     map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, "../"+inputfolder);
-    cout << "Are the pop files hyperstability_param  need a check?" << endl;
+    cout << "Does the pop file hyperstability_param need a check?" << endl;
     map<int, double> hyperstability_param= read_hyperstability_param(folder_name_parameterization, "../"+inputfolder);
 
 	// creation of a vector of populations

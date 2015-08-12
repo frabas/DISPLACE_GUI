@@ -90,7 +90,7 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
 multimap<int, string> read_harbour_names(string folder_name_parameterization, string inputfolder);
 int read_prices_per_harbour(int i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
 int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
-void read_fuel_prices_per_vsize(map<string, double>& fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
+void read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 // metier specific
 map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder);

@@ -71,6 +71,14 @@ public:
     }
 };
 
+class VesselSizeStateEvaluator : public dtree::StateEvaluator {
+public:
+    VesselSizeStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+        return vessel->get_length();
+    }
+};
+
 }
 }
 
@@ -278,7 +286,7 @@ void Vessel::init()
 
         // Add here the variables associations
         mStateEvaluators[dtree::vesselSizeIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<LengthClass>(mLengthClassId));
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
         mStateEvaluators[dtree::lastTripRevenueIs] = boost::shared_ptr<dtree::StateEvaluator>(new dtree::TwoArgumentsComparatorStateEvaluator<std::less<double> >(
                     boost::shared_ptr<dtree::StateEvaluator> (new dtree::VariableReferenceStateEvaluator<double>(lastTrip_revenues)),
                     boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesStateEvaluator()),

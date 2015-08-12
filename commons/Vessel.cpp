@@ -75,7 +75,8 @@ class VesselSizeStateEvaluator : public dtree::StateEvaluator {
 public:
     VesselSizeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-        return vessel->get_length();
+      //cout << vessel->get_name() << " with length " << vessel->get_length() << " is of length class " <<  (double)vessel->get_length_class() << endl;
+        return vessel->get_length_class();
     }
 };
 
@@ -83,7 +84,7 @@ class MetierStateEvaluator : public dtree::StateEvaluator {
 public:
     MetierStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-        return vessel->get_metier()->get_metier_type();
+        return vessel->get_metier()->get_name();
     }
 };
 
@@ -228,19 +229,19 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 	// length class
     if(length<15) {
-        length_class = "u15m";
+        length_class = 0; //"u15m";
         mLengthClassId = Under15;
     } else if(length>=15 && length <18) {
-        length_class = "15-18m";
+        length_class = 1; //"15-18m";
         mLengthClassId = Between15and18;
     } else if(length>=18 && length <24) {
-        length_class = "18-24m";
+        length_class = 2; // "18-24m";
         mLengthClassId = Between18and24;
     } else if(length>=24 && length <40) {
-        length_class = "24-40m";
+        length_class = 3; //"24-40m";
         mLengthClassId = Between24and40;
     } else if(length>=40) {
-        length_class = "o40m";
+        length_class = 4; // "o40m";
         mLengthClassId = Over40;
     }
 
@@ -293,6 +294,8 @@ void Vessel::init()
         }
 
         // Add here the variables associations
+        mStateEvaluators[dtree::vesselMetierIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMetierStateEvaluator);
         mStateEvaluators[dtree::vesselSizeIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
         mStateEvaluators[dtree::lastTripRevenueIs] =
@@ -369,7 +372,7 @@ double Vessel::get_KW () const
 }
 
 
-string Vessel::get_length_class () const
+int Vessel::get_length_class() const
 {
 	return(length_class);
 }
@@ -1166,6 +1169,7 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
         double value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
+            //cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
@@ -2432,7 +2436,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 		path_shop, min_distance_shop, from, the_grounds);
 
 								 // vsize
-	string length_class =this->get_length_class();
+    int length_class =this->get_length_class();
 
     //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
 
@@ -3583,6 +3587,7 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
 
             boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
             double the_value = traverseDtree(tstep, tree.get());
+            //cout <<"the value returned by traverseDtree is "<< the_value << endl;
 
         // draw a random number [0,1) and compare with the value
 

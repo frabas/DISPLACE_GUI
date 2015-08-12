@@ -39,12 +39,14 @@ public:
 
         int adim =0;
 
-        // find out the targetted stocks and take the more priced
-        multimap<int, int>  trgts =v->get_metier()->get_metier_target_stocks();
+        // find out the bunch of targeted stocks and decide from the currently more priced one among them
+        vector<int>  trgts =v->get_metier()->get_metier_target_stocks();
         vector <double> values;
-        for (std::multimap<int,int>::iterator it=trgts.begin(); it!=trgts.end(); ++it)
+
+        for (int i=0; i<trgts.size(); i++)
         {
-            adim=(*it).second;
+            adim = trgts.at(i);
+            cout << v->get_name() << " look at the price of the target -> stock " << adim << endl;
             displace::simulation::TimeSeries *a_ts = displace::simulation::Simulation::instance()->getTimeSeries(displace::simulation::TimeSeriesManager::Fishprice,  v->get_loc()->get_code_area(), adim);
             values.push_back (a_ts->evaluateThresholds((tstep / 24) % 365));
         }

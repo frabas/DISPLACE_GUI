@@ -44,7 +44,7 @@ class Metier
 		double gear_width_b;
 		string gear_width_model;
 		multimap<int, double> loss_after_1_passage;
-        multimap<int, int> metier_target_stocks;
+        vector<int> metier_target_stocks;
 
 	public:
 		Metier();
@@ -59,7 +59,7 @@ class Metier
             double gear_width_b,
             string gear_width_model,
             multimap<int, double> loss_after_1_passage,
-            multimap<int, int> _metier_target_stocks);
+            vector<int> _metier_target_stocks);
 		~Metier();
 		int get_name();
 		int get_metier_type();
@@ -71,7 +71,7 @@ class Metier
 		double  get_gear_width_b();
 		string  get_gear_width_model();
 		multimap<int, double>  get_loss_after_1_passage();
-        multimap<int, int>  get_metier_target_stocks();
+        vector<int> get_metier_target_stocks();
         vector<double> get_betas_per_pop();
         vector<int> get_mls_cat_per_pop();
         void set_betas_per_pop(vector<double> metier_betas_per_pop);

@@ -161,7 +161,7 @@ double Node::get_prices_per_cat(int pop, int cat)
 }
 
 
-double Node::get_fuelprices(string vsize)
+double Node::get_fuelprices(int vsize)
 {
     UNUSED(vsize);
 

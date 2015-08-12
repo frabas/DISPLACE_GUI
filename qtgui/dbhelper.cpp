@@ -463,7 +463,7 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
 
         /* TODO: a,b */
         multimap<int,double> a;
-        map<string,double> b;
+        map<int,double> b;
 
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;

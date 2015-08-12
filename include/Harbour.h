@@ -35,19 +35,19 @@ using namespace std;
 class Harbour : public Node
 {
 	public:
-		Harbour(int idx,
-			double xval,
-			double yval,
-			int _harbour,
-			int _code_area,
-			int _code_landscape,
-			int nbpops,
+        Harbour(int idx,
+            double xval,
+            double yval,
+            int _harbour,
+            int _code_area,
+            int _code_landscape,
+            int nbpops,
             int nbbenthospops,
             int nbszgroups,
-			string _name,
-		//multimap<string, double> mean_fish_price_per_met_per_pop,
-			multimap<int, double> mean_fish_price_per_pop_per_cat,
-			map<string, double> fuelprice);
+            string _name,
+        //multimap<string, double> mean_fish_price_per_met_per_pop,
+            multimap<int, double> mean_fish_price_per_pop_per_cat,
+            map<int, double> fuelprice);
         Harbour(string name);
 		Harbour();
         Harbour(int idx,double xval,double yval,int _harbour);
@@ -56,12 +56,12 @@ class Harbour : public Node
 		virtual string get_name() const;
 		//virtual double get_prices(string met, int pop) ;
 		virtual double get_prices_per_cat(int pop, int cat) ;
-		virtual double get_fuelprices(string vsize) ;
+        virtual double get_fuelprices(int vsize) ;
 
 	private:
 		string name;
 		//int idx_node;
-		map<string, double>  fuelprice;
+        map<int, double>  fuelprice;
 		//multimap<string, double> mean_fish_price_per_met_per_pop;
 		multimap<int, double> mean_fish_price_per_pop_per_cat;
 

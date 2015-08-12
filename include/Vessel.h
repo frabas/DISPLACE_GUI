@@ -89,9 +89,8 @@ class Vessel
 		double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 
-        /// \todo Calculate last_trip_compared_avg and normalize it, divide it by 2 so the variable as a 0.5 threshold (above/below).
-        double last_trip_compared_avg;
-		string length_class, nationality;
+        int length_class;
+        string nationality;
         LengthClass mLengthClassId;
 		int message;
 		int state;
@@ -144,7 +143,7 @@ public:
 		double get_speed () const;
 		double get_length () const;
 		double get_KW () const;
-		string get_length_class () const;
+        int get_length_class() const;
 		string get_nationality () const;
         const vector<int> &get_harbours () const;
         const vector<int> &get_fgrounds () const;

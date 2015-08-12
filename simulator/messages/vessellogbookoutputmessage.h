@@ -48,7 +48,8 @@ private:
     std::ostream &loglike;
 
     displace::ipc::VesselLogbookMessage logbook;
-    std::string name, freq_metiers, length_class;
+    std::string name, freq_metiers;
+    int length_class;
 
     std::vector<double> cumul;
 };

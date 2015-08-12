@@ -663,7 +663,7 @@ string folder_name_parameterization, string inputfolder)
 }
 
 
-void read_fuel_prices_per_vsize(map<string, double>& fuel_prices_per_vsize,
+void read_fuel_prices_per_vsize(map<int, double>& fuel_prices_per_vsize,
 string folder_name_parameterization, string inputfolder)
 {
 
@@ -678,7 +678,7 @@ string folder_name_parameterization, string inputfolder)
 	}
 	else
 	{
-		fill_map_from_specifications_s_d(file_fuel_prices_per_vsize,  fuel_prices_per_vsize);
+        fill_map_from_specifications_i_d(file_fuel_prices_per_vsize,  fuel_prices_per_vsize,  inputfolder);
 		file_fuel_prices_per_vsize.close();
 
 	}

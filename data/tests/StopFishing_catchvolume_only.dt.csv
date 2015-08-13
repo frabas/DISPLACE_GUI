@@ -1,0 +1,6 @@
+#TreeVersion: 6
+#TreeType: StopFishing
+# id,variable,posx,posy,nchld,children...,value
+0,catchVolumeIs,2460,2443,2,1,0,2,1,0
+1,probability,2323,2603,0,0
+2,probability,2478,2605,0,1

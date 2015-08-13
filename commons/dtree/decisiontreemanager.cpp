@@ -188,10 +188,11 @@ bool DecisionTreeManager::readFile (std::string filename)
             boost::shared_ptr<dtree::Node> n = nodes[i].node;
             n->setVariable(nodes[i].variable);
             n->setValue(nodes[i].value);
+            int nch = 0;
             for (size_t j = 0; j < nodes[i].children.size(); ++j) {
                 int chld = nodes[i].children[j];
                 if (chld != -1) {
-                    n->setChild(j, nodes[chld].node);
+                    n->setChild(nch++, nodes[chld].node);
                     nodes[chld].node->setParent(n);
                 }
                 int map = nodes[i].mapping[j];

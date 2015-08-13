@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE( Dtree )
 
     boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
 
-    Metier m1(9,0,std::vector<double>(),
+    Metier m1(7,0,std::vector<double>(),
              std::vector<double>(),
              std::vector<double>(),
              std::vector<int>(),

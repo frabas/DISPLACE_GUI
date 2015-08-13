@@ -84,7 +84,7 @@ class MetierStateEvaluator : public dtree::StateEvaluator {
 public:
     MetierStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-        return vessel->get_metier()->get_name();
+        return static_cast<float>(vessel->get_metier()->get_name()) / 29.0;
     }
 };
 
@@ -1162,12 +1162,18 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
  * */
 double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
 {
+    int bin = -1;
+    double value = 0.0f;
+
+    boost::shared_ptr<dtree::Node> prevnode;
     boost::shared_ptr<dtree::Node> node = tree->root();
     while (node.get()) {
-        if (node->getChildrenCount() == 0) // is a leaf node
+        if (node->getChildrenCount() == 0) { // is a leaf node
+//            std::cout << "Node Value= " << node->value() << std::endl;
             return node->value();
+        }
 
-        double value = 0.0;
+        value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
             //cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
@@ -1175,15 +1181,26 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
 
-        int bin = static_cast<int>(std::floor(value + 0.5));
+        bin = static_cast<int>(std::floor(value*node->getChildrenCount() + 0.5));
+
+//        std::cout << "value=" << value << " bin=" << bin << std::endl;
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;
+        prevnode = node;
         node = node->getChild(bin);
     }
 
     // if here, we may have a problem.
-    throw std::runtime_error("Invalid null node reached while traversing decision tree.");
+
+    if (prevnode != nullptr) {
+        std::ostringstream ss;
+        ss << "Invalid null node reached while traversing decision tree. value=" << value << " bin= " << bin;
+        ss << " map: " << prevnode->getMapping(bin);
+        throw std::runtime_error(ss.str());
+    } else {
+        throw std::runtime_error("Traversing an empty dtree.");
+    }
 }
 
 string Vessel::nationalityFromName(const string &name)

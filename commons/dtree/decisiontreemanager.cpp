@@ -98,7 +98,7 @@ struct NodePrototype {
  * */
 bool DecisionTreeManager::readFile (std::string filename)
 {
-    std::cout << "@DEBUG: Reading file " << filename << std::endl;
+//    std::cout << "@DEBUG: Reading file " << filename << std::endl;
 
     std::ifstream stream;
     stream.open(filename.c_str(), std::ios_base::in);
@@ -141,6 +141,7 @@ bool DecisionTreeManager::readFile (std::string filename)
             // fields 2 and 3 are ignored (posx,posy)
             int n = atoi(fields[4].c_str());
             int fldnum = 5;
+//            std::cout << prt.id << " " << n << " ";
             for (int i = 0; i < n; ++i) {
                 // read the child
                 int ch;
@@ -152,6 +153,7 @@ bool DecisionTreeManager::readFile (std::string filename)
                 }
                 prt.children.push_back(ch);
 
+//                std::cout << " chld: " << ch << " map: ";
                 // read the map
                 fld = fields[fldnum++];
                 if (fld.empty()) {
@@ -160,8 +162,10 @@ bool DecisionTreeManager::readFile (std::string filename)
                     ch = atoi(fld.c_str());
                 }
                 prt.mapping.push_back(ch);
+//                std::cout << ch << " ";
             }
             prt.value = atof(fields[5+n].c_str());
+//            std::cout << " value " << prt.value << std::endl;
             prt.node = boost::shared_ptr<dtree::Node>(new dtree::Node(tree));
 
             while (nodes.size() <= (size_t)prt.id)
@@ -170,7 +174,7 @@ bool DecisionTreeManager::readFile (std::string filename)
         }
     }
 
-    std::cout << "@DEBUG: TreeType = " << treeType << std::endl;
+//    std::cout << "@DEBUG: TreeType = " << treeType << std::endl;
     if (treeType == DecisionTreeManager::InvalidTreeType) {
         std::cerr << "Invalid Tree Type" << std::endl;
         return false;
@@ -196,6 +200,21 @@ bool DecisionTreeManager::readFile (std::string filename)
                 }
             }
         }
+
+        /*
+        for (size_t i = 0; i < nodes.size(); ++i) {
+            boost::shared_ptr<dtree::Node> n = nodes[i].node;
+            for (int i = 0; i < n->getChildrenCount() ; ++i) {
+                std::cout << i << " unm " << n->getUnmappedChild(i).get() << " map "
+                          << n->getMapping(i) << " "
+                          << n->getChild(i).get();
+                if (n->getUnmappedChild(i) != nullptr)
+                    std::cout << " value " << n->getUnmappedChild(i)->value();
+                std::cout << std::endl;
+            }
+
+        }
+        */
 
         // set the root
         tree->setRoot(nodes[0].node);

@@ -53,7 +53,7 @@ const char *const VariableNames::names[] = {
 const char *const VariableNames::bins[][40] = {
     { "0", "1","2","3","4","5","6","7","8","9",
       "10", "11","12","13","14","15","16","17","18","19",
-      "20", "21","22","23","24","25","26","27","28","29", 0  },
+      "20", "21","22","23","24", 0  },
     { "u15m", "15-18m", "18-24m", "24-40m", "o40m", 0},    // given by length_class in Vessel::Vessel()
     { "below av.", "above av.", 0 },   //lastTripProfitIs
     {  "below av.", "above av.",0 },      //lastTripRevenueIs

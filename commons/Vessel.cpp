@@ -102,6 +102,30 @@ public:
 };
 
 
+class VesselCatchVolumeStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselCatchVolumeStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+          return vessel->get_cumcatches() > (vessel->get_carrycapacity() *0.5)  ? 1.0 : 0.0;
+        }
+};
+
+
+class VesselNbOfDaysAtSeaSoFarIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselNbOfDaysAtSeaSoFarIsStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+          return vessel->get_timeatsea() > 5  ? 1.0 : 0.0;
+        }
+};
+
+
+
+
+
+
 }
 }
 
@@ -309,6 +333,7 @@ void Vessel::init()
         }
 
         // Add here the variables associations
+        // GoFishing
         mStateEvaluators[dtree::vesselMetierIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator);
         mStateEvaluators[dtree::vesselSizeIs] =
@@ -323,8 +348,14 @@ void Vessel::init()
         mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
         mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
 
+        // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFuelTankStateEvaluator);
+        mStateEvaluators[dtree::catchVolumeIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselCatchVolumeStateEvaluator);
+        mStateEvaluators[dtree::nbOfDaysAtSeaSoFarIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNbOfDaysAtSeaSoFarIsStateEvaluator);
+
 
 
     }

@@ -88,6 +88,20 @@ public:
     }
 };
 
+class VesselFuelTankStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselFuelTankStateEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+          return vessel->get_cumfuelcons() > (vessel->get_tankcapacity()*0.5)  ? 1.0 : 0.0;
+          //  a more complicated alternative require computing (all) distance to ports:
+          //  return (	vessel->get_tankcapacity() - vessel->get_cumfuelcons()
+          //          < ( (a_min_dist /(vessel->get_speed() * NAUTIC)) * vessel->get_fuelcons()*vessel->get_mult_fuelcons_when_steaming() );
+          //   ? 1.0 : 0.0);
+        }
+};
+
+
 }
 }
 
@@ -308,6 +322,11 @@ void Vessel::init()
         mStateEvaluators[dtree::fuelPriceIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
         mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
         mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
+
+        mStateEvaluators[dtree::fuelTankIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFuelTankStateEvaluator);
+
+
     }
 
 }
@@ -3580,11 +3599,6 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
 		// (binary tree only, no/low/bad is 0 and yes/high/good is 1)
         if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::GoFishing))
 		{
-			map<string,int> internal_states;
-								 // TO DO: retrieve from the state of the vessel
-			internal_states.insert(make_pair(" remaining_quota_is ",1));
-								 // TO DO: retrieve from the state of the vessel
-			internal_states.insert(make_pair(" last_trip_was ",0));
 
             boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
             double the_value = traverseDtree(tstep, tree.get());
@@ -3720,10 +3734,22 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
     UNUSED(freq_distance);
     UNUSED(vertex_names);
 
-	if(use_the_tree)
-	{
-		// TO DO
-        return -1;
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StopFishing))
+        {
+
+            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::StopFishing);
+            double the_value = traverseDtree(tstep, tree.get());
+
+
+            //STOP FISHING!
+            if(unif_rand()<the_value) {
+                unlock();
+                return(1);
+            } else {
+                unlock();
+                return(0);		 // DON´T STOP!
+            }
+
 	}
 	else
 	{

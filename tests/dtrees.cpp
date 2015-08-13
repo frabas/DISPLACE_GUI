@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE( Dtree )
 
     boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
 
-    Metier m1(7,0,std::vector<double>(),
+    Metier m1(9,0,std::vector<double>(),
              std::vector<double>(),
              std::vector<double>(),
              std::vector<int>(),
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE( Dtree )
     v.set_metier(&m1);
 
     double rv = v.traverseDtree(0, tree.get());
-    BOOST_CHECK_CLOSE(rv, 1.0, 0.01);
+    BOOST_CHECK_CLOSE(rv, 0.09, 0.001);
 
     Metier m2(1,0,std::vector<double>(),
              std::vector<double>(),
@@ -48,19 +48,42 @@ BOOST_AUTO_TEST_CASE( Dtree )
 
     v.set_metier(&m2);
     rv = v.traverseDtree(0, tree.get());
-    BOOST_CHECK_CLOSE(rv, 0.0, 0.01);
+    BOOST_CHECK_CLOSE(rv, 0.01, 0.001);
 
     manager->readFromDirectory("data/tests/dtree-metiers-mapped");
     BOOST_CHECK( manager->hasTree(dtree::DecisionTreeManager::GoFishing) == true );
 
     tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+
+    m1.set_name(0);
     v.set_metier(&m1);
     rv = v.traverseDtree(0, tree.get());
-    BOOST_CHECK_CLOSE(rv, 0.1, 0.01);
+    BOOST_CHECK_CLOSE(rv, 0.0, 0.001);
 
-    v.set_metier(&m2);
+    m1.set_name(4);
+    v.set_metier(&m1);
     rv = v.traverseDtree(0, tree.get());
-    BOOST_CHECK_CLOSE(rv, 0.0, 0.01);
+    BOOST_CHECK_CLOSE(rv, 0.0, 0.001);
+
+    m1.set_name(5);
+    v.set_metier(&m1);
+    rv = v.traverseDtree(0, tree.get());
+    BOOST_CHECK_CLOSE(rv, 0.1, 0.001);
+
+    m1.set_name(9);
+    v.set_metier(&m1);
+    rv = v.traverseDtree(0, tree.get());
+    BOOST_CHECK_CLOSE(rv, 0.1, 0.001);
+
+    m1.set_name(10);
+    v.set_metier(&m1);
+    rv = v.traverseDtree(0, tree.get());
+    BOOST_CHECK_CLOSE(rv, 0.2, 0.001);
+
+    m1.set_name(29);
+    v.set_metier(&m1);
+    rv = v.traverseDtree(0, tree.get());
+    BOOST_CHECK_CLOSE(rv, 0.5, 0.001);
 
 }
 

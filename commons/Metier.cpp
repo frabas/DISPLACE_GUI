@@ -63,7 +63,12 @@ Metier::~Metier()
 int Metier::get_name()
 {
 
-	return(name);
+    return(name);
+}
+
+void Metier::set_name(int name)
+{
+    Metier::name = name;
 }
 
 

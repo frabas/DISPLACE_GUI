@@ -62,6 +62,7 @@ class Metier
             vector<int> _metier_target_stocks);
 		~Metier();
 		int get_name();
+        void set_name(int name);
 		int get_metier_type();
 		double get_target_factor();
 		vector<double> get_selectivity_ogive();

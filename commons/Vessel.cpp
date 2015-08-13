@@ -3620,32 +3620,42 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
     if(this->get_targeting_non_tac_pop_only())
         still_some_quotas=1;
 
-	if(still_some_quotas)
+    if( still_some_quotas)
 	{
 
 		// PBLE HERE FOR THE USE OF THE DECISION TREE: WHICH TIMING SHOULD WE USE?
-		// i.e. at which frequency should we make this decision??
+        // take the decision to go once a day and at 7 a.m.
 
 		// read the vessel-specific decision tree
 		// (binary tree only, no/low/bad is 0 and yes/high/good is 1)
         if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::GoFishing))
 		{
 
-            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
-            double the_value = traverseDtree(tstep, tree.get());
-            //cout <<"the value returned by traverseDtree is "<< the_value << endl;
+            if((tstep % 24)==7)
+            {
+               boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+               double the_value = traverseDtree(tstep, tree.get());
+               //cout <<"the value returned by traverseDtree is "<< the_value << endl;
 
-        // draw a random number [0,1) and compare with the value
+               // draw a random number [0,1) and compare with the value
 
-            //GO!
-            if(unif_rand()<the_value) {
-                unlock();
-                return(1);
-            } else {
-                unlock();
-                return(0);		 // DONT GO!
+               if(unif_rand()<the_value) {
+                   unlock();     // GO!
+                   return(1);
+               } else {
+                   unlock();
+                   return(0);	  // DON'T GO!
+               }
+
             }
-		}
+            else
+            {
+              unlock();
+              return(0);		  // DON'T DECIDE NOW!
+            }
+
+
+        }
 		else
 		{
 

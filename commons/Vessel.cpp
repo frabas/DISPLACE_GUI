@@ -129,7 +129,7 @@ private:
 public:
     VesselNbOfDaysAtSeaSoFarIsStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          return vessel->get_timeatsea() > 5  ? 1.0 : 0.0; //0: ; 1:
+          return vessel->get_timeatsea() > 5*24  ? 1.0 : 0.0; //0:<5days ; 1:><5days
         }
 };
 

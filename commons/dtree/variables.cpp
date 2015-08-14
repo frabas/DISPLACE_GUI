@@ -81,7 +81,7 @@ const char *const VariableNames::bins[][40] = {
     { "still ok", "fulfilled",0 },
     { "still ok", "low",0 },
     { "true", "false",0 },
-    { ">5", ">14",0 },  //or  {"short", "long" },
+    { "<5days", ">5days",0 },  //or  {"short", "long" },
 //    { "low", "medium", "large",0 }, // or { "<5knots", "5-10knots", ">10knots" },
 
 

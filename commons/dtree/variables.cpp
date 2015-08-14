@@ -16,7 +16,6 @@ const char *const VariableNames::names[] = {
     "windSpeedIs",                // goFishing
     "fishPriceTargetStockIs",      // goFishing
     "fuelPriceIs",                  // goFishing
-    "remainingQuotaTargetStockIs",     // goFishing
     "todayIs",                      // goFishing
 
     "highPotentialCatch",          // ChooseGround
@@ -59,8 +58,7 @@ const char *const VariableNames::bins[][40] = {
     {  "below av.", "above av.",0 },      //lastTripRevenueIs
     { "low", "medium", "large",0 }, // or { "<5knots", "5-10knots", ">10knots" },
     { "low","medium", "high",0 },
-    { "low", "medium", "high",0 },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targetted stock(s)
-    { "low", "high",0 },
+    { "low", "medium", "high",0 },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targeted stock(s)
     { "week start", "week ending",0 },
 
 

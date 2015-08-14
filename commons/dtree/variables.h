@@ -15,7 +15,6 @@ enum Variable {
     windSpeedIs,                // goFishing
     fishPriceTargetStockIs,      // goFishing
     fuelPriceIs,                  // goFishing
-    remainingQuotaTargetStockIs,    // goFishing
     todayIs,                      // goFishing
 
     highPotentialCatch,          // ChooseGround
@@ -37,7 +36,7 @@ enum Variable {
     fuelTankIs, // StopFishing
     endOfTheDayIs, // StopFishing
     nbOfDaysAtSeaSoFarIs, // StopFishing
-    weatherIs, // StopFishing
+//    windSpeedIs, // goFishing and StopFishing
 
     distanceToPortIs,   // ChoosePort
     fuelPriceInPortIs,     // ChoosePort

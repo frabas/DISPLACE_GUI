@@ -18,10 +18,12 @@ const char *const VariableNames::names[] = {
     "fuelPriceIs",                  // goFishing
     "todayIs",                      // goFishing
 
+    "smartCatch",                  // ChooseGround
     "highPotentialCatch",          // ChooseGround
-    "knowledgeOfThisGround",          // ChooseGround
-    "lastTripThisGroundWas",          // ChooseGround
-    "riskOfBycatchIs",          // ChooseGround
+    "notThatFar",                  // ChooseGround
+    "knowledgeOfThisGround",       // ChooseGround
+    "lastTripThisGroundWas",       // ChooseGround
+    "riskOfBycatchIs",             // ChooseGround
 
 
     "arrivedOnGroundIs",    // StartFishing
@@ -62,10 +64,12 @@ const char *const VariableNames::bins[][40] = {
     { "week start", "week ending",0 },
 
 
-    { "not expected", "expected",0 },
-    { "bad", "good",0 },
-    { "bad", "good",0 },
-    { "low", "high",0 },
+    { "yes", "no",0 },
+    { "yes", "no",0 },
+    { "yes", "no",0 },
+    { "yes", "no",0 },
+    { "yes", "no",0 },
+    { "yes", "no",0 },
 
     { "false", "true",0 },
     { "false", "true",0 },

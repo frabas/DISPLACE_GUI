@@ -17,10 +17,12 @@ enum Variable {
     fuelPriceIs,                  // goFishing
     todayIs,                      // goFishing
 
-    highPotentialCatch,          // ChooseGround
+    smartCatch,                     // ChooseGround
+    highPotentialCatch,             // ChooseGround
     knowledgeOfThisGround,          // ChooseGround
+    notThatFar,                     // ChooseGround
     lastTripThisGroundWas,          // ChooseGround
-    riskOfBycatchIs,          // ChooseGround
+    riskOfBycatchIs,                // ChooseGround
 
 
     arrivedOnGroundIs,    // StartFishing

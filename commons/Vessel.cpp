@@ -2939,7 +2939,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 			freq_profit);
 	}
 
-	// ********realloc among the 3 more used grounds to save 20%*******//
+    // ********realloc among the 3 more used grounds to save 20%*******//
     if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
 	{
 
@@ -2959,7 +2959,10 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 		}
 
 	}
-	// ****************closer_grounds**********************************//
+
+
+
+    // ****************closer_grounds**********************************//
     if (dyn_alloc_sce.option(Options::loser_grounds))		 // dyn sce.
 	{
 		this->alloc_on_closer_grounds(tstep,
@@ -3698,14 +3701,31 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
 }
 
 
+
+
+
+
 int Vessel::should_i_choose_this_ground(map<string,int>& external_states, bool use_the_tree)
 {
     UNUSED(external_states);
 
-	if(use_the_tree)
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround))
 	{
 		// TO DO
-	}
+         // 1. shuffle grounds of that vessel
+         // 2. traverseTree for each possible ground (??: is this realistic??)
+         // evaluators should evaluate propension of individual to mix strategies:
+         // e.g.
+
+            //"smartCatch",          // ChooseGround             => find if that ground is relvant according to something like alloc_on_high_profit_grounds
+            //"highPotentialCatch",          // ChooseGround     => find if that ground is relvant according to something like alloc_on_high_previous_cpue
+            //"notThatFar",          // ChooseGround             => alloc_on_closer_grounds
+            //"knowledgeOfThisGround",          // ChooseGround  => TO DO: look at the historic proba of visiting the grounds
+            //"lastTripThisGroundWas",          // ChooseGround  => TO DO: looking at the gain from last trip on that ground
+            //"riskOfBycatchIs",          // ChooseGround        => TO DO: looking at the proportion on sites of juveniles or other non-targeted species
+
+
+    }
 	else
 	{
 

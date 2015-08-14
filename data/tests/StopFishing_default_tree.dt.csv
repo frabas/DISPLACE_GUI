@@ -1,0 +1,16 @@
+#TreeVersion: 6
+#TreeType: StopFishing
+# id,variable,posx,posy,nchld,children...,value
+0,vesselSizeIs,2435,2306,5,1,0,,0,2,1,,1,,1,0
+1,catchVolumeIs,2225,2393,2,3,0,4,1,0
+2,catchVolumeIs,2573,2404,2,5,0,6,1,0
+3,fuelTankIs,2227,2484,2,7,0,8,1,0
+4,probability,2329,2470,0,1
+5,fuelTankIs,2573,2515,2,9,0,10,1,0
+6,probability,2679,2486,0,1
+7,endOfTheDayIs,2227,2584,2,11,0,12,1,0
+8,probability,2340,2572,0,1
+9,probability,2496,2599,0,0
+10,probability,2696,2599,0,1
+11,probability,2183,2683,0,1
+12,probability,2342,2680,0,0

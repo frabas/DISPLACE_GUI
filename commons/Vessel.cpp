@@ -122,6 +122,17 @@ public:
 };
 
 
+class VesselEndOfTheDayIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselEndOfTheDayIsStateEvaluatorStateEvaluator() {}
+    double evaluate(int tstep, Vessel *) const {
+          return (tstep % 24)>18  ? 1.0 : 0.0; // return for daily trip after 6 p.m.
+        }
+};
+
+
+
 
 
 
@@ -284,35 +295,6 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
         mLengthClassId = Over40;
     }
 
-	//  set of decision trees by default (from the questionnaire)
-	// principle of the encodage:
-	//  no/low/bad on the left branch
-	//  yes/high/good on the right branch
-	// the  trick: use iteratively split() on those strings
-	// and keep left or right branch at each step depending on the state values
-	// the reading_direction give the order for splitting.
-#if 0
-	decision_tree_for_go_fishing="0.0 last_trip_was 0.3 weather_is 0.5 fish_price_is 0.2 last_trip_was 0.8 remaining_quota_is 0.9";
-	decision_tree_for_choose_ground="0.3 high_potential_catch 0.4 last_trip_on_the_ground 0.99";
-	decision_tree_for_start_fishing="0.2 fish_detection_with_echosounder 0.4 arrived_on_the_ground 0.9 bycatch_risk 0.2 suitable_bottom_detection 0.8";
-	decision_tree_for_change_ground="0.6 feeling_for_higher_catches_elsewhere 0.8" ;
-	decision_tree_for_stop_fishing="0.6 catch_volume 0.95" ;
-	decision_tree_for_choose_port="0.5 fish_price 0.95 distance_to_port 0.1 fish_price 0.5";
-	reading_direction_go_fishing.push_back(" fish_price_is ");
-	reading_direction_go_fishing.push_back(" weather_is ");
-	reading_direction_go_fishing.push_back(" remaining_quota_is ");
-	reading_direction_go_fishing.push_back(" last_trip_was ");
-	reading_direction_choose_ground.push_back(" high_potential_catch ");
-	reading_direction_choose_ground.push_back(" last_trip_on_the_ground ");
-	reading_direction_start_fishing.push_back(" arrived_on_the_ground ");
-	reading_direction_start_fishing.push_back(" fish_detection_with_echosounder ");
-	reading_direction_start_fishing.push_back(" bycatch_risk ");
-	reading_direction_start_fishing.push_back(" suitable_bottom_detection ");
-	reading_direction_change_ground.push_back(" feeling_for_higher_catches_elsewhere ");
-	reading_direction_stop_fishing.push_back(" catch_volume ");
-	reading_direction_choose_port.push_back(" distance_to_port ");
-	reading_direction_choose_port.push_back(" fish_price ");
-#endif
 
     dout(cout <<"vessel creator...OK" << endl);
     init();
@@ -355,6 +337,8 @@ void Vessel::init()
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselCatchVolumeStateEvaluator);
         mStateEvaluators[dtree::nbOfDaysAtSeaSoFarIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNbOfDaysAtSeaSoFarIsStateEvaluator);
+        mStateEvaluators[dtree::endOfTheDayIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
 
 
 

@@ -3714,15 +3714,49 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree)
 int Vessel::should_i_choose_this_ground(int tstep)
 {
 
-        // 1. shuffle grounds of that vessel
+        boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
+
+        // 1. Shuffle grounds of that vessel
         vector <int> grds= this->get_fgrounds();
         random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
 
-        // 2. traverseDTree for each possible ground (??: is this realistic??)
+        // 2. Pre-computing of the variable all grds together
+        // (if the variable in the tree, and if this variable need computing from all grounds altogether)
+        // e.g. for smartCatch or highPotentialCatch
+        // TO DO...
+        /*
+        if(smartCatch is in tree)
+        {
+            vector<int> expected_profit_per_ground = this->compute_expected_profit_per_ground();
+            smartCatchGround = *max_element(expected_profit_per_ground.begin(), expected_profit_per_ground.end());
+            //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
+        }
+
+        if(highPotentialCatch is in tree)
+        {
+            vector<int> expected_cpue_per_ground = this->compute_expected_cpue_per_ground();
+            highPotentialCatchGround = *max_element(expected_cpue_per_ground.begin(), expected_cpue_per_ground.end());
+        }
+
+        if(notThatFar is in tree)
+        {
+            vector<int> distance_to_grounds = this->compute_distance_to_grounds();
+            notThatFar = *min_element(distance_to_grounds.begin(), distance_to_grounds.end());
+        }
+
+        if(saveFuel is in tree)
+        {
+            vector<int> fuel_to_grounds = this->compute_fuel_to_grounds();
+            notThatFar = *min_element(fuel_to_grounds.begin(), fuel_to_grounds.end());
+
+        }
+        */
+
+        // 3. traverseDTree for each possible ground (??: is this realistic??)
         int ground=-1;
         for (int it=0; it < grds.size(); ++it){
             ground=grds.at(it);
-            // evaluators should evaluate propension of individual to mix strategies:
+            // evaluators should evaluate if yes/no the ground a smartCatch ground etc.:
          // e.g.
 
             //"smartCatch",          // ChooseGround             => find if that ground is relvant according to something like alloc_on_high_profit_grounds
@@ -3733,7 +3767,8 @@ int Vessel::should_i_choose_this_ground(int tstep)
             //"riskOfBycatchIs",          // ChooseGround        => TO DO: looking at the proportion on sites of juveniles or other non-targeted species
             //"saveFuel"                 // ChooseGround         => find if that ground is relvant according to something like alloc_while_saving_fuel
             //"complyToAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
-            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
+            //=> TO DO: add the corresponding dtree evaluators...
+
             double the_value = traverseDtree(tstep, tree.get());
 
 

@@ -3,7 +3,7 @@ CONFIG+=ordered unit-test
 SUBDIRS+=commons qtcommons QMapControl qtgui simulator dteditor tseditor
 
 unit-test {
-#    SUBDIRS += tests
+    SUBDIRS += tests
 }
 
 !unit-test {

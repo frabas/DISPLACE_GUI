@@ -278,7 +278,7 @@ public:
             const deque<map<vertex_t, vertex_t> > &path_shop,
             const deque<map<vertex_t, weight_t> > &min_distance_shop,
             ofstream& freq_distance);
-        void choose_a_ground_and_go_fishing(int tstep,
+        void choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
             const vector <int>& idx_path_shop,
@@ -330,9 +330,9 @@ public:
             );
         void which_metier_should_i_go_for(vector <Metier*>& metiers);
                                  //yes:1; no=0
-        int should_i_go_fishing(int tstep, map<string, int>& external_states, bool use_the_tree);
+        int should_i_go_fishing(int tstep, bool use_the_tree);
 		int should_i_start_fishing(map<string, int>& external_states, bool use_the_tree);
-		int should_i_choose_this_ground(map<string, int>& external_states, bool use_the_tree);
+        int should_i_choose_this_ground(int tstep);
 		int should_i_change_ground(map<string, int>& external_states, bool use_the_tree);
 								 //yes:1; no=0
         int should_i_stop_fishing(const map<string, int> &external_states, bool use_the_tree,

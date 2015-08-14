@@ -154,15 +154,9 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // the metier should help informing to which fish price time series the vessel will be look at
                 // if a decision on the fish price is used in the GoFishing dtree...
                 // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
-                // TO DO....
 
                 // ***************make a dtree decision****************************
-                map<string,int> external_states_relevant_for_going_fishing;
-                external_states_relevant_for_going_fishing.insert(make_pair(" fish_price_is ",1));
-                external_states_relevant_for_going_fishing.insert(make_pair(" weather_is ",0));
-                //if(tstep % 24 ==7){ // frequency of the decision e.g. every 7 a.m
-                int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep,
-                    external_states_relevant_for_going_fishing, use_dtrees);
+                int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep, use_dtrees);
                 //}
                 // ***************implement a decision*****************************
                 if(go_fishing)
@@ -171,7 +165,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     //go fishing
                     outc(cout  << "GO FISHING" << endl);
                     vessels[ index_v ]->choose_a_ground_and_go_fishing(
-                        tstep,
+                        tstep, use_dtrees,
                         dyn_alloc_sce, create_a_path_shop,
                         idx_path_shop, path_shop, min_distance_shop,
                         adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,

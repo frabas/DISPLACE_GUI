@@ -23,7 +23,8 @@ enum Variable {
     notThatFar,                     // ChooseGround
     lastTripThisGroundWas,          // ChooseGround
     riskOfBycatchIs,                // ChooseGround
-
+    saveFuel,                       // ChooseGround
+    complyToAreaClosure,            // ChooseGround
 
     arrivedOnGroundIs,    // StartFishing
     detectedWithEchosounderIs,    // StartFishing

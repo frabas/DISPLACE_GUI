@@ -24,6 +24,8 @@ const char *const VariableNames::names[] = {
     "knowledgeOfThisGround",       // ChooseGround
     "lastTripThisGroundWas",       // ChooseGround
     "riskOfBycatchIs",             // ChooseGround
+    "saveFuel",                    // ChooseGround
+    "complyToAreaClosure",          // ChooseGround
 
 
     "arrivedOnGroundIs",    // StartFishing
@@ -64,6 +66,8 @@ const char *const VariableNames::bins[][40] = {
     { "week start", "week ending",0 },
 
 
+    { "yes", "no",0 },
+    { "yes", "no",0 },
     { "yes", "no",0 },
     { "yes", "no",0 },
     { "yes", "no",0 },

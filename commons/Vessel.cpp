@@ -2891,7 +2891,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
 
 
-void Vessel::choose_a_ground_and_go_fishing(int tstep,
+void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
         const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
         const vector<int> &idx_path_shop,
@@ -2920,183 +2920,190 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep,
 	// choose the ground, dyn sce. vs. baseline
 	int ground;
 
-	// ************focus_on_high_previous_cpue********************//
-    if (dyn_alloc_sce.option(Options::focus_on_high_previous_cpue))
-	{
+
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
+
+        ground=this->should_i_choose_this_ground(tstep); // use ChooseGround dtree along all possible grounds to define the next ground
+        if(ground==-1) cout << "Bad probabilities defined in the ChooseGround dtree...need a revision" << endl;
+
+    } else{
+
+       // ************focus_on_high_previous_cpue********************//
+       if (dyn_alloc_sce.option(Options::focus_on_high_previous_cpue))
+       {
 
 		this->alloc_on_high_previous_cpue(tstep,
 			freq_cpue);
-	}
+       }
 
-	// ************focus_on_high_profit_grounds********************//
-    if (dyn_alloc_sce.option(Options::focus_on_high_profit_grounds))
-	{
+       // ************focus_on_high_profit_grounds********************//
+       if (dyn_alloc_sce.option(Options::focus_on_high_profit_grounds))
+       {
 
 		this->alloc_on_high_profit_grounds(tstep,
 			idx_path_shop,
 			path_shop,
 			min_distance_shop,
 			freq_profit);
-	}
+       }
 
-    // ********realloc among the 3 more used grounds to save 20%*******//
-    if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
-	{
+       // ********realloc among the 3 more used grounds to save 20%*******//
+       if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
+       {
 
-		// update freq only if starting from a port different from the last one.
-		int from = this->get_loc()->get_idx_node();
-		if(from!=this->get_previous_harbour_idx())
-		{
+           // update freq only if starting from a port different from the last one.
+           int from = this->get_loc()->get_idx_node();
+           if(from!=this->get_previous_harbour_idx())
+           {
 
 			this->alloc_while_saving_fuel(tstep,
 				idx_path_shop,
 				path_shop,
 				min_distance_shop);
-		}
-		else
-		{
+           }
+           else
+           {
             dout(cout  << "not looking for more saving here..." << endl);
-		}
+           }
 
-	}
+       }
 
 
-
-    // ****************closer_grounds**********************************//
-    if (dyn_alloc_sce.option(Options::loser_grounds))		 // dyn sce.
-	{
+       // ****************closer_grounds**********************************//
+       if (dyn_alloc_sce.option(Options::loser_grounds))		 // dyn sce.
+       {
 		this->alloc_on_closer_grounds(tstep,
 			idx_path_shop,
 			path_shop,
 			min_distance_shop,
 			freq_distance);
-	}
+       }
 
-	// ****************area_closure**********************************//
-    if (dyn_alloc_sce.option(Options::area_closure))		 // area-based sce
-	{
+       // ****************area_closure**********************************//
+       if (dyn_alloc_sce.option(Options::area_closure))		 // area-based sce
+       {
 		this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
 		// compliance => 0.0001
-	}
+       }
 
-	// then, draw a ground from the frequencies (altered or not)...
-    vector <double> freq_grds = this->get_freq_fgrounds();
+       // then, draw a ground from the frequencies (altered or not)...
+       vector <double> freq_grds = this->get_freq_fgrounds();
 								 // need to convert in array, see myRutils.cpp
-	vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
-	ground=grounds[0];
-	//random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
-	//int ground=grds[0];
-    dout(cout  << "GO FISHING ON " << ground << endl);
-	// get the shortest path between source and destination
-	// with the list of intermediate nodes
-	int from = this->get_loc()->get_idx_node();
-	this->set_previous_harbour_idx(from);
+       vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
+       ground=grounds[0];
+       }
 
-	if(!create_a_path_shop)
-	{
+
+
+       //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
+       //int ground=grds[0];
+       dout(cout  << "GO FISHING ON " << ground << endl);
+       // get the shortest path between source and destination
+       // with the list of intermediate nodes
+       int from = this->get_loc()->get_idx_node();
+       this->set_previous_harbour_idx(from);
+
+       if(!create_a_path_shop)
+       {
 		min_distance.clear();
 		previous.clear();
 								 // from the source to all nodes
 		DijkstraComputePaths(from, adjacency_map, min_distance, previous, relevant_nodes);
-	}
-	else						 // replaced by:
-	{
+       }
+       else						 // replaced by:
+       {
         vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
 								 // tricky!
 		int idx = it - idx_path_shop.begin();
 
 		previous=path_shop.at(idx);
 		min_distance=min_distance_shop.at(idx);
+       }
+       vertex_t vx = ground;		 // destination
+       dout(cout  << "distance to fishing ground " << vertex_names[vx] << ": " << min_distance[vx] << endl);
 
-	}
-	vertex_t vx = ground;		 // destination
-    dout(cout  << "distance to fishing ground " << vertex_names[vx] << ": " << min_distance[vx] << endl);
-
-	// check for area_closure
-    if (dyn_alloc_sce.option(Options::area_closure) )
-	{
+       // check for area_closure
+       if (dyn_alloc_sce.option(Options::area_closure) )
+       {
 		vector<int> polygons;
 		vector<int> polygon_nodes;
 		for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-		{
+           {
 			// all values across the keys
 			polygons.push_back(pos->first);
 			polygon_nodes.push_back(pos->second);
             dout(cout  << " a polygon node is " << pos->second << endl);
-		}
+           }
 		sort (polygon_nodes.begin(), polygon_nodes.end());
 
 		if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), ground))
-		{
+           {
             dout(cout  << "this node " << ground << " is actually within a closed area!!!" << endl);
-		}
-	}
+           }
+       }
 
-	list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
-	if(path.size()>1)			 // i.e no path has been found if path.size()==1...
-	{
-		path.pop_front();		 // delete the first node (departure) because we are lying in...
-		this->set_roadmap(path);
-		min_distance.clear();
-		previous.clear();
-		// show the roadmap
-		list<vertex_t> road= this->get_roadmap();
-		list<vertex_t>::iterator road_iter = road.begin();
+       list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
+       if(path.size()>1)			 // i.e no path has been found if path.size()==1...
+       {
+           path.pop_front();		 // delete the first node (departure) because we are lying in...
+           this->set_roadmap(path);
+           min_distance.clear();
+           previous.clear();
+           // show the roadmap
+           list<vertex_t> road= this->get_roadmap();
+           list<vertex_t>::iterator road_iter = road.begin();
 
-		// check path
-        //    dout(cout << "path: ");
-		//    for( ; road_iter != road.end(); road_iter++)
-		//    {
-        //       dout(cout << vertex_names[*road_iter] << " " );
-		//    }
-        //    dout(cout << endl);
+           // check path
+           //    dout(cout << "path: ");
+           //    for( ; road_iter != road.end(); road_iter++)
+           //    {
+           //       dout(cout << vertex_names[*road_iter] << " " );
+           //    }
+           //    dout(cout << endl);
 
-		// then, call to find.next.pt.on.the.graph()
-        this-> find_next_point_on_the_graph_unlocked(nodes);
+           // then, call to find.next.pt.on.the.graph()
+           this-> find_next_point_on_the_graph_unlocked(nodes);
 
-		// decide on the rest duration for the next time (drawn from a gamma law)
-		double calib=1;
+           // decide on the rest duration for the next time (drawn from a gamma law)
+           double calib=1;
 
-        // only if a NOT a Swedish vessel
-        if (nationality != "SWE")
-            calib = 2;
 
-		double a_shape = this-> get_resttime_par1();
-		double a_scale = this-> get_resttime_par2()  *calib;
-        dout(cout  << "TIME FOR REST WHEN WE WILL BE AT PORT AFTER OUR TRIP"  << endl);
+           double a_shape = this-> get_resttime_par1();
+           double a_scale = this-> get_resttime_par2()  *calib;
+           dout(cout  << "TIME FOR REST WHEN WE WILL BE AT PORT AFTER OUR TRIP"  << endl);
 
-		this-> set_timeforrest( rgamma(a_shape, a_scale) );
-		// set inactive
-		this-> set_inactive(false);
-		// set vessel nationality
-        this-> set_natio(true);
+           this-> set_timeforrest( rgamma(a_shape, a_scale) );
+           // set inactive
+           this-> set_inactive(false);
+           // set vessel nationality
+           this-> set_natio(true);
 
-		// for this vessel, select the metier specific to this particular fishing ground
-		// according to the observed frequency in data
-        // (NOTE THAT, FINALLY, THE METIER CAN BE DIFFERENT FROM THE ONE FROM which_metier_should_i_go_for() )
-        const multimap<int, int> &poss_met        = this->get_possible_metiers();
-        const multimap<int, double> &freq_poss_met= this->get_freq_possible_metiers();
-		vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
-		vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
+           // for this vessel, select the metier specific to this particular fishing ground
+           // according to the observed frequency in data
+           // (NOTE THAT, FINALLY, THE METIER CAN BE DIFFERENT FROM THE ONE FROM which_metier_should_i_go_for() )
+           const multimap<int, int> &poss_met        = this->get_possible_metiers();
+           const multimap<int, double> &freq_poss_met= this->get_freq_possible_metiers();
+           vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
+           vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
 								 // need to convert in array, see myRutils.cpp
-		vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
-		this->set_metier(  metiers[ a_met[0] ]  );
-		//random_shuffle(metiers_on_grd.begin(),metiers_on_grd.end()); // random permutation i.e. equal frequency of occurence
-		//this->set_metier(  metiers[ metiers_on_grd[0] ]  );
+           vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+           this->set_metier(  metiers[ a_met[0] ]  );
+           //random_shuffle(metiers_on_grd.begin(),metiers_on_grd.end()); // random permutation i.e. equal frequency of occurence
+           //this->set_metier(  metiers[ metiers_on_grd[0] ]  );
 
-		// make a pause and check...
-        // dout(cout <<  a_met[0] << " name: " << this->get_metier()->get_name() << endl);
-		// int a;
-        //dout(cout  << "Pause: type a number to continue");
-		//cin >> a;
+           // make a pause and check...
+           // dout(cout <<  a_met[0] << " name: " << this->get_metier()->get_name() << endl);
+           // int a;
+           //dout(cout  << "Pause: type a number to continue");
+           //cin >> a;
 
-	}
-	else
-	{
-        outc(cout << "pble calculating from " << from << " to " << ground << endl);
-        this->move_to(nodes.at(from)) ;
-        // no path found: assume the vessel stucks at its current location
-    }
+       }
+       else
+       {
+           outc(cout << "pble calculating from " << from << " to " << ground << endl);
+           this->move_to(nodes.at(from)) ;
+           // no path found: assume the vessel stucks at its current location
+       }
 
 }
 
@@ -3610,9 +3617,8 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, bool use_the_tree)
+int Vessel::should_i_go_fishing(int tstep, bool use_the_tree)
 {
-    UNUSED(external_states);
 
     lock();
 
@@ -3705,16 +3711,18 @@ int Vessel::should_i_go_fishing(int tstep, map<string,int>& external_states, boo
 
 
 
-int Vessel::should_i_choose_this_ground(map<string,int>& external_states, bool use_the_tree)
+int Vessel::should_i_choose_this_ground(int tstep)
 {
-    UNUSED(external_states);
 
-    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround))
-	{
-		// TO DO
-         // 1. shuffle grounds of that vessel
-         // 2. traverseTree for each possible ground (??: is this realistic??)
-         // evaluators should evaluate propension of individual to mix strategies:
+        // 1. shuffle grounds of that vessel
+        vector <int> grds= this->get_fgrounds();
+        random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
+
+        // 2. traverseDTree for each possible ground (??: is this realistic??)
+        int ground=-1;
+        for (int it=0; it < grds.size(); ++it){
+            ground=grds.at(it);
+            // evaluators should evaluate propension of individual to mix strategies:
          // e.g.
 
             //"smartCatch",          // ChooseGround             => find if that ground is relvant according to something like alloc_on_high_profit_grounds
@@ -3723,16 +3731,24 @@ int Vessel::should_i_choose_this_ground(map<string,int>& external_states, bool u
             //"knowledgeOfThisGround",          // ChooseGround  => TO DO: look at the historic proba of visiting the grounds
             //"lastTripThisGroundWas",          // ChooseGround  => TO DO: looking at the gain from last trip on that ground
             //"riskOfBycatchIs",          // ChooseGround        => TO DO: looking at the proportion on sites of juveniles or other non-targeted species
+            //"saveFuel"                 // ChooseGround         => find if that ground is relvant according to something like alloc_while_saving_fuel
+            //"complyToAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
+            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
+            double the_value = traverseDtree(tstep, tree.get());
 
 
-    }
-	else
-	{
+            //CHOOSE THAT GROUND!
+            if(unif_rand()<the_value) {
+                unlock();
+                return(ground);
+            }
+            //  else // CONTINUE SEARCHING GROUND
 
-		// DEFAULT-------------------------
-	}
+        }
 
-    return 0;
+
+ return(-1);
+
 }
 
 

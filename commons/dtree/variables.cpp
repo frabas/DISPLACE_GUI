@@ -61,7 +61,7 @@ const char *const VariableNames::bins[][40] = {
     { "low","medium", "high",0 },
     { "low", "medium", "high",0 },  // fishPriceTargetStockIs a difficult one which requires an extra info to link metier names to targetted stock(s)
     { "low", "high",0 },
-    { "ongoing", "ending",0 },
+    { "week start", "week ending",0 },
 
 
     { "not expected", "expected",0 },

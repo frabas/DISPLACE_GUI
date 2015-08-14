@@ -88,6 +88,18 @@ public:
     }
 };
 
+
+class VesselTodayIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselTodayIsStateEvaluator() {}
+    double evaluate(int tstep, Vessel *) const {
+          return (tstep % 168)>72  ? 1.0 : 0.0; // 24*7=168; 3 first days is 72h //0: "week start" node; 1: "week ending"
+        }
+};
+
+
+
 class VesselFuelTankStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
@@ -125,7 +137,7 @@ public:
 class VesselEndOfTheDayIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
-    VesselEndOfTheDayIsStateEvaluatorStateEvaluator() {}
+    VesselEndOfTheDayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *) const {
           return (tstep % 24)<18  ? 1.0 : 0.0; // return for daily trip after 6 p.m. //0: "true" node; 1: "false"
         }
@@ -329,6 +341,8 @@ void Vessel::init()
         mStateEvaluators[dtree::fuelPriceIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
         mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
         mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
+        mStateEvaluators[dtree::todayIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
 
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =

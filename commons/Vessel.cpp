@@ -93,7 +93,7 @@ private:
 public:
     VesselFuelTankStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          return vessel->get_cumfuelcons() > (vessel->get_tankcapacity()*0.5)  ? 1.0 : 0.0;
+          return vessel->get_cumfuelcons() > (vessel->get_tankcapacity()*0.5)  ? 1.0 : 0.0; //0: "still ok" node; 1: "low"
           //  a more complicated alternative require computing (all) distance to ports:
           //  return (	vessel->get_tankcapacity() - vessel->get_cumfuelcons()
           //          < ( (a_min_dist /(vessel->get_speed() * NAUTIC)) * vessel->get_fuelcons()*vessel->get_mult_fuelcons_when_steaming() );
@@ -107,7 +107,7 @@ private:
 public:
     VesselCatchVolumeStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          return vessel->get_cumcatches() > (vessel->get_carrycapacity() *0.5)  ? 1.0 : 0.0;
+          return vessel->get_cumcatches() > (vessel->get_carrycapacity() *0.5)  ? 1.0 : 0.0; //0: "still ok" node; 1: "fullfilled"
         }
 };
 
@@ -117,7 +117,7 @@ private:
 public:
     VesselNbOfDaysAtSeaSoFarIsStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-          return vessel->get_timeatsea() > 5  ? 1.0 : 0.0;
+          return vessel->get_timeatsea() > 5  ? 1.0 : 0.0; //0: ; 1:
         }
 };
 
@@ -127,7 +127,7 @@ private:
 public:
     VesselEndOfTheDayIsStateEvaluatorStateEvaluator() {}
     double evaluate(int tstep, Vessel *) const {
-          return (tstep % 24)>18  ? 1.0 : 0.0; // return for daily trip after 6 p.m.
+          return (tstep % 24)<18  ? 1.0 : 0.0; // return for daily trip after 6 p.m. //0: "true" node; 1: "false"
         }
 };
 

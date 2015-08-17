@@ -108,6 +108,8 @@ class Vessel
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
+        int smartcatch;
+
         pthread_mutex_t mutex;
 
 protected:
@@ -190,6 +192,7 @@ public:
 	    double get_mult_fuelcons_when_returning() const;
 	    double get_mult_fuelcons_when_inactive() const;		
 		double get_cumcatches() const;
+        int get_smartcatch() const;
         const vector<vector<double> > &get_gshape_cpue_nodes_species() const;
         const vector<vector<double> > &get_gscale_cpue_nodes_species() const;
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
@@ -234,7 +237,8 @@ public:
 		void set_inharbour (bool logic);
 		void set_inactive (bool logic);
 		void set_natio (bool logic);
-		void set_state (int _state);
+        void set_smartcatch (int smartcatch);
+        void set_state (int _state);
 		void set_previous_harbour_idx (int previous_harbour_idx);
 		void set_reason_to_go_back (int _reason_to_go_back);
 		void set_tstep_dep (int _tstep);
@@ -270,6 +274,10 @@ public:
             const deque<map<vertex_t, vertex_t> > &path_shop,
             const deque<map<vertex_t, weight_t> > &min_distance_shop,
             ofstream& freq_profit);
+        vector<double> expected_profit_on_grounds(const vector<int> &idx_path_shop,
+            const deque<map<vertex_t, vertex_t> > &path_shop,
+            const deque<map<vertex_t, weight_t> > &min_distance_shop
+            );
         void alloc_while_saving_fuel(int tstep, const vector<int> &idx_path_shop,
             const deque<map<vertex_t, vertex_t> > &path_shop,
             const deque<map<vertex_t, weight_t> > &min_distance_shop
@@ -332,7 +340,9 @@ public:
                                  //yes:1; no=0
         int should_i_go_fishing(int tstep, bool use_the_tree);
 		int should_i_start_fishing(map<string, int>& external_states, bool use_the_tree);
-        int should_i_choose_this_ground(int tstep);
+        int should_i_choose_this_ground(int tstep,  const vector <int>& idx_path_shop,
+                                        const deque<map<vertex_t, vertex_t> >& path_shop,
+                                        const deque<map<vertex_t, weight_t> >& min_distance_shop);
 		int should_i_change_ground(map<string, int>& external_states, bool use_the_tree);
 								 //yes:1; no=0
         int should_i_stop_fishing(const map<string, int> &external_states, bool use_the_tree,

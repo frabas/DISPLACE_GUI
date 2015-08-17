@@ -145,6 +145,14 @@ public:
 
 
 
+class VesselSmartCatchStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselSmartCatchStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+          return  fground==v->get_smartcatch() ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
+        }
+};
 
 
 
@@ -353,6 +361,11 @@ void Vessel::init()
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNbOfDaysAtSeaSoFarIsStateEvaluator);
         mStateEvaluators[dtree::endOfTheDayIs] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
+
+
+        // chooseGround
+        mStateEvaluators[dtree::smartCatch] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSmartCatchStateEvaluator);
 
 
 
@@ -735,6 +748,10 @@ int Vessel::get_targeting_non_tac_pop_only () const
 	return(targeting_non_tac_pop_only);
 }
 
+int Vessel::get_smartcatch () const
+{
+    return(smartcatch);
+}
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -1254,6 +1271,12 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
 string Vessel::nationalityFromName(const string &name)
 {
     return name.substr(0, 3);
+}
+
+
+void Vessel::set_smartcatch(int _smartcatch)
+{
+     smartcatch=_smartcatch;
 }
 
 
@@ -2477,95 +2500,123 @@ ofstream& freq_cpue)
 }
 
 
+vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_shop,
+                                        const deque <map<vertex_t, vertex_t> >& path_shop,
+                                        const deque <map<vertex_t, weight_t> >& min_distance_shop)
+{
+    vector <double> freq_grds = this->get_freq_fgrounds();
+                                 // get_experiencedcpue_fgrounds_per_pop is scaled to 1
+    vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
+
+    vector <double> revenue_per_fgrounds(freq_grds.size());
+    vector <double> fcost_per_fgrounds(freq_grds.size());
+    vector <double> scost_per_fgrounds(freq_grds.size());
+    vector <double> profit_per_fgrounds(freq_grds.size());
+
+    // distance to all grounds (through the graph...)
+    int from = this->get_loc()->get_idx_node();
+    vector<int> the_grounds = this->get_fgrounds();
+    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop,
+        path_shop, min_distance_shop, from, the_grounds);
+
+                                 // vsize
+    int length_class =this->get_length_class();
+
+    //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
+
+    for(unsigned int gr=0; gr<freq_grds.size(); gr++)
+    {
+        //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
+        cout << "...on this ground " << gr << endl;
+
+        //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
+        // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
+        //double a_sum=1;
+        //for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
+        //{
+        // a_sum += past_freq_cpue_grds_pops.at(gr).at(pop);
+        //}
+        for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
+        {
+            //if(tstep>1) dout(cout  << "...adding the pop " << pop << endl);
+
+            //revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop)/a_sum * // weighted average of cpues
+            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
+                this->get_carrycapacity() *
+                                 // choose the most valuable cat (but actually currently the first one is returned: to do)
+                this->get_loc()->get_prices_per_cat(pop, 0);
+
+            //if(tstep>1) dout(cout  <<  past_freq_cpue_grds_pops.at(gr).at(pop) << " * " << this->get_carrycapacity() << " * " << this->get_loc()->get_prices_per_cat(pop, 0) << endl);
+            //if(tstep>1) dout(cout  << "the expected revenue is now " << revenue_per_fgrounds.at(gr) << endl);
+        }
+        //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
+        cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
+
+        //2. compute the expected cost when steaming
+                                 // time given the shortest distance divided by the speed...
+        double time_for_steaming=0;
+                                 // *2 because WE NEED TO GO BACK TO PORT!
+        time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
+        //if(tstep>1) dout(cout << "the expected time to reach this ground is " << time_for_steaming << endl);
+        scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
+        //if(tstep>1) dout(cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl);
+        cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
+
+        //3. compute the expected cost when fishing
+        double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
+        double cpue_this_node = this->experiencedcpue_fgrounds.at(gr);
+        if(cpue_this_node!=0)
+        {
+            time_to_be_full_of_catches_if_infinite_fuel_tank = this->get_carrycapacity() / cpue_this_node;
+            //if(tstep>1) dout(cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl);
+        }
+        else
+        {
+            time_to_be_full_of_catches_if_infinite_fuel_tank = 100;
+        }
+
+        double time_for_fishing_given_fuel_tank= (this->get_tankcapacity() -
+            ( time_for_steaming * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming())) /
+            (this->get_fuelcons()) ;// (tank - expected tot fuelcons when steaming) / conso per hour when fishing
+        //if(tstep>1) dout(cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl);
+
+        double time_for_fishing= min(time_to_be_full_of_catches_if_infinite_fuel_tank, time_for_fishing_given_fuel_tank);
+        //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
+
+        fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons();
+        //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
+        cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
+
+        //4. then compute the expected profit for this ground
+        profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
+            scost_per_fgrounds.at(gr) -
+            fcost_per_fgrounds.at(gr);
+        //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
+        cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
+
+    }
+
+    return(profit_per_fgrounds);
+
+}
+
 void Vessel::alloc_on_high_profit_grounds(int tstep,
                                           const vector <int>& idx_path_shop,
                                           const deque <map<vertex_t, vertex_t> >& path_shop,
                                           const deque <map<vertex_t, weight_t> >& min_distance_shop,
                                           ofstream& freq_profit)
 {
-    UNUSED(tstep);
-    UNUSED(freq_profit);
-								 // input...
-	vector <double> freq_grds = this->get_freq_fgrounds();
-								 // get_experiencedcpue_fgrounds_per_pop is scaled to 1
-	vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
 
-	vector <double> revenue_per_fgrounds(freq_grds.size());
-	vector <double> fcost_per_fgrounds(freq_grds.size());
-	vector <double> scost_per_fgrounds(freq_grds.size());
-	vector <double> profit_per_fgrounds(freq_grds.size());
 
-	// distance to all grounds (through the graph...)
-	int from = this->get_loc()->get_idx_node();
-	vector<int> the_grounds = this->get_fgrounds();
-	vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop,
-		path_shop, min_distance_shop, from, the_grounds);
+    vector<double> profit_per_fgrounds = expected_profit_on_grounds(
+                                            idx_path_shop,
+                                            path_shop,
+                                            min_distance_shop);
 
-								 // vsize
-    int length_class =this->get_length_class();
 
-    //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
-
-    for(unsigned int gr=0; gr<freq_grds.size(); gr++)
-	{
-        //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
-
-		//1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
-		// and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
-        for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
-		{
-            //if(tstep>1) dout(cout  << "...adding the pop " << pop << endl);
-
-			revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) *
-				this->get_carrycapacity() *
-								 // choose the most valuable cat (but actually currently the first one is returned: to do)
-				this->get_loc()->get_prices_per_cat(pop, 0);
-
-            //if(tstep>1) dout(cout  <<  past_freq_cpue_grds_pops.at(gr).at(pop) << " * " << this->get_carrycapacity() << " * " << this->get_loc()->get_prices_per_cat(pop, 0) << endl);
-            //if(tstep>1) dout(cout  << "the expected revenue is now " << revenue_per_fgrounds.at(gr) << endl);
-		}
-        //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
-
-		//2. compute the expected cost when steaming
-								 // time given the shortest distance divided by the speed...
-		double time_for_steaming=0;
-								 // *2 because WE NEED TO GO BACK TO PORT!
-		time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
-        //if(tstep>1) dout(cout << "the expected time to reach this ground is " << time_for_steaming << endl);
-		scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();		
-        //if(tstep>1) dout(cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl);
-
-		//3. compute the expected cost when fishing
-		double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
-		double cpue_this_node = this->experiencedcpue_fgrounds.at(gr);
-		if(cpue_this_node!=0)
-		{
-			time_to_be_full_of_catches_if_infinite_fuel_tank = this->get_carrycapacity() / cpue_this_node;
-            //if(tstep>1) dout(cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl);
-		}
-		else
-		{
-			time_to_be_full_of_catches_if_infinite_fuel_tank = 100;
-		}
-
-		double time_for_fishing_given_fuel_tank= (this->get_tankcapacity() -
-			( time_for_steaming * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming())) /
-			(this->get_fuelcons()) ;// (tank - expected tot fuelcons when steaming) / conso per hour when fishing
-        //if(tstep>1) dout(cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl);
-
-		double time_for_fishing= min(time_to_be_full_of_catches_if_infinite_fuel_tank, time_for_fishing_given_fuel_tank);
-        //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
-
-		fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons();
-        //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
-
-		//4. then compute the expected profit for this ground
-		profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
-			scost_per_fgrounds.at(gr) -
-			fcost_per_fgrounds.at(gr);
-        //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
-
-	}
+    vector <double> freq_grds = this->get_freq_fgrounds();
+                                 // get_experiencedcpue_fgrounds_per_pop is scaled to 1
+    vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
 
     // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << endl);
 
@@ -2923,7 +2974,10 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
 
-        ground=this->should_i_choose_this_ground(tstep); // use ChooseGround dtree along all possible grounds to define the next ground
+        ground=this->should_i_choose_this_ground(tstep,
+                                                 idx_path_shop,
+                                                 path_shop,
+                                                 min_distance_shop); // use ChooseGround dtree along all possible grounds to define the next ground
         if(ground==-1) cout << "Bad probabilities defined in the ChooseGround dtree...need a revision" << endl;
 
     } else{
@@ -3711,28 +3765,36 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree)
 
 
 
-int Vessel::should_i_choose_this_ground(int tstep)
+int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_shop,
+                                        const deque<map<vertex_t, vertex_t> > &path_shop,
+                                        const deque<map<vertex_t, weight_t> > &min_distance_shop)
 {
 
         boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
-        // 1. Shuffle grounds of that vessel
+        // 1. grounds of that vessel
         vector <int> grds= this->get_fgrounds();
-        random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
 
         // 2. Pre-computing of the variable all grds together
         // (if the variable in the tree, and if this variable need computing from all grounds altogether)
         // e.g. for smartCatch or highPotentialCatch
         // TO DO...
-        /*
-        if(smartCatch is in tree)
-        {
-            vector<int> expected_profit_per_ground = this->compute_expected_profit_per_ground();
-            smartCatchGround = *max_element(expected_profit_per_ground.begin(), expected_profit_per_ground.end());
-            //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
-        }
 
-        if(highPotentialCatch is in tree)
+        //if(smartCatch is in tree)
+        //{
+            vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
+                                                                                      path_shop,
+                                                                                      min_distance_shop);
+            int idx = distance(expected_profit_per_ground.begin(),
+                                             max_element(expected_profit_per_ground.begin(), expected_profit_per_ground.end()));
+            int smartCatchGround = grds.at(idx);
+            cout << "smartCatchGround is " << smartCatchGround << endl;
+            this->set_smartcatch(smartCatchGround);
+            //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
+        //}
+
+        /*
+         if(highPotentialCatch is in tree)
         {
             vector<int> expected_cpue_per_ground = this->compute_expected_cpue_per_ground();
             highPotentialCatchGround = *max_element(expected_cpue_per_ground.begin(), expected_cpue_per_ground.end());
@@ -3750,10 +3812,19 @@ int Vessel::should_i_choose_this_ground(int tstep)
             notThatFar = *min_element(fuel_to_grounds.begin(), fuel_to_grounds.end());
 
         }
-        */
+        if(knowledgeOfThisGround is in tree)
+        {
+            vector<int> fuel_to_grounds = this->compute_fuel_to_grounds();
+            notThatFar = *min_element(fuel_to_grounds.begin(), fuel_to_grounds.end());
+
+        }
+
+
+       */
 
         // 3. traverseDTree for each possible ground (??: is this realistic??)
         int ground=-1;
+        random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
         for (int it=0; it < grds.size(); ++it){
             ground=grds.at(it);
             // evaluators should evaluate if yes/no the ground a smartCatch ground etc.:

@@ -2531,16 +2531,9 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
         //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
         // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
-        //double a_sum=1;
-        //for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
-        //{
-        // a_sum += past_freq_cpue_grds_pops.at(gr).at(pop);
-        //}
         for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
         {
             //if(tstep>1) dout(cout  << "...adding the pop " << pop << endl);
-
-            //revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop)/a_sum * // weighted average of cpues
             revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
                 this->get_carrycapacity() *
                                  // choose the most valuable cat (but actually currently the first one is returned: to do)
@@ -2583,7 +2576,7 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
         double time_for_fishing= min(time_to_be_full_of_catches_if_infinite_fuel_tank, time_for_fishing_given_fuel_tank);
         //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
 
-        fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons();
+        fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons()  *  this->get_mult_fuelcons_when_fishing();
         //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
         cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
 

@@ -155,6 +155,15 @@ public:
 };
 
 
+class VesselHighPotentialCatchStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselHighPotentialCatchStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+          return  fground==v->get_highpotentialcatch() ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
+        }
+};
+
 
 
 }
@@ -366,6 +375,8 @@ void Vessel::init()
         // chooseGround
         mStateEvaluators[dtree::smartCatch] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSmartCatchStateEvaluator);
+        mStateEvaluators[dtree::highPotentialCatch] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselHighPotentialCatchStateEvaluator);
 
 
 
@@ -752,6 +763,13 @@ int Vessel::get_smartcatch () const
 {
     return(smartcatch);
 }
+
+int Vessel::get_highpotentialcatch () const
+{
+    return(highpotentialcatch);
+}
+
+
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -1277,6 +1295,11 @@ string Vessel::nationalityFromName(const string &name)
 void Vessel::set_smartcatch(int _smartcatch)
 {
      smartcatch=_smartcatch;
+}
+
+void Vessel::set_highpotentialcatch(int _highpotentialcatch)
+{
+     highpotentialcatch=_highpotentialcatch;
 }
 
 
@@ -2527,7 +2550,6 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
     for(unsigned int gr=0; gr<freq_grds.size(); gr++)
     {
         //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
-        cout << "...on this ground " << gr << endl;
 
         //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
         // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
@@ -2543,7 +2565,6 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
             //if(tstep>1) dout(cout  << "the expected revenue is now " << revenue_per_fgrounds.at(gr) << endl);
         }
         //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
-        cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
 
         //2. compute the expected cost when steaming
                                  // time given the shortest distance divided by the speed...
@@ -2553,7 +2574,6 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
         //if(tstep>1) dout(cout << "the expected time to reach this ground is " << time_for_steaming << endl);
         scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
         //if(tstep>1) dout(cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl);
-        cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
 
         //3. compute the expected cost when fishing
         double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
@@ -2578,14 +2598,12 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
         fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons()  *  this->get_mult_fuelcons_when_fishing();
         //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
-        cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
 
         //4. then compute the expected profit for this ground
         profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
             scost_per_fgrounds.at(gr) -
             fcost_per_fgrounds.at(gr);
         //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
-        cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
 
     }
 
@@ -3765,6 +3783,8 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
 
         boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
+        int idx=0; // idx of the relevant ground
+
         // 1. grounds of that vessel
         vector <int> grds= this->get_fgrounds();
 
@@ -3778,7 +3798,7 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
                                                                                       min_distance_shop);
-            int idx = distance(expected_profit_per_ground.begin(),
+            idx = distance(expected_profit_per_ground.begin(),
                                              max_element(expected_profit_per_ground.begin(), expected_profit_per_ground.end()));
             int smartCatchGround = grds.at(idx);
             cout << "smartCatchGround is " << smartCatchGround << endl;
@@ -3786,13 +3806,17 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
         //}
 
-        /*
-         if(highPotentialCatch is in tree)
-        {
-            vector<int> expected_cpue_per_ground = this->compute_expected_cpue_per_ground();
-            highPotentialCatchGround = *max_element(expected_cpue_per_ground.begin(), expected_cpue_per_ground.end());
-        }
+        //if(highPotentialCatch is in tree)
+        //{
+           vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
+           idx = distance(past_freq_cpue_grds.begin(),
+                                         max_element(past_freq_cpue_grds.begin(), past_freq_cpue_grds.end()));
+           int highPotentialCatchGround = grds.at(idx);
+           cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl;
+           this->set_highpotentialcatch(highPotentialCatchGround);
+        //}
 
+         /*
         if(notThatFar is in tree)
         {
             vector<int> distance_to_grounds = this->compute_distance_to_grounds();
@@ -3833,7 +3857,7 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             //"complyToAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
             //=> TO DO: add the corresponding dtree evaluators...
 
-            double the_value = traverseDtree(tstep, tree.get());
+            //double the_value = traverseDtree(ground, tree.get());
 
 
             //CHOOSE THAT GROUND!

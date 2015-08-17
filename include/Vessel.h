@@ -108,7 +108,7 @@ class Vessel
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
-        int smartcatch;
+        int smartcatch, highpotentialcatch; // some relevant grounds
 
         pthread_mutex_t mutex;
 
@@ -193,6 +193,7 @@ public:
 	    double get_mult_fuelcons_when_inactive() const;		
 		double get_cumcatches() const;
         int get_smartcatch() const;
+        int get_highpotentialcatch() const;
         const vector<vector<double> > &get_gshape_cpue_nodes_species() const;
         const vector<vector<double> > &get_gscale_cpue_nodes_species() const;
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
@@ -238,6 +239,7 @@ public:
 		void set_inactive (bool logic);
 		void set_natio (bool logic);
         void set_smartcatch (int smartcatch);
+        void set_highpotentialcatch (int highpotentialcatch);
         void set_state (int _state);
 		void set_previous_harbour_idx (int previous_harbour_idx);
 		void set_reason_to_go_back (int _reason_to_go_back);

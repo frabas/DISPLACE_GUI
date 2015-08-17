@@ -1222,6 +1222,33 @@ bool DisplaceModel::loadNodes()
         }
     }
 
+
+    // read nodes in polygons for area-based management
+    string a_graph_name="a_graph";
+    a_graph_name=a_graph_name+a_graph_s;
+    multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
+    // check for area_closure
+    vector<int> polygons;
+    vector<int> polygon_nodes;
+    for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+        {
+            // get all values across the keys
+            polygons.push_back(pos->first);
+            polygon_nodes.push_back(pos->second);
+        }
+        sort (polygon_nodes.begin(), polygon_nodes.end());
+
+    for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
+        {
+        if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), mNodes.at(a_idx)->get_idx_node()))
+           {
+            mNodes.at(a_idx)->setAreaType(1);
+           } else{
+            mNodes.at(a_idx)->setAreaType(0);
+           }
+        }
+
+
     /* Not sure if we need this...
     // init
     for (unsigned int i=0; i< nodes.size(); i++)
@@ -1302,6 +1329,7 @@ bool DisplaceModel::loadVessels()
 
     // read nodes in polygons for area-based management
     multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
+
 
     // check
     //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)

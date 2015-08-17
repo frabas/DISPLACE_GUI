@@ -119,6 +119,7 @@ public:
     std::shared_ptr<Edge> getAdiacencyByIdx(int idx) const;
     double getAdiacencyWeight(int idx) const;
     void setAdiacencyWeight (int idx, double w);
+    void setAreaType (int value);
 
     bool isDeleted() const;
     void setDeleted(bool value = true);
@@ -134,6 +135,7 @@ private:
 
     double *mImpact;
     double *mBenthosBiomass;
+    int areaType;
 
     AdiacencyList mAdiacency;
 };

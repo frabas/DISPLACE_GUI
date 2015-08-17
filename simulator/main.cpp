@@ -1134,6 +1134,8 @@ int main(int argc, char* argv[])
 			}
 
 
+
+
 			nodes[i] =    (new Harbour(i,
 				graph_coord_x[i],
 				graph_coord_y[i],
@@ -1177,6 +1179,10 @@ int main(int argc, char* argv[])
 		nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
 		nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops,SEL_NBSZGROUP);
 	}
+
+
+
+
 
 #ifdef PROFILE
     memInfo.update();
@@ -1894,7 +1900,32 @@ int main(int argc, char* argv[])
 	//}
 	//cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
 
-	//creation of a vector of vessels from vesselids, graph, harbours and fgrounds
+    // check for area_closure
+    vector<int> polygons;
+    vector<int> polygon_nodes;
+    for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+        {
+            // get all values across the keys
+            polygons.push_back(pos->first);
+            polygon_nodes.push_back(pos->second);
+            dout(cout  << " a polygon node is " << pos->second << endl);
+        }
+        sort (polygon_nodes.begin(), polygon_nodes.end());
+
+    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
+        {
+        if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node()))
+           {
+            nodes.at(a_idx)->setAreaType(1);
+           } else{
+            nodes.at(a_idx)->setAreaType(0);
+           }
+        }
+
+
+
+
+    //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
 	// and check the start coord
 								 //here
     vessels = vector <Vessel*> (vesselids.size());
@@ -3686,6 +3717,27 @@ int main(int argc, char* argv[])
 
 				// re-read nodes in polygons for area-based management
                 nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization,"../"+ inputfolder);
+
+
+                // check for area_closure
+                for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+                    {
+                        // get all values across the keys
+                        polygons.push_back(pos->first);
+                        polygon_nodes.push_back(pos->second);
+                        dout(cout  << " a polygon node is " << pos->second << endl);
+                    }
+                    sort (polygon_nodes.begin(), polygon_nodes.end());
+
+                for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
+                    {
+                    if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node()))
+                       {
+                        nodes.at(a_idx)->setAreaType(1);
+                       } else{
+                        nodes.at(a_idx)->setAreaType(0);
+                       }
+                    }
 
 				vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
 				vessels.at(v)->set_spe_harbours(spe_harbours);

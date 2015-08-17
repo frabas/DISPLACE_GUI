@@ -118,6 +118,9 @@ class Node
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
+        int setAreaType(int _area_type);
+        int evaluateAreaType();
+
         int get_nbpops() const { return m_nbpops; }
         int get_nbbenthospops() const { return m_nbbenthospops; }
         int get_nszgroups() const { return m_nszgrp; }
@@ -154,6 +157,8 @@ private:
         int m_nbpops;
         int m_nbbenthospops;
         int m_nszgrp;
+
+        int area_type;
 
         pthread_mutex_t mutex;
 };

@@ -924,3 +924,16 @@ void Node::recover_benthos_tot_biomass_per_funcgroup()
 	}
 
 }
+
+
+int Node::setAreaType(int _area_type)
+{
+area_type=_area_type;
+}
+
+
+int Node::evaluateAreaType()
+{
+return area_type;
+}
+

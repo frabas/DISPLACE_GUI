@@ -124,6 +124,12 @@ void NodeData::setHarbourId(int value)
     mHarbourId = value;
 }
 
+void NodeData::setAreaType(int value)
+{
+    areaType = value;
+}
+
+
 /**
  * @brief NodeData::appendAdiancency
  * @param to_id

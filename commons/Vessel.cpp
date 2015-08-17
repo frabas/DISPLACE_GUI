@@ -177,6 +177,18 @@ public:
 };
 
 
+class VesselComplyToAreaClosureStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselComplyToAreaClosureStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        //cout << "look at type of node: Is it lying in a closed area? " << endl;
+
+        return  v->get_loc()->evaluateAreaType() ? 1.0 : 0.0; // Is yes or no this ground in a closed area?
+        }
+};
+
+
 
 
 }
@@ -3866,7 +3878,6 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             notThatFar = *min_element(fuel_to_grounds.begin(), fuel_to_grounds.end());
 
         }
-
 
        */
 

@@ -1,12 +1,10 @@
 #TreeVersion: 6
 #TreeType: ChooseGround
 # id,variable,posx,posy,nchld,children...,value
-0,smartCatch,2398,2303,2,1,0,2,1,0
-1,probability,2299,2392,0,0.6
-2,highPotentialCatch,2465,2388,2,3,0,4,1,0
-3,probability,2349,2489,0,0.7
-4,notThatFar,2528,2489,2,5,0,6,1,0
-5,probability,2385,2589,0,1
-6,riskOfBycatchIs,2593,2597,2,7,0,8,1,0
-7,probability,2466,2676,0,0
-8,probability,2682,2679,0,1
+0,smartCatch,2593,2329,2,1,0,2,1,0
+1,highPotentialCatch,2505,2421,2,3,0,4,1,0
+2,probability,2664,2430,0,0.5
+3,notThatFar,2381,2535,2,5,0,6,1,0
+4,probability,2567,2532,0,0.5
+5,probability,2286,2623,0,0
+6,probability,2448,2625,0,1

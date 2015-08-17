@@ -150,6 +150,7 @@ private:
 public:
     VesselSmartCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
+        //cout << "smartcatch is " <<  v->get_smartcatch() << endl;
           return  fground==v->get_smartcatch() ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
         }
 };
@@ -160,9 +161,21 @@ private:
 public:
     VesselHighPotentialCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-          return  fground==v->get_highpotentialcatch() ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
+        //cout << "highpotentialcatch is " <<  v->get_highpotentialcatch() << endl;
+          return  fground==v->get_highpotentialcatch() ? 1.0 : 0.0; // Is yes or no the tested ground the highest cpue ground?
         }
 };
+
+class VesselNotThatFarStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselNotThatFarStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        //cout << "notthatfar is " <<  v->get_notthatfar() << endl;
+          return  fground==v->get_notthatfar() ? 1.0 : 0.0; // Is yes or no the closest ground?
+        }
+};
+
 
 
 
@@ -377,6 +390,8 @@ void Vessel::init()
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSmartCatchStateEvaluator);
         mStateEvaluators[dtree::highPotentialCatch] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselHighPotentialCatchStateEvaluator);
+        mStateEvaluators[dtree::notThatFar] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
 
 
 
@@ -769,6 +784,10 @@ int Vessel::get_highpotentialcatch () const
     return(highpotentialcatch);
 }
 
+int Vessel::get_notthatfar () const
+{
+    return(notthatfar);
+}
 
 
 //------------------------------------------------------------//
@@ -1266,7 +1285,7 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
 
         bin = static_cast<int>(std::floor(value*node->getChildrenCount() + 0.5));
 
-//        std::cout << "value=" << value << " bin=" << bin << std::endl;
+        //std::cout << "value=" << value << " bin=" << bin << std::endl;
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;
@@ -1300,6 +1319,11 @@ void Vessel::set_smartcatch(int _smartcatch)
 void Vessel::set_highpotentialcatch(int _highpotentialcatch)
 {
      highpotentialcatch=_highpotentialcatch;
+}
+
+void Vessel::set_notthatfar(int _notthatfar)
+{
+     notthatfar=_notthatfar;
 }
 
 
@@ -3801,7 +3825,7 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             idx = distance(expected_profit_per_ground.begin(),
                                              max_element(expected_profit_per_ground.begin(), expected_profit_per_ground.end()));
             int smartCatchGround = grds.at(idx);
-            cout << "smartCatchGround is " << smartCatchGround << endl;
+            //cout << "smartCatchGround is " << smartCatchGround << endl;
             this->set_smartcatch(smartCatchGround);
             //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
         //}
@@ -3812,17 +3836,24 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
            idx = distance(past_freq_cpue_grds.begin(),
                                          max_element(past_freq_cpue_grds.begin(), past_freq_cpue_grds.end()));
            int highPotentialCatchGround = grds.at(idx);
-           cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl;
+           //cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl;
            this->set_highpotentialcatch(highPotentialCatchGround);
         //}
 
-         /*
-        if(notThatFar is in tree)
-        {
-            vector<int> distance_to_grounds = this->compute_distance_to_grounds();
-            notThatFar = *min_element(distance_to_grounds.begin(), distance_to_grounds.end());
-        }
+        //if(notThatFar is in tree)
+        //{
+          int from = this->get_loc()->get_idx_node();
+          vector <double> distance_to_grounds = compute_distance_fgrounds
+                                                   (idx_path_shop,
+                                                   path_shop, min_distance_shop, from, grds);
+          idx = distance(distance_to_grounds.begin(),
+                                      max_element(distance_to_grounds.begin(), distance_to_grounds.end()));
+          int notThatFarGround = grds.at(idx);
+          //cout << "notThatFarGround is " << notThatFarGround << endl;
+          this->set_notthatfar(notThatFarGround);
+        //}
 
+        /*
         if(saveFuel is in tree)
         {
             vector<int> fuel_to_grounds = this->compute_fuel_to_grounds();
@@ -3857,7 +3888,8 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             //"complyToAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
             //=> TO DO: add the corresponding dtree evaluators...
 
-            //double the_value = traverseDtree(ground, tree.get());
+            // cout << "traverse tree for ground " << ground << endl;
+            double the_value = traverseDtree(ground, tree.get());
 
 
             //CHOOSE THAT GROUND!

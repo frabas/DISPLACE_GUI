@@ -66,14 +66,14 @@ const char *const VariableNames::bins[][40] = {
     { "week start", "week ending",0 },
 
 
-    { "yes", "no",0 },
-    { "yes", "no",0 },
-    { "yes", "no",0 },
-    { "yes", "no",0 },
-    { "yes", "no",0 },
-    { "yes", "no",0 },
-    { "yes", "no",0 },
-    { "yes", "no",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
+    { "no", "yes",0 },
 
     { "false", "true",0 },
     { "false", "true",0 },

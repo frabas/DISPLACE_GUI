@@ -24,7 +24,7 @@ enum Variable {
     lastTripThisGroundWas,       // ChooseGround
     riskOfBycatchIs,             // ChooseGround
     saveFuel,                    // ChooseGround
-    complyToAreaClosure,          // ChooseGround
+    isInAreaClosure,          // ChooseGround
 
 
     arrivedOnGroundIs,    // StartFishing

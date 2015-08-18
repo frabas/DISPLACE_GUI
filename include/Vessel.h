@@ -344,7 +344,7 @@ public:
                                  //yes:1; no=0
         int should_i_go_fishing(int tstep, bool use_the_tree);
 		int should_i_start_fishing(map<string, int>& external_states, bool use_the_tree);
-        int should_i_choose_this_ground(int tstep,  const vector <int>& idx_path_shop,
+        int should_i_choose_this_ground(int tstep, vector<Node*>& nodes,  const vector <int>& idx_path_shop,
                                         const deque<map<vertex_t, vertex_t> >& path_shop,
                                         const deque<map<vertex_t, weight_t> >& min_distance_shop);
 		int should_i_change_ground(map<string, int>& external_states, bool use_the_tree);

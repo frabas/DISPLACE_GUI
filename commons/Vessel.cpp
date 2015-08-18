@@ -177,19 +177,6 @@ public:
 };
 
 
-class VesselComplyToAreaClosureStateEvaluator : public dtree::StateEvaluator {
-private:
-public:
-    VesselComplyToAreaClosureStateEvaluator() {}
-    double evaluate(int fground, Vessel *v) const {
-        //cout << "look at type of node: Is it lying in a closed area? " << endl;
-
-        return  v->get_loc()->evaluateAreaType() ? 1.0 : 0.0; // Is yes or no this ground in a closed area?
-        }
-};
-
-
-
 
 }
 }
@@ -3022,6 +3009,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
 
         ground=this->should_i_choose_this_ground(tstep,
+                                                 nodes,
                                                  idx_path_shop,
                                                  path_shop,
                                                  min_distance_shop); // use ChooseGround dtree along all possible grounds to define the next ground
@@ -3099,6 +3087,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
        //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
        //int ground=grds[0];
        dout(cout  << "GO FISHING ON " << ground << endl);
+       cout  << "GO FISHING ON " << ground << endl;
        // get the shortest path between source and destination
        // with the list of intermediate nodes
        int from = this->get_loc()->get_idx_node();
@@ -3812,7 +3801,7 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree)
 
 
 
-int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_shop,
+int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const vector<int> &idx_path_shop,
                                         const deque<map<vertex_t, vertex_t> > &path_shop,
                                         const deque<map<vertex_t, weight_t> > &min_distance_shop)
 {
@@ -3829,6 +3818,23 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
         // e.g. for smartCatch or highPotentialCatch
         // TO DO...
 
+        vector<int> grds_in_closure (grds.size(), 0);
+        //if(isInAreaClosure is in tree)
+        //{
+          // list all the grounds lying in the closure to exclude them
+          // from the search of smartCatch, highPotentialCatch and notThatFar
+          for (unsigned int i=0; i<grds.size();++i)
+             {
+              int in = nodes.at(grds.at(i))->evaluateAreaType();
+              if(in) grds_in_closure.at(i)=1;
+             }
+          for (unsigned int i=0; i<grds.size();++i)
+             {
+             cout << grds.at(i) << " is in ? " << grds_in_closure.at(i) << endl;
+             }
+
+
+        //}
         //if(smartCatch is in tree)
         //{
             vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
@@ -3866,12 +3872,7 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
         //}
 
         /*
-        if(saveFuel is in tree)
-        {
-            vector<int> fuel_to_grounds = this->compute_fuel_to_grounds();
-            notThatFar = *min_element(fuel_to_grounds.begin(), fuel_to_grounds.end());
-
-        }
+         }
         if(knowledgeOfThisGround is in tree)
         {
             vector<int> fuel_to_grounds = this->compute_fuel_to_grounds();
@@ -3896,7 +3897,7 @@ int Vessel::should_i_choose_this_ground(int tstep, const vector<int> &idx_path_s
             //"lastTripThisGroundWas",          // ChooseGround  => TO DO: looking at the gain from last trip on that ground
             //"riskOfBycatchIs",          // ChooseGround        => TO DO: looking at the proportion on sites of juveniles or other non-targeted species
             //"saveFuel"                 // ChooseGround         => find if that ground is relvant according to something like alloc_while_saving_fuel
-            //"complyToAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
+            //"isInAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
             //=> TO DO: add the corresponding dtree evaluators...
 
             // cout << "traverse tree for ground " << ground << endl;

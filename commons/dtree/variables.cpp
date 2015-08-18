@@ -25,7 +25,7 @@ const char *const VariableNames::names[] = {
     "lastTripThisGroundWas",       // ChooseGround
     "riskOfBycatchIs",             // ChooseGround
     "saveFuel",                    // ChooseGround
-    "complyToAreaClosure",          // ChooseGround
+    "isInAreaClosure",          // ChooseGround
 
 
     "arrivedOnGroundIs",    // StartFishing

@@ -28,6 +28,34 @@
 
 #define NBSZGROUP 14
 
+#include <dtree/dtnode.h>
+#include <dtree/decisiontreemanager.h>
+#include <dtree/externalstatemanager.h>
+#include <dtree/commonstateevaluators.h>
+#include <dtree/evaluators/timeseriesevaluator.h>
+#include <dtree/variables.h>
+
+#include <boost/make_shared.hpp>
+
+std::vector<boost::shared_ptr<dtree::StateEvaluator> > Node::mStateEvaluators;
+
+namespace dtree {
+namespace nodes {
+class NodeIsInAreaClosureStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    NodeIsInAreaClosureStateEvaluator() {}
+    double evaluateAreaType(int tstep, Node *n) const {
+        //cout << "look at type of node: Is it lying in a closed area? " << n->evaluateAreaType() << endl;
+        //return  n->evaluateAreaType()==1 ? 1.0 : 0.0; // Is yes or no this ground in a closed area?
+        return 1 ? 1.0 : 0.0; // Is yes or no this ground in a closed area?
+        }
+};
+
+}
+}
+
+
 Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, int nbpops,int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
@@ -51,6 +79,18 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
     m_nbpops = nbpops;
     m_nbbenthospops = nbbenthospops;
     m_nszgrp = nbszgroups;
+
+    // Lazy initialization of the global State Evaluator.
+    if (mStateEvaluators.size() == 0) {
+        for (int i = 0; i < dtree::VarLast; ++i) {
+            mStateEvaluators.push_back(boost::shared_ptr<dtree::StateEvaluator>());
+        }
+    // ChooseGround
+    mStateEvaluators[dtree::isInAreaClosure] =
+            boost::shared_ptr<dtree::StateEvaluator> (new dtree::nodes::NodeIsInAreaClosureStateEvaluator);
+    }
+
+
 }
 
 
@@ -81,6 +121,19 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 		is_harbour=false;
 	}
 
+
+
+    // Lazy initialization of the global State Evaluator.
+    if (mStateEvaluators.size() == 0) {
+        for (int i = 0; i < dtree::VarLast; ++i) {
+            mStateEvaluators.push_back(boost::shared_ptr<dtree::StateEvaluator>());
+        }
+    // ChooseGround
+    mStateEvaluators[dtree::isInAreaClosure] =
+            boost::shared_ptr<dtree::StateEvaluator> (new dtree::nodes::NodeIsInAreaClosureStateEvaluator);
+    }
+
+
 }
 
 
@@ -107,6 +160,18 @@ Node::Node()
       m_nbbenthospops(0),
       m_nszgrp(0)
 {
+
+    // Lazy initialization of the global State Evaluator.
+    if (mStateEvaluators.size() == 0) {
+        for (int i = 0; i < dtree::VarLast; ++i) {
+            mStateEvaluators.push_back(boost::shared_ptr<dtree::StateEvaluator>());
+        }
+    // ChooseGround
+    mStateEvaluators[dtree::isInAreaClosure] =
+            boost::shared_ptr<dtree::StateEvaluator> (new dtree::nodes::NodeIsInAreaClosureStateEvaluator);
+    }
+
+
     pthread_mutex_init(&mutex, 0);
 }
 

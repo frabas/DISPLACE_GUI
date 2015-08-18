@@ -24,6 +24,11 @@ public:
     double evaluate(int, Vessel *) const {
         return static_cast<double>(mVariable);
     }
+
+    double evaluateAreaType(int, Node *) const {
+        return static_cast<double>(mVariable);
+    }
+
 };
 
 /** \brief A templated class that evaluates constant-valued variable
@@ -41,7 +46,11 @@ public:
     double evaluate(int, Vessel *) const {
         return static_cast<double>(mConst);
     }
+
+
 };
+
+
 
 
 /** \brief A decorator class that evaluates the relation between the values of two other evaluators

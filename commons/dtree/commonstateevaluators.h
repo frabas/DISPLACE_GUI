@@ -25,9 +25,6 @@ public:
         return static_cast<double>(mVariable);
     }
 
-    double evaluateAreaType(int, Node *) const {
-        return static_cast<double>(mVariable);
-    }
 
 };
 

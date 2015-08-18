@@ -3840,9 +3840,22 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
             vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
                                                                                       min_distance_shop);
-            idx = distance(expected_profit_per_ground.begin(),
-                                             max_element(expected_profit_per_ground.begin(), expected_profit_per_ground.end()));
-            int smartCatchGround = grds.at(idx);
+            // keep only the grds out the closed areas...
+            vector <int> grds_out;
+            vector <int> expected_profit_per_ground_out;
+            for (unsigned int i=0; i<grds.size();++i)
+               {
+                if(grds_in_closure.at(i)==0)
+                   {
+                    expected_profit_per_ground_out.push_back(expected_profit_per_ground.at(i));
+                    grds_out.push_back(grds.at(i));
+                   }
+               }
+
+            // ...and find the max
+            idx = distance(expected_profit_per_ground_out.begin(),
+                                             max_element(expected_profit_per_ground_out.begin(), expected_profit_per_ground_out.end()));
+            int smartCatchGround = grds_out.at(idx);
             //cout << "smartCatchGround is " << smartCatchGround << endl;
             this->set_smartcatch(smartCatchGround);
             //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
@@ -3851,9 +3864,22 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         //if(highPotentialCatch is in tree)
         //{
            vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
-           idx = distance(past_freq_cpue_grds.begin(),
-                                         max_element(past_freq_cpue_grds.begin(), past_freq_cpue_grds.end()));
-           int highPotentialCatchGround = grds.at(idx);
+
+           // keep only the grds out the closed areas...
+           //vector <int> grds_out;
+           vector <int> past_freq_cpue_grds_out;
+           for (unsigned int i=0; i<grds.size();++i)
+              {
+               if(grds_in_closure.at(i)==0)
+                  {
+                   past_freq_cpue_grds_out.push_back(past_freq_cpue_grds.at(i));
+                   grds_out.push_back(grds.at(i));
+                  }
+              }
+
+           idx = distance(past_freq_cpue_grds_out.begin(),
+                                         max_element(past_freq_cpue_grds_out.begin(), past_freq_cpue_grds_out.end()));
+           int highPotentialCatchGround = grds_out.at(idx);
            //cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl;
            this->set_highpotentialcatch(highPotentialCatchGround);
         //}
@@ -3864,9 +3890,22 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
           vector <double> distance_to_grounds = compute_distance_fgrounds
                                                    (idx_path_shop,
                                                    path_shop, min_distance_shop, from, grds);
-          idx = distance(distance_to_grounds.begin(),
-                                      max_element(distance_to_grounds.begin(), distance_to_grounds.end()));
-          int notThatFarGround = grds.at(idx);
+
+          // keep only the grds out the closed areas...
+          //vector <int> grds_out;
+          vector <int> distance_to_grounds_out;
+          for (unsigned int i=0; i<grds.size();++i)
+             {
+              if(grds_in_closure.at(i)==0)
+                 {
+                  distance_to_grounds_out.push_back(distance_to_grounds.at(i));
+                  grds_out.push_back(grds.at(i));
+                 }
+             }
+
+          idx = distance(distance_to_grounds_out.begin(),
+                                      max_element(distance_to_grounds_out.begin(), distance_to_grounds_out.end()));
+          int notThatFarGround = grds_out.at(idx);
           //cout << "notThatFarGround is " << notThatFarGround << endl;
           this->set_notthatfar(notThatFarGround);
         //}

@@ -24,7 +24,7 @@ public:
      * \arg vessel A pointer for the vessel being evaluated.
      * */
     virtual double evaluate(int tstep, Vessel *vessel) const = 0;
-    virtual double evaluateAreaType(int tstep, Node *node) const = 0;
+
 };
 
 } // ns dtree

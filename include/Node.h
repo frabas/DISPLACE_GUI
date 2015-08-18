@@ -30,10 +30,6 @@
 
 #include <pthread.h>
 
-#include <dtree/decisiontree.h>
-#include <dtree/stateevaluator.h>
-
-#include <boost/make_shared.hpp>
 
 using namespace std;
 
@@ -132,7 +128,7 @@ class Node
 
         void set_is_harbour(int id);
         void set_idx_node(int idx);
-        static std::vector<boost::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
+
 
 protected:
         void reinit(vector<double> &vec, unsigned int sz);

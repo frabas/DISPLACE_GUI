@@ -175,6 +175,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         freq_cpue, freq_profit, freq_distance
                         );
 
+
+
                 }
                 else
                 {

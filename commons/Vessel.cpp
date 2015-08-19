@@ -3118,8 +3118,9 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
        //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
        //int ground=grds[0];
-       dout(cout  << "GO FISHING ON " << ground << endl);
-       cout  << "GO FISHING ON " << ground << endl;
+       dout(cout  << this->get_name() << "GO FISHING ON " << ground << endl);
+       cout  << this->get_name() << "GO FISHING ON " << ground << endl;
+
        // get the shortest path between source and destination
        // with the list of intermediate nodes
        int from = this->get_loc()->get_idx_node();
@@ -3851,7 +3852,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
           vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
           // check
-          cout << "ground in closure ? " << endl;
+          cout << this->get_name() << " has ground in closure ? " << endl;
           for (unsigned int i=0; i<grds_in_closure.size();++i)
              {
              cout << grds_in_closure.at(i) << " ";
@@ -3899,6 +3900,10 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
             cout << "smartCatchGround is " << smartCatchGround << endl;
 
         //}
+
+
+
+
 
         //if(highPotentialCatch is in tree)
         //{

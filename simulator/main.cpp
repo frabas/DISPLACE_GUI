@@ -2033,7 +2033,31 @@ int main(int argc, char* argv[])
         }
         vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
 
+/*
+        if(vessels[i]->get_name()=="SWN21"){
+          cout << "CLOSED:" << endl;
+            vector<int> grs = vessels[i]->get_fgrounds_in_closed_areas();
+                  for (int i=0;i<grs.size();++i)
+                  {
+                  cout << grs.at(i) << " " ;
+                  }
+              cout << endl;
 
+              cout << "ALL:" << endl;
+                    for (int i=0;i<grds.size();++i)
+                    {
+                    cout << grds.at(i) << " " ;
+                    }
+                cout << endl;
+
+                bool Istype =nodes.at(1087)->evaluateAreaType()==1;
+                cout << " node 1087 type is: " << Istype;
+
+                int aa;
+              cin >> aa;
+
+        }
+*/
 
 
         // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
@@ -3767,7 +3791,17 @@ int main(int argc, char* argv[])
 				vessels.at(v)->set_spe_possible_metiers(possible_metiers);
 				vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
 
-				// ...also for the particular cpue_nodes_species element
+
+                // inform grounds in closed areas
+                vector<int> new_grds = vessels.at(v)->get_fgrounds();
+                vector<int> fgrounds_in_closed_areas;
+                for(unsigned int i=0; i<new_grds.size();++i)
+                {
+                    if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
+                }
+               vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+                // ...also for the particular cpue_nodes_species element
                 dout(cout << "re-set vessels step2..."  << endl);
                 vector<int> gshape_name_nodes_with_cpue;
 				for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();

@@ -3113,7 +3113,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
 
        // ****************closer_grounds**********************************//
-       if (dyn_alloc_sce.option(Options::loser_grounds))		 // dyn sce.
+       if (dyn_alloc_sce.option(Options::closer_grounds))		 // dyn sce.
        {
 		this->alloc_on_closer_grounds(tstep,
 			idx_path_shop,
@@ -4101,6 +4101,21 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         cout << "no one among relevant grounds... take from fground frequencies " << ground << endl;
         vector <double> freq_grds = this->get_freq_fgrounds();
                                   // need to convert in array, see myRutils.cpp
+        double cumul=0.0;
+        for(unsigned int n=0; n<grds.size(); n++)
+        {
+            if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
+            {
+                freq_grds.at(n)=0.00000000000001; // to avoid removing if nb of grounds outside is 0
+            }
+            cumul += freq_grds.at(n);
+        }
+            // then re-scale to 1
+        for(unsigned int n=0; n<grds.size(); n++)
+        {
+            freq_grds.at(n)= freq_grds.at(n)/cumul;
+        }
+        // then sample...
         vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
         ground=grounds[0];
   return(ground);

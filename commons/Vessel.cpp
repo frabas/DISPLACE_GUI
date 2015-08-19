@@ -179,6 +179,16 @@ public:
         }
 };
 
+class VesselKnowledgeOfThisGroundStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselKnowledgeOfThisGroundStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        bool isWellKnown = (fground==v->get_mosthistoricallyused());
+        cout << "mosthistoricallyused on this ground evaluated at " << isWellKnown << endl;
+        return  isWellKnown ? 1.0 : 0.0; // Is yes or no the ground has been the most historically frequent?
+        }
+};
 
 class VesselIsInAreaClosureEvaluator : public dtree::StateEvaluator {
 private:
@@ -409,6 +419,8 @@ void Vessel::init()
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselHighPotentialCatchStateEvaluator);
         mStateEvaluators[dtree::notThatFar] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
+        mStateEvaluators[dtree::knowledgeOfThisGround] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 
@@ -813,6 +825,12 @@ int Vessel::get_notthatfar () const
 {
     return(notthatfar);
 }
+
+int Vessel::get_mosthistoricallyused () const
+{
+    return(mosthistoricallyused);
+}
+
 
 
 //------------------------------------------------------------//
@@ -1357,6 +1375,10 @@ void Vessel::set_notthatfar(int _notthatfar)
      notthatfar=_notthatfar;
 }
 
+void Vessel::set_mosthistoricallyused(int _mosthistoricallyused)
+{
+     mosthistoricallyused=_mosthistoricallyused;
+}
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -3985,16 +4007,46 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
           cout << "notThatFarGround is " << notThatFarGround << endl;
           //}
 
-        /*
-         }
-        if(knowledgeOfThisGround is in tree)
-        {
-            vector<int> fuel_to_grounds = this->compute_fuel_to_grounds();
-            notThatFar = *min_element(fuel_to_grounds.begin(), fuel_to_grounds.end());
+       // if(knowledgeOfThisGround is in tree)
+       // {
+          int knowledgeOfThisGround;
+          vector <double> freq_grounds = this->get_freq_fgrounds();
 
-        }
+          // keep only the grds out the closed areas...
+          vector <int> grds_out4;
+          vector <double> freq_grounds_out;
+          if(grds_in_closure.size()>0)
+          {
+              for (unsigned int i=0; i<grds.size();++i)
+              {
+              std::vector<int>::iterator it;
+              it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+              if(it == grds_in_closure.end()) // not found
+                 {
+                  freq_grounds_out.push_back(freq_grounds.at(i));
+                  grds_out4.push_back(grds.at(i));
+                 }
+             }
+          } else{
+              grds_out4=grds;
+              freq_grounds_out=freq_grounds;
+          }
+          if(grds_out4.size()>0){
 
-       */
+             // ...and find the max
+             idx = distance(freq_grounds_out.begin(),
+                                           max_element(freq_grounds_out.begin(), freq_grounds_out.end()));
+             knowledgeOfThisGround = grds_out4.at(idx);
+             this->set_mosthistoricallyused(knowledgeOfThisGround);
+            //grds.moveToFront(highPotentialCatchGround); // put on top to limit the search time??
+          } else{
+          this->set_notthatfar(-1);  // grounds are all included in closed areas...
+          }
+          cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl;
+
+        // }
+
+
 
         // 3. traverseDTree for each possible ground (??: is this realistic??)
         int ground=-1;
@@ -4002,13 +4054,18 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         for (int it=0; it < grds.size(); ++it){
             ground=grds.at(it);
             cout << "Evaluate for ground... "<< ground << endl;
+
+            // Caution with a logical leaks: each ground is evaluated once and only once,
+            // meanwhile the smartCatch ground can be likely the same than the highPotentialCatch, notThatFar, etc.
+            // so most of the time the tree need to be COMPLETE or FULL to account for conditional probabilities...
+
             // evaluators should evaluate if yes/no the ground a smartCatch ground etc.:
          // e.g.
 
             //"smartCatch",          // ChooseGround             => find if that ground is relvant according to something like alloc_on_high_profit_grounds
             //"highPotentialCatch",          // ChooseGround     => find if that ground is relvant according to something like alloc_on_high_previous_cpue
             //"notThatFar",          // ChooseGround             => alloc_on_closer_grounds
-            //"knowledgeOfThisGround",          // ChooseGround  => TO DO: look at the historic proba of visiting the grounds
+            //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds
             //"lastTripThisGroundWas",          // ChooseGround  => TO DO: looking at the gain from last trip on that ground
             //"riskOfBycatchIs",          // ChooseGround        => TO DO: looking at the proportion on sites of juveniles or other non-targeted species
             //"saveFuel"                 // ChooseGround         => find if that ground is relvant according to something like alloc_while_saving_fuel

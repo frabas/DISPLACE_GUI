@@ -109,7 +109,7 @@ class Vessel
 		vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
-        int smartcatch, highpotentialcatch, notthatfar; // some relevant grounds
+        int smartcatch, highpotentialcatch, notthatfar, mosthistoricallyused; // some relevant grounds
 
         pthread_mutex_t mutex;
 
@@ -197,6 +197,7 @@ public:
         int get_smartcatch() const;
         int get_highpotentialcatch() const;
         int get_notthatfar() const;
+        int get_mosthistoricallyused() const;
         const vector<vector<double> > &get_gshape_cpue_nodes_species() const;
         const vector<vector<double> > &get_gscale_cpue_nodes_species() const;
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
@@ -246,6 +247,7 @@ public:
         void set_smartcatch (int smartcatch);
         void set_highpotentialcatch (int highpotentialcatch);
         void set_notthatfar (int notthatfar);
+        void set_mosthistoricallyused (int mosthistoricallyused);
         void set_state (int _state);
 		void set_previous_harbour_idx (int previous_harbour_idx);
 		void set_reason_to_go_back (int _reason_to_go_back);

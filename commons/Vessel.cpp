@@ -3865,6 +3865,10 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         int idx=0; // idx of the relevant ground
 
+        // keep tracks relevant nodes to evaluate
+        vector <int> relevant_grounds_to_evaluate;
+
+
         // 1. grounds of that vessel
         vector <int> grds= this->get_fgrounds();
 
@@ -3915,7 +3919,9 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                              max_element(expected_profit_per_ground_out.begin(), expected_profit_per_ground_out.end()));
                smartCatchGround = grds_out.at(idx);
                this->set_smartcatch(smartCatchGround);
-              //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
+
+               relevant_grounds_to_evaluate.push_back(smartCatchGround); // use it to limit the search time...
+
             } else{
             this->set_smartcatch(-1);  // grounds are all included in closed areas...
             }
@@ -3958,7 +3964,9 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                             max_element(past_freq_cpue_grds_out.begin(), past_freq_cpue_grds_out.end()));
               highPotentialCatchGround = grds_out2.at(idx);
               this->set_highpotentialcatch(highPotentialCatchGround);
-             //grds.moveToFront(highPotentialCatchGround); // put on top to limit the search time??
+
+              relevant_grounds_to_evaluate.push_back(highPotentialCatchGround); // use it to limit the search time...
+
            } else{
            this->set_highpotentialcatch(-1);  // grounds are all included in closed areas...
            }
@@ -4000,7 +4008,9 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                            max_element(distance_to_grounds_out.begin(), distance_to_grounds_out.end()));
              notThatFarGround = grds_out3.at(idx);
              this->set_notthatfar(notThatFarGround);
-            //grds.moveToFront(highPotentialCatchGround); // put on top to limit the search time??
+
+             relevant_grounds_to_evaluate.push_back(notThatFarGround); // use it to limit the search time...
+
           } else{
           this->set_notthatfar(-1);  // grounds are all included in closed areas...
           }
@@ -4038,7 +4048,9 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                            max_element(freq_grounds_out.begin(), freq_grounds_out.end()));
              knowledgeOfThisGround = grds_out4.at(idx);
              this->set_mosthistoricallyused(knowledgeOfThisGround);
-            //grds.moveToFront(highPotentialCatchGround); // put on top to limit the search time??
+
+             relevant_grounds_to_evaluate.push_back(knowledgeOfThisGround); // use it to limit the search time...
+
           } else{
           this->set_notthatfar(-1);  // grounds are all included in closed areas...
           }
@@ -4050,9 +4062,9 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         // 3. traverseDTree for each possible ground (??: is this realistic??)
         int ground=-1;
-        random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
-        for (int it=0; it < grds.size(); ++it){
-            ground=grds.at(it);
+        //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
+        for (int it=0; it < relevant_grounds_to_evaluate.size(); ++it){
+            ground=relevant_grounds_to_evaluate.at(it);
             cout << "Evaluate for ground... "<< ground << endl;
 
             // Caution with a logical leaks: each ground is evaluated once and only once,
@@ -4081,12 +4093,17 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                 unlock();
                 return(ground);
             }
-            //  else // CONTINUE SEARCHING GROUND
+            //  else // CONTINUE SEARCHING AMONG RELEVANT GROUNDS
 
         }
 
-
- return(-1);
+ // if here, then no ground has been found so use the freq_fgrounds
+        cout << "no one among relevant grounds... take from fground frequencies " << ground << endl;
+        vector <double> freq_grds = this->get_freq_fgrounds();
+                                  // need to convert in array, see myRutils.cpp
+        vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
+        ground=grounds[0];
+  return(ground);
 
 }
 

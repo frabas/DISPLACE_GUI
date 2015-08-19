@@ -150,8 +150,9 @@ private:
 public:
     VesselSmartCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        //cout << "smartcatch is " <<  v->get_smartcatch() << endl;
-          return  fground==v->get_smartcatch() ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
+        bool isSmart= (fground==v->get_smartcatch());
+        cout << "smartcatch on this ground evaluated at " <<  isSmart << endl;
+        return  isSmart ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
         }
 };
 
@@ -161,8 +162,9 @@ private:
 public:
     VesselHighPotentialCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        //cout << "highpotentialcatch is " <<  v->get_highpotentialcatch() << endl;
-          return  fground==v->get_highpotentialcatch() ? 1.0 : 0.0; // Is yes or no the tested ground the highest cpue ground?
+        bool isHighPotential=(fground==v->get_highpotentialcatch());
+        cout << "highpotentialcatch on this ground evaluated at " << isHighPotential<< endl;
+        return   isHighPotential ? 1.0 : 0.0; // Is yes or no the tested ground the highest cpue ground?
         }
 };
 
@@ -171,8 +173,9 @@ private:
 public:
     VesselNotThatFarStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        //cout << "notthatfar is " <<  v->get_notthatfar() << endl;
-          return  fground==v->get_notthatfar() ? 1.0 : 0.0; // Is yes or no the closest ground?
+        bool isNotFar = (fground==v->get_notthatfar());
+        cout << "notthatfar on this ground evaluated at " << isNotFar << endl;
+        return  isNotFar ? 1.0 : 0.0; // Is yes or no the closest ground?
         }
 };
 
@@ -182,10 +185,11 @@ private:
 public:
     VesselIsInAreaClosureEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        //cout << "isinareaclosure "  << endl;
           vector <int> lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
           std::vector<int>::iterator it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), fground);
-          return  it != lst_fgrounds_in_closed_areas.end() ? 1.0 : 0.0; // Is yes or no the closest ground?
+          bool isIt= (it != lst_fgrounds_in_closed_areas.end()); // found
+          cout << "isinareaclosure on this ground evaluated at "  << isIt << endl;
+          return  isIt ? 1.0 : 0.0; // Is yes or no tin closed area?
 
         }
 };
@@ -3844,99 +3848,137 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         // 2. Pre-computing of the variable all grds together
         // (if the variable in the tree, and if this variable need computing from all grounds altogether)
         // e.g. for smartCatch or highPotentialCatch
-        // TO DO...
 
-        vector<int> grds_in_closure (grds.size(), 0);
-        //if(isInAreaClosure is in tree)
-        //{
-          // list all the grounds lying in the closure to exclude them
-          // from the search of smartCatch, highPotentialCatch and notThatFar
-          for (unsigned int i=0; i<grds.size();++i)
+          vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
+          // check
+          cout << "ground in closure ? " << endl;
+          for (unsigned int i=0; i<grds_in_closure.size();++i)
              {
-              int in = nodes.at(grds.at(i))->evaluateAreaType();
-              if(in) grds_in_closure.at(i)=1;
+             cout << grds_in_closure.at(i) << " ";
              }
-          for (unsigned int i=0; i<grds.size();++i)
-             {
-             cout << grds.at(i) << " is in ? " << grds_in_closure.at(i) << endl;
-             }
+          cout << endl;
 
 
         //}
         //if(smartCatch is in tree)
         //{
-            vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
+           int smartCatchGround;
+           vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
                                                                                       min_distance_shop);
             // keep only the grds out the closed areas...
             vector <int> grds_out;
-            vector <int> expected_profit_per_ground_out;
-            for (unsigned int i=0; i<grds.size();++i)
-               {
-                if(grds_in_closure.at(i)==0)
+            vector <double> expected_profit_per_ground_out;
+            if(grds_in_closure.size()>0)
+            {
+                for (unsigned int i=0; i<grds.size();++i)
+                {
+                std::vector<int>::iterator it;
+                it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+                if(it == grds_in_closure.end()) // not found
                    {
                     expected_profit_per_ground_out.push_back(expected_profit_per_ground.at(i));
                     grds_out.push_back(grds.at(i));
                    }
                }
+            } else{
+                grds_out=grds;
+                expected_profit_per_ground_out=expected_profit_per_ground;
+            }
+            if(grds_out.size()>0){
 
-            // ...and find the max
-            idx = distance(expected_profit_per_ground_out.begin(),
+               // ...and find the max
+               idx = distance(expected_profit_per_ground_out.begin(),
                                              max_element(expected_profit_per_ground_out.begin(), expected_profit_per_ground_out.end()));
-            int smartCatchGround = grds_out.at(idx);
-            //cout << "smartCatchGround is " << smartCatchGround << endl;
-            this->set_smartcatch(smartCatchGround);
-            //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
+               smartCatchGround = grds_out.at(idx);
+               this->set_smartcatch(smartCatchGround);
+              //grds.moveToFront(smartCatchGround); // put on top to limit the search time??
+            } else{
+            this->set_smartcatch(-1);  // grounds are all included in closed areas...
+            }
+            cout << "smartCatchGround is " << smartCatchGround << endl;
+
         //}
 
         //if(highPotentialCatch is in tree)
         //{
+           int highPotentialCatchGround;
            vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
 
            // keep only the grds out the closed areas...
-           //vector <int> grds_out;
-           vector <int> past_freq_cpue_grds_out;
-           for (unsigned int i=0; i<grds.size();++i)
-              {
-               if(grds_in_closure.at(i)==0)
+           vector <int> grds_out2;
+           vector <double> past_freq_cpue_grds_out;
+           if(grds_in_closure.size()>0)
+           {
+               for (unsigned int i=0; i<grds.size();++i)
+               {
+               std::vector<int>::iterator it;
+               it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+               if(it == grds_in_closure.end()) // not found
                   {
                    past_freq_cpue_grds_out.push_back(past_freq_cpue_grds.at(i));
-                   grds_out.push_back(grds.at(i));
+                   grds_out2.push_back(grds.at(i));
                   }
               }
+           } else{
+               grds_out2=grds;
+               past_freq_cpue_grds_out=past_freq_cpue_grds;
+           }
+           if(grds_out2.size()>0){
 
-           idx = distance(past_freq_cpue_grds_out.begin(),
-                                         max_element(past_freq_cpue_grds_out.begin(), past_freq_cpue_grds_out.end()));
-           int highPotentialCatchGround = grds_out.at(idx);
-           //cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl;
-           this->set_highpotentialcatch(highPotentialCatchGround);
+              // ...and find the max
+              idx = distance(past_freq_cpue_grds_out.begin(),
+                                            max_element(past_freq_cpue_grds_out.begin(), past_freq_cpue_grds_out.end()));
+              highPotentialCatchGround = grds_out2.at(idx);
+              this->set_highpotentialcatch(highPotentialCatchGround);
+             //grds.moveToFront(highPotentialCatchGround); // put on top to limit the search time??
+           } else{
+           this->set_highpotentialcatch(-1);  // grounds are all included in closed areas...
+           }
+           cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl;
+
         //}
 
         //if(notThatFar is in tree)
         //{
+          int notThatFarGround;
           int from = this->get_loc()->get_idx_node();
           vector <double> distance_to_grounds = compute_distance_fgrounds
                                                    (idx_path_shop,
                                                    path_shop, min_distance_shop, from, grds);
 
           // keep only the grds out the closed areas...
-          //vector <int> grds_out;
-          vector <int> distance_to_grounds_out;
-          for (unsigned int i=0; i<grds.size();++i)
-             {
-              if(grds_in_closure.at(i)==0)
+          vector <int> grds_out3;
+          vector <double> distance_to_grounds_out;
+          if(grds_in_closure.size()>0)
+          {
+              for (unsigned int i=0; i<grds.size();++i)
+              {
+              std::vector<int>::iterator it;
+              it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+              if(it == grds_in_closure.end()) // not found
                  {
                   distance_to_grounds_out.push_back(distance_to_grounds.at(i));
-                  grds_out.push_back(grds.at(i));
+                  grds_out3.push_back(grds.at(i));
                  }
              }
+          } else{
+              grds_out3=grds;
+              distance_to_grounds_out=distance_to_grounds;
+          }
+          if(grds_out3.size()>0){
 
-          idx = distance(distance_to_grounds_out.begin(),
-                                      max_element(distance_to_grounds_out.begin(), distance_to_grounds_out.end()));
-          int notThatFarGround = grds_out.at(idx);
-          //cout << "notThatFarGround is " << notThatFarGround << endl;
-          this->set_notthatfar(notThatFarGround);
-        //}
+             // ...and find the max
+             idx = distance(distance_to_grounds_out.begin(),
+                                           max_element(distance_to_grounds_out.begin(), distance_to_grounds_out.end()));
+             notThatFarGround = grds_out3.at(idx);
+             this->set_notthatfar(notThatFarGround);
+            //grds.moveToFront(highPotentialCatchGround); // put on top to limit the search time??
+          } else{
+          this->set_notthatfar(-1);  // grounds are all included in closed areas...
+          }
+          cout << "notThatFarGround is " << notThatFarGround << endl;
+          //}
 
         /*
          }
@@ -3954,6 +3996,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
         for (int it=0; it < grds.size(); ++it){
             ground=grds.at(it);
+            cout << "Evaluate for ground... "<< ground << endl;
             // evaluators should evaluate if yes/no the ground a smartCatch ground etc.:
          // e.g.
 

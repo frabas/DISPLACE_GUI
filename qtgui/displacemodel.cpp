@@ -1448,6 +1448,36 @@ bool DisplaceModel::loadVessels()
         v->set_spe_possible_metiers(possible_metiers);
         v->set_spe_freq_possible_metiers(freq_possible_metiers);
 
+
+        // inform grounds in closed areas
+        vector <int> grds = v->get_fgrounds();
+        vector <int> fgrounds_in_closed_areas;
+        vector<int> polygons;
+        vector<int> polygon_nodes;
+        for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
+            {
+                // get all values across the keys
+                polygons.push_back(pos->first);
+                polygon_nodes.push_back(pos->second);
+            }
+        sort (polygon_nodes.begin(), polygon_nodes.end());
+        for(unsigned int i=0; i<grds.size();++i){
+            int ground=grds.at(i);
+            std::vector<int>::iterator it=find(polygon_nodes.begin(), polygon_nodes.end(), grds.at(i));
+            if(it!=polygon_nodes.end()) fgrounds_in_closed_areas.push_back(ground); // found
+        }
+        v->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+        // check
+        cout << "for this vessel, check included fgrounds in polygon_nodes" << endl;
+        for (unsigned int i=0;i<fgrounds_in_closed_areas.size();++i)
+          {
+          cout << fgrounds_in_closed_areas.at(i) << " ";
+          }
+        cout << endl;
+
+
+
         // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
                                  // dyn sce.
         if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "reduced_speed_10percent"))

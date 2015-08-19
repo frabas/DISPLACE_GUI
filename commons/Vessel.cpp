@@ -177,6 +177,20 @@ public:
 };
 
 
+class VesselIsInAreaClosureEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselIsInAreaClosureEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        //cout << "isinareaclosure "  << endl;
+          vector <int> lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
+          std::vector<int>::iterator it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), fground);
+          return  it != lst_fgrounds_in_closed_areas.end() ? 1.0 : 0.0; // Is yes or no the closest ground?
+
+        }
+};
+
+
 
 }
 }
@@ -391,6 +405,8 @@ void Vessel::init()
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselHighPotentialCatchStateEvaluator);
         mStateEvaluators[dtree::notThatFar] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
+        mStateEvaluators[dtree::isInAreaClosure] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 
 
 
@@ -481,6 +497,12 @@ const vector<int> &Vessel::get_fgrounds() const
 {
 	return(fgrounds);
 }
+
+vector<int> &Vessel::get_fgrounds_in_closed_areas()
+{
+    return(fgrounds_in_closed_areas);
+}
+
 
 
 const vector<double> &Vessel::get_freq_harbours() const
@@ -859,6 +881,12 @@ void Vessel::set_spe_fgrounds (vector<int> _fgrounds)
 {
 	fgrounds=_fgrounds;
 }
+
+void Vessel::set_fgrounds_in_closed_areas (vector<int> _fgrounds)
+{
+    fgrounds_in_closed_areas=_fgrounds;
+}
+
 
 
 void Vessel::set_spe_freq_harbours (vector<double> _freq_harbours)

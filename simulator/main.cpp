@@ -1923,8 +1923,6 @@ int main(int argc, char* argv[])
         }
 
 
-
-
     //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
 	// and check the start coord
 								 //here
@@ -2025,7 +2023,20 @@ int main(int argc, char* argv[])
 		vessels[i]->set_spe_possible_metiers(possible_metiers);
 		vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers);
 
-		// for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
+
+
+        // inform grounds in closed areas
+        vector <int> grds = vessels[i]->get_fgrounds();
+        vector <int> fgrounds_in_closed_areas;
+        for(unsigned int i=0; i<grds.size();++i){
+            if(nodes.at(grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
+        }
+        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+
+
+
+        // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
 								 // dyn sce.
         if (dyn_alloc_sce.option(Options::reduced_speed_10percent))
 		{

@@ -49,7 +49,8 @@ class Vessel
 		Node* m_location;
 		Metier* metier;
 		vector<int> fgrounds;	 // idx nodes
-		vector<int> harbours;	 // idx nodes
+        vector<int> fgrounds_in_closed_areas;	 // idx nodes
+        vector<int> harbours;	 // idx nodes
 								 // freq of visit per node
 		vector<double> freq_fgrounds;
 								 // freq of visit per node
@@ -149,6 +150,7 @@ public:
 		string get_nationality () const;
         const vector<int> &get_harbours () const;
         const vector<int> &get_fgrounds () const;
+        vector<int> &get_fgrounds_in_closed_areas ();
         const vector<double> &get_freq_harbours () const;
         const vector<double> &get_freq_fgrounds () const;
         const vector<double> &get_cumcatch_fgrounds () const;
@@ -209,10 +211,12 @@ public:
 		void set_fuelcons (double val);
 		void set_course (double val);
 		void set_fgrounds (int val);
-		void set_harbours (int val);
+        void set_fgrounds_int_closed_areas (vector<int> grounds);
+        void set_harbours (int val);
 		void set_spe_harbours (vector<int> _harbours);
-		void set_spe_fgrounds (vector<int> _fgrounds);
-		void set_spe_freq_harbours (vector<double> _harbours);
+		void set_spe_fgrounds (vector<int> _fgrounds);		
+        void set_fgrounds_in_closed_areas (vector<int> _fgrounds);
+        void set_spe_freq_harbours (vector<double> _harbours);
 		void set_spe_freq_fgrounds (vector<double> _fgrounds);
 		void set_spe_cumcatch_fgrounds (vector<double> _cumcatch);
 		void set_spe_cumeffort_fgrounds (vector<double> _cumeffort);

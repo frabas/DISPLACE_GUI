@@ -199,7 +199,7 @@ public:
         int idx_node_r= find(the_grds.begin(), the_grds.end(), fground) - the_grds.begin();    // relative node index to this vessel
         cout << "risk of bycatch on this ground being evaluated..." << endl;
         vector <double> prop_bycatch = v->get_experienced_bycatch_prop_on_fgrounds();
-        cout << "size is " << prop_bycatch.size() << " while idx_node_r is " << idx_node_r << endl;
+        cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
         return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
         }
 };
@@ -1772,8 +1772,16 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	sort (pop_names.begin(), pop_names.end());
 	int idx_node = this->get_loc()->get_idx_node();
 	int code_area = this->get_loc()->get_code_area();
+    vector <int> the_grds = this->get_fgrounds();
+                     // relative node index to this vessel
+    int idx_node_r= find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
 
-	// OUTPUTS
+    // VARIABLES VALID FOR THIS FISHING EVENT ONLY
+    double totLandThisEvent=1;
+    double totDiscThisEvent=0.0001;
+
+
+    // OUTPUTS
 								 // declare with length nbpops
 	vector<double> tot_catch_per_pop(  catch_pop_at_szgroup.size() );
 
@@ -2241,10 +2249,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					// update dynamic trip-based cumul for this node
 								 // CUMUL FOR THE TRIP (all species confounded)
 					this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
-					vector <int> the_grds = this->get_fgrounds();
-								 // relative node index to this vessel
-					int idx_node_r= find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
-								 // catches
+                                 // catches
 					cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
 								 // catches per pop
 					cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += a_cumul_weight_this_pop_this_vessel;
@@ -2252,14 +2257,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
 
-                    // compute the proportion of discard to potentially influence future decision-making
-                    double totLand=1;
-                    double totDisc=0.0001;
+                    // cumul to later compute the proportion of discard to potentially influence future decision-making
                     for (unsigned int sz=0; sz<landings_per_szgroup.size(); ++sz){
-                        totLand += landings_per_szgroup[sz];
-                        totDisc += discards_per_szgroup[sz];
+                        totLandThisEvent += landings_per_szgroup[sz];
+                        totDiscThisEvent += discards_per_szgroup[sz];
                     }
-                    experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDisc/(totLand+totDisc);
 
 
 
@@ -2324,8 +2326,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 			{
                 dout(cout  << "no indiv of this pop " << populations[pop]->get_name() << " on this node... " << endl);
 			}
-		}
-		else
+
+
+
+        }
+        else  // implicit pop:
 		{
             dout(cout  << "this pop " << populations.at(pop)->get_name() << " is implicit (or outside the range)...catch knowing cpue only! " << endl);
             // tips: put tot catch into the first bin...we don´t care which szgroup here...
@@ -2365,10 +2370,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 				*/
 
 				// update dynamic trip-based cumul for this node
-				vector <int> the_grds = this->get_fgrounds();
-								 // relative node index to this vessel
-				int idx_node_r= find(the_grds.begin(), the_grds.end(), idx_node) - the_grds.begin();
-								 // catches
+                                 // catches
 				cumcatch_fgrounds.at(idx_node_r) += cpue*PING_RATE;
 								 // catches per pop
 				cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue*PING_RATE;
@@ -2377,7 +2379,16 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 			}
 		}
-	}
+
+
+    }
+
+
+    // compute the proportion of discard of this event on that ground
+    // (of all explicit species) to potentially influence future decision-making (see ChooseGround dtree)
+    experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDiscThisEvent/(totLandThisEvent+totDiscThisEvent);
+
+
 
 	// check the matrix of catches
 	//double a_cumul=0;

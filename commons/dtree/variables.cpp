@@ -72,7 +72,6 @@ const char *const VariableNames::bins[][40] = {
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
-    { "no", "yes",0 },
 
     { "false", "true",0 },
     { "false", "true",0 },

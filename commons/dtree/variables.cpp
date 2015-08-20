@@ -22,7 +22,6 @@ const char *const VariableNames::names[] = {
     "highPotentialCatch",          // ChooseGround
     "notThatFar",                  // ChooseGround
     "knowledgeOfThisGround",       // ChooseGround
-    "lastTripThisGroundWas",       // ChooseGround
     "riskOfBycatchIs",             // ChooseGround
     "saveFuel",                    // ChooseGround
     "isInAreaClosure",          // ChooseGround

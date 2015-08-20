@@ -2425,7 +2425,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
 {
 	vector<double> cum_cpue_over_pop;
 
-    // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full a guesses !
+    // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full of guesses!
 	// but there are qualified guesses: actually cpue from the frequency given by the input data...
 
     dout(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
@@ -4074,14 +4074,13 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
             // evaluators should evaluate if yes/no the ground a smartCatch ground etc.:
          // e.g.
 
-            //"smartCatch",          // ChooseGround             => find if that ground is relvant according to something like alloc_on_high_profit_grounds
-            //"highPotentialCatch",          // ChooseGround     => find if that ground is relvant according to something like alloc_on_high_previous_cpue
-            //"notThatFar",          // ChooseGround             => alloc_on_closer_grounds
-            //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds
-            //"lastTripThisGroundWas",          // ChooseGround  => TO DO: looking at the gain from last trip on that ground
-            //"riskOfBycatchIs",          // ChooseGround        => TO DO: looking at the proportion on sites of juveniles or other non-targeted species
-            //"saveFuel"                 // ChooseGround         => find if that ground is relvant according to something like alloc_while_saving_fuel
-            //"isInAreaClosure"      // ChooseGround         => find if that ground is relvant according to something like alter_freq_fgrounds_for_nodes_in_polygons         // ChooseGround
+            //"smartCatch",          // ChooseGround             => find if that ground is where the highest expected profit is
+            //"highPotentialCatch",          // ChooseGround     => find if that ground is where the highest experienced CPUE (all species) occurred
+            //"notThatFar",          // ChooseGround             => find if that ground is the closest one
+            //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds and pick up the most frequented ground
+            //"riskOfBycatchIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
+            //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
+            //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
             //=> TO DO: add the corresponding dtree evaluators...
 
             // cout << "traverse tree for ground " << ground << endl;
@@ -4097,7 +4096,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         }
 
- // if here, then no ground has been found so use the freq_fgrounds
+ // if here, then no ground has actually been found (because of a *non-complete* tree) so use the freq_fgrounds
         cout << "no one among relevant grounds... take from fground frequencies " << ground << endl;
         vector <double> freq_grds = this->get_freq_fgrounds();
                                   // need to convert in array, see myRutils.cpp

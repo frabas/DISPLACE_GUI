@@ -29,7 +29,7 @@ enum Variable {
     arrivedOnGroundIs,    // StartFishing
     detectedWithEchosounderIs,    // StartFishing
     suitableBottomTypeIs,   // StartFishing
-//    riskOfBycatchIs,          // ChooseGround and StartFishing
+    riskOfBycatchHereIs,          //  StartFishing
     otherVesselFishingHere,          // StartFishing
 
     FeelingForCatchingElsewhere,  // ChangeGround

@@ -190,6 +190,21 @@ public:
         }
 };
 
+class VesselRiskOfBycatchIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselRiskOfBycatchIsStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        vector <int> the_grds = v->get_fgrounds();
+        int idx_node_r= find(the_grds.begin(), the_grds.end(), fground) - the_grds.begin();    // relative node index to this vessel
+        cout << "risk of bycatch on this ground being evaluated..." << endl;
+        vector <double> prop_bycatch = v->get_experienced_bycatch_prop_on_fgrounds();
+        cout << "size is " << prop_bycatch.size() << " while idx_node_r is " << idx_node_r << endl;
+        return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
+        }
+};
+
+
 class VesselIsInAreaClosureEvaluator : public dtree::StateEvaluator {
 private:
 public:
@@ -421,6 +436,8 @@ void Vessel::init()
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
         mStateEvaluators[dtree::knowledgeOfThisGround] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchIs] =
+                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 
@@ -536,6 +553,11 @@ const vector<double> &Vessel::get_freq_fgrounds() const
 const vector<double> &Vessel::get_cumcatch_fgrounds() const
 {
 	return(cumcatch_fgrounds);
+}
+
+const vector<double> &Vessel::get_experienced_bycatch_prop_on_fgrounds () const
+{
+    return(experienced_bycatch_prop_on_fgrounds);
 }
 
 
@@ -928,6 +950,12 @@ void Vessel::set_spe_cumcatch_fgrounds (vector<double> _cumcatch_fgrounds)
 	cumcatch_fgrounds=_cumcatch_fgrounds;
 }
 
+void Vessel::set_spe_experienced_bycatch_prop_on_fgrounds (vector<double> _experienced_bycatch_prop_on_fgrounds)
+{
+    experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
+}
+
+
 
 void Vessel::set_spe_cumeffort_fgrounds (vector<double> _cumeffort_fgrounds)
 {
@@ -1065,6 +1093,14 @@ void Vessel::set_cumcatch_fgrounds (vector<double>  _cumcatch_fgrounds)
 {
 	cumcatch_fgrounds=_cumcatch_fgrounds;
 }
+
+
+void Vessel::set_experienced_bycatch_prop_on_fgrounds (vector<double>  _experienced_bycatch_prop_on_fgrounds)
+{
+    experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
+}
+
+
 
 
 void Vessel::set_cumcatch_fgrounds_per_pop (vector<vector<double> >  _cumcatch_fgrounds_per_pop)
@@ -2215,6 +2251,20 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								 // effort
 					cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
+
+                    // compute the proportion of discard to potentially influence future decision-making
+                    double totLand=1;
+                    double totDisc=0.0001;
+                    for (unsigned int sz=0; sz<landings_per_szgroup.size(); ++sz){
+                        totLand += landings_per_szgroup[sz];
+                        totDisc += discards_per_szgroup[sz];
+                    }
+                    experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDisc/(totLand+totDisc);
+
+
+
+
+
 					// check
 					/*
 					 for(int i=0; i<new_Ns_at_szgroup_pop.size(); i++)
@@ -2475,7 +2525,7 @@ void Vessel::clear_cumcatch_and_cumeffort()
 		}
 								 //clear
 		cumcatch_fgrounds.at(n) =0;
-								 //clear
+                                 //clear
 		cumeffort_fgrounds.at(n) =0;
 	}
 }

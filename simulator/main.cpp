@@ -2178,7 +2178,8 @@ int main(int argc, char* argv[])
 		vector<double > init_for_fgrounds(fgrounds.size());
 		vector<double > cumeffort_fgrounds= init_for_fgrounds;
 		vector<double > cumcatch_fgrounds= init_for_fgrounds;
-		vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
+        vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
+        vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
 		vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
 		vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 		vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -2187,11 +2188,13 @@ int main(int argc, char* argv[])
 		{
 			cumcatch_fgrounds[f] = 0;
 			cumeffort_fgrounds[f] = 0;
-			experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
+            experienced_bycatch_prop_on_fgrounds[f] =0;
+            experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
 			// this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
 			// first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
 			// second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
 			// third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
+            dout(cout  << "experienced_bycatch_prop_on_fgrounds[f]"  <<experienced_bycatch_prop_on_fgrounds[f] << endl);
             dout(cout  << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << endl);
             dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl);
 
@@ -2205,7 +2208,8 @@ int main(int argc, char* argv[])
 		}
 		// per total...
 		vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
-		vessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
+        vessels.at(i)->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
+        vessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
 		vessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
 		vessels.at(i)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
 								 // compute for the first time, to get freq_experiencedcpue_fgrounds...
@@ -3784,7 +3788,8 @@ int main(int argc, char* argv[])
 					init_for_fgrounds[i] = 0;
 				}
 				vessels.at(v)->set_spe_cumcatch_fgrounds (init_for_fgrounds);
-				vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
+                vessels.at(v)->set_spe_experienced_bycatch_prop_on_fgrounds(init_for_fgrounds);
+                vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
 				vessels.at(v)->set_spe_experiencedcpue_fgrounds (init_for_fgrounds);
 				vessels.at(v)->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
 				vessels.at(v)->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
@@ -3886,7 +3891,8 @@ int main(int argc, char* argv[])
 				vector<double > a_init_for_fgrounds(fgrounds.size());
 				vector<double > a_cumeffort_fgrounds= init_for_fgrounds;
 				vector<double > a_cumcatch_fgrounds= init_for_fgrounds;
-				vector<double > a_experiencedcpue_fgrounds= init_for_fgrounds;
+                vector<double > a_experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
+                vector<double > a_experiencedcpue_fgrounds= init_for_fgrounds;
 				vector<double > a_freq_experiencedcpue_fgrounds= init_for_fgrounds;
 				vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -3895,8 +3901,9 @@ int main(int argc, char* argv[])
                 for(unsigned int g = 0; g < fgrounds.size(); g++)
 				{
 					a_cumcatch_fgrounds[g] = 0;
-					a_cumeffort_fgrounds[g] = 0;
-					a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
+                    a_experienced_bycatch_prop_on_fgrounds[g] = 0;
+                    a_cumeffort_fgrounds[g] = 0;
+                    a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
                     // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
 					// first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
 					// second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
@@ -3913,7 +3920,8 @@ int main(int argc, char* argv[])
 				// per total...
                 dout(cout << "re-set vessels step5..."  << endl);
                 vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
-				vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
+                vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(a_experienced_bycatch_prop_on_fgrounds);
+                vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
 				vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
 				vessels.at(v)->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
 								 // compute for the first time, to get freq_experiencedcpue_fgrounds...

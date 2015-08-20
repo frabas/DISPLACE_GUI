@@ -1592,6 +1592,7 @@ bool DisplaceModel::loadVessels()
         vector<double > init_for_fgrounds(fgrounds.size());
         vector<double > cumeffort_fgrounds= init_for_fgrounds;
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
+        vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -1600,6 +1601,7 @@ bool DisplaceModel::loadVessels()
         for(int f = 0; f < fgrounds.size(); f++)
         {
             cumcatch_fgrounds[f] = 0;
+            experienced_bycatch_prop_on_fgrounds[f] = 0;
             cumeffort_fgrounds[f] = 0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
             // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
@@ -1618,6 +1620,7 @@ bool DisplaceModel::loadVessels()
 
         // per total...
         mVessels.at(i)->mVessel->set_cumcatch_fgrounds(cumcatch_fgrounds);
+        mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
         mVessels.at(i)->mVessel->set_cumeffort_fgrounds(cumeffort_fgrounds);
         mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
         mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);

@@ -57,7 +57,9 @@ class Vessel
 		vector<double> freq_harbours;
 								 // cumulated catch per node for the last trip, reinit when new trip start
 		vector<double> cumcatch_fgrounds;
-		vector< vector<double> > cumcatch_fgrounds_per_pop;
+        vector<double> experienced_bycatch_prop_on_fgrounds;
+
+        vector< vector<double> > cumcatch_fgrounds_per_pop;
 								 // cumulated effort per node for the last trip, reinit when new trip start
 		vector<double> cumeffort_fgrounds;
 								 // from cumcatch/cumeffort for last trip
@@ -154,6 +156,7 @@ public:
         const vector<double> &get_freq_harbours () const;
         const vector<double> &get_freq_fgrounds () const;
         const vector<double> &get_cumcatch_fgrounds () const;
+        const vector<double> &get_experienced_bycatch_prop_on_fgrounds () const;
         const vector<vector<double> > &get_cumcatch_fgrounds_per_pop () const;
         const vector<double> &get_cumeffort_fgrounds () const;
         const vector<double> &get_experiencedcpue_fgrounds () const;
@@ -220,7 +223,8 @@ public:
         void set_spe_freq_harbours (vector<double> _harbours);
 		void set_spe_freq_fgrounds (vector<double> _fgrounds);
 		void set_spe_cumcatch_fgrounds (vector<double> _cumcatch);
-		void set_spe_cumeffort_fgrounds (vector<double> _cumeffort);
+        void set_spe_experienced_bycatch_prop_on_fgrounds (vector<double> _experienced_bycatch_prop_on_fgrounds);
+        void set_spe_cumeffort_fgrounds (vector<double> _cumeffort);
 		void set_spe_experiencedcpue_fgrounds (vector<double> _experiencedcpue);
 		void set_spe_betas_per_pop (vector<double> _betas_per_pop);
 		void set_spe_percent_tac_per_pop (vector<double> _tacs_per_pop);
@@ -233,7 +237,8 @@ public:
 		void init_gscale_cpue_nodes_species(int nbnodes, int nbspecies);
 		void set_gscale_cpue_nodes_species(int sp, vector<double> newval);
 		void set_cumcatch_fgrounds(vector<double> newval);
-		void set_cumcatch_fgrounds_per_pop(vector<vector<double> > newval);
+        void set_experienced_bycatch_prop_on_fgrounds(vector<double> newval);
+        void set_cumcatch_fgrounds_per_pop(vector<vector<double> > newval);
 		void set_cumeffort_fgrounds(vector<double> newval);
 		void set_experiencedcpue_fgrounds(vector<double> newval);
 		void set_experiencedcpue_fgrounds_per_pop(vector<vector<double> > newval);

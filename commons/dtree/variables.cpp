@@ -30,7 +30,7 @@ const char *const VariableNames::names[] = {
     "arrivedOnGroundIs",    // StartFishing
     "detectedWithEchosounderIs",    // StartFishing
     "suitableBottomTypeIs",   // StartFishing
-//    "riskOfBycatchIs",          // ChooseGround and StartFishing
+    "riskOfBycatchHereIs",          // StartFishing
     "otherVesselFishingHere",          // StartFishing
 
     "FeelingForCatchingElsewhere",  // ChangeGround
@@ -69,14 +69,14 @@ const char *const VariableNames::bins[][40] = {
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
-    { "no", "yes",0 },
+    { "<50% bycatch", ">50%",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
 
     { "false", "true",0 },
     { "false", "true",0 },
     { "false", "true",0 },
-//    { "low", "high",0 },
+    { "<50% bycatch", ">50%",0 },
     { "no", "yes",0 },
 
     { "after 3 h", "after 6 h",0 },

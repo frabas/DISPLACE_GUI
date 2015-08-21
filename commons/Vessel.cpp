@@ -1380,7 +1380,7 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
 
     // if here, we may have a problem.
 
-    if (prevnode != nullptr) {
+    if (prevnode != 0) {
         std::ostringstream ss;
         ss << "Invalid null node reached while traversing decision tree. value=" << value << " bin= " << bin;
         ss << " map: " << prevnode->getMapping(bin);

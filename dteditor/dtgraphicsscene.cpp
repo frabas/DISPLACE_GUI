@@ -20,14 +20,18 @@ DtGraphicsScene::DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QO
 
 void DtGraphicsScene::clear()
 {
+    if (mRoot) {
+        QList<GraphNodeItem*> nodes;
+        nodes.push_back(mRoot);
+        removeNodes(nodes);
+    }
+
     mRoot = 0;
     mAddingNode.reset();
     if (mAddingItem) delete mAddingItem;
     mAddingItem = 0;
     mHoveringNode = 0;
     mHoveringNodeChild = -1;
-
-    QGraphicsScene::clear();
 }
 
 bool DtGraphicsScene::requiresChildrenHighlight() const

@@ -27,7 +27,6 @@ using namespace std;
 struct thread_data_t {
     pthread_t thread;
     int thread_idx;
-    int thread_id;
 };
 
 static unsigned int numthreads;

@@ -26,5 +26,6 @@ void thread_vessel_prepare();
 void thread_vessel_insert_job(int idx);
 void thread_vessel_wait_completed();
 void thread_vessel_deinit();
+void thread_vessel_signal_exit();
 
 #endif // THREAD_VESSELS_H

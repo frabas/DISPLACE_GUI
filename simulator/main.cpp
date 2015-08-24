@@ -4255,6 +4255,8 @@ int main(int argc, char* argv[])
     CALLGRIND_STOP_INSTRUMENTATION;
     CALLGRIND_DUMP_STATS;
 
+    thread_vessel_signal_exit();
+
 #ifdef PROFILE
     guiSendCapture(true);
 

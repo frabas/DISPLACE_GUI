@@ -395,8 +395,12 @@ static void *thread(void *args)
 
     while (!exit_flag) {
         pthread_mutex_lock(&work_mutex);
-        while (works.size() == 0) {
+        while (works.size() == 0 && !exit_flag) {
             pthread_cond_wait(&work_cond, &work_mutex);
+        }
+        if (exit_flag) {
+            pthread_mutex_unlock(&work_mutex);
+            break;
         }
 
         int nextidx = works.front();
@@ -426,7 +430,7 @@ void thread_vessel_init (int n)
     thread_data = new thread_data_t[numthreads];
     for (unsigned int i = 0; i < numthreads; ++i) {
         thread_data[i].thread_idx = i;
-        thread_data[i].thread_id = pthread_create(&thread_data[i].thread, 0, thread, (void *)&thread_data[i]);
+        pthread_create(&thread_data[i].thread, 0, thread, (void *)&thread_data[i]);
 
         struct sched_param tparam;
         int policy;
@@ -463,6 +467,21 @@ void thread_vessel_insert_job(int idx)
     ++uncompleted_works;
     pthread_cond_signal(&work_cond);
     pthread_mutex_unlock(&work_mutex);
+}
+
+void thread_vessel_signal_exit()
+{
+    exit_flag = true;
+    void *rv;
+    for (int i = 0; i < numthreads; ++i) {
+//        thread_vessel_insert_job(-1);
+        pthread_mutex_lock(&work_mutex);
+        pthread_cond_signal(&work_cond);
+        pthread_mutex_unlock(&work_mutex);
+        usleep(1000);
+    }
+    for (int i = 0; i < numthreads; ++i)
+        pthread_join(thread_data[i].thread, &rv);
 }
 
 void thread_vessel_wait_completed()

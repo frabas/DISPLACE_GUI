@@ -3948,9 +3948,8 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
          */
 
 
-        //}
-        //if(smartCatch is in tree)
-        //{
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::smartCatch) == true)
+        {
            int smartCatchGround;
            vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
@@ -3989,14 +3988,14 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
             }
             dout(cout << "smartCatchGround is " << smartCatchGround << endl);
 
-        //}
+        }
 
 
 
 
 
-        //if(highPotentialCatch is in tree)
-        //{
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::highPotentialCatch) == true)
+        {
            int highPotentialCatchGround;
            vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
 
@@ -4034,10 +4033,10 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
            }
            dout(cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl);
 
-        //}
+        }
 
-        //if(notThatFar is in tree)
-        //{
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::notThatFar) == true)
+        {
           int notThatFarGround;
           int from = this->get_loc()->get_idx_node();
           vector <double> distance_to_grounds = compute_distance_fgrounds
@@ -4077,10 +4076,10 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
           this->set_notthatfar(-1);  // grounds are all included in closed areas...
           }
           dout(cout << "notThatFarGround is " << notThatFarGround << endl);
-          //}
+          }
 
-       // if(knowledgeOfThisGround is in tree)
-       // {
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::knowledgeOfThisGround) == true)
+        {
           int knowledgeOfThisGround;
           vector <double> freq_grounds = this->get_freq_fgrounds();
 
@@ -4114,11 +4113,11 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
              relevant_grounds_to_evaluate.push_back(knowledgeOfThisGround); // use it to limit the search time...
 
           } else{
-          this->set_notthatfar(-1);  // grounds are all included in closed areas...
+          this->set_mosthistoricallyused(-1);  // grounds are all included in closed areas...
           }
           dout(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl);
 
-        // }
+         }
 
 
 

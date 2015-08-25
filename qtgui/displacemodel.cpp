@@ -26,7 +26,7 @@ DisplaceModel::DisplaceModel()
       mSimuName("simu2"),
       mLinkedDbName(),
       mIndex(-1),
-      mSimulSteps(8761),
+      mSimulSteps(8762),
       mUseStaticPaths(1),
       mPreexistingPathsShop(1),
       mCurrentStep(0), mLastStep(0),

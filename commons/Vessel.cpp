@@ -151,7 +151,7 @@ public:
     VesselSmartCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isSmart= (fground==v->get_smartcatch());
-        cout << "smartcatch on this ground evaluated at " <<  isSmart << endl;
+        //cout << "smartcatch on this ground evaluated at " <<  isSmart << endl;
         return  isSmart ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
         }
 };
@@ -163,7 +163,7 @@ public:
     VesselHighPotentialCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isHighPotential=(fground==v->get_highpotentialcatch());
-        cout << "highpotentialcatch on this ground evaluated at " << isHighPotential<< endl;
+        //cout << "highpotentialcatch on this ground evaluated at " << isHighPotential<< endl;
         return   isHighPotential ? 1.0 : 0.0; // Is yes or no the tested ground the highest cpue ground?
         }
 };
@@ -174,7 +174,7 @@ public:
     VesselNotThatFarStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isNotFar = (fground==v->get_notthatfar());
-        cout << "notthatfar on this ground evaluated at " << isNotFar << endl;
+        //cout << "notthatfar on this ground evaluated at " << isNotFar << endl;
         return  isNotFar ? 1.0 : 0.0; // Is yes or no the closest ground?
         }
 };
@@ -185,7 +185,7 @@ public:
     VesselKnowledgeOfThisGroundStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         bool isWellKnown = (fground==v->get_mosthistoricallyused());
-        cout << "mosthistoricallyused on this ground evaluated at " << isWellKnown << endl;
+        //cout << "mosthistoricallyused on this ground evaluated at " << isWellKnown << endl;
         return  isWellKnown ? 1.0 : 0.0; // Is yes or no the ground has been the most historically frequent?
         }
 };
@@ -197,9 +197,9 @@ public:
     double evaluate(int fground, Vessel *v) const {
         vector <int> the_grds = v->get_fgrounds();
         int idx_node_r= find(the_grds.begin(), the_grds.end(), fground) - the_grds.begin();    // relative node index to this vessel
-        cout << "risk of bycatch on this ground being evaluated..." << endl;
+        //cout << "risk of bycatch on this ground being evaluated..." << endl;
         vector <double> prop_bycatch = v->get_experienced_bycatch_prop_on_fgrounds();
-        cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
+        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
         return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
         }
 };
@@ -3202,7 +3202,6 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
        //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
        //int ground=grds[0];
        dout(cout  << this->get_name() << "GO FISHING ON " << ground << endl);
-       cout  << this->get_name() << "GO FISHING ON " << ground << endl;
 
        // get the shortest path between source and destination
        // with the list of intermediate nodes

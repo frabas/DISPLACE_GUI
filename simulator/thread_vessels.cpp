@@ -23,6 +23,11 @@ using namespace std;
 #include <semaphore.h>
 #include <errno.h>
 
+// for Windows
+#ifdef _WIN32
+#include <windows.h>
+#include <direct.h>
+#endif
 
 struct thread_data_t {
     pthread_t thread;
@@ -477,7 +482,12 @@ void thread_vessel_signal_exit()
         pthread_mutex_lock(&work_mutex);
         pthread_cond_signal(&work_cond);
         pthread_mutex_unlock(&work_mutex);
+#ifdef _WIN32
+        Sleep(1000);
+#else
         usleep(1000);
+#endif
+
     }
     for (int i = 0; i < numthreads; ++i)
         pthread_join(thread_data[i].thread, &rv);

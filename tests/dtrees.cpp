@@ -16,6 +16,8 @@ BOOST_AUTO_TEST_CASE( Dtree )
 
     manager->readFromDirectory("data/tests/dtree-metiers");
     BOOST_CHECK( manager->hasTree(dtree::DecisionTreeManager::GoFishing) == true );
+    BOOST_CHECK( manager->hasTreeVariable(dtree::DecisionTreeManager::GoFishing, dtree::vesselMetierIs) == true);
+    BOOST_CHECK( manager->hasTreeVariable(dtree::DecisionTreeManager::GoFishing, dtree::vesselSizeIs) == false);
 
     boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
 

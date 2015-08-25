@@ -1,8 +1,11 @@
 #ifndef DECISIONTREEMANAGER_H
 #define DECISIONTREEMANAGER_H
 
+#include <dtree/variables.h>
+
 #include <string>
 #include <vector>
+#include <set>
 
 #include <boost/shared_ptr.hpp>
 
@@ -45,6 +48,7 @@ public:
     int readFromScenario (std::string path, displace::commons::Scenario scenario);
     boost::shared_ptr<dtree::DecisionTree> tree (TreeType type);
     bool hasTree(TreeType type);
+    bool hasTreeVariable (TreeType type, dtree::Variable variable) const;
 
     /** \brief returns the instance of the singleton.
      * Uses lazy initialization to proper initialize the instance.
@@ -64,6 +68,7 @@ protected:
 
 private:
     std::vector<boost::shared_ptr<dtree::DecisionTree> > mTrees;
+    std::vector<std::set<dtree::Variable> > mVariableDictionary;
 
     static DecisionTreeManager *mInstance;
 

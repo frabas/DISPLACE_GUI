@@ -28,8 +28,10 @@ DecisionTreeManager *DecisionTreeManager::mInstance = 0;
 DecisionTreeManager::DecisionTreeManager()
     : mTrees()
 {
-    for (int i = 0; i < SIZE; ++i)
+    for (int i = 0; i < SIZE; ++i) {
         mTrees.push_back(boost::shared_ptr<dtree::DecisionTree>());
+        mVariableDictionary.push_back(std::set<Variable>());
+    }
 }
 
 /** \brief Read all the dtrees in a directory, returning the number of loaded trees.
@@ -182,11 +184,13 @@ bool DecisionTreeManager::readFile (std::string filename)
 
     // setup the tree
     tree->setType(treeType);
+    std::set<Variable> &dictionary = mVariableDictionary.at(static_cast<int>(treeType));
 
     if (nodes.size() > 0) {
         for (size_t i = 0; i < nodes.size(); ++i) {
             boost::shared_ptr<dtree::Node> n = nodes[i].node;
             n->setVariable(nodes[i].variable);
+            dictionary.insert(nodes[i].variable);
             n->setValue(nodes[i].value);
             int nch = 0;
             for (size_t j = 0; j < nodes[i].children.size(); ++j) {
@@ -236,6 +240,13 @@ boost::shared_ptr<dtree::DecisionTree> DecisionTreeManager::tree(DecisionTreeMan
 bool DecisionTreeManager::hasTree(DecisionTreeManager::TreeType type)
 {
     return tree(type).get() != 0;
+}
+
+bool DecisionTreeManager::hasTreeVariable(DecisionTreeManager::TreeType type, Variable variable) const
+{
+    const std::set<Variable> &dictionary = mVariableDictionary.at(static_cast<int>(type));
+    std::set<Variable>::const_iterator it = dictionary.find(variable);
+    return it != dictionary.end();
 }
 
 std::string DecisionTreeManager::treeTypeCode(DecisionTreeManager::TreeType type)

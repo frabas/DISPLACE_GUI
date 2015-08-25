@@ -16,7 +16,7 @@ Simulator::Simulator()
       mIpcThread(0),
       mIpcQueue(0),
       mModel(),
-      mSimSteps(8761),
+      mSimSteps(8762),
       useStaticPaths(1),
       preexistingPathsShop(1),
       mLastStep(-1),

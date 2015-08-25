@@ -3615,7 +3615,7 @@ int main(int argc, char* argv[])
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
                 for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++){
-                   nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep, funcgroup);
+//                   nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep, funcgroup);
                 }
             }
 

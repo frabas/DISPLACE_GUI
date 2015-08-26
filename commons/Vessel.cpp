@@ -3927,6 +3927,10 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         // keep tracks relevant nodes to evaluate
         vector <int> relevant_grounds_to_evaluate;
+        int smartCatchGround;
+        int highPotentialCatchGround;
+        int notThatFarGround;
+        int knowledgeOfThisGround;
 
 
         // 1. grounds of that vessel
@@ -3950,7 +3954,6 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::smartCatch) == true)
         {
-           int smartCatchGround;
            vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
                                                                                       min_distance_shop);
@@ -3996,7 +3999,6 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::highPotentialCatch) == true)
         {
-           int highPotentialCatchGround;
            vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
 
            // keep only the grds out the closed areas...
@@ -4035,9 +4037,48 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         }
 
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::knowledgeOfThisGround) == true)
+        {
+          vector <double> freq_grounds = this->get_freq_fgrounds();
+
+          // keep only the grds out the closed areas...
+          vector <int> grds_out4;
+          vector <double> freq_grounds_out;
+          if(grds_in_closure.size()>0)
+          {
+              for (unsigned int i=0; i<grds.size();++i)
+              {
+              std::vector<int>::iterator it;
+              it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+              if(it == grds_in_closure.end()) // not found
+                 {
+                  freq_grounds_out.push_back(freq_grounds.at(i));
+                  grds_out4.push_back(grds.at(i));
+                 }
+             }
+          } else{
+              grds_out4=grds;
+              freq_grounds_out=freq_grounds;
+          }
+          if(grds_out4.size()>0){
+
+             // ...and find the max
+             idx = distance(freq_grounds_out.begin(),
+                                           max_element(freq_grounds_out.begin(), freq_grounds_out.end()));
+             knowledgeOfThisGround = grds_out4.at(idx);
+             this->set_mosthistoricallyused(knowledgeOfThisGround);
+
+             relevant_grounds_to_evaluate.push_back(knowledgeOfThisGround); // use it to limit the search time...
+
+          } else{
+          this->set_mosthistoricallyused(-1);  // grounds are all included in closed areas...
+          }
+          dout(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl);
+
+         }
+
         if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::notThatFar) == true)
         {
-          int notThatFarGround;
           int from = this->get_loc()->get_idx_node();
           vector <double> distance_to_grounds = compute_distance_fgrounds
                                                    (idx_path_shop,
@@ -4078,46 +4119,6 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
           dout(cout << "notThatFarGround is " << notThatFarGround << endl);
           }
 
-        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::knowledgeOfThisGround) == true)
-        {
-          int knowledgeOfThisGround;
-          vector <double> freq_grounds = this->get_freq_fgrounds();
-
-          // keep only the grds out the closed areas...
-          vector <int> grds_out4;
-          vector <double> freq_grounds_out;
-          if(grds_in_closure.size()>0)
-          {
-              for (unsigned int i=0; i<grds.size();++i)
-              {
-              std::vector<int>::iterator it;
-              it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
-              if(it == grds_in_closure.end()) // not found
-                 {
-                  freq_grounds_out.push_back(freq_grounds.at(i));
-                  grds_out4.push_back(grds.at(i));
-                 }
-             }
-          } else{
-              grds_out4=grds;
-              freq_grounds_out=freq_grounds;
-          }
-          if(grds_out4.size()>0){
-
-             // ...and find the max
-             idx = distance(freq_grounds_out.begin(),
-                                           max_element(freq_grounds_out.begin(), freq_grounds_out.end()));
-             knowledgeOfThisGround = grds_out4.at(idx);
-             this->set_mosthistoricallyused(knowledgeOfThisGround);
-
-             relevant_grounds_to_evaluate.push_back(knowledgeOfThisGround); // use it to limit the search time...
-
-          } else{
-          this->set_mosthistoricallyused(-1);  // grounds are all included in closed areas...
-          }
-          dout(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl);
-
-         }
 
 
 
@@ -4157,8 +4158,13 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         }
 
- // if here, then no ground has actually been found (because of a *non-complete* tree) so use the freq_fgrounds
-        cout << "no one among relevant grounds... take from fground frequencies " << ground << endl;
+ // if here, then no ground has actually been found
+        // (because of 1- a *non-complete* tree;
+        // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
+        cout << "no one among relevant grounds......take the last ground evaluated... "<< ground << endl;
+        if(relevant_grounds_to_evaluate.size()>0) return (ground);
+
+        // ultimately, use the freq_fgrounds...(e.g. when all nodes are in closed areas)
         vector <double> freq_grds = this->get_freq_fgrounds();
                                   // need to convert in array, see myRutils.cpp
         double cumul=0.0;

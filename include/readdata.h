@@ -73,6 +73,7 @@ string inputfolder
 );
 
 multimap<string, int> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, int> read_fgrounds_shared(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, int> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);

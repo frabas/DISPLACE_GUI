@@ -758,6 +758,41 @@ multimap<string, int> read_fgrounds(string a_quarter, string folder_name_paramet
 }
 
 
+
+multimap<string, int> read_fgrounds_shared(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: fishing grounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";  // TO BE CHANGED
+    ifstream vessels_fgrounds;
+    vessels_fgrounds.open(filename.c_str());
+    if(vessels_fgrounds.fail())
+    {
+        open_file_error(filename.c_str());
+        //   return 1;
+    }
+    multimap<string, int> fgrounds_shared;
+    fill_multimap_from_specifications_s_i(vessels_fgrounds,  fgrounds_shared);
+    vessels_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,int>::iterator lower_fg = fgrounds_shared.lower_bound("DNK001");
+    multimap<string,int>::iterator upper_fg = fgrounds_shared.upper_bound("DNK001");
+
+    dout(cout << "fishing grounds: ");
+    for (multimap<string, int>::iterator pos=lower_fg; pos != upper_fg; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(fgrounds_shared);
+}
+
+
+
 multimap<string, int> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)
 {
 

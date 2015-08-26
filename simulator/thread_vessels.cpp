@@ -80,6 +80,7 @@ extern multimap<int, double> freq_possible_metiers;
 extern multimap<int, double> gshape_cpue_per_stk_on_nodes;
 extern multimap<int, double> gscale_cpue_per_stk_on_nodes;
 extern vector<int> spe_fgrounds;
+extern vector<int> spe_fgrounds_shared;
 extern vector<int> spe_harbours;
 extern vector<double> spe_freq_fgrounds;
 extern vector<double> spe_freq_harbours;

@@ -1306,6 +1306,7 @@ bool DisplaceModel::loadVessels()
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
     multimap<string, int> fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> fgrounds_shared = read_fgrounds_shared(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
     multimap<string, int> harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
@@ -1345,6 +1346,7 @@ bool DisplaceModel::loadVessels()
     multimap<int, double> gshape_cpue_per_stk_on_nodes;
     multimap<int, double> gscale_cpue_per_stk_on_nodes;
     vector<int> spe_fgrounds;
+    vector<int> spe_fgrounds_shared;
     vector<int> spe_harbours;
     vector<double> spe_freq_fgrounds;
     vector<double> spe_freq_harbours;
@@ -1380,6 +1382,7 @@ bool DisplaceModel::loadVessels()
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
         spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
+        spe_fgrounds_shared = find_entries_s_i(fgrounds_shared, vesselids[i]);
         spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
         spe_harbours = find_entries_s_i(harbours, vesselids[i]);
         spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
@@ -1412,6 +1415,7 @@ bool DisplaceModel::loadVessels()
             NBSZGROUP,
             spe_harbours,
             spe_fgrounds,
+            spe_fgrounds_shared,
             spe_freq_harbours,
             spe_freq_fgrounds,
             spe_vessel_betas_per_pop,
@@ -1440,6 +1444,7 @@ bool DisplaceModel::loadVessels()
         // some useful setters...
         // will also be useful when change of YEAR-QUARTER
         v->set_spe_fgrounds(spe_fgrounds);
+        v->set_spe_fgrounds_shared(spe_fgrounds_shared);
         v->set_spe_harbours(spe_harbours);
         v->set_spe_freq_fgrounds(spe_freq_fgrounds);
         v->set_spe_freq_harbours(spe_freq_harbours);

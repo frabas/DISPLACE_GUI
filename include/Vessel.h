@@ -48,7 +48,8 @@ class Vessel
 		//boost::shared_ptr<Node> m_location;
 		Node* m_location;
 		Metier* metier;
-		vector<int> fgrounds;	 // idx nodes
+        vector<int> fgrounds;	 // idx nodes for fishing grounds specific to this vessel
+        vector<int> fgrounds_shared;	 // fishing grounds specific to e.g. port shared
         vector<int> fgrounds_in_closed_areas;	 // idx nodes
         vector<int> harbours;	 // idx nodes
 								 // freq of visit per node
@@ -125,16 +126,16 @@ public:
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name);
 		Vessel(Node* a_location, int idx_vessel, string name);
 		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name, int nbpops, int nbszgroups, vector<int> harbours, vector<int> fgrounds,
-        Vessel(Node* a_location, int idx_vessel, string name, int nbpops, int nbszgroups, const vector<int> &harbours, const vector<int> &fgrounds,
+        Vessel(Node* a_location, int idx_vessel, string name, int nbpops, int nbszgroups, const vector<int> &harbours, const vector<int> &fgrounds, const vector<int> &fgrounds_shared,
             const vector<double> &freq_harbours, const vector<double> &freq_fgrounds, const vector<double> &vessel_betas_per_pop,
             const vector<double> &percent_tac_per_pop,
             const multimap <int, int> &possible_metiers, const multimap <int, double> &freq_possible_metiers,
-			double speed, double fuelcons, double length, double KW,
-			double  carrycapacity, double tankcapacity, double nbfpingspertrip,
-			double resttime_par1, double resttime_par2, double av_trip_duration,
-           	double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
-           	double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive
-           	);			
+            double speed, double fuelcons, double length, double KW,
+            double  carrycapacity, double tankcapacity, double nbfpingspertrip,
+            double resttime_par1, double resttime_par2, double av_trip_duration,
+            double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
+            double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive
+            );
 		Vessel();
 		~Vessel();
 
@@ -152,6 +153,7 @@ public:
 		string get_nationality () const;
         const vector<int> &get_harbours () const;
         const vector<int> &get_fgrounds () const;
+        const vector<int> &get_fgrounds_shared () const;
         vector<int> &get_fgrounds_in_closed_areas ();
         const vector<double> &get_freq_harbours () const;
         const vector<double> &get_freq_fgrounds () const;
@@ -215,10 +217,12 @@ public:
 		void set_fuelcons (double val);
 		void set_course (double val);
 		void set_fgrounds (int val);
+        void set_fgrounds_shared (int val);
         void set_fgrounds_int_closed_areas (vector<int> grounds);
         void set_harbours (int val);
 		void set_spe_harbours (vector<int> _harbours);
 		void set_spe_fgrounds (vector<int> _fgrounds);		
+        void set_spe_fgrounds_shared (vector<int> _fgrounds_shared);
         void set_fgrounds_in_closed_areas (vector<int> _fgrounds);
         void set_spe_freq_harbours (vector<double> _harbours);
 		void set_spe_freq_fgrounds (vector<double> _fgrounds);

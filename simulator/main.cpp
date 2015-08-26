@@ -176,6 +176,7 @@ multimap<int, double> freq_possible_metiers;
 multimap<int, double> gshape_cpue_per_stk_on_nodes;
 multimap<int, double> gscale_cpue_per_stk_on_nodes;
 vector<int> spe_fgrounds;
+vector<int> spe_fgrounds_shared;
 vector<int> spe_harbours;
 vector<double> spe_freq_fgrounds;
 vector<double> spe_freq_harbours;
@@ -1209,7 +1210,7 @@ int main(int argc, char* argv[])
 	graph_point_code_landscape.resize( std::distance(graph_point_code_landscape.begin(),it) );
 	int nbland = graph_point_code_landscape.size();
 
-    // creation of a vector of benthos community (one benthos community per landscape)
+    // creation of a vector of benthos shared (one benthos shared per landscape)
 	vector <Benthos* > benthoss(nbland);
 
    outc(cout << "nb of marine landscapes " << nbland << endl);
@@ -1238,7 +1239,7 @@ int main(int argc, char* argv[])
 			cin>>aa;
 		}
 
-		// add e.g. 2 functional groups per community
+        // add e.g. 2 functional groups per shared
 		// and init with an arbitrary biomass.
 		// init_biomass will be distributed evenly among nodes
 		// belonging to this particular landscape
@@ -1246,7 +1247,7 @@ int main(int argc, char* argv[])
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
 			nodes,
 			init_tot_biomass_per_group);
-        //out(cout << "marine landscape for this benthos community is " << benthoss.at(landscape)->get_marine_landscape() << endl);
+        //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 
 	}
@@ -1265,7 +1266,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	// check the area distribution for benthos community 0
+    // check the area distribution for benthos shared 0
 	//vector<Node* > some_nodes= benthoss.at(0)-> get_list_nodes();
 	//for(int a_idx=0; a_idx<some_nodes.size(); a_idx++){
 	//    cout << some_nodes.at(a_idx)->get_idx_node() << endl;
@@ -1273,14 +1274,14 @@ int main(int argc, char* argv[])
 
 	// check the biomasses
 	vector<double> biomass_per_funcgr = benthoss[0]->get_tot_biomass();
-   outc(cout << "check biomass per func. gr. for benthos community 0  " << endl);
+   outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
 	for(unsigned int i=0 ; i<biomass_per_funcgr.size();  i++)
 	{
        outc(cout << biomass_per_funcgr[i] << " " );
 	}
    outc(cout << endl);
 
-	// check the biomasses for benthos community 0 on the first node for the
+    // check the biomasses for benthos shared 0 on the first node for the
 	// first functional group
 	//cout <<"...and the biomass this node this func. grp is "  <<
 	//     benthoss.at(0)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl;
@@ -1866,6 +1867,7 @@ int main(int argc, char* argv[])
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
     multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> fgrounds_shared = read_fgrounds_shared(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
@@ -1960,7 +1962,8 @@ int main(int argc, char* argv[])
 		// read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
 		// for creating the vessel object, search into the multimaps
 		spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
-		spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_fgrounds_shared = find_entries_s_i(fgrounds_shared, vesselids[i]);
+        spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
 		spe_harbours = find_entries_s_i(harbours, vesselids[i]);
 		spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
 		spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
@@ -1992,7 +1995,8 @@ int main(int argc, char* argv[])
 			NBSZGROUP,
 			spe_harbours,
 			spe_fgrounds,
-			spe_freq_harbours,
+            spe_fgrounds_shared,
+            spe_freq_harbours,
 			spe_freq_fgrounds,
 			spe_vessel_betas_per_pop,
 			spe_percent_tac_per_pop,
@@ -2017,7 +2021,8 @@ int main(int argc, char* argv[])
 		// some useful setters...
 		// will also be useful when change of YEAR-QUARTER
 		vessels[i]->set_spe_fgrounds(spe_fgrounds);
-		vessels[i]->set_spe_harbours(spe_harbours);
+        vessels[i]->set_spe_fgrounds_shared(spe_fgrounds_shared);
+        vessels[i]->set_spe_harbours(spe_harbours);
 		vessels[i]->set_spe_freq_fgrounds(spe_freq_fgrounds);
 		vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
 		vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
@@ -3716,6 +3721,7 @@ int main(int argc, char* argv[])
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
 			// also quarter specific but semester specific for the betas because of the survey design they are comning from...
             fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            fgrounds_shared = read_fgrounds_shared(a_quarter, folder_name_parameterization, "../"+inputfolder);
             harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
             freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
@@ -3732,7 +3738,8 @@ int main(int argc, char* argv[])
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
 				spe_fgrounds = find_entries_s_i(fgrounds, vesselids.at(v));
-				spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
+                spe_fgrounds_shared = find_entries_s_i(fgrounds_shared, vesselids.at(v));
+                spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
 				spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids.at(v));
 				spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
 				spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids.at(v));
@@ -3781,7 +3788,8 @@ int main(int argc, char* argv[])
                     }
 
 				vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
-				vessels.at(v)->set_spe_harbours(spe_harbours);
+                vessels.at(v)->set_spe_fgrounds_shared(spe_fgrounds_shared);
+                vessels.at(v)->set_spe_harbours(spe_harbours);
 				vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
 				vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
 				vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());

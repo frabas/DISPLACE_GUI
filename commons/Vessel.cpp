@@ -263,7 +263,7 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 
 
 Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
-const vector<int> &_harbours, const vector<int> &_fgrounds,
+const vector<int> &_harbours, const vector<int> &_fgrounds, const vector<int> &_fgrounds_shared,
 const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds,
 const vector<double> &_vessel_betas_per_pop,
 const vector<double> &_percent_tac_per_pop,
@@ -287,7 +287,8 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	name = a_name;
 	harbours = _harbours;		 // overwrite by the setter() in main...
 	fgrounds = _fgrounds;		 // overwrite by the setter() in main...
-								 // overwrite by the setter() in main...
+    fgrounds_shared = _fgrounds_shared;		 // overwrite by the setter() in main...
+                                 // overwrite by the setter() in main...
 	freq_harbours = _freq_harbours;
 								 // overwrite by the setter() in main...
 	freq_fgrounds = _freq_fgrounds;
@@ -530,6 +531,12 @@ const vector<int> &Vessel::get_fgrounds() const
 {
 	return(fgrounds);
 }
+
+const vector<int> &Vessel::get_fgrounds_shared() const
+{
+    return(fgrounds_shared);
+}
+
 
 vector<int> &Vessel::get_fgrounds_in_closed_areas()
 {
@@ -925,6 +932,12 @@ void Vessel::set_spe_fgrounds (vector<int> _fgrounds)
 {
 	fgrounds=_fgrounds;
 }
+
+void Vessel::set_spe_fgrounds_shared (vector<int> _fgrounds_shared)
+{
+    fgrounds_shared=_fgrounds_shared;
+}
+
 
 void Vessel::set_fgrounds_in_closed_areas (vector<int> _fgrounds)
 {

@@ -33,13 +33,17 @@ int nbszgroups,
 string _name,
 //multimap<string, double> _mean_fish_price_per_met_per_pop,
 multimap<int, double> _mean_fish_price_per_pop_per_cat,
-map<int, double> _fuelprice)
+map<int, double> _fuelprice,
+vector<int> _usual_fgrounds,
+vector<double> _freq_usual_fgrounds)
 : Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
 	//mean_fish_price_per_met_per_pop= _mean_fish_price_per_met_per_pop;
 	mean_fish_price_per_pop_per_cat=_mean_fish_price_per_pop_per_cat;
 	fuelprice= _fuelprice;
+    usual_fgrounds=_usual_fgrounds;
+    freq_usual_fgrounds=_freq_usual_fgrounds;
 
 }
 
@@ -137,3 +141,28 @@ double Harbour::get_fuelprices(int vsize)
 
     return(a_fuelprice);
 }
+
+
+const vector<int> &Harbour::get_usual_fgrounds() const
+{
+    return(usual_fgrounds);
+}
+
+
+const vector<double> &Harbour::get_freq_usual_fgrounds() const
+{
+    return(freq_usual_fgrounds);
+}
+
+void Harbour::set_usual_fgrounds(vector <int> _usual_fgrounds)
+{
+ usual_fgrounds=_usual_fgrounds;
+}
+
+
+void Harbour::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
+{
+ freq_usual_fgrounds=_freq_usual_fgrounds;
+}
+
+

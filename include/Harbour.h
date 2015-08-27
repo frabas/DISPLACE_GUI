@@ -47,7 +47,9 @@ class Harbour : public Node
             string _name,
         //multimap<string, double> mean_fish_price_per_met_per_pop,
             multimap<int, double> mean_fish_price_per_pop_per_cat,
-            map<int, double> fuelprice);
+            map<int, double> fuelprice,
+            vector<int> usual_fgrounds,
+            vector<double> freq_usual_fgrounds);
         Harbour(string name);
 		Harbour();
         Harbour(int idx,double xval,double yval,int _harbour);
@@ -57,6 +59,10 @@ class Harbour : public Node
 		//virtual double get_prices(string met, int pop) ;
 		virtual double get_prices_per_cat(int pop, int cat) ;
         virtual double get_fuelprices(int vsize) ;
+        virtual const vector<int> &get_usual_fgrounds () const;
+        virtual const vector<double> &get_freq_usual_fgrounds () const;
+        virtual void set_usual_fgrounds (vector <int> usual_fgrounds);
+        virtual void set_freq_usual_fgrounds (vector <double> freq_usual_fgrounds);
 
 	private:
 		string name;
@@ -64,7 +70,8 @@ class Harbour : public Node
         map<int, double>  fuelprice;
 		//multimap<string, double> mean_fish_price_per_met_per_pop;
 		multimap<int, double> mean_fish_price_per_pop_per_cat;
-
+        vector <int> usual_fgrounds;
+        vector <double> freq_usual_fgrounds;
 
 };
 #endif							 // HARBOUR_H

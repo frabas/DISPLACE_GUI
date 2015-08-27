@@ -1183,6 +1183,12 @@ bool DisplaceModel::loadNodes()
                 }
 
             }
+            vector <int> usual_fgrounds;
+            usual_fgrounds.push_back(0);
+
+            vector <double> freq_usual_fgrounds;
+            freq_usual_fgrounds.push_back(1.0);
+
             std::shared_ptr<Harbour> h (new Harbour(i,
                                        graph_coord_x[i],
                                        graph_coord_y[i],
@@ -1195,7 +1201,9 @@ bool DisplaceModel::loadNodes()
                                        a_name,
                                        //prices,
                                        fishprices_each_species_per_cat,
-                                       init_fuelprices
+                                       init_fuelprices,
+                                       usual_fgrounds,
+                                       freq_usual_fgrounds
                                        ));
             std::shared_ptr<HarbourData> hd (new HarbourData(h));
             mHarbours.push_back(hd);

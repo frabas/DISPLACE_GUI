@@ -1138,9 +1138,13 @@ int main(int argc, char* argv[])
 			}
 
 
+            vector <int> init_usual_fgrounds;
+            init_usual_fgrounds.push_back(0);
 
+            vector <double> init_freq_usual_fgrounds;
+            init_freq_usual_fgrounds.push_back(1.0);
 
-			nodes[i] =    (new Harbour(i,
+            nodes[i] =    (new Harbour(i,
 				graph_coord_x[i],
 				graph_coord_y[i],
 				graph_coord_harbour[i],
@@ -1151,7 +1155,9 @@ int main(int argc, char* argv[])
 				NBSZGROUP,
 				a_name,
                 fishprices_each_species_per_cat,
-				init_fuelprices
+                init_fuelprices,
+                init_usual_fgrounds,
+                init_freq_usual_fgrounds
 				));
 
             dout(cout << "Harbour " <<  nodes[i]->get_name() << " " <<
@@ -2302,6 +2308,9 @@ int main(int argc, char* argv[])
 	*/
 
 
+
+
+
 #ifdef PROFILE
     mLoadVesselProfileResult = mLoadProfile.elapsed_ms();
 #endif
@@ -2879,7 +2888,11 @@ int main(int argc, char* argv[])
 
 		}
 
-		//----------------------------------------//
+
+
+
+
+        //----------------------------------------//
 		//----------------------------------------//
 		// POP DYNAMICS --------------------------//
 		//----------------------------------------//
@@ -3988,7 +4001,11 @@ int main(int argc, char* argv[])
 
 		}						 // END RE-READ DATA FOR VESSEL AND METIER...
 
-		bool is_re_read_pop_data=false;
+
+
+
+
+        bool is_re_read_pop_data=false;
         if (dyn_pop_sce.option(Options::with_monthly_redistribution))
 		{
 
@@ -4164,6 +4181,84 @@ int main(int argc, char* argv[])
 			}
 
 		}						 // END RE-READ DATA FOR POP...
+
+
+
+
+        //----------------------------------------//
+        //----------------------------------------//
+        // RE-READ HARBOUR INFOS------------------//
+        //----------------------------------------//
+        //----------------------------------------//
+
+    if(tstep==0 || binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep)){
+
+        // fill in the usual_fgrounds on harbours
+        for (unsigned int i=0; i<nodes.size(); ++i)
+        {
+           if(nodes.at(i)->get_is_harbour())
+              {
+               vector<int>  vids_on_harbours =nodes.at(i)->get_vid();
+               vector<int> fgrounds;
+               vector<double> freq_fgrounds;
+
+               if(vids_on_harbours.size()>0)
+               {
+                   //cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl;
+                  for (unsigned int v=0; v<vids_on_harbours.size(); ++v)
+                    {
+                    vector<int> some_grounds=vessels.at(v)->get_fgrounds();
+                    for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
+                      {
+                        //cout << gr  << endl;
+                      fgrounds.push_back(some_grounds.at(gr));
+                      }
+                    }
+                  remove_dups(fgrounds);
+                  //cout << "assume equal probas "  << endl;
+               vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());
+               for (unsigned int gr=0; gr<equal_proba.size(); ++gr)
+                   {
+                   freq_fgrounds.push_back(equal_proba.at(gr));
+                   }
+               }
+               else
+               {
+               //cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
+               fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
+               }
+               nodes.at(i)-> set_usual_fgrounds(fgrounds);
+               nodes.at(i)-> set_freq_usual_fgrounds(freq_fgrounds);
+
+
+               // a check
+               /*
+               cout << "Harbour " <<  nodes.at(i)->get_name() << " has the usual grounds: " << endl;
+               vector <int> usual_grounds =  nodes.at(i)->get_usual_fgrounds();
+               for (unsigned int ii=0; ii<usual_grounds.size(); ++ii)
+                   {
+                   cout << usual_grounds.at(ii) << " " ;
+                   }
+               cout << endl;
+               */
+
+
+              }
+
+            }
+       }
+
+
+
+
+
+
+
+
+
+
+
+
 
         dout(cout  << "THE VESSEL LOOP----------" << endl);
 		// get a random order for acting vessels

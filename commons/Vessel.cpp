@@ -3995,21 +3995,34 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                }
            //cout << "_The expected revenue for this vessel " <<
            //         this->get_name() << " is " << expected_profit << endl;
-           if(expected_profit<0) cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+           if(expected_profit<=0) cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+          /*
            // => IMAGINE A MEAN TO EXPAND THEIR RANGE....
-           if(expected_profit<0)
+           if(expected_profit<=0)
               {
                // e.g. look at what use to do some vessels sharing the same departure harbour!
-               //int a_node = this->get_previous_harbour_idx();
-               //vector <int> grounds_from_harbours =node.at(a_node->get_grounds_from_harbours());
-               //this->set_fgounds(grounds_from_harbours);
-               //this->set_freq_fgounds(freq_grounds_from_harbours);
-               // then, do it again:
-                 expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
-                                                                             path_shop,
-                                                                             min_distance_shop);
-              }
+               int a_node = this->get_previous_harbour_idx();
+               vector <int>    grounds_from_harbours      = nodes.at(a_node)->get_usual_fgrounds();
+               vector <double> freq_grounds_from_harbours = nodes.at(a_node)->get_freq_usual_fgrounds();
+               if(grounds_from_harbours.at(0)!=a_node)
+               {
+                   this->set_spe_fgrounds(grounds_from_harbours);
+                   this->set_spe_freq_fgrounds(freq_grounds_from_harbours);
+               }
+               else
+               {
+                   cout << this->get_name() << " says: no info from the harbour...hopeless! " << endl;
+               }
+               cout << this->get_name() << "...look at knowledge from " << nodes.at(a_node)->get_name() << endl;
+               // then, assume:
+                 expected_profit_per_ground = freq_grounds_from_harbours;
 
+               // ...and caution, need for redefining grds.
+               grds= this->get_fgrounds();
+
+
+             }
+            */
 
 
 
@@ -4023,7 +4036,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                 {
                 std::vector<int>::iterator it;
                 it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
-                if(it == grds_in_closure.end()) // not found
+                if(it == grds_in_closure.end()) // not found in closure....so keep it
                    {
                     expected_profit_per_ground_out.push_back(expected_profit_per_ground.at(i));
                     grds_out.push_back(grds.at(i));
@@ -4047,7 +4060,6 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
             this->set_smartcatch(-1);  // grounds are all included in closed areas...
             }
             dout(cout << "smartCatchGround is " << smartCatchGround << endl);
-
         }
 
 

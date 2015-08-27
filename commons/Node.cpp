@@ -184,6 +184,30 @@ double Node::get_fuelprices(int vsize)
 }
 
 
+const vector<int> &Node::get_usual_fgrounds() const
+{
+    return(vector<int> (0));
+}
+
+
+const vector<double> &Node::get_freq_usual_fgrounds() const
+{
+    return(vector<double> (0));
+}
+
+void Node::set_usual_fgrounds(vector <int> _usual_fgrounds)
+{
+}
+
+
+void Node::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
+{
+}
+
+
+
+
+
 double Node::get_x() const
 {
 	return(x);

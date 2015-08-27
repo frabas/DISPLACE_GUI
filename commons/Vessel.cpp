@@ -2698,23 +2698,28 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
     //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
 
+    vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
     for(unsigned int gr=0; gr<freq_grds.size(); gr++)
     {
         //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
 
         //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
         // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
-        for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
-        {
-            //if(tstep>1) dout(cout  << "...adding the pop " << pop << endl);
-            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
-                this->get_carrycapacity() *
-                                 // choose the most valuable cat (but actually currently the first one is returned: to do)
-                this->get_loc()->get_prices_per_cat(pop, 0);
+       // .....only looking at the targeted stocks
 
-            //if(tstep>1) dout(cout  <<  past_freq_cpue_grds_pops.at(gr).at(pop) << " * " << this->get_carrycapacity() << " * " << this->get_loc()->get_prices_per_cat(pop, 0) << endl);
-            //if(tstep>1) dout(cout  << "the expected revenue is now " << revenue_per_fgrounds.at(gr) << endl);
-        }
+        for(unsigned int i=0; i<trgts.size(); ++i)
+           {
+            int a_trgt=trgts.at(i);
+            cout << "pop target is: .." << a_trgt << endl;
+            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(a_trgt) * // weighted average of cpues
+                                              this->get_carrycapacity() *
+                                               // choose the most valuable cat (but actually currently the first one is returned: to do)
+                                              this->get_loc()->get_prices_per_cat(a_trgt, 0);
+
+           }
+
+
+
         //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
 
         //2. compute the expected cost when steaming
@@ -2778,7 +2783,6 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // get_experiencedcpue_fgrounds_per_pop is scaled to 1
-    vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
 
     // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << endl);
 
@@ -4012,7 +4016,24 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::highPotentialCatch) == true)
         {
-           vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
+           vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop(); // (experiencedcpue is computed after each trip)
+           vector <double> past_freq_cpue_grds (grds.size());
+
+           vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
+
+           // only look at the targeted stocks
+           //cout << "there are xx grounds: .." << grds.size() << endl;
+           for(unsigned int gr=0; gr<grds.size(); ++gr)
+              {
+               //cout << "gr is: .." << gr << endl;
+              for(unsigned int i=0; i<trgts.size(); ++i)
+                 {
+                 int a_trgt=trgts.at(i);
+                 //cout << "pop target is: .." << a_trgt << endl;
+                 past_freq_cpue_grds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(a_trgt);
+                 }
+              }
+
 
            // keep only the grds out the closed areas...
            vector <int> grds_out2;

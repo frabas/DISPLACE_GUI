@@ -72,7 +72,11 @@ class Node
         virtual const vector<int> &get_usual_fgrounds () const;
         virtual const vector<double> &get_freq_usual_fgrounds () const;
         virtual void set_usual_fgrounds (vector <int> usual_fgrounds);
-        virtual void set_freq_usual_fgrounds (vector <double> freq_usual_fgrounds);
+        virtual void set_freq_usual_fgrounds (vector <double> _freq_usual_fgrounds);
+        virtual const multimap<int,int> &get_usual_metiers () const;
+        virtual const multimap<int,double> &get_freq_usual_metiers () const;
+        virtual void set_usual_metiers (multimap <int,int> usual_metiers);
+        virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers);
 
 
         double get_x() const;

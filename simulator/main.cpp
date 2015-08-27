@@ -176,9 +176,10 @@ multimap<int, double> freq_possible_metiers;
 multimap<int, double> gshape_cpue_per_stk_on_nodes;
 multimap<int, double> gscale_cpue_per_stk_on_nodes;
 vector<int> spe_fgrounds;
-vector<int> spe_fgrounds_shared;
+vector<int> spe_fgrounds_init;
 vector<int> spe_harbours;
 vector<double> spe_freq_fgrounds;
+vector<double> spe_freq_fgrounds_init;
 vector<double> spe_freq_harbours;
 vector<double> spe_vessel_betas_per_pop;
 vector<double> spe_percent_tac_per_pop;
@@ -1867,10 +1868,11 @@ int main(int argc, char* argv[])
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
     multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> fgrounds_shared = read_fgrounds_shared(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization,"../"+ inputfolder);
@@ -1962,9 +1964,10 @@ int main(int argc, char* argv[])
 		// read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
 		// for creating the vessel object, search into the multimaps
 		spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
-        spe_fgrounds_shared = find_entries_s_i(fgrounds_shared, vesselids[i]);
+        spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids[i]);
         spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
-		spe_harbours = find_entries_s_i(harbours, vesselids[i]);
+        spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
+        spe_harbours = find_entries_s_i(harbours, vesselids[i]);
 		spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
 		spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
 		spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
@@ -1995,10 +1998,11 @@ int main(int argc, char* argv[])
 			NBSZGROUP,
 			spe_harbours,
 			spe_fgrounds,
-            spe_fgrounds_shared,
+            spe_fgrounds_init,
             spe_freq_harbours,
 			spe_freq_fgrounds,
-			spe_vessel_betas_per_pop,
+            spe_freq_fgrounds_init,
+            spe_vessel_betas_per_pop,
 			spe_percent_tac_per_pop,
 			possible_metiers,
 			freq_possible_metiers,
@@ -2021,10 +2025,11 @@ int main(int argc, char* argv[])
 		// some useful setters...
 		// will also be useful when change of YEAR-QUARTER
 		vessels[i]->set_spe_fgrounds(spe_fgrounds);
-        vessels[i]->set_spe_fgrounds_shared(spe_fgrounds_shared);
+        vessels[i]->set_spe_fgrounds_init(spe_fgrounds_init);
         vessels[i]->set_spe_harbours(spe_harbours);
 		vessels[i]->set_spe_freq_fgrounds(spe_freq_fgrounds);
-		vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
+        vessels[i]->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
+        vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
 		vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
 		vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
 		vessels[i]->set_spe_possible_metiers(possible_metiers);
@@ -3721,9 +3726,10 @@ int main(int argc, char* argv[])
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
 			// also quarter specific but semester specific for the betas because of the survey design they are comning from...
             fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
-            fgrounds_shared = read_fgrounds_shared(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
             harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
             freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
             vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
@@ -3738,10 +3744,11 @@ int main(int argc, char* argv[])
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
 				spe_fgrounds = find_entries_s_i(fgrounds, vesselids.at(v));
-                spe_fgrounds_shared = find_entries_s_i(fgrounds_shared, vesselids.at(v));
+                spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids.at(v));
                 spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
 				spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids.at(v));
-				spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
+                spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids.at(v));
+                spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
 				spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids.at(v));
 				spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v));
 
@@ -3788,10 +3795,11 @@ int main(int argc, char* argv[])
                     }
 
 				vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
-                vessels.at(v)->set_spe_fgrounds_shared(spe_fgrounds_shared);
+                vessels.at(v)->set_spe_fgrounds_init(spe_fgrounds_init);
                 vessels.at(v)->set_spe_harbours(spe_harbours);
 				vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
-				vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
+                vessels.at(v)->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
+                vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
 				vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());
 				for(unsigned int i = 0; i < init_for_fgrounds.size(); i++)
 				{

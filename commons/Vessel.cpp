@@ -263,8 +263,8 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 
 
 Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
-const vector<int> &_harbours, const vector<int> &_fgrounds, const vector<int> &_fgrounds_shared,
-const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds,
+const vector<int> &_harbours, const vector<int> &_fgrounds, const vector<int> &_fgrounds_init,
+const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds, const vector<double> &_freq_fgrounds_init,
 const vector<double> &_vessel_betas_per_pop,
 const vector<double> &_percent_tac_per_pop,
 const multimap<int, int> &_possible_metiers, const multimap<int, double> &_freq_possible_metiers,
@@ -287,12 +287,13 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	name = a_name;
 	harbours = _harbours;		 // overwrite by the setter() in main...
 	fgrounds = _fgrounds;		 // overwrite by the setter() in main...
-    fgrounds_shared = _fgrounds_shared;		 // overwrite by the setter() in main...
+    fgrounds_init = _fgrounds_init;		 // overwrite by the setter() in main...
                                  // overwrite by the setter() in main...
 	freq_harbours = _freq_harbours;
 								 // overwrite by the setter() in main...
 	freq_fgrounds = _freq_fgrounds;
-								 // overwrite by the setter() in main...
+    freq_fgrounds_init = _freq_fgrounds_init;
+                                 // overwrite by the setter() in main...
 	vessel_betas_per_pop = _vessel_betas_per_pop;
 								 // overwrite by the setter() in main...
 	percent_tac_per_pop = _percent_tac_per_pop;
@@ -532,9 +533,9 @@ const vector<int> &Vessel::get_fgrounds() const
 	return(fgrounds);
 }
 
-const vector<int> &Vessel::get_fgrounds_shared() const
+const vector<int> &Vessel::get_fgrounds_init() const
 {
-    return(fgrounds_shared);
+    return(fgrounds_init);
 }
 
 
@@ -554,6 +555,11 @@ const vector<double> &Vessel::get_freq_harbours() const
 const vector<double> &Vessel::get_freq_fgrounds() const
 {
 	return(freq_fgrounds);
+}
+
+const vector<double> &Vessel::get_freq_fgrounds_init() const
+{
+    return(freq_fgrounds_init);
 }
 
 
@@ -933,9 +939,9 @@ void Vessel::set_spe_fgrounds (vector<int> _fgrounds)
 	fgrounds=_fgrounds;
 }
 
-void Vessel::set_spe_fgrounds_shared (vector<int> _fgrounds_shared)
+void Vessel::set_spe_fgrounds_init (vector<int> _fgrounds_init)
 {
-    fgrounds_shared=_fgrounds_shared;
+    fgrounds_init=_fgrounds_init;
 }
 
 
@@ -955,6 +961,11 @@ void Vessel::set_spe_freq_harbours (vector<double> _freq_harbours)
 void Vessel::set_spe_freq_fgrounds (vector<double> _freq_fgrounds)
 {
 	freq_fgrounds=_freq_fgrounds;
+}
+
+void Vessel::set_spe_freq_fgrounds_init (vector<double> _freq_fgrounds_init)
+{
+    freq_fgrounds=_freq_fgrounds_init;
 }
 
 
@@ -2710,14 +2721,13 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
         for(unsigned int i=0; i<trgts.size(); ++i)
            {
             int a_trgt=trgts.at(i);
-            cout << "pop target is: .." << a_trgt << endl;
+            //cout << "pop target is: .." << a_trgt << endl;
             revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(a_trgt) * // weighted average of cpues
                                               this->get_carrycapacity() *
                                                // choose the most valuable cat (but actually currently the first one is returned: to do)
                                               this->get_loc()->get_prices_per_cat(a_trgt, 0);
 
            }
-
 
 
         //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
@@ -2762,6 +2772,8 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
         //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
 
     }
+
+
 
     return(profit_per_fgrounds);
 
@@ -3974,7 +3986,35 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
            vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
                                                                                       min_distance_shop);
-            // keep only the grds out the closed areas...
+
+           // a check
+           double expected_profit=0;
+           for(unsigned int gr=0; gr<grds.size(); gr++)
+               {
+               expected_profit+=expected_profit_per_ground.at(gr);
+               }
+           //cout << "_The expected revenue for this vessel " <<
+           //         this->get_name() << " is " << expected_profit << endl;
+           if(expected_profit<0) cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+           // => IMAGINE A MEAN TO EXPAND THEIR RANGE....
+           if(expected_profit<0)
+              {
+               // e.g. look at what use to do some vessels sharing the same departure harbour!
+               //int a_node = this->get_previous_harbour_idx();
+               //vector <int> grounds_from_harbours =node.at(a_node->get_grounds_from_harbours());
+               //this->set_fgounds(grounds_from_harbours);
+               //this->set_freq_fgounds(freq_grounds_from_harbours);
+               // then, do it again:
+                 expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
+                                                                             path_shop,
+                                                                             min_distance_shop);
+              }
+
+
+
+
+
+           // keep only the grds out the closed areas...
             vector <int> grds_out;
             vector <double> expected_profit_per_ground_out;
             if(grds_in_closure.size()>0)

@@ -2702,6 +2702,7 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // get_experiencedcpue_fgrounds_per_pop is scaled to 1
     vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
+    vector <vector<double> > past_freq_cpue_grds_targts =past_freq_cpue_grds_pops;
 
     vector <double> revenue_per_fgrounds(freq_grds.size());
     vector <double> fcost_per_fgrounds(freq_grds.size());
@@ -2717,39 +2718,73 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
                                  // vsize
     int length_class =this->get_length_class();
 
-    //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
 
     vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
+    vector<double> cum_cpue_over_trgt_pop(freq_grds.size());
     for(unsigned int gr=0; gr<freq_grds.size(); gr++)
     {
-        //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
 
-        //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
-        // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
-       // .....only looking at the targeted stocks
-
+        // note that cpues sum to 1 over ALL pops...
+        // ...then before all, given that the revenue is computed from the targeted pops only,
+        // we need to rescale the past cpues to sum to 1 over the TARGT pop only.
         for(unsigned int i=0; i<trgts.size(); ++i)
            {
             int a_trgt=trgts.at(i);
-            //cout << "pop target is: .." << a_trgt << endl;
-            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(a_trgt) * // weighted average of cpues
+            cum_cpue_over_trgt_pop.at(gr) +=past_freq_cpue_grds_pops.at(gr).at(a_trgt);
+           }
+        //  scale to 1
+        if(cum_cpue_over_trgt_pop.at(gr)!=0)
+           {
+            for(unsigned int i=0; i<trgts.size(); ++i)
+               {
+                int a_trgt=trgts.at(i);
+                past_freq_cpue_grds_targts.at(gr).at(a_trgt)= past_freq_cpue_grds_pops.at(gr).at(a_trgt) / cum_cpue_over_trgt_pop.at(gr);
+               }
+           }
+
+
+       //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
+       // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
+       // .....only looking at the targeted stocks
+
+       double tot_revenue=0.0;
+       for(unsigned int i=0; i<trgts.size(); ++i)
+           {
+            int a_trgt=trgts.at(i);
+            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_targts.at(gr).at(a_trgt) * // weighted average of cpues
                                               this->get_carrycapacity() *
                                                // choose the most valuable cat (but actually currently the first one is returned: to do)
                                               this->get_loc()->get_prices_per_cat(a_trgt, 0);
 
+           tot_revenue+=revenue_per_fgrounds.at(gr);
            }
 
+       if(tot_revenue==0) // we shouldn´t expect this...
+       {
+           cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl;
+           for(unsigned int pop=0; pop<past_freq_cpue_grds_pops.at(gr).size(); ++pop)
+               {
+                revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
+                                                  this->get_carrycapacity() *
+                                                   // choose the most valuable cat (but actually currently the first one is returned: to do)
+                                                  this->get_loc()->get_prices_per_cat(pop, 0);
 
-        //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
+               tot_revenue+=revenue_per_fgrounds.at(gr);
+               }
+
+       }
+
+
+        //cout << "given the capacity "   << this->get_carrycapacity() << ", the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
 
         //2. compute the expected cost when steaming
                                  // time given the shortest distance divided by the speed...
         double time_for_steaming=0;
                                  // *2 because WE NEED TO GO BACK TO PORT!
         time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
-        //if(tstep>1) dout(cout << "the expected time to reach this ground is " << time_for_steaming << endl);
+        //if(tstep>1) cout << "the expected time to reach this ground is " << time_for_steaming << endl;
         scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
-        //if(tstep>1) dout(cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl);
+        //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
 
         //3. compute the expected cost when fishing
         double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
@@ -2773,13 +2808,13 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
         //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
 
         fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons()  *  this->get_mult_fuelcons_when_fishing();
-        //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
+        //cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
 
         //4. then compute the expected profit for this ground
         profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
             scost_per_fgrounds.at(gr) -
             fcost_per_fgrounds.at(gr);
-        //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
+        //cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
 
     }
 
@@ -4003,11 +4038,11 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
            // a check
            if ( std::all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
               {
-             //   for(unsigned int gr=0; gr<grds.size(); gr++)
-             //       {
-             //       cout << expected_profit_per_ground.at(gr) << " ";
-             //       }
-             //   cout << endl;
+                for(unsigned int gr=0; gr<grds.size(); gr++)
+                    {
+                    cout << expected_profit_per_ground.at(gr) << " ";
+                    }
+                cout << endl;
 
                // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
                 cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;

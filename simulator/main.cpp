@@ -2222,7 +2222,7 @@ int main(int argc, char* argv[])
 								 // init
 				cumcatch_fgrounds_per_pop[f][pop] = 0;
 				experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
-			}
+            }
 		}
 		// per total...
 		vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);

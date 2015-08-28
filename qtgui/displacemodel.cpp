@@ -1592,11 +1592,13 @@ bool DisplaceModel::loadVessels()
                 double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
                 cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
                 //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
+            // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
             }
             // compute the average cpue for this pop across all nodes
             for(int f = 0; f < fgrounds.size(); f++)
             {
                 expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
+
             }
                                  // do the mean
             if(expected_cpue_this_pop.at(pop)!=0) expected_cpue_this_pop.at(pop)= expected_cpue_this_pop.at(pop)/fgrounds.size();

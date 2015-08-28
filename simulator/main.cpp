@@ -512,9 +512,10 @@ int main(int argc, char* argv[])
 
 	// not Windows eg Linux on HPC DTU
 	int status;
-    bool DTU_HPC = false;
-    if(DTU_HPC) string home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
-    else string home=getenv("HOME");
+    bool DTU_HPC_SCRATCH = false;
+    string home;
+    if(DTU_HPC_SCRATCH) home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
+    else home=getenv("HOME");
     pathoutput=home+"/ibm_vessels";
 	an_output_folder= pathoutput+"/DISPLACE_outputs";
 

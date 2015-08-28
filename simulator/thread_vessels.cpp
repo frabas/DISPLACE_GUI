@@ -250,7 +250,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                          // ...but not on this ground!
                     if(another_ground || force_another_ground )
                     {
-                        outc(cout  << "CHANGE OF GROUND, GUYS! "  << endl);
+                        outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(
                             tstep,
                             dyn_alloc_sce, create_a_path_shop,
@@ -261,7 +261,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                             metiers,
                             freq_cpue, freq_distance
                             );
-                        outc(cout  << "GOOD JOB, GUYS! "  << endl);
+                        outc(cout  << "GOOD JOB, FISHERS! "  << endl);
 
                     }
                     // ***************implement a decision************************************
@@ -310,7 +310,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         vessels[index_v]->unlock();
 
                         outc(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
-                        outc(cout  << "my comsumed fuel so far is " << cumfuelcons << endl);
+                        outc(cout  << "my consumed fuel so far is " << cumfuelcons << endl);
                         outc(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
 
                     }

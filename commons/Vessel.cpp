@@ -4001,21 +4001,20 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                                                                       min_distance_shop);
 
            // a check
-           double expected_profit=0;
-           for(unsigned int gr=0; gr<grds.size(); gr++)
-               {
-               expected_profit+=expected_profit_per_ground.at(gr);
-               }
-           //cout << "_The expected profit for this vessel " <<
-           //         this->get_name() << " is " << expected_profit << endl;
-
-           if(expected_profit<=0) // a TRIGGER EVENT for the vessel to start exploring other horizons...
+           if ( std::all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
               {
-               cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+             //   for(unsigned int gr=0; gr<grds.size(); gr++)
+             //       {
+             //       cout << expected_profit_per_ground.at(gr) << " ";
+             //       }
+             //   cout << endl;
+
+               // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
+                cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
                // => Then, imagine a mean to expand the range of these vessels....
 
                // e.g. look at what use to do some vessels sharing the same departure harbour!
-               int a_node         = this->get_previous_harbour_idx();
+               int a_node         = this->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
                int current_metier = this->get_metier()->get_name();
                int nbpops         = nodes.at(a_node)->get_nbpops();
                vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
@@ -4058,7 +4057,6 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                grds_in_closure = this->get_fgrounds_in_closed_areas();
 
              }
-
 
 
 

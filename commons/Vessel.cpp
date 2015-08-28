@@ -31,6 +31,7 @@
 #include <helpers.h>
 #include <assert.h>
 
+
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
 #include <dtree/externalstatemanager.h>
@@ -2761,7 +2762,7 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
        if(tot_revenue==0) // we shouldn´t expect this...
        {
-           cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl;
+           outc(cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl);
            for(unsigned int pop=0; pop<past_freq_cpue_grds_pops.at(gr).size(); ++pop)
                {
                 revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
@@ -4036,13 +4037,22 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                                                                       min_distance_shop);
 
            // a check
-           if ( std::all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
+
+           // (c++11)
+           //if ( all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
+           //   {
+
+           bool positive_found = false;
+              for(unsigned int i=0; i<expected_profit_per_ground.size();++i)
               {
-                for(unsigned int gr=0; gr<grds.size(); gr++)
-                    {
-                    cout << expected_profit_per_ground.at(gr) << " ";
-                    }
-                cout << endl;
+                if(expected_profit_per_ground.at(i) > 0)
+                   {
+                   positive_found = true;
+                   break;
+                   }
+              }
+           if (!positive_found)
+               {
 
                // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
                 cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;

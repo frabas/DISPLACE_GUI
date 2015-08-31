@@ -46,8 +46,8 @@ daily_ts_generator <- function (param_ts, variable="wspeed", area="all_area", a_
                         prob=c(prob_quartile1, prob_quartile2, prob_quartile3, prob_quartile4, prob_quartile5))
           )
    }
-   return(ts_for_a_variable)
+    return(ts_for_a_variable)
 }
 
 ts_for_a_variable <- daily_ts_generator(param_ts, variable=variable, area=area, a_dim=a_dim_as_int)
-write.table(ts_for_a_variable, file=dest_file, row.names=FALSE, col.names=TRUE, sep=" ")
+write.table(ts_for_a_variable, file=dest_file, row.names=FALSE, col.names=FALSE, sep=" ")

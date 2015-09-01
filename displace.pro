@@ -1,9 +1,10 @@
 TEMPLATE=subdirs
-CONFIG+=ordered unit-test
+CONFIG+=ordered
 SUBDIRS+=commons qtcommons QMapControl qtgui simulator dteditor tseditor
 
-unit-test {
-#    SUBDIRS += tests
+!win32 {
+    CONFIG += unit-test
+    SUBDIRS += tests
 }
 
 !unit-test {

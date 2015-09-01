@@ -19,7 +19,8 @@ boost_test_included {
 }
 
 SOURCES= main.cpp \
-    dtrees.cpp
+    dtrees.cpp \
+    timeseries.cpp
 
 HEADERS=
 

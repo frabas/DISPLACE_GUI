@@ -1183,6 +1183,12 @@ bool DisplaceModel::loadNodes()
                 }
 
             }
+            vector <int> usual_fgrounds;
+            usual_fgrounds.push_back(0);
+
+            vector <double> freq_usual_fgrounds;
+            freq_usual_fgrounds.push_back(1.0);
+
             std::shared_ptr<Harbour> h (new Harbour(i,
                                        graph_coord_x[i],
                                        graph_coord_y[i],
@@ -1195,7 +1201,9 @@ bool DisplaceModel::loadNodes()
                                        a_name,
                                        //prices,
                                        fishprices_each_species_per_cat,
-                                       init_fuelprices
+                                       init_fuelprices,
+                                       usual_fgrounds,
+                                       freq_usual_fgrounds
                                        ));
             std::shared_ptr<HarbourData> hd (new HarbourData(h));
             mHarbours.push_back(hd);
@@ -1306,9 +1314,11 @@ bool DisplaceModel::loadVessels()
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
     multimap<string, int> fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
     multimap<string, int> harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
     multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mInputName.toStdString(), mBasePath.toStdString());
     multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mInputName.toStdString(), mBasePath.toStdString());
@@ -1345,8 +1355,10 @@ bool DisplaceModel::loadVessels()
     multimap<int, double> gshape_cpue_per_stk_on_nodes;
     multimap<int, double> gscale_cpue_per_stk_on_nodes;
     vector<int> spe_fgrounds;
+    vector<int> spe_fgrounds_init;
     vector<int> spe_harbours;
     vector<double> spe_freq_fgrounds;
+    vector<double> spe_freq_fgrounds_init;
     vector<double> spe_freq_harbours;
     vector<double> spe_vessel_betas_per_pop;
     vector<double> spe_percent_tac_per_pop;
@@ -1380,7 +1392,9 @@ bool DisplaceModel::loadVessels()
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
         spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
+        spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids[i]);
         spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
         spe_harbours = find_entries_s_i(harbours, vesselids[i]);
         spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
         spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
@@ -1412,8 +1426,10 @@ bool DisplaceModel::loadVessels()
             NBSZGROUP,
             spe_harbours,
             spe_fgrounds,
+            spe_fgrounds_init,
             spe_freq_harbours,
             spe_freq_fgrounds,
+            spe_freq_fgrounds_init,
             spe_vessel_betas_per_pop,
             spe_percent_tac_per_pop,
             possible_metiers,
@@ -1440,8 +1456,10 @@ bool DisplaceModel::loadVessels()
         // some useful setters...
         // will also be useful when change of YEAR-QUARTER
         v->set_spe_fgrounds(spe_fgrounds);
+        v->set_spe_fgrounds_init(spe_fgrounds_init);
         v->set_spe_harbours(spe_harbours);
         v->set_spe_freq_fgrounds(spe_freq_fgrounds);
+        v->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
         v->set_spe_freq_harbours(spe_freq_harbours);
         v->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
         v->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
@@ -1574,11 +1592,13 @@ bool DisplaceModel::loadVessels()
                 double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
                 cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
                 //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
+            // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
             }
             // compute the average cpue for this pop across all nodes
             for(int f = 0; f < fgrounds.size(); f++)
             {
                 expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
+
             }
                                  // do the mean
             if(expected_cpue_this_pop.at(pop)!=0) expected_cpue_this_pop.at(pop)= expected_cpue_this_pop.at(pop)/fgrounds.size();

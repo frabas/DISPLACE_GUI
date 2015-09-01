@@ -31,6 +31,7 @@
 #include <helpers.h>
 #include <assert.h>
 
+
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
 #include <dtree/externalstatemanager.h>
@@ -214,11 +215,10 @@ public:
           std::vector<int>::iterator it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), fground);
           bool isIt= (it != lst_fgrounds_in_closed_areas.end()); // found
           //cout << "isinareaclosure on this ground evaluated at "  << isIt << endl;
-          return  isIt ? 1.0 : 0.0; // Is yes or no tin closed area?
+          return  isIt ? 1.0 : 0.0; // Is yes or no in closed area?
 
         }
 };
-
 
 
 }
@@ -263,8 +263,8 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 
 
 Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
-const vector<int> &_harbours, const vector<int> &_fgrounds,
-const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds,
+const vector<int> &_harbours, const vector<int> &_fgrounds, const vector<int> &_fgrounds_init,
+const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds, const vector<double> &_freq_fgrounds_init,
 const vector<double> &_vessel_betas_per_pop,
 const vector<double> &_percent_tac_per_pop,
 const multimap<int, int> &_possible_metiers, const multimap<int, double> &_freq_possible_metiers,
@@ -287,11 +287,13 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	name = a_name;
 	harbours = _harbours;		 // overwrite by the setter() in main...
 	fgrounds = _fgrounds;		 // overwrite by the setter() in main...
-								 // overwrite by the setter() in main...
+    fgrounds_init = _fgrounds_init;		 // overwrite by the setter() in main...
+                                 // overwrite by the setter() in main...
 	freq_harbours = _freq_harbours;
 								 // overwrite by the setter() in main...
 	freq_fgrounds = _freq_fgrounds;
-								 // overwrite by the setter() in main...
+    freq_fgrounds_init = _freq_fgrounds_init;
+                                 // overwrite by the setter() in main...
 	vessel_betas_per_pop = _vessel_betas_per_pop;
 								 // overwrite by the setter() in main...
 	percent_tac_per_pop = _percent_tac_per_pop;
@@ -531,6 +533,12 @@ const vector<int> &Vessel::get_fgrounds() const
 	return(fgrounds);
 }
 
+const vector<int> &Vessel::get_fgrounds_init() const
+{
+    return(fgrounds_init);
+}
+
+
 vector<int> &Vessel::get_fgrounds_in_closed_areas()
 {
     return(fgrounds_in_closed_areas);
@@ -547,6 +555,11 @@ const vector<double> &Vessel::get_freq_harbours() const
 const vector<double> &Vessel::get_freq_fgrounds() const
 {
 	return(freq_fgrounds);
+}
+
+const vector<double> &Vessel::get_freq_fgrounds_init() const
+{
+    return(freq_fgrounds_init);
 }
 
 
@@ -926,6 +939,12 @@ void Vessel::set_spe_fgrounds (vector<int> _fgrounds)
 	fgrounds=_fgrounds;
 }
 
+void Vessel::set_spe_fgrounds_init (vector<int> _fgrounds_init)
+{
+    fgrounds_init=_fgrounds_init;
+}
+
+
 void Vessel::set_fgrounds_in_closed_areas (vector<int> _fgrounds)
 {
     fgrounds_in_closed_areas=_fgrounds;
@@ -942,6 +961,11 @@ void Vessel::set_spe_freq_harbours (vector<double> _freq_harbours)
 void Vessel::set_spe_freq_fgrounds (vector<double> _freq_fgrounds)
 {
 	freq_fgrounds=_freq_fgrounds;
+}
+
+void Vessel::set_spe_freq_fgrounds_init (vector<double> _freq_fgrounds_init)
+{
+    freq_fgrounds=_freq_fgrounds_init;
 }
 
 
@@ -2343,11 +2367,20 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 			//double cpue = cpue_nodes_species.at(idx_node_v).at(pop); // look into the vector of vector....
 			// replaced by:
+            // look into the vector of vector....
+            double a_shape;
+            double a_scale;
+            double cpue;
+            if(idx_node_v<gshape_cpue_nodes_species.size()){
+                a_shape = gshape_cpue_nodes_species.at(idx_node_v).at(pop);
 								 // look into the vector of vector....
-			double a_shape = gshape_cpue_nodes_species.at(idx_node_v).at(pop);
-								 // look into the vector of vector....
-			double a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);
-			double cpue = rgamma(a_shape, a_scale);
+                a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);
+                cpue = rgamma(a_shape, a_scale);
+              }
+           else
+             { // it occurs when fgrounds are not the initial ones...e.g. usual_fgrounds from harbour
+             cpue = rgamma(a_shape, a_scale);
+             }
 
             dout (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
                 << " on this node "<< idx_node << " is " << cpue << endl);
@@ -2449,16 +2482,16 @@ void Vessel::compute_experiencedcpue_fgrounds()
     // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full a guesses !
 	// but there are qualified guesses: actually cpue from the frequency given by the input data...
 
-    dout(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
+    outc(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
     for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
 	{
 								 // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
 		if(cumeffort_fgrounds.at(a_node)!=0)
 		{
-            dout(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds.at(a_node) << endl);
-            dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
+            outc(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds.at(a_node) << endl);
+            outc(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
 			experiencedcpue_fgrounds.at(a_node)= cumcatch_fgrounds.at(a_node) / cumeffort_fgrounds.at(a_node);
-            dout(cout  << "on the grounds of this vessel experienced cpue is then " << experiencedcpue_fgrounds.at(a_node) << endl);
+            outc(cout  << "on the grounds of this vessel experienced cpue is then " << experiencedcpue_fgrounds.at(a_node) << endl);
 		}
 								 // cumul to scale to 1 (just below)
 		cum_cpue +=experiencedcpue_fgrounds.at(a_node);
@@ -2476,9 +2509,10 @@ void Vessel::compute_experiencedcpue_fgrounds()
         for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
 		{
 			freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
-            dout(cout  << "scaled experienced cpue is then " << freq_experiencedcpue_fgrounds.at(a_node) << endl);
+            outc(cout  << "scaled experienced cpue is then " << freq_experiencedcpue_fgrounds.at(a_node) << endl);
 		}
 	}
+    outc(cout  << "compute experienced cpue on grounds...OK" << endl);
 }
 
 
@@ -2489,7 +2523,7 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
     // note that, at the tstep=0, no one single node has been visited yet, so experiencedcpue_fgrounds is full of guesses!
 	// but there are qualified guesses: actually cpue from the frequency given by the input data...
 
-    dout(cout  << "compute experienced cpue on grounds and clear cum effort and catch..." << endl);
+    outc(cout  << "compute experienced cpue on grounds per pop and clear cum effort and catch..." << endl);
     for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++)
 	{
 		cum_cpue_over_pop.push_back(0);
@@ -2513,13 +2547,14 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
                 for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
 				{
 					freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) / cum_cpue_over_pop.at(a_node);
-                    dout(cout  << "scaled experienced cpue this pop is then " << freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
+                    //dout(cout  << "scaled experienced cpue this pop is then " << freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
 				}
 			}
 
 		}
 
 	}
+    outc(cout  << "experienced cpue on grounds per pop...OK" << endl);
 
 }
 
@@ -2668,6 +2703,7 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // get_experiencedcpue_fgrounds_per_pop is scaled to 1
     vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
+    vector <vector<double> > past_freq_cpue_grds_targts =past_freq_cpue_grds_pops;
 
     vector <double> revenue_per_fgrounds(freq_grds.size());
     vector <double> fcost_per_fgrounds(freq_grds.size());
@@ -2683,35 +2719,73 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
                                  // vsize
     int length_class =this->get_length_class();
 
-    //if(tstep>1) dout(cout << "the vessel "<< this->get_name() << " ask for a good guess..." << endl);
 
+    vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
+    vector<double> cum_cpue_over_trgt_pop(freq_grds.size());
     for(unsigned int gr=0; gr<freq_grds.size(); gr++)
     {
-        //if(tstep>1) dout(cout << "...on this ground " << gr << endl);
 
-        //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
-        // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
-        for(unsigned int pop=0; pop<past_freq_cpue_grds_pops[gr].size(); pop++)
-        {
-            //if(tstep>1) dout(cout  << "...adding the pop " << pop << endl);
-            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
-                this->get_carrycapacity() *
-                                 // choose the most valuable cat (but actually currently the first one is returned: to do)
-                this->get_loc()->get_prices_per_cat(pop, 0);
+        // note that cpues sum to 1 over ALL pops...
+        // ...then before all, given that the revenue is computed from the targeted pops only,
+        // we need to rescale the past cpues to sum to 1 over the TARGT pop only.
+        for(unsigned int i=0; i<trgts.size(); ++i)
+           {
+            int a_trgt=trgts.at(i);
+            cum_cpue_over_trgt_pop.at(gr) +=past_freq_cpue_grds_pops.at(gr).at(a_trgt);
+           }
+        //  scale to 1
+        if(cum_cpue_over_trgt_pop.at(gr)!=0)
+           {
+            for(unsigned int i=0; i<trgts.size(); ++i)
+               {
+                int a_trgt=trgts.at(i);
+                past_freq_cpue_grds_targts.at(gr).at(a_trgt)= past_freq_cpue_grds_pops.at(gr).at(a_trgt) / cum_cpue_over_trgt_pop.at(gr);
+               }
+           }
 
-            //if(tstep>1) dout(cout  <<  past_freq_cpue_grds_pops.at(gr).at(pop) << " * " << this->get_carrycapacity() << " * " << this->get_loc()->get_prices_per_cat(pop, 0) << endl);
-            //if(tstep>1) dout(cout  << "the expected revenue is now " << revenue_per_fgrounds.at(gr) << endl);
-        }
-        //if(tstep>1) dout(cout << "the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl);
+
+       //1. first, compute the expected revenue for full vessel load on this ground knowing the experienced cpues
+       // and the fish price on the departure harbour. (caution, the vessel is assumed to currently be at the port)
+       // .....only looking at the targeted stocks
+
+       double tot_revenue=0.0;
+       for(unsigned int i=0; i<trgts.size(); ++i)
+           {
+            int a_trgt=trgts.at(i);
+            revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_targts.at(gr).at(a_trgt) * // weighted average of cpues
+                                              this->get_carrycapacity() *
+                                               // choose the most valuable cat (but actually currently the first one is returned: to do)
+                                              this->get_loc()->get_prices_per_cat(a_trgt, 0);
+
+           tot_revenue+=revenue_per_fgrounds.at(gr);
+           }
+
+       if(tot_revenue==0) // we shouldn´t expect this...
+       {
+           outc(cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl);
+           for(unsigned int pop=0; pop<past_freq_cpue_grds_pops.at(gr).size(); ++pop)
+               {
+                revenue_per_fgrounds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(pop) * // weighted average of cpues
+                                                  this->get_carrycapacity() *
+                                                   // choose the most valuable cat (but actually currently the first one is returned: to do)
+                                                  this->get_loc()->get_prices_per_cat(pop, 0);
+
+               tot_revenue+=revenue_per_fgrounds.at(gr);
+               }
+
+       }
+
+
+        //cout << "given the capacity "   << this->get_carrycapacity() << ", the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
 
         //2. compute the expected cost when steaming
                                  // time given the shortest distance divided by the speed...
         double time_for_steaming=0;
                                  // *2 because WE NEED TO GO BACK TO PORT!
         time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
-        //if(tstep>1) dout(cout << "the expected time to reach this ground is " << time_for_steaming << endl);
+        //if(tstep>1) cout << "the expected time to reach this ground is " << time_for_steaming << endl;
         scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
-        //if(tstep>1) dout(cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl);
+        //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
 
         //3. compute the expected cost when fishing
         double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
@@ -2735,15 +2809,17 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
         //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
 
         fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons()  *  this->get_mult_fuelcons_when_fishing();
-        //if(tstep>1) dout(cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl);
+        //cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
 
         //4. then compute the expected profit for this ground
         profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
             scost_per_fgrounds.at(gr) -
             fcost_per_fgrounds.at(gr);
-        //if(tstep>1) dout(cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl);
+        //cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
 
     }
+
+
 
     return(profit_per_fgrounds);
 
@@ -2765,7 +2841,6 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // get_experiencedcpue_fgrounds_per_pop is scaled to 1
-    vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
 
     // if(tstep>1) dout(cout << "an expected profit per ground has been estimated..." << endl);
 
@@ -3201,7 +3276,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
        //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
        //int ground=grds[0];
-       dout(cout  << this->get_name() << "GO FISHING ON " << ground << endl);
+       outc(cout  << this->get_name() << " GO FISHING ON " << ground << endl);
 
        // get the shortest path between source and destination
        // with the list of intermediate nodes
@@ -3282,7 +3357,6 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
            this-> set_inactive(false);
            // set vessel nationality
            this-> set_natio(true);
-
            // for this vessel, select the metier specific to this particular fishing ground
            // according to the observed frequency in data
            // (NOTE THAT, FINALLY, THE METIER CAN BE DIFFERENT FROM THE ONE FROM which_metier_should_i_go_for() )
@@ -3755,7 +3829,8 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
 void Vessel::reinit_after_a_trip()
 {
-	// clear for this vessel
+    outc(cout << "reinit after a trip..." << endl);
+    // clear for this vessel
 	this-> clear_catch_pop_at_szgroup();
 	this-> set_inactive(true);
 	// re-init some other stuffs after the trip
@@ -3775,6 +3850,7 @@ void Vessel::reinit_after_a_trip()
 	this-> set_natio(true);
 	this->set_tstep_dep(0);
 	this->set_reason_to_go_back(0);
+    outc(cout << "reinit after a trip...OK" << endl);
 }
 
 
@@ -3927,6 +4003,10 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         // keep tracks relevant nodes to evaluate
         vector <int> relevant_grounds_to_evaluate;
+        int smartCatchGround;
+        int highPotentialCatchGround;
+        int notThatFarGround;
+        int knowledgeOfThisGround;
 
 
         // 1. grounds of that vessel
@@ -3948,14 +4028,85 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
          */
 
 
-        //}
-        //if(smartCatch is in tree)
-        //{
-           int smartCatchGround;
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::smartCatch) == true)
+        {
+           outc(cout << "compute smartCatchGround"  << endl);
+
            vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
                                                                                       path_shop,
                                                                                       min_distance_shop);
-            // keep only the grds out the closed areas...
+
+           // a check
+
+           // (c++11)
+           //if ( all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
+           //   {
+
+           bool positive_found = false;
+              for(unsigned int i=0; i<expected_profit_per_ground.size();++i)
+              {
+                if(expected_profit_per_ground.at(i) > 0)
+                   {
+                   positive_found = true;
+                   break;
+                   }
+              }
+           if (!positive_found)
+               {
+
+               // all negative expected revenue: a TRIGGER EVENT for the vessel to start exploring other horizons...
+                cout << this->get_name() << ": NO PROFIT EXPECTED ON ALL GROUNDS FROM TARGET SPECIES!" << endl;
+               // => Then, imagine a mean to expand the range of these vessels....
+
+               // e.g. look at what use to do some vessels sharing the same departure harbour!
+               int a_node         = this->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
+               int current_metier = this->get_metier()->get_name();
+               int nbpops         = nodes.at(a_node)->get_nbpops();
+               vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
+               vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
+               vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+               multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+               multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+               for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
+                  { // rebuild assuming deploying one metier spread over the entire range from this harbour...
+                  possible_metiers_from_harbours.insert(std::pair<int,int>(grounds_from_harbours.at(gr),current_metier));
+                  freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
+                  }
+
+               if(grounds_from_harbours.at(0)!=a_node)
+               {
+                   this->set_spe_fgrounds(grounds_from_harbours); // CHANGED
+                   this->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
+                   this->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                   this->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                   this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                   this->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                   this->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+                   this->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                   this->set_freq_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+                   this->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                   this->set_fgrounds_in_closed_areas(vector <int> (0)); // TO DO
+                   this->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
+                   this->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+               }
+               else
+               {
+                   cout << this->get_name() << " says: no info from the harbour...hopeless! " << endl;
+               }
+               cout << this->get_name() << "...look at knowledge from " << nodes.at(a_node)->get_name() << endl;
+               // then, assume:
+                 expected_profit_per_ground = freq_grounds_from_harbours;
+
+               // ...and caution, need for redefining grds.
+               grds= this->get_fgrounds();
+               grds_in_closure = this->get_fgrounds_in_closed_areas();
+
+             }
+
+
+
+
+           // keep only the grds out the closed areas...
             vector <int> grds_out;
             vector <double> expected_profit_per_ground_out;
             if(grds_in_closure.size()>0)
@@ -3964,7 +4115,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                 {
                 std::vector<int>::iterator it;
                 it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
-                if(it == grds_in_closure.end()) // not found
+                if(it == grds_in_closure.end()) // not found in closure....so keep it
                    {
                     expected_profit_per_ground_out.push_back(expected_profit_per_ground.at(i));
                     grds_out.push_back(grds.at(i));
@@ -3987,18 +4138,35 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
             } else{
             this->set_smartcatch(-1);  // grounds are all included in closed areas...
             }
-            dout(cout << "smartCatchGround is " << smartCatchGround << endl);
-
-        //}
-
+            outc(cout << "smartCatchGround is " << smartCatchGround << endl);
+        }
 
 
 
 
-        //if(highPotentialCatch is in tree)
-        //{
-           int highPotentialCatchGround;
-           vector <double> past_freq_cpue_grds = this-> get_freq_experiencedcpue_fgrounds(); // (experiencedcpue is computed after each trip)
+
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::highPotentialCatch) == true)
+        {
+           outc(cout << "compute highPotentialCatchGround"  << endl);
+
+           vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop(); // (experiencedcpue is computed after each trip)
+           vector <double> past_freq_cpue_grds (grds.size());
+
+           vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
+
+           // only look at the targeted stocks
+           //cout << "there are xx grounds: .." << grds.size() << endl;
+           for(unsigned int gr=0; gr<grds.size(); ++gr)
+              {
+               //cout << "gr is: .." << gr << endl;
+              for(unsigned int i=0; i<trgts.size(); ++i)
+                 {
+                 int a_trgt=trgts.at(i);
+                 //cout << "pop target is: .." << a_trgt << endl;
+                 past_freq_cpue_grds.at(gr)+= past_freq_cpue_grds_pops.at(gr).at(a_trgt);
+                 }
+              }
+
 
            // keep only the grds out the closed areas...
            vector <int> grds_out2;
@@ -4032,13 +4200,55 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
            } else{
            this->set_highpotentialcatch(-1);  // grounds are all included in closed areas...
            }
-           dout(cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl);
+           outc(cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl);
 
-        //}
+        }
 
-        //if(notThatFar is in tree)
-        //{
-          int notThatFarGround;
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::knowledgeOfThisGround) == true)
+        {
+          outc(cout << "compute knowledgeOfThisGround" << endl);
+          vector <double> freq_grounds = this->get_freq_fgrounds();
+
+          // keep only the grds out the closed areas...
+          vector <int> grds_out4;
+          vector <double> freq_grounds_out;
+          if(grds_in_closure.size()>0)
+          {
+              for (unsigned int i=0; i<grds.size();++i)
+              {
+              std::vector<int>::iterator it;
+              it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
+              if(it == grds_in_closure.end()) // not found
+                 {
+                  freq_grounds_out.push_back(freq_grounds.at(i));
+                  grds_out4.push_back(grds.at(i));
+                 }
+             }
+          } else{
+              grds_out4=grds;
+              freq_grounds_out=freq_grounds;
+          }
+          if(grds_out4.size()>0){
+
+             // ...and find the max
+             idx = distance(freq_grounds_out.begin(),
+                                           max_element(freq_grounds_out.begin(), freq_grounds_out.end()));
+             knowledgeOfThisGround = grds_out4.at(idx);
+             this->set_mosthistoricallyused(knowledgeOfThisGround);
+
+             relevant_grounds_to_evaluate.push_back(knowledgeOfThisGround); // use it to limit the search time...
+
+          } else{
+          this->set_mosthistoricallyused(-1);  // grounds are all included in closed areas...
+          }
+          outc(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl);
+
+         }
+
+        if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::notThatFar) == true)
+        {
+          outc(cout << "compute notThatFarGround"  << endl);
+
           int from = this->get_loc()->get_idx_node();
           vector <double> distance_to_grounds = compute_distance_fgrounds
                                                    (idx_path_shop,
@@ -4076,49 +4286,9 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
           } else{
           this->set_notthatfar(-1);  // grounds are all included in closed areas...
           }
-          dout(cout << "notThatFarGround is " << notThatFarGround << endl);
-          //}
-
-       // if(knowledgeOfThisGround is in tree)
-       // {
-          int knowledgeOfThisGround;
-          vector <double> freq_grounds = this->get_freq_fgrounds();
-
-          // keep only the grds out the closed areas...
-          vector <int> grds_out4;
-          vector <double> freq_grounds_out;
-          if(grds_in_closure.size()>0)
-          {
-              for (unsigned int i=0; i<grds.size();++i)
-              {
-              std::vector<int>::iterator it;
-              it=find (grds_in_closure.begin(), grds_in_closure.end(), grds.at(i));
-              if(it == grds_in_closure.end()) // not found
-                 {
-                  freq_grounds_out.push_back(freq_grounds.at(i));
-                  grds_out4.push_back(grds.at(i));
-                 }
-             }
-          } else{
-              grds_out4=grds;
-              freq_grounds_out=freq_grounds;
+          outc(cout << "notThatFarGround is " << notThatFarGround << endl);
           }
-          if(grds_out4.size()>0){
 
-             // ...and find the max
-             idx = distance(freq_grounds_out.begin(),
-                                           max_element(freq_grounds_out.begin(), freq_grounds_out.end()));
-             knowledgeOfThisGround = grds_out4.at(idx);
-             this->set_mosthistoricallyused(knowledgeOfThisGround);
-
-             relevant_grounds_to_evaluate.push_back(knowledgeOfThisGround); // use it to limit the search time...
-
-          } else{
-          this->set_notthatfar(-1);  // grounds are all included in closed areas...
-          }
-          dout(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl);
-
-        // }
 
 
 
@@ -4127,7 +4297,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
         for (int it=0; it < relevant_grounds_to_evaluate.size(); ++it){
             ground=relevant_grounds_to_evaluate.at(it);
-            dout(cout << "Evaluate for ground... "<< ground << endl);
+            outc(cout << "Evaluate for ground... "<< ground << endl);
 
             // Caution with a logical leaks: each ground is evaluated once and only once,
             // meanwhile the smartCatch ground can be likely the same than the highPotentialCatch, notThatFar, etc.
@@ -4158,8 +4328,13 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
         }
 
- // if here, then no ground has actually been found (because of a *non-complete* tree) so use the freq_fgrounds
-        cout << "no one among relevant grounds... take from fground frequencies " << ground << endl;
+ // if here, then no ground has actually been found
+        // (because of 1- a *non-complete* tree;
+        // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
+        cout << "no one among relevant grounds......take the last ground evaluated... "<< ground << endl;
+        if(relevant_grounds_to_evaluate.size()>0) return (ground);
+
+        // ultimately, use the freq_fgrounds...(e.g. when all nodes are in closed areas)
         vector <double> freq_grds = this->get_freq_fgrounds();
                                   // need to convert in array, see myRutils.cpp
         double cumul=0.0;

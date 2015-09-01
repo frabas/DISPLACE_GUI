@@ -758,6 +758,41 @@ multimap<string, int> read_fgrounds(string a_quarter, string folder_name_paramet
 }
 
 
+
+multimap<string, int> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: fishing grounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_fgrounds_"+a_quarter+".dat";
+    ifstream vessels_fgrounds;
+    vessels_fgrounds.open(filename.c_str());
+    if(vessels_fgrounds.fail())
+    {
+        open_file_error(filename.c_str());
+        //   return 1;
+    }
+    multimap<string, int> fgrounds_init;
+    fill_multimap_from_specifications_s_i(vessels_fgrounds,  fgrounds_init);
+    vessels_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,int>::iterator lower_fg = fgrounds_init.lower_bound("DNK001");
+    multimap<string,int>::iterator upper_fg = fgrounds_init.upper_bound("DNK001");
+
+    dout(cout << "fishing grounds: ");
+    for (multimap<string, int>::iterator pos=lower_fg; pos != upper_fg; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(fgrounds_init);
+}
+
+
+
 multimap<string, int> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)
 {
 
@@ -821,6 +856,39 @@ multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name
 
 	return(freq_fgrounds);
 }
+
+multimap<string, double> read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder)
+{
+
+    //input data, vessel characteristics: frequency for fgrounds
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_freq_fgrounds_"+a_quarter+".dat";
+    ifstream vessels_freq_fgrounds;
+    vessels_freq_fgrounds.open(filename.c_str());
+    if(vessels_freq_fgrounds.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<string, double> freq_fgrounds_init;
+    fill_multimap_from_specifications_s_d(vessels_freq_fgrounds,  freq_fgrounds_init);
+    vessels_freq_fgrounds.close();
+
+#ifdef VERBOSE
+    // check input
+    multimap<string,double>::iterator lower3 = freq_fgrounds_init.lower_bound("DNK001");
+    multimap<string,double>::iterator upper3 = freq_fgrounds_init.upper_bound("DNK001");
+    dout(cout << "specific freq fgrounds: ");
+    for (multimap<string, double>::iterator pos=lower3; pos != upper3; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+
+    return(freq_fgrounds_init);
+}
+
 
 
 multimap<string, double> read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)

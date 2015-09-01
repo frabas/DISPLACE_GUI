@@ -461,14 +461,16 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         int szgroup = model->getSzGrupsCount();
         QString name = q.value(6).toString();
 
-        /* TODO: a,b */
+        /* TODO: a,b,c,d */
         multimap<int,double> a;
         map<int,double> b;
+        vector<int> c;
+        vector<double> d;
 
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;
         if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, nbbenthospops, szgroup, name.toStdString(),a,b));
+            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
         } else {
             nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape, nbpops, nbbenthospops,  szgroup));
         }

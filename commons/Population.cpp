@@ -872,28 +872,28 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
 
         multimap<int, double>::iterator pos;
 
-       int sz=-1;
+       int sz=0;
        for(pos = migration_fluxes.begin(); pos != migration_fluxes.end(); ++pos)
           {
 
           int arrival_pop = pos->first;
-          int flux_prop =pos->second;
+          double flux_prop =pos->second;
 
 
  cout << "departure pop is " << this->get_name() << endl;
  cout << "arrival_pop is " << arrival_pop << endl;
  cout << "sz is " << sz << endl;
- cout << "flux_prop is " << sz << endl;
+ cout << "flux_prop is " << flux_prop << endl;
 
            // input
           vector<double> N_at_szgroup_this_pop = this->get_tot_N_at_szgroup();
           vector<double> N_at_szgroup_arr_pop  = populations.at(arrival_pop)->get_tot_N_at_szgroup();
 
-          if(sz>N_at_szgroup_this_pop.size()) sz = -1; // reinit because next pop
-          sz +=1;
+          if((sz+1)>=N_at_szgroup_this_pop.size()) sz = 0; // reinit because next pop
 
  cout << " before: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
  cout << " before: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
+
 
  // impact the Ns from emigration/immigration specified in the multimap
           N_at_szgroup_arr_pop.at(sz)  = N_at_szgroup_arr_pop.at(sz)+(N_at_szgroup_this_pop.at(sz)*flux_prop);
@@ -909,6 +909,7 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
           // output arrival pop
           populations.at(arrival_pop)->set_tot_N_at_szgroup(N_at_szgroup_arr_pop);
 
+          sz +=1;
        }
       } else{
 

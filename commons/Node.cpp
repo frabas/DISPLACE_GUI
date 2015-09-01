@@ -184,6 +184,54 @@ double Node::get_fuelprices(int vsize)
 }
 
 
+const vector<int> &Node::get_usual_fgrounds() const
+{
+    return(vector<int> (0));
+}
+
+
+const vector<double> &Node::get_freq_usual_fgrounds() const
+{
+    return(vector<double> (0));
+}
+
+void Node::set_usual_fgrounds(vector <int> _usual_fgrounds)
+{
+}
+
+
+void Node::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
+{
+}
+
+
+const multimap<int,int> &Node::get_usual_metiers() const
+{
+    multimap<int,int> zero;
+     return(zero);
+
+}
+
+
+const multimap<int,double> &Node::get_freq_usual_metiers() const
+{
+   multimap<int,double> zero;
+    return(zero);
+}
+
+void Node::set_usual_metiers(multimap<int,int> _usual_metiers)
+{
+}
+
+
+void Node::set_freq_usual_metiers(multimap<int,double> _freq_usual_metiers)
+{
+}
+
+
+
+
+
 double Node::get_x() const
 {
 	return(x);

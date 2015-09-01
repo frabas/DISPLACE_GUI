@@ -176,8 +176,10 @@ multimap<int, double> freq_possible_metiers;
 multimap<int, double> gshape_cpue_per_stk_on_nodes;
 multimap<int, double> gscale_cpue_per_stk_on_nodes;
 vector<int> spe_fgrounds;
+vector<int> spe_fgrounds_init;
 vector<int> spe_harbours;
 vector<double> spe_freq_fgrounds;
+vector<double> spe_freq_fgrounds_init;
 vector<double> spe_freq_harbours;
 vector<double> spe_vessel_betas_per_pop;
 vector<double> spe_percent_tac_per_pop;
@@ -510,8 +512,11 @@ int main(int argc, char* argv[])
 
 	// not Windows eg Linux on HPC DTU
 	int status;
-	string home=getenv("HOME");
-	pathoutput=home+"/ibm_vessels";
+    bool DTU_HPC_SCRATCH = false;
+    string home;
+    if(DTU_HPC_SCRATCH) home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
+    else home=getenv("HOME");
+    pathoutput=home+"/ibm_vessels";
 	an_output_folder= pathoutput+"/DISPLACE_outputs";
 
     status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -1134,9 +1139,13 @@ int main(int argc, char* argv[])
 			}
 
 
+            vector <int> init_usual_fgrounds;
+            init_usual_fgrounds.push_back(0);
 
+            vector <double> init_freq_usual_fgrounds;
+            init_freq_usual_fgrounds.push_back(1.0);
 
-			nodes[i] =    (new Harbour(i,
+            nodes[i] =    (new Harbour(i,
 				graph_coord_x[i],
 				graph_coord_y[i],
 				graph_coord_harbour[i],
@@ -1147,7 +1156,9 @@ int main(int argc, char* argv[])
 				NBSZGROUP,
 				a_name,
                 fishprices_each_species_per_cat,
-				init_fuelprices
+                init_fuelprices,
+                init_usual_fgrounds,
+                init_freq_usual_fgrounds
 				));
 
             dout(cout << "Harbour " <<  nodes[i]->get_name() << " " <<
@@ -1207,7 +1218,7 @@ int main(int argc, char* argv[])
 	graph_point_code_landscape.resize( std::distance(graph_point_code_landscape.begin(),it) );
 	int nbland = graph_point_code_landscape.size();
 
-    // creation of a vector of benthos community (one benthos community per landscape)
+    // creation of a vector of benthos shared (one benthos shared per landscape)
 	vector <Benthos* > benthoss(nbland);
 
    outc(cout << "nb of marine landscapes " << nbland << endl);
@@ -1236,7 +1247,7 @@ int main(int argc, char* argv[])
 			cin>>aa;
 		}
 
-		// add e.g. 2 functional groups per community
+        // add e.g. 2 functional groups per shared
 		// and init with an arbitrary biomass.
 		// init_biomass will be distributed evenly among nodes
 		// belonging to this particular landscape
@@ -1244,7 +1255,7 @@ int main(int argc, char* argv[])
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
 			nodes,
 			init_tot_biomass_per_group);
-        //out(cout << "marine landscape for this benthos community is " << benthoss.at(landscape)->get_marine_landscape() << endl);
+        //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 
 	}
@@ -1263,7 +1274,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	// check the area distribution for benthos community 0
+    // check the area distribution for benthos shared 0
 	//vector<Node* > some_nodes= benthoss.at(0)-> get_list_nodes();
 	//for(int a_idx=0; a_idx<some_nodes.size(); a_idx++){
 	//    cout << some_nodes.at(a_idx)->get_idx_node() << endl;
@@ -1271,14 +1282,14 @@ int main(int argc, char* argv[])
 
 	// check the biomasses
 	vector<double> biomass_per_funcgr = benthoss[0]->get_tot_biomass();
-   outc(cout << "check biomass per func. gr. for benthos community 0  " << endl);
+   outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
 	for(unsigned int i=0 ; i<biomass_per_funcgr.size();  i++)
 	{
        outc(cout << biomass_per_funcgr[i] << " " );
 	}
    outc(cout << endl);
 
-	// check the biomasses for benthos community 0 on the first node for the
+    // check the biomasses for benthos shared 0 on the first node for the
 	// first functional group
 	//cout <<"...and the biomass this node this func. grp is "  <<
 	//     benthoss.at(0)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl;
@@ -1864,9 +1875,11 @@ int main(int argc, char* argv[])
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
     multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
     multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization,"../"+ inputfolder);
@@ -1958,8 +1971,10 @@ int main(int argc, char* argv[])
 		// read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
 		// for creating the vessel object, search into the multimaps
 		spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
-		spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
-		spe_harbours = find_entries_s_i(harbours, vesselids[i]);
+        spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids[i]);
+        spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
+        spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
+        spe_harbours = find_entries_s_i(harbours, vesselids[i]);
 		spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
 		spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
 		spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
@@ -1990,9 +2005,11 @@ int main(int argc, char* argv[])
 			NBSZGROUP,
 			spe_harbours,
 			spe_fgrounds,
-			spe_freq_harbours,
+            spe_fgrounds_init,
+            spe_freq_harbours,
 			spe_freq_fgrounds,
-			spe_vessel_betas_per_pop,
+            spe_freq_fgrounds_init,
+            spe_vessel_betas_per_pop,
 			spe_percent_tac_per_pop,
 			possible_metiers,
 			freq_possible_metiers,
@@ -2015,9 +2032,11 @@ int main(int argc, char* argv[])
 		// some useful setters...
 		// will also be useful when change of YEAR-QUARTER
 		vessels[i]->set_spe_fgrounds(spe_fgrounds);
-		vessels[i]->set_spe_harbours(spe_harbours);
+        vessels[i]->set_spe_fgrounds_init(spe_fgrounds_init);
+        vessels[i]->set_spe_harbours(spe_harbours);
 		vessels[i]->set_spe_freq_fgrounds(spe_freq_fgrounds);
-		vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
+        vessels[i]->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
+        vessels[i]->set_spe_freq_harbours(spe_freq_harbours);
 		vessels[i]->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
 		vessels[i]->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
 		vessels[i]->set_spe_possible_metiers(possible_metiers);
@@ -2204,7 +2223,7 @@ int main(int argc, char* argv[])
 								 // init
 				cumcatch_fgrounds_per_pop[f][pop] = 0;
 				experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
-			}
+            }
 		}
 		// per total...
 		vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
@@ -2288,6 +2307,9 @@ int main(int argc, char* argv[])
       dout(cout  << endl);
 
 	*/
+
+
+
 
 
 #ifdef PROFILE
@@ -2867,7 +2889,11 @@ int main(int argc, char* argv[])
 
 		}
 
-		//----------------------------------------//
+
+
+
+
+        //----------------------------------------//
 		//----------------------------------------//
 		// POP DYNAMICS --------------------------//
 		//----------------------------------------//
@@ -3714,8 +3740,10 @@ int main(int argc, char* argv[])
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
 			// also quarter specific but semester specific for the betas because of the survey design they are comning from...
             fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
             harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
+            freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
             freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
             vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
@@ -3730,9 +3758,11 @@ int main(int argc, char* argv[])
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
                 gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
 				spe_fgrounds = find_entries_s_i(fgrounds, vesselids.at(v));
-				spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
+                spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids.at(v));
+                spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
 				spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids.at(v));
-				spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
+                spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids.at(v));
+                spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
 				spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids.at(v));
 				spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v));
 
@@ -3779,9 +3809,11 @@ int main(int argc, char* argv[])
                     }
 
 				vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
-				vessels.at(v)->set_spe_harbours(spe_harbours);
+                vessels.at(v)->set_spe_fgrounds_init(spe_fgrounds_init);
+                vessels.at(v)->set_spe_harbours(spe_harbours);
 				vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
-				vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
+                vessels.at(v)->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
+                vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
 				vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());
 				for(unsigned int i = 0; i < init_for_fgrounds.size(); i++)
 				{
@@ -3970,7 +4002,11 @@ int main(int argc, char* argv[])
 
 		}						 // END RE-READ DATA FOR VESSEL AND METIER...
 
-		bool is_re_read_pop_data=false;
+
+
+
+
+        bool is_re_read_pop_data=false;
         if (dyn_pop_sce.option(Options::with_monthly_redistribution))
 		{
 
@@ -4146,6 +4182,84 @@ int main(int argc, char* argv[])
 			}
 
 		}						 // END RE-READ DATA FOR POP...
+
+
+
+
+        //----------------------------------------//
+        //----------------------------------------//
+        // RE-READ HARBOUR INFOS------------------//
+        //----------------------------------------//
+        //----------------------------------------//
+
+    if(tstep==0 || binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep)){
+
+        // fill in the usual_fgrounds on harbours
+        for (unsigned int i=0; i<nodes.size(); ++i)
+        {
+           if(nodes.at(i)->get_is_harbour())
+              {
+               vector<int>  vids_on_harbours =nodes.at(i)->get_vid();
+               vector<int> fgrounds;
+               vector<double> freq_fgrounds;
+
+               if(vids_on_harbours.size()>0)
+               {
+                   //cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl;
+                  for (unsigned int v=0; v<vids_on_harbours.size(); ++v)
+                    {
+                    vector<int> some_grounds=vessels.at(v)->get_fgrounds();
+                    for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
+                      {
+                        //cout << gr  << endl;
+                      fgrounds.push_back(some_grounds.at(gr));
+                      }
+                    }
+                  remove_dups(fgrounds);
+                  //cout << "assume equal probas "  << endl;
+               vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());
+               for (unsigned int gr=0; gr<equal_proba.size(); ++gr)
+                   {
+                   freq_fgrounds.push_back(equal_proba.at(gr));
+                   }
+               }
+               else
+               {
+               //cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
+               fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
+               }
+               nodes.at(i)-> set_usual_fgrounds(fgrounds);
+               nodes.at(i)-> set_freq_usual_fgrounds(freq_fgrounds);
+
+
+               // a check
+               /*
+               cout << "Harbour " <<  nodes.at(i)->get_name() << " has the usual grounds: " << endl;
+               vector <int> usual_grounds =  nodes.at(i)->get_usual_fgrounds();
+               for (unsigned int ii=0; ii<usual_grounds.size(); ++ii)
+                   {
+                   cout << usual_grounds.at(ii) << " " ;
+                   }
+               cout << endl;
+               */
+
+
+              }
+
+            }
+       }
+
+
+
+
+
+
+
+
+
+
+
+
 
         dout(cout  << "THE VESSEL LOOP----------" << endl);
 		// get a random order for acting vessels

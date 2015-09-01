@@ -144,6 +144,7 @@ bool Simulation::readTsFile (std::string filename) throw (boost::bad_lexical_cas
                 }
             }
 
+            boost::algorithm::trim(line);
             double v = boost::lexical_cast<double>(line);
 
             switch (val_line) {

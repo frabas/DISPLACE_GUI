@@ -5,12 +5,17 @@
   general$main.path.data <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input")
   general$main.path.data2 <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
   
-  general$igraph <- 11 # for the balticonly
-  general$case_study <- "balticonly"
+  general$igraph      <- 11 # for the balticonly
+  general$case_study  <- "balticonly"
   general$case_study2 <- "baltic_only"
-  general$a.year <- "2012"
-  general$a.country <- "DEN"
+  general$a.year      <- "2012"
+  general$a.country   <- "DEN"
 
+  general$igraph      <- 56 # for  myfish
+  general$case_study  <- "myfish"
+  general$case_study2 <- "myfish"
+  general$a.year      <- "2012"
+  general$a.country   <- "DEN"
 
 ##------------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------##
@@ -106,7 +111,10 @@
     paste( prices[grep('IIIa', prices$stock),'species_uk_code'], ".kask", sep='')
 
  # subset for relevant populations
- pop_names                   <- read.table(file.path(general$main.path.data, "popsspe_balticonly", paste("pop_names_baltic_only.txt", sep='')))
+ if(general$case_study=="balticonly") 
+       pop_names        <- read.table(file.path(general$main.path.data, "popsspe_balticonly", paste("pop_names_baltic_only.txt", sep='')))
+ if(general$case_study=="myfish") 
+       pop_names        <- read.table(file.path(general$main.path.data, "popsspe_myfish", paste("pop_names_myfish.txt", sep='')))
  prices                 <- prices[prices$stock %in% pop_names[,1],] # keep simulated stocks only
  prices$stock           <- factor(prices$stock)
  levels(prices$stock )  <- pop_names[,2][ match(levels(prices$stock), as.character(pop_names[,1]))] # map the name to integer
@@ -204,10 +212,10 @@ param_ts <- rbind.data.frame( param_ts,
 
 
 
-write.table(param_ts, file=file.path('C:','Users','fbas','Documents','GitHub','DISPLACE_input', 'externalforcing_balticonly', 'param_timeseries.dat'),
+if(general$case_study=="balticonly")  write.table(param_ts, file=file.path('C:','Users','fbas','Documents','GitHub','DISPLACE_input', 'externalforcing_balticonly', 'param_timeseries.dat'),
                  row.names=FALSE, col.names=TRUE, sep= " ", quote=FALSE)
 
-write.table(param_ts, file=file.path('C:','Users','fbas','Documents','GitHub','DISPLACE_input', 'externalforcing_myfish', 'param_timeseries.dat'),
+if(general$case_study=="myfish")  write.table(param_ts, file=file.path('C:','Users','fbas','Documents','GitHub','DISPLACE_input', 'externalforcing_myfish', 'param_timeseries.dat'),
                  row.names=FALSE, col.names=TRUE, sep= " ", quote=FALSE)
 
 ##------------------------------------------------------------------------------##

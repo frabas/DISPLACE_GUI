@@ -74,6 +74,11 @@ public:
     void set_cumftime(int i) { mNode->set_cumftime(i); }
     double get_cumsweptarea() const { return mNode->get_cumsweptarea(); }
     void set_cumsweptarea(int i) { mNode->set_cumsweptarea(i); }
+    vector<int> get_usual_fgrounds() { mNode->get_usual_fgrounds(); }
+    void set_usual_fgrounds(vector<int> usual_fgrounds) { mNode->set_usual_fgrounds(usual_fgrounds); }
+    vector<double> get_freq_usual_fgrounds() { mNode->get_freq_usual_fgrounds(); }
+    void set_freq_usual_fgrounds(vector<double> freq_usual_fgrounds) { mNode->set_freq_usual_fgrounds(freq_usual_fgrounds); }
+    int evaluateAreaType() { mNode->evaluateAreaType(); }
 
     /* Extending functions */
 

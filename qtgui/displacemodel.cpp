@@ -1681,6 +1681,82 @@ bool DisplaceModel::loadVessels()
         //    cout  << " " << a_ogive[i] << " " ;
         //}
         //cout << endl; // well...nothing there because a metier is still not assigned at this stage...
+
+
+        if (binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "shared_harbour_knowledge"))
+        {
+
+            //1. draw a ground according to freq
+            const vector <int> &grds = mVessels.at(i)->mVessel->get_fgrounds();
+            vector <double> freq_grds = mVessels.at(i)->mVessel->get_freq_fgrounds();
+                                         // need to convert in array, see myRutils.cpp
+            if(!freq_grds.empty())
+            {
+            vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
+            int ground=grounds[0];
+
+
+            //2. get possible metiers on this ground
+            const multimap<int, int> &poss_met        = mVessels.at(i)->mVessel->get_possible_metiers();
+            const multimap<int, double> &freq_poss_met= mVessels.at(i)->mVessel->get_freq_possible_metiers();
+            vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
+            vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
+                                     // need to convert in array, see myRutils.cpp
+            vector<int>    a_met;
+             a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+            //mVessels.at(i)->mVessel->set_metier(  mMetiers[ a_met[0] ]  );
+
+            int a_node         = mVessels.at(i)->mVessel->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
+            int current_metier =  a_met[0];// mVessels.at(i)->mVessel->get_metier()->get_name();
+            int nbpops         = mNodes.at(a_node)->getPopCount();
+            vector <int>            grounds_from_harbours ;
+            vector <double>         freq_grounds_from_harbours;
+            for(int idx=0; idx<mHarbours.size();++idx)
+            {
+               if(mHarbours.at(idx)->mHarbour->get_idx_node()==a_node) // silly brute force! because idx in mHarbours != idx in mNodes
+                   {
+                   grounds_from_harbours        = mHarbours.at(idx)->mHarbour->get_usual_fgrounds();
+                   freq_grounds_from_harbours   = mHarbours.at(idx)->mHarbour->get_freq_usual_fgrounds();
+                   }
+            }
+            vector<double> a_vector(nbpops);
+            vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), a_vector);
+            multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+            multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+            for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
+               { // rebuild assuming deploying one metier spread over the entire range from this harbour...
+               possible_metiers_from_harbours.insert(std::pair<int,int>(grounds_from_harbours.at(gr),current_metier));
+               freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
+               }
+
+            mVessels.at(i)->mVessel->set_spe_fgrounds(grounds_from_harbours); // CHANGED
+            mVessels.at(i)->mVessel->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
+            mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+            mVessels.at(i)->mVessel->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+            mVessels.at(i)->mVessel->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+            mVessels.at(i)->mVessel->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+            mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+            mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+            mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+            mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+            mVessels.at(i)->mVessel->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
+            mVessels.at(i)->mVessel->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+
+            // inform grounds in closed areas
+            vector<int> new_grds = mVessels.at(i)->mVessel->get_fgrounds();
+            vector<int> fgrounds_in_closed_areas;
+            for(unsigned int i=0; i<new_grds.size();++i)
+            {
+                if(mNodes.at(new_grds.at(i))->mNode->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
+            }
+           mVessels.at(i)->mVessel->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+            } // otherwise, no activity this vessel this quarter
+
+        }
+
+
+
     }
 
     return false;

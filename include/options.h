@@ -85,7 +85,7 @@ enum Dyn_Alloc {
     increased_catch_power_5percent,
     focus_on_high_profit_grounds_area_closure,
     focus_on_high_previous_cpue,
-    loser_grounds,
+    shared_harbour_knowledge,
 
     Dyn_Alloc_last
 };

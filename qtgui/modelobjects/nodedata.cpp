@@ -130,6 +130,8 @@ void NodeData::setAreaType(int value)
 }
 
 
+
+
 /**
  * @brief NodeData::appendAdiancency
  * @param to_id

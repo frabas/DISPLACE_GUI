@@ -2043,7 +2043,6 @@ int main(int argc, char* argv[])
 		vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers);
 
 
-
         // inform grounds in closed areas
         vector <int> grds = vessels[i]->get_fgrounds();
         vector <int> fgrounds_in_closed_areas;
@@ -2307,6 +2306,66 @@ int main(int argc, char* argv[])
       dout(cout  << endl);
 
 	*/
+
+
+    if(dyn_alloc_sce.option(Options::shared_harbour_knowledge)){
+
+        //1. draw a ground according to freq
+        const vector <int> &grds = vessels[i]->get_fgrounds();
+        vector <double> freq_grds = vessels[i]->get_freq_fgrounds();
+                                     // need to convert in array, see myRutils.cpp
+        vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
+        int ground=grounds[0];
+
+
+        //2. get possible metiers on this ground
+        const multimap<int, int> &poss_met        = vessels[i]->get_possible_metiers();
+        const multimap<int, double> &freq_poss_met= vessels[i]->get_freq_possible_metiers();
+        vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
+        vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
+                                 // need to convert in array, see myRutils.cpp
+        vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+        vessels[i]->set_metier(  metiers[ a_met[0] ]  );
+
+
+        int a_node         = vessels[i]->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
+        int current_metier = vessels[i]->get_metier()->get_name();
+        int nbpops         = nodes.at(a_node)->get_nbpops();
+        vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
+        vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
+        vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+        multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+        multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+        for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
+           { // rebuild assuming deploying one metier spread over the entire range from this harbour...
+           possible_metiers_from_harbours.insert(std::pair<int,int>(grounds_from_harbours.at(gr),current_metier));
+           freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
+           }
+
+
+        vessels[i]->set_spe_fgrounds(grounds_from_harbours); // CHANGED
+        vessels[i]->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
+        vessels[i]->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+        vessels[i]->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+        vessels[i]->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+        vessels[i]->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+        vessels[i]->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+        vessels[i]->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+        vessels[i]->set_freq_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+        vessels[i]->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+        vessels[i]->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
+        vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+
+        // inform grounds in closed areas
+        vector<int> new_grds = vessels[i]->get_fgrounds();
+        vector<int> fgrounds_in_closed_areas;
+        for(unsigned int i=0; i<new_grds.size();++i)
+        {
+            if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
+        }
+       vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+    }
 
 
 
@@ -4000,7 +4059,69 @@ int main(int argc, char* argv[])
 			}					 // end a_met
             dout(cout << "re-read metiers...OK"  << endl);
 
-		}						 // END RE-READ DATA FOR VESSEL AND METIER...
+
+
+            if(dyn_alloc_sce.option(Options::shared_harbour_knowledge)){
+
+                //1. draw a ground according to freq
+                const vector <int> &grds = vessels.at(v)->get_fgrounds();
+                vector <double> freq_grds = vessels.at(v)->get_freq_fgrounds();
+                                             // need to convert in array, see myRutils.cpp
+                vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
+                int ground=grounds[0];
+
+
+                //2. get possible metiers on this ground
+                const multimap<int, int> &poss_met        = vessels.at(v)->get_possible_metiers();
+                const multimap<int, double> &freq_poss_met= vessels.at(v)->get_freq_possible_metiers();
+                vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
+                vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
+                                         // need to convert in array, see myRutils.cpp
+                vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+                vessels.at(v)->set_metier(  metiers[ a_met[0] ]  );
+
+
+                int a_node         = vessels.at(v)->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
+                int current_metier = vessels.at(v)->get_metier()->get_name();
+                int nbpops         = nodes.at(a_node)->get_nbpops();
+                vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
+                vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
+                vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+                multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+                multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+                for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
+                   { // rebuild assuming deploying one metier spread over the entire range from this harbour...
+                   possible_metiers_from_harbours.insert(std::pair<int,int>(grounds_from_harbours.at(gr),current_metier));
+                   freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
+                   }
+
+
+                vessels.at(v)->set_spe_fgrounds(grounds_from_harbours); // CHANGED
+                vessels.at(v)->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
+                vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                vessels.at(v)->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                vessels.at(v)->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                vessels.at(v)->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+                vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                vessels.at(v)->set_freq_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+                vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                vessels.at(v)->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
+                vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+
+                // inform grounds in closed areas
+                vector<int> new_grds = vessels.at(v)->get_fgrounds();
+                vector<int> fgrounds_in_closed_areas;
+                for(unsigned int i=0; i<new_grds.size();++i)
+                {
+                    if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
+                }
+               vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+            }
+
+
+        }						 // END RE-READ DATA FOR VESSEL AND METIER...
 
 
 

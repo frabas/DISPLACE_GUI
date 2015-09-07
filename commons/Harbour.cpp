@@ -166,6 +166,7 @@ void Harbour::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
 }
 
 
+
 const multimap<int,int> &Harbour::get_usual_metiers() const
 {
     return(usual_metiers);

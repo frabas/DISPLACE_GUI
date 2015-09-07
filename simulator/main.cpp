@@ -4455,33 +4455,79 @@ int main(int argc, char* argv[])
               {
                vector<int>  vids_on_harbours =nodes.at(i)->get_vid();
                vector<int> fgrounds;
+               multimap<int, double> grounds_cpues_harbour_knowledge;
+               vector<double> cpue_fgrounds;
                vector<double> freq_fgrounds;
 
                if(vids_on_harbours.size()>0)
                {
                    //cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl;
-                  for (unsigned int v=0; v<vids_on_harbours.size(); ++v)
+                  for (unsigned int vi=0; vi<vids_on_harbours.size(); ++vi)
                     {
-                    vector<int> some_grounds=vessels.at(v)->get_fgrounds();
+                    vector<int>   some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
+                    vector<double> some_cpues  = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
                     for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
                       {
                         //cout << gr  << endl;
+                      int a_ground = some_grounds.at(gr);
+                      double a_cpue= some_cpues.at(gr);
+
+                      grounds_cpues_harbour_knowledge.insert(std::make_pair<int,double>(a_ground,a_cpue));
                       fgrounds.push_back(some_grounds.at(gr));
                       }
                     }
                   remove_dups(fgrounds);
-                  //cout << "assume equal probas "  << endl;
-               vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());
-               for (unsigned int gr=0; gr<equal_proba.size(); ++gr)
-                   {
-                   freq_fgrounds.push_back(equal_proba.at(gr));
-                   }
+
+
+                  // do an average of cpues for each fgrounds
+                  for (int gr=0; gr <fgrounds.size() ; ++gr)
+                     {
+                     int cnt = grounds_cpues_harbour_knowledge.count(fgrounds.at(gr));
+                     multimap<int,double>::iterator it;
+                     double sum =0;
+                     for (it=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).first; it!=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).second; ++it)
+                        {
+                         sum += (*it).second;
+                        }
+                     cout << "average for: "<< fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt  << endl;
+                     cpue_fgrounds.push_back(sum / cnt);
+                     }
+                  //  ...and scale to 1 to transform into probas
+                  double cum_cpue=0;
+                  for (int gr=0; gr <fgrounds.size() ; ++gr)
+                     {
+                     cum_cpue+=cpue_fgrounds.at(gr);
+                     }
+                 if(cum_cpue!=0)
+                    {
+                     for (int gr=0; gr <fgrounds.size() ; ++gr)
+                        {
+                         freq_fgrounds.push_back(cpue_fgrounds.at(gr) / cum_cpue);
+                        }
+                    }
+                 else
+                    {
+                    freq_fgrounds.push_back(0.00001);
+                    }
+
+
+
+                // cout << "assume equal probas "  << endl;
+                // vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());
+                // for (unsigned int gr=0; gr<equal_proba.size(); ++gr)
+                //    {
+                //    freq_fgrounds.push_back(equal_proba.at(gr));
+                //    }
+
+
                }
                else
                {
                //cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
                fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                }
+
+               // update the harbour
                nodes.at(i)-> set_usual_fgrounds(fgrounds);
                nodes.at(i)-> set_freq_usual_fgrounds(freq_fgrounds);
 

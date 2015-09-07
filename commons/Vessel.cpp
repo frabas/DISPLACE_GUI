@@ -3838,7 +3838,6 @@ void Vessel::reinit_after_a_trip()
 	this-> set_consotogetthere(0);
 	this-> set_cumsteaming(0);
 	this-> set_cumcatches(0);
-	this-> set_cumcatches(0);
 	this-> clear_idx_used_metiers_this_trip();
 	this-> compute_experiencedcpue_fgrounds();
 	this-> compute_experiencedcpue_fgrounds_per_pop();

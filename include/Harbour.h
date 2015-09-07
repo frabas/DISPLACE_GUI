@@ -68,6 +68,7 @@ class Harbour : public Node
         virtual void set_usual_metiers (multimap<int, int> usual_metiers);
         virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers);
 
+
 	private:
 		string name;
 		//int idx_node;

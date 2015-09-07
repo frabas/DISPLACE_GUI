@@ -2314,6 +2314,8 @@ int main(int argc, char* argv[])
         const vector <int> &grds = vessels[i]->get_fgrounds();
         vector <double> freq_grds = vessels[i]->get_freq_fgrounds();
                                      // need to convert in array, see myRutils.cpp
+        if(!freq_grds.empty())
+        {
         vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
         int ground=grounds[0];
 
@@ -2334,6 +2336,9 @@ int main(int argc, char* argv[])
         vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
         vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
         vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+        vector <double>         experiencedcpue_fgrounds(grounds_from_harbours.size());
+        vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+        vector <double>         freq_experiencedcpue_fgrounds(grounds_from_harbours.size());
         multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
         multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
         for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
@@ -2342,17 +2347,63 @@ int main(int argc, char* argv[])
            freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
            }
 
+        // 4- create randomized cpues on grounds known from the harbours for
+        // experiencedcpue_fgrounds
+        // and experiencedcpue_fgrounds_per_pop
+        // NO OTHER CHOICE FOR NOW BECAUSE NO SHARED KNOWLEDGE ON THIS ASPECT
+        vector<double> cum_cpue_over_pop(grounds_from_harbours.size());
+        double cum_cpue=0;
+        for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++)
+        {
 
+        double a_number= rand()% 100;         // in the range 0 to 99
+        experiencedcpue_fgrounds.at(a_node)= a_number; // populate with rand()
+        cum_cpue +=experiencedcpue_fgrounds.at(a_node);
+
+
+            cum_cpue_over_pop.push_back(0);
+
+            for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
+            {
+                experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= a_number;
+
+                // cumul to scale to 1 (just below)
+                cum_cpue_over_pop.at(a_node) +=experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
+
+                //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
+                if(cum_cpue_over_pop.at(a_node)!=0)
+                {
+                    for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
+                    {
+                        freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) / cum_cpue_over_pop.at(a_node);
+                    }
+                }
+
+            }
+
+        }
+
+         //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds
+        if(cum_cpue!=0)
+        {
+            for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
+            {
+                freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
+            }
+        }
+
+
+        // 5- then apply the changes to the vessel
         vessels[i]->set_spe_fgrounds(grounds_from_harbours); // CHANGED
         vessels[i]->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
         vessels[i]->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
-        vessels[i]->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+        vessels[i]->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
         vessels[i]->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
         vessels[i]->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
-        vessels[i]->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+        vessels[i]->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
         vessels[i]->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
-        vessels[i]->set_freq_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
-        vessels[i]->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+        vessels[i]->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds); // re-dimensioned
+        vessels[i]->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop); // re-dimensioned
         vessels[i]->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
         vessels[i]->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
 
@@ -2365,6 +2416,7 @@ int main(int argc, char* argv[])
         }
        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
 
+        } // otherwise, no activity this vessel this quarter
     }
 
 
@@ -3979,12 +4031,12 @@ int main(int argc, char* argv[])
                 dout(cout << "re-set vessels step4..."  << endl);
                 dout(cout  << "init dynamic object related to fgrounds" << endl);
 				vector<double > a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
-				vector<double > a_init_for_fgrounds(fgrounds.size());
-				vector<double > a_cumeffort_fgrounds= init_for_fgrounds;
-				vector<double > a_cumcatch_fgrounds= init_for_fgrounds;
-                vector<double > a_experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
-                vector<double > a_experiencedcpue_fgrounds= init_for_fgrounds;
-				vector<double > a_freq_experiencedcpue_fgrounds= init_for_fgrounds;
+                vector<double > a_init_for_fgrounds(fgrounds.size());
+                vector<double > a_cumeffort_fgrounds= a_init_for_fgrounds;
+                vector<double > a_cumcatch_fgrounds= a_init_for_fgrounds;
+                vector<double > a_experienced_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
+                vector<double > a_experiencedcpue_fgrounds= a_init_for_fgrounds;
+                vector<double > a_freq_experiencedcpue_fgrounds= a_init_for_fgrounds;
 				vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -4063,30 +4115,50 @@ int main(int argc, char* argv[])
 
             if(dyn_alloc_sce.option(Options::shared_harbour_knowledge)){
 
-                //1. draw a ground according to freq
-                const vector <int> &grds = vessels.at(v)->get_fgrounds();
+                for (unsigned int v=0; v<vessels.size(); v++)
+                {
+
+                //1. draw a ground
+                vector <int>    grds      = vessels.at(v)->get_fgrounds();
                 vector <double> freq_grds = vessels.at(v)->get_freq_fgrounds();
                                              // need to convert in array, see myRutils.cpp
-                vector<int> grounds = do_sample(1, grds.size(), &grds[0], &freq_grds[0]);
-                int ground=grounds[0];
+                if(!freq_grds.empty())
+                {
+                int idx_max = max_element (freq_grds.begin(), freq_grds.end()) - freq_grds.begin();
+                int ground=grds.at(idx_max);
+                cout << vessels.at(v)->get_name() << ": ground is " << ground << endl;
 
 
                 //2. get possible metiers on this ground
-                const multimap<int, int> &poss_met        = vessels.at(v)->get_possible_metiers();
-                const multimap<int, double> &freq_poss_met= vessels.at(v)->get_freq_possible_metiers();
+                const multimap<int, int>    &poss_met        = vessels.at(v)->get_possible_metiers();
+                const multimap<int, double> &freq_poss_met   = vessels.at(v)->get_freq_possible_metiers();
                 vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
                 vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
                                          // need to convert in array, see myRutils.cpp
-                vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+                vector<int>    a_met               = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
                 vessels.at(v)->set_metier(  metiers[ a_met[0] ]  );
 
 
-                int a_node         = vessels.at(v)->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
+                vector <int>    harbs      = vessels.at(v)->get_harbours();
+                vector <double> freq_harbs = vessels.at(v)->get_freq_harbours();
+                if(freq_harbs.empty())
+                {
+                  cout << "check why..." << endl;
+                }
+
+                int idx_max2               = max_element (freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
+                int a_node                 = harbs.at(idx_max2);  // cause the decision is taken in harbour...
+                cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node)->get_idx_node() << " is in harb?`" <<
+                        nodes.at(a_node)->get_is_harbour() << " ...cause the decision is taken in harbour..." << endl;
                 int current_metier = vessels.at(v)->get_metier()->get_name();
+                cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
                 int nbpops         = nodes.at(a_node)->get_nbpops();
                 vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
                 vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
                 vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+                vector <double>         experiencedcpue_fgrounds(grounds_from_harbours.size());
+                vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
+                vector <double>         freq_experiencedcpue_fgrounds(grounds_from_harbours.size());
                 multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
                 multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
                 for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
@@ -4095,17 +4167,70 @@ int main(int argc, char* argv[])
                    freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
                    }
 
+                cout << vessels.at(v)->get_name() << ": grounds_from_harbours is " <<  endl;
+                for (int a_gr=0; a_gr<grounds_from_harbours.size();++a_gr)
+                   {
+                    cout << grounds_from_harbours.at(a_gr) << " " ;
+                   }
+                cout << endl;
 
+                // 4- create randomized cpues on grounds known from the harbours for
+                // experiencedcpue_fgrounds
+                // and experiencedcpue_fgrounds_per_pop
+                // NO OTHER CHOICE FOR NOW BECAUSE NO SHARED KNOWLEDGE ON THIS ASPECT
+                vector<double> cum_cpue_over_pop(grounds_from_harbours.size());
+                double cum_cpue=0;
+                for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds_per_pop.size(); a_node++)
+                {
+
+                double a_number= rand()% 100;         // in the range 0 to 99
+                experiencedcpue_fgrounds.at(a_node)= a_number; // populate with rand()
+                cum_cpue +=experiencedcpue_fgrounds.at(a_node);
+
+
+                    cum_cpue_over_pop.push_back(0);
+
+                    for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
+                    {
+                        experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= a_number;
+
+                        // cumul to scale to 1 (just below)
+                        cum_cpue_over_pop.at(a_node) +=experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
+
+                        //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds_per_pop
+                        if(cum_cpue_over_pop.at(a_node)!=0)
+                        {
+                            for(unsigned int pop = 0; pop < experiencedcpue_fgrounds_per_pop[a_node].size(); pop++)
+                            {
+                                freq_experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) / cum_cpue_over_pop.at(a_node);
+                            }
+                        }
+
+                    }
+
+                }
+
+                 //  scale to 1 for use in do_sample() => freq_experiencedcpue_fgrounds
+                if(cum_cpue!=0)
+                {
+                    for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
+                    {
+                        freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
+                    }
+                }
+
+
+                // 5- then apply the changes to the vessel
                 vessels.at(v)->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                 vessels.at(v)->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                 vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
-                vessels.at(v)->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                vessels.at(v)->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                 vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                 vessels.at(v)->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
-                vessels.at(v)->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
+                vessels.at(v)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
                 vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
-                vessels.at(v)->set_freq_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
-                vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
+                vessels.at(v)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds); // re-dimensioned
+                vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop); // re-dimensioned
                 vessels.at(v)->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
                 vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
 
@@ -4117,8 +4242,16 @@ int main(int argc, char* argv[])
                     if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
                 }
                vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+              }
+              else
+              {
+                    // otherwise, no activity this vessel this quarter
+                    cout << " --> no activity for " << vessels.at(v)->get_name() << endl;
 
-            }
+
+              }
+            } // end v
+           } // end sce
 
 
         }						 // END RE-READ DATA FOR VESSEL AND METIER...

@@ -4237,14 +4237,16 @@ int main(int argc, char* argv[])
                       int a_met= metiers_on_grd.at(0); // take only one, the first as it comes....
 
                       bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, std::make_pair<int,int>(a_met, a_ground));
+                      if(is_present)
+                         {
+                          // EQUAL FREQ (TO BE CHANGED, BUT DOESNT MATTER IF A ChooseGround DTREES IN USE)
+                         freq_grounds_mets_harbour_knowledge.insert(std::make_pair<int,int>(a_met, 1.0));
+                         }
+                      }
                     }
-                    }
+
+                  // DEPRECATED:
                   remove_dups(fgrounds);
-
-                  // EQUAL FREQ (TO BE CHANGED)
-                  for (std::multimap<int,int>::iterator it=grounds_mets_harbour_knowledge.begin(); it!=grounds_mets_harbour_knowledge.end(); ++it)
-                        freq_grounds_mets_harbour_knowledge.insert(std::make_pair<int,int>((*it).first, 1.0));
-
 
                   // do an average of cpues for each fgrounds
                   for (int gr=0; gr <fgrounds.size() ; ++gr)

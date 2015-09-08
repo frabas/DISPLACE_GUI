@@ -65,6 +65,12 @@ double myintegrand(double x, double S1, double S2);
 
 
 void remove_dups(vector<int>& seq);
+multimap<int,int>  remove_dups(multimap<int,int>& original_map); // keep the first pair of all keys
+
+// remove key-value duplicates
+multimap<int,int>::const_iterator find_pair(const multimap<int,int>& map, const pair<int, int>& pair);
+bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair);
+
 
 //void print( vector <string> & v );
 //void print_d( vector <double> & v );

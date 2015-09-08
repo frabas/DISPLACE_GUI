@@ -205,6 +205,31 @@ void Node::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
 }
 
 
+
+vector<int> Node::get_usual_fgrounds_this_met(int met)
+{
+    return(vector<int> (0));
+}
+
+
+vector<double> Node::get_freq_usual_fgrounds_this_met(int met)
+{
+    return(vector<double> (0));
+}
+
+void Node::set_usual_fgrounds_per_met(multimap <int,int> _usual_fgrounds_per_met)
+{
+}
+
+
+void Node::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgrounds_per_met)
+{
+}
+
+
+
+
+
 const multimap<int,int> &Node::get_usual_metiers() const
 {
     multimap<int,int> zero;

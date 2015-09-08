@@ -67,6 +67,10 @@ class Harbour : public Node
         virtual const multimap<int,double> &get_freq_usual_metiers () const;
         virtual void set_usual_metiers (multimap<int, int> usual_metiers);
         virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers);
+        virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met);
+        virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met);
+        virtual vector<int> get_usual_fgrounds_this_met(int met);
+        virtual vector<double> get_freq_usual_fgrounds_this_met (int met);
 
 
 	private:
@@ -79,6 +83,8 @@ class Harbour : public Node
         vector <double> freq_usual_fgrounds;
         multimap<int, int> usual_metiers;
         multimap<int, double> freq_usual_metiers;
+        multimap<int, int> usual_fgrounds_per_met;
+        multimap<int, double> freq_usual_fgrounds_per_met;
 
 };
 #endif							 // HARBOUR_H

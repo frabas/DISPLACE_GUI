@@ -52,6 +52,43 @@ void remove_dups(vector<int>& seq)
 	seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
 }
 
+
+// to keep the first element of all the keys only:
+multimap<int,int>  remove_dups(multimap<int,int>& original_map)
+{
+   multimap<int,int> new_map;
+
+   while (original_map.size() > 0)
+      {
+       pair<int,int> element = *(original_map.begin());
+       new_map.insert(make_pair(element.first,element.second));
+       original_map.erase(element.first);
+      }
+return(new_map);
+}
+
+
+// to remove key-value duplicates:
+multimap<int,int>::const_iterator find_pair(const multimap<int,int>& map, const pair<int, int>& pair)
+{
+    std::pair<multimap<int, int>::const_iterator ,multimap<int, int>::const_iterator > range = map.equal_range(pair.first);
+    for (multimap<int, int>::const_iterator p = range.first; p != range.second; ++p)
+        if (p->second == pair.second)
+            return p;
+    return map.end();
+}
+
+bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair)
+{
+    if (find_pair(map, pair) == map.end()) {
+        map.insert(pair);
+        return true;
+    }
+    return false;
+}
+
+
+
 /*
 void print( vector <string> & v )
 {

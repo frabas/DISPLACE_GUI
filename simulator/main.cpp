@@ -4207,6 +4207,8 @@ int main(int argc, char* argv[])
                vector<int>  vids_on_harbours =nodes.at(i)->get_vid();
                vector<int> fgrounds;
                multimap<int, double> grounds_cpues_harbour_knowledge;
+               multimap<int, int> grounds_mets_harbour_knowledge;
+               multimap<int, double> freq_grounds_mets_harbour_knowledge;
                vector<double> cpue_fgrounds;
                vector<double> freq_fgrounds;
 
@@ -4217,17 +4219,31 @@ int main(int argc, char* argv[])
                     {
                     vector<int>   some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
                     vector<double> some_cpues  = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
+
+                    const multimap<int, int> &poss_met  = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
+
                     for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
                       {
-                        //cout << gr  << endl;
+                      //cout << gr  << endl;
+
+                      // cpues
                       int a_ground = some_grounds.at(gr);
                       double a_cpue= some_cpues.at(gr);
-
                       grounds_cpues_harbour_knowledge.insert(std::make_pair<int,double>(a_ground,a_cpue));
                       fgrounds.push_back(some_grounds.at(gr));
-                      }
+
+                      // mets
+                      vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, a_ground );
+                      int a_met= metiers_on_grd.at(0); // take only one, the first as it comes....
+
+                      bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, std::make_pair<int,int>(a_met, a_ground));
+                    }
                     }
                   remove_dups(fgrounds);
+
+                  // EQUAL FREQ (TO BE CHANGED)
+                  for (std::multimap<int,int>::iterator it=grounds_mets_harbour_knowledge.begin(); it!=grounds_mets_harbour_knowledge.end(); ++it)
+                        freq_grounds_mets_harbour_knowledge.insert(std::make_pair<int,int>((*it).first, 1.0));
 
 
                   // do an average of cpues for each fgrounds
@@ -4271,6 +4287,10 @@ int main(int argc, char* argv[])
                 //    }
 
 
+
+
+
+
                }
                else
                {
@@ -4282,6 +4302,9 @@ int main(int argc, char* argv[])
                nodes.at(i)-> set_usual_fgrounds(fgrounds);
                nodes.at(i)-> set_freq_usual_fgrounds(freq_fgrounds);
 
+               // TO DO:
+               nodes.at(i)-> set_usual_fgrounds_per_met(grounds_mets_harbour_knowledge);
+               nodes.at(i)-> set_freq_usual_fgrounds_per_met(freq_grounds_mets_harbour_knowledge);
 
                // a check
                /*
@@ -4343,8 +4366,11 @@ int main(int argc, char* argv[])
             int current_metier = vessels.at(v)->get_metier()->get_name();
             cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
             int nbpops         = nodes.at(a_node)->get_nbpops();
-            vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
-            vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
+            // TO DO:
+            vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds_this_met(current_metier);
+            vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds_this_met(current_metier);
+            //vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
+            //vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
             if(grounds_from_harbours.size()==1)
             {   // few cases for which the harbour has been badly informed...
                 grounds_from_harbours        = vessels.at(v)->get_fgrounds();

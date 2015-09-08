@@ -166,6 +166,34 @@ void Harbour::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
 }
 
 
+vector<int> Harbour::get_usual_fgrounds_this_met(int met)
+{
+    vector<int> usual_fgrounds_this_met  = find_entries_i_i( usual_fgrounds_per_met, met );
+
+
+    return(usual_fgrounds_this_met);
+}
+
+
+vector<double> Harbour::get_freq_usual_fgrounds_this_met(int met)
+{
+     vector<double> freq_usual_fgrounds_this_met = find_entries_i_d( freq_usual_fgrounds_per_met, met );
+
+    return(freq_usual_fgrounds_this_met);
+}
+
+void Harbour::set_usual_fgrounds_per_met(multimap <int,int> _usual_fgrounds_per_met)
+{
+ usual_fgrounds_per_met=_usual_fgrounds_per_met;
+}
+
+
+void Harbour::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgrounds_per_met)
+{
+ freq_usual_fgrounds_per_met=_freq_usual_fgrounds_per_met;
+}
+
+
 
 const multimap<int,int> &Harbour::get_usual_metiers() const
 {

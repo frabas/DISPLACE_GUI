@@ -2382,6 +2382,28 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
              cpue = rgamma(a_shape, a_scale);
              }
 
+
+            //if(tstep>8761 && is_individual_vessel_quotas)
+            if(tstep>1 && is_individual_vessel_quotas)
+               {
+                // check the individual quota for this pop
+               double a_cumul_weight_this_pop_this_vessel=0;
+               int remaining_individual_tac_this_pop = this->get_individual_tac(pop);
+               if(remaining_individual_tac_this_pop <=0)
+                  {
+                   dout(cout  << this->get_name() << ": individual quota this IMPLICIT pop"<< pop << " EXHAUSTED! " << endl);
+                  cpue = 0; // quota exhausted for this implicit stock: no catch
+                  }
+               else
+                  {
+                   dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
+                         " still ok...but now decrease the amount by the last catches. It remains "<< remaining_individual_tac_this_pop << endl);
+                   this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
+                                                     remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
+                  }
+              }
+
+
             dout (cout<<this->get_name() << ": the cpue for this pop " << populations.at(pop)->get_name()
                 << " on this node "<< idx_node << " is " << cpue << endl);
 

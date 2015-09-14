@@ -3578,7 +3578,17 @@ int main(int argc, char* argv[])
 							//=> obviously, F restart from 0 each year...
 							populations.at(sp)->set_landings_so_far(0);
 
-						}
+                        }
+                        else
+                        {
+                        double tac_y_plus_1 = populations.at(sp)->get_tac()->get_current_tac();
+                        populations.at(sp)->get_tac()->add_tac_y_plus_1(tac_y_plus_1);
+                        for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
+                           {
+                            vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
+                           }
+
+                        }
 
                         // store N initial for the next year and reinit Fs
                         if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_single))
@@ -4245,7 +4255,7 @@ int main(int argc, char* argv[])
                       }
                     }
 
-                  // DEPRECATED:
+                  // DEPRECATED? (still in use for enlarging the vessel horizon if no positive profit)
                   remove_dups(fgrounds);
 
                   // do an average of cpues for each fgrounds

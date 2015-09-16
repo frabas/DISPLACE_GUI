@@ -2379,7 +2379,13 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
               }
            else
              { // it occurs when fgrounds are not the initial ones...e.g. usual_fgrounds from harbour
-             cpue = rgamma(a_shape, a_scale);
+               // (in this case the location is not that important (because implicit species),
+               // it is just assuming that the TAC for this species will be exhausted wherever the area it is caught)
+                a_shape = gshape_cpue_nodes_species.at(0).at(pop);
+                                 // look into the vector of vector....
+                a_scale = gscale_cpue_nodes_species.at(0).at(pop);
+                cpue = rgamma(a_shape, a_scale);
+
              }
 
 
@@ -2397,9 +2403,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                else
                   {
                    dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
-                         " still ok...but now decrease the amount by the last catches. It remains "<< remaining_individual_tac_this_pop << endl);
+                         " still ok...but now decrease the amount by the last catches. Note that it remains "<< remaining_individual_tac_this_pop << endl);
+                   a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE;
                    this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
                                                      remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
+                   dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
+                         " is now "<< remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel << endl);
                   }
               }
 

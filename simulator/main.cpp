@@ -3541,8 +3541,8 @@ int main(int argc, char* argv[])
 					if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 					{
 						int namepop = populations.at(sp)->get_name();
-						if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ))
-						{
+                        //if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ))
+                        //{
 							// compute a TAC for y+1 from a short-term forecast (STF)
 							// and a long-term management plan (LTMP)
 							populations.at(sp)->compute_TAC();
@@ -3578,17 +3578,10 @@ int main(int argc, char* argv[])
 							//=> obviously, F restart from 0 each year...
 							populations.at(sp)->set_landings_so_far(0);
 
-                        }
-                        else
-                        {
-                        double tac_y_plus_1 = populations.at(sp)->get_tac()->get_current_tac();
-                        populations.at(sp)->get_tac()->add_tac_y_plus_1(tac_y_plus_1);
-                        for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
-                           {
-                            vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
-                           }
-
-                        }
+                        //}
+                        //else
+                        //{
+                         //}
 
                         // store N initial for the next year and reinit Fs
                         if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_single))
@@ -3613,7 +3606,27 @@ int main(int argc, char* argv[])
 				else
 				{
                    outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
-				}
+                   // apply only at the beginning of the year (this is maybe not always relevant...)
+                   if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+                      {
+                      //cout << "1- Current global tac for this pop " << sp << "is " << populations.at(sp)->get_tac()->get_current_tac() << endl;
+                      double tac_y_plus_1 = populations.at(sp)->get_tac()->get_current_tac();
+
+                     // should be equivalent to do:
+                     // vector<double> ts_tac = populations.at(sp)->get_tac()->get_ts_tac();
+                     //  populations.at(sp)->get_tac()->add_tac_y_plus_1(ts_tac.at(0));
+
+                      populations.at(sp)->get_tac()->add_tac_y_plus_1(tac_y_plus_1);
+
+                      //cout << "2- Current global tac for this pop " << sp << "is " << populations.at(sp)->get_tac()->get_current_tac() << endl;;
+
+                      for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
+                         {
+                         vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
+                         }
+
+                      }
+                }
 
 			}
 

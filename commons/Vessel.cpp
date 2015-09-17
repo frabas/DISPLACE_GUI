@@ -2381,9 +2381,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
              { // it occurs when fgrounds are not the initial ones...e.g. usual_fgrounds from harbour
                // (in this case the location is not that important (because implicit species),
                // it is just assuming that the TAC for this species will be exhausted wherever the area it is caught)
-                a_shape = gshape_cpue_nodes_species.at(0).at(pop);
+                int randomIndex = rand() % gshape_cpue_nodes_species.size();
+                a_shape = gshape_cpue_nodes_species.at(randomIndex).at(pop);
                                  // look into the vector of vector....
-                a_scale = gscale_cpue_nodes_species.at(0).at(pop);
+                a_scale = gscale_cpue_nodes_species.at(randomIndex).at(pop);
                 cpue = rgamma(a_shape, a_scale);
 
              }

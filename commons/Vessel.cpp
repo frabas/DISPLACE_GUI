@@ -4428,7 +4428,8 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 		random_shuffle(a_vect.begin(),a_vect.end());
 		bool another_ground = a_vect[0] &&
 			this->get_fgrounds().size()>2 &&
-			this->get_nbfpingspertrip() > 1;
+            this->get_nbfpingspertrip() > 1 &&
+            this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
 
         unlock();
 		return(another_ground);

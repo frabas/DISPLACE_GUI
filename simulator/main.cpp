@@ -4237,7 +4237,7 @@ int main(int argc, char* argv[])
 
                if(vids_on_harbours.size()>0)
                {
-                   //cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl;
+                   dout(cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl);
                   for (unsigned int vi=0; vi<vids_on_harbours.size(); ++vi)
                     {
                     vector<int>   some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
@@ -4281,7 +4281,7 @@ int main(int argc, char* argv[])
                         {
                          sum += (*it).second;
                         }
-                     //cout << "average for: "<< fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt  << endl;
+                     cout << "average for: "<< fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt  << endl;
                      cpue_fgrounds.push_back(sum / cnt);
                      }
                   //  ...and scale to 1 to transform into probas
@@ -4319,11 +4319,12 @@ int main(int argc, char* argv[])
                }
                else
                {
-               //cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
+               dout(cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl);
                fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                }
 
                // update the harbour
+               dout(cout << "update the harbour for grounds (node: " <<  nodes.at(i)->get_name() << endl);
                nodes.at(i)-> set_usual_fgrounds(fgrounds);
                nodes.at(i)-> set_freq_usual_fgrounds(freq_fgrounds);
 

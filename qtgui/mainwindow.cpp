@@ -2142,3 +2142,19 @@ void MainWindow::on_actionTime_Series_Editor_triggered()
     ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->start(app);
 }
+
+
+void MainWindow::on_actionVessel_Creation_Editor_triggered()
+{
+    QProcess *ed = new QProcess;
+    QString app = qApp->applicationDirPath() + "/vesseleditor";
+
+#ifdef __WINNT
+    app += ".exe";
+#endif
+
+    ed->setWorkingDirectory(qApp->applicationDirPath());
+    ed->start(app);
+}
+
+

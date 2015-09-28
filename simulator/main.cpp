@@ -4281,7 +4281,7 @@ int main(int argc, char* argv[])
                         {
                          sum += (*it).second;
                         }
-                     cout << "average for: "<< fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt  << endl;
+                     dout(cout << "average for: "<< fgrounds.at(gr) << " is => " << setprecision(3) << sum / cnt  << endl);
                      cpue_fgrounds.push_back(sum / cnt);
                      }
                   //  ...and scale to 1 to transform into probas

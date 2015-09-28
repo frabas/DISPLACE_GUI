@@ -1,6 +1,6 @@
 TEMPLATE=subdirs
 CONFIG+=ordered
-SUBDIRS+=commons qtcommons QMapControl qtgui simulator dteditor tseditor
+SUBDIRS+=commons qtcommons QMapControl qtgui simulator dteditor tseditor vesseleditor
 
 !win32 {
     CONFIG += unit-test

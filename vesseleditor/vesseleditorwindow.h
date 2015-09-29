@@ -60,14 +60,14 @@ protected:
 private:
     Ui::VesselEditorWindow *ui;
 
-    QString mFilename, mFilename2;
+    QString mFilename;
     std::shared_ptr<QList<QStringList> > mData;
     CsvTableModel *mModel;
 
     int colVid, colMet, colHarb;
 
     QProcess *mProcess;
-    QTemporaryFile mDestFile, mParFile, mParFile2;
+    QTemporaryFile mDestFile, mParFile;
 
     bool mDirty;
     QLabel *mDirtyIndicator;
@@ -86,7 +86,7 @@ private:
     void loadSampleFileGraph(QString name);
 
     void saveTempParamFile();
-    void generate(QString param_file, QString param_file2, QString dest, QString vid, QString met, QString harb);
+    void generate(QString param_file, QString dest, QString vid, QString met, QString harb);
     void generateAll (QString outpath);
     QString generateAllWorker(QString outpath);
 

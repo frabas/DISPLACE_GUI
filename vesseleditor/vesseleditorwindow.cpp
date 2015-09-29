@@ -15,18 +15,18 @@
 #include <QProgressDialog>
 #include <QDebug>
 
+#include <iostream>
+
 VesselEditorWindow::VesselEditorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorWindow),
     mFilename(),
-    mFilename2(),
     mData(),
     mModel(0),
     colVid(-1), colMet(-1), colHarb(-1),
     mProcess(0),
-    mDestFile("ts-XXXXXX.dat"),
-    mParFile("param_fgrounds.dat"),
-    mParFile2("param_metnames.dat"),
+    mDestFile("fgrounds-XXXXXX.dat"),
+    mParFile("param_fgrounds-XXXXXX.dat"),
     mDirty(false)
 {
     ui->setupUi(this);
@@ -39,11 +39,9 @@ VesselEditorWindow::VesselEditorWindow(QWidget *parent) :
 
     mDestFile.open();
     mParFile.open();
-    mParFile2.open();
 
     mDestFile.close();
     mParFile.close();
-    mParFile2.close();
 
     mDirtyIndicator = new QLabel;
     QPixmap ic (":/icons/save.png");
@@ -141,10 +139,6 @@ void VesselEditorWindow::on_action_Open_triggered()
         set.setValue("VesselEditor.LastPath", info.absoluteFilePath());
         set.setValue("VesselEditor.filter", filter);
 
-        QString file2 = QFileDialog::getOpenFileName(this, tr("Open CSV file for metier names"),
-                                                    dir, tr("Text Files (*.txt);;Dat Files (*.dat);;CSV Files (*.csv);;All Files (*.*)"),
-                                                    &filter);
-        mFilename2 = file2;
 
 
     }
@@ -230,13 +224,13 @@ void VesselEditorWindow::genSampleFile()
     QString m = ui->areaSelect->currentText();
     QString h = ui->adimSelect->currentText();
 
-    qDebug() << mDestFile.fileName() << mParFile.fileName() << mParFile2.fileName() << v << m << h;
+    qDebug() << mDestFile.fileName() << mParFile.fileName() << v << m << h;
 
     if (v.isEmpty() || m.isEmpty() || h.isEmpty())
         return;
 
     saveTempParamFile();
-    generate(mParFile.fileName(), mParFile2.fileName(), mDestFile.fileName(), v, m, h);
+    generate(mParFile.fileName(), mDestFile.fileName(), v, m, h);
 }
 
 void VesselEditorWindow::loadSampleFileGraph(QString name)
@@ -320,7 +314,7 @@ void VesselEditorWindow::saveTempParamFile()
     exporter.exportFile(mParFile.fileName(),*mData);
 }
 
-void VesselEditorWindow::generate(QString param_file, QString param_file2, QString dest, QString vid, QString met, QString harb)
+void VesselEditorWindow::generate(QString param_file, QString dest, QString vid, QString met, QString harb)
 {
     QString script_file = getScriptPath();
 
@@ -332,7 +326,7 @@ void VesselEditorWindow::generate(QString param_file, QString param_file2, QStri
     connect(mProcess, SIGNAL(finished(int)), this, SLOT(processExit(int)));
 
     QStringList args;
-    args << script_file << dest << vid << met << harb << param_file << param_file2;
+    args << script_file << dest << vid << met << harb << param_file;
 
     displace::R::Env env;
     mProcess->setEnvironment(env.environment().toStringList());
@@ -340,7 +334,7 @@ void VesselEditorWindow::generate(QString param_file, QString param_file2, QStri
     mProcess->start(env.getRScriptExe(), args);
 
     qDebug() << "START:" << env.getRScriptExe() << args;
-}
+ }
 
 void VesselEditorWindow::generateAll(QString outpath)
 {
@@ -389,7 +383,7 @@ QString VesselEditorWindow::generateAllWorker(QString outpath)
                 connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readError()));
 
                 QStringList args;
-                args << script_file << dest << vesselid << metier << harbour << mParFile.fileName() << mParFile2.fileName();
+                args << script_file << dest << vesselid << metier << harbour << mParFile.fileName();
 
                 qDebug() << args;
 

@@ -60,7 +60,7 @@ protected:
 private:
     Ui::VesselEditorWindow *ui;
 
-    QString mFilename;
+    QString mFilename, mFilename2;
     std::shared_ptr<QList<QStringList> > mData;
     CsvTableModel *mModel;
 

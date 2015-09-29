@@ -228,7 +228,7 @@ public:
 
     void retranslateUi(QMainWindow *VesselEditorWindow)
     {
-        VesselEditorWindow->setWindowTitle(QApplication::translate("VesselEditorWindow", "Time Series Editor", 0));
+        VesselEditorWindow->setWindowTitle(QApplication::translate("VesselEditorWindow", "Vessel Creation Editor", 0));
         action_Open->setText(QApplication::translate("VesselEditorWindow", "&Open...", 0));
         actionGenerate->setText(QApplication::translate("VesselEditorWindow", "Generate &outputs...", 0));
         actionQuit->setText(QApplication::translate("VesselEditorWindow", "Quit", 0));
@@ -236,9 +236,9 @@ public:
         action_Save->setText(QApplication::translate("VesselEditorWindow", "&Save...", 0));
         actionRScript_location->setText(QApplication::translate("VesselEditorWindow", "RScript location...", 0));
         actionGen_Script_location->setText(QApplication::translate("VesselEditorWindow", "Gen Script location...", 0));
-        label->setText(QApplication::translate("VesselEditorWindow", "Variable", 0));
-        label_2->setText(QApplication::translate("VesselEditorWindow", "Area", 0));
-        label_3->setText(QApplication::translate("VesselEditorWindow", "A Dim", 0));
+        label->setText(QApplication::translate("VesselEditorWindow", "Vid", 0));
+        label_2->setText(QApplication::translate("VesselEditorWindow", "Met", 0));
+        label_3->setText(QApplication::translate("VesselEditorWindow", "Harb", 0));
         menu_File->setTitle(QApplication::translate("VesselEditorWindow", "&File", 0));
         menu_View->setTitle(QApplication::translate("VesselEditorWindow", "&Utils and Settings", 0));
         dockLogWindow->setWindowTitle(QApplication::translate("VesselEditorWindow", "Log Window", 0));

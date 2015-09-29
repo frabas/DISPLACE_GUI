@@ -19,6 +19,7 @@ VesselEditorWindow::VesselEditorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorWindow),
     mFilename(),
+    mFilename2(),
     mData(),
     mModel(0),
     colVid(-1), colMet(-1), colHarb(-1),
@@ -127,7 +128,7 @@ void VesselEditorWindow::on_action_Open_triggered()
     QString dir = set.value("VesselEditor.LastPath", QDir::homePath()).toString();
     QString filter = set.value("VesselEditor.filter", "").toString();
 
-    QString file = QFileDialog::getOpenFileName(this, tr("Open CSV file"),
+    QString file = QFileDialog::getOpenFileName(this, tr("Open geodata CSV file e.g. param_fgrounds.dat"),
                                                 dir, tr("Dat Files (*.dat);;CSV Files (*.csv);;Text Files (*.txt);;All Files (*.*)"),
                                                 &filter);
 
@@ -139,6 +140,13 @@ void VesselEditorWindow::on_action_Open_triggered()
         QFileInfo info(file);
         set.setValue("VesselEditor.LastPath", info.absoluteFilePath());
         set.setValue("VesselEditor.filter", filter);
+
+        QString file2 = QFileDialog::getOpenFileName(this, tr("Open CSV file for metier names"),
+                                                    dir, tr("Text Files (*.txt);;Dat Files (*.dat);;CSV Files (*.csv);;All Files (*.*)"),
+                                                    &filter);
+        mFilename2 = file2;
+
+
     }
 }
 
@@ -184,6 +192,9 @@ void VesselEditorWindow::load(QString filename)
 
     updateKeys();
 }
+
+
+
 
 void VesselEditorWindow::updateKeys()
 {

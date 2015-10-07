@@ -29,6 +29,7 @@ static const char *dyn_pop_options[] = {
     "use_SMS",
     "use_SMS_single",
     "with_monthly_redistribution",
+    "stop_mig_35065",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

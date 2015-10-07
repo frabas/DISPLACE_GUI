@@ -97,6 +97,7 @@ enum Pop_Sce {
     with_monthly_redistribution,
     white_noise_on_avai,
     with_stochast_oth_land,
+    stop_mig_35065,
 
     Pop_Sce_last
 };

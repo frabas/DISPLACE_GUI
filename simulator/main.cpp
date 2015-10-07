@@ -4124,7 +4124,7 @@ int main(int argc, char* argv[])
                     populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                     // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
-                    populations.at(i)->apply_overall_migration_fluxes(populations);
+                    if(!dyn_pop_sce.option(Options::stop_mig_35065) || tstep<35065) populations.at(i)->apply_overall_migration_fluxes(populations);
 
                     //then, re-set the list_nodes and the pop_names_on_node
 					// from the new area distribution given by this new spatial avai

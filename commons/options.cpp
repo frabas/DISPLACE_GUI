@@ -31,4 +31,5 @@ PopSceOptions::PopSceOptions()
     O(mMap,with_monthly_redistribution);
     O(mMap,white_noise_on_avai);
     O(mMap,with_stochast_oth_land);
+    O(mMap,stop_mig_35065);
 }

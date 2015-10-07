@@ -84,9 +84,11 @@ class Population
         const vector<double>& get_tot_N_at_szgroup_month_minus_1() const;
         const vector<double>& get_tot_N_at_szgroup_year_minus_1() const;
         const vector<double>& get_tot_N_at_age() const;
+        const vector<double>& get_perceived_tot_N_at_age() const;
         const vector<double>& get_tot_N_at_age_last_quarter() const;
         const vector<double>& get_tot_F_at_age() const;
         const vector<double>& get_tot_F_at_age_last_quarter() const;
+        const vector<double>& get_perceived_tot_F_at_age() const;
         const vector<double>& get_tot_M_at_age() const;
         const vector<double>& get_tot_W_at_age() const;
         const vector<double>& get_fbar_ages_min_max() const;
@@ -123,8 +125,10 @@ class Population
         void set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1);
         void set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1);
         void set_tot_N_at_age(const vector<double>& _N_at_age);
+        void set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age);
         void set_tot_N_at_age_last_quarter(const vector<double>& _N_at_age_last_quarter);
         void set_tot_F_at_age(const vector<double>& _F_at_age);
+        void set_perceived_tot_F_at_age(const vector<double>& _perceived_F_at_age);
         void set_tot_F_at_age_last_quarter(const vector<double>& _tot_F_at_age_last_quarter);
         void set_tot_M_at_age(const vector<double>& _M_at_age);
         void set_tot_W_at_age(const vector<double>& _W_at_age);
@@ -190,9 +194,12 @@ class Population
 		vector<double> tot_N_at_szgroup_year_minus_1;
 								 //
 		vector<double> tot_N_at_age;
-								 //
+        vector<double> perceived_tot_N_at_age;
+                                 //
 		vector<double> tot_F_at_age;
-		vector<double> tot_F_at_age_last_quarter;
+                                 //
+        vector<double> perceived_tot_F_at_age;
+        vector<double> tot_F_at_age_last_quarter;
 								 //
 		vector<double> tot_M_at_age;
 								 //

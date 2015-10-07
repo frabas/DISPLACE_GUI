@@ -353,6 +353,11 @@ const vector<double>& Population::get_tot_F_at_age() const
 	return(tot_F_at_age);
 }
 
+const vector<double>& Population::get_perceived_tot_F_at_age() const
+{
+    return(perceived_tot_F_at_age);
+}
+
 
 const vector<double>& Population::get_tot_F_at_age_last_quarter() const
 {
@@ -360,9 +365,9 @@ const vector<double>& Population::get_tot_F_at_age_last_quarter() const
 }
 
 
-const vector<double>& Population::get_tot_N_at_age() const
+const vector<double>& Population::get_perceived_tot_N_at_age() const
 {
-	return(tot_N_at_age);
+    return(perceived_tot_N_at_age);
 }
 
 
@@ -599,6 +604,20 @@ void Population::set_tot_N_at_age(const vector<double>& _tot_N_at_age)
 void Population::set_tot_F_at_age(const vector<double>& _tot_F_at_age)
 {
 	tot_F_at_age =_tot_F_at_age;
+
+}
+
+
+void Population::set_perceived_tot_N_at_age(const vector<double>& _perceived_N_at_age)
+{
+    perceived_tot_N_at_age =_perceived_N_at_age;
+
+}
+
+
+void Population::set_perceived_tot_F_at_age(const vector<double>& _perceived_F_at_age)
+{
+    perceived_tot_F_at_age =_perceived_F_at_age;
 
 }
 
@@ -961,30 +980,39 @@ void Population::add_recruits_from_SR()
 {
     dout(cout << "BEGIN add_recruits() form SR "  << endl );
 
-								 // init
-	vector <double> new_tot_N_at_szgroup (tot_N_at_szgroup.size());
+    // first of all, get the true N
+    vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
+    vector <double> prop_migrants=this->get_prop_migrants_in_tot_N_at_szgroup();
+    for(unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
+    {
+       a_tot_N_at_szgroup.at(sz) = a_tot_N_at_szgroup.at(sz) - (a_tot_N_at_szgroup.at(sz) *prop_migrants.at(sz)); // retrieve the true N
+    }
+
+
+    // init
+    vector <double> new_tot_N_at_szgroup (a_tot_N_at_szgroup.size());
 
 	// aggregate from nodes
 	//aggregate_N();
 
 	// compute SSB
 								 // init
-	vector <double> SSB_per_szgroup (tot_N_at_szgroup.size());
-	for(unsigned int i = 0; i < tot_N_at_szgroup.size(); i++)
+    vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
 	{
 
 		// reminder: tot_N_at_szgroup are in thousand in input file
 		//  but in absolute numbers here because have been multiplied by 1000 when importing
-		SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
+        SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * a_tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
         dout(cout << "szgroup is " << i  << " " << endl );
-        cout << "tot_N_at_szgroup is " << tot_N_at_szgroup.at(i)  << " " << endl ;
+        cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
         cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
         cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
 
 	}
 	// ...then, cumul for getting tot SSB (here in kilos)
 	SSB=0;
-	for(unsigned int i = 0; i < tot_N_at_szgroup.size(); i++)
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
 	{
 		SSB +=  SSB_per_szgroup.at(i);
 	}
@@ -1008,10 +1036,10 @@ void Population::add_recruits_from_SR()
     cout << "stochastic recruits are " << recruits  << endl ;
 
 	// ...then distribute among szgroup
-	for(unsigned int i = 0; i < tot_N_at_szgroup.size(); i++)
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
 	{
-		new_tot_N_at_szgroup[i] =  tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
-        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << tot_N_at_szgroup.at(i) << endl ;
+        new_tot_N_at_szgroup[i] =  a_tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
+        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << a_tot_N_at_szgroup.at(i) << endl ;
         //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
     }
 
@@ -1071,19 +1099,39 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
     dout(cout << "BEGIN compute_tot_N_and_F_and_M_and_W_at_age() "  << endl );
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
-								 // init
+    vector <double> perceived_tot_F_at_age = get_tot_F_at_age();
+                                 // init
 	vector <double> tot_M_at_age (tot_F_at_age.size());
 								 // init
 	vector <double> tot_W_at_age (tot_F_at_age.size());
 								 // init
 	vector <double> tot_N_at_age (tot_F_at_age.size());
-								 // init
+    vector <double> perceived_tot_N_at_age (tot_F_at_age.size());
+                                 // init
 	vector <double> tot_N_at_age_minus_1 (tot_F_at_age.size());
+    vector <double> perceived_tot_N_at_age_minus_1 (tot_F_at_age.size());
 
 	int nbsz = percent_szgroup_per_age_matrix.size();
 	int nbages = percent_szgroup_per_age_matrix[0].size();
 
-	// apply size percent_szgroup_per_age_matrix to finds out N IN AGE!
+
+    // first of all, get the true N
+    vector <double> a_tot_N_at_szgroup         =this->get_tot_N_at_szgroup();
+    vector <double> perceived_tot_N_at_szgroup =this->get_tot_N_at_szgroup();
+    vector <double> prop_migrants              =this->get_prop_migrants_in_tot_N_at_szgroup();
+    for(unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
+    {
+       a_tot_N_at_szgroup.at(sz) = a_tot_N_at_szgroup.at(sz) - (a_tot_N_at_szgroup.at(sz) *prop_migrants.at(sz));
+    }
+
+    vector <double> a_tot_N_at_szgroup_month_minus_1=this->get_tot_N_at_szgroup_month_minus_1();
+    vector <double> perceived_tot_N_at_szgroup_month_minus_1=this->get_tot_N_at_szgroup_month_minus_1();
+    for(unsigned int sz = 0; sz < a_tot_N_at_szgroup_month_minus_1.size(); sz++)
+    {
+       a_tot_N_at_szgroup_month_minus_1.at(sz) =a_tot_N_at_szgroup_month_minus_1.at(sz) - (a_tot_N_at_szgroup_month_minus_1.at(sz) *prop_migrants.at(sz));
+    }
+
+    // apply size percent_szgroup_per_age_matrix to finds out N IN AGE!
     for(int sz = 0; sz < nbsz; sz++)
 	{
         for(int a = 0; a < nbages; a++)
@@ -1103,9 +1151,14 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 			}
 			*/
 
-			tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * tot_N_at_szgroup[sz] ;
-			tot_N_at_age_minus_1[a] +=  percent_szgroup_per_age_matrix[sz][a] * tot_N_at_szgroup_month_minus_1[sz] ;
-		}
+            // used for perceived stock in the management procedure
+            perceived_tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * perceived_tot_N_at_szgroup[sz] ;
+            perceived_tot_N_at_age_minus_1[a] +=  percent_szgroup_per_age_matrix[sz][a] * perceived_tot_N_at_szgroup_month_minus_1[sz] ;
+
+            // used for outcomes
+            tot_N_at_age[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup[sz] ;
+            tot_N_at_age_minus_1[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup_month_minus_1[sz] ;
+        }
 
 	}
 
@@ -1144,14 +1197,16 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 	// with M=0 here because apply_natural_mortality() actually is applied just AFTER this function
 	for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
 	{
-		if(tot_N_at_age_minus_1.at(a) >0 && tot_N_at_age.at(a)>0)
+        if(tot_N_at_age_minus_1.at(a) >0 && tot_N_at_age.at(a)>0)
 		{
-			tot_F_at_age.at(a)+= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a));
-		}
+            perceived_tot_F_at_age.at(a)+= -log(perceived_tot_N_at_age.at(a)/perceived_tot_N_at_age_minus_1.at(a)); // used for perceived stock in the management procedure
+            tot_F_at_age.at(a)+= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a));  // used for outcomes
+        }
 		else
 		{
-			tot_F_at_age.at(a)+= 0;
-		}
+            perceived_tot_F_at_age.at(a)+= 0;
+            tot_F_at_age.at(a)+= 0;
+        }
 		// => cumul over months
         dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
         dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
@@ -1162,8 +1217,10 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 
 	// set the tot N and F at age
 	this->set_tot_N_at_age(tot_N_at_age);
-	this->set_tot_F_at_age(tot_F_at_age);
-	this->set_tot_M_at_age(tot_M_at_age);
+    this->set_perceived_tot_N_at_age(perceived_tot_N_at_age);
+    this->set_tot_F_at_age(tot_F_at_age);
+    this->set_perceived_tot_F_at_age(perceived_tot_F_at_age);
+    this->set_tot_M_at_age(tot_M_at_age);
 	this->set_tot_W_at_age(tot_W_at_age);
 
     dout(cout << "END compute_tot_N_and_F_and_M_and_W_at_age() "  << endl);
@@ -1192,10 +1249,13 @@ double Population::compute_fbar()
         dout(cout << "age_max at 0 for this pop??" << endl);
 		age_max=5;
 	}
+
+    vector <double> a_tot_F_at_age= this->get_perceived_tot_F_at_age(); // perceived
+
     for(int a = age_min; a < age_max; a++)
 	{
 								 // sum...
-		fbar+=this->tot_F_at_age[a];
+        fbar+=a_tot_F_at_age[a];
 	}
 								 // then do the average...
 	fbar=fbar/(fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0));
@@ -1238,7 +1298,8 @@ void Population::compute_TAC()
 
 	//a. for year y from y-1
     dout(cout << "the  N by age at the end of  y is " << endl);
-	vector <double> tot_N_at_age_end_previous_y = this->get_tot_N_at_age();
+    vector <double> tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
+
     for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
 	{
         dout(cout << "age" << i+1 << ": " << tot_N_at_age_end_previous_y.at(i) << endl);

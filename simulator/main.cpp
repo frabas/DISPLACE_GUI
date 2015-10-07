@@ -3512,7 +3512,8 @@ int main(int argc, char* argv[])
 
 					// at the end, store the current N for being the N minus 1 the next time we are going to compute F (e.g. the next month)
 					// (this is done like this because the over-writing of N that occurs in aggregate() make it difficult to do other ways....)
-					populations.at(sp)->set_tot_N_at_szgroup_month_minus_1( populations.at(sp)->get_tot_N_at_szgroup() );
+                    vector <double> a_tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
+                       populations.at(sp)->set_tot_N_at_szgroup_month_minus_1( a_tot_N_at_szgroup );
 
 					// spread out the recruits
                     // apply only by semester, to be consistent with the timeframe of survey data

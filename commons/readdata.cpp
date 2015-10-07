@@ -1498,6 +1498,47 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
 }
 
 
+
+multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce)
+{
+
+    string filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_prop_migrants_pops_per_szgroup_biolsce"+biolsce+".dat";
+
+    //input data, pop characteristics: initial prop migrants
+    ifstream file_init_prop_migrants_pops_per_szgroup;
+    file_init_prop_migrants_pops_per_szgroup.open(filename.c_str());
+    if(file_init_prop_migrants_pops_per_szgroup.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, double> init_prop_migrants_pops_per_szgroup;
+    fill_multimap_from_specifications_i_d(file_init_prop_migrants_pops_per_szgroup,  init_prop_migrants_pops_per_szgroup);
+    file_init_prop_migrants_pops_per_szgroup.close();
+    // Here lies a deadly bug: remember very hard bug to find out due to non-unique pop names in the input files!
+    // was creating access violation from pointers misuse, etc.
+
+#ifdef VERBOSE
+    // check input
+    multimap<int,double>::iterator lower_init = init_prop_migrants_pops_per_szgroup.lower_bound(0);
+    multimap<int,double>::iterator upper_init = init_prop_migrants_pops_per_szgroup.upper_bound(0);
+    dout(cout << "initial N at szgroup for pop0: ");
+    for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
+    {
+        dout(cout << pos->second << " ");
+    }
+    dout(cout << endl);
+#endif
+
+    return(init_prop_migrants_pops_per_szgroup);
+}
+
+
+
+
+
+
+
 multimap<int, double> read_init_maturity_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce)
 {
 

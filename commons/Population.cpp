@@ -33,6 +33,7 @@ Population::Population(int a_name,
                        double _avai7_beta,
                        const vector<int> &_selected_szgroups,
                        const vector<double> &init_tot_N_at_szgroup,
+                       const vector<double> &init_prop_migrants_in_tot_N_at_szgroup,
                        const vector<double> &init_fecundity_at_szgroup,
                        vector<double> init_weight_at_szgroup,
                        const vector<int> &init_comcat_at_szgroup,
@@ -80,7 +81,9 @@ Population::Population(int a_name,
 	for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
 	{
 		tot_N_at_szgroup.push_back(0);
-		tot_N_at_szgroup_just_after_redistribution.push_back(0);
+        true_tot_N_at_szgroup.push_back(0);
+        prop_migrants_in_N_at_szgroup.push_back(0);
+        tot_N_at_szgroup_just_after_redistribution.push_back(0);
 		tot_N_at_szgroup_month_minus_1.push_back(0);
 		tot_N_at_szgroup_year_minus_1.push_back(0);
 		fecundity_at_szgroup.push_back(0);
@@ -131,11 +134,19 @@ Population::Population(int a_name,
 	this->set_cpue_multiplier(1*a_calib_cpue_multiplier);
 
 	// ...then fill in with start pop
-								 // set the overal N_at_szgroup
+                                 // set the overall N_at_szgroup
 	this->set_tot_N_at_szgroup(init_tot_N_at_szgroup);
 
-	// ...then fill in with start pop
-								 // set the overal N_at_szgroup
+    // ...then fill in with start pop
+                                 // set the overall N_at_szgroup
+    this->set_true_tot_N_at_szgroup(init_tot_N_at_szgroup);
+
+    // ...then fill in with start info
+                                 // set the migrant prop
+    this->set_prop_migrants_in_tot_N_at_szgroup(init_prop_migrants_in_tot_N_at_szgroup);
+
+    // ...then fill in with start pop
+                                 // set the overall N_at_szgroup
 	this->set_tot_N_at_szgroup_just_after_redistribution(init_tot_N_at_szgroup);
 
 	// ...then fill in with start pop also for minus 1
@@ -309,6 +320,15 @@ const vector<double>& Population::get_tot_N_at_szgroup() const
 	return(tot_N_at_szgroup);
 }
 
+const vector<double>& Population::get_true_tot_N_at_szgroup() const
+{
+    return(true_tot_N_at_szgroup);
+}
+
+const vector<double>& Population::get_prop_migrants_in_tot_N_at_szgroup() const
+{
+    return(prop_migrants_in_N_at_szgroup);
+}
 
 const vector<double>& Population::get_tot_N_at_szgroup_just_after_redistribution() const
 {
@@ -532,6 +552,18 @@ void Population::set_hyperstability_param(double _hyperstability_param)
 void Population::set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup)
 {
 	tot_N_at_szgroup =_N_at_szgroup;
+
+}
+
+void Population::set_true_tot_N_at_szgroup(const vector<double>& _true_tot_N_at_szgroup)
+{
+    true_tot_N_at_szgroup =_true_tot_N_at_szgroup;
+
+}
+
+void Population::set_prop_migrants_in_tot_N_at_szgroup(const vector<double>& _prop_migrants_in_N_at_szgroup)
+{
+    prop_migrants_in_N_at_szgroup =_prop_migrants_in_N_at_szgroup;
 
 }
 

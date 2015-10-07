@@ -115,6 +115,7 @@ multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(s
 								 // beta per pop fro a given szgroup
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
+multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, double> read_init_maturity_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
 multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);

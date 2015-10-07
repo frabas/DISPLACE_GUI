@@ -40,6 +40,7 @@ class Population
             double _avai7_beta,
             const vector<int> &selected_szgroups,
             const vector<double> &init_tot_N_at_szgroup,
+            const vector<double> &init_prop_migrants_in_tot_N_at_szgroup,
             const vector<double> &init_fecundity_at_szgroup,
             vector<double> init_weight_at_szgroup,
             const vector<int> &init_comcat_at_szgroup,
@@ -77,6 +78,8 @@ class Population
 		double get_avai7_beta() const;
 		double get_cpue_multiplier() const;
         const vector<double>& get_tot_N_at_szgroup() const;
+        const vector<double>& get_true_tot_N_at_szgroup() const;
+        const vector<double>& get_prop_migrants_in_tot_N_at_szgroup() const;
         const vector<double>& get_tot_N_at_szgroup_just_after_redistribution() const;
         const vector<double>& get_tot_N_at_szgroup_month_minus_1() const;
         const vector<double>& get_tot_N_at_szgroup_year_minus_1() const;
@@ -114,6 +117,8 @@ class Population
 		void set_cpue_multiplier(double _cpue_multiplier);
         void set_hyperstability_param(double _hyperstability_param);
         void set_tot_N_at_szgroup(const vector<double>& _N_at_szgroup);
+        void set_true_tot_N_at_szgroup(const vector<double>& _true_tot_N_at_szgroup);
+        void set_prop_migrants_in_tot_N_at_szgroup(const vector<double>& _prop_migrants_at_szgroup);
         void set_tot_N_at_szgroup_just_after_redistribution(const vector<double>& _N_at_szgroup_just_after_redistribution);
         void set_tot_N_at_szgroup_month_minus_1(const vector<double>& _N_at_szgroup_month_minus_1);
         void set_tot_N_at_szgroup_year_minus_1(const vector<double>& _N_at_szgroup_year_minus_1);
@@ -173,8 +178,12 @@ class Population
 		double cpue_multiplier;	 //
 								 //
 		vector<double> tot_N_at_szgroup;
-								 //
-		vector<double> tot_N_at_szgroup_just_after_redistribution;
+                                 //
+        vector<double> true_tot_N_at_szgroup; // same as tot_N_at_szgroup if pop is 100% of the same species (i.e. different if stock mixing occurs)
+                                 //
+        vector<double> prop_migrants_in_N_at_szgroup; //0 if pop is 100% of the same species (i.e. different if stock mixing occurs)
+                                 //
+        vector<double> tot_N_at_szgroup_just_after_redistribution;
 								 //
 		vector<double> tot_N_at_szgroup_month_minus_1;
 								 //

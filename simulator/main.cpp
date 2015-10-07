@@ -1327,6 +1327,8 @@ int main(int argc, char* argv[])
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
     cout << "Do the pop files init_pops_per_szgroup need a check?" << endl;
     multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
+    multimap<int, double> init_prop_migrants_pops_per_szgroup = read_init_prop_migrants_pops_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
     cout << "Do the pop files init_fecundity_per_szgroup need a check?" << endl;
     multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
     cout << "Do the pop files init_maturity_per_szgroup need a check?" << endl;
@@ -1424,9 +1426,17 @@ int main(int argc, char* argv[])
 		vector<double> init_tot_N_per_szgroup;
 		for (multimap<int, double>::iterator pos=lower_init; pos != upper_init; pos++)
 								 // convert in thousands
-			init_tot_N_per_szgroup.push_back(pos->second * 1000);
+            init_tot_N_per_szgroup.push_back(pos->second * 1000);
 
-		// initial fecundity for this particular pop
+        // initial prop_migrants for this particular pop
+        multimap<int,double>::iterator lower_init_migrants = init_prop_migrants_pops_per_szgroup.lower_bound(sp);
+        multimap<int,double>::iterator upper_init_migrants = init_prop_migrants_pops_per_szgroup.upper_bound(sp);
+        vector<double> init_prop_migrants_in_N_per_szgroup;
+        for (multimap<int, double>::iterator pos=lower_init_migrants; pos != upper_init_migrants; pos++)
+                                 // convert in thousands
+            init_prop_migrants_in_N_per_szgroup.push_back(pos->second);
+
+        // initial fecundity for this particular pop
 		multimap<int,double>::iterator lower_init_fec = init_fecundity_per_szgroup.lower_bound(sp);
 		multimap<int,double>::iterator upper_init_fec = init_fecundity_per_szgroup.upper_bound(sp);
 		vector<double> init_fecundity_per_szgroup;
@@ -1508,7 +1518,8 @@ int main(int argc, char* argv[])
 			avai7_beta,
 			init_selected_szgroups,
 			init_tot_N_per_szgroup,// N comes in thousands in the input file
-			init_fecundity_per_szgroup,
+            init_prop_migrants_in_N_per_szgroup,
+            init_fecundity_per_szgroup,
 			init_weight_per_szgroup,
 			init_comcat_per_szgroup,
 			init_maturity_per_szgroup,

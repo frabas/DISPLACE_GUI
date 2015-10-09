@@ -3860,8 +3860,11 @@ int main(int argc, char* argv[])
                 vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
 				vessels.at(v)->set_spe_experiencedcpue_fgrounds (init_for_fgrounds);
 				vessels.at(v)->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
-				vessels.at(v)->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
-				vessels.at(v)->set_spe_possible_metiers(possible_metiers);
+
+                // uncomment for use if TACs are semester-based....otherwise don´t refresh the annual TAC!
+                //if (semester) vessels.at(v)->set_spe_percent_tac_per_pop(spe_percent_tac_per_pop);
+
+                vessels.at(v)->set_spe_possible_metiers(possible_metiers);
 				vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
 
 

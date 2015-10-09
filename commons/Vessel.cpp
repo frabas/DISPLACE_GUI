@@ -2201,8 +2201,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					}
 
                     // the management is not applied the first year, because the first year is the calibration year.
-                    if(tstep>8761 && is_individual_vessel_quotas)
-					{
+                   // if(tstep>8761 && is_individual_vessel_quotas)
+                        if(tstep>1 && is_individual_vessel_quotas)
+                    {
 						// MANAGEMENT MEASURE:
 						// THE TAC: check against first the individual quota, then the global tac...
 						// 1. get the individual vessel tac for this pop
@@ -2217,13 +2218,13 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 a_cumul_weight_this_pop_this_vessel <<") for this pop " << pop << "!!! " << endl);
 
 								 // force a zero quota on this pop. (and export discards)
-                            this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0, a_cumul_weight_this_pop_this_vessel);
+                            a_cumul_weight_this_pop_this_vessel=0.0;
+                            this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0, 0.0);
 							// => if all quotas at 0 then the vessel will stay on quayside in should_i_go_fishing()...
 								 // what a waste !!...
-							a_cumul_weight_this_pop_this_vessel=0.0;
 
 						}
-						else
+                        else
 						{
                             dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
                             this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
@@ -2408,7 +2409,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                    a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE;
                    this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
                                                      remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
-                   dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
+                  dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
                          " is now "<< remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel << endl);
                   }
               }

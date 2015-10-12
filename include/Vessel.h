@@ -111,7 +111,8 @@ class Vessel
 								 // dynamic
 		bool inharbour, inactive, natio;
 		vector < vector<double> > catch_pop_at_szgroup;
-		vector<int> individual_tac_per_pop;
+        vector < vector<double> > discards_pop_at_szgroup;
+        vector<int> individual_tac_per_pop;
 		int targeting_non_tac_pop_only;
 
         int smartcatch, highpotentialcatch, notthatfar, mosthistoricallyused; // some relevant grounds
@@ -209,7 +210,8 @@ public:
         const vector<vector<double> > &get_gshape_cpue_nodes_species() const;
         const vector<vector<double> > &get_gscale_cpue_nodes_species() const;
         const vector < vector<double> > &get_catch_pop_at_szgroup() const;
-		int read_message() const;
+        const vector < vector<double> > &get_discards_pop_at_szgroup() const;
+        int read_message() const;
 		int get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
@@ -283,7 +285,8 @@ public:
         void find_next_point_on_the_graph(vector<Node* >& nodes);
         void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res, int &is_individual_vessel_quotas);
 		void clear_catch_pop_at_szgroup();
-		void compute_experiencedcpue_fgrounds();
+        void clear_discards_pop_at_szgroup();
+        void compute_experiencedcpue_fgrounds();
 		void compute_experiencedcpue_fgrounds_per_pop();
 		void clear_cumcatch_and_cumeffort();
 		void receive_message(int message);

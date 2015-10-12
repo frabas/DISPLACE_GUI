@@ -52,6 +52,7 @@ private:
     int length_class;
 
     std::vector<double> cumul;
+    std::vector<double> cumul_discards;
 };
 
 #endif // VESSELLOGBOOKOUTPUTMESSAGE_H

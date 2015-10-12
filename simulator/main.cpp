@@ -2792,6 +2792,7 @@ int main(int argc, char* argv[])
 
 	// init
 	vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector< vector<double> > a_discards_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
 
 	// write down initial pop number in popdyn
     for (unsigned int sp=0; sp<populations.size(); sp++)

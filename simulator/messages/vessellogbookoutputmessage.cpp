@@ -10,6 +10,12 @@ extern bool use_gui;
 VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations)
     : loglike(strm)
 {
+    // (caution: hardcoding to be removed)
+    vector <int> explicit_pops;
+    explicit_pops.push_back(10);
+    explicit_pops.push_back(11);
+
+
     logbook.tstep = _tstep;
     logbook.tstepdep = v->get_tstep_dep();
     logbook.rtbb = v->get_reason_to_go_back();
@@ -33,6 +39,24 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
        {
        cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
        }
+    }
+
+    vector< vector<double> > a_discards_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
+    a_discards_pop_at_szgroup = v->get_discards_pop_at_szgroup();
+    int count =0;
+    for(int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
+    {
+
+        if (binary_search (explicit_pops.begin(), explicit_pops.end(),  pop  ))
+        {
+       cumul_discards.push_back(0);
+         for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
+            {
+            if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
+            }
+         count+=1;
+       }
+
     }
 
 
@@ -64,6 +88,8 @@ bool VesselLogbookOutputMessage::process()
     ss  << logbook.fuelcost << " " ;
     ss  << 0 << " " ;
     ss  << logbook.gav2 << " " ;
+    for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
+        ss  << *it2 << " " ;
     ss  << " " << std::endl;
 
     MutexLocker l(&glob_mutex);

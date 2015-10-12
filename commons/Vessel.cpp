@@ -350,8 +350,10 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 	// init at 0 the matrix of catches
     dout(cout  << "init matrix of catches" << endl);
 	vector< vector<double> > init_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
-	catch_pop_at_szgroup= init_catch_pop_at_szgroup;
-	for(int i = 0; i < nbpops; i++)
+    vector< vector<double> > init_discards_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
+    catch_pop_at_szgroup= init_catch_pop_at_szgroup;
+    discards_pop_at_szgroup= init_discards_pop_at_szgroup;
+    for(int i = 0; i < nbpops; i++)
 	{
 
 		for(int j = 0; j < nbszgroups; j++)
@@ -359,7 +361,9 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 			catch_pop_at_szgroup[i][j] = 0;
             dout(cout  << catch_pop_at_szgroup[i][j] << " ");
-		}
+            discards_pop_at_szgroup[i][j] = 0;
+            dout(cout  << discards_pop_at_szgroup[i][j] << " ");
+        }
         dout(cout  << endl);
 	}
 
@@ -821,6 +825,10 @@ const vector<vector<double> > &Vessel::get_catch_pop_at_szgroup() const
 	return(catch_pop_at_szgroup);
 }
 
+const vector<vector<double> > &Vessel::get_discards_pop_at_szgroup() const
+{
+    return(discards_pop_at_szgroup);
+}
 
 const vector<vector<double> > &Vessel::get_gshape_cpue_nodes_species() const
 {
@@ -1321,7 +1329,7 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
             export_individual_tacs << tstep << " " <<
 			this->get_name() << " " <<
 			pop << " " <<
-            a_tac << " " <<
+            a_tac << " " << // tac at 0
 			discard_all << endl;
 
             // e.g. if discard for this vessel this pop then force a 0:
@@ -2044,6 +2052,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 }
 
+
                                 dout (cout << "the szgroup " << szgroup <<
 									"for this pop " << pop << " is fully depleted on this node " <<
 									idx_node << "! catch is "<<
@@ -2058,7 +2067,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							{
 								new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 
-								/*
+                                /*
 								// check (before)
 								vector <double> a_avai_bef = nodes.at(idx_node)->get_avai_pops_at_selected_szgroup(pop);
                                 dout(cout << "a_avai bef: " << endl);
@@ -2136,7 +2145,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
                             // caution: cumul landings at the trip level
-                            catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup];
+                            catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // in weight
+                            discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
 
 						}
 						else
@@ -2150,7 +2160,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							// add the preexisting removals (from other vessels) on this node for this szgroup
 							vector <double>cumul_removals_at_szgroup_pop=this->get_loc()->get_removals_pops_at_szgroup(namepop);
 							removals_per_szgroup[szgroup]+=cumul_removals_at_szgroup_pop[szgroup];
-						}
+
+                            catch_pop_at_szgroup[pop][szgroup] = 0; // in weight
+                            discards_pop_at_szgroup[pop][szgroup] = 0;// in weight
+
+                        }
 
                     } // end szgroup
 
@@ -2218,12 +2232,18 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 a_cumul_weight_this_pop_this_vessel <<") for this pop " << pop << "!!! " << endl);
 
 								 // force a zero quota on this pop. (and export discards)
-                            a_cumul_weight_this_pop_this_vessel=0.0;
+                            a_cumul_weight_this_pop_this_vessel=0.0; // discard all!
                             this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0, 0.0);
 							// => if all quotas at 0 then the vessel will stay on quayside in should_i_go_fishing()...
 								 // what a waste !!...
 
-						}
+                            for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
+                              {
+                                discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
+                                catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
+                              }
+
+                        }
                         else
 						{
                             dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
@@ -2255,13 +2275,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 							// reaction
                             dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
-							//populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
+                            populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
 							// => back correction (disable if you want to know the discarded part in annual_indic.
 							// ...i.e. discarded = so_far - current_tac)
 								 // what a waste !!...
-							a_cumul_weight_this_pop_this_vessel=0;
+                            a_cumul_weight_this_pop_this_vessel=0;// discard all!
 
-						}
+                            for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
+                              {
+                                discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
+                                catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
+                              }
+
+                        }
 						else
 						{
                             dout (cout << "used " <<
@@ -2421,8 +2447,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 			if(cpue!=0)
 			{
 								 // ON THIS NODE, cpue per hour, see the R code
-				catch_pop_at_szgroup[pop][0] = cpue*PING_RATE;
-								 // CUMUL
+                catch_pop_at_szgroup[pop][0] += cpue*PING_RATE;
+                discards_pop_at_szgroup[pop][0] = 0;
+                                 // CUMUL
 				this->cumcatches+= catch_pop_at_szgroup[pop][0];
 
 				/*
@@ -2443,7 +2470,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								 // effort
 				cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
-			}
+            }
+            else
+            {
+                catch_pop_at_szgroup[pop][0] +=0;
+            }
 		}
 
 
@@ -2501,6 +2532,18 @@ void Vessel::clear_catch_pop_at_szgroup()
 	}
 }
 
+
+void Vessel::clear_discards_pop_at_szgroup()
+{
+    dout(cout  << "clear catches..." << endl);
+    for(unsigned int i = 0; i < discards_pop_at_szgroup.size(); i++)
+    {
+        for(unsigned int j = 0; j < discards_pop_at_szgroup[i].size(); j++)
+        {
+            discards_pop_at_szgroup[i][j] = 0;
+        }
+    }
+}
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -3865,7 +3908,8 @@ void Vessel::reinit_after_a_trip()
     outc(cout << "reinit after a trip..." << endl);
     // clear for this vessel
 	this-> clear_catch_pop_at_szgroup();
-	this-> set_inactive(true);
+    this-> clear_discards_pop_at_szgroup();
+    this-> set_inactive(true);
 	// re-init some other stuffs after the trip
 	this-> set_cumfuelcons(0);
 	this-> set_consotogetthere(0);

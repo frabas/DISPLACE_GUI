@@ -393,7 +393,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
 
 void Vessel::init()
 {
-    lastTrip_revenues = lastTrip_profit = avgRevenues = avgProfit = 0;
+    lastTrip_revenues = lastTrip_explicit_revenues = lastTrip_profit = avgRevenues = avgProfit = 0;
     numTrips = 0;
 
     nationality = nationalityFromName(get_name());
@@ -1346,6 +1346,7 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
 
 void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
 {
+
     double cumProfit = avgProfit * numTrips;
     double cumRevenues = avgRevenues * numTrips;
 
@@ -1357,6 +1358,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
     }
 
     lastTrip_revenues = 0.0;
+    lastTrip_explicit_revenues=0.0;
     lastTrip_profit = 0.0;
     const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
     for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
@@ -1368,6 +1370,21 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
             int comcat_this_size =comcat_at_szgroup.at(sz);
             lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
         }
+
+        if(pop==11) // HARDCODING
+        {
+         //   vector<int>& implicit_pops
+         //  if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) )
+         //  {
+            for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+            {
+                int comcat_this_size =comcat_at_szgroup.at(sz);
+                lastTrip_explicit_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+            }
+
+        }
+
+
     }
 
     double fuelcost = get_cumfuelcons() * get_loc()->get_fuelprices(length_class);
@@ -1820,7 +1837,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	// for loop over pop
     for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
 	{
-		int namepop = populations[pop]->get_name();
+        int namepop = populations[pop]->get_name();
 								 // is this pop not implicit? AND is this node in the range of the pop? remember code 10 is for out of range (see R code)
 		if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) && code_area!=10)
 		{

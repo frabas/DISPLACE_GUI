@@ -104,6 +104,7 @@ class Vessel
 		int previous_harbour_idx;
 
         double lastTrip_revenues;
+        double lastTrip_explicit_revenues;
         double lastTrip_profit;
         double avgRevenues;
         double avgProfit;
@@ -395,6 +396,9 @@ public:
 
         double getLastTripRevenues() const {
             return lastTrip_revenues;
+        }
+        double getLastTripExplicitRevenues() const {
+            return lastTrip_explicit_revenues;
         }
         double getAvgTripRevenues() const {
             return avgRevenues;

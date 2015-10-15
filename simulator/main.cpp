@@ -1358,16 +1358,16 @@ int main(int argc, char* argv[])
 	// get the name of the pops
 	// copy only unique elements of init_pops_per_szgroup into name_pops
 	// DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
-    cout << "Are the  name_pops creation  need a check?" << endl;
+    cout << "Do the name_pops creation  need a check?" << endl;
     vector<int> name_pops;
 	for(multimap<int, double>::iterator iter=init_pops_per_szgroup.begin(); iter != init_pops_per_szgroup.end();
 		iter = init_pops_per_szgroup.upper_bound( iter->first ) )
 	{
 		name_pops.push_back (iter->first);
-       outc(cout << "pop " << iter->first << endl);
+       cout << "pop " << iter->first << endl;
 
 	}
-   outc(cout << "nb pops: " << name_pops.size() << endl);
+   cout << "nb pops: " << name_pops.size() << endl;
    outc(cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl);
 
 	// FOR-LOOP OVER POP
@@ -1510,7 +1510,8 @@ int main(int argc, char* argv[])
 		double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
 		double a_calib_weight_at_szgroup=calib_weight_at_szgroup.at(sp);
 
-		populations[sp] =   ( new Population(sp,
+        cout << " create pop... "  << endl;
+        populations[sp] =   ( new Population(sp,
 			avai0_beta,
 			avai2_beta,
 			avai3_beta,

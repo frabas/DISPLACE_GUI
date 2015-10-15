@@ -327,6 +327,11 @@ void StatsController::updateNationStats(DisplaceModel *model)
                     mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     mPlotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
+                case ExEarnings:
+                    valueData << it.value().at(ip).mExRevenues;
+                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    mPlotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+                    break;
                 case TimeAtSea:
                     valueData << it.value().at(ip).mTimeAtSea;
                     mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));

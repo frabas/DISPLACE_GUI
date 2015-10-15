@@ -28,6 +28,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     logbook.travdist = v->get_traveled_dist_this_trip();
 
     logbook.revenue_from_av_prices=v->getLastTripRevenues();
+    logbook.revenue_explicit_from_av_prices=v->getLastTripExplicitRevenues();
 
     int NBSZGROUP=14;
     vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
@@ -85,6 +86,7 @@ bool VesselLogbookOutputMessage::process()
         ss  << *it << " " ;
     ss  << freq_metiers << " " << 0 << " " ;
     ss  << logbook.revenue_from_av_prices << " " ;
+    ss  << logbook.revenue_explicit_from_av_prices << " " ;
     ss  << logbook.fuelcost << " " ;
     ss  << 0 << " " ;
     ss  << logbook.gav2 << " " ;

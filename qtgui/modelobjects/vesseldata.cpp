@@ -35,6 +35,16 @@ void VesselData::setRevenueAV(double value)
     mRevenueAV = value;
 }
 
+double VesselData::getRevenueExAV() const
+{
+    return mRevenueExAV;
+}
+
+void VesselData::setRevenueExAV(double value)
+{
+    mRevenueExAV = value;
+}
+
 void VesselData::setCatch(int idx, double val)
 {
     while (mCatches.size() < idx)

@@ -218,8 +218,8 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselS
     QSqlQuery q(mDb),qn(mDb);
 
     bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
-                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,cumfuel,fuelcost,gav)"
-                       + " VALUES(?,?,?,?,?,?,?,?,?)");
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,explicit_revenue_av,cumfuel,fuelcost,gav)"
+                       + " VALUES(?,?,?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
@@ -233,6 +233,7 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselS
     q.addBindValue(vessel.getLastHarbour());
     q.addBindValue(stats.reasonToGoBack);
     q.addBindValue(stats.revenueAV);
+    q.addBindValue(stats.revenueExAV);
     q.addBindValue(stats.cumFuelCons);
     q.addBindValue(stats.fuelCost);
     q.addBindValue(stats.gav);
@@ -692,7 +693,7 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
     DB_ASSERT(res,q);
 
     QSqlQuery q2(mDb);
-    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),harbour,SUM(gav),SUM(revenue_av)/SUM(cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),SUM(explicit_revenue_av),harbour,SUM(gav),SUM(revenue_av)/SUM(cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     foreach(int tstep, steps) {
@@ -736,10 +737,11 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             int nid = vessels.at(vid)->getNationality();
             double timeatsea = q2.value(1).toDouble();
             double rev = q2.value(2).toDouble();
-            int hid = q2.value(3).toInt();
+            double exrev = q2.value(3).toDouble();
+            int hid = q2.value(4).toInt();
             int hidx = nodes.at(hid)->getHarbourId();
-            double gav = q2.value(4).toDouble();
-            double vpuf = q2.value(5).toDouble();
+            double gav = q2.value(5).toDouble();
+            double vpuf = q2.value(6).toDouble();
 
             while (curnationsdata.size() <= nid)
                 curnationsdata.push_back(NationStats());
@@ -747,6 +749,7 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
                 curHarbourData.push_back(HarbourStats());
 
             curnationsdata[nid].mRevenues += rev;
+            curnationsdata[nid].mExRevenues += exrev;
             curnationsdata[nid].mTimeAtSea += timeatsea;
             curnationsdata[nid].mGav += gav;
             curnationsdata[nid].mVpuf = vpuf;
@@ -1095,6 +1098,7 @@ bool DbHelper::checkVesselsTable(int version)
                + "harbour INTEGER,"
                + "reason INTEGER,"
                + "revenue_av REAL,"
+               + "explicit_revenue_av REAL,"
                + "cumfuel REAL,"
                + "fuelcost REAL,"
                + "gav REAL"

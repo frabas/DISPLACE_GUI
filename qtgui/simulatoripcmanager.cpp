@@ -58,6 +58,7 @@ void SimulatorIpcManager::threadStarted()
                         stats.mCatches.push_back(data->pop[i]);
                     }
                     stats.revenueAV = data->revenue_from_av_prices;
+                    stats.revenueExAV = data->revenue_explicit_from_av_prices;
                     stats.fuelCost = data->fuelcost;
                     stats.gav = data->gav2;
 

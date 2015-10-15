@@ -43,7 +43,7 @@ public:
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
-    enum NationsStat { Catches, Earnings, TimeAtSea, Gav, Vpuf };
+    enum NationsStat { Catches, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf };
     void setNationsStat(NationsStat stat);
     NationsStat getNationsStat() const { return mSelectedNationsStat; }
 

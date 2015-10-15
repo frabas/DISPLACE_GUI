@@ -43,6 +43,8 @@ public:
 
     double getRevenueAV() const;
     void setRevenueAV(double value);
+    double getRevenueExAV() const;
+    void setRevenueExAV(double value);
 
     int getCatchesListSize() const { return mCatches.size(); }
     double getCatch(int idx) const { return mCatches.at(idx); }
@@ -63,6 +65,7 @@ private:
     int mNationality;
     int mLastHarbour;
     double mRevenueAV;
+    double mRevenueExAV;
     double cumFuelCons;
     double fuelCost;
     double gav;
@@ -79,6 +82,7 @@ public:
     int vesselId;
     int lastHarbour;
     double revenueAV;
+    double revenueExAV;
     double timeAtSea;
     int reasonToGoBack;
     double cumFuelCons;

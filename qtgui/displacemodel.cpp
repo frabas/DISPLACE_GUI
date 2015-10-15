@@ -536,6 +536,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
     vessel->setLastHarbour(stats.lastHarbour);
     vessel->setRevenueAV(stats.revenueAV);
+    vessel->setRevenueExAV(stats.revenueExAV);
     vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
     vessel->mVessel->set_timeatsea(stats.timeAtSea);
     vessel->addCumFuelCons(stats.cumFuelCons);
@@ -546,6 +547,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     }
 
     mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
+    mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
     mStatsNationsCollected[nat].mVpuf += stats.vpuf();

@@ -39,6 +39,7 @@ public:
     NationStats()
         : mTotCatches(0.0),
           mRevenues(0.0),
+          mExRevenues(0.0),
           mTimeAtSea(0), mGav(0), mVpuf(0),
           szGroups()
     {
@@ -46,6 +47,7 @@ public:
 
     double mTotCatches;
     double mRevenues;
+    double mExRevenues;
     double mTimeAtSea;
     double mGav;
     double mVpuf;

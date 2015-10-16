@@ -939,19 +939,34 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
            // input
           vector<double> N_at_szgroup_this_pop = this->get_tot_N_at_szgroup();
           vector<double> N_at_szgroup_arr_pop  = populations.at(arrival_pop)->get_tot_N_at_szgroup();
+          vector<double> weight_at_szgroup_this_pop = this->get_weight_at_szgroup();
+          vector<double> weight_at_szgroup_arr_pop = populations.at(arrival_pop)->get_weight_at_szgroup();
 
           if((sz+1)>=N_at_szgroup_this_pop.size()) sz = 0; // reinit because next pop
 
  cout << " before: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
  cout << " before: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
 
+ cout << " before: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << endl;
 
  // impact the Ns from emigration/immigration specified in the multimap
-          N_at_szgroup_arr_pop.at(sz)  = N_at_szgroup_arr_pop.at(sz)+(N_at_szgroup_this_pop.at(sz)*flux_prop);
-          N_at_szgroup_this_pop.at(sz) = N_at_szgroup_this_pop.at(sz)*(1-flux_prop);
+          double tot_before_in_arr = N_at_szgroup_arr_pop.at(sz);
+          double tot_to_in_arr     = N_at_szgroup_this_pop.at(sz)*flux_prop;
+          double tot_now_in_arr    = N_at_szgroup_arr_pop.at(sz)+(N_at_szgroup_this_pop.at(sz)*flux_prop);
+          double tot_now_in_dep    = N_at_szgroup_this_pop.at(sz)*(1-flux_prop);
+
+          N_at_szgroup_arr_pop.at(sz)  = tot_now_in_arr;
+          N_at_szgroup_this_pop.at(sz) = tot_now_in_dep;
 
  cout << " after: N_at_szgroup_this_pop.at(sz) is " <<  N_at_szgroup_this_pop.at(sz) << endl;
  cout << " after: N_at_szgroup_arr_pop.at(sz) is " <<  N_at_szgroup_arr_pop.at(sz) << endl;
+
+
+          // do a weighted average of the weight
+          weight_at_szgroup_arr_pop.at(sz)  = (tot_to_in_arr/tot_now_in_arr) *weight_at_szgroup_arr_pop.at(sz) +
+                                                    (tot_before_in_arr/tot_now_in_arr)* weight_at_szgroup_this_pop.at(sz);
+
+cout << " after: weight_at_szgroup_arr_pop.at(sz) is " <<  weight_at_szgroup_arr_pop.at(sz) << endl;
 
           // output this pop
           this->set_tot_N_at_szgroup(N_at_szgroup_this_pop);
@@ -959,6 +974,10 @@ void Population::apply_overall_migration_fluxes(vector<Population* >& population
 
           // output arrival pop
           populations.at(arrival_pop)->set_tot_N_at_szgroup(N_at_szgroup_arr_pop);
+
+          // ....including affecting the weight-at-szgroup
+          populations.at(arrival_pop)->set_weight_at_szgroup(weight_at_szgroup_arr_pop);
+
 
           sz +=1;
        }

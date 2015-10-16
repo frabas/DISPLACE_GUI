@@ -1371,7 +1371,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
             lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
         }
 
-        if(pop==11) // HARDCODING
+        if(pop==11 || pop==10) // HARDCODING
         {
          //   vector<int>& implicit_pops
          //  if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) )

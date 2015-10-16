@@ -1344,7 +1344,7 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
-void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
+void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops)
 {
 
     double cumProfit = avgProfit * numTrips;
@@ -1371,11 +1371,9 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations)
             lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
         }
 
-        if(pop==11 || pop==10) // HARDCODING
+        int namepop = populations[pop]->get_name();
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) )
         {
-         //   vector<int>& implicit_pops
-         //  if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ) )
-         //  {
             for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
             {
                 int comcat_this_size =comcat_at_szgroup.at(sz);
@@ -1870,7 +1868,35 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 				vector <int>selected_szgroups        = populations[pop]->get_selected_szgroups();
 				vector <double>wsz                   = populations[pop]->get_weight_at_szgroup();
-								 // init
+
+
+       // // // // // //
+                // HARDCODING SPECIFIC TO MYFISH MIG (TO BE REMOVED!!!)
+                if(pop==10 && this->get_loc()->get_x()<12)
+                {
+                    vector <double> initial_wsz;
+                    initial_wsz.push_back(0.0001266451);
+                    initial_wsz.push_back(0.004076539);
+                    initial_wsz.push_back(0.02048018);
+                    initial_wsz.push_back(0.05930595);
+                    initial_wsz.push_back(0.1312184);
+                    initial_wsz.push_back(0.2473941);
+                    initial_wsz.push_back(0.4194203);
+                    initial_wsz.push_back(0.6592298);
+                    initial_wsz.push_back(0.9790549);
+                    initial_wsz.push_back(1.391393);
+                    initial_wsz.push_back(1.90898);
+                    initial_wsz.push_back(2.544769);
+                    initial_wsz.push_back(3.311913);
+                    initial_wsz.push_back(4.223748);
+                wsz=initial_wsz; // replace if sd22
+                }
+     // // // // // //
+
+
+
+
+                // init
                 vector <double>all_biomass         = Ns_at_szgroup_pop;
                                  // init
                 vector <double>avail_biomass         = Ns_at_szgroup_pop;

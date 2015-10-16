@@ -708,7 +708,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	vector<double> clup_sel_ogive (clupeid_sel_ogive, clupeid_sel_ogive + sizeof(clupeid_sel_ogive) / sizeof(double) );
 	vector<double> gad_sel_ogive (gadoid_sel_ogive, gadoid_sel_ogive + sizeof(gadoid_sel_ogive) / sizeof(double) );
 	vector<double> sel_ogive;
-	if(name_pop==10)
+    if(name_pop==10 || name_pop==11) // HARDCODING
 	{
 		sel_ogive =gad_sel_ogive;
 	}

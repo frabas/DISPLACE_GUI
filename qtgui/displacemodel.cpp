@@ -416,6 +416,12 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
         }
         mNodesStatsDirty = true;
     }
+    if (fields[0] == "cumcatches") {
+        for (int i = 0; i < num; ++i) {
+            mNodes.at(start + i)->set_cumcatches(fields[4+i].toDouble());
+        }
+        mNodesStatsDirty = true;
+    }
 
 
 }
@@ -495,6 +501,13 @@ void DisplaceModel::collectPopCumsweptarea(int step, int node_idx, double cumswe
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->set_cumsweptarea(cumsweptarea);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectPopCumcatches(int step, int node_idx, double cumcatches)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->set_cumcatches(cumcatches);
     mNodesStatsDirty = true;
 }
 

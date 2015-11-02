@@ -135,4 +135,11 @@ void NodeWithCumSweptAreaGraphics::drawShape(QPainter &painter, const qmapcontro
     painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
 }
 
+void NodeWithCumCatchesGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumcatches()));
+    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+}
 

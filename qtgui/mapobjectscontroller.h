@@ -182,6 +182,7 @@ public:
         OutLayerBenthosBiomass,
         OutLayerCumFTime,
         OutLayerCumSweptArea,
+        OutLayerCumCatches,
 
         OutLayerMax
     };
@@ -315,6 +316,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBenthosBiomass [MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumsweptarea[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatches[MAX_MODELS];
     QVector<bool> mModelVisibility;
 
     QVector<LayerListImpl> mLayers;

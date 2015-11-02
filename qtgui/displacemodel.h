@@ -297,6 +297,7 @@ public:
     void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, const QList<double> &stats_w, double tot, double wtot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
     void collectPopCumsweptarea(int step, int node_idx, double cumsweptarea);
+    void collectPopCumcatches(int step, int node_idx, double cumcatches);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
 

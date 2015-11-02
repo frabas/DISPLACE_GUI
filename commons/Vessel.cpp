@@ -2529,6 +2529,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDiscThisEvent/(totLandThisEvent+totDiscThisEvent);
 
 
+    // contribute to accumulated catches on this node
+    this->get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
+
 
 	// check the matrix of catches
 	//double a_cumul=0;

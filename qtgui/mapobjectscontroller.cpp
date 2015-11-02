@@ -100,6 +100,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumsweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Swept Area")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumSweptArea, mStatsLayerCumsweptarea[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
+    mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
+
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {
         addHarbour(model_n, h, true);
@@ -337,6 +340,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerBiomass[model_n]->clearGeometries();
     mStatsLayerCumftime[model_n]->clearGeometries();
     mStatsLayerCumsweptarea[model_n]->clearGeometries();
+    mStatsLayerCumcatches[model_n]->clearGeometries();
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
@@ -390,6 +394,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumsweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesRole, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerCumcatches[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

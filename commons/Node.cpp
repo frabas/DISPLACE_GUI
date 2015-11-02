@@ -43,6 +43,7 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 	y=yval;
 	cumftime=0;
     cumsweptarea=0;
+    cumcatches=0;
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
@@ -79,6 +80,7 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 	y=graph_coord_y[idx];
     cumftime=0;
     cumsweptarea=0;
+    cumcatches=0;
     harbour=graph_coord_harbour[idx];
 	code_area=graph_point_code_area[idx];
 	marine_landscape=graph_point_marine_landscape[idx];
@@ -106,6 +108,7 @@ Node::Node()
       is_harbour(false),
       cumftime(0),
       cumsweptarea(0),
+      cumcatches(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
@@ -394,6 +397,10 @@ double Node::get_cumsweptarea() const
     return(cumsweptarea);
 }
 
+double Node::get_cumcatches() const
+{
+    return(cumcatches);
+}
 
 vector<int> Node::get_pop_names_on_node ()
 {
@@ -424,6 +431,11 @@ void Node::set_cumsweptarea(double tot)
     cumsweptarea = tot;
 }
 
+void Node::set_cumcatches(double tot)
+{
+    cumcatches = tot;
+}
+
 
 void Node::set_xy(double xval, double yval)
 {
@@ -445,6 +457,14 @@ void Node::add_to_cumsweptarea(double sweptarea)
     cumsweptarea+=sweptarea;
     unlock();
 }
+
+void Node::add_to_cumcatches(double catches)
+{
+    lock();
+    cumcatches+=catches;
+    unlock();
+}
+
 
 void Node::reinit(vector<double> &vec, unsigned int sz)
 {
@@ -966,6 +986,19 @@ void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
     popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumsweptarea << " " <<  endl;
+
+}
+
+void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot impact pop
+    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        cumcatches << " " <<  endl;
 
 }
 

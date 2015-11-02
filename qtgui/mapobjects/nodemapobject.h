@@ -51,6 +51,7 @@ public:
         GraphNodeWithBiomass,
         GraphNodeWithCumFTimeRole,
         GraphNodeWithCumSweptAreaRole,
+        GraphNodeWithCumCatchesRole,
         GraphNodeWithPopImpact,
         GraphNodeWithBenthosBiomass
     };

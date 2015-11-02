@@ -56,6 +56,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithCumSweptAreaGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithCumCatchesRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithCumCatchesGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -137,6 +142,11 @@ void NodeMapObject::updateProperties()
     case GraphNodeWithCumSweptAreaRole:
         text += QString("<br/><b>Swept area (km2):</b> %1<br/>")
                 .arg(mNode->get_cumsweptarea());
+        break;
+
+    case GraphNodeWithCumCatchesRole:
+        text += QString("<br/><b>Catches (kg):</b> %1<br/>")
+                .arg(mNode->get_cumcatches());
         break;
     }
 

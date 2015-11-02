@@ -100,6 +100,7 @@ class Node
         const vector<double>& get_impact_on_pops ();
 		int get_cumftime() const;
         double get_cumsweptarea() const;
+        double get_cumcatches() const;
         void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
@@ -112,9 +113,11 @@ class Node
 		void set_vid(int val);
         void set_cumftime(int tot);
         void set_cumsweptarea(double tot);
+        void set_cumcatches(double tot);
         void add_to_cumftime(int delta_time);
         void add_to_cumsweptarea(double sweptarea);
         void add_to_sweptarea(int sweptarea);
+        void add_to_cumcatches(double catches);
         void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);
 		void clear_pop_names_on_node();
@@ -131,6 +134,7 @@ class Node
 		void recover_benthos_tot_biomass_per_funcgroup();
 		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
+        void export_popnodes_cumcatches(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
         int setAreaType(int _area_type);
@@ -157,6 +161,7 @@ private:
 		bool is_harbour;
 		int cumftime;
         double cumsweptarea;
+        double cumcatches;
         vector< vector<double> > Ns_pops_at_szgroup;
 		vector< vector<double> > Ns_pops_at_szgroup_at_month_start;
 		vector< vector<double> > removals_pops_at_szgroup;

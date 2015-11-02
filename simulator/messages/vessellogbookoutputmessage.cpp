@@ -30,6 +30,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     logbook.revenue_from_av_prices=v->getLastTripRevenues();
     logbook.revenue_explicit_from_av_prices=v->getLastTripExplicitRevenues();
 
+    // fill in for catches
     int NBSZGROUP=14;
     vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
     a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
@@ -41,6 +42,32 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
        cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
        }
     }
+
+
+    // inform frequencies of metiers by counting nb of time a metier has been used during the trip
+    vector<int> vec = v->get_idx_used_metiers_this_trip();
+      // Create an histogram
+      map<int, unsigned> histogram;
+      for (vector<int>::const_iterator i = vec.begin(); i != vec.end(); i++)
+      {
+          ++histogram[*i];
+      }
+      // ... and display it.
+      for (map<int, unsigned>::const_iterator i = histogram.begin(); i != histogram.end(); i++)
+      {
+          freq_metiers= freq_metiers + "_" ;
+          double freq = static_cast<double>(i->second) / vec.size();
+          stringstream ss, ss2;
+          ss <<  i->first;
+          ss2 <<  freq;
+          string str = ss.str();
+          string str2 = ss2.str();
+          freq_metiers  = freq_metiers + str + ":" + str2 ;
+
+      }
+
+
+
 
     vector< vector<double> > a_discards_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
     a_discards_pop_at_szgroup = v->get_discards_pop_at_szgroup();

@@ -3565,11 +3565,21 @@ int main(int argc, char* argv[])
                         //{
 							// compute a TAC for y+1 from a short-term forecast (STF)
 							// and a long-term management plan (LTMP)
-							populations.at(sp)->compute_TAC();
 
-                           outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
+                        double multiOnTACconstraint;
+                        if(dyn_alloc_sce.option(Options::twoFoldTACconstr))
+                           {
+                           multiOnTACconstraint=2.0;
+                        } else{
+                           multiOnTACconstraint=1.0; // default
+                        }
+
+
+                        populations.at(sp)->compute_TAC(multiOnTACconstraint);
+
+                        outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
 							// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-							for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
+                        for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
 							{
                                 vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
 							}
@@ -4373,7 +4383,6 @@ int main(int argc, char* argv[])
               }
 
             }
-
 
 
 

@@ -21,7 +21,8 @@ static const char *dyn_alloc_options[] = {
     "area_closure_fuelprice_plus20percent",
     "increased_catch_power_5percent",
     "focus_on_high_profit_grounds_area_closure",
-    "shared_harbour_knowledge"
+    "shared_harbour_knowledge",
+    "twoFoldTACconstr"
 };
 
 static const char *dyn_pop_options[] = {

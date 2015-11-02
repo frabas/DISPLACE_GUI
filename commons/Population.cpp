@@ -1282,7 +1282,7 @@ double Population::compute_fbar()
 }
 
 
-void Population::compute_TAC()
+void Population::compute_TAC(double multiOnTACconstraint)
 {
     dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year" << endl);
 	vector<double> fbar_ages_min_max =this-> get_fbar_ages_min_max();
@@ -1401,7 +1401,12 @@ void Population::compute_TAC()
 
 	// 5. check if within the TAC range, otherwise force to keep the range.
 								 // i.e. at y
-	double tac_y= this->get_tac()->get_current_tac();
+
+
+    // apply here a scenario if any (default multi is 1)
+    TACpercent=TACpercent*multiOnTACconstraint;
+
+    double tac_y= this->get_tac()->get_current_tac();
 	if((tac_y_plus_1/tac_y) > (1+(TACpercent/100)))
 	{
 		tac_y_plus_1=tac_y* (1+(TACpercent/100));

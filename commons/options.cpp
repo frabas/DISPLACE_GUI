@@ -20,6 +20,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,focus_on_high_profit_grounds_area_closure);
     O(mMap,focus_on_high_previous_cpue);
     O(mMap,shared_harbour_knowledge);
+    O(mMap,twoFoldTACconstr);
+
 }
 
 

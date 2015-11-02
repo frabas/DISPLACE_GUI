@@ -86,6 +86,7 @@ enum Dyn_Alloc {
     focus_on_high_profit_grounds_area_closure,
     focus_on_high_previous_cpue,
     shared_harbour_knowledge,
+    twoFoldTACconstr,
 
     Dyn_Alloc_last
 };

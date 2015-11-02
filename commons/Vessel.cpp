@@ -1741,7 +1741,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes,
-                      vector<int>& implicit_pops, int& tstep, double& graph_res, int& is_individual_vessel_quotas)
+                      vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, int& is_individual_vessel_quotas)
 {
     lock();
 
@@ -2257,11 +2257,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 						a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup];
 					}
 
-                    // the management is not applied the first year, because the first year is the calibration year.
-                   // if(tstep>8761 && is_individual_vessel_quotas)
-                        if(tstep>1 && is_individual_vessel_quotas)
-                    {
-						// MANAGEMENT MEASURE:
+                    // the management is also applied the first year, (caution, the first year is also the calibration year)
+                    if(is_tacs)
+                       {
+                       if(tstep>1 && is_individual_vessel_quotas)
+                       {
+                        // TAC MANAGEMENT MEASURE:
 						// THE TAC: check against first the individual quota, then the global tac...
 						// 1. get the individual vessel tac for this pop
                         int remaining_individual_tac_this_pop = this->get_individual_tac(pop);
@@ -2338,9 +2339,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 " % global quota of " << populations.at(pop)->get_tac()->get_current_tac() << " this pop: ok." << endl);
 						}
 
-					}			 // end individual TAC management
+                     }			 // end individual TAC management
+                   } // end TAC management
 
-					// update dynamic trip-based cumul for this node
+
+                    // update dynamic trip-based cumul for this node
 								 // CUMUL FOR THE TRIP (all species confounded)
 					this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
                                  // catches
@@ -2460,8 +2463,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
              }
 
 
-            //if(tstep>8761 && is_individual_vessel_quotas)
-            if(tstep>1 && is_individual_vessel_quotas)
+            // TAC management effect for implicit species
+            if(tstep>1 && is_tacs && is_individual_vessel_quotas)
                {
                 // check the individual quota for this pop
                double a_cumul_weight_this_pop_this_vessel=0;

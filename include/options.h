@@ -74,6 +74,7 @@ namespace Options {
 enum Dyn_Alloc {
     alloc_baseline,
     focus_on_high_profit_grounds,
+    TACs,
     area_closure,
     fuelprice_plus20percent,
     reduced_speed_10percent,

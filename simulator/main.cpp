@@ -146,6 +146,7 @@ int nrow_coord;
 int nrow_graph;
 double graph_res;
 bool is_individual_vessel_quotas;
+bool is_tacs;
 int export_vmslike;
 bool use_dtrees;
 ofstream vmslike;
@@ -871,6 +872,13 @@ int main(int argc, char* argv[])
 		str_rand_avai_file = "baseline";
 	}
 
+
+    if(dyn_alloc_sce.option(Options::TACs))
+    {
+      is_tacs=1;
+    } else{
+       is_tacs=0;
+    }
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
 	export_individual_tacs.open(filename.c_str());
@@ -2258,10 +2266,13 @@ int main(int argc, char* argv[])
 		// and vice versa...
 
 		// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-		for (unsigned int sp=0; sp<populations.size(); sp++)
-		{
+        if(is_tacs)
+        {
+           for (unsigned int sp=0; sp<populations.size(); sp++)
+            {
             vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 1, 0.0);
-		}
+            }
+        }
 
 		// check
         outc(cout << "create vessel " << vessels[i]->get_idx()  << " " << vessels[i]->get_name() << " " << vessels[i]->get_nationality() <<" on "
@@ -3301,7 +3312,7 @@ int main(int argc, char* argv[])
             if(dyn_pop_sce.option(Options::use_SMS)  || dyn_pop_sce.option(Options::use_SMS_single))
 			{
 
-                if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="op-sms-single";
+                if(dyn_pop_sce.option(Options::use_SMS_single)) sms_folder="sms-op-single";
 
                 // check for cod
 				vector<double> Ns= populations.at(10)->get_tot_N_at_szgroup();
@@ -3561,43 +3572,51 @@ int main(int argc, char* argv[])
 					if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
 					{
 						int namepop = populations.at(sp)->get_name();
-                        //if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  namepop  ))
-                        //{
-							// compute a TAC for y+1 from a short-term forecast (STF)
-							// and a long-term management plan (LTMP)
-
-                        double multiOnTACconstraint;
-                        if(dyn_alloc_sce.option(Options::twoFoldTACconstr))
-                           {
-                           multiOnTACconstraint=2.0;
-                        } else{
-                           multiOnTACconstraint=1.0; // default
-                        }
 
 
-                        populations.at(sp)->compute_TAC(multiOnTACconstraint);
 
-                        outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
-							// initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
-                        for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
-							{
-                                vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
-							}
-                           outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
-							// to do next time oth_land will be applied: oth_land * TACy+1 / TACy
-							vector<double> ts_tac = populations.at(sp)->get_tac()->get_ts_tac();
-							double TAC_y_plus_1 = ts_tac.at(ts_tac.size()-1);
-							double TAC_y = ts_tac.at(ts_tac.size()-2);
-							populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
-							if(populations.at(sp)->get_oth_land_multiplier()!=
+                        if(dyn_alloc_sce.option(Options::TACs))
+                        {
+                           // compute a TAC for y+1 from a short-term forecast (STF)
+                           // and a long-term management plan (LTMP)
+
+
+
+                           double multiOnTACconstraint;
+                           if(dyn_alloc_sce.option(Options::twoFoldTACconstr))
+                              {
+                              multiOnTACconstraint=2.0;
+                           } else{
+                              multiOnTACconstraint=1.0; // default
+                           }
+
+
+                           populations.at(sp)->compute_TAC(multiOnTACconstraint);
+
+                           outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
+                               // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
+                               for (unsigned int vsl =0; vsl < ve.size(); vsl ++)
+                                  {
+                                   vessels.at(vsl)->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, sp, 1, 0.0);
+                                  }
+                               outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
+                               // to do next time oth_land will be applied: oth_land * TACy+1 / TACy
+                               vector<double> ts_tac = populations.at(sp)->get_tac()->get_ts_tac();
+                               double TAC_y_plus_1 = ts_tac.at(ts_tac.size()-1);
+                               double TAC_y = ts_tac.at(ts_tac.size()-2);
+                               populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
+                               if(populations.at(sp)->get_oth_land_multiplier()!=
                                  // i.e. a trick to check if nan
 								populations.at(sp)->get_oth_land_multiplier())
-							{
-                               outc(cout << "stop: check the c++ code for oth_land_multiplier"<< endl);
-								int ff;
-								cin >>ff;
+                                  {
+                                  outc(cout << "stop: check the c++ code for oth_land_multiplier"<< endl);
+                                   int ff;
+                                   cin >>ff;
 
 							}
+                           } else{ // if no TAC regime
+                              populations.at(sp)->set_oth_land_multiplier (1.0);
+                           }
 
 							// export
                             // ...export the cpue and oth_land multiplier
@@ -3637,7 +3656,7 @@ int main(int argc, char* argv[])
 				{
                    outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
                    // apply only at the beginning of the year (this is maybe not always relevant...)
-                   if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+                   if(is_tacs && binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                       {
                       //cout << "1- Current global tac for this pop " << sp << "is " << populations.at(sp)->get_tac()->get_current_tac() << endl;
                       double tac_y_plus_1 = populations.at(sp)->get_tac()->get_current_tac();
@@ -3803,7 +3822,7 @@ int main(int argc, char* argv[])
             freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
             freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
             vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
-            vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
+            if(is_tacs) vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
             dout(cout  << "re-read data...OK" << endl);
 
             // LOOP OVER VESSELS
@@ -3821,7 +3840,7 @@ int main(int argc, char* argv[])
                 spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids.at(v));
                 spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
 				spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids.at(v));
-				spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v));
+                if(is_tacs) spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids.at(v));
 
 				// correct if missing harbour for this quarter
 				if(spe_harbours.empty())

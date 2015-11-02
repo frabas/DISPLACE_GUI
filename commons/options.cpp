@@ -8,6 +8,7 @@ DynAllocOptions::DynAllocOptions()
 {
     M(mMap,"baseline", alloc_baseline);
     O(mMap,focus_on_high_profit_grounds);
+    O(mMap,TACs);
     O(mMap,area_closure);
     O(mMap,fuelprice_plus20percent);
     O(mMap,reduced_speed_10percent);

@@ -150,6 +150,7 @@ int export_vmslike;
 bool use_dtrees;
 ofstream vmslike;
 vector <int> implicit_pops;
+vector <int> explicit_pops;
 vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
 vector <double> calib_cpue_multiplier;

@@ -7,13 +7,13 @@
 extern pthread_mutex_t glob_mutex;
 extern bool use_gui;
 
-VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations)
+VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations, vector<int> &implicit_pops)
     : loglike(strm)
 {
     // (caution: hardcoding to be removed)
-    vector <int> explicit_pops;
-    explicit_pops.push_back(10);
-    explicit_pops.push_back(11);
+    //vector <int> explicit_pops;
+    //explicit_pops.push_back(10);
+    //explicit_pops.push_back(11);
 
 
     logbook.tstep = _tstep;
@@ -57,6 +57,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
       {
           freq_metiers= freq_metiers + "_" ;
           double freq = static_cast<double>(i->second) / vec.size();
+          freq = floor(freq * 100.0) / 100.0; // 2 digits after decimal only
           stringstream ss, ss2;
           ss <<  i->first;
           ss2 <<  freq;
@@ -75,9 +76,9 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     for(int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
     {
 
-        if (binary_search (explicit_pops.begin(), explicit_pops.end(),  pop  ))
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
         {
-       cumul_discards.push_back(0);
+         cumul_discards.push_back(0);
          for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
             {
             if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];

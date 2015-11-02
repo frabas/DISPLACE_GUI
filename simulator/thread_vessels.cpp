@@ -141,7 +141,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 if(!inactive)
                 {
                     vessels[index_v]->updateTripsStatistics(populations, implicit_pops);
-                    mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations)));
+                    mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations, implicit_pops)));
 #if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);

@@ -2350,7 +2350,7 @@ vector<int> some_max_nb_ages)
     for (unsigned int i=0; i<stock_numbers.size(); i++)
 	{
 
-		vector< vector<double> > percent_szgroup_per_age_matrix(NBSZGROUP, vector<double>(NBAGE));
+        vector< vector<double> > percent_szgroup_per_age_matrix(NBSZGROUP, vector<double>(NBAGE));
 		percent_szgroup_per_age_matrix=populations.at( stock_numbers.at(i) )->get_percent_szgroup_per_age_matrix();
 
 		// convert N from size to age

@@ -3258,7 +3258,7 @@ int main(int argc, char* argv[])
                             dout(cout  << "impact_on_pop " << impact_on_pop << endl);
 
 							// update, export and clear for the next time...
-							if(impact_on_pop!=0)
+                            if(export_vmslike && impact_on_pop!=0)
 							{
                                 a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
 							}
@@ -3419,12 +3419,13 @@ int main(int argc, char* argv[])
 
 				}
 			}
-			else
-			{
 
-				for (unsigned int sp=0; sp<populations.size(); sp++)
+
+
+            for (unsigned int sp=0; sp<populations.size(); sp++)
 				{
-					if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
+                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) &&  // not an implicit species
+                            !binary_search (stock_numbers.begin(), stock_numbers.end(),  sp  )) // not a SMS species
 					{
 						vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
@@ -3520,7 +3521,6 @@ int main(int argc, char* argv[])
                        outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
 					}
 				}
-			}					 // end else not SMS
 
 			for (unsigned int sp=0; sp<populations.size(); sp++)
 			{
@@ -3706,7 +3706,7 @@ int main(int argc, char* argv[])
 			for (unsigned int n=0; n<nodes.size(); n++)
 			{
 				nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
-                nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
+                if(export_vmslike) nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
                 nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
                 if(export_vmslike) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
 			}
@@ -4208,7 +4208,7 @@ int main(int argc, char* argv[])
 					// re-read presence node for this semester
                     multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
 
-					// finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in do_catch)
+                    // finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in export_impact)
 					// 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
                    outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
 					vector <int> nodes_with_presence;

@@ -382,6 +382,10 @@ const vector<double>& Population::get_tot_W_at_age() const
 	return(tot_W_at_age);
 }
 
+const vector<double>& Population::get_tot_Mat_at_age() const
+{
+    return(tot_Mat_at_age);
+}
 
 const vector<double>& Population::get_fbar_ages_min_max() const
 {
@@ -642,6 +646,11 @@ void Population::set_tot_W_at_age(const vector<double>& _tot_W_at_age)
 
 }
 
+void Population::set_tot_Mat_at_age(const vector<double>& _tot_Mat_at_age)
+{
+    tot_Mat_at_age =_tot_Mat_at_age;
+
+}
 
 void Population::set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup)
 {
@@ -1124,7 +1133,9 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 								 // init
 	vector <double> tot_W_at_age (tot_F_at_age.size());
 								 // init
-	vector <double> tot_N_at_age (tot_F_at_age.size());
+    vector <double> tot_Mat_at_age (tot_F_at_age.size());
+                                 // init
+    vector <double> tot_N_at_age (tot_F_at_age.size());
     vector <double> perceived_tot_N_at_age (tot_F_at_age.size());
                                  // init
 	vector <double> tot_N_at_age_minus_1 (tot_F_at_age.size());
@@ -1201,7 +1212,8 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 			*/
 			tot_M_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * M_at_szgroup[sz] ;
 			tot_W_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * weight_at_szgroup[sz] ;
-		}
+            tot_Mat_at_age[a] +=  percent_age_per_szgroup_matrix[sz][a] * maturity_at_szgroup[sz] ;
+        }
 
 		// check
 		/*
@@ -1241,6 +1253,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
     this->set_perceived_tot_F_at_age(perceived_tot_F_at_age);
     this->set_tot_M_at_age(tot_M_at_age);
 	this->set_tot_W_at_age(tot_W_at_age);
+    this->set_tot_Mat_at_age(tot_Mat_at_age);
 
     dout(cout << "END compute_tot_N_and_F_and_M_and_W_at_age() "  << endl);
 
@@ -1436,11 +1449,12 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
         double biomass =0.0;
         vector <double> tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
         vector <double> tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
+        vector <double> maturity_at_age_y_plus_1 = this->get_tot_Mat_at_age();
         for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
         {
-            biomass+= tot_N_at_age_end_previous_y.at(i)* tot_W_at_age_y_plus_1.at(i);
+            biomass+= tot_N_at_age_end_previous_y.at(i)* tot_W_at_age_y_plus_1.at(i) * maturity_at_age_y_plus_1.at(i); // SSB
         }
-        biomass= biomass/1000; // in tons
+        biomass= biomass/1000; // SSB in tons
 
         double fmultiplier=1;
         // 2. compare with the target

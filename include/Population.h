@@ -91,6 +91,7 @@ class Population
         const vector<double>& get_perceived_tot_F_at_age() const;
         const vector<double>& get_tot_M_at_age() const;
         const vector<double>& get_tot_W_at_age() const;
+        const vector<double>& get_tot_Mat_at_age() const;
         const vector<double>& get_fbar_ages_min_max() const;
         const vector<double>& get_maturity_at_szgroup() const;
         const vector<double>& get_fecundity_at_szgroup() const;
@@ -132,6 +133,7 @@ class Population
         void set_tot_F_at_age_last_quarter(const vector<double>& _tot_F_at_age_last_quarter);
         void set_tot_M_at_age(const vector<double>& _M_at_age);
         void set_tot_W_at_age(const vector<double>& _W_at_age);
+        void set_tot_Mat_at_age(const vector<double>& _Mat_at_age);
         void set_maturity_at_szgroup(const vector<double>& _maturity_at_szgroup);
         void set_fecundity_at_szgroup(const vector<double>& _fecundity_at_szgroup);
         void set_weight_at_szgroup(const vector<double> &_weight_at_szgroup);
@@ -205,7 +207,9 @@ class Population
 								 //
 		vector<double> tot_W_at_age;
 								 //
-		vector<double> weight_at_szgroup;
+        vector<double> tot_Mat_at_age;
+                                 //
+        vector<double> weight_at_szgroup;
 								 //
 		vector<int> comcat_at_szgroup;
 								 //

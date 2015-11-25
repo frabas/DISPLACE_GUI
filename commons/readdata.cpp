@@ -2228,8 +2228,8 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 		open_file_error(filename.c_str());
 		// return 1;
 	}
-								 // i.e. 5 columns: F min age, F max age, LTMP ftarget, Fpercent, TACpercent
-	vector<double> fbar_ages_min_max(5);
+                                 // i.e. 6 columns: F min age, F max age, LTMP ftarget, Fpercent, TACpercent, Btrigger, F-MSY value
+    vector<double> fbar_ages_min_max(7);
 	fill_in_fbar_ages_min_max(file_fbar_ages_min_max, fbar_ages_min_max);
 	file_fbar_ages_min_max.close();
 

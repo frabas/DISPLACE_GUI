@@ -3591,7 +3591,8 @@ int main(int argc, char* argv[])
                            }
 
 
-                           populations.at(sp)->compute_TAC(multiOnTACconstraint);
+                           if(dyn_alloc_sce.option(Options::LTMP)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
+                           if(dyn_alloc_sce.option(Options::FMSY)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
 
                            outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
                                // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel

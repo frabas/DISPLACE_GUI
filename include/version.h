@@ -15,7 +15,7 @@
 #define VER_COMPANYNAME_STR         "Displace-project"
 #define VER_FILEDESCRIPTION_STR     "DisplaceGui"
 #define VER_INTERNALNAME_STR        "DisplaceGui.exe"
-#define VER_LEGALCOPYRIGHT_STR      "Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>"
+#define VER_LEGALCOPYRIGHT_STR      "Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>"
 #define VER_LEGALTRADEMARKS1_STR    "All Rights Reserved"
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
 #define VER_ORIGINALFILENAME_STR    "displacegui.exe"

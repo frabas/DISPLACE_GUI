@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -2308,7 +2308,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     dout(cout  << "landings so far for pop " << pop << ", AFTER: " << populations.at(pop)->get_landings_so_far());
 
 								 // because the first year is the calibration year.
-					if(tstep>8761)
+                    if(tstep>8761  && !is_individual_vessel_quotas)
 					{
 						// 4. compare in tons (AT THE GLOBAL SCALE)
 						if( (so_far/1000) > (populations.at(pop)->get_tac()->get_current_tac()))
@@ -4023,12 +4023,16 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(int tstep, bool use_the_tree)
+int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& implicit_pops, int check_all_stocks)
 {
 
     lock();
 
-	// first of all, check if some remaining quotas
+    // first of all, check if some remaining quotas (either on explicit stocks only or on ALL stocks)
+    // (if the check is done on all the stocks then it is likely that some discards will occur because
+    // vessel are continuing going fishing until no one quota is remaining...on the contrary, if only explicit stocks
+    // that are checked then these stocks will act as "choke" species and the vessels will stay on quayside as soon as
+    // the quotas are exhausted on explicit stocks.)
 	// note that, by default, only pops with informed global_tac_this_pop have non-zero individual_tac
 	// which means that the vessel will stop going fishing if all the pops with informed tac have their tac exhausted
 	// (while they might actually target other species?? caution!)
@@ -4036,14 +4040,17 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree)
 	int nbpops = this->get_percent_tac_per_pop().size();
 	for (int pop=0; pop < nbpops; pop++)
 	{
-								 // return the annual individual quota (!= the quota left), should be 0 if erased because no quota left
-		double indiv_quota= this->get_individual_tac(pop);
-		if(indiv_quota!=0)
-		{
+       if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) || check_all_stocks)
+       {
+           // return the annual individual quota (!= the quota left), should be 0 if erased because no quota left
+           double indiv_quota= this->get_individual_tac(pop);
+           if(indiv_quota!=0)
+            {
 			still_some_quotas=1;
             dout(cout  << "this vessel " << this->get_name() << " have (still) quota for pop " << pop << ": " << indiv_quota << endl);
-		}
-	}
+            }
+        }
+    }
 
 	// to avoid the vessel staying quayside while the vessel is actually not targeting the tac-informed species
 	// we need a small fix:

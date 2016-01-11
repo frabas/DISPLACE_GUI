@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -1054,9 +1054,9 @@ void Population::add_recruits_from_SR()
 	double recruits =(param_sr[0]*SSB*exp(-param_sr[1]*SSB)) * 1000;
     dout(cout << "New recruits are " << recruits  << endl );
 
-    // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 10%)
+    // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
 	// TO DO: use a stock-specific input there...
-	double sd=0.1;
+    double sd=0.2;
 	double rec_error=0;
 	rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
 	recruits= recruits * rec_error;

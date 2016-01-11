@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -365,7 +365,7 @@ public:
             );
         void which_metier_should_i_go_for(vector <Metier*>& metiers);
                                  //yes:1; no=0
-        int should_i_go_fishing(int tstep, bool use_the_tree);
+        int should_i_go_fishing(int tstep, bool use_the_tree, vector<int> &implicit_pops, int check_all_stocks);
 		int should_i_start_fishing(map<string, int>& external_states, bool use_the_tree);
         int should_i_choose_this_ground(int tstep, vector<Node*>& nodes,  const vector <int>& idx_path_shop,
                                         const deque<map<vertex_t, vertex_t> >& path_shop,

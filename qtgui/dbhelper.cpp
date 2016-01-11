@@ -134,8 +134,8 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
 
     bool r =
     q.prepare("INSERT INTO " + TBL_NODES_STATS
-              + "(nodeid,tstep,cumftime,cumsweptarea,cumcatches, totpop,totpopw) "
-              + "VALUES (?,?,?,?,?,?,?)");
+              + "(nodeid,tstep,cumftime,cumsweptarea,cumcatches, totpop,totpopw, tariffs) "
+              + "VALUES (?,?,?,?,?,?,?,?)");
 
     DB_ASSERT(r,q);
 
@@ -155,6 +155,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
         q.addBindValue(n->get_cumcatches());
         q.addBindValue(n->getPopTot());
         q.addBindValue(n->getPopWTot());
+        q.addBindValue(n->get_tariffs());
 
         bool res = q.exec();
         DB_ASSERT(res, q);
@@ -572,7 +573,7 @@ bool DbHelper::updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> 
 bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes)
 {
     QSqlQuery q(mDb);
-    bool res = q.prepare("SELECT nodeid,cumftime,cumsweptarea,cumcatches,totpop,totpopw FROM " + TBL_NODES_STATS + " WHERE tstep<=? GROUP BY nodeid");
+    bool res = q.prepare("SELECT nodeid,cumftime,cumsweptarea,cumcatches,totpop,totpopw,tariffs FROM " + TBL_NODES_STATS + " WHERE tstep<=? GROUP BY nodeid");
     DB_ASSERT(res,q);
 
     q.addBindValue(step);
@@ -584,6 +585,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double cumca = q.value(3).toDouble();
         double tot = q.value(4).toDouble();
         double totw = q.value(5).toDouble();
+        double tariff = q.value(6).toDouble();
 
         if (nid < nodes.size()) {
             nodes.at(nid)->set_cumftime(cum);
@@ -591,6 +593,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
             nodes.at(nid)->set_cumcatches(cumca);
             nodes.at(nid)->setPopTot(tot);
             nodes.at(nid)->setPopWTot(totw);
+            nodes.at(nid)->set_tariffs(tariff);
         }
     }
 
@@ -982,7 +985,8 @@ bool DbHelper::checkNodesStats(int version)
                + "cumsweptarea REAL,"
                + "cumcatches REAL,"
                + "totpop REAL,"
-               + "totpopw REAL"
+               + "totpopw REAL,"
+               + "tariffs REAL"
                + ");"
                );
 

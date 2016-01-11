@@ -163,3 +163,10 @@ void NodeWithCumCatchesGraphics::drawShape(QPainter &painter, const qmapcontrol:
     painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
 }
 
+void NodeWithTariffsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_tariffs()));
+    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+}

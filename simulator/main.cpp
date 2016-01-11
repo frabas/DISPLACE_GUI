@@ -1309,6 +1309,10 @@ int main(int argc, char* argv[])
 	//cout <<"...and the biomass this node this func. grp is "  <<
 	//     benthoss.at(4)-> get_list_nodes().at(100)-> get_benthos_tot_biomass(1) << endl;
 
+
+
+
+
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
     dout(cout  << " POPULATION-RELATED STUFFS " << endl);
@@ -1694,6 +1698,29 @@ int main(int argc, char* argv[])
        outc(cout << removals_per_szgroup.at(i) << endl);
 	}
 	*/
+
+
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " FISHING CREDITS-RELATED   " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+
+
+    // TO DO: compute from the benthos and risk of bycatch on localities....
+    // types 0 and 1, say 0: benthos, 1: bycatch risk
+    double init_tariff0_on_localities=100.0;
+    double init_tariff1_on_localities=100.0;
+
+    // init
+    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
+    {
+       nodes.at(a_idx)->set_tariffs(0, init_tariff0_on_localities); // type 0
+       nodes.at(a_idx)->set_tariffs(1, init_tariff1_on_localities); // type 1
+    }
+
+
+
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);

@@ -114,6 +114,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerBenthosBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Biomass")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosBiomass, mStatsLayerBenthosBiomass[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
+    mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
+
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
@@ -363,6 +366,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerCumcatches[model_n]->clearGeometries();
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
+    mStatsLayerTariffs[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
     mEdgesLayer[model_n]->clear();
     mEntityLayer[model_n]->clearGeometries();
@@ -426,6 +430,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosBiomass, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerTariffs[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

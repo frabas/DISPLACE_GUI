@@ -76,6 +76,8 @@ public:
     void set_cumsweptarea(int i) { mNode->set_cumsweptarea(i); }
     double get_cumcatches() const { return mNode->get_cumcatches(); }
     void set_cumcatches(int i) { mNode->set_cumcatches(i); }
+    double get_tariffs() const { return mNode->get_tariffs(0); }
+    void set_tariffs(int i) { mNode->set_tariffs(0,i); }
     vector<int> get_usual_fgrounds() { mNode->get_usual_fgrounds(); }
     void set_usual_fgrounds(vector<int> usual_fgrounds) { mNode->set_usual_fgrounds(usual_fgrounds); }
     vector<double> get_freq_usual_fgrounds() { mNode->get_freq_usual_fgrounds(); }

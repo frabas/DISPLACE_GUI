@@ -60,6 +60,9 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
     m_nbbenthospops = nbbenthospops;
     m_nszgrp = nbszgroups;
 
+    // length 2 for type 0 and 1
+    tariffs.push_back(0);
+    tariffs.push_back(0);
 
 
 }
@@ -93,6 +96,9 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 		is_harbour=false;
 	}
 
+    // length 2 for type 0 and 1
+    tariffs.push_back(0);
+    tariffs.push_back(0);
 
 
 }
@@ -118,6 +124,7 @@ Node::Node()
       vid(),
       pop_names_on_node(),
       benthos_tot_biomass(),
+      tariffs(),
       m_nbpops(0),
       m_nbbenthospops(0),
       m_nszgrp(0)
@@ -370,6 +377,18 @@ const vector <double> &Node::get_benthos_tot_biomass() const
 	return(benthos_tot_biomass);
 }
 
+double  Node::get_tariffs(int type) const
+{
+
+    return(tariffs.at(type));
+}
+
+
+const vector <double> &Node::get_tariffs() const
+{
+
+    return(tariffs);
+}
 
 vector <vector <double> > Node::get_Ns_pops_at_szgroup() const
 {
@@ -613,6 +632,11 @@ void  Node::set_benthos_tot_biomass(int funcgr, double value)
 	benthos_tot_biomass.at(funcgr)= value;
 }
 
+void  Node::set_tariffs(int type, double value)
+{
+
+    tariffs.at(type)= value;
+}
 
 void Node::clear_Ns_pops_at_szgroup()
 {

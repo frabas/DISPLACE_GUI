@@ -179,6 +179,23 @@ void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel 
     }
 }
 
+void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *model)
+{
+    QTextStream strm (file);
+
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            int id = fields[1].toInt();
+            double tariffs = fields[4].toDouble();
+            model->collectPopTariffs (step, id, tariffs);
+        }
+    }
+}
+
 
 void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *model)
 {

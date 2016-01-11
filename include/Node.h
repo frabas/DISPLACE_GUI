@@ -94,7 +94,9 @@ class Node
         vector<double> get_avai_pops_at_selected_szgroup(int name_pop) const;
 		double get_benthos_tot_biomass(int funcgr) const;
         const vector<double>& get_benthos_tot_biomass() const;
-		vector< vector<double> >  get_Ns_pops_at_szgroup() const;
+        double get_tariffs(int type) const;
+        const vector<double>& get_tariffs() const;
+        vector< vector<double> >  get_Ns_pops_at_szgroup() const;
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
         const vector<double>& get_impact_on_pops ();
@@ -120,7 +122,8 @@ class Node
         void add_to_cumcatches(double catches);
         void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);
-		void clear_pop_names_on_node();
+        void set_tariffs(int type, double value);
+        void clear_pop_names_on_node();
 		void clear_Ns_pops_at_szgroup();
 		void clear_removals_pops_at_szgroup();
 		void clear_avai_pops_at_selected_szgroup();
@@ -174,6 +177,7 @@ private:
 		vector<int> pop_names_on_node;
 								 // possibly per functional group
 		vector<double> benthos_tot_biomass;
+        vector<double> tariffs;
 
         int m_nbpops;
         int m_nbbenthospops;

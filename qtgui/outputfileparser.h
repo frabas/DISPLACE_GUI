@@ -71,6 +71,7 @@ protected:
     void parsePopCumftime(QFile *file, int tstep, DisplaceModel *model);
     void parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model);
     void parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopTariffs(QFile *file, int tstep, DisplaceModel *model);
     void parsePopImpact(QFile *file, int tstep, DisplaceModel *model);
     void parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model);
     void parsePopdynF(QFile *file, int tstep, DisplaceModel *model);

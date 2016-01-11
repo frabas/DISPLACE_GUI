@@ -318,6 +318,7 @@ public:
     void collectPopCumftime(int step, int node_idx, double cumftime);
     void collectPopCumsweptarea(int step, int node_idx, double cumsweptarea);
     void collectPopCumcatches(int step, int node_idx, double cumcatches);
+    void collectPopTariffs(int step, int node_idx, double tariffs);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
 

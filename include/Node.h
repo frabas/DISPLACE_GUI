@@ -122,6 +122,7 @@ class Node
         void add_to_cumcatches(double catches);
         void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);
+        void set_tariffs(vector<double> values);
         void set_tariffs(int type, double value);
         void clear_pop_names_on_node();
 		void clear_Ns_pops_at_szgroup();

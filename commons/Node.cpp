@@ -638,6 +638,13 @@ void  Node::set_tariffs(int type, double value)
     tariffs.at(type)= value;
 }
 
+void  Node::set_tariffs(vector<double> values)
+{
+
+    tariffs= values;
+}
+
+
 void Node::clear_Ns_pops_at_szgroup()
 {
     dout(cout  << "clear pop on nodes..." << endl);

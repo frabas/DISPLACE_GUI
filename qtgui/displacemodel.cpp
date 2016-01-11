@@ -444,7 +444,10 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
     }
     if (fields[0] == "tariffs") {
         for (int i = 0; i < num; ++i) {
-            mNodes.at(start + i)->set_tariffs(fields[4+i].toDouble());
+            vector<double> tariffs;
+            tariffs.push_back(fields[4+i].toDouble());
+            tariffs.push_back(0);
+            mNodes.at(start + i)->set_tariffs(tariffs);
         }
         mNodesStatsDirty = true;
     }
@@ -537,7 +540,7 @@ void DisplaceModel::collectPopCumcatches(int step, int node_idx, double cumcatch
     mNodesStatsDirty = true;
 }
 
-void DisplaceModel::collectPopTariffs(int step, int node_idx, double tariffs)
+void DisplaceModel::collectPopTariffs(int step, int node_idx, vector<double> tariffs)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->set_tariffs(tariffs);

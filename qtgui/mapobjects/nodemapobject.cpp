@@ -123,6 +123,8 @@ void NodeMapObject::updateProperties()
             .arg(mNode->get_marine_landscape())
             .arg(mNode->get_code_area());
 
+    vector <double> tariffs=mNode->get_tariffs();
+
     switch (mRole) {
     default:
     case GraphNodeRole:
@@ -161,7 +163,7 @@ void NodeMapObject::updateProperties()
 
     case GraphNodeWithTariffs:
         text += QString("<br/><b>Tariffs (type 0):</b> %1<br/>")
-                .arg(mNode->get_tariffs());
+                .arg(tariffs.at(0));
         break;
 
     case GraphNodeWithCumFTimeRole:
@@ -205,9 +207,6 @@ QString NodeMapObject::updateStatText(QString prefix)
             break;
         case GraphNodeWithBenthosBiomass:
             val = mNode->getBenthosBiomass(i);
-            break;
-        case GraphNodeWithTariffs:
-            val = mNode->get_tariffs();
             break;
         default:
             throw std::runtime_error("Unhandled case in updateStatText");

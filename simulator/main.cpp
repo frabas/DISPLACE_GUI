@@ -1711,15 +1711,26 @@ int main(int argc, char* argv[])
     // types 0 and 1, say 0: benthos, 1: bycatch risk
     double init_tariff0_on_localities=100.0;
     double init_tariff1_on_localities=100.0;
+    vector<double> tariffs;
+    tariffs.push_back(init_tariff0_on_localities);
+    tariffs.push_back(init_tariff1_on_localities);
 
     // init
     for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
     {
-       nodes.at(a_idx)->set_tariffs(0, init_tariff0_on_localities); // type 0
-       nodes.at(a_idx)->set_tariffs(1, init_tariff1_on_localities); // type 1
+       nodes.at(a_idx)->set_tariffs(tariffs); // type 0
     }
 
 
+    // check
+    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
+    {
+        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
+            " has tariffs 0 " << nodes.at(a_idx)->get_tariffs().at(0) << endl);
+
+        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
+            " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
+    }
 
 
     dout(cout  << "---------------------------" << endl);

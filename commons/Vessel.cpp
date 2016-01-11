@@ -1827,6 +1827,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double totLandThisEvent=1;
     double totDiscThisEvent=0.0001;
 
+    // TARIFFS ON THE NODE
+    vector<double> tariffs = this->get_loc()->get_tariffs();
+    //this->get_fishing_credits(); // TO DO...
+    // check
+    cout << "this node " << this->get_loc()->get_idx_node() <<
+        " has tariffs0 " << this->get_loc()->get_tariffs().at(0) << endl;
+
+
 
     // OUTPUTS
 								 // declare with length nbpops

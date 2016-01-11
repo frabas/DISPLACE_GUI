@@ -155,7 +155,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
         q.addBindValue(n->get_cumcatches());
         q.addBindValue(n->getPopTot());
         q.addBindValue(n->getPopWTot());
-        q.addBindValue(n->get_tariffs());
+        q.addBindValue(n->get_tariffs().at(0));
 
         bool res = q.exec();
         DB_ASSERT(res, q);
@@ -586,6 +586,9 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double tot = q.value(4).toDouble();
         double totw = q.value(5).toDouble();
         double tariff = q.value(6).toDouble();
+        vector<double> tariffs;
+        tariffs.push_back(tariff);
+        tariffs.push_back(0);
 
         if (nid < nodes.size()) {
             nodes.at(nid)->set_cumftime(cum);
@@ -593,7 +596,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
             nodes.at(nid)->set_cumcatches(cumca);
             nodes.at(nid)->setPopTot(tot);
             nodes.at(nid)->setPopWTot(totw);
-            nodes.at(nid)->set_tariffs(tariff);
+            nodes.at(nid)->set_tariffs(tariffs);
         }
     }
 

@@ -139,6 +139,7 @@ class Node
 		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches(ofstream& popnodes, int tstep);
+        void export_popnodes_tariffs(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
         int setAreaType(int _area_type);

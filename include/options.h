@@ -90,6 +90,7 @@ enum Dyn_Alloc {
     focus_on_high_previous_cpue,
     shared_harbour_knowledge,
     twoFoldTACconstr,
+    fishing_credits,
 
     Dyn_Alloc_last
 };

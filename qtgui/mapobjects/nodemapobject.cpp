@@ -125,6 +125,8 @@ void NodeMapObject::updateProperties()
 
     vector <double> tariffs=mNode->get_tariffs();
 
+    cout << "updateProperties here!" << tariffs.at(0) << endl;
+
     switch (mRole) {
     default:
     case GraphNodeRole:

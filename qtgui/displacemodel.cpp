@@ -445,9 +445,10 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
     if (fields[0] == "tariffs") {
         for (int i = 0; i < num; ++i) {
             vector<double> tariffs;
-            tariffs.push_back(fields[4+i].toDouble());
-            tariffs.push_back(0);
+            tariffs.push_back(fields[4+i].toDouble());   // type 0
+            tariffs.push_back(0);                        // type 1
             mNodes.at(start + i)->set_tariffs(tariffs);
+
         }
         mNodesStatsDirty = true;
     }

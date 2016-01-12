@@ -928,6 +928,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 	// instead of using population->get_weight_at_szgroup()
 
     dout(cout  << "export biomass on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
 
 	popnodes << setprecision(3) << fixed;
 	// tstep / node / long / lat / tot N sp0 / tot N sp1 /...
@@ -962,6 +963,7 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 {
 
     dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
@@ -976,6 +978,7 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
 {
 
     dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
 
 	vector<double> impact_per_szgroup=get_pressure_pops_at_szgroup(pop);
 
@@ -998,6 +1001,7 @@ void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 {
 
     dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
@@ -1011,6 +1015,7 @@ void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
 {
 
     dout(cout  << "export swept area on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  swept area
@@ -1024,6 +1029,7 @@ void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 {
 
     dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
@@ -1033,6 +1039,19 @@ void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 
 }
 
+void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export tariffs on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tariffs
+    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        tariffs.at(0) << " " <<  endl;
+
+}
 
 void Node::add_benthos_tot_biomass_on_node(double tot_biomass_this_group)
 {

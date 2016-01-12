@@ -45,7 +45,8 @@ static const char *dyn_alloc_options[] = {
     "increased_catch_power_5percent",
     "focus_on_high_profit_grounds_area_closure",
     "shared_harbour_knowledge",
-    "twoFoldTACconstr"
+    "twoFoldTACconstr",
+    "fishing_credits",
 };
 
 static const char *dyn_pop_options[] = {

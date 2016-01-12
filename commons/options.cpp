@@ -44,6 +44,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,focus_on_high_previous_cpue);
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);
+    O(mMap,fishing_credits);
 
 }
 

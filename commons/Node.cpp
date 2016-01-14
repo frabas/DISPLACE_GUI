@@ -994,7 +994,7 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 
 }
 
-void Node::export_popnodes_cumcatches_per_pop(ofstream& popnodes, int tstep, int pop)
+void Node::export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop)
 {
 
     dout(cout  << "export accumulated catches (i.e. landings) on nodes for use in e.g. a GIS engine" << endl);

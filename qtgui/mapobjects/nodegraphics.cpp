@@ -122,6 +122,7 @@ double NodeWithPopStatsGraphics::getValueForPop(int pop) const
     switch (mType) {
     case Population:
         return mNode->getPop(pop);
+         break;
     case Biomass:
         return mNode->getPopW(pop);
         break;

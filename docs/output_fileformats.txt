@@ -35,9 +35,9 @@ pop / tstep / node_idx / long / lat / impact_on_pop
 Collected Fields: (0,1,2,)5
 
 
-* popnodes_cumcatches_per_pop_*.dat
+* popnodes_cumulcatches_per_pop_*.dat
 -----------------------
-Written by: Node::export_popnodes_cumcatches_per_pop()
+Written by: Node::export_popnodes_cumulcatches_per_pop()
 See: commons/Node.cpp
 Content:
 Format:

@@ -235,8 +235,8 @@ void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, Displace
         if (step == tstep || tstep == -1) {
             int popid = fields[0].toInt();
             int nodeid = fields[2].toInt();
-            double cumcatchesperpop = fields[5].toDouble();
-            model->collectPopCumcatchesPerPop (step, nodeid, popid, cumcatchesperpop);
+            double cumcatchesthispop = fields[5].toDouble();
+            model->collectPopCumcatchesPerPop (step, nodeid, popid, cumcatchesthispop);
         }
     }
 

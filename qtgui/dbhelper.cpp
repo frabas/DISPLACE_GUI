@@ -140,7 +140,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
     DB_ASSERT(r,q);
 
     r = sq.prepare("INSERT INTO " + TBL_POPNODES_STATS
-        + "(statid,tstep,nodeid,popid,pop,popw,impact,cumcatchesperpop) VALUES(?,?,?,?,?,?,?,?)");
+        + "(statid,tstep,nodeid,popid,pop,popw,impact,cumcatchesthispop) VALUES(?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,sq);
 
     r = sq2.prepare("INSERT INTO " + TBL_BENTHOSPOPNODES_STATS
@@ -601,7 +601,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         }
     }
 
-    q.prepare ("SELECT nodeid,popid,pop,popw,impact,cumcatchesperpop FROM " + TBL_POPNODES_STATS
+    q.prepare ("SELECT nodeid,popid,pop,popw,impact,cumcatchesthispop FROM " + TBL_POPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -613,13 +613,13 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double val = q.value(2).toDouble();
         double valw = q.value(3).toDouble();
         double impact = q.value(4).toDouble();
-        double cumcatchesperpop = q.value(5).toDouble();
+        double cumcatchesthispop = q.value(5).toDouble();
 
         if (nid < nodes.size()) {
             nodes.at(nid)->setPop(pid,val);
             nodes.at(nid)->setPopW(pid,valw);
             nodes.at(nid)->setImpact(pid,impact);
-            nodes.at(nid)->setCumcatchesPerPop(pid,cumcatchesperpop);
+            nodes.at(nid)->setCumcatchesPerPop(pid,cumcatchesthispop);
         }
     }
 
@@ -1010,7 +1010,7 @@ bool DbHelper::checkNodesStats(int version)
                + "pop REAL,"
                + "popw REAL,"
                + "impact REAL,"
-               + "cumcatchesperpop REAL"
+               + "cumcatchesthispop REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }

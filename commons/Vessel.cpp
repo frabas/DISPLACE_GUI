@@ -1828,6 +1828,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double totDiscThisEvent=0.0001;
 
     // TARIFFS ON THE NODE
+    vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
     vector<double> tariffs = this->get_loc()->get_tariffs();
     //this->get_fishing_credits(); // TO DO...
     // check
@@ -2354,6 +2355,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // update dynamic trip-based cumul for this node
 								 // CUMUL FOR THE TRIP (all species confounded)
 					this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
+                    this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
                                  // catches
 					cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
 								 // catches per pop
@@ -2505,7 +2507,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 discards_pop_at_szgroup[pop][0] = 0;
                                  // CUMUL
 				this->cumcatches+= catch_pop_at_szgroup[pop][0];
-
+                this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + catch_pop_at_szgroup[pop][0]);
 				/*
 				if(pop==21 && (this->get_name())=="DNK000012028"){
                     dout(cout << "cpue " <<cpue << endl);

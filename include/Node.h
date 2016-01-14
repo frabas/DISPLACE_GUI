@@ -100,7 +100,8 @@ class Node
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
         const vector<double>& get_impact_on_pops ();
-		int get_cumftime() const;
+        const vector<double>& get_cumcatches_per_pop ();
+        int get_cumftime() const;
         double get_cumsweptarea() const;
         double get_cumcatches() const;
         void set_xy(double xval, double yval);
@@ -112,7 +113,8 @@ class Node
 		void init_avai_pops_at_selected_szgroup(int nbpops, int selected_nbszgroups);
         void set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>& val);
 		void set_impact_on_pops(int name_pop, double val);
-		void set_vid(int val);
+        void set_cumcatches_per_pop(int name_pop, double val);
+        void set_vid(int val);
         void set_cumftime(int tot);
         void set_cumsweptarea(double tot);
         void set_cumcatches(double tot);
@@ -129,6 +131,7 @@ class Node
 		void clear_removals_pops_at_szgroup();
 		void clear_avai_pops_at_selected_szgroup();
 		void clear_impact_on_pops();
+        void clear_cumcatches_per_pop();
         void apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup);
         void apply_oth_land(int name_pop, double &oth_land_this_pop_this_node, const vector<double>&  weight_at_szgroup, const vector<double>& totN);
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
@@ -139,6 +142,7 @@ class Node
 		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches(ofstream& popnodes, int tstep);
+        void export_popnodes_cumcatches_per_pop(ofstream& popnodes, int tstep, int pop);
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
@@ -175,7 +179,8 @@ private:
 		vector< vector<double> > avai_pops_at_selected_szgroup;
 								 // a proportion i.e. ratio removals/available on node
 		vector<double> impact_on_pops;
-		vector<int> vid;		 // list of index of vessels currently on the node
+        vector<double> cumcatches_per_pop;
+        vector<int> vid;		 // list of index of vessels currently on the node
 		vector<int> pop_names_on_node;
 								 // possibly per functional group
 		vector<double> benthos_tot_biomass;

@@ -121,6 +121,7 @@ Node::Node()
       pressure_pops_at_szgroup(),
       avai_pops_at_selected_szgroup(),
       impact_on_pops(),
+      cumcatches_per_pop(),
       vid(),
       pop_names_on_node(),
       benthos_tot_biomass(),
@@ -432,6 +433,10 @@ const vector<double>& Node::get_impact_on_pops ()
 	return(impact_on_pops);
 }
 
+const vector<double>& Node::get_cumcatches_per_pop ()
+{
+    return(cumcatches_per_pop);
+}
 
 void Node::set_vid (int val)
 {
@@ -508,6 +513,7 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (removals_pops_at_szgroup, nbpops, nbszgroups);
     reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
     reinit (impact_on_pops, nbpops);
+    reinit (cumcatches_per_pop, nbpops);
 
 #if 0
 	// init at 0 the matrix of Ns
@@ -530,7 +536,8 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
         dout(cout  << endl);
 
 		impact_on_pops.push_back(0);
-	}
+        cumcatches_per_pop.push_back(0);
+    }
 #endif
 }
 
@@ -613,6 +620,12 @@ void Node::set_impact_on_pops(int name_pop, double newval)
 
 }
 
+void Node::set_cumcatches_per_pop(int name_pop, double newval)
+{
+
+    cumcatches_per_pop.at(name_pop)=newval;
+
+}
 
 void Node::set_pop_names_on_node(int name_pop)
 {
@@ -680,6 +693,14 @@ void Node::clear_impact_on_pops()
 
 }
 
+void Node::clear_cumcatches_per_pop()
+{
+    for(unsigned int i=0; i<cumcatches_per_pop.size(); i++)
+    {
+        cumcatches_per_pop.at(i)=0;
+    }
+
+}
 
 void Node::clear_avai_pops_at_selected_szgroup()
 {
@@ -973,6 +994,19 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 
 }
 
+void Node::export_popnodes_cumcatches_per_pop(ofstream& popnodes, int tstep, int pop)
+{
+
+    dout(cout  << "export accumulated catches (i.e. landings) on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot cumcatches pop
+    popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        cumcatches_per_pop.at(pop) << " " <<  endl;
+
+}
 
 void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop)
 {

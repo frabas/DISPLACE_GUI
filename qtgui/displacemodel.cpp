@@ -556,6 +556,13 @@ void DisplaceModel::collectPopImpact(int step, int node_idx, int popid, double i
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setCumcatchesPerPop(popid, cumcatchesperpop);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass)
 {
     checkStatsCollection(step);

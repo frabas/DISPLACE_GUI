@@ -39,7 +39,7 @@ QList<objecttree::ObjectTreeEntity *> ObjectTreeModel::entityTemplates;
 QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Layers"),
     QT_TR_NOOP_UTF8("Shapefile Layers"),
-    QT_TR_NOOP_UTF8("Output Layers"),
+    QT_TR_NOOP_UTF8("Monthly Output Layers"),
     QT_TR_NOOP_UTF8("Nodes"),
     QT_TR_NOOP_UTF8("Harbours"),
     QT_TR_NOOP_UTF8("Vessels"),

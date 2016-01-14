@@ -320,6 +320,7 @@ public:
     void collectPopCumcatches(int step, int node_idx, double cumcatches);
     void collectPopTariffs(int step, int node_idx, vector<double> tariffs);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
+    void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);

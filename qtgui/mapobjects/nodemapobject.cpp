@@ -61,6 +61,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::Impact, mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithPopCumcatches:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::CumcatchesPerPop, mNode.get(), mController, indx));
+        break;
+
     case GraphNodeWithBenthosBiomass:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::BenthosBiomass, mNode.get(), mController, indx));
@@ -159,6 +164,10 @@ void NodeMapObject::updateProperties()
         text += updateStatText("Impact");
         break;
 
+    case GraphNodeWithPopCumcatches:
+        text += updateStatText("Cumulated catches");
+        break;
+
     case GraphNodeWithBenthosBiomass:
         text += updateStatText("Benthos Biomass");
         break;
@@ -206,6 +215,9 @@ QString NodeMapObject::updateStatText(QString prefix)
             break;
         case GraphNodeWithPopImpact:
             val = mNode->getImpact(i);
+            break;
+        case GraphNodeWithPopCumcatches:
+            val = mNode->getCumcatchesPerPop(i);
             break;
         case GraphNodeWithBenthosBiomass:
             val = mNode->getBenthosBiomass(i);

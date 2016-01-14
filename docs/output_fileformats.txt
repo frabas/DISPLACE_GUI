@@ -34,6 +34,17 @@ Format:
 pop / tstep / node_idx / long / lat / impact_on_pop
 Collected Fields: (0,1,2,)5
 
+
+* popnodes_cumcatches_per_pop_*.dat
+-----------------------
+Written by: Node::export_popnodes_cumcatches_per_pop()
+See: commons/Node.cpp
+Content:
+Format:
+pop / tstep / node_idx / long / lat / cumcatches (actually landings)
+Collected Fields: (0,1,2,)5
+
+
 * popdyn_*.dat
 --------------
 Written by: Population::export_popdyn_N

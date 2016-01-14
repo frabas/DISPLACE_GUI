@@ -2792,7 +2792,12 @@ int main(int argc, char* argv[])
 	popnodes_impact.open(filename.c_str());
     std::string popnodes_impact_filename = filename;
 
-	ofstream popnodes_impact_per_szgroup;
+    ofstream popnodes_cumcatches_per_pop;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_per_pop_"+namesimu+".dat";
+    popnodes_cumcatches_per_pop.open(filename.c_str());
+    std::string popnodes_cumcatches_per_pop_filename = filename;
+
+    ofstream popnodes_impact_per_szgroup;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
 	popnodes_impact_per_szgroup.open(filename.c_str());
 
@@ -3304,7 +3309,8 @@ int main(int argc, char* argv[])
                             if(export_vmslike && impact_on_pop!=0)
 							{
                                 a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
-							}
+                                a_list_nodes.at(n)->export_popnodes_cumcatches_per_pop(popnodes_cumcatches_per_pop, tstep, name_pop);
+                            }
 						}
 								 // RE-INIT
 						a_list_nodes.at(n)->clear_removals_pops_at_szgroup();
@@ -3782,6 +3788,9 @@ int main(int argc, char* argv[])
 
                 popnodes_impact.flush();
                 guiSendUpdateCommand(popnodes_impact_filename, tstep);
+
+                popnodes_cumcatches_per_pop.flush();
+                guiSendUpdateCommand(popnodes_cumcatches_per_pop_filename, tstep);
 
                 benthosnodes.flush();
                 guiSendUpdateCommand(popnodes_benthos_filename, tstep);

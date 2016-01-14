@@ -45,7 +45,7 @@ protected:
 
 class NodeWithPopStatsGraphics : public NodeGraphics {
 public:
-    enum Type { Population, Biomass, Impact, BenthosBiomass,
+    enum Type { Population, Biomass, Impact, CumcatchesPerPop, BenthosBiomass,
               LastType };
 
     NodeWithPopStatsGraphics(Type type, NodeData *node, MapObjectsController *controller, int indx)

@@ -111,6 +111,11 @@ public:
         return mImpact[pop];
     }
 
+    void setCumcatchesPerPop(int pop, double cumcatchesperpop);
+    double getCumcatchesPerPop(int pop) const {
+        return mCumcatchesPerPop[pop];
+    }
+
     void setBenthosBiomass(int func, double benthosbiomass);
     double getBenthosBiomass(int func) const {
         return mBenthosBiomass[func];
@@ -143,6 +148,7 @@ private:
     double mPopWTot;
 
     double *mImpact;
+    double *mCumcatchesPerPop;
     double *mBenthosBiomass;
     int areaType;
 

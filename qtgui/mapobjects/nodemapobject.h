@@ -53,6 +53,7 @@ public:
         GraphNodeWithCumSweptAreaRole,
         GraphNodeWithCumCatchesRole,
         GraphNodeWithPopImpact,
+        GraphNodeWithPopCumcatches,
         GraphNodeWithBenthosBiomass,
         GraphNodeWithTariffs
     };

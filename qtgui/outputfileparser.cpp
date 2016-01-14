@@ -67,6 +67,8 @@ void OutputFileParser::parse(QString path, int tstep)
         parsePopTariffs(&file, tstep, mModel);
     } else if (name.startsWith("popnodes_impact_")) {
         parsePopImpact(&file, tstep, mModel);
+    } else if (name.startsWith("popnodes_cumcatches_per_pop_")) {
+        parsePopCumcatchesPerPop(&file, tstep, mModel);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {
         parsePopBenthosBiomass(&file, tstep, mModel);
     } else if (name.startsWith("popdyn_F_")) {
@@ -215,6 +217,26 @@ void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *mod
             int nodeid = fields[2].toInt();
             double impact = fields[5].toDouble();
             model->collectPopImpact (step, nodeid, popid, impact);
+        }
+    }
+
+}
+
+
+void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model)
+{
+    QTextStream strm (file);
+
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[1].toInt();
+
+        if (step == tstep || tstep == -1) {
+            int popid = fields[0].toInt();
+            int nodeid = fields[2].toInt();
+            double cumcatchesperpop = fields[5].toDouble();
+            model->collectPopCumcatchesPerPop (step, nodeid, popid, cumcatchesperpop);
         }
     }
 

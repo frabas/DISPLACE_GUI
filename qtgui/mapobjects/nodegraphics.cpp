@@ -128,6 +128,9 @@ double NodeWithPopStatsGraphics::getValueForPop(int pop) const
     case Impact:
         return mNode->getImpact(pop);
         break;
+    case CumcatchesPerPop:
+        return mNode->getCumcatchesPerPop(pop);
+        break;
     case BenthosBiomass:
         return mNode->getBenthosBiomass(pop);
         break;

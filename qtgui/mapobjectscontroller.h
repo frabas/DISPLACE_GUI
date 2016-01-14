@@ -199,6 +199,7 @@ public:
         OutLayerPopStats = 0,
         OutLayerBiomass,
         OutLayerPopImpact,
+        OutLayerPopCumcatches,
         OutLayerBenthosBiomass,
         OutLayerTariffs,
         OutLayerCumFTime,
@@ -334,6 +335,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerPop[MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBiomass[MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerImpact [MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatchesPerPop [MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBenthosBiomass [MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffs [MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MAX_MODELS];

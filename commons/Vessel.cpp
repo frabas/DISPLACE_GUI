@@ -1932,6 +1932,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 				// compute available biomass via selectivity
                 for(int szgroup=0; szgroup < (int)avail_biomass.size(); szgroup++)
 				{
+                    catch_per_szgroup[szgroup]=0; // init
+
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *sel_ogive[szgroup]; // available for landings only
 								 // cumul

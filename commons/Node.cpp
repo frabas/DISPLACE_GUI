@@ -495,7 +495,7 @@ void Node::reinit(vector<double> &vec, unsigned int sz)
     if (vec.size() != sz)
         vec.resize(sz, 0);
     for (unsigned int i = 0; i < sz; ++i)
-        vec[i] = sz;
+        vec[i] = 0.0;
 }
 
 void Node::reinit(vector<vector<double> > &vec, unsigned int sz, unsigned int subsz)

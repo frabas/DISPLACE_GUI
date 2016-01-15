@@ -1718,16 +1718,30 @@ int main(int argc, char* argv[])
 
     // TO DO: compute from the benthos and risk of bycatch on localities....
     // types 0 and 1, say 0: benthos, 1: bycatch risk
-    double init_tariff0_on_localities=100.0;
-    double init_tariff1_on_localities=100.0;
-    vector<double> tariffs;
-    tariffs.push_back(init_tariff0_on_localities);
-    tariffs.push_back(init_tariff1_on_localities);
+    //double init_tariff0_on_localities=100.0;
+    //double init_tariff1_on_localities=100.0;
+    //vector<double> tariffs;
+    //tariffs.push_back(init_tariff0_on_localities);
+    //tariffs.push_back(init_tariff1_on_localities);
+
+    multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, "../"+inputfolder);
 
     // init
     for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
     {
-       nodes.at(a_idx)->set_tariffs(tariffs); // type 0
+
+        int idx_node=nodes.at(a_idx)->get_idx_node();
+
+        // initial tariff for this particular node
+        multimap<int,double>::iterator lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
+        multimap<int,double>::iterator upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
+        vector<double> init_tariffs;
+        for (multimap<int, double>::iterator pos=lower_init_cr; pos != upper_init_cr; pos++)
+            init_tariffs.push_back(pos->second);
+
+        if(initial_tariffs_on_nodes.count(idx_node)==0) init_tariffs.push_back(0); // put 0 if this node is not informed
+
+        nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
     }
 
 

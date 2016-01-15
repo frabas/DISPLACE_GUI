@@ -1214,6 +1214,50 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
 }
 
 
+
+multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder)
+{
+
+    // obtained from looking at average cpue on nodes for the explicit species
+    //string filename=  inputfolder+"/graphsspe_"+folder_name_parameterization+"/initial_tariffs_on_nodes.dat";
+    string filename=  inputfolder+"/graphsspe/initial_tariffs_on_nodes.dat";
+
+    ifstream initial_tariffs_on_nodes_file;
+    initial_tariffs_on_nodes_file.open(filename.c_str());
+    if(initial_tariffs_on_nodes_file.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+                                 //key=fground, value=gamma scale param
+    multimap<int, double> initial_tariffs_on_nodes;
+    fill_multimap_from_specifications_i_d(initial_tariffs_on_nodes_file,  initial_tariffs_on_nodes);
+    initial_tariffs_on_nodes_file.close();
+
+#ifdef VERBOSE
+    // check input
+    bool check = 0;
+    if(check)
+    {
+        multimap<int,double>::iterator lower_gr = initial_tariffs_on_nodes.lower_bound(1600);
+        multimap<int,double>::iterator upper_gr = initial_tariffs_on_nodes.upper_bound(1600);
+        dout(cout << "for this specific ground (1600): ");
+        for (multimap<int, double>::iterator pos2=lower_gr; pos2 != upper_gr; pos2++)
+        {
+            dout(cout << pos2->second << " ");
+        }
+        dout(cout << endl);
+    }
+#endif
+
+    return(initial_tariffs_on_nodes);
+}
+
+
+
+
+
+
 // FOR METIER
 multimap<int, double> read_sel_ogives(string folder_name_parameterization, string inputfolder)
 {

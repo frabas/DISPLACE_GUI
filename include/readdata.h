@@ -90,6 +90,10 @@ multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vess
 multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
+multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder);
+
+
+
 // harbour specific
 multimap<int, string> read_harbour_names(string folder_name_parameterization, string inputfolder);
 int read_prices_per_harbour(int i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);

@@ -82,6 +82,7 @@ extern ofstream vmslike;
 extern double graph_res;
 extern int is_individual_vessel_quotas;
 extern bool is_tacs;
+extern bool is_fishing_credits;
 extern vector <int> implicit_pops;
 extern ofstream loglike;
 extern DynAllocOptions dyn_alloc_sce;
@@ -293,7 +294,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         //#pragma omp critical(docatch)
                         {
                             dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
-                            vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res, is_tacs, is_individual_vessel_quotas);
+                            vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res,
+                                                         is_tacs, is_individual_vessel_quotas, is_fishing_credits);
 
                             // check
                             //if(vessels[ index_v ]->get_loc()->get_idx_node()==430)

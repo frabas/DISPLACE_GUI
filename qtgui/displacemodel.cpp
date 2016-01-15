@@ -1407,6 +1407,13 @@ bool DisplaceModel::loadVessels()
     //}
     //cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
 
+     multimap<string, double> fishing_credits;
+    if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
+    {
+         fishing_credits   = read_initial_fishing_credits(mInputName.toStdString(), mBasePath.toStdString());
+    }
+
+
     //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
     // and check the start coord
     multimap<int, int> possible_metiers;
@@ -1421,8 +1428,9 @@ bool DisplaceModel::loadVessels()
     vector<double> spe_freq_harbours;
     vector<double> spe_vessel_betas_per_pop;
     vector<double> spe_percent_tac_per_pop;
+    vector<double> spe_fishing_credits;
 
-                                 //here
+     //here
     vector <Vessel*> vessels(vesselids.size());
     for (int i=0; i<vesselids.size(); i++)
         //vector <Vessel*> vessels(7); //here
@@ -1458,6 +1466,11 @@ bool DisplaceModel::loadVessels()
         spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
         spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
         spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
+
+        if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
+        {
+            spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
+        }
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
         int start_harbour;
@@ -1525,6 +1538,10 @@ bool DisplaceModel::loadVessels()
         v->set_spe_possible_metiers(possible_metiers);
         v->set_spe_freq_possible_metiers(freq_possible_metiers);
 
+        if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
+        {
+            v->set_fishing_credits(spe_fishing_credits);
+        }
 
         // inform grounds in closed areas
         vector <int> grds = v->get_fgrounds();

@@ -631,6 +631,10 @@ const vector<double> &Vessel::get_percent_tac_per_pop () const
 	return(percent_tac_per_pop);
 }
 
+const vector<double> &Vessel::get_fishing_credits () const
+{
+    return(fishing_credits);
+}
 
 const multimap<int, int> &Vessel::get_possible_metiers() const
 {
@@ -1010,6 +1014,12 @@ void Vessel::set_spe_betas_per_pop (vector<double> _betas_per_pop)
 void Vessel::set_spe_percent_tac_per_pop (vector<double> _tacs_per_pop)
 {
 	percent_tac_per_pop=_tacs_per_pop;
+}
+
+
+void Vessel::set_fishing_credits (vector<double> _fishing_credits)
+{
+    fishing_credits=_fishing_credits;
 }
 
 
@@ -1741,7 +1751,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes,
-                      vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, int& is_individual_vessel_quotas)
+                      vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, int& is_individual_vessel_quotas, bool& is_fishing_credits)
 {
     lock();
 
@@ -1829,12 +1839,20 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
     // TARIFFS ON THE NODE
     vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
-    vector<double> tariffs = this->get_loc()->get_tariffs();
-    //this->get_fishing_credits(); // TO DO...
-    // check
-    cout << "this node " << this->get_loc()->get_idx_node() <<
-        " has tariffs0 " << this->get_loc()->get_tariffs().at(0) << endl;
-
+    if(is_fishing_credits)
+    {
+        vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
+        vector<double> fishing_credits = this->get_fishing_credits();
+        // check
+        cout << "this node " << this->get_loc()->get_idx_node() <<
+        " has tariffs0 " << tariff_this_cell.at(0) << endl;
+        cout << "this vessel " << this->get_name() <<
+        " has credits " << fishing_credits.at(0) << endl;
+        fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(0);
+        this->set_fishing_credits(fishing_credits);
+        cout << "this vessel " << this->get_loc()->get_idx_node() <<
+        " has remaining credits " << this->get_fishing_credits().at(0) << endl;
+    }
 
 
     // OUTPUTS

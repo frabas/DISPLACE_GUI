@@ -995,6 +995,40 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
 }
 
 
+multimap<string, double> read_initial_fishing_credits(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/initial_fishing_credits_per_vid.dat";
+
+    ifstream vesselsspe_credits_file;
+    vesselsspe_credits_file.open(filename.c_str());
+    if(vesselsspe_credits_file.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<string, double> initial_fishing_credits;
+    fill_multimap_from_specifications_s_d(vesselsspe_credits_file, initial_fishing_credits);
+    vesselsspe_credits_file.close();
+
+    /*
+    // check input
+    multimap<string,double>::iterator lower5 = initial_fishing_credits.lower_bound("DNK000001744");
+    multimap<string,double>::iterator upper5 = initial_fishing_credits.upper_bound("DNK000001744");
+    cout << "specific tac per pop: ";
+    for (multimap<string, double>::iterator pos=lower5; pos != upper5; pos++)
+    {
+        cout << pos->second << " ";
+    }
+    cout << endl;
+    */
+
+    return(initial_fishing_credits);
+}
+
+
+
+
 multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 

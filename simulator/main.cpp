@@ -147,6 +147,7 @@ int nrow_graph;
 double graph_res;
 bool is_individual_vessel_quotas;
 bool is_tacs;
+bool is_fishing_credits;
 int export_vmslike;
 bool use_dtrees;
 ofstream vmslike;
@@ -185,6 +186,7 @@ vector<double> spe_freq_fgrounds_init;
 vector<double> spe_freq_harbours;
 vector<double> spe_vessel_betas_per_pop;
 vector<double> spe_percent_tac_per_pop;
+vector<double> spe_fishing_credits;
 vector <Node* > nodes;
 multimap<int, string> harbour_names;
 vector<int> name_metiers;
@@ -878,6 +880,13 @@ int main(int argc, char* argv[])
       is_tacs=1;
     } else{
        is_tacs=0;
+    }
+
+    if(dyn_alloc_sce.option(Options::fishing_credits))
+    {
+      is_fishing_credits=1;
+    } else{
+       is_fishing_credits=0;
     }
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
@@ -1995,6 +2004,12 @@ int main(int argc, char* argv[])
         }
 
 
+    multimap<string, double> fishing_credits;
+    if(dyn_alloc_sce.option(Options::fishing_credits))
+    {
+         fishing_credits = read_initial_fishing_credits(folder_name_parameterization, "../"+inputfolder);
+    }
+
     //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
 	// and check the start coord
 								 //here
@@ -2038,7 +2053,12 @@ int main(int argc, char* argv[])
 		spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
 		spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
 
-		// choose a departure (node) harbour for this vessel according to the observed frequency in data
+        if(dyn_alloc_sce.option(Options::fishing_credits))
+        {
+        spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
+        }
+
+        // choose a departure (node) harbour for this vessel according to the observed frequency in data
 		int start_harbour;
 		if(!spe_harbours.empty())
 		{
@@ -2135,6 +2155,10 @@ int main(int argc, char* argv[])
 
         }
 */
+        if(dyn_alloc_sce.option(Options::fishing_credits))
+        {
+            vessels[i]->set_fishing_credits(spe_fishing_credits);
+        }
 
 
         // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....

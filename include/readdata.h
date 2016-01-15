@@ -81,6 +81,8 @@ multimap<string, double> read_freq_harbours(string a_quarter, string folder_name
 multimap<string, double> read_vessels_betas(string a_semester, string folder_name_parameterization, string inputfolder);
 multimap<string, double> read_vessels_tacs(string a_semester, string folder_name_parameterization, string inputfolder);
 
+multimap<string, double> read_initial_fishing_credits(string folder_name_parameterization, string inputfolder);
+
 multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 

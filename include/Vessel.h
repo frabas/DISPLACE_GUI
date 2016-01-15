@@ -114,6 +114,7 @@ class Vessel
 		vector < vector<double> > catch_pop_at_szgroup;
         vector < vector<double> > discards_pop_at_szgroup;
         vector<int> individual_tac_per_pop;
+        vector<double> fishing_credits;
 		int targeting_non_tac_pop_only;
 
         int smartcatch, highpotentialcatch, notthatfar, mosthistoricallyused; // some relevant grounds
@@ -172,6 +173,7 @@ public:
         const vector<vector<double> > &get_freq_experiencedcpue_fgrounds_per_pop () const;
         const vector<double> &get_vessel_betas_per_pop () const;
         const vector<double> &get_percent_tac_per_pop () const;
+        const vector<double> &get_fishing_credits () const;
         const vector<int> &get_idx_used_metiers_this_trip ();
         const multimap<int,int> &get_possible_metiers () const;
         const multimap<int,double> &get_freq_possible_metiers () const;
@@ -216,13 +218,13 @@ public:
 		int get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
-		void set_speed (double val);
+        void set_speed (double val);
 		void set_resttime_par1 (double val);
 		void set_resttime_par2 (double val);
 		void set_av_trip_duration (double val);
 		void set_fuelcons (double val);
 		void set_course (double val);
-		void set_fgrounds (int val);
+        void set_fgrounds (int val);
         void set_fgrounds_init (int val);
         void set_fgrounds_int_closed_areas (vector<int> grounds);
         void set_harbours (int val);
@@ -233,6 +235,7 @@ public:
         void set_spe_freq_harbours (vector<double> _harbours);
 		void set_spe_freq_fgrounds (vector<double> _fgrounds);
         void set_spe_freq_fgrounds_init (vector<double> _fgrounds_init);
+        void set_fishing_credits (vector<double> _fishing_credits);
         void set_spe_cumcatch_fgrounds (vector<double> _cumcatch);
         void set_spe_experienced_bycatch_prop_on_fgrounds (vector<double> _experienced_bycatch_prop_on_fgrounds);
         void set_spe_cumeffort_fgrounds (vector<double> _cumeffort);
@@ -284,7 +287,8 @@ public:
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(vector<Node* >& nodes);
-        void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res, bool &is_tacs, int &is_individual_vessel_quotas);
+        void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res,
+                      bool &is_tacs, int &is_individual_vessel_quotas, bool &is_fishing_credits);
 		void clear_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();
         void compute_experiencedcpue_fgrounds();

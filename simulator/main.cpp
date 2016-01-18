@@ -4683,6 +4683,105 @@ int main(int argc, char* argv[])
 
 
 
+   // UPDATE THE TARIFF MAP
+   if(dyn_alloc_sce.option(Options::fishing_credits) )
+    {
+
+      // timing (update at 7 a.m.)
+     int do_update=0;
+     switch(freq_update_tariff_code)
+       {
+         case 0:
+             if((tstep % 24)==7) do_update=1;
+        // daily update
+             break;
+         case 1:
+             if((tstep % 168)==7) do_update=1;
+        // weekly update
+        break;
+         case 2:
+             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)) do_update=1;
+        // monthly update
+        break;
+       }
+
+      if(do_update)
+      {
+       cout << " Update the tariff map....at " << tstep << endl;
+
+         // obtain the list of idx relevant nodes for these tariff pops
+         vector <int> list_nodes_idx;
+         for (int ipop=0; ipop <tariff_pop.size();++ipop)
+         {
+            cout << "Get the list of nodes for the tariff pop " << populations.at(tariff_pop.at(ipop))->get_name() << endl;
+            vector<Node* > a_list_nodes       = populations.at(tariff_pop.at(ipop))->get_list_nodes();
+            for (int inode=0; inode <a_list_nodes.size();++inode)
+            {
+            list_nodes_idx.push_back(a_list_nodes.at(inode)->get_idx_node());
+            }
+         }
+
+         // sort and unique
+         remove_dups(list_nodes_idx);
+
+         // check
+         cout << "nodes for the lpue computation are:" << endl;
+         for(int i=0; i<list_nodes_idx.size();++i)
+         {
+             cout << list_nodes_idx.at(i) << " ";
+         }
+         cout << endl;
+
+
+         // loop over to find out the mean lpue
+         double cumcatches, cumeffort, mean_lpue;
+         for (int inode=0; inode < list_nodes_idx.size(); ++inode)
+         {
+             for (int ipop=0; ipop <tariff_pop.size();++ipop)
+             {
+                cumcatches+= nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop);
+             }
+             cumeffort+= nodes[list_nodes_idx.at(inode)]->get_cumftime();
+         }
+         cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
+         cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
+        if(cumeffort!=0){
+             mean_lpue =cumcatches/cumeffort;
+         cout << " mean_lpue of reference for the update is.... " << mean_lpue << endl;
+
+
+         // loop over to scale the tariff (on each node) up or down (caution: by one category)
+         double tariff_this_node, node_lpue, nb_times_diff;
+         for (int inode=0; inode < list_nodes_idx.size(); ++inode)
+         {
+             node_lpue = nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop) /
+                            nodes[list_nodes_idx.at(inode)]->get_cumftime();
+             nb_times_diff    =  node_lpue/mean_lpue;
+            cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
+
+
+
+            // find out which category the tariff should be
+            int count=0;
+            while (nb_times_diff > arbitary_breaks_for_tariff.at(count))
+               {
+               if((count) > arbitary_breaks_for_tariff.size()) break;
+               count = count+1;
+               }
+
+            // constraint +/-1 category
+            tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
+
+            // set back
+            nodes[list_nodes_idx.at(inode)]->set_tariffs(0, arbitary_breaks_for_tariff.at(count));
+            cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  arbitary_breaks_for_tariff.at(count) << endl;
+
+         }
+
+        }
+      }
+
+    }
 
 
 

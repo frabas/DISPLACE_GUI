@@ -38,12 +38,19 @@ struct Scenario {
     bool is_individual_vessel_quotas;
     bool use_dtrees;
 
+    std::vector <int> tariff_pop;
+    int freq_update_tariff_code;
+    std::vector <double> arbitary_breaks_for_tariff;
+
+
     std::string dt_go_fishing;
     std::string dt_choose_ground;
     std::string dt_start_fishing;
     std::string dt_change_ground;
     std::string dt_stop_fishing;
     std::string dt_change_port;
+
+
 
 };
 

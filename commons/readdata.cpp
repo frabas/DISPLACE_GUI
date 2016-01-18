@@ -284,13 +284,36 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.use_dtrees=(val != 0);
             }
         }
+        if(counter==34)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.tariff_pop.push_back(val);
+            }
+        }
+        if(counter==36)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.freq_update_tariff_code=val;
+            }
+        }
+        if(counter==38)
+        {
+            double val;
+            while(linestream >> val)
+            {
+                scenario.arbitary_breaks_for_tariff.push_back(val);
+            }
+        }
 
 	}
 	cout << "read config file...OK" << endl << flush;
 
     return 0;
 }
-
 
 vector <int> read_tsteps_quarters(string folder_name_parameterization, string inputfolder)
 {

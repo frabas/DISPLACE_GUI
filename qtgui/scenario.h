@@ -45,6 +45,7 @@
 #include <QList>
 #include <QStringList>
 
+
 class Scenario
 {
 private:
@@ -65,6 +66,10 @@ private:
     QString mDtChangeGround;
     QString mDtStopFishing;
     QString mDtChangePort;
+
+    QStringList tariff_pop;
+    int freq_update_tariff_code;
+    QStringList arbitary_breaks_for_tariff;
 
 public:
     Scenario();
@@ -110,6 +115,16 @@ public:
     void setDtStopFishing(const QString &dtStopFishing);
     QString getDtChangePort() const;
     void setDtChangePort(const QString &dtChangePort);
+
+    std::vector<int> getTariffPop_asVector() const;
+    void setTariffPop(const QStringList &value);
+    int getFreqUpdateTariffCode() const;
+    void setFreqUpdateTariffCode(int value);
+    std::vector<double> getArbitraryBreaksForTariff_asVector() const;
+    void setArbitraryBreaksForTariff(const QStringList &value);
+
+
+
 };
 
 #endif // SCENARIO_H

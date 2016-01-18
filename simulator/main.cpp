@@ -146,6 +146,10 @@ int nrow_coord;
 int nrow_graph;
 double graph_res;
 bool is_individual_vessel_quotas;
+vector <int> tariff_pop;
+int freq_update_tariff_code;
+vector <double> arbitary_breaks_for_tariff;
+
 bool is_tacs;
 bool is_fishing_credits;
 int export_vmslike;
@@ -591,6 +595,15 @@ int main(int argc, char* argv[])
     is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
     use_dtrees = scenario.use_dtrees;
 
+    if(dyn_alloc_sce.option(Options::fishing_credits))
+    {
+      tariff_pop=scenario.tariff_pop;
+      freq_update_tariff_code=scenario.freq_update_tariff_code;
+      arbitary_breaks_for_tariff=scenario.arbitary_breaks_for_tariff;
+    }
+
+
+
 	stringstream graphnum;
 	graphnum << a_graph;
 	a_graph_name=a_graph_name+graphnum.str();
@@ -643,7 +656,13 @@ int main(int argc, char* argv[])
    outc(cout << "nrow_graph " << nrow_graph << endl);
    outc(cout << "a_port " << a_port << endl);
    outc(cout << "graph res in km " << graph_res << endl);
-   outc(cout << "graph res in km " << is_individual_vessel_quotas << endl);
+   outc(cout << "is_individual_vessel_quotas " << is_individual_vessel_quotas << endl);
+   if(dyn_alloc_sce.option(Options::fishing_credits))
+   {
+   outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
+   outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
+   outc(cout << "arbitary_breaks_for_tariff.at(0) " << arbitary_breaks_for_tariff.at(0) << endl);
+   }
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
 	// for which we do not have any info on the pops_N_at_szgroup because not assessed stock by ICES....

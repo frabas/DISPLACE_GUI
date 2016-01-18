@@ -4713,7 +4713,7 @@ int main(int argc, char* argv[])
          vector <int> list_nodes_idx;
          for (int ipop=0; ipop <tariff_pop.size();++ipop)
          {
-            cout << "Get the list of nodes for the tariff pop " << populations.at(tariff_pop.at(ipop))->get_name() << endl;
+            dout(cout << "Get the list of nodes for the tariff pop " << populations.at(tariff_pop.at(ipop))->get_name() << endl);
             vector<Node* > a_list_nodes       = populations.at(tariff_pop.at(ipop))->get_list_nodes();
             for (int inode=0; inode <a_list_nodes.size();++inode)
             {
@@ -4725,7 +4725,7 @@ int main(int argc, char* argv[])
          remove_dups(list_nodes_idx);
 
          // check
-         cout << "nodes for the lpue computation are:" << endl;
+         //cout << "nodes for the lpue computation are:" << endl;
          //for(int i=0; i<list_nodes_idx.size();++i)
          //{
          //    cout << list_nodes_idx.at(i) << " ";
@@ -4747,13 +4747,16 @@ int main(int argc, char* argv[])
          //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
         if(cumeffort!=0){
              mean_lpue =cumcatches/cumeffort;
-         cout << " mean_lpue of reference for the update is.... " << mean_lpue << endl;
+         dout(cout << " mean_lpue of reference for the update is.... " << mean_lpue << endl);
 
 
          // loop over to scale the tariff (on each node) up or down (caution: by one category)
          double tariff_this_node, node_lpue, nb_times_diff, effort_on_this_node;
          for (int inode=0; inode < list_nodes_idx.size(); ++inode)
          {
+             tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
+
+
              effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
              node_lpue = nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop) /effort_on_this_node;
 
@@ -4762,20 +4765,31 @@ int main(int argc, char* argv[])
 
 
 
+
             // find out which category the tariff should be
-            int count=0;
-            while (nb_times_diff > arbitary_breaks_for_tariff.at(count))
+            int count1=0;
+            while (nb_times_diff > arbitary_breaks_for_tariff.at(count1))
                {
-               if((count) > arbitary_breaks_for_tariff.size()) break;
-               count = count+1;
+               if((count1) >= arbitary_breaks_for_tariff.size()-1) break;
+               count1 = count1+1;
                }
 
             // constraint +/-1 category
-            tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
+            double updated_tariff;
+            //cout << "...tariff_this_node is "  << tariff_this_node << endl;
+            int count2=0;
+            while (tariff_this_node > arbitary_breaks_for_tariff.at(count2))
+               {
+               if((count2) >= arbitary_breaks_for_tariff.size()-1) break;
+               count2 = count2+1;
+               }
+            if(count1>count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2+1);
+            if(count1<count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2-1);
+            if(count1==count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2);
 
             // update the tariff (unless the effort on this node is 0)
-            if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode)]->set_tariffs(0, arbitary_breaks_for_tariff.at(count));
-            cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  arbitary_breaks_for_tariff.at(count) << endl;
+            if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode)]->set_tariffs(0, updated_tariff);
+            //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
 
          }
 

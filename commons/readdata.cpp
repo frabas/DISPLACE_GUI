@@ -1238,12 +1238,12 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
 
 
 
-multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder)
+multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name)
 {
 
     // obtained from looking at average cpue on nodes for the explicit species
     //string filename=  inputfolder+"/graphsspe_"+folder_name_parameterization+"/initial_tariffs_on_nodes.dat";
-    string filename=  inputfolder+"/graphsspe/initial_tariffs_on_nodes.dat";
+    string filename=  inputfolder+"/graphsspe/initial_tariffs_on_nodes_"+a_graph_name+".dat";
 
     ifstream initial_tariffs_on_nodes_file;
     initial_tariffs_on_nodes_file.open(filename.c_str());

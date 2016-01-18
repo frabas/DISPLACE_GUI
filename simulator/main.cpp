@@ -1743,7 +1743,7 @@ int main(int argc, char* argv[])
     //tariffs.push_back(init_tariff0_on_localities);
     //tariffs.push_back(init_tariff1_on_localities);
 
-    multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, "../"+inputfolder, a_graph_name);
 
     // init
     for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)

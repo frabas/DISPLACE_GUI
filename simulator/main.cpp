@@ -4726,11 +4726,11 @@ int main(int argc, char* argv[])
 
          // check
          cout << "nodes for the lpue computation are:" << endl;
-         for(int i=0; i<list_nodes_idx.size();++i)
-         {
-             cout << list_nodes_idx.at(i) << " ";
-         }
-         cout << endl;
+         //for(int i=0; i<list_nodes_idx.size();++i)
+         //{
+         //    cout << list_nodes_idx.at(i) << " ";
+         //}
+         //cout << endl;
 
 
          // loop over to find out the mean lpue
@@ -4743,21 +4743,22 @@ int main(int argc, char* argv[])
              }
              cumeffort+= nodes[list_nodes_idx.at(inode)]->get_cumftime();
          }
-         cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
-         cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
+         //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
+         //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
         if(cumeffort!=0){
              mean_lpue =cumcatches/cumeffort;
          cout << " mean_lpue of reference for the update is.... " << mean_lpue << endl;
 
 
          // loop over to scale the tariff (on each node) up or down (caution: by one category)
-         double tariff_this_node, node_lpue, nb_times_diff;
+         double tariff_this_node, node_lpue, nb_times_diff, effort_on_this_node;
          for (int inode=0; inode < list_nodes_idx.size(); ++inode)
          {
-             node_lpue = nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop) /
-                            nodes[list_nodes_idx.at(inode)]->get_cumftime();
+             effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
+             node_lpue = nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop) /effort_on_this_node;
+
              nb_times_diff    =  node_lpue/mean_lpue;
-            cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
+             //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
 
 
 
@@ -4772,8 +4773,8 @@ int main(int argc, char* argv[])
             // constraint +/-1 category
             tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
 
-            // set back
-            nodes[list_nodes_idx.at(inode)]->set_tariffs(0, arbitary_breaks_for_tariff.at(count));
+            // update the tariff (unless the effort on this node is 0)
+            if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode)]->set_tariffs(0, arbitary_breaks_for_tariff.at(count));
             cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  arbitary_breaks_for_tariff.at(count) << endl;
 
          }

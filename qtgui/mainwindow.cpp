@@ -1134,6 +1134,11 @@ void MainWindow::on_actionPopulations_triggered()
     showPaletteDialog(PopulationRole);
 }
 
+void MainWindow::on_actionTariffs_triggered()
+{
+    showPaletteDialog(TariffsRole);
+}
+
 void MainWindow::showPaletteDialog (PaletteRole role)
 {
     EditPaletteDialog dlg(this);

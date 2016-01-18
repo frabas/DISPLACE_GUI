@@ -51,7 +51,7 @@
 #include <memory>
 
 enum PaletteRole {
-    ValueRole = 0, PopulationRole,
+    ValueRole = 0, PopulationRole, TariffsRole,
 
     LastRole
 };

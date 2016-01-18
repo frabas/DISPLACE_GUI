@@ -259,7 +259,8 @@ OTHER_FILES += \
     ../docs/dbstruct.sh \
     palettes/pop_colors.p2c \
     ../docs/input_fileformats.txt \
-    ../Doxyfile
+    ../Doxyfile \
+    palettes/tariffs_colors.p2c
 
 TRANSLATIONS += \
     translations/displace_it.ts \

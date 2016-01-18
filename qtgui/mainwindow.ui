@@ -52,6 +52,7 @@
      </property>
      <addaction name="actionPalettes"/>
      <addaction name="actionPopulations"/>
+     <addaction name="actionTariffs"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -1154,6 +1155,15 @@
    </property>
    <property name="text">
     <string>Vessel Creation Editor...</string>
+   </property>
+  </action>
+  <action name="actionTariffs">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tariffs...</string>
    </property>
   </action>
  </widget>

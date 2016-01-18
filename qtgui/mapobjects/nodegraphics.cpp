@@ -172,6 +172,6 @@ void NodeWithTariffsGraphics::drawShape(QPainter &painter, const qmapcontrol::Re
     Q_UNUSED(rect);
 
     vector<double>  tariffs =mNode->get_tariffs();
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)tariffs.at(0) ));
+    painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(0) ));
     painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
 }

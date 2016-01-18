@@ -52,5 +52,6 @@
         <file>icons/more-horz.png</file>
         <file>icons/Rlogo.png</file>
         <file>icons/tseditor.png</file>
+        <file>palettes/tariffs_colors.p2c</file>
     </qresource>
 </RCC>

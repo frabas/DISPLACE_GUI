@@ -308,6 +308,14 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.arbitary_breaks_for_tariff.push_back(val);
             }
         }
+        if(counter==40)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.total_amount_credited=val;
+            }
+        }
 
 	}
 	cout << "read config file...OK" << endl << flush;
@@ -1021,7 +1029,7 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
 multimap<string, double> read_initial_fishing_credits(string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/initial_fishing_credits_per_vid.dat";
+    string filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/initial_share_fishing_credits_per_vid.dat";
 
     ifstream vesselsspe_credits_file;
     vesselsspe_credits_file.open(filename.c_str());

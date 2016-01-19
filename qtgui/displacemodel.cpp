@@ -1494,6 +1494,11 @@ bool DisplaceModel::loadVessels()
         if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
         {
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
+            for (int icr=0; icr <spe_fishing_credits.size();++icr)
+            {
+             spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* mScenario.getTotalAmountCredited();
+            }
+
         }
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data

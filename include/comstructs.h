@@ -41,7 +41,7 @@ struct Scenario {
     std::vector <int> tariff_pop;
     int freq_update_tariff_code;
     std::vector <double> arbitary_breaks_for_tariff;
-
+    int total_amount_credited;
 
     std::string dt_go_fishing;
     std::string dt_choose_ground;

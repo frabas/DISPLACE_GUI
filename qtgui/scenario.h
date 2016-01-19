@@ -70,6 +70,7 @@ private:
     QStringList tariff_pop;
     int freq_update_tariff_code;
     QStringList arbitary_breaks_for_tariff;
+    int total_amount_credited;
 
 public:
     Scenario();
@@ -122,6 +123,8 @@ public:
     void setFreqUpdateTariffCode(int value);
     std::vector<double> getArbitraryBreaksForTariff_asVector() const;
     void setArbitraryBreaksForTariff(const QStringList &value);
+    int getTotalAmountCredited() const;
+    void setTotalAmountCredited(int value);
 
 
 

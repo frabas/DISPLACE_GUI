@@ -149,6 +149,7 @@ bool is_individual_vessel_quotas;
 vector <int> tariff_pop;
 int freq_update_tariff_code;
 vector <double> arbitary_breaks_for_tariff;
+int total_amount_credited;
 
 bool is_tacs;
 bool is_fishing_credits;
@@ -600,6 +601,7 @@ int main(int argc, char* argv[])
       tariff_pop=scenario.tariff_pop;
       freq_update_tariff_code=scenario.freq_update_tariff_code;
       arbitary_breaks_for_tariff=scenario.arbitary_breaks_for_tariff;
+      total_amount_credited=scenario.total_amount_credited;
     }
 
 
@@ -662,6 +664,7 @@ int main(int argc, char* argv[])
    outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);
    outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
    outc(cout << "arbitary_breaks_for_tariff.at(0) " << arbitary_breaks_for_tariff.at(0) << endl);
+   outc(cout << "total_amount_credited " << total_amount_credited << endl);
    }
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
@@ -2088,7 +2091,12 @@ int main(int argc, char* argv[])
 
         if(dyn_alloc_sce.option(Options::fishing_credits))
         {
-        spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
+           spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
+           for (int icr=0; icr <spe_fishing_credits.size();++icr)
+             {
+             spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* total_amount_credited;
+             }
+
         }
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data

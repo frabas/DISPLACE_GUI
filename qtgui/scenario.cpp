@@ -43,7 +43,8 @@ Scenario::Scenario()
       is_individual_vessel_quotas(0),
       tariff_pop(0),
       freq_update_tariff_code(0),
-      arbitary_breaks_for_tariff(0)
+      arbitary_breaks_for_tariff(0),
+      total_amount_credited(0)
 
 {
 }
@@ -192,6 +193,15 @@ vector<double> Scenario::getArbitraryBreaksForTariff_asVector() const
 }
 
 
+void Scenario::setTotalAmountCredited(int value)
+{
+    total_amount_credited = value;
+}
+
+int Scenario::getTotalAmountCredited() const
+{
+return total_amount_credited;
+}
 
 
 

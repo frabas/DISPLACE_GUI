@@ -1319,10 +1319,14 @@ bool DisplaceModel::loadNodes()
 
 
     // read tariff map
-    multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes(  mInputName.toStdString(), mBasePath.toStdString(), a_graph_name);
-    // init
-    for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
+    if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
     {
+        multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes(  mInputName.toStdString(), mBasePath.toStdString(), a_graph_name);
+
+
+        // init
+       for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
+       {
         int idx_node=mNodes.at(a_idx)->get_idx_node();
 
         // initial tariff for this particular node
@@ -1335,9 +1339,9 @@ bool DisplaceModel::loadNodes()
         if(initial_tariffs_on_nodes.count(idx_node)==0) init_tariffs.push_back(0); // put 0 if this node is not informed
 
         mNodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
+       }
+
     }
-
-
 
 
     /* Not sure if we need this...

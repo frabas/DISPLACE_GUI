@@ -294,6 +294,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setDyn_pop_sce(popsce);
     s.setBiolsce(QString(scenario.biolsce.c_str()));
     s.setFreqDoGrowth(scenario.freq_do_growth);
+    s.setFreqDispatchThePop(scenario.freq_redispatch_the_pop);
     s.setGraph(scenario.a_graph);
     s.setNrow_coord(scenario.nrow_coord);
     s.setNrow_graph(scenario.nrow_graph);

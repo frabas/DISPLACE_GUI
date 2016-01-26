@@ -148,6 +148,7 @@ double graph_res;
 bool is_individual_vessel_quotas;
 vector <int> tariff_pop;
 int freq_update_tariff_code;
+int freq_do_growth;
 vector <double> arbitary_breaks_for_tariff;
 int total_amount_credited;
 
@@ -588,6 +589,7 @@ int main(int argc, char* argv[])
     dyn_alloc_sce = scenario.dyn_alloc_sce;
     dyn_pop_sce  = scenario.dyn_pop_sce;
     biolsce = scenario.biolsce;
+    freq_do_growth=scenario.freq_do_growth;
     a_graph = scenario.a_graph;
     nrow_coord = scenario.nrow_coord;
     nrow_graph = scenario.nrow_graph;
@@ -652,6 +654,7 @@ int main(int argc, char* argv[])
    outc(cout << dyn_alloc_sce.toString() << endl);
    outc(cout << dyn_pop_sce.toString() << endl);
    outc(cout << "biolsce " << biolsce << endl);
+   outc(cout << "freq_do_growth " << freq_do_growth << endl);
    outc(cout << "a_graph " << a_graph << endl);
    outc(cout << "a_graph_name " << a_graph_name << endl);
    outc(cout << "nrow_coord " << nrow_coord << endl);
@@ -3626,11 +3629,48 @@ int main(int argc, char* argv[])
 							populations.at(sp)->set_tot_N_at_szgroup_year_minus_1( N_at_szgroup );
 
 						}
+                     }
+                   }
+                } // end month detection
 
-                        // apply only by semester, to be consistent with the timeframe of the survey data
-						if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep))
-						{
-                           outc(cout<< "DO GROWTH TRANSITION" << endl);
+        for (unsigned int sp=0; sp<populations.size(); sp++)
+            {
+                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) &&  // not an implicit species
+                        !binary_search (stock_numbers.begin(), stock_numbers.end(),  sp  )) // not a SMS species
+                {
+
+                        // apply growth only by semester if want to be consistent with the timeframe of the survey data
+                        // apply growth consistently with the time frame chosen during the parameterisation because the matrix time specific
+
+                        // timing (update at 7 a.m.)
+                       int do_growth=0;
+                       switch(freq_do_growth)
+                         {
+                           case 0:
+                               if((tstep % 24)==7) do_growth=1;
+                          // daily update
+                               break;
+                           case 1:
+                               if((tstep % 168)==7) do_growth=1;
+                          // weekly update
+                          break;
+                           case 2:
+                               if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)) do_growth=1;
+                          // monthly update
+                          break;
+                           case 3:
+                               if(binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) do_growth=1;
+                          // monthly update
+                          break;
+                           case 4:
+                              if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep)) do_growth=1;
+                          // monthly update
+                          break;
+                         }
+
+                        if(do_growth)
+                        {
+                           outc(cout<< "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
 							populations[sp]->do_growth();
 						}
 
@@ -3640,6 +3680,11 @@ int main(int argc, char* argv[])
                        outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
 					}
 				}
+
+
+        // restart month detection
+        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+        {
 
 			for (unsigned int sp=0; sp<populations.size(); sp++)
 			{

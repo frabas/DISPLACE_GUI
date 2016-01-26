@@ -54,6 +54,8 @@ bool SimpleGeodesicLineGraphBuilder::beginCreateGrid()
     num_y = int(std::ceil(s12_y / mStepY)); // The number of intervals
     da_y = a12_y / num_y;
 
+    ds_y = s12_y / num_y;
+
     i = 0;
     j = 0;
 
@@ -66,15 +68,22 @@ QPointF SimpleGeodesicLineGraphBuilder::getNext()
         // First inner loop
         double ylat,ylon;
         line_y.ArcPosition(j*da_y, ylat, ylon);
+       // line_y.Position(j*ds_y, ylat, ylon);
 
         a12 = mGeodesic.Inverse(ylat, mLonMin, ylat, mLonMax, s12, azi1, azi2);
         line = GeographicLib::GeodesicLine(mGeodesic, ylat, mLonMin, azi1);
         num = int(std::ceil(s12 / mStepX)); // The number of intervals
         da = a12 / num;
+
+        // Use intervals of equal length
+        // ds = s12 / num;
     }
 
     double plat, plon;
     line.ArcPosition((i + (mInterlace ? j % 2 : 0))* da, plat, plon);
+
+    //line.Position((i + (mInterlace ? j % 2 : 0))*  ds, plat, plon);
+    // http://geographiclib.sourceforge.net/html/classGeographicLib_1_1GeodesicLine.html
 
     i += 2;
     if (i > num) {

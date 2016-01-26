@@ -36,12 +36,12 @@ private:
     bool mInterlace;
 
     // outer loop
-    double s12_y, azi1_y, azi2_y, a12_y, da_y;
+    double s12_y, azi1_y, azi2_y, a12_y, da_y, ds_y;
     GeographicLib::GeodesicLine line_y;
     int num_y;
 
     // inner loop
-    double s12, azi1, azi2, a12, da;
+    double s12, azi1, azi2, a12, da, ds;
     GeographicLib::GeodesicLine line;
     int num;
 

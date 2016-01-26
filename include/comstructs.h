@@ -30,6 +30,7 @@ struct Scenario {
     DynAllocOptions dyn_alloc_sce;
     PopSceOptions dyn_pop_sce;
     std::string biolsce;
+    int freq_do_growth;
     int a_graph;
     int nrow_coord;
     int nrow_graph;

@@ -35,6 +35,7 @@ Scenario::Scenario()
     : dyn_alloc_sce("baseline"),
       dyn_pop_sce("baseline"),
       biolsce("1"),
+      freq_do_growth(3),
       graph(0),
       nrow_coord(0),
       nrow_graph(0),
@@ -94,6 +95,17 @@ void Scenario::setBiolsce(const QString &value)
 {
     biolsce = value;
 }
+
+void Scenario::setFreqDoGrowth(int value)
+{
+    freq_do_growth = value;
+}
+
+int Scenario::getFreqDoGrowth() const
+{
+return freq_do_growth;
+}
+
 
 int Scenario::getGraph() const
 {
@@ -178,6 +190,7 @@ int Scenario::getFreqUpdateTariffCode() const
 {
 return freq_update_tariff_code;
 }
+
 
 void Scenario::setArbitraryBreaksForTariff(const QStringList &value)
 {
@@ -269,6 +282,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setDyn_alloc_sce(alsce);
     s.setDyn_pop_sce(popsce);
     s.setBiolsce(QString(scenario.biolsce.c_str()));
+    s.setFreqDoGrowth(scenario.freq_do_growth);
     s.setGraph(scenario.a_graph);
     s.setNrow_coord(scenario.nrow_coord);
     s.setNrow_graph(scenario.nrow_graph);

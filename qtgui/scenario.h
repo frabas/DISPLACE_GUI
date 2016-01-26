@@ -52,6 +52,7 @@ private:
     QStringList dyn_alloc_sce;
     QStringList dyn_pop_sce;
     QString biolsce;
+    int freq_do_growth;
     int graph;
     int nrow_coord;
     int nrow_graph;
@@ -85,6 +86,8 @@ public:
     void setDyn_pop_sce(const QStringList &value);
     QString getBiolsce() const;
     void setBiolsce(const QString &value);
+    int getFreqDoGrowth() const;
+    void setFreqDoGrowth(int value);
     int getGraph() const;
     void setGraph(int value);
     int getNrow_coord() const;

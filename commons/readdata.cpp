@@ -180,7 +180,16 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.biolsce=val;
 			}
 		}
-		if(counter==8)
+        if(counter==8)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.freq_do_growth=val;
+            }
+        }
+
+        if(counter==10)
 		{
 			int val;
 			while(linestream >> val)
@@ -188,7 +197,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.a_graph=val;
 			}
 		}
-		if(counter==10)
+        if(counter==12)
 		{
 			int val;
 			while(linestream >> val)
@@ -196,7 +205,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.nrow_coord=val;
 			}
 		}
-		if(counter==12)
+        if(counter==14)
 		{
 			int val;
 			while(linestream >> val)
@@ -204,7 +213,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.nrow_graph=val;
 			}
 		}
-		if(counter==14)
+        if(counter==16)
 		{
 			int val;
 			while(linestream >> val)
@@ -212,7 +221,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.a_port=val;
 			}
 		}
-		if(counter==16)
+        if(counter==18)
 		{
 			double val;
 			while(linestream >> val)
@@ -220,7 +229,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.graph_res=val;
 			}
 		}
-        if(counter==18)
+        if(counter==20)
         {
             int val;
             while(linestream >> val)
@@ -228,7 +237,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.is_individual_vessel_quotas= (val != 0);
             }
         }
-        if (counter == 20)
+        if (counter == 22)
         {
             string val;
             while(linestream >> val)
@@ -236,7 +245,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_go_fishing=val;
             }
         }
-        if(counter==22)
+        if(counter==24)
         {
             string val;
             while(linestream >> val)
@@ -244,7 +253,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_choose_ground=val;
             }
         }
-        if(counter==24)
+        if(counter==26)
         {
             string val;
             while(linestream >> val)
@@ -252,7 +261,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_start_fishing=val;
             }
         }
-        if(counter==26)
+        if(counter==28)
         {
             string val;
             while(linestream >> val)
@@ -260,7 +269,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_change_ground=val;
             }
         }
-        if(counter==28)
+        if(counter==30)
         {
             string val;
             while(linestream >> val)
@@ -268,7 +277,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_stop_fishing=val;
             }
         }
-        if(counter==30)
+        if(counter==32)
         {
             string val;
             while(linestream >> val)
@@ -276,7 +285,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_change_port=val;
             }
         }
-        if(counter==32)
+        if(counter==34)
         {
             int val;
             while(linestream >> val)
@@ -284,7 +293,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.use_dtrees=(val != 0);
             }
         }
-        if(counter==34)
+        if(counter==36)
         {
             int val;
             while(linestream >> val)
@@ -292,7 +301,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.tariff_pop.push_back(val);
             }
         }
-        if(counter==36)
+        if(counter==38)
         {
             int val;
             while(linestream >> val)
@@ -300,7 +309,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.freq_update_tariff_code=val;
             }
         }
-        if(counter==38)
+        if(counter==40)
         {
             double val;
             while(linestream >> val)
@@ -308,7 +317,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.arbitary_breaks_for_tariff.push_back(val);
             }
         }
-        if(counter==40)
+        if(counter==42)
         {
             int val;
             while(linestream >> val)

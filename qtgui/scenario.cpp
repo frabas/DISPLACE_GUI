@@ -35,7 +35,7 @@ Scenario::Scenario()
     : dyn_alloc_sce("baseline"),
       dyn_pop_sce("baseline"),
       biolsce("1"),
-      freq_do_growth(3),
+      freq_do_growth(4),
       graph(0),
       nrow_coord(0),
       nrow_graph(0),

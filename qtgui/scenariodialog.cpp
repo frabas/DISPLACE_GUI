@@ -70,6 +70,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     setDynAlloc(mScen.getDyn_alloc_sce());
     ui->biol_sce->setText(mScen.getBiolsce());
     ui->agraph->setValue(mScen.getGraph());
+    ui->freqDoGrowth->setValue(mScen.getFreqDoGrowth());
     ui->aport->setValue(mScen.getA_port());
     ui->gridres->setValue(mScen.getGraph_res());
     ui->individualQuotas->setChecked(mScen.getIs_individual_vessel_quotas());
@@ -174,6 +175,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
 
     mScen.setBiolsce(ui->biol_sce->text());
     mScen.setGraph(ui->agraph->value());
+    mScen.setFreqDoGrowth(ui->freqDoGrowth->value());
     mScen.setA_port(ui->aport->value());
     mScen.setGraph_res(ui->gridres->value());
     mScen.setIs_individual_vessel_quotas(ui->individualQuotas->isChecked());

@@ -149,6 +149,7 @@ bool is_individual_vessel_quotas;
 vector <int> tariff_pop;
 int freq_update_tariff_code;
 int freq_do_growth;
+int freq_redispatch_the_pop;
 vector <double> arbitary_breaks_for_tariff;
 int total_amount_credited;
 
@@ -590,6 +591,7 @@ int main(int argc, char* argv[])
     dyn_pop_sce  = scenario.dyn_pop_sce;
     biolsce = scenario.biolsce;
     freq_do_growth=scenario.freq_do_growth;
+    freq_redispatch_the_pop=scenario.freq_redispatch_the_pop;
     a_graph = scenario.a_graph;
     nrow_coord = scenario.nrow_coord;
     nrow_graph = scenario.nrow_graph;
@@ -655,6 +657,7 @@ int main(int argc, char* argv[])
    outc(cout << dyn_pop_sce.toString() << endl);
    outc(cout << "biolsce " << biolsce << endl);
    outc(cout << "freq_do_growth " << freq_do_growth << endl);
+   outc(cout << "freq_redispatch_the_pop " << freq_redispatch_the_pop << endl);
    outc(cout << "a_graph " << a_graph << endl);
    outc(cout << "a_graph_name " << a_graph_name << endl);
    outc(cout << "nrow_coord " << nrow_coord << endl);
@@ -4259,19 +4262,33 @@ int main(int argc, char* argv[])
 
 
 
-        bool is_re_read_pop_data=false;
-        if (dyn_pop_sce.option(Options::with_monthly_redistribution))
-		{
+        int redispatch_the_pop=0;
+        switch(freq_redispatch_the_pop)
+          {
+            case 0:
+                if((tstep % 24)==7) redispatch_the_pop=1;
+           // daily update
+                break;
+            case 1:
+                if((tstep % 168)==7) redispatch_the_pop=1;
+           // weekly update
+           break;
+            case 2:
+                if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)) redispatch_the_pop=1;
+           // monthly update
+           break;
+            case 3:
+                if(binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep)) redispatch_the_pop=1;
+           // quartely update
+           break;
+            case 4:
+               if(binary_search (tsteps_semesters.begin(), tsteps_semesters.end(), tstep)) redispatch_the_pop=1;
+           // semester update
+           break;
+          }
 
-			is_re_read_pop_data=binary_search (tsteps_months.begin(), tsteps_months.end(), tstep);
-		}
-		else
-		{
-			is_re_read_pop_data=binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep);
 
-		}
-
-		if(is_re_read_pop_data)	 // EVENT => re-read pop data
+        if(redispatch_the_pop)	 // EVENT => re-read pop data
 		{
 
 			// CHECK...CHECK...CHECK...

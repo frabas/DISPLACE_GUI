@@ -36,6 +36,7 @@ Scenario::Scenario()
       dyn_pop_sce("baseline"),
       biolsce("1"),
       freq_do_growth(4),
+      freq_redispatch_the_pop(3),
       graph(0),
       nrow_coord(0),
       nrow_graph(0),
@@ -104,6 +105,16 @@ void Scenario::setFreqDoGrowth(int value)
 int Scenario::getFreqDoGrowth() const
 {
 return freq_do_growth;
+}
+
+void Scenario::setFreqDispatchThePop(int value)
+{
+    freq_redispatch_the_pop = value;
+}
+
+int Scenario::getFreqDispatchThePop() const
+{
+return freq_redispatch_the_pop;
 }
 
 

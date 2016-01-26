@@ -54,7 +54,6 @@ PopSceOptions::PopSceOptions()
     M(mMap,"baseline", pop_baseline);
     O(mMap,use_SMS);
     O(mMap,use_SMS_single);
-    O(mMap,with_monthly_redistribution);
     O(mMap,white_noise_on_avai);
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);

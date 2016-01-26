@@ -53,7 +53,6 @@ static const char *dyn_pop_options[] = {
     "baseline",
     "use_SMS",
     "use_SMS_single",
-    "with_monthly_redistribution",
     "stop_mig_35065",
 };
 
@@ -71,6 +70,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->biol_sce->setText(mScen.getBiolsce());
     ui->agraph->setValue(mScen.getGraph());
     ui->freqDoGrowth->setValue(mScen.getFreqDoGrowth());
+    ui->freqDispatchThePop->setValue(mScen.getFreqDispatchThePop());
     ui->aport->setValue(mScen.getA_port());
     ui->gridres->setValue(mScen.getGraph_res());
     ui->individualQuotas->setChecked(mScen.getIs_individual_vessel_quotas());
@@ -176,6 +176,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setBiolsce(ui->biol_sce->text());
     mScen.setGraph(ui->agraph->value());
     mScen.setFreqDoGrowth(ui->freqDoGrowth->value());
+    mScen.setFreqDispatchThePop(ui->freqDispatchThePop->value());
     mScen.setA_port(ui->aport->value());
     mScen.setGraph_res(ui->gridres->value());
     mScen.setIs_individual_vessel_quotas(ui->individualQuotas->isChecked());

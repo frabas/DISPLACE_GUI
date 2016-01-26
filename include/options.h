@@ -99,7 +99,6 @@ enum Pop_Sce {
     pop_baseline,
     use_SMS,
     use_SMS_single,
-    with_monthly_redistribution,
     white_noise_on_avai,
     with_stochast_oth_land,
     stop_mig_35065,

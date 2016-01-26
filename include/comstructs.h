@@ -31,6 +31,7 @@ struct Scenario {
     PopSceOptions dyn_pop_sce;
     std::string biolsce;
     int freq_do_growth;
+    int freq_redispatch_the_pop;
     int a_graph;
     int nrow_coord;
     int nrow_graph;

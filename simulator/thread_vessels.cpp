@@ -84,6 +84,7 @@ extern int is_individual_vessel_quotas;
 extern vector <int> tariff_pop;
 extern int freq_update_tariff_code;
 extern int freq_do_growth;
+extern int freq_redispatch_pop;
 extern vector<double> arbitary_breaks_for_tariff;
 extern int total_amount_credited;
 extern bool is_tacs;

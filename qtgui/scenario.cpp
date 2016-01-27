@@ -263,6 +263,8 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << endl;
 
     stream << "# biolsce\n" << biolsce << endl;
+    stream << "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_do_growth << endl;
+    stream << "# Frequency to redispatch the pop (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_redispatch_the_pop << endl;
     stream << "# a_graph\n" << graph << endl;
     stream << "# nrow_coord\n" << nrow_coord << endl;
     stream << "# nrow_graph\n" << nrow_graph << endl;

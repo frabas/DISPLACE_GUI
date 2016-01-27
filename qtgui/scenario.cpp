@@ -46,7 +46,8 @@ Scenario::Scenario()
       tariff_pop(0),
       freq_update_tariff_code(0),
       arbitary_breaks_for_tariff(0),
-      total_amount_credited(0)
+      total_amount_credited(0),
+      tariff_annual_hcr_percent_change(0.0)
 
 {
 }
@@ -227,6 +228,15 @@ int Scenario::getTotalAmountCredited() const
 return total_amount_credited;
 }
 
+void Scenario::setTariffAnnualHcrPercentChange(double value)
+{
+    tariff_annual_hcr_percent_change = value;
+}
+
+double Scenario::getTariffAnnualHcrPercentChange() const
+{
+return tariff_annual_hcr_percent_change;
+}
 
 
 

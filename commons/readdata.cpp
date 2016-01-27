@@ -333,6 +333,14 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.total_amount_credited=val;
             }
         }
+        if(counter==46)
+        {
+            double val;
+            while(linestream >> val)
+            {
+                scenario.tariff_annual_hcr_percent_change=val;
+            }
+        }
 
 	}
 	cout << "read config file...OK" << endl << flush;

@@ -44,6 +44,7 @@ struct Scenario {
     int freq_update_tariff_code;
     std::vector <double> arbitary_breaks_for_tariff;
     int total_amount_credited;
+    double tariff_annual_hcr_percent_change;
 
     std::string dt_go_fishing;
     std::string dt_choose_ground;

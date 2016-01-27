@@ -87,6 +87,7 @@ extern int freq_do_growth;
 extern int freq_redispatch_pop;
 extern vector<double> arbitary_breaks_for_tariff;
 extern int total_amount_credited;
+extern double tariff_annual_hcr_percent_change;
 extern bool is_tacs;
 extern bool is_fishing_credits;
 extern vector <int> implicit_pops;

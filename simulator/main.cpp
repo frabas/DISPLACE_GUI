@@ -152,6 +152,7 @@ int freq_do_growth;
 int freq_redispatch_the_pop;
 vector <double> arbitary_breaks_for_tariff;
 int total_amount_credited;
+double tariff_annual_hcr_percent_change;
 
 bool is_tacs;
 bool is_fishing_credits;
@@ -606,6 +607,7 @@ int main(int argc, char* argv[])
       freq_update_tariff_code=scenario.freq_update_tariff_code;
       arbitary_breaks_for_tariff=scenario.arbitary_breaks_for_tariff;
       total_amount_credited=scenario.total_amount_credited;
+      tariff_annual_hcr_percent_change=scenario.tariff_annual_hcr_percent_change;
     }
 
 
@@ -671,6 +673,7 @@ int main(int argc, char* argv[])
    outc(cout << "freq_update_tariff_code " << freq_update_tariff_code << endl);
    outc(cout << "arbitary_breaks_for_tariff.at(0) " << arbitary_breaks_for_tariff.at(0) << endl);
    outc(cout << "total_amount_credited " << total_amount_credited << endl);
+   outc(cout << "tariff_annual_hcr_percent_change " << tariff_annual_hcr_percent_change << endl);
    }
 
 	// implicit_pops is a vector of the index of pop (see pop_names.txt)
@@ -4768,7 +4771,8 @@ int main(int argc, char* argv[])
          cout << "Annual tariff HCR... " << endl;
            double fbar_py_allpopav=0.0;
            double ftarget_allpopav=0.0;
-           double change_per_year=0.1; // 10% HCR
+           double change_per_year=tariff_annual_hcr_percent_change/100;
+           cout << "...change_per_year is " << change_per_year << endl;
            for (int ipop=0; ipop <tariff_pop.size();++ipop)
            {
               vector<double> fbar_ages_min_max =populations.at(tariff_pop.at(ipop))-> get_fbar_ages_min_max();

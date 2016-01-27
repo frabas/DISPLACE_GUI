@@ -73,6 +73,7 @@ private:
     int freq_update_tariff_code;
     QStringList arbitary_breaks_for_tariff;
     int total_amount_credited;
+    double tariff_annual_hcr_percent_change;
 
 public:
     Scenario();
@@ -131,6 +132,8 @@ public:
     void setArbitraryBreaksForTariff(const QStringList &value);
     int getTotalAmountCredited() const;
     void setTotalAmountCredited(int value);
+    double getTariffAnnualHcrPercentChange() const;
+    void setTariffAnnualHcrPercentChange(double value);
 
 
 

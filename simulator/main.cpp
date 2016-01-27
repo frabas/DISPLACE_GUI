@@ -3769,9 +3769,9 @@ int main(int argc, char* argv[])
                                   }
                                outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change" << endl);
                                // to do next time oth_land will be applied: oth_land * TACy+1 / TACy
-                               vector<double> ts_tac = populations.at(sp)->get_tac()->get_ts_tac();
-                               double TAC_y_plus_1 = ts_tac.at(ts_tac.size()-1);
-                               double TAC_y = ts_tac.at(ts_tac.size()-2);
+                               vector<double> ts_tac  = populations.at(sp)->get_tac()->get_ts_tac();
+                               double TAC_y_plus_1    = ts_tac.at(ts_tac.size()-1);
+                               double TAC_y           = ts_tac.at(ts_tac.size()-2);
                                populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
                                if(populations.at(sp)->get_oth_land_multiplier()!=
                                  // i.e. a trick to check if nan
@@ -4762,9 +4762,50 @@ int main(int argc, char* argv[])
    if(dyn_alloc_sce.option(Options::fishing_credits) )
     {
 
-      // timing (update at 7 a.m.)
-     int do_update=0;
-     switch(freq_update_tariff_code)
+       // annual tariff HCR (currently pooling all tariff pops together)
+       if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+       {
+         cout << "Annual tariff HCR... " << endl;
+           double fbar_py_allpopav=0.0;
+           double ftarget_allpopav=0.0;
+           double change_per_year=0.1; // 10% HCR
+           for (int ipop=0; ipop <tariff_pop.size();++ipop)
+           {
+              vector<double> fbar_ages_min_max =populations.at(tariff_pop.at(ipop))-> get_fbar_ages_min_max();
+              double ftarget = fbar_ages_min_max.at(2);
+              cout << "...the ftarget at y-1 for this pop is " << ftarget << endl;
+              ftarget_allpopav +=ftarget; // cumul...
+              double fbar_py= populations.at(tariff_pop.at(ipop))->compute_fbar();
+              fbar_py_allpopav +=fbar_py; // cumul...
+              cout << "...the fbar at y-1 for this pop is " << fbar_py << endl;
+           }
+           ftarget_allpopav=ftarget_allpopav/tariff_pop.size(); // ...then average
+           fbar_py_allpopav=fbar_py_allpopav/tariff_pop.size(); // ...then average
+
+           cout << "...decide on the fmultiplier "  << endl;
+           double fmultiplier=1.0;
+           if(fbar_py_allpopav > ftarget_allpopav)
+           {
+               // harvest rate is too high, we need more restrictive categories
+               fmultiplier = 1.0 - change_per_year ; // or (Fpercent/100); ?
+           }
+           else
+           {   // harvest rate is too low, we need less restrictive categories (e.g. higher lpue allowed for the same tariff)
+               fmultiplier = 1.0 + change_per_year; // or  (Fpercent/100); ?
+           }
+           cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
+               " given the target F " <<  ftarget_allpopav << "  and the assessed F averaged over tariff pops " <<  fbar_py_allpopav  << endl;
+           for (int icl=0; icl <tariff_pop.size();++icl)
+              {
+              arbitary_breaks_for_tariff.at(icl) * fmultiplier;
+              }
+       }
+
+
+
+       // timing (update at 7 a.m.)
+       int do_update=0;
+       switch(freq_update_tariff_code)
        {
          case 0:
              if((tstep % 24)==7) do_update=1;
@@ -4780,8 +4821,8 @@ int main(int argc, char* argv[])
         break;
        }
 
-      if(do_update)
-      {
+       if(do_update)
+       {
        cout << " Update the tariff map....at " << tstep << endl;
 
          // obtain the list of idx relevant nodes for these tariff pops

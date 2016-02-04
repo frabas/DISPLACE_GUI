@@ -61,6 +61,7 @@ public:
         Layers = 0,
         ShapefileLayers,
         OutputLayers,
+        TariffsLayers,
         Nodes, Harbours, Vessels, Populations, Benthos,
         Nations, SizeGroups,
         LastCategory

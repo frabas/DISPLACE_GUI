@@ -201,12 +201,21 @@ public:
         OutLayerPopImpact,
         OutLayerPopCumcatches,
         OutLayerBenthosBiomass,
-        OutLayerTariffs,
+        //OutLayerTariffs,
         OutLayerCumFTime,
         OutLayerCumSweptArea,
         OutLayerCumCatches,
 
         OutLayerMax
+
+    };
+
+    enum TariffLayerIds {
+        TariffLayerTariffAll,
+        TariffLayerTariffPop,
+        TariffLayerTariffBenthos,
+
+     TariffLayerMax
     };
 
     enum EditorModes {
@@ -231,6 +240,7 @@ public:
         case ObjectTreeModel::Layers: return &mLayers[model];
         case ObjectTreeModel::ShapefileLayers: return &mShapefileLayers[model];
         case ObjectTreeModel::OutputLayers: return &mOutputLayers[model];
+        case ObjectTreeModel::TariffsLayers: return &mTariffsLayers[model];
         default:
             break;
         }
@@ -286,6 +296,7 @@ public:
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
+    void addTariffLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility);
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
@@ -341,10 +352,15 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumsweptarea[MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatches[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MAX_MODELS];
+
     QVector<bool> mModelVisibility;
 
     QVector<LayerListImpl> mLayers;
     QVector<LayerListImpl> mOutputLayers;
+    QVector<LayerListImpl> mTariffsLayers;
     QVector<QList<std::shared_ptr<OGRDataSource> > > mShapefiles;
     QVector<LayerVarListImpl<qmapcontrol::LayerESRIShapefile> > mShapefileLayers;
 

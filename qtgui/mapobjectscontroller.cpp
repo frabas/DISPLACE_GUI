@@ -49,6 +49,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mModelVisibility(MAX_MODELS, false),
       mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
+      mTariffsLayers(MAX_MODELS, LayerListImpl(TariffLayerMax)),
       mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
       mShapefileLayers(MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
       mEditorMode(NoEditorMode),
@@ -117,8 +118,8 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerBenthosBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Biomass")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosBiomass, mStatsLayerBenthosBiomass[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
-    mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
+   // mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
+   // addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : true);
@@ -128,6 +129,17 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
+
+
+    mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all")).arg(model_n).toStdString()));
+    addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : true);
+
+    mStatsLayerTariffPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff pop")).arg(model_n).toStdString()));
+    addTariffLayer(model_n, TariffLayerTariffPop, mStatsLayerTariffPop[model_n], type != DisplaceModel::LiveModelType ? false : true);
+
+    mStatsLayerTariffBenthos[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff benthos")).arg(model_n).toStdString()));
+    addTariffLayer(model_n, TariffLayerTariffBenthos, mStatsLayerTariffBenthos[model_n], type != DisplaceModel::LiveModelType ? false : true);
+
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();
     foreach (std::shared_ptr<HarbourData> h, harbours) {
@@ -183,6 +195,7 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
 
     mLayers[model].updateVisibility(visible);
     mOutputLayers[model].updateVisibility(visible);
+    mTariffsLayers[model].updateVisibility(visible);
 }
 
 void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Category type, int layer, bool visibility)
@@ -197,6 +210,11 @@ void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Catego
         mOutputLayers[model].setVisible(layer, visibility);
         if (isModelActive(model))
             mOutputLayers[model].layer(layer)->setVisible(visibility);
+        break;
+    case ObjectTreeModel::TariffsLayers:
+        mTariffsLayers[model].setVisible(layer, visibility);
+        if (isModelActive(model))
+            mTariffsLayers[model].layer(layer)->setVisible(visibility);
         break;
     case ObjectTreeModel::ShapefileLayers:
         mShapefileLayers[model].setVisible(layer, visibility);
@@ -218,6 +236,8 @@ bool MapObjectsController::isLayerVisible(int model, ObjectTreeModel::Category t
         return mLayers[model].isVisible(layer);
     case ObjectTreeModel::OutputLayers:
         return mOutputLayers[model].isVisible(layer);
+    case ObjectTreeModel::TariffsLayers:
+        return mTariffsLayers[model].isVisible(layer);
     case ObjectTreeModel::ShapefileLayers:
         return mShapefileLayers[model].isVisible(layer);
     default:
@@ -370,8 +390,11 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerCumcatchesPerPop[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
-    mStatsLayerTariffs[model_n]->clearGeometries();
+    //mStatsLayerTariffs[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
+    mStatsLayerTariffAll[model_n]->clearGeometries();
+    mStatsLayerTariffPop[model_n]->clearGeometries();
+    mStatsLayerTariffBenthos[model_n]->clearGeometries();
     mEdgesLayer[model_n]->clear();
     mEntityLayer[model_n]->clearGeometries();
 
@@ -392,6 +415,13 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
     mMap->addLayer(layer);
     mOutputLayers[model].setLayer(id,layer, visibility);
 }
+
+void MapObjectsController::addTariffLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility)
+{
+    mMap->addLayer(layer);
+    mTariffsLayers[model].setLayer(id,layer, visibility);
+}
+
 
 void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
@@ -439,9 +469,22 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);
+    //obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);
+    //mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    //mStatsLayerTariffs[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd); // TO DO: change input data for GraphNodeWithTariffsAll
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffs[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+    mStatsLayerTariffAll[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd); // TO DO: change input data for GraphNodeWithTariffsPop
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerTariffPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);  // TO DO: change input data for GraphNodeWithTariffsBenthos
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerTariffBenthos[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

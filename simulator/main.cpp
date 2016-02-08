@@ -146,6 +146,7 @@ int nrow_coord;
 int nrow_graph;
 double graph_res;
 bool is_individual_vessel_quotas;
+bool check_all_stocks_before_going_fishing;
 vector <int> tariff_pop;
 int freq_update_tariff_code;
 int freq_do_growth;
@@ -599,8 +600,8 @@ int main(int argc, char* argv[])
     a_port = scenario.a_port;
     graph_res = scenario.graph_res;
     is_individual_vessel_quotas = scenario.is_individual_vessel_quotas;
+    check_all_stocks_before_going_fishing=scenario.check_all_stocks_before_going_fishing;
     use_dtrees = scenario.use_dtrees;
-
     if(dyn_alloc_sce.option(Options::fishing_credits))
     {
       tariff_pop=scenario.tariff_pop;
@@ -667,6 +668,8 @@ int main(int argc, char* argv[])
    outc(cout << "a_port " << a_port << endl);
    outc(cout << "graph res in km " << graph_res << endl);
    outc(cout << "is_individual_vessel_quotas " << is_individual_vessel_quotas << endl);
+   outc(cout << "check_all_stocks_before_going_fishing " << check_all_stocks_before_going_fishing << endl);
+
    if(dyn_alloc_sce.option(Options::fishing_credits))
    {
    outc(cout << "tariff_pop.at(0) " << tariff_pop.at(0) << endl);

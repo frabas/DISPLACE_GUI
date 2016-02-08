@@ -43,6 +43,7 @@ Scenario::Scenario()
       a_port(0),
       graph_res(10),
       is_individual_vessel_quotas(0),
+      check_all_stocks_before_going_fishing(0),
       tariff_pop(0),
       freq_update_tariff_code(0),
       arbitary_breaks_for_tariff(0),
@@ -179,6 +180,16 @@ void Scenario::setIs_individual_vessel_quotas(bool value)
     is_individual_vessel_quotas = value;
 }
 
+bool Scenario::getIs_check_all_stocks_before_going_fishing() const
+{
+    return check_all_stocks_before_going_fishing;
+}
+
+void Scenario::setIs_check_all_stocks_before_going_fishing(bool value)
+{
+    check_all_stocks_before_going_fishing = value;
+}
+
 
 void Scenario::setTariffPop(const QStringList & value)
 {
@@ -271,6 +282,7 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << "# a_port\n" << a_port << endl;
     stream << "# grid res km\n" << graph_res << endl;
     stream << "# is_individual_vessel_quotas\n" << is_individual_vessel_quotas << endl;
+    stream << "#  check all stocks before going fishing (otherwise, explicit pops only)" << check_all_stocks_before_going_fishing << endl;
 
     stream << "# Go Fishing DTree\n" << mDtGoFishing << endl;
     stream << "# Choose Ground DTree\n" << mDtChooseGround<< endl;
@@ -321,6 +333,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setDtStopFishing(QString::fromStdString(scenario.dt_stop_fishing));
     s.setDtChangePort(QString::fromStdString(scenario.dt_change_port));
     s.setIs_individual_vessel_quotas(scenario.is_individual_vessel_quotas);
+    s.setIs_check_all_stocks_before_going_fishing(scenario.check_all_stocks_before_going_fishing);
     s.setDtreesEnabled(scenario.use_dtrees);
 
     std::stringstream tariff;

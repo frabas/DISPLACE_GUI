@@ -150,29 +150,30 @@ int read_scenario_config_file (string folder_name_parameterization,
 	}
 
 	string line;
-	int counter=0;
-	while(!getline(in, line).eof())
+    int a_counter=0;
+    while(!getline(in, line).eof())
 	{
-		std::stringstream linestream(line);
-		counter+=1;
-		if(counter==2)
+
+        std::stringstream linestream(line);
+        a_counter+=1;
+        if(a_counter==2)
 		{
 			string val;
 			while(linestream >> val)
 			{
                 scenario.dyn_alloc_sce.setOption(val);
-			}
+            }
         }
-		if(counter==4)
+        if(a_counter==4)
 		{
 			string val;
 			while(linestream >> val)
             {
                 scenario.dyn_pop_sce.setOption(val);
 			}
-		}
+        }
 
-		if(counter==6)
+        if(a_counter==6)
 		{
 			string val;
 			while(linestream >> val)
@@ -180,7 +181,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.biolsce=val;
 			}
 		}
-        if(counter==8)
+        if(a_counter==8)
         {
             int val;
             while(linestream >> val)
@@ -189,7 +190,7 @@ int read_scenario_config_file (string folder_name_parameterization,
             }
         }
 
-        if(counter==10)
+        if(a_counter==10)
         {
             int val;
             while(linestream >> val)
@@ -197,7 +198,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.freq_redispatch_the_pop=val;
             }
         }
-        if(counter==12)
+        if(a_counter==12)
 		{
 			int val;
 			while(linestream >> val)
@@ -205,7 +206,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.a_graph=val;
 			}
 		}
-        if(counter==14)
+        if(a_counter==14)
 		{
 			int val;
 			while(linestream >> val)
@@ -213,7 +214,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.nrow_coord=val;
 			}
 		}
-        if(counter==16)
+        if(a_counter==16)
 		{
 			int val;
 			while(linestream >> val)
@@ -221,7 +222,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.nrow_graph=val;
 			}
 		}
-        if(counter==18)
+        if(a_counter==18)
 		{
 			int val;
 			while(linestream >> val)
@@ -229,7 +230,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.a_port=val;
 			}
 		}
-        if(counter==20)
+        if(a_counter==20)
 		{
 			double val;
 			while(linestream >> val)
@@ -237,7 +238,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.graph_res=val;
 			}
 		}
-        if(counter==22)
+        if(a_counter==22)
         {
             int val;
             while(linestream >> val)
@@ -245,7 +246,15 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.is_individual_vessel_quotas= (val != 0);
             }
         }
-        if(counter == 24)
+        if(a_counter==24)
+        {
+            int val;
+            while(linestream >> val)
+            {
+                scenario.check_all_stocks_before_going_fishing= (val != 0);
+            }
+        }
+        if(a_counter == 26)
         {
             string val;
             while(linestream >> val)
@@ -253,7 +262,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_go_fishing=val;
             }
         }
-        if(counter==26)
+        if(a_counter==28)
         {
             string val;
             while(linestream >> val)
@@ -261,7 +270,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_choose_ground=val;
             }
         }
-        if(counter==28)
+        if(a_counter==30)
         {
             string val;
             while(linestream >> val)
@@ -269,7 +278,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_start_fishing=val;
             }
         }
-        if(counter==30)
+        if(a_counter==32)
         {
             string val;
             while(linestream >> val)
@@ -277,7 +286,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_change_ground=val;
             }
         }
-        if(counter==32)
+        if(a_counter==34)
         {
             string val;
             while(linestream >> val)
@@ -285,7 +294,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_stop_fishing=val;
             }
         }
-        if(counter==34)
+        if(a_counter==36)
         {
             string val;
             while(linestream >> val)
@@ -293,7 +302,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.dt_change_port=val;
             }
         }
-        if(counter==36)
+        if(a_counter==38)
         {
             int val;
             while(linestream >> val)
@@ -301,7 +310,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.use_dtrees=(val != 0);
             }
         }
-        if(counter==38)
+        if(a_counter==40)
         {
             int val;
             while(linestream >> val)
@@ -309,7 +318,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.tariff_pop.push_back(val);
             }
         }
-        if(counter==40)
+        if(a_counter==42)
         {
             int val;
             while(linestream >> val)
@@ -317,7 +326,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.freq_update_tariff_code=val;
             }
         }
-        if(counter==42)
+        if(a_counter==44)
         {
             double val;
             while(linestream >> val)
@@ -325,7 +334,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.arbitary_breaks_for_tariff.push_back(val);
             }
         }
-        if(counter==44)
+        if(a_counter==46)
         {
             int val;
             while(linestream >> val)
@@ -333,7 +342,7 @@ int read_scenario_config_file (string folder_name_parameterization,
                 scenario.total_amount_credited=val;
             }
         }
-        if(counter==46)
+        if(a_counter==48)
         {
             double val;
             while(linestream >> val)
@@ -343,7 +352,7 @@ int read_scenario_config_file (string folder_name_parameterization,
         }
 
 	}
-	cout << "read config file...OK" << endl << flush;
+    cout << "read scenario config file...OK given graph" << scenario.a_graph <<  endl << flush;
 
     return 0;
 }

@@ -14,8 +14,102 @@
    <string>Scenario</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="1">
-    <widget class="QSpinBox" name="nrowgraph">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Scenario file:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="scenarioPath">
+     <property name="placeholderText">
+      <string>.../simulsspe/name.dat</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QGroupBox" name="group_dyn_alloc_sce">
+     <property name="title">
+      <string>Dyn Alloc Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QGroupBox" name="group_dyn_pop_sce">
+     <property name="title">
+      <string>Dyn Pop Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Bio Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="biol_sce"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Freq do growth</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSpinBox" name="freqDoGrowth">
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Freq dispatch</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QSpinBox" name="freqDispatchThePop">
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>AGraph</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QSpinBox" name="agraph">
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QToolButton" name="graphBrowse">
+     <property name="text">
+      <string>...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>N Row Coord</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QSpinBox" name="nrowcoord">
      <property name="maximum">
       <number>1000000</number>
      </property>
@@ -28,31 +122,17 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="freqDispatchThePop">
+   <item row="8" column="1">
+    <widget class="QSpinBox" name="nrowgraph">
      <property name="maximum">
-      <number>100000</number>
+      <number>1000000</number>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_8">
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>N Row Coord</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Scenario file:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Freq do growth</string>
+      <string>A Port</string>
      </property>
     </widget>
    </item>
@@ -63,93 +143,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="scenarioPath">
-     <property name="placeholderText">
-      <string>.../simulsspe/name.dat</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="biol_sce"/>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_10">
-     <property name="text">
-      <string>Freq dispatch</string>
-     </property>
-    </widget>
-   </item>
    <item row="10" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>Grid Resolution</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>AGraph</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="rename">
-       <property name="text">
-        <string>Rename...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancel">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="apply">
-       <property name="text">
-        <string>Save and Close</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="7" column="1">
-    <widget class="QSpinBox" name="nrowcoord">
-     <property name="maximum">
-      <number>1000000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QToolButton" name="graphBrowse">
-     <property name="text">
-      <string>...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>A Port</string>
      </property>
     </widget>
    </item>
@@ -166,27 +163,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QSpinBox" name="freqDoGrowth">
-     <property name="maximum">
-      <number>100000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QSpinBox" name="agraph">
-     <property name="maximum">
-      <number>100000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Bio Sce</string>
-     </property>
-    </widget>
-   </item>
    <item row="11" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
@@ -200,7 +176,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
          <string>Decision Trees</string>
@@ -324,29 +300,60 @@
         </layout>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QCheckBox" name="useDTree">
         <property name="text">
          <string>Use DTrees</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkAllStocks">
+        <property name="text">
+         <string>Check All Stocks Bef. Going</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QGroupBox" name="group_dyn_alloc_sce">
-     <property name="title">
-      <string>Dyn Alloc Sce</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="3">
-    <widget class="QGroupBox" name="group_dyn_pop_sce">
-     <property name="title">
-      <string>Dyn Pop Sce</string>
-     </property>
-    </widget>
+   <item row="12" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="rename">
+       <property name="text">
+        <string>Rename...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="apply">
+       <property name="text">
+        <string>Save and Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

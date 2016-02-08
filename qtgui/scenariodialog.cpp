@@ -74,6 +74,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->aport->setValue(mScen.getA_port());
     ui->gridres->setValue(mScen.getGraph_res());
     ui->individualQuotas->setChecked(mScen.getIs_individual_vessel_quotas());
+    ui->checkAllStocks->setChecked(mScen.getIs_check_all_stocks_before_going_fishing());
     ui->nrowcoord->setValue(mScen.getNrow_coord());
     ui->nrowgraph->setValue(mScen.getNrow_graph());
 
@@ -180,6 +181,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setA_port(ui->aport->value());
     mScen.setGraph_res(ui->gridres->value());
     mScen.setIs_individual_vessel_quotas(ui->individualQuotas->isChecked());
+    mScen.setIs_check_all_stocks_before_going_fishing(ui->checkAllStocks->isChecked());
     mScen.setNrow_coord(ui->nrowcoord->value());
     mScen.setNrow_graph(ui->nrowgraph->value());
 

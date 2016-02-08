@@ -81,6 +81,7 @@ extern int export_vmslike;
 extern ofstream vmslike;
 extern double graph_res;
 extern int is_individual_vessel_quotas;
+extern int check_all_stocks_before_going_fishing;
 extern vector <int> tariff_pop;
 extern int freq_update_tariff_code;
 extern int freq_do_growth;
@@ -191,8 +192,11 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
 
                 // ***************make a dtree decision****************************
-                int check_all_stocks=0; // TO DO: make it as an option in the scenario.dat file together with indiv_quotas
-                int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep, use_dtrees, implicit_pops, check_all_stocks);
+                int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep,
+                                                                         use_dtrees,
+                                                                         implicit_pops,
+                                                                         is_individual_vessel_quotas,
+                                                                         check_all_stocks_before_going_fishing);
                 //}
                 // ***************implement a decision*****************************
                 if(go_fishing)
@@ -302,7 +306,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         {
                             dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
                             vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res,
-                                                         is_tacs, is_individual_vessel_quotas, is_fishing_credits);
+                                                         is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing,  is_fishing_credits);
 
                             // check
                             //if(vessels[ index_v ]->get_loc()->get_idx_node()==430)

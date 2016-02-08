@@ -288,7 +288,7 @@ public:
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(vector<Node* >& nodes);
         void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res,
-                      bool &is_tacs, int &is_individual_vessel_quotas, bool &is_fishing_credits);
+                      bool &is_tacs, int &is_individual_vessel_quotas, int &check_all_stocks_before_going_fishing, bool &is_fishing_credits);
 		void clear_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();
         void compute_experiencedcpue_fgrounds();
@@ -369,7 +369,7 @@ public:
             );
         void which_metier_should_i_go_for(vector <Metier*>& metiers);
                                  //yes:1; no=0
-        int should_i_go_fishing(int tstep, bool use_the_tree, vector<int> &implicit_pops, int check_all_stocks);
+        int should_i_go_fishing(int tstep, bool use_the_tree, vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
 		int should_i_start_fishing(map<string, int>& external_states, bool use_the_tree);
         int should_i_choose_this_ground(int tstep, vector<Node*>& nodes,  const vector <int>& idx_path_shop,
                                         const deque<map<vertex_t, vertex_t> >& path_shop,

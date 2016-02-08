@@ -38,6 +38,7 @@ struct Scenario {
     int a_port;
     double graph_res;
     bool is_individual_vessel_quotas;
+    bool check_all_stocks_before_going_fishing;
     bool use_dtrees;
 
     std::vector <int> tariff_pop;

@@ -1751,8 +1751,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes,
-                      vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, int& is_individual_vessel_quotas,
-                      int& check_all_stocks_before_going_fishing, bool& is_fishing_credits)
+                      vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, bool& is_individual_vessel_quotas,
+                      bool& check_all_stocks_before_going_fishing, bool& is_fishing_credits)
 {
     lock();
 
@@ -4071,15 +4071,21 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
     // NOTE THAT IDEALLY check_all_stocks_before_going_fishing SHOULD BE 1 IF ALL POPS ARE IMPLICIT!
     // OTHERWISE MOST OF THE VESSELS WILL STAY ON QUAYSIDE....
 
+    cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << endl;
+    cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << endl;
+
     int still_some_quotas;
     if(is_individual_vessel_quotas)
     {
      still_some_quotas=0; // init
      int nbpops = this->get_percent_tac_per_pop().size();
+     int nbimplicitpops = implicit_pops.size();
        for (int pop=0; pop < nbpops; pop++)
             {
-            // check explicit pops, and other pops if specified.
-            if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) || check_all_stocks_before_going_fishing)
+            // check
+            if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  )  // check explicit pops...
+                    || check_all_stocks_before_going_fishing                         // ...and other pops if specified...
+                    || nbimplicitpops==nbpops)                                 // ...and force check all pops if all pops are implicit (see config.dat)
                {
                // return the annual individual quota (!= the quota left), should be 0 if erased because no quota left
                double indiv_quota= this->get_individual_tac(pop);
@@ -4093,15 +4099,21 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
 
 
 	// to avoid the vessel staying quayside while the vessel is actually not targeting the tac-informed species
-	// we need a small fix:
+    // we need a small fix:
     if(this->get_targeting_non_tac_pop_only())
         still_some_quotas=1;
+
+    cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << endl;
 
     }
     else
     {
      still_some_quotas=1; // init
     }
+
+
+    cout << "still_some_quotas is" <<still_some_quotas << endl;
+
 
     if( still_some_quotas)
 	{

@@ -352,7 +352,9 @@ int read_scenario_config_file (string folder_name_parameterization,
         }
 
 	}
-    cout << "read scenario config file...OK given graph" << scenario.a_graph <<  endl << flush;
+    cout << "read scenario config file...OK" <<  endl << flush;
+    cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;
+    cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  endl << flush;
 
     return 0;
 }

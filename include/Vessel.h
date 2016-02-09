@@ -288,7 +288,7 @@ public:
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(vector<Node* >& nodes);
         void do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<int>& implicit_pops, int& tstep, double &graph_res,
-                      bool &is_tacs, int &is_individual_vessel_quotas, int &check_all_stocks_before_going_fishing, bool &is_fishing_credits);
+                      bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing, bool &is_fishing_credits);
 		void clear_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();
         void compute_experiencedcpue_fgrounds();

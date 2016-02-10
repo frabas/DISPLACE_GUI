@@ -27,6 +27,7 @@
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
+#include <objects/fishfarmentity.h>
 #include <objects/populationentity.h>
 #include <objects/benthosentity.h>
 #include <objects/nationentity.h>
@@ -43,8 +44,10 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Monthly Tariffs"),
     QT_TR_NOOP_UTF8("Nodes"),
     QT_TR_NOOP_UTF8("Harbours"),
-    QT_TR_NOOP_UTF8("Vessels"),
-    QT_TR_NOOP_UTF8("Populations"),
+    QT_TR_NOOP_UTF8("Fishing Vessels"),
+    QT_TR_NOOP_UTF8("Fishfarms"),
+    //QT_TR_NOOP_UTF8("Shipping"),
+    QT_TR_NOOP_UTF8("Fish Populations"),
     QT_TR_NOOP_UTF8("Benthos"),
     QT_TR_NOOP_UTF8("Nations"),
     QT_TR_NOOP_UTF8("Size Groups or Age"),
@@ -58,7 +61,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
     mModelIdx(-1)
 {
     if (entityTemplates.size() == 0) {
-        // Registers all entity templaes
+        // Registers all entity templates
         entityTemplates.reserve(LastCategory);
 
         for (int i = 0; i < LastCategory; ++i)
@@ -71,6 +74,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);
         entityTemplates[Nodes] = new objecttree::NodeEntity(this);
         entityTemplates[Vessels] = new objecttree::VesselEntity(this);
+        entityTemplates[Fishfarms] = new objecttree::FishfarmEntity(this);
         entityTemplates[Populations] = new objecttree::PopulationEntity(this);
         entityTemplates[Benthos] = new objecttree::BenthosEntity(this);
         entityTemplates[Nations] = new objecttree::NationEntity(this);

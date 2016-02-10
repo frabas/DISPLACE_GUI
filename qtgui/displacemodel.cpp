@@ -54,6 +54,7 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mVesselsStatsDirty(false),
+      mFishfarmStatsDirty(false),
       mScenario(),
       mConfig(),
       mInterestingPop(),
@@ -154,6 +155,7 @@ bool DisplaceModel::load(QString path)
         loadNodes();
         loadVessels();
         loadGraphs();
+        initFishfarm();
         initBenthos();
         initPopulations();
         initNations();
@@ -482,6 +484,15 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
         mVesselsStatsDirty = false;
+    }
+
+    if (mFishfarmStatsDirty) {
+        //if (mDb)
+        //    mDb->addFishfarmStats (mLastStats, mStatsFishfarmCollected);
+
+        // Fishfarm stats are not saved on db, but loaded on the fly
+       // mStatsFishfarms.insertValue(tstep, mStatsFishfarmCollected);
+       // mFishfarmStatsDirty = false;
     }
 
     if (mCalendar && mCalendar->isYear(tstep)) {
@@ -983,6 +994,31 @@ void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float cou
         mDb->addVesselPosition(tstep, idx, v);
     }
 }
+
+
+int DisplaceModel::getFishfarmCount() const
+{
+    return mFishfarms.size();
+}
+
+QString DisplaceModel::getFishfarmId(int idx) const
+{
+    return QString::number(mFishfarms.at(idx)->mFishfarm->get_name());
+}
+
+
+void DisplaceModel::updateFishfarm(int idx, float x, float y)
+{
+    std::shared_ptr<FishfarmData> ff(mFishfarms.at(idx));
+    ff->mFishfarm->set_x(x);
+    ff->mFishfarm->set_y(y);
+
+    if (mDb) {
+      //  mDb->addFishfarmPosition(idx, ff);
+    }
+}
+
+
 
 int DisplaceModel::getBenthosCount() const
 {
@@ -1853,6 +1889,41 @@ bool DisplaceModel::loadGraphs()
 
     return true;
 }
+
+
+
+bool DisplaceModel::initFishfarm()
+{
+
+    multimap<int, double> init_size_per_farm = read_size_per_farm(mInputName.toStdString(), mBasePath.toStdString());
+    vector<int> name_fishfarms;
+    for(multimap<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end();
+        iter = init_size_per_farm.upper_bound( iter->first ) )
+    {
+        name_fishfarms.push_back (iter->first);
+    }
+
+     vector <Node *> nodes;
+     foreach (std::shared_ptr<NodeData> nd, mNodes) {
+      nodes.push_back( nd->mNode.get() );
+     }
+
+    for (int i=0; i<name_fishfarms.size(); i++)
+    {
+       std::shared_ptr<Fishfarm> ff (new Fishfarm(name_fishfarms.at(i),
+                                                  nodes,
+                                                  init_size_per_farm
+                         ));
+
+       std::shared_ptr<FishfarmData> ffd (new FishfarmData(ff));
+       mFishfarms.push_back(ffd);
+
+    }
+
+    return true;
+}
+
+
 
 bool DisplaceModel::initBenthos()
 {

@@ -138,7 +138,9 @@ SOURCES += \
     algo/geographicgridbuilder.cpp \
     algo/simplegeodesiclinegraphbuilder.cpp \
     algo/simpleplanargraphbuilder.cpp \
-    R/rconsole.cpp
+    R/rconsole.cpp \
+    modelobjects/fishfarmdata.cpp \
+    objects/fishfarmentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -246,7 +248,9 @@ HEADERS += \
     algo/geographicgridbuilder.h \
     algo/simplegeodesiclinegraphbuilder.h \
     algo/simpleplanargraphbuilder.h \
-    R/rconsole.h
+    R/rconsole.h \
+    modelobjects/fishfarmdata.h \
+    objects/fishfarmentity.h
 
 RESOURCES += \
     qtgui.qrc

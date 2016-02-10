@@ -46,7 +46,9 @@ Fishfarm::Fishfarm(int a_name,
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
         list_nodes.push_back(p_spe_nodes[i]);
 
-
+    // assume xy imformed by the first node
+    this->set_x(list_nodes.at(0)->get_x());
+    this->set_y(list_nodes.at(0)->get_y());
 
 }
 
@@ -63,6 +65,15 @@ int Fishfarm::get_name() const
     return(name);
 }
 
+double Fishfarm::get_x() const
+{
+    return(x);
+}
+
+double Fishfarm::get_y() const
+{
+    return(y);
+}
 
 const vector<Node* > &Fishfarm::get_list_nodes() const
 {
@@ -74,4 +85,15 @@ void Fishfarm::set_list_nodes(vector<Node* > _list_nodes)
 {
     list_nodes= _list_nodes;
 }
+
+void Fishfarm::set_x(double _x)
+{
+    x= _x;
+}
+
+void Fishfarm::set_y(double _y)
+{
+    y= _y;
+}
+
 

@@ -1585,6 +1585,30 @@ multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(s
 }
 
 
+
+// FOR FISHFARMS
+multimap<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/size_per_farm.dat";
+
+    ifstream file_size_per_farm;
+    file_size_per_farm.open(filename.c_str());
+    if(file_size_per_farm.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> size_per_farm;
+    fill_multimap_from_specifications_i_d(file_size_per_farm,  size_per_farm);
+    file_size_per_farm.close();
+
+    return(size_per_farm);
+}
+
+
+
+
 // FOR POPULATION
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder)
 {

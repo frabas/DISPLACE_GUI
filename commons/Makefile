@@ -2,6 +2,7 @@ SOURCES= \
     readdata.cpp \
     myutils.cpp \
     Population.cpp \
+    Fishfarm.cpp \
     Node.cpp \
     Tac.cpp \
     Benthos.cpp \
@@ -28,6 +29,7 @@ HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
+    ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \
     ../include/Benthos.h \

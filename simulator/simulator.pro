@@ -54,6 +54,7 @@ HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
+    ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \
     ../include/Benthos.h \

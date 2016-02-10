@@ -117,6 +117,9 @@ multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_param
 // benthos specific
 multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
 
+// fishfarms specific
+multimap<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder);
+
 // pop specific
 								 // beta per pop fro a given szgroup
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder);

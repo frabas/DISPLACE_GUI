@@ -4071,8 +4071,8 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
     // NOTE THAT IDEALLY check_all_stocks_before_going_fishing SHOULD BE 1 IF ALL POPS ARE IMPLICIT!
     // OTHERWISE MOST OF THE VESSELS WILL STAY ON QUAYSIDE....
 
-    cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << endl;
-    cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << endl;
+    dout(cout << "is_individual_vessel_quotas is" <<is_individual_vessel_quotas << endl);
+    dout(cout << "check_all_stocks_before_going_fishing is" <<check_all_stocks_before_going_fishing << endl);
 
     int still_some_quotas;
     if(is_individual_vessel_quotas)
@@ -4103,7 +4103,7 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
     if(this->get_targeting_non_tac_pop_only())
         still_some_quotas=1;
 
-    cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << endl;
+    dout(cout << "this->get_targeting_non_tac_pop_only() is" <<this->get_targeting_non_tac_pop_only() << endl);
 
     }
     else
@@ -4112,7 +4112,7 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
     }
 
 
-    cout << "still_some_quotas is" <<still_some_quotas << endl;
+    dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
 
 
     if( still_some_quotas)

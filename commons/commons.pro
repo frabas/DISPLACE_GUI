@@ -16,6 +16,7 @@ SOURCES= \
     readdata.cpp \
     myutils.cpp \
     Population.cpp \
+    Fishfarm.cpp \
     Node.cpp \
     Tac.cpp \
     Benthos.cpp \
@@ -36,12 +37,13 @@ SOURCES= \
     dtree/decisiontreemanager.cpp \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
-    tseries/timeseriesmanager.cpp
+    tseries/timeseriesmanager.cpp \
 
 HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
+    ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \
     ../include/Benthos.h \
@@ -72,7 +74,8 @@ HEADERS= \
     ../include/comstructs.h \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
-    dtree/evaluators/timeseriesevaluator.h
+    dtree/evaluators/timeseriesevaluator.h \
+
 
 OTHER_FILES += \
     Makefile

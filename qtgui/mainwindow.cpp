@@ -27,6 +27,7 @@
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
+#include <objects/fishfarmentity.h>
 #include <simulator.h>
 #include <editpalettedialog.h>
 
@@ -653,6 +654,13 @@ void MainWindow::centerMapOnVesselId(int id)
     centerMap(qmapcontrol::PointWorldCoord(h->mVessel->get_x(), h->mVessel->get_y()));
 }
 
+void MainWindow::centerMapOnFishfarmId(int id)
+{
+    std::shared_ptr<FishfarmData> h(currentModel->getFishfarmList()[id]);
+    centerMap(qmapcontrol::PointWorldCoord(h->mFishfarm->get_x(), h->mFishfarm->get_y()));
+}
+
+
 void MainWindow::on_cmdStart_clicked()
 {
     if (!mSimulation->isRunning() && models[0] != 0) {
@@ -797,6 +805,10 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
     case ObjectTreeModel::Vessels:
         centerMapOnVesselId((reinterpret_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
+        break;
+
+    case ObjectTreeModel::Fishfarms:
+        centerMapOnFishfarmId((reinterpret_cast<objecttree::FishfarmEntity *>(treemodel->entity(index)))->getFishfarmId());
         break;
 
     default:    // nothing to do

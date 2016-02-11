@@ -140,7 +140,8 @@ SOURCES += \
     algo/simpleplanargraphbuilder.cpp \
     R/rconsole.cpp \
     modelobjects/fishfarmdata.cpp \
-    objects/fishfarmentity.cpp
+    objects/fishfarmentity.cpp \
+    mapobjects/fishfarmobject.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -250,7 +251,8 @@ HEADERS += \
     algo/simpleplanargraphbuilder.h \
     R/rconsole.h \
     modelobjects/fishfarmdata.h \
-    objects/fishfarmentity.h
+    objects/fishfarmentity.h \
+    mapobjects/fishfarmobject.h
 
 RESOURCES += \
     qtgui.qrc

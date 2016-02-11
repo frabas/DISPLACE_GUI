@@ -225,6 +225,7 @@ protected:
     void centerMapOnHarbourId (int id);
     void centerMapOnNodeId (int id);
     void centerMapOnVesselId (int id);
+    void centerMapOnFishfarmId(int id);
 
     void showPaletteDialog(PaletteRole role);
 

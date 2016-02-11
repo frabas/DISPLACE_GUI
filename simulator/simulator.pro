@@ -48,7 +48,8 @@ SOURCES= main.cpp \
     messages/movevesseloutputmessage.cpp \
     messages/exportvmslikeoutputmessage.cpp \
     messages/vessellogbookoutputmessage.cpp \
-    messages/genericconsolestringoutputmessage.cpp
+    messages/genericconsolestringoutputmessage.cpp \
+    messages/moveshipoutputmessage.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -75,7 +76,8 @@ HEADERS= \
     messages/movevesseloutputmessage.h \
     messages/exportvmslikeoutputmessage.h \
     messages/vessellogbookoutputmessage.h \
-    messages/genericconsolestringoutputmessage.h
+    messages/genericconsolestringoutputmessage.h \
+    messages/moveshipoutputmessage.h
 
 OTHER_FILES += \
     Makefile

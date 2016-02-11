@@ -266,6 +266,10 @@ bool Simulator::processCodedLine(QString line)
         parseUpdateVesselStats(args);
         break;
 
+    case 'X':
+        parseUpdateShip(args);
+        break;
+
     case 'U':
         emit outputFileUpdated(args[0], args[1].toInt());
         break;

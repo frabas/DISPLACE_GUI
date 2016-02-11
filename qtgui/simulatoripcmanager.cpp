@@ -62,6 +62,12 @@ void SimulatorIpcManager::threadStarted()
                     emit vesselMoved(data->tstep, data->idx, data->x, data->y, data->course, data->cumfuelcons, data->state);
                 }
                 break;
+            case MoveShip:
+                {
+                    displace::ipc::MoveShipMessage *data = reinterpret_cast<displace::ipc::MoveShipMessage *>(buffer);
+                    emit shipMoved(data->tstep, data->idx, data->x, data->y, data->course);
+                }
+                break;
             case VesselLogbook:
                 {
                     displace::ipc::VesselLogbookMessage *data = reinterpret_cast<displace::ipc::VesselLogbookMessage *>(buffer);

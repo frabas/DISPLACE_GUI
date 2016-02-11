@@ -5029,7 +5029,7 @@ int main(int argc, char* argv[])
 		// move the ships along the ship lanes
         for(unsigned int s=0; s<ships.size(); s++)
 		{
-			//  ships[ s ]->move();
+              ships[ s ]->move();
 		}
 
 		#ifdef _WIN32

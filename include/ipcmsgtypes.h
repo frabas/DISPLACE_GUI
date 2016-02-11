@@ -48,7 +48,8 @@ enum IpcMessageTypes {
     GenericConsole,
     VesselLogbook,
     ExportVms,
-    MoveVessel
+    MoveVessel,
+    MoveShip
 };
 
 namespace displace {
@@ -59,6 +60,12 @@ struct MoveVesselMessage {
     unsigned int idx;
     double x,y,course,cumfuelcons;
     int state;
+};
+
+struct MoveShipMessage {
+    unsigned int tstep;
+    unsigned int idx;
+    double x,y,course;
 };
 
 struct VesselLogbookMessage {

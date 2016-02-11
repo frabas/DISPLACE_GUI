@@ -79,6 +79,9 @@ void FishfarmMapObject::fishfarmUpdated()
     mGeometry->layer()->addGeometry(mGeometry);
 }
 
+
+
+
 void FishfarmMapObject::widgetClosed()
 {
     mWidget = 0;

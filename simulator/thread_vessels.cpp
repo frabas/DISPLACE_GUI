@@ -30,10 +30,12 @@
 
 #include <values.h>
 #include <Vessel.h>
+#include <Ship.h>
 #include <Node.h>
 
 #include <outputqueuemanager.h>
 #include <messages/movevesseloutputmessage.h>
+#include <messages/moveshipoutputmessage.h>
 #include <messages/exportvmslikeoutputmessage.h>
 #include <messages/vessellogbookoutputmessage.h>
 
@@ -74,6 +76,7 @@ extern bool use_gnuplot;
 extern bool gui_move_vessels;
 extern vector<int> ve;
 extern vector <Vessel*> vessels;
+extern vector <Ship*> ships;
 extern vector <Population* > populations;
 extern int tstep;
 extern int nbpops;
@@ -131,9 +134,26 @@ extern ofstream export_individual_tacs;
 
 extern void guiSendVesselLogbook(const std::string &line);
 
+
+
+static void manage_ship(thread_data_t *dt, int idx_v)
+{
+    UNUSED(dt);
+
+ pthread_mutex_lock (&glob_mutex);
+ //  ships[idx_v]->move();
+ //  mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships[idx_v])));
+ pthread_mutex_unlock (&glob_mutex);
+
+}
+
+
+
+
 static void manage_vessel(thread_data_t *dt, int idx_v)
 {
     UNUSED(dt);
+
 
     map<vertex_t, weight_t> min_distance;
     map<vertex_t, vertex_t> previous;
@@ -143,7 +163,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     pthread_mutex_lock (&glob_mutex);
     int index_v =  ve[idx_v];
     //dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
-    outc(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
+    outc(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name()<< " " << endl);
     pthread_mutex_unlock (&glob_mutex);
 
     // check roadmap
@@ -430,6 +450,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 }
 
 
+
 static void *thread(void *args)
 {
     thread_data_t *data = (thread_data_t *)args;
@@ -449,7 +470,14 @@ static void *thread(void *args)
 //        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
         pthread_mutex_unlock(&work_mutex);
 
-        manage_vessel(data, nextidx);
+        if(nextidx<1000) // caution: assuming no more 1000 fishing vessels
+        {
+            manage_vessel(data, nextidx);
+        }
+        else
+        {
+            manage_ship(data, nextidx);
+        }
 
         pthread_mutex_lock(&work_mutex);
         --uncompleted_works;

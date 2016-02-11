@@ -5013,6 +5013,13 @@ int main(int argc, char* argv[])
           int index_v = ve[idx_v];
             thread_vessel_insert_job(index_v);
 		}
+
+        for (int s=0; s<ships.size(); s++)
+        {
+            thread_vessel_insert_job(1000+s);
+        }
+
+
         thread_vessel_wait_completed();
 
 #ifdef PROFILE
@@ -5027,10 +5034,10 @@ int main(int argc, char* argv[])
         }*/
 
 		// move the ships along the ship lanes
-        for(unsigned int s=0; s<ships.size(); s++)
-		{
-              ships[ s ]->move();
-		}
+        //for(unsigned int s=0; s<ships.size(); s++)
+        //{
+        //      ships[ s ]->move();
+        //}
 
 		#ifdef _WIN32
 		if(use_gnuplot)

@@ -4,6 +4,7 @@ SOURCES= main.cpp \
         thread_vessels.cpp \
         messages/exportvmslikeoutputmessage.cpp \
         messages/movevesseloutputmessage.cpp \
+        messages/moveshipoutputmessage.cpp \
         messages/genericconsolestringoutputmessage.cpp \
         messages/vessellogbookoutputmessage.cpp
 
@@ -14,6 +15,7 @@ HEADERS= \
         values.h \
         messages/exportvmslikeoutputmessage.h \
         messages/movevesseloutputmessage.h \
+        messages/moveshipoutputmessage.h \
         messages/genericconsolestringoutputmessage.h \
         messages/vessellogbookoutputmessage.h
 

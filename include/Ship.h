@@ -27,6 +27,9 @@
 #include <iostream>
 #include <list>
 
+
+#include <pthread.h>
+
 class Ship
 {
 	private:
@@ -39,10 +42,16 @@ class Ship
 		double x, y, course;
 		double vmax, vcruise;
 
-	public:
+        pthread_mutex_t mutex;
+
+    public:
 		Ship(string name,  double vmax, double vcruise, vector<double> lats, vector<double> longs);
 		Ship();
 		~Ship();
+
+        void lock() { pthread_mutex_lock (&mutex); }
+        void unlock() { pthread_mutex_unlock (&mutex); }
+
 
 		// getters
 		string get_name () const;

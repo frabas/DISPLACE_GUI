@@ -82,6 +82,7 @@ signals:
     void processStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate);
     void simulationStepChanged(int);
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);
+    void shipMoved (int laststep, int idx, float x, float y, float course);
     void outputFileUpdated(QString, int);
     void nodesStatsUpdate(QString);
     void debugMemoryStats(long rss, long peak);
@@ -114,6 +115,7 @@ private:
     int mVerbosity;
 
     void parseUpdateVessel(QStringList fields);
+    void parseUpdateShip(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
     void parseDebug(QStringList fields);
 

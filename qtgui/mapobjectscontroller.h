@@ -74,6 +74,7 @@ class MapObject;
 class HarbourMapObject;
 class NodeMapObject;
 class VesselMapObject;
+class ShipMapObject;
 class FishfarmMapObject;
 class EdgeLayer;
 class EdgeMapObject;
@@ -233,6 +234,7 @@ public:
     void updateMapObjectsFromModel(int model_n, DisplaceModel *model);
 
     void updateVesselPosition (int model, int idx);
+    void updateShipPosition (int model, int idx);
     void updateFishfarmPosition (int model, int idx);
 
     void updateNodes(int model);
@@ -329,6 +331,7 @@ private:
     MapObjectContainer<HarbourMapObject> mHarbourObjects[MAX_MODELS];
     MapObjectContainer<NodeMapObject> mNodeObjects[MAX_MODELS];
     MapObjectContainer<VesselMapObject> mVesselObjects[MAX_MODELS];
+    MapObjectContainer<ShipMapObject> mShipObjects[MAX_MODELS];
     MapObjectContainer<FishfarmMapObject> mFishfarmObjects[MAX_MODELS];
     MapObjectContainer<EdgeMapObject> mEdgeObjects[MAX_MODELS];
 

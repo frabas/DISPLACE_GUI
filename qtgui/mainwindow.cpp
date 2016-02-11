@@ -27,6 +27,7 @@
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
+#include <objects/shipentity.h>
 #include <objects/fishfarmentity.h>
 #include <simulator.h>
 #include <editpalettedialog.h>
@@ -165,6 +166,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
              this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
+    connect (mSimulation, SIGNAL(shipMoved(int,int,float,float,float)),
+             this, SLOT(shipMoved(int,int,float,float,float)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
@@ -408,6 +411,12 @@ void MainWindow::vesselMoved(int step, int idx, float x, float y, float course, 
     mMapController->updateVesselPosition(0, idx);
 }
 
+void MainWindow::shipMoved(int step, int idx, float x, float y, float course)
+{
+    models[0]->updateShip (step, idx, x, y, course);
+    mMapController->updateShipPosition(0, idx);
+}
+
 void MainWindow::updateModelState()
 {
     simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
@@ -644,6 +653,7 @@ void MainWindow::centerMapOnHarbourId(int id)
 
 void MainWindow::centerMapOnNodeId(int id)
 {
+    std::cout << "id is " << id << endl;
     std::shared_ptr<NodeData> h (currentModel->getNodesList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->get_x(), h->get_y()));
 }
@@ -652,6 +662,12 @@ void MainWindow::centerMapOnVesselId(int id)
 {
     std::shared_ptr<VesselData> h(currentModel->getVesselList()[id]);
     centerMap(qmapcontrol::PointWorldCoord(h->mVessel->get_x(), h->mVessel->get_y()));
+}
+
+void MainWindow::centerMapOnShipId(int id)
+{
+    std::shared_ptr<ShipData> h(currentModel->getShipList()[id]);
+    centerMap(qmapcontrol::PointWorldCoord(h->mShip->get_x(), h->mShip->get_y()));
 }
 
 void MainWindow::centerMapOnFishfarmId(int id)
@@ -805,6 +821,10 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
     case ObjectTreeModel::Vessels:
         centerMapOnVesselId((reinterpret_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
+        break;
+
+    case ObjectTreeModel::Ships:
+        centerMapOnShipId((reinterpret_cast<objecttree::ShipEntity *>(treemodel->entity(index)))->getShipId());
         break;
 
     case ObjectTreeModel::Fishfarms:

@@ -66,9 +66,11 @@ int NodeEntity::columnCount() const
 QVariant NodeEntity::data(const QModelIndex &index, int role) const
 {
     if (mNodeId != -1 && model->getModel() != 0 && role == Qt::DisplayRole && index.column() == 0) {
-        return model->getModel()->getNodeId(mNodeId);
-    }
+    //    return model->getModel()->getNodeId(mNodeId);
 
+        std::shared_ptr<NodeData> n (model->getModel()->getNodesList()[mNodeId]);
+                return n->get_idx_node();
+    }
     return QVariant();
 }
 

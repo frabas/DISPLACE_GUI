@@ -54,6 +54,7 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mVesselsStatsDirty(false),
+      mShipsStatsDirty(false),
       mFishfarmStatsDirty(false),
       mScenario(),
       mConfig(),
@@ -155,6 +156,7 @@ bool DisplaceModel::load(QString path)
         loadNodes();
         loadVessels();
         loadGraphs();
+        initShips();
         initFishfarm();
         initBenthos();
         initPopulations();
@@ -344,7 +346,8 @@ int DisplaceModel::getNodesCount() const
 
 QString DisplaceModel::getNodeId(int idx) const
 {
-    return QString::fromStdString(mNodes.at(idx)->get_name());
+   // return QString::fromStdString(mNodes.at(idx)->get_name());
+    return QString::number(mNodes.at(idx)->get_idx_node());
 }
 
 QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist_km) const
@@ -484,6 +487,11 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
         mVesselsStatsDirty = false;
+    }
+
+    if (mShipsStatsDirty) {
+
+        mShipsStatsDirty = false;
     }
 
     if (mFishfarmStatsDirty) {
@@ -994,6 +1002,30 @@ void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float cou
         mDb->addVesselPosition(tstep, idx, v);
     }
 }
+
+
+
+int DisplaceModel::getShipCount() const
+{
+    return mShips.size();
+}
+
+QString DisplaceModel::getShipId(int idx) const
+{
+    return QString::fromStdString(mShips.at(idx)->mShip->get_name());
+}
+
+void DisplaceModel::updateShip(int tstep, int idx, float x, float y, float course)
+{
+    std::shared_ptr<ShipData> sh(mShips.at(idx));
+    sh->mShip->set_xy(x,y);
+    sh->mShip->set_course(course);
+
+    if (mDb) {
+    //    mDb->addShipPosition(tstep, idx, sh);
+    }
+}
+
 
 
 int DisplaceModel::getFishfarmCount() const
@@ -1886,6 +1918,94 @@ bool DisplaceModel::loadGraphs()
     foreach (data d, datas) {
         mNodes[d.from]->appendAdiancency(mNodes.at(d.to), d.weight);
     }
+
+    return true;
+}
+
+
+bool DisplaceModel::initShips()
+{
+
+
+    // read general ship features
+    vector<string> shipids;
+    vector<double> vmaxs;
+    vector<double> vcruises;
+    vector<double> lane_ids;
+    read_ships_features(shipids, vmaxs, vcruises, lane_ids, mInputName.toStdString(), mBasePath.toStdString());
+
+    // init the ship lanes (just fake examples as a matter of proof here...)
+    double the_lats1[] =		 // y
+    {
+        57.2374,57.897336,55.702355,55.116085,55.590763
+    };
+    double the_longs1 [] =		 // x
+    {
+        6.27136,10.841675,12.863159,12.533569 ,15.587768
+    };
+    vector<double> lats1 (the_lats1, the_lats1 + sizeof(the_lats1) / sizeof(double) );
+    vector<double> longs1 (the_longs1, the_longs1 + sizeof(the_longs1) / sizeof(double) );
+    double the_lats2[] =		 // y
+    {
+        54.29481, 54.61786, 54.42403, 55.03321, 55.96545
+    };
+    double the_longs2 [] =		 // x
+    {
+        9.91210, 11.10286, 12.15808, 14.04587, 15.20759
+    };
+    vector<double> lats2 (the_lats2, the_lats2 + sizeof(the_lats2) / sizeof(double) );
+    vector<double> longs2 (the_longs2, the_longs2 + sizeof(the_longs2) / sizeof(double) );
+    double the_lats3[] =		 // y
+    {
+        57.58070, 57.81145, 56.78692, 55.70700, 55.22704, 54.62709, 54.44249, 55.03321, 55.85469
+    };
+    double the_longs3 [] =		 // x
+    {
+        8.043674, 11.170626, 11.877336, 10.754344, 11.093178, 10.822111, 12.216170, 14.065234, 15.149502
+    };
+    vector<double> lats3 (the_lats3, the_lats3 + sizeof(the_lats3) / sizeof(double) );
+    vector<double> longs3 (the_longs3, the_longs3 + sizeof(the_longs3) / sizeof(double) );
+
+    //http://frv.dk/SiteCollectionDocuments/pdf/NtDW.pdf
+    // ROUTE T- A deep water route with a minimum depth of water below mean sea level of 16.5 metres is
+    //bounded by a line connecting the following geographical positions
+    //(1) 54 27.10 N 012 10.50 E
+    //(2) 54 27.73 N 012 11.30 E
+    //(3) 54 31.30 N 012 12.80 E
+    //(4) 54 36.46 N 012 15.83 E
+    //(5) 54 46.86 N 012 43.23 E
+    //(6) 54 46.06 N 012 44.03 E
+    //(7) 54 35.36 N 012 16.93 E
+    //(8) 54 31.00 N 012 15.20 E
+    //(9) 54 27.40 N 012 13.10 E
+    //(10) 54 26.57 N 012 11.90 E
+
+                                 //here
+    vector <Ship*> ships(shipids.size());
+    for (unsigned int i=0; i<shipids.size(); i++)
+    {
+
+      vector<double> longs, lats;
+      if(lane_ids[i]==1) {
+          longs =longs1; lats =lats1;
+      }
+      if(lane_ids[i]==2) {
+          longs =longs2; lats =lats2;
+      }
+      if(lane_ids[i]==3) {
+          longs =longs3; lats =lats3;
+      }
+
+      std::shared_ptr<Ship> sh (new Ship(shipids[i], vmaxs[i], vcruises[i],
+                                                   longs, lats
+                          ));
+
+      std::shared_ptr<ShipData> shd (new ShipData(sh));
+        mShips.push_back(shd);
+
+
+    }
+
 
     return true;
 }

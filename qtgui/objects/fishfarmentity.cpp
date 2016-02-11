@@ -42,6 +42,7 @@ QModelIndex FishfarmEntity::index(int row, int column, const QModelIndex &parent
     Q_UNUSED(parent);
 
     ObjectTreeEntity * entity = new FishfarmEntity(model, row);
+  //   std::cout << "id (row) is assigned here and is " << row << endl;
     return model->createEntity(row, column, entity);
 }
 
@@ -64,8 +65,8 @@ QVariant FishfarmEntity::data(const QModelIndex &index, int role) const
         if (role == Qt::DisplayRole)
             return model->getModel()->getFishfarmId(mFishfarmId);
         if (role == Qt::ToolTipRole) {
-            std::shared_ptr<FishfarmData> v = model->getModel()->getFishfarmList()[mFishfarmId];
-            return QString("%1 %2").arg(v->mFishfarm->get_y()).arg(v->mFishfarm->get_x());
+            std::shared_ptr<FishfarmData> ff = model->getModel()->getFishfarmList()[mFishfarmId];
+            return QString("%1 %2").arg(ff->mFishfarm->get_y()).arg(ff->mFishfarm->get_x());
         }
     }
 

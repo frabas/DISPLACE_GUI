@@ -80,6 +80,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 
     connect (mIpcQueue, SIGNAL(receivedCodedLine(QString)), this, SLOT(processCodedLine(QString)));
     connect (mIpcQueue, SIGNAL(vesselMoved(int,int,float,float,float,float,int)), SIGNAL(vesselMoved(int,int,float,float,float,float,int)));
+    connect (mIpcQueue, SIGNAL(shipMoved(int,int,float,float,float)), SIGNAL(shipMoved(int,int,float,float,float)));
     connect (mIpcQueue, SIGNAL(vesselLogbookReceived(VesselStats)), this, SLOT(vesselLogbookReceived(VesselStats)));
 
     mIpcThread->start();
@@ -328,3 +329,14 @@ void Simulator::parseUpdateVesselStats(QStringList fields)
 
     vesselLogbookReceived(v);
 }
+
+void Simulator::parseUpdateShip(QStringList fields)
+{
+    int id = fields[1].toInt();
+    float x = fields[3].toFloat();
+    float y = fields[4].toFloat();
+    float course = fields[5].toFloat();
+
+    emit shipMoved(mLastStep, id, x, y, course);
+}
+

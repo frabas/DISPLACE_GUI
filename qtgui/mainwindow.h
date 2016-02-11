@@ -109,6 +109,7 @@ private slots:
     void simulatorCaptureLine(QString);
 
     void vesselMoved (int step, int idx, float x, float y, float course, float fuel, int state);
+    void shipMoved (int step, int idx, float x, float y, float course);
     void updateModelState();
     void updateOutputFile (QString,int);
     void outputUpdated();
@@ -225,6 +226,7 @@ protected:
     void centerMapOnHarbourId (int id);
     void centerMapOnNodeId (int id);
     void centerMapOnVesselId (int id);
+    void centerMapOnShipId (int id);
     void centerMapOnFishfarmId(int id);
 
     void showPaletteDialog(PaletteRole role);

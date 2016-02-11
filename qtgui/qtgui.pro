@@ -141,7 +141,10 @@ SOURCES += \
     R/rconsole.cpp \
     modelobjects/fishfarmdata.cpp \
     objects/fishfarmentity.cpp \
-    mapobjects/fishfarmobject.cpp
+    mapobjects/fishfarmobject.cpp \
+    modelobjects/shipdata.cpp \
+    mapobjects/shipmapobject.cpp \
+    objects/shipentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -252,7 +255,10 @@ HEADERS += \
     R/rconsole.h \
     modelobjects/fishfarmdata.h \
     objects/fishfarmentity.h \
-    mapobjects/fishfarmobject.h
+    mapobjects/fishfarmobject.h \
+    modelobjects/shipdata.h \
+    mapobjects/shipmapobject.h \
+    objects/shipentity.h
 
 RESOURCES += \
     qtgui.qrc

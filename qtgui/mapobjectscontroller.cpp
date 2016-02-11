@@ -24,6 +24,7 @@
 #include <mapobjects/harbourmapobject.h>
 #include <mapobjects/nodemapobject.h>
 #include <mapobjects/vesselmapobject.h>
+#include <mapobjects/shipmapobject.h>
 #include <mapobjects/fishfarmobject.h>
 #include <mapobjects/edgemapobject.h>
 #include <mapobjects/edgelayer.h>
@@ -162,6 +163,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }
 
+    const QList<std::shared_ptr<ShipData> > &ships = model->getShipList();
+    foreach (std::shared_ptr<ShipData> vsl, ships) {
+        ShipMapObject *obj = new ShipMapObject(this,vsl.get());
+        mShipObjects[model_n].add(vsl->mShip->get_idx(),obj, 0);
+
+        mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
+    }
+
     const QList<std::shared_ptr<FishfarmData> > &fishfarms = model->getFishfarmList();
     foreach (std::shared_ptr<FishfarmData> ff, fishfarms) {
         FishfarmMapObject *obj = new FishfarmMapObject(this,ff.get());
@@ -186,6 +195,12 @@ void MapObjectsController::updateVesselPosition(int model, int idx)
 {
     mVesselObjects[model].get(idx, 0)->vesselUpdated();
 }
+
+void MapObjectsController::updateShipPosition(int model, int idx)
+{
+    mShipObjects[model].get(idx, 0)->shipUpdated();
+}
+
 
 void MapObjectsController::updateFishfarmPosition(int model, int idx)
 {

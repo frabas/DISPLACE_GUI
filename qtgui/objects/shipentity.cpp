@@ -18,55 +18,55 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#include "vesselentity.h"
+#include "shipentity.h"
 
 #include <objecttreemodel.h>
 #include <displacemodel.h>
 
 namespace objecttree {
 
-VesselEntity::VesselEntity(ObjectTreeModel *_model, int id)
+ShipEntity::ShipEntity(ObjectTreeModel *_model, int id)
     : ObjectTreeEntity(_model),
-      mVesselId(id)
+      mShipId(id)
 {
 }
 
-QModelIndex VesselEntity::parent(const QModelIndex &parent) const
+QModelIndex ShipEntity::parent(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return model->createCategoryEntityFromChild(ObjectTreeModel::Vessels);
+    return model->createCategoryEntityFromChild(ObjectTreeModel::Ships);
 }
 
-QModelIndex VesselEntity::index(int row, int column, const QModelIndex &parent) const
+QModelIndex ShipEntity::index(int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
-    ObjectTreeEntity * entity = new VesselEntity(model, row);
+    ObjectTreeEntity * entity = new ShipEntity(model, row);
  // std::cout << "id (row) is assigned here and is " << row << endl;
     return model->createEntity(row, column, entity);
 }
 
-int VesselEntity::rowCount() const
+int ShipEntity::rowCount() const
 {
-    if (mVesselId == -1 && model->getModel() != 0)
-        return model->getModel()->getVesselCount();
+    if (mShipId == -1 && model->getModel() != 0)
+        return model->getModel()->getShipCount();
 
     return 0;
 }
 
-int VesselEntity::columnCount() const
+int ShipEntity::columnCount() const
 {
     return 1;
 }
 
-QVariant VesselEntity::data(const QModelIndex &index, int role) const
+QVariant ShipEntity::data(const QModelIndex &index, int role) const
 {
-    if (mVesselId != -1 && model->getModel() != 0 && index.column() == 0) {
+    if (mShipId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
-            return model->getModel()->getVesselId(mVesselId);
+            return model->getModel()->getShipId(mShipId);
         if (role == Qt::ToolTipRole) {
-            std::shared_ptr<VesselData> v = model->getModel()->getVesselList()[mVesselId];
-            return QString("%1 %2").arg(v->mVessel->get_y()).arg(v->mVessel->get_x());
+            std::shared_ptr<ShipData> sh = model->getModel()->getShipList()[mShipId];
+            return QString("%1 %2").arg(sh->mShip->get_y()).arg(sh->mShip->get_x());
         }
     }
 

@@ -1607,6 +1607,47 @@ multimap<int, double> read_size_per_farm(string folder_name_parameterization, st
 }
 
 
+// FOR SHIPPING LANES
+multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/shipsspe_"+folder_name_parameterization+"/shipsspe_lanes_lat.dat";
+
+    ifstream file_shipsspe_lanes_lat;
+    file_shipsspe_lanes_lat.open(filename.c_str());
+    if(file_shipsspe_lanes_lat.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> shipsspe_lanes_lat;
+    fill_multimap_from_specifications_i_d(file_shipsspe_lanes_lat,  shipsspe_lanes_lat);
+    file_shipsspe_lanes_lat.close();
+
+    return(shipsspe_lanes_lat);
+}
+
+multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/shipsspe_"+folder_name_parameterization+"/shipsspe_lanes_lon.dat";
+
+    ifstream file_shipsspe_lanes_lon;
+    file_shipsspe_lanes_lon.open(filename.c_str());
+    if(file_shipsspe_lanes_lon.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> shipsspe_lanes_lon;
+    fill_multimap_from_specifications_i_d(file_shipsspe_lanes_lon,  shipsspe_lanes_lon);
+    file_shipsspe_lanes_lon.close();
+
+    return(shipsspe_lanes_lon);
+}
+
+
+
 
 
 // FOR POPULATION

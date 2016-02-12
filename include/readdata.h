@@ -120,6 +120,10 @@ multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(s
 // fishfarms specific
 multimap<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder);
 
+// shipping specific
+multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder);
+multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
+
 // pop specific
 								 // beta per pop fro a given szgroup
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder);

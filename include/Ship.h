@@ -74,8 +74,9 @@ class Ship
 		double get_course() const;
 
 		// setters
-		void set_count (int val);
-		void set_vmax (double val);
+        void set_idx_ship (int val);
+        void set_count (int val);
+        void set_vmax (double val);
 		void set_vcruise (double val);
 		void set_course (double val);
 		void set_lats (vector<double> _lats);

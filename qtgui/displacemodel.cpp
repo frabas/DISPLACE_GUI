@@ -1527,11 +1527,7 @@ bool DisplaceModel::loadVessels()
     vector<double> spe_fishing_credits;
 
      //here
-    vector <Vessel*> vessels(vesselids.size());
     for (int i=0; i<vesselids.size(); i++)
-        //vector <Vessel*> vessels(7); //here
-        //vesselids.erase (vesselids.begin());
-        //for (int i=0; i<7; i++)
     {
         cout<<"create vessel " << i << endl;
         // read vessel and quarter specific multimap

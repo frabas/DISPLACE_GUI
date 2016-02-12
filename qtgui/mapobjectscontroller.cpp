@@ -164,9 +164,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     }
 
     const QList<std::shared_ptr<ShipData> > &ships = model->getShipList();
-    foreach (std::shared_ptr<ShipData> vsl, ships) {
-        ShipMapObject *obj = new ShipMapObject(this,vsl.get());
-        mShipObjects[model_n].add(vsl->mShip->get_idx(),obj, 0);
+    foreach (std::shared_ptr<ShipData> sh, ships) {
+        ShipMapObject *obj = new ShipMapObject(this,sh.get());
+        mShipObjects[model_n].add(sh->mShip->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }

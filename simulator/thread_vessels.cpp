@@ -139,12 +139,15 @@ extern void guiSendVesselLogbook(const std::string &line);
 static void manage_ship(thread_data_t *dt, int idx_v)
 {
     UNUSED(dt);
-
- pthread_mutex_lock (&glob_mutex);
-   ships[idx_v]->move();  // WHY IS THIS NOT WORKING?
-   mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships[idx_v])));
- pthread_mutex_unlock (&glob_mutex);
-
+    cout << "idx_v is " << idx_v << " " << ships.size() << endl;
+       ships.at(idx_v - 1000)->lock();
+         pthread_mutex_lock (&glob_mutex);
+           cout<<"before at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl;
+            ships.at(idx_v - 1000)->move();
+            cout<<"after at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl;
+ //           mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 1000))));
+         pthread_mutex_unlock (&glob_mutex);
+       ships.at(idx_v - 1000)->unlock();
 }
 
 

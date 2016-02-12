@@ -1952,19 +1952,21 @@ int main(int argc, char* argv[])
     vector<double> lats;
     vector<double> longs;
 
-
-    vector <Ship*> ships(shipids.size());
+    ships= vector <Ship*> (shipids.size());
     for (unsigned int i=0; i<shipids.size(); i++)
 	{
-       outc(cout<<"create ship " << shipids[i] << endl);
+       cout<<"create ship " << shipids[i] << endl;
 
             lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
             ships[i]= new Ship(shipids[i], vmaxs[i], vcruises[i], longs, lats);
+            ships[i]->set_idx_ship(i);
 
-       outc(cout<<"at (" << ships[i]->get_x() << "," << ships[i]->get_y()  << ") "   << endl);
+       cout<<"at (" << ships[i]->get_x() << "," << ships[i]->get_y()  << ") "   << endl;
 
 	}
+    cout<<"Number of ships created: " << ships.size()  << endl;
+
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
@@ -4974,9 +4976,9 @@ int main(int argc, char* argv[])
             thread_vessel_insert_job(index_v);
         }
 
-        for (int s=0; s<ships.size(); s++)
+        for (unsigned int s=0; s<ships.size(); s++)
         {
-         //   thread_vessel_insert_job(1000+s);
+            thread_vessel_insert_job(1000+s);
         }
 
 

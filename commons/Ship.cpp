@@ -36,7 +36,8 @@
 
 Ship::Ship()
 {
-	idx_ship = 0;
+ pthread_mutex_init(&mutex,0);
+ idx_ship = 0;
 }
 
 
@@ -48,7 +49,8 @@ Ship::~Ship()
 
 Ship::Ship(string a_name, double a_vmax, double a_vcruise, vector<double> a_longs, vector<double> a_lats)
 {
-	count=0;
+ pthread_mutex_init(&mutex,0);
+    count=0;
 	idx_ship = 0;
 	origin_x =a_longs[0];
 	origin_y =a_lats[0];
@@ -160,6 +162,12 @@ double Ship::get_course () const
 // setters...
 //------------------------------------------------------------//
 //------------------------------------------------------------//
+
+void Ship::set_idx_ship (int _idx)
+{
+    idx_ship= _idx;
+}
+
 
 void Ship::set_lats (vector <double> _lats)
 {

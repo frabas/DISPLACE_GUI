@@ -141,8 +141,8 @@ static void manage_ship(thread_data_t *dt, int idx_v)
     UNUSED(dt);
 
  pthread_mutex_lock (&glob_mutex);
- //  ships[idx_v]->move();  // WHY IS THIS NOT WORKING?
- //  mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships[idx_v])));
+   ships[idx_v]->move();  // WHY IS THIS NOT WORKING?
+   mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships[idx_v])));
  pthread_mutex_unlock (&glob_mutex);
 
 }

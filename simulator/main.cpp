@@ -137,6 +137,7 @@ OutputQueueManager mOutQueue; // Use Binary Format
 pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
 vector<int> ve;
 vector <Vessel*> vessels;
+vector <Ship*> ships;
 vector <Population* > populations;
 vector <Fishfarm* > fishfarms;
 int tstep;
@@ -4967,15 +4968,15 @@ int main(int argc, char* argv[])
 #endif
 
         thread_vessel_prepare();
-		for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
-		{
+        for (unsigned int idx_v =0; idx_v < ve.size(); idx_v++)
+        {
           int index_v = ve[idx_v];
             thread_vessel_insert_job(index_v);
-		}
+        }
 
         for (int s=0; s<ships.size(); s++)
         {
-            thread_vessel_insert_job(1000+s);
+         //   thread_vessel_insert_job(1000+s);
         }
 
 

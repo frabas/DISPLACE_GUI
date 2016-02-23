@@ -34,18 +34,26 @@ class Ship
 {
 	private:
 		string name;
+        string imo;
+        string flag;
+        string type;
 		int idx_ship;
 		int count;
 		vector<double> lats;
 		vector<double> longs;
 		double origin_x, origin_y, end_point_x, end_point_y;
 		double x, y, course;
-		double vmax, vcruise;
+        double yearbuild, typecode, loa, breadth, grosstonnage, nbunits;
+        double vmax, vcruise;
 
         pthread_mutex_t mutex;
 
     public:
-		Ship(string name,  double vmax, double vcruise, vector<double> lats, vector<double> longs);
+        Ship(string name,  double imo, double yearbuild, string flag,
+             string type, double typecode, double loa, double breadth,
+             double grosstonnage, double nbunits,
+             double vmax, double vcruise,
+             vector<double> lats, vector<double> longs);
 		Ship();
 		~Ship();
 

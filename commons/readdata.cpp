@@ -635,12 +635,17 @@ int selected_vessels_only)
 
 //----------------
 void read_ships_features(  vector<string>& shipids,
-vector<double>& vmaxs,
-vector<double>& vcruises,
-vector<double>& lane_ids,
-string folder_name_parameterization,
-string inputfolder
-)
+                           vector<double> &imos,
+                           vector<double> &yearbuilds, vector<string> &flags,
+                           vector<string> &types, vector<double> &typecodes,
+                           vector<double> &loas, vector<double> &breadths,
+                           vector<double> &grosstonnages, vector<double> &nbunits,
+                           vector<double>& vmaxs,
+                           vector<double>& vcruises,
+                           vector<double>& lane_ids,
+                           string folder_name_parameterization,
+                           string inputfolder
+                            )
 {
 
     string filename=  inputfolder+"/shipsspe_"+folder_name_parameterization+"/shipsspe_features.dat";
@@ -653,8 +658,12 @@ string inputfolder
 		// return 1;
 	}
 
-	fill_from_ships_specifications(ships_features, shipids, vmaxs, vcruises, lane_ids);
+    fill_from_ships_specifications(ships_features, shipids, imos,
+                                   yearbuilds, flags, types, typecodes,
+                                   loas, breadths, grosstonnages, nbunits,
+                                   vmaxs, vcruises, lane_ids);
 	ships_features.close();
+
 
 }
 

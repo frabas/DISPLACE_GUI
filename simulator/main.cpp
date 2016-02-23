@@ -1940,10 +1940,22 @@ int main(int argc, char* argv[])
 
     // read general ship features (incl. their specific lanes)
 	vector<string> shipids;
-	vector<double> vmaxs;
-	vector<double> vcruises;
-	vector<double> lane_ids;
-    read_ships_features(shipids, vmaxs, vcruises, lane_ids, folder_name_parameterization, "../"+inputfolder);
+    vector<double> imos;
+    vector<double> yearbuilds;
+    vector<string> flags;
+    vector<string> types;
+    vector<double> typecodes;
+    vector<double> loas;
+    vector<double> breadths;
+    vector<double> grosstonnages;
+    vector<double> nbunits;
+    vector<double> vmaxs;
+    vector<double> vcruises;
+    vector<double> lane_ids;
+    read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
+                        loas, breadths, grosstonnages, nbunits,
+                        vmaxs, vcruises, lane_ids,
+                        folder_name_parameterization, "../"+inputfolder);
 
     // read shipping lanes
     multimap<int, double> shiplanes_lat = read_shiplanes_lat( folder_name_parameterization, "../"+inputfolder);
@@ -1959,7 +1971,10 @@ int main(int argc, char* argv[])
 
             lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
-            ships[i]= new Ship(shipids[i], vmaxs[i], vcruises[i], longs, lats);
+            ships[i]= new Ship(shipids[i], imos[i], yearbuilds[i], flags[i],
+                               types[i], typecodes[i], loas[i], breadths[i],
+                               grosstonnages[i], nbunits[i],
+                               vmaxs[i], vcruises[i], longs, lats);
             ships[i]->set_idx_ship(i);
 
        cout<<"at (" << ships[i]->get_x() << "," << ships[i]->get_y()  << ") "   << endl;

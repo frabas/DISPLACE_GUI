@@ -1285,6 +1285,7 @@ bool DisplaceModel::loadNodes()
                 //int er = read_prices_per_harbour(a_port, "quarter1", prices, mName.toStdString()); // delete later on when final parameterisation
                 cout << "then go for the port: " << a_port  << " instead" <<  endl;
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
+                cout << "....OK" << endl;
 
             }
 
@@ -1292,10 +1293,13 @@ bool DisplaceModel::loadNodes()
             if (!binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(),
                                 "fuelprice_plus20percent"))
             {
+                cout << "read fuel price..." << endl;
                 read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
+                cout << "...OK" << endl;
             }
             else
             {
+                cout << "read fuel price..." << endl;
                 read_fuel_prices_per_vsize(init_fuelprices, mInputName.toStdString(), mBasePath.toStdString());
 
                 map<int,double>::iterator pos;
@@ -1308,6 +1312,7 @@ bool DisplaceModel::loadNodes()
                 {
                     cout << pos->first << " " << pos->second;
                 }
+                cout << "...OK" << endl;
 
             }
             vector <int> usual_fgrounds;
@@ -1316,6 +1321,7 @@ bool DisplaceModel::loadNodes()
             vector <double> freq_usual_fgrounds;
             freq_usual_fgrounds.push_back(1.0);
 
+            cout << "create an harbour..." << endl;
             std::shared_ptr<Harbour> h (new Harbour(i,
                                        graph_coord_x[i],
                                        graph_coord_y[i],
@@ -1341,6 +1347,7 @@ bool DisplaceModel::loadNodes()
         }
         else
         {
+            //cout << "create a node..." << endl;
             std::shared_ptr<Node> nd (new Node(i,
                                  graph_coord_x[i],
                                  graph_coord_y[i],
@@ -1359,6 +1366,7 @@ bool DisplaceModel::loadNodes()
 
 
     // read nodes in polygons for area-based management
+    cout << "read node in polygons..." << endl;
     string a_graph_name="a_graph";
     a_graph_name=a_graph_name+a_graph_s;
     multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
@@ -1382,6 +1390,7 @@ bool DisplaceModel::loadNodes()
             mNodes.at(a_idx)->setAreaType(0);
            }
         }
+    cout << "OK for in polygons..." << endl;
 
 
 
@@ -1925,10 +1934,22 @@ bool DisplaceModel::initShips()
 
     // read general ship features (incl. their specific lanes)
     vector<string> shipids;
+    vector<double> imos;
+    vector<double> yearbuilds;
+    vector<string> flags;
+    vector<string> types;
+    vector<double> typecodes;
+    vector<double> loas;
+    vector<double> breadths;
+    vector<double> grosstonnages;
+    vector<double> nbunits;
     vector<double> vmaxs;
     vector<double> vcruises;
     vector<double> lane_ids;
-    read_ships_features(shipids, vmaxs, vcruises, lane_ids, mInputName.toStdString(), mBasePath.toStdString());
+
+    read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
+                        loas, breadths, grosstonnages, nbunits,
+                        vmaxs, vcruises, lane_ids, mInputName.toStdString(), mBasePath.toStdString());
 
     // read shipping lanes
     multimap<int, double> shiplanes_lat = read_shiplanes_lat(mInputName.toStdString(), mBasePath.toStdString());
@@ -1946,8 +1967,11 @@ bool DisplaceModel::initShips()
             lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
 
-            std::shared_ptr<Ship> sh (new Ship(shipids[i], vmaxs[i], vcruises[i],
-                                                         longs, lats
+            std::shared_ptr<Ship> sh (new Ship(shipids[i], imos[i], yearbuilds[i], flags[i],
+                                               types[i], typecodes[i], loas[i], breadths[i],
+                                               grosstonnages[i], nbunits[i],
+                                               vmaxs[i], vcruises[i],
+                                               longs, lats
                                 ));
 
             std::shared_ptr<ShipData> shd (new ShipData(sh));
@@ -1967,6 +1991,7 @@ bool DisplaceModel::initShips()
 bool DisplaceModel::initFishfarm()
 {
 
+
     multimap<int, double> init_size_per_farm = read_size_per_farm(mInputName.toStdString(), mBasePath.toStdString());
     vector<int> name_fishfarms;
     for(multimap<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end();
@@ -1982,7 +2007,9 @@ bool DisplaceModel::initFishfarm()
 
     for (int i=0; i<name_fishfarms.size(); i++)
     {
-       std::shared_ptr<Fishfarm> ff (new Fishfarm(name_fishfarms.at(i),
+        cout<<"create fishfarm " << name_fishfarms.at(i) << endl;
+
+        std::shared_ptr<Fishfarm> ff (new Fishfarm(name_fishfarms.at(i),
                                                   nodes,
                                                   init_size_per_farm
                          ));
@@ -2000,6 +2027,8 @@ bool DisplaceModel::initFishfarm()
 bool DisplaceModel::initBenthos()
 {
     QList<int> ids;
+
+    cout<<"create benthos" << endl;
 
     foreach (std::shared_ptr<NodeData> nd, mNodes) {
         int bm = nd->get_marine_landscape();
@@ -2030,6 +2059,9 @@ bool DisplaceModel::initBenthos()
 
 bool DisplaceModel::initPopulations()
 {
+    cout<<"init pop" << endl;
+
+
     mStatsPopulationsCollected.clear();
     for (int i = 0; i < getPopulationsCount(); ++i) {
         mStatsPopulationsCollected.push_back(PopulationData(i));
@@ -2053,6 +2085,8 @@ bool DisplaceModel::initPopulations()
 
 bool DisplaceModel::initNations()
 {
+     cout<<"init nation" << endl;
+
     // nations are read from vessels.
     QMultiMap<QString, std::shared_ptr<VesselData> > nationSet;
     foreach (std::shared_ptr<VesselData> vessel, mVessels) {

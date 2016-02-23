@@ -694,22 +694,59 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
 fill in the vessel attributes
 @param the vessel specification file, ...
 */
-void fill_from_ships_specifications (istream& in, vector<string>& names,
-vector<double>& vmaxs,
-vector<double>& vcruises,
-vector<double>& lane_ids)
+void fill_from_ships_specifications (istream& in,
+                                     vector<string>& names,
+                                     vector<double>& imos,
+                                     vector<double>& yearbuilds,
+                                     vector<string>& flags,
+                                     vector<string>& types,
+                                     vector<double>& typecodes,
+                                     vector<double>& loas,
+                                     vector<double>& breadths,
+                                     vector<double>& grosstonnages,
+                                     vector<double>& nbunits,
+                                     vector<double>& vmaxs,
+                                     vector<double>& vcruises,
+                                     vector<double>& lane_ids)
 {
 	string name;
 	while(!std::getline(in, name, '|').eof())
 	{
-		string vmax;
+        string imo;
+        string yearbuild;
+        string flag;
+        string type;
+        string typecode;
+        string loa;
+        string breadth;
+        string grosstonnage;
+        string nbunit;
+        string vmax;
 		string vcruise;
 		string lane_id;
-		std::getline(in, vmax, '|');
-		std::getline(in, vcruise, '|');
+        std::getline(in, imo, '|');
+        std::getline(in, yearbuild, '|');
+        std::getline(in, flag, '|');
+        std::getline(in, type, '|');
+        std::getline(in, typecode, '|');
+        std::getline(in, loa, '|');
+        std::getline(in, breadth, '|');
+        std::getline(in, grosstonnage, '|');
+        std::getline(in, nbunit, '|');
+        std::getline(in, vmax, '|');
+        std::getline(in, vcruise, '|');
 		std::getline(in, lane_id);
 		names.push_back(name);
-		vmaxs.push_back(strtod(vmax.c_str(),0));
+        imos.push_back(strtod(imo.c_str(),0));
+        yearbuilds.push_back(strtod(yearbuild.c_str(),0));
+        flags.push_back(flag);
+        types.push_back(type);
+        typecodes.push_back(strtod(typecode.c_str(),0));
+        loas.push_back(strtod(loa.c_str(),0));
+        breadths.push_back(strtod(breadth.c_str(),0));
+        grosstonnages.push_back(strtod(grosstonnage.c_str(),0));
+        nbunits.push_back(strtod(nbunit.c_str(),0));
+        vmaxs.push_back(strtod(vmax.c_str(),0));
 		vcruises.push_back(strtod(vcruise.c_str(),0));
 		lane_ids.push_back(strtod(lane_id.c_str(),0));
 	}

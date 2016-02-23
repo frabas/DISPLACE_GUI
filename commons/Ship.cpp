@@ -47,7 +47,11 @@ Ship::~Ship()
 }
 
 
-Ship::Ship(string a_name, double a_vmax, double a_vcruise, vector<double> a_longs, vector<double> a_lats)
+Ship::Ship(string a_name, double a_imo, double a_yearbuild, string a_flag,
+           string a_type, double a_typecode, double a_loa, double a_breadth,
+           double a_grosstonnage, double a_nbunits,
+           double a_vmax, double a_vcruise,
+           vector<double> a_longs, vector<double> a_lats)
 {
  pthread_mutex_init(&mutex,0);
     count=0;
@@ -64,6 +68,15 @@ Ship::Ship(string a_name, double a_vmax, double a_vcruise, vector<double> a_long
 	vcruise=a_vcruise;
 	course=0;
 	name = a_name;
+    imo = a_imo;
+    yearbuild=a_yearbuild;
+    flag=a_flag;
+    type=a_type;
+    typecode=a_typecode;
+    loa=a_loa;
+    breadth=a_breadth;
+    grosstonnage=a_grosstonnage;
+    nbunits=a_nbunits;
 }
 
 

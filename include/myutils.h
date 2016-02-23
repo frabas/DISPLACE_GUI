@@ -182,10 +182,14 @@ vector<double>& av_trip_duration,
                                        vector<double>& mult_fuelcons_when_fishing,
                                        vector<double>& mult_fuelcons_when_returning,
                                        vector<double>& mult_fuelcons_when_inactive);
-void fill_from_ships_specifications (istream& in, vector<string>& names,
-vector<double>& vmaxs,
-vector<double>& vcruises,
-vector<double>& lane_ids);
+void fill_from_ships_specifications (istream& in, vector<string>& names, vector<double> &imos,
+                                     vector<double> &yearbuilds, vector<string> &flags,
+                                     vector<string> &types, vector<double> &typecodes,
+                                     vector<double> &loas, vector<double> &breadths,
+                                     vector<double> &grosstonnages, vector<double> &nbunits,
+                                     vector<double>& vmaxs,
+                                     vector<double>& vcruises,
+                                     vector<double>& lane_ids);
 
 void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
 void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);

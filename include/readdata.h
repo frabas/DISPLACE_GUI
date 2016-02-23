@@ -64,13 +64,13 @@ vector<double>& mult_fuelcons_when_steaming,
 string folder_name_parameterization,
 string inputfolder,
 int selected_vessels_only);
-void read_ships_features(  vector<string>& shipids,
-vector<double>& vmaxs,
-vector<double>& vcruises,
-vector<double>& lane_ids,
-string folder_name_parameterization,
-string inputfolder
-);
+void read_ships_features(vector<string>& shipids, vector<double> &imos,
+                         vector<double> &yearbuilds, vector<string> &flags,
+                         vector<string> &types, vector<double> &typecodes,
+                         vector<double> &loas, vector<double> &breadths,
+                         vector<double> &grosstonnages, vector<double> &nbunits,
+                         vector<double>& vmaxs, vector<double>& vcruises,vector<double>& lane_ids,
+                         string folder_name_parameterization, string inputfolder);
 
 multimap<string, int> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, int> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);

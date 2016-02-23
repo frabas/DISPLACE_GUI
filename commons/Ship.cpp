@@ -103,6 +103,51 @@ string Ship::get_name () const
 	return(name);
 }
 
+string Ship::get_type () const
+{
+    return(type);
+}
+
+string Ship::get_flag () const
+{
+    return(flag);
+}
+
+double Ship::get_imo () const
+{
+    return(imo);
+}
+
+double Ship::get_typecode () const
+{
+    return(typecode);
+}
+
+double Ship::get_grosstonnage () const
+{
+    return(grosstonnage);
+}
+
+double Ship::get_loa () const
+{
+    return(loa);
+}
+
+double Ship::get_breadth () const
+{
+    return(breadth);
+}
+
+double Ship::get_nbunits () const
+{
+    return(nbunits);
+}
+
+double Ship::get_yearbuild () const
+{
+    return(yearbuild);
+}
+
 
 double Ship::get_vmax () const
 {

@@ -34,7 +34,6 @@ class Ship
 {
 	private:
 		string name;
-        string imo;
         string flag;
         string type;
 		int idx_ship;
@@ -43,7 +42,7 @@ class Ship
 		vector<double> longs;
 		double origin_x, origin_y, end_point_x, end_point_y;
 		double x, y, course;
-        double yearbuild, typecode, loa, breadth, grosstonnage, nbunits;
+        double imo, yearbuild, typecode, loa, breadth, grosstonnage, nbunits;
         double vmax, vcruise;
 
         pthread_mutex_t mutex;
@@ -77,7 +76,16 @@ class Ship
 		double get_end_point_y() const;
 		double get_x() const;	 // in the continuous space
 		double get_y() const;	 // in the continuous space
-		double get_vmax() const;
+        string get_type () const;
+        string get_flag () const;
+        double get_imo() const;
+        double get_typecode() const;
+        double get_grosstonnage() const;
+        double get_loa() const;
+        double get_breadth() const;
+        double get_nbunits() const;
+        double get_yearbuild() const;
+        double get_vmax() const;
 		double get_vcruise() const;
 		double get_course() const;
 

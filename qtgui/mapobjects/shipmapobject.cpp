@@ -67,7 +67,15 @@ void ShipMapObject::updateProperties()
             .arg(mShip->mShip->get_x());
 
     text += "<br/>";
-    text += QString("<b>Speed:</b> %1<br/>").arg(mShip->mShip->get_vmax());
+    text += QString("<b>Type:</b> %1<br/>").arg(QString::fromStdString(mShip->mShip->get_type()));
+    text += QString("<b>Flag:</b> %1<br/>").arg(QString::fromStdString(mShip->mShip->get_flag()));
+    text += QString("<b>IMO:</b> %1<br/>").arg(mShip->mShip->get_imo());
+    text += QString("<b>Year Build:</b> %1<br/>").arg(mShip->mShip->get_yearbuild());
+    text += QString("<b>GT:</b> %1<br/>").arg(mShip->mShip->get_grosstonnage());
+    text += QString("<b>LOA:</b> %1<br/>").arg(mShip->mShip->get_loa());
+    text += QString("<b>Breadth:</b> %1<br/>").arg(mShip->mShip->get_breadth());
+    text += QString("<b>Number Units:</b> %1<br/>").arg(mShip->mShip->get_nbunits());
+    text += QString("<b>Max Speed:</b> %1<br/>").arg(mShip->mShip->get_vmax());
 
     mWidget->setText(text);
 }

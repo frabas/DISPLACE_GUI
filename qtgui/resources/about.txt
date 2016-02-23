@@ -1,4 +1,4 @@
-<html><head/>
+﻿<html><head/>
 <body>
 <p align="center"><span style=" font-size:16pt;">DISPLACE</span></p>
 <p align="center">version $VERSION</p><p align="center"><br/></p><p align="justify"/>
@@ -12,7 +12,7 @@ Copyright
  * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
  * AND EFFORT DISPLACEMENT
 <br/>
- * Copyright (c) 2012, 2013, 2014, 2015 Francois Bastardie <fba@aqua.dtu.dk>
+ * Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>
 <br/>
  *
 <br/>

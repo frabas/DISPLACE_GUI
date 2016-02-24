@@ -23,12 +23,6 @@
 
 #include <time.h>
 
-#ifdef DEBUG
-#ifndef PROFILE
-#define PROFILE
-#endif
-#endif
-
 class Profiler {
 private:
 #ifdef PROFILE

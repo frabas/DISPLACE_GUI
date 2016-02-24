@@ -18,7 +18,7 @@ public:
         void raise() const { throw *this; }
         Exception *clone() const { return new Exception(*this); }
 
-        const char *what() const _GLIBCXX_USE_NOEXCEPT {
+        const char *what() const _NOEXCEPT {
             return mWhat.toStdString().c_str();
         }
 

@@ -1,0 +1,28 @@
+How to build under MacOSX
+=========================
+
+Prerequisites
+-------------
+
+Boost can be downloaded from boost.org.
+GDAL can be downloaded from http://www.kyngchaos.com/software:frameworks .
+
+Fix GDAL installation by adding the following sym link:
+
+$ ln -s /Library/Frameworks/GDAL.framework/unix/include /usr/local/include/gdal
+
+CGAL can be downloaded from ...
+It must be installed in /usr/local. Unpack the sources, create a build directory, then run cmake and make:
+
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ sudo make install
+
+GreographicLib must be installed as well
+
+$ configure --prefix=/usr/local
+$ make
+$ sudo make install
+

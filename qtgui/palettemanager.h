@@ -46,6 +46,7 @@
 #include <QColor>
 #include <QMap>
 #include <QList>
+#include <QIODevice>
 #include <QVariant>
 #include <cmath>
 #include <memory>

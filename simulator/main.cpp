@@ -4904,7 +4904,6 @@ int main(int argc, char* argv[])
          {
              tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
 
-
              effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
              node_lpue = nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop) /effort_on_this_node;
 

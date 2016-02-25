@@ -30,17 +30,21 @@
 
 using namespace displace::graphbuilders;
 
-SimplePlanarGraphBuilder::SimplePlanarGraphBuilder(Type type, double lat_min_deg, double lon_min_deg, double lat_max_deg, double lon_max_deg, double step_x)
-    : mLonMin(lon_min_deg * M_PI / 180.0), mLatMin(lat_min_deg * M_PI / 180.0),
-      mLonMax(lon_max_deg * M_PI / 180.0), mLatMax(lat_max_deg * M_PI / 180.0),
-      stepx(step_x)
+SimplePlanarGraphBuilder::SimplePlanarGraphBuilder(Type type, double lat_min_deg, double lon_min_deg, double lat_max_deg, double lon_max_deg, double step)
+    : mType(type),
+      mLonMin(lon_min_deg * M_PI / 180.0), mLatMin(lat_min_deg * M_PI / 180.0),
+      mLonMax(lon_max_deg * M_PI / 180.0), mLatMax(lat_max_deg * M_PI / 180.0)
 {
-    switch (type) {
+    switch (mType) {
     case Quad:
-        fal = 0;
+        stepx = step;
+        stepy = step;
+        incr = 0;
         break;
     case Hex:
-        fal = 30;
+        stepx = step/2;
+        stepy = std::sqrt(3) * step / 2;
+        incr = 1;
         break;
     }
 }
@@ -52,13 +56,25 @@ SimplePlanarGraphBuilder::~SimplePlanarGraphBuilder()
 
 bool SimplePlanarGraphBuilder::beginCreateGrid()
 {
-    p1 = QPointF(mLonMin, mLatMin);
     clat = mLatMin;
-    flon = mLonMin;
     linestart = true;
-    nr = 0;
+    nr = nc = 0;
 
-    qDebug() << "FAL: " << fal;
+    double l = mLonMin;
+    p1 = p2 = QPointF(mLonMin, mLatMin);
+    while (l < mLonMax) {
+        mLongitudes.push_back(p2.x());
+
+//        qDebug() << p2.x();
+        pointSumWithBearing(p1, stepx, M_PI_2, p2);
+        p1 = p2;
+
+        l = p2.x();
+    }
+
+    p1 = QPointF(mLonMin, mLatMin);
+
+//    qDebug() << "Nodes: " << mLongitudes.size();
 
     return true;
 }
@@ -66,25 +82,32 @@ bool SimplePlanarGraphBuilder::beginCreateGrid()
 QPointF SimplePlanarGraphBuilder::getNext()
 {
     QPointF pt = QPointF(p1.x() * 180.0 / M_PI, p1.y() * 180.0 / M_PI);
+//    qDebug() << nr << nc << pt << p1;
 
     linestart = false;
-    pointSumWithBearing(p1, stepx, M_PI_2, p2);
-    p1 = p2;
 
-    if (p1.x() > mLonMax) {
+    ++nc;
+    if (mType == Hex) {
+        ++nc;
+    }
+
+    if (nc >= mLongitudes.size()) {
         ++nr;
-
-        if ((nr % 2) == 1) {
-            pointSumWithBearing(QPointF(flon, clat), stepx, -fal * M_PI / 180, p2);
-        } else {
-            pointSumWithBearing(QPointF(flon, clat), stepx, fal * M_PI / 180, p2);
+        nc = 0;
+        if (mType == Hex) {
+            if ((nr % 2) == 1) {
+                ++nc;
+            }
         }
 
+        pointSumWithBearing(QPointF(mLongitudes[0], clat), stepy, 0, p2);
+
         clat = p2.y();
-        flon = p2.x();
-        p1=p2;
         linestart = true;
     }
+
+    p1.setX(mLongitudes[nc]);
+    p1.setY(clat);
 
     return pt;
 }

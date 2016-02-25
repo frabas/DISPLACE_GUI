@@ -21,6 +21,9 @@ unix {
         PREFIX=/usr/local/
     }
     #CONFIG += boost_test_included
+    !macx {
+        LIBS += -lrt
+    }
 
 }
 

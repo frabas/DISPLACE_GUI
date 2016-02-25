@@ -18,7 +18,7 @@ public:
     QString message() const {
         return mWhat;
     }
-    const char *what() const _NOEXCEPT {
+    const char *what() const noexcept {
         return mWhat.toStdString().c_str();
     }
     QString file() const {

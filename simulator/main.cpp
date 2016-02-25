@@ -4905,7 +4905,12 @@ int main(int argc, char* argv[])
              tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
 
              effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
-             node_lpue = nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop) /effort_on_this_node;
+             double cumcatches_this_node=0;
+             for (int ipop=0; ipop <tariff_pop.size();++ipop)
+             {
+                cumcatches_this_node+=nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop);
+             }
+             node_lpue = cumcatches_this_node /effort_on_this_node;
 
              nb_times_diff    =  node_lpue/mean_lpue;
              //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;

@@ -1,1 +1,3 @@
-bin/displace usr/bin
+qtgui/displace usr/bin
+displace.desktop usr/share/applications
+qtgui/icons/displace.png usr/share/pixmaps

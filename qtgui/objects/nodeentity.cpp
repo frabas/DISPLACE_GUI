@@ -46,8 +46,17 @@ QModelIndex NodeEntity::index(int row, int column, const QModelIndex &parent) co
 {
     Q_UNUSED(parent);
 
-    ObjectTreeEntity * entity = new NodeEntity(model, row);
-    return model->createEntity(row, column, entity);
+    if (mNodeId == -1 && model->getModel() != 0 && mEntities.size() == 0) {
+        for(int i = 0; i< model->getModel()->getNodesCount(); ++i) {
+            mEntities.push_back(new NodeEntity(model, i));
+        }
+    }
+
+    if (mEntities.size() > row) {
+        return model->createEntity(row, column, mEntities.at(row));
+    }
+    else
+        return model->createEntity(row, column, nullptr);
 }
 
 int NodeEntity::rowCount() const

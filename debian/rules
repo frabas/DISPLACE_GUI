@@ -1,5 +1,15 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
 export QT_SELECT := qt5
-	
+
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+
 %:
 	dh $@ 

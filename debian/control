@@ -1,0 +1,14 @@
+Source: displace
+Section: science
+Priority: optional
+Maintainer: Federico Fuga <fuga@studiofuga.com>
+Build-Depends: debhelper (>= 9), qtbase5-dev, qtbase5-dev-tools, qt5-qmake
+Standards-Version: 0.8.0
+Homepage: https://displace-project.org
+
+Package: packagename
+Architecture: any
+Depends: libqt5gui5, libqt5widgets5, libqt5core5a, ${misc:Depends}, ${shlibs:Depends}
+Description: 
+
+

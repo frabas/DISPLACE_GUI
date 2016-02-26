@@ -55,6 +55,7 @@ public slots:
 
 private:
     mutable QMenu *mContextMenu;
+    mutable QList<NodeEntity *> mEntities;    // for lazy initialization
 };
 
 }

@@ -45,6 +45,7 @@
 #include <QList>
 #include <QStringList>
 
+#include <vector>
 
 class Scenario
 {

@@ -13,7 +13,7 @@ SUBDIRS+=commons qtcommons QMapControl qtgui simulator dteditor tseditor vessele
 
 OTHER_FILES += \
     Readme.txt \
-    Building.win Building.unix \
+    Building.win Building.unix Building.MacOSX \
     localconfig.pri \
     COPYRIGHT.txt \
     LICENSE.txt \

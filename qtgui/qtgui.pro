@@ -47,7 +47,10 @@ DEFINES += HAVE_GEOGRAPHICLIB
 LIBS += -lGeographic
 
 QMAKE_CXXFLAGS += -frounding-math
-DEFINES += PROFILE
+!macx {
+    DEFINES += PROFILE
+}
+
 LIBS+=-L.. -ldisplacecommons -lqtcommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL include path.
@@ -58,6 +61,8 @@ win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
 
 # Add GDAL library path and library (unix).
 unix:LIBS += -lgdal
+
+macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
 
 SOURCES += \
     main.cpp \

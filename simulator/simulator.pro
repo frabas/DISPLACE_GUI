@@ -12,7 +12,7 @@ include ("$$top_srcdir/localconfig.pri")
 QMAKE_CXXFLAGS += -fpermissive
 LIBS+= -L.. -ldisplacecommons
 
-unix {
+unix,!macx {
     LIBS += -lrt
 }
 
@@ -30,11 +30,18 @@ win32 {
 }
 
 CONFIG(debug,debug|release) {
-    DEFINES += DEBUG PROFILE
+    DEFINES += DEBUG
+    !macx {
+        DEFINES += PROFILE
+    }
 }
 
-# Force profiling in release
-DEFINES += PROFILE
+CONFIG(release,debug|release) {
+    # Force profiling in release
+    !macx {
+        DEFINES += PROFILE
+    }
+}
 
 # Force callgrind profiling
 DEFINES += INSTRUMENTATION

@@ -812,23 +812,23 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
     switch (cat) {
 
     case ObjectTreeModel::Harbours:
-        centerMapOnHarbourId((reinterpret_cast<objecttree::HarbourEntity *>(treemodel->entity(index)))->getHarbourId());
+        centerMapOnHarbourId((dynamic_cast<objecttree::HarbourEntity *>(treemodel->entity(index)))->getHarbourId());
         break;
 
     case ObjectTreeModel::Nodes:
-        centerMapOnNodeId((reinterpret_cast<objecttree::NodeEntity *>(treemodel->entity(index)))->getNodeId());
+        centerMapOnNodeId((dynamic_cast<objecttree::NodeEntity *>(treemodel->entity(index)))->getNodeId());
         break;
 
     case ObjectTreeModel::Vessels:
-        centerMapOnVesselId((reinterpret_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
+        centerMapOnVesselId((dynamic_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
         break;
 
     case ObjectTreeModel::Ships:
-        centerMapOnShipId((reinterpret_cast<objecttree::ShipEntity *>(treemodel->entity(index)))->getShipId());
+        centerMapOnShipId((dynamic_cast<objecttree::ShipEntity *>(treemodel->entity(index)))->getShipId());
         break;
 
     case ObjectTreeModel::Fishfarms:
-        centerMapOnFishfarmId((reinterpret_cast<objecttree::FishfarmEntity *>(treemodel->entity(index)))->getFishfarmId());
+        centerMapOnFishfarmId((dynamic_cast<objecttree::FishfarmEntity *>(treemodel->entity(index)))->getFishfarmId());
         break;
 
     default:    // nothing to do

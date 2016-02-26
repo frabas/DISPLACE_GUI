@@ -4904,7 +4904,6 @@ int main(int argc, char* argv[])
          {
              tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
 
-
              effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
              double cumcatches_this_node=0;
              for (int ipop=0; ipop <tariff_pop.size();++ipop)

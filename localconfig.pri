@@ -21,6 +21,22 @@ unix {
         PREFIX=/usr/local/
     }
     #CONFIG += boost_test_included
+    !macx {
+        LIBS += -lrt
+    }
+
+}
+
+macx {
+    INCLUDEPATH += /usr/local/include
+    INCLUDEPATH += /Library/Frameworks/GDAL.framework/unix/include
+
+    LIBS += -L/usr/local/lib
+    LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/ -lgdal
+    DEFINES +=
+
+    QMAKE_CXXFLAGS += -std=c++11
+
 }
 
 DESTDIR=$$top_builddir

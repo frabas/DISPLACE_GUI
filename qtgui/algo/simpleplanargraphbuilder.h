@@ -4,6 +4,7 @@
 #include <algo/geographicgridbuilder.h>
 
 #include <QPointF>
+#include <vector>
 
 namespace displace {
 namespace graphbuilders {
@@ -28,13 +29,17 @@ protected:
     void pointSumWithBearing(const QPointF &p1, double dist, double bearing, QPointF &p2);
 
 private:
+    Type mType;
     double mLonMin, mLatMin, mLonMax, mLatMax;
-    double stepx, fal;
+    double stepx, stepy;
+    int incr;
+
+    std::vector<double> mLongitudes;
 
     QPointF p1, p2;
-    double clat, flon;
+    double clat;
     bool linestart;
-    int nr;
+    unsigned int nr,nc;
 };
 
 }

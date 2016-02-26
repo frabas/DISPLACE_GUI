@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=`git describe --abbrev=4 --dirty --always --tags`
+VERSION=`git describe --abbrev=0 --always --tags`
 NAME=displace-$VERSION
 TEMP=../temp-src
 SRCPATH=$TEMP/$NAME

@@ -18,7 +18,7 @@ win32 {
 
 unix {
     isEmpty(PREFIX) {
-        PREFIX=/usr/local/
+        PREFIX=/usr/
     }
     #CONFIG += boost_test_included
     !macx {

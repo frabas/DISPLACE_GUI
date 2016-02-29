@@ -1596,7 +1596,7 @@ multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(s
 
 
 // FOR FISHFARMS
-multimap<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder)
+map<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder)
 {
 
     string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/size_per_farm.dat";
@@ -1608,8 +1608,8 @@ multimap<int, double> read_size_per_farm(string folder_name_parameterization, st
         open_file_error(filename.c_str());
         //return 1;
     }
-    multimap<int, double> size_per_farm;
-    fill_multimap_from_specifications_i_d(file_size_per_farm,  size_per_farm);
+    map<int, double> size_per_farm;
+    fill_map_from_specifications(file_size_per_farm,  size_per_farm);
     file_size_per_farm.close();
 
     return(size_per_farm);

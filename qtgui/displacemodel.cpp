@@ -1990,34 +1990,17 @@ bool DisplaceModel::initShips()
 
 bool DisplaceModel::initFishfarm()
 {
+    map<int, double> init_size_per_farm = read_size_per_farm(mInputName.toStdString(), mBasePath.toStdString());
 
+   for (auto iter : init_size_per_farm) {
+       cout<<"create fishfarm " << iter.first << endl;
 
-    multimap<int, double> init_size_per_farm = read_size_per_farm(mInputName.toStdString(), mBasePath.toStdString());
-    vector<int> name_fishfarms;
-    for(multimap<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end();
-        iter = init_size_per_farm.upper_bound( iter->first ) )
-    {
-        name_fishfarms.push_back (iter->first);
-    }
+       auto node = mNodes.at(iter.first);
+       auto ff = std::make_shared<Fishfarm>(iter.first, node->mNode.get(), iter.second);
 
-     vector <Node *> nodes;
-     foreach (std::shared_ptr<NodeData> nd, mNodes) {
-      nodes.push_back( nd->mNode.get() );
-     }
-
-    for (int i=0; i<name_fishfarms.size(); i++)
-    {
-        cout<<"create fishfarm " << name_fishfarms.at(i) << endl;
-
-        std::shared_ptr<Fishfarm> ff (new Fishfarm(name_fishfarms.at(i),
-                                                  nodes,
-                                                  init_size_per_farm
-                         ));
-
-       std::shared_ptr<FishfarmData> ffd (new FishfarmData(ff));
+       auto ffd = std::make_shared<FishfarmData>(ff);
        mFishfarms.push_back(ffd);
-
-    }
+   }
 
     return true;
 }

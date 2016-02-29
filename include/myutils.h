@@ -207,6 +207,19 @@ void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map);
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map);
 void fill_map_from_specifications_s_d (istream& in, map<string, double>& a_map);
 
+template <typename DTYPE>
+void fill_map_from_specifications (istream &in, map<int,DTYPE> &map) {
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        map.insert(make_pair(key,val));
+    }
+}
+
 vector<double> find_entries_s_d (multimap<string, double>& infos, string str);
 vector<int> find_entries_s_i (multimap<string, int>& infos, string vid);
 vector<double> find_entries_i_d (const multimap<int, double> &infos, int intg);

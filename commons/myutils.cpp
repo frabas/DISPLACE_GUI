@@ -940,7 +940,7 @@ void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& 
 fill in the vessel attributes into a multimap <integer, double>
 @param e.g. the vessel specification file, ...
 */
-void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double>& infos)
+void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &infos)
 {
 
 	string line;

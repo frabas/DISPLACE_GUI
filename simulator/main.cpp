@@ -1364,7 +1364,7 @@ int main(int argc, char* argv[])
    dout(cout  << "---------------------------" << endl);
    dout(cout  << "---------------------------" << endl);
 
-   multimap<int, double> init_size_per_farm = read_size_per_farm(folder_name_parameterization, "../"+inputfolder);
+   map<int, double> init_size_per_farm = read_size_per_farm(folder_name_parameterization, "../"+inputfolder);
    cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
 
 
@@ -1372,38 +1372,11 @@ int main(int argc, char* argv[])
    // copy only unique elements of init_pops_per_szgroup into name_pops
    // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
    cout << "Do the name_pops creation  need a check?" << endl;
-   vector<int> name_fishfarms;
-   for(multimap<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end();
-       iter = init_size_per_farm.upper_bound( iter->first ) )
-   {
-       name_fishfarms.push_back (iter->first);
-      cout << "fishfarm " << iter->first << endl;
 
-   }
-  cout << "nb fishfarms: " << name_fishfarms.size() << endl;
-  outc(cout << "if you have a problem of overflow here then check if you forgot a blank at the end of size_per_farm.dat! "  << endl);
-
-
-  // creation of a vector of fishfarms
-  fishfarms = vector <Fishfarm* > (name_fishfarms.size());
-
-
-  // FOR-LOOP OVER FISHFARMS
-  for (unsigned int ff=0; ff<fishfarms.size(); ff++)
-  {
-     dout(cout  << endl);
-
-     outc(cout << "fish farm name: " <<  ff << endl);
-
-     cout << " create fish farm... "  << endl;
-     fishfarms[ff] =   ( new Fishfarm(ff,
-                                      nodes,
-                                      init_size_per_farm
-                       ));
-
-
-  }
-
+    for(map<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end(); iter = init_size_per_farm.upper_bound( iter->first ) ) {
+        Fishfarm *ff = new Fishfarm(iter->first, nodes.at(iter->first), iter->second);
+        fishfarms.push_back(ff);
+    }
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);

@@ -118,7 +118,7 @@ multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_param
 multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
 
 // fishfarms specific
-multimap<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder);
+map<int, double> read_size_per_farm(string folder_name_parameterization, string inputfolder);
 
 // shipping specific
 multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder);

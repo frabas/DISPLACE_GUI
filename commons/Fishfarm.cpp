@@ -25,35 +25,14 @@
 #include "Fishfarm.h"
 #include <helpers.h>
 
-Fishfarm::Fishfarm(int a_name,
-                       const vector<Node *> &nodes,
-                       const multimap <int, double> _fishfarm_size)
+#include <iterator>
+
+
+Fishfarm::Fishfarm(int _name, Node *_node, double _size)
+    : name(_name), x(_node->get_x()), y(_node->get_y()),
+      size(_size)
 {
-
-    name=a_name;
-
-    fishfarm_size= _fishfarm_size;
-
-    //
-    vector<Node* > p_spe_nodes;
-    for(multimap<int, double>::iterator iter=fishfarm_size.begin(); iter != fishfarm_size.end();
-        iter = fishfarm_size.upper_bound( iter->first ) )
-    {
-        p_spe_nodes.push_back (nodes[  iter->first  ]);
-        // nodes[ iter->first ]->set_fishfarm_names_on_node(a_name);
-
-    }
-    for(unsigned int i=0; i<p_spe_nodes.size(); i++)
-        list_nodes.push_back(p_spe_nodes[i]);
-
-    // assume xy imformed by the first node
-    this->set_x(list_nodes.at(0)->get_x());
-    this->set_y(list_nodes.at(0)->get_y());
-
 }
-
-
-
 
 Fishfarm::~Fishfarm()
 {
@@ -75,17 +54,6 @@ double Fishfarm::get_y() const
     return(y);
 }
 
-const vector<Node* > &Fishfarm::get_list_nodes() const
-{
-    return(list_nodes);
-}
-
-
-void Fishfarm::set_list_nodes(vector<Node* > _list_nodes)
-{
-    list_nodes= _list_nodes;
-}
-
 void Fishfarm::set_x(double _x)
 {
     x= _x;
@@ -95,5 +63,3 @@ void Fishfarm::set_y(double _y)
 {
     y= _y;
 }
-
-

@@ -31,17 +31,12 @@
 class Fishfarm
 {
     public:
-        Fishfarm(int name,
-            const vector<Node* > &nodes,
-            const multimap <int, double> fishfarm_size
-             );
+        Fishfarm(int _name, Node *_node, double size);
 
         Fishfarm();
         virtual ~Fishfarm();
                                  // Copy constructor
         int get_name() const;
-        const vector<Node *> &get_list_nodes() const;
-        void set_list_nodes(vector<Node* > _list_nodes);
         double get_x() const;
         double get_y() const;
         void set_x(double value);
@@ -51,9 +46,6 @@ class Fishfarm
     private:
         int name;
         double x, y;
-                                 // area distribution
-        vector<Node* > list_nodes;
-        multimap <int, double> fishfarm_size;
-
+        double size;
 };
 #endif							 // FISHFARM_H

@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 2.8)
+project(displace)
+
+SET(CMAKE_SYSTEM_NAME Linux)
+SET(CMAKE_SYSTEM_VERSION 1)
+
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
+SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall")
+
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/" ${CMAKE_MODULE_PATH} )
+
+execute_process(
+        COMMAND git describe --abbrev=4 --dirty --always --tags
+        OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_UNSTRIPPED
+)
+
+add_subdirectory(simulator)
+
+
+string(STRIP "${CPACK_PACKAGE_VERSION_UNSTRIPPED}" CPACK_PACKAGE_VERSION )
+
+SET(CPACK_SOURCE_GENERATOR "TGZ")
+SET(CPACK_GENERATOR "STGZ;TGZ")
+SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY "1")
+SET(CPACK_PACKAGE_NAME "displace")
+
+message(STATUS "Package: ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+
+SET(CPACK_SOURCE_IGNORE_FILES "build/;\\\\.idea/;\\\\.gitignore;.*~;\\\\.git")
+
+INCLUDE(CPack)
+

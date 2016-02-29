@@ -16,3 +16,4 @@ docs/html
 docs/latex
 *.autosave
 build-*
+.idea

@@ -14,6 +14,7 @@ execute_process(
         OUTPUT_VARIABLE CPACK_PACKAGE_VERSION_UNSTRIPPED
 )
 
+add_subdirectory(commons)
 add_subdirectory(simulator)
 
 

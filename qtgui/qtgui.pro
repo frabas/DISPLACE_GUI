@@ -277,7 +277,8 @@ OTHER_FILES += \
     palettes/pop_colors.p2c \
     ../docs/input_fileformats.txt \
     ../Doxyfile \
-    palettes/tariffs_colors.p2c
+    palettes/tariffs_colors.p2c \
+    extra/displace.desktop
 
 TRANSLATIONS += \
     translations/displace_it.ts \
@@ -287,3 +288,10 @@ TRANSLATIONS += \
 
 target.path=$${PREFIX}/bin
 
+extra.path=$${PREFIX}/share/applications
+extra.files=extra/displace.desktop
+
+icons.path=$${PREFIX}/share/pixmaps
+icons.files=icons/displace.png
+
+INSTALLS += target icons extra

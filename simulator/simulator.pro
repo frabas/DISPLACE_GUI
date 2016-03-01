@@ -91,3 +91,4 @@ OTHER_FILES += \
     Makefile.hpc
 
 target.path=$${PREFIX}/bin
+INSTALLS += target

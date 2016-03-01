@@ -45,7 +45,7 @@ CONFIG(release,debug|release) {
 }
 
 # Force callgrind profiling
-DEFINES += INSTRUMENTATION
+# DEFINES += INSTRUMENTATION
 
 #QMAKE_CXXFLAGS += -g
 

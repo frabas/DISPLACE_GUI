@@ -139,12 +139,12 @@ extern void guiSendVesselLogbook(const std::string &line);
 static void manage_ship(thread_data_t *dt, int idx_v)
 {
     UNUSED(dt);
-    cout << "idx_v is " << idx_v << " " << ships.size() << endl;
+    dout(cout << "idx_v is " << idx_v << " " << ships.size() << endl);
        ships.at(idx_v - 1000)->lock();
          pthread_mutex_lock (&glob_mutex);
-           cout<<"before at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl;
+           dout(cout<<"before at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl);
             ships.at(idx_v - 1000)->move();
-            cout<<"after at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl;
+            dout(cout<<"after at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl);
             mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 1000))));
          pthread_mutex_unlock (&glob_mutex);
        ships.at(idx_v - 1000)->unlock();

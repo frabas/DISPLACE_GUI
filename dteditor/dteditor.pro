@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = dtreeeditor
 
-INCLUDEPATH+=../include/  ../commons/
+INCLUDEPATH+=../include/  ../commons/ ../qtcommons/
 
 include ("$$top_srcdir/localconfig.pri")
 

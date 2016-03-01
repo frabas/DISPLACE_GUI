@@ -12,6 +12,10 @@ win32 {
     LIBS += -lpsapi
 }
 
+unix,!macx {
+    LIBS += -lrt
+}
+
 SOURCES= \
     readdata.cpp \
     myutils.cpp \
@@ -78,7 +82,7 @@ HEADERS= \
 
 
 OTHER_FILES += \
-    Makefile
+    Makefile.hpc
 
 target.path = $${PREFIX}/lib
 headers.path = $${PREFIX}/include/

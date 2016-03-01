@@ -12,11 +12,12 @@ include ("$$top_srcdir/localconfig.pri")
 QMAKE_CXXFLAGS += -fpermissive
 LIBS+= -L.. -ldisplacecommons
 
-unix,!macx {
+LIBS += -lpthread
+
+unix {
     LIBS += -lrt
 }
 
-LIBS += -lpthread
 
 macx {
     CONFIG -= app_bundle
@@ -87,6 +88,6 @@ HEADERS= \
     messages/moveshipoutputmessage.h
 
 OTHER_FILES += \
-    Makefile
+    Makefile.hpc
 
 target.path=$${PREFIX}/bin

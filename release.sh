@@ -8,7 +8,7 @@ TEMP=../temp-src
 SRCPATH=$TEMP/$NAME
 
 mkdir -p $SRCPATH
-rsync -rav --progress --exclude .git --exclude .qt.conf --exclude \*~ --exclude \*.tar.gz . $SRCPATH
+rsync -rav --progress --exclude .git --exclude .qt.conf --exclude \*~ --exclude \*.tar.gz --exclude build . $SRCPATH
 ( cd $TEMP && tar zcvf $NAME.tar.gz $NAME )
 
 mv $TEMP/$NAME.tar.gz .

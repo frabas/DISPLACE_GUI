@@ -121,4 +121,5 @@ void ShipMapObject::ShipGraphics::drawShape(QPainter &painter, const qmapcontrol
     painter.setBrush(*color);
     painter.drawEllipse(-10, -20, 20, 40);
 
+    painter.rotate(-mShip->mShip->get_course());
 }

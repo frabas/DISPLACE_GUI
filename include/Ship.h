@@ -48,7 +48,7 @@ class Ship
         pthread_mutex_t mutex;
 
     public:
-        Ship(string name,  double imo, double yearbuild, string flag,
+        Ship(int idx, string name,  double imo, double yearbuild, string flag,
              string type, double typecode, double loa, double breadth,
              double grosstonnage, double nbunits,
              double vmax, double vcruise,

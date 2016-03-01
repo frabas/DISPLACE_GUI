@@ -1967,7 +1967,7 @@ bool DisplaceModel::initShips()
             lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
 
-            std::shared_ptr<Ship> sh (new Ship(shipids[i], imos[i], yearbuilds[i], flags[i],
+            std::shared_ptr<Ship> sh (new Ship(i,shipids[i], imos[i], yearbuilds[i], flags[i],
                                                types[i], typecodes[i], loas[i], breadths[i],
                                                grosstonnages[i], nbunits[i],
                                                vmaxs[i], vcruises[i],

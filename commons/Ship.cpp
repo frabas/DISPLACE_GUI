@@ -47,7 +47,7 @@ Ship::~Ship()
 }
 
 
-Ship::Ship(string a_name, double a_imo, double a_yearbuild, string a_flag,
+Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_flag,
            string a_type, double a_typecode, double a_loa, double a_breadth,
            double a_grosstonnage, double a_nbunits,
            double a_vmax, double a_vcruise,
@@ -55,7 +55,7 @@ Ship::Ship(string a_name, double a_imo, double a_yearbuild, string a_flag,
 {
  pthread_mutex_init(&mutex,0);
     count=0;
-	idx_ship = 0;
+    idx_ship = idx;
 	origin_x =a_longs[0];
 	origin_y =a_lats[0];
 	longs=a_longs;

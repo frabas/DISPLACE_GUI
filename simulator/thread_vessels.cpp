@@ -145,7 +145,7 @@ static void manage_ship(thread_data_t *dt, int idx_v)
            cout<<"before at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl;
             ships.at(idx_v - 1000)->move();
             cout<<"after at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl;
- //           mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 1000))));
+            mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 1000))));
          pthread_mutex_unlock (&glob_mutex);
        ships.at(idx_v - 1000)->unlock();
 }

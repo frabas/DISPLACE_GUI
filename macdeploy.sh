@@ -22,7 +22,17 @@ else
 	T=$1
 fi
 
-qmake -query | sed -e 's/:/=/g' > /tmp/qtconf
+QMAKE=`which qmake`
+if [ "$QMAKE" == "" ] ; then
+	echo "qmake not in path."
+	QMAKE=~/Qt/5.5/clang_64/bin/qmake
+	if [ ! -r $QMAKE ] ; then
+		echo "Cannot use wired in qmake. please fix paths."
+		exit 1
+	fi
+fi
+
+$QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
 DESTDIR=$PWD/build/$T/bin

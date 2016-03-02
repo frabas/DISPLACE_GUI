@@ -129,12 +129,6 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     qDebug() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
 
-#ifdef __MAC_10_0
-    QProcessEnvironment env = mSimulation->processEnvironment();
-    env.insert("DYLD_LIBRARY_PATH", QApplication::applicationDirPath());
-    mSimulation->setProcessEnvironment(env);
-#endif
-
     mSimulation->start(QApplication::applicationDirPath() + "/displace", arguments);
 
     return true;

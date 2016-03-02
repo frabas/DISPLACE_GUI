@@ -1,3 +1,5 @@
+CONFIG -= qt
+
 TEMPLATE= lib
 TARGET=displacecommons
 DESTDIR=../

@@ -11,6 +11,7 @@ DESTDIR=../
 DEFINES += QTCOMMONS_LIBRARY
 
 include ("$$top_srcdir/localconfig.pri")
+macx:DESTDIR=$$LIBDESTDIR
 
 SOURCES += qcustomplot.cpp \
         R/env.cpp \

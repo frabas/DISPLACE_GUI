@@ -6,12 +6,37 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = displacegui
 
+macx {
+    TARGET=$$APPTARGET
+    TEMPLATE=app
+    DESTDIR=$$APPDESTDIR
+
+    QMAKE_INFO_PLIST = resources/Info.plist
+    ICON = icons/displace.icns
+
+    #CONFIG -= app_bundle
+
+    ### qmake 4.7.4 workaround
+#    QMAKE_INFO_PLIST_OUT = $$DESTDIR/$$TARGETAPPBUNDLE/Contents/Info.plist
+
+#    missing.target = dummy
+#    missing.depends = $$DESTDIR/$$TARGETAPPBUNDLE/Contents/Info.plist $$DESTDIR/$$TARGETAPPBUNDLE/Contents/Resources/displace.icns
+
+#    QMAKE_EXTRA_TARGETS = missing
+#    QMAKE_PRE_LINK = make dummy
+}
+
 INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")
 
 DESTDIR = ../
+macx {
+    DESTDIR=$$APPDESTDIR
+    TARGET=$$APPTARGET
+}
+
 QMAPCONTROL_LIB=qmapcontrol
 
 CONFIG(debug,release|debug) {
@@ -24,12 +49,6 @@ CONFIG(release,release|debug) {
 # For use with debugger in release mode
 #   QMAKE_CXXFLAGS_RELEASE += -g -O2
 #   QMAKE_LFLAGS_RELEASE=
-}
-
-macx {
-    CONFIG -= app_bundle
-    ICON = icons/displace.icns
-
 }
 
 win32 {
@@ -278,7 +297,9 @@ OTHER_FILES += \
     ../docs/input_fileformats.txt \
     ../Doxyfile \
     palettes/tariffs_colors.p2c \
-    extra/displace.desktop
+    extra/displace.desktop \
+    icons/displace.icns \
+    resources/Info.plist
 
 TRANSLATIONS += \
     translations/displace_it.ts \

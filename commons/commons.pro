@@ -4,6 +4,7 @@ DESTDIR=../
 CONFIG += c++11
 
 include ("$$top_srcdir/localconfig.pri")
+macx:DESTDIR=$$LIBDESTDIR
 
 INCLUDEPATH +=../include/ .
 

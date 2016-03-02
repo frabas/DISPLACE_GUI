@@ -11,6 +11,10 @@ INCLUDEPATH+=../include/  ../commons/ ../qtcommons
 include ("$$top_srcdir/localconfig.pri")
 
 DESTDIR = ../
+macx {
+    DESTDIR=$$EXEDESTDIR
+    CONFIG -= app_bundle
+}
 
 CONFIG(debug,release|debug) {
     DEFINES += DEBUG

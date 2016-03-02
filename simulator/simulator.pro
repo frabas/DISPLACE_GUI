@@ -4,9 +4,14 @@ TARGET=displace
 TEMPLATE=app
 
 DESTDIR = ../
+
 INCLUDEPATH=../include ../commons
 
 include ("$$top_srcdir/localconfig.pri")
+macx {
+    DESTDIR=$$EXEDESTDIR
+    CONFIG -= app_bundle
+}
 
 QMAKE_CXXFLAGS += -fpermissive
 LIBS+= -L.. -ldisplacecommons

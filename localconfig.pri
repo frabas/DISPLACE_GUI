@@ -1,5 +1,14 @@
 DEFINES += QMC_GDAL
 
+macx {
+    APPTARGET=DisplaceProject
+}
+
+!macx {
+    APPTARGET=displace
+}
+
+
 win32 {
     #MINGW=C:\Qt\qt-5.3.1-x64-mingw482r4-seh-opengl\mingw64
     #MINGW=C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64
@@ -36,7 +45,26 @@ macx {
 
     QMAKE_CXXFLAGS += -std=c++11 -stdlib=libstdc++
 
+    APPDESTDIR=../bin
+    TARGETAPPBUNDLE=$$join(APPTARGET,,,".app")
+    TARGETSODIR= $$APPDESTDIR $$TARGETAPPBUNDLE Contents Frameworks
+    TARGETEXEDIR= $$APPDESTDIR $$TARGETAPPBUNDLE Contents MacOS
+    LIBDESTDIR= $$join(TARGETSODIR,"/")
+    EXEDESTDIR= $$join(TARGETEXEDIR,"/")
+
+    ## hack
+    QMC_LIBDESTDIR=../../../$$LIBDESTDIR
+
+    QMAKE_LFLAGS_SONAME=-Wl,-install_name,@executable_path/../Frameworks/
+    LOCALEDIR=$$APPDESTDIR/$$TARGETAPPBUNDLE/Contents/Resources/Locales
+
+    LIBS += -L$$LIBDESTDIR
 }
+
+MOC_DIR = moc
+UI_DIR = ui
+OBJECTS_DIR = obj
+RCC_DIR = obj
 
 DESTDIR=$$top_builddir
 

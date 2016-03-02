@@ -337,6 +337,9 @@
         <property name="suffix">
          <string> km</string>
         </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
        </widget>
       </item>
       <item row="0" column="0">

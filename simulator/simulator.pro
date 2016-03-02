@@ -1,5 +1,4 @@
 CONFIG -= qt
-CONFIG +=
 
 TARGET=displace
 TEMPLATE=app
@@ -12,22 +11,16 @@ include ("$$top_srcdir/localconfig.pri")
 QMAKE_CXXFLAGS += -fpermissive
 LIBS+= -L.. -ldisplacecommons
 
-LIBS += -lpthread
-
-unix {
-    LIBS += -lrt
-}
-
-
 macx {
+    CONFIG += c++11
+    LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
     CONFIG -= app_bundle
 }
 
-win32 {
-    #PATH+=C:\mingw\x64-4.8.1-posix-seh-rev5\mingw64\bin
-#    QMAKE_CXX = x86_64-w64-mingw32-g++
-#    QMAKE_LINK = x86_64-w64-mingw32-g++
-#    QMAKE_LFLAGS = -static
+LIBS += -lpthread
+
+unix,!macx {
+    LIBS += -lrt
 }
 
 CONFIG(debug,debug|release) {

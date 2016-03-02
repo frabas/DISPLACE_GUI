@@ -32,10 +32,9 @@ macx {
     INCLUDEPATH += /Library/Frameworks/GDAL.framework/unix/include
 
     LIBS += -L/usr/local/lib
-    LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/ -lgdal
     DEFINES +=
 
-    QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++11 -stdlib=libstdc++
 
 }
 

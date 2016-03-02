@@ -443,10 +443,10 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // realtime gnuplot
     if(use_gnuplot)
     {
-        pthread_mutex_lock(&mutex);
+        pthread_mutex_lock(&::mutex);
         vmslike2   << vessels[ index_v ]->get_x() << " "
             << vessels[ index_v ]->get_y() <<  endl;
-        pthread_mutex_unlock(&mutex);
+        pthread_mutex_unlock(&::mutex);
     }
     vessels[index_v]->unlock();
 

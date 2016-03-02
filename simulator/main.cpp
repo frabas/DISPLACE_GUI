@@ -4498,18 +4498,18 @@ int main(int argc, char* argv[])
                       // cpues
                       int a_ground = some_grounds.at(gr);
                       double a_cpue= some_cpues.at(gr);
-                      grounds_cpues_harbour_knowledge.insert(std::make_pair<int,double>(a_ground,a_cpue));
+                      grounds_cpues_harbour_knowledge.insert(make_pair(a_ground,a_cpue));
                       fgrounds.push_back(some_grounds.at(gr));
 
                       // mets
                       vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, a_ground );
                       int a_met= metiers_on_grd.at(0); // take only one, the first as it comes....
 
-                      bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, std::make_pair<int,int>(a_met, a_ground));
+                      bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, make_pair(a_met, a_ground));
                       if(is_present)
                          {
                           // EQUAL FREQ (TO BE CHANGED, BUT DOESNT MATTER IF A ChooseGround DTREES IN USE)
-                         freq_grounds_mets_harbour_knowledge.insert(std::make_pair<int,int>(a_met, 1.0));
+                         freq_grounds_mets_harbour_knowledge.insert(make_pair(a_met, 1.0));
                          }
                       }
                     }

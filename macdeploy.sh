@@ -14,7 +14,7 @@
 # It must be told about all the external libraries that must me installed, automatically or manually.
 #
 
-set -e
+#set -e
 
 if [ "$1" == "" ] ; then
 	T=release
@@ -29,10 +29,10 @@ DESTDIR=$PWD/build/$T/bin
 APPNAME=DisplaceProject
 APPBUNDLE=$DESTDIR/$APPNAME.app
 
-EXECUTABLES="DisplaceProject displace dtreeeditor tseditor vsleditor"
+EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor vsleditor"
 EXTRA_FRAMEWORKS="GDAL"
 EXTRA_LIBS="libGeographic libCGAL libgmp "
-QT_PLUGINS="qsqlite qgif qjpeg qmng qtiff"
+QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
 INSTALL_EXTRA_LIBS=""
 
@@ -53,11 +53,12 @@ copy_lib()
 	
 	#echo "checking $T against $LIB"
 	libpath=`otool -L $T | grep $LIB`
-	if [ $? -eq 0 ] ; then	
+	if [ $? -eq 0 ] ; then
 		org_name=`otool -L $T | grep $LIB | egrep -v '\:$' | awk '{ print \$1 }'`	
-		
-		echo "$org_name" | egrep '@executable_path/' > /dev/null
-		if [ $? -ne 0 ] ; then	
+		echo "$org_name" | egrep '@executable_path/' 
+		RES=$?
+		#echo "result: $RES"
+		if [ $RES -ne 0 ] ; then	
 			lib_name=`basename $org_name`
 			dest_name=$AB/Contents/Frameworks/$lib_name
 			new_name=@executable_path/../Frameworks/$lib_name
@@ -66,14 +67,23 @@ copy_lib()
 			# Check if the library is accessible. It could not if the library doesn't exists but is manually
 			# installed by INSTALL_EXTRA_LIBS
 			#
+			if [ ! -r "$org_name" ] ; then
+				echo "$org_name not found, trying with /usr/local/lib"
+				org_name=/usr/local/lib/$org_name
+			fi
+			
 			if [ -r "$org_name" ] ; then
 				#echo "COPYING: $org_name $dest_name"
-				cp -R $org_name $dest_name
+				cp -L $org_name $dest_name || exit 1
 		
 				#echo "Running: install_name_tool -id $new_name $dest_name"
 				install_name_tool -id $new_name $dest_name || echo "- ***Error Running: install_name_tool -id $new_name $dest_name"
+			else
+				echo "Cannot read $org_name (`otool -L $T | grep $LIB`)"
 			fi
 		fi
+	#else
+		#echo "No $LIB found"
 	fi	
 }
 
@@ -93,7 +103,7 @@ copy_framework_qt()
 	src_file=`echo $WF | sed -e 's/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_file=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\)\/.*$/\1/g'`
 	dst_lib=`echo $WF | sed -e 's/^.*\/\(Qt[^/]*\.framework\/.*\)$/\1/g'` 
-	echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
+	#echo "Copying framework: $WF $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file
@@ -110,11 +120,12 @@ copy_framework()
 	src_file=$1
 	dst_file=$2
 	dst_lib=$3
+	BUNDLE=$4
 	
 	echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
-		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file
+		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
 	
 		#echo "Running: install_name_tool -id @executable_path/../Frameworks/$dst_file $BUNDLE/Contents/Frameworks/$dst_lib"
 		install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib \
@@ -214,13 +225,18 @@ fi
 
 for app in $EXECUTABLES; do 
 	echo "Deploying: $app"
+	if [ ! -r $APPBUNDLE/Contents/MacOS/$app ] ; then
+		echo "Exe Contents/MacOS/$app not readable."
+		exit 1
+	fi
+	
 	QTLIBS=`otool -L $APPBUNDLE/Contents/MacOS/$app | egrep 'Qt[^/]*\.framework' | egrep -v '@executable_path' | awk '{ print \$1 }' | sed -e's|@rpath/||g'`
 	for qtlib in $QTLIBS; do
 		copy_framework_qt $APPBUNDLE/Contents/MacOS/$app $QT_INSTALL_LIBS/$qtlib $APPBUNDLE
 	done
 
 	for fmw in $EXTRA_FRAMEWORKS ; do
-		copy_framework /Library/Frameworks/$fmw.framework/Versions/Current/$fmw $fmw.framework $fmw.framework
+		copy_framework /Library/Frameworks/$fmw.framework $fmw.framework $fmw.framework/Versions/Current/$fmw $APPBUNDLE
 	done
 	
 	for lib in $EXTRA_LIBS; do
@@ -265,11 +281,6 @@ for file in $CEXE $APPBUNDLE/Contents/Frameworks/* $PLUGINS; do
 done
 
 # Other, unrelated stuff
-
-cp extra/license.html $APPBUNDLE/Contents/Resources
-cp prelude/icons/document2.icns $APPBUNDLE/Contents/Resources
-install_name_tool -change libsglmac-2.29.0.0.dylib.x86_64 libsglmac-2.29.0.0.dylib $APPBUNDLE/Contents/MacOS/updater
-install_name_tool -change libsglmac-2.29.0.0.dylib.x86_64 libsglmac-2.29.0.0.dylib $APPBUNDLE/Contents/MacOS/Prelude_2.0
 
 # Applying owner:group and access rights
 

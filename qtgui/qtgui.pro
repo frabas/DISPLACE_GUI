@@ -65,8 +65,8 @@ unix {
 DEFINES += HAVE_GEOGRAPHICLIB
 LIBS += -lGeographic
 
-QMAKE_CXXFLAGS += -frounding-math
 !macx {
+    QMAKE_CXXFLAGS += -frounding-math
     DEFINES += PROFILE
 }
 

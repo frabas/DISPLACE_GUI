@@ -35,6 +35,8 @@
 #include <QProgressDialog>
 #include <QDebug>
 
+#include <qsignalblocker.h>
+
 TsEditorWindow::TsEditorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::TsEditorWindow),

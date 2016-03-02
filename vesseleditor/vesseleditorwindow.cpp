@@ -37,6 +37,8 @@
 
 #include <iostream>
 
+#include <qsignalblocker.h>
+
 VesselEditorWindow::VesselEditorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorWindow),

@@ -37,6 +37,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include <qsignalblocker.h>
 
 DtEditorWindow::DtEditorWindow(QWidget *parent) :
     QMainWindow(parent),

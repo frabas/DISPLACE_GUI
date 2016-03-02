@@ -24,7 +24,8 @@ HEADERS +=\
         R/env.h \
         csv/csvimporter.h \
         csv/csvexporter.h \
-        csv/csvtablemodel.h
+        csv/csvtablemodel.h \
+    qsignalblocker.h
 
 unix {
     target.path = /usr/lib

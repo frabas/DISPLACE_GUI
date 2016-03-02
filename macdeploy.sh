@@ -26,6 +26,7 @@ qmake -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
 DESTDIR=$PWD/build/$T/bin
+INSTALL=$PWD/build
 APPNAME=DisplaceProject
 APPBUNDLE=$DESTDIR/$APPNAME.app
 
@@ -35,6 +36,9 @@ EXTRA_LIBS="libGeographic libCGAL libgmp "
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
 INSTALL_EXTRA_LIBS=""
+
+
+TOOLDIR=`dirname $0`
 
 #copy_lib
 # copy a library in the application bundle Frameworks directory
@@ -122,7 +126,7 @@ copy_framework()
 	dst_lib=$3
 	BUNDLE=$4
 	
-	echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
+	#echo "Copying framework: $src_file into $BUNDLE/Contents/Frameworks/$dst_file"
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
@@ -216,8 +220,9 @@ fi
 
 echo "Deploying from: $T"
 
-# manually copy the libraries
+fix_bundle() {
 
+# manually copy the libraries
 if [ "$INSTALL_EXTRA_LIBS" != "" ] ; then
 	echo "Installing extra libs"
 	cp $INSTALL_EXTRA_LIBS $APPBUNDLE/Contents/Frameworks/ 
@@ -291,3 +296,23 @@ sudo find $APPBUNDLE -type d -exec chmod 755 \{\} \;
 for app in $EXECUTABLES; do
 	sudo chmod +x $APPBUNDLE/Contents/MacOS/$app
 done
+
+}
+
+create_dmg() {
+
+rm -rf $INSTALL/install
+mkdir $INSTALL/install
+cp -a $APPBUNDLE $INSTALL/install/
+
+$TOOLDIR/scripts/create-dmg.sh \
+    --app-drop-link 20 20 \
+    --volname "Displace Project for MacOS" \
+    $INSTALL/displace-mac.dmg $INSTALL/install/
+
+
+}
+
+
+fix_bundle
+create_dmg

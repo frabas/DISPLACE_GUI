@@ -6,7 +6,9 @@ find_package(Boost REQUIRED
 
 set(SOURCES
         main.cpp
-        keyvaluereader.cpp)
+        keyvaluereader.cpp
+        linenumberreader.cpp
+    )
 
 include_directories(
         ../

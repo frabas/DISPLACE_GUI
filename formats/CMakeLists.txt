@@ -1,11 +1,13 @@
 project (formats)
 
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED
+        COMPONENTS regex filesystem
+        )
 
 set(SOURCES
         legacy/ConfigFileReader.cpp legacy/ConfigFileReader.h
         utils/KeyValueReader.cpp utils/KeyValueReader.h
-    )
+        test/main.cpp)
 
 include_directories(
         ${Boost_INCLUDE_DIRS}
@@ -15,7 +17,8 @@ set(CMAKE_CXX_FLAGS "-fpermissive" )
 
 add_library(formats
         ${SOURCES}
-        )
+        ${Boost_LIBRARY_DIRS} ${Boost_LIBRARIES}
+    )
 
 
 #target_link_libraries(
@@ -30,3 +33,5 @@ endif()
 
 # Set target directory
 install (TARGETS formats DESTINATION lib)
+
+add_subdirectory(test)

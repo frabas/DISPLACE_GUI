@@ -19,7 +19,7 @@ add_definitions(
     )
 
 find_package(Boost REQUIRED
-        COMPONENTS filesystem system
+        COMPONENTS regex filesystem system
     )
 
 include_directories(.

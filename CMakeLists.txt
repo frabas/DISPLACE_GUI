@@ -15,6 +15,7 @@ execute_process(
 )
 
 add_subdirectory(commons)
+add_subdirectory(formats)
 add_subdirectory(simulator)
 
 

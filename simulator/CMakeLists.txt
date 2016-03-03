@@ -23,6 +23,7 @@ find_package(Boost REQUIRED
     )
 
 include_directories(.
+        ../formats
         ${Boost_INCLUDE_DIRS}
     )
 
@@ -31,7 +32,7 @@ add_executable(displace
     )
 
 target_link_libraries(displace
-        commons
+        formats
         ${Boost_LIBRARY_DIRS} ${Boost_LIBRARIES}
         )
 

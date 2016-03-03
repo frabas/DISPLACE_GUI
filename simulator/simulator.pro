@@ -24,7 +24,7 @@ macx {
 
 LIBS += -lpthread
 
-unix,!macx {
+unix:!macx {
     LIBS += -lrt
 }
 

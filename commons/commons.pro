@@ -15,7 +15,7 @@ win32 {
     LIBS += -lpsapi
 }
 
-unix,!macx {
+unix:!macx {
     LIBS += -lrt
 }
 

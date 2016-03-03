@@ -23,7 +23,7 @@ find_package(Boost REQUIRED
     )
 
 include_directories(.
-        ../formats
+        ../
         ${Boost_INCLUDE_DIRS}
     )
 

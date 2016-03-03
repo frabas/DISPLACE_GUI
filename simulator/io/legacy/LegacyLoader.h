@@ -13,12 +13,15 @@ namespace displace {
 
         class LegacyLoader : public Loader {
             boost::filesystem::path mPath;
+            std::string mModel;
         public:
             explicit LegacyLoader(const std::string &path);
 
             virtual bool load(Simulation *simulation);
-        };
 
+        protected:
+            bool loadConfigFile();
+        };
     }
 }
 

@@ -7,7 +7,7 @@ find_package(Boost REQUIRED
 set(SOURCES
         legacy/ConfigFileReader.cpp legacy/ConfigFileReader.h
         utils/KeyValueReader.cpp utils/KeyValueReader.h
-        test/main.cpp)
+        test/main.cpp utils/LineNumberReader.cpp utils/LineNumberReader.h)
 
 include_directories(
         ${Boost_INCLUDE_DIRS}

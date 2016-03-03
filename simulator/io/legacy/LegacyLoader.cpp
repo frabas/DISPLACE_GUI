@@ -42,8 +42,6 @@ bool LegacyLoader::load(displace::Simulation *simulation)
 
 bool LegacyLoader::loadConfigFile()
 {
-    // simusspe_"+folder_name_parameterization+"/config.dat
-
     std::string filepath = mPath.append(std::string {"simusspe_"} + mModel).append("config.dat").string();
 
     displace::formats::helpers::LineNumberReader reader;
@@ -58,6 +56,7 @@ bool LegacyLoader::loadConfigFile()
         return false;
 
     // dump
+    std::cout << reader << std::endl;
 
     return true;
 }

@@ -3,7 +3,7 @@ project (simulator)
 SET(SIMSOURCES
         main.cpp
         Simulation.cpp Simulation.h
-        Environment.h
+        Environment.cpp Environment.h
         Actor.h
         env/Playground.cpp env/Playground.h
         env/Clock.cpp env/Clock.h
@@ -11,16 +11,28 @@ SET(SIMSOURCES
         env/MapGraph.cpp env/MapGraph.h
         io/Loader.cpp io/Loader.h
         utils/make_unique.h
+        io/legacy/LegacyLoader.cpp io/legacy/LegacyLoader.h
         )
 
-include_directories(.)
+add_definitions(
+        -DBOOST_FILESYSTEM_VERSION=3
+    )
+
+find_package(Boost REQUIRED
+        COMPONENTS filesystem system
+    )
+
+include_directories(.
+        ${Boost_INCLUDE_DIRS}
+    )
 
 add_executable(displace
         ${SIMSOURCES}
-        )
+    )
 
 target_link_libraries(displace
         commons
+        ${Boost_LIBRARY_DIRS} ${Boost_LIBRARIES}
         )
 
 # Set standard as c++11

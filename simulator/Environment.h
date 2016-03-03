@@ -5,10 +5,12 @@
 #ifndef DISPLACE_ENVIRONMENT_H
 #define DISPLACE_ENVIRONMENT_H
 
+namespace displace {
 
-class Environment {
+    class Environment {
+    public:
+    };
 
-};
-
+}
 
 #endif //DISPLACE_ENVIRONMENT_H

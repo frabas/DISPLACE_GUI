@@ -5,9 +5,12 @@
 #ifndef DISPLACE_LOADER_H
 #define DISPLACE_LOADER_H
 
-#include <bits/unique_ptr.h>
+#include <memory>
+#include <string>
 
 namespace displace {
+    class Simulation;
+
     namespace io {
 
         /** @brief A builder class that generate an instance of the right loader for the project file */
@@ -17,7 +20,8 @@ namespace displace {
         public:
             static std::unique_ptr<Loader> create(const std::string &path);
 
-            virtual bool load() = 0;
+            virtual ~Loader() noexcept = default;
+            virtual bool load(Simulation *) = 0;
         };
 
     }

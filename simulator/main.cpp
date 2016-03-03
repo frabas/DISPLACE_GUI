@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < argc; ++i)
         options.emplace_back(std::string(argv[i]));
 
-    Simulation sim;
+    displace::Simulation sim;
     if (!sim.initialize(options)) {
         std::cerr << "Cannot initialize simulation. Exiting." << std::endl;
         return 1;

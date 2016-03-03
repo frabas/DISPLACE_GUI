@@ -8,12 +8,16 @@
 #include <list>
 #include <string>
 
+namespace displace {
+
 class Simulation {
 public:
-    explicit Simulation(const std::list<std::string> &options);
+    explicit Simulation();
 
+    bool initialize(const std::list<std::string> &options);
     int run();
 };
 
+} // ns;
 
 #endif //DISPLACE_SIMULATION_H

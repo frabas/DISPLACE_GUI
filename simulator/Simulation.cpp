@@ -3,13 +3,27 @@
 //
 
 #include "Simulation.h"
+#include <io/Loader.h>
 
-Simulation::Simulation(const std::list<std::string> &options)
+using namespace displace;
+
+Simulation::Simulation()
 {
 
+}
+
+bool Simulation::initialize(const std::list<std::string> &options)
+{
+
+    auto project_file = options.back();
+
+
+
+    return true;
 }
 
 int Simulation::run()
 {
     return 0;
 }
+

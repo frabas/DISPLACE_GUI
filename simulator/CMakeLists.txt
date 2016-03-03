@@ -1,7 +1,17 @@
 project (simulator)
 
 SET(SIMSOURCES
-        main.cpp Simulation.cpp Simulation.h Environment.h Actor.h env/Playground.cpp env/Playground.h env/Clock.cpp env/Clock.h env/Calendar.cpp env/Calendar.h)
+        main.cpp
+        Simulation.cpp Simulation.h
+        Environment.h
+        Actor.h
+        env/Playground.cpp env/Playground.h
+        env/Clock.cpp env/Clock.h
+        env/Calendar.cpp env/Calendar.h
+        env/MapGraph.cpp env/MapGraph.h
+        io/Loader.cpp io/Loader.h
+        utils/make_unique.h
+        )
 
 include_directories(.)
 

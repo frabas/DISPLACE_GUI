@@ -8,6 +8,8 @@
 #include <map>
 #include <string>
 
+#include "prettyprint.h"
+
 namespace displace {
     namespace formats {
         namespace helpers {
@@ -25,6 +27,10 @@ namespace displace {
 
                 unsigned long numValues() const {
                     return mConfig.size();
+                }
+
+                friend std::ostream &operator << (std::ostream &strm, const LineNumberReader &rdr) {
+                    return strm << rdr.mConfig;
                 }
 
             private:

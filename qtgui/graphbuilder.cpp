@@ -200,7 +200,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                 ld.id_to = vc->info();
                 ld.removed = false;
 
-                if (mOutsideEnabled && mRemoveEdgesInExcludeZone) {
+                if (mRemoveEdgesInExcludeZone) {
                     // look for edges intersecting the exclusion Zone
                     OGRLineString *line = (OGRLineString *)OGRGeometryFactory::createGeometry(wkbLineString);
                     line->addPoint(p1.x(), p1.y());

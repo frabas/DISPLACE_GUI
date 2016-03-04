@@ -18,12 +18,17 @@ namespace displace {
 
         public:
             explicit LegacyLoader(const std::string &path);
+            ~LegacyLoader() noexcept ;
 
             virtual bool load(Simulation *simulation);
 
         protected:
             bool loadConfigFile();
             bool loadScenarioFile();
+            bool loadGraph();
+
+            struct Status;
+            std::unique_ptr<Status> mStatus;
         };
     }
 }

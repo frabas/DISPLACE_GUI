@@ -12,16 +12,20 @@ namespace displace {
 
         class MapGraph;
         class Node;
+        class Edge;
 
         class Playground {
         public:
             explicit Playground();
             ~Playground() noexcept;
 
-            int getNodeCount();
+            int getNodeCount() const;
             int addNode ();
             std::shared_ptr<Node> node(int idx);
 
+            int getEdgeCount() const;
+            int addEdge (int from, int to);
+            std::shared_ptr<Edge> edge(int from, int to);
 
         private:
             std::unique_ptr<MapGraph> mGraph;

@@ -13,6 +13,7 @@
 #include <Environment.h>
 #include <env/Playground.h>
 #include <env/Node.h>
+#include <env/Edge.h>
 
 #include <boost/regex.hpp>
 #include <boost/format.hpp>
@@ -27,7 +28,8 @@ namespace helpers = displace::formats::helpers;
 struct LegacyLoader::Status
 {
     int a_graph;
-    unsigned int nrow_coord;
+    unsigned long nrow_coord;
+    unsigned long nrow_graph;
 };
 
 LegacyLoader::LegacyLoader(const std::string &path)
@@ -121,6 +123,7 @@ bool LegacyLoader::loadScenarioFile()
 
     mStatus->a_graph = boost::lexical_cast<int>(reader.get("a_graph"));
     mStatus->nrow_coord = boost::lexical_cast<unsigned int>(reader.get("nrow_coord"));
+    mStatus->nrow_graph = boost::lexical_cast<unsigned int>(reader.get("nrow_graph"));
 
     return true;
 }
@@ -131,10 +134,12 @@ bool LegacyLoader::loadGraph(Simulation *simulation)
     auto graph = (path / boost::filesystem::path{ boost::str(boost::format{"coord%d.dat"} % mStatus->a_graph) }).string();
     auto codearea = (path / boost::filesystem::path{ boost::str(boost::format{"code_area_for_graph%d_points.dat"} % mStatus->a_graph) }).string();
     auto marineland = (path / boost::filesystem::path{ boost::str(boost::format{"coord%d_with_landscape.dat"} % mStatus->a_graph) }).string();
+    auto conn = (path / boost::filesystem::path{ boost::str(boost::format{"graph%d.dat"} % mStatus->a_graph) }).string();
 
     std::cout << "Loading graph from " << graph << std::endl;
     std::cout << "Loading codearea from " << codearea << std::endl;
     std::cout << "Loading marineland from " << marineland << std::endl;
+    std::cout << "Loading connections from " << marineland << std::endl;
 
     formats::legacy::NodesFileReader reader;
 
@@ -185,7 +190,6 @@ bool LegacyLoader::loadGraph(Simulation *simulation)
         return false;
     }
 
-
     auto AssignMarineLandscape = [simulation](int idx, int marineidx) {
         // TODO assign marine landscape.
     };
@@ -195,6 +199,43 @@ bool LegacyLoader::loadGraph(Simulation *simulation)
         return false;
     }
 
+    std::ifstream fconn(conn);
+    if (!fconn) {
+        std::cout << "Error opening connection file." << std::endl;
+        return false;
+    }
+
+    using EC = std::tuple<int,int,double>;
+    std::vector<EC> edges;
+
+    auto AssignEdgeEnds = [&edges](int ct, int idx, int node) {
+        while (idx >= edges.size())
+            edges.emplace_back(EC());
+        if (ct == 0)
+            std::get<0>(edges[idx]) = node;
+        else if (ct == 1)
+            std::get<1>(edges[idx]) = node;
+        else
+            throw std::runtime_error ("Wrong parameter to SetGraphCoord.");
+    };
+
+    auto AssignEdgeWeight = [&edges](int idx, double w) {
+        std::get<2>(edges[idx]) = w;
+    };
+
+    if (!reader.read<int,double>(fconn, mStatus->nrow_graph, AssignEdgeEnds, AssignEdgeWeight )) {
+        std::cout << "Error reading codearea file." << std::endl;
+        return false;
+    }
+
+    for (auto e : edges) {
+        int f,t,w;
+        std::tie(f,t,w) = e;
+        auto idx = simulation->environment().playground().addEdge(f,t);
+        simulation->environment().playground().edge(f,t)->setWeight(w);
+    }
+
+    std::cout << "Read " << edges.size() << " Graph edges." << std::endl;
 
     return true;
 }

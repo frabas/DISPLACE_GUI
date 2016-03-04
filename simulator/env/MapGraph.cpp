@@ -5,6 +5,7 @@
 #include "MapGraph.h"
 
 #include <env/Node.h>
+#include <env/Edge.h>
 
 using namespace displace::env;
 
@@ -27,3 +28,17 @@ long MapGraph::addNode()
 
     return newname;
 }
+
+long MapGraph::addEdge(int src, int to)
+{
+    long newname = edgeCount();
+
+    using namespace boost::graph;
+    auto ne = add_edge(src, to, mGraph);
+
+    auto nn = std::make_shared<Edge>(newname);
+    mGraph[std::get<0>(ne)] = nn;
+
+    return newname;
+}
+

@@ -17,7 +17,7 @@ Playground::Playground()
 
 Playground::~Playground() noexcept = default;
 
-int Playground::getNodeCount()
+int Playground::getNodeCount() const
 {
     return mGraph->nodeCount();
 }
@@ -30,4 +30,19 @@ int Playground::addNode()
 std::shared_ptr<Node> Playground::node(int idx)
 {
     return mGraph->node(idx);
+}
+
+int Playground::getEdgeCount() const
+{
+    return mGraph->edgeCount();
+}
+
+int Playground::addEdge(int from, int to)
+{
+    return mGraph->addEdge(from, to);
+}
+
+std::shared_ptr<Edge> Playground::edge(int form, int to)
+{
+    return mGraph->edge(form, to);
 }

@@ -29,6 +29,21 @@ namespace displace {
                 return mGraph[idx];
             }
 
+            unsigned long edgeCount() const {
+                return mGraph.m_edges.size();
+            }
+            long addEdge(int src, int to);
+            std::shared_ptr<Edge> edge(int from, int to) {
+                boost::graph_traits<Graph>::edge_descriptor e;
+                bool b;
+                std::tie(e,b) = boost::edge(from, to, mGraph);
+
+                if (b) {
+                    return mGraph[e];
+                }
+                return nullptr;
+            }
+
             using NodeProperty = std::shared_ptr<Node>;
             using EdgeProperty = std::shared_ptr<Edge>;
 

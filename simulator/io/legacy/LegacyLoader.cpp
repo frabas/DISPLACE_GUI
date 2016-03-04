@@ -15,7 +15,8 @@ using namespace displace::io;
 LegacyLoader::LegacyLoader(const std::string &path)
 {
     boost::filesystem::path p(path);
-    auto dir = p.remove_filename();
+    auto dir = p;
+    dir.remove_filename();
 
     auto ldir = dir.filename();
     boost::regex r { ".*_([^_]+)$" };
@@ -28,13 +29,16 @@ LegacyLoader::LegacyLoader(const std::string &path)
 
     mPath = dir.parent_path();
     mModel = results[1];
+    mScenario = p.filename().replace_extension({""}).string();
 }
 
 bool LegacyLoader::load(displace::Simulation *simulation)
 {
-    std::cout << "Loading from: " << mPath << " model is " << mModel << std::endl;
+    std::cout << "Loading from: " << mPath << " model is " << mModel << " scenario " << mScenario << std::endl;
 
     if (!loadConfigFile())
+        return false;
+    if (!loadScenarioFile())
         return false;
 
     return true;
@@ -42,7 +46,8 @@ bool LegacyLoader::load(displace::Simulation *simulation)
 
 bool LegacyLoader::loadConfigFile()
 {
-    std::string filepath = mPath.append(std::string {"simusspe_"} + mModel).append("config.dat").string();
+    auto path = mPath;
+    std::string filepath = path.append(std::string {"simusspe_"} + mModel).append("config.dat").string();
 
     displace::formats::helpers::LineNumberReader reader;
     static const displace::formats::helpers::LineNumberReader::Specifications specs {
@@ -51,6 +56,33 @@ bool LegacyLoader::loadConfigFile()
     };
 
     std::cout << "Reading config file from " << filepath << std::endl;
+
+    if (!reader.importFromFile(filepath, specs))
+        return false;
+
+    // dump
+    std::cout << reader << std::endl;
+
+    return true;
+}
+
+bool LegacyLoader::loadScenarioFile()
+{
+    auto path = mPath;
+    std::string filepath = path.append(std::string {"simusspe_"} + mModel).append(mScenario + ".dat").string();
+
+    displace::formats::helpers::LineNumberReader reader;
+
+    static const displace::formats::helpers::LineNumberReader::Specifications specs {
+            {1,"dyn_alloc_sce"},{3,"dyn_pop_sce"},{5,"biolsce"},{7,"freq_do_growth"},{9,"freq_redispatch_the_pop"},
+            {11,"a_graph"},{13,"nrow_coord"},{15,"nrow_graph"},{17,"a_port"},{19,"graph_res"},
+            {21,"is_individual_vessel_quotas"},{23,"check_all_stocks_before_going_fishing"},{25,"dt_go_fishing"},
+            {27,"dt_choose_ground"},{29,"dt_start_fishing"},{31,"dt_change_ground"},{33,"dt_stop_fishing"},
+            {35,"dt_change_port"},{37,"use_dtrees"},{39,"tariff_pop"},{41,"freq_update_tariff_code"},
+            {43,"arbitary_breaks_for_tariff"},{45,"total_amount_credited"},{47,"tariff_annual_hcr_percent_change"}
+    };
+
+    std::cout << "Reading Scenario file from " << filepath << std::endl;
 
     if (!reader.importFromFile(filepath, specs))
         return false;

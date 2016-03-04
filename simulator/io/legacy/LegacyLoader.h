@@ -14,6 +14,8 @@ namespace displace {
         class LegacyLoader : public Loader {
             boost::filesystem::path mPath;
             std::string mModel;
+            std::string mScenario;
+
         public:
             explicit LegacyLoader(const std::string &path);
 
@@ -21,6 +23,7 @@ namespace displace {
 
         protected:
             bool loadConfigFile();
+            bool loadScenarioFile();
         };
     }
 }

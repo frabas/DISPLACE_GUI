@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <formats/utils/LineNumberReader.h>
+#include <formats/legacy/NodesFileReader.h>
 
 #include <boost/regex.hpp>
 #include <boost/format.hpp>
@@ -21,6 +22,7 @@ namespace helpers = displace::formats::helpers;
 struct LegacyLoader::Status
 {
     int a_graph;
+    unsigned int nrow_coord;
 };
 
 LegacyLoader::LegacyLoader(const std::string &path)
@@ -113,6 +115,7 @@ bool LegacyLoader::loadScenarioFile()
     std::cout << reader << std::endl;
 
     mStatus->a_graph = boost::lexical_cast<int>(reader.get("a_graph"));
+    mStatus->nrow_coord = boost::lexical_cast<unsigned int>(reader.get("nrow_coord"));
 
     return true;
 }
@@ -127,6 +130,49 @@ bool LegacyLoader::loadGraph()
     std::cout << "Loading graph from " << graph << std::endl;
     std::cout << "Loading codearea from " << codearea << std::endl;
     std::cout << "Loading marineland from " << marineland << std::endl;
+
+    formats::legacy::NodesFileReader reader;
+    std::vector<formats::legacy::NodesFileReader::Node<double,int>> nodes;
+
+    std::ifstream fgraph(graph);
+    if (!fgraph) {
+        std::cout << "Error opening graph file." << std::endl;
+        return false;
+    }
+
+    if (!reader.read(fgraph, mStatus->nrow_coord, nodes)) {
+        std::cout << "Error reading Graph file. " << nodes.size() << " nodes partially read." << std::endl;
+        return false;
+    }
+
+    std::cout << "Read Graph Nodes " << nodes.size() << std::endl;
+
+    std::ifstream fcodearea(codearea);
+    if (!fcodearea) {
+        std::cout << "Error opening codearea file." << std::endl;
+        return false;
+    }
+
+    if (!reader.read<int,int>(fcodearea, mStatus->nrow_coord, nullptr, [] (int idx, int codearea) {
+        // assign codearea to node idx
+    })) {
+        std::cout << "Error reading codearea file." << std::endl;
+        return false;
+    }
+
+    std::ifstream fmarineland(marineland);
+    if (!fmarineland) {
+        std::cout << "Error opening marineland file." << std::endl;
+        return false;
+    }
+
+    if (!reader.read<int,int>(fmarineland, mStatus->nrow_coord, nullptr, [] (int idx, int marineland) {
+        // assign codearea to node idx
+    })) {
+        std::cout << "Error reading marineland file." << std::endl;
+        return false;
+    }
+
 
     return true;
 }

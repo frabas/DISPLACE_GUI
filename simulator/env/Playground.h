@@ -7,16 +7,28 @@
 
 #include <memory>
 
-class MapGraph;
+namespace displace {
+    namespace env {
 
-class Playground {
-public:
-    explicit Playground();
-    ~Playground() noexcept = default;
+        class MapGraph;
+        class Node;
 
-private:
-    std::unique_ptr<MapGraph> mGraph;
-};
+        class Playground {
+        public:
+            explicit Playground();
+            ~Playground() noexcept;
+
+            int getNodeCount();
+            int addNode ();
+            std::shared_ptr<Node> node(int idx);
+
+
+        private:
+            std::unique_ptr<MapGraph> mGraph;
+        };
+
+    }
+}
 
 
 #endif //DISPLACE_PLAYGROUND_H

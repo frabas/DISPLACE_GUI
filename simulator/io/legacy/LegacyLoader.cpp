@@ -9,6 +9,11 @@
 #include <formats/utils/LineNumberReader.h>
 #include <formats/legacy/NodesFileReader.h>
 
+#include <Simulation.h>
+#include <Environment.h>
+#include <env/Playground.h>
+#include <env/Node.h>
+
 #include <boost/regex.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
@@ -56,7 +61,7 @@ bool LegacyLoader::load(displace::Simulation *simulation)
         return false;
     if (!loadScenarioFile())
         return false;
-    if (!loadGraph())
+    if (!loadGraph(simulation))
         return false;
 
     return true;
@@ -120,7 +125,7 @@ bool LegacyLoader::loadScenarioFile()
     return true;
 }
 
-bool LegacyLoader::loadGraph()
+bool LegacyLoader::loadGraph(Simulation *simulation)
 {
     auto path = mPath / boost::filesystem::path{"graphsspe"};
     auto graph = (path / boost::filesystem::path{ boost::str(boost::format{"coord%d.dat"} % mStatus->a_graph) }).string();
@@ -132,7 +137,6 @@ bool LegacyLoader::loadGraph()
     std::cout << "Loading marineland from " << marineland << std::endl;
 
     formats::legacy::NodesFileReader reader;
-    std::vector<formats::legacy::NodesFileReader::Node<double,int>> nodes;
 
     std::ifstream fgraph(graph);
     if (!fgraph) {
@@ -140,12 +144,25 @@ bool LegacyLoader::loadGraph()
         return false;
     }
 
-    if (!reader.read(fgraph, mStatus->nrow_coord, nodes)) {
-        std::cout << "Error reading Graph file. " << nodes.size() << " nodes partially read." << std::endl;
+    auto SetGraphCoord = [simulation](int ct, int idx, double v) {
+        auto &play = simulation->environment().playground();
+        while (idx >= play.getNodeCount())
+            play.addNode();
+        auto nd = play.node(idx);
+        if (ct == 0)
+            nd->setX(v);
+        else if (ct == 1)
+            nd->setY(v);
+        else
+            throw std::runtime_error ("Wrong parameter to SetGraphCoord.");
+    };
+
+    if (!reader.read<double,int>(fgraph, mStatus->nrow_coord, SetGraphCoord, nullptr)) {
+        std::cout << "Error reading Graph file. " << std::endl;
         return false;
     }
 
-    std::cout << "Read Graph Nodes " << nodes.size() << std::endl;
+    std::cout << "Read Graph Nodes " << simulation->environment().playground().getNodeCount() << std::endl;
 
     std::ifstream fcodearea(codearea);
     if (!fcodearea) {
@@ -153,9 +170,11 @@ bool LegacyLoader::loadGraph()
         return false;
     }
 
-    if (!reader.read<int,int>(fcodearea, mStatus->nrow_coord, nullptr, [] (int idx, int codearea) {
-        // assign codearea to node idx
-    })) {
+    auto AssignCodeArea = [simulation](int idx, int codearea) {
+        //TODO assign codearea to node idx
+    };
+
+    if (!reader.read<int,int>(fcodearea, mStatus->nrow_coord, nullptr, AssignCodeArea )) {
         std::cout << "Error reading codearea file." << std::endl;
         return false;
     }
@@ -166,9 +185,12 @@ bool LegacyLoader::loadGraph()
         return false;
     }
 
-    if (!reader.read<int,int>(fmarineland, mStatus->nrow_coord, nullptr, [] (int idx, int marineland) {
-        // assign codearea to node idx
-    })) {
+
+    auto AssignMarineLandscape = [simulation](int idx, int marineidx) {
+        // TODO assign marine landscape.
+    };
+
+    if (!reader.read<int,int>(fmarineland, mStatus->nrow_coord, nullptr, AssignMarineLandscape)) {
         std::cout << "Error reading marineland file." << std::endl;
         return false;
     }

@@ -12,7 +12,7 @@ SET(SIMSOURCES
         io/Loader.cpp io/Loader.h
         utils/make_unique.h
         io/legacy/LegacyLoader.cpp io/legacy/LegacyLoader.h
-        )
+        env/Node.cpp env/Node.h)
 
 add_definitions(
         -DBOOST_FILESYSTEM_VERSION=3

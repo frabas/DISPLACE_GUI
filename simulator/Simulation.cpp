@@ -4,13 +4,23 @@
 
 #include "Simulation.h"
 #include <io/Loader.h>
+#include <utils/make_unique.h>
+
+#include <Environment.h>
 
 using namespace displace;
 
-Simulation::Simulation()
-{
+struct Simulation::Impl {
+};
 
+Simulation::Simulation()
+: mImpl(utils::make_unique<Impl>()),
+  mEnv(utils::make_unique<Environment>())
+{
 }
+
+Simulation::~Simulation() noexcept = default;
+
 
 bool Simulation::initialize(const std::list<std::string> &options)
 {

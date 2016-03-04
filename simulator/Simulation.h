@@ -7,16 +7,28 @@
 
 #include <list>
 #include <string>
+#include "Environment.h"
 
 namespace displace {
 
-class Simulation {
-public:
-    explicit Simulation();
+    class Environment;
 
-    bool initialize(const std::list<std::string> &options);
-    int run();
-};
+    class Simulation {
+    private:
+        struct Impl;
+        std::unique_ptr<Impl> mImpl;
+
+        std::unique_ptr<Environment> mEnv;
+    public:
+        explicit Simulation();
+        ~Simulation() noexcept ;
+
+        bool initialize(const std::list<std::string> &options);
+        int run();
+
+        Environment &environment() { return *mEnv; }
+        const Environment &environment() const { return *mEnv; }
+    };
 
 } // ns;
 

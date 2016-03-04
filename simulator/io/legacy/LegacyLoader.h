@@ -25,7 +25,7 @@ namespace displace {
         protected:
             bool loadConfigFile();
             bool loadScenarioFile();
-            bool loadGraph();
+            bool loadGraph(Simulation *simulation);
 
             struct Status;
             std::unique_ptr<Status> mStatus;

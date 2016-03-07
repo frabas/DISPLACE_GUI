@@ -9,7 +9,8 @@ set(SOURCES
         utils/KeyValueReader.cpp utils/KeyValueReader.h
         utils/LineNumberReader.cpp utils/LineNumberReader.h
         utils/prettyprint.h
-        legacy/NodesFileReader.h)
+        legacy/NodesFileReader.h utils/MultifieldReader.h
+    )
 
 include_directories(
         ${Boost_INCLUDE_DIRS}

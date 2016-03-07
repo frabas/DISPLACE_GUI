@@ -26,6 +26,7 @@ namespace displace {
             bool loadConfigFile();
             bool loadScenarioFile();
             bool loadGraph(Simulation *simulation);
+            bool loadVessels(Simulation *simulation, int quarter);
 
             struct Status;
             std::unique_ptr<Status> mStatus;

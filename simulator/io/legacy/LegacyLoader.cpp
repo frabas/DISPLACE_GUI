@@ -8,6 +8,7 @@
 #include <iostream>
 #include <formats/utils/LineNumberReader.h>
 #include <formats/legacy/NodesFileReader.h>
+#include <formats/utils/MultifieldReader.h>
 
 #include <Simulation.h>
 #include <Environment.h>
@@ -20,6 +21,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <utils/make_unique.h>
+#include <formats/utils/prettyprint.h>
 
 using namespace displace::io;
 
@@ -64,6 +66,8 @@ bool LegacyLoader::load(displace::Simulation *simulation)
     if (!loadScenarioFile())
         return false;
     if (!loadGraph(simulation))
+        return false;
+    if (!loadVessels(simulation, 1))
         return false;
 
     return true;
@@ -209,7 +213,7 @@ bool LegacyLoader::loadGraph(Simulation *simulation)
     std::vector<EC> edges;
 
     auto AssignEdgeEnds = [&edges](int ct, int idx, int node) {
-        while (idx >= edges.size())
+        while ((size_t)idx >= edges.size())
             edges.emplace_back(EC());
         if (ct == 0)
             std::get<0>(edges[idx]) = node;
@@ -231,11 +235,44 @@ bool LegacyLoader::loadGraph(Simulation *simulation)
     for (auto e : edges) {
         int f,t,w;
         std::tie(f,t,w) = e;
-        auto idx = simulation->environment().playground().addEdge(f,t);
+        simulation->environment().playground().addEdge(f,t);
         simulation->environment().playground().edge(f,t)->setWeight(w);
     }
 
     std::cout << "Read " << edges.size() << " Graph edges." << std::endl;
+
+    return true;
+}
+
+bool LegacyLoader::loadVessels(displace::Simulation *simulation, int quarter)
+{
+    auto path = mPath
+        / boost::filesystem::path{boost::str(boost::format{"vesselsspe_%s"} % mModel)}
+        / boost::filesystem::path{boost::str(boost::format{"vesselsspe_features_quarter%d.dat"} % quarter)};
+
+
+    formats::helpers::MultifieldReader reader;
+
+    std::ifstream strm(path.string());
+    if (!strm) {
+        std::cout << "Error opening file: " << path.string() << std::endl;
+        return false;
+    }
+
+    using VesselDataType = std::tuple<std::string,
+            double,double,double,double,double,double,double,
+            double,double,double,double,double,double,double>;
+
+    int i = 0;
+    auto VesselLoaderFunc = [&i] (VesselDataType data) {
+        std::cout << i << " Vessel: " << data << std::endl;
+        ++i;
+    };
+    if (!reader.importFromStream<VesselDataType>(strm,"|", VesselLoaderFunc)) {
+        std::cout << "Error loading vessels" << std::endl;
+    }
+
+    std::cout << "Read " << i << " vessels..." << std::endl;
 
     return true;
 }

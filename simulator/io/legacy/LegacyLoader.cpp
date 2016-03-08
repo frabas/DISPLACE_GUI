@@ -15,6 +15,8 @@
 #include <env/Playground.h>
 #include <env/Node.h>
 #include <env/Edge.h>
+#include <env/ActorsContainer.h>
+#include <actors/Vessel.h>
 
 #include <boost/regex.hpp>
 #include <boost/format.hpp>
@@ -263,16 +265,15 @@ bool LegacyLoader::loadVessels(displace::Simulation *simulation, int quarter)
             double,double,double,double,double,double,double,
             double,double,double,double,double,double,double>;
 
-    int i = 0;
-    auto VesselLoaderFunc = [&i] (VesselDataType data) {
-        std::cout << i << " Vessel: " << data << std::endl;
-        ++i;
+    auto VesselLoaderFunc = [simulation] (VesselDataType data) {
+        auto v = std::make_shared<actors::Vessel>();
+        simulation->environment().vessels().addActor(v);
     };
     if (!reader.importFromStream<VesselDataType>(strm,"|", VesselLoaderFunc)) {
         std::cout << "Error loading vessels" << std::endl;
     }
 
-    std::cout << "Read " << i << " vessels..." << std::endl;
+    std::cout << "Read " << simulation->environment().vessels().actorsCount() << " vessels..." << std::endl;
 
     return true;
 }

@@ -13,7 +13,8 @@ struct Environment::Impl {
 
 Environment::Environment()
 : mImpl( utils::make_unique<Impl>() ),
-  mPlayground(utils::make_unique<env::Playground>())
+  mPlayground(utils::make_unique<env::Playground>()),
+  mVessels(utils::make_unique<env::ActorsContainer<actors::Vessel>>())
 {
 
 }

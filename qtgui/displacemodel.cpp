@@ -1456,7 +1456,7 @@ bool DisplaceModel::loadVessels()
     vector<double> speeds;
     vector<double> fuelcons;
     vector<double> lengths;
-    vector<double> KWs;
+    vector<double> vKWs;
     vector<double> carrycapacities;
     vector<double> tankcapacities;
     vector<double> nbfpingspertrips;
@@ -1467,7 +1467,7 @@ bool DisplaceModel::loadVessels()
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;
-    read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
+    read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
                           carrycapacities, tankcapacities, nbfpingspertrips,
                           resttime_par1s, resttime_par2s, av_trip_duration,
                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
@@ -1615,7 +1615,7 @@ bool DisplaceModel::loadVessels()
             speeds[i],
             fuelcons[i],
             lengths[i],
-            KWs[i],
+            vKWs[i],
             carrycapacities[i],
             tankcapacities[i],
             nbfpingspertrips[i],
@@ -1940,15 +1940,22 @@ bool DisplaceModel::initShips()
     vector<string> types;
     vector<double> typecodes;
     vector<double> loas;
+    vector<double> KWs;
     vector<double> breadths;
     vector<double> grosstonnages;
+    vector<double> fueluses;
+    vector<double> NOxEmission_gperKWhs;
+    vector<double> SOxEmission_percentpertotalfuelmasss;
+    vector<double> GHGEmissions;
+    vector<double> PMEmissions;
     vector<double> nbunits;
     vector<double> vmaxs;
     vector<double> vcruises;
     vector<double> lane_ids;
 
     read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
-                        loas, breadths, grosstonnages, nbunits,
+                        loas, KWs, breadths, grosstonnages, nbunits, fueluses,NOxEmission_gperKWhs,
+                        SOxEmission_percentpertotalfuelmasss, GHGEmissions, PMEmissions,
                         vmaxs, vcruises, lane_ids, mInputName.toStdString(), mBasePath.toStdString());
 
     // read shipping lanes
@@ -1968,8 +1975,11 @@ bool DisplaceModel::initShips()
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
 
             std::shared_ptr<Ship> sh (new Ship(i,shipids[i], imos[i], yearbuilds[i], flags[i],
-                                               types[i], typecodes[i], loas[i], breadths[i],
+                                               types[i], typecodes[i], loas[i], KWs[i], breadths[i],
                                                grosstonnages[i], nbunits[i],
+                                               fueluses[i], NOxEmission_gperKWhs[i],
+                                               SOxEmission_percentpertotalfuelmasss[i],
+                                               GHGEmissions[i], PMEmissions[i],
                                                vmaxs[i], vcruises[i],
                                                longs, lats
                                 ));

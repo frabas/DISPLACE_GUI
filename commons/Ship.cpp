@@ -48,8 +48,11 @@ Ship::~Ship()
 
 
 Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_flag,
-           string a_type, double a_typecode, double a_loa, double a_breadth,
+           string a_type, double a_typecode, double a_loa, double a_KW, double a_breadth,
            double a_grosstonnage, double a_nbunits,
+           double a_fueluse, double a_NOxEmission_gperKWh,
+           double a_SOxEmission_percentpertotalfuelmass,
+           double a_GHGEmission, double a_PMEmission,
            double a_vmax, double a_vcruise,
            vector<double> a_longs, vector<double> a_lats)
 {
@@ -74,9 +77,15 @@ Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_fl
     type=a_type;
     typecode=a_typecode;
     loa=a_loa;
+    KW=a_KW;
     breadth=a_breadth;
     grosstonnage=a_grosstonnage;
     nbunits=a_nbunits;
+    fueluse=a_fueluse;
+    NOxEmission_gperKWh=a_NOxEmission_gperKWh;  // 9 for Tier III 1st jan 2016
+    SOxEmission_percentpertotalfuelmass=a_SOxEmission_percentpertotalfuelmass;// limit is 0.10% y 1 January 2015
+    GHGEmission=a_GHGEmission;
+    PMEmission=a_PMEmission;
 }
 
 
@@ -133,6 +142,11 @@ double Ship::get_loa () const
     return(loa);
 }
 
+double Ship::get_KW () const
+{
+    return(KW);
+}
+
 double Ship::get_breadth () const
 {
     return(breadth);
@@ -141,6 +155,31 @@ double Ship::get_breadth () const
 double Ship::get_nbunits () const
 {
     return(nbunits);
+}
+
+double Ship::get_fueluse () const
+{
+    return(fueluse);
+}
+
+double Ship::get_NOxEmission_gperKWh () const
+{
+    return(NOxEmission_gperKWh);
+}
+
+double Ship::get_SOxEmission_percentpertotalfuelmass () const
+{
+    return(SOxEmission_percentpertotalfuelmass);
+}
+
+double Ship::get_GHGEmission () const
+{
+    return(GHGEmission);
+}
+
+double Ship::get_PMEmission () const
+{
+    return(PMEmission);
 }
 
 double Ship::get_yearbuild () const

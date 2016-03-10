@@ -42,15 +42,19 @@ class Ship
 		vector<double> longs;
 		double origin_x, origin_y, end_point_x, end_point_y;
 		double x, y, course;
-        double imo, yearbuild, typecode, loa, breadth, grosstonnage, nbunits;
+        double imo, yearbuild, typecode, loa, KW, breadth, grosstonnage, nbunits;
+        double fueluse, NOxEmission_gperKWh, SOxEmission_percentpertotalfuelmass;
+        double GHGEmission, PMEmission;
         double vmax, vcruise;
 
         pthread_mutex_t mutex;
 
     public:
         Ship(int idx, string name,  double imo, double yearbuild, string flag,
-             string type, double typecode, double loa, double breadth,
+             string type, double typecode, double loa, double KW, double breadth,
              double grosstonnage, double nbunits,
+             double fueluse, double NOxEmission_gperKWh, double SOxEmission_percentpertotalfuelmass,
+             double GHGEmission, double PMEmission,
              double vmax, double vcruise,
              vector<double> lats, vector<double> longs);
 		Ship();
@@ -82,8 +86,14 @@ class Ship
         double get_typecode() const;
         double get_grosstonnage() const;
         double get_loa() const;
+        double get_KW() const;
         double get_breadth() const;
         double get_nbunits() const;
+        double get_fueluse() const;
+        double get_NOxEmission_gperKWh()const;
+        double get_SOxEmission_percentpertotalfuelmass()const;
+        double get_GHGEmission()const;
+        double get_PMEmission()const;
         double get_yearbuild() const;
         double get_vmax() const;
 		double get_vcruise() const;

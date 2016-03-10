@@ -1919,14 +1919,22 @@ int main(int argc, char* argv[])
     vector<string> types;
     vector<double> typecodes;
     vector<double> loas;
+    vector<double> KWs;
     vector<double> breadths;
     vector<double> grosstonnages;
     vector<double> nbunits;
+    vector<double>  fueluses;
+    vector<double>  NOxEmission_gperKWhs;
+    vector<double>  SOxEmission_percentpertotalfuelmasss;
+    vector<double>  GHGEmissions;
+    vector<double>  PMEmissions;
     vector<double> vmaxs;
     vector<double> vcruises;
     vector<double> lane_ids;
     read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
-                        loas, breadths, grosstonnages, nbunits,
+                        loas, KWs, breadths, grosstonnages, nbunits,
+                        fueluses,NOxEmission_gperKWhs, SOxEmission_percentpertotalfuelmasss,
+                        GHGEmissions, PMEmissions,
                         vmaxs, vcruises, lane_ids,
                         folder_name_parameterization, "../"+inputfolder);
 
@@ -1945,8 +1953,11 @@ int main(int argc, char* argv[])
             lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
             ships[i]= new Ship(i,shipids[i], imos[i], yearbuilds[i], flags[i],
-                               types[i], typecodes[i], loas[i], breadths[i],
+                               types[i], typecodes[i], KWs[i], loas[i], breadths[i],
                                grosstonnages[i], nbunits[i],
+                               fueluses[i], NOxEmission_gperKWhs[i],
+                               SOxEmission_percentpertotalfuelmasss[i],
+                               GHGEmissions[i], PMEmissions[i],
                                vmaxs[i], vcruises[i], longs, lats);
             ships[i]->set_idx_ship(i);
 
@@ -1973,7 +1984,7 @@ int main(int argc, char* argv[])
 	vector<double> speeds;
 	vector<double> fuelcons;
 	vector<double> lengths;
-	vector<double> KWs;
+    vector<double> vKWs;
 	vector<double> carrycapacities;
 	vector<double> tankcapacities;
 	vector<double> nbfpingspertrips;
@@ -1984,7 +1995,7 @@ int main(int argc, char* argv[])
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;	
-	read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
+    read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
 		resttime_par1s, resttime_par2s, av_trip_duration,
 		mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
@@ -3981,7 +3992,7 @@ int main(int argc, char* argv[])
             mult_fuelcons_when_inactive.clear();
 
 			// then, re-read...
-			read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, KWs,
+            read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
 				carrycapacities, tankcapacities, nbfpingspertrips,
 				resttime_par1s, resttime_par2s, av_trip_duration,
 				mult_fuelcons_when_steaming,

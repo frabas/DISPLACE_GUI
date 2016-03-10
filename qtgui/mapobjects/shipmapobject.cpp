@@ -73,8 +73,14 @@ void ShipMapObject::updateProperties()
     text += QString("<b>Year Build:</b> %1<br/>").arg(mShip->mShip->get_yearbuild());
     text += QString("<b>GT:</b> %1<br/>").arg(mShip->mShip->get_grosstonnage());
     text += QString("<b>LOA:</b> %1<br/>").arg(mShip->mShip->get_loa());
+    text += QString("<b>KW:</b> %1<br/>").arg(mShip->mShip->get_KW());
     text += QString("<b>Breadth:</b> %1<br/>").arg(mShip->mShip->get_breadth());
     text += QString("<b>Number Units:</b> %1<br/>").arg(mShip->mShip->get_nbunits());
+    text += QString("<b>Fuel use (ton/h):</b> %1<br/>").arg(mShip->mShip->get_fueluse());
+    text += QString("<b>NOx emission (g/KWh):</b> %1<br/>").arg(mShip->mShip->get_NOxEmission_gperKWh());
+    text += QString("<b>SOx emission (%m/m):</b> %1<br/>").arg(mShip->mShip->get_SOxEmission_percentpertotalfuelmass());
+    text += QString("<b>GHG emission (ton/h):</b> %1<br/>").arg(mShip->mShip->get_GHGEmission());
+    text += QString("<b>PM emission(ton/h; PM2.5):</b> %1<br/>").arg(mShip->mShip->get_PMEmission());
     text += QString("<b>Max Speed:</b> %1<br/>").arg(mShip->mShip->get_vmax());
 
     mWidget->setText(text);

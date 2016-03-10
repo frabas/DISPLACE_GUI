@@ -627,7 +627,7 @@ fill in the vessel attributes
 @param the vessel specification file, ...
 */
 void fill_from_vessels_specifications (istream& in, vector<string>& names,
-vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vector<double>& KWs,
+vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vector<double>& vKWs,
 vector<double>& carrycapacities, vector<double>& tankcapacities,
 vector<double>& nbfpingspertrips,
 vector<double>& resttime_par1s,vector<double>& resttime_par2s,
@@ -673,7 +673,7 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
 		speeds.push_back(strtod(speed.c_str(),0));
 		fuelcons.push_back(strtod(fuelconso.c_str(),0));
 		lengths.push_back(strtod(length.c_str(),0));
-		KWs.push_back(strtod(KW.c_str(),0));
+        vKWs.push_back(strtod(KW.c_str(),0));
 		carrycapacities.push_back(strtod(carrycap.c_str(),0));
 		tankcapacities.push_back(strtod(tankcap.c_str(),0));
 		nbfpingspertrips.push_back(strtod(nbpings.c_str(),0));
@@ -702,9 +702,15 @@ void fill_from_ships_specifications (istream& in,
                                      vector<string>& types,
                                      vector<double>& typecodes,
                                      vector<double>& loas,
+                                     vector<double>& KWs,
                                      vector<double>& breadths,
                                      vector<double>& grosstonnages,
                                      vector<double>& nbunits,
+                                     vector<double>& fueluses,
+                                     vector<double>& NOxEmission_gperKWhs,
+                                     vector<double>& SOxEmission_percentpertotalfuelmasss,
+                                     vector<double>& GHGEmissions,
+                                     vector<double>& PMEmissions,
                                      vector<double>& vmaxs,
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids)
@@ -718,9 +724,15 @@ void fill_from_ships_specifications (istream& in,
         string type;
         string typecode;
         string loa;
+        string KW;
         string breadth;
         string grosstonnage;
         string nbunit;
+        string fueluse;
+        string NOxEmission_gperKWh;
+        string SOxEmission_percentpertotalfuelmass;
+        string GHGEmission;
+        string PMEmission;
         string vmax;
 		string vcruise;
 		string lane_id;
@@ -730,9 +742,15 @@ void fill_from_ships_specifications (istream& in,
         std::getline(in, type, '|');
         std::getline(in, typecode, '|');
         std::getline(in, loa, '|');
+        std::getline(in, KW, '|');
         std::getline(in, breadth, '|');
         std::getline(in, grosstonnage, '|');
         std::getline(in, nbunit, '|');
+        std::getline(in, fueluse, '|');
+        std::getline(in, NOxEmission_gperKWh, '|');
+        std::getline(in, SOxEmission_percentpertotalfuelmass, '|');
+        std::getline(in, GHGEmission, '|');
+        std::getline(in, PMEmission, '|');
         std::getline(in, vmax, '|');
         std::getline(in, vcruise, '|');
 		std::getline(in, lane_id);
@@ -743,9 +761,15 @@ void fill_from_ships_specifications (istream& in,
         types.push_back(type);
         typecodes.push_back(strtod(typecode.c_str(),0));
         loas.push_back(strtod(loa.c_str(),0));
+        KWs.push_back(strtod(KW.c_str(),0));
         breadths.push_back(strtod(breadth.c_str(),0));
         grosstonnages.push_back(strtod(grosstonnage.c_str(),0));
         nbunits.push_back(strtod(nbunit.c_str(),0));
+        fueluses.push_back(strtod(fueluse.c_str(),0));
+        NOxEmission_gperKWhs.push_back(strtod(NOxEmission_gperKWh.c_str(),0));
+        SOxEmission_percentpertotalfuelmasss.push_back(strtod(SOxEmission_percentpertotalfuelmass.c_str(),0));
+        GHGEmissions.push_back(strtod(GHGEmission.c_str(),0));
+        PMEmissions.push_back(strtod(PMEmission.c_str(),0));
         vmaxs.push_back(strtod(vmax.c_str(),0));
 		vcruises.push_back(strtod(vcruise.c_str(),0));
 		lane_ids.push_back(strtod(lane_id.c_str(),0));

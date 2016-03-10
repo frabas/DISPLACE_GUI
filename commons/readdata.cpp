@@ -525,7 +525,7 @@ vector<string>& vesselids,
 vector<double>& speeds,
 vector<double>& fuelcons,
 vector<double>& lengths,
-vector<double>& KWs,
+vector<double>& vKWs,
 vector<double>& carrycapacities,
 vector<double>& tankcapacities,
 vector<double>& nbfpingspertrips,
@@ -559,7 +559,7 @@ int selected_vessels_only)
 		// return 1;
 	}
 
-	fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, KWs,
+    fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, vKWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
                                      resttime_par1s, resttime_par2s, av_trip_duration,
                                      mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
@@ -582,9 +582,9 @@ int selected_vessels_only)
 	cout << endl;
 
 	// check inputs
-	for (unsigned int i=0; i<KWs.size(); i++)
+    for (unsigned int i=0; i<vKWs.size(); i++)
 	{
-		cout << KWs[i] << " ";
+        cout << vKWs[i] << " ";
 	}
 	cout << endl;
 
@@ -634,12 +634,19 @@ int selected_vessels_only)
 
 
 //----------------
-void read_ships_features(  vector<string>& shipids,
+void read_ships_features(vector<string>& shipids,
                            vector<double> &imos,
                            vector<double> &yearbuilds, vector<string> &flags,
                            vector<string> &types, vector<double> &typecodes,
-                           vector<double> &loas, vector<double> &breadths,
+                           vector<double> &loas,
+                           vector<double> &KWs,
+                           vector<double> &breadths,
                            vector<double> &grosstonnages, vector<double> &nbunits,
+                           vector<double> &fueluses,
+                           vector<double> &NOxEmission_gperKWhs,
+                           vector<double> &SOxEmission_percentpertotalfuelmasss,
+                           vector<double> &GHGEmissions,
+                           vector<double> &PMEmissions,
                            vector<double>& vmaxs,
                            vector<double>& vcruises,
                            vector<double>& lane_ids,
@@ -660,7 +667,10 @@ void read_ships_features(  vector<string>& shipids,
 
     fill_from_ships_specifications(ships_features, shipids, imos,
                                    yearbuilds, flags, types, typecodes,
-                                   loas, breadths, grosstonnages, nbunits,
+                                   loas, KWs, breadths, grosstonnages, nbunits,
+                                   fueluses, NOxEmission_gperKWhs,
+                                   SOxEmission_percentpertotalfuelmasss,
+                                   GHGEmissions, PMEmissions,
                                    vmaxs, vcruises, lane_ids);
 	ships_features.close();
 

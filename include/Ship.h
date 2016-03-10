@@ -47,6 +47,8 @@ class Ship
         double GHGEmission, PMEmission;
         double vmax, vcruise;
 
+        double cumul_fueluse;
+
         pthread_mutex_t mutex;
 
     public:
@@ -99,7 +101,9 @@ class Ship
 		double get_vcruise() const;
 		double get_course() const;
 
-		// setters
+        double get_cumul_fueluse () const;
+
+        // setters
         void set_idx_ship (int val);
         void set_count (int val);
         void set_vmax (double val);
@@ -112,7 +116,9 @@ class Ship
 		void set_end_point_xy (double _x, double _y);
 		void set_lane (vector<double> _longs, vector<double> _lats);
 
-		void move ();
+        void set_cumul_fueluse (double _cumul);
+
+        void move ();
 
 };
 #endif							 // SHIP_H

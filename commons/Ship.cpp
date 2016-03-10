@@ -86,6 +86,7 @@ Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_fl
     SOxEmission_percentpertotalfuelmass=a_SOxEmission_percentpertotalfuelmass;// limit is 0.10% y 1 January 2015
     GHGEmission=a_GHGEmission;
     PMEmission=a_PMEmission;
+    cumul_fueluse=0.0;
 }
 
 
@@ -253,6 +254,11 @@ double Ship::get_course () const
 	return(course);
 }
 
+double Ship::get_cumul_fueluse () const
+{
+    return(cumul_fueluse);
+}
+
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -333,6 +339,12 @@ void Ship::set_lane (vector<double> _longs, vector<double> _lats)
 }
 
 
+void Ship::set_cumul_fueluse(double _cumul)
+{
+    cumul_fueluse=_cumul;
+}
+
+
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 // methods
@@ -341,6 +353,10 @@ void Ship::set_lane (vector<double> _longs, vector<double> _lats)
 
 void Ship::move()
 {
+
+    // update tracking
+    this->set_cumul_fueluse(get_cumul_fueluse() + get_fueluse()); // assuming no shut down of the engine so far
+    //cout <<  "accumulated fuel use for this ship "<< this->get_name() << " is " << this->get_cumul_fueluse() << endl;
 
 	// movement for a ship
 	set_course( bearing(get_x(), get_y(), get_end_point_x(), get_end_point_y()) );

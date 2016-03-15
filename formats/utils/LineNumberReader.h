@@ -44,6 +44,19 @@ namespace displace {
                     }
                 }
 
+                template <typename T>
+                T getAs(const std::string &key, T&& defvalue) const {
+                    try {
+                        auto v = get(key);
+                        if (v.empty())
+                            return std::forward<T>(defvalue);
+                        return boost::lexical_cast<T>(v);
+                    } catch (boost::bad_lexical_cast &) {
+                        return std::forward<T>(defvalue);
+                    }
+                }
+
+
                 unsigned long numValues() const {
                     return mConfig.size();
                 }

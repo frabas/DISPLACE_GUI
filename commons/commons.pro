@@ -70,6 +70,7 @@ HEADERS= \
     ../include/ipcqueue.h \
     ../include/ipcmsgtypes.h \
     ../include/version.h \
+    ../include/utils/make_unique.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \

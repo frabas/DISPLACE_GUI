@@ -1,0 +1,31 @@
+#include "simulationrun.h"
+
+SimulationRun::SimulationRun()
+{
+
+}
+
+void SimulationRun::setName(QString name)
+{
+    mName = name;
+}
+
+void SimulationRun::setSimulationSteps(int steps)
+{
+    nSteps = steps;
+}
+
+void SimulationRun::setSimulationOutputName(QString name)
+{
+    mOutName = name;
+}
+
+void SimulationRun::setSimulationName(QString name)
+{
+    mSimName = name;
+}
+
+void SimulationRun::setNumThreads(int n)
+{
+    nThreads = n;
+}

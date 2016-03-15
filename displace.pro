@@ -1,6 +1,7 @@
 TEMPLATE=subdirs
 CONFIG+=ordered
-SUBDIRS+=formats commons qtcommons QMapControl qtgui simulator dteditor tseditor vesseleditor
+SUBDIRS+=formats commons qtcommons QMapControl qtgui simulator dteditor tseditor vesseleditor \
+    scheduler
 
 unix:!macx{
     CONFIG += unit-test

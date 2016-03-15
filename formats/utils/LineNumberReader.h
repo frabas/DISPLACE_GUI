@@ -5,8 +5,13 @@
 #ifndef DISPLACE_LINENUMBERREADER_H
 #define DISPLACE_LINENUMBERREADER_H
 
+#include <formatexception.h>
+
 #include <map>
 #include <string>
+#include <sstream>
+
+#include <boost/lexical_cast.hpp>
 
 #include "prettyprint.h"
 
@@ -24,6 +29,20 @@ namespace displace {
                 bool importFromStream(std::istream &stream, const Specifications &specifications);
 
                 std::string get(const std::string &key, std::string value = std::string()) const;
+
+                template <typename T>
+                T getAs(const std::string &key) const {
+                    try {
+                        auto v = get(key);
+                        if (v.empty())
+                            return T();
+                        return boost::lexical_cast<T>(v);
+                    } catch (boost::bad_lexical_cast &x) {
+                        std::stringstream ss;
+                        ss << "Bad format for key '" << key << "' value '" << get(key) << "'";
+                        throw FormatException(ss.str());
+                    }
+                }
 
                 unsigned long numValues() const {
                     return mConfig.size();

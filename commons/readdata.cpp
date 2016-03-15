@@ -50,12 +50,12 @@ read the settings for the siums given the case study
 */
 int read_config_file (string folder_name_parameterization,
     string inputfolder,
-    int& a_int_line2,
-    int& a_int_line4,
-    vector<int>& a_vector_line6,
-    vector<double>& a_vector_line8,
-    vector<double>& a_vector_line10,
-    vector<double>& a_vector_line12,
+    int& nbpops,
+    int& nbbenthospops,
+    vector<int>& implicit_pops,
+    vector<double>& calib_oth_landings,
+    vector<double>& calib_w,
+    vector<double>& calib_cpue,
     vector<int> &interesting_harbours)
 {
 
@@ -72,12 +72,12 @@ int read_config_file (string folder_name_parameterization,
     if (!reader.importFromFile(filename, specs))
         return false;
 
-    a_int_line2 = boost::lexical_cast<int>(reader.get("nbpops"));
-    a_int_line4 = boost::lexical_cast<int>(reader.get("nbbenthospops"));
-    a_vector_line6 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
-    a_vector_line8 = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
-    a_vector_line10 = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
-    a_vector_line12 = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
+    nbpops = reader.getAs<int>("nbpops");
+    nbbenthospops= reader.getAs<int>("nbbenthospops");
+    implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
+    calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
+    calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
+    calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
     interesting_harbours = displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " ");
 
 	cout << "read config file...OK" << endl << flush;
@@ -117,29 +117,29 @@ int read_scenario_config_file (string folder_name_parameterization,
     scenario.dyn_alloc_sce.setOption(reader.get("dyn_alloc_sce"));
     scenario.dyn_pop_sce.setOption(reader.get("dyn_pop_sce"));
     scenario.biolsce=reader.get("biolsce");
-    scenario.freq_do_growth=boost::lexical_cast<int>(reader.get("freq_do_growth"));
-    scenario.freq_redispatch_the_pop=boost::lexical_cast<int>(reader.get("freq_redispatch_the_pop"));
-    scenario.a_graph=boost::lexical_cast<int>(reader.get("a_graph"));
-    scenario.nrow_coord=boost::lexical_cast<int>(reader.get("nrow_coord"));
-    scenario.nrow_graph=boost::lexical_cast<int>(reader.get("nrow_graph"));
-    scenario.a_port=boost::lexical_cast<int>(reader.get("a_port"));
-    scenario.graph_res=boost::lexical_cast<double>(reader.get("graph_res"));
-    scenario.is_individual_vessel_quotas= (boost::lexical_cast<int>(reader.get("is_individual_vessel_quotas")) != 0);
-    scenario.check_all_stocks_before_going_fishing=(boost::lexical_cast<int>(reader.get("check_all_stocks_before_going_fishing")) != 0);
+    scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
+    scenario.freq_redispatch_the_pop=reader.getAs<int>("freq_redispatch_the_pop");
+    scenario.a_graph=reader.getAs<int>("a_graph");
+    scenario.nrow_coord=reader.getAs<int>("nrow_coord");
+    scenario.nrow_graph=reader.getAs<int>("nrow_graph");
+    scenario.a_port=reader.getAs<int>("a_port");
+    scenario.graph_res=reader.getAs<double>("graph_res");
+    scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
+    scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
     scenario.dt_go_fishing=reader.get("dt_go_fishing");
     scenario.dt_choose_ground=reader.get("dt_choose_ground");
     scenario.dt_start_fishing=reader.get("dt_start_fishing");
     scenario.dt_change_ground=reader.get("dt_change_ground");
     scenario.dt_stop_fishing=reader.get("dt_stop_fishing");
     scenario.dt_change_port=reader.get("dt_change_port");
-    scenario.use_dtrees=(boost::lexical_cast<int>(reader.get("use_dtrees")) != 0);
+    scenario.use_dtrees=(reader.getAs<int>("use_dtrees") != 0);
 
     scenario.tariff_pop = displace::formats::utils::stringToVector<int>(reader.get("tariff_pop"), " ");
     scenario.freq_update_tariff_code = reader.getAs<int>("freq_update_tariff_code");
     scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(reader.get("arbitary_breaks_for_tariff"), " ");
 
-    scenario.total_amount_credited = boost::lexical_cast<int>(reader.get("total_amount_credited", "0"));
-    scenario.tariff_annual_hcr_percent_change = boost::lexical_cast<double>(reader.get("tariff_annual_hcr_percent_change", "0"));
+    scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
+    scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
 
     cout << "read scenario config file...OK" <<  endl << flush;
     cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;

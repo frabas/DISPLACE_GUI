@@ -1388,9 +1388,15 @@ bool MainWindow::loadLiveModel(QString path, QString *error)
 {
     std::shared_ptr<DisplaceModel> m(new DisplaceModel());
 
-    if (!m->load(path)) {
+    try {
+        if (!m->load(path)) {
+            if (error)
+                *error = m->getLastError();
+            return false;
+        }
+    } catch (std::exception &x) {
         if (error)
-            *error = m->getLastError();
+            *error = x.what();
         return false;
     }
 

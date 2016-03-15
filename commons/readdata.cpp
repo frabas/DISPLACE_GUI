@@ -20,6 +20,11 @@
 
 #include"readdata.h"
 #include <helpers.h>
+#include <utils/LineNumberReader.h>
+#include <boost/lexical_cast.hpp>
+#include <utils/vectorsdata.h>
+
+using namespace displace::formats;
 
 #define NBSZGROUP 14
 #define NBAGE 11				 // nb age classes max
@@ -51,79 +56,30 @@ int read_config_file (string folder_name_parameterization,
     vector<double>& a_vector_line8,
     vector<double>& a_vector_line10,
     vector<double>& a_vector_line12,
-                      vector<int> &interesting_harbours)
+    vector<int> &interesting_harbours)
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
 
-	ifstream in;
-	in.open(filename.c_str());
-	if(in.fail())
-	{
-		open_file_error(filename);
-        return -1;
-	}
+    helpers::LineNumberReader reader;
+    static const helpers::LineNumberReader::Specifications specs {
+            {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
+            {9,"calib_weight_at_szgroup"},{11,"calib_cpue_multiplier"},{13,"int_harbours"}
+    };
 
-	string line;
-	int counter=0;
-	while(!getline(in, line).eof())
-	{
-		std::stringstream linestream(line);
-		counter+=1;
-		if(counter==2)
-		{
-			int val;
-			linestream >> val;
-			a_int_line2 =val;
-		}
-        if(counter==4)
-        {
-            int val;
-            linestream >> val;
-            a_int_line4 =val;
-        }
-        if(counter==6)
-		{
-			int val;
-			while(linestream >> val)
-			{
-                a_vector_line6.push_back(val);
-			}
-		}
+    std::cout << "Reading config file from " << filename << std::endl;
 
-        if(counter==8)
-		{
-			double val;
-			while(linestream >> val)
-			{
-                a_vector_line8.push_back(val);
-			}
-		}
-        if(counter==10)
-		{
-			double val;
-			while(linestream >> val)
-			{
-                a_vector_line10.push_back(val);
-			}
-		}
-        if(counter==12)
-		{
-			double val;
-			while(linestream >> val)
-			{
-                a_vector_line12.push_back(val);
-			}
-		}
-        if(counter==14)
-        {
-            double val;
-            while(linestream >> val)
-            {
-                interesting_harbours.push_back(val);
-            }
-        }
-	}
+    if (!reader.importFromFile(filename, specs))
+        return false;
+
+    a_int_line2 = boost::lexical_cast<int>(reader.get("nbpops"));
+    a_int_line4 = boost::lexical_cast<int>(reader.get("nbbenthospops"));
+    a_vector_line6 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
+    a_vector_line8 = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
+    a_vector_line10 = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
+    a_vector_line12 = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
+    interesting_harbours = displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " ");
+
 	cout << "read config file...OK" << endl << flush;
 
     return 0;

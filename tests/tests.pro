@@ -7,7 +7,7 @@ DESTDIR = ../
 
 DEFINES=
 INCLUDEPATH=../include ../commons
-LIBS=-L.. -ldisplacecommons -lpthread -lrt
+LIBS=-L.. -lformats -ldisplacecommons -lpthread -lrt
 
 !boost_test_included {
     message("Boost::Test framework will be dynamically linked")

@@ -8,6 +8,8 @@ TARGET = qtcommons
 TEMPLATE = lib
 DESTDIR=../
 
+LIBS += -L.. -lformats
+
 DEFINES += QTCOMMONS_LIBRARY
 
 include ("$$top_srcdir/localconfig.pri")

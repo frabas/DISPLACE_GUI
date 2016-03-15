@@ -5,7 +5,7 @@ TEMPLATE=app
 
 DESTDIR = ../
 
-INCLUDEPATH=../include ../commons
+INCLUDEPATH=../include ../commons ../formats
 
 include ("$$top_srcdir/localconfig.pri")
 macx {
@@ -14,7 +14,7 @@ macx {
 }
 
 QMAKE_CXXFLAGS += -fpermissive
-LIBS+= -L.. -ldisplacecommons
+LIBS+= -L.. -lformats -ldisplacecommons
 
 macx {
     CONFIG += c++11

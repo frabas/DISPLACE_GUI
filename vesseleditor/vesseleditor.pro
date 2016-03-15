@@ -31,7 +31,7 @@ win32 {
     RC_FILE = vesseleditor.rc
 }
 
-LIBS += -L.. -lqtcommons
+LIBS += -L.. -lformats -lqtcommons
 
 SOURCES += \
     vesseleditor.cpp \

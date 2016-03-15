@@ -8,7 +8,8 @@ CONFIG += c++11
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
-INCLUDEPATH +=../include/ .
+INCLUDEPATH +=../include/ ../formats .
+LIBS += -L.. -lformats
 
 win32 {
     # For GetProcessMemoryInfo()

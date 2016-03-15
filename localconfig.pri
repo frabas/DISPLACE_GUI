@@ -31,6 +31,7 @@ unix {
     }
     #CONFIG += boost_test_included
     !macx {
+        #LIBS += -L/usr/lib/x86_64-linux-gnu
         LIBS += -lrt
     }
 

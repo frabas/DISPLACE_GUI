@@ -31,7 +31,7 @@ win32 {
     RC_FILE = tseditor.rc
 }
 
-LIBS += -L.. -lqtcommons
+LIBS += -L.. -lformats -lqtcommons
 
 SOURCES += \
     tseditor.cpp \

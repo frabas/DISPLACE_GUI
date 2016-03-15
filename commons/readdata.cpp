@@ -97,217 +97,50 @@ int read_scenario_config_file (string folder_name_parameterization,
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
 
-	ifstream in;
-	in.open(filename.c_str());
-	if(in.fail())
-	{
-		open_file_error(filename);
-        return -1;
-	}
+    helpers::LineNumberReader reader;
 
-	string line;
-    int a_counter=0;
-    while(!getline(in, line).eof())
-	{
+    static const helpers::LineNumberReader::Specifications specs {
+            {1,"dyn_alloc_sce"},{3,"dyn_pop_sce"},{5,"biolsce"},{7,"freq_do_growth"},{9,"freq_redispatch_the_pop"},
+            {11,"a_graph"},{13,"nrow_coord"},{15,"nrow_graph"},{17,"a_port"},{19,"graph_res"},
+            {21,"is_individual_vessel_quotas"},{23,"check_all_stocks_before_going_fishing"},{25,"dt_go_fishing"},
+            {27,"dt_choose_ground"},{29,"dt_start_fishing"},{31,"dt_change_ground"},{33,"dt_stop_fishing"},
+            {35,"dt_change_port"},{37,"use_dtrees"},{39,"tariff_pop"},{41,"freq_update_tariff_code"},
+            {43,"arbitary_breaks_for_tariff"},{45,"total_amount_credited"},{47,"tariff_annual_hcr_percent_change"}
+    };
 
-        std::stringstream linestream(line);
-        a_counter+=1;
-        if(a_counter==2)
-		{
-			string val;
-			while(linestream >> val)
-			{
-                scenario.dyn_alloc_sce.setOption(val);
-            }
-        }
-        if(a_counter==4)
-		{
-			string val;
-			while(linestream >> val)
-            {
-                scenario.dyn_pop_sce.setOption(val);
-			}
-        }
+    std::cout << "Reading Scenario file from " << filename << std::endl;
 
-        if(a_counter==6)
-		{
-			string val;
-			while(linestream >> val)
-			{
-                scenario.biolsce=val;
-			}
-		}
-        if(a_counter==8)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.freq_do_growth=val;
-            }
-        }
+    if (!reader.importFromFile(filename, specs))
+        return false;
 
-        if(a_counter==10)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.freq_redispatch_the_pop=val;
-            }
-        }
-        if(a_counter==12)
-		{
-			int val;
-			while(linestream >> val)
-			{
-                scenario.a_graph=val;
-			}
-		}
-        if(a_counter==14)
-		{
-			int val;
-			while(linestream >> val)
-			{
-                scenario.nrow_coord=val;
-			}
-		}
-        if(a_counter==16)
-		{
-			int val;
-			while(linestream >> val)
-			{
-                scenario.nrow_graph=val;
-			}
-		}
-        if(a_counter==18)
-		{
-			int val;
-			while(linestream >> val)
-			{
-                scenario.a_port=val;
-			}
-		}
-        if(a_counter==20)
-		{
-			double val;
-			while(linestream >> val)
-			{
-                scenario.graph_res=val;
-			}
-		}
-        if(a_counter==22)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.is_individual_vessel_quotas= (val != 0);
-            }
-        }
-        if(a_counter==24)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.check_all_stocks_before_going_fishing= (val != 0);
-            }
-        }
-        if(a_counter == 26)
-        {
-            string val;
-            while(linestream >> val)
-            {
-                scenario.dt_go_fishing=val;
-            }
-        }
-        if(a_counter==28)
-        {
-            string val;
-            while(linestream >> val)
-            {
-                scenario.dt_choose_ground=val;
-            }
-        }
-        if(a_counter==30)
-        {
-            string val;
-            while(linestream >> val)
-            {
-                scenario.dt_start_fishing=val;
-            }
-        }
-        if(a_counter==32)
-        {
-            string val;
-            while(linestream >> val)
-            {
-                scenario.dt_change_ground=val;
-            }
-        }
-        if(a_counter==34)
-        {
-            string val;
-            while(linestream >> val)
-            {
-                scenario.dt_stop_fishing=val;
-            }
-        }
-        if(a_counter==36)
-        {
-            string val;
-            while(linestream >> val)
-            {
-                scenario.dt_change_port=val;
-            }
-        }
-        if(a_counter==38)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.use_dtrees=(val != 0);
-            }
-        }
-        if(a_counter==40)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.tariff_pop.push_back(val);
-            }
-        }
-        if(a_counter==42)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.freq_update_tariff_code=val;
-            }
-        }
-        if(a_counter==44)
-        {
-            double val;
-            while(linestream >> val)
-            {
-                scenario.arbitary_breaks_for_tariff.push_back(val);
-            }
-        }
-        if(a_counter==46)
-        {
-            int val;
-            while(linestream >> val)
-            {
-                scenario.total_amount_credited=val;
-            }
-        }
-        if(a_counter==48)
-        {
-            double val;
-            while(linestream >> val)
-            {
-                scenario.tariff_annual_hcr_percent_change=val;
-            }
-        }
 
-	}
+    scenario.dyn_alloc_sce.setOption(reader.get("dyn_alloc_sce"));
+    scenario.dyn_pop_sce.setOption(reader.get("dyn_pop_sce"));
+    scenario.biolsce=reader.get("biolsce");
+    scenario.freq_do_growth=boost::lexical_cast<int>(reader.get("freq_do_growth"));
+    scenario.freq_redispatch_the_pop=boost::lexical_cast<int>(reader.get("freq_redispatch_the_pop"));
+    scenario.a_graph=boost::lexical_cast<int>(reader.get("a_graph"));
+    scenario.nrow_coord=boost::lexical_cast<int>(reader.get("nrow_coord"));
+    scenario.nrow_graph=boost::lexical_cast<int>(reader.get("nrow_graph"));
+    scenario.a_port=boost::lexical_cast<int>(reader.get("a_port"));
+    scenario.graph_res=boost::lexical_cast<double>(reader.get("graph_res"));
+    scenario.is_individual_vessel_quotas= (boost::lexical_cast<int>(reader.get("is_individual_vessel_quotas")) != 0);
+    scenario.check_all_stocks_before_going_fishing=(boost::lexical_cast<int>(reader.get("check_all_stocks_before_going_fishing")) != 0);
+    scenario.dt_go_fishing=reader.get("dt_go_fishing");
+    scenario.dt_choose_ground=reader.get("dt_choose_ground");
+    scenario.dt_start_fishing=reader.get("dt_start_fishing");
+    scenario.dt_change_ground=reader.get("dt_change_ground");
+    scenario.dt_stop_fishing=reader.get("dt_stop_fishing");
+    scenario.dt_change_port=reader.get("dt_change_port");
+    scenario.use_dtrees=(boost::lexical_cast<int>(reader.get("use_dtrees")) != 0);
+
+    scenario.tariff_pop = displace::formats::utils::stringToVector<int>(reader.get("tariff_pop"), " ");
+    scenario.freq_update_tariff_code = reader.getAs<int>("freq_update_tariff_code");
+    scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(reader.get("arbitary_breaks_for_tariff"), " ");
+
+    scenario.total_amount_credited = boost::lexical_cast<int>(reader.get("total_amount_credited", "0"));
+    scenario.tariff_annual_hcr_percent_change = boost::lexical_cast<double>(reader.get("tariff_annual_hcr_percent_change", "0"));
+
     cout << "read scenario config file...OK" <<  endl << flush;
     cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;
     cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  endl << flush;

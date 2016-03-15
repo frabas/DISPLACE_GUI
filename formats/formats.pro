@@ -22,7 +22,8 @@ HEADERS = \
     utils/LineNumberReader.h \
     utils/prettyprint.h \
     legacy/NodesFileReader.h utils/MultifieldReader.h \
-    utils/vectorsdata.h
+    utils/vectorsdata.h \
+    formatexception.h
 
 SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \

@@ -1,7 +1,10 @@
 #ifndef VECTORSDATA_H
 #define VECTORSDATA_H
 
+#include <formatexception.h>
+
 #include <vector>
+#include <sstream>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
@@ -22,8 +25,14 @@ std::vector<ResultType> stringToVector(std::string string, const char *separator
     boost::split(sr, string, boost::is_any_of(separator));
 
     for (auto x : sr) {
-        ResultType v = boost::lexical_cast<ResultType>(x);
-        c.push_back(v);
+        try {
+            ResultType v = boost::lexical_cast<ResultType>(x);
+            c.push_back(v);
+        } catch (boost::bad_lexical_cast &ex) {
+            std::stringstream ss;
+            ss << "Bad format for value '" << x << "'";
+            throw FormatException(ss.str());
+        }
     }
 
     return c;

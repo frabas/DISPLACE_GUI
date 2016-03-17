@@ -6,7 +6,7 @@ SET(SIMSOURCES
         Environment.cpp Environment.h
         Actor.h
         env/Playground.cpp env/Playground.h
-        env/Clock.cpp env/Clock.h
+        env/Clock.h
         env/Calendar.cpp env/Calendar.h
         env/MapGraph.cpp env/MapGraph.h
         io/Loader.cpp io/Loader.h

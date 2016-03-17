@@ -16,11 +16,47 @@
 
 #set -e
 
-if [ "$1" == "" ] ; then
-	T=release
-else
-	T=$1
-fi
+help() {
+cat << EOF
+Usage: 
+	macdeploy.sh [-t type] [-nb] [-nf]
+	macdeploy.sh -h
+	
+		-t type				Define where to find the binaries. default is "release"
+		-nb					No Bundle. Do not create dmg
+		-nf					No Fix. Do not fix the bundle
+		-h					help
+
+EOF
+}
+
+T=release
+OPT_NOBUNDLE=
+OPT_NOFIX=
+
+while [ "$1" != "" ] ; do
+	case "$1" in
+		-t)
+			shift
+			T=$1
+			;;
+		-nb)
+			OPT_NOBUNDLE=y
+			;;
+		-nf)
+			OPT_NOFIX=y
+			;;
+		-h)
+			help
+			exit 0
+			;;
+		*)
+			echo "Options unknown, use -h to have help."
+			exit 1
+			;;
+	esac
+	shift
+done
 
 QMAKE=`which qmake`
 if [ "$QMAKE" == "" ] ; then
@@ -41,7 +77,7 @@ APPNAME=DisplaceProject
 APPBUNDLE=$DESTDIR/$APPNAME.app
 
 EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor vsleditor"
-EXTRA_FRAMEWORKS="GDAL"
+EXTRA_FRAMEWORKS="GDAL PROJ GEOS SQLite3 UnixImageIO"
 EXTRA_LIBS="libGeographic libCGAL libgmp "
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
@@ -141,7 +177,7 @@ copy_framework()
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
 	
-		#echo "Running: install_name_tool -id @executable_path/../Frameworks/$dst_file $BUNDLE/Contents/Frameworks/$dst_lib"
+		echo "Running: install_name_tool -id @executable_path/../Frameworks/$dst_file $BUNDLE/Contents/Frameworks/$dst_lib"
 		install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib \
 			|| echo "- ***Error Running: install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib"
 	fi
@@ -221,6 +257,17 @@ update_links()
 	fi
 }
 
+fix_links() {
+	file=$1
+	
+	for lib in $EXTRA_LIBS $QTLIBS ; do
+		update_links $file $lib $APPBUNDLE
+	done
+	for lib in $EXTRA_FRAMEWORKS; do
+		update_links $file $lib.framework $APPBUNDLE
+	done
+}
+
 ########## Main ##########
 
 if [ ! -e "$APPBUNDLE" ] ; then
@@ -286,12 +333,17 @@ for file in $QTLIBS; do
 done
 
 echo "Updating dynamic library references"
-for file in $CEXE $APPBUNDLE/Contents/Frameworks/* $PLUGINS; do
+for file in $CEXE $APPBUNDLE/Contents/Frameworks/* $PLUGINS ; do
 	echo $file | egrep '.*\.framework' > /dev/null
 	if [ $? -ne 0 ] ; then
-		for lib in $EXTRA_LIBS $QTLIBS; do
-			update_links $file $lib $APPBUNDLE
-		done
+		fix_links $file
+	fi
+done
+
+for file in $EXTRA_FRAMEWORKS; do
+	echo $file | egrep '.*\.framework' > /dev/null
+	if [ $? -ne 0 ] ; then
+		fix_links $APPBUNDLE/Contents/Frameworks/$file.framework/Versions/Current/$file
 	fi
 done
 
@@ -323,6 +375,11 @@ $TOOLDIR/scripts/create-dmg.sh \
 
 }
 
+if [ "$OPT_NOFIX" == "" ] ; then
+	fix_bundle
+fi
 
-fix_bundle
-create_dmg
+if [ "$OPT_NOBUNDLE" == "" ] ; then
+	create_dmg
+fi
+

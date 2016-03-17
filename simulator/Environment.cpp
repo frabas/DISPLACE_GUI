@@ -21,3 +21,12 @@ Environment::Environment()
 
 Environment::~Environment() noexcept = default;
 
+void Environment::assignCalendar(std::unique_ptr<env::Calendar> calendar)
+{
+    if (mCalendar != nullptr) {
+        throw std::runtime_error("Calendar has been already assigned.");
+    }
+
+    mCalendar = std::move(calendar);
+}
+

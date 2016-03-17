@@ -9,6 +9,8 @@
 
 #include <env/ActorsContainer.h>
 #include <actors/Vessel.h>
+#include <env/Clock.h>
+#include <env/Calendar.h>
 
 namespace displace {
 
@@ -22,6 +24,8 @@ namespace displace {
 
         std::unique_ptr<Impl> mImpl;
         std::unique_ptr<env::Playground> mPlayground;
+        std::unique_ptr<env::Clock> mClock;
+        std::unique_ptr<env::Calendar> mCalendar;
 
         std::unique_ptr<env::ActorsContainer<actors::Vessel>> mVessels;
 
@@ -29,9 +33,14 @@ namespace displace {
         explicit Environment();
         ~Environment() noexcept ;
 
+        env::Clock &clock() { return *mClock; }
+        env::Calendar &calendar() { return *mCalendar; }
         env::Playground &playground() { return *mPlayground; }
 
         env::ActorsContainer<actors::Vessel> &vessels() { return *mVessels; }
+
+        void assignCalendar(std::unique_ptr<env::Calendar> calendar);
+
     };
 
 }

@@ -284,7 +284,7 @@ bool LegacyLoader::loadVessels(displace::Simulation *simulation, int quarter)
 
 bool LegacyLoader::loadCalendar(displace::Simulation *simulation)
 {
-    env::LegacyCalendar *calendar = new env::LegacyCalendar();
+    std::unique_ptr<env::LegacyCalendar> calendar = utils::make_unique<env::LegacyCalendar>();
 
     displace::formats::helpers::SinglefieldReader reader;
 
@@ -301,7 +301,7 @@ bool LegacyLoader::loadCalendar(displace::Simulation *simulation)
     }
 
     int n = 0;
-    reader.importFromStream<int>(in, [calendar, &n](int step) {
+    reader.importFromStream<int>(in, [&calendar, &n](int step) {
         calendar->insertMonth(step, n++);
     });
 
@@ -318,7 +318,7 @@ bool LegacyLoader::loadCalendar(displace::Simulation *simulation)
     }
 
     n = 0;
-    reader.importFromStream<int>(in, [calendar, &n](int step) {
+    reader.importFromStream<int>(in, [&calendar, &n](int step) {
         calendar->insertQuarter(step, n++);
     });
 
@@ -335,7 +335,7 @@ bool LegacyLoader::loadCalendar(displace::Simulation *simulation)
     }
 
     n = 0;
-    reader.importFromStream<int>(in, [calendar, &n](int step) {
+    reader.importFromStream<int>(in, [&calendar, &n](int step) {
         calendar->insertSemester(step, n++);
     });
 
@@ -352,12 +352,16 @@ bool LegacyLoader::loadCalendar(displace::Simulation *simulation)
     }
 
     n = 0;
-    reader.importFromStream<int>(in, [calendar, &n](int step) {
+    reader.importFromStream<int>(in, [&calendar, &n](int step) {
         calendar->insertYear(step, n++);
     });
 
     std::cout << "Read " << n << " timesteps per years" << std::endl;
     in.close();
+
+    // assign
+
+    simulation->environment().assignCalendar(std::move(calendar));
 
     return true;
 }

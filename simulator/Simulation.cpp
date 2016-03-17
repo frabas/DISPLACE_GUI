@@ -7,6 +7,7 @@
 #include <utils/make_unique.h>
 
 #include <Environment.h>
+#include <iostream>
 
 using namespace displace;
 
@@ -38,6 +39,24 @@ bool Simulation::initialize(const std::list<std::string> &options)
 
 int Simulation::run()
 {
+    unsigned long numsteps = 10000;
+
+    auto tstep = mEnv->clock().timestep();
+    while (tstep < numsteps) {
+        // do something...
+
+        if (mEnv->calendar().isMonth(tstep))
+            std::cout << "New Month at " << tstep << std::endl;
+        if (mEnv->calendar().isYear(tstep))
+            std::cout << "New Year at " << tstep << std::endl;
+
+        mEnv->clock().advance();
+
+
+        // last before restart
+        tstep = mEnv->clock().timestep();
+    }
+
     return 0;
 }
 

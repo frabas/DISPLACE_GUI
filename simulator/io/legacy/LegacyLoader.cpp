@@ -24,6 +24,8 @@
 
 #include <utils/make_unique.h>
 #include <formats/utils/prettyprint.h>
+#include <env/legacy/LegacyCalendar.h>
+#include <formats/utils/SinglefieldReader.h>
 
 using namespace displace::io;
 
@@ -70,6 +72,8 @@ bool LegacyLoader::load(displace::Simulation *simulation)
     if (!loadGraph(simulation))
         return false;
     if (!loadVessels(simulation, 1))
+        return false;
+    if (!loadCalendar(simulation))
         return false;
 
     return true;
@@ -277,3 +281,84 @@ bool LegacyLoader::loadVessels(displace::Simulation *simulation, int quarter)
 
     return true;
 }
+
+bool LegacyLoader::loadCalendar(displace::Simulation *simulation)
+{
+    env::LegacyCalendar *calendar = new env::LegacyCalendar();
+
+    displace::formats::helpers::SinglefieldReader reader;
+
+    auto path = mPath
+                / boost::filesystem::path{boost::str(boost::format{"simusspe_%s"} % mModel)};
+
+    auto np = path / boost::filesystem::path{"tstep_months_2009_2015.dat"};
+
+    std::ifstream in;
+    in.open(np.string());
+    if(!in) {
+        std::cout << "Error reading months calendar" << std::endl;
+        return false;
+    }
+
+    int n = 0;
+    reader.importFromStream<int>(in, [calendar, &n](int step) {
+        calendar->insertMonth(step, n++);
+    });
+
+    std::cout << "Read " << n << " timesteps per months" << std::endl;
+    in.close();
+
+    // quarters
+    np = path / boost::filesystem::path{"tstep_quarters_2009_2015.dat"};
+
+    in.open(np.string());
+    if(!in) {
+        std::cout << "Error reading quarters calendar." << std::endl;
+        return false;
+    }
+
+    n = 0;
+    reader.importFromStream<int>(in, [calendar, &n](int step) {
+        calendar->insertQuarter(step, n++);
+    });
+
+    std::cout << "Read " << n << " timesteps per quarter" << std::endl;
+    in.close();
+
+    // semesters
+    np = path / boost::filesystem::path{"tstep_semesters_2009_2015.dat"};
+
+    in.open(np.string());
+    if(!in) {
+        std::cout << "Error reading semsters calendar." << std::endl;
+        return false;
+    }
+
+    n = 0;
+    reader.importFromStream<int>(in, [calendar, &n](int step) {
+        calendar->insertSemester(step, n++);
+    });
+
+    std::cout << "Read " << n << " timesteps per semesters" << std::endl;
+    in.close();
+
+    // years
+    np = path / boost::filesystem::path{"tstep_years_2009_2015.dat"};
+
+    in.open(np.string());
+    if(!in) {
+        std::cout << "Error reading years calendar." << std::endl;
+        return false;
+    }
+
+    n = 0;
+    reader.importFromStream<int>(in, [calendar, &n](int step) {
+        calendar->insertYear(step, n++);
+    });
+
+    std::cout << "Read " << n << " timesteps per years" << std::endl;
+    in.close();
+
+    return true;
+}
+

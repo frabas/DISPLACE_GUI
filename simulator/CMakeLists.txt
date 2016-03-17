@@ -12,7 +12,11 @@ SET(SIMSOURCES
         io/Loader.cpp io/Loader.h
         utils/make_unique.h
         io/legacy/LegacyLoader.cpp io/legacy/LegacyLoader.h
-        env/Node.cpp env/Node.h env/Edge.cpp env/Edge.h env/ActorsContainer.h actors/Vessel.cpp actors/Vessel.h)
+        env/Node.cpp env/Node.h
+        env/Edge.cpp env/Edge.h
+        env/ActorsContainer.h
+        actors/Vessel.cpp actors/Vessel.h
+        env/legacy/LegacyCalendar.h)
 
 add_definitions(
         -DBOOST_FILESYSTEM_VERSION=3

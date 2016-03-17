@@ -27,6 +27,7 @@ namespace displace {
             bool loadScenarioFile();
             bool loadGraph(Simulation *simulation);
             bool loadVessels(Simulation *simulation, int quarter);
+            bool loadCalendar(Simulation *simulation);
 
             struct Status;
             std::unique_ptr<Status> mStatus;

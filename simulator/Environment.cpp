@@ -14,6 +14,7 @@ struct Environment::Impl {
 Environment::Environment()
 : mImpl( utils::make_unique<Impl>() ),
   mPlayground(utils::make_unique<env::Playground>()),
+  mClock(utils::make_unique<env::Clock>()),
   mVessels(utils::make_unique<env::ActorsContainer<actors::Vessel>>())
 {
 

@@ -10,7 +10,7 @@ set(SOURCES
         utils/LineNumberReader.cpp utils/LineNumberReader.h
         utils/prettyprint.h
         legacy/NodesFileReader.h utils/MultifieldReader.h
-    )
+        utils/SinglefieldReader.h)
 
 include_directories(
         ${Boost_INCLUDE_DIRS}

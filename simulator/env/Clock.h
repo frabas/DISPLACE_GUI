@@ -14,7 +14,7 @@ namespace displace {
             }
 
             unsigned long timestep () const { return mTimeStep; }
-            void advance() { ++mTimeStep; }
+            unsigned long advance() { return ++mTimeStep; }
 
         private:
             unsigned long mTimeStep = 0;

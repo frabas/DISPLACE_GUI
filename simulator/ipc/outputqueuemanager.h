@@ -40,7 +40,6 @@ class OutputQueueManager
 {
 public:
     explicit OutputQueueManager();
-    explicit OutputQueueManager(std::ostream &stream);
 
     void disableIpcQueue();
     void start();
@@ -77,9 +76,7 @@ private:
     std::queue<boost::shared_ptr<OutputMessage> > mQueue;
 
     IpcQueue ipcQueue;
-    enum ProtocolType { TextWithStdOut, Binary, None } mType;
-
-    std::ostream &mOutStream;        ///< File descriptor for socket/pipe (Binary protocol)
+    enum ProtocolType { Binary, None } mType;
 };
 
 #endif // OUTPUQUEUEMANAGER_H

@@ -58,16 +58,7 @@ public:
 
 OutputQueueManager::OutputQueueManager()
     : ipcQueue(),
-      mType(Binary),
-      mOutStream(std::cout)
-{
-    pthread_mutex_init(&mMutex, 0);
-    sem_init(&mSemaphore, 0, 0);
-}
-
-OutputQueueManager::OutputQueueManager(std::ostream &stream)
-    : mType (TextWithStdOut),
-      mOutStream (stream)
+      mType(Binary)
 {
     pthread_mutex_init(&mMutex, 0);
     sem_init(&mSemaphore, 0, 0);
@@ -139,9 +130,6 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
         if (!exit) {
             switch (mType) {
             case None:
-                break;
-            case TextWithStdOut:
-                exit = !msg->send(mOutStream);
                 break;
             case Binary:
                 len = msg->sendBinary(buffer, 1024);

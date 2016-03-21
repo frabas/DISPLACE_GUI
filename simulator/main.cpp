@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    return sim.run();
+    auto ret = sim.run();
+
+    sim.deinitialize();
+
+    return ret;
 }
 

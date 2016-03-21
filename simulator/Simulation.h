@@ -25,6 +25,8 @@ namespace displace {
         ~Simulation() noexcept ;
 
         bool initialize(const std::list<std::string> &options);
+        bool deinitialize();
+
         int run();
 
         Environment &environment() { return *mEnv; }

@@ -34,8 +34,18 @@ bool Simulation::initialize(const std::list<std::string> &options)
     if (!loader->load(this))
         return false;
 
+    mOutQueueManager.start();
+
     return true;
 }
+
+bool Simulation::deinitialize()
+{
+    mOutQueueManager.finish();
+
+    return true;
+}
+
 
 int Simulation::run()
 {

@@ -1,24 +1,7 @@
 project (commons)
 
 SET(SOURCES
-        readdata.cpp
-        myutils.cpp
-        Population.cpp
-        Fishfarm.cpp
-        Node.cpp
-        Tac.cpp
-        Benthos.cpp
-        Harbour.cpp
-        Ship.cpp
-        Vessel.cpp
-        Metier.cpp
-        myRutils.cpp
-        mkpath.cpp
-        memoryinfo.cpp
-        options.cpp
         ipcqueue.cpp
-        statics.cpp
-        simulation.cpp
         dtree/decisiontree.cpp
         dtree/variables.cpp
         dtree/dtnode.cpp
@@ -26,6 +9,7 @@ SET(SOURCES
         dtree/externalstatemanager.cpp
         tseries/timeseries.cpp
         tseries/timeseriesmanager.cpp
+        include/ipcqueue.h include/ipcmsgtypes.h
     )
 
 find_package(Boost REQUIRED)
@@ -33,7 +17,7 @@ find_package(Boost REQUIRED)
 message(STATUS "Boost found: ${Boost_INCLUDE_DIRS}")
 
 include_directories(
-        ../include
+        include
         ../commons
         ${Boost_INCLUDE_DIRS}
     )

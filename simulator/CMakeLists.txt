@@ -19,7 +19,8 @@ SET(SIMSOURCES
         env/legacy/LegacyCalendar.h
         ipc/outputmessage.cpp ipc/outputmessage.h
         ipc/outputqueuemanager.cpp ipc/outputqueuemanager.h
-        )
+        ipc/messages/genericconsolestringoutputmessage.cpp ipc/messages/genericconsolestringoutputmessage.h
+        ipc/messages/StepMessage.h)
 
 add_definitions(
         -DBOOST_FILESYSTEM_VERSION=3

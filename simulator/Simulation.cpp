@@ -9,6 +9,9 @@
 #include <Environment.h>
 #include <iostream>
 
+#include <ipc/messages/StepMessage.h>
+#include <boost/make_shared.hpp>
+
 using namespace displace;
 
 struct Simulation::Impl {
@@ -54,6 +57,7 @@ int Simulation::run()
     auto tstep = mEnv->clock().timestep();
     while (tstep < numsteps) {
         // do something...
+        mOutQueueManager.enqueue(boost::make_shared<displace::ipc::StepMessage>(tstep));
 
         applyPopulationModel();
 

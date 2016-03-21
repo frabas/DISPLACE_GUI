@@ -8,6 +8,7 @@
 #include <list>
 #include <string>
 #include "Environment.h"
+#include <ipc/outputqueuemanager.h>
 
 namespace displace {
 
@@ -33,6 +34,8 @@ namespace displace {
         void applyPopulationModel();
         void applyManagementModel();
         void applyVesselsModel();
+
+        OutputQueueManager mOutQueueManager;
     };
 
 } // ns;

@@ -16,7 +16,10 @@ SET(SIMSOURCES
         env/Edge.cpp env/Edge.h
         env/ActorsContainer.h
         actors/Vessel.cpp actors/Vessel.h
-        env/legacy/LegacyCalendar.h)
+        env/legacy/LegacyCalendar.h
+        ipc/outputmessage.cpp ipc/outputmessage.h
+        ipc/outputqueuemanager.cpp ipc/outputqueuemanager.h
+        )
 
 add_definitions(
         -DBOOST_FILESYSTEM_VERSION=3
@@ -28,6 +31,7 @@ find_package(Boost REQUIRED
 
 include_directories(.
         ../
+        ../commons/include
         ${Boost_INCLUDE_DIRS}
     )
 
@@ -37,6 +41,7 @@ add_executable(displace
 
 target_link_libraries(displace
         formats
+        commons
         ${Boost_LIBRARY_DIRS} ${Boost_LIBRARIES}
         )
 

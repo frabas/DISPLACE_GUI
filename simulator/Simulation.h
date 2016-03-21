@@ -28,6 +28,11 @@ namespace displace {
 
         Environment &environment() { return *mEnv; }
         const Environment &environment() const { return *mEnv; }
+
+    private:
+        void applyPopulationModel();
+        void applyManagementModel();
+        void applyVesselsModel();
     };
 
 } // ns;

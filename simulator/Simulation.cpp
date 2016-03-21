@@ -45,13 +45,17 @@ int Simulation::run()
     while (tstep < numsteps) {
         // do something...
 
-        if (mEnv->calendar().isMonth(tstep))
-            std::cout << "New Month at " << tstep << std::endl;
-        if (mEnv->calendar().isYear(tstep))
-            std::cout << "New Year at " << tstep << std::endl;
+        applyPopulationModel();
+
+        applyManagementModel();
+
+        applyVesselsModel();
+
+        // export data
+
+        // update clock and calendar
 
         mEnv->clock().advance();
-
 
         // last before restart
         tstep = mEnv->clock().timestep();
@@ -59,4 +63,25 @@ int Simulation::run()
 
     return 0;
 }
+
+void Simulation::applyPopulationModel()
+{
+
+}
+
+void Simulation::applyManagementModel()
+{
+
+}
+
+void Simulation::applyVesselsModel()
+{
+
+}
+
+
+
+
+
+
 

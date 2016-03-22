@@ -7,6 +7,15 @@ SchedulerJobAdapter::SchedulerJobAdapter(SchedulerJob &sj, QObject *parent)
 
 }
 
+void SchedulerJobAdapter::addSimulationRun(const SimulationRun &data)
+{
+    int p = mSj.jobsCount();
+    beginInsertRows(QModelIndex(), p, p);
+    mSj.addAt(p);
+    mSj.job(p) = data;
+    endInsertRows();
+}
+
 int SchedulerJobAdapter::rowCount(const QModelIndex &) const
 {
     return mSj.jobsCount();

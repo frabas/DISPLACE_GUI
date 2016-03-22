@@ -18,6 +18,8 @@ class SchedulerJobAdapter : public QAbstractItemModel
 public:
     explicit SchedulerJobAdapter(SchedulerJob &sj, QObject *parent = 0);
 
+    void addSimulationRun(const SimulationRun &data);
+
     // QAbstractItemModel interface
 public:
     int rowCount(const QModelIndex &parent) const;

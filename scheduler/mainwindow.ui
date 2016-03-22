@@ -27,6 +27,13 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="action_Open"/>
+   <addaction name="action_Save"/>
+   <addaction name="separator"/>
+   <addaction name="action_Generate_Script"/>
+   <addaction name="separator"/>
+   <addaction name="action_Add"/>
+   <addaction name="actionInfo"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QMenuBar" name="menuBar">
@@ -55,6 +62,7 @@
     </property>
     <addaction name="action_Add"/>
     <addaction name="action_Remove"/>
+    <addaction name="actionInfo"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -65,42 +73,72 @@
    </property>
   </action>
   <action name="action_Open">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/load.png</normaloff>:/resources/icons/load.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
   </action>
   <action name="action_Save">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/save.png</normaloff>:/resources/icons/save.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Save</string>
    </property>
   </action>
   <action name="action_Quit">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/quit.png</normaloff>:/resources/icons/quit.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>
   </action>
-  <action name="action_Export">
-   <property name="text">
-    <string>&amp;Export...</string>
-   </property>
-  </action>
   <action name="action_Generate_Script">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/export.png</normaloff>:/resources/icons/export.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Generate Script...</string>
    </property>
   </action>
   <action name="action_Remove">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/remove.png</normaloff>:/resources/icons/remove.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Remove</string>
    </property>
   </action>
   <action name="action_Add">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/add.png</normaloff>:/resources/icons/add.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Add</string>
    </property>
   </action>
+  <action name="actionInfo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/icons/info.png</normaloff>:/resources/icons/info.png</iconset>
+   </property>
+   <property name="text">
+    <string>Info...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -12,7 +12,7 @@ TARGET = scheduler
 TEMPLATE = app
 CONFIG += c++11
 
-INCLUDEPATH += ../include/ ../commons ../qtcommons
+INCLUDEPATH += ../include/ ../commons ../qtcommons ../formats/
 
 include ("$$top_srcdir/localconfig.pri")
 
@@ -26,11 +26,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     schedulerjob.cpp \
     simulationrun.cpp \
-    schedulerjobadapter.cpp
+    schedulerjobadapter.cpp \
+    rundialog.cpp
 
 HEADERS  += mainwindow.h \
     schedulerjob.h \
     simulationrun.h \
-    schedulerjobadapter.h
+    schedulerjobadapter.h \
+    rundialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    rundialog.ui
+
+RESOURCES += \
+    resources.qrc

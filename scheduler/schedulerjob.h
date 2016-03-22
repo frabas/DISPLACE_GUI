@@ -16,6 +16,14 @@ public:
     SimulationRun &job(int n) { return mList[n]; }
 
     SimulationRun &addAt(int position);
+
+    std::list<SimulationRun::DataAsTuple> getDataAsTuple() const {
+        std::list<SimulationRun::DataAsTuple> d;
+        for (auto s : mList) {
+            d.push_back(s.dataAsTuple());
+        }
+        return d;
+    }
 };
 
 #endif // SCHEDULERJOB_H

@@ -5,15 +5,23 @@
 
 class SimulationRun
 {
-    int nSteps;
-    int nThreads;
+    int nSteps = 0;
+    int nThreads = 0;
 
+    QString mPath;
     QString mName;
     QString mOutName;
     QString mSimName;
 
 public:
+    using DataAsTuple = std::tuple<std::string,
+        std::string, std::string, std::string,
+        int, int>;
+
     SimulationRun();
+
+    QString getPath() const;
+    void setPath(const QString &path);
 
     QString getName() const { return mName; }
     void setName(QString name);
@@ -29,6 +37,15 @@ public:
 
     int getNumThreads() { return nThreads; }
     void setNumThreads(int n);
+
+    DataAsTuple dataAsTuple() const {
+        return std::make_tuple(mPath.toStdString(),
+                        mName.toStdString(),
+                        mOutName.toStdString(),
+                        mSimName.toStdString(),
+                        nSteps, nThreads
+                        );
+    }
 };
 
 #endif // SIMULATIONRUN_H

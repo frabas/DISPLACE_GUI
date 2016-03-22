@@ -1,8 +1,18 @@
 #include "simulationrun.h"
 
+QString SimulationRun::getPath() const
+{
+    return mPath;
+}
+
+void SimulationRun::setPath(const QString &path)
+{
+    mPath = path;
+}
+
 SimulationRun::SimulationRun()
 {
-
+    
 }
 
 void SimulationRun::setName(QString name)

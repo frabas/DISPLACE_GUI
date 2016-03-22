@@ -7,13 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>487</width>
-    <height>560</height>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Simulation Setup</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Simulation Length</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QSpinBox" name="simSteps">
      <property name="suffix">
@@ -31,13 +38,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Simulation Length</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Output folder name</string>
@@ -48,14 +48,14 @@
     <widget class="QLineEdit" name="outName"/>
    </item>
    <item>
-    <widget class="QLineEdit" name="simName"/>
-   </item>
-   <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Simulation Name</string>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="simName"/>
    </item>
    <item>
     <widget class="QCheckBox" name="optMoveVessels">
@@ -65,14 +65,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="verbosity"/>
-   </item>
-   <item>
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Verbosity Level</string>
      </property>
     </widget>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="verbosity"/>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">

@@ -29,5 +29,12 @@ SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \
     utils/LineNumberReader.cpp
 
-LIBS += -lboost_filesystem -lboost_regex
+win32 {
+    LIBS +=  -lboost_regex-mgw49-mt-1_57
+}
+
+!win32 {
+    LIBS += -lboost_regex
+}
+
 

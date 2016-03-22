@@ -3,6 +3,8 @@
 
 #include <QString>
 
+#include <tuple>
+
 class SimulationRun
 {
     int nSteps = 0;

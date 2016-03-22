@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.8.3"
+#define MyAppVersion "0.8.3b"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -48,6 +48,7 @@ Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\dtreeeditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\tsereditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\bin\scheduler.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\formats.dll; DestDir: {app}; Flags: ignoreversion

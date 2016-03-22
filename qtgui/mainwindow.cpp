@@ -2221,3 +2221,16 @@ void MainWindow::on_actionVessel_Creation_Editor_triggered()
 }
 
 
+
+void MainWindow::on_actionScheduler_Editor_triggered()
+{
+    QProcess *ed = new QProcess;
+    QString app = qApp->applicationDirPath() + "/scheduler";
+
+#ifdef __WINNT
+    app += ".exe";
+#endif
+
+    ed->setWorkingDirectory(qApp->applicationDirPath());
+    ed->start(app);
+}

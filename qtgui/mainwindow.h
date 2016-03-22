@@ -205,6 +205,8 @@ private slots:
     void on_actionTime_Series_Editor_triggered();
     void on_actionVessel_Creation_Editor_triggered();
 
+    void on_actionScheduler_Editor_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

@@ -53,5 +53,6 @@
         <file>icons/Rlogo.png</file>
         <file>icons/tseditor.png</file>
         <file>palettes/tariffs_colors.p2c</file>
+        <file>icons/scheduler.png</file>
     </qresource>
 </RCC>

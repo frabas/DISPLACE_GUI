@@ -7,5 +7,6 @@
         <file>resources/icons/info.png</file>
         <file>resources/icons/quit.png</file>
         <file>resources/icons/remove.png</file>
+        <file>resources/icons/scheduler.png</file>
     </qresource>
 </RCC>

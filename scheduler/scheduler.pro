@@ -22,6 +22,10 @@ CONFIG(debug,release|debug) {
     DEFINES += DEBUG
 }
 
+win32 {
+    RC_FILE = scheduler.rc
+}
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     schedulerjob.cpp \
@@ -40,3 +44,6 @@ FORMS    += mainwindow.ui \
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    scheduler.rc

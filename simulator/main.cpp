@@ -3084,7 +3084,7 @@ int main(int argc, char* argv[])
 		else
 		{
 								 // for pop xx
-			sample_pops.push_back(15);
+            sample_pops.push_back(0);
 		}
 		for (unsigned int sp=0; sp<sample_pops.size(); sp++)
 		{

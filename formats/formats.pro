@@ -23,7 +23,8 @@ HEADERS = \
     utils/prettyprint.h \
     legacy/NodesFileReader.h utils/MultifieldReader.h \
     utils/vectorsdata.h \
-    formatexception.h
+    formatexception.h \
+    utils/MultifieldWriter.h
 
 SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \

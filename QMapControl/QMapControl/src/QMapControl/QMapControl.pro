@@ -17,6 +17,10 @@ CONFIG(release, debug|release) {
     TARGET = qmapcontrol
 }
 
+!isEmpty(QMC_LIBDESTDIR) {
+    DESTDIR=$$QMC_LIBDESTDIR
+}
+
 # Target version.
 VERSION = 1.0.0
 

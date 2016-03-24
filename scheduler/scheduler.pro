@@ -1,22 +1,22 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-03-15T17:20:03
-#
-#-------------------------------------------------
-
+TEMPLATE = app
 QT       += core gui
+CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = scheduler
-TEMPLATE = app
-CONFIG += c++11
 
 INCLUDEPATH += ../include/ ../commons ../qtcommons ../formats/
 
 include ("$$top_srcdir/localconfig.pri")
 
 DESTDIR = ../bin
+
+macx {
+    DESTDIR=$$EXEDESTDIR
+    CONFIG -= app_bundle
+}
+
 
 CONFIG(debug,release|debug) {
     DEFINES += DEBUG
@@ -47,3 +47,7 @@ RESOURCES += \
 
 DISTFILES += \
     scheduler.rc
+
+
+target.path=$${PREFIX}/bin
+INSTALLS += target

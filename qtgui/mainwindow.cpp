@@ -1040,6 +1040,25 @@ void MainWindow::startBackgroundOperation(BackgroundWorkerWithWaitDialog *work)
     startBackgroundOperation(work, work->getWaitDialog());
 }
 
+QProcess *MainWindow::prepareAppExecutableStart(QString exename)
+{
+    QProcess *ed = new QProcess;
+    QString app = qApp->applicationDirPath() + "/" + exename;
+
+#ifdef __WINNT
+    app += ".exe";
+#endif
+
+    ed->setWorkingDirectory(qApp->applicationDirPath());
+    ed->setProgram(app);
+
+    connect (ed, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), [this, ed, app](QProcess::ProcessError err) {
+       QMessageBox::warning(this, tr("Failed to start"),
+                            QString(tr("The process %1 failed to start")).arg(app));
+    });
+    return ed;
+}
+
 void MainWindow::startMouseMode(MouseMode * newmode)
 {
     abortMouseMode();
@@ -2158,15 +2177,8 @@ void MainWindow::on_actionLoadStockNames_triggered()
 
 void MainWindow::on_actionDecision_Trees_Editor_triggered()
 {
-    QProcess *ed = new QProcess;
-    QString app = qApp->applicationDirPath() + "/dtreeeditor";
-
-#ifdef __WINNT
-    app += ".exe";
-#endif
-
-    ed->setWorkingDirectory(qApp->applicationDirPath());
-    ed->start(app);
+    auto ed = prepareAppExecutableStart("dtreeeditor");
+    ed->start();
 }
 
 void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
@@ -2195,42 +2207,20 @@ void MainWindow::on_actionR_Console_triggered()
 
 void MainWindow::on_actionTime_Series_Editor_triggered()
 {
-    QProcess *ed = new QProcess;
-    QString app = qApp->applicationDirPath() + "/tsereditor";
-
-#ifdef __WINNT
-    app += ".exe";
-#endif
-
-    ed->setWorkingDirectory(qApp->applicationDirPath());
-    ed->start(app);
+    auto ed = prepareAppExecutableStart("tsereditor");
+    ed->start();
 }
-
 
 void MainWindow::on_actionVessel_Creation_Editor_triggered()
 {
-    QProcess *ed = new QProcess;
-    QString app = qApp->applicationDirPath() + "/vesseleditor";
-
-#ifdef __WINNT
-    app += ".exe";
-#endif
-
-    ed->setWorkingDirectory(qApp->applicationDirPath());
-    ed->start(app);
+    auto ed = prepareAppExecutableStart("vesseleditor");
+    ed->start();
 }
 
 
 
 void MainWindow::on_actionScheduler_Editor_triggered()
 {
-    QProcess *ed = new QProcess;
-    QString app = qApp->applicationDirPath() + "/scheduler";
-
-#ifdef __WINNT
-    app += ".exe";
-#endif
-
-    ed->setWorkingDirectory(qApp->applicationDirPath());
-    ed->start(app);
+    auto ed = prepareAppExecutableStart("scheduler");
+    ed->start();
 }

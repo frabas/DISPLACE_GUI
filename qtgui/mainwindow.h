@@ -237,6 +237,7 @@ protected:
 
     void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog, QObject *receiver = 0, const char *onEndSlot = 0);
     void startBackgroundOperation (BackgroundWorkerWithWaitDialog *work);
+    QProcess *prepareAppExecutableStart(QString exename);
     void startMouseMode (MouseMode *);
     void endMouseMode (bool success = true);
 

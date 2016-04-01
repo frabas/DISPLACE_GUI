@@ -20,7 +20,7 @@ SET(SIMSOURCES
         ipc/outputmessage.cpp ipc/outputmessage.h
         ipc/outputqueuemanager.cpp ipc/outputqueuemanager.h
         ipc/messages/genericconsolestringoutputmessage.cpp ipc/messages/genericconsolestringoutputmessage.h
-        ipc/messages/StepMessage.h)
+        ipc/messages/StepMessage.h strategies/modelstrategy.h strategies/models/SimpleIncrementalModel.cpp strategies/models/SimpleIncrementalModel.h env/aspects/populationsaspect.h)
 
 add_definitions(
         -DBOOST_FILESYSTEM_VERSION=3

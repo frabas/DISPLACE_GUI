@@ -11,16 +11,20 @@
 
 #include <ipc/messages/StepMessage.h>
 #include <boost/make_shared.hpp>
+#include <strategies/modelstrategy.h>
+#include <strategies/models/SimpleIncrementalModel.h>
 
 using namespace displace;
 
 struct Simulation::Impl {
+    std::unique_ptr<strategy::model::ModelStrategy> mModelStrategy;
 };
 
 Simulation::Simulation()
 : mImpl(utils::make_unique<Impl>()),
   mEnv(utils::make_unique<Environment>())
 {
+    mImpl->mModelStrategy = utils::make_unique<strategy::model::SimpleIncrementalModel>();
 }
 
 Simulation::~Simulation() noexcept = default;
@@ -80,7 +84,7 @@ int Simulation::run()
 
 void Simulation::applyPopulationModel()
 {
-
+    mImpl->mModelStrategy->updatePopulationModel(this);
 }
 
 void Simulation::applyManagementModel()
@@ -92,8 +96,6 @@ void Simulation::applyVesselsModel()
 {
 
 }
-
-
 
 
 

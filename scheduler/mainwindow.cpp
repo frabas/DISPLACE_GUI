@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mScheduler = utils::make_unique<SchedulerJob>();
     ui->dataView->setModel(mAdapter = new SchedulerJobAdapter(*mScheduler, this));
+
+//#ifdef Q_OS_WIN32
+//    ui->action_Generate_Script->setVisible(false);
+//#endif
 }
 
 MainWindow::~MainWindow()
@@ -104,4 +108,47 @@ void MainWindow::on_action_Open_triggered()
                                  tr("Couldn't load the file. Check the destination has the right access permissions and the file exists and it is in the right format."));
         }
     }
+}
+
+void MainWindow::on_action_Generate_Script_triggered()
+{
+    QSettings s;
+    QString out = QFileDialog::getSaveFileName(this, tr("Export Script file"),
+                                               s.value("last_gen_script").toString(),
+                                               QString("Scheduler files (*.bat);;All files (*)")
+                                               );
+
+    if (!out.isEmpty()) {
+        std::ofstream os(out.toStdString(), std::ios_base::out | std::ios_base::trunc);
+
+        bool ok = false;
+        if (os) {
+            for (int i = 0; i < mScheduler->jobsCount(); ++i) {
+                auto job = mScheduler->job(i);
+
+                os << "start /d " << QCoreApplication::applicationDirPath().toStdString() <<
+                      " displace -f \"" << job.getName().toStdString() <<
+                      "\" -f2 \"" << job.getSimulationOutputName().toStdString() <<
+                      "\" -s \"" << job.getSimulationName().toStdString() <<
+                      "\" -i " << job.getSimulationSteps() <<
+                      " -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 1 --num_threads " << job.getNumThreads() <<
+                      " > ..\\" << job.getName().toStdString() << "-out.txt" << std::endl;
+            }
+
+            os.close();
+
+            QFileInfo info(out);
+            s.setValue("last_gen_script", info.path());
+            ok = true;
+
+            QMessageBox::information(this, tr("Script generated"),
+                                     tr("Simulation script generated successfully."));
+        }
+
+        if (!ok) {
+            QMessageBox::warning(this, tr("Displace Scheduler editor"),
+                                 tr("Couldn't save the file. Check the destination has the right write permissions."));
+        }
+    }
+
 }

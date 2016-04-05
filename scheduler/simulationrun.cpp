@@ -39,3 +39,4 @@ void SimulationRun::setNumThreads(int n)
 {
     nThreads = n;
 }
+

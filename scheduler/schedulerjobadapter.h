@@ -19,6 +19,7 @@ public:
     explicit SchedulerJobAdapter(SchedulerJob &sj, QObject *parent = 0);
 
     void addSimulationRun(const SimulationRun &data);
+    void refresh();
 
     // QAbstractItemModel interface
 public:

@@ -16,6 +16,12 @@ void SchedulerJobAdapter::addSimulationRun(const SimulationRun &data)
     endInsertRows();
 }
 
+void SchedulerJobAdapter::refresh()
+{
+    beginResetModel();
+    endResetModel();
+}
+
 int SchedulerJobAdapter::rowCount(const QModelIndex &) const
 {
     return mSj.jobsCount();

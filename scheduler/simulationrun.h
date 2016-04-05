@@ -22,6 +22,26 @@ public:
 
     SimulationRun();
 
+    explicit SimulationRun(DataAsTuple &&tuple)
+        : mPath(QString::fromStdString(std::get<0>(tuple))),
+          mName(QString::fromStdString(std::get<1>(tuple))),
+          mOutName(QString::fromStdString(std::get<2>(tuple))),
+          mSimName(QString::fromStdString(std::get<3>(tuple))),
+          nSteps(std::get<4>(tuple)),
+          nThreads(std::get<5>(tuple))
+    {
+    }
+
+    explicit SimulationRun(const DataAsTuple &tuple)
+        : mPath(QString::fromStdString(std::get<0>(tuple))),
+          mName(QString::fromStdString(std::get<1>(tuple))),
+          mOutName(QString::fromStdString(std::get<2>(tuple))),
+          mSimName(QString::fromStdString(std::get<3>(tuple))),
+          nSteps(std::get<4>(tuple)),
+          nThreads(std::get<5>(tuple))
+    {
+    }
+
     QString getPath() const;
     void setPath(const QString &path);
 

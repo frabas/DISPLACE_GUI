@@ -24,6 +24,12 @@ public:
         }
         return d;
     }
+
+    void appendData (const std::list<SimulationRun> &dt) {
+        for (auto d : dt) {
+            mList.push_back(d);
+        }
+    }
 };
 
 #endif // SCHEDULERJOB_H

@@ -31,16 +31,19 @@ SOURCES += main.cpp\
     schedulerjob.cpp \
     simulationrun.cpp \
     schedulerjobadapter.cpp \
-    rundialog.cpp
+    rundialog.cpp \
+    batchcreatedialog.cpp
 
 HEADERS  += mainwindow.h \
     schedulerjob.h \
     simulationrun.h \
     schedulerjobadapter.h \
-    rundialog.h
+    rundialog.h \
+    batchcreatedialog.h
 
 FORMS    += mainwindow.ui \
-    rundialog.ui
+    rundialog.ui \
+    batchcreatedialog.ui
 
 RESOURCES += \
     resources.qrc

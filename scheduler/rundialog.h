@@ -21,6 +21,8 @@ public:
 private slots:
     void on_cmdBrowseModel_clicked();
 
+    void on_cmdBatchCreate_clicked();
+
 private:
     Ui::RunDialog *ui;
 

@@ -1,6 +1,8 @@
 #include "rundialog.h"
 #include "ui_rundialog.h"
 
+#include <batchcreatedialog.h>
+
 #include <QSettings>
 #include <QDir>
 #include <QFileDialog>
@@ -65,4 +67,14 @@ bool RunDialog::parsePathParts(const QString &path, QString &basepath, QString &
     outputname = regexp.cap(3);
 
     return true;
+}
+
+void RunDialog::on_cmdBatchCreate_clicked()
+{
+    BatchCreateDialog dlg;
+    dlg.setBaseName(ui->simName->text());
+
+    if (dlg.exec() == QDialog::Accepted) {
+        ui->simName->setText(dlg.getResultingName());
+    }
 }

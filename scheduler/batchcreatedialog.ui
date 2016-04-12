@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Batch job creation</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
@@ -64,6 +64,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>basename</tabstop>
+  <tabstop>first</tabstop>
+  <tabstop>last</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

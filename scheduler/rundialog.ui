@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Insert new job(s)</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="5" column="0" colspan="2">
@@ -204,6 +204,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>path</tabstop>
+  <tabstop>cmdBrowseModel</tabstop>
+  <tabstop>modName</tabstop>
+  <tabstop>outName</tabstop>
+  <tabstop>simName</tabstop>
+  <tabstop>cmdBatchCreate</tabstop>
+  <tabstop>simSteps</tabstop>
+  <tabstop>optMoveVessels</tabstop>
+  <tabstop>verbosity</tabstop>
+  <tabstop>preexistingPathsShop</tabstop>
+  <tabstop>useStaticPaths</tabstop>
+  <tabstop>threads</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

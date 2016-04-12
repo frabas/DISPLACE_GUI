@@ -77,7 +77,7 @@ APPNAME=DisplaceProject
 APPBUNDLE=$DESTDIR/$APPNAME.app
 
 EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor vsleditor"
-EXTRA_FRAMEWORKS="GDAL PROJ GEOS SQLite3 UnixImageIO"
+EXTRA_FRAMEWORKS=""
 EXTRA_LIBS="libGeographic libCGAL libgmp "
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 

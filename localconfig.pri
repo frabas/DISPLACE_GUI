@@ -44,8 +44,6 @@ macx {
     LIBS += -L/usr/local/lib
     DEFINES +=
 
-    QMAKE_CXXFLAGS += -std=c++11 -stdlib=libstdc++
-
     APPDESTDIR=../bin
     TARGETAPPBUNDLE=$$join(APPTARGET,,,".app")
     TARGETSODIR= $$APPDESTDIR $$TARGETAPPBUNDLE Contents Frameworks

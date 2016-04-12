@@ -23,6 +23,8 @@ private slots:
 
     void on_cmdBatchCreate_clicked();
 
+    void on_RunDialog_accepted();
+
 private:
     Ui::RunDialog *ui;
 

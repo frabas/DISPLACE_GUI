@@ -37,7 +37,36 @@ void MainWindow::on_action_Add_triggered()
 {
     RunDialog dlg;
     if (dlg.exec() == QDialog::Accepted) {
-        mAdapter->addSimulationRun(dlg.get());
+        QList<QString> lsim;
+
+        auto &d = dlg.get();
+        QString sim = d.getSimulationName();
+        QRegExp r("(.*)\\[([0-9]+)-([0-9]+)\\]");
+        if (r.indexIn(sim) == -1) {
+            lsim << sim;
+        } else {
+            bool ok1, ok2;
+            QString pat = r.cap(1);
+            int first = r.cap(2).toInt(&ok1);
+            int last = r.cap(3).toInt(&ok2);
+
+            if (ok1 && ok2 && first <= last) {
+                while (first <= last) {
+                    lsim << QString("%1%2")
+                            .arg(pat)
+                            .arg(first);
+                    ++first;
+                }
+            } else {
+                lsim << sim;
+            }
+        }
+
+        for (auto sim : lsim) {
+            auto d = dlg.get();
+            d.setSimulationName(sim);
+            mAdapter->addSimulationRun(d);
+        }
     }
 }
 

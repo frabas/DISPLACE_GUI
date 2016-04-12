@@ -45,8 +45,8 @@ void RunDialog::on_cmdBrowseModel_clicked()
         mData.setSimulationOutputName(out);
         mData.setName(base);
 
-        ui->modName->setText(base);
-        ui->simName->setText(in);
+        ui->path->setText(base);
+        ui->modName->setText(in);
         ui->outName->setText(out);
     } else {
         QMessageBox::warning(this, tr("Model path error"),
@@ -77,4 +77,14 @@ void RunDialog::on_cmdBatchCreate_clicked()
     if (dlg.exec() == QDialog::Accepted) {
         ui->simName->setText(dlg.getResultingName());
     }
+}
+
+void RunDialog::on_RunDialog_accepted()
+{
+    mData.setPath(ui->path->text());
+    mData.setName(ui->modName->text());
+    mData.setSimulationOutputName(ui->outName->text());
+    mData.setSimulationName(ui->simName->text());
+    mData.setNumThreads(ui->threads->value());
+    mData.setSimulationSteps(ui->simSteps->value());
 }

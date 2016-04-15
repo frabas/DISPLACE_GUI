@@ -47,6 +47,17 @@ using namespace std;
 #define GetCurrentDir getcwd
 #endif
 
+extern pthread_mutex_t glob_mutex;
+
+static void lock()
+{
+    pthread_mutex_lock(&glob_mutex);
+}
+
+static void unlock()
+{
+    pthread_mutex_unlock(&glob_mutex);
+}
 
 
 int applyBiologicalModule(int tstep, string namesimu,

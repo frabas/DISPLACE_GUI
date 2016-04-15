@@ -246,12 +246,12 @@ ofstream export_individual_tacs;
  *
  * */
 
-void lock()
+static void lock()
 {
     pthread_mutex_lock(&glob_mutex);
 }
 
-void unlock()
+static void unlock()
 {
     pthread_mutex_unlock(&glob_mutex);
 }

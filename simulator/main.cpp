@@ -3634,7 +3634,7 @@ int main(int argc, char* argv[])
                   remove_dups(fgrounds);
 
                   // do an average of cpues for each fgrounds
-                  for (int gr=0; gr <fgrounds.size() ; ++gr)
+                  for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
                      {
                      int cnt = grounds_cpues_harbour_knowledge.count(fgrounds.at(gr));
                      multimap<int,double>::iterator it;
@@ -3648,13 +3648,13 @@ int main(int argc, char* argv[])
                      }
                   //  ...and scale to 1 to transform into probas
                   double cum_cpue=0;
-                  for (int gr=0; gr <fgrounds.size() ; ++gr)
+                  for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
                      {
                      cum_cpue+=cpue_fgrounds.at(gr);
                      }
                  if(cum_cpue!=0)
                     {
-                     for (int gr=0; gr <fgrounds.size() ; ++gr)
+                     for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
                         {
                          freq_fgrounds.push_back(cpue_fgrounds.at(gr) / cum_cpue);
                         }
@@ -3890,7 +3890,7 @@ int main(int argc, char* argv[])
            double ftarget_allpopav=0.0;
            double change_per_year=tariff_annual_hcr_percent_change/100;
            cout << "...change_per_year is " << change_per_year << endl;
-           for (int ipop=0; ipop <tariff_pop.size();++ipop)
+           for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
            {
               vector<double> fbar_ages_min_max =populations.at(tariff_pop.at(ipop))-> get_fbar_ages_min_max();
               double ftarget = fbar_ages_min_max.at(2);
@@ -3916,7 +3916,7 @@ int main(int argc, char* argv[])
            }
            cout << "The fmultiplier for the annual tariff HCR is then " << fmultiplier <<
                " given the target F " <<  ftarget_allpopav << "  and the assessed F averaged over tariff pops " <<  fbar_py_allpopav  << endl;
-           for (int icl=0; icl <tariff_pop.size();++icl)
+           for (unsigned int icl=0; icl <tariff_pop.size();++icl)
               {
               arbitary_breaks_for_tariff.at(icl) * fmultiplier;
               }
@@ -3948,11 +3948,11 @@ int main(int argc, char* argv[])
 
          // obtain the list of idx relevant nodes for these tariff pops
          vector <int> list_nodes_idx;
-         for (int ipop=0; ipop <tariff_pop.size();++ipop)
+         for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
          {
             dout(cout << "Get the list of nodes for the tariff pop " << populations.at(tariff_pop.at(ipop))->get_name() << endl);
             vector<Node* > a_list_nodes       = populations.at(tariff_pop.at(ipop))->get_list_nodes();
-            for (int inode=0; inode <a_list_nodes.size();++inode)
+            for (unsigned int inode=0; inode <a_list_nodes.size();++inode)
             {
             list_nodes_idx.push_back(a_list_nodes.at(inode)->get_idx_node());
             }
@@ -3972,9 +3972,9 @@ int main(int argc, char* argv[])
 
          // loop over to find out the mean lpue
          double cumcatches, cumeffort, mean_lpue;
-         for (int inode=0; inode < list_nodes_idx.size(); ++inode)
+         for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
          {
-             for (int ipop=0; ipop <tariff_pop.size();++ipop)
+             for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
              {
                 cumcatches+= nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop);
              }
@@ -3989,13 +3989,13 @@ int main(int argc, char* argv[])
 
          // loop over to scale the tariff (on each node) up or down (caution: by one category)
          double tariff_this_node, node_lpue, nb_times_diff, effort_on_this_node;
-         for (int inode=0; inode < list_nodes_idx.size(); ++inode)
+         for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
          {
              tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
 
              effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
              double cumcatches_this_node=0;
-             for (int ipop=0; ipop <tariff_pop.size();++ipop)
+             for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
              {
                 cumcatches_this_node+=nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop);
              }
@@ -4008,7 +4008,7 @@ int main(int argc, char* argv[])
 
 
             // find out which category the tariff should be
-            int count1=0;
+            unsigned int count1=0;
             while (nb_times_diff > arbitary_breaks_for_tariff.at(count1))
                {
                if((count1) >= arbitary_breaks_for_tariff.size()-1) break;
@@ -4018,7 +4018,7 @@ int main(int argc, char* argv[])
             // constraint +/-1 category
             double updated_tariff;
             //cout << "...tariff_this_node is "  << tariff_this_node << endl;
-            int count2=0;
+            unsigned int count2=0;
             while (tariff_this_node > arbitary_breaks_for_tariff.at(count2))
                {
                if((count2) >= arbitary_breaks_for_tariff.size()-1) break;

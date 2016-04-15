@@ -55,7 +55,9 @@ SOURCES= main.cpp \
     messages/exportvmslikeoutputmessage.cpp \
     messages/vessellogbookoutputmessage.cpp \
     messages/genericconsolestringoutputmessage.cpp \
-    messages/moveshipoutputmessage.cpp
+    messages/moveshipoutputmessage.cpp \
+    biomodule.cpp \
+    ipc.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -84,7 +86,9 @@ HEADERS= \
     messages/exportvmslikeoutputmessage.h \
     messages/vessellogbookoutputmessage.h \
     messages/genericconsolestringoutputmessage.h \
-    messages/moveshipoutputmessage.h
+    messages/moveshipoutputmessage.h \
+    biomodule.h \
+    ipc.h
 
 OTHER_FILES += \
     Makefile.hpc

@@ -45,8 +45,7 @@ SOURCES= \
     dtree/decisiontreemanager.cpp \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
-    tseries/timeseriesmanager.cpp \
-    biomodule.cpp
+    tseries/timeseriesmanager.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -85,8 +84,7 @@ HEADERS= \
     ../include/comstructs.h \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
-    dtree/evaluators/timeseriesevaluator.h \
-    biomodule.h
+    dtree/evaluators/timeseriesevaluator.h
 
 
 OTHER_FILES += \

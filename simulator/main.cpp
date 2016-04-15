@@ -53,6 +53,7 @@
 #include <comstructs.h>
 #include <simulation.h>
 #include <tseries/timeseriesmanager.h>
+#include <ipc.h>
 
 #include <iomanip>
 #include <iostream>
@@ -132,7 +133,6 @@ double mLoadGraphProfileResult;
 MemoryInfo memInfo;
 
 //OutputQueueManager mOutQueue(std::cout);  // Use Text stream
-OutputQueueManager mOutQueue; // Use Binary Format
 
 pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
 vector<int> ve;
@@ -254,43 +254,6 @@ static void lock()
 static void unlock()
 {
     pthread_mutex_unlock(&glob_mutex);
-}
-
-void guiSendCurrentStep (unsigned int tstep)
-{
-    if (use_gui) {
-        ostringstream ss;
-        ss << "=S" << tstep << endl;      /* use gui */
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
-    }
-}
-
-void guiSendUpdateCommand (const std::string &filename, int tstep)
-{
-    if (use_gui) {
-        ostringstream ss;
-        ss << "=U" << filename << " " << tstep << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
-    }
-}
-
-void guiSendMemoryInfo(const MemoryInfo &info)
-{
-    if (use_gui) {
-        ostringstream ss;
-        ss << "=Dm" << info.rss() << " " << info.peakRss() << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
-    }
-
-}
-
-void guiSendCapture(bool on)
-{
-    if (use_gui) {
-        ostringstream ss;
-        ss << "=Dc" << (on ? "+" : "-") << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
-    }
 }
 
 bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
@@ -483,10 +446,7 @@ int main(int argc, char* argv[])
 
     UNUSED(dparam);
 
-    if (!use_gui)
-        mOutQueue.disableIpcQueue();
-
-    mOutQueue.start();
+    initIpcQueue();
     thread_vessel_init(num_threads);
 
     cwd = std::string(getcwd(buf, MAXPATH));
@@ -3004,7 +2964,7 @@ int main(int argc, char* argv[])
         tout(cout << "tstep: " << tstep << endl);
         ostringstream os;
         os << "tstep " << tstep << endl;
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(os.str())));
+        guiSendTerminalMessage(os.str());
 
         dout(cout  << "---------------" << endl);
 
@@ -4219,11 +4179,11 @@ int main(int argc, char* argv[])
     memInfo.update();
     ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
-    mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+    guiSendTerminalMessage(ss.str());
     guiSendCapture(false);
 #endif
 
-    mOutQueue.finish();
+    finalizeIpcQueue();
 
 
 	// close all....

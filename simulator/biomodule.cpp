@@ -26,6 +26,8 @@
 #include <options.h>
 #include <readdata.h>
 #include <helpers.h>
+#include <ipc.h>
+#include <profiler.h>
 
 using namespace std;
 
@@ -45,6 +47,10 @@ using namespace std;
 #else
 #include <unistd.h>
 #define GetCurrentDir getcwd
+#endif
+
+#ifdef PROFILE
+extern AverageProfiler mPopExportProfile;
 #endif
 
 extern pthread_mutex_t glob_mutex;

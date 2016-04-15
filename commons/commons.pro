@@ -46,11 +46,13 @@ SOURCES= \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
+    biomodule.cpp
 
 HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
+    ../include/biomodule.h \
     ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \
@@ -84,6 +86,7 @@ HEADERS= \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h \
+    biomodule.h
 
 
 OTHER_FILES += \

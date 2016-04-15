@@ -61,6 +61,7 @@ HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
+    ../include/biomodule.h \
     ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \

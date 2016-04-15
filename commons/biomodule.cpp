@@ -39,6 +39,15 @@ using namespace std;
 #include <direct.h>
 #endif
 
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+
+
 
 int applyBiologicalModule(int tstep, string namesimu,
                           string namefolderinput, string namefolderoutput,	string pathoutput,
@@ -80,7 +89,7 @@ int applyBiologicalModule(int tstep, string namesimu,
                           bool is_tacs,
                           int export_vmslike,
                           int freq_do_growth,
-                          vector<double> init_weight_per_szgroup,
+                          multimap<int,double> init_weight_per_szgroup,
                           vector<Population* >& populations, vector<Node* >&nodes,
                           vector<Vessel* >& vessels,
                           PopSceOptions dyn_pop_sce, DynAllocOptions dyn_alloc_sce)

@@ -1085,6 +1085,58 @@ void Population::add_recruits_from_SR()
     dout(cout << "END add_recruits() "  << endl );
 }
 
+void Population::add_recruits_from_a_fixed_number()
+{
+    dout(cout << "BEGIN add_recruits() form SR "  << endl );
+
+    // first of all, get the true N
+    vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
+    vector <double> prop_migrants=this->get_prop_migrants_in_tot_N_at_szgroup();
+    for(unsigned int sz = 0; sz < a_tot_N_at_szgroup.size(); sz++)
+    {
+       a_tot_N_at_szgroup.at(sz) = a_tot_N_at_szgroup.at(sz) - (a_tot_N_at_szgroup.at(sz) *prop_migrants.at(sz)); // retrieve the true N
+    }
+
+
+    // init
+    vector <double> new_tot_N_at_szgroup (a_tot_N_at_szgroup.size());
+
+
+    // assign a fixed numbernt, e.g. SSB-R for cod 2532 is usually simulated for age2)...
+    double recruits =param_sr[0];
+    dout(cout << "New recruits are " << recruits  << endl );
+
+    // add stochasticity on recruits (MAGIC NUMBER default: lognormal with CV at 20%)
+    // TO DO: use a stock-specific input there...
+    double sd=0.2;
+    double rec_error=0;
+    rec_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);
+    recruits= recruits * rec_error;
+    //dout(cout << "stochastic recruits are " << recruits  << endl );
+    cout << "stochastic recruits are " << recruits  << endl ;
+
+    // ...then distribute among szgroup
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
+    {
+        new_tot_N_at_szgroup[i] =  a_tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
+        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << a_tot_N_at_szgroup.at(i) << endl ;
+        //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
+    }
+
+    //if(this->get_name()==29){
+    //int a_int;
+    //cin >> a_int;
+    //}
+
+    // set the tot N at szgroup
+    this->set_tot_N_at_szgroup(new_tot_N_at_szgroup);
+
+    // redistribute on nodes
+    //distribute_N();
+
+    dout(cout << "END add_recruits() "  << endl );
+}
+
 
 void Population::add_recruits_from_eggs()
 {

@@ -3621,7 +3621,15 @@ int main(int argc, char* argv[])
 						{
                            outc(cout<< "ADD RECRUITS" << endl);
 							//populations[sp]->add_recruits_from_eggs();
-							populations[sp]->add_recruits_from_SR();
+                            vector <double> params = populations[sp]->get_param_sr();
+                            if(params.at(0)>2000) // a smart guess on the alpha param to avoid further adding a meta-option...
+                            {
+                               populations[sp]->add_recruits_from_a_fixed_number();
+                            }
+                            else
+                            {
+                               populations[sp]->add_recruits_from_SR();
+                            }
 
                            outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl);
 							// compute the cpue_multiplier

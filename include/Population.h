@@ -164,7 +164,8 @@ class Population
         void add_recruits_from_eggs();
 								 // stock-recruitment relationship via fecundity_at_szgroup
 		void add_recruits_from_SR();
-								 // monthly M on the entire pop (i.e. not spatially disaggregated)
+        void add_recruits_from_a_fixed_number(); // absolute nb of recruits taken from param[0]
+        // monthly M on the entire pop (i.e. not spatially disaggregated)
 		void apply_natural_mortality();
 		void export_popdyn_N(ofstream& popdyn_N, int tstep);
 		void export_popdyn_F(ofstream& popdyn_F, int tstep);

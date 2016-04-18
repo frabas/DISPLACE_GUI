@@ -51,7 +51,7 @@ QModelIndex SzGroupEntity::index(int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(parent);
 
-    ObjectTreeEntity * entity;
+    ObjectTreeEntity * entity = 0;
     if (mGroupIndex == -1) {
         entity = new SzGroupEntity(model, row);
     }

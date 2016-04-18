@@ -71,8 +71,8 @@ class Node
         virtual double get_fuelprices(int vsize) ;
         virtual const vector<int> &get_usual_fgrounds () const;
         virtual const vector<double> &get_freq_usual_fgrounds () const;
-        virtual void set_usual_fgrounds (vector <int> usual_fgrounds);
-        virtual void set_freq_usual_fgrounds (vector <double> _freq_usual_fgrounds);
+        virtual void set_usual_fgrounds (const vector<int> &usual_fgrounds);
+        virtual void set_freq_usual_fgrounds (const vector<double> &_freq_usual_fgrounds);
         virtual const multimap<int,int> &get_usual_metiers () const;
         virtual const multimap<int,double> &get_freq_usual_metiers () const;
         virtual void set_usual_metiers (multimap <int,int> usual_metiers);
@@ -80,7 +80,7 @@ class Node
         virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met);
         virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met);
         virtual vector<int> get_usual_fgrounds_this_met(int met);
-        virtual vector<double> get_freq_usual_fgrounds_this_met (int met);
+        virtual vector<double> get_freq_usual_fgrounds_this_met(int met);
 
 
         double get_x() const;
@@ -146,7 +146,7 @@ class Node
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
 
-        int setAreaType(int _area_type);
+        void setAreaType(int _area_type);
         int evaluateAreaType();
 
         int get_nbpops() const { return m_nbpops; }
@@ -185,6 +185,13 @@ private:
 								 // possibly per functional group
 		vector<double> benthos_tot_biomass;
         vector<double> tariffs;
+
+        static const vector<int> mUsualFGrounds;
+        static const vector<double> mFreqUsualFGrounds;
+        static const vector<int> mUsualFGroundsMet;
+        static const vector<double> mFreqUsualFGroundsMet;
+        static const multimap<int,int> mUsualMetiers;
+        static const multimap<int,double> mFreqUsualMetiers;
 
         int m_nbpops;
         int m_nbbenthospops;

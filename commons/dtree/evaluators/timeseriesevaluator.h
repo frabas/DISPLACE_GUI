@@ -43,7 +43,7 @@ public:
         vector<int>  trgts =v->get_metier()->get_metier_target_stocks();
         vector <double> values;
 
-        for (int i=0; i<trgts.size(); i++)
+        for (size_t i=0; i<trgts.size(); i++)
         {
             adim = trgts.at(i);
             cout << v->get_name() << " look at the price of the target -> stock " << adim << endl;

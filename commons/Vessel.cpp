@@ -2475,7 +2475,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             double a_shape;
             double a_scale;
             double cpue;
-            if(idx_node_v<gshape_cpue_nodes_species.size()){
+            if(idx_node_v<(int)gshape_cpue_nodes_species.size()){
                 a_shape = gshape_cpue_nodes_species.at(idx_node_v).at(pop);
 								 // look into the vector of vector....
                 a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);
@@ -4252,7 +4252,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                int a_node         = this->get_loc()->get_idx_node(); // cause the decision is taken in harbour...
                int current_metier = this->get_metier()->get_name();
                int nbpops         = nodes.at(a_node)->get_nbpops();
-               vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
+               const vector <int> &grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
                vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
                vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
                multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
@@ -4485,7 +4485,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         // 3. traverseDTree for each possible ground (??: is this realistic??)
         int ground=-1;
         //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
-        for (int it=0; it < relevant_grounds_to_evaluate.size(); ++it){
+        for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
             ground=relevant_grounds_to_evaluate.at(it);
             outc(cout << "Evaluate for ground... "<< ground << endl);
 

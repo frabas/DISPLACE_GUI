@@ -30,9 +30,12 @@
 
 
 
-
-
-
+const vector<int> Node::mUsualFGrounds;
+const vector<double> Node::mFreqUsualFGrounds;
+const vector<int> Node::mUsualFGroundsMet;
+const vector<double> Node::mFreqUsualFGroundsMet;
+const multimap<int,int> Node::mUsualMetiers;
+const multimap<int,double> Node::mFreqUsualMetiers;
 
 
 Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, int nbpops,int nbbenthospops, int nbszgroups)
@@ -194,77 +197,74 @@ double Node::get_fuelprices(int vsize)
 	return(0);
 }
 
-
 const vector<int> &Node::get_usual_fgrounds() const
 {
-    return(vector<int> (0));
+    return mUsualFGrounds;
 }
-
 
 const vector<double> &Node::get_freq_usual_fgrounds() const
 {
-    return(vector<double> (0));
+    return mFreqUsualFGrounds;
 }
 
-void Node::set_usual_fgrounds(vector <int> _usual_fgrounds)
+void Node::set_usual_fgrounds(const vector <int> &_usual_fgrounds)
 {
+    UNUSED(_usual_fgrounds);
+//    mUsualFGrounds = _usual_fgrounds;
 }
 
-
-void Node::set_freq_usual_fgrounds(vector <double> _freq_usual_fgrounds)
+void Node::set_freq_usual_fgrounds(const vector <double> &_freq_usual_fgrounds)
 {
+    UNUSED(_freq_usual_fgrounds);
+//    mFreqUsualFGrounds = _freq_usual_fgrounds;
 }
-
-
 
 vector<int> Node::get_usual_fgrounds_this_met(int met)
 {
-    return(vector<int> (0));
+    UNUSED(met);
+    return mUsualFGroundsMet;
 }
 
 
 vector<double> Node::get_freq_usual_fgrounds_this_met(int met)
 {
-    return(vector<double> (0));
+    UNUSED(met);
+    return mFreqUsualFGroundsMet;
 }
 
 void Node::set_usual_fgrounds_per_met(multimap <int,int> _usual_fgrounds_per_met)
 {
+    UNUSED(_usual_fgrounds_per_met);
 }
 
 
 void Node::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgrounds_per_met)
 {
+    UNUSED(_freq_usual_fgrounds_per_met);
 }
-
-
-
 
 
 const multimap<int,int> &Node::get_usual_metiers() const
 {
-    multimap<int,int> zero;
-     return(zero);
-
+     return mUsualMetiers;
 }
 
 
 const multimap<int,double> &Node::get_freq_usual_metiers() const
 {
-   multimap<int,double> zero;
-    return(zero);
+    return mFreqUsualMetiers;
 }
 
 void Node::set_usual_metiers(multimap<int,int> _usual_metiers)
 {
+    UNUSED(_usual_metiers);
 }
 
 
 void Node::set_freq_usual_metiers(multimap<int,double> _freq_usual_metiers)
 {
+    UNUSED(_freq_usual_metiers);
 }
-
-
 
 
 
@@ -1131,14 +1131,14 @@ void Node::recover_benthos_tot_biomass_per_funcgroup()
 }
 
 
-int Node::setAreaType(int _area_type)
+void Node::setAreaType(int _area_type)
 {
-area_type=_area_type;
+    area_type=_area_type;
 }
 
 
 int Node::evaluateAreaType()
 {
-return area_type;
+    return area_type;
 }
 

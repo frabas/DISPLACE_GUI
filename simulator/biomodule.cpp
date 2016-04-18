@@ -742,8 +742,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    outc(cout<< "COMPUTE THE CPUE MULTIPLIER FOR THIS POP" << endl);
                     // compute the cpue_multiplier
                     // at the beginning of the year as N(y)/N(y-1)
-                    double sum_N_year_minus_1;
-                    double sum_N_start_current_year;
+                    double sum_N_year_minus_1 = 0;
+                    double sum_N_start_current_year = 0;
                     vector <double> N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
                     vector <double> N_at_szgroup_year_minus_1=populations.at(sp)->get_tot_N_at_szgroup_year_minus_1();
                     for(unsigned int sz=0; sz<N_at_szgroup.size(); sz++)

@@ -310,7 +310,7 @@ void StatsController::updateNationStats(DisplaceModel *model)
     mNatTimeLine->start->setCoords(t, timelineMin);
     mNatTimeLine->end->setCoords(t, timelineMax);
 
-    int cnt;
+    int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
     foreach (int ip, ipl) {
         if (col_it == mPalette.end())
@@ -388,7 +388,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
 
     QList<int> ipl = model->getInterestingHarbours();
 
-    int cnt;
+    int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
 
     double t = model->getCurrentStep();

@@ -47,12 +47,13 @@ public:
 private:
     std::ostream &loglike;
 
-    displace::ipc::VesselLogbookMessage logbook;
     std::string name, freq_metiers;
     int length_class;
 
     std::vector<double> cumul;
     std::vector<double> cumul_discards;
+
+    displace::ipc::VesselLogbookMessage logbook;
 };
 
 #endif // VESSELLOGBOOKOUTPUTMESSAGE_H

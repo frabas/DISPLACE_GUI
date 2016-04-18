@@ -34,10 +34,10 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
     int NBSZGROUP=14;
     vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
     a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
-    for(int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    for(size_t pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
     cumul.push_back(0);
-    for(int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+    for(size_t sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
        {
        cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
        }

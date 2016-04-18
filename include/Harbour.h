@@ -55,22 +55,22 @@ class Harbour : public Node
         Harbour(int idx,double xval,double yval,int _harbour);
 
 		~Harbour();
-		virtual string get_name() const;
+        virtual string get_name() const override;
 		//virtual double get_prices(string met, int pop) ;
-		virtual double get_prices_per_cat(int pop, int cat) ;
-        virtual double get_fuelprices(int vsize) ;
-        virtual const vector<int> &get_usual_fgrounds () const;
-        virtual const vector<double> &get_freq_usual_fgrounds () const;
-        virtual void set_usual_fgrounds (vector <int> usual_fgrounds);
-        virtual void set_freq_usual_fgrounds (vector <double> freq_usual_fgrounds);
-        virtual const multimap<int, int> &get_usual_metiers() const;
-        virtual const multimap<int,double> &get_freq_usual_metiers () const;
-        virtual void set_usual_metiers (multimap<int, int> usual_metiers);
-        virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers);
-        virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met);
-        virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met);
-        virtual vector<int> get_usual_fgrounds_this_met(int met);
-        virtual vector<double> get_freq_usual_fgrounds_this_met (int met);
+        virtual double get_prices_per_cat(int pop, int cat) override;
+        virtual double get_fuelprices(int vsize)  override;
+        virtual const vector<int> &get_usual_fgrounds () const override;
+        virtual const vector<double> &get_freq_usual_fgrounds () const override;
+        virtual void set_usual_fgrounds (const vector <int> &usual_fgrounds) override;
+        virtual void set_freq_usual_fgrounds (const vector <double> &freq_usual_fgrounds) override;
+        virtual const multimap<int, int> &get_usual_metiers() const override;
+        virtual const multimap<int,double> &get_freq_usual_metiers () const override;
+        virtual void set_usual_metiers (multimap<int, int> usual_metiers) override;
+        virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers) override;
+        virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met) override;
+        virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met) override;
+        virtual vector<int> get_usual_fgrounds_this_met(int met) override;
+        virtual vector<double> get_freq_usual_fgrounds_this_met(int met) override;
 
 
 	private:

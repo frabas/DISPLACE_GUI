@@ -54,6 +54,7 @@
 #include <simulation.h>
 #include <tseries/timeseriesmanager.h>
 #include <ipc.h>
+#include <biomodule.h>
 
 #include <iomanip>
 #include <iostream>
@@ -518,6 +519,16 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 #endif
+
+
+
+#ifdef _WIN32
+    // for gnuplot installed for at least MinGW_with_gcc_4.6.2
+char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
+#endif
+
+
+
 
 	// get the name of the input directory for this simu
 	string folder_name_parameterization= namefolderinput;
@@ -2736,9 +2747,7 @@ int main(int argc, char* argv[])
 	// realtime gnuplot
 	if(use_gnuplot)
 	{
-								 // for gnuplot installed for at least MinGW_with_gcc_4.6.2
-		char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
-		pipe2 = _popen(path, "w");
+        pipe2 = _popen(path, "w");
 		//pipe2 = popen("gnuplot", "w"); // for gnuplot installed for MinGW_with_gcc_4.5.2, a previous version
 		//pipe3 = popen("gnuplot", "w"); //this opens gnuplot
 								 //this opens gnuplot
@@ -3006,8 +3015,7 @@ int main(int argc, char* argv[])
                                              popnodes_end,
                                              benthosnodes,
                                              nbbenthospops,
-                                             *pipe3,
-                                             *pipe4,
+                                             path,
                                              use_gnuplot,
                                              use_gui,
                                              popdyn_N_filename,

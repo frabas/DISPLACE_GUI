@@ -25,6 +25,7 @@
 
 #include <Population.h>
 #include <Node.h>
+#include <vessel.h>
 #include <options.h>
 
 using namespace std;
@@ -38,6 +39,7 @@ using namespace std;
 #include <windows.h>
 #include <direct.h>
 #endif
+
 
 
 int applyBiologicalModule(int tstep, string namesimu,
@@ -57,8 +59,7 @@ int applyBiologicalModule(int tstep, string namesimu,
                           ofstream popnodes_end,
                           ofstream benthosnodes,
                           int nbbenthospops,
-                          FILE *pipe3,
-                          FILE *pipe4,
+                          char *path,
                           bool use_gnuplot,
                           bool use_gui,
                           string popdyn_N_filename,
@@ -82,7 +83,7 @@ int applyBiologicalModule(int tstep, string namesimu,
                           int freq_do_growth,
                           multimap<int,double> init_weight_per_szgroup,
                           vector<Population* >& populations, vector<Node* >&nodes,
-                           vector<Vessel* >& vessels,
+                          vector<Vessel* >& vessels,
                           PopSceOptions dyn_pop_sce, DynAllocOptions dyn_alloc_sce);
 
 #endif

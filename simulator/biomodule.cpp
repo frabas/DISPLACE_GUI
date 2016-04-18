@@ -83,8 +83,7 @@ int applyBiologicalModule(int tstep, string namesimu,
                           ofstream popnodes_end,
                           ofstream benthosnodes,
                           int nbbenthospops,
-                          FILE *pipe3,
-                          FILE *pipe4,
+                          char *path,
                           bool use_gnuplot,
                           bool use_gui,
                           string popdyn_N_filename,
@@ -696,6 +695,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 #ifdef _WIN32
                 if(use_gnuplot)
                 {
+                   FILE *pipe3;
+                   FILE *pipe4;
+                   pipe3 = _popen(path, "w");
+                         //this opens gnuplot
+                   pipe4 = _popen(path, "w");
 
                     // first pop, szgroup 1,2,3
                     fflush( pipe3 );

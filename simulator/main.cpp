@@ -525,6 +525,8 @@ int main(int argc, char* argv[])
 #ifdef _WIN32
     // for gnuplot installed for at least MinGW_with_gcc_4.6.2
 char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
+#else
+    char *path = 0;
 #endif
 
 

@@ -52,8 +52,8 @@ public:
     void removeNodes (QList<GraphNodeItem *>items);
 
 protected:
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void keyPressEvent(QKeyEvent * keyEvent) override;
 
 signals:

@@ -7,13 +7,12 @@
 
 class SimulationRun
 {
-    int nSteps = 0;
-    int nThreads = 0;
-
     QString mPath;
     QString mName;
     QString mOutName;
     QString mSimName;
+    int nSteps = 0;
+    int nThreads = 0;
 
 public:
     using DataAsTuple = std::tuple<std::string,

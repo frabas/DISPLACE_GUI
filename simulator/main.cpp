@@ -3981,7 +3981,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
          // loop over to find out the mean lpue
-         double cumcatches, cumeffort, mean_lpue;
+         double cumcatches = 0, cumeffort = 0, mean_lpue;
          for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
          {
              for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)

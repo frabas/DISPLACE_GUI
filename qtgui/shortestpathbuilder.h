@@ -47,7 +47,12 @@
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+#pragma GCC diagnostic pop
+
 #include <boost/property_map/property_map.hpp>
 
 class NodeData;

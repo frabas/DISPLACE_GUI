@@ -17,8 +17,8 @@ public:
     }
 
     virtual void execute() override;
-    void setMax (int m);
-    void setStep(int step);
+    void setMax (int m) override;
+    void setStep(int step) override;
 };
 
 #endif // GRAPHBUILDERWORKER_H

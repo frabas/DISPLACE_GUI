@@ -11,7 +11,7 @@ class ShapefileLayerEntity : public LayerEntity
 public:
     explicit ShapefileLayerEntity(ObjectTreeModel *_model, int LayerEntity_idx = -1);
     virtual ~ShapefileLayerEntity();
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
 
     virtual QMenu *contextMenu() const override ;
 

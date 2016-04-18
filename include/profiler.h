@@ -47,6 +47,7 @@ public:
             mstart = now;
         return t-frm;
 #else
+        (void)cumulative;
         return 0.0;
 #endif
     }

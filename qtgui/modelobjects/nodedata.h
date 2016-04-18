@@ -78,11 +78,11 @@ public:
     void set_cumcatches(int i) { mNode->set_cumcatches(i); }
     vector<double> get_tariffs() const { return mNode->get_tariffs(); }
     void set_tariffs(vector<double> tariffs) { mNode->set_tariffs(tariffs); }
-    vector<int> get_usual_fgrounds() { mNode->get_usual_fgrounds(); }
+    vector<int> get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }
     void set_usual_fgrounds(vector<int> usual_fgrounds) { mNode->set_usual_fgrounds(usual_fgrounds); }
-    vector<double> get_freq_usual_fgrounds() { mNode->get_freq_usual_fgrounds(); }
+    vector<double> get_freq_usual_fgrounds() { return mNode->get_freq_usual_fgrounds(); }
     void set_freq_usual_fgrounds(vector<double> freq_usual_fgrounds) { mNode->set_freq_usual_fgrounds(freq_usual_fgrounds); }
-    int evaluateAreaType() { mNode->evaluateAreaType(); }
+    int evaluateAreaType() { return mNode->evaluateAreaType(); }
 
     /* Extending functions */
 

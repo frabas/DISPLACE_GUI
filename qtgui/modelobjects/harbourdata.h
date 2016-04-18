@@ -34,9 +34,9 @@ public:
     explicit HarbourData(std::shared_ptr<Harbour> harbour);
 
     int get_idx_node() const { return mHarbour->get_idx_node(); }
-    vector<int> get_usual_fgrounds() { mHarbour->get_usual_fgrounds(); }
+    vector<int> get_usual_fgrounds() { return mHarbour->get_usual_fgrounds(); }
     void set_usual_fgrounds(vector<int> usual_fgrounds) { mHarbour->set_usual_fgrounds(usual_fgrounds); }
-    vector<double> get_freq_usual_fgrounds() { mHarbour->get_freq_usual_fgrounds(); }
+    vector<double> get_freq_usual_fgrounds() { return mHarbour->get_freq_usual_fgrounds(); }
     void set_freq_usual_fgrounds(vector<double> freq_usual_fgrounds) { mHarbour->set_freq_usual_fgrounds(freq_usual_fgrounds); }
 
 };

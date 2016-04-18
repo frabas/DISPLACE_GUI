@@ -47,10 +47,15 @@
 #include <memory>
 #include <gdal/ogrsf_frmts.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshift-negative-value"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
 #include <CGAL/Delaunay_triangulation_2.h>
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
+#pragma GCC diagnostic pop
+
 #include <utility>
 
 namespace displace {

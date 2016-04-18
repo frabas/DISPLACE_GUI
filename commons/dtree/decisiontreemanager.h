@@ -11,7 +11,7 @@
 
 namespace displace {
 namespace commons {
-class Scenario;
+struct Scenario;
 }
 }
 

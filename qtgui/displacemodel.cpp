@@ -1017,6 +1017,7 @@ QString DisplaceModel::getShipId(int idx) const
 
 void DisplaceModel::updateShip(int tstep, int idx, float x, float y, float course)
 {
+    (void)tstep;
     std::shared_ptr<ShipData> sh(mShips.at(idx));
     sh->mShip->set_xy(x,y);
     sh->mShip->set_course(course);
@@ -1536,7 +1537,7 @@ bool DisplaceModel::loadVessels()
     vector<double> spe_fishing_credits;
 
      //here
-    for (int i=0; i<vesselids.size(); i++)
+    for (size_t i=0; i<vesselids.size(); i++)
     {
         cout<<"create vessel " << i << endl;
         // read vessel and quarter specific multimap
@@ -1571,7 +1572,7 @@ bool DisplaceModel::loadVessels()
         if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
         {
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
-            for (int icr=0; icr <spe_fishing_credits.size();++icr)
+            for (size_t icr=0; icr <spe_fishing_credits.size();++icr)
             {
              spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* mScenario.getTotalAmountCredited();
             }
@@ -1735,7 +1736,7 @@ bool DisplaceModel::loadVessels()
         mVessels.at(i)->mVessel->init_gshape_cpue_nodes_species(nbnodes, nbpops);
                                  // init the vector of vector with Os
         mVessels.at(i)->mVessel->init_gscale_cpue_nodes_species(nbnodes, nbpops);
-        for (int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
+        for (size_t n=0; n< gshape_name_nodes_with_cpue.size(); n++)
         {
                                  // look into the multimap...
             vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
@@ -1766,7 +1767,7 @@ bool DisplaceModel::loadVessels()
             expected_cpue_this_pop.at(pop)=0;
 
             // compute cpue on nodes
-            for(int f = 0; f < fgrounds.size(); f++)
+            for(size_t f = 0; f < fgrounds.size(); f++)
             {
                                  // look into the vector of vector....
                 double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
@@ -1777,7 +1778,7 @@ bool DisplaceModel::loadVessels()
             // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
             }
             // compute the average cpue for this pop across all nodes
-            for(int f = 0; f < fgrounds.size(); f++)
+            for(size_t f = 0; f < fgrounds.size(); f++)
             {
                 expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
 
@@ -1800,7 +1801,7 @@ bool DisplaceModel::loadVessels()
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-        for(int f = 0; f < fgrounds.size(); f++)
+        for(size_t f = 0; f < fgrounds.size(); f++)
         {
             cumcatch_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] = 0;

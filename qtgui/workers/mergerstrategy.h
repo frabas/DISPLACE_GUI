@@ -14,7 +14,7 @@ public:
     };
 
     MergerStrategy (MergeType type);
-    void attach(DataMerger *merger);
+    void attach(DataMerger *merger) override;
     bool processHeaderField(QString field, int i) override;
     bool postHeaderProcessed() override;
     void processLine (int linenum, QString line) override;

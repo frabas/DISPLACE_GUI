@@ -25,7 +25,7 @@
 
 #include <Population.h>
 #include <Node.h>
-#include <vessel.h>
+#include <Vessel.h>
 #include <options.h>
 
 using namespace std;

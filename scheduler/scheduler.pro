@@ -10,7 +10,12 @@ INCLUDEPATH += ../include/ ../commons ../qtcommons ../formats/
 
 include ("$$top_srcdir/localconfig.pri")
 
-DESTDIR = ../bin
+win32 {
+    DESTDIR = ..
+}
+!win32 {
+    DESTDIR = ../bin
+}
 
 macx {
     DESTDIR=$$EXEDESTDIR
@@ -32,14 +37,16 @@ SOURCES += main.cpp\
     simulationrun.cpp \
     schedulerjobadapter.cpp \
     rundialog.cpp \
-    batchcreatedialog.cpp
+    batchcreatedialog.cpp \
+    windowsscriptgenerator.cpp
 
 HEADERS  += mainwindow.h \
     schedulerjob.h \
     simulationrun.h \
     schedulerjobadapter.h \
     rundialog.h \
-    batchcreatedialog.h
+    batchcreatedialog.h \
+    windowsscriptgenerator.h
 
 FORMS    += mainwindow.ui \
     rundialog.ui \
@@ -49,7 +56,8 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES += \
-    scheduler.rc
+    scheduler.rc \
+    resources/templates/windows-runqueue.txt
 
 
 target.path=$${PREFIX}/bin

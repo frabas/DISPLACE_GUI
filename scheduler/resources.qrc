@@ -9,4 +9,7 @@
         <file>resources/icons/remove.png</file>
         <file>resources/icons/scheduler.png</file>
     </qresource>
+    <qresource prefix="/scripts">
+        <file alias="windows-template">resources/templates/windows-runqueue.txt</file>
+    </qresource>
 </RCC>

@@ -56,7 +56,7 @@ public:
     void setSimulationName(QString name);
     QString getSimulationName() const { return mSimName; }
 
-    int getNumThreads() { return nThreads; }
+    int getNumThreads() const { return nThreads; }
     void setNumThreads(int n);
 
     DataAsTuple dataAsTuple() const {

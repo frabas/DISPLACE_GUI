@@ -6,6 +6,7 @@
 #include <rundialog.h>
 #include <utils/MultifieldWriter.h>
 #include <utils/MultifieldReader.h>
+#include <windowsscriptgenerator.h>
 
 #include <fstream>
 
@@ -148,36 +149,18 @@ void MainWindow::on_action_Generate_Script_triggered()
                                                );
 
     if (!out.isEmpty()) {
-        std::ofstream os(out.toStdString(), std::ios_base::out | std::ios_base::trunc);
-
-        bool ok = false;
-        if (os) {
-            for (int i = 0; i < mScheduler->jobsCount(); ++i) {
-                auto job = mScheduler->job(i);
-
-                os << "start /d " << QCoreApplication::applicationDirPath().toStdString() <<
-                      " displace -f \"" << job.getName().toStdString() <<
-                      "\" -f2 \"" << job.getSimulationOutputName().toStdString() <<
-                      "\" -s \"" << job.getSimulationName().toStdString() <<
-                      "\" -i " << job.getSimulationSteps() <<
-                      " -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 1 --num_threads " << job.getNumThreads() <<
-                      " > ..\\" << job.getName().toStdString() << "-out.txt" << std::endl;
-            }
-
-            os.close();
-
-            QFileInfo info(out);
-            s.setValue("last_gen_script", info.path());
-            ok = true;
-
-            QMessageBox::information(this, tr("Script generated"),
-                                     tr("Simulation script generated successfully."));
-        }
-
-        if (!ok) {
+        WindowsScriptGenerator gen;
+        QString err;
+        if (!gen.generate(out, mScheduler.get(), &err)) {
             QMessageBox::warning(this, tr("Displace Scheduler editor"),
-                                 tr("Couldn't save the file. Check the destination has the right write permissions."));
+                                 QString(tr("Couldn't save the file: %1")).arg(err));
+            return;
         }
-    }
 
+        QFileInfo info(out);
+        s.setValue("last_gen_script", info.path());
+
+        QMessageBox::information(this, tr("Script generated"),
+                                 tr("Simulation script generated successfully."));
+    }
 }

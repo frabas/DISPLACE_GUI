@@ -23,6 +23,8 @@ const QString WindowsScriptGenerator::sKeySimuOutName = "JobSimuOutName";
 const QString WindowsScriptGenerator::sKeySimuLength = "JobLenght";
 const QString WindowsScriptGenerator::sKeySimuNumThreads = "JobNumThreads";
 
+const QString WindowsScriptGenerator::sValueAppExec = "displace.exe";
+
 WindowsScriptGenerator::WindowsScriptGenerator()
 {
 
@@ -167,7 +169,7 @@ bool WindowsScriptGenerator::getValue(QString key, QString &value)
     if (key == sKeyAppPath) {
         r = QDir::toNativeSeparators(QFileInfo(QApplication::applicationFilePath()).absolutePath());
     } else if (key == sKeyAppExec) {
-        r = QDir::toNativeSeparators(QFileInfo(QApplication::applicationFilePath()).fileName());
+        r = sValueAppExec;
     }
 
     if (r.isEmpty())

@@ -37,6 +37,8 @@ private:
     static const QString sKeySimuOutName;
     static const QString sKeySimuLength;
     static const QString sKeySimuNumThreads;
+
+    static const QString sValueAppExec;
 };
 
 #endif // WINDOWSSCRIPTGENERATOR_H

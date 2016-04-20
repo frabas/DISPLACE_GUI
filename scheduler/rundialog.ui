@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>405</width>
-    <height>598</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="5" column="0" colspan="2">
     <widget class="QLineEdit" name="outName"/>
    </item>
-   <item row="12" column="0" colspan="2">
+   <item row="13" column="0" colspan="2">
     <widget class="QSpinBox" name="verbosity"/>
    </item>
    <item row="8" column="0" colspan="2">
@@ -33,7 +33,7 @@
      </property>
     </widget>
    </item>
-   <item row="15" column="0" colspan="2">
+   <item row="16" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Multithreading</string>
@@ -69,7 +69,7 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="0" colspan="2">
+   <item row="15" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Shortest paths</string>
@@ -131,12 +131,8 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Verbosity Level</string>
-     </property>
-    </widget>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLineEdit" name="modName"/>
    </item>
    <item row="10" column="0" colspan="2">
     <widget class="QSpinBox" name="simSteps">
@@ -150,7 +146,7 @@
       <number>100000</number>
      </property>
      <property name="value">
-      <number>8000</number>
+      <number>8762</number>
      </property>
     </widget>
    </item>
@@ -161,9 +157,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLineEdit" name="modName"/>
-   </item>
    <item row="0" column="1">
     <widget class="QToolButton" name="cmdBrowseModel">
      <property name="text">
@@ -171,7 +164,7 @@
      </property>
     </widget>
    </item>
-   <item row="16" column="0">
+   <item row="17" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -199,6 +192,13 @@
     <widget class="QLabel" name="label_9">
      <property name="text">
       <string>Model Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Verbosity Level</string>
      </property>
     </widget>
    </item>

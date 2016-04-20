@@ -15,6 +15,8 @@
 #include <QSettings>
 #include <QMessageBox>
 
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -163,4 +165,20 @@ void MainWindow::on_action_Generate_Script_triggered()
         QMessageBox::information(this, tr("Script generated"),
                                  tr("Simulation script generated successfully."));
     }
+}
+
+void MainWindow::on_action_Remove_triggered()
+{
+    auto selmodel = ui->dataView->selectionModel();
+    auto sel = selmodel->selectedIndexes();
+
+    std::vector<int> selidx;
+    for (auto row : sel) {
+        selidx.push_back(row.row());
+    }
+    auto newend = std::unique(selidx.begin(), selidx.end());
+    selidx.erase(newend, selidx.end());
+    mAdapter->removeRows(selidx, QModelIndex());
+
+    ui->dataView->clearSelection();
 }

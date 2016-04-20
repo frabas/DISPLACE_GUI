@@ -16,6 +16,7 @@ public:
     SimulationRun &job(int n) { return mList[n]; }
 
     SimulationRun &addAt(int position);
+    void remove(int position);
 
     std::list<SimulationRun::DataAsTuple> getDataAsTuple() const {
         std::list<SimulationRun::DataAsTuple> d;

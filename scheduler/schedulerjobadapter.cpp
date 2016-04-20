@@ -1,5 +1,7 @@
 #include "schedulerjobadapter.h"
 
+#include <QDebug>
+
 SchedulerJobAdapter::SchedulerJobAdapter(SchedulerJob &sj, QObject *parent)
     : QAbstractItemModel(parent),
       mSj(sj)
@@ -129,4 +131,34 @@ bool SchedulerJobAdapter::insertRows(int row, int count, const QModelIndex &pare
 QModelIndex SchedulerJobAdapter::parent(const QModelIndex &) const
 {
     return QModelIndex();
+}
+
+
+bool SchedulerJobAdapter::removeRows(int row, int count, const QModelIndex &parent)
+{
+    beginRemoveRows(parent, row, row+count-1);
+    for (int r = row; r < row+count; ++r) {
+        mSj.remove(row);
+    }
+    endRemoveRows();
+
+    return true;
+}
+
+bool SchedulerJobAdapter::removeRows(std::vector<int> rows, const QModelIndex &parent)
+{
+    std::sort(rows.begin(), rows.end());
+
+    int f = rows.back();
+    int l = rows.front();
+
+    beginRemoveRows(parent, f,l);
+    auto it = rows.rbegin();
+    while (it != rows.rend()) {
+        mSj.remove(*it);
+        ++it;
+    }
+    endRemoveRows();
+
+    return true;
 }

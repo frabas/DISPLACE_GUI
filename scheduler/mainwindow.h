@@ -31,6 +31,8 @@ private slots:
 
     void on_action_Generate_Script_triggered();
 
+    void on_action_Remove_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

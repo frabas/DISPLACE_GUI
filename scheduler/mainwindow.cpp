@@ -173,6 +173,9 @@ void MainWindow::on_action_Remove_triggered()
     auto selmodel = ui->dataView->selectionModel();
     auto sel = selmodel->selectedIndexes();
 
+    if (sel.empty())
+        return;
+
     std::vector<int> selidx;
     for (auto row : sel) {
         selidx.push_back(row.row());

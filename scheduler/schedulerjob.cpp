@@ -5,6 +5,11 @@ SchedulerJob::SchedulerJob()
 
 }
 
+void SchedulerJob::clear()
+{
+    mList.clear();
+}
+
 SimulationRun &SchedulerJob::addAt(int position)
 {
     mList.insert(position, SimulationRun());

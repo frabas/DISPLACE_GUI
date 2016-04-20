@@ -126,6 +126,7 @@ void MainWindow::on_action_Open_triggered()
             });
 
             if (r) {
+                mScheduler->clear();
                 mScheduler->appendData(data);
                 mAdapter->refresh();
 

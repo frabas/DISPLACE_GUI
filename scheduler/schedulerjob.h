@@ -15,6 +15,7 @@ public:
     int jobsCount() const { return mList.size(); }
     SimulationRun &job(int n) { return mList[n]; }
 
+    void clear();
     SimulationRun &addAt(int position);
     void remove(int position);
 

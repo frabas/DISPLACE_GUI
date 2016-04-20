@@ -22,6 +22,8 @@ namespace displace {
                 inline typename std::enable_if< I == sizeof...(Ts), void>::type
                 parse( std::tuple<Ts...> &tuple, const std::vector<std::string> &vec)
                 {
+                    (void)tuple;
+                    (void)vec;
                 };
 
                 template <std::size_t I = 0, typename ...Ts>

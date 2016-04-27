@@ -1,4 +1,5 @@
 CONFIG -= qt
+CONFIG += console
 
 TARGET=displace
 TEMPLATE=app

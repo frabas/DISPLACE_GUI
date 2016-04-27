@@ -213,8 +213,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
+        outc(cout << "...pop " << sp << endl;)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
+            outc(cout << "......pop " << sp << endl;)
             vector <double> SSB_per_szgroup ( populations.at(sp)->get_tot_N_at_szgroup().size());
             for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
             {
@@ -250,11 +252,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
+        outc(cout << "...pop " << sp << endl;)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
+            outc(cout << ".....pop " << sp << endl;)
 
             int name_pop =populations.at(sp)->get_name();
-           outc(cout << "apply other land on nodes..." << endl);
+            outc(cout << "apply other land on nodes..." << endl);
             vector <double> M_at_szgroup      = populations.at(sp)->get_M_at_szgroup();
             vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
             vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
@@ -271,7 +275,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 dout(cout << a_list_nodes.at(n)->get_idx_node() << " ");
 
                 // a check
-                vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
+                /*
+                 vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
                 vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(9);
                 if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
                    outc(cout << "N_at_szgroup before oth_land" << endl);
@@ -291,6 +296,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         outc(cout << removals_per_szgroup.at(i) << endl);
                     }
                 }
+                */
 
                 // apply "other" landings
                 // (also accounting for a potential multiplier (default at 1.0))

@@ -685,7 +685,7 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
         mult_fuelcons_when_returning.push_back(strtod(fuelconsreturning.c_str(),0));
         mult_fuelcons_when_inactive.push_back(strtod(fuelconsinactive.c_str(),0));		
 	}
-    dout(cout  << "read and set up the general features of each vessel...OK" << endl << flush);
+    cout  << "read and set up the general features of each vessel...OK" << endl;
 
 }
 

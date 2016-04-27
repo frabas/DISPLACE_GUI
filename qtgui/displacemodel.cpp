@@ -1468,6 +1468,9 @@ bool DisplaceModel::loadVessels()
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;
+
+    cout << "read_vessels_features() in loadVessels()" << endl;
+
     read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
                           carrycapacities, tankcapacities, nbfpingspertrips,
                           resttime_par1s, resttime_par2s, av_trip_duration,
@@ -1476,16 +1479,26 @@ bool DisplaceModel::loadVessels()
                           mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
 
 
+    cout << "fill in multimaps in loadVessels()" << endl;
+
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
+    cout << "read_fgrounds in loadVessels()" << endl;
     multimap<string, int> fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    cout << "read_fgrounds_init in loadVessels()" << endl;
     multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    cout << "read_harbours in loadVessels()" << endl;
     multimap<string, int> harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
+    cout << "read_freq_fgrounds in loadVessels()" << endl;
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    cout << "read_freq_fgrounds_init in loadVessels()" << endl;
     multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    cout << "read_freq_harbours in loadVessels()" << endl;
     multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    cout << "read_vessels_betas in loadVessels()" << endl;
     multimap<string, double> vessels_betas = read_vessels_betas(a_semester, mInputName.toStdString(), mBasePath.toStdString());
+    cout << "read_vessels_tacs in loadVessels()" << endl;
     multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, mInputName.toStdString(), mBasePath.toStdString());
 
     // debug
@@ -1503,6 +1516,7 @@ bool DisplaceModel::loadVessels()
     }
 
     // read nodes in polygons for area-based management
+    cout << "nodes_in_polygons() in loadVessels()" << endl;
     multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
 
 
@@ -1761,6 +1775,7 @@ bool DisplaceModel::loadVessels()
         vector <double> expected_cpue_this_pop (nbpops);
         for(int pop = 0; pop < nbpops; pop++)
         {
+            cout << "...for pop" << pop << endl;
 
             vector<double> cpue_per_fground (fgrounds.size());
                                  // init
@@ -1777,6 +1792,8 @@ bool DisplaceModel::loadVessels()
                 //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
             // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
             }
+
+            cout << "compute the average cpue for this pop across all nodes" << endl;
             // compute the average cpue for this pop across all nodes
             for(size_t f = 0; f < fgrounds.size(); f++)
             {
@@ -1789,6 +1806,9 @@ bool DisplaceModel::loadVessels()
                                  // sum over pop
             expected_cpue+= expected_cpue_this_pop.at(pop);
         }
+        cout << "expected_cpue_this_pop computation was successful...." << endl;
+
+
         // init at 0 cumcatch and cumeffort per trip,
         // init at best guest the experiencedcpue_fgrounds
         vector<double > freq_fgrounds= mVessels.at(i)->mVessel->get_freq_fgrounds();

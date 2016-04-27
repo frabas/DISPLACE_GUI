@@ -1357,6 +1357,8 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
 void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops)
 {
 
+    outc(cout  << "...updateTripsStatistics()" << endl);
+
     double cumProfit = avgProfit * numTrips;
     double cumRevenues = avgRevenues * numTrips;
 
@@ -1373,11 +1375,15 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     const vector< vector<double> > &a_catch_pop_at_szgroup = get_catch_pop_at_szgroup();
     for(unsigned int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
+
         vector<int> comcat_at_szgroup =   populations[pop]->get_comcat_at_szgroup();
+
+        outc(cout  << "...for pop " << pop << endl);
 
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
+            outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << endl);
             lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
         }
 
@@ -1399,6 +1405,9 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     lastTrip_profit = lastTrip_revenues - fuelcost;
 
     ++numTrips;
+
+     outc(cout  << "...updateTripsStatistics()...OK" << endl);
+
 }
 
 /** \brief Starting from the dtree root, traverse it evaluating any node and the relative Variable.

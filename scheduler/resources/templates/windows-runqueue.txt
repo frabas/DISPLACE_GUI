@@ -2,11 +2,12 @@
 %%%Begin-Header%%%
 REM 8762 tsteps for one year....
 
+echo "Run this script from the drive where displace_input is."
 %%%End-Header%%%
 
 %%%Begin-Job%%%
 cd %%%JobPath%%%
-start /w /d %%%AppPath%%% %%%AppExec%%% -f "%%%JobName%%%" -f2 "%%%JobSimuOutName%%%" -s "%%%JobSimuName%%%" -i %%%JobLenght%%% -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 1 --num_threads %%%JobNumThreads%%% > ..\%%%JobName%%%-%%%JobSimuName%%%.txt
+start /w %%%AppPath%%%\%%%AppExec%%% -f "%%%JobName%%%" -f2 "%%%JobSimuOutName%%%" -s "%%%JobSimuName%%%" -i %%%JobLenght%%% -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 1 --num_threads %%%JobNumThreads%%% > ..\%%%JobName%%%-%%%JobSimuName%%%.txt
 
 %%%End-Job%%%
 

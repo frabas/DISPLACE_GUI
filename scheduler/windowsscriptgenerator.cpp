@@ -185,7 +185,7 @@ bool WindowsScriptGenerator::getValue(QString key, const SimulationRun &job, QSt
     if (key == sKeyJobName) {
         r = job.getName();
     } else if (key == sKeyJobPath) {
-        r = job.getPath();
+        r = QDir::toNativeSeparators(job.getPath());
     } else if (key == sKeySimuName) {
         r = job.getSimulationName();
     } else if (key == sKeySimuOutName) {

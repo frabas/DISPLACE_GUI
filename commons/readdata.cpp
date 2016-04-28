@@ -1260,9 +1260,18 @@ map<int, double> read_gear_widths_param_a(string folder_name_parameterization, s
 		open_file_error(filename.c_str());
 		//return 1;
 	}
-	map<int, double> gear_widths_param_a;
+
+    //cout << "here:" << filename << endl;
+
+    map<int, double> gear_widths_param_a;
 	fill_map_from_specifications_i_d (metier_gear_widths_param_a,  gear_widths_param_a, folder_name_parameterization);
 	metier_gear_widths_param_a.close();
+
+    //cout << "here:" << gear_widths_param_a[0] << endl;
+    //cout << "here:" << gear_widths_param_a[1] << endl;
+    //=> do not forget the heading in input files given first line is skipped
+
+
 
 	return(gear_widths_param_a);
 }

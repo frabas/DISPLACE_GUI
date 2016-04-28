@@ -684,7 +684,7 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
         mult_fuelcons_when_fishing.push_back(strtod(fuelconsfishing.c_str(),0));
         mult_fuelcons_when_returning.push_back(strtod(fuelconsreturning.c_str(),0));
         mult_fuelcons_when_inactive.push_back(strtod(fuelconsinactive.c_str(),0));		
-	}
+    }
     cout  << "read and set up the general features of each vessel...OK" << endl;
 
 }
@@ -1086,7 +1086,7 @@ void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, str
 		in >> key;
 		double val;
 		in >> val;
-		infos.insert(make_pair(key,val));
+        infos.insert(make_pair(key,val));
 	}
     dout(cout  << "read and set up the specification map<int, double> " << endl << flush);
 
@@ -1105,7 +1105,7 @@ void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, str
 	while(!getline(in, line).eof())
 	{
 		int key;
-		in >> key;
+        in >> key;
 		string val;
 		in >> val;
 		infos.insert(make_pair(key,val));

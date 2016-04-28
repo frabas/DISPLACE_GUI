@@ -1857,25 +1857,32 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             the_metier_target_stocks);
 	}
 
-	/*
+
 	// check selectivity
 	vector<double> ogive = metiers[0]->get_selectivity_ogive();
-   outc(cout << "selectivity ogive of the metier 0" << endl);
+    cout << "selectivity ogive of the metier 0" << endl;
 	for (unsigned int i=0; i<ogive.size(); i++)
 	{
-       outc(cout  << " " << ogive[i] << " " );
+       cout  << " " << ogive[i] << " " ;
 	}
-   outc(cout << endl);
+   cout << endl;
 
 	// check metier betas
 	vector<double> met_betas = metiers[0]->get_betas_per_pop();
-   outc(cout << "met_betas of the metier 0" << endl);
+    cout << "met_betas of the metier 0" << endl;
 	for (int i=0; i<met_betas.size(); i++)
 	{
-       outc(cout  << " " << met_betas[i] << " " );
+       cout  << " " << met_betas[i] << " " ;
 	}
-   outc(cout << endl);
-	*/
+    cout << endl;
+
+    // check gear_width_a
+    double gear_width_a = metiers[0]->get_gear_width_a();
+    cout << "gear_width_a of the metier 0" << endl;
+    cout  << " " << gear_width_a << " " ;
+    cout << endl;
+
+
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
@@ -2134,7 +2141,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			speeds[i],
 			fuelcons[i],
 			lengths[i],
-			KWs[i],
+            vKWs[i],
 			carrycapacities[i],
 			tankcapacities[i],
 			nbfpingspertrips[i],
@@ -2409,7 +2416,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have a max speed of "
         << vessels[0]->get_speed() << " "  << endl);
 
-	/*  //check movement
+    cout << " vessel"<< vessels[0]->get_idx()  <<" have a kW of "
+        << vessels[0]->get_KW() << " "  << endl;
+
+
+    /*  //check movement
 	  // (caution: take really care of this piece of code that is able to uncouple the vessel to the graph if altered,
 	  // i.e. the "go straight" symptom)
 	  int old_node = vessels[0]->get_loc()->get_idx_node();

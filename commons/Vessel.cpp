@@ -1807,10 +1807,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     swept_area =  PI*pow(((gear_width/1000)/(2*PI)),2);  // seiners and gillnetters
     }
 
-    dout( cout << " for this model " << gear_width_model << " the gear width is " << gear_width
+    dout(cout << " for this model " << gear_width_model << " the gear width is " << gear_width
 		<< "from KW "<<  v_kw << " and vessel size "<< v_vsize << " and param a " << gear_width_a << " param b " <<gear_width_b
 		<< ", swept area this fishing event is then:" << swept_area
-        << " compared to the cell area which is " << graph_res*graph_res << endl);
+        << " compared to the cell area which is " << graph_res*graph_res << endl ;);
     this->get_loc()->add_to_cumsweptarea(swept_area);
 
 

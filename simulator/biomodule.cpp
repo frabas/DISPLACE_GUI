@@ -165,7 +165,6 @@ if(dyn_pop_sce.option(Options::use_SMS) || dyn_pop_sce.option(Options::use_SMS_s
 
 
 
-
 //----------------------------------------//
 //----------------------------------------//
 // POP DYNAMICS --------------------------//

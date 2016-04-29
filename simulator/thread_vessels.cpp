@@ -140,14 +140,14 @@ static void manage_ship(thread_data_t *dt, int idx_v)
 {
     UNUSED(dt);
     dout(cout << "idx_v is " << idx_v << " " << ships.size() << endl);
-       ships.at(idx_v - 1000)->lock();
+       ships.at(idx_v - 5000)->lock();
          pthread_mutex_lock (&glob_mutex);
-           dout(cout<<"before at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl);
-            ships.at(idx_v - 1000)->move();
-            dout(cout<<"after at (" << ships.at(idx_v - 1000)->get_x() << "," << ships.at(idx_v - 1000)->get_y()  << ") "   << endl);
-            mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 1000))));
+           dout(cout<<"before at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
+            ships.at(idx_v - 5000)->move();
+            dout(cout<<"after at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
+            mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
          pthread_mutex_unlock (&glob_mutex);
-       ships.at(idx_v - 1000)->unlock();
+       ships.at(idx_v - 5000)->unlock();
 }
 
 
@@ -214,7 +214,6 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // the metier should help informing to which fish price time series the vessel will be look at
                 // if a decision on the fish price is used in the GoFishing dtree...
                 // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
-
                 // ***************make a dtree decision****************************
                 int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep,
                                                                          use_dtrees,
@@ -240,7 +239,6 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         );
 
 
-
                 }
                 else
                 {
@@ -257,7 +255,6 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
             else
             {
                 outc(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
-
                 // ***************make a decision************************************
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
@@ -397,10 +394,10 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
             }
 
         }
-
     }
     else
     {
+
         outc(cout  << "roadmap is not empty... ");
         // display the road map
         //list<int>::iterator pos;
@@ -474,7 +471,7 @@ static void *thread(void *args)
 //        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
         pthread_mutex_unlock(&work_mutex);
 
-        if(nextidx<1000) // caution: assuming no more 1000 fishing vessels
+        if(nextidx<5000) // caution: assuming no more 5000 fishing vessels
         {
             manage_vessel(data, nextidx);
         }

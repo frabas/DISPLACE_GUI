@@ -2300,7 +2300,22 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
 								 // look into the vector of vector....
 				double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
-				cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
+
+                // a dangerous fix:
+                if(a_shape<0 || a_scale <0)
+                {
+
+                  cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                  //for(size_t f = 0; f < fgrounds.size(); ++f)
+                  //{
+                  //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
+                  //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                  //}
+                  a_shape=1;
+                  a_scale=1;
+                }
+
+                cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
                 //if( vessels[i]->get_idx() ==2) dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
                 dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
 			}
@@ -3287,7 +3302,23 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 						double a_shape = gshape_cpue_nodes_species.at(g).at(pop);
 								 // look into the vector of vector....
 						double a_scale = gscale_cpue_nodes_species.at(g).at(pop);
-						cpue_per_fground.at(g) = rgamma(a_shape, a_scale);
+
+
+                        // a dangerous fix:
+                        if(a_shape<0 || a_scale <0)
+                        {
+
+                          cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                          //for(size_t f = 0; f < fgrounds.size(); ++f)
+                          //{
+                          //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
+                          //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                          //}
+                          a_shape=1;
+                          a_scale=1;
+                        }
+
+                        cpue_per_fground.at(g) = rgamma(a_shape, a_scale);
                         dout(cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl);
                         //if(vessels.at(v)->get_name()=="DNK000041435") cout  << "cpue_per_fground.at(g)" <<cpue_per_fground.at(g) << endl;
                     }
@@ -3322,7 +3353,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-
+cout << "HII!" << endl;
                 for(unsigned int g = 0; g < fgrounds.size(); g++)
 				{
 					a_cumcatch_fgrounds[g] = 0;
@@ -3398,7 +3429,6 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         }						 // END RE-READ DATA FOR VESSEL AND METIER...
-
 
 
 
@@ -3596,7 +3626,6 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-
         //----------------------------------------//
         //----------------------------------------//
         // RE-READ HARBOUR INFOS------------------//
@@ -3620,17 +3649,15 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                if(vids_on_harbours.size()>0)
                {
-                   dout(cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl);
+                  dout(cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl);
                   for (unsigned int vi=0; vi<vids_on_harbours.size(); ++vi)
                     {
                     vector<int>   some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
                     vector<double> some_cpues  = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
 
                     const multimap<int, int> &poss_met  = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
-
                     for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
                       {
-                      //cout << gr  << endl;
 
                       // cpues
                       int a_ground = some_grounds.at(gr);
@@ -3640,15 +3667,20 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                       // mets
                       vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, a_ground );
-                      int a_met= metiers_on_grd.at(0); // take only one, the first as it comes....
+                      if(metiers_on_grd.size()!=0)
+                      {
 
-                      bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, make_pair(a_met, a_ground));
-                      if(is_present)
-                         {
-                          // EQUAL FREQ (TO BE CHANGED, BUT DOESNT MATTER IF A ChooseGround DTREES IN USE)
-                         freq_grounds_mets_harbour_knowledge.insert(make_pair(a_met, 1.0));
-                         }
-                      }
+                         int a_met= metiers_on_grd.at(0); // take only one, the first as it comes....
+
+
+                         bool is_present = insert_if_not_present(grounds_mets_harbour_knowledge, make_pair(a_met, a_ground));
+                         if(is_present)
+                            {
+                             // EQUAL FREQ (TO BE CHANGED, BUT DOESNT MATTER IF A ChooseGround DTREES IN USE)
+                            freq_grounds_mets_harbour_knowledge.insert(make_pair(a_met, 1.0));
+                            }
+                      } else{}
+                     }
                     }
 
                   // DEPRECATED? (still in use for enlarging the vessel horizon if no positive profit)
@@ -3757,8 +3789,15 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
                                      // need to convert in array, see myRutils.cpp
             vector<int>    a_met               = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
-            vessels.at(v)->set_metier(  metiers[ a_met[0] ]  );
 
+            if(metiers_on_grd.size()!=0)
+            {
+                vessels.at(v)->set_metier(  metiers[ a_met.at(0) ]  );
+            }
+            else
+            {
+                vessels.at(v)->set_metier(  metiers[ 0 ]  );   // dangerous fix
+            }
 
             vector <int>    harbs      = vessels.at(v)->get_harbours();
             vector <double> freq_harbs = vessels.at(v)->get_freq_harbours();
@@ -3847,6 +3886,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
                 }
             }
+
 
 
             // 5- then apply the changes to the vessel
@@ -4081,13 +4121,12 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			for (unsigned int i =0; i < ve.size(); i++)
 			{
 				bool is_harbour = vessels[ i ]->get_loc()->get_is_harbour();
-                outc(cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
-                    <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl);
+                cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
+                    <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl;
 
 			}
 
 		}
-
 		///------------------------------///
 		///------------------------------///
 		///  THE FOR-LOOP OVER VESSELS   ///
@@ -4107,7 +4146,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         for (unsigned int s=0; s<ships.size(); s++)
         {
-            thread_vessel_insert_job(1000+s);
+            thread_vessel_insert_job(5000+s);
         }
 
 

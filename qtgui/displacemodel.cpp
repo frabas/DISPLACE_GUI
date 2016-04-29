@@ -1782,20 +1782,38 @@ bool DisplaceModel::loadVessels()
             expected_cpue_this_pop.at(pop)=0;
 
             // compute cpue on nodes
-            for(size_t f = 0; f < fgrounds.size(); f++)
+            for(size_t f = 0; f < fgrounds.size(); ++f)
             {
                                  // look into the vector of vector....
                 double a_shape = gshape_cpue_nodes_species.at(f).at(pop);
                                  // look into the vector of vector....
                 double a_scale = gscale_cpue_nodes_species.at(f).at(pop);
-                cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
-                //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
+
+            // a dangerous fix:
+            if(a_shape<0 || a_scale <0)
+            {
+
+              cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+              //for(size_t f = 0; f < fgrounds.size(); ++f)
+              //{
+              //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
+              //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+              //}
+              a_shape=1;
+              a_scale=1;
+            }
+
+
+
+
+            cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
+            //if( v->get_idx() ==2) dout << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl;
             // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
             }
 
             cout << "compute the average cpue for this pop across all nodes" << endl;
             // compute the average cpue for this pop across all nodes
-            for(size_t f = 0; f < fgrounds.size(); f++)
+            for(size_t f = 0; f < fgrounds.size(); ++f)
             {
                 expected_cpue_this_pop.at(pop)+=cpue_per_fground.at(f);
 

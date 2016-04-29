@@ -2488,6 +2488,20 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 a_shape = gshape_cpue_nodes_species.at(idx_node_v).at(pop);
 								 // look into the vector of vector....
                 a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);
+
+                // a dangerous fix:
+                if(a_shape<0 || a_scale <0)
+                {
+
+                  cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                  //for(size_t f = 0; f < fgrounds.size(); ++f)
+                  //{
+                  //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
+                  //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                  //}
+                  a_shape=1;
+                  a_scale=1;
+                }
                 cpue = rgamma(a_shape, a_scale);
               }
            else
@@ -2498,6 +2512,20 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 a_shape = gshape_cpue_nodes_species.at(randomIndex).at(pop);
                                  // look into the vector of vector....
                 a_scale = gscale_cpue_nodes_species.at(randomIndex).at(pop);
+
+                // a dangerous fix:
+                if(a_shape<0 || a_scale <0)
+                {
+
+                  cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                  //for(size_t f = 0; f < fgrounds.size(); ++f)
+                  //{
+                  //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
+                  //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+                  //}
+                  a_shape=1;
+                  a_scale=1;
+                }
                 cpue = rgamma(a_shape, a_scale);
 
              }
@@ -3322,9 +3350,17 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
     vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
                              // need to convert in array, see myRutils.cpp
-    vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
-    this->set_metier(  metiers[ a_met[0] ]  );
 
+    if(metiers_on_grd.size()!=0)
+    {
+    vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+    this->set_metier(  metiers[ a_met.at(0) ]  );
+    }
+    else
+    {
+     cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl;
+     this->set_metier(  metiers[ 0 ]  ); // dangerous fix
+    }
 
 
 }
@@ -3443,10 +3479,12 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
        //int ground=grds[0];
        outc(cout  << this->get_name() << " GO FISHING ON " << ground << endl);
 
+
        // get the shortest path between source and destination
        // with the list of intermediate nodes
        int from = this->get_loc()->get_idx_node();
        this->set_previous_harbour_idx(from);
+
 
        if(!create_a_path_shop)
        {
@@ -3512,12 +3550,12 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
            // decide on the rest duration for the next time (drawn from a gamma law)
            double calib=1;
 
-
            double a_shape = this-> get_resttime_par1();
            double a_scale = this-> get_resttime_par2()  *calib;
            dout(cout  << "TIME FOR REST WHEN WE WILL BE AT PORT AFTER OUR TRIP"  << endl);
 
            this-> set_timeforrest( rgamma(a_shape, a_scale) );
+
            // set inactive
            this-> set_inactive(false);
            // set vessel nationality
@@ -3530,8 +3568,15 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
            vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
            vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
 								 // need to convert in array, see myRutils.cpp
-           vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
-           this->set_metier(  metiers[ a_met[0] ]  );
+           if(metiers_on_grd.size()!=0)
+             {
+              vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+             this->set_metier(  metiers[ a_met.at(0) ]  );
+             }
+           else
+             {
+             this->set_metier(  metiers[ 0 ]  ); // dangerous fix
+             }
            //random_shuffle(metiers_on_grd.begin(),metiers_on_grd.end()); // random permutation i.e. equal frequency of occurence
            //this->set_metier(  metiers[ metiers_on_grd[0] ]  );
 
@@ -3796,9 +3841,17 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, next_ground );
 	vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, next_ground );
 								 // need to convert in array, see myRutils.cpp
-	vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
-	this->set_metier(  metiers[ a_met[0] ]  );
-	// find.next.pt.on.the.graph()
+
+    if(metiers_on_grd.size()!=0)
+      {
+      vector<int>    a_met = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+      this->set_metier(  metiers[ a_met[0] ]  );
+      }
+    else
+      {
+        this->set_metier(  metiers[ 0 ]  );   // a dangerous fix
+      }
+    // find.next.pt.on.the.graph()
     this->find_next_point_on_the_graph_unlocked(nodes);
     unlock();
 }

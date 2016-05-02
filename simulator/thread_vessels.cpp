@@ -254,13 +254,14 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
             }
             else
             {
+
                 outc(cout  << "NOT IN HARB...SO ON A FISHING GROUND!" << endl);
                 // ***************make a decision************************************
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
                 int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
                     external_states_relevant_for_stopping_fishing,
-                    false,
+                    use_dtrees,
                     tstep,
                     dyn_alloc_sce, create_a_path_shop,
                     idx_path_shop, path_shop, min_distance_shop,
@@ -368,6 +369,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         outc(cout  << "my catches so far is " << vessels[ index_v ]->get_cumcatches() << endl);
                         outc(cout  << "my consumed fuel so far is " << cumfuelcons << endl);
                         outc(cout  << "my time at sea so far is " << vessels[ index_v ]->get_timeatsea() << endl);
+
+
 
                     }
                 }

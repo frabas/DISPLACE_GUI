@@ -4686,6 +4686,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
     UNUSED(freq_distance);
     UNUSED(vertex_names);
 
+
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StopFishing))
         {
 

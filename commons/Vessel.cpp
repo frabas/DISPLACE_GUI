@@ -1909,25 +1909,25 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
        // // // // // //
                 // HARDCODING SPECIFIC TO MYFISH MIG (TO BE REMOVED!!!)
-                if(pop==10 && this->get_loc()->get_x()<12)
-                {
-                    vector <double> initial_wsz;
-                    initial_wsz.push_back(0.0001266451);
-                    initial_wsz.push_back(0.004076539);
-                    initial_wsz.push_back(0.02048018);
-                    initial_wsz.push_back(0.05930595);
-                    initial_wsz.push_back(0.1312184);
-                    initial_wsz.push_back(0.2473941);
-                    initial_wsz.push_back(0.4194203);
-                    initial_wsz.push_back(0.6592298);
-                    initial_wsz.push_back(0.9790549);
-                    initial_wsz.push_back(1.391393);
-                    initial_wsz.push_back(1.90898);
-                    initial_wsz.push_back(2.544769);
-                    initial_wsz.push_back(3.311913);
-                    initial_wsz.push_back(4.223748);
-                wsz=initial_wsz; // replace if sd22
-                }
+              //  if(pop==10 && this->get_loc()->get_x()<12)
+              //  {
+              //      vector <double> initial_wsz;
+              //      initial_wsz.push_back(0.0001266451);
+              //      initial_wsz.push_back(0.004076539);
+              //      initial_wsz.push_back(0.02048018);
+              //      initial_wsz.push_back(0.05930595);
+              //      initial_wsz.push_back(0.1312184);
+              //      initial_wsz.push_back(0.2473941);
+              //      initial_wsz.push_back(0.4194203);
+              //      initial_wsz.push_back(0.6592298);
+              //      initial_wsz.push_back(0.9790549);
+              //      initial_wsz.push_back(1.391393);
+              //      initial_wsz.push_back(1.90898);
+              //      initial_wsz.push_back(2.544769);
+              //      initial_wsz.push_back(3.311913);
+              //      initial_wsz.push_back(4.223748);
+              //  wsz=initial_wsz; // replace if sd22
+              //  }
      // // // // // //
 
 

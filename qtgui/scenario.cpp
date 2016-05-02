@@ -31,6 +31,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <QDebug>
+
 Scenario::Scenario()
     : dyn_alloc_sce("baseline"),
       dyn_pop_sce("baseline"),
@@ -313,6 +315,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 
     QStringList alsce = QString::fromStdString(scenario.dyn_alloc_sce.toString()).split(" ", QString::SkipEmptyParts);
     QStringList popsce = QString::fromStdString(scenario.dyn_pop_sce.toString()).split(" ", QString::SkipEmptyParts);
+
 
     s.setDyn_alloc_sce(alsce);
     s.setDyn_pop_sce(popsce);

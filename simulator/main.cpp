@@ -3371,7 +3371,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 				vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-cout << "HII!" << endl;
+
                 for(unsigned int g = 0; g < fgrounds.size(); g++)
 				{
 					a_cumcatch_fgrounds[g] = 0;

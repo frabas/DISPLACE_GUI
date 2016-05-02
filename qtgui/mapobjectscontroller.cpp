@@ -73,7 +73,8 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMap->addLayer(mWidgetLayer);
     mMap->addLayer(mEditorLayer);
 
-    mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299));
+    //mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299)); // should be eventually made as a option
+    mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
     mMap->setZoom(10);
 
     connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));
@@ -103,44 +104,44 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
 
     addStandardLayer(model_n, LayerEntities, mEntityLayer[model_n], true);
     addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer(), false);
-    addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n], true);
+    addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n], false);
 
     mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Abundance")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Biomass")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Impact")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerCumcatchesPerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches Per Pop")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerPopCumcatches, mStatsLayerCumcatchesPerPop[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerPopCumcatches, mStatsLayerCumcatchesPerPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerBenthosBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Biomass")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerBenthosBiomass, mStatsLayerBenthosBiomass[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerBenthosBiomass, mStatsLayerBenthosBiomass[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
    // mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
    // addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerCumsweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Swept Area")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerCumSweptArea, mStatsLayerCumsweptarea[model_n],type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerCumSweptArea, mStatsLayerCumsweptarea[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
 
     mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all")).arg(model_n).toStdString()));
-    addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerTariffPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff pop")).arg(model_n).toStdString()));
-    addTariffLayer(model_n, TariffLayerTariffPop, mStatsLayerTariffPop[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addTariffLayer(model_n, TariffLayerTariffPop, mStatsLayerTariffPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerTariffBenthos[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff benthos")).arg(model_n).toStdString()));
-    addTariffLayer(model_n, TariffLayerTariffBenthos, mStatsLayerTariffBenthos[model_n], type != DisplaceModel::LiveModelType ? false : true);
+    addTariffLayer(model_n, TariffLayerTariffBenthos, mStatsLayerTariffBenthos[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
 
     const QList<std::shared_ptr<HarbourData> > &harbours = model->getHarboursList();

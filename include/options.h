@@ -78,6 +78,8 @@ enum Dyn_Alloc {
     LTMP,
     FMSY,
     area_closure,
+    area_closure_netters,
+    area_closure_trawlers,
     fuelprice_plus20percent,
     reduced_speed_10percent,
     reduced_speed_20percent,

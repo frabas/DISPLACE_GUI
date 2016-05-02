@@ -95,7 +95,7 @@ private:
 public:
     VesselTodayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *) const {
-          return (tstep % 168)>72  ? 1.0 : 0.0; // 24*7=168; 3 first days is 72h //0: "week start" node; 1: "week ending"
+          return (tstep % 168)>96  ? 1.0 : 0.0; // 24*7=168; 4 first days is 96h //0: "week start" node; 1: "week ending"
         }
 };
 

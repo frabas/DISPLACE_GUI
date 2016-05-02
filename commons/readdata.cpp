@@ -23,6 +23,7 @@
 #include <utils/LineNumberReader.h>
 #include <boost/lexical_cast.hpp>
 #include <utils/vectorsdata.h>
+#include <boost/algorithm/string.hpp>
 
 using namespace displace::formats;
 
@@ -113,9 +114,20 @@ int read_scenario_config_file (string folder_name_parameterization,
     if (!reader.importFromFile(filename, specs))
         return false;
 
+    auto dasf = reader.get("dyn_alloc_sce");
+    std::vector<std::string> das;
+    boost::split(das, dasf, boost::is_any_of(" "));
+    for (auto d : das) {
+        scenario.dyn_alloc_sce.setOption(d);
+    }
 
-    scenario.dyn_alloc_sce.setOption(reader.get("dyn_alloc_sce"));
-    scenario.dyn_pop_sce.setOption(reader.get("dyn_pop_sce"));
+    auto dpsf = reader.get("dyn_pop_sce");
+    std::vector<std::string> dps;
+    boost::split(dps, dpsf, boost::is_any_of(" "));
+    for (auto d : dps) {
+        scenario.dyn_pop_sce.setOption(d);
+    }
+
     scenario.biolsce=reader.get("biolsce");
     scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
     scenario.freq_redispatch_the_pop=reader.getAs<int>("freq_redispatch_the_pop");

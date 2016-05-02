@@ -2191,6 +2191,34 @@ vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup,
 }
 
 
+vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_pop into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename = inputfolder+"/metiersspe_"+folder_name_parameterization+"/" + a_met_s + "metier_selectivity_per_stock_ogives.dat";
+
+    ifstream file_selectivity_per_stock_ogives;
+    file_selectivity_per_stock_ogives.open(filename.c_str());
+    if(file_selectivity_per_stock_ogives.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    vector< vector<double> > selectivity_per_stock_ogives(nbpops, vector<double>(nbszgroup));
+    fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives, selectivity_per_stock_ogives);
+    file_selectivity_per_stock_ogives.close();
+
+    return(selectivity_per_stock_ogives);
+}
+
+
+
+
+
 vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce)
 {
 	// casting a_pop into a string

@@ -1806,6 +1806,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, "../"+inputfolder);
     map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, "../"+inputfolder);
 
+
 	// get the name of the metiers
 	// copy only unique elements of sel_ogives into name_metiers
 	// TOO TRICKY: TO BE CHANGED!!!
@@ -1835,6 +1836,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, "../"+inputfolder);
         multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, "../"+inputfolder);
 
+        vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, "../"+inputfolder);
+
         // metier_target_stocks for this particular metier
         multimap<int,int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
         multimap<int,int>::iterator upper_metier_target_stocks = metier_target_stocks.upper_bound(i);
@@ -1846,6 +1849,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         metiers[i] =  new Metier(metier_name,
 			metier_type,
 			selectivity,
+            selectivity_per_stock_ogives,
 			discards,
 			metier_betas,
             metier_mls_cat,
@@ -1858,7 +1862,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	}
 
 
-	// check selectivity
+    // check selectivity per metier
 	vector<double> ogive = metiers[0]->get_selectivity_ogive();
     cout << "selectivity ogive of the metier 0" << endl;
 	for (unsigned int i=0; i<ogive.size(); i++)
@@ -1866,6 +1870,20 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        cout  << " " << ogive[i] << " " ;
 	}
    cout << endl;
+
+   // check selectivity per metier per stock
+   vector< vector<double> > selectivity_per_stock = metiers[0]->get_selectivity_per_stock_ogives();
+   for(unsigned int i = 0; i < selectivity_per_stock.size(); i++)
+   {
+       for(unsigned int j = 0; j < selectivity_per_stock[i].size(); j++)
+       {
+
+           cout << "pop is "<< i  << endl;
+           cout << "szgroup is "<< j  << endl;
+           cout << "selectivity_per_stock[i,j] is "<< selectivity_per_stock[i][j]  << endl;
+       }
+   }
+
 
 	// check metier betas
 	vector<double> met_betas = metiers[0]->get_betas_per_pop();

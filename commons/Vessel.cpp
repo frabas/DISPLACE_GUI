@@ -1785,13 +1785,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 	// METIER EFFECT
 	vector<double> dis_ogive        = this->get_metier()->get_discards_ogive();
-	vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
-	vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
+    vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
+    vector< vector<double> > selectivity_per_stock = this->get_metier()->get_selectivity_per_stock_ogives();
+    vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
     vector<int> m_mls_cat_per_pop  = this->get_metier()->get_mls_cat_per_pop();
     double fspeed                   = this->get_metier()->get_fspeed();
     double gear_width_a             = this->get_metier()->get_gear_width_a();
 	double gear_width_b             = this->get_metier()->get_gear_width_b();
-	string gear_width_model         = this->get_metier()->get_gear_width_model();
+	string gear_width_model         = this->get_metier()->get_gear_width_model();   
+
 
 	// SWEPT AREA
 	double gear_width=0.0;
@@ -1957,13 +1959,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 double tot_avai_for_disc            = 0;
                 int    MLS_cat                      = m_mls_cat_per_pop[pop];
 
+
+
 				// compute available biomass via selectivity
                 for(int szgroup=0; szgroup < (int)avail_biomass.size(); szgroup++)
 				{
                     catch_per_szgroup[szgroup]=0; // init
 
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
-                    avail_biomass[szgroup] =  all_biomass[szgroup]      *sel_ogive[szgroup]; // available for landings only
+                    avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
 								 // cumul
 					tot = tot+avail_biomass[szgroup];
                     if(szgroup >=MLS_cat) {
@@ -1972,9 +1976,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         tot_avai_for_disc= tot_avai_for_disc+all_biomass[szgroup];
                     }
                     dout(cout  << "wsz[szgroup] " <<wsz[szgroup] << endl);
-                    dout(cout  << "sel_ogive[szgroup] " <<sel_ogive[szgroup] << endl);
+                    dout(cout  << "selectivity_per_stock[pop] " <<selectivity_per_stock[pop][szgroup] << endl);
                     dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
-				}
+                }
 
                 dout(cout  << "tot biomass available on this node " << tot << endl);
 
@@ -2001,15 +2005,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								 // metier effect
 						m_betas_per_pop[pop]*1 +
 								 // avai effect szgroup 0
-						populations[pop]->get_avai0_beta()* avai_pops_at_selected_szgroup[0] *1000 *sel_ogive[selected_szgroups.at(0)] +
+                        populations[pop]->get_avai0_beta()* avai_pops_at_selected_szgroup[0] *1000 *selectivity_per_stock[pop][selected_szgroups.at(0)] +
 								 //szgroup 2
-						populations[pop]->get_avai2_beta()* avai_pops_at_selected_szgroup[1] *1000 *sel_ogive[selected_szgroups.at(1)]+
+                        populations[pop]->get_avai2_beta()* avai_pops_at_selected_szgroup[1] *1000 *selectivity_per_stock[pop][selected_szgroups.at(1)]+
 								 //szgroup 3
-						populations[pop]->get_avai3_beta()* avai_pops_at_selected_szgroup[2] *1000 *sel_ogive[selected_szgroups.at(2)]+
+                        populations[pop]->get_avai3_beta()* avai_pops_at_selected_szgroup[2] *1000 *selectivity_per_stock[pop][selected_szgroups.at(2)]+
 								 //szgroup 5
-						populations[pop]->get_avai5_beta()* avai_pops_at_selected_szgroup[3] *1000 *sel_ogive[selected_szgroups.at(3)]+
+                        populations[pop]->get_avai5_beta()* avai_pops_at_selected_szgroup[3] *1000 *selectivity_per_stock[pop][selected_szgroups.at(3)]+
 								 //szgroup 7
-						populations[pop]->get_avai7_beta()* avai_pops_at_selected_szgroup[4] *1000 *sel_ogive[selected_szgroups.at(4)]
+                        populations[pop]->get_avai7_beta()* avai_pops_at_selected_szgroup[4] *1000 *selectivity_per_stock[pop][selected_szgroups.at(4)]
 								 // poisson regression, see the R code
 						)*populations[pop]->get_cpue_multiplier() );
 					// 'min' is there for not allowing catching more than available!
@@ -2019,6 +2023,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 					// REMENBER THAT THE IDEAL WOULD BE DO THE THE GLM ON ABSOLUTE NUMBER OF INDIVIDUAL ON EACH NODE......
 					// BUT THIS INFO IS NOT AVAILABLE OF COURSE (WE ONLY HAVE THE N FOR THE FIRST OF JANUARY)
 					// THATS WHY WE USE THE RELATIVE AVAILABILITY AS A PROXY.
+
 
 					//for(int i = 0; i < cumcatch_fgrounds.size(); i++){
 					//cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
@@ -2040,13 +2045,13 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     }
                     double left_to_MLS=0;
                     double right_to_MLS=0;
-                    if(sel_ogive.at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
-                        left_to_MLS  = trapezoidal(0, inter, sel_ogive) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
+                    if(selectivity_per_stock[pop].at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
+                        left_to_MLS  = trapezoidal(0, inter, selectivity_per_stock[pop]) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
                         right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
 
                       } else{
-                        left_to_MLS  = trapezoidal(0, MLS_cat, sel_ogive); // discards
-                        right_to_MLS = trapezoidal(MLS_cat, inter, sel_ogive)+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
+                        left_to_MLS  = trapezoidal(0, MLS_cat, selectivity_per_stock[pop]); // discards
+                        right_to_MLS = trapezoidal(MLS_cat, inter, selectivity_per_stock[pop])+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
 
                     }
 
@@ -2065,7 +2070,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
 					{
-                        if(all_biomass[szgroup]!=0)
+                        if(avail_biomass[szgroup]!=0)
 						{
                         // compute alloc key
                         // proportion
@@ -2085,7 +2090,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                     " landings per sz "      <<  landings_per_szgroup[szgroup] << endl
                                        );
 
-                           //catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
+                            //catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] /(1-dis_ogive[szgroup]);
                            // replaced by: (9 March 2015)
 
                        // 3bis. DISAGREGATE TOTAL DISCARDS IN WEIGHT INTO SZGROUP
@@ -2117,8 +2122,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                        // then get the removals in terms of N
                        removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/wsz[szgroup];
+                       if(removals_per_szgroup[szgroup]!=removals_per_szgroup[szgroup])
+                       {
+                           cout <<"nan detected! in removals_per_szgroup[szgroup] ... "<< endl;
+                       }
 
-                       dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
+                           dout(cout  << " weight_per_szgroup[szgroup] " << wsz[szgroup] << endl);
                        //if(idx_node==2436 && namepop==9) dout(cout << " in do_catch, removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
                        // finally, impact the N...
@@ -2126,7 +2135,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 							// then correct the catches accordingly.
 							if(removals_per_szgroup[szgroup]>Ns_at_szgroup_pop[szgroup])
 							{
-								catch_per_szgroup[szgroup]=
+                                catch_per_szgroup[szgroup]=
 									(Ns_at_szgroup_pop[szgroup])*wsz[szgroup];
                                 if(szgroup>=MLS_cat){
                                     landings_per_szgroup[szgroup]=
@@ -2147,7 +2156,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             }
 							else
 							{
-								new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
+
+
+                                new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 
                                 /*
 								// check (before)
@@ -2250,10 +2261,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     } // end szgroup
 
-   //if(tot_landings_this_pop>1000){
-   //int aa;
-   //cin >> aa;
-   //}
 
 
 					// new Ns on this node= old Ns - removals

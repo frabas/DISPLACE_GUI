@@ -532,6 +532,35 @@ void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_tr
 
 }
 
+/**
+fill in the growth transition matrix
+@param the vector file, ...
+*/
+void fill_in_selectivity_per_stock (istream& in, vector< vector<double> >& selectivity_per_stock)
+{
+    double val;
+    for(unsigned int i = 0; i < selectivity_per_stock.size(); i++)
+    {
+        for(unsigned int j = 0; j < selectivity_per_stock[i].size(); j++)
+        {
+            in>> val;
+            selectivity_per_stock[i][j] = val;
+        }
+    }
+    dout(cout  << "read size selectivity_per_stock matrix"  << endl << flush);
+    for(unsigned int i = 0; i < selectivity_per_stock.size(); i++)
+    {
+        for(unsigned int j = 0; j < selectivity_per_stock[i].size(); j++)
+        {
+            dout(cout  << selectivity_per_stock[i][j] << " ");
+        }
+        dout(cout  << endl);
+    }
+    dout(cout  << endl);
+
+}
+
+
 
 /**
 fill in

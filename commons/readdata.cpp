@@ -1238,6 +1238,28 @@ map<int, int> read_metiers_types(string folder_name_parameterization, string inp
 }
 
 
+
+// FOR METIER
+map<int, double> read_percent_revenue_completenesses(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/percent_revenue_completenesses.dat";
+
+    ifstream metier_percent_revenue_completenesses;
+    metier_percent_revenue_completenesses.open(filename.c_str());
+    if(metier_percent_revenue_completenesses.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    map<int, double> percent_revenue_completenesses;
+    fill_map_from_specifications_i_d (metier_percent_revenue_completenesses,  percent_revenue_completenesses, folder_name_parameterization);
+    metier_percent_revenue_completenesses.close();
+
+    return(percent_revenue_completenesses);
+}
+
+
 // FOR METIER
 map<int, double> read_metiers_fspeed(string folder_name_parameterization, string inputfolder)
 {

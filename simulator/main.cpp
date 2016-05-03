@@ -1801,6 +1801,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
     multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, "../"+inputfolder);
+    map<int, double>      percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, "../"+inputfolder);
     map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, "../"+inputfolder);
@@ -1829,6 +1830,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
         vector<int> metier_mls_cat                 = find_entries_i_i(metiers_mls_cat, metier_name);
         int metier_type                            = metiers_types[ i ];
+        double percent_revenue_completeness        = percent_revenue_completenesses[ i ];
         double fspeed                              = metiers_fspeed[ i ];
         double gear_width_a                        = metiers_gear_widths_param_a[ i ];
 		double gear_width_b                        = metiers_gear_widths_param_b[ i ];
@@ -1848,6 +1850,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         metiers[i] =  new Metier(metier_name,
 			metier_type,
+            percent_revenue_completeness,
 			selectivity,
             selectivity_per_stock_ogives,
 			discards,

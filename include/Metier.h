@@ -34,6 +34,7 @@ class Metier
 	private:
 		int name;
 		int type;
+        double percent_revenue_completeness; // for completing the revenue from other species....
 		double target_factor;	 //NOT IN USE...
 		vector<double> selectivity;
         vector< vector <double> > selectivity_per_stock;
@@ -51,6 +52,7 @@ class Metier
 		Metier();
         Metier(int name,
             int type,
+            double percent_revenue_completeness,
             vector<double> selectivity,
             const vector< vector <double> > &selectivity_per_stock_ogives,
             vector<double> discards,
@@ -66,6 +68,7 @@ class Metier
 		int get_name();
         void set_name(int name);
 		int get_metier_type();
+        double get_percent_revenue_completeness();
 		double get_target_factor();
 		vector<double> get_selectivity_ogive();
         vector<vector <double> > get_selectivity_per_stock_ogives() const;

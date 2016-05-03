@@ -23,6 +23,7 @@
 
 Metier::Metier(int _name,
 int _type,
+double _percent_revenue_completeness,
 vector<double> _selectivity,
 const vector< vector <double> > &_selectivity_per_stock,
 vector<double> _discards,
@@ -37,6 +38,7 @@ vector<int> _metier_target_stocks)
 {
 	name=_name;
 	type=_type;
+    percent_revenue_completeness=_percent_revenue_completeness;
 	selectivity=_selectivity;
     selectivity_per_stock=_selectivity_per_stock;
 	discards=_discards;
@@ -78,6 +80,12 @@ int Metier::get_metier_type()
 {
 
 	return(type);
+}
+
+double Metier::get_percent_revenue_completeness()
+{
+
+    return(percent_revenue_completeness);
 }
 
 

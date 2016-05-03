@@ -1380,11 +1380,13 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
         outc(cout  << "...for pop " << pop << endl);
 
+
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
             outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << endl);
-            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size);
+            lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size)
+                    * (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
         }
 
         int namepop = populations[pop]->get_name();

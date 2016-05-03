@@ -238,7 +238,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
          SSB +=  SSB_per_szgroup.at(i);
          }
          SSB= SSB/1000;			 //
-         cout << "The SSB is " << SSB  << " tons" << endl ;
+         cout << "The SSB is " << SSB  << " tons for " << populations.at(sp)->get_name() << endl ;
        }
     }
 }

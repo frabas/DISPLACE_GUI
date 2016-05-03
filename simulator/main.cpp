@@ -3479,8 +3479,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(redispatch_the_pop)	 // EVENT => re-read pop data
 		{
+          cout << "redispatch the population over the its spatial extent...." << endl;
 
-			// CHECK...CHECK...CHECK...
+          // CHECK...CHECK...CHECK...
 			// write done  pop number in popdyn_test
             for (unsigned int sp=0; sp<populations.size(); sp++)
 			{

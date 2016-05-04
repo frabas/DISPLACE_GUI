@@ -122,13 +122,14 @@ class Node
         void add_to_cumsweptarea(double sweptarea);
         void add_to_sweptarea(int sweptarea);
         void add_to_cumcatches(double catches);
+        void add_to_cumcatches_per_pop(double catches, int pop);
         void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);
         void set_tariffs(vector<double> values);
         void set_tariffs(int type, double value);
         void clear_pop_names_on_node();
 		void clear_Ns_pops_at_szgroup();
-		void clear_removals_pops_at_szgroup();
+        void clear_removals_pops_at_szgroup(int pop);
 		void clear_avai_pops_at_selected_szgroup();
 		void clear_impact_on_pops();
         void clear_cumcatches_per_pop();

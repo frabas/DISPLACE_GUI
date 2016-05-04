@@ -165,7 +165,7 @@ void NodeMapObject::updateProperties()
         break;
 
     case GraphNodeWithPopCumcatches:
-        text += updateStatText("Cumulated catches");
+        text += updateStatText("Accum.catches(kg. land.+disc.):");
         break;
 
     case GraphNodeWithBenthosBiomass:
@@ -188,7 +188,7 @@ void NodeMapObject::updateProperties()
         break;
 
     case GraphNodeWithCumCatchesRole:
-        text += QString("<br/><b>Catches (kg):</b> %1<br/>")
+        text += QString("<br/><b>Accum.catches(kg land.+disc.):</b> %1<br/>")
                 .arg(mNode->get_cumcatches());
         break;
     }

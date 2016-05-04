@@ -2242,7 +2242,6 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // caution: cumul landings at the trip level
                             catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
-
 						}
 						else
 						{
@@ -2270,7 +2269,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 					// a new removals cumul on this node
 					// i.e. the preexisting removals from oth vessels + from this vessel
-					this->get_loc()->set_removals_pops_at_szgroup(  namepop, removals_per_szgroup);
+                    this->get_loc()->set_removals_pops_at_szgroup(  namepop, removals_per_szgroup);
 
 					/*
 					if(this->get_loc()->get_idx_node()==186 && namepop==3)
@@ -2394,7 +2393,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // update dynamic trip-based cumul for this node
 								 // CUMUL FOR THE TRIP (all species confounded)
 					this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
-                    this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
+                    //this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
                                  // catches
 					cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
 								 // catches per pop
@@ -2601,7 +2600,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 		}
 
 
-    }
+
+    // contribute to accumulated catches on this node
+    this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
+
+    } // end pop
 
 
     // compute the proportion of discard of this event on that ground
@@ -2711,7 +2714,7 @@ void Vessel::compute_experiencedcpue_fgrounds()
         for(unsigned int a_node = 0; a_node < experiencedcpue_fgrounds.size(); a_node++)
 		{
 			freq_experiencedcpue_fgrounds.at(a_node)= experiencedcpue_fgrounds.at(a_node) / cum_cpue;
-            outc(cout  << "scaled experienced cpue is then " << freq_experiencedcpue_fgrounds.at(a_node) << endl);
+            //outc(cout  << "scaled experienced cpue is then " << freq_experiencedcpue_fgrounds.at(a_node) << endl);
 		}
 	}
     outc(cout  << "compute experienced cpue on grounds...OK" << endl);

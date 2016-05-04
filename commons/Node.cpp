@@ -489,6 +489,13 @@ void Node::add_to_cumcatches(double catches)
     unlock();
 }
 
+void Node::add_to_cumcatches_per_pop(double catches, int pop)
+{
+    lock();
+    cumcatches_per_pop.at(pop)+=catches;
+    unlock();
+}
+
 
 void Node::reinit(vector<double> &vec, unsigned int sz)
 {
@@ -671,16 +678,13 @@ void Node::clear_Ns_pops_at_szgroup()
 }
 
 
-void Node::clear_removals_pops_at_szgroup()
+void Node::clear_removals_pops_at_szgroup(int namepop)
 {
     dout(cout  << "clear removals on nodes..." << endl);
-	for(unsigned int i = 0; i < removals_pops_at_szgroup.size(); i++)
-	{
-		for(unsigned int j = 0; j < removals_pops_at_szgroup[i].size(); j++)
+        for(unsigned int sz = 0; sz < removals_pops_at_szgroup[namepop].size(); sz++)
 		{
-			removals_pops_at_szgroup[i][j] = 0;
+            removals_pops_at_szgroup[namepop][sz] = 0;
 		}
-	}
 }
 
 
@@ -738,7 +742,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN)
 {
-	//cout << "BEGIN: apply_oth_land()" << endl;
+    cout << "BEGIN: apply_oth_land()" << endl;
 
 	// DISSAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
 	// AND CONVERT INTO REMOVALS IN NUMBERS
@@ -892,14 +896,13 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                 //if(idx_node==430&& name_pop==3) dout(cout << " cumul_removals_at_szgroup_pop[szgroup] " << cumul_removals_at_szgroup_pop[szgroup] << endl);
                 //if(idx_node==430&& name_pop==3) dout(cout << " removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
-				new_removals_at_szgroup_pop[szgroup]=cumul_removals_at_szgroup_pop[szgroup]+removals_per_szgroup[szgroup];
+                new_removals_at_szgroup_pop[szgroup]=cumul_removals_at_szgroup_pop[szgroup]+removals_per_szgroup[szgroup];
 
-                //if(idx_node==430&& name_pop==3) dout(cout << " new_removals_at_szgroup_pop[szgroup] after oth land" << new_removals_at_szgroup_pop[szgroup] << endl);
 
 			}
 			else
 			{
-				new_Ns_at_szgroup_pop[szgroup]=0;
+                new_Ns_at_szgroup_pop[szgroup]=0;
 				removals_per_szgroup[szgroup]=0;
 				new_removals_at_szgroup_pop[szgroup]=cumul_removals_at_szgroup_pop[szgroup]+removals_per_szgroup[szgroup];
 
@@ -921,6 +924,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	}
 	else
 	{
+        cout  << "no biomass available here...." << tot << endl;
 
 	}
 
@@ -938,8 +942,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	//        cin >> a_int; // pause
 	//    }
 	//}
-
-	//cout << "END: apply_oth_land()" << endl;
+    cout << "END: apply_oth_land()" << endl;
 }
 
 

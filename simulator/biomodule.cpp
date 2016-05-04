@@ -254,7 +254,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         outc(cout << "...pop " << sp << endl;)
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
         {
-            outc(cout << ".....pop " << sp << endl;)
+           cout << ".....monthly pop model for pop " << sp << endl;
 
             int name_pop =populations.at(sp)->get_name();
             outc(cout << "apply other land on nodes..." << endl);
@@ -398,7 +398,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // over the removals (from catches + oth_land) during this month....
             // caution with terminology: here we named "pressure" what is actually "impact"
             // i.e. a ratio, (to do: need correction...)
-            dout(cout  << "pop " << name_pop << endl);
+            cout  << "compute the impact for pop " << name_pop << endl;
             vector <double>wsz = populations[name_pop]->get_weight_at_szgroup();
             for (unsigned int n=0; n<a_list_nodes.size(); n++)
             {
@@ -434,7 +434,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     pressure_per_szgroup_pop[szgroup]=removals_per_szgroup[szgroup]/N_at_szgroup_at_month_start[szgroup];
                     a_list_nodes.at(n)->set_pressure_pops_at_szgroup(  name_pop, pressure_per_szgroup_pop);
 
-                         // cumul
+                    // cumul
                     tot_removals+=(removals_per_szgroup[szgroup]*wsz[szgroup]);
                          // cumul
                     tot_B+=(N_at_szgroup_at_month_start[szgroup]*wsz[szgroup]);
@@ -449,7 +449,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                        outc(cout << N_at_szgroup.at(i) << endl);
                     }
                 }
-
                 if(tot_removals!=0)
                 {
 
@@ -504,6 +503,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     a_list_nodes.at(n)->set_impact_on_pops(name_pop, impact_on_pop);
                     dout(cout  << "impact_on_pop " << impact_on_pop << endl);
 
+
+
                     // update, export and clear for the next time...
                     if(export_vmslike && impact_on_pop!=0)
                     {
@@ -511,9 +512,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
                     }
                 }
-                         // RE-INIT
-                a_list_nodes.at(n)->clear_removals_pops_at_szgroup();
-                a_list_nodes.at(n)->clear_impact_on_pops();
+                         // RE-INIT if no cumul is wished
+                //a_list_nodes.at(n)->clear_removals_pops_at_szgroup(name_pop);
+                //a_list_nodes.at(n)->clear_impact_on_pops();
             }
 
             outc(cout << "landings so far for this pop " << sp << ", after applying oth_land " <<

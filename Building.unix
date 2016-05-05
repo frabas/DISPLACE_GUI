@@ -7,7 +7,7 @@ Prerequisites
 The following libraries, with development files, are required to compile under linux:
 
 Gdal library 1.10
-Boost Graph library 1.55 
+Boost 1.58 with the following components: Boost::Graph, Boost::RegEx
 GeographicLib 
 
 To install prerequisites under Ubuntu 14.10:
@@ -63,4 +63,21 @@ Installation need to be done manually, by copying the binary into the destinatio
 
 $ sudo install -m 0755 displace /usr/local/bin/
 
+
+Compilation under HPC (without qt)
+==================================
+
+The simulator can be compiled without the Qt support, for example on HPC, to run simulations only.
+The following components, that depends only on stdc++ library and boost::regex, must be compiled manually using the following procedure
+
+$ cd formats
+$ make -f Makefile.hpc
+$ cd ../commons
+$ make -f Makefile.hpc
+$ cd ../simulator
+$ make -f Makefile.hpc
+$ cd ..
+
+To install, manually copy formats/libformats.so, commons/libcommons.so and simulator/displace in the proper directories, for example, /usr/local/lib (for libraries)
+and /usr/local/bin for displace
 

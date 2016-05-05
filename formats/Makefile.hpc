@@ -1,4 +1,9 @@
-TARGET=libformats
+TARGET=libformats.so
+
+PREFIX?=/usr/local
+DESTDIR?=
+BINDIR?=${PREFIX}/bin
+LIBDIR?=${PREFIX}/lib
 
 HEADERS = \
     legacy/ConfigFileReader.h \
@@ -20,7 +25,7 @@ LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
 
-all: ${TARGET}.so
+all: ${TARGET}
 
 debug:
 	${MAKE} all CPPDEBUG=-g
@@ -29,5 +34,9 @@ ${TARGET}.so: ${OBJS}
 	${CXX} -shared ${LDFLAGS} -o $@ $^ ${LIBS}
 
 clean:
-	@-rm ${OBJS} ${TARGET}.so
+	@-rm ${OBJS} ${TARGET}
+
+install: all
+	@-install -d -m0755 ${DESTDIR}/${LIBDIR}
+	install -m 0644 ${TARGET} ${DESTDIR}/${LIBDIR}
 

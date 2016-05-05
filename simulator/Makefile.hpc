@@ -1,5 +1,10 @@
 TARGET=displace
 
+PREFIX?=/usr/local
+DESTDIR?=
+BINDIR?=${PREFIX}/bin
+LIBDIR?=${PREFIX}/lib
+
 SOURCES= main.cpp \
     thread_vessels.cpp \
     outputqueuemanager.cpp \
@@ -59,4 +64,8 @@ debug:
 
 clean:
 	-@rm ${OBJS} ${TARGET}
+
+install: all
+	@-install -d -m0755 ${DESTDIR}/${BINDIR}
+	install -m 0644 ${TARGET} ${DESTDIR}/${BINDIR}
 

@@ -9,7 +9,7 @@
 
 #include <tuple>
 #include <string>
-#include <boost/regex.hpp>
+#include <regex>
 
 using namespace displace::formats::helpers;
 
@@ -19,12 +19,12 @@ KeyValueReader::KeyValueReader() {
 
 std::tuple<std::string,std::string> KeyValueReader::parseLine(std::string arg)
 {
-    boost::smatch results;
+    std::smatch results;
 
     // Legal chars for key: numbers, letters, minus, underscore, point and slash (at least one)
     // Legal chars for value: any char
-    boost::regex r{ "([\\w\\-_\\.\\/]+)\\s*=\\s*(.*)"};
-    if (!boost::regex_match(arg, results, r)) {
+    std::regex r{ "([\\w\\-_\\.\\/]+)\\s*=\\s*(.*)"};
+    if (!std::regex_match(arg, results, r)) {
         return std::tuple<std::string, std::string>();
     }
 

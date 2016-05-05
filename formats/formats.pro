@@ -31,11 +31,11 @@ SOURCES = legacy/ConfigFileReader.cpp  \
     utils/LineNumberReader.cpp
 
 win32 {
-    LIBS +=  -lboost_regex-mgw49-mt-1_57
+    LIBS +=
 }
 
 !win32 {
-    LIBS += -lboost_regex
+    LIBS +=
 }
 
 

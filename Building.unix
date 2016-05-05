@@ -68,16 +68,16 @@ Compilation under HPC (without qt)
 ==================================
 
 The simulator can be compiled without the Qt support, for example on HPC, to run simulations only.
-The following components, that depends only on stdc++ library and boost::regex, must be compiled manually using the following procedure
+The following components, that depends only on stdc++ library and boost::regex.
+Run the main makefile from the source root directory:
 
-$ cd formats
 $ make -f Makefile.hpc
-$ cd ../commons
-$ make -f Makefile.hpc
-$ cd ../simulator
-$ make -f Makefile.hpc
-$ cd ..
 
-To install, manually copy formats/libformats.so, commons/libcommons.so and simulator/displace in the proper directories, for example, /usr/local/lib (for libraries)
-and /usr/local/bin for displace
+To install, simply use the "install" target. You can define a PREFIX (defualts to /usr/local) to install in a proper prefix location
+and DESTDIR to install out of the root (for packaging purpose, for example). you can also tweak BINDIR and LIBDIR - see Makefiles for
+more details.
+
+$ sudo make PREFIX=/usr/local -f Makefile.hpc install
+
+Use clean target to remove object files.
 

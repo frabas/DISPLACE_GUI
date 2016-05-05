@@ -54,5 +54,5 @@ clean:
 
 install: all
 	@-install -d -m0755 ${DESTDIR}/${BINDIR}
-	install -m 0644 ${TARGET} ${DESTDIR}/${BINDIR}
+	install -m 0755 ${TARGET} ${DESTDIR}/${BINDIR}
 

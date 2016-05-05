@@ -28,7 +28,7 @@
 double GraphNodeItem::sDefWidth = 100.;
 double GraphNodeItem::sDefHeight = 60.;
 
-GraphNodeItem::GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent)
+GraphNodeItem::GraphNodeItem(std::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent)
     : QGraphicsItemGroup(parent),
       mScene(scene),
       mParent(0),
@@ -87,7 +87,7 @@ void GraphNodeItem::setVariable(dtree::Variable var)
 {
     Q_UNUSED(var);
 
-    boost::shared_ptr<dtree::Node> node = getNode();
+    std::shared_ptr<dtree::Node> node = getNode();
 
     QVector<int> nummaps(node->getChildrenCount(), 0);
 
@@ -220,7 +220,7 @@ void GraphNodeItem::update()
     if (mArrow == 0)
         createArrow();
 
-    boost::shared_ptr<dtree::Node> node = getNode();
+    std::shared_ptr<dtree::Node> node = getNode();
     if (node) {
         switch (node->variable()) {
         case dtree::Variable::VarUndefined:

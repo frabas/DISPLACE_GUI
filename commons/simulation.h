@@ -25,7 +25,7 @@
 #include <string>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace displace {
 namespace simulation {
@@ -52,7 +52,7 @@ public:
     TimeSeries *getTimeSeries (TimeSeriesManager::Variables var, int zone, int adim);
 
 private:
-    boost::shared_ptr<TimeSeriesManager> mTsManager;
+    std::shared_ptr<TimeSeriesManager> mTsManager;
 
     bool readTsFile(std::string filename) throw (boost::bad_lexical_cast);
 };

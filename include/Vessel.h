@@ -45,7 +45,7 @@ class Vessel
 
 		string name;
 		int idx_vessel;
-		//boost::shared_ptr<Node> m_location;
+		//std::shared_ptr<Node> m_location;
 		Node* m_location;
 		Metier* metier;
         vector<int> fgrounds;	 // idx nodes for fishing grounds specific to this vessel
@@ -126,11 +126,11 @@ protected:
         void find_next_point_on_the_graph_unlocked(vector<Node* >& nodes);
 
 public:
-		//Vessel(string name,  boost::shared_ptr<Node> a_location);
+		//Vessel(string name,  std::shared_ptr<Node> a_location);
 		Vessel(string name,  Node* a_location);
-		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name);
+		//Vessel(std::shared_ptr<Node> a_location, int idx_vessel, string name);
 		Vessel(Node* a_location, int idx_vessel, string name);
-		//Vessel(boost::shared_ptr<Node> a_location, int idx_vessel, string name, int nbpops, int nbszgroups, vector<int> harbours, vector<int> fgrounds,
+		//Vessel(std::shared_ptr<Node> a_location, int idx_vessel, string name, int nbpops, int nbszgroups, vector<int> harbours, vector<int> fgrounds,
         Vessel(Node* a_location, int idx_vessel, string name, int nbpops, int nbszgroups, const vector<int> &harbours, const vector<int> &fgrounds, const vector<int> &fgrounds_init,
             const vector<double> &freq_harbours, const vector<double> &freq_fgrounds, const vector<double> &freq_fgrounds_init, const vector<double> &vessel_betas_per_pop,
             const vector<double> &percent_tac_per_pop,
@@ -425,7 +425,7 @@ public:
          * we can put a static instance and avoid wasting a lot of memory.
          * The table is initialized once in init() (lazy initialization)
          */
-        static std::vector<boost::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
+        static std::vector<std::shared_ptr<dtree::StateEvaluator> > mStateEvaluators;
         static std::string nationalityFromName (const std::string &name);
 };
 #endif							 // VESSEL_H

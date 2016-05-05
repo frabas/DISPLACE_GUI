@@ -2,7 +2,7 @@
 #define SETNODEVALUECOMMAND_H
 
 #include <commands/command.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <dtree/dtnode.h>
 #include <QList>
 
@@ -21,7 +21,7 @@ public:
 
 private:
     struct Data {
-        boost::shared_ptr<dtree::Node> node;
+        std::shared_ptr<dtree::Node> node;
         GraphNodeItem *item;
         double old_value;
     };

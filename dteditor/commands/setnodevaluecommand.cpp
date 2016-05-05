@@ -11,7 +11,7 @@ SetNodeValueCommand::SetNodeValueCommand(QList<QGraphicsItem *> items, double ne
 
         // don't like this - TODO: fix it without using downcasting
         if (item) {
-            boost::shared_ptr<dtree::Node> node = item->getNode();
+            std::shared_ptr<dtree::Node> node = item->getNode();
             if (node.get() != 0) {
                 Data d;
                 d.node = node;

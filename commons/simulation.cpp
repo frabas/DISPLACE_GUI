@@ -144,7 +144,7 @@ bool Simulation::readTsFile (std::string filename) throw (boost::bad_lexical_cas
 
     int val_line = 0;
 
-    boost::shared_ptr<TimeSeries> ts (new TimeSeries);
+    std::shared_ptr<TimeSeries> ts (new TimeSeries);
 
     while (!stream.eof()) {
         std::string line;

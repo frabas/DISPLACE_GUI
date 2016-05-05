@@ -34,15 +34,15 @@ DtCsvReader::DtCsvReader()
 {
 }
 
-bool DtCsvReader::readTree(QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
+bool DtCsvReader::readTree(QTextStream &stream, std::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
 throw (std::invalid_argument)
 {
-//    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
+//    std::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
 
     QString line;
 
     struct Data {
-        boost::shared_ptr<dtree::Node> node;
+        std::shared_ptr<dtree::Node> node;
         GraphNodeItem *item;
         int parent;
         QPointF position;

@@ -3,7 +3,7 @@
 
 #include <dtree/stateevaluator.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dtree {
 
@@ -69,11 +69,11 @@ public:
 template <typename Operator>
 class TwoArgumentsComparatorStateEvaluator : public StateEvaluator {
 private:
-    boost::shared_ptr<StateEvaluator> mOp1, mOp2;
+    std::shared_ptr<StateEvaluator> mOp1, mOp2;
     Operator mOperator;
 
 public:
-    TwoArgumentsComparatorStateEvaluator (boost::shared_ptr<StateEvaluator> op1, boost::shared_ptr<StateEvaluator> op2, Operator oper)
+    TwoArgumentsComparatorStateEvaluator (std::shared_ptr<StateEvaluator> op1, std::shared_ptr<StateEvaluator> op2, Operator oper)
         : StateEvaluator(), mOp1(op1), mOp2(op2), mOperator(oper) {
     }
 

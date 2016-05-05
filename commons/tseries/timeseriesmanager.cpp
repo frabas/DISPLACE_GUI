@@ -30,7 +30,7 @@ TimeSeriesManager::TimeSeriesManager()
         mData.push_back(new ZoneContainer());
 }
 
-void TimeSeriesManager::addTimeSerie(TimeSeriesManager::Variables var, int zone, int adim, boost::shared_ptr<TimeSeries> ts)
+void TimeSeriesManager::addTimeSerie(TimeSeriesManager::Variables var, int zone, int adim, std::shared_ptr<TimeSeries> ts)
 {
     ZoneContainer *zonec = mData.at(var);
 
@@ -51,7 +51,7 @@ void TimeSeriesManager::addTimeSerie(TimeSeriesManager::Variables var, int zone,
     adimc->insert(std::make_pair(adim, ts));
 }
 
-boost::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager::Variables var, int zone, int adim)
+std::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager::Variables var, int zone, int adim)
 {
     ZoneContainer *zonec = mData.at(var);
 
@@ -60,7 +60,7 @@ boost::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager
         // "all area" is supposed to be the 0 in code_area
         it = zonec->find(ALL_ZONES);
         if (it == zonec->end())
-            return boost::shared_ptr<TimeSeries>();
+            return std::shared_ptr<TimeSeries>();
     }
 
     ADimContainer::iterator adcit = (it->second)->find(adim);
@@ -69,7 +69,7 @@ boost::shared_ptr<TimeSeries> TimeSeriesManager::getTimeSeries(TimeSeriesManager
         adcit = (it->second)->find(0);
         if (adcit == (it->second)->end())
         // -- //
-            return boost::shared_ptr<TimeSeries>();
+            return std::shared_ptr<TimeSeries>();
     }
     return adcit->second;
 }

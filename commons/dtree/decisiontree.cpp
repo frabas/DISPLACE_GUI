@@ -37,62 +37,62 @@ void DecisionTree::clear()
     mType = DecisionTreeManager::InvalidTreeType;
 }
 
-boost::shared_ptr<Node> DecisionTree::createNode()
+std::shared_ptr<Node> DecisionTree::createNode()
 {
-    boost::shared_ptr<Node> node(new Node(shared_from_this()));
+    std::shared_ptr<Node> node(new Node(shared_from_this()));
 
     return node;
 }
 
-void DecisionTree::setRoot(boost::shared_ptr<Node> root)
+void DecisionTree::setRoot(std::shared_ptr<Node> root)
 {
     mRoot = root;
 }
 
-void DecisionTree::connect(boost::shared_ptr<Node> node, boost::shared_ptr<Node> parent, int childId)
+void DecisionTree::connect(std::shared_ptr<Node> node, std::shared_ptr<Node> parent, int childId)
 {
     node->setParent(parent);
     parent->setChild(childId, node);
 }
 
-void DecisionTree::removeNodes(std::list<boost::shared_ptr<Node> > nodes)
+void DecisionTree::removeNodes(std::list<std::shared_ptr<Node> > nodes)
 {
     // collect nodes to remove
-    std::list<boost::shared_ptr<Node> > queue;
+    std::list<std::shared_ptr<Node> > queue;
 
-    for (std::list<boost::shared_ptr<Node> >::iterator it = nodes.begin(); it != nodes.end(); ++it)
+    for (std::list<std::shared_ptr<Node> >::iterator it = nodes.begin(); it != nodes.end(); ++it)
         queue.push_back(*it);
 
-    std::set<boost::shared_ptr<Node> > nodes_to_remove;
+    std::set<std::shared_ptr<Node> > nodes_to_remove;
     while (!queue.empty()) {
-        boost::shared_ptr<Node> node = queue.front();
+        std::shared_ptr<Node> node = queue.front();
         queue.pop_front();
 
         nodes_to_remove.insert(node);
         for (int i = 0; i < node->getChildrenCount(); ++i) {
-            boost::shared_ptr<dtree::Node> ch = node->getChild(i);
+            std::shared_ptr<dtree::Node> ch = node->getChild(i);
             if (ch) {
                 queue.push_back(ch);
             }
         }
     }
 
-    for (std::set<boost::shared_ptr<Node> >::iterator it = nodes_to_remove.begin(); it != nodes_to_remove.end(); ++it) {
-        boost::shared_ptr<Node> node = *it;
-        boost::shared_ptr<Node> parent = node->parent().lock();
+    for (std::set<std::shared_ptr<Node> >::iterator it = nodes_to_remove.begin(); it != nodes_to_remove.end(); ++it) {
+        std::shared_ptr<Node> node = *it;
+        std::shared_ptr<Node> parent = node->parent().lock();
         if (parent) {
             for (int j = 0; j < parent->getChildrenCount(); ++j) {
                 if (parent->getChild(j) == node) {
-                    parent->setChild(j, boost::shared_ptr<dtree::Node>());
+                    parent->setChild(j, std::shared_ptr<dtree::Node>());
                     break;
                 }
             }
-            node->setParent(boost::weak_ptr<Node>());
+            node->setParent(std::weak_ptr<Node>());
         } else {
             mRoot.reset();
         }
         for (int i = 0; i < node->getChildrenCount(); ++i) {
-            node->setChild(i, boost::shared_ptr<Node>());
+            node->setChild(i, std::shared_ptr<Node>());
         }
     }
 }

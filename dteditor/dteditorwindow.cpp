@@ -58,7 +58,7 @@ DtEditorWindow::DtEditorWindow(QWidget *parent) :
     }
     ui->treeType->setCurrentIndex(-1);
 
-    createScene(boost::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree));
+    createScene(std::shared_ptr<dtree::DecisionTree>(new dtree::DecisionTree));
 
     QSettings set;
     restoreGeometry(set.value("mainGeometry").toByteArray());
@@ -73,7 +73,7 @@ DtEditorWindow::~DtEditorWindow()
     delete ui;
 }
 
-void DtEditorWindow::createScene(boost::shared_ptr<dtree::DecisionTree> tree)
+void DtEditorWindow::createScene(std::shared_ptr<dtree::DecisionTree> tree)
 {
     mTree = tree;
     mScene = new DtGraphicsScene(mTree);
@@ -88,7 +88,7 @@ void DtEditorWindow::createScene(boost::shared_ptr<dtree::DecisionTree> tree)
 void DtEditorWindow::undo()
 {
     if (!mUndoList.empty()) {
-        boost::shared_ptr<Command> command = mUndoList.pop();
+        std::shared_ptr<Command> command = mUndoList.pop();
         if (command->undo()) {
             mRedoList.push(command);
         }
@@ -99,7 +99,7 @@ void DtEditorWindow::undo()
 void DtEditorWindow::redo()
 {
     if (!mRedoList.empty()) {
-        boost::shared_ptr<Command> command = mRedoList.pop();
+        std::shared_ptr<Command> command = mRedoList.pop();
         if (command->redo()) {
             mUndoList.push(command);
         }
@@ -107,7 +107,7 @@ void DtEditorWindow::redo()
     updateUndoGuiStatus();
 }
 
-void DtEditorWindow::execute(boost::shared_ptr<Command> command)
+void DtEditorWindow::execute(std::shared_ptr<Command> command)
 {
     if (command->execute()) {
         mUndoList.push(command);
@@ -217,8 +217,8 @@ void DtEditorWindow::closeEvent(QCloseEvent *event)
 
 void DtEditorWindow::on_action_Add_Node_triggered()
 {
-    boost::shared_ptr<dtree::Node> newnode = mTree->createNode();
-    boost::shared_ptr<dtree::GraphNodeExtra> newextra (new dtree::GraphNodeExtra);
+    std::shared_ptr<dtree::Node> newnode = mTree->createNode();
+    std::shared_ptr<dtree::GraphNodeExtra> newextra (new dtree::GraphNodeExtra);
 
     newnode->setExtra(newextra);
     mScene->startAddNode(newnode);
@@ -249,7 +249,7 @@ void DtEditorWindow::evt_scene_selection_changed()
 
         // don't like this - TODO: fix it without using downcasting
         if (item) {
-            boost::shared_ptr<dtree::Node> node = item->getNode();
+            std::shared_ptr<dtree::Node> node = item->getNode();
             if (node.get() != 0) {
                 dtree::Variable var = node->variable();
                 ui->nodepropVariable->setCurrentIndex(var);
@@ -262,7 +262,7 @@ void DtEditorWindow::evt_scene_selection_changed()
                     ui->nodeValue->setValue(0);
                 }
 
-                boost::shared_ptr<dtree::NodeExtra> extra = node->extra();
+                std::shared_ptr<dtree::NodeExtra> extra = node->extra();
                 if (extra.get() != 0) {
 
                 }
@@ -284,7 +284,7 @@ void DtEditorWindow::on_nodepropVariable_currentIndexChanged(int index)
 
         // don't like this - TODO: fix it without using downcasting
         if (item) {
-            boost::shared_ptr<dtree::Node> node = item->getNode();
+            std::shared_ptr<dtree::Node> node = item->getNode();
             if (node.get() != 0) {
                 dtree::Variable var = static_cast<dtree::Variable>(index);
                 node->setVariable(var);
@@ -308,7 +308,7 @@ void DtEditorWindow::on_nodeValue_valueChanged(double value)
 
     QList<QGraphicsItem *> selection = mScene->selectedItems();
 
-    boost::shared_ptr<SetNodeValueCommand> command(new SetNodeValueCommand(selection, value));
+    std::shared_ptr<SetNodeValueCommand> command(new SetNodeValueCommand(selection, value));
     execute(command);
 }
 
@@ -384,7 +384,7 @@ bool DtEditorWindow::checkForDTreeBeforeSaving()
 void DtEditorWindow::on_treeType_currentIndexChanged(int index)
 {
     if (mTree) {
-        boost::shared_ptr<Command> command (new SetTreeTypeCommand(this, mTree, static_cast<dtree::DecisionTreeManager::TreeType>(index)));
+        std::shared_ptr<Command> command (new SetTreeTypeCommand(this, mTree, static_cast<dtree::DecisionTreeManager::TreeType>(index)));
         execute(command);
     }
 }
@@ -399,7 +399,7 @@ void DtEditorWindow::on_action_Delete_Nodes_triggered()
                                      QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
 
             QList<GraphNodeItem *>nodeitems;
-            std::list<boost::shared_ptr<dtree::Node> > nodes;
+            std::list<std::shared_ptr<dtree::Node> > nodes;
             foreach (QGraphicsItem * item, selection) {
                 GraphNodeItem *nodeitem = dynamic_cast<GraphNodeItem*>(item);
                 if (nodeitem) {
@@ -446,7 +446,7 @@ void DtEditorWindow::on_actionMappings_triggered()
     if (!item)
         return;
 
-    boost::shared_ptr<dtree::Node> node = item->getNode();
+    std::shared_ptr<dtree::Node> node = item->getNode();
     NodeMappingsDialog dlg(node, this);
 
     if (dlg.exec() == QDialog::Accepted) {

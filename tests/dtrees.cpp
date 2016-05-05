@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE( Dtree )
     BOOST_CHECK( manager->hasTreeVariable(dtree::DecisionTreeManager::GoFishing, dtree::vesselMetierIs) == true);
     BOOST_CHECK( manager->hasTreeVariable(dtree::DecisionTreeManager::GoFishing, dtree::vesselSizeIs) == false);
 
-    boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+    std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
 
     Metier m1(9,0,0.0,std::vector<double>(),
              std::vector<std::vector<double>>(),

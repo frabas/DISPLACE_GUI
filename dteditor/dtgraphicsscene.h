@@ -23,7 +23,7 @@
 
 #include <QGraphicsScene>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <set>
 
 namespace dtree {
@@ -38,7 +38,7 @@ class DtGraphicsScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent = 0);
+    explicit DtGraphicsScene(std::shared_ptr<dtree::DecisionTree> tree, QObject *parent = 0);
 
     void clear();
     bool requiresChildrenHighlight() const;
@@ -61,7 +61,7 @@ signals:
     void mouseModeEnded();
 
 public slots:
-    void startAddNode(boost::shared_ptr<dtree::Node>);
+    void startAddNode(std::shared_ptr<dtree::Node>);
     void endMode();
 
 private:
@@ -71,11 +71,11 @@ private:
 
     Mode mMode = None;
 
-    boost::shared_ptr<dtree::DecisionTree> mTree;
+    std::shared_ptr<dtree::DecisionTree> mTree;
     GraphNodeItem *mRoot;
 
     //////
-    boost::shared_ptr<dtree::Node> mAddingNode;
+    std::shared_ptr<dtree::Node> mAddingNode;
     GraphNodeItem *mAddingItem;
 
     GraphNodeItem *mHoveringNode;

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace displace {
 namespace simulation {
@@ -18,13 +18,13 @@ public:
 
     TimeSeriesManager();
 
-    void addTimeSerie (Variables var, int zone, int adim, boost::shared_ptr<TimeSeries> ts);
-    boost::shared_ptr<TimeSeries> getTimeSeries (Variables var, int zone, int adim);
+    void addTimeSerie (Variables var, int zone, int adim, std::shared_ptr<TimeSeries> ts);
+    std::shared_ptr<TimeSeries> getTimeSeries (Variables var, int zone, int adim);
 
     static const int ALL_ZONES;
 
 private:
-    typedef std::map<int, boost::shared_ptr<TimeSeries> > ADimContainer;
+    typedef std::map<int, std::shared_ptr<TimeSeries> > ADimContainer;
     typedef std::map<int, ADimContainer *> ZoneContainer;
     typedef std::vector<ZoneContainer *> TimeSeriesContainer;
 

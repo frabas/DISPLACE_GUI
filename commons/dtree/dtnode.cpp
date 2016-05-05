@@ -22,7 +22,7 @@
 
 using namespace dtree;
 
-Node::Node(boost::shared_ptr<DecisionTree> node)
+Node::Node(std::shared_ptr<DecisionTree> node)
     : mTree(node),
       mNodes(),
       mExtra(),
@@ -36,17 +36,17 @@ int Node::getChildrenCount() const
     return mNodes.size();
 }
 
-boost::shared_ptr<Node> Node::getChild(int idx)
+std::shared_ptr<Node> Node::getChild(int idx)
 {
     return mNodes.at(mGroups[idx]);
 }
 
-boost::shared_ptr<Node> Node::getUnmappedChild(int idx)
+std::shared_ptr<Node> Node::getUnmappedChild(int idx)
 {
     return mNodes.at(idx);
 }
 
-void Node::setChild(int idx, boost::shared_ptr<Node> child)
+void Node::setChild(int idx, std::shared_ptr<Node> child)
 {
     mNodes[idx] = child; /*VariableNames::Bin*/
 }
@@ -63,12 +63,12 @@ int Node::getMapping(int idx) const
     return mGroups[idx];
 }
 
-void Node::setExtra(boost::shared_ptr<NodeExtra> extra)
+void Node::setExtra(std::shared_ptr<NodeExtra> extra)
 {
     mExtra = extra;
 }
 
-boost::shared_ptr<NodeExtra> Node::extra() const
+std::shared_ptr<NodeExtra> Node::extra() const
 {
     return mExtra;
 }
@@ -80,7 +80,7 @@ void Node::setVariable(Variable var)
         mGroups.clear();
         // Note: binary node
         for (int i = 0; i < VariableNames::variableBinCount(var); ++i) {
-            mNodes.push_back(boost::shared_ptr<Node> ());
+            mNodes.push_back(std::shared_ptr<Node> ());
             mGroups.push_back(i);
         }
         mVariable = var;

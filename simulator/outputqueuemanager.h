@@ -51,7 +51,7 @@
 #include <memory>
 #include <ostream>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class OutputMessage;
 
@@ -74,7 +74,7 @@ public:
         pthread_mutex_unlock(&mMutex);
     }
 
-    void enqueue(boost::shared_ptr<OutputMessage> msg);
+    void enqueue(std::shared_ptr<OutputMessage> msg);
 
 private:
     /** @brief The pthread-style entry point to the thread. */
@@ -94,7 +94,7 @@ private:
     pthread_mutex_t mMutex;
     sem_t mSemaphore;
 
-    std::queue<boost::shared_ptr<OutputMessage> > mQueue;
+    std::queue<std::shared_ptr<OutputMessage> > mQueue;
 
     IpcQueue ipcQueue;
     enum ProtocolType { TextWithStdOut, Binary, None } mType;

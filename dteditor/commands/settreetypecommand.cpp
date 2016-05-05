@@ -3,7 +3,7 @@
 #include <dteditorwindow.h>
 #include <dtree/decisiontree.h>
 
-SetTreeTypeCommand::SetTreeTypeCommand(DtEditorWindow *win, boost::shared_ptr<dtree::DecisionTree> tree, dtree::DecisionTreeManager::TreeType var)
+SetTreeTypeCommand::SetTreeTypeCommand(DtEditorWindow *win, std::shared_ptr<dtree::DecisionTree> tree, dtree::DecisionTreeManager::TreeType var)
     : mMain(win), mTree(tree), mNewType(var)
 {
     mOldType = mTree->type();

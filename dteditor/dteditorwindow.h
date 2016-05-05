@@ -22,11 +22,11 @@
 #define DTEDITORWINDOW_H
 
 #include <QMainWindow>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <dtree/decisiontree.h>
 #include <dtgraphicsscene.h>
 #include <commands/command.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <QStack>
 
 namespace Ui {
@@ -48,11 +48,11 @@ protected:
     void open(QString filename);
     void updateTitleBar();
     bool checkForDTreeBeforeSaving();
-    void createScene(boost::shared_ptr<dtree::DecisionTree> tree);
+    void createScene(std::shared_ptr<dtree::DecisionTree> tree);
 
     void undo();
     void redo();
-    void execute(boost::shared_ptr<Command> command);
+    void execute(std::shared_ptr<Command> command);
     void clearUndoRedoStacks();
     void updateUndoGuiStatus();
 
@@ -79,10 +79,10 @@ private slots:
 private:
     Ui::DtEditorWindow *ui;
 
-    boost::shared_ptr<dtree::DecisionTree> mTree;
+    std::shared_ptr<dtree::DecisionTree> mTree;
     DtGraphicsScene *mScene;
 
-    QStack<boost::shared_ptr<Command>> mUndoList, mRedoList;
+    QStack<std::shared_ptr<Command>> mUndoList, mRedoList;
     QString mFilename;
 };
 

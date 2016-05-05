@@ -49,7 +49,7 @@ DecisionTreeManager::DecisionTreeManager()
     : mTrees()
 {
     for (int i = 0; i < SIZE; ++i) {
-        mTrees.push_back(boost::shared_ptr<dtree::DecisionTree>());
+        mTrees.push_back(std::shared_ptr<dtree::DecisionTree>());
         mVariableDictionary.push_back(std::set<Variable>());
     }
 }
@@ -113,7 +113,7 @@ struct NodePrototype {
     double value;
     std::vector<int> children;
     std::vector<int> mapping;
-    boost::shared_ptr<dtree::Node> node;
+    std::shared_ptr<dtree::Node> node;
 };
 
 /** \brief Loads a specific file, creating the dtree and allocating it to the type specified in the file
@@ -128,7 +128,7 @@ bool DecisionTreeManager::readFile (std::string filename)
         return false;
     }
 
-    boost::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
+    std::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
 
     std::vector<NodePrototype> nodes;
 
@@ -188,7 +188,7 @@ bool DecisionTreeManager::readFile (std::string filename)
             }
             prt.value = atof(fields[5+n].c_str());
 //            std::cout << " value " << prt.value << std::endl;
-            prt.node = boost::shared_ptr<dtree::Node>(new dtree::Node(tree));
+            prt.node = std::shared_ptr<dtree::Node>(new dtree::Node(tree));
 
             while (nodes.size() <= (size_t)prt.id)
                 nodes.push_back(NodePrototype());
@@ -208,7 +208,7 @@ bool DecisionTreeManager::readFile (std::string filename)
 
     if (nodes.size() > 0) {
         for (size_t i = 0; i < nodes.size(); ++i) {
-            boost::shared_ptr<dtree::Node> n = nodes[i].node;
+            std::shared_ptr<dtree::Node> n = nodes[i].node;
             n->setVariable(nodes[i].variable);
             dictionary.insert(nodes[i].variable);
             n->setValue(nodes[i].value);
@@ -228,7 +228,7 @@ bool DecisionTreeManager::readFile (std::string filename)
 
         /*
         for (size_t i = 0; i < nodes.size(); ++i) {
-            boost::shared_ptr<dtree::Node> n = nodes[i].node;
+            std::shared_ptr<dtree::Node> n = nodes[i].node;
             for (int i = 0; i < n->getChildrenCount() ; ++i) {
                 std::cout << i << " unm " << n->getUnmappedChild(i).get() << " map "
                           << n->getMapping(i) << " "
@@ -252,7 +252,7 @@ bool DecisionTreeManager::readFile (std::string filename)
 
 /** \brief Returns a reference to the specified tree
  */
-boost::shared_ptr<dtree::DecisionTree> DecisionTreeManager::tree(DecisionTreeManager::TreeType type)
+std::shared_ptr<dtree::DecisionTree> DecisionTreeManager::tree(DecisionTreeManager::TreeType type)
 {
     return mTrees[static_cast<int>(type)];
 }

@@ -7,7 +7,7 @@
 #include <vector>
 #include <set>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace displace {
 namespace commons {
@@ -46,7 +46,7 @@ public:
 
     int readFromDirectory(std::string path);
     int readFromScenario (std::string path, displace::commons::Scenario scenario);
-    boost::shared_ptr<dtree::DecisionTree> tree (TreeType type);
+    std::shared_ptr<dtree::DecisionTree> tree (TreeType type);
     bool hasTree(TreeType type);
     bool hasTreeVariable (TreeType type, dtree::Variable variable) const;
 
@@ -67,7 +67,7 @@ protected:
     void readScenarioFileIfAvailable(std::string path, std::string scenarioname);
 
 private:
-    std::vector<boost::shared_ptr<dtree::DecisionTree> > mTrees;
+    std::vector<std::shared_ptr<dtree::DecisionTree> > mTrees;
     std::vector<std::set<dtree::Variable> > mVariableDictionary;
 
     static DecisionTreeManager *mInstance;

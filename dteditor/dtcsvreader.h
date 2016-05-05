@@ -22,7 +22,7 @@
 #define DTCSVREADER_H
 
 #include <QTextStream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <stdexcept>
 
@@ -38,7 +38,7 @@ public:
     static const int VERSION;
 
     DtCsvReader();
-    bool readTree (QTextStream &stream, boost::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
+    bool readTree (QTextStream &stream, std::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
     throw (std::invalid_argument);
 };
 

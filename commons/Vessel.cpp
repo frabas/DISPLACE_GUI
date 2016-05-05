@@ -44,7 +44,7 @@
 #include <functional>
 #include <stdexcept>
 
-std::vector<boost::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
+std::vector<std::shared_ptr<dtree::StateEvaluator> > Vessel::mStateEvaluators;
 
 namespace dtree {
 namespace vessels {
@@ -401,51 +401,51 @@ void Vessel::init()
     // Lazy initialization of the global State Evaluator.
     if (mStateEvaluators.size() == 0) {
         for (int i = 0; i < dtree::VarLast; ++i) {
-            mStateEvaluators.push_back(boost::shared_ptr<dtree::StateEvaluator>());
+            mStateEvaluators.push_back(std::shared_ptr<dtree::StateEvaluator>());
         }
 
         // Add here the variables associations
         // GoFishing
         mStateEvaluators[dtree::vesselMetierIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator);
         mStateEvaluators[dtree::vesselSizeIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
         mStateEvaluators[dtree::lastTripRevenueIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesComparationStateEvaluator());
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesComparationStateEvaluator());
         mStateEvaluators[dtree::lastTripProfitIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageProfitComparationsStateEvaluator());
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageProfitComparationsStateEvaluator());
         mStateEvaluators[dtree::vesselMetierIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator());
-        mStateEvaluators[dtree::fuelPriceIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
-        mStateEvaluators[dtree::fishPriceTargetStockIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
-        mStateEvaluators[dtree::windSpeedIs] = boost::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator());
+        mStateEvaluators[dtree::fuelPriceIs] = std::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fuelprice>());
+        mStateEvaluators[dtree::fishPriceTargetStockIs] = std::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::Fishprice>());
+        mStateEvaluators[dtree::windSpeedIs] = std::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
         mStateEvaluators[dtree::todayIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
 
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFuelTankStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFuelTankStateEvaluator);
         mStateEvaluators[dtree::catchVolumeIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselCatchVolumeStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselCatchVolumeStateEvaluator);
         mStateEvaluators[dtree::nbOfDaysAtSeaSoFarIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNbOfDaysAtSeaSoFarIsStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNbOfDaysAtSeaSoFarIsStateEvaluator);
         mStateEvaluators[dtree::endOfTheDayIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselEndOfTheDayIsStateEvaluator);
 
 
         // chooseGround
         mStateEvaluators[dtree::smartCatch] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSmartCatchStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSmartCatchStateEvaluator);
         mStateEvaluators[dtree::highPotentialCatch] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselHighPotentialCatchStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselHighPotentialCatchStateEvaluator);
         mStateEvaluators[dtree::notThatFar] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
         mStateEvaluators[dtree::knowledgeOfThisGround] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
         mStateEvaluators[dtree::riskOfBycatchIs] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchIsStateEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
-                boost::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 
 
 
@@ -1420,8 +1420,8 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
     int bin = -1;
     double value = 0.0f;
 
-    boost::shared_ptr<dtree::Node> prevnode;
-    boost::shared_ptr<dtree::Node> node = tree->root();
+    std::shared_ptr<dtree::Node> prevnode;
+    std::shared_ptr<dtree::Node> node = tree->root();
     while (node.get()) {
         if (node->getChildrenCount() == 0) { // is a leaf node
 //            std::cout << "Node Value= " << node->value() << std::endl;
@@ -1516,7 +1516,7 @@ void Vessel::move_to(double nx, double ny)
 }
 
 
-//void Vessel::move_to(boost::shared_ptr<Node> pnext_node)
+//void Vessel::move_to(std::shared_ptr<Node> pnext_node)
 void Vessel::move_to(Node* pnext_node)
 {
 	m_location= pnext_node;
@@ -4212,7 +4212,7 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
 
             if((tstep % 24)==7)
             {
-               boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
+               std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
                double the_value = traverseDtree(tstep, tree.get());
                //cout <<"the value returned by traverseDtree is "<< the_value << endl;
 
@@ -4271,7 +4271,7 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
                                         const deque<map<vertex_t, weight_t> > &min_distance_shop)
 {
 
-        boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
+        std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
         int idx=0; // idx of the relevant ground
 
@@ -4712,7 +4712,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StopFishing))
         {
 
-            boost::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::StopFishing);
+            std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::StopFishing);
             double the_value = traverseDtree(tstep, tree.get());
 
 

@@ -27,7 +27,7 @@
 #include <graphnodeitem.h>
 #include <QDebug>
 
-DtGraphicsScene::DtGraphicsScene(boost::shared_ptr<dtree::DecisionTree> tree, QObject *parent) :
+DtGraphicsScene::DtGraphicsScene(std::shared_ptr<dtree::DecisionTree> tree, QObject *parent) :
     QGraphicsScene(parent),
     mTree(tree),
     mRoot(0),
@@ -117,7 +117,7 @@ void DtGraphicsScene::removeNodes(QList<GraphNodeItem *> items)
 }
 
 #if 0
-void DtGraphicsScene::addUnconnectedNode(boost::shared_ptr<dtree::Node> node, QPointF pos)
+void DtGraphicsScene::addUnconnectedNode(std::shared_ptr<dtree::Node> node, QPointF pos)
 {
     GraphNodeItem *item = new GraphNodeItem(node);
     item->setPos(pos);
@@ -163,7 +163,7 @@ void DtGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     case AddNodeConnect:
         // connect the nodes
-        boost::shared_ptr<dtree::Node> nd;
+        std::shared_ptr<dtree::Node> nd;
         if (mHoveringNode != 0 && mHoveringNodeChild != -1 && ( nd = mHoveringNode->getNode()).get() != 0 && nd != mAddingNode) {
             mTree->connect(mAddingNode, nd, mHoveringNodeChild);
             mAddingItem->connectAsChild(mHoveringNode, mHoveringNodeChild);
@@ -197,7 +197,7 @@ void DtGraphicsScene::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void DtGraphicsScene::startAddNode(boost::shared_ptr<dtree::Node> node)
+void DtGraphicsScene::startAddNode(std::shared_ptr<dtree::Node> node)
 {
     mAddingItem = new GraphNodeItem(node, this);
     mMode = AddNode;

@@ -145,7 +145,7 @@ static void manage_ship(thread_data_t *dt, int idx_v)
            dout(cout<<"before at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
             ships.at(idx_v - 5000)->move();
             dout(cout<<"after at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
-            mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
+            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
          pthread_mutex_unlock (&glob_mutex);
        ships.at(idx_v - 5000)->unlock();
 }
@@ -195,7 +195,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 {
                     outc(cout  << "...just arrived!" << endl);
                     vessels[index_v]->updateTripsStatistics(populations, implicit_pops);
-                    mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations, implicit_pops)));
+                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations, implicit_pops)));
 #if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);
@@ -433,12 +433,12 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
     if(export_vmslike /*&& tstep<8641*/) {
         if( vessels[ index_v ]->get_state()!=3) {
-            mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
+            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
         }
     }
 
     if (use_gui && gui_move_vessels) {
-        mOutQueue.enqueue(boost::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
     }
 
     // realtime gnuplot

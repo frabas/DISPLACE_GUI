@@ -22,7 +22,7 @@
 #define GRAPHNODEITEM_H
 
 #include <QGraphicsItemGroup>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/weak_ptr.hpp>
 #include <dtree/variables.h>
 
@@ -36,10 +36,10 @@ class GraphNodeChildBoxItem;
 class GraphNodeItem : public QGraphicsItemGroup
 {
 public:
-    explicit GraphNodeItem(boost::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent = 0);
+    explicit GraphNodeItem(std::shared_ptr<dtree::Node> node, DtGraphicsScene *scene, QGraphicsItem *parent = 0);
     virtual ~GraphNodeItem();
 
-    boost::shared_ptr<dtree::Node> getNode() const { return mNode.lock(); }
+    std::shared_ptr<dtree::Node> getNode() const { return mNode.lock(); }
 
     // These mimics the Node's counterparts.
     int getChildrenCount() const;
@@ -75,7 +75,7 @@ private:
     GraphNodeItem *mParent;
     QVector<GraphNodeItem *> mChildrenItems;
 
-    boost::weak_ptr<dtree::Node> mNode;
+    std::weak_ptr<dtree::Node> mNode;
 
     QGraphicsRectItem *mRect;
     QGraphicsTextItem *mText;

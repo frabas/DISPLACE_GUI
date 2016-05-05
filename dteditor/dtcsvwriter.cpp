@@ -58,7 +58,7 @@ bool DtCsvWriter::exportTree(QTextStream &stream, dtree::DecisionTree *tree, DtG
         id = queueid.front();
         queueid.pop_front();
 
-        boost::shared_ptr<dtree::Node> node = gnode->getNode();
+        std::shared_ptr<dtree::Node> node = gnode->getNode();
         stream << id << "," << dtree::VariableNames::variableName(node->variable()) << ",";
         // Other data
         QPointF pos = gnode->pos();

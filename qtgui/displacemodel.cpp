@@ -1251,7 +1251,7 @@ bool DisplaceModel::loadNodes()
     // use polymorphism i.e. store either Harbour or Node in the vector of pointers 'nodes'
 
 //    vector <Node* > nodes(graph_coord_x.size());
-    // REPLACE boost::shared_ptr<Node> by Node* in every files if you want to remove boost
+    // REPLACE std::shared_ptr<Node> by Node* in every files if you want to remove boost
 
     for (unsigned int i=0; i<graph_coord_x.size(); i++)
     {

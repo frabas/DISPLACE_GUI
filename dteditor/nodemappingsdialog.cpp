@@ -26,7 +26,7 @@
 #include <QLayout>
 #include <QLabel>
 
-NodeMappingsDialog::NodeMappingsDialog(boost::shared_ptr<dtree::Node> node, QWidget *parent) :
+NodeMappingsDialog::NodeMappingsDialog(std::shared_ptr<dtree::Node> node, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::NodeMappingsDialog),
     mNode(node)

@@ -84,7 +84,7 @@ all: ${TARGET}
 debug:
 	${MAKE} all CPPDEBUG=-g
 
-${TARGET}.so: ${OBJS}
+${TARGET}: ${OBJS}
 	${CXX} -shared ${LDFLAGS} -o $@ $^ ${LIBS}
 
 clean:

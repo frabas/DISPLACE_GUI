@@ -50,15 +50,7 @@ CONFIG(release,debug|release) {
 
 SOURCES= main.cpp \
     thread_vessels.cpp \
-    outputqueuemanager.cpp \
-    outputmessage.cpp \
-    messages/movevesseloutputmessage.cpp \
-    messages/exportvmslikeoutputmessage.cpp \
-    messages/vessellogbookoutputmessage.cpp \
-    messages/genericconsolestringoutputmessage.cpp \
-    messages/moveshipoutputmessage.cpp \
-    biomodule.cpp \
-    ipc.cpp
+    biomodule.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -81,15 +73,30 @@ HEADERS= \
     ../include/version.h \
     thread_vessels.h \
     values.h \
-    outputqueuemanager.h \
-    outputmessage.h \
-    messages/movevesseloutputmessage.h \
-    messages/exportvmslikeoutputmessage.h \
-    messages/vessellogbookoutputmessage.h \
-    messages/genericconsolestringoutputmessage.h \
-    messages/moveshipoutputmessage.h \
     biomodule.h \
-    ipc.h
+    messages/noipc.h
+
+!no_ipc {
+    SOURCES += \
+        ipc.cpp \
+        outputqueuemanager.cpp \
+        outputmessage.cpp \
+        messages/movevesseloutputmessage.cpp \
+        messages/exportvmslikeoutputmessage.cpp \
+        messages/vessellogbookoutputmessage.cpp \
+        messages/genericconsolestringoutputmessage.cpp \
+        messages/moveshipoutputmessage.cpp
+
+    HEADERS += \
+        ipc.h \
+        outputqueuemanager.h \
+        outputmessage.h \
+        messages/movevesseloutputmessage.h \
+        messages/exportvmslikeoutputmessage.h \
+        messages/vessellogbookoutputmessage.h \
+        messages/genericconsolestringoutputmessage.h \
+        messages/moveshipoutputmessage.h
+}
 
 OTHER_FILES += \
     Makefile.hpc

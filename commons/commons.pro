@@ -36,7 +36,6 @@ SOURCES= \
     mkpath.cpp \
     memoryinfo.cpp \
     options.cpp \
-    ipcqueue.cpp \
     statics.cpp \
     simulation.cpp \
     dtree/decisiontree.cpp \
@@ -68,8 +67,6 @@ HEADERS= \
     ../include/options.h \
     ../include/mutexlocker.h \
     ../include/guiproto_struct.h \
-    ../include/ipcqueue.h \
-    ../include/ipcmsgtypes.h \
     ../include/version.h \
     ../include/utils/make_unique.h \
     simulation.h \
@@ -86,6 +83,16 @@ HEADERS= \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h
 
+## Do not add this if you don't support IPC queues
+
+!no_ipc {
+    SOURCES += \
+        ipcqueue.cpp
+
+    HEADERS += \
+        ../include/ipcqueue.h \
+        ../include/ipcmsgtypes.h \
+}
 
 OTHER_FILES += \
     Makefile.hpc

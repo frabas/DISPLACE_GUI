@@ -53,7 +53,11 @@
 #include <comstructs.h>
 #include <simulation.h>
 #include <tseries/timeseriesmanager.h>
+
+#ifndef NO_IPC
 #include <ipc.h>
+#endif
+
 #include <biomodule.h>
 
 #include <iomanip>
@@ -210,6 +214,40 @@ ofstream vmslike2;
 ofstream vmslike3;
 vector <Metier*> metiers;
 ofstream export_individual_tacs;
+
+#ifdef NO_IPC
+static void initIpcQueue()
+{
+    std::cout << "Ipc Queue are disabled." << std::endl;
+}
+
+static void finalizeIpcQueue()
+{
+}
+
+void guiSendCurrentStep (unsigned int tstep)
+{
+}
+
+void guiSendUpdateCommand (const std::string &filename, int tstep)
+{
+}
+
+void guiSendMemoryInfo(const MemoryInfo &info)
+{
+}
+
+void guiSendCapture(bool on)
+{
+}
+
+void guiSendTerminalMessage(const string &ss)
+{
+}
+
+#endif
+
+
 //vector <double> dist_to_ports;
 
 /* GUI Protocol

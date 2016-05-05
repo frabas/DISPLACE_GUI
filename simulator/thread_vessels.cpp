@@ -33,17 +33,23 @@
 #include <Ship.h>
 #include <Node.h>
 
+#ifndef NO_IPC
 #include <outputqueuemanager.h>
 #include <messages/movevesseloutputmessage.h>
 #include <messages/moveshipoutputmessage.h>
 #include <messages/exportvmslikeoutputmessage.h>
 #include <messages/vessellogbookoutputmessage.h>
+#else
+#include <messages/noipc.h>
+#endif
 
 using namespace std;
 
 #include <pthread.h>
 #include <semaphore.h>
 #include <errno.h>
+
+#include <unistd.h>
 
 // for Windows
 #ifdef _WIN32
@@ -67,7 +73,11 @@ static unsigned int uncompleted_works;
 static bool exit_flag;
 static thread_data_t *thread_data;
 
+#ifndef NO_IPC
 extern OutputQueueManager mOutQueue;
+#else
+static OutputQueueManager mOutQueue;
+#endif
 
 extern pthread_mutex_t glob_mutex;
 extern bool use_gui;

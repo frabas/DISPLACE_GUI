@@ -7,15 +7,7 @@ LIBDIR?=${PREFIX}/lib
 
 SOURCES= main.cpp \
     thread_vessels.cpp \
-    outputqueuemanager.cpp \
-    outputmessage.cpp \
-    messages/movevesseloutputmessage.cpp \
-    messages/exportvmslikeoutputmessage.cpp \
-    messages/vessellogbookoutputmessage.cpp \
-    messages/genericconsolestringoutputmessage.cpp \
-    messages/moveshipoutputmessage.cpp \
-    biomodule.cpp \
-    ipc.cpp
+    biomodule.cpp 
 
 HEADERS= \
     ../include/readdata.h \
@@ -38,18 +30,13 @@ HEADERS= \
     ../include/version.h \
     thread_vessels.h \
     values.h \
-    outputqueuemanager.h \
-    outputmessage.h \
-    messages/movevesseloutputmessage.h \
-    messages/exportvmslikeoutputmessage.h \
-    messages/vessellogbookoutputmessage.h \
-    messages/genericconsolestringoutputmessage.h \
-    messages/moveshipoutputmessage.h \
     biomodule.h \
     ipc.h
 
+DEFINES=-DNO_IPC
+
 LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++11 -fpermissive -I../include -I../commons -I.
+CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I.
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

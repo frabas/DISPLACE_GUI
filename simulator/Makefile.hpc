@@ -1,38 +1,62 @@
+TARGET=displace
+
 SOURCES= main.cpp \
-        outputmessage.cpp \
-        outputqueuemanager.cpp \
-        thread_vessels.cpp \
-        messages/exportvmslikeoutputmessage.cpp \
-        messages/movevesseloutputmessage.cpp \
-        messages/moveshipoutputmessage.cpp \
-        messages/genericconsolestringoutputmessage.cpp \
-        messages/vessellogbookoutputmessage.cpp
+    thread_vessels.cpp \
+    outputqueuemanager.cpp \
+    outputmessage.cpp \
+    messages/movevesseloutputmessage.cpp \
+    messages/exportvmslikeoutputmessage.cpp \
+    messages/vessellogbookoutputmessage.cpp \
+    messages/genericconsolestringoutputmessage.cpp \
+    messages/moveshipoutputmessage.cpp \
+    biomodule.cpp \
+    ipc.cpp
 
 HEADERS= \
-        outputmessage.h \
-        outputqueuemanager.h \
-        thread_vessels.h \
-        values.h \
-        messages/exportvmslikeoutputmessage.h \
-        messages/movevesseloutputmessage.h \
-        messages/moveshipoutputmessage.h \
-        messages/genericconsolestringoutputmessage.h \
-        messages/vessellogbookoutputmessage.h
+    ../include/readdata.h \
+    ../include/myutils.h \
+    ../include/Population.h \
+    ../include/biomodule.h \
+    ../include/Fishfarm.h \
+    ../include/Node.h \
+    ../include/Tac.h \
+    ../include/Benthos.h \
+    ../include/Harbour.h \
+    ../include/Ship.h \
+    ../include/Vessel.h \
+    ../include/Metier.h \
+    ../include/myRutils.h \
+    ../include/mkpath.h \
+    ../include/m_constants.h \
+    ../include/options.h \
+    ../include/profiler.h \
+    ../include/version.h \
+    thread_vessels.h \
+    values.h \
+    outputqueuemanager.h \
+    outputmessage.h \
+    messages/movevesseloutputmessage.h \
+    messages/exportvmslikeoutputmessage.h \
+    messages/vessellogbookoutputmessage.h \
+    messages/genericconsolestringoutputmessage.h \
+    messages/moveshipoutputmessage.h \
+    biomodule.h \
+    ipc.h
 
-LIBS=-L../commons -lcommons -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -O2 -fpermissive -I../include -I../commons -I.
+LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt
+CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++11 -fpermissive -I../include -I../commons -I.
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
 
-all: displace
+all: ${TARGET}
 
-displace: ${OBJS}
+${TARGET}: ${OBJS}
 	${CXX} ${LDFLAGS} -o $@ $^ ${LIBS}
 
 debug:
 	${MAKE} all CPPDEBUG=-g
 
 clean:
-	-@rm ${OBJS} displace
+	-@rm ${OBJS} ${TARGET}
 

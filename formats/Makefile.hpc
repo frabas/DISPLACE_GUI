@@ -1,0 +1,33 @@
+TARGET=libformats
+
+HEADERS = \
+    legacy/ConfigFileReader.h \
+    utils/KeyValueReader.h \
+    utils/LineNumberReader.h \
+    utils/prettyprint.h \
+    legacy/NodesFileReader.h utils/MultifieldReader.h \
+    utils/vectorsdata.h \
+    formatexception.h \
+    utils/MultifieldWriter.h
+
+SOURCES = legacy/ConfigFileReader.cpp  \
+    utils/KeyValueReader.cpp \
+    utils/LineNumberReader.cpp
+
+LIBS=-lboost_regex
+CPPFLAGS=${CPPDEBUG} -std=c++11 -O2 -fpermissive -I../include -I../commons -I. -fpic
+LDFLAGS=
+
+OBJS=$(SOURCES:.cpp=.o)
+
+all: ${TARGET}.so
+
+debug:
+	${MAKE} all CPPDEBUG=-g
+
+${TARGET}.so: ${OBJS}
+	${CXX} -shared ${LDFLAGS} -o $@ $^ ${LIBS}
+
+clean:
+	@-rm ${OBJS} ${TARGET}.so
+

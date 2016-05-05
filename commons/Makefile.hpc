@@ -1,3 +1,5 @@
+TARGET=libcommons
+
 SOURCES= \
     readdata.cpp \
     myutils.cpp \
@@ -49,6 +51,7 @@ HEADERS= \
     ../include/ipcqueue.h \
     ../include/ipcmsgtypes.h \
     ../include/version.h \
+    ../include/utils/make_unique.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \
@@ -63,22 +66,22 @@ HEADERS= \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h
 
-LIBS=-lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -O2 -fpermissive -I../include -I../commons -I. -fpic
+LIBS=-L../formats -lformats -lpthread -lrt
+CPPFLAGS=${CPPDEBUG} -O2 -std=c++11 -fpermissive -I../include -I../commons -I../formats -I. -fpic
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)
 
-all: libcommons.so
+OBJS=$(SOURCES:.cpp=.o)
+
+all: ${TARGET}.so
 
 debug:
 	${MAKE} all CPPDEBUG=-g
 
-libcommons.so: ${OBJS}
+${TARGET}.so: ${OBJS}
 	${CXX} -shared ${LDFLAGS} -o $@ $^ ${LIBS}
-	
-	
-	
+
 clean:
-	@-rm ${OBJS} libcommons.so
+	@-rm ${OBJS} ${TARGET}.so
 

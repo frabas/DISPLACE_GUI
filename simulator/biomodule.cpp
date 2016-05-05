@@ -26,7 +26,13 @@
 #include <options.h>
 #include <readdata.h>
 #include <helpers.h>
+
+#ifndef NO_IPC
 #include <ipc.h>
+#else
+#include <messages/noipc.h>
+#endif
+
 #include <profiler.h>
 
 using namespace std;

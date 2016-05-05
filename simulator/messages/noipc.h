@@ -6,6 +6,7 @@
 
 class Vessel;
 class Population;
+class MemoryInfo;
 
 class OutputMessage {
 public:
@@ -40,5 +41,35 @@ public:
     void enqueue(std::shared_ptr<OutputMessage>){
     }
 };
+
+void inline initIpcQueue()
+{
+    std::cout << "Ipc Queue are disabled." << std::endl;
+}
+
+void inline finalizeIpcQueue()
+{
+}
+
+void inline guiSendCurrentStep (unsigned int tstep)
+{
+}
+
+void inline guiSendUpdateCommand (const std::string &filename, int tstep)
+{
+}
+
+void inline guiSendMemoryInfo(const MemoryInfo &info)
+{
+}
+
+void inline guiSendCapture(bool on)
+{
+}
+
+void inline guiSendTerminalMessage(const string &ss)
+{
+}
+
 
 #endif // NOIPC_H

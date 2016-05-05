@@ -45,9 +45,6 @@
 #define CALLGRIND_DUMP_STATS
 #endif
 
-#include <outputqueuemanager.h>
-#include <outputmessage.h>
-#include <messages/genericconsolestringoutputmessage.h>
 #include <thread_vessels.h>
 #include <dtree/decisiontreemanager.h>
 #include <comstructs.h>
@@ -56,6 +53,9 @@
 
 #ifndef NO_IPC
 #include <ipc.h>
+#include <outputqueuemanager.h>
+#include <outputmessage.h>
+#include <messages/genericconsolestringoutputmessage.h>
 #endif
 
 #include <biomodule.h>
@@ -216,35 +216,7 @@ vector <Metier*> metiers;
 ofstream export_individual_tacs;
 
 #ifdef NO_IPC
-static void initIpcQueue()
-{
-    std::cout << "Ipc Queue are disabled." << std::endl;
-}
-
-static void finalizeIpcQueue()
-{
-}
-
-void guiSendCurrentStep (unsigned int tstep)
-{
-}
-
-void guiSendUpdateCommand (const std::string &filename, int tstep)
-{
-}
-
-void guiSendMemoryInfo(const MemoryInfo &info)
-{
-}
-
-void guiSendCapture(bool on)
-{
-}
-
-void guiSendTerminalMessage(const string &ss)
-{
-}
-
+#include <messages/noipc.h>
 #endif
 
 

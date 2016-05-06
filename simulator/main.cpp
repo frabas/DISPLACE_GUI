@@ -350,7 +350,7 @@ int main(int argc, char* argv[])
 	// default
 	string namefolderinput="fake";
 	string namefolderoutput="baseline";
-	string inputfolder="DISPLACE_input";
+    string inputfolder="";
 	string namesimu="sim1";
     int nbsteps=10;
     double dparam=10.0;
@@ -391,7 +391,9 @@ int main(int argc, char* argv[])
 		{
 			use_gnuplot=true;
 		}
-        else if (sw=="--use-gui")
+        else if (sw == "-a") {
+            inputfolder = argv[++optind];
+        } else if (sw=="--use-gui")
         {
             use_gui = true;
         }
@@ -467,7 +469,7 @@ int main(int argc, char* argv[])
 		<< " namefolderinput " << namefolderinput <<" " << read_preexisting_paths << endl;
     unlock();
 
-	if(namefolderinput=="fake") inputfolder="DISPLACE_input_test";
+//	if(namefolderinput=="fake") inputfolder="DISPLACE_input_test";
 
 	// misc.
 	string filename;
@@ -556,7 +558,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	// config at the simusspe level
     read_config_file (
 		folder_name_parameterization,
-        "../"+inputfolder,
+        inputfolder,
 		nbpops,
         nbbenthospops,
 		implicit_pops,
@@ -570,7 +572,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	read_scenario_config_file (
         folder_name_parameterization,
-        "../"+inputfolder,
+        inputfolder,
 		namefolderoutput,
         scenario);
 
@@ -606,13 +608,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     displace::simulation::Simulation *sim_scenario = displace::simulation::Simulation::instance();
 
     if (use_dtrees) {
-        if (!sim_scenario->loadTimeSeries("../"+inputfolder+"/timeseries", "")) {
+        if (!sim_scenario->loadTimeSeries(inputfolder+"/timeseries", "")) {
             std::cerr << "Cannot read time series. aborting." <<std::endl;
             return -1;
         }
 
         // Load dtrees
-        if (dtree::DecisionTreeManager::manager()->readFromScenario("../"+inputfolder+"/dtrees", scenario) <= 0) {
+        if (dtree::DecisionTreeManager::manager()->readFromScenario(inputfolder+"/dtrees", scenario) <= 0) {
             std::cerr << "Cannot read decision trees, aborting." << std::endl;
             return -1;
         }
@@ -1059,9 +1061,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	stringstream out;
 	out << a_graph;
 	string a_graph_s = out.str();
-	string filename_graph="../"+inputfolder+"/graphsspe/coord"+a_graph_s+".dat";
-	string filename_code_area_graph="../"+inputfolder+"/graphsspe/code_area_for_graph"+a_graph_s+"_points.dat";
-	string filename_code_marine_landscape_graph="../"+inputfolder+"/graphsspe/coord"+a_graph_s+"_with_landscape.dat";
+    string filename_graph=inputfolder+"/graphsspe/coord"+a_graph_s+".dat";
+    string filename_code_area_graph=inputfolder+"/graphsspe/code_area_for_graph"+a_graph_s+"_points.dat";
+    string filename_code_marine_landscape_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_landscape.dat";
 
 	coord_graph.open(filename_graph.c_str());
 	if(coord_graph.fail())
@@ -1112,7 +1114,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    outc(cout << endl);
 
 	// read harbour specific files
-    harbour_names = read_harbour_names(folder_name_parameterization, "../"+inputfolder);
+    harbour_names = read_harbour_names(folder_name_parameterization, inputfolder);
 	// creation of a vector of nodes from coord
 	// and check with the coord in input.
 	// use inheritance i.e. a Harbour is child of a Node
@@ -1139,7 +1141,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             if(a_name!="none" && a_point== (int)i)
 			{
                outc(cout << "load prices for port " << a_name << " which is point " << a_point << endl);
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
 								 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 assert(er2 == 0);
                outc(cout << "....OK" << endl);
@@ -1148,7 +1150,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			{
                outc(cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl);
                outc(cout << "...then go for the port: " << a_port  << " instead" <<  endl);
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, "../"+inputfolder);
+                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
 
                 assert(er2 == 0);
 			}
@@ -1156,11 +1158,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			// read fuel price (vessel size dependent for the time being)
             if (dyn_alloc_sce.option(Options::fuelprice_plus20percent))
 			{
-                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, "../"+inputfolder);
+                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
 			}
 			else
 			{
-                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, "../"+inputfolder);
+                read_fuel_prices_per_vsize(init_fuelprices, folder_name_parameterization, inputfolder);
 
                 map<int,double>::iterator pos;
 				for (pos=init_fuelprices.begin(); pos != init_fuelprices.end(); pos++)
@@ -1246,7 +1248,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------" << endl);
 
 	// read estimates
-    multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  "../"+inputfolder);
+    multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
 
 	// 2. sort and unique
 	sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
@@ -1346,7 +1348,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    dout(cout  << "---------------------------" << endl);
    dout(cout  << "---------------------------" << endl);
 
-   map<int, double> init_size_per_farm = read_size_per_farm(folder_name_parameterization, "../"+inputfolder);
+   map<int, double> init_size_per_farm = read_size_per_farm(folder_name_parameterization, inputfolder);
    cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
 
 
@@ -1373,44 +1375,44 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	// read the pop-specific betas related to the availability
 								 // szgroup0
-    multimap<int, double> avai0_betas = read_avai_betas(a_semester, "0", folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> avai0_betas = read_avai_betas(a_semester, "0", folder_name_parameterization, inputfolder);
 								 // szgroup2
-    multimap<int, double> avai2_betas = read_avai_betas(a_semester, "2", folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> avai2_betas = read_avai_betas(a_semester, "2", folder_name_parameterization, inputfolder);
 								 // szgroup3
-    multimap<int, double> avai3_betas = read_avai_betas(a_semester, "3", folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> avai3_betas = read_avai_betas(a_semester, "3", folder_name_parameterization, inputfolder);
 								 // szgroup5
-    multimap<int, double> avai5_betas = read_avai_betas(a_semester, "5", folder_name_parameterization,"../"+ inputfolder);
+    multimap<int, double> avai5_betas = read_avai_betas(a_semester, "5", folder_name_parameterization, inputfolder);
 								 // szgroup7
-    multimap<int, double> avai7_betas = read_avai_betas(a_semester, "7", folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> avai7_betas = read_avai_betas(a_semester, "7", folder_name_parameterization, inputfolder);
 
 	// read other stuffs...
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
     cout << "Do the pop files init_pops_per_szgroup need a check?" << endl;
-    multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_pops_per_szgroup = read_init_pops_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
-    multimap<int, double> init_prop_migrants_pops_per_szgroup = read_init_prop_migrants_pops_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_prop_migrants_pops_per_szgroup = read_init_prop_migrants_pops_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_fecundity_per_szgroup need a check?" << endl;
-    multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_fecundity_per_szgroup = read_init_fecundity_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_maturity_per_szgroup need a check?" << endl;
-    multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_maturity_per_szgroup = read_init_maturity_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_weight_per_szgroupneed a check?" << endl;
-    multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_weight_per_szgroup = read_init_weight_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_comcat_per_szgroup need a check?" << endl;
-    multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization, "../"+inputfolder);
+    multimap<int, int> init_comcat_per_szgroup = read_init_comcat_per_szgroup(folder_name_parameterization, inputfolder);
     cout << "Do the pop files init_M_per_szgroup need a check?" << endl;
-    multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_M_per_szgroup = read_init_M_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files init_proprecru_per_szgroup need a check?" << endl;
-    multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, "../"+inputfolder, biolsce);
+    multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
-    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
+    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
     cout << "Do the pop files selected_szgroups need a check?" << endl;
-    multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, "../"+inputfolder);
+    multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
 
     cout << "Does the pop file tac_percent_simulated need a check?" << endl;
-    map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, "../"+inputfolder);
+    map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, inputfolder);
     cout << "Does the pop file hyperstability_param need a check?" << endl;
-    map<int, double> hyperstability_param= read_hyperstability_param(folder_name_parameterization, "../"+inputfolder);
+    map<int, double> hyperstability_param= read_hyperstability_param(folder_name_parameterization, inputfolder);
 
 	// creation of a vector of populations
     populations = vector <Population* > (nbpops);
@@ -1539,31 +1541,31 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			init_proprecru_per_szgroup.push_back(pos->second);
 
 		// input data, avai per szgroup on nodes and presence of the pop
-        multimap<int, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
-        multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
+        multimap<int, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
+        multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
 
 		// input data, read a other landings per node for this species
-        map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, sp, folder_name_parameterization, "../"+inputfolder);
-        map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, "../"+inputfolder);
+        map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder);
+        map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, inputfolder);
 
 		// input data, growth transition, percent_szgroup_per_age_matrix
-        vector< vector<double> > growth_transition_matrix= read_growth_transition_matrix(sp, NBSZGROUP, folder_name_parameterization, "../"+inputfolder, biolsce);
-        vector< vector<double> > percent_szgroup_per_age_matrix= read_percent_szgroup_per_age_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, "../"+inputfolder, biolsce);
-        vector< vector<double> > percent_age_per_szgroup_matrix= read_percent_age_per_szgroup_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, "../"+inputfolder, biolsce);
+        vector< vector<double> > growth_transition_matrix= read_growth_transition_matrix(sp, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
+        vector< vector<double> > percent_szgroup_per_age_matrix= read_percent_szgroup_per_age_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
+        vector< vector<double> > percent_age_per_szgroup_matrix= read_percent_age_per_szgroup_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
 
 		// input data, parameter for stock-recruitment relationship
-        vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, "../"+inputfolder, biolsce);
+        vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
 
 		// input data, fbar ages
-        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, "../"+inputfolder);
+        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder);
 
 		// input data, initial tac
-        vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, "../"+inputfolder);
+        vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
 		double tac_percent_simulated_this_pop= tac_percent_simulated[sp];
         double hyperstability_param_this_pop= hyperstability_param[sp];
 
         // input data, read migration fluxes in proportion per size group (if any)
-        multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, "../"+inputfolder, biolsce);
+        multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
 
         double landings_so_far=0;
 
@@ -1764,7 +1766,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if(dyn_alloc_sce.option(Options::fishing_credits))
     {
-        multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, "../"+inputfolder, a_graph_name);
+        multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, inputfolder, a_graph_name);
 
 
        // init
@@ -1806,16 +1808,16 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------" << endl);
 
 	//input data, metier characteristics: selectivty ogives, beta per pop
-    multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, "../"+inputfolder);
-    multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, "../"+inputfolder);
-    multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
-    multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
-    map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, "../"+inputfolder);
-    map<int, double>      percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization, "../"+inputfolder);
-    map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, "../"+inputfolder);
-    map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, "../"+inputfolder);
-    map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, "../"+inputfolder);
-    map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder);
+    multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, inputfolder);
+    multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
+    multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
+    map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
+    map<int, double>      percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization, inputfolder);
+    map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, inputfolder);
+    map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, inputfolder);
+    map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, inputfolder);
+    map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
 
 
 	// get the name of the metiers
@@ -1845,10 +1847,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         double gear_width_a                        = metiers_gear_widths_param_a[ i ];
 		double gear_width_b                        = metiers_gear_widths_param_b[ i ];
 		string gear_width_model                    = metiers_gear_widths_model_type[ i ];
-        multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, "../"+inputfolder);
-        multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, "../"+inputfolder);
+        multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, inputfolder);
+        multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, inputfolder);
 
-        vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, "../"+inputfolder);
+        vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder);
 
         // metier_target_stocks for this particular metier
         multimap<int,int>::iterator lower_metier_target_stocks = metier_target_stocks.lower_bound(i);
@@ -1946,11 +1948,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         fueluses,NOxEmission_gperKWhs, SOxEmission_percentpertotalfuelmasss,
                         GHGEmissions, PMEmissions,
                         vmaxs, vcruises, lane_ids,
-                        folder_name_parameterization, "../"+inputfolder);
+                        folder_name_parameterization, inputfolder);
 
     // read shipping lanes
-    multimap<int, double> shiplanes_lat = read_shiplanes_lat( folder_name_parameterization, "../"+inputfolder);
-    multimap<int, double> shiplanes_lon = read_shiplanes_lon( folder_name_parameterization, "../"+inputfolder);
+    multimap<int, double> shiplanes_lat = read_shiplanes_lat( folder_name_parameterization, inputfolder);
+    multimap<int, double> shiplanes_lon = read_shiplanes_lon( folder_name_parameterization, inputfolder);
 
     vector<double> lats;
     vector<double> longs;
@@ -2010,19 +2012,19 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		resttime_par1s, resttime_par2s, av_trip_duration,
 		mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
 		mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
-        folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
+        folder_name_parameterization, inputfolder, selected_vessels_only);
 
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
-    multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
+    multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
 
-    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
-    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization,"../"+ inputfolder);
+    multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, double> freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
+    multimap<string, double> vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
+    multimap<string, double> vessels_tacs   = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
 
     /*
 	// debug
@@ -2044,7 +2046,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }*/
 
 	// read nodes in polygons for area-based management
-    nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, "../"+inputfolder);
+    nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
 
 	// check
 	//for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -2079,7 +2081,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<string, double> fishing_credits;
     if(dyn_alloc_sce.option(Options::fishing_credits))
     {
-         fishing_credits = read_initial_fishing_credits(folder_name_parameterization, "../"+inputfolder);
+         fishing_credits = read_initial_fishing_credits(folder_name_parameterization, inputfolder);
     }
 
     //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
@@ -2095,12 +2097,12 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		// read vessel and quarter specific multimap
 		// quarter specific to capture a piece of seasonality in the fishnig activity
-        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
-        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
+        possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
 
 		//cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
-        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
-        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, "../"+inputfolder);
+        gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+        gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
 
 		// debug
 		if(possible_metiers.size() != freq_possible_metiers.size())
@@ -2511,7 +2513,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	// CAUTION INDEXATION C++ from 0 to n while in R from 1 to n+1
     // so take care to have idx of node starting from 0 in the input file
 	ifstream graph;
-	string filename_graph_test="../"+inputfolder+"/graphsspe/graph"+a_graph_s+".dat";
+    string filename_graph_test=inputfolder+"/graphsspe/graph"+a_graph_s+".dat";
 	graph.open(filename_graph_test.c_str());
 	if(graph.fail())
 	{
@@ -2647,7 +2649,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	// bound the two vectors
 								 // copy
-    if (!load_relevant_nodes(folder_name_parameterization, "../" + inputfolder, relevant_nodes)) {
+    if (!load_relevant_nodes(folder_name_parameterization, inputfolder, relevant_nodes)) {
         cerr << "*** cannot load file." << endl;
         return -1;
     }
@@ -2691,10 +2693,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i) << endl);
 								 // these maps come from SimplifyThePreviousMap()
-                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
+                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
                 dout(cout  << ":: "<<  endl);
 								 // these maps come from SimplifyThePreviousMap()
-                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
+                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
 
 			}
 			else
@@ -2709,13 +2711,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 								 // 'previous' is not modified but a new 'previous' is exported into a file here....
 				SimplifyThePreviousMap(relevant_nodes.at(i), previous,
                     relevant_nodes, min_distance,
-                    namefolderinput, "../"+inputfolder, a_graph_name);
+                    namefolderinput, inputfolder, a_graph_name);
                 min_distance.clear();
 				previous.clear();
 								 // these maps come from SimplifyThePreviousMap()
-                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
+                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
 								 // these maps come from SimplifyThePreviousMap()
-                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, "../"+inputfolder, a_graph_name);
+                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
 
 			}
 
@@ -2955,10 +2957,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 	// read list of tsteps with discrete events
-    vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, "../"+inputfolder);
-    vector <int> tsteps_semesters = read_tsteps_semesters( folder_name_parameterization, "../"+inputfolder);
-    vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization,"../"+inputfolder);
-    vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, "../"+inputfolder);
+    vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, inputfolder);
+    vector <int> tsteps_semesters = read_tsteps_semesters( folder_name_parameterization, inputfolder);
+    vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization,inputfolder);
+    vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, inputfolder);
 	int count_quarters=1;
 
 	// get a vector v filled in with 1 to n
@@ -3171,28 +3173,28 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				mult_fuelcons_when_fishing,
 				mult_fuelcons_when_returning,
 				mult_fuelcons_when_inactive,
-                folder_name_parameterization, "../"+inputfolder, selected_vessels_only);
+                folder_name_parameterization, inputfolder, selected_vessels_only);
 
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
 			// also quarter specific but semester specific for the betas because of the survey design they are comning from...
-            fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
-            fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
-            harbours = read_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
-            freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, "../"+inputfolder);
-            freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, "../"+inputfolder);
-            freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization,"../"+ inputfolder);
-            vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
-            if(is_tacs) vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, "../"+inputfolder);
+            fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+            fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+            harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
+            freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+            freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+            freq_harbours = read_freq_harbours(a_quarter, folder_name_parameterization, inputfolder);
+            vessels_betas = read_vessels_betas(a_semester, folder_name_parameterization, inputfolder);
+            if(is_tacs) vessels_tacs = read_vessels_tacs(a_semester, folder_name_parameterization, inputfolder);
             dout(cout  << "re-read data...OK" << endl);
 
             // LOOP OVER VESSELS
 			for (unsigned int v=0; v<vessels.size(); v++)
 			{
                 dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
-                possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
-                freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
-                gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
-                gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, "../"+inputfolder);
+                possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
+                freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
+                gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
+                gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
 				spe_fgrounds = find_entries_s_i(fgrounds, vesselids.at(v));
                 spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids.at(v));
                 spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
@@ -3221,7 +3223,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
 
 				// re-read nodes in polygons for area-based management
-                nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization,"../"+ inputfolder);
+                nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
 
 
                 // check for area_closure
@@ -3440,8 +3442,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 			// RE-read for metiers
             dout(cout << "re-read metiers..."  << endl);
-            metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, "../"+inputfolder);
-            metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, "../"+inputfolder);
+            metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
+            metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
             for (unsigned int m=0; m<metiers.size(); m++)
 			{
 				// casting m into a string
@@ -3544,16 +3546,16 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					out << i;
 
 					// read a new spatial_availability
-                    multimap<int,double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, "../"+inputfolder,  str_rand_avai_file);
-                    multimap<int,double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, "../"+inputfolder,  str_rand_avai_file);
+                    multimap<int,double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
+                    multimap<int,double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
 					populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 					// read a other landings per node for this species
-                    map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, i, folder_name_parameterization,"../"+ inputfolder);
+                    map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder);
 					populations.at(i)->set_oth_land(oth_land);
 
                     // read migration fluxes in proportion per size group (if any)
-                    multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, i, folder_name_parameterization, "../"+inputfolder, biolsce);
+                    multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, i, folder_name_parameterization, inputfolder, biolsce);
                     populations.at(i)->set_overall_migration_fluxes(overall_migration_fluxes);
 
                     // apply the overall migration loss fluxes (i.e. on the overall N at szgroup)
@@ -3596,7 +3598,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					}
 
 					// re-read presence node for this semester
-                    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, "../"+inputfolder, str_rand_avai_file);
+                    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
 
                     // finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in export_impact)
 					// 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)

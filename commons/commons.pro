@@ -9,7 +9,7 @@ include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
 INCLUDEPATH +=../include/ ../formats .
-LIBS += -L.. -lformats -lboost_system -lboost_chrono
+LIBS += -L.. -lformats
 
 win32 {
     # For GetProcessMemoryInfo()
@@ -83,8 +83,7 @@ HEADERS= \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h \
-    utils/CrashHandler.h \
-    utils/dateformat.h
+    utils/CrashHandler.h
 
 ## Do not add this if you don't support IPC queues
 

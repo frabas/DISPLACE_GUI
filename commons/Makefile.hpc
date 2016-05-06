@@ -68,8 +68,7 @@ HEADERS= \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h \
-    utils/CrashHandler.h \
-    utils/dateformat.h
+    utils/CrashHandler.h
 
 DEFINES=-DNO_IPC
 

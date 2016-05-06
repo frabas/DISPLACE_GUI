@@ -35,7 +35,7 @@ HEADERS= \
 
 DEFINES=-DNO_IPC
 
-LIBS=-L../commons -lcommons -L../formats -lformats -lboost_chrono -lboost_system -lpthread -lrt
+LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt
 CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I.
 LDFLAGS=
 

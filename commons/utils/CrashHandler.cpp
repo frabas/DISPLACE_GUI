@@ -5,7 +5,6 @@
 #define BOOST_CHRONO_VERSION 2
 
 #include "CrashHandler.h"
-#include "dateformat.h"
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -29,13 +28,7 @@
 #include <cxxabi.h>
 #include <fstream>
 
-#include <boost/chrono/system_clocks.hpp>
-#include <boost/chrono/io/time_point_io.hpp>
-
 #include <stdio.h>
-
-static std::string startup_time;
-
 
 CrashHandler::CrashHandler()
 {
@@ -58,11 +51,6 @@ bool CrashHandler::initialize()
         std::cerr << "Cannot set signal handler for SIGABRT." << std::endl;
         return false;
     }
-    // ss << boost::chrono::time_fmt(boost::chrono::timezone::local) << boost::chrono::system_clock::now() << std::endl;
-
-    // startup_time = boost::str(boost::format("%Y%m") % boost::chrono::system_clock::now());
-    startup_time = utils::fmtDate(boost::chrono::system_clock::now());
-    // printf ("%s\n", startup_time.c_str());
     return true;
 }
 
@@ -76,9 +64,7 @@ void CrashHandler::UncaughtExceptionHandler()
     size = backtrace(array, 50);
 
     messages = backtrace_symbols(array, size);
-    ss << "*** app start: " << startup_time << std::endl;
-    ss << "*** Unhandled exception detected - "
-        << boost::chrono::time_fmt(boost::chrono::timezone::local) << boost::chrono::system_clock::now() << std::endl;
+    ss << "*** Unhandled exception detected " << std::endl;
 
     DoBacktrace(messages, size, ss);
 
@@ -120,9 +106,7 @@ void CrashHandler::CritErrHandler(int sig_num, siginfo_t * info, void * ucontext
 
     std::ostringstream ss;
 
-    ss << "*** app start: " << startup_time << std::endl;
-    ss << "*** Critical Signal detected - "
-        << boost::chrono::time_fmt(boost::chrono::timezone::local) << boost::chrono::system_clock::now() << std::endl;
+    ss << "*** Critical Signal detected " << std::endl;
 
     ss << boost::str(boost::format {"signal %d (%s), address is %p from %p\n" }
             % sig_num % strsignal(sig_num) % info->si_addr
@@ -210,8 +194,7 @@ void CrashHandler::DoBacktrace(char **messages, size_t size, std::ostream &ss)
 
 void CrashHandler::DoSaveCrashdump(const std::string &msg)
 {
-    auto logfilename = boost::str(boost::format{"crashdump-%s.log"} %
-                                          utils::fmtDate(boost::chrono::system_clock::now()));
+    auto logfilename = boost::str(boost::format{"crashdump-%l.log"} % time(0));
     auto logpath1 = logfilename;
 
     std::ofstream fs (logpath1, std::ios::out | std::ios::app);

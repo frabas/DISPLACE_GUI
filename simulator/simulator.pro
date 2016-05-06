@@ -23,7 +23,7 @@ macx {
     CONFIG -= app_bundle
 }
 
-LIBS += -lpthread -lboost_system -lboost_chrono
+LIBS += -lpthread
 
 unix:!macx {
     LIBS += -lrt

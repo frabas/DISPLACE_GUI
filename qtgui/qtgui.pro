@@ -70,7 +70,7 @@ LIBS += -lGeographic
     DEFINES += PROFILE
 }
 
-LIBS+=-L.. -lformats -ldisplacecommons -lqtcommons -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
+LIBS+=-L.. -lformats -ldisplacecommons -lqtcommons -lboost_system -lboost_chrono -L../QMapControl/QMapControl/src/QMapControl/lib -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL include path.
 INCLUDEPATH += $$QMC_GDAL_INC

@@ -23,6 +23,8 @@
 #include <helpers.h>
 #include <assert.h>
 
+#include <utils/CrashHandler.h>
+
 // for Windows
 #ifdef _WIN32
 #include <windows.h>
@@ -346,6 +348,9 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
 /**---------------------------------------------------------------**/
 int main(int argc, char* argv[])
 {
+
+    CrashHandler handler;
+    handler.initialize();
 
 	// default
 	string namefolderinput="fake";

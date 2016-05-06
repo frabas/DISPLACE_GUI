@@ -9,7 +9,7 @@ include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
 INCLUDEPATH +=../include/ ../formats .
-LIBS += -L.. -lformats
+LIBS += -L.. -lformats -lboost_system -lboost_chrono
 
 win32 {
     # For GetProcessMemoryInfo()
@@ -44,7 +44,8 @@ SOURCES= \
     dtree/decisiontreemanager.cpp \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
-    tseries/timeseriesmanager.cpp
+    tseries/timeseriesmanager.cpp \
+    utils/CrashHandler.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -81,7 +82,9 @@ HEADERS= \
     ../include/comstructs.h \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
-    dtree/evaluators/timeseriesevaluator.h
+    dtree/evaluators/timeseriesevaluator.h \
+    utils/CrashHandler.h \
+    utils/dateformat.h
 
 ## Do not add this if you don't support IPC queues
 

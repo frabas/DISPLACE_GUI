@@ -8,6 +8,8 @@
 #include <signal.h>
 #include <iosfwd>
 
+class siginfo_t;
+
 class CrashHandler {
 public:
     CrashHandler();

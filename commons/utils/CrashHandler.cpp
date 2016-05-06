@@ -6,6 +6,9 @@
 
 #include "CrashHandler.h"
 
+
+#ifndef __WIN32
+
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
@@ -201,3 +204,32 @@ void CrashHandler::DoSaveCrashdump(const std::string &msg)
     fs << msg << std::endl;
     fs.close();
 }
+
+
+#else // __win32 defined
+
+CrashHandler::CrashHandler() {
+}
+
+bool CrashHandler::initialize() {
+    return true;
+}
+
+void CrashHandler::CritErrHandler(int, siginfo_t *, void *) {
+
+}
+
+void CrashHandler::UncaughtExceptionHandler() {
+
+}
+
+void CrashHandler::DoBacktrace (char **, size_t, std::ostream &) {
+
+}
+
+void CrashHandler::DoSaveCrashdump (const std::string &) {
+
+}
+
+#endif
+

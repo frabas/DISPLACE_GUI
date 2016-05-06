@@ -355,7 +355,7 @@ int main(int argc, char* argv[])
 	// default
 	string namefolderinput="fake";
 	string namefolderoutput="baseline";
-    string inputfolder="";
+    string inputfolder=".";
 	string namesimu="sim1";
     int nbsteps=10;
     double dparam=10.0;

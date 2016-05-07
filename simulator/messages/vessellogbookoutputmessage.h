@@ -34,7 +34,7 @@ class Population;
 class VesselLogbookOutputMessage : public OutputMessage
 {
 public:
-    VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population *> &populations, std::vector <int> &implicit_pops);
+    VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v, const std::vector<Population *> &populations, std::vector <int> &implicit_pops);
 
     virtual IpcMessageTypes getType() const {
         return VesselLogbook;
@@ -45,8 +45,6 @@ public:
     virtual size_t sendBinary(void *buffer, size_t maxlen);
 
 private:
-    std::ostream &loglike;
-
     std::string name, freq_metiers;
     int length_class;
 

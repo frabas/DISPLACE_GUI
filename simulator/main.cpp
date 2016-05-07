@@ -177,7 +177,6 @@ vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
 vector <double> calib_cpue_multiplier;
 vector <int> int_harbours;
-ofstream loglike;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
 string biolsce;
@@ -2871,9 +2870,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 //	vmslike.open(filename.c_str());
 //    std::string vmslike_filename = filename;
 
-	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
-	loglike.open(filename.c_str());
-    std::string loglike_filename = filename;
+//	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
+//	loglike.open(filename.c_str());
+//    std::string loglike_filename = filename;
 
 	ofstream loglike_prop_met;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
@@ -4293,7 +4292,6 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	// close all....
     OutputExporter::instance().close();
-    loglike.close();
 	loglike_prop_met.close();
 	popdyn_N.close();
 	popdyn_F.close();

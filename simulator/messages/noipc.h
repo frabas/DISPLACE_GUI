@@ -21,13 +21,7 @@ public:
 class VesselLogbookOutputMessage : public OutputMessage
 {
 public:
-    VesselLogbookOutputMessage(std::ostream &, unsigned int, Vessel *, const std::vector<Population *> &, std::vector <int> &) {}
-};
-
-class ExportVmslikeOutputMessage : public OutputMessage
-{
-public:
-    ExportVmslikeOutputMessage(std::ostream &, unsigned int, void *) {}
+    VesselLogbookOutputMessage(unsigned int, Vessel *, const std::vector<Population *> &, std::vector <int> &) {}
 };
 
 class MoveVesselOutputMessage : public OutputMessage

@@ -105,7 +105,6 @@ extern double tariff_annual_hcr_percent_change;
 extern bool is_tacs;
 extern bool is_fishing_credits;
 extern vector <int> implicit_pops;
-extern ofstream loglike;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
@@ -205,7 +204,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 {
                     outc(cout  << "...just arrived!" << endl);
                     vessels[index_v]->updateTripsStatistics(populations, implicit_pops);
-                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(loglike, tstep, vessels[index_v], populations, implicit_pops)));
+                    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(tstep, vessels[index_v], populations, implicit_pops)));
+                    OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
 #if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);

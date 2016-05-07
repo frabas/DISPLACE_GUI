@@ -7,8 +7,7 @@
 extern pthread_mutex_t glob_mutex;
 extern bool use_gui;
 
-VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations, vector<int> &implicit_pops)
-    : loglike(strm)
+VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations, vector<int> &implicit_pops)
 {
     // (caution: hardcoding to be removed)
     //vector <int> explicit_pops;
@@ -96,35 +95,6 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(std::ostream &strm, unsig
 
 bool VesselLogbookOutputMessage::process()
 {
-    std::ostringstream ss;
-
-    ss << setprecision(0) << fixed;
-    // vessel / date dep / date arr / reason to return to port / cum steaming in hours/
-    //    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
-    ss << logbook.tstepdep << " " << logbook.tstep << " "
-        << logbook.rtbb << " "
-        << logbook.cumstm << " "
-        << logbook.node << " "
-        << logbook.idx << " "
-        << name << " "
-        << logbook.timeatsea << " "
-        << logbook.cumfcons << " "
-        << logbook.travdist << " ";
-    for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
-        ss  << *it << " " ;
-    ss  << freq_metiers << " " << 0 << " " ;
-    ss  << logbook.revenue_from_av_prices << " " ;
-    ss  << logbook.revenue_explicit_from_av_prices << " " ;
-    ss  << logbook.fuelcost << " " ;
-    ss  << 0 << " " ;
-    ss  << logbook.gav2 << " " ;
-    for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
-        ss  << *it2 << " " ;
-    ss  << " " << std::endl;
-
-    MutexLocker l(&glob_mutex);
-
-    loglike << ss.str();
     return true;
 }
 

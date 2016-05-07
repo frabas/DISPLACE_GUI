@@ -4,6 +4,8 @@ debug/
 release/
 *.pro.user*
 *.o
+*.so
+simulator/displace
 /build
 /install
 *~

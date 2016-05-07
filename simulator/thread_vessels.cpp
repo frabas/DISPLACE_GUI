@@ -37,11 +37,12 @@
 #include <outputqueuemanager.h>
 #include <messages/movevesseloutputmessage.h>
 #include <messages/moveshipoutputmessage.h>
-#include <messages/exportvmslikeoutputmessage.h>
 #include <messages/vessellogbookoutputmessage.h>
 #else
 #include <messages/noipc.h>
 #endif
+
+#include <outputexporter.h>
 
 using namespace std;
 
@@ -91,7 +92,6 @@ extern vector <Population* > populations;
 extern int tstep;
 extern int nbpops;
 extern int export_vmslike;
-extern ofstream vmslike;
 extern double graph_res;
 extern bool is_individual_vessel_quotas;
 extern bool check_all_stocks_before_going_fishing;
@@ -443,7 +443,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
     if(export_vmslike /*&& tstep<8641*/) {
         if( vessels[ index_v ]->get_state()!=3) {
-            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new ExportVmslikeOutputMessage(vmslike, tstep, vessels[index_v])));
+            OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
         }
     }
 

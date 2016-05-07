@@ -50,7 +50,8 @@ CONFIG(release,debug|release) {
 
 SOURCES= main.cpp \
     thread_vessels.cpp \
-    biomodule.cpp
+    biomodule.cpp \
+    outputexporter.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -74,7 +75,8 @@ HEADERS= \
     thread_vessels.h \
     values.h \
     biomodule.h \
-    messages/noipc.h
+    messages/noipc.h \
+    outputexporter.h
 
 !no_ipc {
     SOURCES += \
@@ -82,7 +84,6 @@ HEADERS= \
         outputqueuemanager.cpp \
         outputmessage.cpp \
         messages/movevesseloutputmessage.cpp \
-        messages/exportvmslikeoutputmessage.cpp \
         messages/vessellogbookoutputmessage.cpp \
         messages/genericconsolestringoutputmessage.cpp \
         messages/moveshipoutputmessage.cpp
@@ -92,7 +93,6 @@ HEADERS= \
         outputqueuemanager.h \
         outputmessage.h \
         messages/movevesseloutputmessage.h \
-        messages/exportvmslikeoutputmessage.h \
         messages/vessellogbookoutputmessage.h \
         messages/genericconsolestringoutputmessage.h \
         messages/moveshipoutputmessage.h

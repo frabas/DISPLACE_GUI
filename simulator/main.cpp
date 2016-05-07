@@ -97,6 +97,8 @@
 
 #include "Harbour.h"
 
+#include <outputexporter.h>
+
 #include "readdata.h"
 #include "myutils.h"
 #include <memoryinfo.h>
@@ -169,7 +171,6 @@ bool is_tacs;
 bool is_fishing_credits;
 int export_vmslike;
 bool use_dtrees;
-ofstream vmslike;
 vector <int> implicit_pops;
 vector <int> explicit_pops;
 vector <double> calib_oth_landings;
@@ -913,6 +914,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
       is_fishing_credits=1;
     } else{
        is_fishing_credits=0;
+    }
+
+    if (!OutputExporter::instantiate(pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
+        std::cerr << "Cannot open output files." << std::endl;
+        exit (1);
     }
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
@@ -2861,9 +2867,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------------" << endl);
     dout(cout  << "---------------------------------" << endl);
 
-	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
-	vmslike.open(filename.c_str());
-    std::string vmslike_filename = filename;
+//	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike_"+namesimu+".dat";
+//	vmslike.open(filename.c_str());
+//    std::string vmslike_filename = filename;
 
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_"+namesimu+".dat";
 	loglike.open(filename.c_str());
@@ -4286,8 +4292,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 	// close all....
-	vmslike.close();
-	loglike.close();
+    OutputExporter::instance().close();
+    loglike.close();
 	loglike_prop_met.close();
 	popdyn_N.close();
 	popdyn_F.close();

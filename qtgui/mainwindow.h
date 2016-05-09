@@ -188,6 +188,8 @@ private slots:
 
     void on_actionScheduler_Editor_triggered();
 
+    void on_actionExportAllGraphics_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

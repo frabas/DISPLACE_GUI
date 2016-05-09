@@ -2224,3 +2224,10 @@ void MainWindow::on_actionScheduler_Editor_triggered()
     auto ed = prepareAppExecutableStart("scheduler");
     ed->start();
 }
+
+void MainWindow::on_actionExportAllGraphics_triggered()
+{
+    on_actionExport_Harbours_triggered();
+    on_actionExport_Populations_triggered();
+    on_actionExport_Nations_triggered();
+}

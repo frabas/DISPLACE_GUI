@@ -125,6 +125,8 @@
      <addaction name="actionExport_Harbours"/>
      <addaction name="actionExport_Populations"/>
      <addaction name="actionExport_Nations"/>
+     <addaction name="separator"/>
+     <addaction name="actionExportAllGraphics"/>
     </widget>
     <addaction name="actionCSV_Editor"/>
     <addaction name="actionDecision_Trees_Editor"/>
@@ -1174,6 +1176,11 @@
    </property>
    <property name="text">
     <string>Scheduler Editor...</string>
+   </property>
+  </action>
+  <action name="actionExportAllGraphics">
+   <property name="text">
+    <string>All...</string>
    </property>
   </action>
  </widget>

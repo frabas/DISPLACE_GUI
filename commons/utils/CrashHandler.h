@@ -8,7 +8,9 @@
 #include <signal.h>
 #include <iosfwd>
 
-class siginfo_t;
+#ifdef __WIN32
+struct siginfo_t;
+#endif
 
 class CrashHandler {
 public:

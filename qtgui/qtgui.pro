@@ -282,7 +282,8 @@ HEADERS += \
     mapobjects/fishfarmobject.h \
     modelobjects/shipdata.h \
     mapobjects/shipmapobject.h \
-    objects/shipentity.h
+    objects/shipentity.h \
+    modelobjects/metierdata.h
 
 RESOURCES += \
     qtgui.qrc

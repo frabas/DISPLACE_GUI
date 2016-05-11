@@ -220,7 +220,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../tseditor/tseditor.qrc">
+          <iconset resource="../vesseleditor/vesseleditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -264,7 +264,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../tseditor/tseditor.qrc">
+          <iconset resource="../vesseleditor/vesseleditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -316,7 +316,7 @@
         <item>
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>2</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
@@ -546,6 +546,78 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="metiersTab">
+           <attribute name="title">
+            <string>Metiers</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QComboBox" name="metierStatSelector">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Cum Catches</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Added Value</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>VPUF</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QCustomPlot" name="plotMetiers" native="true"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -594,7 +666,7 @@
         <string>Setup</string>
        </property>
        <property name="icon">
-        <iconset resource="../tseditor/tseditor.qrc">
+        <iconset resource="../vesseleditor/vesseleditor.qrc">
          <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>
        </property>
       </widget>
@@ -826,7 +898,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -835,7 +907,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -844,7 +916,7 @@
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -990,7 +1062,7 @@
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1029,7 +1101,7 @@
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1043,7 +1115,7 @@
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1135,7 +1207,7 @@
   </action>
   <action name="actionR_Console">
    <property name="icon">
-    <iconset resource="../tseditor/tseditor.qrc">
+    <iconset resource="../vesseleditor/vesseleditor.qrc">
      <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
    </property>
    <property name="text">
@@ -1199,7 +1271,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../tseditor/tseditor.qrc"/>
+  <include location="../vesseleditor/vesseleditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

@@ -56,6 +56,7 @@ public:
     void setPopulationPlot(QCustomPlot *plot);
     void setHarboursPlot(QCustomPlot *plot);
     void setNationsPlot(QCustomPlot *plot);
+    void setMetiersPlot(QCustomPlot *plot);
 
     void updateStats(DisplaceModel *model);
 
@@ -70,6 +71,10 @@ public:
     enum HarboursStat { H_Catches, H_Earnings, H_Gav, H_Vpuf };
     void setHarbourStat(HarboursStat stat);
     HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
+
+    enum MetiersStat { M_Catches, M_Gav };
+    void setMetiersStat(MetiersStat stat);
+    MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
 
     /* == */
 
@@ -101,6 +106,12 @@ private:
     QCustomPlot *mPlotNations;
     NationsStat mSelectedNationsStat;
     QCPItemLine *mNatTimeLine;
+
+    /* Metiers */
+    QCustomPlot *mPlotMetiers;
+    MetiersStat mSelectedMetiersStat;
+    QCPItemLine *mMetTimeLine;
+
 
     DisplaceModel *mLastModel;
 

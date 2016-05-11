@@ -80,6 +80,7 @@ public:
     int tstep;
 
     int vesselId;
+    int metierId;
     int lastHarbour;
     double revenueAV;
     double revenueExAV;

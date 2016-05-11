@@ -22,6 +22,7 @@
 #include <exceptions.h>
 #include <dbhelper.h>
 #include <calendar.h>
+#include <modelobjects/metierdata.h>
 
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
@@ -286,6 +287,9 @@ bool DisplaceModel::clearStats()
 
     mStatsHarbours.clear();
     mStatsHarboursCollected.clear();
+
+    mStatsMetiers.clear();
+    mStatsMetiersCollected.clear();
 
     return true;
 }
@@ -636,11 +640,25 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsHarboursCollected[hidx].mGav += stats.gav;
     mStatsHarboursCollected[hidx].mVpuf += stats.vpuf();
 
+    int midx = stats.metierId;
+    if (midx != -1) {
+        while (mStatsMetiersCollected.size() <= midx) {
+            MetierStats m;
+            mStatsMetiersCollected.push_back(m);
+        }
+
+        mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
+        mStatsMetiersCollected[midx].gav += stats.gav;
+    }
+
     int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {
         vessel->addCatch(i, stats.mCatches[i]);
         mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
         mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
+
+        if (midx != -1)
+            mStatsMetiersCollected[midx].mTotCatches += stats.mCatches[i];
     }
 
     if (mDb)

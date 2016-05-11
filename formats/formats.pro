@@ -30,6 +30,8 @@ SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \
     utils/LineNumberReader.cpp
 
+OTHER_FILES = Makefile.hpc
+
 win32 {
     LIBS +=
 }

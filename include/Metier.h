@@ -32,8 +32,8 @@ using namespace std;
 class Metier
 {
 	private:
-		int name;
-		int type;
+        int name = -1;
+        int type = -1;
         double percent_revenue_completeness; // for completing the revenue from other species....
 		double target_factor;	 //NOT IN USE...
 		vector<double> selectivity;

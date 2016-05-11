@@ -37,6 +37,9 @@ StatsController::StatsController(QObject *parent)
       mPlotNations(0),
       mSelectedNationsStat(Catches),
       mNatTimeLine(0),
+      mPlotMetiers(0),
+      mSelectedMetiersStat(M_Catches),
+      mMetTimeLine(0),
       mLastModel(0)
 {
     mPalette = PaletteManager::instance()->palette(PopulationRole);
@@ -78,6 +81,18 @@ void StatsController::setNationsPlot(QCustomPlot *plot)
     mPlotNations->addItem(mNatTimeLine);
 }
 
+void StatsController::setMetiersPlot(QCustomPlot *plot)
+{
+    mPlotMetiers = plot;
+    mPlotMetiers->legend->setVisible(true);
+
+    if (mMetTimeLine != 0)
+        delete mMetTimeLine;
+
+    mMetTimeLine = new QCPItemLine(mPlotMetiers);
+    mPlotMetiers->addItem(mMetTimeLine);
+}
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)
@@ -111,6 +126,12 @@ void StatsController::setNationsStat(StatsController::NationsStat stat)
 void StatsController::setHarbourStat(StatsController::HarboursStat stat)
 {
     mSelectedHarboursStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setMetiersStat(StatsController::MetiersStat stat)
+{
+    mSelectedMetiersStat = stat;
     updateStats(mLastModel);
 }
 

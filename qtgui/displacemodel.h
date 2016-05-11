@@ -49,6 +49,7 @@
 #include <modelobjects/shipdata.h>
 #include <modelobjects/fishfarmdata.h>
 #include <modelobjects/benthos.h>
+#include <modelobjects/metierdata.h>
 #include <modelobjects/populationdata.h>
 #include <modelobjects/nationdata.h>
 #include <modelobjects/harbourdata.h>
@@ -85,6 +86,8 @@ public:
     typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
     typedef QVector<HarbourStats> HarboursStats;
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
+    typedef QVector<MetierStats> MetiersStats;
+    typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -442,6 +445,8 @@ private:
     NationsStats mStatsNationsCollected;
     HarboursStatsContainer mStatsHarbours;
     HarboursStats mStatsHarboursCollected;
+    MetiersStatsContainer mStatsMetiers;
+    MetiersStats mStatsMetiersCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<QString, int> mStockNames;

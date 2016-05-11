@@ -26,6 +26,8 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
     logbook.cumfcons = v->get_cumfuelcons();
     logbook.travdist = v->get_traveled_dist_this_trip();
 
+    logbook.metier = v->get_metier()->get_name();
+
     logbook.revenue_from_av_prices=v->getLastTripRevenues();
     logbook.revenue_explicit_from_av_prices=v->getLastTripExplicitRevenues();
 

@@ -211,6 +211,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mStatsController->setPopulationPlot(ui->plotPopulations);
     mStatsController->setHarboursPlot(ui->plotHarbours);
     mStatsController->setNationsPlot(ui->plotNations);
+    mStatsController->setMetiersPlot(ui->plotMetiers);
 
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);

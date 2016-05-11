@@ -74,6 +74,7 @@ struct VesselLogbookMessage {
     double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, gav2;
     size_t popnum;
     double pop[];
+    int metier;
 };
 
 }

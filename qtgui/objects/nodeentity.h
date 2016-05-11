@@ -54,8 +54,11 @@ public slots:
     void onActionSearchById();
 
 private:
-    mutable QMenu *mContextMenu;
-    mutable QList<NodeEntity *> mEntities;    // for lazy initialization
+    QMenu *mContextMenu;
+    QList<NodeEntity *> mEntities;    // for lazy initialization
+
+    void init() ;
+    void initMenu();
 };
 
 }

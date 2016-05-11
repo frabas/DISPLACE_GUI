@@ -50,7 +50,7 @@ bool ObjectTreeEntity::setData(const QModelIndex &index, const QVariant &value, 
 
 QMenu *ObjectTreeEntity::contextMenu() const
 {
-    return 0;
+    return nullptr;
 }
 
 

@@ -47,9 +47,8 @@ QModelIndex NodeEntity::index(int row, int column, const QModelIndex &parent) co
     Q_UNUSED(parent);
 
     if (mNodeId == -1 && model->getModel() != 0 && mEntities.size() == 0) {
-        for(int i = 0; i< model->getModel()->getNodesCount(); ++i) {
-            mEntities.push_back(new NodeEntity(model, i));
-        }
+        // make a lazy initialization here.
+        const_cast<NodeEntity*>(this)->init();
     }
 
     if (mEntities.size() > row) {
@@ -102,8 +101,7 @@ bool NodeEntity::setData(const QModelIndex &index, const QVariant &value, int ro
 QMenu *NodeEntity::contextMenu() const
 {
     if (mContextMenu == 0) {
-        mContextMenu = new QMenu();
-        connect (mContextMenu->addAction(QObject::tr("Find node by Id...")), SIGNAL(triggered()), this, SLOT(onActionSearchById()));
+        const_cast<NodeEntity*>(this)->initMenu();
     }
 
     return mContextMenu;
@@ -126,6 +124,19 @@ void NodeEntity::onActionSearchById()
                     qmapcontrol::PointWorldCoord(n->get_x(), n->get_y()),
                     5, std::chrono::milliseconds(100));
     }
+}
+
+void NodeEntity::init()
+{
+    for(int i = 0; i< model->getModel()->getNodesCount(); ++i) {
+        mEntities.push_back(new NodeEntity(model, i));
+    }
+}
+
+void NodeEntity::initMenu()
+{
+    mContextMenu = new QMenu();
+    connect (mContextMenu->addAction(QObject::tr("Find node by Id...")), SIGNAL(triggered()), this, SLOT(onActionSearchById()));
 }
 
 

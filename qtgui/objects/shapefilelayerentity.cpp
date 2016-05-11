@@ -55,8 +55,7 @@ QMenu *ShapefileLayerEntity::contextMenu() const
         return 0;
 
     if (mContextMenu == 0) {
-        mContextMenu = new QMenu();
-        connect (mContextMenu->addAction(QObject::tr("Shape Color...")), SIGNAL(triggered()), this, SLOT(onActionShapeColor()));
+        const_cast<ShapefileLayerEntity*>(this)->initMenu();
     }
 
     return mContextMenu;
@@ -74,4 +73,10 @@ void ShapefileLayerEntity::onActionShapeColor()
         file->setBrushPolygon(brh);
         model->getMapControl()->redraw();
     }
+}
+
+void ShapefileLayerEntity::initMenu()
+{
+    mContextMenu = new QMenu();
+    connect (mContextMenu->addAction(QObject::tr("Shape Color...")), SIGNAL(triggered()), this, SLOT(onActionShapeColor()));
 }

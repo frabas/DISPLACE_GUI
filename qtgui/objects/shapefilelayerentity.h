@@ -19,7 +19,9 @@ public slots:
     void onActionShapeColor();
 
 private:
-    mutable QMenu *mContextMenu;
+    QMenu *mContextMenu;
+
+    void initMenu();
 };
 
 } // ns

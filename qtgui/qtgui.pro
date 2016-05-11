@@ -168,7 +168,8 @@ SOURCES += \
     mapobjects/fishfarmobject.cpp \
     modelobjects/shipdata.cpp \
     mapobjects/shipmapobject.cpp \
-    objects/shipentity.cpp
+    objects/shipentity.cpp \
+    objects/metiersentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -283,7 +284,8 @@ HEADERS += \
     modelobjects/shipdata.h \
     mapobjects/shipmapobject.h \
     objects/shipentity.h \
-    modelobjects/metierdata.h
+    modelobjects/metierdata.h \
+    objects/metiersentity.h
 
 RESOURCES += \
     qtgui.qrc

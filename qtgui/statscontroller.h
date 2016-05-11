@@ -88,6 +88,7 @@ protected:
 
     void updateNationStats(DisplaceModel *model);
     void updateHarboursStats (DisplaceModel *model);
+    void updateMetiersStats(DisplaceModel *model);
 
 private:
     Palette mPalette;

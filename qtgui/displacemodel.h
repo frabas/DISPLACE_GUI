@@ -182,6 +182,11 @@ public:
     const QList<std::shared_ptr<Benthos> > &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
+    const QList<std::shared_ptr<MetierData> > &getMetiersList() const { return mMetiers; }
+    int getMetiersCount() const {
+        return mMetiers.size();
+    }
+
     /* Access to Population statistics */
     int getPopulationsCount() const;
     int getBenthosPopulationsCount() const;
@@ -437,6 +442,7 @@ private:
     QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<FishfarmData> > mFishfarms;
     QList<std::shared_ptr<Benthos> > mBenthos;
+    QList<std::shared_ptr<MetierData>> mMetiers;
     QList<std::shared_ptr<NationData> > mNations;
 
     PopulationStatContainer mStatsPopulations;

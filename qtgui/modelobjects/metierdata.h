@@ -4,8 +4,11 @@
 #include <QList>
 
 class MetierData {
+    int mId = 0;
 public:
     MetierData() {}
+
+    int getId() const { return mId; }
 };
 
 class MetierStats {

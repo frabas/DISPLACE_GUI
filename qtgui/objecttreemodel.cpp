@@ -31,6 +31,7 @@
 #include <objects/fishfarmentity.h>
 #include <objects/populationentity.h>
 #include <objects/benthosentity.h>
+#include <objects/metiersentity.h>
 #include <objects/nationentity.h>
 #include <objects/szgroupentity.h>
 
@@ -50,6 +51,7 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Fishfarms"),
     QT_TR_NOOP_UTF8("Fish Populations"),
     QT_TR_NOOP_UTF8("Benthos"),
+    QT_TR_NOOP_UTF8("Metiers"),
     QT_TR_NOOP_UTF8("Nations"),
     QT_TR_NOOP_UTF8("Size Groups or Age"),
 };
@@ -79,6 +81,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         entityTemplates[Fishfarms] = new objecttree::FishfarmEntity(this);
         entityTemplates[Populations] = new objecttree::PopulationEntity(this);
         entityTemplates[Benthos] = new objecttree::BenthosEntity(this);
+        entityTemplates[Metiers] = new objecttree::MetiersEntity(this);
         entityTemplates[Nations] = new objecttree::NationEntity(this);
         entityTemplates[SizeGroups] = new objecttree::SzGroupEntity(this);
     }

@@ -1076,6 +1076,13 @@ int DisplaceModel::getBenthosCount() const
     return mBenthos.size();
 }
 
+void DisplaceModel::addMetier(int id)
+{
+    auto m  = std::make_shared<objecttree::MetiersInterest>();
+    m->metierId = id;
+    mMetiers.push_back(m);
+}
+
 int DisplaceModel::getPopulationsCount() const
 {
     return mConfig.getNbpops();

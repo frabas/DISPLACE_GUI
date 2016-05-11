@@ -56,6 +56,7 @@
 #include <historicaldatacollector.h>
 #include <outputfileparser.h>
 #include <graphbuilder.h>
+#include <objects/metiersentity.h>
 
 #include <QObject>
 #include <QString>
@@ -182,10 +183,11 @@ public:
     const QList<std::shared_ptr<Benthos> > &getBenthosList() const { return mBenthos; }
     int getBenthosCount() const;
 
-    const QList<std::shared_ptr<MetierData> > &getMetiersList() const { return mMetiers; }
+    const QList<std::shared_ptr<objecttree::MetiersInterest> > &getMetiersList() const { return mMetiers; }
     int getMetiersCount() const {
         return mMetiers.size();
     }
+    void addMetier(int id);
 
     /* Access to Population statistics */
     int getPopulationsCount() const;
@@ -442,7 +444,7 @@ private:
     QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<FishfarmData> > mFishfarms;
     QList<std::shared_ptr<Benthos> > mBenthos;
-    QList<std::shared_ptr<MetierData>> mMetiers;
+    QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
     QList<std::shared_ptr<NationData> > mNations;
 
     PopulationStatContainer mStatsPopulations;

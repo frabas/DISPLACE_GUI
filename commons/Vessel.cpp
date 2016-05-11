@@ -3473,8 +3473,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
        // ****************area_closure**********************************//
        if (dyn_alloc_sce.option(Options::area_closure) ||
-                                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_trawlers)) ||
-                                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_netters))
+                                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
+                                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers))
                                  )		 // area-based sce
        {
 		this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
@@ -3522,8 +3522,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
        // check for area_closure
        if (dyn_alloc_sce.option(Options::area_closure) ||
-               (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_trawlers)) ||
-               (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_netters)))
+               (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
+               (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
        {
 		vector<int> polygons;
 		vector<int> polygon_nodes;
@@ -3674,8 +3674,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	vector<int> polygons;
 	vector<int> polygon_nodes;
     if (dyn_alloc_sce.option(Options::area_closure) ||
-            (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_trawlers)) ||
-            (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_netters)))
+            (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
+            (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
 	{
 
         for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
@@ -3697,8 +3697,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 		// check for area_closure
         if (dyn_alloc_sce.option(Options::area_closure) ||
-                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_trawlers)) ||
-                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_netters)))
+                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
+                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
 		{
 
 			if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
@@ -3776,8 +3776,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 		// check for area_closure
         if (dyn_alloc_sce.option(Options::area_closure) ||
-                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_trawlers)) ||
-                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_netters)))
+                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
+                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
 		{
 
 			vector<int> polygons;

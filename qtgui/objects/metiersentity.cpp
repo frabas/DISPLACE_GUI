@@ -93,11 +93,47 @@ QMenu *MetiersEntity::contextMenu() const
 void MetiersEntity::addMetierActivated()
 {
     bool ok;
-    int mid = QInputDialog::getInt(nullptr, tr("Add Metier"), tr("Metier to add: "), 0, 0, 2147483647, 1, &ok);
+    int mid = QInputDialog::getInt(nullptr, tr("Add Metier"), tr("Metier Id: "), 0, 0, 2147483647, 1, &ok);
 
     if (ok) {
         model->getModel()->addMetier(mid);
     }
+}
+
+void MetiersEntity::addPopulationActivated()
+{
+    bool ok;
+    int mid = QInputDialog::getInt(nullptr, tr("Set Population"), tr("Population id: "), 0, 0, 2147483647, 1, &ok);
+
+    if (ok) {
+        model->getModel()->getMetiersList()[mId]->populationId = mid;
+    }
+
+}
+
+void MetiersEntity::addHarbourActivated()
+{
+    bool ok;
+    int mid = QInputDialog::getInt(nullptr, tr("Set Harbour"), tr("Harbour id: "), 0, 0, 2147483647, 1, &ok);
+
+    if (ok) {
+        model->getModel()->getMetiersList()[mId]->harbourId = mid;
+    }
+}
+
+void MetiersEntity::removePopulationActivated()
+{
+    model->getModel()->getMetiersList()[mId]->populationId = -1;
+}
+
+void MetiersEntity::removeHarbourActivated()
+{
+    model->getModel()->getMetiersList()[mId]->harbourId = -1;
+}
+
+void MetiersEntity::removeActivated()
+{
+
 }
 
 void MetiersEntity::initMenu()
@@ -107,6 +143,11 @@ void MetiersEntity::initMenu()
     if (mId == -1) {
         connect (mContextMenu->addAction(QObject::tr("Add Metier...")), SIGNAL(triggered()), this, SLOT(addMetierActivated()));
     } else {
-
+        connect (mContextMenu->addAction(QObject::tr("Add Population...")), SIGNAL(triggered()), this, SLOT(addPopulationActivated()));
+        connect (mContextMenu->addAction(QObject::tr("Remove Population")), SIGNAL(triggered()), this, SLOT(removePopulationActivated()));
+        connect (mContextMenu->addAction(QObject::tr("Add Harbour...")), SIGNAL(triggered()), this, SLOT(addHarbourActivated()));
+        connect (mContextMenu->addAction(QObject::tr("Remove Harbour")), SIGNAL(triggered()), this, SLOT(removeHarbourActivated()));
+        mContextMenu->addSeparator();
+        connect (mContextMenu->addAction(QObject::tr("Remove")), SIGNAL(triggered()), this, SLOT(removeActivated()));
     }
 }

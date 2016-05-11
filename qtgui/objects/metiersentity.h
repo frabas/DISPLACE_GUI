@@ -42,6 +42,11 @@ public:
 
 private slots:
     void addMetierActivated();
+    void addPopulationActivated();
+    void addHarbourActivated();
+    void removePopulationActivated();
+    void removeHarbourActivated();
+    void removeActivated();
 
 private:
     void initMenu();

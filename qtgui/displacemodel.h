@@ -246,6 +246,21 @@ public:
     /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
     HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
 
+    /* Access Metier Statistics */
+
+    int getMetiersStatsCount() const {
+        return mStatsMetiers.getUniqueValuesCount();
+    }
+    MetiersStatsContainer::Container::const_iterator getMetiersStatsFirstValue() const {
+        return mStatsMetiers.getFirst();
+    }
+    /*
+    const MetiersStatsContainer &getMetiersStatAtStep(int step) const {
+        return mStatsMetiers.getValue(step);
+    }
+    const MetiersStatsContainer &getMetiersStatAtStep(int step, int idx) const {
+        return mStatsMetiers.getValue(step).at(idx);
+    }*/
 
     /* Scenario and configuration */
 

@@ -110,7 +110,7 @@ private:
 
     /* Metiers */
     QCustomPlot *mPlotMetiers;
-    MetiersStat mSelectedMetiersStat;
+    MetiersStat mSelectedMetiersStat = M_Catches;
     QCPItemLine *mMetTimeLine;
 
 

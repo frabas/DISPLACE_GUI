@@ -490,6 +490,7 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
 
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
+        mStatsMetiers.insertValue(tstep, mStatsMetiersCollected);
         mVesselsStatsDirty = false;
     }
 
@@ -510,6 +511,7 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
     if (mCalendar && mCalendar->isYear(tstep)) {
         mStatsNationsCollected.clear();
         mStatsHarboursCollected.clear();
+        mStatsMetiersCollected.clear();
 #if 0       // Not sure if this is needed. Disabling it for now.
         for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
             mStatsPopulationsCollected[i].clear();

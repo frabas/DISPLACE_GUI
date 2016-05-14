@@ -483,16 +483,16 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
     static const QPen pen(QColor(0,0,255,200));
     mPlotMetiers->clearGraphs();
 
-    QList<int> ipl = model->getInterestingHarbours();
+    auto &dl = model->getMetiersList();
+
+    double t = model->getCurrentStep();
+    mMetTimeLine->start->setCoords(t, timelineMin);
+    mMetTimeLine->end->setCoords(t, timelineMax);
 
     int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
 
-    double t = model->getCurrentStep();
-    mHarbTimeLine->start->setCoords(t, timelineMin);
-    mHarbTimeLine->end->setCoords(t, timelineMax);
-
-    foreach (int ip, ipl) {
+    foreach (auto  d, dl) {
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
@@ -508,34 +508,27 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
         graph->setBrush(QBrush(col));
         ++cnt;
 
-        graph->setName(QString::fromStdString(model->getHarbourData(ip).mHarbour->get_name()));
+        graph->setName(d->description());
 
-        int n = model->getHarboursStatsCount();
-        DisplaceModel::HarboursStatsContainer::Container::const_iterator it = model->getHarboursStatsFirstValue();
+        int n = model->getMetiersStatsCount();
+        auto it = model->getMetiersStatsFirstValue();
+
+        int ip = d->metierId;
+
         for (int i = 0; i <n; ++i) {
             if (it.value().size() > ip) {
                 keyData << it.key();
 
-                switch (mSelectedHarboursStat) {
-                case H_Catches:
-                    valueData << it.value().at(ip).mCumCatches;
+                switch (mSelectedMetiersStat) {
+                case M_Catches:
+                    valueData << it.value().at(ip).mTotCatches;
                     mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
                     mPlotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
-                case H_Earnings:
-                    valueData << it.value().at(ip).mCumProfit;
-                    mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
-                    break;
-                case H_Gav:
-                    valueData << it.value().at(ip).mGav;
+                case M_Gav:
+                    valueData << it.value().at(ip).gav;
                     mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
                     mPlotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
-                    break;
-                case H_Vpuf:
-                    valueData << it.value().at(ip).mVpuf;
-                    mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotMetiers->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
                     break;
                 }
             }

@@ -74,11 +74,31 @@ int MetiersEntity::columnCount() const
 QVariant MetiersEntity::data(const QModelIndex &index, int role) const
 {
     if (mId != -1 && model->getModel() != 0 && index.column() == 0) {
+        auto &met = model->getModel()->getMetiersList()[mId];
         if (role == Qt::DisplayRole)
-            return model->getModel()->getMetiersList()[mId]->description();
+            return met->description();
+        if (role == Qt::CheckStateRole)
+            return met->ticked ? Qt::Checked : Qt::Unchecked;
     }
 
     return QVariant();
+}
+
+Qt::ItemFlags MetiersEntity::flags(Qt::ItemFlags defflags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defflags | Qt::ItemIsUserCheckable;
+}
+
+bool MetiersEntity::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    Q_UNUSED(index);
+    if(role == Qt::CheckStateRole) {
+        auto &met = model->getModel()->getMetiersList()[mId];
+        met->ticked = value.toInt() != 0;
+        return true;
+    }
+    return false;
 }
 
 QMenu *MetiersEntity::contextMenu() const

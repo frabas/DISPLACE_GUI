@@ -10,6 +10,7 @@ public:
     MetiersInterest() {
     }
 
+    bool ticked = false;
     int metierId = -1;
     int populationId = -1;
     int harbourId = -1;
@@ -37,6 +38,9 @@ public:
     virtual int rowCount() const;
     virtual int columnCount() const;
     virtual QVariant data(const QModelIndex &index, int role) const;
+
+    virtual Qt::ItemFlags flags(Qt::ItemFlags defflags, const QModelIndex &index) const override;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     QMenu *contextMenu() const override;
 

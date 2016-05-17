@@ -48,6 +48,7 @@
 #include <gdal/ogrsf_frmts.h>
 
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wshift-negative-value"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>

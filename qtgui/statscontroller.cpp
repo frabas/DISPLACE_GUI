@@ -497,6 +497,10 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
         mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
         break;
+    case M_Revenues:
+        mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        break;
     case M_Gav:
         mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
@@ -536,6 +540,9 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
                         valueData << it.value().at(ip).mTotCatches;
                     else
                         valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
+                    break;
+                case M_Revenues:
+                    valueData << it.value().at(ip).revenueAV;
                     break;
                 case M_Gav:
                     valueData << it.value().at(ip).gav;

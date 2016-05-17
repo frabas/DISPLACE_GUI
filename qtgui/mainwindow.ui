@@ -220,7 +220,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../vesseleditor/vesseleditor.qrc">
+          <iconset resource="qtgui.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -264,7 +264,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../vesseleditor/vesseleditor.qrc">
+          <iconset resource="qtgui.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -591,11 +591,6 @@
                   <string>Gross Added Value</string>
                  </property>
                 </item>
-                <item>
-                 <property name="text">
-                  <string>VPUF</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item>
@@ -666,7 +661,7 @@
         <string>Setup</string>
        </property>
        <property name="icon">
-        <iconset resource="../vesseleditor/vesseleditor.qrc">
+        <iconset resource="qtgui.qrc">
          <normaloff>:/icons/setup.png</normaloff>:/icons/setup.png</iconset>
        </property>
       </widget>
@@ -898,7 +893,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -907,7 +902,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -916,7 +911,7 @@
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1062,7 +1057,7 @@
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1101,7 +1096,7 @@
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1115,7 +1110,7 @@
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1207,7 +1202,7 @@
   </action>
   <action name="actionR_Console">
    <property name="icon">
-    <iconset resource="../vesseleditor/vesseleditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/Rlogo.png</normaloff>:/icons/Rlogo.png</iconset>
    </property>
    <property name="text">
@@ -1271,7 +1266,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../vesseleditor/vesseleditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

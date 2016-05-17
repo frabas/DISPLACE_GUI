@@ -492,6 +492,17 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
     int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
 
+    switch (mSelectedMetiersStat) {
+    case M_Catches:
+        mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
+        break;
+    case M_Gav:
+        mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
+        break;
+    }
+
     foreach (auto  d, dl) {
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
@@ -521,14 +532,13 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
 
                 switch (mSelectedMetiersStat) {
                 case M_Catches:
-                    valueData << it.value().at(ip).mTotCatches;
-                    mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
+                    if (d->populationId == -1)
+                        valueData << it.value().at(ip).mTotCatches;
+                    else
+                        valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
                     break;
                 case M_Gav:
                     valueData << it.value().at(ip).gav;
-                    mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
                     break;
                 }
             }

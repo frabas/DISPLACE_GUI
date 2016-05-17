@@ -659,8 +659,12 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
         mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
 
-        if (midx != -1)
+        if (midx != -1) {
+            while (mStatsMetiersCollected[midx].mCatchesPerPop.size() < n)
+                mStatsMetiersCollected[midx].mCatchesPerPop.push_back(0.0);
+            mStatsMetiersCollected[midx].mCatchesPerPop[i] += stats.mCatches[i];
             mStatsMetiersCollected[midx].mTotCatches += stats.mCatches[i];
+        }
     }
 
     if (mDb)

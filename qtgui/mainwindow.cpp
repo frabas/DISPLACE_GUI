@@ -1219,6 +1219,11 @@ void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
     mStatsController->setHarbourStat((StatsController::HarboursStat)index);
 }
 
+void MainWindow::on_metierStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setMetiersStat(static_cast<StatsController::MetiersStat>(index));
+}
+
 void MainWindow::on_play_params_clicked()
 {
     bool ok;
@@ -2232,3 +2237,4 @@ void MainWindow::on_actionExportAllGraphics_triggered()
     on_actionExport_Populations_triggered();
     on_actionExport_Nations_triggered();
 }
+

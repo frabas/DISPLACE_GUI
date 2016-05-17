@@ -19,7 +19,7 @@ public:
     double gav;
     double mTotCatches;
 
-    QList<double> mCatches;
+    QList<double> mCatchesPerPop;
 };
 
 #endif // METIERDATA_H

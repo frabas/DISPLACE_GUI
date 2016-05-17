@@ -190,6 +190,8 @@ private slots:
 
     void on_actionExportAllGraphics_triggered();
 
+    void on_metierStatSelector_currentIndexChanged(int index);
+
 public slots:
     void end_ShortestPathCreated(bool);
 

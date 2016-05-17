@@ -127,6 +127,7 @@ void MetiersEntity::addPopulationActivated()
 
     if (ok) {
         model->getModel()->getMetiersList()[mId]->populationId = mid;
+        model->getModel()->getMetiersList()[mId]->harbourId = -1;
     }
 
 }
@@ -138,6 +139,7 @@ void MetiersEntity::addHarbourActivated()
 
     if (ok) {
         model->getModel()->getMetiersList()[mId]->harbourId = mid;
+        model->getModel()->getMetiersList()[mId]->populationId = -1;
     }
 }
 

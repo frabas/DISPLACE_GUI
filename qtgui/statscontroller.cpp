@@ -508,6 +508,9 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
     }
 
     foreach (auto  d, dl) {
+        if (!d->ticked)
+            continue;
+
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 

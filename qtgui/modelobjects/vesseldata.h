@@ -77,18 +77,18 @@ class VesselStats {
 public:
     double vpuf() const { return revenueAV / cumFuelCons; }
 
-    int tstep;
+    int tstep = 0;
 
-    int vesselId;
-    int metierId;
-    int lastHarbour;
-    double revenueAV;
-    double revenueExAV;
-    double timeAtSea;
-    int reasonToGoBack;
-    double cumFuelCons;
-    double fuelCost;
-    double gav;
+    int vesselId = -1;
+    int metierId = -1;
+    int lastHarbour = -1;
+    double revenueAV = 0;
+    double revenueExAV = 0;
+    double timeAtSea = 0;
+    int reasonToGoBack = 0;
+    double cumFuelCons = 0;
+    double fuelCost = 0;
+    double gav = 0;
 
     QList<double> mCatches;
 

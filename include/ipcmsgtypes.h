@@ -56,25 +56,25 @@ namespace displace {
 namespace ipc {
 
 struct MoveVesselMessage {
-    unsigned int tstep, tstep_dep;
-    unsigned int idx;
-    double x,y,course,cumfuelcons;
-    int state;
+    unsigned int tstep = 0, tstep_dep = 0;
+    unsigned int idx = -1;
+    double x = 0,y = 0,course = 0,cumfuelcons = 0;
+    int state = -1;
 };
 
 struct MoveShipMessage {
-    unsigned int tstep;
-    unsigned int idx;
-    double x,y,course;
+    unsigned int tstep = 0;
+    unsigned int idx = -1;
+    double x = 0,y = 0,course = 0;
 };
 
 struct VesselLogbookMessage {
-    unsigned int tstep, tstepdep;
-    int rtbb, node, idx;
-    double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, gav2;
-    size_t popnum;
+    unsigned int tstep = 0, tstepdep = 0;
+    int rtbb = 0, node = -1, idx = -1;
+    double cumstm = 0, timeatsea = 0,cumfcons = 0,travdist = 0, revenue_from_av_prices = 0, revenue_explicit_from_av_prices = 0, fuelcost = 0, gav2 = 0;
+    size_t popnum = 0;
+    int metier = 0;
     double pop[];
-    int metier;
 };
 
 }

@@ -45,12 +45,12 @@ public:
     {
     }
 
-    double mTotCatches;
-    double mRevenues;
-    double mExRevenues;
-    double mTimeAtSea;
-    double mGav;
-    double mVpuf;
+    double mTotCatches = 0.0;
+    double mRevenues = 0.0;
+    double mExRevenues = 0.0;
+    double mTimeAtSea = 0.0;
+    double mGav = 0.0;
+    double mVpuf = 0.0;
 
     QVector<double> szGroups;
 };

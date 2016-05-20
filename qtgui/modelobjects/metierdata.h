@@ -15,9 +15,9 @@ class MetierStats {
 public:
     MetierStats() {}
 
-    double revenueAV;
-    double gav;
-    double mTotCatches;
+    double revenueAV = 0.0;
+    double gav = 0.0;
+    double mTotCatches = 0.0;
 
     QList<double> mCatchesPerPop;
 };

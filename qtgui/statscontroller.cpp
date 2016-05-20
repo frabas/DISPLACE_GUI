@@ -541,8 +541,12 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
                 case M_Catches:
                     if (d->populationId == -1)
                         valueData << it.value().at(ip).mTotCatches;
-                    else
-                        valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
+                    else {
+                        if (it.value().at(ip).mCatchesPerPop.size() > d->populationId)
+                            valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
+                        else
+                            valueData << 0;
+                    }
                     break;
                 case M_Revenues:
                     valueData << it.value().at(ip).revenueAV;

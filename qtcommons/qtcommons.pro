@@ -8,7 +8,7 @@ TARGET = qtcommons
 TEMPLATE = lib
 DESTDIR=../
 
-LIBS += -L.. -lformats -lboost_system -lboost_chrono
+LIBS += -L.. -lformats
 
 DEFINES += QTCOMMONS_LIBRARY
 

@@ -117,6 +117,7 @@ void MetiersEntity::addMetierActivated()
 
     if (ok) {
         model->getModel()->addMetier(mid);
+        model->refresh();
     }
 }
 
@@ -128,6 +129,7 @@ void MetiersEntity::addPopulationActivated()
     if (ok) {
         model->getModel()->getMetiersList()[mId]->populationId = mid;
         model->getModel()->getMetiersList()[mId]->harbourId = -1;
+        model->refresh();
     }
 
 }
@@ -140,17 +142,20 @@ void MetiersEntity::addHarbourActivated()
     if (ok) {
         model->getModel()->getMetiersList()[mId]->harbourId = mid;
         model->getModel()->getMetiersList()[mId]->populationId = -1;
+        model->refresh();
     }
 }
 
 void MetiersEntity::removePopulationActivated()
 {
     model->getModel()->getMetiersList()[mId]->populationId = -1;
+    model->refresh();
 }
 
 void MetiersEntity::removeHarbourActivated()
 {
     model->getModel()->getMetiersList()[mId]->harbourId = -1;
+    model->refresh();
 }
 
 void MetiersEntity::removeActivated()

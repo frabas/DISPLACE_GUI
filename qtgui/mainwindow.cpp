@@ -2263,6 +2263,7 @@ void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int
 {
     QCustomPlot plot;
     plot.resize(1024, 768);
+    plot.legend->setVisible(true);
     mStatsController->plotGraph(currentModel.get(), type, subtype, &plot, nullptr);
 
     plot.grab().save(outpath);

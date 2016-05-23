@@ -2256,6 +2256,8 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + "/metiers_catches.png", StatsController::Metiers, StatsController::M_Catches);
         exportPlot (out + "/metiers_revenues.png", StatsController::Metiers, StatsController::M_Revenues);
         exportPlot (out + "/metiers_gav.png", StatsController::Metiers, StatsController::M_Gav);
+
+        s.setValue("allplots_out", out);
     }
 }
 

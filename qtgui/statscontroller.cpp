@@ -99,16 +99,16 @@ void StatsController::updateStats(DisplaceModel *model)
         return;
 
     if (mPlotPopulations) {
-        updatePopulationStats(model);
+        updatePopulationStats(model, mSelectedPopStat, mPlotPopulations, mPopTimeLine);
     }
     if (mPlotNations) {
-        updateNationStats(model);
+        updateNationStats(model, mSelectedNationsStat, mPlotNations, mNatTimeLine);
     }
     if (mPlotHarbours) {
-        updateHarboursStats(model);
+        updateHarboursStats(model, mSelectedHarboursStat, mPlotHarbours, mHarbTimeLine);
     }
     if (mPlotMetiers) {
-        updateMetiersStats(model);
+        updateMetiersStats(model, mSelectedMetiersStat, mPlotMetiers, mMetTimeLine);
     }
 
     mLastModel = model;
@@ -158,10 +158,10 @@ void StatsController::setCurrentTimeStep(double t)
 
 }
 
-void StatsController::updatePopulationStats(DisplaceModel *model)
+void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat popStat, QCustomPlot *plotPopulations, QCPItemLine *timeline)
 {
     static const QPen pen(QColor(0,0,255,200));
-    mPlotPopulations->clearGraphs();
+    plotPopulations->clearGraphs();
     double val;
 
     QList<int> interPopList = model->getInterestingPops();
@@ -198,13 +198,13 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     QList<QVector<double> >valueData;
 
     double t = model->getCurrentStep();
-    mPopTimeLine->start->setCoords(t, timelineMin);
-    mPopTimeLine->end->setCoords(t, timelineMax);
+    timeline->start->setCoords(t, timelineMin);
+    timeline->end->setCoords(t, timelineMax);
 
     foreach (int ipop, interPopList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
-            QCPGraph *graph = mPlotPopulations->addGraph();
+            QCPGraph *graph = plotPopulations->addGraph();
             QColor col = mPalette.colorByIndex(ipop);
 
             graph->setLineStyle(QCPGraph::lsLine);
@@ -246,7 +246,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
             for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
-                val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], mSelectedPopStat);
+                val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], popStat);
                 if (iInterSize == 0) {
                     mMin = val;
                     mMax = val;
@@ -280,7 +280,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
                     val = mTot;
                     break;
                 default:
-                    val = getPopStatValue(model, it.key(), interPopList[iinterpPop], graphList[isz], mSelectedPopStat);
+                    val = getPopStatValue(model, it.key(), interPopList[iinterpPop], graphList[isz], popStat);
                     break;
                 }
 
@@ -295,20 +295,20 @@ void StatsController::updatePopulationStats(DisplaceModel *model)
     }
 
 
-    switch (mSelectedPopStat) {
+    switch (popStat) {
     case Aggregate:
-        mPlotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlotPopulations->yAxis->setLabel(QObject::tr("Numbers"));
+        plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotPopulations->yAxis->setLabel(QObject::tr("Numbers"));
         break;
     case Mortality:
-        mPlotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlotPopulations->yAxis->setLabel(QObject::tr("F"));
+        plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotPopulations->yAxis->setLabel(QObject::tr("F"));
         break;
     }
 
 
-    mPlotPopulations->rescaleAxes();
-    mPlotPopulations->replot();
+    plotPopulations->rescaleAxes();
+    plotPopulations->replot();
 }
 
 double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int popid, int szid, StatsController::PopulationStat stattype)
@@ -323,16 +323,18 @@ double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int pop
     return 0;
 }
 
-void StatsController::updateNationStats(DisplaceModel *model)
+void StatsController::updateNationStats(DisplaceModel *model, NationsStat nationsStat, QCustomPlot *plotNations, QCPItemLine *timeLine)
 {
     static const QPen pen(QColor(0,0,255,200));
-    mPlotNations->clearGraphs();
+    plotNations->clearGraphs();
 
     QList<int> ipl = model->getInterestingNations();
 
     double t = model->getCurrentStep();
-    mNatTimeLine->start->setCoords(t, timelineMin);
-    mNatTimeLine->end->setCoords(t, timelineMax);
+    if (timeLine != nullptr ) {
+        timeLine->start->setCoords(t, timelineMin);
+        timeLine->end->setCoords(t, timelineMax);
+    }
 
     int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
@@ -343,7 +345,7 @@ void StatsController::updateNationStats(DisplaceModel *model)
         QVector<double> keyData;
         QVector<double> valueData;
 
-        QCPGraph *graph = mPlotNations->addGraph();
+        QCPGraph *graph = plotNations->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
         QColor col = col_it != mPalette.end() ? *col_it : QColor();
@@ -360,36 +362,36 @@ void StatsController::updateNationStats(DisplaceModel *model)
             if (it.value().size() > ip) {
                 keyData << it.key();
 
-                switch (mSelectedNationsStat) {
+                switch (nationsStat) {
                 case Catches:
                     valueData << it.value().at(ip).mTotCatches;
-                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
                 case Earnings:
                     valueData << it.value().at(ip).mRevenues;
-                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
                 case ExEarnings:
                     valueData << it.value().at(ip).mExRevenues;
-                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
                 case TimeAtSea:
                     valueData << it.value().at(ip).mTimeAtSea;
-                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
                     break;
                 case Gav:
                     valueData << it.value().at(ip).mGav;
-                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotNations->yAxis->setLabel(QObject::tr("GAV (Euro)"));
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("GAV (Euro)"));
                     break;
                 case Vpuf:
                     valueData << it.value().at(ip).mVpuf;
-                    mPlotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    mPlotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
                     break;
                 }
             }
@@ -401,11 +403,11 @@ void StatsController::updateNationStats(DisplaceModel *model)
         ++col_it;
     }
 
-    mPlotNations->rescaleAxes();
-    mPlotNations->replot();    
+    plotNations->rescaleAxes();
+    plotNations->replot();
 }
 
-void StatsController::updateHarboursStats(DisplaceModel *model)
+void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat mSelectedHarboursStat, QCustomPlot *mPlotHarbours, QCPItemLine *mHarbTimeLine)
 {
     static const QPen pen(QColor(0,0,255,200));
     mPlotHarbours->clearGraphs();
@@ -478,32 +480,34 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
     mPlotHarbours->replot();    
 }
 
-void StatsController::updateMetiersStats(DisplaceModel *model)
+void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine)
 {
     static const QPen pen(QColor(0,0,255,200));
-    mPlotMetiers->clearGraphs();
+    plotMetiers->clearGraphs();
 
     auto &dl = model->getMetiersList();
 
     double t = model->getCurrentStep();
-    mMetTimeLine->start->setCoords(t, timelineMin);
-    mMetTimeLine->end->setCoords(t, timelineMax);
+    if (metTimeLine != nullptr) {
+        metTimeLine->start->setCoords(t, timelineMin);
+        metTimeLine->end->setCoords(t, timelineMax);
+    }
 
     int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
 
-    switch (mSelectedMetiersStat) {
+    switch (metStat) {
     case M_Catches:
-        mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
         break;
     case M_Revenues:
-        mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
         break;
     case M_Gav:
-        mPlotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
         break;
     }
 
@@ -517,7 +521,7 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
         QVector<double> keyData;
         QVector<double> valueData;
 
-        QCPGraph *graph = mPlotMetiers->addGraph();
+        QCPGraph *graph = plotMetiers->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
         QColor col = col_it != mPalette.end() ? *col_it : QColor();
@@ -537,7 +541,7 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
             if (it.value().size() > ip) {
                 keyData << it.key();
 
-                switch (mSelectedMetiersStat) {
+                switch (metStat) {
                 case M_Catches:
                     if (d->populationId == -1)
                         valueData << it.value().at(ip).mTotCatches;
@@ -564,7 +568,7 @@ void StatsController::updateMetiersStats(DisplaceModel *model)
         ++col_it;
     }
 
-    mPlotMetiers->rescaleAxes();
-    mPlotMetiers->replot();
+    plotMetiers->rescaleAxes();
+    plotMetiers->replot();
 }
 

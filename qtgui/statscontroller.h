@@ -60,6 +60,10 @@ public:
 
     void updateStats(DisplaceModel *model);
 
+    enum StatType {
+        Populations, Nations, Harbours, Metiers
+    };
+
     enum PopulationStat { Aggregate, Mortality };
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
@@ -82,13 +86,15 @@ public:
 
     void setCurrentTimeStep(double t);
 
+    void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
+
 protected:
-    void updatePopulationStats(DisplaceModel *model);
+    void updatePopulationStats(DisplaceModel *model, PopulationStat popStat, QCustomPlot *plotPopulations, QCPItemLine *timeline);
     double getPopStatValue (DisplaceModel *model, int tstep, int popid, int szid, PopulationStat stattype);
 
-    void updateNationStats(DisplaceModel *model);
-    void updateHarboursStats (DisplaceModel *model);
-    void updateMetiersStats(DisplaceModel *model);
+    void updateNationStats(DisplaceModel *model, NationsStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
+    void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
+//    void updateMetiersStats(DisplaceModel *model);
 
 private:
     Palette mPalette;

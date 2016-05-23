@@ -2233,8 +2233,37 @@ void MainWindow::on_actionScheduler_Editor_triggered()
 
 void MainWindow::on_actionExportAllGraphics_triggered()
 {
-    on_actionExport_Harbours_triggered();
-    on_actionExport_Populations_triggered();
-    on_actionExport_Nations_triggered();
+    QSettings s;
+    QString outpath = s.value("allplots_out", QDir::homePath()).toString();
+    QString out = QFileDialog::getExistingDirectory(this, tr("Export all plots to"), outpath);
+
+    if (!out.isEmpty()) {
+        exportPlot (out + "/pop_aggregate.png", StatsController::Populations, StatsController::Aggregate);
+        exportPlot (out + "/pop_mortality.png", StatsController::Populations, StatsController::Mortality);
+
+        exportPlot (out + "/nations_catches.png", StatsController::Nations, StatsController::Catches);
+        exportPlot (out + "/nations_earnings.png", StatsController::Nations, StatsController::Earnings);
+        exportPlot (out + "/nations_exearnings.png", StatsController::Nations, StatsController::ExEarnings);
+        exportPlot (out + "/nations_timeatsea.png", StatsController::Nations, StatsController::TimeAtSea);
+        exportPlot (out + "/nations_gav.png", StatsController::Nations, StatsController::Gav);
+        exportPlot (out + "/nations_vpuf.png", StatsController::Nations, StatsController::Vpuf);
+
+        exportPlot (out + "/harbours_catches.png", StatsController::Harbours, StatsController::H_Catches);
+        exportPlot (out + "/harbours_earnings.png", StatsController::Harbours, StatsController::H_Earnings);
+        exportPlot (out + "/harbours_gav.png", StatsController::Harbours, StatsController::H_Gav);
+        exportPlot (out + "/harbours_vpuf.png", StatsController::Harbours, StatsController::H_Vpuf);
+
+        exportPlot (out + "/metiers_catches.png", StatsController::Metiers, StatsController::M_Catches);
+        exportPlot (out + "/metiers_revenues.png", StatsController::Metiers, StatsController::M_Revenues);
+        exportPlot (out + "/metiers_gav.png", StatsController::Metiers, StatsController::M_Gav);
+    }
 }
 
+void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype)
+{
+    QCustomPlot plot;
+    plot.resize(1024, 768);
+    mStatsController->plotGraph(currentModel.get(), type, subtype, &plot, nullptr);
+
+    plot.grab().save(outpath);
+}

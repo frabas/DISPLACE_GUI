@@ -230,6 +230,7 @@ protected:
 
     void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
     void exportGraphics(QString label, QWidget *widget);
+    void exportPlot (QString outpath, StatsController::StatType type, int subtype);
 
     void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 private:

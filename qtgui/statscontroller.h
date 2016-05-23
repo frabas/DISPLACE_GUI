@@ -86,7 +86,7 @@ public:
 
     void setCurrentTimeStep(double t);
 
-    void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
+    void plotGraph (DisplaceModel *model, StatType st, int subtype, QCustomPlot *plot, QCPItemLine *line);
 
 protected:
     void updatePopulationStats(DisplaceModel *model, PopulationStat popStat, QCustomPlot *plotPopulations, QCPItemLine *timeline);
@@ -94,7 +94,7 @@ protected:
 
     void updateNationStats(DisplaceModel *model, NationsStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
     void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
-//    void updateMetiersStats(DisplaceModel *model);
+    void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
 
 private:
     Palette mPalette;

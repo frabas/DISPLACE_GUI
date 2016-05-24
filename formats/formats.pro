@@ -40,4 +40,9 @@ win32 {
     LIBS +=
 }
 
+target.path = $${PREFIX}/lib
+headers.path = $${PREFIX}/include/
+headers.files = $${HEADERS}
+
+INSTALLS += target
 

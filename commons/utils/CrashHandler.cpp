@@ -7,7 +7,7 @@
 #include "CrashHandler.h"
 
 
-#ifndef __WIN32
+#ifndef NO_CRASHHANDLER
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE

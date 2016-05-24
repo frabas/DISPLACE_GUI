@@ -12,12 +12,20 @@ INCLUDEPATH +=../include/ ../formats .
 LIBS += -L.. -lformats
 
 win32 {
+    # No crash handler support for Windows
+    DEFINES += NO_CRASHHANDLER
+
     # For GetProcessMemoryInfo()
     LIBS += -lpsapi
 }
 
 unix:!macx {
     LIBS += -lrt
+}
+
+macx {
+    # No crash handler support for MacOS
+    DEFINES += NO_CRASHHANDLER
 }
 
 SOURCES= \

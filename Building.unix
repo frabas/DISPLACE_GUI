@@ -1,20 +1,40 @@
 How to build under Linux
 ========================
 
+At the time of writing, the following procedure is tested on Ubuntu 15.10 and, with minor adaptations, on Ubuntu 14.04 LTS.
+Any recent linux distribution that satisfies the prerequisites should be able to compile and run Displace without issues.
+
 Prerequisites
 -------------
 
-The following libraries, with development files, are required to compile under linux:
+Displace must be compiled with a recent c++ compiler that supports c++11 and the relative standard library.
+gcc 4.8 and clang are compiling correctly.
+The following libraries, with development files (libraries and headers), are required to compile under linux:
 
-Gdal library 1.10
+CGAL library version 4.6.1
+Gdal library version 1.11
 Boost 1.58 with the following components: Boost::Graph, Boost::RegEx
-GeographicLib 
+GeographicLib 1.44
 
-To install prerequisites under Ubuntu 14.10:
+To install prerequisites under Ubuntu 15.10:
 
-$ sudo apt-get install libgdal1-dev
-$ sudo apt-get install libboost-graph1.55-dev
-$ sudo apt-get install libgeographiclib-dev
+$ sudo apt-get install libcgal11v5 libcgal-dev
+$ sudo apt-get install libgdal1i libgdal-dev
+$ sudo apt-get install libboost-all-dev
+$ sudo apt-get install libgeographic14 libgeographic-dev
+
+
+Building packages under Debian
+------------------------------
+
+Under Debian/Ubuntu with the proper setup building system, it is possible to build the debian binary package.
+Run
+
+$ dpkg-buildpackage -uc -B -j8
+
+Please ensure that the system is properly setup, as described in the Debian's New Maintainer's guide
+( https://www.debian.org/doc/manuals/maint-guide/ )
+
 
 Compilation under linux
 -----------------------
@@ -29,6 +49,8 @@ $ mkdir build-release
 $ cd build-release
 $ qmake ../
 $ make
+
+If you have a multicore cpu, you can add -jXXX where XXX is a proper number of threads (for example, -j8 for an eight-core cpu).
 
 Installing
 To install, use make this way:
@@ -49,20 +71,6 @@ Make uninstall is used the same way.
 
 NOTE: 
 Be sure to use qmake for Qt5. In case of Ubuntu 14.10, be sure to install qt5-default to automatically select qmake for qt5, otherwise qmake will point to the qt4 version.
-
-* Compilation of simulator only / without QT
-
-It is possible to compile the simulation module without QT, for example on an HPC.
-
-Just enter the simulation directory and run make:
-
-$ cd simulation
-$ make
-
-Installation need to be done manually, by copying the binary into the destination directory
-
-$ sudo install -m 0755 displace /usr/local/bin/
-
 
 Compilation under HPC (without qt)
 ==================================

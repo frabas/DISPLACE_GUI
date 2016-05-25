@@ -2888,7 +2888,12 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	popdyn_F.open(filename.c_str());
     std::string popdyn_F_filename = filename;
 
-	ofstream popdyn_annual_indic;
+    ofstream popdyn_SSB;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_SSB_"+namesimu+".dat";
+    popdyn_SSB.open(filename.c_str());
+    std::string popdyn_SSB_filename = filename;
+
+    ofstream popdyn_annual_indic;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_annual_indic_"+namesimu+".dat";
 	popdyn_annual_indic.open(filename.c_str());
 
@@ -3073,6 +3078,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              pathoutput,
                                              popdyn_N,
                                              popdyn_F,
+                                             popdyn_SSB,
                                              popdyn_annual_indic,
                                              popdyn_test2,
                                              popnodes_inc,
@@ -3091,6 +3097,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              use_gui,
                                              popdyn_N_filename,
                                              popdyn_F_filename,
+                                             popdyn_SSB_filename,
                                              popnodes_inc_filename,
                                              popnodes_end_filename,
                                              popnodes_impact_filename,
@@ -4295,7 +4302,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	loglike_prop_met.close();
 	popdyn_N.close();
 	popdyn_F.close();
-	popdyn_annual_indic.close();
+    popdyn_SSB.close();
+    popdyn_annual_indic.close();
 	freq_cpue.close();
 	freq_profit.close();
 	popdyn_test.close();

@@ -197,14 +197,14 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
 
     bool r =
     q.prepare("INSERT INTO " + TBL_POP_STATS
-              + "(tstep,popid,N,F) "
-              + "VALUES (?,?,?,?)");
+              + "(tstep,popid,N,F,SSB) "
+              + "VALUES (?,?,?,?, ?)");
     DB_ASSERT(r,q);
 
     r =
     qn.prepare("INSERT INTO " + TBL_POPSZ_STATS
-              + "(tstep,popid,szgroup,N,F) "
-              + "VALUES (?,?,?,?,?)");
+              + "(tstep,popid,szgroup,N,F,SSB) "
+              + "VALUES (?,?,?,?,?, ?)");
     DB_ASSERT(r,qn);
 
 
@@ -213,6 +213,7 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
         q.addBindValue(p.getId());
         q.addBindValue(p.getAggregateTot());
         q.addBindValue(p.getMortalityTot());
+        q.addBindValue(p.getSSBTot());
 
         bool res = q.exec();
         DB_ASSERT(res, q);
@@ -224,6 +225,7 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
             qn.addBindValue(i);
             qn.addBindValue(p.getAggregate().at(i));
             qn.addBindValue(p.getMortality().at(i));
+            qn.addBindValue(p.getSSB().at(i));
             res = qn.exec();
             DB_ASSERT(res,qn);
         }
@@ -651,11 +653,11 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
 bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population)
 {
     QSqlQuery q(mDb);
-    bool res = q.prepare("SELECT tstep,popid,N,F FROM " + TBL_POP_STATS + " ORDER BY tstep");
+    bool res = q.prepare("SELECT tstep,popid,N,F,SSB FROM " + TBL_POP_STATS + " ORDER BY tstep");
     DB_ASSERT(res,q);
 
     QSqlQuery qn(mDb);
-    res = qn.prepare("SELECT szgroup,N,F FROM " + TBL_POPSZ_STATS + " WHERE tstep=? AND popid=?");
+    res = qn.prepare("SELECT szgroup,N,F,SSB FROM " + TBL_POPSZ_STATS + " WHERE tstep=? AND popid=?");
     DB_ASSERT(res,qn);
 
     int last_tstep = -1;
@@ -676,6 +678,7 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
         int pid = q.value(1).toInt();
         double n = q.value(2).toDouble();
         double f = q.value(3).toDouble();
+        double ssb = q.value(4).toDouble();
 
         for (int i = v.size(); i <= pid; ++i) {
             PopulationData p(i);
@@ -692,10 +695,12 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
 
         QVector<double> nv;
         QVector<double> fv;
+        QVector<double> ssbv;
         while (qn.next()) {
             int sz = qn.value(0).toInt();
             double agg = qn.value(1).toDouble();
             double mor = qn.value(2).toDouble();
+            double ssbb = qn.value(2).toDouble();
 
             while (nv.size() <= sz)
                 nv.push_back(0);
@@ -703,12 +708,17 @@ bool DbHelper::loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<Popul
             while (fv.size() <= sz)
                 fv.push_back(0);
             fv[sz] = mor;
+            while (ssbv.size() <= sz)
+                ssbv.push_back(0);
+            ssbv[sz] = ssbb;
         }
 
         v[pid].setAggregate(nv);
         v[pid].setMortality(fv);
+        v[pid].setSSB(ssbv);
         v[pid].setAggregateTot(n);
         v[pid].setMortalityTot(f);
+        v[pid].setSSBTot(ssb);
 
     }
 

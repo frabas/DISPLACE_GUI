@@ -612,6 +612,14 @@ void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &p
     mPopStatsDirty = true;
 }
 
+void DisplaceModel::collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value)
+{
+    checkStatsCollection(step);
+    mStatsPopulationsCollected[popid].setSSB(pops);
+    mStatsPopulationsCollected[popid].setSSBTot(value);
+    mPopStatsDirty = true;
+}
+
 void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 {
     std::shared_ptr<VesselData> vessel = mVessels.at(stats.vesselId);

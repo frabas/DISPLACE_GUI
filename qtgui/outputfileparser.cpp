@@ -73,6 +73,8 @@ void OutputFileParser::parse(QString path, int tstep)
         parsePopBenthosBiomass(&file, tstep, mModel);
     } else if (name.startsWith("popdyn_F_")) {
         parsePopdynF(&file, tstep, mModel);
+    } else if (name.startsWith("popdyn_SSB_")) {
+        parsePopdynSSB(&file, tstep, mModel);
     } else if (name.startsWith("popdyn_")) {
         parsePopdyn(&file, tstep, mModel);
     } else if (name.startsWith("loglike_")) {
@@ -285,6 +287,31 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
         }
     }
 }
+
+void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model)
+{
+    QTextStream strm (file);
+
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        int step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            QVector<double> pop(model->getSzGrupsCount());
+            int id = fields[1].toInt();
+
+            double tot = 0;
+            for (int i = 2; i < fields.size(); ++i) {
+                double v = fields[i].toDouble();
+                tot += v;
+                pop[i-2] = v;
+            }
+            model->collectPopdynSSB(step, id, pop, tot);
+        }
+    }
+}
+
 
 void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
 {

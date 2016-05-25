@@ -99,7 +99,8 @@ class Population
 		vector<int> get_comcat_at_szgroup() const;
         const vector<double>& get_M_at_szgroup() const;
         const vector<double>& get_proprecru_at_szgroup() const;
-		double get_SSB() const;
+        const vector<double>& get_SSB_at_szgroup() const;
+        double get_SSB() const;
         const vector<double>& get_param_sr() const;
 		vector< vector <double> >get_growth_transition_matrix() const;
 		vector< vector <double> >get_percent_szgroup_per_age_matrix() const;
@@ -140,7 +141,8 @@ class Population
 		void set_comcat_at_szgroup(vector <int> _comcat_at_szgroup);
         void set_M_at_szgroup(const vector<double>& _M_at_szgroup);
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
-		void set_SSB(double _SSB);
+        void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
+        void set_SSB(double _SSB);
 								 // in weight...
 		void set_landings_so_far(double _landings_so_far);
         void set_param_sr(const vector<double>& _param_sr);
@@ -169,7 +171,8 @@ class Population
 		void apply_natural_mortality();
 		void export_popdyn_N(ofstream& popdyn_N, int tstep);
 		void export_popdyn_F(ofstream& popdyn_F, int tstep);
-		void export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep);
+        void export_popdyn_SSB(ofstream& popdyn_SSB, int tstep);
+        void export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep);
 
 	protected:
 	private:
@@ -221,7 +224,8 @@ class Population
 		vector<double> M_at_szgroup;
 								 //
 		vector<double> proprecru_at_szgroup;
-		double SSB;				 //
+        vector<double> SSB_at_szgroup;
+        double SSB;				 //
 		vector<double> param_sr; //
 								 // area distribution
 		vector<Node* > list_nodes;

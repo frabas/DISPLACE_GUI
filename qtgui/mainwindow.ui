@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -220,7 +220,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="qtgui.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -264,7 +264,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="qtgui.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -316,7 +316,7 @@
         <item>
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>3</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
@@ -436,6 +436,11 @@
                 <item>
                  <property name="text">
                   <string>Fishing mortality</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Spawning Stock Biomass SSB</string>
                  </property>
                 </item>
                </widget>
@@ -893,7 +898,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -902,7 +907,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -911,7 +916,7 @@
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1010,7 +1015,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -1031,7 +1036,7 @@
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -1057,7 +1062,7 @@
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1096,7 +1101,7 @@
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1110,7 +1115,7 @@
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1183,7 +1188,7 @@
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -1266,6 +1271,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../dteditor/dteditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

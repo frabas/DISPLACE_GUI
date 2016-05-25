@@ -64,7 +64,7 @@ public:
         Populations, Nations, Harbours, Metiers
     };
 
-    enum PopulationStat { Aggregate, Mortality };
+    enum PopulationStat { Aggregate, Mortality, SSB };
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 

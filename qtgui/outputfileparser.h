@@ -76,6 +76,7 @@ protected:
     void parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model);
     void parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model);
     void parsePopdynF(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model);
     void parsePopdyn(QFile *file, int tstep, DisplaceModel *model);
     void parseVessels(QFile *file, int tstep, DisplaceModel *model);
 

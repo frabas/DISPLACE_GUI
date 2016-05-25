@@ -25,17 +25,19 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(), mortality(),
+      aggregate(), mortality(), SSB(),
       totAggregate(0.0),
-      totMortality(0.0)
+      totMortality(0.0),
+      totSSB(0.0)
 {
 }
 
 PopulationData::PopulationData(const PopulationData &p)
     : id(p.id),
-      aggregate(p.aggregate), mortality(p.mortality),
+      aggregate(p.aggregate), mortality(p.mortality), SSB(p.SSB),
       totAggregate(p.totAggregate),
-      totMortality(p.totMortality)
+      totMortality(p.totMortality),
+      totSSB(p.totSSB)
 {
 
 }
@@ -66,6 +68,20 @@ void PopulationData::setMortality(const QVector<double> &value)
         aggregate.push_back(0);
 }
 
+const QVector<double> &PopulationData::getSSB() const
+{
+    return SSB;
+}
+
+void PopulationData::setSSB(const QVector<double> &value)
+{
+    SSB = value;
+    // force aggregate and mortality to have the same size!
+    while (aggregate.size() < SSB.size())
+        aggregate.push_back(0);
+}
+
+
 int PopulationData::getId() const
 {
     return id;
@@ -80,6 +96,17 @@ void PopulationData::setMortalityTot(double value)
 {
     totMortality = value;
 }
+
+double PopulationData::getSSBTot() const
+{
+    return totSSB;
+}
+
+void PopulationData::setSSBTot(double value)
+{
+    totSSB = value;
+}
+
 
 double PopulationData::getAggregateTot() const
 {

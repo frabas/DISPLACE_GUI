@@ -362,6 +362,7 @@ public:
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
+    void collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value);
 
     void collectVesselStats (int step, const VesselStats &stats);
 

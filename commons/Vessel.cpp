@@ -3477,7 +3477,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
                                 (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers))
                                  )		 // area-based sce
        {
-		this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
+        this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
 		// compliance => 0.0001
        }
 

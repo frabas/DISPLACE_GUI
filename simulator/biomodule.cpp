@@ -76,6 +76,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream &popdyn_N,
                           ofstream &popdyn_F,
+                          ofstream &popdyn_SSB,
                           ofstream &popdyn_annual_indic,
                           ofstream &popdyn_test2,
                           ofstream &popnodes_inc,
@@ -94,6 +95,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           bool use_gui,
                           const string & popdyn_N_filename,
                           const string & popdyn_F_filename,
+                          const string & popdyn_SSB_filename,
                           const string & popnodes_inc_filename,
                           const string & popnodes_end_filename,
                           const string & popnodes_impact_filename,
@@ -237,7 +239,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
 
             }
-         // ...then, cumul for getting tot SSB (here in kilos)
+
+           // for export
+           populations.at(sp)->set_SSB_at_szgroup( SSB_per_szgroup  );
+
+            // ...then, cumul for getting tot SSB (here in kilos)
          double SSB=0;
          for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
          {
@@ -245,7 +251,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
          }
          SSB= SSB/1000;			 //
          cout << "The SSB is " << SSB  << " tons for " << populations.at(sp)->get_name() << endl ;
-       }
+        }
     }
 }
 
@@ -871,6 +877,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             populations.at(sp)->export_popdyn_N (popdyn_N, tstep);
                          // ...and F at age
             populations.at(sp)->export_popdyn_F (popdyn_F, tstep);
+            populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
 
 
 

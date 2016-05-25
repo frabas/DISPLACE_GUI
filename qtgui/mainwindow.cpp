@@ -2240,6 +2240,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
     if (!out.isEmpty()) {
         exportPlot (out + "/pop_aggregate.png", StatsController::Populations, StatsController::Aggregate);
         exportPlot (out + "/pop_mortality.png", StatsController::Populations, StatsController::Mortality);
+        exportPlot (out + "/pop_ssb.png", StatsController::Populations, StatsController::SSB);
 
         exportPlot (out + "/nations_catches.png", StatsController::Nations, StatsController::Catches);
         exportPlot (out + "/nations_earnings.png", StatsController::Nations, StatsController::Earnings);

@@ -92,6 +92,7 @@ Population::Population(int a_name,
 		maturity_at_szgroup.push_back(0);
 		M_at_szgroup.push_back(0);
 		proprecru_at_szgroup.push_back(0);
+        SSB_at_szgroup.push_back(0);
 
 	}
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
@@ -428,6 +429,10 @@ const vector<double>& Population::get_proprecru_at_szgroup() const
 	return(proprecru_at_szgroup);
 }
 
+const vector<double>& Population::get_SSB_at_szgroup() const
+{
+    return(SSB_at_szgroup);
+}
 
 double Population::get_SSB() const
 {
@@ -713,6 +718,14 @@ void Population::set_proprecru_at_szgroup(const vector<double>& _proprecru_at_sz
 
 }
 
+void Population::set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup)
+{
+    for(unsigned int sz =0; sz<_SSB_at_szgroup.size(); sz++)
+    {
+        SSB_at_szgroup[sz] =_SSB_at_szgroup[sz];
+    }
+
+}
 
 void Population::set_SSB(double _SSB)
 {
@@ -1661,8 +1674,7 @@ void Population::export_popdyn_N(ofstream& popdyn_N, int tstep)
 void Population::export_popdyn_F(ofstream& popdyn_F, int tstep)
 {
 
-	//this->aggregate_N(); // get total N from summing up N over nodes
-	popdyn_F << setprecision(6) << fixed;
+    popdyn_F << setprecision(6) << fixed;
 	// tstep / pop / F at szgroup
 	popdyn_F << tstep << " " << this->get_name() << " ";
 	vector <double>tot_F_at_age=this->get_tot_F_at_age();
@@ -1673,6 +1685,22 @@ void Population::export_popdyn_F(ofstream& popdyn_F, int tstep)
 	}
 	popdyn_F << " " <<  endl;
 }
+
+void Population::export_popdyn_SSB(ofstream& popdyn_SSB, int tstep)
+{
+
+    popdyn_SSB << setprecision(6) << fixed;
+    // tstep / pop / SSB at szgroup
+    popdyn_SSB << tstep << " " << this->get_name() << " ";
+    vector <double>SSB_at_szgroup=this->get_SSB_at_szgroup();
+    for(unsigned int sz = 0; sz < SSB_at_szgroup.size(); sz++)
+    {
+                                 // output SSB
+        popdyn_SSB  << SSB_at_szgroup.at(sz)  << " " ;
+    }
+    popdyn_SSB << " " <<  endl;
+}
+
 
 
 void Population::export_popdyn_annual_indic(ofstream& popdyn_annual_indic, int tstep)

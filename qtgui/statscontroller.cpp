@@ -324,6 +324,10 @@ void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat
         plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
         plotPopulations->yAxis->setLabel(QObject::tr("F"));
         break;
+    case SSB:
+        plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotPopulations->yAxis->setLabel(QObject::tr("SSB (tons)"));
+        break;
     }
 
 
@@ -338,6 +342,8 @@ double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int pop
         return model->getPopulationsAtStep(tstep, popid).getAggregate().at(szid);
     case Mortality:
         return model->getPopulationsAtStep(tstep, popid).getMortality().at(szid);
+    case SSB:
+        return model->getPopulationsAtStep(tstep, popid).getSSB().at(szid);
     }
 
     return 0;

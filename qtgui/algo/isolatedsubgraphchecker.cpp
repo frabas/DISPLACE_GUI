@@ -46,12 +46,12 @@ public:
     }
 
     template < typename Vertex, typename Graph >
-    void discover_vertex(Vertex u, const Graph & g) const {
+    void discover_vertex(Vertex u, const Graph &) const {
         nodes.erase(u);
     }
 
     template < typename Vertex, typename Graph >
-    void finish_vertex(Vertex u, const Graph & g) const {
+    void finish_vertex(Vertex, const Graph &) const {
     }
 };
 

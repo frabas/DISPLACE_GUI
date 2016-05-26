@@ -216,7 +216,7 @@ for (unsigned int sp=0; sp<sample_pops.size(); sp++)
 
 // TO CHECK: SSB
 // compute SSB
-if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+if(tstep==0 || binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
@@ -252,7 +252,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
          SSB= SSB/1000;			 //
          cout << "The SSB is " << SSB  << " tons for " << populations.at(sp)->get_name() << endl ;
         }
+        populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
     }
+
 }
 
 
@@ -877,7 +879,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             populations.at(sp)->export_popdyn_N (popdyn_N, tstep);
                          // ...and F at age
             populations.at(sp)->export_popdyn_F (popdyn_F, tstep);
-            populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
 
 
 

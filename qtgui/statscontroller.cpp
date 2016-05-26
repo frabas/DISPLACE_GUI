@@ -326,7 +326,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat
         break;
     case SSB:
         plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotPopulations->yAxis->setLabel(QObject::tr("SSB (tons)"));
+        plotPopulations->yAxis->setLabel(QObject::tr("SSB (kg)"));
         break;
     }
 

@@ -68,5 +68,3 @@ OBJECTS_DIR = obj
 RCC_DIR = obj
 
 DESTDIR=$$top_builddir
-
-INSTALLS = target

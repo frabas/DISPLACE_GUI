@@ -1081,6 +1081,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
         popdyn_N.flush();
         guiSendUpdateCommand(popdyn_N_filename, tstep);
+
+        popdyn_SSB.flush();
+        guiSendUpdateCommand(popdyn_SSB_filename, tstep);
     }
 #ifdef PROFILE
     mPopExportProfile.elapsed_ms();

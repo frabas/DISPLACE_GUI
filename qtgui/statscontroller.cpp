@@ -342,8 +342,12 @@ double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int pop
         return model->getPopulationsAtStep(tstep, popid).getAggregate().at(szid);
     case Mortality:
         return model->getPopulationsAtStep(tstep, popid).getMortality().at(szid);
-    case SSB:
-        return model->getPopulationsAtStep(tstep, popid).getSSB().at(szid);
+    case SSB: {
+        auto &x = model->getPopulationsAtStep(tstep, popid).getSSB();
+        if (szid < x.size())
+            return x.at(szid);
+        return 0;
+        }
     }
 
     return 0;

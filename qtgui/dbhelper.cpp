@@ -225,7 +225,7 @@ void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
             qn.addBindValue(i);
             qn.addBindValue(p.getAggregate().at(i));
             qn.addBindValue(p.getMortality().at(i));
-            qn.addBindValue(p.getSSB().at(i));
+            qn.addBindValue(i < p.getSSB().size() ? p.getSSB().at(i) : 0);
             res = qn.exec();
             DB_ASSERT(res,qn);
         }
@@ -1093,7 +1093,8 @@ bool DbHelper::checkStatsTable(int version)
                + "tstep INTEGER,"
                + "popid INTEGER,"
                + "N REAL,"
-               + "F REAL"
+               + "F REAL,"
+               + "SSB REAL"
                + ");"
                );
 
@@ -1108,7 +1109,8 @@ bool DbHelper::checkStatsTable(int version)
                + "popid INTEGER,"
                + "szgroup INTEGER,"
                + "N REAL,"
-               + "F REAL"
+               + "F REAL,"
+               + "SSB REAL"
                + ");"
                );
 

@@ -76,7 +76,6 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream &popdyn_N,
                           ofstream &popdyn_F,
-                          ofstream &popdyn_SSB,
                           ofstream &popdyn_annual_indic,
                           ofstream &popdyn_test2,
                           ofstream &popnodes_inc,
@@ -95,7 +94,6 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           bool use_gui,
                           const string & popdyn_N_filename,
                           const string & popdyn_F_filename,
-                          const string & popdyn_SSB_filename,
                           const string & popnodes_inc_filename,
                           const string & popnodes_end_filename,
                           const string & popnodes_impact_filename,
@@ -216,7 +214,7 @@ for (unsigned int sp=0; sp<sample_pops.size(); sp++)
 
 // TO CHECK: SSB
 // compute SSB
-if(tstep==0 || binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 {
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
@@ -239,11 +237,7 @@ if(tstep==0 || binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)
             cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
 
             }
-
-           // for export
-           populations.at(sp)->set_SSB_at_szgroup( SSB_per_szgroup  );
-
-            // ...then, cumul for getting tot SSB (here in kilos)
+         // ...then, cumul for getting tot SSB (here in kilos)
          double SSB=0;
          for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
          {
@@ -251,10 +245,8 @@ if(tstep==0 || binary_search (tsteps_months.begin(), tsteps_months.end(), tstep)
          }
          SSB= SSB/1000;			 //
          cout << "The SSB is " << SSB  << " tons for " << populations.at(sp)->get_name() << endl ;
-        }
-        populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
+       }
     }
-
 }
 
 
@@ -275,6 +267,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double> M_at_szgroup      = populations.at(sp)->get_M_at_szgroup();
             vector <double> weight_at_szgroup = populations.at(sp)->get_weight_at_szgroup();
             vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
+            
+
             map<int,double> map_oth           = populations.at(sp)->get_oth_land();
 
             outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
@@ -338,9 +332,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     // not farther than 200 km than a closed node.
                     // pseudocode: if a closed node then cumul otherwise apply oth_land + cumul if <200km otherwise apply oth_land only and continue the cumul
                     //
-                    if (dyn_alloc_sce.option(Options::area_closure))
+                    int closed_for_others_as_well = 0;// TO  DO: create option closed_for_others_as_well
+                    if (dyn_alloc_sce.option(Options::area_closure) && closed_for_others_as_well) // TO  DO: create option closed_for_others_as_well
                     {
 
+                       /*
                         vector<int> polygons;
                         vector<int> polygon_nodes;
 
@@ -351,8 +347,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             dout(cout  << " a polygon node is " << pos->second << endl);
                         }
                         sort (polygon_nodes.begin(), polygon_nodes.end());
-
-                        if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node()))
+                        */
+                        //if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node()))
+                        int grd= a_list_nodes.at(n)->get_idx_node();
+                        if (nodes.at(grd)->evaluateAreaType()==1 ) // TO DO: should be improved to allow other in the restricted area concerning explicit vessels only...
                         {
                             // then, this is a closed node!
                             cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node;
@@ -1082,9 +1080,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
         popdyn_N.flush();
         guiSendUpdateCommand(popdyn_N_filename, tstep);
-
-        popdyn_SSB.flush();
-        guiSendUpdateCommand(popdyn_SSB_filename, tstep);
     }
 #ifdef PROFILE
     mPopExportProfile.elapsed_ms();

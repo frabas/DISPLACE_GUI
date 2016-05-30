@@ -441,7 +441,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // for VMS, export the first year only because the file is growing too big otherwise....
     vessels[index_v]->lock();
 
-    if(export_vmslike /*&& tstep<8641*/) {
+    if(export_vmslike && tstep<8641) {
         if( vessels[ index_v ]->get_state()!=3) {
             OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
         }

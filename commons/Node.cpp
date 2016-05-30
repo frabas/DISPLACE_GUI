@@ -742,7 +742,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
                           const vector<double>&  weight_at_szgroup, const vector<double>& totN)
 {
-    cout << "BEGIN: apply_oth_land()" << endl;
+    dout(cout << "BEGIN: apply_oth_land()" << endl);
 
 	// DISSAGREGATE TOTAL CATCH (FROM OTHERS) IN WEIGHT INTO SZGROUP
 	// AND CONVERT INTO REMOVALS IN NUMBERS
@@ -824,8 +824,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 				// disaggregate total catch (in weight) for this pop according to the alloc key
 				catch_per_szgroup[szgroup]= oth_land_this_pop_this_node * alloc_key[szgroup];
-                if(idx_node==2436 && name_pop==9) dout(cout << " catch_per_szgroup[szgroup] from oth land " << catch_per_szgroup[szgroup] << endl);
-
+            
 				// catch_per_szgroup at this point are actually landings (see parameterisation)
 				// so we need to add the part of removals that are actually discarded by the sorting on board.
 				// discard ogive over size e.g. 98%, 98%, 50%, 10%, 0%, 0%...........
@@ -833,8 +832,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 				// then get the removals in terms of N
 				removals_per_szgroup[szgroup]= catch_per_szgroup[szgroup]/weight_at_szgroup[szgroup];
-                if(idx_node==2436 && name_pop==9) dout(cout << " removals_per_szgroup[szgroup] from oth land" << removals_per_szgroup[szgroup] << endl);
-
+            
 				// do not allow negative abundance!
 				if(removals_per_szgroup[szgroup] > new_Ns_at_szgroup_pop[szgroup])
 				{
@@ -942,7 +940,7 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 	//        cin >> a_int; // pause
 	//    }
 	//}
-    cout << "END: apply_oth_land()" << endl;
+    dout(cout << "END: apply_oth_land()" << endl);
 }
 
 

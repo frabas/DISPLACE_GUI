@@ -3477,9 +3477,23 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
                                 (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers))
                                  )		 // area-based sce
        {
-        this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
+        //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
 		// compliance => 0.0001
-       }
+       // replaced by:
+        //vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
+        vector <double> freq_grds = this->get_freq_fgrounds();
+	vector <int> grds = this->get_fgrounds();
+        for (int i=0; i<freq_grds.size();++i)
+           {
+           int a_grd = grds.at(i);
+           //if(binary_search(grds_in_closure.begin(), grds_in_closure.end(), a_grd))
+           if(nodes.at(a_grd)->evaluateAreaType()==1)
+              {
+	      freq_grds.at(i)=0.00000001;
+              }
+           }
+        this->set_spe_freq_fgrounds(freq_grds);
+        }
 
        // then, draw a ground from the frequencies (altered or not)...
        vector <double> freq_grds = this->get_freq_fgrounds();
@@ -3521,7 +3535,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
        dout(cout  << "distance to fishing ground " << vertex_names[vx] << ": " << min_distance[vx] << endl);
 
        // check for area_closure
-       if (dyn_alloc_sce.option(Options::area_closure) ||
+/*      
+ if (dyn_alloc_sce.option(Options::area_closure) ||
                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
        {
@@ -3541,6 +3556,9 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
             dout(cout  << "this node " << ground << " is actually within a closed area!!!" << endl);
            }
        }
+*/
+        
+
 
        list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
        if(path.size()>1)			 // i.e no path has been found if path.size()==1...
@@ -3671,6 +3689,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	}
 
 	// check for area_closure
+/*
 	vector<int> polygons;
 	vector<int> polygon_nodes;
     if (dyn_alloc_sce.option(Options::area_closure) ||
@@ -3688,6 +3707,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 		sort (polygon_nodes.begin(), polygon_nodes.end());
 
 	}
+*/
 
 	for (unsigned int i =0; i< grds.size(); i++)
 	{
@@ -3701,8 +3721,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                 (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
 		{
 
-			if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
-			{
+	//		if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
+                        if(nodes.at(from)->evaluateAreaType()==1) // area closed?	
+		{
                 dout(cout  << "gosh... I am fishing in a closed area there! " << from <<  endl);
 				double dist_to_this_node = dist( nodes.at(from)->get_x(),
 					nodes.at(from)->get_y(),
@@ -3710,8 +3731,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 					nodes.at(vx)->get_y()
 					);
 
-				if(!binary_search (polygon_nodes.begin(), polygon_nodes.end(), vx)
-								 // looking around in a radius of 200 km among the grounds I know...
+			//	if(!binary_search (polygon_nodes.begin(), polygon_nodes.end(), vx)			
+                                     if(nodes.at(vx)->evaluateAreaType()!=1
+					 // looking around in a radius of 200 km among the grounds I know...
 					&&  dist_to_this_node < 200)
 				{
                     dout(cout  << "this node " << vx << " is actually outside the closed area: steam away!!!" << endl);
@@ -3780,7 +3802,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                 (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)))
 		{
 
-			vector<int> polygons;
+		/*	vector<int> polygons;
 			vector<int> polygon_nodes;
             for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
 			{
@@ -3789,8 +3811,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 				polygon_nodes.push_back(pos->second);
                 dout(cout  << " a polygon node is " << pos->second << endl);
 			}
-
-			if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), next_ground))
+              */
+			//if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), next_ground))
+                        if(nodes.at(next_ground)->evaluateAreaType()!=1)
 			{
                 dout(cout  << "this NEXT node " << next_ground << " is actually within a closed area!!!" << endl);
 				finally_I_should_go_for_the_closest = true;

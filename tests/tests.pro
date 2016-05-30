@@ -21,7 +21,8 @@ boost_test_included {
 
 SOURCES= main.cpp \
     dtrees.cpp \
-    timeseries.cpp
+    timeseries.cpp \
+    rutils.cpp
 
 HEADERS=
 

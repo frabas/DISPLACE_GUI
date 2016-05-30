@@ -972,7 +972,12 @@ void Vessel::set_spe_freq_harbours (vector<double> _freq_harbours)
 
 void Vessel::set_spe_freq_fgrounds (vector<double> _freq_fgrounds)
 {
-	freq_fgrounds=_freq_fgrounds;
+    freq_fgrounds=_freq_fgrounds;
+}
+
+void Vessel::set_spe_freq_fground(int index, double _fground)
+{
+    freq_fgrounds.at(index) = _fground;
 }
 
 void Vessel::set_spe_freq_fgrounds_init (vector<double> _freq_fgrounds_init)
@@ -3473,27 +3478,28 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
 
        // ****************area_closure**********************************//
        if (dyn_alloc_sce.option(Options::area_closure) ||
-                                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
-                                (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers))
-                                 )		 // area-based sce
+               (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
+               (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers))
+               )		 // area-based sce
        {
-        //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
-		// compliance => 0.0001
-       // replaced by:
-        //vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
-        vector <double> freq_grds = this->get_freq_fgrounds();
-	vector <int> grds = this->get_fgrounds();
-        for (int i=0; i<freq_grds.size();++i)
+           //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
+           // compliance => 0.0001
+           // replaced by:
+           //vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
+           const vector <double> &freq_grds = this->get_freq_fgrounds();
+           const vector <int> &grds = this->get_fgrounds();
+           for (int i=0; i<freq_grds.size();++i)
            {
-           int a_grd = grds.at(i);
-           //if(binary_search(grds_in_closure.begin(), grds_in_closure.end(), a_grd))
-           if(nodes.at(a_grd)->evaluateAreaType()==1)
-              {
-	      freq_grds.at(i)=0.00000001;
-              }
+               int a_grd = grds.at(i);
+               //if(binary_search(grds_in_closure.begin(), grds_in_closure.end(), a_grd))
+               if(nodes.at(a_grd)->evaluateAreaType()==1)
+               {
+                   set_spe_freq_fground(a_grd, 1e-8);
+//                   freq_grds.at(i)=0.00000001;
+               }
            }
-        this->set_spe_freq_fgrounds(freq_grds);
-        }
+//           this->set_spe_freq_fgrounds(freq_grds);
+       }
 
        // then, draw a ground from the frequencies (altered or not)...
        vector <double> freq_grds = this->get_freq_fgrounds();

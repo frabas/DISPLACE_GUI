@@ -234,6 +234,7 @@ public:
         void set_fgrounds_in_closed_areas (vector<int> _fgrounds);
         void set_spe_freq_harbours (vector<double> _harbours);
 		void set_spe_freq_fgrounds (vector<double> _fgrounds);
+        void set_spe_freq_fground (int index, double _fground);
         void set_spe_freq_fgrounds_init (vector<double> _fgrounds_init);
         void set_fishing_credits (vector<double> _fishing_credits);
         void set_spe_cumcatch_fgrounds (vector<double> _cumcatch);

@@ -2212,7 +2212,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // inform grounds in closed areas
-        vector <int> grds = vessels[i]->get_fgrounds();
+        const vector <int> &grds = vessels[i]->get_fgrounds();
         vector <int> fgrounds_in_closed_areas;
         for(unsigned int i=0; i<grds.size();++i){
             if(nodes.at(grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
@@ -2329,8 +2329,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		double expected_cpue=0;
 		vector <vector<double> > gshape_cpue_nodes_species = vessels.at(i)->get_gshape_cpue_nodes_species();
 		vector <vector<double> > gscale_cpue_nodes_species = vessels.at(i)->get_gscale_cpue_nodes_species();
-		vector <int> fgrounds= vessels.at(i)->get_fgrounds();
-		vector <double> expected_cpue_this_pop (nbpops);
+        const vector <int> &fgrounds= vessels.at(i)->get_fgrounds();
+        vector <double> expected_cpue_this_pop (nbpops);
 		for(int pop = 0; pop < nbpops; pop++)
 		{
 
@@ -2381,7 +2381,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		// init at 0 cumcatch and cumeffort per trip,
 		// init at best guest the experiencedcpue_fgrounds
         dout(cout  << "init dynamic object related to fgrounds" << endl);
-		vector<double > freq_fgrounds= vessels.at(i)->get_freq_fgrounds();
+        const vector<double > &freq_fgrounds= vessels.at(i)->get_freq_fgrounds();
 		vector<double > init_for_fgrounds(fgrounds.size());
 		vector<double > cumeffort_fgrounds= init_for_fgrounds;
 		vector<double > cumcatch_fgrounds= init_for_fgrounds;
@@ -3272,13 +3272,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
   
-			vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
+            vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
                 vessels.at(v)->set_spe_fgrounds_init(spe_fgrounds_init);
                 vessels.at(v)->set_spe_harbours(spe_harbours);
 				vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
                 vessels.at(v)->set_spe_freq_fgrounds_init(spe_freq_fgrounds_init);
                 vessels.at(v)->set_spe_freq_harbours(spe_freq_harbours);
-				vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());
+                vector<double> init_for_fgrounds(vessels.at(v)->get_fgrounds().size());
 				for(unsigned int i = 0; i < init_for_fgrounds.size(); i++)
 				{
 					init_for_fgrounds[i] = 0;
@@ -3297,7 +3297,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
                 // inform grounds in closed areas
-                vector<int> new_grds = vessels.at(v)->get_fgrounds();
+                const vector<int> &new_grds = vessels.at(v)->get_fgrounds();
                 vector<int> fgrounds_in_closed_areas;
                 for(unsigned int i=0; i<new_grds.size();++i)
                 {
@@ -3346,7 +3346,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 double expected_cpue=0;
 				vector <vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
 				vector <vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
-				vector <int> fgrounds= vessels.at(v)->get_fgrounds();
+                const vector <int> &fgrounds= vessels.at(v)->get_fgrounds();
 				vector <double> expected_cpue_this_pop (nbpops);
 				for(int pop = 0; pop < nbpops; pop++)
 				{
@@ -3402,7 +3402,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				// init at best guest the experiencedcpue_fgrounds
                 dout(cout << "re-set vessels step4..."  << endl);
                 dout(cout  << "init dynamic object related to fgrounds" << endl);
-				vector<double > a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
+                const vector<double > &a_freq_fgrounds= vessels.at(v)->get_freq_fgrounds();
                 vector<double > a_init_for_fgrounds(fgrounds.size());
                 vector<double > a_cumeffort_fgrounds= a_init_for_fgrounds;
                 vector<double > a_cumcatch_fgrounds= a_init_for_fgrounds;
@@ -3414,7 +3414,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 
                 for(unsigned int g = 0; g < fgrounds.size(); g++)
-				{
+                {
 					a_cumcatch_fgrounds[g] = 0;
                     a_experienced_bycatch_prop_on_fgrounds[g] = 0;
                     a_cumeffort_fgrounds[g] = 0;

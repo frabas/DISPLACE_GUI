@@ -3486,15 +3486,15 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
            // compliance => 0.0001
            // replaced by:
            //vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
-           const vector <double> &freq_grds = this->get_freq_fgrounds();
+         //  const vector <double> &freq_grds = this->get_freq_fgrounds();
            const vector <int> &grds = this->get_fgrounds();
-           for (int i=0; i<freq_grds.size();++i)
+           for (int i=0; i<grds.size();++i)
            {
                int a_grd = grds.at(i);
                //if(binary_search(grds_in_closure.begin(), grds_in_closure.end(), a_grd))
                if(nodes.at(a_grd)->evaluateAreaType()==1)
                {
-                   set_spe_freq_fground(a_grd, 1e-8);
+                   set_spe_freq_fground(i, 1e-8);
 //                   freq_grds.at(i)=0.00000001;
                }
            }

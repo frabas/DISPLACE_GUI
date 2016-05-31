@@ -16,22 +16,26 @@ static std::list<TestVector> TestSet {
                                                                                                                         15,15,15,15,14,15,14,13,15,14}) },
     { std::make_tuple(20,4, std::vector<int>{13,14,15,12}, std::vector<double>{0.2, 0.3, 0.49, 0.01} , std::vector<int>{13,15,15,12,15,15,12,15,13,14,
                                                                                                                         15,15,15,15,14,15,14,13,15,14})},
-    { std::make_tuple(20,4, std::vector<int>{12,13,14,15}, std::vector<double>{0.04, 0.2, 0.2, 0.2} , std::vector<int>{})},
-    { std::make_tuple(20,0, std::vector<int>{12,13,14,15}, std::vector<double>{} , std::vector<int>{})},
+    { std::make_tuple(20,0, std::vector<int>{}, std::vector<double>{} , std::vector<int>{})},
     { std::make_tuple(20,1, std::vector<int>{12,13,14,15}, std::vector<double>{0.2} , std::vector<int>{})}
 };
 
 static std::vector<int> callDoSample(const TestVector &t) {
     auto &v2 = std::get<2>(t);
-    int *val2 = new int[v2.size()];
+    int *val2 = nullptr;
+    if (v2.size() > 0) {
+        val2 = new int[v2.size()];
+        for (size_t i = 0; i < v2.size(); ++i)
+            val2[i] = v2[i];
+    }
 
     auto &va22 = std::get<3>(t);
-    double *va2 = new double[va22.size()];
-
-    for (size_t i = 0; i < v2.size(); ++i)
-        val2[i] = v2[i];
-    for (size_t i = 0; i < va22.size(); ++i)
-        va2[i] = va22[i];
+    double *va2 = nullptr;
+    if (va22.size() > 0) {
+        va2 = new double[va22.size()];
+        for (size_t i = 0; i < va22.size(); ++i)
+            va2[i] = va22[i];
+    }
 
     auto v = do_sample(std::get<0>(t), std::get<1>(t), val2, va2);
 

@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE( Dtree )
     m1.set_name(29);
     v.set_metier(&m1);
     rv = v.traverseDtree(0, tree.get());
-    BOOST_CHECK_CLOSE(rv, 0.5, 0.001);
+    BOOST_CHECK_CLOSE(rv, 0.4, 0.001);
 
 }
 

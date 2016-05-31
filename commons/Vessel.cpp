@@ -85,7 +85,7 @@ class MetierStateEvaluator : public dtree::StateEvaluator {
 public:
     MetierStateEvaluator() {}
     double evaluate(int, Vessel *vessel) const {
-        return static_cast<float>(vessel->get_metier()->get_name()) / 29.0;
+        return static_cast<float>(vessel->get_metier()->get_name()) / VariableNames::variableBinCount(Variable::vesselMetierIs);
     }
 };
 

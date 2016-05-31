@@ -14,8 +14,8 @@ using TestVector = std::tuple<int, int, std::vector<int>, std::vector<double>, s
 static std::list<TestVector> TestSet {
     { std::make_tuple(20,4, std::vector<int>{12,13,14,15}, std::vector<double>{0.01, 0.2, 0.3, 0.49} , std::vector<int>{13,15,15,12,15,15,12,15,13,14,
                                                                                                                         15,15,15,15,14,15,14,13,15,14}) },
-    { std::make_tuple(20,4, std::vector<int>{12,13,14,15}, std::vector<double>{0.2, 0.3, 0.49, 0.01} , std::vector<int>{15,13,15,15,12,15,15,12,15,13,
-                                                                                                                        14,15,15,15,15,14,15,14,13,15})},
+    { std::make_tuple(20,4, std::vector<int>{13,14,15,12}, std::vector<double>{0.2, 0.3, 0.49, 0.01} , std::vector<int>{13,15,15,12,15,15,12,15,13,14,
+                                                                                                                        15,15,15,15,14,15,14,13,15,14})},
     { std::make_tuple(20,4, std::vector<int>{12,13,14,15}, std::vector<double>{0.04, 0.2, 0.2, 0.2} , std::vector<int>{})},
     { std::make_tuple(20,0, std::vector<int>{12,13,14,15}, std::vector<double>{} , std::vector<int>{})},
     { std::make_tuple(20,1, std::vector<int>{12,13,14,15}, std::vector<double>{0.2} , std::vector<int>{})}

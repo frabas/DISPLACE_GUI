@@ -1637,7 +1637,7 @@ bool DisplaceModel::loadVessels()
         if(!spe_harbours.empty())
         {
                                  // need to convert in array, see myRutils.cpp
-            vector<int> one_harbour = do_sample(1, spe_harbours.size(), &spe_harbours[0], &spe_freq_harbours[0]);
+            vector<int> one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
             start_harbour= one_harbour[0];
         }
         else

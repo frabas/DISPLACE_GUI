@@ -934,6 +934,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	int seed = (int)time(NULL);	 // random seed
     UNUSED(seed);
 
+#if 0
     dout(cout  << " check do_sample() " << endl);
 	int val[4]= {12,13,14,15};
 	double p[4]= {0.01,0.200,0.300,0.490};
@@ -944,6 +945,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         dout(cout  << " " << res[i]);
 	}
     dout(cout  << endl);
+#endif
 
     dout(cout  << " check rgamma() " << endl);
 	double a_shape=1;
@@ -2152,7 +2154,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		if(!spe_harbours.empty())
 		{
 								 // need to convert in array, see myRutils.cpp
-			vector<int> one_harbour = do_sample(1, spe_harbours.size(), &spe_harbours[0], &spe_freq_harbours[0]);
+            vector<int> one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
 			start_harbour= one_harbour[0];
 		}
 		else
@@ -3848,7 +3850,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
             vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
                                      // need to convert in array, see myRutils.cpp
-            vector<int>    a_met               = do_sample(1, metiers_on_grd.size(), &metiers_on_grd[0], &freq_metiers_on_grd[0]);
+            vector<int>    a_met               = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
 
             if(metiers_on_grd.size()!=0)
             {

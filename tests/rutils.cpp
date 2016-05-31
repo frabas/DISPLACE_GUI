@@ -22,6 +22,7 @@ static std::list<TestVector> TestSet {
 };
 
 static std::vector<int> callDoSample(const TestVector &t) {
+#if 0
     auto &v2 = std::get<2>(t);
     int *val2 = nullptr;
     if (v2.size() > 0) {
@@ -37,8 +38,8 @@ static std::vector<int> callDoSample(const TestVector &t) {
         for (size_t i = 0; i < va22.size(); ++i)
             va2[i] = va22[i];
     }
-
-    auto v = do_sample(std::get<0>(t), std::get<1>(t), val2, va2);
+#endif
+    auto v = do_sample(std::get<0>(t), std::get<1>(t), std::get<2>(t), std::get<3>(t));
 
     return v;
 }

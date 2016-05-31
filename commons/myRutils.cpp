@@ -26,6 +26,8 @@
 
 #include <helpers.h>
 
+#include <algorithm>
+
 using namespace std;
 
 //----------------------------------
@@ -181,59 +183,53 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 }
 
 
-vector<int> do_sample( int n, int nval, const int val[], double proba[])
+vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::vector<double> &proba)
 {
-    if (val == nullptr || proba == nullptr || nval == 0)
+    using Rec = std::tuple<int, double>;
+    class RecGreater {
+    public:
+        bool operator () (const Rec&v1, const Rec&v2) const {
+            return std::get<1>(v1) > std::get<1>(v2);
+        }
+    };
+
+    if (val.size() == 0 || proba.size() == 0 || nval == 0)
         return vector<int>();
 
-	vector<int> res(n);
+    if (nval != (int)val.size() || nval != (int)proba.size())
+        throw std::invalid_argument("do_sample requires nval == val.size() == proba.size()");
+
+    vector<Rec> prb;
+    for (int i = 0; i < (int)val.size(); ++i)
+        prb.push_back(std::make_pair(val[i], proba[i]));
+
+    vector<int> res;
+    res.reserve(n);
 
 	int nans = n;
-	int ans[n];
-	int perm[nval];
 
-	//double rUs [n];
-	//for(int i=0; i<n;i++){
-	//  rUs [i]= RanGen.Random();
-	//}
-
-	// ProbSampleReplace(nval, proba, perm, nans, ans, rUs);
-	double rU;
+    double rU;
 	int nm1 = nval - 1;
 
-	/* record element identities */
-	for (int i = 0; i < nval; i++)
-	{
-		perm[i] = i + 1;
-	}
-
 	/* sort the probabilities into descending order */
-	revsort(proba, perm, nval);
+    std::sort(prb.begin(), prb.end(), RecGreater());
 
 	/* compute cumulative probabilities */
-	for (int i = 1 ; i < nval; i++)
-	{
-		proba[i] += proba[i - 1];
-
-	}
+    for (int i = 1 ; i < nval; i++) {
+        std::get<1>(prb[i]) += std::get<1>(prb[i - 1]);
+    }
 
 	/* compute the sample */
 	for (int i = 0; i < nans; i++)
 	{
 		rU = unif_rand();
-		//rU = prUs[i];
 		int j;
 		for (j = 0; j < nm1; j++)
 		{
-			if (rU <= proba[j])
+            if (rU <= std::get<1>(prb[j]))
 				break;
 		}
-		ans[i] = perm[j];
-	}
-
-	for(int i=0; i<n;i++)
-	{
-		res[i] = val[ans[i]-1];
+        res.push_back(std::get<0>(prb[j]));
 	}
 
 	return res;

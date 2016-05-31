@@ -24,6 +24,7 @@
 #include <dtree/decisiontree.h>
 #include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
+#include <dtree/variables.h>
 
 #include <QQueue>
 #include <QDebug>
@@ -37,14 +38,12 @@ DtCsvReader::DtCsvReader()
 bool DtCsvReader::readTree(QTextStream &stream, std::shared_ptr<dtree::DecisionTree> tree, DtGraphicsScene *scene)
 throw (std::invalid_argument)
 {
-//    std::shared_ptr<dtree::DecisionTree> tree (new dtree::DecisionTree());
-
     QString line;
 
     struct Data {
         std::shared_ptr<dtree::Node> node;
         GraphNodeItem *item;
-        int parent;
+        int parent = -1;
         QPointF position;
         QVector<int> children;
         QVector<int> mapping;
@@ -96,7 +95,10 @@ throw (std::invalid_argument)
 
         int nc = fields[4].toInt(&ok);
         if (!ok) throw std::invalid_argument("invalid field");
-        while (data[idx].children.size() < nc) {
+
+        auto mnc = dtree::VariableNames::variableBinCount(data[idx].node->variable());
+
+        while (data[idx].children.size() < std::min(nc,mnc)) {
             data[idx].children.push_back(-1);
             data[idx].mapping.push_back(-1);
         }
@@ -107,25 +109,28 @@ throw (std::invalid_argument)
             int cidx = fields[fldnum].toInt(&ok);
             ++fldnum;
 
-            ok2 = true;
-            int mapn = i;
-            if (version > 5) { // backward compatibility
-                mapn = fields[fldnum].toInt(&ok2);
-                ++fldnum;
+            if (i < mnc) {
+                ok2 = true;
+                int mapn = i;
+                if (version > 5) { // backward compatibility
+                    mapn = fields[fldnum].toInt(&ok2);
+                    ++fldnum;
+                }
+                if (!ok && !ok2) continue;
+
+                if (ok) {
+                   data[idx].children[i] = cidx;
+                }
+                if (ok2) {
+                    data[idx].mapping[i] = mapn;
+                }
+
+                while (data.size() <= cidx)
+                    data.push_back(Data());
+
+                if (ok)
+                    data[cidx].parent = idx;
             }
-            if (!ok && !ok2) continue;
-
-            if (ok)
-               data[idx].children[i] = cidx;
-            if (ok2) {
-                data[idx].mapping[i] = mapn;
-            }
-
-            while (data.size() <= cidx)
-                data.push_back(Data());
-
-            if (ok)
-                data[cidx].parent = idx;
         }
 
         double v = fields[fldnum++].toDouble(&ok);
@@ -135,6 +140,11 @@ throw (std::invalid_argument)
 
     for (int di = 0; di < data.size(); ++di) {
         Data d = data[di];
+
+        if (d.parent == -1 && !tree->isEmpty()) {
+            qDebug() << di << " is orphan";
+            continue;
+        }
 
         Q_ASSERT(d.node.get());
         Q_ASSERT(d.item);

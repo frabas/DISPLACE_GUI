@@ -68,17 +68,22 @@ void DecisionTree::removeNodes(std::list<std::shared_ptr<Node> > nodes)
         std::shared_ptr<Node> node = queue.front();
         queue.pop_front();
 
-        nodes_to_remove.insert(node);
-        for (int i = 0; i < node->getChildrenCount(); ++i) {
-            std::shared_ptr<dtree::Node> ch = node->getChild(i);
-            if (ch) {
-                queue.push_back(ch);
+        if (node != nullptr) {
+            nodes_to_remove.insert(node);
+            for (int i = 0; i < node->getChildrenCount(); ++i) {
+                std::shared_ptr<dtree::Node> ch = node->getChild(i);
+                if (ch) {
+                    queue.push_back(ch);
+                }
             }
         }
     }
 
     for (std::set<std::shared_ptr<Node> >::iterator it = nodes_to_remove.begin(); it != nodes_to_remove.end(); ++it) {
         std::shared_ptr<Node> node = *it;
+        if (node == nullptr)
+            continue;
+
         std::shared_ptr<Node> parent = node->parent().lock();
         if (parent) {
             for (int j = 0; j < parent->getChildrenCount(); ++j) {

@@ -183,6 +183,8 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 
 vector<int> do_sample( int n, int nval, const int val[], double proba[])
 {
+    if (val == nullptr || proba == nullptr || nval == 0)
+        return vector<int>();
 
 	vector<int> res(n);
 

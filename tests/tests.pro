@@ -26,3 +26,8 @@ SOURCES= main.cpp \
 
 HEADERS=
 
+OTHER_FILES += \
+    ../data/tests/dtree-metiers/GoFishing_tree_some_metiers_only.dt.csv \
+    ../data/tests/dtree-metiers-mapped/GoFishingMapped.dt.csv \
+    ../data/tests/timeseries/fishprice-all_area-4.dat
+

@@ -24,6 +24,7 @@ static std::vector<int> callDoSample(const TestVector &t)
 
 void profile_do_sample()
 {
+    std::cout << "Profiling do_sample()..." << std::endl;
     // do_sample( int n, int nval, const int val[], double proba[])
 
     for (int i = 0; i < 2000; ++i) {
@@ -31,4 +32,6 @@ void profile_do_sample()
             callDoSample(tv);
         }
     }
+
+    std::cout << "Completed.";
 }

@@ -12,9 +12,12 @@ macx {
 
 CONFIG(profile) {
     message("Profiling enabled")
-    QMAKE_CXXFLAGS += -pg
-    #QMAKE_CXXFLAGS += -fPIC
-    #QMAKE_LFLAGS += -pg -static
+    CONFIG(gprof) {
+        message ("Compiling with support for gProf")
+        QMAKE_CXXFLAGS += -pg
+        #QMAKE_CXXFLAGS += -fPIC
+        #QMAKE_LFLAGS += -pg -static
+    }
 }
 
 

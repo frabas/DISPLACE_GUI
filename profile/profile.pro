@@ -10,8 +10,10 @@ DEFINES=
 INCLUDEPATH=../include ../commons
 LIBS=-L.. -lformats -ldisplacecommons -lpthread -lrt
 
-QMAKE_CXXFLAGS += -pg
-QMAKE_LFLAGS += -pg -static-libgcc
+CONFIG(gprof) {
+    QMAKE_CXXFLAGS += -pg
+    QMAKE_LFLAGS += -pg -static-libgcc
+}
 
 SOURCES= main.cpp \
     rutils.cpp

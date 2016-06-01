@@ -940,37 +940,37 @@ void Vessel::reset_message()
 }
 
 
-void Vessel::set_spe_harbours (vector<int> _harbours)
+void Vessel::set_spe_harbours (const vector<int> &_harbours)
 {
 	harbours= _harbours;
 }
 
 
-void Vessel::set_spe_fgrounds (vector<int> _fgrounds)
+void Vessel::set_spe_fgrounds (const vector<int> &_fgrounds)
 {
 	fgrounds=_fgrounds;
 }
 
-void Vessel::set_spe_fgrounds_init (vector<int> _fgrounds_init)
+void Vessel::set_spe_fgrounds_init (const vector<int> &_fgrounds_init)
 {
     fgrounds_init=_fgrounds_init;
 }
 
 
-void Vessel::set_fgrounds_in_closed_areas (vector<int> _fgrounds)
+void Vessel::set_fgrounds_in_closed_areas (const vector<int> &_fgrounds)
 {
     fgrounds_in_closed_areas=_fgrounds;
 }
 
 
 
-void Vessel::set_spe_freq_harbours (vector<double> _freq_harbours)
+void Vessel::set_spe_freq_harbours (const vector<double> &_freq_harbours)
 {
 	freq_harbours= _freq_harbours;
 }
 
 
-void Vessel::set_spe_freq_fgrounds (vector<double> _freq_fgrounds)
+void Vessel::set_spe_freq_fgrounds (const vector<double> &_freq_fgrounds)
 {
     freq_fgrounds=_freq_fgrounds;
 }
@@ -980,61 +980,61 @@ void Vessel::set_spe_freq_fground(int index, double _fground)
     freq_fgrounds.at(index) = _fground;
 }
 
-void Vessel::set_spe_freq_fgrounds_init (vector<double> _freq_fgrounds_init)
+void Vessel::set_spe_freq_fgrounds_init (const vector<double> &_freq_fgrounds_init)
 {
     freq_fgrounds=_freq_fgrounds_init;
 }
 
 
-void Vessel::set_spe_cumcatch_fgrounds (vector<double> _cumcatch_fgrounds)
+void Vessel::set_spe_cumcatch_fgrounds (const vector<double> &_cumcatch_fgrounds)
 {
 	cumcatch_fgrounds=_cumcatch_fgrounds;
 }
 
-void Vessel::set_spe_experienced_bycatch_prop_on_fgrounds (vector<double> _experienced_bycatch_prop_on_fgrounds)
+void Vessel::set_spe_experienced_bycatch_prop_on_fgrounds (const vector<double> &_experienced_bycatch_prop_on_fgrounds)
 {
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
 }
 
 
 
-void Vessel::set_spe_cumeffort_fgrounds (vector<double> _cumeffort_fgrounds)
+void Vessel::set_spe_cumeffort_fgrounds (const vector<double> &_cumeffort_fgrounds)
 {
 	cumeffort_fgrounds=_cumeffort_fgrounds;
 }
 
 
-void Vessel::set_spe_experiencedcpue_fgrounds (vector<double> _experiencedcpue_fgrounds)
+void Vessel::set_spe_experiencedcpue_fgrounds (const vector<double> &_experiencedcpue_fgrounds)
 {
 	experiencedcpue_fgrounds=_experiencedcpue_fgrounds;
 }
 
 
-void Vessel::set_spe_betas_per_pop (vector<double> _betas_per_pop)
+void Vessel::set_spe_betas_per_pop (const vector<double> &_betas_per_pop)
 {
 	vessel_betas_per_pop=_betas_per_pop;
 }
 
 
-void Vessel::set_spe_percent_tac_per_pop (vector<double> _tacs_per_pop)
+void Vessel::set_spe_percent_tac_per_pop (const vector<double> &_tacs_per_pop)
 {
 	percent_tac_per_pop=_tacs_per_pop;
 }
 
 
-void Vessel::set_fishing_credits (vector<double> _fishing_credits)
+void Vessel::set_fishing_credits (const vector<double> &_fishing_credits)
 {
     fishing_credits=_fishing_credits;
 }
 
 
-void Vessel::set_spe_possible_metiers (multimap <int, int>  _possible_metiers)
+void Vessel::set_spe_possible_metiers (const multimap<int, int> &_possible_metiers)
 {
 	possible_metiers=_possible_metiers;
 }
 
 
-void Vessel::set_spe_freq_possible_metiers  (multimap <int, double>  _freq_possible_metiers)
+void Vessel::set_spe_freq_possible_metiers  (const multimap<int, double> &_freq_possible_metiers)
 {
 	freq_possible_metiers=_freq_possible_metiers;
 }
@@ -1106,7 +1106,7 @@ void Vessel::init_gscale_cpue_nodes_species(int nbnodes, int nbspecies)
 }
 
 
-void Vessel::set_cpue_nodes_species(int idx_node, vector<double> newval)
+void Vessel::set_cpue_nodes_species(int idx_node, const vector<double> &newval)
 {
     for(unsigned int sp = 0; sp < cpue_nodes_species[idx_node].size(); sp++)
 	{
@@ -1116,7 +1116,7 @@ void Vessel::set_cpue_nodes_species(int idx_node, vector<double> newval)
 }
 
 
-void Vessel::set_gshape_cpue_nodes_species(int idx_node, vector<double> newval)
+void Vessel::set_gshape_cpue_nodes_species(int idx_node, const vector<double> &newval)
 {
     for(unsigned int sp = 0; sp < gshape_cpue_nodes_species[idx_node].size(); sp++)
 	{
@@ -1126,7 +1126,7 @@ void Vessel::set_gshape_cpue_nodes_species(int idx_node, vector<double> newval)
 }
 
 
-void Vessel::set_gscale_cpue_nodes_species(int idx_node, vector<double> newval)
+void Vessel::set_gscale_cpue_nodes_species(int idx_node, const vector<double> &newval)
 {
     for(unsigned int sp = 0; sp < gscale_cpue_nodes_species[idx_node].size(); sp++)
 	{
@@ -1136,13 +1136,13 @@ void Vessel::set_gscale_cpue_nodes_species(int idx_node, vector<double> newval)
 }
 
 
-void Vessel::set_cumcatch_fgrounds (vector<double>  _cumcatch_fgrounds)
+void Vessel::set_cumcatch_fgrounds (const vector<double>  &_cumcatch_fgrounds)
 {
 	cumcatch_fgrounds=_cumcatch_fgrounds;
 }
 
 
-void Vessel::set_experienced_bycatch_prop_on_fgrounds (vector<double>  _experienced_bycatch_prop_on_fgrounds)
+void Vessel::set_experienced_bycatch_prop_on_fgrounds (const vector<double>  &_experienced_bycatch_prop_on_fgrounds)
 {
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
 }
@@ -1150,37 +1150,37 @@ void Vessel::set_experienced_bycatch_prop_on_fgrounds (vector<double>  _experien
 
 
 
-void Vessel::set_cumcatch_fgrounds_per_pop (vector<vector<double> >  _cumcatch_fgrounds_per_pop)
+void Vessel::set_cumcatch_fgrounds_per_pop (const vector<vector<double> >  &_cumcatch_fgrounds_per_pop)
 {
 	cumcatch_fgrounds_per_pop=_cumcatch_fgrounds_per_pop;
 }
 
 
-void Vessel::set_cumeffort_fgrounds (vector<double>  _cumeffort_fgrounds)
+void Vessel::set_cumeffort_fgrounds (const vector<double>  &_cumeffort_fgrounds)
 {
 	cumeffort_fgrounds=_cumeffort_fgrounds;
 }
 
 
-void Vessel::set_experiencedcpue_fgrounds (vector<double>  _experiencedcpue_fgrounds)
+void Vessel::set_experiencedcpue_fgrounds (const vector<double>  &_experiencedcpue_fgrounds)
 {
 	experiencedcpue_fgrounds=_experiencedcpue_fgrounds;
 }
 
 
-void Vessel::set_experiencedcpue_fgrounds_per_pop (vector<vector<double> >  _experiencedcpue_fgrounds_per_pop)
+void Vessel::set_experiencedcpue_fgrounds_per_pop (const vector<vector<double> >  &_experiencedcpue_fgrounds_per_pop)
 {
 	experiencedcpue_fgrounds_per_pop=_experiencedcpue_fgrounds_per_pop;
 }
 
 
-void Vessel::set_freq_experiencedcpue_fgrounds (vector<double>  _freq_experiencedcpue_fgrounds)
+void Vessel::set_freq_experiencedcpue_fgrounds (const vector<double>  &_freq_experiencedcpue_fgrounds)
 {
 	freq_experiencedcpue_fgrounds=_freq_experiencedcpue_fgrounds;
 }
 
 
-void Vessel::set_freq_experiencedcpue_fgrounds_per_pop (vector<vector<double> > _freq_experiencedcpue_fgrounds_per_pop)
+void Vessel::set_freq_experiencedcpue_fgrounds_per_pop (const vector<vector<double> > &_freq_experiencedcpue_fgrounds_per_pop)
 {
 	freq_experiencedcpue_fgrounds_per_pop=_freq_experiencedcpue_fgrounds_per_pop;
 }

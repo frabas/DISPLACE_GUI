@@ -45,7 +45,11 @@ CONFIG(release,debug|release) {
 }
 
 # Force callgrind profiling
-# DEFINES += INSTRUMENTATION
+
+CONFIG(profile) {
+    DEFINES += INSTRUMENTATION
+    message("Instrumentation enabled")
+}
 
 #QMAKE_CXXFLAGS += -g
 

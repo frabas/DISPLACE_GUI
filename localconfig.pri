@@ -10,6 +10,13 @@ macx {
     APPTARGET=displace
 }
 
+CONFIG(profile) {
+    message("Profiling enabled")
+    QMAKE_CXXFLAGS += -pg
+    #QMAKE_CXXFLAGS += -fPIC
+    #QMAKE_LFLAGS += -pg -static
+}
+
 
 win32 {
     #MINGW=C:\Qt\qt-5.3.1-x64-mingw482r4-seh-opengl\mingw64

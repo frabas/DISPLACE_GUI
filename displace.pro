@@ -5,7 +5,7 @@ SUBDIRS+=formats commons qtcommons QMapControl qtgui simulator dteditor tseditor
 
 unix:!macx{
     CONFIG += unit-test
-    SUBDIRS += tests
+    SUBDIRS += tests profile
 }
 
 !unit-test {

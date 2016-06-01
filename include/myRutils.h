@@ -21,6 +21,8 @@
 #include <string>
 #include <m_constants.h>
 
+#include <cmath>
+
 using namespace std;
 
 // source: adapted from Rmath

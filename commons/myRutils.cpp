@@ -199,9 +199,16 @@ vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::
     if (nval != (int)val.size() || nval != (int)proba.size())
         throw std::invalid_argument("do_sample requires nval == val.size() == proba.size()");
 
+    double total = 0.0;
+
+    for (auto pr : proba) {
+        total += pr;
+    }
+
     vector<Rec> prb;
-    for (int i = 0; i < (int)val.size(); ++i)
-        prb.push_back(std::make_pair(val[i], proba[i]));
+    for (int i = 0; i < (int)val.size(); ++i) {
+        prb.push_back(std::make_pair(val[i], proba[i]/ total));
+    }
 
     vector<int> res;
     res.reserve(n);
@@ -211,8 +218,16 @@ vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::
     double rU;
 	int nm1 = nval - 1;
 
-	/* sort the probabilities into descending order */
+//    for (auto x : prb)
+//        cout << "[ " << std::get<0>(x) <<"," << std::get<1>(x) << "] ";
+//    cout << endl;
+
+    /* sort the probabilities into descending order */
     std::sort(prb.begin(), prb.end(), RecGreater());
+
+//    for (auto x : prb)
+//        cout << "[ " << std::get<0>(x) <<"," << std::get<1>(x) << "] ";
+//    cout << endl;
 
 	/* compute cumulative probabilities */
     for (int i = 1 ; i < nval; i++) {
@@ -229,9 +244,11 @@ vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::
             if (rU <= std::get<1>(prb[j]))
 				break;
 		}
+//        cout << j << "," << rU << "," << std::get<1>(prb[j]) << "," << std::get<0>(prb[j]) << endl;
         res.push_back(std::get<0>(prb[j]));
 	}
 
+//    cout << "----" << endl;
 	return res;
 }
 

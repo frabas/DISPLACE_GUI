@@ -126,7 +126,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     connect(mSimulation, SIGNAL(started()), this, SLOT(started()));
     connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
-    qDebug() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
+    qInfo() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
 
     mSimulation->start(QApplication::applicationDirPath() + "/displace", arguments);

@@ -81,6 +81,8 @@
 #include <GeographicLib/Geodesic.hpp>
 #include <version.h>    // Version.h should be included after GeographicLib because it undefines VERSION symbol
 
+#include <legacy/binarygraphfilewriter.h>
+
 #include <QBoxLayout>
 #include <QTextEdit>
 #include <QSettings>
@@ -2270,4 +2272,75 @@ void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int
     mStatsController->plotGraph(currentModel.get(), type, subtype, &plot, nullptr);
 
     plot.grab().save(outpath);
+}
+
+void MainWindow::on_actionShortest_Path_to_Binary_triggered()
+{
+    QStringList files = QFileDialog::getOpenFileNames(this, tr("Select files to convert to Binary Format"), QString(),
+                                                      tr("Graphs files (*.dat)"));
+
+    if (files.size() > 0) {
+        QStringList errors;
+
+        QProgressDialog dlg;
+        dlg.setMinimum(0);
+        dlg.setMaximum(files.size());
+        dlg.setWindowModality(Qt::WindowModal);
+
+        int i= 0;
+        for (QString f : files) {
+            dlg.setValue(i++);
+            if (dlg.wasCanceled())
+                break;
+
+            QFileInfo fi (f);
+            QString fn = fi.fileName();
+            if (!fn.startsWith("previous_") && !fn.startsWith("min_distance_")) {
+                continue;
+            }
+
+            QString of(f);
+            of.replace(".dat", ".bin");
+            if (!of.endsWith(".bin"))
+                of += ".bin";
+
+            std::ifstream in;
+
+            in.open(f.toStdString(), std::ios_base::in);
+            if (in.fail()) {
+                errors << QString("Cannot open: %1").arg(f);
+                continue;
+            }
+
+            displace::formats::legacy::BinaryGraphFileWriter<uint16_t, uint16_t> wr;
+            if (!wr.open(of.toStdString())) {
+                errors << QString("Cannot open %1 for writing.").arg(of);
+                continue;
+            }
+
+            string line;
+            while(!getline(in, line).eof())
+            {
+                int key;
+                in >> key;
+                int val;
+                in >> val;
+
+                if (!wr.write(static_cast<uint16_t>(key),static_cast<uint16_t>(val))) {
+                    errors << QString("Cannot write to %1").arg(of);
+                    break;
+                }
+            }
+
+            wr.close();
+            in.close();
+        }
+        dlg.setValue(files.size());
+
+        if (errors.size() == 0) {
+            QMessageBox::information(this,tr("Graph conversion"), tr("Graph converted successfully."));
+        } else {
+            QMessageBox::warning(this, tr("Graph conversion"), tr("%1 Errors occurred converting files").arg(errors.size()) );
+        }
+    }
 }

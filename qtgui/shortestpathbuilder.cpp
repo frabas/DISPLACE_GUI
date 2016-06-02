@@ -29,6 +29,10 @@
 #include <QFile>
 #include <QTextStream>
 
+
+#include <legacy/binarygraphfilereader.h>
+#include <legacy/binarygraphfilewriter.h>
+
 /* Note
  * Part of this code was extracted from:
  * http://www.boost.org/doc/libs/1_57_0/libs/graph/example/dijkstra-example.cpp
@@ -66,8 +70,10 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
                              predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
                              distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
 
-    QString mindist = QString("%1/min_distance_%2.dat").arg(path).arg(node->get_idx_node());
-    QString prev = QString("%1/previous_%2.dat").arg(path).arg(node->get_idx_node());
+    QString mindist = QString("%1/min_distance_%2.bin").arg(path).arg(node->get_idx_node());
+    QString prev = QString("%1/previous_%2.bin").arg(path).arg(node->get_idx_node());
+
+#if 0
     QFile mindist_file(mindist);
     QFile prev_file (prev);
 
@@ -79,14 +85,24 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
 
     strm_prev << " key  value" << endl;
     strm_min << " key  value" << endl;
+#endif
+
+    displace::formats::legacy::BinaryGraphFileWriter<int,int> wr_prev;
+    wr_prev.open(prev.toStdString());
+
+    displace::formats::legacy::BinaryGraphFileWriter<int,int> wr_md;
+    wr_md.open(mindist.toStdString());
+
 
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
-                strm_prev << nd << " " << mPredecessors[nd] << endl;
-                strm_min << nd << " " << mDistances[nd] << endl;
+                wr_prev.write(nd, mPredecessors[nd]);
+                wr_md.write(nd, mDistances[nd]);
+//                strm_prev << nd << " " << mPredecessors[nd] << endl;
+//                strm_min << nd << " " << mDistances[nd] << endl;
             }
 
             mGraph[nd].flag = true;

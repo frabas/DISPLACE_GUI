@@ -192,6 +192,8 @@ private slots:
 
     void on_metierStatSelector_currentIndexChanged(int index);
 
+    void on_actionShortest_Path_to_Binary_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

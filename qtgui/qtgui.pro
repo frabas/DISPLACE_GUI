@@ -26,7 +26,7 @@ macx {
 #    QMAKE_PRE_LINK = make dummy
 }
 
-INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons
+INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons ../formats
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")

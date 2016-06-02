@@ -12,16 +12,16 @@ namespace helpers {
 // Default are disabled
 
 template <typename T>
-T inline toBigEndian (T v) { char X[!sizeof(T)]; }
+T inline toBigEndian (T) = delete ;
 
 template <typename T>
-T inline fromBigEndian (T v) { char X[!sizeof(T)]; }
+T inline fromBigEndian (T) = delete;
 
 template <typename T>
-T inline toLittleEndian (T v) { char X[!sizeof(T)]; }
+T inline toLittleEndian (T) = delete;
 
 template <typename T>
-T inline fromLittleEndian (T v) { char X[!sizeof(T)]; }
+T inline fromLittleEndian (T) = delete;
 
 
 // Specializations

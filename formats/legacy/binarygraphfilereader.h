@@ -15,9 +15,6 @@ namespace legacy {
 
 class BinaryGraphFileReader {
 public:
-    class Exception : public std::system_error {
-    };
-
     BinaryGraphFileReader() {
     }
 
@@ -30,7 +27,7 @@ public:
 
         FILE *file = fopen(filename.c_str(), "rb");
         if (file == nullptr) {
-            throw Exception(errno);
+            throw std::system_error(errno,std::generic_category());
         }
 
         struct __attribute__ ((__packed__)) {
@@ -38,26 +35,31 @@ public:
             uint8_t keysize, valuesize;
         } header;
 
-        if (!fread(&header, sizeof(header), 1, file) != 1) {
-            throw Exception(errno);
+        int res;
+        if ((res = fread(&header, sizeof(header), 1, file)) != 1) {
+            throw std::system_error(errno,std::generic_category());
         }
 
         if (fromLittleEndian( header.signature ) != 0x01020304 || header.keysize != sizeof(Key) || header.valuesize != sizeof(Value)) {
-            throw Exception(0, "Bad file structure");
+            throw std::system_error(0,std::generic_category(), "Bad header or sizes");
         }
 
+        int nm = 0;
         while (!feof(file)) {
             struct __attribute__ ((__packed__)) {
                 Key k;
                 Value v;
             } rec;
 
-            if (fread(&rec, sizeof(rec), 1, file ) != 1) {
-                throw Exception(errno);
+            if ((res = fread(&rec, sizeof(rec), 1, file )) != 1) {
+                if (feof(file))
+                    break;
+
+                throw std::system_error(errno,std::generic_category());
             }
 
             if (!use(fromLittleEndian(rec.k), fromLittleEndian(rec.v)))
-                throw Exception(0, "Cannot insert data");
+                throw std::system_error(0,std::generic_category(), "cannot insert data");
         }
 
         fclose(file);

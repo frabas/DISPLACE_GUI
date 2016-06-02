@@ -25,6 +25,8 @@
 #include <utils/vectorsdata.h>
 #include <boost/algorithm/string.hpp>
 
+#include <legacy/binarygraphfilereader.h>
+
 using namespace displace::formats;
 
 #define NBSZGROUP 14
@@ -2333,35 +2335,29 @@ map<int, int> read_maps_previous(int source, string namesimu,  string inputfolde
 	stringstream out;
 	out << source;
 	string source_s = out.str();
-    string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
+    string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".bin";
 
-	ifstream file_previous;
-	file_previous.open(filename.c_str());
-	if(file_previous.fail())
-	{
-		open_file_error(filename.c_str());
-		// return 1;
-	}
-	map<int, int> previous;		 //key, value
-	fill_map_from_specifications_i_i(file_previous,  previous, namesimu);
-	//int key;
-	//int value;
-	//while (file_previous >> key >> value) previous[key] = value;
+    bool r;
+    map<int, int> previous;		 //key, value
+    try {
+        displace::formats::legacy::BinaryGraphFileReader rdr;
+        r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&previous](uint16_t key, uint16_t value) {
+            previous.insert(std::pair<int,int>(key,value));
+            return true;
+        });
+    } catch (std::exception &x) {
+        cerr << "Exception : " << x.what() << endl;
+        r = false;
+    }
 
-	//if(source==6976){
-	//        for (map<int, int>::iterator pos=previous.begin(); pos != previous.end(); pos++)
-	//                                {
-	//                                    cout << pos->first << " " << pos->second << " " << endl;
-	//                                }
-	//}
-
-	file_previous.close();
-
+    if (!r) {
+        cerr << "Error loading graph file " << filename << " " << strerror(errno) << endl;
+        throw std::runtime_error("Error loading graph file " + filename + " " + strerror(errno)) ;
+    }
     dout(cout <<"END: read map previous" << endl);
 
 	return(previous);
 }
-
 
 map<int, int> read_min_distance(int source, string namesimu, string inputfolder, string a_graph_name)
 {
@@ -2371,28 +2367,31 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 	stringstream out;
 	out << source;
 	string source_s = out.str();
-    string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
+    string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".bin";
 
-	ifstream file_min_distance;
-	file_min_distance.open(filename.c_str());
-	if(file_min_distance.fail())
-	{
-		open_file_error(filename.c_str());
-		// return 1;
-	}
-	map<int, int> min_distance;	 //key, value
-	fill_map_from_specifications_i_i(file_min_distance,  min_distance, namesimu);
-	//int key;
-	//double value;
-	//while (file_min_distance >> key >> value) min_distance[key] = value;
+    bool r;
+    map<int, int> min_distance;		 //key, value
+    try {
+        displace::formats::legacy::BinaryGraphFileReader rdr;
+        r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&min_distance](uint16_t key, uint16_t value) {
+            min_distance.insert(std::pair<int,int>(key,value));
+            return true;
+        });
+    } catch (std::exception &x) {
+        cerr << "Exception : " << x.what() << endl;
+        r = false;
+    }
 
-	file_min_distance.close();
+    if (!r) {
+        cerr << "Error loading graph file " << filename << " " << strerror(errno) << endl;
+        throw std::runtime_error("Error loading graph file " + filename + " " + strerror(errno)) ;
+    }
+
 
     dout(cout <<"END: read min_distance" << endl);
 
 	return(min_distance);
 }
-
 
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
 {

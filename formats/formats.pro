@@ -24,7 +24,10 @@ HEADERS = \
     legacy/NodesFileReader.h utils/MultifieldReader.h \
     utils/vectorsdata.h \
     formatexception.h \
-    utils/MultifieldWriter.h
+    utils/MultifieldWriter.h \
+    legacy/binarygraphfilereader.h \
+    utils/endian.h \
+    legacy/binarygraphfilewriter.h
 
 SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \

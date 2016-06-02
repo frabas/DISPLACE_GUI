@@ -65,6 +65,9 @@ public:
     QString getGraphName() const;
     void setGraphName(const QString &folder);
 
+    bool isBinaryFormat() const;
+    bool isTextFormat() const;
+
 private slots:
     void on_browseShortestFolder_clicked();
     void on_browseRelevantFolder_clicked();

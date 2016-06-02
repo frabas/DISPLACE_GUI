@@ -45,7 +45,7 @@ void ShortestPathBuilderWorker::doStep(arg a)
 {
     try {
         ShortestPathBuilder builder (a.me->mModel);
-        builder.create(a.node, a.me->mModel->linkedShortestPathFolder(), true, a.me->mRelevantNodes);
+        builder.create(a.node, a.me->mModel->linkedShortestPathFolder(), true, a.me->mRelevantNodes, a.me->mTextFormat ? ShortestPathBuilder::Text : ShortestPathBuilder::Binary);
     } catch (std::exception &x) {
         qDebug() << "Cannot create node " << a.node->get_idx_node() << ":" << x.what();
     }

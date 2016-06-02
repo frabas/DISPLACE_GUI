@@ -1536,6 +1536,11 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
     WaitDialog *dialog = new WaitDialog(this);
     displace::workers::ShortestPathBuilderWorker *builder = new displace::workers::ShortestPathBuilderWorker(this, dialog, currentModel.get());
 
+    if (dlg.isBinaryFormat())
+        builder->setBinaryFormat();
+    else
+        builder->setTextFormat();
+
     SaveGraphDialog savedlg(this);
     savedlg.setName(QString::number(sce.getGraph()));
     savedlg.setOutputFolder(dlg.getOutputFolder());

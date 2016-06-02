@@ -161,3 +161,13 @@ void CreateShortestPathDialog::on_checkAllRelevantNodes_toggled(bool)
     ui->relevantFolder->setEnabled(en);
     ui->browseRelevantFolder->setEnabled(en);
 }
+
+bool CreateShortestPathDialog::isBinaryFormat() const
+{
+    return ui->formatBinary->isChecked();
+}
+
+bool CreateShortestPathDialog::isTextFormat() const
+{
+    return ui->formatText->isChecked();
+}

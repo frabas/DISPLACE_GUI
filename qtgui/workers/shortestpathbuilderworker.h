@@ -21,6 +21,8 @@ public:
     explicit ShortestPathBuilderWorker(QObject *main, WaitDialog *dialog, DisplaceModel *model);
     virtual ~ShortestPathBuilderWorker() {}
 
+    void setBinaryFormat() { mTextFormat = false; }
+    void setTextFormat() { mTextFormat = true; }
     void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes);
     void run(QObject *obj, const char *slot);
 
@@ -44,6 +46,8 @@ private:
     QList<std::shared_ptr<NodeData>> mRelevantNodes;
     QList<arg> mArgumentList;
     QFutureWatcher<void> mFutureWatcher;
+
+    bool mTextFormat = false;
 };
 
 } // workers

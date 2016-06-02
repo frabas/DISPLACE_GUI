@@ -84,10 +84,18 @@ class ShortestPathBuilder
     std::vector<vertex_descriptor> mPredecessors;
     std::vector<double> mDistances;
 
+private:
+    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
+    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
+
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);
 
-    void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes);
+    enum Format {
+        Binary, Text
+    };
+
+    void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format = Binary);
 };
 
 #endif // SHORTESTPATHBUILDER_H

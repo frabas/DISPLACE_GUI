@@ -1,7 +1,7 @@
 #ifndef ENDIAN_H
 #define ENDIAN_H
 
-#include <endian.h>
+#include <utils/portable_endian.h>
 
 #include <cstdint>
 

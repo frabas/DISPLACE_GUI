@@ -27,7 +27,8 @@ HEADERS = \
     utils/MultifieldWriter.h \
     legacy/binarygraphfilereader.h \
     utils/endian.h \
-    legacy/binarygraphfilewriter.h
+    legacy/binarygraphfilewriter.h \
+    utils/portable_endian.h
 
 SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \

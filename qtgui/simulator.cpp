@@ -28,6 +28,10 @@
 #include <QSettings>
 #include <QDebug>
 
+#ifndef qInfo
+#define qInfo qDebug
+#endif
+
 QString Simulator::SET_NUMTHREADS ("simul_numthreads");
 QString Simulator::SET_VERBOSITY ("simulator_verbosity");
 

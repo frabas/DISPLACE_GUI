@@ -1809,7 +1809,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	if(gear_width_model=="a*(kW^b)")   gear_width=gear_width_a* pow(v_kw,gear_width_b);
 	if(gear_width_model=="(a*LOA)+b")  gear_width=(gear_width_a*v_vsize) +gear_width_b;
 	if(gear_width_model=="(a*kW)+b")   gear_width=(gear_width_a*v_kw) +gear_width_b;
-                                 // converted to the right unit i.e. km2 and assuming fishing at fspeed knots
+    if(gear_width_model=="(a*b*LOA/20")   gear_width=gear_width_a*gear_width_b*v_vsize/20;
+    if(gear_width_model=="if_LOA<20_a_else_b") {
+         if(v_vsize<20){
+             gear_width=gear_width_a;
+         } else{
+             gear_width=gear_width_b;
+         }
+    }
+    // converted to the right unit i.e. km2 and assuming fishing at fspeed knots
     if(this->get_metier()->get_metier_type()==1){
     swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC; // for trawlers
     } else{

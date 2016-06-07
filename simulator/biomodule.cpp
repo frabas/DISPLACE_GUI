@@ -76,6 +76,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
                           ofstream &popdyn_N,
                           ofstream &popdyn_F,
+                          ofstream &popdyn_SSB,
                           ofstream &popdyn_annual_indic,
                           ofstream &popdyn_test2,
                           ofstream &popnodes_inc,
@@ -94,6 +95,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           bool use_gui,
                           const string & popdyn_N_filename,
                           const string & popdyn_F_filename,
+                          const string & popdyn_SSB_filename,
                           const string & popnodes_inc_filename,
                           const string & popnodes_end_filename,
                           const string & popnodes_impact_filename,
@@ -877,7 +879,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             populations.at(sp)->export_popdyn_N (popdyn_N, tstep);
                          // ...and F at age
             populations.at(sp)->export_popdyn_F (popdyn_F, tstep);
-
+            populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
 
 
 
@@ -1077,6 +1079,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
         popdyn_F.flush();
         guiSendUpdateCommand(popdyn_F_filename, tstep);
+
+        popdyn_SSB.flush();
+        guiSendUpdateCommand(popdyn_SSB_filename, tstep);
 
         popdyn_N.flush();
         guiSendUpdateCommand(popdyn_N_filename, tstep);

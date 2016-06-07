@@ -140,7 +140,7 @@ private:
 public:
     VesselEndOfTheDayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *) const {
-          return (tstep % 24)<18  ? 1.0 : 0.0; // return for daily trip after 6 p.m. //0: "true" node; 1: "false"
+          return (tstep % 24)<22  ? 1.0 : 0.0; // hardcoded return for daily trip after 22 p.m. //0: "true" node; 1: "false"
         }
 };
 
@@ -4248,7 +4248,7 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
         if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::GoFishing))
 		{
 
-            if((tstep % 24)==7)
+            if((tstep % 24)==4) // hardcoded 4.am
             {
                std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
                double the_value = traverseDtree(tstep, tree.get());
@@ -4704,7 +4704,8 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 		// DEFAULT-------------------------
 		vector <bool> a_vect;
 		a_vect.push_back(true);
-		a_vect.push_back(false);
+        a_vect.push_back(false);
+        a_vect.push_back(false);
 		a_vect.push_back(false);
 		random_shuffle(a_vect.begin(),a_vect.end());
 		bool another_ground = a_vect[0] &&

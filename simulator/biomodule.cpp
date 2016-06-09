@@ -520,9 +520,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                     // update, export and clear for the next time...
-                    if(export_vmslike && impact_on_pop!=0)
+                    if(export_vmslike  && impact_on_pop!=0)
                     {
-                        a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
+                        if(tstep < 8761) a_list_nodes.at(n)->export_popnodes_impact(popnodes_impact, tstep, name_pop);
                         a_list_nodes.at(n)->export_popnodes_cumulcatches_per_pop(popnodes_cumulcatches_per_pop, tstep, name_pop);
                     }
                 }
@@ -1036,7 +1036,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         if(export_vmslike) nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
-        if(export_vmslike) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+        if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
     }
 
     //...and export the benthos biomasses on node

@@ -716,10 +716,19 @@ vector<double>& resttime_par1s, vector<double>& resttime_par2s,
         getline(in, workStartHour, '|');
         getline(in, workEndHour);
 
-        calendar.weekEndStartDay = boost::lexical_cast<int>(weekEndStartDay);
-        calendar.weekEndEndDay = boost::lexical_cast<int>(weekEndEndDay);
-        calendar.workStartHour = boost::lexical_cast<int>(workStartHour);
-        calendar.workEndHour = boost::lexical_cast<int>(workEndHour);
+        try {
+            calendar.weekEndStartDay = boost::lexical_cast<int>(weekEndStartDay);
+        } catch (boost::bad_lexical_cast &x) {}
+
+        try {
+            calendar.weekEndEndDay = boost::lexical_cast<int>(weekEndEndDay);
+        } catch (boost::bad_lexical_cast &x) {}
+        try {
+            calendar.workStartHour = boost::lexical_cast<int>(workStartHour);
+        } catch (boost::bad_lexical_cast &x) {}
+        try {
+            calendar.workEndHour = boost::lexical_cast<int>(workEndHour);
+        } catch (boost::bad_lexical_cast &x) {}
 
 		names.push_back(name);
 		speeds.push_back(strtod(speed.c_str(),0));

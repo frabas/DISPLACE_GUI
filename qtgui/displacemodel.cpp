@@ -1507,6 +1507,7 @@ bool DisplaceModel::loadVessels()
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;
+    vector<VesselCalendar> calendar;
 
     cout << "read_vessels_features() in loadVessels()" << endl;
 
@@ -1515,7 +1516,7 @@ bool DisplaceModel::loadVessels()
                           resttime_par1s, resttime_par2s, av_trip_duration,
                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
                           mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
-                          mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only);
+                          mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only, calendar);
 
 
     cout << "fill in multimaps in loadVessels()" << endl;
@@ -1679,7 +1680,8 @@ bool DisplaceModel::loadVessels()
             mult_fuelcons_when_steaming[i],
             mult_fuelcons_when_fishing[i],
             mult_fuelcons_when_returning[i],
-            mult_fuelcons_when_inactive[i]
+            mult_fuelcons_when_inactive[i],
+                                              calendar[i]
             ));
 
         std::shared_ptr<VesselData> vd (new VesselData(v));

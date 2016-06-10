@@ -3,6 +3,8 @@
 #include <mutexlocker.h>
 #include <Vessel.h>
 
+#include <Node.h>
+
 extern pthread_mutex_t glob_mutex;
 using namespace std;
 

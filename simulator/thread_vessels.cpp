@@ -32,6 +32,7 @@
 #include <Vessel.h>
 #include <Ship.h>
 #include <Node.h>
+#include <Metier.h>
 
 #ifndef NO_IPC
 #include <outputqueuemanager.h>

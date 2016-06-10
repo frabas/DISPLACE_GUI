@@ -23,7 +23,12 @@
 #include <stdlib.h>
 #include <helpers.h>
 
+#include <string>
+#include <vector>
 
+#include <boost/lexical_cast.hpp>
+
+using namespace std;
 
 double myintegrand(double x, double S1, double S2){
 return 1/(1+exp((S1-S2*x)));
@@ -659,12 +664,12 @@ void fill_from_vessels_specifications (istream& in, vector<string>& names,
 vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vector<double>& vKWs,
 vector<double>& carrycapacities, vector<double>& tankcapacities,
 vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s,vector<double>& resttime_par2s,
+vector<double>& resttime_par1s, vector<double>& resttime_par2s,
                                        vector<double>& av_trip_duration,
                                        vector<double>& mult_fuelcons_when_steaming,
                                        vector<double>& mult_fuelcons_when_fishing,
                                        vector<double>& mult_fuelcons_when_returning,
-                                       vector<double>& mult_fuelcons_when_inactive)
+                                       vector<double>& mult_fuelcons_when_inactive, vector<VesselCalendar> &calendars)
 {
 
 	string name;
@@ -684,6 +689,13 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
         string fuelconsfishing;
         string fuelconsreturning;
         string fuelconsinactive;
+        string weekEndStartDay;
+        string weekEndEndDay;
+        string workStartHour;
+        string workEndHour;
+
+        VesselCalendar calendar;
+
 		getline(in, speed, '|');
 		getline(in, fuelconso,'|');
 		getline(in, length,'|');
@@ -697,7 +709,18 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
         getline(in, fuelconssteaming,'|');
         getline(in, fuelconsfishing,'|');
         getline(in, fuelconsreturning,'|');
-        getline(in, fuelconsinactive);		
+        getline(in, fuelconsinactive, '|');
+
+        getline(in, weekEndStartDay, '|');
+        getline(in, weekEndEndDay, '|');
+        getline(in, workStartHour, '|');
+        getline(in, workEndHour);
+
+        calendar.weekEndStartDay = boost::lexical_cast<int>(weekEndStartDay);
+        calendar.weekEndEndDay = boost::lexical_cast<int>(weekEndEndDay);
+        calendar.workStartHour = boost::lexical_cast<int>(workStartHour);
+        calendar.workEndHour = boost::lexical_cast<int>(workEndHour);
+
 		names.push_back(name);
 		speeds.push_back(strtod(speed.c_str(),0));
 		fuelcons.push_back(strtod(fuelconso.c_str(),0));
@@ -713,6 +736,8 @@ vector<double>& resttime_par1s,vector<double>& resttime_par2s,
         mult_fuelcons_when_fishing.push_back(strtod(fuelconsfishing.c_str(),0));
         mult_fuelcons_when_returning.push_back(strtod(fuelconsreturning.c_str(),0));
         mult_fuelcons_when_inactive.push_back(strtod(fuelconsinactive.c_str(),0));		
+
+        calendars.push_back(calendar);
     }
     cout  << "read and set up the general features of each vessel...OK" << endl;
 

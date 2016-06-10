@@ -7,6 +7,9 @@
 #include <tseries/timeseries.h>
 #include <tseries/timeseriesmanager.h>
 
+#include <Node.h>
+#include <Metier.h>
+
 namespace displace {
 namespace dtree {
 

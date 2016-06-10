@@ -2019,12 +2019,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;	
+    vector<VesselCalendar> calendars;
     read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
 		resttime_par1s, resttime_par2s, av_trip_duration,
 		mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
 		mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
-        folder_name_parameterization, inputfolder, selected_vessels_only);
+        folder_name_parameterization, inputfolder, selected_vessels_only, calendars);
 
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
@@ -2196,7 +2197,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			mult_fuelcons_when_steaming[i],
 			mult_fuelcons_when_fishing[i],
 			mult_fuelcons_when_returning[i],
-			mult_fuelcons_when_inactive[i]
+            mult_fuelcons_when_inactive[i],
+                               calendars[i]
 			);
 
 		// some useful setters...
@@ -3185,6 +3187,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             mult_fuelcons_when_fishing.clear();
             mult_fuelcons_when_returning.clear();
             mult_fuelcons_when_inactive.clear();
+            calendars.clear();
 
 			// then, re-read...
             read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
@@ -3194,7 +3197,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				mult_fuelcons_when_fishing,
 				mult_fuelcons_when_returning,
 				mult_fuelcons_when_inactive,
-                folder_name_parameterization, inputfolder, selected_vessels_only);
+                folder_name_parameterization, inputfolder, selected_vessels_only, calendars);
 
 			// RE-read the more complex objects (i.e. when several info for a same vessel)...
 			// also quarter specific but semester specific for the betas because of the survey design they are comning from...
@@ -3303,7 +3306,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 vessels.at(v)->set_spe_possible_metiers(possible_metiers);
 				vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers);
-
+                vessels.at(v)->updateCalendar(calendars[v]);
 
                 // inform grounds in closed areas
                 const vector<int> &new_grds = vessels.at(v)->get_fgrounds();

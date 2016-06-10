@@ -21,7 +21,10 @@
 #include "Benthos.h"
 #include <helpers.h>
 
+#include <string>
+#include <vector>
 
+using namespace std;
 
 Benthos::Benthos(int _marine_landscape,
 const vector<Node *> &_nodes,

@@ -4,6 +4,9 @@
 #include <helpers.h>
 #include <mutexlocker.h>
 
+#include <Node.h>
+#include <Metier.h>
+
 extern pthread_mutex_t glob_mutex;
 extern bool use_gui;
 

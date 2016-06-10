@@ -31,6 +31,9 @@
 #include <helpers.h>
 #include <assert.h>
 
+#include <Node.h>
+#include <Metier.h>
+#include <Population.h>
 
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
@@ -93,13 +96,23 @@ public:
 class VesselTodayIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
+    static constexpr double WorkDay = 0.0;
+    static constexpr double WeekEndDay = 1.0;
+
     VesselTodayIsStateEvaluator() {}
-    double evaluate(int tstep, Vessel *) const {
-          return (tstep % 168)>96  ? 1.0 : 0.0; // 24*7=168; 4 first days is 96h //0: "week start" node; 1: "week ending"
+    double evaluate(int tstep, Vessel *vessel) const {
+        int wday = (tstep % 24*7) / 24;
+        if (vessel->getWeekEndStartDay() > vessel->getWeekEndEndDay()) {
+            if (vessel->getWeekEndEndDay() < wday && wday < vessel->getWeekEndStartDay())
+                return WorkDay;
+            return WeekEndDay;
+        } else {
+            if (vessel->getWeekEndEndDay() >= wday && wday >= vessel->getWeekEndStartDay())
+                return WeekEndDay;
+            return WorkDay;
         }
+    }
 };
-
-
 
 class VesselFuelTankStateEvaluator : public dtree::StateEvaluator {
 private:
@@ -139,8 +152,8 @@ class VesselEndOfTheDayIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
     VesselEndOfTheDayIsStateEvaluator() {}
-    double evaluate(int tstep, Vessel *) const {
-          return (tstep % 24)<22  ? 1.0 : 0.0; // hardcoded return for daily trip after 22 p.m. //0: "true" node; 1: "false"
+    double evaluate(int tstep, Vessel *vessel) const {
+          return (tstep % 24) < vessel->getWorkDayEndHour() ? 1.0 : 0.0; // hardcoded return for daily trip after 22 p.m. //0: "true" node; 1: "false"
         }
 };
 
@@ -272,7 +285,8 @@ double a_speed, double a_fuelcons, double a_length, double a_KW,
 double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
 double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
 double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
-double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive)
+double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, VesselCalendar cd)
+    : calendar(cd)
 {
     pthread_mutex_init(&mutex,0);
 

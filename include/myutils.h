@@ -21,6 +21,8 @@
 #ifndef __MYUTILS_H
 #define __MYUTILS_H (1)
 
+#include <vesselcalendar.h>
+
 #include<vector>
 #include<deque>
 #include<map>
@@ -182,7 +184,8 @@ vector<double>& av_trip_duration,
                                        vector<double>& mult_fuelcons_when_steaming,
                                        vector<double>& mult_fuelcons_when_fishing,
                                        vector<double>& mult_fuelcons_when_returning,
-                                       vector<double>& mult_fuelcons_when_inactive);
+                                       vector<double>& mult_fuelcons_when_inactive,
+                                       vector<VesselCalendar> &calendars);
 void fill_from_ships_specifications (istream& in, vector<string>& names, vector<double> &imos,
                                      vector<double> &yearbuilds, vector<string> &flags,
                                      vector<string> &types, vector<double> &typecodes,

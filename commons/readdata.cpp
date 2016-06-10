@@ -341,7 +341,7 @@ vector<double>& av_trip_duration,
                            vector<double>& mult_fuelcons_when_inactive,
 string folder_name_parameterization,
 string inputfolder,
-int selected_vessels_only)
+int selected_vessels_only, vector<VesselCalendar> &calendars)
 {
 
 	string filename;
@@ -366,7 +366,7 @@ int selected_vessels_only)
 		carrycapacities, tankcapacities, nbfpingspertrips,
                                      resttime_par1s, resttime_par2s, av_trip_duration,
                                      mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
-                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive);
+                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive, calendars);
 	vessels_features.close();
 
 #ifdef VERBOSE

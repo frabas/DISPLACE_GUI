@@ -326,16 +326,16 @@ signals:
 
 private:
     qmapcontrol::QMapControl *mMap;
-    std::shared_ptr<DisplaceModel> mModels[MAX_MODELS];
+    std::shared_ptr<DisplaceModel> mModels[MainWindow::MAX_MODELS];
 
-    MapObjectContainer<HarbourMapObject> mHarbourObjects[MAX_MODELS];
-    MapObjectContainer<NodeMapObject> mNodeObjects[MAX_MODELS];
-    MapObjectContainer<VesselMapObject> mVesselObjects[MAX_MODELS];
-    MapObjectContainer<ShipMapObject> mShipObjects[MAX_MODELS];
-    MapObjectContainer<FishfarmMapObject> mFishfarmObjects[MAX_MODELS];
-    MapObjectContainer<EdgeMapObject> mEdgeObjects[MAX_MODELS];
+    MapObjectContainer<HarbourMapObject> mHarbourObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<NodeMapObject> mNodeObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<VesselMapObject> mVesselObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<ShipMapObject> mShipObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<FishfarmMapObject> mFishfarmObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<EdgeMapObject> mEdgeObjects[MainWindow::MAX_MODELS];
 
-//    std::shared_ptr<PaletteManager> mPaletteManager[MAX_MODELS];
+//    std::shared_ptr<PaletteManager> mPaletteManager[MainWindow::MAX_MODELS];
 
     /* Layers and adapters commons to all models */
     std::shared_ptr<qmapcontrol::MapAdapter> mMainMapAdapter;
@@ -346,21 +346,21 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mEditorLayer;   /* Layer to show temporary geometries */
 
     /* Layers specific to every model */
-    std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer[MAX_MODELS];
-    std::shared_ptr<EdgeLayer> mEdgesLayer[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerPop[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBiomass[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerImpact [MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatchesPerPop [MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBenthosBiomass [MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffs [MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumsweptarea[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatches[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MAX_MODELS];
-    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mEntityLayer[MainWindow::MAX_MODELS];
+    std::shared_ptr<EdgeLayer> mEdgesLayer[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mGraphLayer[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerPop[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBiomass[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerImpact [MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatchesPerPop [MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBenthosBiomass [MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffs [MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumsweptarea[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatches[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 
@@ -375,8 +375,8 @@ private:
 
     /* Selection handling */
 
-    QSet<EdgeMapObject *> mEdgeSelection[MAX_MODELS];
-    QSet<NodeMapObject *> mNodeSelection[MAX_MODELS];
+    QSet<EdgeMapObject *> mEdgeSelection[MainWindow::MAX_MODELS];
+    QSet<NodeMapObject *> mNodeSelection[MainWindow::MAX_MODELS];
 };
 
 #endif // MAPOBJECTSCONTROLLER_H

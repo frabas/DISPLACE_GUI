@@ -71,11 +71,17 @@ class OGRGeometry;
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
-#define MAX_MODELS 5
-
 class MainWindow : public QMainWindow, public MouseModeInterface
 {
     Q_OBJECT
+
+public:
+    static constexpr int MAX_MODELS = 5;
+
+private:
+    static constexpr int ModelIdxEditor = MAX_MODELS-1;
+    static constexpr int ModelIdxSimulator = 0;
+
 
 public:
     explicit MainWindow(QWidget *parent = 0);

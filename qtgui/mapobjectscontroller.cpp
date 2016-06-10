@@ -48,12 +48,12 @@
 
 MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
-      mModelVisibility(MAX_MODELS, false),
-      mLayers(MAX_MODELS, LayerListImpl(LayerMax)),
-      mOutputLayers(MAX_MODELS, LayerListImpl(OutLayerMax)),
-      mTariffsLayers(MAX_MODELS, LayerListImpl(TariffLayerMax)),
-      mShapefiles(MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
-      mShapefileLayers(MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
+      mModelVisibility(MainWindow::MAX_MODELS, false),
+      mLayers(MainWindow::MAX_MODELS, LayerListImpl(LayerMax)),
+      mOutputLayers(MainWindow::MAX_MODELS, LayerListImpl(OutLayerMax)),
+      mTariffsLayers(MainWindow::MAX_MODELS, LayerListImpl(TariffLayerMax)),
+      mShapefiles(MainWindow::MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
+      mShapefileLayers(MainWindow::MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
       mEditorMode(NoEditorMode),
       mClosing(false)
 {

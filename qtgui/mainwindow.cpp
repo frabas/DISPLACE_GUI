@@ -936,13 +936,18 @@ void MainWindow::on_actionImport_results_triggered()
         return;
 
     QSettings sets;
-    QString name =  QFileDialog::getOpenFileName(this, tr("Import data result file"),
+    QString name =  QFileDialog::getExistingDirectory(this, tr("Import result data from directory"),
                                          sets.value("import_last").toString());
 
     if (!name.isEmpty()) {
         QFileInfo info (name);
 
-        currentModel->parseOutputStatsFile(name, -1);
+        QDir dr(name);
+        auto files = dr.entryInfoList();
+        for (auto file : files) {
+            qDebug() << "Trying to import: " << file.filePath();
+            currentModel->parseOutputStatsFile(file.filePath(), -1);
+        }
 
         sets.setValue("import_last", info.absolutePath());
     }

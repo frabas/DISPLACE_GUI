@@ -12,6 +12,10 @@ macx {
 
 CONFIG(profile) {
     message("Profiling enabled")
+
+    QMAKE_CXXFLAGS += -frounding-math
+    DEFINES += CGAL_DISABLE_ROUNDING_MATH_CHECK
+
     CONFIG(gprof) {
         message ("Compiling with support for gProf")
         QMAKE_CXXFLAGS += -pg

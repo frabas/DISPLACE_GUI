@@ -207,7 +207,7 @@ signals:
     void modelStateChanged();
 
 public:
-    bool loadLiveModel(QString path, QString *error);
+    bool loadLiveModel(QString path, QString *error, int model_idx = 0);
 
     void graphCreated(const QList<GraphBuilder::Node> &nodes);
     void addPenaltyPolygon (const QList<QPointF> &points);

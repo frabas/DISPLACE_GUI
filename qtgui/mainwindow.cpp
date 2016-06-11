@@ -239,15 +239,17 @@ MainWindow::~MainWindow()
 
 class Loader : public BackgroundWorker {
     QString mDir;
+    int mModelIdx;
 public:
-    Loader(MainWindow *main, QString dir)
-        : BackgroundWorker(main), mDir(dir) {
+    Loader(MainWindow *main, QString dir, int model_idx = 0)
+        : BackgroundWorker(main), mDir(dir),
+          mModelIdx (model_idx) {
     }
 
     virtual void execute() override {
         qDebug() << "Loader started";
         QString error;
-        if (!mMain->loadLiveModel(mDir, &error)) {
+        if (!mMain->loadLiveModel(mDir, &error, mModelIdx)) {
             setFail(QString(tr("Error loading model %1: %2")).arg(mDir).arg(error));
             emit warning(tr("Load failed."), getError());
             return;
@@ -259,6 +261,12 @@ public:
 
 void MainWindow::on_action_Load_triggered()
 {
+    if (currentModelIdx == ModelIdxEditor) {
+        QMessageBox::warning(this, tr("Can't load model"),
+                             tr("Models can be loaded only from Live (0) or Results (1-3) slots. Please select another slot before loading."));
+        return;
+    }
+
     QSettings sets;
     QString lastpath;
 
@@ -273,7 +281,7 @@ void MainWindow::on_action_Load_triggered()
     QDir d (dir);
     sets.setValue("lastpath", d.absolutePath());
 
-    Loader *loader = new Loader(this,dir);
+    Loader *loader = new Loader(this,dir, currentModelIdx);
 
     startBackgroundOperation(loader, 0);
 }
@@ -946,7 +954,9 @@ void MainWindow::on_actionImport_results_triggered()
         auto files = dr.entryInfoList();
         for (auto file : files) {
             qDebug() << "Trying to import: " << file.filePath();
-            currentModel->parseOutputStatsFile(file.filePath(), -1);
+            OutputFileParser out(currentModel.get());
+            out.parse(file.filePath(), -1);
+            //currentModel->parseOutputStatsFile(file.filePath(), -1);
         }
 
         sets.setValue("import_last", info.absolutePath());
@@ -1416,7 +1426,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
     }
 }
 
-bool MainWindow::loadLiveModel(QString path, QString *error)
+bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
 {
     std::shared_ptr<DisplaceModel> m(new DisplaceModel());
 
@@ -1436,15 +1446,15 @@ bool MainWindow::loadLiveModel(QString path, QString *error)
     connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
     connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
 
-    mMapController->removeModel(0);
+    mMapController->removeModel(model_idx);
 
     m->setIndex(0);
-    mMapController->setModel(0, m);
-    mMapController->createMapObjectsFromModel(0, m.get());
-    ui->modelSelector->setCurrentIndex(0);
-    models[0] = m;
+    mMapController->setModel(model_idx, m);
+    mMapController->createMapObjectsFromModel(model_idx, m.get());
+    ui->modelSelector->setCurrentIndex(model_idx);
+    models[model_idx] = m;
 
-    mSimulation->linkModel(models[0]);
+    mSimulation->linkModel(models[model_idx]);
 
     emit modelStateChanged();
 

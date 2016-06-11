@@ -327,7 +327,7 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
             int id = fields[1].toInt();
 
             double tot = 0;
-            for (int i = 2; i < fields.size(); ++i) {
+            for (int i = 2; i < fields.size() && (i-2) < pop.size(); ++i) {
                 double v = fields[i].toDouble();
                 tot += v;
                 pop[i-2] = v;

@@ -622,16 +622,39 @@ void DisplaceModel::collectPopdynSSB(int step, int popid, const QVector<double> 
 
 void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 {
-    std::shared_ptr<VesselData> vessel = mVessels.at(stats.vesselId);
+    std::shared_ptr<VesselData> vessel;
+    if (stats.vesselId != -1 && stats.vesselId < mVessels.size())
+        vessel = mVessels.at(stats.vesselId);
 
-    vessel->setLastHarbour(stats.lastHarbour);
-    vessel->setRevenueAV(stats.revenueAV);
-    vessel->setRevenueExAV(stats.revenueExAV);
-    vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
-    vessel->mVessel->set_timeatsea(stats.timeAtSea);
-    vessel->addCumFuelCons(stats.cumFuelCons);
+    int nat = -1;
+    if (vessel) {
+        vessel->setLastHarbour(stats.lastHarbour);
+        vessel->setRevenueAV(stats.revenueAV);
+        vessel->setRevenueExAV(stats.revenueExAV);
+        vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
+        vessel->mVessel->set_timeatsea(stats.timeAtSea);
+        vessel->addCumFuelCons(stats.cumFuelCons);
+        nat = vessel->getNationality();
+    } else {
+        // retrieve nationality from vessel name
+        QString natname = QString::fromStdString(Vessel::nationalityFromName(stats.name));
+        // TODO this is not optimal.
 
-    int nat = vessel->getNationality();
+        int i;
+        for (i = 0; i < mNations.size(); ++i) {
+            auto n = mNations[i];
+            if (n->getName() == natname) {
+                break;
+            }
+        }
+        if (i == mNations.size()) { // nation not found, add it
+            auto nn = std::make_shared<NationData>();
+            nn->setName(natname);
+            mNations.push_back(nn);
+            nat = i;
+        }
+    }
+
     while (mStatsNationsCollected.size() <= nat) {
         mStatsNationsCollected.push_back(NationStats());
     }
@@ -642,13 +665,17 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mGav += stats.gav;
     mStatsNationsCollected[nat].mVpuf += stats.vpuf();
 
-    int hidx = mNodes[vessel->getLastHarbour()]->getHarbourId();
-    while (mStatsHarboursCollected.size() <= hidx)
-        mStatsHarboursCollected.push_back(HarbourStats());
+    // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
+    int hidx = -1;
+    if (stats.lastHarbour != -1) {
+        hidx = mNodes[stats.lastHarbour]->getHarbourId();
+        while (mStatsHarboursCollected.size() <= hidx)
+            mStatsHarboursCollected.push_back(HarbourStats());
 
-    mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
-    mStatsHarboursCollected[hidx].mGav += stats.gav;
-    mStatsHarboursCollected[hidx].mVpuf += stats.vpuf();
+        mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
+        mStatsHarboursCollected[hidx].mGav += stats.gav;
+        mStatsHarboursCollected[hidx].mVpuf += stats.vpuf();
+    }
 
     int midx = stats.metierId;
     if (midx != -1) {
@@ -663,8 +690,13 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
     int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {
-        vessel->addCatch(i, stats.mCatches[i]);
-        mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
+        if (vessel)
+            vessel->addCatch(i, stats.mCatches[i]);
+
+        // TODO check this!
+        if (hidx != -1)
+            mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
+
         mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
 
         if (midx != -1) {
@@ -675,8 +707,11 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         }
     }
 
-    if (mDb)
-        mDb->addVesselStats(tstep,*vessel, stats);
+    if (mDb) {
+        // TODO Not sure
+        if (vessel)
+            mDb->addVesselStats(tstep,*vessel, stats);
+    }
 
     mVesselsStatsDirty = true;
 }

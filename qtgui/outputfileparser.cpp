@@ -78,10 +78,8 @@ void OutputFileParser::parse(QString path, int tstep)
     } else if (name.startsWith("popdyn_")) {
         parsePopdyn(&file, tstep, mModel);
     } else if (name.startsWith("loglike_")) {
-        //parseVessels(&file, tstep, mModel);
-        qDebug() << "File ignored...";
+        parseVessels(&file, tstep, mModel);
     } else { /* Don't know how to handle... */
-
         qDebug() << "File isn't recognized: " << path;
     }
 
@@ -349,10 +347,12 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
         int step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
-            QVector<double> pop(model->getSzGrupsCount());
-            int id = fields[5].toInt();
-
-//            model->collectVesselStats(step, 0);
+            VesselStats vs = parseVesselStatLine(fields);
+            if (vs.vesselId == -1) {
+                qWarning() << "Line: " << line;
+            } else {
+                model->collectVesselStats(step, vs);
+            }
         }
     }
 }
@@ -366,6 +366,7 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.reasonToGoBack = toInt(fields[2]);
         v.lastHarbour = toInt(fields[4]);
         v.vesselId = toInt(fields[5]);
+        v.name = fields[6].toStdString();
         v.timeAtSea = toDouble(fields[7]);
         v.cumFuelCons = toDouble(fields[8]);
 
@@ -380,7 +381,7 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.gav = toDouble(fields[10 + pop + 6]);
 
     } catch (std::exception &x) {
-        Q_UNUSED(x);
+        qWarning() << "Error parsing Vessel Stat Line: " << x.what();
         return VesselStats();
     }
 

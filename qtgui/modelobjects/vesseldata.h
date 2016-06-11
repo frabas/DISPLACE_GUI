@@ -80,6 +80,7 @@ public:
     int tstep = 0;
 
     int vesselId = -1;
+    std::string name;
     int metierId = -1;
     int lastHarbour = -1;
     double revenueAV = 0;

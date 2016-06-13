@@ -38,7 +38,7 @@ void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
-    std::string name, freq_metiers;
+    std::string name, freq_metiers= "M";
     int length_class;
 
     std::vector<double> cumul;

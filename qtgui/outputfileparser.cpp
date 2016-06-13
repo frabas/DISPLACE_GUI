@@ -23,7 +23,7 @@
 #include <displacemodel.h>
 #include <mainwindow.h>
 #include <modelobjects/vesseldata.h>
-
+#include <calendar.h>
 
 #include <QFile>
 #include <QFileInfo>
@@ -341,12 +341,19 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
     qDebug() << "PARSING: " << file->fileName();
     QTextStream strm (file);
 
+    int step = 0;
+    int lastMonth = -1, thisMonth;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[1].toInt();
+        step = fields[1].toInt();
 
+        thisMonth = mModel->calendar()->getMonth(step);
         if (step == tstep || tstep == -1) {
+            if (lastMonth < thisMonth) {
+                model->commitNodesStatsFromSimu(step);
+                lastMonth = thisMonth;
+            }
             VesselStats vs = parseVesselStatLine(fields);
             if (vs.vesselId == -1) {
                 qWarning() << "Line: " << line;
@@ -355,6 +362,7 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
             }
         }
     }
+    model->commitNodesStatsFromSimu(step);
 }
 
 VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
@@ -370,7 +378,7 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.timeAtSea = toDouble(fields[7]);
         v.cumFuelCons = toDouble(fields[8]);
 
-        int pop = fields.size() - 16;
+        int pop = mModel->getPopulationsCount();
         for (int i = 0; i < pop; ++i) {
             double value = toDouble(fields[10+i]);
             v.mCatches.push_back(value);

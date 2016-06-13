@@ -97,7 +97,7 @@ protected:
     }
 
 public:
-    static VesselStats parseVesselStatLine(const QStringList &fields);
+    VesselStats parseVesselStatLine(const QStringList &fields);
 };
 
 #endif // OUTPUTFILEPARSER_H

@@ -40,6 +40,7 @@ Simulator::Simulator()
       mIpcThread(0),
       mIpcQueue(0),
       mModel(),
+      mOutFileParser(),
       mSimSteps(8762),
       useStaticPaths(1),
       preexistingPathsShop(1),
@@ -56,6 +57,7 @@ Simulator::Simulator()
 void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
 {
     mModel= model;
+    mOutFileParser = std::make_shared<OutputFileParser>(mModel.get());
 }
 
 // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
@@ -327,7 +329,7 @@ void Simulator::parseUpdateVessel(QStringList fields)
 
 void Simulator::parseUpdateVesselStats(QStringList fields)
 {
-    VesselStats v = OutputFileParser::parseVesselStatLine(fields);
+    VesselStats v = mOutFileParser->parseVesselStatLine(fields);
 
     vesselLogbookReceived(v);
 }

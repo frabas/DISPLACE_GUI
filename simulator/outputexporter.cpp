@@ -24,16 +24,16 @@ void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
     MutexLocker l(&glob_mutex);
 
     mVmsLike << tstep << " "
-               //<< vessels[ index_v ]->get_idx() << " "
-            << vessel->get_name() << " "
-               // can be used as a trip identifier
-            << vessel->get_tstep_dep() << " "
-            << setprecision(3) << fixed << vessel->get_x() << " "
-            << setprecision(3) << fixed << vessel->get_y() << " "
-            << setprecision(0) << fixed << vessel->get_course() << " "
-               //<< vessels[ index_v ]->get_inharbour() << " "
-            << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
-            << vessel->get_state() << " " <<  endl;
+                //<< vessels[ index_v ]->get_idx() << " "
+             << vessel->get_name() << " "
+                // can be used as a trip identifier
+             << vessel->get_tstep_dep() << " "
+             << setprecision(3) << fixed << vessel->get_x() << " "
+             << setprecision(3) << fixed << vessel->get_y() << " "
+             << setprecision(0) << fixed << vessel->get_course() << " "
+                //<< vessels[ index_v ]->get_inharbour() << " "
+             << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
+             << vessel->get_state() << " " <<  endl;
 }
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
@@ -72,36 +72,36 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
     for(size_t pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
     {
-    cumul.push_back(0);
-    for(size_t sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
-       {
-       cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
-       }
+        cumul.push_back(0);
+        for(size_t sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+        {
+            cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
+        }
     }
 
 
     // inform frequencies of metiers by counting nb of time a metier has been used during the trip
     vector<int> vec = v->get_idx_used_metiers_this_trip();
-      // Create an histogram
-      map<int, unsigned> histogram;
-      for (vector<int>::const_iterator i = vec.begin(); i != vec.end(); i++)
-      {
-          ++histogram[*i];
-      }
-      // ... and display it.
-      for (map<int, unsigned>::const_iterator i = histogram.begin(); i != histogram.end(); i++)
-      {
-          freq_metiers= freq_metiers + "_" ;
-          double freq = static_cast<double>(i->second) / vec.size();
-          freq = floor(freq * 100.0) / 100.0; // 2 digits after decimal only
-          stringstream ss, ss2;
-          ss <<  i->first;
-          ss2 <<  freq;
-          string str = ss.str();
-          string str2 = ss2.str();
-          freq_metiers  = freq_metiers + str + ":" + str2 ;
+    // Create an histogram
+    map<int, unsigned> histogram;
+    for (vector<int>::const_iterator i = vec.begin(); i != vec.end(); i++)
+    {
+        ++histogram[*i];
+    }
+    // ... and display it.
+    for (map<int, unsigned>::const_iterator i = histogram.begin(); i != histogram.end(); i++)
+    {
+        freq_metiers= freq_metiers + "_" ;
+        double freq = static_cast<double>(i->second) / vec.size();
+        freq = floor(freq * 100.0) / 100.0; // 2 digits after decimal only
+        stringstream ss, ss2;
+        ss <<  i->first;
+        ss2 <<  freq;
+        string str = ss.str();
+        string str2 = ss2.str();
+        freq_metiers  = freq_metiers + str + ":" + str2 ;
 
-      }
+    }
 
 
 
@@ -114,13 +114,13 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
         {
-         cumul_discards.push_back(0);
-         for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
+            cumul_discards.push_back(0);
+            for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
             {
-            if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
+                if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
             }
-         count+=1;
-       }
+            count+=1;
+        }
 
     }
 
@@ -135,14 +135,14 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     // vessel / date dep / date arr / reason to return to port / cum steaming in hours/
     //    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
     ss << logbook.tstepdep << " " << logbook.tstep << " "
-        << logbook.rtbb << " "
-        << logbook.cumstm << " "
-        << logbook.node << " "
-        << logbook.idx << " "
-        << name << " "
-        << logbook.timeatsea << " "
-        << logbook.cumfcons << " "
-        << logbook.travdist << " ";
+       << logbook.rtbb << " "
+       << logbook.cumstm << " "
+       << logbook.node << " "
+       << logbook.idx << " "
+       << name << " "
+       << logbook.timeatsea << " "
+       << logbook.cumfcons << " "
+       << logbook.travdist << " ";
     for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
         ss  << *it << " " ;
     ss  << freq_metiers << " " << 0 << " " ;

@@ -49,6 +49,7 @@
 #include <utils/imageformathelpers.h>
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
+#include <calendar.h>
 
 #include <algo/isolatedsubgraphchecker.h>
 #include <workers/shortestpathbuilderworker.h>
@@ -399,6 +400,8 @@ void MainWindow::simulatorProcessStepChanged(int step)
     } else {
         ui->info_simstep->setText(QString(tr("Simulation step:")));
     }
+
+    updateCalendarDisplay(step);
 }
 
 void MainWindow::simulatorNodeStatsUpdate(QString data)
@@ -621,6 +624,27 @@ void MainWindow::updateAllDisplayObjects()
 {
     mMapController->updateMapObjectsFromModel(currentModelIdx, currentModel.get());
     mStatsController->updateStats(currentModel.get());
+}
+
+void MainWindow::updateCalendarDisplay(int tstep)
+{
+    if (tstep == -1) {
+        ui->calendar->setText("");
+    } else {
+        int mt = 0, yr = 0;
+        if (currentModel->calendar()) {
+            mt =currentModel->calendar()->getMonth(tstep);
+            yr = currentModel->calendar()->getYear(tstep);
+        }
+        QString txt = QString("D %1 [%6] Wk %2\nMt %3 Yr %4\n%5:00 h")
+                .arg(tstep / 24)
+                .arg(tstep / (24*7))
+                .arg(mt)
+                .arg(yr)
+                .arg(tstep % 24)
+                .arg(Calendar::dayToString((tstep / 24) % 7));
+        ui->calendar->setText(txt);
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -1134,8 +1158,10 @@ void MainWindow::showWarningMessageBox(QString title, QString message)
 void MainWindow::on_play_step_valueChanged(int step)
 {
     if (currentModel && currentModel->modelType() == DisplaceModel::OfflineModelType) {
+
         currentModel->setCurrentStep(step);
         mStatsController->setCurrentTimeStep(step);
+        updateCalendarDisplay(step);
         updateAllDisplayObjects();
     }
 }

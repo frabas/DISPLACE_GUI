@@ -66,6 +66,8 @@ public:
 
     void vesselUpdated();
 
+    static QString vesselStateToString(int state);
+
 private slots:
     void widgetClosed();
 

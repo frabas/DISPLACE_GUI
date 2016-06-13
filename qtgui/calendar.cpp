@@ -23,6 +23,11 @@
 #include <readdata.h>
 #include <QDebug>
 
+const QString Calendar::days[] = {
+    "mon", "tue", "wed", "thu",
+    "fri", "sat", "sun"
+};
+
 Calendar::Calendar()
 {
 }

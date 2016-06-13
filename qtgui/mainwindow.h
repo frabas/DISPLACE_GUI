@@ -215,6 +215,7 @@ public:
 protected:
     void updateModelList();
     void updateAllDisplayObjects();
+    void updateCalendarDisplay(int tstep);
     void closeEvent ( QCloseEvent * event );
 
     void centerMap(const qmapcontrol::PointWorldCoord &pt);

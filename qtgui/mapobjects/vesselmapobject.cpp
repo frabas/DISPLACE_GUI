@@ -27,6 +27,9 @@
 #include <QMapControl/Projection.h>
 #include <QMapControl/LayerGeometry.h>
 
+#include <calendar.h>
+
+
 #include <m_constants.h>
 
 #include <QPainter>
@@ -55,6 +58,20 @@ bool VesselMapObject::showProperties()
     return true;
 }
 
+QString VesselMapObject::vesselStateToString(int state)
+{
+    switch (state) {
+    case 0:
+        return tr("");
+    case 1:
+        return tr("Fishing");
+    case 2:
+        return tr("Heading to/Steaming from Harbour");
+    default:
+        return tr("Unknown?");
+    }
+}
+
 void VesselMapObject::updateProperties()
 {
     if (!mWidget)
@@ -67,11 +84,21 @@ void VesselMapObject::updateProperties()
             .arg(mVessel->mVessel->get_x());
 
     text += "<br/>";
+
+    text += QString("<b>Work hours:</b> %1 - %2<br/>").arg(mVessel->mVessel->getWorkDayStartHour()).arg(mVessel->mVessel->getWorkDayEndHour());
+    text += QString("<b>Week End Days:</b> %1 - %2 (%3 - %4)<br/>").arg(Calendar::dayToString(mVessel->mVessel->getWeekEndStartDay())).arg(Calendar::dayToString(mVessel->mVessel->getWeekEndEndDay()))
+            .arg(mVessel->mVessel->getWeekEndStartDay()).arg(mVessel->mVessel->getWeekEndEndDay());
+
+    text += "<br/>";
     text += QString("<b>Fuel:</b> %1<br/>").arg(mVessel->mVessel->get_cumfuelcons());
-    text += QString("<b>State:</b> %1<br/>").arg(mVessel->mVessel->get_state());
+    text += QString("<b>State:</b> %2 (%1)<br/>").arg(mVessel->mVessel->get_state()).arg(vesselStateToString(mVessel->mVessel->get_state()));
     text += QString("<b>Cum Catches:</b> %1<br/>").arg(mVessel->mVessel->get_cumcatches());
     text += QString("<b>Time at sea:</b> %1<br/>").arg(mVessel->mVessel->get_timeatsea());
     text += QString("<b>Reason To go Back:</b> %1<br/>").arg(mVessel->mVessel->get_reason_to_go_back());
+
+    if (mVessel->mVessel->get_roadmap().size() > 0) {
+        text += QString("<b>Final Destination:</b> %1<br/>").arg(mVessel->mVessel->get_roadmap().back());
+    }
 
     mWidget->setText(text);
 }

@@ -52,25 +52,43 @@ public:
     bool isMonth(int tstep) const {
         return mMonths.contains(tstep);
     }
+    int getMonth (int tstep) const {
+        return mMonths.lowerBound(tstep).value();
+    }
 
     bool isSemester(int tstep) const {
         return mSemesters.contains(tstep);
+    }
+    int getSemester(int tstep) const {
+        return mSemesters.lowerBound(tstep).value();
     }
 
     bool isQuarted(int tstep) const {
         return mQuarters.contains(tstep);
     }
+    int getQuarter (int tstep) const {
+        return mQuarters.lowerBound(tstep).value();
+    }
 
     bool isYear(int tstep) const {
         return mYears.contains(tstep);
     }
+    int getYear(int tstep) const {
+        return mYears.lowerBound(tstep).value();
+    }
 
     static Calendar *load(QString basepath, QString name);
+    static QString dayToString (int day) {
+        return days[day];
+    }
+
 private:
     QMap<int, int> mMonths;
     QMap<int, int> mQuarters;
     QMap<int, int> mSemesters;
     QMap<int, int> mYears;
+
+    static const QString days[];
 };
 
 #endif // CALENDAR_H

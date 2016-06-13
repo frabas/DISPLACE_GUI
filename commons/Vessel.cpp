@@ -101,7 +101,7 @@ public:
 
     VesselTodayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *vessel) const {
-        int wday = (tstep % 24*7) / 24;
+        int wday = (tstep / 24) % 7;
         if (vessel->getWeekEndStartDay() > vessel->getWeekEndEndDay()) {
             if (vessel->getWeekEndEndDay() < wday && wday < vessel->getWeekEndStartDay())
                 return WorkDay;

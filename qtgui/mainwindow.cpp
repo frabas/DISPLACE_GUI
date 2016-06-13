@@ -335,6 +335,8 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
 
     ui->play_step->setValue(currentStep);
 
+    ui->actionLoad_Harbours->setEnabled(e);
+
     /* Editor specific tools */
     e = type == DisplaceModel::EditorModelType;
     ui->actionLoad_Graph->setEnabled(e);
@@ -351,7 +353,6 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionAbort_Operation->setEnabled(false);
 
     ui->actionCreate_Graph->setEnabled(e);
-    ui->actionLoad_Harbours->setEnabled(e);
     ui->actionLink_Harbours_to_Graph->setEnabled(e);
     ui->actionLoadStockNames->setEnabled(e);
     ui->actionCreate_Shortest_Path->setEnabled(e);
@@ -1454,10 +1455,12 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
 
 bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
 {
+    DisplaceModel::ModelType tp = (model_idx == 0 ? DisplaceModel::LiveModelType : DisplaceModel::OfflineModelType);
+
     std::shared_ptr<DisplaceModel> m(new DisplaceModel());
 
     try {
-        if (!m->load(path)) {
+        if (!m->load(path, tp)) {
             if (error)
                 *error = m->getLastError();
             return false;
@@ -1510,7 +1513,7 @@ void MainWindow::on_actionExport_Graph_triggered()
 
 void MainWindow::on_actionLoad_Harbours_triggered()
 {
-    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+    if (!currentModel || (currentModel->modelType() != DisplaceModel::EditorModelType && currentModel->modelType() != DisplaceModel::OfflineModelType ))
         return;
 
     QSettings sets;

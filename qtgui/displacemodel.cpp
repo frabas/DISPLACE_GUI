@@ -120,7 +120,7 @@ bool DisplaceModel::edit(QString modelname)
     return true;
 }
 
-bool DisplaceModel::load(QString path)
+bool DisplaceModel::load(QString path, ModelType type)
 {
     if (mModelType != EmptyModelType)
         return false;
@@ -168,7 +168,7 @@ bool DisplaceModel::load(QString path)
         return false;
     }
 
-    mModelType = LiveModelType;
+    mModelType = type;
     return true;
 }
 

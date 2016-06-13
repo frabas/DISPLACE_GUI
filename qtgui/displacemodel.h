@@ -103,7 +103,7 @@ public:
     void setIndex(int idx) { mIndex = idx; }
     int index() const { return mIndex; }
 
-    bool load (QString path);
+    bool load (QString path, ModelType type);
     bool loadDatabase (QString path);
     bool linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();

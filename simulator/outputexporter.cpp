@@ -2,7 +2,7 @@
 
 #include <mutexlocker.h>
 #include <Vessel.h>
-
+#include <Metier.h>
 #include <Node.h>
 
 extern pthread_mutex_t glob_mutex;
@@ -79,6 +79,9 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
         }
     }
 
+    std::ostringstream oss;
+    oss << "M(" << v->get_metier()->get_name() << ")";
+    freq_metiers= oss.str();
 
     // inform frequencies of metiers by counting nb of time a metier has been used during the trip
     vector<int> vec = v->get_idx_used_metiers_this_trip();

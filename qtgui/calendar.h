@@ -79,6 +79,8 @@ public:
 
     static Calendar *load(QString basepath, QString name);
     static QString dayToString (int day) {
+        if (day < 0 || day > 6)
+            return "?";
         return days[day];
     }
 

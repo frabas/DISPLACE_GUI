@@ -965,8 +965,12 @@ void MainWindow::on_action_Link_database_triggered()
 
 void MainWindow::on_actionImport_results_triggered()
 {
-    if (currentModelIdx == 0 || currentModel == 0)
+    if (currentModelIdx == 0 || currentModel == 0 || currentModel->modelType() != DisplaceModel::OfflineModelType) {
+        QMessageBox::warning(this, tr("Offline results import"),
+                             tr("To import results, an offline Model slot must be selected (slots [1]-[3]) and a"
+                                " config file must be loaded."));
         return;
+    }
 
     QSettings sets;
     QString name =  QFileDialog::getExistingDirectory(this, tr("Import result data from directory"),

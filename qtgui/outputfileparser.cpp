@@ -37,7 +37,7 @@ OutputFileParser::OutputFileParser(DisplaceModel *model, QObject *parent)
 {
 }
 
-void OutputFileParser::parse(QString path, int tstep)
+void OutputFileParser::parse(QString path, int tstep, int period)
 {
     QFile file (path);
     QFileInfo info (file);
@@ -56,29 +56,29 @@ void OutputFileParser::parse(QString path, int tstep)
     }
 
     if (name.startsWith("popnodes_start_") || name.startsWith("popnodes_inc_")) {
-        parsePopStart(&file, tstep, mModel);
+        parsePopStart(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumftime_")) {
-        parsePopCumftime(&file, tstep, mModel);
+        parsePopCumftime(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumsweptarea_")) {
-        parsePopCumsweptarea(&file, tstep, mModel);
+        parsePopCumsweptarea(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumcatches_")) {
-        parsePopCumcatches(&file, tstep, mModel);
+        parsePopCumcatches(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_tariffs_")) {
-        parsePopTariffs(&file, tstep, mModel);
+        parsePopTariffs(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_impact_")) {
-        parsePopImpact(&file, tstep, mModel);
+        parsePopImpact(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumulcatches_per_pop_")) {
-        parsePopCumcatchesPerPop(&file, tstep, mModel);
+        parsePopCumcatchesPerPop(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {
-        parsePopBenthosBiomass(&file, tstep, mModel);
+        parsePopBenthosBiomass(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_F_")) {
-        parsePopdynF(&file, tstep, mModel);
+        parsePopdynF(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_SSB_")) {
-        parsePopdynSSB(&file, tstep, mModel);
+        parsePopdynSSB(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_")) {
-        parsePopdyn(&file, tstep, mModel);
+        parsePopdyn(&file, tstep, mModel, period);
     } else if (name.startsWith("loglike_")) {
-        parseVessels(&file, tstep, mModel);
+        parseVessels(&file, tstep, mModel, period);
     } else { /* Don't know how to handle... */
         qDebug() << "File isn't recognized: " << path;
     }
@@ -94,7 +94,7 @@ void OutputFileParser::parse(QString path, int tstep)
  * nodeid x y population1 population2 ...
  * see Node::export_popnodes for details
  */
-void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
@@ -106,12 +106,20 @@ void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *mode
         dataW.push_back(0.0);
     }
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (tstep == -1 || step == tstep) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int id = fields[1].toInt();
 
             bool ok;
@@ -130,69 +138,113 @@ void OutputFileParser::parsePopStart(QFile *file, int tstep, DisplaceModel *mode
             model->collectNodePopStats(tstep, id, data, dataW, tot, wtot);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopCumftime(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int id = fields[1].toInt();
             double cumftime = fields[4].toDouble();
             model->collectPopCumftime (step, id, cumftime);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int id = fields[1].toInt();
             double cumsweptarea = fields[4].toDouble();
             model->collectPopCumsweptarea (step, id, cumsweptarea);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int id = fields[1].toInt();
             double cumcatches = fields[4].toDouble();
             model->collectPopCumcatches (step, id, cumcatches);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int id = fields[1].toInt();
             vector<double> tariffs;
             tariffs.push_back(fields[4].toDouble());
@@ -200,19 +252,30 @@ void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *mo
             model->collectPopTariffs (step, id, tariffs);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
 
-void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[1].toInt();
+        step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int popid = fields[0].toInt();
             int nodeid = fields[2].toInt();
             double impact = fields[5].toDouble();
@@ -220,19 +283,29 @@ void OutputFileParser::parsePopImpact(QFile *file, int tstep, DisplaceModel *mod
         }
     }
 
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
 
-void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[1].toInt();
+        step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int popid = fields[0].toInt();
             int nodeid = fields[2].toInt();
             double cumcatchesthispop = fields[5].toDouble();
@@ -240,18 +313,28 @@ void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, Displace
         }
     }
 
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[1].toInt();
+        step = fields[1].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             int funcid = fields[0].toInt();
             int nodeid = fields[2].toInt();
             double benthosbiomass = fields[5].toDouble();
@@ -259,19 +342,29 @@ void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceMo
         }
     }
 
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
 
-void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             QVector<double> pop(model->getSzGrupsCount());
             int id = fields[1].toInt();
 
@@ -284,18 +377,29 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
             model->collectPopdynF(step, id, pop, tot);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
             QVector<double> pop(model->getSzGrupsCount());
             int id = fields[1].toInt();
 
@@ -308,19 +412,31 @@ void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *mod
             model->collectPopdynSSB(step, id, pop, tot);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
 
-void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        int step = fields[0].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+
             QVector<double> pop(model->getSzGrupsCount());
             int id = fields[1].toInt();
 
@@ -333,27 +449,31 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model)
             model->collectPopdynN(step, id, pop, tot);
         }
     }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step, true);
 }
 
-void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model)
+void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     // to be completed.
-    qDebug() << "PARSING: " << file->fileName();
     QTextStream strm (file);
 
-    int step = 0;
-    int lastMonth = -1, thisMonth;
+    int step, last_period = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         step = fields[1].toInt();
 
-        thisMonth = mModel->calendar()->getMonth(step);
         if (step == tstep || tstep == -1) {
-            if (lastMonth < thisMonth) {
-                model->commitNodesStatsFromSimu(step);
-                lastMonth = thisMonth;
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
             }
+
             VesselStats vs = parseVesselStatLine(fields);
             if (vs.vesselId == -1) {
                 qWarning() << "Line: " << line;
@@ -362,7 +482,9 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
             }
         }
     }
-    model->commitNodesStatsFromSimu(step);
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
 }
 
 VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)

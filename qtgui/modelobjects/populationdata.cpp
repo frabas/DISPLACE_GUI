@@ -47,6 +47,13 @@ const QVector<double> &PopulationData::getAggregate() const
     return aggregate;
 }
 
+double PopulationData::getAggregateAt(int i) const
+{
+    if (aggregate.size() > i)
+        return aggregate.at(i);
+    return 0;
+}
+
 void PopulationData::setAggregate(const QVector<double> &value)
 {
     aggregate = value;
@@ -58,6 +65,13 @@ void PopulationData::setAggregate(const QVector<double> &value)
 const QVector<double> &PopulationData::getMortality() const
 {
     return mortality;
+}
+
+double PopulationData::getMortalityAt(int i) const
+{
+    if (mortality.size() > i)
+        return mortality.at(i);
+    return 0;
 }
 
 void PopulationData::setMortality(const QVector<double> &value)

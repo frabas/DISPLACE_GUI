@@ -465,25 +465,25 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
 
 }
 
-void DisplaceModel::commitNodesStatsFromSimu(int tstep)
+void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 {
     if (mDb)
         mDb->beginTransaction();
 
-    if (mNodesStatsDirty) {
+    if (mNodesStatsDirty || force) {
         if (mDb)
             mDb->addNodesStats(mLastStats, mNodes);
         mNodesStatsDirty = false;
     }
 
-    if (mPopStatsDirty) {
+    if (mPopStatsDirty || force) {
         mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
         if (mDb)
             mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
         mPopStatsDirty = false;
     }
 
-    if (mVesselsStatsDirty) {
+    if (mVesselsStatsDirty || force) {
         mStatsNations.insertValue(tstep, mStatsNationsCollected);
         if (mDb)
             mDb->addNationsStats (mLastStats, mStatsNationsCollected);
@@ -494,12 +494,12 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep)
         mVesselsStatsDirty = false;
     }
 
-    if (mShipsStatsDirty) {
+    if (mShipsStatsDirty || force) {
 
         mShipsStatsDirty = false;
     }
 
-    if (mFishfarmStatsDirty) {
+    if (mFishfarmStatsDirty || force) {
         //if (mDb)
         //    mDb->addFishfarmStats (mLastStats, mStatsFishfarmCollected);
 

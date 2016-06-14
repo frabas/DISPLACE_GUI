@@ -979,13 +979,61 @@ void MainWindow::on_actionImport_results_triggered()
     if (!name.isEmpty()) {
         QFileInfo info (name);
 
+        QRegExp r(R"%(.*simu(\d+)\.dat)%");
+        QSet<QString> simus;
         QDir dr(name);
         auto files = dr.entryInfoList();
         for (auto file : files) {
-            qDebug() << "Trying to import: " << file.filePath();
-            OutputFileParser out(currentModel.get());
-            out.parse(file.filePath(), -1);
-            //currentModel->parseOutputStatsFile(file.filePath(), -1);
+            if (r.indexIn(file.fileName()) != -1) {
+                simus.insert(QString("simu%1").arg(r.cap(1)));
+            }
+        }
+
+        if (simus.size() == 0) {
+            QMessageBox::warning(this, tr("Import offline data"),
+                                 tr("No relevant simulation files found. Please check the selected folder"));
+            return;
+        }
+        QString selected;
+        if (simus.size() > 1) {
+            QStringList ls(simus.toList());
+
+            ls.sort();
+            selected = QInputDialog::getItem(this, tr("Import offline data"),
+                                             tr("Please select a simulation id"), ls, 0, false);
+            if (selected.isEmpty())
+                return;
+        } else {
+            selected = *simus.begin();
+        }
+
+        // now try to import some relevant file.
+
+        QStringList filesToLoad {
+            "popnodes_start_%1.dat",
+            "popnodes_cumftime_%1.dat", "popnodes_cumsweptarea_%1.dat",
+            "popnodes_cumcatches_%1.dat", "popnodes_tariffs_%1.dat",
+            "popnodes_impact_%1.dat", "popnodes_cumulcatches_per_pop_%1.dat",
+            "benthosnodes_tot_biomasses_%1.dat",
+            "popdyn_%1.dat", "popdyn_F_%1.dat", "popdyn_SSB_%1.dat",
+            "loglike_%1.dat"
+        };
+        QStringList missing;
+
+        OutputFileParser out(currentModel.get());
+        for (auto patternToLoad : filesToLoad) {
+            QString fileToLoad = QString(patternToLoad).arg(selected);
+            QFile tf(QString("%1/%2").arg(name).arg(fileToLoad));
+            if (!tf.exists()) {
+                missing << fileToLoad;
+                continue;
+            }
+            out.parse(tf.fileName(), -1, (24*30));
+        }
+
+        if (!missing.isEmpty()) {
+            QMessageBox::information(this, tr("Import offline data"),
+                                     tr("Data imported, but some file couldn't be loaded. %1").arg(missing.join(", ")));
         }
 
         sets.setValue("import_last", info.absolutePath());

@@ -60,25 +60,25 @@ public:
     explicit OutputFileParser(DisplaceModel *model, QObject *parent = 0);
 
 public slots:
-    void parse (QString path, int tstep);
+    void parse (QString path, int tstep, int period = -1);
 
 signals:
     void error(QString);
     void parseCompleted();
 
 protected:
-    void parsePopStart(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopCumftime(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopTariffs(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopImpact(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopdynF(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model);
-    void parsePopdyn(QFile *file, int tstep, DisplaceModel *model);
-    void parseVessels(QFile *file, int tstep, DisplaceModel *model);
+    void parsePopStart(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopCumftime(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopTariffs(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopImpact(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopdynF(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parseVessels(QFile *file, int tstep, DisplaceModel *model, int period = -1);
 
     static int toInt(const QString x) {
         bool b;

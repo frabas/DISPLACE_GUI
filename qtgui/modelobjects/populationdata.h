@@ -61,8 +61,10 @@ public:
     }
 
     const QVector<double> &getAggregate() const;
+    double getAggregateAt(int i) const;
     void setAggregate(const QVector<double> &value);
     const QVector<double> &getMortality() const;
+    double getMortalityAt(int i) const;
     void setMortality(const QVector<double> &value);
     const QVector<double> &getSSB() const;
     void setSSB(const QVector<double> &value);

@@ -739,7 +739,7 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
             M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i];
         }
 
-        //cout  << "this sz: " << i << "a_Ns_at_szgroup[i] is" << a_Ns_at_szgroup[i] << " and  M_at_szgroup_i_on_node is " << M_at_szgroup_i_on_node << endl;
+        //cout  << "this pop " << name_pop << ", this sz " << i << "M_at_szgroup[i] is " << M_at_szgroup[i] << " and a_Ns_at_szgroup[i] is" << a_Ns_at_szgroup[i] << " and  M_at_szgroup_i_on_node is " << M_at_szgroup_i_on_node << endl;
 
         // divide according to tstep (month in this case)
         a_Ns_at_szgroup[i] =  a_Ns_at_szgroup[i]  *exp(-M_at_szgroup_i_on_node/12);

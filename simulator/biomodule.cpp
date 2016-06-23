@@ -694,6 +694,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
                 vector <double> prop_M_from_species_interactions = species_interactions_mortality_proportion_matrix.at(sp);
+                //check
+                //cout << "check prop_M_from_species_interactions " << endl;
+                //for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)
+                //   {
+                //   cout << prop_M_from_species_interactions.at(spp) << " ";
+                //   }
+                // cout << endl;
 
                 // apply M ---------
                 // this is simply annual M divided by 12 because monthly time step...
@@ -705,15 +712,19 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 for (unsigned int n=0; n<a_list_nodes.size(); n++)
                 {
                     species_on_node = a_list_nodes.at(n)-> get_pop_names_on_node();
+                    vector <double> a_prop_M(prop_M_from_species_interactions.size());
                     for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)
                     {
-                        if(std::find(species_on_node.begin(), species_on_node.end(), spp) == species_on_node.end())
+                       a_prop_M.at(spp)=prop_M_from_species_interactions.at(spp);
+                       //cout << "prop_M_from_species_interactions  is " << prop_M_from_species_interactions.at(spp) << " for spp " << spp <<
+                                  " given sp is " << sp << endl; // we should expect to always get a value!=0 here....
+                       if(std::find(species_on_node.begin(), species_on_node.end(), spp) == species_on_node.end())
                         {
-
-                            prop_M_from_species_interactions.at(spp)=0.0; // put 0 in prop if pop not found on this node
+                            //cout << "...but spp not found on this node " <<  a_list_nodes.at(n)->get_idx_node() << " so no effect..." << endl;
+                            a_prop_M.at(spp)=0.0; // put 0 in prop if pop not found on this node
                         }
                     }
-                    a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, prop_M_from_species_interactions);
+                    a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
                 }
                 // then re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
                 populations.at(sp)->aggregate_N();

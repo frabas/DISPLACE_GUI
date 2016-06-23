@@ -505,6 +505,16 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
             double value = toDouble(fields[10+i]);
             v.mCatches.push_back(value);
         }
+
+        QRegExp r(R"%(M(\((\d+)\))?.*)%");
+        if (r.indexIn(fields[10+pop]) != -1) {
+            // metier id
+            bool ok;
+            v.metierId = r.cap(2).toInt(&ok);
+            if (!ok)
+                v.metierId = -1;
+        }
+
         v.revenueAV = toDouble(fields[10 + pop + 2]);
         v.revenueExAV = toDouble(fields[10 + pop + 3]);
         v.fuelCost = toDouble(fields[10 + pop + 4]);

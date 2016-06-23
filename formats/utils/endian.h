@@ -1,5 +1,5 @@
-#ifndef ENDIAN_H
-#define ENDIAN_H
+#ifndef ENDIAN_H_
+#define ENDIAN_H_
 
 #include <utils/portable_endian.h>
 
@@ -11,17 +11,23 @@ namespace helpers {
 
 // Default are disabled
 
-template <typename T>
-T inline toBigEndian (T) = delete ;
+#ifdef __APPLE__
+#define DELETED {}
+#else
+#define DELETED =delete;
+#endif
 
 template <typename T>
-T inline fromBigEndian (T) = delete;
+T inline toBigEndian (T) DELETED
 
 template <typename T>
-T inline toLittleEndian (T) = delete;
+T inline fromBigEndian (T) DELETED
 
 template <typename T>
-T inline fromLittleEndian (T) = delete;
+T inline toLittleEndian (T) DELETED
+
+template <typename T>
+T inline fromLittleEndian (T) DELETED
 
 
 // Specializations

@@ -114,6 +114,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           int export_vmslike,
                           int freq_do_growth,
                           const multimap<int, double> &init_weight_per_szgroup,
+                          const vector<vector <double> >&species_interactions_mortality_proportion_matrix,
                           vector<Population* >& populations, vector<Node* >&nodes,
                           vector<Vessel* >& vessels,
                           const PopSceOptions &dyn_pop_sce, const DynAllocOptions &dyn_alloc_sce)
@@ -692,15 +693,27 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                 vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
 
+                vector <double> prop_M_from_species_interactions = species_interactions_mortality_proportion_matrix.at(sp);
+
                 // apply M ---------
                 // this is simply annual M divided by 12 because monthly time step...
                 //cout << "apply M on the whole pop..." << endl;
                 //populations.at(sp)->apply_natural_mortality(); // pble for using it if distribute_N() is not by month! i.e. the dead fish here are not removed from the nodes...
                outc(cout << "apply M on each node of the pop..." << endl);
                 vector <double>  M_at_szgroup= populations.at(sp)->get_M_at_szgroup();
+                vector <int> species_on_node;
                 for (unsigned int n=0; n<a_list_nodes.size(); n++)
                 {
-                    a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup);
+                    species_on_node = a_list_nodes.at(n)-> get_pop_names_on_node();
+                    for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)
+                    {
+                        if(std::find(species_on_node.begin(), species_on_node.end(), spp) == species_on_node.end())
+                        {
+
+                            prop_M_from_species_interactions.at(spp)=0.0; // put 0 in prop if pop not found on this node
+                        }
+                    }
+                    a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, prop_M_from_species_interactions);
                 }
                 // then re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
                 populations.at(sp)->aggregate_N();

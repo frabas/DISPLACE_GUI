@@ -84,6 +84,7 @@ int applyBiologicalModule(int tstep, const string &namesimu,
                           int export_vmslike,
                           int freq_do_growth,
                           const multimap<int,double> &init_weight_per_szgroup,
+                          const vector<vector <double> > &species_interactions_mortality_proportion_matrix,
                           vector<Population* >& populations, vector<Node* >&nodes,
                           vector<Vessel* >& vessels,
                           const PopSceOptions &dyn_pop_sce, const DynAllocOptions &dyn_alloc_sce);

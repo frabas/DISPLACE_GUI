@@ -1426,7 +1426,12 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "Does the pop file hyperstability_param need a check?" << endl;
     map<int, double> hyperstability_param= read_hyperstability_param(folder_name_parameterization, inputfolder);
 
-	// creation of a vector of populations
+
+    // input data, read proportion of natural mortality from other species when spatial co-occurences on node
+    vector< vector<double> > species_interactions_mortality_proportion_matrix= read_species_interactions_mortality_proportion_matrix(nbpops, folder_name_parameterization, inputfolder, biolsce);
+
+
+    // creation of a vector of populations
     populations = vector <Population* > (nbpops);
 
 	// get the name of the pops
@@ -1564,9 +1569,6 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector< vector<double> > growth_transition_matrix= read_growth_transition_matrix(sp, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
         vector< vector<double> > percent_szgroup_per_age_matrix= read_percent_szgroup_per_age_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
         vector< vector<double> > percent_age_per_szgroup_matrix= read_percent_age_per_szgroup_matrix(sp, NBSZGROUP, NBAGE, folder_name_parameterization, inputfolder, biolsce);
-
-        // input data, read proportion of natural mortality from other species when spatial co-occurences on node
-        vector< vector<double> > species_interactions_mortality_proportion_matrix= read_species_interactions_mortality_proportion_matrix(nbpops, folder_name_parameterization, inputfolder, biolsce);
 
 		// input data, parameter for stock-recruitment relationship
         vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
@@ -3127,6 +3129,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              export_vmslike,
                                              freq_do_growth,
                                              init_weight_per_szgroup,
+                                             species_interactions_mortality_proportion_matrix,
                                              populations,
                                              nodes,
                                              vessels,

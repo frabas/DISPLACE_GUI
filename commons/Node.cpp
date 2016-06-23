@@ -646,6 +646,12 @@ void Node::clear_pop_names_on_node()
 }
 
 
+void Node::remove_pop_names_on_node(int name_pop)
+{
+    pop_names_on_node.erase(std::remove(pop_names_on_node.begin(), pop_names_on_node.end(), name_pop), pop_names_on_node.end());
+}
+
+
 void  Node::set_benthos_tot_biomass(int funcgr, double value)
 {
 
@@ -719,15 +725,22 @@ void Node::clear_avai_pops_at_selected_szgroup()
 }
 
 
-void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup)
+void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M_at_szgroup, vector<double>& prop_M_from_species_interactions)
 {
     //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
 
 	vector <double> a_Ns_at_szgroup = get_Ns_pops_at_szgroup(name_pop);
 	for(unsigned int i=0; i<a_Ns_at_szgroup.size(); i++)
 	{
-								 // divide according to tstep
-		a_Ns_at_szgroup[i] =  a_Ns_at_szgroup[i]  *exp(-M_at_szgroup[i]/12);
+
+        double M_at_szgroup_i_on_node=0;
+        for (unsigned int spp=0; spp<prop_M_from_species_interactions.size(); spp++)
+        {
+            M_at_szgroup_i_on_node +=  prop_M_from_species_interactions.at(spp)*M_at_szgroup[i];
+        }
+
+                                 // divide according to tstep (month in this case)
+        a_Ns_at_szgroup[i] =  a_Ns_at_szgroup[i]  *exp(-M_at_szgroup_i_on_node/12);
 		//this is assuming that the M is uniformly applied to the pop
 		// e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
 		// (the pble with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)

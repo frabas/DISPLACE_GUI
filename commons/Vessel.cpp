@@ -1983,7 +1983,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 								 // init
 				vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
 								 //init
-                double tot                          = 0;
+                double tot,tot2                     = 0;
                 double tot_avai_for_land            = 0;
                 double tot_avai_for_disc            = 0;
                 int    MLS_cat                      = m_mls_cat_per_pop[pop];
@@ -1999,6 +1999,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
 								 // cumul
 					tot = tot+avail_biomass[szgroup];
+                    tot2 = tot2+all_biomass[szgroup];
                     if(szgroup >=MLS_cat) {
                         tot_avai_for_land= tot_avai_for_land+avail_biomass[szgroup];
                     } else{
@@ -2010,6 +2011,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 }
 
                 dout(cout  << "tot biomass available on this node " << tot << endl);
+
+                // by the way, if no biomass at all then update the spatial pop distribution!
+                if(tot2 <=1.0) this->get_loc()->remove_pop_names_on_node(namepop);
 
 				//if(tot!=tot)  // c++ trick for like testing for is.nan
 				//{

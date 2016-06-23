@@ -168,6 +168,7 @@ int nrow);
 void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
 int nrow);
 void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
+void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
 void fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
 void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
 void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);

@@ -2227,6 +2227,29 @@ vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup,
 }
 
 
+
+
+vector< vector<double> > read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce)
+{
+    // casting a_pop into a string
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/species_interactions_mortality_proportion_matrix_biolsce"+biolsce+".dat";
+
+    ifstream file_species_interactions;
+    file_species_interactions.open(filename.c_str());
+    if(file_species_interactions.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    vector< vector<double> > species_interactions_mortality_proportion_matrix(nbpops, vector<double>(nbpops));
+    fill_in_species_interactions_mortality_proportion_matrix(file_species_interactions, species_interactions_mortality_proportion_matrix);
+    file_species_interactions.close();
+
+    return(species_interactions_mortality_proportion_matrix);
+}
+
+
+
 vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder)
 {
 

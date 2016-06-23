@@ -538,6 +538,39 @@ void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_tr
 
 }
 
+
+/**
+fill in the species_interactions_mortality_proportion_matrix
+@param the vector file, ...
+*/
+void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix)
+{
+    double val;
+    for(unsigned int i = 0; i < species_interactions_mortality_proportion_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < species_interactions_mortality_proportion_matrix[i].size(); j++)
+        {
+            in>> val;
+            species_interactions_mortality_proportion_matrix[i][j] = val;
+        }
+    }
+    dout(cout  << "read species_interactions_mortality_proportion_matrix"  << endl << flush);
+    for(unsigned int i = 0; i < species_interactions_mortality_proportion_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < species_interactions_mortality_proportion_matrix[i].size(); j++)
+        {
+            dout(cout  << species_interactions_mortality_proportion_matrix[i][j] << " ");
+        }
+        dout(cout  << endl);
+    }
+    dout(cout  << endl);
+
+}
+
+
+
+
+
 /**
 fill in the growth transition matrix
 @param the vector file, ...

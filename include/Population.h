@@ -156,6 +156,7 @@ class Population
 								 // do a cumul for F
 		void compute_tot_N_and_F_and_M_and_W_at_age();
 		double compute_fbar();
+        vector <double> compute_SSB();
         void compute_TAC(double multiOnTACconstraint, int HCR);
 								 // clear the cumul
 		void clear_tot_F_at_age();

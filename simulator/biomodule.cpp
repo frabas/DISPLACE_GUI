@@ -892,6 +892,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             populations.at(sp)->export_popdyn_N (popdyn_N, tstep);
                          // ...and F at age
             populations.at(sp)->export_popdyn_F (popdyn_F, tstep);
+            populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
             populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
 
 

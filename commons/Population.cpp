@@ -1021,6 +1021,7 @@ void Population::add_recruits_from_SR()
 {
     dout(cout << "BEGIN add_recruits() form SR "  << endl );
 
+	// compute SSB
     // first of all, get the true N
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
     vector <double> prop_migrants=this->get_prop_migrants_in_tot_N_at_szgroup();
@@ -1030,30 +1031,25 @@ void Population::add_recruits_from_SR()
     }
 
 
-    // init
-    vector <double> new_tot_N_at_szgroup (a_tot_N_at_szgroup.size());
-
-	// aggregate from nodes
-	//aggregate_N();
-
-	// compute SSB
-								 // init
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
-	{
+    {
 
-		// reminder: tot_N_at_szgroup are in thousand in input file
-		//  but in absolute numbers here because have been multiplied by 1000 when importing
-        SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * a_tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
-        dout(cout << "szgroup is " << i  << " " << endl );
-        cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
-        cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
-        cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
+       // reminder: tot_N_at_szgroup are in thousand in input file
+       //  but in absolute numbers here because have been multiplied by 1000 when importing
+       SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * a_tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
+       dout(cout << "szgroup is " << i  << " " << endl );
+       cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
+       cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
+       cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
 
-	}
+    }
+
+
+
 	// ...then, cumul for getting tot SSB (here in kilos)
 	SSB=0;
-    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
+    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
 	{
 		SSB +=  SSB_per_szgroup.at(i);
 	}
@@ -1076,11 +1072,15 @@ void Population::add_recruits_from_SR()
     //dout(cout << "stochastic recruits are " << recruits  << endl );
     cout << "stochastic recruits are " << recruits  << endl ;
 
-	// ...then distribute among szgroup
-    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
+    // init
+    vector <double> new_tot_N_at_szgroup (SSB_per_szgroup.size());
+
+
+    // ...then distribute among szgroup
+    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
 	{
         new_tot_N_at_szgroup[i] =  a_tot_N_at_szgroup.at(i) + (recruits* proprecru_at_szgroup.at(i));
-        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp "  << a_tot_N_at_szgroup.at(i) << endl ;
+        cout << "recruits for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i) << " to add to N this grp " << endl ;
         //dout(cout << "for szgroup " << i << ": " << recruits* proprecru_at_szgroup.at(i)  << endl );
     }
 
@@ -1357,6 +1357,29 @@ double Population::compute_fbar()
 								 // then do the average...
 	fbar=fbar/(fbar_ages_min_max.at(1)-fbar_ages_min_max.at(0));
 	return(fbar);
+}
+
+
+vector<double> Population::compute_SSB()
+{
+    // first of all, get the N
+    vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
+
+    vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
+    {
+
+       // reminder: tot_N_at_szgroup are in thousand in input file
+       //  but in absolute numbers here because have been multiplied by 1000 when importing
+       SSB_per_szgroup.at(i) =  weight_at_szgroup.at(i) * a_tot_N_at_szgroup.at(i) * maturity_at_szgroup.at(i);
+       dout(cout << "szgroup is " << i  << " " << endl );
+       cout << "tot_N_at_szgroup is " << a_tot_N_at_szgroup.at(i)  << " " << endl ;
+       cout << "maturity_at_szgroup is " << maturity_at_szgroup.at(i)  << " " << endl ;
+       cout << "weight_at_szgroup is " << weight_at_szgroup.at(i)  << " kg" << endl ;
+
+    }
+
+  return(SSB_per_szgroup);
 }
 
 

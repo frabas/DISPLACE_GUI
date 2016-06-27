@@ -717,7 +717,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     {
                        a_prop_M.at(spp)=prop_M_from_species_interactions.at(spp);
                        //cout << "prop_M_from_species_interactions  is " << prop_M_from_species_interactions.at(spp) << " for spp " << spp <<
-                                  " given sp is " << sp << endl; // we should expect to always get a value!=0 here....
+                       //           " given sp is " << sp << endl; // we should expect to always get a value!=0 here....
                        if(std::find(species_on_node.begin(), species_on_node.end(), spp) == species_on_node.end())
                         {
                             //cout << "...but spp not found on this node " <<  a_list_nodes.at(n)->get_idx_node() << " so no effect..." << endl;

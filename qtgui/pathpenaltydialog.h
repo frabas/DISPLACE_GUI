@@ -43,6 +43,11 @@
 
 #include <QDialog>
 
+QT_BEGIN_NAMESPACE
+class QGridLayout;
+class QCheckBox;
+QT_END_NAMESPACE
+
 namespace Ui {
 class PathPenaltyDialog;
 }
@@ -57,19 +62,25 @@ public:
 
     void showShapefileOptions(bool show);
     void setShapefileList(QStringList files);
-    QString selectedShapefile() const;
+    QStringList selectedShapefile() const;
     bool isClosedForFishing();
     bool isPenaltyQ1();
     bool isPenaltyQ2();
     bool isPenaltyQ3();
     bool isPenaltyQ4();
     double weight() const;
+
 private slots:
     void on_ok_clicked();
-    void on_shapefile_currentIndexChanged(int);
+    void cbToggled(bool);
 
 private:
     Ui::PathPenaltyDialog *ui;
+
+    QGridLayout *mGrid;
+    std::vector<QCheckBox *> mCheckboxes;
+
+    int clickCount = 0;
 };
 
 #endif // PATHPENALTYDIALOG_H

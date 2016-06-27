@@ -1732,19 +1732,24 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
     if (dlg.exec() == QDialog::Accepted) {
         double weight = dlg.weight();
-        QString shp = dlg.selectedShapefile();
-        std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+        QStringList shp = dlg.selectedShapefile();
+        //std::vector<std::shared_ptr<OGRDataSource> dss;
 
-        int n = ds->GetLayerCount();
-        for (int i = 0; i < n ;  ++i) {
-            OGRLayer *lr = ds->GetLayer(i);
-            lr->SetSpatialFilter(0);
-            lr->ResetReading();
+        for (auto sh : shp) {
+            std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, sh);
+//            dss.push_back(ds);
 
-            OGRFeature *feature;
-            while ((feature = lr->GetNextFeature())) {
-                currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing(),
-                                                            dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4());
+            int n = ds->GetLayerCount();
+            for (int i = 0; i < n ;  ++i) {
+                OGRLayer *lr = ds->GetLayer(i);
+                lr->SetSpatialFilter(0);
+                lr->ResetReading();
+
+                OGRFeature *feature;
+                while ((feature = lr->GetNextFeature())) {
+                    currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing(),
+                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4());
+                }
             }
         }
 

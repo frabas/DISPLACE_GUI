@@ -21,13 +21,18 @@
 #include "pathpenaltydialog.h"
 #include "ui_pathpenaltydialog.h"
 
+#include <QGridLayout>
+#include <QCheckBox>
+
 PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PathPenaltyDialog)
 {
     ui->setupUi(this);
 
-    on_shapefile_currentIndexChanged(0);
+    ui->shapefileGroup->setLayout(mGrid = new QGridLayout);
+
+    ui->ok->setEnabled(false);
 }
 
 PathPenaltyDialog::~PathPenaltyDialog()
@@ -37,18 +42,29 @@ PathPenaltyDialog::~PathPenaltyDialog()
 
 void PathPenaltyDialog::showShapefileOptions(bool show)
 {
-    ui->shapefile->setVisible(show);
-    ui->label_shapefile->setVisible(show);
+    ui->shapefileGroup->setVisible(show);
 }
 
 void PathPenaltyDialog::setShapefileList(QStringList files)
 {
-    ui->shapefile->addItems(files);
+    for (auto file : files) {
+        auto cb = new QCheckBox(file);
+        mGrid->addWidget(cb);
+        mCheckboxes.push_back(cb);
+
+        connect (cb, SIGNAL(toggled(bool)), this, SLOT(cbToggled(bool)));
+    }
 }
 
-QString PathPenaltyDialog::selectedShapefile() const
+QStringList PathPenaltyDialog::selectedShapefile() const
 {
-    return ui->shapefile->currentText();
+    QStringList l;
+    for (QCheckBox *cb : mCheckboxes) {
+        if (cb->isChecked())
+            l << cb->text();
+    }
+
+    return l;
 }
 
 bool PathPenaltyDialog::isClosedForFishing()
@@ -83,13 +99,18 @@ double PathPenaltyDialog::weight() const
 
 void PathPenaltyDialog::on_ok_clicked()
 {
-    if (ui->shapefile->isVisible() && ui->shapefile->currentIndex() == -1)
+    if (ui->shapefileGroup->isVisible() && clickCount == 0)
         return;
 
     accept();
 }
 
-void PathPenaltyDialog::on_shapefile_currentIndexChanged(int)
+void PathPenaltyDialog::cbToggled(bool v)
 {
-    ui->ok->setEnabled(!ui->shapefile->isVisible() || ui->shapefile->currentIndex() != -1);
+    if (v)
+        ++clickCount;
+    else
+        --clickCount;
+
+    ui->ok->setEnabled(clickCount > 0);
 }

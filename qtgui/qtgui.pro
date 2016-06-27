@@ -285,7 +285,8 @@ HEADERS += \
     mapobjects/shipmapobject.h \
     objects/shipentity.h \
     modelobjects/metierdata.h \
-    objects/metiersentity.h
+    objects/metiersentity.h \
+    nodepenalty.h
 
 RESOURCES += \
     qtgui.qrc

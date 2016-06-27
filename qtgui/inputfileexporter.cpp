@@ -164,11 +164,10 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         for (int q = 0; q < 4; ++q) {
             if (clsfile[q].isOpen()) {
                 clsstream.setDevice(&clsfile[q]);
-                int N = currentModel->countPenaltyPolygons(q);
-                for (int i = 0; i < N; ++i) {
-                    foreach (int ndx, currentModel->getPenaltyPolygonsAt(q,i)) {
-                        clsstream << (i+1) << " " << ndx << endl;
-                    }
+                auto &pl = currentModel->getPenaltyCollection();
+                for (auto p : pl) {
+                    if (p.closed && p.q[q])
+                        clsstream << p.polyId << " " << p.nodeId << endl;
                 }
                 clsfile[q].close();
             }

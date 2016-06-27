@@ -43,6 +43,7 @@
 
 #include <scenario.h>
 #include <config.h>
+#include <nodepenalty.h>
 
 #include <modelobjects/nodedata.h>
 #include <modelobjects/vesseldata.h>
@@ -378,8 +379,12 @@ public:
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing, bool onQ1, bool onQ2, bool onQ3, bool onQ4);
     void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,  bool onQ1, bool onQ2, bool onQ3, bool onQ4);
 
+#if 0 // TODO remove me
     int countPenaltyPolygons(int quarter) const;
     const QList<int> getPenaltyPolygonsAt (int quarter, int ndx) const ;
+#endif
+
+    const QList<displace::NodePenalty> getPenaltyCollection() const { return mPenaltyNodes; }
 
     bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }
     void linkShortestPathFolder(QString path) { mShortestPathFolder = path; }
@@ -449,10 +454,7 @@ private:
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
-    QList<QList<int>> mPenaltyNodesQ1;
-    QList<QList<int>> mPenaltyNodesQ2;
-    QList<QList<int>> mPenaltyNodesQ3;
-    QList<QList<int>> mPenaltyNodesQ4;
+    QList<displace::NodePenalty> mPenaltyNodes;
 
     QList<std::shared_ptr<HarbourData>> mHarbours;
     QList<std::shared_ptr<NodeData> > mNodes;

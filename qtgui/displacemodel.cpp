@@ -720,10 +720,7 @@ void DisplaceModel::clearAllNodes()
 {
     mNodes.clear();
     mHarbours.clear();
-    mPenaltyNodesQ1.clear();
-    mPenaltyNodesQ2.clear();
-    mPenaltyNodesQ3.clear();
-    mPenaltyNodesQ4.clear();
+    mPenaltyNodes.clear();
     mDataSource->DeleteLayer(mNodesLayerIndex);
     createFeaturesLayer();
 }
@@ -999,20 +996,24 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         }
     }
 
-    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ1)
-        mPenaltyNodesQ1.push_back(penaltyNodes);
+    if (closed_for_fishing && penaltyNodes.size() > 0) {
+        displace::NodePenalty pen;
 
-    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ2)
-        mPenaltyNodesQ2.push_back(penaltyNodes);
+        pen.q[0] = onQ1;
+        pen.q[1] = onQ2;
+        pen.q[2] = onQ3;
+        pen.q[3] = onQ4;
+        pen.closed = closed_for_fishing;
+        pen.polyId = 0;
 
-    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ3)
-        mPenaltyNodesQ3.push_back(penaltyNodes);
-
-    if (closed_for_fishing && penaltyNodes.size() > 0 && onQ4)
-        mPenaltyNodesQ4.push_back(penaltyNodes);
-
+        for (auto n : penaltyNodes) {
+            pen.nodeId = n;
+            mPenaltyNodes.push_back(pen);
+        }
+    }
 }
 
+#if 0 // TODO REMOVE ME
 int DisplaceModel::countPenaltyPolygons(int quarter) const
 {
     switch(quarter) {
@@ -1044,7 +1045,7 @@ const QList<int> DisplaceModel::getPenaltyPolygonsAt(int quarter, int ndx) const
         throw std::runtime_error("Unhandled case in getPenaltyPolygonsAt");
     }
 }
-
+#endif
 
 
 int DisplaceModel::getVesselCount() const

@@ -30,7 +30,9 @@ PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->shapefileGroup->setLayout(mGrid = new QGridLayout);
+    ui->shapefileGroup->setLayout(mShapefileGrid = new QGridLayout);
+    ui->metierGroup->setLayout(mMetierGrid = new QGridLayout);
+    ui->enableMetiers->setEnabled(false);
 
     ui->ok->setEnabled(false);
 }
@@ -49,17 +51,26 @@ void PathPenaltyDialog::setShapefileList(QStringList files)
 {
     for (auto file : files) {
         auto cb = new QCheckBox(file);
-        mGrid->addWidget(cb);
-        mCheckboxes.push_back(cb);
+        mShapefileGrid->addWidget(cb);
+        mShapefileCheckboxes.push_back(cb);
 
         connect (cb, SIGNAL(toggled(bool)), this, SLOT(cbToggled(bool)));
+    }
+}
+
+void PathPenaltyDialog::setMetierNumber(int num)
+{
+    for (int i = 0; i < num; ++i) {
+        auto cb = new QCheckBox(QString(tr("Metier %1")).arg(i+1));
+        mMetierGrid->addWidget(cb);
+        mMetierCheckboxes.push_back(cb);
     }
 }
 
 QStringList PathPenaltyDialog::selectedShapefile() const
 {
     QStringList l;
-    for (QCheckBox *cb : mCheckboxes) {
+    for (QCheckBox *cb : mShapefileCheckboxes) {
         if (cb->isChecked())
             l << cb->text();
     }

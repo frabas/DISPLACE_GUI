@@ -1728,6 +1728,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
     PathPenaltyDialog dlg(this);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+    dlg.setMetierNumber(currentModel->getMetiersCount());
     dlg.showShapefileOptions(true);
 
     if (dlg.exec() == QDialog::Accepted) {

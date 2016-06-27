@@ -62,6 +62,7 @@ public:
 
     void showShapefileOptions(bool show);
     void setShapefileList(QStringList files);
+    void setMetierNumber(int num);
     QStringList selectedShapefile() const;
     bool isClosedForFishing();
     bool isPenaltyQ1();
@@ -77,8 +78,9 @@ private slots:
 private:
     Ui::PathPenaltyDialog *ui;
 
-    QGridLayout *mGrid;
-    std::vector<QCheckBox *> mCheckboxes;
+    QGridLayout *mShapefileGrid, *mMetierGrid;
+    std::vector<QCheckBox *> mShapefileCheckboxes;
+    std::vector<QCheckBox *> mMetierCheckboxes;
 
     int clickCount = 0;
 };

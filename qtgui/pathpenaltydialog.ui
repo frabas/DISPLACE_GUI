@@ -7,33 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>236</height>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Graph Penalties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
-    <widget class="QCheckBox" name="optPenaltyQ2">
-     <property name="text">
-      <string>Quarter2</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QCheckBox" name="optPenaltyQ4">
-     <property name="text">
-      <string>Quarter4</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -41,7 +21,14 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="2">
+   <item row="6" column="0" colspan="2">
+    <widget class="QGroupBox" name="metierGroup">
+     <property name="title">
+      <string>Metiers</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="cancel">
@@ -75,51 +62,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="optPenaltyQ3">
-     <property name="text">
-      <string>Quarter3</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="optPenaltyQ1">
-     <property name="text">
-      <string>Quarter1</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="optClosedForFishing">
-     <property name="text">
-      <string>Closed for fishing</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QDoubleSpinBox" name="weight">
-     <property name="maximum">
-      <double>100000000.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QGroupBox" name="shapefileGroup">
-     <property name="title">
-      <string>Shapefile</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
+   <item row="11" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -131,6 +74,86 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDoubleSpinBox" name="weight">
+     <property name="maximum">
+      <double>100000000.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QCheckBox" name="enableMetiers">
+     <property name="text">
+      <string>Select Metiers</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <widget class="QGroupBox" name="shapefileGroup">
+     <property name="title">
+      <string>Shapefiles</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Quarters</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="optPenaltyQ2">
+        <property name="text">
+         <string>Quarter2</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="optPenaltyQ1">
+        <property name="text">
+         <string>Quarter1</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="optPenaltyQ3">
+        <property name="text">
+         <string>Quarter3</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="optPenaltyQ4">
+        <property name="text">
+         <string>Quarter4</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="optClosedForFishing">
+     <property name="text">
+      <string>Closed for fishing</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

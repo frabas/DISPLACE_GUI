@@ -120,14 +120,14 @@ int read_scenario_config_file (string folder_name_parameterization,
     std::vector<std::string> das;
     boost::split(das, dasf, boost::is_any_of(" "));
     for (auto d : das) {
-        scenario.dyn_alloc_sce.setOption(d);
+        scenario.dyn_alloc_sce.setOption(d, true);
     }
 
     auto dpsf = reader.get("dyn_pop_sce");
     std::vector<std::string> dps;
     boost::split(dps, dpsf, boost::is_any_of(" "));
     for (auto d : dps) {
-        scenario.dyn_pop_sce.setOption(d);
+        scenario.dyn_pop_sce.setOption(d, true);
     }
 
     scenario.biolsce=reader.get("biolsce");

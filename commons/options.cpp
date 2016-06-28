@@ -31,7 +31,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,TACs);
     O(mMap,LTMP);
     O(mMap,FMSY);
-    O(mMap,area_closure);
+    M(mMap,"area_closure", area_closure);
     O(mMap,area_closure_netters);
     O(mMap,area_closure_trawlers);
     O(mMap,fuelprice_plus20percent);
@@ -48,6 +48,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,twoFoldTACconstr);
     O(mMap,fishing_credits);
 
+    for (int i = 0; i < n(); ++i)
+        mOptions[i] = false;
 }
 
 
@@ -59,4 +61,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,white_noise_on_avai);
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);
+
+    for (int i = 0; i < n(); ++i)
+        mOptions[i] = false;
 }

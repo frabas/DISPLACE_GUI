@@ -23,27 +23,27 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
-template <typename OPT, int N>
+template <typename OPT, int N, typename TYPE>
 class Option
 {
 public:
-    Option() {
-        for (int i = 0; i < N; ++i)
-            mOptions[i] = false;
+    Option() {}
+
+    void setOption (OPT option, TYPE value) {
+        mOptions[option] = value;
     }
 
-    void setOption (OPT option) {
-        mOptions[option] = true;
-    }
-
-    void setOption (std::string option) {
+    void setOption (std::string option, TYPE value) {
         Iterator it = mMap.find(option);
         if (it != mMap.end())
-            setOption(it->second);
+            setOption(it->second, value);
     }
 
-    bool option(OPT option) const {
+    constexpr int n() const { return N; }
+
+    const TYPE &option(OPT option) const {
         return mOptions[option];
     }
 
@@ -62,7 +62,7 @@ public:
     }
 
 protected:
-    bool mOptions[N];
+    TYPE mOptions[N];
     typedef std::map<std::string, OPT> Map;
     typedef typename Map::iterator Iterator;
     typedef typename Map::const_iterator ConstIterator;
@@ -108,18 +108,27 @@ enum Pop_Sce {
     Pop_Sce_last
 };
 
+enum Closure_Opt {
+    banned_metiers,
+
+    Closure_Opt_last
+};
+
 } // namespace
 
-class DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last>
+class DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last, bool>
 {
 public:
     DynAllocOptions();
 };
 
-class PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last>
+class PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last, bool>
 {
 public:
     PopSceOptions();
+};
+
+class ClosureOptions : public Option<Options::Closure_Opt, Options::Closure_Opt_last, std::vector<int>> {
 };
 
 #endif // OPTIONS_H

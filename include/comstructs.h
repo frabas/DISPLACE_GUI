@@ -29,6 +29,7 @@ namespace commons {
 struct Scenario {
     DynAllocOptions dyn_alloc_sce;
     PopSceOptions dyn_pop_sce;
+    ClosureOptions closure_opts;
     std::string biolsce;
     int freq_do_growth;
     int freq_redispatch_the_pop;

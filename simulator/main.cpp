@@ -179,6 +179,7 @@ vector <double> calib_cpue_multiplier;
 vector <int> int_harbours;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
+ClosureOptions closure_opts;
 string biolsce;
 int create_a_path_shop;
 deque<map<vertex_t, vertex_t> > path_shop;

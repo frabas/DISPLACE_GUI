@@ -158,6 +158,12 @@ class Node
         void set_is_harbour(int id);
         void set_idx_node(int idx);
 
+        void setBannedMetier(int metier) {
+            while ((size_t)metier < mBannedMetiers.size())
+                mBannedMetiers.push_back(false);
+            mBannedMetiers[metier] = true;
+        }
+
         bool isMetierBanned(int metier) const {
             if ((size_t)metier < mBannedMetiers.size())
                 return mBannedMetiers[metier];

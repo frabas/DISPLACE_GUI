@@ -2064,6 +2064,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }*/
 
 	// read nodes in polygons for area-based management
+#if 0
     nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
 
 	// check
@@ -2094,7 +2095,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             nodes.at(a_idx)->setAreaType(0);
            }
         }
+#endif
 
+    if (!read_metier_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
+        exit (1);
+    }
 
     multimap<string, double> fishing_credits;
     if(dyn_alloc_sce.option(Options::fishing_credits))
@@ -3252,6 +3257,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				vessels.at(v)->set_resttime_par2(resttime_par2s.at(v));
 				vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
 
+#if 0
 				// re-read nodes in polygons for area-based management
                 nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
 
@@ -3287,7 +3293,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     {
                     nodes.at(polygon_nodes.at(a_idx))->setAreaType(1);
                     }
-
+#endif
+                if (!read_metier_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
+                    exit(1);
+                }
 
   
             vessels.at(v)->set_spe_fgrounds(spe_fgrounds);

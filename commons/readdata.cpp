@@ -2459,6 +2459,51 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
 	return(nodes_in_polygons);
 }
 
+bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
+{
+    UNUSED(folder_name_parameterization);
+
+    const string separator=" ";
+
+    string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_"+a_quarter+".dat";
+
+    ifstream is;
+    is.open(filename.c_str());
+    if(is.fail())
+    {
+        open_file_error(filename);
+        return false;
+    }
+
+    int linenum = 0;
+    try {
+        while (is) {
+            std::string line;
+            std::getline(is, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            std::vector<std::string> sr;
+            boost::split(sr, line, boost::is_any_of(separator));
+
+            int nodeId = boost::lexical_cast<int>(sr[0]);
+            for (size_t i = 1; i < sr.size(); ++i) {
+                int m = boost::lexical_cast<int>(sr[i]);
+                nodes.at(nodeId)->setBannedMetier(m);
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on read_closure file " << filename << " line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
+    }
+
+    return true;
+}
+
 
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
 vector<Population* >& populations,

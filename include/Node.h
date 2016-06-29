@@ -158,6 +158,11 @@ class Node
         void set_is_harbour(int id);
         void set_idx_node(int idx);
 
+        bool isMetierBanned(int metier) const {
+            if ((size_t)metier < mBannedMetiers.size())
+                return mBannedMetiers[metier];
+            return false;
+        }
 
 protected:
         void reinit(vector<double> &vec, unsigned int sz);
@@ -187,6 +192,8 @@ private:
 								 // possibly per functional group
 		vector<double> benthos_tot_biomass;
         vector<double> tariffs;
+
+        vector<bool> mBannedMetiers;
 
         static const vector<int> mUsualFGrounds;
         static const vector<double> mFreqUsualFGrounds;

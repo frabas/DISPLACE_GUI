@@ -106,6 +106,7 @@ extern double tariff_annual_hcr_percent_change;
 extern bool is_tacs;
 extern bool is_fishing_credits;
 extern vector <int> implicit_pops;
+extern displace::commons::Scenario scenario;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
@@ -239,7 +240,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     //go fishing
                     outc(cout  << "GO FISHING" << endl);
                     vessels[ index_v ]->choose_a_ground_and_go_fishing(
-                        tstep, use_dtrees,
+                        tstep, scenario, use_dtrees,
                         dyn_alloc_sce, create_a_path_shop,
                         idx_path_shop, path_shop, min_distance_shop,
                         adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,

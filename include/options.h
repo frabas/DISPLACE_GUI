@@ -129,6 +129,15 @@ public:
 };
 
 class ClosureOptions : public Option<Options::Closure_Opt, Options::Closure_Opt_last, std::vector<int>> {
+    std::vector<bool> mBannedMetiers;
+public:
+    void update();
+
+    bool isMetierBanned(int metier) const {
+        if (metier < (int)mBannedMetiers.size())
+            return mBannedMetiers[metier];
+        return false;
+    }
 };
 
 #endif // OPTIONS_H

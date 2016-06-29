@@ -34,6 +34,7 @@
 #include <Node.h>
 #include <Metier.h>
 #include <Population.h>
+#include <comstructs.h>
 
 #include <dtree/dtnode.h>
 #include <dtree/decisiontreemanager.h>
@@ -3410,7 +3411,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
 
 
-void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
+void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
         const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
         const vector<int> &idx_path_shop,
@@ -3505,7 +3506,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
        // ****************area_closure**********************************//
        if (dyn_alloc_sce.option(Options::area_closure) ||
                (this->get_metier()->get_metier_type()==0 &&  dyn_alloc_sce.option(Options::area_closure_netters)) ||
-               (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers))
+               (this->get_metier()->get_metier_type()==1 && dyn_alloc_sce.option(Options::area_closure_trawlers)) ||
+               (scenario.closure_opts.isMetierBanned(this->get_metier()->get_metier_type()))
                )		 // area-based sce
        {
            //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
@@ -3518,7 +3520,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, bool use_the_tree,
            {
                int a_grd = grds.at(i);
                //if(binary_search(grds_in_closure.begin(), grds_in_closure.end(), a_grd))
-               if(nodes.at(a_grd)->evaluateAreaType()==1)
+               //if(nodes.at(a_grd)->evaluateAreaType()==1)
+               if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_metier_type()))
                {
                    set_spe_freq_fground(i, 1e-8);
 //                   freq_grds.at(i)=0.00000001;

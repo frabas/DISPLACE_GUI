@@ -177,6 +177,7 @@ vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
 vector <double> calib_cpue_multiplier;
 vector <int> int_harbours;
+displace::commons::Scenario scenario;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
 ClosureOptions closure_opts;
@@ -573,8 +574,6 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         calib_cpue_multiplier,
         int_harbours
 		);
-
-    displace::commons::Scenario scenario;
 
 	read_scenario_config_file (
         folder_name_parameterization,

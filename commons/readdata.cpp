@@ -108,7 +108,8 @@ int read_scenario_config_file (string folder_name_parameterization,
             {21,"is_individual_vessel_quotas"},{23,"check_all_stocks_before_going_fishing"},{25,"dt_go_fishing"},
             {27,"dt_choose_ground"},{29,"dt_start_fishing"},{31,"dt_change_ground"},{33,"dt_stop_fishing"},
             {35,"dt_change_port"},{37,"use_dtrees"},{39,"tariff_pop"},{41,"freq_update_tariff_code"},
-            {43,"arbitary_breaks_for_tariff"},{45,"total_amount_credited"},{47,"tariff_annual_hcr_percent_change"}
+            {43,"arbitary_breaks_for_tariff"},{45,"total_amount_credited"},{47,"tariff_annual_hcr_percent_change"},
+        {49,"metier_closures"}
     };
 
     std::cout << "Reading Scenario file from " << filename << std::endl;
@@ -129,6 +130,15 @@ int read_scenario_config_file (string folder_name_parameterization,
     for (auto d : dps) {
         scenario.dyn_pop_sce.setOption(d, true);
     }
+
+    auto met_c = reader.get("metier_closures");
+    std::vector<std::string> closures;
+    boost::split(closures, met_c, boost::is_any_of(" "));
+    std::vector<int> metier_closures;
+    for (auto cl : closures) {
+        metier_closures.push_back(boost::lexical_cast<int>(cl));
+    }
+    scenario.closure_opts.setOption(Options::Closure_Opt::banned_metiers, metier_closures);
 
     scenario.biolsce=reader.get("biolsce");
     scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
@@ -158,6 +168,9 @@ int read_scenario_config_file (string folder_name_parameterization,
     cout << "read scenario config file...OK" <<  endl << flush;
     cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;
     cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  endl << flush;
+
+    // Update the internals when needed
+    scenario.closure_opts.update();
 
     return 0;
 }

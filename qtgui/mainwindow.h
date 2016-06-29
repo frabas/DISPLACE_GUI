@@ -67,6 +67,7 @@ class MapObjectsController;
 class WaitDialog;
 class MouseMode;
 class OGRGeometry;
+struct GraphProperties;
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
@@ -239,7 +240,7 @@ protected:
 
     void openScenarioDialog(QString suggestedPath, bool askForReload, bool forceRename);
     void exportGraphics(QString label, QWidget *widget);
-    void exportPlot (QString outpath, StatsController::StatType type, int subtype);
+    void exportPlot (QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties);
 
     void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 private:

@@ -78,6 +78,8 @@
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
+#include <dialogs/graphexportproperties.h>
+
 #include <gdal/ogrsf_frmts.h>
 #include <GeographicLib/Geodesic.hpp>
 #include <version.h>    // Version.h should be included after GeographicLib because it undefines VERSION symbol
@@ -2361,34 +2363,41 @@ void MainWindow::on_actionExportAllGraphics_triggered()
     QString out = QFileDialog::getExistingDirectory(this, tr("Export all plots to"), outpath);
 
     if (!out.isEmpty()) {
-        exportPlot (out + "/pop_aggregate.png", StatsController::Populations, StatsController::Aggregate);
-        exportPlot (out + "/pop_mortality.png", StatsController::Populations, StatsController::Mortality);
-        exportPlot (out + "/pop_ssb.png", StatsController::Populations, StatsController::SSB);
 
-        exportPlot (out + "/nations_catches.png", StatsController::Nations, StatsController::Catches);
-        exportPlot (out + "/nations_earnings.png", StatsController::Nations, StatsController::Earnings);
-        exportPlot (out + "/nations_exearnings.png", StatsController::Nations, StatsController::ExEarnings);
-        exportPlot (out + "/nations_timeatsea.png", StatsController::Nations, StatsController::TimeAtSea);
-        exportPlot (out + "/nations_gav.png", StatsController::Nations, StatsController::Gav);
-        exportPlot (out + "/nations_vpuf.png", StatsController::Nations, StatsController::Vpuf);
+        GraphExportProperties p;
+        if (p.exec() == QDialog::Rejected)
+            return;
 
-        exportPlot (out + "/harbours_catches.png", StatsController::Harbours, StatsController::H_Catches);
-        exportPlot (out + "/harbours_earnings.png", StatsController::Harbours, StatsController::H_Earnings);
-        exportPlot (out + "/harbours_gav.png", StatsController::Harbours, StatsController::H_Gav);
-        exportPlot (out + "/harbours_vpuf.png", StatsController::Harbours, StatsController::H_Vpuf);
+        auto r = p.getOptions();
 
-        exportPlot (out + "/metiers_catches.png", StatsController::Metiers, StatsController::M_Catches);
-        exportPlot (out + "/metiers_revenues.png", StatsController::Metiers, StatsController::M_Revenues);
-        exportPlot (out + "/metiers_gav.png", StatsController::Metiers, StatsController::M_Gav);
+        exportPlot (out + "/pop_aggregate.png", StatsController::Populations, StatsController::Aggregate, r);
+        exportPlot (out + "/pop_mortality.png", StatsController::Populations, StatsController::Mortality, r);
+        exportPlot (out + "/pop_ssb.png", StatsController::Populations, StatsController::SSB, r);
+
+        exportPlot (out + "/nations_catches.png", StatsController::Nations, StatsController::Catches, r);
+        exportPlot (out + "/nations_earnings.png", StatsController::Nations, StatsController::Earnings, r);
+        exportPlot (out + "/nations_exearnings.png", StatsController::Nations, StatsController::ExEarnings, r);
+        exportPlot (out + "/nations_timeatsea.png", StatsController::Nations, StatsController::TimeAtSea, r);
+        exportPlot (out + "/nations_gav.png", StatsController::Nations, StatsController::Gav, r);
+        exportPlot (out + "/nations_vpuf.png", StatsController::Nations, StatsController::Vpuf, r);
+
+        exportPlot (out + "/harbours_catches.png", StatsController::Harbours, StatsController::H_Catches, r);
+        exportPlot (out + "/harbours_earnings.png", StatsController::Harbours, StatsController::H_Earnings, r);
+        exportPlot (out + "/harbours_gav.png", StatsController::Harbours, StatsController::H_Gav, r);
+        exportPlot (out + "/harbours_vpuf.png", StatsController::Harbours, StatsController::H_Vpuf, r);
+
+        exportPlot (out + "/metiers_catches.png", StatsController::Metiers, StatsController::M_Catches, r);
+        exportPlot (out + "/metiers_revenues.png", StatsController::Metiers, StatsController::M_Revenues, r);
+        exportPlot (out + "/metiers_gav.png", StatsController::Metiers, StatsController::M_Gav, r);
 
         s.setValue("allplots_out", out);
     }
 }
 
-void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype)
+void MainWindow::exportPlot(QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties)
 {
     QCustomPlot plot;
-    plot.resize(1024, 768);
+    plot.resize(properties.width, properties.height);
     plot.legend->setVisible(true);
     mStatsController->plotGraph(currentModel.get(), type, subtype, &plot, nullptr);
 

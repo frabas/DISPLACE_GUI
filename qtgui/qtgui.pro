@@ -169,7 +169,8 @@ SOURCES += \
     modelobjects/shipdata.cpp \
     mapobjects/shipmapobject.cpp \
     objects/shipentity.cpp \
-    objects/metiersentity.cpp
+    objects/metiersentity.cpp \
+    dialogs/graphexportproperties.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -189,7 +190,8 @@ FORMS += \
     shapefileoperationdialog.ui \
     savegraphdialog.ui \
     mergepopulationplugincomponent.ui \
-    R/rconsole.ui
+    R/rconsole.ui \
+    dialogs/graphexportproperties.ui
 
 HEADERS += \
     mainwindow.h \
@@ -286,7 +288,8 @@ HEADERS += \
     objects/shipentity.h \
     modelobjects/metierdata.h \
     objects/metiersentity.h \
-    nodepenalty.h
+    nodepenalty.h \
+    dialogs/graphexportproperties.h
 
 RESOURCES += \
     qtgui.qrc

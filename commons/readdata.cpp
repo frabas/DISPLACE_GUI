@@ -2475,6 +2475,9 @@ bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_gra
         return false;
     }
 
+    // Format:
+    // PolyId NodeId Metier [Metier[ Metier...]]
+
     int linenum = 0;
     try {
         while (is) {
@@ -2488,8 +2491,8 @@ bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_gra
             std::vector<std::string> sr;
             boost::split(sr, line, boost::is_any_of(separator));
 
-            int nodeId = boost::lexical_cast<int>(sr[0]);
-            for (size_t i = 1; i < sr.size(); ++i) {
+            int nodeId = boost::lexical_cast<int>(sr[1]);
+            for (size_t i = 2; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
                 nodes.at(nodeId)->setBannedMetier(m);
             }

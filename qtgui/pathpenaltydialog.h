@@ -71,9 +71,12 @@ public:
     bool isPenaltyQ4();
     double weight() const;
 
+    std::vector<int> getBannedMetiers() const;
+
 private slots:
     void on_ok_clicked();
     void cbToggled(bool);
+    void metierEnableToggled(bool);
 
 private:
     Ui::PathPenaltyDialog *ui;

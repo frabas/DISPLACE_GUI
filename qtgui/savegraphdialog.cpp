@@ -103,7 +103,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->graphFileName->setText(QString("graph%1.dat").arg(gn));
     ui->areaCodeFileName->setText(QString("code_area_for_graph%1_points.dat").arg(gn));
     ui->landscapeFileName->setText(QString("coord%1_with_landscape.dat").arg(gn));
-    ui->closedPolyFilename->setText(QString("nodes_in_polygons_a_graph%1_quarter?.dat").arg(gn));
+    ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));
 }
 
 void SaveGraphDialog::on_cmdBrowse_clicked()

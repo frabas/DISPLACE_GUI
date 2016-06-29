@@ -1495,10 +1495,18 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
 {
     PathPenaltyDialog dlg(this);
     dlg.showShapefileOptions(false);
+    dlg.setMetierNumber(40);
 
     if (dlg.exec() == QDialog::Accepted) {
+        auto bannedMetiers = dlg.getBannedMetiers();
+
+        std::ostringstream ss;
+        for (auto b : bannedMetiers)
+            ss << b << ",";
+        qDebug() << "Banned Metiers: " << QString::fromStdString(ss.str());
+
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.isClosedForFishing(),
-                                        dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4());
+                                        dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), bannedMetiers);
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
                              tr("Graph weights are changed, you'll need to recreate the shortest path."));
@@ -1728,12 +1736,18 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
     PathPenaltyDialog dlg(this);
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
-    dlg.setMetierNumber(currentModel->getMetiersCount());
+
+    if (currentModel->getMetiersCount() == 0)
+        dlg.setMetierNumber(40);
+    else
+        dlg.setMetierNumber(currentModel->getMetiersCount());
+
     dlg.showShapefileOptions(true);
 
     if (dlg.exec() == QDialog::Accepted) {
         double weight = dlg.weight();
         QStringList shp = dlg.selectedShapefile();
+        auto bannedMetiers = dlg.getBannedMetiers();
         //std::vector<std::shared_ptr<OGRDataSource> dss;
 
         for (auto sh : shp) {
@@ -1749,7 +1763,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
                 OGRFeature *feature;
                 while ((feature = lr->GetNextFeature())) {
                     currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing(),
-                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4());
+                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), bannedMetiers);
                 }
             }
         }

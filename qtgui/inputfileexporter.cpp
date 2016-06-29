@@ -166,8 +166,12 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 clsstream.setDevice(&clsfile[q]);
                 auto &pl = currentModel->getPenaltyCollection();
                 for (auto p : pl) {
-                    if (p.closed && p.q[q])
-                        clsstream << p.polyId << " " << p.nodeId << endl;
+                    if (p.closed && p.q[q]) {
+                        clsstream << p.polyId << " " << p.nodeId;
+                        for (auto m : p.metiers)
+                            clsstream << " " << m;
+                        clsstream << "\n";
+                    }
                 }
                 clsfile[q].close();
             }

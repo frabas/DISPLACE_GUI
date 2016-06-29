@@ -32,9 +32,13 @@ PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
 
     ui->shapefileGroup->setLayout(mShapefileGrid = new QGridLayout);
     ui->metierGroup->setLayout(mMetierGrid = new QGridLayout);
-    ui->enableMetiers->setEnabled(false);
 
     ui->ok->setEnabled(false);
+
+    connect (ui->enableMetiers, SIGNAL(toggled(bool)), this, SLOT(metierEnableToggled(bool)));
+
+    ui->enableMetiers->setChecked(true);
+    ui->enableMetiers->setChecked(false);   // to force metierEnableToggled call
 }
 
 PathPenaltyDialog::~PathPenaltyDialog()
@@ -45,6 +49,7 @@ PathPenaltyDialog::~PathPenaltyDialog()
 void PathPenaltyDialog::showShapefileOptions(bool show)
 {
     ui->shapefileGroup->setVisible(show);
+    ui->ok->setEnabled(!show);
 }
 
 void PathPenaltyDialog::setShapefileList(QStringList files)
@@ -60,9 +65,11 @@ void PathPenaltyDialog::setShapefileList(QStringList files)
 
 void PathPenaltyDialog::setMetierNumber(int num)
 {
+    int cols = 8;
+
     for (int i = 0; i < num; ++i) {
-        auto cb = new QCheckBox(QString(tr("Metier %1")).arg(i+1));
-        mMetierGrid->addWidget(cb);
+        auto cb = new QCheckBox(QString(tr("Metier %1")).arg(i));
+        mMetierGrid->addWidget(cb, i / cols, i % cols);
         mMetierCheckboxes.push_back(cb);
     }
 }
@@ -108,6 +115,22 @@ double PathPenaltyDialog::weight() const
     return ui->weight->value();
 }
 
+std::vector<int> PathPenaltyDialog::getBannedMetiers() const
+{
+    if (!ui->enableMetiers->isChecked()) {
+        return std::vector<int>();
+    }
+
+    std::vector<int> r;
+
+    for (int i = 0; (size_t)i < mMetierCheckboxes.size(); ++i) {
+        if (mMetierCheckboxes[i]->isChecked())
+            r.push_back(i);
+    }
+
+    return r;
+}
+
 void PathPenaltyDialog::on_ok_clicked()
 {
     if (ui->shapefileGroup->isVisible() && clickCount == 0)
@@ -124,4 +147,9 @@ void PathPenaltyDialog::cbToggled(bool v)
         --clickCount;
 
     ui->ok->setEnabled(clickCount > 0);
+}
+
+void PathPenaltyDialog::metierEnableToggled(bool status)
+{
+    ui->metierGroup->setEnabled(status);
 }

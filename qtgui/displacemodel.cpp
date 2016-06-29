@@ -910,7 +910,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 }
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing,
-                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4)
+                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<int> bannedMetiers)
 {
     OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
 
@@ -923,7 +923,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     gpoly->addRing(gring);
 
     addPenaltyToNodesByAddWeight(gpoly, weight, closed_for_fishing,
-                                  onQ1, onQ2, onQ3, onQ4);
+                                  onQ1, onQ2, onQ3, onQ4, bannedMetiers);
 
     delete gpoly;
 }
@@ -959,7 +959,7 @@ void DisplaceModel::setCodeFromFeature (OGRGeometry *geometry, int code, std::fu
 }
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,
-                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4)
+                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<int> bannedMetiers)
 {
     QList<int> penaltyNodes;
 
@@ -1005,6 +1005,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         pen.q[3] = onQ4;
         pen.closed = closed_for_fishing;
         pen.polyId = 0;
+        pen.metiers = bannedMetiers;
 
         for (auto n : penaltyNodes) {
             pen.nodeId = n;
@@ -1457,6 +1458,8 @@ bool DisplaceModel::loadNodes()
         }
         sort (polygon_nodes.begin(), polygon_nodes.end());
 
+        // TODO this could be removed.
+#if 0
     for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
         {
         if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), mNodes.at(a_idx)->get_idx_node()))
@@ -1467,7 +1470,7 @@ bool DisplaceModel::loadNodes()
            }
         }
     cout << "OK for in polygons..." << endl;
-
+#endif
 
 
 

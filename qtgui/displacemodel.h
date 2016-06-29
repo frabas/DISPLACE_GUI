@@ -376,8 +376,8 @@ public:
     int addEdge(int srcidx, int targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
-    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing, bool onQ1, bool onQ2, bool onQ3, bool onQ4);
-    void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,  bool onQ1, bool onQ2, bool onQ3, bool onQ4);
+    void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing, bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<int> bannedMetiers);
+    void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<int> bannedMetiers);
 
 #if 0 // TODO remove me
     int countPenaltyPolygons(int quarter) const;

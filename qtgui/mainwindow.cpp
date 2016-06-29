@@ -2370,25 +2370,25 @@ void MainWindow::on_actionExportAllGraphics_triggered()
 
         auto r = p.getOptions();
 
-        exportPlot (out + "/pop_aggregate.png", StatsController::Populations, StatsController::Aggregate, r);
-        exportPlot (out + "/pop_mortality.png", StatsController::Populations, StatsController::Mortality, r);
-        exportPlot (out + "/pop_ssb.png", StatsController::Populations, StatsController::SSB, r);
+        exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, StatsController::Aggregate, r);
+        exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, StatsController::Mortality, r);
+        exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, StatsController::SSB, r);
 
-        exportPlot (out + "/nations_catches.png", StatsController::Nations, StatsController::Catches, r);
-        exportPlot (out + "/nations_earnings.png", StatsController::Nations, StatsController::Earnings, r);
-        exportPlot (out + "/nations_exearnings.png", StatsController::Nations, StatsController::ExEarnings, r);
-        exportPlot (out + "/nations_timeatsea.png", StatsController::Nations, StatsController::TimeAtSea, r);
-        exportPlot (out + "/nations_gav.png", StatsController::Nations, StatsController::Gav, r);
-        exportPlot (out + "/nations_vpuf.png", StatsController::Nations, StatsController::Vpuf, r);
+        exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, StatsController::Catches, r);
+        exportPlot (out + QString("/nations_earnings.%1").arg(r.format), StatsController::Nations, StatsController::Earnings, r);
+        exportPlot (out + QString("/nations_exearnings.%1").arg(r.format), StatsController::Nations, StatsController::ExEarnings, r);
+        exportPlot (out + QString("/nations_timeatsea.%1").arg(r.format), StatsController::Nations, StatsController::TimeAtSea, r);
+        exportPlot (out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations, StatsController::Gav, r);
+        exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, StatsController::Vpuf, r);
 
-        exportPlot (out + "/harbours_catches.png", StatsController::Harbours, StatsController::H_Catches, r);
-        exportPlot (out + "/harbours_earnings.png", StatsController::Harbours, StatsController::H_Earnings, r);
-        exportPlot (out + "/harbours_gav.png", StatsController::Harbours, StatsController::H_Gav, r);
-        exportPlot (out + "/harbours_vpuf.png", StatsController::Harbours, StatsController::H_Vpuf, r);
+        exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, StatsController::H_Catches, r);
+        exportPlot (out + QString("/harbours_earnings.%1").arg(r.format), StatsController::Harbours, StatsController::H_Earnings, r);
+        exportPlot (out + QString("/harbours_gav.%1").arg(r.format), StatsController::Harbours, StatsController::H_Gav, r);
+        exportPlot (out + QString("/harbours_vpuf.%1").arg(r.format), StatsController::Harbours, StatsController::H_Vpuf, r);
 
-        exportPlot (out + "/metiers_catches.png", StatsController::Metiers, StatsController::M_Catches, r);
-        exportPlot (out + "/metiers_revenues.png", StatsController::Metiers, StatsController::M_Revenues, r);
-        exportPlot (out + "/metiers_gav.png", StatsController::Metiers, StatsController::M_Gav, r);
+        exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, StatsController::M_Catches, r);
+        exportPlot (out + QString("/metiers_revenues.%1").arg(r.format), StatsController::Metiers, StatsController::M_Revenues, r);
+        exportPlot (out + QString("/metiers_gav.%1").arg(r.format), StatsController::Metiers, StatsController::M_Gav, r);
 
         s.setValue("allplots_out", out);
     }

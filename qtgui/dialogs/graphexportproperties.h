@@ -10,6 +10,7 @@ class GraphExportProperties;
 struct GraphProperties {
     unsigned int width;
     unsigned int height;
+    QString format;
 };
 
 class GraphExportProperties : public QDialog

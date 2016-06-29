@@ -1,6 +1,8 @@
 #include "graphexportproperties.h"
 #include "ui_graphexportproperties.h"
 
+#include <utils/imageformathelpers.h>
+
 #include <QSettings>
 
 GraphExportProperties::GraphExportProperties(QWidget *parent) :
@@ -12,6 +14,15 @@ GraphExportProperties::GraphExportProperties(QWidget *parent) :
     QSettings s;
     ui->width->setValue(s.value("export_all_graphs_width", 1024).toInt());
     ui->height->setValue(s.value("export_all_graphs_height", 768).toInt());
+
+    QString lastform = s.value("ImageExport.format", "png").toString();
+    QStringList filter = displace::helpers::images::supportedFormatsOnWrite();
+
+    ui->fileType->addItems(filter);
+
+    int idx = displace::helpers::images::supportedFormatsOnWrite().indexOf(lastform);
+    if (idx != -1)
+        ui->fileType->setCurrentIndex(idx);
 }
 
 GraphExportProperties::~GraphExportProperties()
@@ -24,6 +35,7 @@ GraphProperties GraphExportProperties::getOptions() const
     GraphProperties p;
     p.width = ui->width->value();
     p.height = ui->height->value();
+    p.format = ui->fileType->currentText();
 
     return p;
 }

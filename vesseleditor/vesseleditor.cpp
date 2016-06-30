@@ -22,7 +22,6 @@
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QTranslator>
-#include <vesseleditorwindow.h>
 
 int main (int argc, char *argv[])
 {
@@ -40,9 +39,6 @@ int main (int argc, char *argv[])
     QTranslator myappTranslator;
     myappTranslator.load("vesseleditor_" + QLocale::system().name());
     app.installTranslator(&myappTranslator);
-
-    VesselEditorWindow w;
-    w.show();
 
     return app.exec();
 }

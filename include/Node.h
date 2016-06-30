@@ -159,7 +159,7 @@ class Node
         void set_idx_node(int idx);
 
         void setBannedMetier(int metier) {
-            while ((size_t)metier < mBannedMetiers.size())
+            while (mBannedMetiers.size() <= (size_t)metier)
                 mBannedMetiers.push_back(false);
             mBannedMetiers[metier] = true;
         }

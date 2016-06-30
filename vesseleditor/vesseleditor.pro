@@ -34,11 +34,14 @@ win32 {
 LIBS += -L.. -lformats -lqtcommons
 
 SOURCES += \
-    vesseleditor.cpp
+    vesseleditor.cpp \
+    vesseleditormainwindow.cpp
 
-FORMS +=
+FORMS += \
+    vesseleditormainwindow.ui
 
-HEADERS +=
+HEADERS += \
+    vesseleditormainwindow.h
 
 RESOURCES += \
     vesseleditor.qrc

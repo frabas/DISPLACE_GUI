@@ -23,6 +23,8 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 
+#include <vesseleditormainwindow.h>
+
 int main (int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("DTUAqua");
@@ -39,6 +41,9 @@ int main (int argc, char *argv[])
     QTranslator myappTranslator;
     myappTranslator.load("vesseleditor_" + QLocale::system().name());
     app.installTranslator(&myappTranslator);
+
+    VesselEditorMainWindow m;
+    m.show();
 
     return app.exec();
 }

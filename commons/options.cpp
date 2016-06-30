@@ -70,7 +70,7 @@ void ClosureOptions::update()
 {
     auto &l = option(banned_metiers);
     for (auto &n : l) {
-        while (mBannedMetiers.size() < (size_t)n)
+        while (mBannedMetiers.size() <= (size_t)n)
             mBannedMetiers.push_back(false);
         mBannedMetiers[n] = true;
     }

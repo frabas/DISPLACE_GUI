@@ -131,12 +131,15 @@ int read_scenario_config_file (string folder_name_parameterization,
         scenario.dyn_pop_sce.setOption(d, true);
     }
 
+    std::vector<int> metier_closures;
     auto met_c = reader.get("metier_closures");
     std::vector<std::string> closures;
-    boost::split(closures, met_c, boost::is_any_of(" "));
-    std::vector<int> metier_closures;
-    for (auto cl : closures) {
-        metier_closures.push_back(boost::lexical_cast<int>(cl));
+    boost::trim(met_c);
+    if (!met_c.empty()) {
+        boost::split(closures, met_c, boost::is_any_of(" "));
+        for (auto cl : closures) {
+            metier_closures.push_back(boost::lexical_cast<int>(cl));
+        }
     }
     scenario.closure_opts.setOption(Options::Closure_Opt::banned_metiers, metier_closures);
 

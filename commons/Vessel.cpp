@@ -3504,7 +3504,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
        }
 
        // ****************area_closure**********************************//
-       if (dyn_alloc_sce.option(Options::area_closure) && scenario.closure_opts.isMetierBanned(this->get_metier()->get_metier_type()))
+       if (dyn_alloc_sce.option(Options::area_closure) || scenario.closure_opts.isMetierBanned(this->get_metier()->get_name()))
        {
            //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
            // compliance => 0.0001
@@ -3517,7 +3517,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                int a_grd = grds.at(i);
                //if(binary_search(grds_in_closure.begin(), grds_in_closure.end(), a_grd))
                //if(nodes.at(a_grd)->evaluateAreaType()==1)
-               if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_metier_type()))
+              // if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_metier_type()))
+             if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()))
                {
                    set_spe_freq_fground(i, 1e-8);
 //                   freq_grds.at(i)=0.00000001;
@@ -3754,7 +3755,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 	//		if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
 //                        if(nodes.at(from)->evaluateAreaType()==1) // area closed?
-            if (nodes.at(from)->isMetierBanned(this->get_metier()->get_metier_type()))
+            if (nodes.at(from)->isMetierBanned(this->get_metier()->get_name()))
 		{
                 dout(cout  << "gosh... I am fishing in a closed area there! " << from <<  endl);
 				double dist_to_this_node = dist( nodes.at(from)->get_x(),
@@ -3766,7 +3767,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 			//	if(!binary_search (polygon_nodes.begin(), polygon_nodes.end(), vx)			
 
                 //if(nodes.at(vx)->evaluateAreaType()!=1
-                if (!nodes.at(vx)->isMetierBanned(this->get_metier()->get_metier_type())
+                if (!nodes.at(vx)->isMetierBanned(this->get_metier()->get_name())
 					 // looking around in a radius of 200 km among the grounds I know...
 					&&  dist_to_this_node < 200)
 				{
@@ -3849,7 +3850,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 			//if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), next_ground))
 
             //if(nodes.at(next_ground)->evaluateAreaType()!=1)
-            if (!nodes.at(next_ground)->isMetierBanned(this->get_metier()->get_metier_type()))
+            if (!nodes.at(next_ground)->isMetierBanned(this->get_metier()->get_name()))
             {
                 dout(cout  << "this NEXT node " << next_ground << " is actually within a closed area!!!" << endl);
 				finally_I_should_go_for_the_closest = true;

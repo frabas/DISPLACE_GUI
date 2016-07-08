@@ -3402,7 +3402,8 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     }
     else
     {
-     cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl;
+
+        cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl;
      this->set_metier(  metiers[ 0 ]  ); // dangerous fix
     }
 
@@ -3563,6 +3564,8 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
 
        list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
+
+
        if(path.size()>1)			 // i.e no path has been found if path.size()==1...
        {
            path.pop_front();		 // delete the first node (departure) because we are lying in...
@@ -4208,6 +4211,8 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
 
             if((tstep % 24)==4) // hardcoded 4.am
             {
+
+
                std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::GoFishing);
                double the_value = traverseDtree(tstep, tree.get());
                //cout <<"the value returned by traverseDtree is "<< the_value << endl;

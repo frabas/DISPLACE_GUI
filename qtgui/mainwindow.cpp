@@ -1889,7 +1889,7 @@ void MainWindow::on_actionLoad_Graph_triggered()
 
             int res = QMessageBox::question(this, tr("Coordinates file"),
                                       QString(tr("Do you want also to load %1 as a coordinates file?")).arg(coordspath),
-                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Open);
+                                      QMessageBox::Yes, QMessageBox::No);
             if (res == QMessageBox::Open) {
                 coordspath = QFileDialog::getOpenFileName(this, tr("Import Coords file"), coordspath);
             } else if (res == QMessageBox::No) {
@@ -1901,7 +1901,7 @@ void MainWindow::on_actionLoad_Graph_triggered()
 
             int res = QMessageBox::question(this, tr("Graph file"),
                                       QString(tr("Do you want also to load %1 as a graph file?")).arg(graphpath),
-                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Open);
+                                      QMessageBox::Yes, QMessageBox::No);
             if (res == QMessageBox::Open) {
                 graphpath = QFileDialog::getOpenFileName(this, tr("Import Graph file"), coordspath);
             } else if (res == QMessageBox::No) {

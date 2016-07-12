@@ -309,7 +309,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
 
     DisplaceModel::ModelType type = currentModel == 0 ? DisplaceModel::EmptyModelType : currentModel->modelType() ;
 
-    bool e = (type == DisplaceModel::OfflineModelType);
+    bool e = (type == DisplaceModel::OfflineModelType || type == DisplaceModel::EditorModelType);
     ui->play_bk->setEnabled(e);
     ui->play_fbk->setEnabled(e);
     ui->play_ffwd->setEnabled(e);

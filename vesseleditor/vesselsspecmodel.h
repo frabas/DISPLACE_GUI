@@ -3,6 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <memory>
+#include <QVariant>
 
 class VesselsSpec;
 
@@ -16,7 +17,53 @@ public:
     void update();
 
 private:
+    static const char *sHeaders[];
+
     std::shared_ptr<VesselsSpec> mVesselsSpec;
+
+    QVariant data(const std::string &value, int role, bool ro = false) const {
+        if (role == Qt::DisplayRole || (role == Qt::EditRole && !ro))
+            return QVariant(QString::fromStdString(value));
+        return QVariant::Invalid;
+    }
+
+    QVariant data(int value, int role, bool ro = false) const {
+        if (role == Qt::DisplayRole || (role == Qt::EditRole && !ro))
+            return QVariant(value);
+        return QVariant::Invalid;
+    }
+
+    QVariant data(float value, int role, bool ro = false) const {
+        if (role == Qt::DisplayRole || (role == Qt::EditRole && !ro))
+            return QVariant(value);
+        return QVariant::Invalid;
+    }
+
+    bool setData(std::string &var, const QVariant &value, int role) const {
+        if (role == Qt::EditRole) {
+            var = value.toString().toStdString();
+            return true;
+        }
+        return false;
+    }
+
+    bool setData(int &var, const QVariant &value, int role) const {
+        if (role == Qt::EditRole) {
+            bool ok;
+            var = value.toInt(&ok);
+            return ok;
+        }
+        return false;
+    }
+
+    bool setData(float &var, const QVariant &value, int role) const {
+        if (role == Qt::EditRole) {
+            bool ok;
+            var = value.toFloat(&ok);
+            return ok;
+        }
+        return false;
+    }
 
 public:
     int rowCount(const QModelIndex &parent) const override;
@@ -25,6 +72,12 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &child) const override;
     int columnCount(const QModelIndex &parent) const override;
+
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 };
 
 #endif // VESSELSPECMODEL_H

@@ -2,6 +2,7 @@
 #include "ui_vesseleditormainwindow.h"
 
 #include <vesselsspec.h>
+#include <vesselsspecmodel.h>
 
 #include <fstream>
 
@@ -16,6 +17,10 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     mVesselsSpec = std::make_shared<VesselsSpec>();
+    mVesselsSpecModel = std::make_shared<VesselsSpecModel>();
+    mVesselsSpecModel->linkVesselsSpec(mVesselsSpec);
+
+    ui->tableView->setModel(mVesselsSpecModel.get());
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()

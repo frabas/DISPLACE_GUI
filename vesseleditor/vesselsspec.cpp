@@ -51,6 +51,7 @@ void VesselsSpec::update()
             it = mUpdateList.erase(it);
         } else {
             std::get<1>(*it)();
+            ++it;
         }
     }
 }

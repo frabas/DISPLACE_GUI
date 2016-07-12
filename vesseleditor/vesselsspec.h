@@ -44,6 +44,11 @@ public:
         return mVesselsSpec.at(i);
     }
 
+    void setRecord (size_t i, const Record &r) {
+        if (i < mVesselsSpec.size())
+            mVesselsSpec[i] =r ;
+    }
+
 private:
     using FuncPair = std::tuple<std::weak_ptr<void>, OnUpdate>;
     std::list<FuncPair> mUpdateList;

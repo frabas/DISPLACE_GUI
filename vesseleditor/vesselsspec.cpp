@@ -18,13 +18,17 @@ bool VesselsSpec::loadFromSpecFile(std::istream &is)
     bool res = false;
 
     try {
-    res = reader.importFromStream<RecordTuple>(is, ",", [this](RecordTuple t) {
+        // skip the first line
+        std::string empty;
+        std::getline(is,empty);
+
+        res = reader.importFromStream<RecordTuple>(is, ",", [this](RecordTuple t) {
         Record rec;
         RecordTupleRef r = recordToTuple(rec);
         r = t;
         mVesselsSpec.push_back(rec);
-    });
-    } catch (boost::bad_lexical_cast &x) {
+    },1);
+    } catch (std::exception &x) {
         qWarning() << "Cannot read spec file: " << x.what();
     }
 

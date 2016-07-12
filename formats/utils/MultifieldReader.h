@@ -8,6 +8,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <sstream>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
@@ -30,7 +31,15 @@ namespace displace {
                 inline typename std::enable_if< I < sizeof...(Ts), void>::type
                 parse( std::tuple<Ts...> &tuple, const std::vector<std::string> &vec)
                 {
-                    std::get<I>(tuple) = boost::lexical_cast<typename std::tuple_element<I, std::tuple<Ts...> >::type >(vec[I]);
+                    try {
+                        if (!vec[I].empty())
+                            std::get<I>(tuple) = boost::lexical_cast<typename std::tuple_element<I, std::tuple<Ts...> >::type >(vec[I]);
+                    } catch (boost::bad_lexical_cast &x) {
+                        std::ostringstream ss;
+                        ss << x.what() << " fld: " << I;
+                        throw std::runtime_error(ss.str());
+                    }
+
                     parse<I+1, Ts...>(tuple, vec);
                 };
 
@@ -45,12 +54,12 @@ namespace displace {
                 using LoaderFunction = std::function<void(T)>;
 
                 template <typename T>
-                bool importFromStream(std::istream &is, const char*separator, LoaderFunction<T> loader)
+                bool importFromStream(std::istream &is, const char*separator, LoaderFunction<T> loader, int curr_linenum = 0)
                 {
                     if (!is)
                         return false;
 
-                    int linenum = 0;
+                    int linenum = curr_linenum;
                     while (is) {
                         std::string line;
                         std::getline(is, line);
@@ -63,7 +72,13 @@ namespace displace {
                         boost::split(sr, line, boost::is_any_of(separator));
 
                         T values;
-                        parse (values, sr);
+                        try {
+                            parse (values, sr);
+                        } catch (std::exception &x) {
+                            std::ostringstream ss;
+                            ss << x.what() << " line: " << linenum+1;
+                            throw std::runtime_error(ss.str());
+                        }
 
                         loader(values);
 

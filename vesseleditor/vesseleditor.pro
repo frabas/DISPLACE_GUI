@@ -6,7 +6,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = vsleditor
 
-INCLUDEPATH+=../include/  ../formats
+INCLUDEPATH+=../include/  ../formats ../qtcommons/
 
 include ("$$top_srcdir/localconfig.pri")
 
@@ -31,7 +31,7 @@ win32 {
     RC_FILE = vesseleditor.rc
 }
 
-LIBS += -L.. -lformats
+LIBS += -L.. -lformats -lqtcommons
 
 SOURCES += \
     vesseleditor.cpp \

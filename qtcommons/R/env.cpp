@@ -55,3 +55,23 @@ void Env::setRScriptHome(QString home)
     set.setValue(RSCRIPT_HOME_SETTING, home);
 }
 
+bool Env::check() const
+{
+    QProcess p;
+    QStringList args;
+    args << "--version";
+
+    // If process starts regularly, it will return error()==5 "unknown error".
+    // If it cannot start, it will return error() == 0 "Failed to start".
+
+    p.setEnvironment(environment().toStringList());
+    p.start(getRScriptExe(), args);
+    p.waitForFinished(-1);
+
+    if (p.error() != 5 || p.exitCode() == -1) {
+        return false;
+    }
+
+    return true;
+}
+

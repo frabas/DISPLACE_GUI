@@ -64,7 +64,7 @@
       </widget>
       <widget class="QWidget" name="tabConfig">
        <attribute name="title">
-        <string>Configuration</string>
+        <string>Script</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -74,7 +74,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="scriptPath"/>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_2">
@@ -84,7 +84,7 @@
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QToolButton" name="toolButton">
+            <widget class="QToolButton" name="browseRScript">
              <property name="text">
               <string>Browse</string>
              </property>
@@ -92,6 +92,16 @@
            </item>
           </layout>
          </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="run">
+          <property name="text">
+           <string>Run</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPlainTextEdit" name="log"/>
         </item>
         <item>
          <spacer name="verticalSpacer">
@@ -110,7 +120,7 @@
       </widget>
       <widget class="QWidget" name="tabCustomize">
        <attribute name="title">
-        <string>Output Config</string>
+        <string>Output</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -205,7 +215,14 @@
     <addaction name="actionSave_Vessels_Spec"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menuUtils">
+    <property name="title">
+     <string>Tools &amp;&amp; Config</string>
+    </property>
+    <addaction name="actionRscript_location"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuUtils"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_Load_Vessels_Spec">
@@ -216,6 +233,11 @@
   <action name="actionSave_Vessels_Spec">
    <property name="text">
     <string>Save Vessels Spec...</string>
+   </property>
+  </action>
+  <action name="actionRscript_location">
+   <property name="text">
+    <string>Rscript location...</string>
    </property>
   </action>
  </widget>

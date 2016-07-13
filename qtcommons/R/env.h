@@ -19,6 +19,7 @@ public:
     QString getRScriptHome() const;
     void setRScriptHome(QString home);
 
+    bool check() const;
 private:
     QSettings set;
 

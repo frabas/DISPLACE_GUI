@@ -11,6 +11,7 @@ class VesselEditorMainWindow;
 
 QT_BEGIN_NAMESPACE
 class QSortFilterProxyModel;
+class QProcess;
 QT_END_NAMESPACE
 
 class VesselsSpec;
@@ -26,6 +27,16 @@ public:
 
 private slots:
     void on_action_Load_Vessels_Spec_triggered();
+    void on_run_clicked();
+
+    void processStarted();
+    void readOutput();
+    void readError();
+    void processExit(int);
+
+    void on_browseRScript_clicked();
+
+    void on_actionRscript_location_triggered();
 
 private:
     Ui::VesselEditorMainWindow *ui;
@@ -33,6 +44,10 @@ private:
     std::shared_ptr<VesselsSpec> mVesselsSpec;
     std::shared_ptr<VesselsSpecModel> mVesselsSpecModel;
     QSortFilterProxyModel *mVesselsSpecProxyModel;
+
+    QProcess *mProcess;
+
+    void checkEnv();
 };
 
 #endif // VESSELEDITORMAINWINDOW_H

@@ -76,6 +76,9 @@ void VesselEditorMainWindow::on_run_clicked()
         return;
     }
 
+    QSettings s;
+    s.setValue("VesselRScriptPath", ui->scriptPath->text());
+
     displace::R::Env env;
 
     mProcess = new QProcess;

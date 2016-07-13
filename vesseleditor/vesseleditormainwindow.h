@@ -9,6 +9,10 @@ namespace Ui {
 class VesselEditorMainWindow;
 }
 
+QT_BEGIN_NAMESPACE
+class QSortFilterProxyModel;
+QT_END_NAMESPACE
+
 class VesselsSpec;
 class VesselsSpecModel;
 
@@ -28,6 +32,7 @@ private:
 
     std::shared_ptr<VesselsSpec> mVesselsSpec;
     std::shared_ptr<VesselsSpecModel> mVesselsSpecModel;
+    QSortFilterProxyModel *mVesselsSpecProxyModel;
 };
 
 #endif // VESSELEDITORMAINWINDOW_H

@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QFileInfo>
+#include <QSortFilterProxyModel>
 
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,7 +21,10 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     mVesselsSpecModel = std::make_shared<VesselsSpecModel>();
     mVesselsSpecModel->linkVesselsSpec(mVesselsSpec);
 
-    ui->tableView->setModel(mVesselsSpecModel.get());
+    mVesselsSpecProxyModel = new QSortFilterProxyModel(this);
+
+    mVesselsSpecProxyModel->setSourceModel(mVesselsSpecModel.get());
+    ui->tableView->setModel(mVesselsSpecProxyModel);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()

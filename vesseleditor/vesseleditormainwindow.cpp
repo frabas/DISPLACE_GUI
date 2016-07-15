@@ -29,9 +29,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mVesselsSpecProxyModel->setSourceModel(mVesselsSpecModel.get());
     ui->tableView->setModel(mVesselsSpecProxyModel);
-
-    QSettings s;
-    ui->scriptPath->setText(s.value("VesselRScriptPath").toString());
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -69,15 +66,14 @@ void VesselEditorMainWindow::on_action_Load_Vessels_Spec_triggered()
 
 void VesselEditorMainWindow::on_run_clicked()
 {
-    auto script = ui->scriptPath->text();
+    QSettings s;
+    auto script = s.value("VesselRScriptPath").toString();
+
     if (script.isEmpty()) {
         QMessageBox::warning(this, tr("Run R Scrpt"),
                              tr("Please select an R Script on the 'script' field above."));
         return;
     }
-
-    QSettings s;
-    s.setValue("VesselRScriptPath", ui->scriptPath->text());
 
     displace::R::Env env;
 
@@ -122,19 +118,6 @@ void VesselEditorMainWindow::processExit(int result)
     qDebug() << "Completed: " << result;
 }
 
-void VesselEditorMainWindow::on_browseRScript_clicked()
-{
-    QSettings set;
-    QString dir = ui->scriptPath->text();
-    QFileInfo idir(dir);
-
-    QString script = QFileDialog::getOpenFileName(this, tr("Location of R script"), idir.absolutePath(),
-                                                  tr("R scripts (*.R *.r);;All files (*)"));
-    if (!script.isEmpty()) {
-        ui->scriptPath->setText(script);
-    }
-}
-
 void VesselEditorMainWindow::on_actionRscript_location_triggered()
 {
     displace::R::Env env;
@@ -158,5 +141,17 @@ void VesselEditorMainWindow::checkEnv()
     if (!env.check()) {
         QMessageBox::warning(this, tr("Vessel Editor setup check"),
                              tr("Couldn't start Rscript. Please setup the Rscript path properly in the Settings screen."));
+    }
+}
+
+void VesselEditorMainWindow::on_actionScripts_location_triggered()
+{
+    QSettings s;
+    QString dir = s.value("VesselRScriptPath").toString();
+    QFileInfo idir(dir);
+
+    QString script = QFileDialog::getExistingDirectory(this, tr("Location of R script"), idir.absolutePath());
+    if (!script.isEmpty()) {
+        s.setValue("VesselRScriptPath", script);
     }
 }

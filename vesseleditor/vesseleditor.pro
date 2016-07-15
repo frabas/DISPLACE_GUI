@@ -58,3 +58,7 @@ TRANSLATIONS +=
 
 target.path=$${PREFIX}/bin
 INSTALLS += target
+
+DISTFILES += \
+    ../scripts/GenerateVesselsConfigFiles.R \
+    ../scripts/RunVesselsConfigFiles.R

@@ -34,9 +34,9 @@ private slots:
     void readError();
     void processExit(int);
 
-    void on_browseRScript_clicked();
-
     void on_actionRscript_location_triggered();
+
+    void on_actionScripts_location_triggered();
 
 private:
     Ui::VesselEditorMainWindow *ui;

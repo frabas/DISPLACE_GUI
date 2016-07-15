@@ -73,37 +73,54 @@
            <string>Script</string>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="scriptPath"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Script Path</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="browseRScript">
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Output Path</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item row="2" column="1">
             <widget class="QLineEdit" name="outputPath"/>
            </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="browseOutputPath">
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Browse</string>
+              <string>Harbours file Path</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Shapefile Path</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_4"/>
+           </item>
+           <item row="2" column="2">
+            <widget class="QPushButton" name="browseOutputPath">
+             <property name="text">
+              <string>Browse...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="browseShapefilePath">
+             <property name="text">
+              <string>Browse...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="browseHarboursPath">
+             <property name="text">
+              <string>Browse...</string>
              </property>
             </widget>
            </item>
@@ -111,11 +128,22 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="run">
-          <property name="text">
-           <string>Run</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="genConfig">
+            <property name="text">
+             <string>Generate Config Files</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="run">
+            <property name="text">
+             <string>Run</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QPlainTextEdit" name="log"/>
@@ -237,6 +265,7 @@
      <string>Tools &amp;&amp; Config</string>
     </property>
     <addaction name="actionRscript_location"/>
+    <addaction name="actionScripts_location"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuUtils"/>
@@ -254,7 +283,12 @@
   </action>
   <action name="actionRscript_location">
    <property name="text">
-    <string>Rscript location...</string>
+    <string>Rscript executable location...</string>
+   </property>
+  </action>
+  <action name="actionScripts_location">
+   <property name="text">
+    <string>Scripts location...</string>
    </property>
   </action>
  </widget>

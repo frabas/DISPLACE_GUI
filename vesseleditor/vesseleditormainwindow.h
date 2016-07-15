@@ -38,6 +38,12 @@ private slots:
 
     void on_actionScripts_location_triggered();
 
+    void on_browseShapefilePath_clicked();
+
+    void on_browseHarboursPath_clicked();
+
+    void on_browseOutputPath_clicked();
+
 private:
     Ui::VesselEditorMainWindow *ui;
 

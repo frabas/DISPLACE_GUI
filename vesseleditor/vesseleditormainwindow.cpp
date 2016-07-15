@@ -29,6 +29,12 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mVesselsSpecProxyModel->setSourceModel(mVesselsSpecModel.get());
     ui->tableView->setModel(mVesselsSpecProxyModel);
+
+    QSettings s;
+    ui->shapefilePath->setText(s.value("Vessel_LastShapefilePath").toString());
+    ui->harbourFilePath->setText(s.value("Vessel_LastHarboursPath").toString());
+    ui->outputPath->setText(s.value("Vessel_LastOutputPath").toString());
+
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -153,5 +159,46 @@ void VesselEditorMainWindow::on_actionScripts_location_triggered()
     QString script = QFileDialog::getExistingDirectory(this, tr("Location of R script"), idir.absolutePath());
     if (!script.isEmpty()) {
         s.setValue("VesselRScriptPath", script);
+    }
+}
+
+void VesselEditorMainWindow::on_browseShapefilePath_clicked()
+{
+    QSettings s;
+    QString dir = s.value("Vessel_LastShapefilePath").toString();
+    QFileInfo idir(dir);
+
+    QString path = QFileDialog::getOpenFileName(this, tr("ShapefilePath"), idir.absolutePath(),
+                                                tr("Shapefiles (*.shp)"));
+    if (!path.isEmpty()) {
+        s.setValue("Vessel_LastShapefilePath", path);
+        ui->shapefilePath->setText(path);
+    }
+}
+
+void VesselEditorMainWindow::on_browseHarboursPath_clicked()
+{
+    QSettings s;
+    QString dir = s.value("Vessel_LastHarboursPath").toString();
+    QFileInfo idir(dir);
+
+    QString path = QFileDialog::getOpenFileName(this, tr("Harbours file"), idir.absolutePath(),
+                                                tr("Harbours file (*.dat)"));
+    if (!path.isEmpty()) {
+        s.setValue("Vessel_LastHarboursPath", path);
+        ui->harbourFilePath->setText(path);
+    }
+}
+
+void VesselEditorMainWindow::on_browseOutputPath_clicked()
+{
+    QSettings s;
+    QString dir = s.value("Vessel_LastOutputPath").toString();
+    QFileInfo idir(dir);
+
+    QString path = QFileDialog::getExistingDirectory(this, tr("Output Path"), idir.absolutePath());
+    if (!path.isEmpty()) {
+        s.setValue("Vessel_LastOutputPath", path);
+        ui->outputPath->setText(path);
     }
 }

@@ -1,18 +1,33 @@
- # some args for the bunch of vessels to be created....
- 
+# some args for the bunch of vessels to be created....
+#
+# Run with the following arguments:
+# 1: Output Path
+# 2: Harbours Path
+# 3: Application name ("adriatic")
+
    # GENERAL SETTINGS
    general <- list()
-   if(.Platform$OS.type == "windows") {
-     general$main.path             <- file.path("C:","DISPLACE_outputs")
-     general$application           <- "adriatic" # ...or myfish
-     general$main.path.param       <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
-     general$main.path.param.gis   <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", general$application)
-     general$main.path.ibm         <- file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_", general$application, sep=''))
+
+   args <- commandArgs(trailingOnly = TRUE)
+
+#   general$main.path             <- file.path("C:","DISPLACE_outputs") # Not Used
+   general$application           <- args[3] 
+   general$main.path.param       <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
+   general$main.path.param.gis   <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", general$application)
+   general$main.path.ibm         <- file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_", general$application, sep=''))
+   
+
+#   if(.Platform$OS.type == "windows") {
+#     general$main.path             <- file.path("C:","DISPLACE_outputs")
+#     general$application           <- "adriatic" # ...or myfish
+#     general$main.path.param       <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
+#     general$main.path.param.gis   <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", general$application)
+#     general$main.path.ibm         <- file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_", general$application, sep=''))
   
    # dir_to_clean <-    file.path(general$main.path.ibm, "FISHERIES", "vessels_config_files")
    # file.remove(dir(   dir_to_clean, pattern = "vessels_creator_args", full.names = FALSE))
  
-   }
+#   }
    
   
   

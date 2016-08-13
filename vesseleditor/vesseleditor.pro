@@ -37,15 +37,22 @@ SOURCES += \
     vesseleditor.cpp \
     vesseleditormainwindow.cpp \
     vesselsspec.cpp \
-    vesselsspecmodel.cpp
+    vesselsspecmodel.cpp \
+    scriptselectionform.cpp \
+    defaults.cpp \
+    settings.cpp
 
 FORMS += \
-    vesseleditormainwindow.ui
+    vesseleditormainwindow.ui \
+    scriptselectionform.ui
 
 HEADERS += \
     vesseleditormainwindow.h \
     vesselsspec.h \
-    vesselsspecmodel.h
+    vesselsspecmodel.h \
+    scriptselectionform.h \
+    defaults.h \
+    settings.h
 
 RESOURCES += \
     vesseleditor.qrc

@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabVessels">
        <attribute name="title">
@@ -343,7 +343,10 @@
   </action>
   <action name="actionScripts_location">
    <property name="text">
-    <string>Scripts location...</string>
+    <string>Scripts Selection...</string>
+   </property>
+   <property name="toolTip">
+    <string>Customize the scripts selection.</string>
    </property>
   </action>
  </widget>

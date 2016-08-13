@@ -3,7 +3,9 @@
 
 #include <vesselsspec.h>
 #include <vesselsspecmodel.h>
+#include <scriptselectionform.h>
 #include <R/env.h>
+#include <settings.h>
 
 #include <fstream>
 
@@ -74,7 +76,14 @@ void VesselEditorMainWindow::on_action_Load_Vessels_Spec_triggered()
 
 void VesselEditorMainWindow::on_run_clicked()
 {
-    runScript("VesselRScriptPath");
+    displace::vesselsEditor::Settings s;
+    runScript(s.getRunScriptPath());
+}
+
+void VesselEditorMainWindow::on_genConfig_clicked()
+{
+    displace::vesselsEditor::Settings s;
+    runScript(s.getConfigScriptPath());
 }
 
 bool VesselEditorMainWindow::runScript(QString scriptName)
@@ -173,14 +182,8 @@ void VesselEditorMainWindow::checkEnv()
 
 void VesselEditorMainWindow::on_actionScripts_location_triggered()
 {
-    QSettings s;
-    QString dir = s.value("VesselRScriptPath").toString();
-    QFileInfo idir(dir);
-
-    QString script = QFileDialog::getExistingDirectory(this, tr("Location of R script"), idir.absolutePath());
-    if (!script.isEmpty()) {
-        s.setValue("VesselRScriptPath", script);
-    }
+    ScriptSelectionForm f;
+    f.exec();
 }
 
 void VesselEditorMainWindow::on_browseShapefilePath_clicked()

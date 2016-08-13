@@ -26,28 +26,21 @@ public:
     ~VesselEditorMainWindow();
 
 private slots:
-    void on_action_Load_Vessels_Spec_triggered();
-    void on_run_clicked();
-
     void processStarted();
     void readOutput();
     void readError();
     void processExit(int);
 
+    void on_action_Load_Vessels_Spec_triggered();
+    void on_run_clicked();
+    void on_genConfig_clicked();
     void on_actionRscript_location_triggered();
-
     void on_actionScripts_location_triggered();
-
     void on_browseShapefilePath_clicked();
-
     void on_browseHarboursPath_clicked();
-
     void on_browseOutputPath_clicked();
-
     void on_browseInputPath_clicked();
-
     void on_browseRawPath_clicked();
-
     void on_browseGISPath_clicked();
 
 private:

@@ -4,6 +4,9 @@
 # 1: Output Path
 # 2: Harbours Path
 # 3: Application name ("adriatic")
+# 4: Path Param  i.e. point to DISPLACE_input_raw
+# 5: Path Param GIS point to DISPLACE_input_gis
+# 6: Path Input (IBM) i.e. pointing to displace_input_test
 
    # GENERAL SETTINGS
    general <- list()
@@ -12,9 +15,9 @@
 
 #   general$main.path             <- file.path("C:","DISPLACE_outputs") # Not Used
    general$application           <- args[3] 
-   general$main.path.param       <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
-   general$main.path.param.gis   <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", general$application)
-   general$main.path.ibm         <- file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_", general$application, sep=''))
+   general$main.path.param       <- args[4] #file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
+   general$main.path.param.gis   <- args[5] #file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", general$application)
+   general$main.path.ibm         <- args[6] #file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_", general$application, sep=''))
    
 
 #   if(.Platform$OS.type == "windows") {
@@ -31,7 +34,7 @@
    
   
   
-   general$namefolderinput    <- "adriatic"
+   general$namefolderinput    <- general$application #"adriatic"
    dir.create(path=file.path(general$main.path.param.gis, "FISHERIES", "vessels_config_files"))
   
    vessel_specifications <- read.table(file=file.path(general$main.path.param.gis, "FISHERIES", "vessels_specifications_per_harbour_3metiers.csv"), sep=",", header=TRUE )

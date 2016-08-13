@@ -4,12 +4,30 @@
 #-----read input config file----------------------------------------------------
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
+# Run with the following arguments:
+# 1: Output Path
+# 2: Harbours Path
+# 3: Application name ("adriatic")
+# 4: Path Param  i.e. point to DISPLACE_input_raw
+# 5: Path Param GIS point to DISPLACE_input_gis
+# 6: Path Input (IBM) i.e. pointing to displace_input_test
+
+   # GENERAL SETTINGS
+   cmdlineargs <- list()
+
+   args <- commandArgs(trailingOnly = TRUE)
+
+
+   cmdlineargs$application           <- args[3]
+   cmdlineargs$main.path.param       <- args[4] #file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_raw")
+   cmdlineargs$main.path.param.gis   <- args[5] #file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", cmdlineargs$application)
+   cmdlineargs$main.path.ibm         <- args[6] #file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_", cmdlineargs$application, sep=''))
 
 
    # create from different set of vessels, for example:
-   path      <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", "adriatic", "FISHERIES", "vessels_config_files")
+   path      <- file.path(cmdlineargs$main.path.param.gis, cmdlineargs$application, "FISHERIES", "vessels_config_files" )
+            #was: file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", "adriatic", "FISHERIES", "vessels_config_files")
    namefiles <- list.files(file.path( path))
-
 
    count <- 0
  for (namefile in namefiles){ # LOOP OVER CONFIG FILES

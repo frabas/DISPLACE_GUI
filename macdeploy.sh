@@ -71,6 +71,7 @@ fi
 $QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
 . /tmp/qtconf
 
+TOPDIR=$PWD
 DESTDIR=$PWD/build/$T/bin
 INSTALL=$PWD/build
 APPNAME=DisplaceProject
@@ -348,6 +349,10 @@ for file in $EXTRA_FRAMEWORKS; do
 done
 
 # Other, unrelated stuff
+# Copy of R Scripts
+
+mkdir $APPBUNDLE/Contents/Resources/scripts
+cp $TOPDIR/scripts/*.R $APPBUNDLE/Contents/Resources/scripts
 
 # Applying owner:group and access rights
 

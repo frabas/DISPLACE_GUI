@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabVessels">
        <attribute name="title">
@@ -73,18 +73,45 @@
            <string>Script</string>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="2" column="0">
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>GIS Data Path</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Raw Data Path</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QLineEdit" name="gisPath"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="shapefilePath"/>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLineEdit" name="applicationName"/>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="outputPath"/>
+           </item>
+           <item row="3" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Output Path</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QLineEdit" name="outputPath"/>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="harbourFilePath"/>
+           <item row="3" column="3">
+            <widget class="QPushButton" name="browseOutputPath">
+             <property name="text">
+              <string>Browse...</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_2">
@@ -100,25 +127,59 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="shapefilePath"/>
-           </item>
-           <item row="2" column="2">
-            <widget class="QPushButton" name="browseOutputPath">
+           <item row="1" column="3">
+            <widget class="QPushButton" name="browseHarboursPath">
              <property name="text">
               <string>Browse...</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="2">
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="harbourFilePath"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Input Path</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="inputPath"/>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLineEdit" name="rawPath"/>
+           </item>
+           <item row="0" column="3">
             <widget class="QPushButton" name="browseShapefilePath">
              <property name="text">
               <string>Browse...</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
-            <widget class="QPushButton" name="browseHarboursPath">
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Application Name</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QPushButton" name="browseInputPath">
+             <property name="text">
+              <string>Browse...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QPushButton" name="browseRawPath">
+             <property name="text">
+              <string>Browse...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="3">
+            <widget class="QPushButton" name="browseGISPath">
              <property name="text">
               <string>Browse...</string>
              </property>
@@ -139,7 +200,7 @@
           <item>
            <widget class="QPushButton" name="run">
             <property name="text">
-             <string>Run</string>
+             <string>Generate Data File</string>
             </property>
            </widget>
           </item>
@@ -200,7 +261,14 @@
                <string>General</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_2">
-               <item row="2" column="0">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Graph Name</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
                 <spacer name="verticalSpacer_2">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -213,24 +281,7 @@
                  </property>
                 </spacer>
                </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_3">
-                 <property name="text">
-                  <string>Application Name</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>Graph Name</string>
-                 </property>
-                </widget>
-               </item>
                <item row="0" column="2">
-                <widget class="QLineEdit" name="lineEdit_2"/>
-               </item>
-               <item row="1" column="2">
                 <widget class="QLineEdit" name="lineEdit_3"/>
                </item>
               </layout>
@@ -253,7 +304,7 @@
      <x>0</x>
      <y>0</y>
      <width>852</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -296,6 +347,29 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>tableView</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>shapefilePath</tabstop>
+  <tabstop>browseShapefilePath</tabstop>
+  <tabstop>harbourFilePath</tabstop>
+  <tabstop>browseHarboursPath</tabstop>
+  <tabstop>inputPath</tabstop>
+  <tabstop>browseInputPath</tabstop>
+  <tabstop>outputPath</tabstop>
+  <tabstop>browseOutputPath</tabstop>
+  <tabstop>applicationName</tabstop>
+  <tabstop>rawPath</tabstop>
+  <tabstop>browseRawPath</tabstop>
+  <tabstop>gisPath</tabstop>
+  <tabstop>browseGISPath</tabstop>
+  <tabstop>genConfig</tabstop>
+  <tabstop>run</tabstop>
+  <tabstop>log</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>listView</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

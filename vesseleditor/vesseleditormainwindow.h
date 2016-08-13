@@ -44,6 +44,12 @@ private slots:
 
     void on_browseOutputPath_clicked();
 
+    void on_browseInputPath_clicked();
+
+    void on_browseRawPath_clicked();
+
+    void on_browseGISPath_clicked();
+
 private:
     Ui::VesselEditorMainWindow *ui;
 
@@ -53,6 +59,7 @@ private:
 
     QProcess *mProcess;
 
+    bool runScript(QString scriptName);
     void checkEnv();
 };
 

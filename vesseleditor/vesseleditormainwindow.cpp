@@ -34,7 +34,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->shapefilePath->setText(s.value("Vessel_LastShapefilePath").toString());
     ui->harbourFilePath->setText(s.value("Vessel_LastHarboursPath").toString());
     ui->outputPath->setText(s.value("Vessel_LastOutputPath").toString());
-
+    ui->outputPath->setText(s.value("Vessel_LastInputPath").toString());
+    ui->outputPath->setText(s.value("Vessel_LastRawPath").toString());
+    ui->outputPath->setText(s.value("Vessel_LastGisPath").toString());
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -72,13 +74,18 @@ void VesselEditorMainWindow::on_action_Load_Vessels_Spec_triggered()
 
 void VesselEditorMainWindow::on_run_clicked()
 {
+    runScript("VesselRScriptPath");
+}
+
+bool VesselEditorMainWindow::runScript(QString scriptName)
+{
     QSettings s;
-    auto script = s.value("VesselRScriptPath").toString();
+    auto script = s.value(scriptName).toString();
 
     if (script.isEmpty()) {
         QMessageBox::warning(this, tr("Run R Scrpt"),
                              tr("Please select an R Script on the 'script' field above."));
-        return;
+        return false;
     }
 
     displace::R::Env env;
@@ -92,12 +99,26 @@ void VesselEditorMainWindow::on_run_clicked()
 
     QStringList args;
     args << script;
+    /* Scripts are called with the following arguments:
+     * # 1: Output Path
+     * # 2: Harbours Path
+     * # 3: Application name ("adriatic")
+     * # 4: Path Param  i.e. point to DISPLACE_input_raw
+     * # 5: Path Param GIS point to DISPLACE_input_gis
+     * # 6: Path Input (IBM) i.e. pointing to displace_input_test
+     */
+
+    args << ui->outputPath->text() << ui->harbourFilePath->text();
+    args << ui->applicationName->text() << ui->rawPath->text();
+    args << ui->gisPath->text() << ui->inputPath->text();
 
     mProcess->setEnvironment(env.environment().toStringList());
     mProcess->setWorkingDirectory(env.getRScriptHome());
     mProcess->start(env.getRScriptExe(), args);
 
     qDebug() << "START:" << env.getRScriptExe() << args;
+
+    return true;
 }
 
 void VesselEditorMainWindow::processStarted()
@@ -199,6 +220,45 @@ void VesselEditorMainWindow::on_browseOutputPath_clicked()
     QString path = QFileDialog::getExistingDirectory(this, tr("Output Path"), idir.absolutePath());
     if (!path.isEmpty()) {
         s.setValue("Vessel_LastOutputPath", path);
+        ui->outputPath->setText(path);
+    }
+}
+
+void VesselEditorMainWindow::on_browseInputPath_clicked()
+{
+    QSettings s;
+    QString dir = s.value("Vessel_LastInputPath").toString();
+    QFileInfo idir(dir);
+
+    QString path = QFileDialog::getExistingDirectory(this, tr("Input Path"), idir.absolutePath());
+    if (!path.isEmpty()) {
+        s.setValue("Vessel_LastInputPath", path);
+        ui->outputPath->setText(path);
+    }
+}
+
+void VesselEditorMainWindow::on_browseRawPath_clicked()
+{
+    QSettings s;
+    QString dir = s.value("Vessel_LastRawPath").toString();
+    QFileInfo idir(dir);
+
+    QString path = QFileDialog::getExistingDirectory(this, tr("Raw Data Path"), idir.absolutePath());
+    if (!path.isEmpty()) {
+        s.setValue("Vessel_LastRawPath", path);
+        ui->outputPath->setText(path);
+    }
+}
+
+void VesselEditorMainWindow::on_browseGISPath_clicked()
+{
+    QSettings s;
+    QString dir = s.value("Vessel_LastGisPath").toString();
+    QFileInfo idir(dir);
+
+    QString path = QFileDialog::getExistingDirectory(this, tr("Gis Data Path"), idir.absolutePath());
+    if (!path.isEmpty()) {
+        s.setValue("Vessel_LastGisPath", path);
         ui->outputPath->setText(path);
     }
 }

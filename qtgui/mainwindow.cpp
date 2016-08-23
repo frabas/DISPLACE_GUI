@@ -375,6 +375,8 @@ void MainWindow::simulatorLogging(QString msg)
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate)
 {
+    cout << "is simulator process state changed?" <<  endl;
+
     if (models[0] != 0) {
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
@@ -436,6 +438,7 @@ void MainWindow::shipMoved(int step, int idx, float x, float y, float course)
 
 void MainWindow::updateModelState()
 {
+    cout << "update model state" <<  endl;
     simulatorProcessStateChanged(mSimulation->processState(),mSimulation->processState());
     updateModelList();
 }
@@ -1533,9 +1536,13 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
         return false;
     }
 
+    cout << "live model loaded..." << endl;
+
     /* Connect model */
     connect (m.get(), SIGNAL(errorParsingStatsFile(QString)), this, SLOT(errorImportingStatsFile(QString)));
     connect (m.get(), SIGNAL(outputParsed()), this, SLOT(outputUpdated()));
+
+    cout << "current model connected..." << endl;
 
     mMapController->removeModel(model_idx);
 
@@ -1545,7 +1552,11 @@ bool MainWindow::loadLiveModel(QString path, QString *error, int model_idx)
     ui->modelSelector->setCurrentIndex(model_idx);
     models[model_idx] = m;
 
+    cout << "create map objects from model..." << endl;
+
     mSimulation->linkModel(models[model_idx]);
+
+    cout << "link model to next simulation..." << endl;
 
     emit modelStateChanged();
 

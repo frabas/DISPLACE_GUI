@@ -1622,6 +1622,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			landings_so_far,
 			a_calib_cpue_multiplier,
 			a_calib_weight_at_szgroup));
+        cout << " ...done "  << endl;
 
 		if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
 		{
@@ -1825,8 +1826,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------" << endl);
 
 	//input data, metier characteristics: selectivty ogives, beta per pop
-    multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder);
-    multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, inputfolder);
+    //multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder); // DEPRECATED
+    //multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, inputfolder);// DEPRECATED
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
     multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
@@ -1838,24 +1839,27 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 	// get the name of the metiers
-	// copy only unique elements of sel_ogives into name_metiers
+    // copy only unique elements into name_metiers
 	// TOO TRICKY: TO BE CHANGED!!!
-	for(multimap<int, double>::iterator iter=sel_ogives.begin(); iter != sel_ogives.end();
-		iter = sel_ogives.upper_bound( iter->first ) )
+    for(multimap<int, double>::iterator iter=metiers_gear_widths_param_a.begin(); iter != metiers_gear_widths_param_a.end();
+        iter = metiers_gear_widths_param_a.upper_bound( iter->first ) )
 	{
-		name_metiers.push_back (iter->first);
+        name_metiers.push_back (iter->first);
        outc(cout << "metier " << iter->first << endl);
 	}
-   outc(cout << "nb metiers: " << name_metiers.size() << endl);
+   cout << "nb metiers: " << name_metiers.size() << endl;
 
 	// creation of a vector of metier from input data...
     metiers = vector <Metier*> (name_metiers.size());
 
     for (unsigned int i=0; i<metiers.size(); i++)
 	{
-		int metier_name = i;
-		vector<double> selectivity                 = find_entries_i_d(sel_ogives, metier_name);
-		vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name);
+
+        int metier_name = i;
+        cout << "creating metier " << i << endl;
+
+        //vector<double> selectivity                 = find_entries_i_d(sel_ogives, metier_name); // DEPRECATED
+        //vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name); // DEPRECATED
 		vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
         vector<int> metier_mls_cat                 = find_entries_i_i(metiers_mls_cat, metier_name);
         int metier_type                            = metiers_types[ i ];
@@ -1880,9 +1884,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         metiers[i] =  new Metier(metier_name,
 			metier_type,
             percent_revenue_completeness,
-			selectivity,
+            //selectivity,
             selectivity_per_stock_ogives,
-			discards,
+            //discards,
 			metier_betas,
             metier_mls_cat,
             fspeed,
@@ -1891,17 +1895,19 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			gear_width_model,
             loss_after_1_passage,
             the_metier_target_stocks);
-	}
+     cout << "done.... "  << endl;
+    }
 
 
     // check selectivity per metier
-	vector<double> ogive = metiers[0]->get_selectivity_ogive();
+    /*vector<double> ogive = metiers[0]->get_selectivity_ogive();
     cout << "selectivity ogive of the metier 0" << endl;
 	for (unsigned int i=0; i<ogive.size(); i++)
 	{
        cout  << " " << ogive[i] << " " ;
 	}
    cout << endl;
+   */
 
    // check selectivity per metier per stock
    vector< vector<double> > selectivity_per_stock = metiers[0]->get_selectivity_per_stock_ogives();

@@ -1806,8 +1806,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 	double v_vsize                  = this->get_length ();
 
 	// METIER EFFECT
-	vector<double> dis_ogive        = this->get_metier()->get_discards_ogive();
-    vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
+    //vector<double> dis_ogive        = this->get_metier()->get_discards_ogive();
+    //vector<double> sel_ogive        = this->get_metier()->get_selectivity_ogive();
     vector< vector<double> > selectivity_per_stock = this->get_metier()->get_selectivity_per_stock_ogives();
     vector<double> m_betas_per_pop  = this->get_metier()->get_betas_per_pop();
     vector<int> m_mls_cat_per_pop  = this->get_metier()->get_mls_cat_per_pop();

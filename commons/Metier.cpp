@@ -24,9 +24,9 @@
 Metier::Metier(int _name,
 int _type,
 double _percent_revenue_completeness,
-vector<double> _selectivity,
+//vector<double> _selectivity,
 const vector< vector <double> > &_selectivity_per_stock,
-vector<double> _discards,
+//vector<double> _discards,
 vector<double> _betas_per_pop,
 vector<int>    _mls_cat_per_pop,
 double _fspeed,
@@ -39,9 +39,9 @@ vector<int> _metier_target_stocks)
 	name=_name;
 	type=_type;
     percent_revenue_completeness=_percent_revenue_completeness;
-	selectivity=_selectivity;
+    //selectivity=_selectivity;
     selectivity_per_stock=_selectivity_per_stock;
-	discards=_discards;
+    //discards=_discards;
 	betas_per_pop=_betas_per_pop;
     mls_cat_per_pop=_mls_cat_per_pop;
     fspeed= _fspeed;
@@ -96,11 +96,13 @@ double Metier::get_target_factor()
 }
 
 
-vector<double> Metier::get_selectivity_ogive()
+/*
+ vector<double> Metier::get_selectivity_ogive()
 {
 
 	return(selectivity);
 }
+*/
 
 vector< vector <double> > Metier::get_selectivity_per_stock_ogives() const
 {
@@ -108,12 +110,13 @@ vector< vector <double> > Metier::get_selectivity_per_stock_ogives() const
 }
 
 
-
+/*
 vector<double> Metier::get_discards_ogive()
 {
 
 	return(discards);
 }
+*/
 
 
 vector<double> Metier::get_betas_per_pop()

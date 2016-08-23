@@ -36,9 +36,9 @@ class Metier
         int type = -1;
         double percent_revenue_completeness; // for completing the revenue from other species....
 		double target_factor;	 //NOT IN USE...
-		vector<double> selectivity;
+        //vector<double> selectivity;
         vector< vector <double> > selectivity_per_stock;
-        vector<double> discards;
+        //vector<double> discards;
 		vector<double> betas_per_pop;
         vector<int> mls_cat_per_pop;
         double fspeed;
@@ -53,9 +53,9 @@ class Metier
         Metier(int name,
             int type,
             double percent_revenue_completeness,
-            vector<double> selectivity,
+            //vector<double> selectivity,
             const vector< vector <double> > &selectivity_per_stock_ogives,
-            vector<double> discards,
+            //vector<double> discards,
             vector<double> metier_betas_per_pop,
             vector<int> metier_mls_cat_per_pop,
             double fspeed,
@@ -70,9 +70,9 @@ class Metier
 		int get_metier_type();
         double get_percent_revenue_completeness();
 		double get_target_factor();
-		vector<double> get_selectivity_ogive();
+        //vector<double> get_selectivity_ogive();
         vector<vector <double> > get_selectivity_per_stock_ogives() const;
-       vector<double> get_discards_ogive();
+        //vector<double> get_discards_ogive();
         double  get_fspeed();
         double  get_gear_width_a();
 		double  get_gear_width_b();

@@ -168,6 +168,7 @@ bool DisplaceModel::load(QString path, ModelType type)
         return false;
     }
 
+    cout << "load...ok" << endl;
     mModelType = type;
     return true;
 }
@@ -1891,7 +1892,7 @@ bool DisplaceModel::loadVessels()
             // unfortunately this might be 0 for the target species if the used metiers has small mismatch in pop.
             }
 
-            cout << "compute the average cpue for this pop across all nodes" << endl;
+            //cout << "compute the average cpue for this pop across all nodes" << endl;
             // compute the average cpue for this pop across all nodes
             for(size_t f = 0; f < fgrounds.size(); ++f)
             {

@@ -1444,6 +1444,7 @@ bool DisplaceModel::loadNodes()
 
 
     // read nodes in polygons for area-based management
+#if 0
     cout << "read node in polygons..." << endl;
     string a_graph_name="a_graph";
     a_graph_name=a_graph_name+a_graph_s;
@@ -1459,6 +1460,7 @@ bool DisplaceModel::loadNodes()
         }
         sort (polygon_nodes.begin(), polygon_nodes.end());
 
+#endif
         // TODO this could be removed.
 #if 0
     for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
@@ -1476,6 +1478,8 @@ bool DisplaceModel::loadNodes()
 
 
     // read tariff map
+    string a_graph_name="a_graph";
+    a_graph_name=a_graph_name+a_graph_s;
     if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
     {
         multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes(  mInputName.toStdString(), mBasePath.toStdString(), a_graph_name);
@@ -1596,6 +1600,7 @@ bool DisplaceModel::loadVessels()
     }
 
     // read nodes in polygons for area-based management
+ #if 0
     cout << "nodes_in_polygons() in loadVessels()" << endl;
     multimap<int, int> nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, mInputName.toStdString(), mBasePath.toStdString());
 
@@ -1606,6 +1611,8 @@ bool DisplaceModel::loadVessels()
     //    cout << " a polygon node is " << pos->second << endl;
     //}
     //cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
+# endif
+
 
      multimap<string, double> fishing_credits;
     if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
@@ -1746,6 +1753,7 @@ bool DisplaceModel::loadVessels()
         }
 
         // inform grounds in closed areas
+# if 0
         vector <int> grds = v->get_fgrounds();
         vector <int> fgrounds_in_closed_areas;
         vector<int> polygons;
@@ -1771,8 +1779,7 @@ bool DisplaceModel::loadVessels()
           cout << fgrounds_in_closed_areas.at(i) << " ";
           }
         cout << endl;
-
-
+# endif
 
         // for dyn sce. CAUTION: MAGIC NUMBERS HERE FOR SOME SCENARIOS....
                                  // dyn sce.

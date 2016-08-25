@@ -1828,19 +1828,28 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	//input data, metier characteristics: selectivty ogives, beta per pop
     //multimap<int, double> sel_ogives = read_sel_ogives(folder_name_parameterization, inputfolder); // DEPRECATED
     //multimap<int, double> dis_ogives = read_dis_ogives(folder_name_parameterization, inputfolder);// DEPRECATED
+    cout << "check whether all metiers informed in the following parameters files... " << endl;
+    cout << "read metier betas parameters....ok? " << endl;
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
+    cout << "read mls cat parameters....ok? " << endl;
     multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
+    cout << "read metiers types parameters....ok? " << endl;
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
+    cout << "read revenue completeness parameters....ok? " << endl;
     map<int, double>      percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization, inputfolder);
+    cout << "read fspeed parameters....ok? " << endl;
     map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, inputfolder);
+    cout << "read gear width a parameters....ok? " << endl;
     map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, inputfolder);
+    cout << "read gear width b parameters....ok? " << endl;
     map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, inputfolder);
+    cout << "read gear width model type parameters....ok? " << endl;
     map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
 
 
 	// get the name of the metiers
     // copy only unique elements into name_metiers
-	// TOO TRICKY: TO BE CHANGED!!!
+    cout << "retrieve the metier names.... " << endl;
     for(multimap<int, double>::iterator iter=metiers_gear_widths_param_a.begin(); iter != metiers_gear_widths_param_a.end();
         iter = metiers_gear_widths_param_a.upper_bound( iter->first ) )
 	{

@@ -51,6 +51,7 @@ class Config
     int szGroups;
 
     QList <int> m_implicit_pops;
+    QList <int> m_implicit_pops_level2;
     QList <double> m_calib_oth_landings;
     QList <double> m_calib_weight_at_szgroup;
     QList <double> m_calib_cpue_multiplier;
@@ -70,7 +71,9 @@ public:
     int getNbbenthospops() const;
     void setNbbenthospops(int value);
     const QList<int> &implicit_pops() const;
+    const QList<int> &implicit_pops_level2() const;
     void setImplicit_pops(const QList<int> &implicit_pops);
+    void setImplicit_pops_level2(const QList<int> &implicit_pops_level2);
     const QList<double> &calib_oth_landings() const;
     void setCalib_oth_landings(const QList<double> &calib_oth_landings);
     const QList<double> &calib_weight_at_szgroup() const;

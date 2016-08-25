@@ -172,6 +172,7 @@ bool is_fishing_credits;
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
+vector <int> implicit_pops_level2;
 vector <int> explicit_pops;
 vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
@@ -569,7 +570,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		nbpops,
         nbbenthospops,
 		implicit_pops,
-		calib_oth_landings,
+        implicit_pops_level2,
+        calib_oth_landings,
 		calib_weight_at_szgroup,
         calib_cpue_multiplier,
         int_harbours

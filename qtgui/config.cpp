@@ -37,6 +37,7 @@ Config::Config()
       nbbenthospops(0),
       szGroups(0),
       m_implicit_pops(),
+      m_implicit_pops_level2(),
       m_calib_oth_landings(),
       m_calib_weight_at_szgroup(),
       m_calib_cpue_multiplier()
@@ -51,6 +52,16 @@ const QList<int> &Config::implicit_pops() const
 void Config::setImplicit_pops(const QList<int> &implicit_pops)
 {
     m_implicit_pops = implicit_pops;
+}
+
+const QList<int> &Config::implicit_pops_level2() const
+{
+    return m_implicit_pops_level2;
+}
+
+void Config::setImplicit_pops_level2(const QList<int> &implicit_pops_level2)
+{
+    m_implicit_pops_level2 = implicit_pops_level2;
 }
 
 const QList<double> &Config::calib_oth_landings() const
@@ -170,6 +181,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     config.szGroups = NBSZGROUP;
 
     std::vector <int> implicit_pops;
+    std::vector <int> implicit_pops_level2;
     std::vector <int> implicit_harbours;
     std::vector <double> calib_oth_landings;
     std::vector <double> calib_weight_at_szgroup;
@@ -181,6 +193,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         config.nbpops,
         config.nbbenthospops,
         implicit_pops,
+        implicit_pops_level2,
         calib_oth_landings,
         calib_weight_at_szgroup,
         calib_cpue_multiplier,
@@ -193,6 +206,8 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
 
     for (std::vector<int>::iterator it = implicit_pops.begin(); it != implicit_pops.end(); ++it)
         config.m_implicit_pops.push_back(*it);
+    for (std::vector<int>::iterator it = implicit_pops_level2.begin(); it != implicit_pops_level2.end(); ++it)
+        config.m_implicit_pops_level2.push_back(*it);
     for (std::vector<double>::iterator it = calib_oth_landings.begin(); it != calib_oth_landings.end(); ++it)
         config.m_calib_oth_landings.push_back(*it);
     for (std::vector<double>::iterator it = calib_weight_at_szgroup.begin(); it != calib_weight_at_szgroup.end(); ++it)

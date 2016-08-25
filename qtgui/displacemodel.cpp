@@ -60,6 +60,7 @@ DisplaceModel::DisplaceModel()
       mScenario(),
       mConfig(),
       mInterestingPop(),
+      mInterestingPop2(),
       mInterestingSizeTotal(false),
       mInterestingSizeAvg(true),
       mInterestingSizeMin(false),
@@ -1200,9 +1201,21 @@ void DisplaceModel::setInterestingPop(int n)
         qSort(mInterestingPop);
 }
 
+void DisplaceModel::setInterestingPop2(int n)
+{
+    if (!mInterestingPop2.contains(n))
+        mInterestingPop2.append(n);
+        qSort(mInterestingPop2);
+}
+
 void DisplaceModel::remInterestingPop(int n)
 {
     mInterestingPop.removeAll(n);
+}
+
+void DisplaceModel::remInterestingPop2(int n)
+{
+    mInterestingPop2.removeAll(n);
 }
 
 bool DisplaceModel::isInterestingPop(int n)
@@ -1210,9 +1223,19 @@ bool DisplaceModel::isInterestingPop(int n)
     return mInterestingPop.contains(n);
 }
 
+bool DisplaceModel::isInterestingPop2(int n)
+{
+    return mInterestingPop2.contains(n);
+}
+
 void DisplaceModel::clearInterestingPop()
 {
     mInterestingPop.clear();
+}
+
+void DisplaceModel::clearInterestingPop2()
+{
+    mInterestingPop2.clear();
 }
 
 void DisplaceModel::setInterestingSize(int n)
@@ -2190,6 +2213,9 @@ bool DisplaceModel::initPopulations()
     QList<int> imp = mConfig.implicit_pops();
     qSort(imp);
 
+    QList<int> imp2 = mConfig.implicit_pops_level2();
+    qSort(imp2);
+
     clearInterestingPop();
     int c = 0;
     for (int i = 0; i < imp.size(); ++i) {
@@ -2198,6 +2224,16 @@ bool DisplaceModel::initPopulations()
             ++c;
         }
         ++c;
+    }
+
+    clearInterestingPop2();
+    int c2 = 0;
+    for (int i = 0; i < imp2.size(); ++i) {
+        while (c2 < imp2[i]) {
+            setInterestingPop2(c2);
+            ++c2;
+        }
+        ++c2;
     }
 
     return true;

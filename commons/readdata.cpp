@@ -56,6 +56,7 @@ int read_config_file (string folder_name_parameterization,
     int& nbpops,
     int& nbbenthospops,
     vector<int>& implicit_pops,
+    vector<int>& implicit_pops_level2,
     vector<double>& calib_oth_landings,
     vector<double>& calib_w,
     vector<double>& calib_cpue,
@@ -67,7 +68,8 @@ int read_config_file (string folder_name_parameterization,
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
             {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
-            {9,"calib_weight_at_szgroup"},{11,"calib_cpue_multiplier"},{13,"int_harbours"}
+            {9,"calib_weight_at_szgroup"},{11,"calib_cpue_multiplier"},{13,"int_harbours"},
+            {15,"implicit_pops_level2"},
     };
 
     std::cout << "Reading config file from " << filename << std::endl;
@@ -78,6 +80,7 @@ int read_config_file (string folder_name_parameterization,
     nbpops = reader.getAs<int>("nbpops");
     nbbenthospops= reader.getAs<int>("nbbenthospops");
     implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
+    implicit_pops_level2 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops_level2"), " ");
     calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
     calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
     calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");

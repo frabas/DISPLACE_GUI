@@ -285,14 +285,19 @@ public:
 
     /* Interesting pop access functions */
     const QList<int> &getInterestingPops() const { return mInterestingPop; }
+    const QList<int> &getInterestingPops2() const { return mInterestingPop2; }
 
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingPop(int n);
+    void setInterestingPop2(int n);
 
     /** \brief remove the pop from the list of interest for pops */
     void remInterestingPop(int n);
+    void remInterestingPop2(int n);
     bool isInterestingPop(int n);
+    bool isInterestingPop2(int n);
     void clearInterestingPop();
+    void clearInterestingPop2();
 
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
@@ -450,6 +455,7 @@ private:
     Config mConfig;
 
     QList<int> mInterestingPop;
+    QList<int> mInterestingPop2;
     bool mInterestingSizeTotal, mInterestingSizeAvg, mInterestingSizeMin, mInterestingSizeMax;
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;

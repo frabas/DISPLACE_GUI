@@ -368,6 +368,13 @@ bool DbHelper::loadConfig(Config &cfg)
     }
     cfg.setImplicit_pops(ipops);
 
+    QList<int> ipops_level2;
+    QStringList lsi2 = getMetadata("config::ipops_level2").split(" ");
+    foreach (QString i2, lsi2) {
+        ipops_level2.push_back(i2.toInt());
+    }
+    cfg.setImplicit_pops_level2(ipops_level2);
+
     QList<double> vl;
     lsi = getMetadata("config::calib_oth_landings").split(" ");
     foreach (QString i, lsi) {

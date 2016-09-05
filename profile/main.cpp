@@ -2,7 +2,7 @@
 
 void profile_do_sample();
 
-int main(int argc, char *argv[])
+int main(int, char **)
 {
     profile_do_sample();
 

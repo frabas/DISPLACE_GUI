@@ -33,12 +33,10 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tableView->setModel(mVesselsSpecProxyModel);
 
     QSettings s;
-    ui->shapefilePath->setText(s.value("Vessel_LastShapefilePath").toString());
-    ui->harbourFilePath->setText(s.value("Vessel_LastHarboursPath").toString());
     ui->outputPath->setText(s.value("Vessel_LastOutputPath").toString());
-    ui->outputPath->setText(s.value("Vessel_LastInputPath").toString());
-    ui->outputPath->setText(s.value("Vessel_LastRawPath").toString());
-    ui->outputPath->setText(s.value("Vessel_LastGisPath").toString());
+    ui->inputPath->setText(s.value("Vessel_LastInputPath").toString());
+    ui->gisPath->setText(s.value("Vessel_LastGisPath").toString());
+    ui->applicationName->setText(s.value("Vessel_LastAppName").toString());
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -77,25 +75,31 @@ void VesselEditorMainWindow::on_action_Load_Vessels_Spec_triggered()
 void VesselEditorMainWindow::on_run_clicked()
 {
     displace::vesselsEditor::Settings s;
-    runScript(s.getRunScriptPath());
+    auto script = s.getRunScriptPath();
+
+    if (script.isEmpty() || !QFile(script).exists()) {
+        QMessageBox::warning(this, tr("Run R Scrpt"),
+                             tr("Please select an R Script on the 'script' field above."));
+        return;
+    }
+    runScript(script);
 }
 
 void VesselEditorMainWindow::on_genConfig_clicked()
 {
     displace::vesselsEditor::Settings s;
-    runScript(s.getConfigScriptPath());
-}
+    auto script = s.getConfigScriptPath();
 
-bool VesselEditorMainWindow::runScript(QString scriptName)
-{
-    QSettings s;
-    auto script = s.value(scriptName).toString();
-
-    if (script.isEmpty()) {
+    if (script.isEmpty() || !QFile(script).exists()) {
         QMessageBox::warning(this, tr("Run R Scrpt"),
                              tr("Please select an R Script on the 'script' field above."));
-        return false;
+        return;
     }
+    runScript(script);
+}
+
+bool VesselEditorMainWindow::runScript(QString script)
+{
 
     displace::R::Env env;
 
@@ -187,34 +191,6 @@ void VesselEditorMainWindow::on_actionScripts_location_triggered()
     f.exec();
 }
 
-void VesselEditorMainWindow::on_browseShapefilePath_clicked()
-{
-    QSettings s;
-    QString dir = s.value("Vessel_LastShapefilePath").toString();
-    QFileInfo idir(dir);
-
-    QString path = QFileDialog::getOpenFileName(this, tr("ShapefilePath"), idir.absolutePath(),
-                                                tr("Shapefiles (*.shp)"));
-    if (!path.isEmpty()) {
-        s.setValue("Vessel_LastShapefilePath", path);
-        ui->shapefilePath->setText(path);
-    }
-}
-
-void VesselEditorMainWindow::on_browseHarboursPath_clicked()
-{
-    QSettings s;
-    QString dir = s.value("Vessel_LastHarboursPath").toString();
-    QFileInfo idir(dir);
-
-    QString path = QFileDialog::getOpenFileName(this, tr("Harbours file"), idir.absolutePath(),
-                                                tr("Harbours file (*.dat)"));
-    if (!path.isEmpty()) {
-        s.setValue("Vessel_LastHarboursPath", path);
-        ui->harbourFilePath->setText(path);
-    }
-}
-
 void VesselEditorMainWindow::on_browseOutputPath_clicked()
 {
     QSettings s;
@@ -241,18 +217,6 @@ void VesselEditorMainWindow::on_browseInputPath_clicked()
     }
 }
 
-void VesselEditorMainWindow::on_browseRawPath_clicked()
-{
-    QSettings s;
-    QString dir = s.value("Vessel_LastRawPath").toString();
-    QFileInfo idir(dir);
-
-    QString path = QFileDialog::getExistingDirectory(this, tr("Raw Data Path"), idir.absolutePath());
-    if (!path.isEmpty()) {
-        s.setValue("Vessel_LastRawPath", path);
-        ui->rawPath->setText(path);
-    }
-}
 
 void VesselEditorMainWindow::on_browseGISPath_clicked()
 {

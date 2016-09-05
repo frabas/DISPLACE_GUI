@@ -36,11 +36,8 @@ private slots:
     void on_genConfig_clicked();
     void on_actionRscript_location_triggered();
     void on_actionScripts_location_triggered();
-    void on_browseShapefilePath_clicked();
-    void on_browseHarboursPath_clicked();
     void on_browseOutputPath_clicked();
     void on_browseInputPath_clicked();
-    void on_browseRawPath_clicked();
     void on_browseGISPath_clicked();
 
 private:
@@ -52,7 +49,7 @@ private:
 
     QProcess *mProcess;
 
-    bool runScript(QString scriptName);
+    bool runScript(QString script);
     void checkEnv();
 };
 

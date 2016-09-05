@@ -3,8 +3,8 @@
 
 using namespace displace::vesselsEditor;
 
-const QString Settings::KeyConfigScriptPath = "VesselEditor::ConfigScriptPath";
-const QString Settings::KeyRunScriptPath = "VesselEditor::RunScriptPath";
+const QString Settings::KeyConfigScriptPath = "R::GenerateVesselsConfigFiles.R";
+const QString Settings::KeyRunScriptPath = "R::RunVesselsConfigFiles.R";
 
 QString Settings::getConfigScriptPath()
 {

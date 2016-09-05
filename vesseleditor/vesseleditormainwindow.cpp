@@ -108,17 +108,18 @@ bool VesselEditorMainWindow::runScript(QString scriptName)
 
     QStringList args;
     args << script;
-    /* Scripts are called with the following arguments:
+    /*
+     * Dest_path application input_raw_path gis_path input_application_path
+     *
+     * Scripts are called with the following arguments:
      * # 1: Output Path
-     * # 2: Harbours Path
-     * # 3: Application name ("adriatic")
-     * # 4: Path Param  i.e. point to DISPLACE_input_raw
-     * # 5: Path Param GIS point to DISPLACE_input_gis
-     * # 6: Path Input (IBM) i.e. pointing to displace_input_test
+     * # 2: Application name ("adriatic")
+     * # 3: Path Param GIS point to DISPLACE_input_gis
+     * # 4: Path Input (IBM) i.e. pointing to displace_input_(application)
      */
 
-    args << ui->outputPath->text() << ui->harbourFilePath->text();
-    args << ui->applicationName->text() << ui->rawPath->text();
+    args << ui->outputPath->text();
+    args << ui->applicationName->text();
     args << ui->gisPath->text() << ui->inputPath->text();
 
     mProcess->setEnvironment(env.environment().toStringList());
@@ -236,7 +237,7 @@ void VesselEditorMainWindow::on_browseInputPath_clicked()
     QString path = QFileDialog::getExistingDirectory(this, tr("Input Path"), idir.absolutePath());
     if (!path.isEmpty()) {
         s.setValue("Vessel_LastInputPath", path);
-        ui->outputPath->setText(path);
+        ui->inputPath->setText(path);
     }
 }
 
@@ -249,7 +250,7 @@ void VesselEditorMainWindow::on_browseRawPath_clicked()
     QString path = QFileDialog::getExistingDirectory(this, tr("Raw Data Path"), idir.absolutePath());
     if (!path.isEmpty()) {
         s.setValue("Vessel_LastRawPath", path);
-        ui->outputPath->setText(path);
+        ui->rawPath->setText(path);
     }
 }
 
@@ -262,6 +263,6 @@ void VesselEditorMainWindow::on_browseGISPath_clicked()
     QString path = QFileDialog::getExistingDirectory(this, tr("Gis Data Path"), idir.absolutePath());
     if (!path.isEmpty()) {
         s.setValue("Vessel_LastGisPath", path);
-        ui->outputPath->setText(path);
+        ui->gisPath->setText(path);
     }
 }

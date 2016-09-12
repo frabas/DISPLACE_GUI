@@ -33,7 +33,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tableView->setModel(mVesselsSpecProxyModel);
 
     QSettings s;
-    ui->outputPath->setText(s.value("Vessel_LastOutputPath").toString());
+    ui->iGraph->setText(s.value("Vessel_LastIGraphValue").toString());
     ui->inputPath->setText(s.value("Vessel_LastInputPath").toString());
     ui->gisPath->setText(s.value("Vessel_LastGisPath").toString());
     ui->applicationName->setText(s.value("Vessel_LastAppName").toString());
@@ -116,15 +116,15 @@ bool VesselEditorMainWindow::runScript(QString script)
      * Dest_path application input_raw_path gis_path input_application_path
      *
      * Scripts are called with the following arguments:
-     * # 1: Output Path
-     * # 2: Application name ("adriatic")
-     * # 3: Path Param GIS point to DISPLACE_input_gis
-     * # 4: Path Input (IBM) i.e. pointing to displace_input_(application)
+     * # 1: Application name ("adriatic")
+     * # 2: GIS Path, point to DISPLACE_input_gis
+     * # 3: Application Path (IBM) i.e. pointing to displace_input_(application)
+     * # 4: iGraph Parameter.
      */
 
-    args << ui->outputPath->text();
     args << ui->applicationName->text();
     args << ui->gisPath->text() << ui->inputPath->text();
+    args << ui->iGraph->text();
 
     mProcess->setEnvironment(env.environment().toStringList());
     mProcess->setWorkingDirectory(env.getRScriptHome());
@@ -189,19 +189,6 @@ void VesselEditorMainWindow::on_actionScripts_location_triggered()
 {
     ScriptSelectionForm f;
     f.exec();
-}
-
-void VesselEditorMainWindow::on_browseOutputPath_clicked()
-{
-    QSettings s;
-    QString dir = s.value("Vessel_LastOutputPath").toString();
-    QFileInfo idir(dir);
-
-    QString path = QFileDialog::getExistingDirectory(this, tr("Output Path"), idir.absolutePath());
-    if (!path.isEmpty()) {
-        s.setValue("Vessel_LastOutputPath", path);
-        ui->outputPath->setText(path);
-    }
 }
 
 void VesselEditorMainWindow::on_browseInputPath_clicked()

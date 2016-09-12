@@ -36,7 +36,6 @@ private slots:
     void on_genConfig_clicked();
     void on_actionRscript_location_triggered();
     void on_actionScripts_location_triggered();
-    void on_browseOutputPath_clicked();
     void on_browseInputPath_clicked();
     void on_browseGISPath_clicked();
 

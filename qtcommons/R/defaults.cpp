@@ -13,6 +13,6 @@ QString defaults::getRScriptsPath()
 
 QString defaults::getScriptFileName(const QString &name)
 {
-    return name + ".R";
+    return getRScriptsPath() + "/" + name;
 }
 

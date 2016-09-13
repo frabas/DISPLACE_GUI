@@ -18,6 +18,7 @@ public:
 
     void setScriptBasePath(const QString &path);
     void setScriptPath (const QString &scriptName, const QString &path);
+    void resetScriptPath (const QString &scriptName);
 
     class Scripts {
     public:

@@ -21,6 +21,12 @@ private slots:
     void on_reset_clicked();
     void on_ScriptSelectionForm_accepted();
 
+    void on_browseBasePath_clicked();
+
+    void on_resetConfig_clicked();
+
+    void on_resetRun_clicked();
+
 private:
     Ui::ScriptSelectionForm *ui;
 };

@@ -28,3 +28,8 @@ void Settings::setScriptPath(const QString &scriptName, const QString &path)
     mSettings.setValue("R::" + scriptName, path);
 }
 
+void Settings::resetScriptPath(const QString &scriptName)
+{
+    mSettings.remove("R::" + scriptName);
+}
+

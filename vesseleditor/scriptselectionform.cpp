@@ -1,9 +1,11 @@
 #include "scriptselectionform.h"
 #include "ui_scriptselectionform.h"
 
-#include <defaults.h>
-#include <settings.h>
+#include <R/defaults.h>
+#include <R/settings.h>
 #include <QFileDialog>
+
+using namespace displace;
 
 ScriptSelectionForm::ScriptSelectionForm(QWidget *parent) :
     QDialog(parent),
@@ -11,9 +13,9 @@ ScriptSelectionForm::ScriptSelectionForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    displace::vesselsEditor::Settings s;
-    ui->configPath->setText(s.getConfigScriptPath());
-    ui->runPath->setText(s.getRunScriptPath());
+    R::Settings s;
+    ui->configPath->setText(s.getScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles));
+    ui->runPath->setText(s.getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles));
 }
 
 ScriptSelectionForm::~ScriptSelectionForm()
@@ -23,16 +25,16 @@ ScriptSelectionForm::~ScriptSelectionForm()
 
 void ScriptSelectionForm::on_reset_clicked()
 {
-    ui->configPath->setText(displace::vesselsEditor::getDefaultConfigScriptPath());
-    ui->runPath->setText(displace::vesselsEditor::getDefaultRunScriptPath());
+    ui->configPath->setText(R::defaults::getScriptFileName(R::Settings::Scripts::GenerateVesselsConfigFiles));
+    ui->runPath->setText(R::defaults::getScriptFileName(R::Settings::Scripts::RunVesselsConfigFiles));
 }
 
 void ScriptSelectionForm::on_ScriptSelectionForm_accepted()
 {
-    displace::vesselsEditor::Settings s;
+    R::Settings s;
 
-    s.setConfigScriptPath(ui->configPath->text());
-    s.setRunScriptPath(ui->runPath->text());
+    s.setScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles, ui->configPath->text());
+    s.setScriptPath(R::Settings::Scripts::RunVesselsConfigFiles, ui->runPath->text());
 }
 
 void ScriptSelectionForm::on_browseConfig_clicked()

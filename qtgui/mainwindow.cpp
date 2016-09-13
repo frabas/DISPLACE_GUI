@@ -2355,7 +2355,7 @@ void MainWindow::on_actionTime_Series_Editor_triggered()
 
 void MainWindow::on_actionVessel_Creation_Editor_triggered()
 {
-    auto ed = prepareAppExecutableStart("vesseleditor");
+    auto ed = prepareAppExecutableStart("vsleditor");
     ed->start();
 }
 

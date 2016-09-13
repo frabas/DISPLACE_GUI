@@ -19,7 +19,9 @@ SOURCES += qcustomplot.cpp \
         R/env.cpp \
         csv/csvimporter.cpp \
         csv/csvexporter.cpp \
-        csv/csvtablemodel.cpp
+        csv/csvtablemodel.cpp \
+    R/defaults.cpp \
+    R/settings.cpp
 
 HEADERS +=\
         qtcommons_global.h \
@@ -28,7 +30,9 @@ HEADERS +=\
         csv/csvimporter.h \
         csv/csvexporter.h \
         csv/csvtablemodel.h \
-    qsignalblocker.h
+    qsignalblocker.h \
+    R/defaults.h \
+    R/settings.h
 
 unix {
     target.path = /usr/lib

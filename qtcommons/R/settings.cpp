@@ -5,6 +5,9 @@ using namespace displace::R;
 
 const char *const Settings::BasePathKey = "R::basePath";
 
+const QString Settings::Scripts::GenerateVesselsConfigFiles = "GenerateVesselsConfigFiles.R";
+const QString Settings::Scripts::RunVesselsConfigFiles = "RunVesselsConfigFiles.R";
+
 QString Settings::getScriptBasePath() const
 {
     return mSettings.value(BasePathKey, defaults::getRScriptsPath()).toString();

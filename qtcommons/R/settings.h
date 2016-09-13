@@ -1,5 +1,5 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef R_SETTINGS_H
+#define R_SETTINGS_H
 
 #include <QString>
 #include <QSettings>
@@ -18,9 +18,15 @@ public:
 
     void setScriptBasePath(const QString &path);
     void setScriptPath (const QString &scriptName, const QString &path);
+
+    class Scripts {
+    public:
+        static const QString GenerateVesselsConfigFiles;
+        static const QString RunVesselsConfigFiles;
+    };
 };
 
 }
 }
 
-#endif // SETTINGS_H
+#endif // R_SETTINGS_H

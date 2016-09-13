@@ -1,5 +1,5 @@
-#ifndef DEFAULTS_H
-#define DEFAULTS_H
+#ifndef R_DEFAULTS_H
+#define R_DEFAULTS_H
 
 #include <QString>
 
@@ -8,11 +8,10 @@ namespace R {
 namespace defaults {
 
     QString getRScriptsPath();
-    QString getGenerateVesselsScript();
-    QString getRunVesselsScript();
+    QString getScriptFileName(const QString &name);
 
 }
 }
 }
 
-#endif // DEFAULTS_H
+#endif // R_DEFAULTS_H

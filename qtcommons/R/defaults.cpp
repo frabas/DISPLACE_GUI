@@ -10,12 +10,9 @@ QString defaults::getRScriptsPath()
             + "/GitHub/DISPLACE_R_inputs";
 }
 
-QString defaults::getGenerateVesselsScript()
+
+QString defaults::getScriptFileName(const QString &name)
 {
-    return defaults::getRScriptsPath() + "/GenerateVesselsConfigFiles.R";
+    return name + ".R";
 }
 
-QString defaults::getRunVesselsScript()
-{
-    return defaults::getRScriptsPath() + "/RunVesselsConfigFiles.R";
-}

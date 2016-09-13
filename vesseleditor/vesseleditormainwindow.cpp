@@ -17,6 +17,11 @@
 #include <QProcess>
 #include <QDebug>
 
+#include <defaults.h>
+#include <R/settings.h>
+
+using namespace displace;
+
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorMainWindow)
@@ -33,10 +38,10 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tableView->setModel(mVesselsSpecProxyModel);
 
     QSettings s;
-    ui->iGraph->setText(s.value("Vessel_LastIGraphValue").toString());
-    ui->inputPath->setText(s.value("Vessel_LastInputPath").toString());
-    ui->gisPath->setText(s.value("Vessel_LastGisPath").toString());
-    ui->applicationName->setText(s.value("Vessel_LastAppName").toString());
+    ui->iGraph->setText(s.value("Vessel_LastIGraphValue", vesselsEditor::defaults::getIGraphValue()).toString());
+    ui->inputPath->setText(s.value("Vessel_LastInputPath", vesselsEditor::defaults::getApplicationPath()).toString());
+    ui->gisPath->setText(s.value("Vessel_LastGisPath", vesselsEditor::defaults::getGisDataPath()).toString());
+    ui->applicationName->setText(s.value("Vessel_LastAppName", vesselsEditor::defaults::getApplicationName()).toString());
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()

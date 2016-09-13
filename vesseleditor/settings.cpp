@@ -1,30 +1,27 @@
 #include "settings.h"
 #include <defaults.h>
 
-using namespace displace::vesselsEditor;
+#include <R/settings.h>
 
-const QString Settings::KeyConfigScriptPath = "R::GenerateVesselsConfigFiles.R";
-const QString Settings::KeyRunScriptPath = "R::RunVesselsConfigFiles.R";
+using namespace displace::vesselsEditor;
 
 QString Settings::getConfigScriptPath()
 {
-    return settings.value(KeyConfigScriptPath,
-                          displace::vesselsEditor::getDefaultConfigScriptPath()).toString();
+    return R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles);
 }
 
 void Settings::setConfigScriptPath(const QString &path)
 {
-    settings.setValue(KeyConfigScriptPath, path);
+    R::Settings().setScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles, path);
 }
 
 QString Settings::getRunScriptPath()
 {
-    return settings.value(KeyRunScriptPath,
-                          displace::vesselsEditor::getDefaultRunScriptPath()).toString();
+    return R::Settings().getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles);
 }
 
 void Settings::setRunScriptPath(const QString &path)
 {
-    settings.setValue(KeyRunScriptPath, path);
+    R::Settings().setScriptPath(R::Settings::Scripts::RunVesselsConfigFiles, path);
 }
 

@@ -1,5 +1,5 @@
-#ifndef DEFAULTS_H
-#define DEFAULTS_H
+#ifndef VESSELS_DEFAULTS_H
+#define VESSELS_DEFAULTS_H
 
 #include <QString>
 
@@ -19,4 +19,4 @@ namespace vesselsEditor {
 }
 }
 
-#endif // DEFAULTS_H
+#endif // VESSELS_DEFAULTS_H

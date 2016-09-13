@@ -1,10 +1,15 @@
-#include "defaults.h"
+#include <defaults.h>
+
+#include <R/settings.h>
+#include <R/defaults.h>
 
 #include <QApplication>
 #include <QFile>
 #include <QStandardPaths>
 
-QString displace::vesselsEditor::getScriptsPath()
+using namespace displace;
+
+QString vesselsEditor::getScriptsPath()
 {
 #if !defined( __APPLE__ )
     return QApplication::applicationDirPath() + "/script";
@@ -13,35 +18,35 @@ QString displace::vesselsEditor::getScriptsPath()
 #endif
 }
 
-QString displace::vesselsEditor::getDefaultConfigScriptPath()
+QString vesselsEditor::getDefaultConfigScriptPath()
 {
-    return getScriptsPath() + "/GenerateVesselsConfigFile.R";
+    return R::defaults::getScriptFileName(R::Settings::Scripts::GenerateVesselsConfigFiles);
 }
 
-QString displace::vesselsEditor::getDefaultRunScriptPath()
+QString vesselsEditor::getDefaultRunScriptPath()
 {
-    return getScriptsPath() + "/RunVesselsConfigFiles.R";
+    return R::defaults::getScriptFileName(R::Settings::Scripts::RunVesselsConfigFiles);
 }
 
 
-QString displace::vesselsEditor::defaults::getApplicationName()
+QString vesselsEditor::defaults::getApplicationName()
 {
     return "balticRTI";
 }
 
-QString displace::vesselsEditor::defaults::getApplicationPath()
+QString vesselsEditor::defaults::getApplicationPath()
 {
     return QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]
             + "/GitHub/DISPLACE_input_balticRTI";
 }
 
-QString displace::vesselsEditor::defaults::getGisDataPath()
+QString vesselsEditor::defaults::getGisDataPath()
 {
     return QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]
             + "/GitHub/DISPLACE_input_gis/balticRTI";
 }
 
-QString displace::vesselsEditor::defaults::getIGraphValue()
+QString vesselsEditor::defaults::getIGraphValue()
 {
     return "56";
 }

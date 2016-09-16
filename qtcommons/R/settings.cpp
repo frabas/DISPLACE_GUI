@@ -7,6 +7,8 @@ const char *const Settings::BasePathKey = "R::basePath";
 
 const QString Settings::Scripts::GenerateVesselsConfigFiles = "GenerateVesselsConfigFiles.R";
 const QString Settings::Scripts::RunVesselsConfigFiles = "RunVesselsConfigFiles.R";
+const QString Settings::Scripts::GenerateMetiersVariousFiles = "GenerateMetiersVariousFiles.R";
+const QString Settings::Scripts::GenerateMetiersSelectivityPerStockFiles = "GenerateMetiersSelectivityPerStockFiles.R";
 
 QString Settings::getScriptBasePath() const
 {

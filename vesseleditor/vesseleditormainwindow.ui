@@ -131,18 +131,32 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
            <widget class="QPushButton" name="genConfig">
             <property name="text">
              <string>Generate Config Files</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="0" column="1">
            <widget class="QPushButton" name="run">
             <property name="text">
              <string>Generate Data File</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="genMetVar">
+            <property name="text">
+             <string>Generate Metiers Files</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="genMetSelectivity">
+            <property name="text">
+             <string>Generate Metiers Selectivity per Stock Files</string>
             </property>
            </widget>
           </item>
@@ -246,7 +260,7 @@
      <x>0</x>
      <y>0</y>
      <width>852</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

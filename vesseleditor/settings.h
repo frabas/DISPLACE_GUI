@@ -7,6 +7,8 @@
 namespace displace {
 namespace vesselsEditor {
 
+// TODO remove this class.
+
     class Settings {
         QSettings settings;
     public:

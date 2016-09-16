@@ -24,6 +24,8 @@ public:
     public:
         static const QString GenerateVesselsConfigFiles;
         static const QString RunVesselsConfigFiles;
+        static const QString GenerateMetiersVariousFiles;
+        static const QString GenerateMetiersSelectivityPerStockFiles;
     };
 };
 

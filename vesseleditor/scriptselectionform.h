@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+QT_BEGIN_NAMESPACE
+class QGridLayout;
+QT_END_NAMESPACE
+
 namespace Ui {
 class ScriptSelectionForm;
 }
@@ -16,19 +20,15 @@ public:
     ~ScriptSelectionForm();
 
 private slots:
-    void on_browseConfig_clicked();
-    void on_browseRun_clicked();
     void on_reset_clicked();
     void on_ScriptSelectionForm_accepted();
-
     void on_browseBasePath_clicked();
-
-    void on_resetConfig_clicked();
-
-    void on_resetRun_clicked();
 
 private:
     Ui::ScriptSelectionForm *ui;
+
+    QGridLayout *mGrid;
+    void addDelegate(const QString &label, const QString &key);
 };
 
 #endif // SCRIPTSELECTIONFORM_H

@@ -222,3 +222,15 @@ void VesselEditorMainWindow::on_browseGISPath_clicked()
         ui->gisPath->setText(path);
     }
 }
+
+void VesselEditorMainWindow::on_genMetVar_clicked()
+{
+    auto script = R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles);
+    runScript(script);
+}
+
+void VesselEditorMainWindow::on_genMetSelectivity_clicked()
+{
+    auto script = R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles);
+    runScript(script);
+}

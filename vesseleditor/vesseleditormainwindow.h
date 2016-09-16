@@ -39,6 +39,10 @@ private slots:
     void on_browseInputPath_clicked();
     void on_browseGISPath_clicked();
 
+    void on_genMetVar_clicked();
+
+    void on_genMetSelectivity_clicked();
+
 private:
     Ui::VesselEditorMainWindow *ui;
 

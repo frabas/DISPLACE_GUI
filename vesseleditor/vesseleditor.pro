@@ -36,8 +36,6 @@ LIBS += -L.. -lformats -lqtcommons
 SOURCES += \
     vesseleditor.cpp \
     vesseleditormainwindow.cpp \
-    vesselsspec.cpp \
-    vesselsspecmodel.cpp \
     scriptselectionform.cpp \
     defaults.cpp \
     settings.cpp
@@ -48,8 +46,6 @@ FORMS += \
 
 HEADERS += \
     vesseleditormainwindow.h \
-    vesselsspec.h \
-    vesselsspecmodel.h \
     scriptselectionform.h \
     defaults.h \
     settings.h

@@ -1,8 +1,6 @@
 #include "vesseleditormainwindow.h"
 #include "ui_vesseleditormainwindow.h"
 
-#include <vesselsspec.h>
-#include <vesselsspecmodel.h>
 #include <scriptselectionform.h>
 #include <R/env.h>
 #include <settings.h>

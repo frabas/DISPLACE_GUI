@@ -9,13 +9,12 @@ namespace Ui {
 class VesselEditorMainWindow;
 }
 
+class CsvTableModel;
+
 QT_BEGIN_NAMESPACE
 class QSortFilterProxyModel;
 class QProcess;
 QT_END_NAMESPACE
-
-class VesselsSpec;
-class VesselsSpecModel;
 
 class VesselEditorMainWindow : public QMainWindow
 {
@@ -46,8 +45,8 @@ private slots:
 private:
     Ui::VesselEditorMainWindow *ui;
 
-    std::shared_ptr<VesselsSpec> mVesselsSpec;
-    std::shared_ptr<VesselsSpecModel> mVesselsSpecModel;
+    std::shared_ptr<QList<QStringList>> mData;
+    CsvTableModel *mModel;
     QSortFilterProxyModel *mVesselsSpecProxyModel;
 
     QProcess *mProcess;

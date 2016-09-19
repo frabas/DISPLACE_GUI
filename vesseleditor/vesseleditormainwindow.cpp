@@ -6,6 +6,8 @@
 #include <scriptselectionform.h>
 #include <R/env.h>
 #include <settings.h>
+#include <csv/csvtablemodel.h>
+#include <csv/csvimporter.h>
 
 #include <fstream>
 
@@ -28,13 +30,11 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    mVesselsSpec = std::make_shared<VesselsSpec>();
-    mVesselsSpecModel = std::make_shared<VesselsSpecModel>();
-    mVesselsSpecModel->linkVesselsSpec(mVesselsSpec);
-
+    mData = std::make_shared<QList<QStringList>> ();
+    mModel = new CsvTableModel(mData);
     mVesselsSpecProxyModel = new QSortFilterProxyModel(this);
 
-    mVesselsSpecProxyModel->setSourceModel(mVesselsSpecModel.get());
+    mVesselsSpecProxyModel->setSourceModel(mModel);
     ui->tableView->setModel(mVesselsSpecProxyModel);
 
     QSettings s;
@@ -66,18 +66,16 @@ void VesselEditorMainWindow::on_action_Load_Vessels_Spec_triggered()
         QFileInfo d (fn);
         sets.setValue("vessel_specs_lastpath", d.absoluteFilePath());
 
-        std::ifstream f;
-
-        f.open(fn.toStdString(), std::ios_base::in);
-        if (f.fail()) {
+        try {
+            CsvImporter i;
+            i.setSeparator(QChar(';'));
+            mData = std::make_shared<QList<QStringList>>(i.import(fn));
+            mModel->setSource(mData);
+        } catch (CsvImporter::Exception &x) {
+            QMessageBox::warning(this, tr("Load failed"),
+                                 tr("Cannot load %1: %2").arg(fn).arg(x.what()));
             return;
         }
-
-        if (!mVesselsSpec->loadFromSpecFile(f)) {
-            return;
-        }
-
-        f.close();
     }
 }
 
@@ -198,26 +196,16 @@ void VesselEditorMainWindow::loadCsv()
 {
     QString fn = ui->gisPath->text() + "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
 
-    std::ifstream f;
-
-    f.open(fn.toStdString(), std::ios_base::in);
-    if (f.fail()) {
-        QMessageBox::warning(this, "CSV error",
-                             tr("Cannot load %1: %2").arg(fn).arg(strerror(errno)));
-        return;
-    }
-
     try {
-        if (!mVesselsSpec->loadFromSpecFile(f)) {
-            throw std::runtime_error(strerror(errno));
-        }
-    } catch (std::exception &x) {
-        QMessageBox::warning(this, "CSV error",
+        CsvImporter i;
+        i.setSeparator(QChar(';'));
+        mData = std::make_shared<QList<QStringList>>(i.import(fn));
+        mModel->setSource(mData);
+    } catch (CsvImporter::Exception &x) {
+        QMessageBox::warning(this, tr("Load failed"),
                              tr("Cannot load %1: %2").arg(fn).arg(x.what()));
         return;
     }
-
-    f.close();
 }
 
 void VesselEditorMainWindow::on_actionScripts_location_triggered()

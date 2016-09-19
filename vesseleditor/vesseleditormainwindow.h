@@ -38,10 +38,10 @@ private slots:
     void on_actionScripts_location_triggered();
     void on_browseInputPath_clicked();
     void on_browseGISPath_clicked();
-
     void on_genMetVar_clicked();
-
     void on_genMetSelectivity_clicked();
+    void on_browseBasePath_clicked();
+    void on_tabWidget_currentChanged(int index);
 
 private:
     Ui::VesselEditorMainWindow *ui;
@@ -54,6 +54,7 @@ private:
 
     bool runScript(QString script);
     void checkEnv();
+    void loadCsv();
 };
 
 #endif // VESSELEDITORMAINWINDOW_H

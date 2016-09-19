@@ -38,10 +38,14 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tableView->setModel(mVesselsSpecProxyModel);
 
     QSettings s;
+    ui->scriptsPath->setText(R::Settings().getScriptBasePath());
+
     ui->iGraph->setText(s.value("Vessel_LastIGraphValue", vesselsEditor::defaults::getIGraphValue()).toString());
     ui->inputPath->setText(s.value("Vessel_LastInputPath", vesselsEditor::defaults::getApplicationPath()).toString());
     ui->gisPath->setText(s.value("Vessel_LastGisPath", vesselsEditor::defaults::getGisDataPath()).toString());
     ui->applicationName->setText(s.value("Vessel_LastAppName", vesselsEditor::defaults::getApplicationName()).toString());
+
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -190,6 +194,32 @@ void VesselEditorMainWindow::checkEnv()
     }
 }
 
+void VesselEditorMainWindow::loadCsv()
+{
+    QString fn = ui->gisPath->text() + "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
+
+    std::ifstream f;
+
+    f.open(fn.toStdString(), std::ios_base::in);
+    if (f.fail()) {
+        QMessageBox::warning(this, "CSV error",
+                             tr("Cannot load %1: %2").arg(fn).arg(strerror(errno)));
+        return;
+    }
+
+    try {
+        if (!mVesselsSpec->loadFromSpecFile(f)) {
+            throw std::runtime_error(strerror(errno));
+        }
+    } catch (std::exception &x) {
+        QMessageBox::warning(this, "CSV error",
+                             tr("Cannot load %1: %2").arg(fn).arg(x.what()));
+        return;
+    }
+
+    f.close();
+}
+
 void VesselEditorMainWindow::on_actionScripts_location_triggered()
 {
     ScriptSelectionForm f;
@@ -234,3 +264,23 @@ void VesselEditorMainWindow::on_genMetSelectivity_clicked()
     auto script = R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles);
     runScript(script);
 }
+
+void VesselEditorMainWindow::on_browseBasePath_clicked()
+{
+    QString file = QFileDialog::getExistingDirectory(this, tr("Select Base Scripts Path"), ui->scriptsPath->text());
+    if (!file.isEmpty()) {
+        ui->scriptsPath->setText(file);
+    }
+}
+
+void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
+{
+    switch (index) {
+    default:
+        break;
+    case 1:
+        loadCsv();
+        break;
+    }
+}
+

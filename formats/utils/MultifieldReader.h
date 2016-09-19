@@ -36,7 +36,7 @@ namespace displace {
                             std::get<I>(tuple) = boost::lexical_cast<typename std::tuple_element<I, std::tuple<Ts...> >::type >(vec[I]);
                     } catch (boost::bad_lexical_cast &x) {
                         std::ostringstream ss;
-                        ss << x.what() << " fld: " << I;
+                        ss << x.what() << " fld: " << I << " (" << vec[I] << ")";
                         throw std::runtime_error(ss.str());
                     }
 

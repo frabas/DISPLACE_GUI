@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -136,43 +136,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="genConfig">
-            <property name="text">
-             <string>Generate Config Files</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="run">
-            <property name="text">
-             <string>Generate Data File</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="genMetVar">
-            <property name="text">
-             <string>Generate Metiers Files</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="genMetSelectivity">
-            <property name="text">
-             <string>Generate Metiers Selectivity per Stock Files</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QPlainTextEdit" name="log">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <widget class="RunScriptsPage" name="vesselsScriptsPage" native="true"/>
         </item>
        </layout>
       </widget>
@@ -256,12 +220,15 @@
    <header>csvspecspage.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>RunScriptsPage</class>
+   <extends>QWidget</extends>
+   <header>runscriptspage.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>genConfig</tabstop>
-  <tabstop>run</tabstop>
-  <tabstop>log</tabstop>
  </tabstops>
  <resources/>
  <connections/>

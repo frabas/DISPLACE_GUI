@@ -10,6 +10,12 @@ const QString Settings::Scripts::RunVesselsConfigFiles = "RunVesselsConfigFiles.
 const QString Settings::Scripts::GenerateMetiersVariousFiles = "GenerateMetiersVariousFiles.R";
 const QString Settings::Scripts::GenerateMetiersSelectivityPerStockFiles = "GenerateMetiersSelectivityPerStockFiles.R";
 
+const QString Settings::Scripts::GenerateVesselFishingEffort = "GenerateVesselsFishingEffortGISLayers.R";
+const QString Settings::Scripts::GeneratePopAvailFromSurveys = "";
+const QString Settings::Scripts::RunPopulationsConfigFiles = "RunPopulationsConfigFiles.R";
+const QString Settings::Scripts::GeneratePopAvailGisLayers = "GeneratePopulationsAvaiGISLayersFromStockAvai.R";
+const QString Settings::Scripts::GeneratePopFeatures = "GeneratePopulationsFeatures.R";
+
 QString Settings::getScriptBasePath() const
 {
     return mSettings.value(BasePathKey, defaults::getRScriptsPath()).toString();

@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -130,7 +130,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabConfig">
+      <widget class="QWidget" name="tabVesselsScript">
        <attribute name="title">
         <string>Vessels Scripts</string>
        </attribute>
@@ -140,7 +140,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tabPopSpecs">
        <attribute name="title">
         <string>Populations Specs</string>
        </attribute>
@@ -150,7 +150,7 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
-          <widget class="QWidget" name="tab_2">
+          <widget class="QWidget" name="tabPopSpecs1">
            <attribute name="title">
             <string>Specs 1</string>
            </attribute>
@@ -160,7 +160,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab_3">
+          <widget class="QWidget" name="tabPopSpecs2">
            <attribute name="title">
             <string>Specs 2</string>
            </attribute>
@@ -170,7 +170,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab_4">
+          <widget class="QWidget" name="tabPopSpecs3">
            <attribute name="title">
             <string>Specs 3</string>
            </attribute>
@@ -181,6 +181,16 @@
            </layout>
           </widget>
          </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabPopScripts">
+       <attribute name="title">
+        <string>Populations Scripts</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_9">
+        <item>
+         <widget class="RunScriptsPage" name="popScriptsPage" native="true"/>
         </item>
        </layout>
       </widget>

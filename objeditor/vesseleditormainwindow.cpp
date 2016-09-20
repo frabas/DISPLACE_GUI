@@ -24,9 +24,9 @@ using namespace displace;
 const QString VesselEditorMainWindow::VesselsSpecFilename = "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
 
 // TODO assign more generic names...
-const QString VesselEditorMainWindow::Pop1SpecFilename = "/POPULATIONS/DISPLACE_datainput_abundances_at_age_Baltic_22-32_2015.csv";
-const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/DISPLACE_datainput_DATRAS_CPUE_all_sp_per_length_per_haul_BITS_2013_2014_2015.csv";
-const QString VesselEditorMainWindow::Pop3SpecFilename = "/POPULATIONS/DISPLACE_datainput_stock_parameters_Baltic_22-32.csv";
+const QString VesselEditorMainWindow::Pop1SpecFilename = "/POPULATIONS/Stock_abundances_at_age.csv";
+const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/Stock_spatial_research_survey_vessel_data.csv";
+const QString VesselEditorMainWindow::Pop3SpecFilename = "/POPULATIONS/Stock_biological_traits.csv";
 
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -45,9 +45,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     ui->popSpecsTab->setCurrentIndex(0);
 
-    ui->popSpecs1->setSeparator(QChar(','));
-    ui->popSpecs2->setSeparator(QChar(','));
-    ui->popSpecs3->setSeparator(QChar(','));
+    ui->popSpecs1->setSeparator(QChar(';'));
+    ui->popSpecs2->setSeparator(QChar(';'));
+    ui->popSpecs3->setSeparator(QChar(';'));
 
     auto func = [this](QStringList &args) {
         fillRScriptsArgs(args);

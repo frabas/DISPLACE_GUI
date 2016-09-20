@@ -17,6 +17,7 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
 
     mData = std::make_shared<QList<QStringList>> ();
     mModel = new CsvTableModel(mData);
+    mModel->setFirstLineHeaders(true);
     mVesselsSpecProxyModel = new QSortFilterProxyModel(this);
 
     mVesselsSpecProxyModel->setSourceModel(mModel);

@@ -4,13 +4,19 @@ CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = vsleditor
+TARGET = objeditor
 
 INCLUDEPATH+=../include/  ../formats ../qtcommons/
 
 include ("$$top_srcdir/localconfig.pri")
 
-DESTDIR = ../
+win32 {
+    DESTDIR = ..
+}
+!win32 {
+    DESTDIR = ../bin
+}
+
 macx {
     DESTDIR=$$EXEDESTDIR
     CONFIG -= app_bundle
@@ -28,7 +34,7 @@ macx {
 }
 
 win32 {
-    RC_FILE = vesseleditor.rc
+    RC_FILE = objeditor.rc
 }
 
 LIBS += -L.. -lformats -lqtcommons
@@ -54,7 +60,7 @@ RESOURCES += \
     vesseleditor.qrc
 
 OTHER_FILES += \
-    vesseleditor.rc
+    objeditor.rc
 
 TRANSLATIONS +=
 

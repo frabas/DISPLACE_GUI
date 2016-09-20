@@ -31,13 +31,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    mData = std::make_shared<QList<QStringList>> ();
-    mModel = new CsvTableModel(mData);
-    mVesselsSpecProxyModel = new QSortFilterProxyModel(this);
-
-    mVesselsSpecProxyModel->setSourceModel(mModel);
-    ui->tableView->setModel(mVesselsSpecProxyModel);
-
     QSettings s;
     ui->scriptsPath->setText(R::Settings().getScriptBasePath());
 
@@ -52,32 +45,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 VesselEditorMainWindow::~VesselEditorMainWindow()
 {
     delete ui;
-}
-
-void VesselEditorMainWindow::on_action_Load_Vessels_Spec_triggered()
-{
-    QSettings sets;
-    QString lastpath;
-
-    lastpath = sets.value("vessel_specs_lastpath", QDir::homePath()).toString();
-
-    QString fn = QFileDialog::getOpenFileName(this, tr("Get Vessel Spec File"), lastpath);
-
-    if (!fn.isEmpty()) {
-        QFileInfo d (fn);
-        sets.setValue("vessel_specs_lastpath", d.absoluteFilePath());
-
-        try {
-            CsvImporter i;
-            i.setSeparator(QChar(';'));
-            mData = std::make_shared<QList<QStringList>>(i.import(fn));
-            mModel->setSource(mData);
-        } catch (CsvImporter::Exception &x) {
-            QMessageBox::warning(this, tr("Load failed"),
-                                 tr("Cannot load %1: %2").arg(fn).arg(x.what()));
-            return;
-        }
-    }
 }
 
 void VesselEditorMainWindow::on_run_clicked()
@@ -193,44 +160,6 @@ void VesselEditorMainWindow::checkEnv()
     }
 }
 
-void VesselEditorMainWindow::loadCsv()
-{
-    QString fn = ui->gisPath->text() + VesselsSpecFilename;
-
-    try {
-        CsvImporter i;
-        i.setSeparator(QChar(';'));
-        mData = std::make_shared<QList<QStringList>>(i.import(fn));
-        mModel->setSource(mData);
-    } catch (CsvImporter::Exception &x) {
-        QMessageBox::warning(this, tr("Load failed"),
-                             tr("Cannot load %1: %2").arg(fn).arg(x.what()));
-        return;
-    }
-}
-
-void VesselEditorMainWindow::saveCsv()
-{
-    if (mData == nullptr)
-        return;
-
-    QString fn = ui->gisPath->text() + VesselsSpecFilename;
-
-    try {
-        CsvExporter ex;
-        ex.setSeparator(QChar(';'));
-        ex.exportFile(fn, *mData);
-    } catch (CsvImporter::Exception &x) {
-        QMessageBox::warning(this, tr("Save failed"),
-                             tr("Cannot save %1: %2").arg(fn).arg(x.what()));
-        return;
-    }
-
-    QMessageBox::information(this, tr("Save Csv"),
-                         tr("File successfully saved to %1").arg(fn));
-
-}
-
 void VesselEditorMainWindow::on_actionScripts_location_triggered()
 {
     ScriptSelectionForm f;
@@ -290,13 +219,8 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     default:
         break;
     case 1:
-        loadCsv();
+        ui->vesselsCsvPage->setFilename(ui->gisPath->text() + VesselsSpecFilename);
+        ui->vesselsCsvPage->load();
         break;
     }
-}
-
-
-void VesselEditorMainWindow::on_saveCsv_clicked()
-{
-    saveCsv();
 }

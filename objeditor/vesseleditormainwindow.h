@@ -32,7 +32,6 @@ private slots:
     void readError();
     void processExit(int);
 
-    void on_action_Load_Vessels_Spec_triggered();
     void on_run_clicked();
     void on_genConfig_clicked();
     void on_actionRscript_location_triggered();
@@ -43,21 +42,14 @@ private slots:
     void on_genMetSelectivity_clicked();
     void on_browseBasePath_clicked();
     void on_tabWidget_currentChanged(int index);
-    void on_saveCsv_clicked();
 
 private:
     Ui::VesselEditorMainWindow *ui;
-
-    std::shared_ptr<QList<QStringList>> mData;
-    CsvTableModel *mModel;
-    QSortFilterProxyModel *mVesselsSpecProxyModel;
 
     QProcess *mProcess;
 
     bool runScript(QString script);
     void checkEnv();
-    void loadCsv();
-    void saveCsv();
 };
 
 #endif // VESSELEDITORMAINWINDOW_H

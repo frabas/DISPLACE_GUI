@@ -44,17 +44,20 @@ SOURCES += \
     vesseleditormainwindow.cpp \
     scriptselectionform.cpp \
     defaults.cpp \
-    settings.cpp
+    settings.cpp \
+    csvspecspage.cpp
 
 FORMS += \
     vesseleditormainwindow.ui \
-    scriptselectionform.ui
+    scriptselectionform.ui \
+    csvspecspage.ui
 
 HEADERS += \
     vesseleditormainwindow.h \
     scriptselectionform.h \
     defaults.h \
-    settings.h
+    settings.h \
+    csvspecspage.h
 
 RESOURCES += \
     vesseleditor.qrc

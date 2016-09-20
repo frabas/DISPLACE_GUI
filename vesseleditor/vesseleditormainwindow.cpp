@@ -6,6 +6,7 @@
 #include <settings.h>
 #include <csv/csvtablemodel.h>
 #include <csv/csvimporter.h>
+#include <csv/csvexporter.h>
 
 #include <fstream>
 
@@ -21,6 +22,8 @@
 #include <R/settings.h>
 
 using namespace displace;
+
+const QString VesselEditorMainWindow::VesselsSpecFilename = "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
 
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -192,7 +195,7 @@ void VesselEditorMainWindow::checkEnv()
 
 void VesselEditorMainWindow::loadCsv()
 {
-    QString fn = ui->gisPath->text() + "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
+    QString fn = ui->gisPath->text() + VesselsSpecFilename;
 
     try {
         CsvImporter i;
@@ -204,6 +207,28 @@ void VesselEditorMainWindow::loadCsv()
                              tr("Cannot load %1: %2").arg(fn).arg(x.what()));
         return;
     }
+}
+
+void VesselEditorMainWindow::saveCsv()
+{
+    if (mData == nullptr)
+        return;
+
+    QString fn = ui->gisPath->text() + VesselsSpecFilename;
+
+    try {
+        CsvExporter ex;
+        ex.setSeparator(QChar(';'));
+        ex.exportFile(fn, *mData);
+    } catch (CsvImporter::Exception &x) {
+        QMessageBox::warning(this, tr("Save failed"),
+                             tr("Cannot save %1: %2").arg(fn).arg(x.what()));
+        return;
+    }
+
+    QMessageBox::information(this, tr("Save Csv"),
+                         tr("File successfully saved to %1").arg(fn));
+
 }
 
 void VesselEditorMainWindow::on_actionScripts_location_triggered()
@@ -270,3 +295,8 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     }
 }
 
+
+void VesselEditorMainWindow::on_saveCsv_clicked()
+{
+    saveCsv();
+}

@@ -24,6 +24,8 @@ public:
     explicit VesselEditorMainWindow(QWidget *parent = 0);
     ~VesselEditorMainWindow();
 
+    static const QString VesselsSpecFilename;
+
 private slots:
     void processStarted();
     void readOutput();
@@ -41,6 +43,7 @@ private slots:
     void on_genMetSelectivity_clicked();
     void on_browseBasePath_clicked();
     void on_tabWidget_currentChanged(int index);
+    void on_saveCsv_clicked();
 
 private:
     Ui::VesselEditorMainWindow *ui;
@@ -54,6 +57,7 @@ private:
     bool runScript(QString script);
     void checkEnv();
     void loadCsv();
+    void saveCsv();
 };
 
 #endif // VESSELEDITORMAINWINDOW_H

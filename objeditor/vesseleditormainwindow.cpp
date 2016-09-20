@@ -25,6 +25,11 @@ using namespace displace;
 
 const QString VesselEditorMainWindow::VesselsSpecFilename = "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
 
+// TODO assign more generic names...
+const QString VesselEditorMainWindow::Pop1SpecFilename = "/POPULATIONS/DISPLACE_datainput_abundances_at_age_Baltic_22-32_2015.csv";
+const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/DISPLACE_datainput_DATRAS_CPUE_all_sp_per_length_per_haul_BITS_2013_2014_2015.csv";
+const QString VesselEditorMainWindow::Pop3SpecFilename = "/POPULATIONS/DISPLACE_datainput_stock_parameters_Baltic_22-32.csv";
+
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorMainWindow)
@@ -40,6 +45,11 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->applicationName->setText(s.value("Vessel_LastAppName", vesselsEditor::defaults::getApplicationName()).toString());
 
     ui->tabWidget->setCurrentIndex(0);
+    ui->popSpecsTab->setCurrentIndex(0);
+
+    ui->popSpecs1->setSeparator(QChar(','));
+    ui->popSpecs2->setSeparator(QChar(','));
+    ui->popSpecs3->setSeparator(QChar(','));
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -221,6 +231,14 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 1:
         ui->vesselsCsvPage->setFilename(ui->gisPath->text() + VesselsSpecFilename);
         ui->vesselsCsvPage->load();
+        break;
+    case 3:
+        ui->popSpecs1->setFilename(ui->gisPath->text() + Pop1SpecFilename);
+        ui->popSpecs1->load();
+        ui->popSpecs2->setFilename(ui->gisPath->text() + Pop2SpecFilename);
+        ui->popSpecs2->load();
+        ui->popSpecs3->setFilename(ui->gisPath->text() + Pop3SpecFilename);
+        ui->popSpecs3->load();
         break;
     }
 }

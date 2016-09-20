@@ -25,6 +25,9 @@ public:
     ~VesselEditorMainWindow();
 
     static const QString VesselsSpecFilename;
+    static const QString Pop1SpecFilename;
+    static const QString Pop2SpecFilename;
+    static const QString Pop3SpecFilename;
 
 private slots:
     void processStarted();

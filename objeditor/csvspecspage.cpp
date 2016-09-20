@@ -11,7 +11,7 @@
 CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CsvSpecsPage),
-    mFilename()
+    mFilename(), mSeparator(';')
 {
     ui->setupUi(this);
 
@@ -32,7 +32,7 @@ void CsvSpecsPage::load()
 {
     try {
         CsvImporter i;
-        i.setSeparator(QChar(';'));
+        i.setSeparator(mSeparator);
         mData = std::make_shared<QList<QStringList>>(i.import(mFilename));
         mModel->setSource(mData);
 
@@ -52,7 +52,7 @@ void CsvSpecsPage::save()
 
     try {
         CsvExporter ex;
-        ex.setSeparator(QChar(';'));
+        ex.setSeparator(mSeparator);
         ex.exportFile(mFilename, *mData);
     } catch (CsvImporter::Exception &x) {
         QMessageBox::warning(this, tr("Save failed"),

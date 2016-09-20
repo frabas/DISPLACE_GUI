@@ -29,11 +29,15 @@ public:
     void setFilename(QString n) {
         mFilename = n;
     }
+    void setSeparator(QChar sep) {
+        mSeparator = sep;
+    }
 
 private:
     Ui::CsvSpecsPage *ui;
 
     QString mFilename;
+    QChar mSeparator;
 
     std::shared_ptr<QList<QStringList>> mData;
     CsvTableModel *mModel;

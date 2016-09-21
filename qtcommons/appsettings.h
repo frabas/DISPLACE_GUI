@@ -17,6 +17,7 @@ public:
 
     static void initialize();
 
+    static const QString MapCenterPoint;
 };
 
 }

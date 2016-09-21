@@ -23,6 +23,7 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 
+#include <appsettings.h>
 #include <vesseleditormainwindow.h>
 
 #include <gdal/ogr_core.h>
@@ -30,9 +31,7 @@
 
 int main (int argc, char *argv[])
 {
-    QCoreApplication::setOrganizationName("DTUAqua");
-    QCoreApplication::setOrganizationDomain("dtu.aqua.dk");
-    QCoreApplication::setApplicationName("vesseleditor");
+    displace::AppSettings::initialize();
 
     QApplication app(argc, argv);
 

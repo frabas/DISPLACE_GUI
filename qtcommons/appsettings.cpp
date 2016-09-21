@@ -1,6 +1,7 @@
 #include "appsettings.h"
 
 #include <QPointF>
+#include <QCoreApplication>
 
 using namespace displace;
 
@@ -21,3 +22,9 @@ void AppSettings::setMapCenterPoint(const QPointF &point)
     settings.setValue(MapCenterPoint, point);
 }
 
+void AppSettings::initialize()
+{
+    QCoreApplication::setOrganizationName("DTUAqua");
+    QCoreApplication::setOrganizationDomain("dtu.aqua.dk");
+    QCoreApplication::setApplicationName("vesseleditor");
+}

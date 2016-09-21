@@ -20,6 +20,7 @@
 
 #include "mainwindow.h"
 
+#include <appsettings.h>
 #include <QCoreApplication>
 #include <QApplication>
 #include <ipcqueue.h>
@@ -32,11 +33,9 @@
 
 int main (int argc, char *argv[])
 {
-    OGRRegisterAll();
+    displace::AppSettings::initialize();
 
-    QCoreApplication::setOrganizationName("Studiofuga");
-    QCoreApplication::setOrganizationDomain("studiofuga.com");
-    QCoreApplication::setApplicationName("displace");
+    OGRRegisterAll();
 
     // Cleanup the shm objets
     IpcQueue::forceCleanup();

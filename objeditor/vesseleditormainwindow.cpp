@@ -70,6 +70,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popScriptsPage->addScriptButton(tr("Run Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunPopulationsConfigFiles), func);
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Avail GIS layer"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailGisLayers), func);
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func);
+    ui->popScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters"), R::Settings().getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func);
 
     // setup map
     auto center = AppSettings().getMapCenterPoint();

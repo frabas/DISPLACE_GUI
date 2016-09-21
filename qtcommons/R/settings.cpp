@@ -15,6 +15,7 @@ const QString Settings::Scripts::GeneratePopAvailFromSurveys = "";
 const QString Settings::Scripts::RunPopulationsConfigFiles = "RunPopulationsConfigFiles.R";
 const QString Settings::Scripts::GeneratePopAvailGisLayers = "GeneratePopulationsAvaiGISLayersFromStockAvai.R";
 const QString Settings::Scripts::GeneratePopFeatures = "GeneratePopulationsFeatures.R";
+const QString Settings::Scripts::OverwriteCatchEquationParameters = "OverwriteCatchEquationParameters.R";
 
 QString Settings::getScriptBasePath() const
 {

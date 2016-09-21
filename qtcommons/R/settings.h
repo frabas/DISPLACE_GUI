@@ -32,6 +32,7 @@ public:
         static const QString RunPopulationsConfigFiles;
         static const QString GeneratePopAvailGisLayers;
         static const QString GeneratePopFeatures;
+        static const QString OverwriteCatchEquationParameters;
     };
 };
 

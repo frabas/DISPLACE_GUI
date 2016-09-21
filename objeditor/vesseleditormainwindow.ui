@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -120,29 +120,9 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabVessels">
-       <attribute name="title">
-        <string>Vessels Specifications</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="CsvSpecsPage" name="vesselsCsvPage" native="true"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tabVesselsScript">
-       <attribute name="title">
-        <string>Vessels Scripts</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="RunScriptsPage" name="vesselsScriptsPage" native="true"/>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="tabPopSpecs">
        <attribute name="title">
-        <string>Populations Specs</string>
+        <string>Populations Specifications</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -204,6 +184,26 @@
        <layout class="QVBoxLayout" name="verticalLayout_9">
         <item>
          <widget class="RunScriptsPage" name="popScriptsPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabVessels">
+       <attribute name="title">
+        <string>Vessels Specifications</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="CsvSpecsPage" name="vesselsCsvPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabVesselsScript">
+       <attribute name="title">
+        <string>Vessels Scripts</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="RunScriptsPage" name="vesselsScriptsPage" native="true"/>
         </item>
        </layout>
       </widget>

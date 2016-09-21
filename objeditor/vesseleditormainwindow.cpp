@@ -62,8 +62,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->vesselsScriptsPage->addScriptButton(tr("Generate Data Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles), func);
     ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles), func);
     ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Selectivity per Stock Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles), func);
+    ui->vesselsScriptsPage->addScriptButton(tr("Generate Vessels Fishing Effort GIS layers"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselFishingEffort), func);
 
-    ui->popScriptsPage->addScriptButton(tr("Generate Vessels Fishing Effort GIS layers"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselFishingEffort), func);
     ui->popScriptsPage->addScriptButton(tr("Generate Pop Avail from Surveys"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailFromSurveys), func);
     ui->popScriptsPage->addScriptButton(tr("Run Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunPopulationsConfigFiles), func);
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Avail GIS layer"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailGisLayers), func);
@@ -125,11 +125,11 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     switch (index) {
     default:
         break;
-    case 1:
+    case 3:     // Vessels Specifications
         ui->vesselsCsvPage->setFilename(ui->gisPath->text() + VesselsSpecFilename);
         ui->vesselsCsvPage->load();
         break;
-    case 3:
+    case 1:     // Populations Specifications
         ui->popSpecs1->setFilename(ui->gisPath->text() + Pop1SpecFilename);
         ui->popSpecs1->load();
         ui->popSpecs2->setFilename(ui->gisPath->text() + Pop2SpecFilename);

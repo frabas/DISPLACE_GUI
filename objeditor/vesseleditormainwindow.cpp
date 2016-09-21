@@ -9,6 +9,11 @@
 
 #include <fstream>
 
+#include <Layer.h>
+#include <LayerMapAdapter.h>
+#include <MapAdapterOSM.h>
+#include <MapAdapterOpenSeaMap.h>
+
 #include <QFileDialog>
 #include <QSettings>
 #include <QFileInfo>
@@ -63,6 +68,14 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popScriptsPage->addScriptButton(tr("Run Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunPopulationsConfigFiles), func);
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Avail GIS layer"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailGisLayers), func);
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func);
+
+    // setup map
+    ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
+    ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+
+    ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
+    ui->popShapefilesMap->setZoom(7);
+
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()

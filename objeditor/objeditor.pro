@@ -17,6 +17,39 @@ win32 {
     DESTDIR = ../bin
 }
 
+include ("$$top_srcdir/QMapControl/QMapControl/QMapControl.pri")
+
+INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
+
+QMAPCONTROL_LIB=qmapcontrol
+CONFIG(debug,release|debug) {
+    DEFINES += DEBUG
+    QMAPCONTROL_LIB=qmapcontrold
+}
+CONFIG(release,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrol
+}
+win32 {
+    QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+    CGAL_LIBS= -lCGAL -lgmp -lboost_system-mgw49-mt-1_57
+}
+
+unix {
+    CGAL_LIBS= -lCGAL -lgmp
+}
+
+
+LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
+
+# Add GDAL library path and library (windows).
+win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
+
+# Add GDAL library path and library (unix).
+unix:LIBS += -lgdal
+
+macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
+
+
 macx {
     DESTDIR=$$EXEDESTDIR
     CONFIG -= app_bundle

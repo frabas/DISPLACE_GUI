@@ -18,10 +18,15 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
     mData = std::make_shared<QList<QStringList>> ();
     mModel = new CsvTableModel(mData);
     mModel->setFirstLineHeaders(true);
+
+#if QT_VERSION > 0x050500
     mVesselsSpecProxyModel = new QSortFilterProxyModel(this);
 
     mVesselsSpecProxyModel->setSourceModel(mModel);
     ui->tableView->setModel(mVesselsSpecProxyModel);
+#else
+    ui->tableView->setModel(mModel);
+#endif
 }
 
 CsvSpecsPage::~CsvSpecsPage()

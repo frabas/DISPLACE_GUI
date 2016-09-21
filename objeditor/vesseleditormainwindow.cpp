@@ -25,6 +25,8 @@
 #include <defaults.h>
 #include <R/settings.h>
 
+#include <appsettings.h>
+
 using namespace displace;
 
 const QString VesselEditorMainWindow::VesselsSpecFilename = "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
@@ -70,16 +72,18 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func);
 
     // setup map
+    auto center = AppSettings().getMapCenterPoint();
+
     ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
-    ui->vesselsShapefileMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
+    ui->vesselsShapefileMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->vesselsShapefileMap->setZoom(7);
 
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
-    ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
+    ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->popShapefilesMap->setZoom(7);
 
     mVesMapListAdapter = new MapListAdapter(ui->vesselsShapefileMap);

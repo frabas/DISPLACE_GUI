@@ -42,6 +42,8 @@
 
 #include <QTextEdit>
 
+#include <appsettings.h>
+
 /* If defined, CONFIG_ALLOW_MULTIPLE_DETAILS_WINDOWS allows opening more than one Details window.
  */
 #undef CONFIG_ALLOW_MULTIPLE_DETAILS_WINDOWS
@@ -73,8 +75,8 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMap->addLayer(mWidgetLayer);
     mMap->addLayer(mEditorLayer);
 
-    //mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(11.54105,54.49299)); // should be eventually made as a option
-    mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
+    auto center = displace::AppSettings().getMapCenterPoint();
+    mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     mMap->setZoom(10);
 
     connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));

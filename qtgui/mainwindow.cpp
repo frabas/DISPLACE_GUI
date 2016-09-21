@@ -50,6 +50,7 @@
 #include <utils/mrupathmanager.h>
 #include <utils/displaceexception.h>
 #include <calendar.h>
+#include <appsettings.h>
 
 #include <algo/isolatedsubgraphchecker.h>
 #include <workers/shortestpathbuilderworker.h>
@@ -2484,4 +2485,10 @@ void MainWindow::on_actionShortest_Path_to_Binary_triggered()
             QMessageBox::warning(this, tr("Graph conversion"), tr("%1 Errors occurred converting files").arg(errors.size()) );
         }
     }
+}
+
+void MainWindow::on_action_Record_Current_Map_Position_triggered()
+{
+    auto pt = map->mapFocusPointCoord();
+    displace::AppSettings().setMapCenterPoint(QPointF(pt.longitude(), pt.latitude()));
 }

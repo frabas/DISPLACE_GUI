@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -193,7 +193,37 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="CsvSpecsPage" name="vesselsCsvPage" native="true"/>
+         <widget class="QTabWidget" name="tabWidget_2">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tabVesselsSpecs">
+           <attribute name="title">
+            <string>Vessels Specs</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="CsvSpecsPage" name="vesselsCsvPage" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabVesselsShapefiles">
+           <attribute name="title">
+            <string>Shapefiles</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+            <item>
+             <widget class="QListView" name="vesselsShapefileList"/>
+            </item>
+            <item>
+             <widget class="qmapcontrol::QMapControl" name="vesselsShapefileMap" native="true"/>
+            </item>
+           </layout>
+           <zorder>vesselsCsvPage</zorder>
+           <zorder>vesselsShapefileMap</zorder>
+           <zorder>vesselsShapefileList</zorder>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>

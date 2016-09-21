@@ -70,14 +70,23 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func);
 
     // setup map
+    ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
+    ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+
+    ui->vesselsShapefileMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
+    ui->vesselsShapefileMap->setZoom(7);
+
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
     ui->popShapefilesMap->setZoom(7);
 
-    mMapListAdapter = new MapListAdapter(ui->popShapefilesMap);
-    ui->popShapefilesList->setModel(mMapListAdapter);
+    mVesMapListAdapter = new MapListAdapter(ui->vesselsShapefileMap);
+    ui->vesselsShapefileList->setModel(mVesMapListAdapter);
+
+    mPopMapListAdapter = new MapListAdapter(ui->popShapefilesMap);
+    ui->popShapefilesList->setModel(mPopMapListAdapter);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -128,6 +137,9 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 3:     // Vessels Specifications
         ui->vesselsCsvPage->setFilename(ui->gisPath->text() + VesselsSpecFilename);
         ui->vesselsCsvPage->load();
+        mVesMapListAdapter->clearPaths();
+        mVesMapListAdapter->addPath(ui->gisPath->text() + "/FISHERIES/SpatialLayers/");
+        mVesMapListAdapter->refresh();
         break;
     case 1:     // Populations Specifications
         ui->popSpecs1->setFilename(ui->gisPath->text() + Pop1SpecFilename);
@@ -136,10 +148,9 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->popSpecs2->load();
         ui->popSpecs3->setFilename(ui->gisPath->text() + Pop3SpecFilename);
         ui->popSpecs3->load();
-        mMapListAdapter->clearPaths();
-        mMapListAdapter->addPath(ui->gisPath->text() + "/FISHERIES/SpatialLayers/");
-        mMapListAdapter->addPath(ui->gisPath->text() + "/POPULATIONS/spatialLayers/");
-        mMapListAdapter->refresh();
+        mPopMapListAdapter->clearPaths();
+        mPopMapListAdapter->addPath(ui->gisPath->text() + "/POPULATIONS/spatialLayers/");
+        mPopMapListAdapter->refresh();
         break;
     }
 }

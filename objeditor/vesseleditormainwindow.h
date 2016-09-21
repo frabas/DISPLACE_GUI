@@ -38,7 +38,8 @@ private slots:
 
 private:
     Ui::VesselEditorMainWindow *ui;
-    MapListAdapter *mMapListAdapter;
+    MapListAdapter *mVesMapListAdapter;
+    MapListAdapter *mPopMapListAdapter;
 
     bool runScript(QString script);
     void fillRScriptsArgs(QStringList &args);

@@ -29,14 +29,8 @@ public:
     static const QString Pop3SpecFilename;
 
 private slots:
-//    void on_run_clicked();
-//    void on_genConfig_clicked();
-//    void on_actionRscript_location_triggered();
-//    void on_actionScripts_location_triggered();
     void on_browseInputPath_clicked();
     void on_browseGISPath_clicked();
-//    void on_genMetVar_clicked();
-//    void on_genMetSelectivity_clicked();
     void on_browseBasePath_clicked();
     void on_tabWidget_currentChanged(int index);
 

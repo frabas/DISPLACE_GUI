@@ -28,7 +28,6 @@ using namespace displace;
 
 const QString VesselEditorMainWindow::VesselsSpecFilename = "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
 
-// TODO assign more generic names...
 const QString VesselEditorMainWindow::Pop1SpecFilename = "/POPULATIONS/Stock_abundances_at_age.csv";
 const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/Stock_spatial_research_survey_vessel_data.csv";
 const QString VesselEditorMainWindow::Pop3SpecFilename = "/POPULATIONS/Stock_biological_traits.csv";
@@ -83,62 +82,6 @@ VesselEditorMainWindow::~VesselEditorMainWindow()
     delete ui;
 }
 
-#if 0
-void VesselEditorMainWindow::on_run_clicked()
-{
-    displace::vesselsEditor::Settings s;
-    auto script = s.getRunScriptPath();
-
-    if (script.isEmpty() || !QFile(script).exists()) {
-        QMessageBox::warning(this, tr("Run R Scrpt"),
-                             tr("Please select an R Script on the 'script' field above."));
-        return;
-    }
-    runScript(script);
-}
-
-void VesselEditorMainWindow::on_genConfig_clicked()
-{
-    displace::vesselsEditor::Settings s;
-    auto script = s.getConfigScriptPath();
-
-    if (script.isEmpty() || !QFile(script).exists()) {
-        QMessageBox::warning(this, tr("Run R Scrpt"),
-                             tr("Please select an R Script on the 'script' field above."));
-        return;
-    }
-    runScript(script);
-}
-#endif
-
-#if 0
-void VesselEditorMainWindow::on_actionRscript_location_triggered()
-{
-    displace::R::Env env;
-
-    QString dir = env.getRScriptHome();
-    if (dir.isEmpty())
-        dir = qApp->applicationDirPath();
-
-    QString exe = QFileDialog::getOpenFileName(this, tr("Location of Rscript installation"), dir);
-    if (!exe.isEmpty()) {
-        QFileInfo info(exe);
-
-        env.setRScriptHome(info.absolutePath());
-        checkEnv();
-    }
-}
-#endif
-
-
-#if 0
-void VesselEditorMainWindow::on_actionScripts_location_triggered()
-{
-    ScriptSelectionForm f;
-    f.exec();
-}
-#endif
-
 void VesselEditorMainWindow::on_browseInputPath_clicked()
 {
     QSettings s;
@@ -165,20 +108,6 @@ void VesselEditorMainWindow::on_browseGISPath_clicked()
         ui->gisPath->setText(path);
     }
 }
-
-#if 0
-void VesselEditorMainWindow::on_genMetVar_clicked()
-{
-    auto script = R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles);
-    runScript(script);
-}
-
-void VesselEditorMainWindow::on_genMetSelectivity_clicked()
-{
-    auto script = R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles);
-    runScript(script);
-}
-#endif
 
 void VesselEditorMainWindow::on_browseBasePath_clicked()
 {

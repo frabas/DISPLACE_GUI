@@ -318,6 +318,7 @@ void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidg
 
 bool MapObjectsController::importShapefile(int model_idx, QString path, QString layername)
 {
+    /// @bug The following code will result in a memory leak and/or double free bug.
     std::shared_ptr<OGRDataSource> src(OGRSFDriverRegistrar::Open(path.toStdString().c_str(), FALSE));
     if (!src.get()) {
         return false;

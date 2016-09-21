@@ -79,7 +79,8 @@ SOURCES += \
     defaults.cpp \
     settings.cpp \
     csvspecspage.cpp \
-    runscriptspage.cpp
+    runscriptspage.cpp \
+    maplistadapter.cpp
 
 FORMS += \
     vesseleditormainwindow.ui \
@@ -93,7 +94,8 @@ HEADERS += \
     defaults.h \
     settings.h \
     csvspecspage.h \
-    runscriptspage.h
+    runscriptspage.h \
+    maplistadapter.h
 
 RESOURCES += \
     vesseleditor.qrc

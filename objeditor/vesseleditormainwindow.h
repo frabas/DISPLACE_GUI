@@ -15,6 +15,8 @@ QT_BEGIN_NAMESPACE
 class QSortFilterProxyModel;
 QT_END_NAMESPACE
 
+class MapListAdapter;
+
 class VesselEditorMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -36,6 +38,7 @@ private slots:
 
 private:
     Ui::VesselEditorMainWindow *ui;
+    MapListAdapter *mMapListAdapter;
 
     bool runScript(QString script);
     void fillRScriptsArgs(QStringList &args);

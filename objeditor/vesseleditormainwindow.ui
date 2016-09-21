@@ -186,7 +186,7 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
             <item>
-             <widget class="QListWidget" name="popShapefilesList"/>
+             <widget class="QListView" name="popShapefilesList"/>
             </item>
             <item>
              <widget class="qmapcontrol::QMapControl" name="popShapefilesMap" native="true"/>

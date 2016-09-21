@@ -25,6 +25,9 @@
 
 #include <vesseleditormainwindow.h>
 
+#include <gdal/ogr_core.h>
+#include <gdal/ogrsf_frmts.h>
+
 int main (int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName("DTUAqua");
@@ -41,6 +44,8 @@ int main (int argc, char *argv[])
     QTranslator myappTranslator;
     myappTranslator.load("vesseleditor_" + QLocale::system().name());
     app.installTranslator(&myappTranslator);
+
+    OGRRegisterAll();
 
     VesselEditorMainWindow m;
     m.show();

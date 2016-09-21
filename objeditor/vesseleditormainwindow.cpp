@@ -3,6 +3,7 @@
 
 #include <scriptselectionform.h>
 #include <settings.h>
+#include <maplistadapter.h>
 #include <csv/csvtablemodel.h>
 #include <csv/csvimporter.h>
 #include <csv/csvexporter.h>
@@ -75,6 +76,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(13.7507,43.7282));
     ui->popShapefilesMap->setZoom(7);
 
+    mMapListAdapter = new MapListAdapter(ui->popShapefilesMap);
+    ui->popShapefilesList->setModel(mMapListAdapter);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -133,6 +136,10 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->popSpecs2->load();
         ui->popSpecs3->setFilename(ui->gisPath->text() + Pop3SpecFilename);
         ui->popSpecs3->load();
+        mMapListAdapter->clearPaths();
+        mMapListAdapter->addPath(ui->gisPath->text() + "/FISHERIES/SpatialLayers/");
+        mMapListAdapter->addPath(ui->gisPath->text() + "/POPULATIONS/spatialLayers/");
+        mMapListAdapter->refresh();
         break;
     }
 }

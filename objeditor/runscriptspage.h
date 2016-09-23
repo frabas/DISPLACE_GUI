@@ -13,6 +13,7 @@ class RunScriptsPage;
 
 QT_BEGIN_NAMESPACE
 class QProcess;
+class QPushButton;
 QT_END_NAMESPACE
 
 class RunScriptsPage : public QWidget
@@ -24,7 +25,8 @@ public:
     ~RunScriptsPage();
 
     using FeedArgsFunction = std::function<void(QStringList &)>;
-    void addScriptButton (const QString &label, const QString &script, FeedArgsFunction feed_args_function);
+    using ButtonPushedFunction = std::function<void(QPushButton *)>;
+    QPushButton *addScriptButton(const QString &label, const QString &script, FeedArgsFunction feed_args_function, ButtonPushedFunction onButtonPushed = nullptr);
 
 private slots:
     void processStarted();

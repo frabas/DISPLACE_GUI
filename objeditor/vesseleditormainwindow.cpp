@@ -60,17 +60,36 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
         fillRScriptsArgs(args);
     };
 
-    ui->vesselsScriptsPage->addScriptButton(tr("Generate Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles), func);
-    ui->vesselsScriptsPage->addScriptButton(tr("Generate Data Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles), func);
-    ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles), func);
-    ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Selectivity per Stock Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles), func);
-    ui->vesselsScriptsPage->addScriptButton(tr("Generate Vessels Fishing Effort GIS layers"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselFishingEffort), func);
+    auto onPushed = [this](QPushButton *button) {
+        auto id = button->property("id").toInt();
+        auto next = button->property("next").toInt();
 
-    ui->popScriptsPage->addScriptButton(tr("Generate Pop Avail from Surveys"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailFromSurveys), func);
-    ui->popScriptsPage->addScriptButton(tr("Run Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunPopulationsConfigFiles), func);
-    ui->popScriptsPage->addScriptButton(tr("Generate Populations Avail GIS layer"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailGisLayers), func);
-    ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func);
-    ui->popScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters"), R::Settings().getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func);
+        lightup (id, false);
+        lightup (next, true);
+    };
+
+    mButtons.resize(30);
+
+    mButtons[0] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func, onPushed);
+    mButtons[1] = ui->popScriptsPage->addScriptButton(tr("Generate Pop Avail from Surveys"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailFromSurveys), func, onPushed);
+    mButtons[2] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Avail GIS layer"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailGisLayers), func, onPushed);
+    mButtons[3] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsConfigFiles), func, onPushed);
+    mButtons[4] = ui->popScriptsPage->addScriptButton(tr("Run Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunPopulationsConfigFiles), func, onPushed);
+    mButtons[5] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Interaction Matrix File"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsInteractionMatrixFile), func, onPushed);
+    mButtons[6] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Various Files"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsVariousFiles), func, onPushed);
+    mButtons[7] = ui->popScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters"), R::Settings().getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func, onPushed);
+
+    mButtons[8] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles), func, onPushed);
+    mButtons[9] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Vessels Fishing Effort GIS layers"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselFishingEffort), func, onPushed);
+    mButtons[10] = ui->vesselsScriptsPage->addScriptButton(tr("Run Vessels Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles), func, onPushed);
+    mButtons[11] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Selectivity per Stock Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles), func, onPushed);
+    mButtons[12] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Various Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles), func, onPushed);
+    mButtons[13] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Other Catches On Nodes"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateOtherCatchesOnNodes), func, onPushed);
+
+    for (int i = 0; i < 13; ++i)
+        setNext(i, i+1);
+
+    lightup(0, true);
 
     // setup map
     auto center = AppSettings().getMapCenterPoint();
@@ -175,4 +194,17 @@ void VesselEditorMainWindow::fillRScriptsArgs(QStringList &args)
     args << ui->applicationName->text();
     args << ui->gisPath->text() << ui->inputPath->text();
     args << ui->iGraph->text();
+}
+
+void VesselEditorMainWindow::lightup(int id, bool on)
+{
+    QFont f = mButtons[id]->font();
+    f.setBold(on);
+    mButtons[id]->setFont(f);
+}
+
+void VesselEditorMainWindow::setNext(int id, int next)
+{
+    mButtons[id]->setProperty("id", id);
+    mButtons[id]->setProperty("next", next);
 }

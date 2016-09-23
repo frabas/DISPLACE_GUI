@@ -13,6 +13,7 @@ class CsvTableModel;
 
 QT_BEGIN_NAMESPACE
 class QSortFilterProxyModel;
+class QPushButton;
 QT_END_NAMESPACE
 
 class MapListAdapter;
@@ -43,6 +44,11 @@ private:
 
     bool runScript(QString script);
     void fillRScriptsArgs(QStringList &args);
+
+    void lightup (int id, bool on);
+    void setNext (int id, int next);
+
+    QVector<QPushButton *> mButtons;
 };
 
 #endif // VESSELEDITORMAINWINDOW_H

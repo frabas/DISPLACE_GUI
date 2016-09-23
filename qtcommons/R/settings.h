@@ -26,6 +26,7 @@ public:
         static const QString RunVesselsConfigFiles;
         static const QString GenerateMetiersVariousFiles;
         static const QString GenerateMetiersSelectivityPerStockFiles;
+        static const QString GenerateOtherCatchesOnNodes;
 
         static const QString GenerateVesselFishingEffort;
         static const QString GeneratePopAvailFromSurveys;
@@ -33,6 +34,10 @@ public:
         static const QString GeneratePopAvailGisLayers;
         static const QString GeneratePopFeatures;
         static const QString OverwriteCatchEquationParameters;
+        static const QString GeneratePopulationsConfigFiles;
+        static const QString GeneratePopulationsInteractionMatrixFile;
+        static const QString GeneratePopulationsVariousFiles;
+
     };
 };
 

@@ -22,19 +22,23 @@ RunScriptsPage::~RunScriptsPage()
     delete ui;
 }
 
-void RunScriptsPage::addScriptButton(const QString &label, const QString &script, FeedArgsFunction feed_args_function)
+QPushButton * RunScriptsPage::addScriptButton(const QString &label, const QString &script, FeedArgsFunction feed_args_function, ButtonPushedFunction onButtonPushed)
 {
     QPushButton *button = new QPushButton(label);
 
-    connect (button, &QPushButton::clicked, [script, this, feed_args_function]() {
+    connect (button, &QPushButton::clicked, [onButtonPushed, button, script, this, feed_args_function]() {
         QStringList args;
         if (feed_args_function != nullptr)
             feed_args_function(args);
         runScript(script, args);
+        if (onButtonPushed != nullptr)
+            onButtonPushed(button);
     });
 
     mLayout->addWidget(button, mNw / 2, mNw % 2);
     ++mNw;
+
+    return button;
 }
 
 void RunScriptsPage::runScript(const QString &script, const QStringList &extra_args)

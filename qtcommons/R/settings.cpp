@@ -10,16 +10,16 @@ const QString Settings::Scripts::RunVesselsConfigFiles = "RunVesselsConfigFiles.
 const QString Settings::Scripts::GenerateMetiersVariousFiles = "GenerateMetiersVariousFiles.R";
 const QString Settings::Scripts::GenerateMetiersSelectivityPerStockFiles = "GenerateMetiersSelectivityPerStockFiles.R";
 const QString Settings::Scripts::GenerateOtherCatchesOnNodes = "GenerateOtherCatchesOnNodes.R";
-
 const QString Settings::Scripts::GenerateVesselFishingEffort = "GenerateVesselsFishingEffortGISLayers.R";
-const QString Settings::Scripts::GeneratePopAvailFromSurveys = "";
-const QString Settings::Scripts::RunPopulationsConfigFiles = "RunPopulationsConfigFiles.R";
-const QString Settings::Scripts::GeneratePopAvailGisLayers = "GeneratePopulationsAvaiGISLayersFromStockAvai.R";
+
 const QString Settings::Scripts::GeneratePopFeatures = "GeneratePopulationsFeatures.R";
-const QString Settings::Scripts::OverwriteCatchEquationParameters = "OverwriteCatchEquationParameters.R";
+const QString Settings::Scripts::GeneratePopAvailFromSurveys = "GeneratePopulationsStockAvaiFromTrawlSurveys.R";
+const QString Settings::Scripts::GeneratePopAvailGisLayers = "GeneratePopulationsAvaiGISLayersFromStockAvai.R";
 const QString Settings::Scripts::GeneratePopulationsConfigFiles = "GeneratePopulationsConfigFiles.R";
+const QString Settings::Scripts::RunPopulationsConfigFiles = "RunPopulationsConfigFiles.R";
 const QString Settings::Scripts::GeneratePopulationsInteractionMatrixFile = "GeneratePopulationsInteractionMatrixFile.R";
 const QString Settings::Scripts::GeneratePopulationsVariousFiles = "GeneratePopulationsVariousFiles.R";
+const QString Settings::Scripts::OverwriteCatchEquationParameters = "OverwriteCatchEquationParameters.R";
 
 QString Settings::getScriptBasePath() const
 {

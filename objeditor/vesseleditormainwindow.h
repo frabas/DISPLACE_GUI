@@ -37,6 +37,8 @@ private slots:
     void on_browseBasePath_clicked();
     void on_tabWidget_currentChanged(int index);
 
+    void on_configRScript_clicked();
+
 private:
     Ui::VesselEditorMainWindow *ui;
     MapListAdapter *mVesMapListAdapter;

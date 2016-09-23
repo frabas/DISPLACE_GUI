@@ -46,6 +46,11 @@ QString Env::getRScriptHome() const
     if (set.contains(RSCRIPT_HOME_SETTING)) {
         base = set.value(RSCRIPT_HOME_SETTING, "").toString() + "/";
     }
+#ifdef __linux
+    else {
+        base = "/usr/bin/";
+    }
+#endif
 
     return base;
 }

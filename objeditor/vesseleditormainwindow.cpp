@@ -24,6 +24,7 @@
 
 #include <defaults.h>
 #include <R/settings.h>
+#include <R/env.h>
 
 #include <appsettings.h>
 
@@ -209,4 +210,26 @@ void VesselEditorMainWindow::setNext(int id, int next)
 {
     mButtons[id]->setProperty("id", id);
     mButtons[id]->setProperty("next", next);
+}
+
+void VesselEditorMainWindow::on_configRScript_clicked()
+{
+    displace::R::Env env;
+
+    QString dir = env.getRScriptHome();
+    if (dir.isEmpty())
+        dir = qApp->applicationDirPath();
+
+    QString exe = QFileDialog::getOpenFileName(this, tr("Location of Rscript installation"), dir);
+    if (!exe.isEmpty()) {
+        QFileInfo info(exe);
+
+        env.setRScriptHome(info.absolutePath());
+
+        if (!env.check()) {
+            QMessageBox::warning(this, tr("Object Editor setup check"),
+                                 tr("Couldn't start Rscript. Please check the Path and executable."));
+            return;
+        }
+    }
 }

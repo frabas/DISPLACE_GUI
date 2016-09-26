@@ -203,6 +203,8 @@ private slots:
 
     void on_action_Record_Current_Map_Position_triggered();
 
+    void on_actionClear_configuration_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

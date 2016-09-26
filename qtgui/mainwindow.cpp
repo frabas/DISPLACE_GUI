@@ -234,6 +234,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /* hide unneeded menu items */
     ui->actionLoadStockNames->setVisible(false);
+
+#ifndef DEBUG
+    ui->actionClear_configuration->setVisible(false);
+#endif
 }
 
 MainWindow::~MainWindow()
@@ -2491,4 +2495,15 @@ void MainWindow::on_action_Record_Current_Map_Position_triggered()
 {
     auto pt = map->mapFocusPointCoord();
     displace::AppSettings().setMapCenterPoint(QPointF(pt.longitude(), pt.latitude()));
+}
+
+void MainWindow::on_actionClear_configuration_triggered()
+{
+    auto r = QMessageBox::warning(this, tr("Clear configuration"),
+                         tr("This will remove all the current configuration. Proceed?"),
+                         QMessageBox::No, QMessageBox::Yes);
+    if (r == QMessageBox::Yes) {
+        QSettings s;
+        s.clear();
+    }
 }

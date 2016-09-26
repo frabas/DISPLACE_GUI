@@ -152,6 +152,7 @@ void VesselEditorMainWindow::on_browseBasePath_clicked()
 {
     QString file = QFileDialog::getExistingDirectory(this, tr("Select Base Scripts Path"), ui->scriptsPath->text());
     if (!file.isEmpty()) {
+        R::Settings().setScriptBasePath(file);
         ui->scriptsPath->setText(file);
     }
 }

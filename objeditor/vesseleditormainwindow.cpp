@@ -57,8 +57,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popSpecs2->setSeparator(QChar(';'));
     ui->popSpecs3->setSeparator(QChar(';'));
 
-    auto func = [this](QStringList &args) {
-        fillRScriptsArgs(args);
+    auto func = [this](QStringList &args, const QString &script) {
+        fillRScriptsArgs(args, script);
     };
 
     auto onPushed = [this](QPushButton *button) {
@@ -185,7 +185,7 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     }
 }
 
-void VesselEditorMainWindow::fillRScriptsArgs(QStringList &args)
+void VesselEditorMainWindow::fillRScriptsArgs(QStringList &args, const QString &script)
 {
     /*
      * Dest_path application input_raw_path gis_path input_application_path
@@ -200,6 +200,7 @@ void VesselEditorMainWindow::fillRScriptsArgs(QStringList &args)
     args << ui->applicationName->text();
     args << ui->gisPath->text() << ui->inputPath->text();
     args << ui->iGraph->text();
+    args << script;
 }
 
 void VesselEditorMainWindow::lightup(int id, bool on)

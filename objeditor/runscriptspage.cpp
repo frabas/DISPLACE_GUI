@@ -29,7 +29,7 @@ QPushButton * RunScriptsPage::addScriptButton(const QString &label, const QStrin
     connect (button, &QPushButton::clicked, [onButtonPushed, button, script, this, feed_args_function]() {
         QStringList args;
         if (feed_args_function != nullptr)
-            feed_args_function(args);
+            feed_args_function(args, script);
         runScript(script, args);
         if (onButtonPushed != nullptr)
             onButtonPushed(button);

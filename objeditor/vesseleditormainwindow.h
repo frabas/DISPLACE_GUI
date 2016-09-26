@@ -46,7 +46,7 @@ private:
     MapListAdapter *mPopMapListAdapter;
 
     bool runScript(QString script);
-    void fillRScriptsArgs(QStringList &args);
+    void fillRScriptsArgs(QStringList &args, const QString &script);
 
     void lightup (int id, bool on);
     void setNext (int id, int next);

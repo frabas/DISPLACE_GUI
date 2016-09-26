@@ -24,7 +24,7 @@ public:
     explicit RunScriptsPage(QWidget *parent = 0);
     ~RunScriptsPage();
 
-    using FeedArgsFunction = std::function<void(QStringList &)>;
+    using FeedArgsFunction = std::function<void(QStringList &, const QString &script)>;
     using ButtonPushedFunction = std::function<void(QPushButton *)>;
     QPushButton *addScriptButton(const QString &label, const QString &script, FeedArgsFunction feed_args_function, ButtonPushedFunction onButtonPushed = nullptr);
 

@@ -30,6 +30,7 @@
 using namespace displace;
 
 const QString VesselEditorMainWindow::VesselsSpecFilename = "/FISHERIES/vessels_specifications_per_harbour_metiers.csv";
+const QString VesselEditorMainWindow::VesselsSpec2Filename = "/OTHERS/othercatchespercountry.csv";
 
 const QString VesselEditorMainWindow::Pop1SpecFilename = "/POPULATIONS/Stock_abundances_at_age.csv";
 const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/Stock_spatial_research_survey_vessel_data.csv";
@@ -163,6 +164,8 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 3:     // Vessels Specifications
         ui->vesselsCsvPage->setFilename(ui->gisPath->text() + VesselsSpecFilename);
         ui->vesselsCsvPage->load();
+        ui->vesselsCsvPage_2->setFilename(ui->gisPath->text() + VesselsSpec2Filename);
+        ui->vesselsCsvPage_2->load();
         mVesMapListAdapter->clearPaths();
         mVesMapListAdapter->addPath(ui->gisPath->text() + "/FISHERIES/SpatialLayers/");
         mVesMapListAdapter->refresh();

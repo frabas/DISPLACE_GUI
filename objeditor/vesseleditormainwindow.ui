@@ -223,11 +223,21 @@
           </property>
           <widget class="QWidget" name="tabVesselsSpecs">
            <attribute name="title">
-            <string>Vessels Specs</string>
+            <string>Specs 1</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
              <widget class="CsvSpecsPage" name="vesselsCsvPage" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabVesselsSpecs2">
+           <attribute name="title">
+            <string>Specs 2</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="CsvSpecsPage" name="vesselsCsvPage_2" native="true"/>
             </item>
            </layout>
           </widget>

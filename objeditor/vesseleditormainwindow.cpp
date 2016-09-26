@@ -73,18 +73,18 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     mButtons[0] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Features"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopFeatures), func, onPushed);
     mButtons[1] = ui->popScriptsPage->addScriptButton(tr("Generate Pop Avail from Surveys [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailFromSurveys), func, onPushed);
     mButtons[2] = ui->popScriptsPage->addScriptButton(tr("Generate Pop Avail GIS layer [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopAvailGisLayers), func, onPushed);
-    mButtons[3] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsConfigFiles), func, onPushed);
+    mButtons[3] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Config Files [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsConfigFiles), func, onPushed);
     mButtons[4] = ui->popScriptsPage->addScriptButton(tr("Run Populations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunPopulationsConfigFiles), func, onPushed);
     mButtons[5] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Interaction Matrix File"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsInteractionMatrixFile), func, onPushed);
     mButtons[6] = ui->popScriptsPage->addScriptButton(tr("Generate Populations Various Files"), R::Settings().getScriptPath(R::Settings::Scripts::GeneratePopulationsVariousFiles), func, onPushed);
-    mButtons[7] = ui->popScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func, onPushed);
 
-    mButtons[8] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Vessels Fishing Effort GIS layers [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselFishingEffort), func, onPushed);
-    mButtons[9] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles), func, onPushed);
-    mButtons[10] = ui->vesselsScriptsPage->addScriptButton(tr("Run Vessels Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles), func, onPushed);
-    mButtons[11] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Selectivity per Stock Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles), func, onPushed);
-    mButtons[12] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Various Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles), func, onPushed);
-    mButtons[13] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Other Catches On Nodes"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateOtherCatchesOnNodes), func, onPushed);
+    mButtons[7] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Vessels Fishing Effort GIS layers [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselFishingEffort), func, onPushed);
+    mButtons[8] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateVesselsConfigFiles), func, onPushed);
+    mButtons[9] = ui->vesselsScriptsPage->addScriptButton(tr("Run Vessels Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::RunVesselsConfigFiles), func, onPushed);
+    mButtons[10] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Selectivity per Stock Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersSelectivityPerStockFiles), func, onPushed);
+    mButtons[11] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Metiers Various Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateMetiersVariousFiles), func, onPushed);
+    mButtons[12] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Other Catches On Nodes"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateOtherCatchesOnNodes), func, onPushed);
+    mButtons[13] = ui->vesselsScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func, onPushed);
 
     for (int i = 0; i < 13; ++i)
         setNext(i, i+1);

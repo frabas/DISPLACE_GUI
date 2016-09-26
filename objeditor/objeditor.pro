@@ -75,7 +75,6 @@ LIBS += -L.. -lformats -lqtcommons
 SOURCES += \
     vesseleditor.cpp \
     vesseleditormainwindow.cpp \
-    scriptselectionform.cpp \
     defaults.cpp \
     settings.cpp \
     csvspecspage.cpp \
@@ -90,7 +89,6 @@ FORMS += \
 
 HEADERS += \
     vesseleditormainwindow.h \
-    scriptselectionform.h \
     defaults.h \
     settings.h \
     csvspecspage.h \

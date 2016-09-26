@@ -1,7 +1,6 @@
 #include "vesseleditormainwindow.h"
 #include "ui_vesseleditormainwindow.h"
 
-#include <scriptselectionform.h>
 #include <settings.h>
 #include <maplistadapter.h>
 #include <csv/csvtablemodel.h>

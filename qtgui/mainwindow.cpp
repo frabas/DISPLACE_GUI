@@ -235,7 +235,13 @@ MainWindow::MainWindow(QWidget *parent) :
     /* hide unneeded menu items */
     ui->actionLoadStockNames->setVisible(false);
 
+    ui->actionMergeWeights->setVisible(false);
+    ui->actionMergePings->setVisible(false);
+    ui->actionCalcPopDistribution->setVisible(false);
+
 #ifndef DEBUG
+    ui->actionR_Console->setVisible(false);
+    ui->actionCSV_Editor->setVisible(false);
     ui->actionClear_configuration->setVisible(false);
 #endif
 }

@@ -56,7 +56,9 @@
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
+    <addaction name="separator"/>
     <addaction name="menuPalettes"/>
+    <addaction name="actionScheduler_Editor"/>
    </widget>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -138,12 +140,7 @@
      <addaction name="actionExportAllGraphics"/>
     </widget>
     <addaction name="actionCSV_Editor"/>
-    <addaction name="actionDecision_Trees_Editor"/>
-    <addaction name="actionTime_Series_Editor"/>
-    <addaction name="actionVessel_Creation_Editor"/>
     <addaction name="actionR_Console"/>
-    <addaction name="actionScheduler_Editor"/>
-    <addaction name="separator"/>
     <addaction name="actionExport_Map"/>
     <addaction name="menuExport_Graph_Image"/>
     <addaction name="separator"/>
@@ -155,7 +152,16 @@
      <string>Windows</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu_Parameters">
+    <property name="title">
+     <string>&amp;Parameters</string>
+    </property>
+    <addaction name="actionVessel_Creation_Editor"/>
+    <addaction name="actionDecision_Trees_Editor"/>
+    <addaction name="actionTime_Series_Editor"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Parameters"/>
    <addaction name="menu_Model"/>
    <addaction name="menuGraph"/>
    <addaction name="menu_Editor"/>

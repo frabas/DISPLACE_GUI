@@ -86,7 +86,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     mButtons[12] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Other Catches On Nodes"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateOtherCatchesOnNodes), func, onPushed);
     mButtons[13] = ui->vesselsScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters [optional]"), R::Settings().getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func, onPushed);
 
-    for (int i = 0; i < 13; ++i)
+    mButtons[14] = ui->simuScriptsPage->addScriptButton(tr("Generate Simulations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateSimulationsConfigFiles), func, onPushed);
+
+    for (int i = 0; i < 14; ++i)
         setNext(i, i+1);
 
     lightup(0, true);

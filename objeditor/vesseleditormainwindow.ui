@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -219,7 +219,6 @@
              <widget class="qmapcontrol::QMapControl" name="vesselsShapefileMap" native="true"/>
             </item>
            </layout>
-           <zorder>vesselsCsvPage</zorder>
            <zorder>vesselsShapefileMap</zorder>
            <zorder>vesselsShapefileList</zorder>
           </widget>
@@ -236,6 +235,21 @@
          <widget class="RunScriptsPage" name="vesselsScriptsPage" native="true"/>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tabSimuScript">
+       <attribute name="title">
+        <string>Simu Scripts</string>
+       </attribute>
+       <widget class="RunScriptsPage" name="simuScriptsPage" native="true">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>9</y>
+          <width>810</width>
+          <height>541</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>

@@ -38,6 +38,8 @@ public:
         static const QString GeneratePopulationsInteractionMatrixFile;
         static const QString GeneratePopulationsVariousFiles;
 
+        static const QString GenerateSimulationsConfigFiles;
+
     };
 };
 

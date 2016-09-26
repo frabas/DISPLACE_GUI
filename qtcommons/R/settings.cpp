@@ -20,6 +20,7 @@ const QString Settings::Scripts::RunPopulationsConfigFiles = "RunPopulationsConf
 const QString Settings::Scripts::GeneratePopulationsInteractionMatrixFile = "GeneratePopulationsInteractionMatrixFile.R";
 const QString Settings::Scripts::GeneratePopulationsVariousFiles = "GeneratePopulationsVariousFiles.R";
 const QString Settings::Scripts::OverwriteCatchEquationParameters = "OverwriteCatchEquationParameters.R";
+const QString Settings::Scripts::GenerateSimulationsConfigFiles = "GenerateSimulationsConfigFiles.R";
 
 QString Settings::getScriptBasePath() const
 {

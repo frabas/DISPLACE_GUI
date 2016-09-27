@@ -40,6 +40,7 @@ public:
 
         static const QString GenerateSimulationsConfigFiles;
 
+        static const QString GenerateHarboursFiles;
     };
 };
 

@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -284,6 +284,26 @@
          </rect>
         </property>
        </widget>
+      </widget>
+      <widget class="QWidget" name="tabHarboursSpec">
+       <attribute name="title">
+        <string>Harbours Specifications</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_12">
+        <item>
+         <widget class="CsvSpecsPage" name="harbourCsvPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabHarboursScripts">
+       <attribute name="title">
+        <string>Harbours Scripts</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_13">
+        <item>
+         <widget class="RunScriptsPage" name="harboursScriptsPage" native="true"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

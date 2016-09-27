@@ -89,6 +89,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mButtons[14] = ui->simuScriptsPage->addScriptButton(tr("Generate Simulations Config Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateSimulationsConfigFiles), func, onPushed);
 
+    mButtons[15] = ui->harboursScriptsPage->addScriptButton(tr("Generate Harbours Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateHarboursFiles), func, onPushed);
+
     for (int i = 0; i < 14; ++i)
         setNext(i, i+1);
 
@@ -181,6 +183,11 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         mPopMapListAdapter->clearPaths();
         mPopMapListAdapter->addPath(ui->gisPath->text() + "/POPULATIONS/spatialLayers/");
         mPopMapListAdapter->refresh();
+        break;
+    case 6:     // Harbour Specs
+        // TODO Check this file name.
+        ui->harbourCsvPage->setFilename(ui->gisPath->text() + "/POPULATIONS/Stock_prices_data.csv");
+        ui->harbourCsvPage->load();
         break;
     }
 }

@@ -31,6 +31,9 @@ public:
     static const QString Pop1SpecFilename;
     static const QString Pop2SpecFilename;
     static const QString Pop3SpecFilename;
+    static const QString ShippingFeaturesFilename;
+    static const QString ShippingLanesLatFilename;
+    static const QString ShippingLanesLonFilename;
 
 private slots:
     void on_browseInputPath_clicked();

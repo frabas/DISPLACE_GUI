@@ -22,6 +22,7 @@ const QString Settings::Scripts::GeneratePopulationsVariousFiles = "GeneratePopu
 const QString Settings::Scripts::OverwriteCatchEquationParameters = "OverwriteCatchEquationParameters.R";
 const QString Settings::Scripts::GenerateSimulationsConfigFiles = "GenerateSimulationsConfigFiles.R";
 const QString Settings::Scripts::GenerateHarboursFiles = "GenerateHarboursFiles.R";
+const QString Settings::Scripts::GenerateShippingFiles = "GenerateShippingFiles.R";
 
 QString Settings::getScriptBasePath() const
 {

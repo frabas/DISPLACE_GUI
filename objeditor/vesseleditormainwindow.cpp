@@ -36,6 +36,10 @@ const QString VesselEditorMainWindow::Pop1SpecFilename = "/POPULATIONS/Stock_abu
 const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/Stock_spatial_research_survey_vessel_data.csv";
 const QString VesselEditorMainWindow::Pop3SpecFilename = "/POPULATIONS/Stock_biological_traits.csv";
 
+const QString VesselEditorMainWindow::ShippingFeaturesFilename = "/SHIPPING/shipsspe_features.csv";
+const QString VesselEditorMainWindow::ShippingLanesLatFilename = "/SHIPPING/shipsspe_lanes_lat.csv";
+const QString VesselEditorMainWindow::ShippingLanesLonFilename = "/SHIPPING/shipsspe_lanes_lon.csv";
+
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorMainWindow)
@@ -52,6 +56,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->tabWidget->setCurrentIndex(0);
     ui->popSpecsTab->setCurrentIndex(0);
+    ui->tabShippingSpecsContainer->setCurrentIndex(0);
 
     ui->popSpecs1->setSeparator(QChar(';'));
     ui->popSpecs2->setSeparator(QChar(';'));
@@ -91,6 +96,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mButtons[15] = ui->harboursScriptsPage->addScriptButton(tr("Generate Harbours Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateHarboursFiles), func, onPushed);
 
+    mButtons[16] = ui->shippingsScriptsPage->addScriptButton(tr("Generate Shipping Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateShippingFiles), func, onPushed);
+
     for (int i = 0; i < 14; ++i)
         setNext(i, i+1);
 
@@ -110,6 +117,12 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->popShapefilesMap->setZoom(7);
+
+    ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
+    ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+
+    ui->shippingShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
+    ui->shippingShapefilesMap->setZoom(7);
 
     mVesMapListAdapter = new MapListAdapter(ui->vesselsShapefileMap);
     ui->vesselsShapefileList->setModel(mVesMapListAdapter);
@@ -185,9 +198,16 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         mPopMapListAdapter->refresh();
         break;
     case 6:     // Harbour Specs
-        // TODO Check this file name.
         ui->harbourCsvPage->setFilename(ui->gisPath->text() + "/POPULATIONS/Stock_prices_data.csv");
         ui->harbourCsvPage->load();
+        break;
+    case 8:
+        ui->ShippingCsvPage1->setFilename(ui->gisPath->text() + ShippingFeaturesFilename);
+        ui->ShippingCsvPage1->load();
+        ui->ShippingCsvPage2->setFilename(ui->gisPath->text() + ShippingLanesLatFilename);
+        ui->ShippingCsvPage2->load();
+        ui->ShippingCsvPage3->setFilename(ui->gisPath->text() + ShippingLanesLonFilename);
+        ui->ShippingCsvPage3->load();
         break;
     }
 }

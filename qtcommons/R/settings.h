@@ -45,6 +45,8 @@ public:
         static const QString GenerateShippingFiles;
 
         static const QString GenerateFishfarmsFiles;
+
+        static const QString GenerateBenthosFiles;
     };
 };
 

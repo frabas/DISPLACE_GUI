@@ -102,7 +102,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mButtons[17] = ui->fishfarmsScriptsPage->addScriptButton(tr("Generate Fishfarms Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateFishfarmsFiles), func, onPushed);
 
-    for (int i = 0; i < 17; ++i)
+    mButtons[18] = ui->benthosScriptsPage->addScriptButton(tr("Generate Benthos landscapes on Nodes"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateBenthosFiles), func, onPushed);
+
+    for (int i = 0; i < 18; ++i)
         setNext(i, i+1);
 
     lightup(0, true);
@@ -127,6 +129,12 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->shippingShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->shippingShapefilesMap->setZoom(7);
+
+    ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
+    ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+
+    ui->benthosShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
+    ui->benthosShapefilesMap->setZoom(7);
 
     mVesMapListAdapter = new MapListAdapter(ui->vesselsShapefileMap);
     ui->vesselsShapefileList->setModel(mVesMapListAdapter);

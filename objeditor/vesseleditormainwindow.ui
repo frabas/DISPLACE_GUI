@@ -308,7 +308,7 @@
         <item>
          <widget class="QTabWidget" name="tabShippingSpecsContainer">
           <property name="currentIndex">
-           <number>0</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tabShippingSpecsPage1">
            <attribute name="title">
@@ -381,6 +381,26 @@
        <layout class="QVBoxLayout" name="verticalLayout_21">
         <item>
          <widget class="RunScriptsPage" name="fishfarmsScriptsPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabBenthosSpecs">
+       <attribute name="title">
+        <string>Benthos Specifications</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_23">
+        <item>
+         <widget class="qmapcontrol::QMapControl" name="benthosShapefilesMap" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabBenthosScriptsPage">
+       <attribute name="title">
+        <string>Benthos Scripts</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_24">
+        <item>
+         <widget class="RunScriptsPage" name="benthosScriptsPage" native="true"/>
         </item>
        </layout>
       </widget>

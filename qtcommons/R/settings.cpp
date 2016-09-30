@@ -24,6 +24,7 @@ const QString Settings::Scripts::GenerateSimulationsConfigFiles = "GenerateSimul
 const QString Settings::Scripts::GenerateHarboursFiles = "GenerateHarboursFiles.R";
 const QString Settings::Scripts::GenerateShippingFiles = "GenerateShippingFiles.R";
 const QString Settings::Scripts::GenerateFishfarmsFiles = "GenerateFishfarmsFiles.R";
+const QString Settings::Scripts::GenerateBenthosFiles = "GenerateBenthosLandscapeOnNodes.R";
 
 QString Settings::getScriptBasePath() const
 {

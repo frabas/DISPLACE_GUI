@@ -181,6 +181,8 @@ namespace qmapcontrol
 
     QPixmap ImageManager::prefetchImage(const QUrl& url)
     {
+        QMutexLocker locker(&mMutex);
+
         // Add the url to the prefetch list.
         m_prefetch_urls.append(url);
 

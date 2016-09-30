@@ -221,6 +221,8 @@ namespace qmapcontrol
         bool persistentCacheInsert(const QUrl& url, const QPixmap& pixmap);
 
     private:
+        QMutex mMutex;
+
         /// Network manager.
         NetworkManager m_nm;
 

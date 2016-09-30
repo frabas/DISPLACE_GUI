@@ -233,13 +233,6 @@ namespace qmapcontrol
          */
         void stopFollowingGeometry();
 
-        // Viewport management.
-        /*!
-         * Set the viewport size in pixels.
-         * @param size_px The viewport (visible-part of each layer) size in pixels.
-         */
-        void setViewportSize(const QSizeF& size_px);
-
         /*!
          * Fetches the visible viewport rect in world coordinates.
          * @return the visible viewport rect in world coordinates.
@@ -744,5 +737,16 @@ namespace qmapcontrol
 
         /// Progress indicator to alert user to redrawing progress.
         QProgressIndicator m_progress_indicator;
+
+        // Viewport management.
+        /*!
+         * Set the viewport size in pixels.
+         * @param size_px The viewport (visible-part of each layer) size in pixels.
+         */
+        void setViewportSize(const QSizeF& size_px);
+
+    protected:
+        void resizeEvent(QResizeEvent *event) override;
+
     };
 }

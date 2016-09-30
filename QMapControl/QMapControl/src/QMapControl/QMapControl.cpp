@@ -349,9 +349,6 @@ namespace qmapcontrol
     // Viewport management.
     void QMapControl::setViewportSize(const QSizeF& size_px)
     {
-        // Set the inherited QWidget maximum size.
-        QWidget::setMaximumSize(size_px.width() + 1, size_px.height() + 1);
-
         // Set the size of the viewpoint (visible-part of the layer) in pixels.
         m_viewport_size_px = size_px;
 
@@ -1576,4 +1573,10 @@ namespace qmapcontrol
         // Schedule a repaint.
         QWidget::update();
     }
+}
+
+
+void qmapcontrol::QMapControl::resizeEvent(QResizeEvent *event)
+{
+    setViewportSize(event->size());
 }

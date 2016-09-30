@@ -31,6 +31,6 @@ WrapperWidget::WrapperWidget(QWidget *parent) :
 void WrapperWidget::resizeEvent(QResizeEvent *event)
 {
     if (widget) {
-        widget->setViewportSize(event->size());
+        widget->resize(event->size());
     }
 }

@@ -13,6 +13,8 @@ class Settings
     static const char *const BasePathKey;
 
 public:
+    Settings() : mSettings() {
+    }
     QString getScriptBasePath() const;
     QString getScriptPath(QString scriptName) const;
 

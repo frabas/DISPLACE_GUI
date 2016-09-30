@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>10</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -274,16 +274,11 @@
        <attribute name="title">
         <string>Simu Scripts</string>
        </attribute>
-       <widget class="RunScriptsPage" name="simuScriptsPage" native="true">
-        <property name="geometry">
-         <rect>
-          <x>9</x>
-          <y>9</y>
-          <width>810</width>
-          <height>541</height>
-         </rect>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_22">
+        <item>
+         <widget class="RunScriptsPage" name="simuScriptsPage" native="true"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tabHarboursSpec">
        <attribute name="title">

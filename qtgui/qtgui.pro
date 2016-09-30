@@ -86,7 +86,6 @@ macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    wrapperwidget.cpp \
     objecttreemodel.cpp \
     displacemodel.cpp \
     simulator.cpp \
@@ -195,7 +194,6 @@ FORMS += \
 
 HEADERS += \
     mainwindow.h \
-    wrapperwidget.h \
     objecttreemodel.h \
     displacemodel.h \
     simulator.h \

@@ -189,7 +189,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 
-    map = new qmapcontrol::QMapControl(ui->mapWidget);
+    map = ui->mapWidget;
     mMapController = new MapObjectsController(map);
     connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
     connect (mMapController, SIGNAL(nodeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
@@ -204,12 +204,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap pixmap;
     pixmap.fill( Qt::white );
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
-
-    QHBoxLayout *layout = new QHBoxLayout;
-    ui->mapWidget->setLayout(layout);
-    layout->addWidget(map);
-
-    ui->mapWidget->setWidget(map);
 
     /* Stats windows setup */
 

@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>10</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -366,6 +366,26 @@
        <layout class="QVBoxLayout" name="verticalLayout_18">
         <item>
          <widget class="RunScriptsPage" name="shippingsScriptsPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabFishfarmSpecs">
+       <attribute name="title">
+        <string>Fishfarms specifications</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_20">
+        <item>
+         <widget class="CsvSpecsPage" name="fishfarmsCsvPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabFishfarmsScriptsPage">
+       <attribute name="title">
+        <string>Fishfarms Scripts</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_21">
+        <item>
+         <widget class="RunScriptsPage" name="fishfarmsScriptsPage" native="true"/>
         </item>
        </layout>
       </widget>

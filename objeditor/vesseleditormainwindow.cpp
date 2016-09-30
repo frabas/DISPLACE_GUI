@@ -40,6 +40,8 @@ const QString VesselEditorMainWindow::ShippingFeaturesFilename = "/SHIPPING/ship
 const QString VesselEditorMainWindow::ShippingLanesLatFilename = "/SHIPPING/shipsspe_lanes_lat.csv";
 const QString VesselEditorMainWindow::ShippingLanesLonFilename = "/SHIPPING/shipsspe_lanes_lon.csv";
 
+const QString VesselEditorMainWindow::FishfarmsFeaturesFilename = "/FISHFARMS/fishfarms_features.csv";
+
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::VesselEditorMainWindow)
@@ -98,7 +100,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mButtons[16] = ui->shippingsScriptsPage->addScriptButton(tr("Generate Shipping Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateShippingFiles), func, onPushed);
 
-    for (int i = 0; i < 14; ++i)
+    mButtons[17] = ui->fishfarmsScriptsPage->addScriptButton(tr("Generate Fishfarms Files"), R::Settings().getScriptPath(R::Settings::Scripts::GenerateFishfarmsFiles), func, onPushed);
+
+    for (int i = 0; i < 17; ++i)
         setNext(i, i+1);
 
     lightup(0, true);
@@ -208,6 +212,10 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->ShippingCsvPage2->load();
         ui->ShippingCsvPage3->setFilename(ui->gisPath->text() + ShippingLanesLonFilename);
         ui->ShippingCsvPage3->load();
+        break;
+    case 10:
+        ui->fishfarmsCsvPage->setFilename(ui->gisPath->text() + FishfarmsFeaturesFilename);
+        ui->fishfarmsCsvPage->load();
         break;
     }
 }

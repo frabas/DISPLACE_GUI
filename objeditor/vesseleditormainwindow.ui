@@ -270,16 +270,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabSimuScript">
-       <attribute name="title">
-        <string>Simu Scripts</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_22">
-        <item>
-         <widget class="RunScriptsPage" name="simuScriptsPage" native="true"/>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="tabHarboursSpec">
        <attribute name="title">
         <string>Harbours Specifications</string>
@@ -401,6 +391,16 @@
        <layout class="QVBoxLayout" name="verticalLayout_24">
         <item>
          <widget class="RunScriptsPage" name="benthosScriptsPage" native="true"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSimuScript">
+       <attribute name="title">
+        <string>Simu Config</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_22">
+        <item>
+         <widget class="RunScriptsPage" name="simuScriptsPage" native="true"/>
         </item>
        </layout>
       </widget>

@@ -97,8 +97,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     mButtons[btn++] = ui->vesselsScriptsPage->addScriptButton(tr("Generate Other Catches On Nodes"), settings.getScriptPath(R::Settings::Scripts::GenerateOtherCatchesOnNodes), func, onPushed);
     mButtons[btn++] = ui->vesselsScriptsPage->addScriptButton(tr("Overwrite Catch Equation Parameters [optional]"), settings.getScriptPath(R::Settings::Scripts::OverwriteCatchEquationParameters), func, onPushed);
 
-    mButtons[btn++] = ui->simuScriptsPage->addScriptButton(tr("Generate Simulations Config Files"), settings.getScriptPath(R::Settings::Scripts::GenerateSimulationsConfigFiles), func, onPushed);
-
     mButtons[btn++] = ui->harboursScriptsPage->addScriptButton(tr("Generate Harbours Files"), settings.getScriptPath(R::Settings::Scripts::GenerateHarboursFiles), func, onPushed);
 
     mButtons[btn++] = ui->shippingsScriptsPage->addScriptButton(tr("Generate Shipping Files"), settings.getScriptPath(R::Settings::Scripts::GenerateShippingFiles), func, onPushed);
@@ -106,6 +104,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     mButtons[btn++] = ui->fishfarmsScriptsPage->addScriptButton(tr("Generate Fishfarms Files"), settings.getScriptPath(R::Settings::Scripts::GenerateFishfarmsFiles), func, onPushed);
 
     mButtons[btn++] = ui->benthosScriptsPage->addScriptButton(tr("Generate Benthos landscapes on Nodes"), settings.getScriptPath(R::Settings::Scripts::GenerateBenthosFiles), func, onPushed);
+
+    mButtons[btn++] = ui->simuScriptsPage->addScriptButton(tr("Generate Simulations Config Files"), settings.getScriptPath(R::Settings::Scripts::GenerateSimulationsConfigFiles), func, onPushed);
 
     for (int i = 0; i < btn-1; ++i)
         setNext(i, i+1);
@@ -212,11 +212,11 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         mPopMapListAdapter->addPath(ui->gisPath->text() + "/POPULATIONS/spatialLayers/");
         mPopMapListAdapter->refresh();
         break;
-    case 6:     // Harbour Specs
+    case 5:     // Harbour Specs
         ui->harbourCsvPage->setFilename(ui->gisPath->text() + "/POPULATIONS/Stock_prices_data.csv");
         ui->harbourCsvPage->load();
         break;
-    case 8:
+    case 7:     // Shipping specs
         ui->ShippingCsvPage1->setFilename(ui->gisPath->text() + ShippingFeaturesFilename);
         ui->ShippingCsvPage1->load();
         ui->ShippingCsvPage2->setFilename(ui->gisPath->text() + ShippingLanesLatFilename);
@@ -224,7 +224,7 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->ShippingCsvPage3->setFilename(ui->gisPath->text() + ShippingLanesLonFilename);
         ui->ShippingCsvPage3->load();
         break;
-    case 10:
+    case 9:     // Fishfarms specs
         ui->fishfarmsCsvPage->setFilename(ui->gisPath->text() + FishfarmsFeaturesFilename);
         ui->fishfarmsCsvPage->load();
         break;

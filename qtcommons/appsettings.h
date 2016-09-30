@@ -15,9 +15,13 @@ public:
     QPointF getMapCenterPoint() const;
     void setMapCenterPoint(const QPointF &);
 
+    int getMapZoom() const;
+    void setMapZoom (int zoomlevel);
+
     static void initialize();
 
     static const QString MapCenterPoint;
+    static const QString MapZoom;
 };
 
 }

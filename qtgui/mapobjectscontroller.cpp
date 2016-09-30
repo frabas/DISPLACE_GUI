@@ -75,9 +75,10 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     mMap->addLayer(mWidgetLayer);
     mMap->addLayer(mEditorLayer);
 
-    auto center = displace::AppSettings().getMapCenterPoint();
+    displace::AppSettings appsettings;
+    auto center = appsettings.getMapCenterPoint();
     mMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    mMap->setZoom(10);
+    mMap->setZoom(appsettings.getMapZoom());
 
     connect (mMap, SIGNAL(geometryClicked(const Geometry*)), this, SLOT(geometryClicked(const Geometry*)));
 }

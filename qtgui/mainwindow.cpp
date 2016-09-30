@@ -2494,7 +2494,9 @@ void MainWindow::on_actionShortest_Path_to_Binary_triggered()
 void MainWindow::on_action_Record_Current_Map_Position_triggered()
 {
     auto pt = map->mapFocusPointCoord();
-    displace::AppSettings().setMapCenterPoint(QPointF(pt.longitude(), pt.latitude()));
+    displace::AppSettings appsettings;
+    appsettings.setMapCenterPoint(QPointF(pt.longitude(), pt.latitude()));
+    appsettings.setMapZoom(map->getCurrentZoom());
 }
 
 void MainWindow::on_actionClear_configuration_triggered()

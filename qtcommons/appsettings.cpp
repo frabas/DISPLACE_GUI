@@ -6,6 +6,7 @@
 using namespace displace;
 
 const QString AppSettings::MapCenterPoint = "MapCentralPoint";
+const QString AppSettings::MapZoom = "MapZoom";
 
 AppSettings::AppSettings()
 {
@@ -20,6 +21,16 @@ QPointF AppSettings::getMapCenterPoint() const
 void AppSettings::setMapCenterPoint(const QPointF &point)
 {
     settings.setValue(MapCenterPoint, point);
+}
+
+int AppSettings::getMapZoom() const
+{
+    return settings.value(MapZoom, 7).toInt();
+}
+
+void AppSettings::setMapZoom(int zoomlevel)
+{
+    settings.setValue(MapZoom, zoomlevel);
 }
 
 void AppSettings::initialize()

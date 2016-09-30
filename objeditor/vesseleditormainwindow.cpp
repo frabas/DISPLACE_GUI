@@ -114,37 +114,39 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     lightup(0, true);
 
     // setup map
-    auto center = AppSettings().getMapCenterPoint();
+    AppSettings appsettings;
+    auto center = appsettings.getMapCenterPoint();
+    auto zoom = appsettings.getMapZoom();
 
     ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
     ui->vesselsShapefileMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->vesselsShapefileMap->setZoom(7);
+    ui->vesselsShapefileMap->setZoom(zoom);
 
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->popShapefilesMap->setZoom(7);
+    ui->popShapefilesMap->setZoom(zoom);
 
     ui->fishfarmMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->fishfarmMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
     ui->fishfarmMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->fishfarmMap->setZoom(7);
+    ui->fishfarmMap->setZoom(zoom);
 
     ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
     ui->shippingShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->shippingShapefilesMap->setZoom(7);
+    ui->shippingShapefilesMap->setZoom(zoom);
 
     ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
     ui->benthosShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->benthosShapefilesMap->setZoom(7);
+    ui->benthosShapefilesMap->setZoom(zoom);
 
     mVesMapListAdapter = new MapListAdapter(ui->vesselsShapefileMap);
     ui->vesselsShapefileList->setModel(mVesMapListAdapter);

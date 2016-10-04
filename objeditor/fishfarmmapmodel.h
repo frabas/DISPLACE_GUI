@@ -15,7 +15,6 @@ public:
     explicit FishfarmMapModel(qmapcontrol::QMapControl *map);
 
     void addGraphicsData(int id, float lat, float lon) override;
-
 private:
     std::vector<std::shared_ptr<FishfarmGraphics>> mGraphics;
     std::shared_ptr<qmapcontrol::LayerGeometry> mGraphicsLayer;

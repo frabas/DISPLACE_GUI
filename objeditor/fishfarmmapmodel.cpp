@@ -20,4 +20,3 @@ void FishfarmMapModel::addGraphicsData(int id, float lat, float lon)
     mGraphics[id] = gr;
     mGraphicsLayer->addGeometry(gr);
 }
-

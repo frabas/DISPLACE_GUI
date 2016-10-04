@@ -22,9 +22,12 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    mData = std::make_shared<QList<QStringList>> ();
-    mModel = new CsvTableModel(mData);
+//    mData = std::make_shared<QList<QStringList>> ();
+    mModel = new CsvTableModel(std::make_shared<QList<QStringList>> ());
     mModel->setFirstLineHeaders(true);
+
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectItems);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
 #if QT_VERSION > 0x050500
     mVesselsSpecProxyModel = new QSortFilterProxyModel(this);
@@ -34,6 +37,15 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
 #else
     ui->tableView->setModel(mModel);
 #endif
+
+    connect (ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, [this](QModelIndex from,QModelIndex to) {
+        emit currentRowChanged(from.row());
+        int row = from.row();
+        if (row < mData.size() && ui->map) {
+            Data &dt = mData[row];
+            ui->map->setMapFocusPoint(qmapcontrol::PointWorldCoord(dt.lon, dt.lat));
+        }
+    });
 
     ui->map->setVisible(false);
 }
@@ -48,12 +60,14 @@ void CsvSpecsPage::load()
     try {
         CsvImporter i;
         i.setSeparator(mSeparator);
-        mData = std::make_shared<QList<QStringList>>(i.import(mFilename));
-        mModel->setSource(mData);
+        auto datalist = std::make_shared<QList<QStringList>>(i.import(mFilename));
+        mModel->setSource(datalist);
 
         if (mIdIndex != -1 && mLatIndex != -1 && mLonIndex != -1) {
+            std::map<int, int> indexlist;
+
             int n = 0;
-            for (auto fields: *mData) {
+            for (auto fields: *datalist) {
                 if (n++ == 0) { // Skip headers
                     continue;
                 }
@@ -74,6 +88,27 @@ void CsvSpecsPage::load()
                     throw CsvImporter::Exception(tr("Bad Lon field"));
                 }
 
+                int cnt = 0;
+                auto indxlistit = indexlist.find(id);
+                if (indxlistit != indexlist.end()) {
+                    cnt = std::get<1>(*indxlistit)+1;
+                } else {
+                    indxlistit = std::get<0>(indexlist.insert(std::make_pair(id,0)));
+                }
+
+                Data d;
+                d.id = id;
+                d.lat = lat;
+                d.lon = lon;
+                d.index = cnt;
+
+                while (mData.size() <= id) {
+                    mData.emplace_back(Data());
+                }
+                mData[id] = d;
+
+                std::get<1>(*indxlistit) = cnt;
+
                 if (mMapGraphicsModel != nullptr) {
                     mMapGraphicsModel->addGraphicsData (id, lat, lon);
                 }
@@ -91,13 +126,10 @@ void CsvSpecsPage::load()
 
 void CsvSpecsPage::save()
 {
-    if (mData == nullptr)
-        return;
-
     try {
         CsvExporter ex;
         ex.setSeparator(mSeparator);
-        ex.exportFile(mFilename, *mData);
+        ex.exportFile(mFilename, mModel->rawData());
     } catch (CsvImporter::Exception &x) {
         QMessageBox::warning(this, tr("Save failed"),
                              tr("Cannot save %1: %2").arg(mFilename).arg(x.what()));

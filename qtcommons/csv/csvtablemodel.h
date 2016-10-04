@@ -27,6 +27,8 @@ public:
 
     void setSource (std::shared_ptr<QList<QStringList> > data);
     void setFirstLineHeaders(bool x);
+
+    const QList<QStringList> &rawData() const { return *mData; }
 signals:
 
 public slots:

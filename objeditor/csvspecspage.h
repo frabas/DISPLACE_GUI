@@ -42,14 +42,25 @@ public:
     void setupIdLatLonCsvIndex(int id, int lat, int lon);
 
    qmapcontrol::QMapControl *getMapControlWidget() const;
+
+signals:
+   void currentRowChanged(int row);
+
 private:
     Ui::CsvSpecsPage *ui;
 
     QString mFilename;
     QChar mSeparator;
 
+    struct Data {
+        int id;
+        float lat;
+        float lon;
+        int index;
+    };
+
     std::shared_ptr<MapControlGraphicsModel> mMapGraphicsModel;
-    std::shared_ptr<QList<QStringList>> mData;
+    std::vector<Data> mData;
     CsvTableModel *mModel;
     QSortFilterProxyModel *mVesselsSpecProxyModel;
 

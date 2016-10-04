@@ -2,7 +2,7 @@
 #include "ui_vesseleditormainwindow.h"
 
 #include <settings.h>
-#include <maplistadapter.h>
+#include <mapshapefilelistadapter.h>
 #include <csv/csvtablemodel.h>
 #include <csv/csvimporter.h>
 #include <csv/csvexporter.h>
@@ -148,10 +148,10 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->benthosShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->benthosShapefilesMap->setZoom(zoom);
 
-    mVesMapListAdapter = new MapListAdapter(ui->vesselsShapefileMap);
+    mVesMapListAdapter = new MapShapefileListAdapter(ui->vesselsShapefileMap);
     ui->vesselsShapefileList->setModel(mVesMapListAdapter);
 
-    mPopMapListAdapter = new MapListAdapter(ui->popShapefilesMap);
+    mPopMapListAdapter = new MapShapefileListAdapter(ui->popShapefilesMap);
     ui->popShapefilesList->setModel(mPopMapListAdapter);
 }
 

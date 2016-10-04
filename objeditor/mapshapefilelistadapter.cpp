@@ -1,4 +1,4 @@
-#include "maplistadapter.h"
+#include "mapshapefilelistadapter.h"
 
 #include <LayerESRIShapefile.h>
 #include <ESRIShapefile.h>
@@ -10,23 +10,23 @@
 
 #include <sstream>
 
-MapListAdapter::MapListAdapter(qmapcontrol::QMapControl *control)
+MapShapefileListAdapter::MapShapefileListAdapter(qmapcontrol::QMapControl *control)
     : mMapController(control)
 {
 
 }
 
-void MapListAdapter::clearPaths()
+void MapShapefileListAdapter::clearPaths()
 {
     mPaths.clear();
 }
 
-void MapListAdapter::addPath(const QString &path)
+void MapShapefileListAdapter::addPath(const QString &path)
 {
     mPaths << path;
 }
 
-void MapListAdapter::refresh()
+void MapShapefileListAdapter::refresh()
 {
     bool errorShown = false;
 
@@ -57,13 +57,13 @@ void MapListAdapter::refresh()
 }
 
 
-int MapListAdapter::rowCount(const QModelIndex &parent) const
+int MapShapefileListAdapter::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return mEntries.size();
 }
 
-QVariant MapListAdapter::data(const QModelIndex &index, int role) const
+QVariant MapShapefileListAdapter::data(const QModelIndex &index, int role) const
 {
     switch (role) {
     case Qt::DisplayRole:
@@ -75,12 +75,12 @@ QVariant MapListAdapter::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags MapListAdapter::flags(const QModelIndex &index) const
+Qt::ItemFlags MapShapefileListAdapter::flags(const QModelIndex &index) const
 {
     return QAbstractListModel::flags(index) | Qt::ItemIsUserCheckable;
 }
 
-bool MapListAdapter::setData(const QModelIndex &index, const QVariant &value, int role)
+bool MapShapefileListAdapter::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     switch (role) {
     case Qt::CheckStateRole:
@@ -91,7 +91,7 @@ bool MapListAdapter::setData(const QModelIndex &index, const QVariant &value, in
     return false;
 }
 
-MapListAdapter::MapEntry::MapEntry(const QString &path, qmapcontrol::QMapControl *controller, QString name)
+MapShapefileListAdapter::MapEntry::MapEntry(const QString &path, qmapcontrol::QMapControl *controller, QString name)
     : mPath (path), mName(name), mController(controller)
 {
     mDataSource = OGRSFDriverRegistrar::Open(path.toStdString().c_str(), FALSE);
@@ -116,7 +116,7 @@ MapListAdapter::MapEntry::MapEntry(const QString &path, qmapcontrol::QMapControl
     mController->addLayer(mLayer);
 }
 
-MapListAdapter::MapEntry::~MapEntry()
+MapShapefileListAdapter::MapEntry::~MapEntry()
 {
     qDebug() << "Destroy: " << mPath;
     mController->removeLayer(mPath.toStdString());
@@ -124,17 +124,17 @@ MapListAdapter::MapEntry::~MapEntry()
     //OGRSFDriverRegistrar::GetRegistrar()->ReleaseDataSource(mDataSource);
 }
 
-QString MapListAdapter::MapEntry::getName() const
+QString MapShapefileListAdapter::MapEntry::getName() const
 {
     return mName;
 }
 
-bool MapListAdapter::MapEntry::isVisible() const
+bool MapShapefileListAdapter::MapEntry::isVisible() const
 {
     return mLayer->isVisible();
 }
 
-void MapListAdapter::MapEntry::setVisible(bool visible)
+void MapShapefileListAdapter::MapEntry::setVisible(bool visible)
 {
     mLayer->setVisible(visible);
 }

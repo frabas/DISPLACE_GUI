@@ -9,10 +9,10 @@
 namespace qmapcontrol { class QMapControl; class LayerESRIShapefile; }
 class OGRDataSource;
 
-class MapListAdapter : public QAbstractListModel
+class MapShapefileListAdapter : public QAbstractListModel
 {
 public:
-    explicit MapListAdapter(qmapcontrol::QMapControl * control);
+    explicit MapShapefileListAdapter(qmapcontrol::QMapControl * control);
 
     void clearPaths();
     void addPath (const QString &path);

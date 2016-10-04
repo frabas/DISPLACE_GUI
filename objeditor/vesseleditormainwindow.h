@@ -16,7 +16,7 @@ class QSortFilterProxyModel;
 class QPushButton;
 QT_END_NAMESPACE
 
-class MapListAdapter;
+class MapShapefileListAdapter;
 
 class VesselEditorMainWindow : public QMainWindow
 {
@@ -46,8 +46,8 @@ private slots:
 
 private:
     Ui::VesselEditorMainWindow *ui;
-    MapListAdapter *mVesMapListAdapter;
-    MapListAdapter *mPopMapListAdapter;
+    MapShapefileListAdapter *mVesMapListAdapter;
+    MapShapefileListAdapter *mPopMapListAdapter;
 
     bool runScript(QString script);
     void fillRScriptsArgs(QStringList &args, const QString &script);

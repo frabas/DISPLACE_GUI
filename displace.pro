@@ -1,6 +1,6 @@
 TEMPLATE=subdirs
 CONFIG+=ordered
-SUBDIRS+=formats commons qtcommons QMapControl qtgui simulator dteditor tseditor objeditor \
+SUBDIRS+=formats commons QMapControl qtcommons qtgui simulator dteditor tseditor objeditor \
     scheduler
 
 unix:!macx{

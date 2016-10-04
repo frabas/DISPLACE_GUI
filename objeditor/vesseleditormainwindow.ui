@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -358,33 +358,9 @@
        <attribute name="title">
         <string>Fishfarms specifications</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_25">
+       <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
-         <widget class="QTabWidget" name="tabFishfarmSpecContainer">
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="tabFishfarmSpecSubPage1">
-           <attribute name="title">
-            <string>Specs</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_20">
-            <item>
-             <widget class="CsvSpecsPage" name="fishfarmsCsvPage" native="true"/>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tabFishfarmSpecSubPage2">
-           <attribute name="title">
-            <string>Map</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_26">
-            <item>
-             <widget class="qmapcontrol::QMapControl" name="fishfarmMap" native="true"/>
-            </item>
-           </layout>
-          </widget>
-         </widget>
+         <widget class="CsvSpecsPage" name="fishfarmsCsvPage" native="true"/>
         </item>
        </layout>
       </widget>

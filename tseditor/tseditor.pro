@@ -31,7 +31,22 @@ win32 {
     RC_FILE = tseditor.rc
 }
 
-LIBS += -L.. -lformats -lqtcommons
+
+LIBS += -lqtcommons
+
+include ("$$top_srcdir/QMapControl/QMapControl/QMapControl.pri")
+
+INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
+
+LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
+
+# Add GDAL library path and library (windows).
+win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
+
+# Add GDAL library path and library (unix).
+unix:LIBS += -lgdal
+
+macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
 
 SOURCES += \
     tseditor.cpp \

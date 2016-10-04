@@ -39,3 +39,21 @@ isEmpty(DESTDIR) {
 QT +=                               \
     network                         \
     widgets                         \
+
+# Variables for clients
+
+CONFIG(debug,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrold
+}
+CONFIG(release,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrol
+}
+
+win32 {
+    QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+    CGAL_LIBS= -lCGAL -lgmp -lboost_system-mgw49-mt-1_57
+}
+
+unix {
+    CGAL_LIBS= -lCGAL -lgmp
+}

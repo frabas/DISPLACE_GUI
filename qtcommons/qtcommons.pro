@@ -8,12 +8,16 @@ TARGET = qtcommons
 TEMPLATE = lib
 DESTDIR=../
 
-LIBS += -L.. -lformats
-
 DEFINES += QTCOMMONS_LIBRARY
 
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
+
+include (../QMapControl/QMapControl/QMapControl.pri)
+
+INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
+#LIBS += -L.. -lformats -l$$QMAPCONTROL_LIB  $$CGAL_LIBS
+
 
 SOURCES += qcustomplot.cpp \
         R/env.cpp \
@@ -22,7 +26,8 @@ SOURCES += qcustomplot.cpp \
         csv/csvtablemodel.cpp \
     R/defaults.cpp \
     R/settings.cpp \
-    appsettings.cpp
+    appsettings.cpp \
+    graphics/fishfarmgraphics.cpp
 
 HEADERS +=\
         qtcommons_global.h \
@@ -34,7 +39,8 @@ HEADERS +=\
     qsignalblocker.h \
     R/defaults.h \
     R/settings.h \
-    appsettings.h
+    appsettings.h \
+    graphics/fishfarmgraphics.h
 
 unix {
     target.path = /usr/lib

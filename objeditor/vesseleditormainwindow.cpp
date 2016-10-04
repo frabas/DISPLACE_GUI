@@ -6,6 +6,7 @@
 #include <csv/csvtablemodel.h>
 #include <csv/csvimporter.h>
 #include <csv/csvexporter.h>
+#include <fishfarmmapmodel.h>
 
 #include <fstream>
 
@@ -59,7 +60,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     ui->popSpecsTab->setCurrentIndex(0);
     ui->tabShippingSpecsContainer->setCurrentIndex(0);
-    ui->tabFishfarmSpecContainer->setCurrentIndex(0);
 
     ui->popSpecs1->setSeparator(QChar(';'));
     ui->popSpecs2->setSeparator(QChar(';'));
@@ -130,12 +130,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->popShapefilesMap->setZoom(zoom);
 
-    ui->fishfarmMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
-    ui->fishfarmMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
-
-    ui->fishfarmMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->fishfarmMap->setZoom(zoom);
-
     ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
 
@@ -153,6 +147,12 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mPopMapListAdapter = new MapShapefileListAdapter(ui->popShapefilesMap);
     ui->popShapefilesList->setModel(mPopMapListAdapter);
+
+    ui->fishfarmsCsvPage->enableMap();
+    ui->fishfarmsCsvPage->setupMapInitialDisplayConditions(center, zoom);
+    ui->fishfarmsCsvPage->setupIdLatLonCsvIndex(0,3,4);
+    auto mapmodel = std::make_shared<FishfarmMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
+    ui->fishfarmsCsvPage->setMapControlGraphicsModel(mapmodel);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()

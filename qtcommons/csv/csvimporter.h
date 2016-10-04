@@ -18,7 +18,7 @@ public:
         void raise() const { throw *this; }
         Exception *clone() const { return new Exception(*this); }
 
-        const char *what() const noexcept {
+        const char *what() const noexcept override {
             return mWhat.toStdString().c_str();
         }
 

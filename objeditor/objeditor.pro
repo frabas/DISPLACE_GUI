@@ -21,24 +21,6 @@ include ("$$top_srcdir/QMapControl/QMapControl/QMapControl.pri")
 
 INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
 
-QMAPCONTROL_LIB=qmapcontrol
-CONFIG(debug,release|debug) {
-    DEFINES += DEBUG
-    QMAPCONTROL_LIB=qmapcontrold
-}
-CONFIG(release,release|debug) {
-    QMAPCONTROL_LIB=qmapcontrol
-}
-win32 {
-    QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
-    CGAL_LIBS= -lCGAL -lgmp -lboost_system-mgw49-mt-1_57
-}
-
-unix {
-    CGAL_LIBS= -lCGAL -lgmp
-}
-
-
 LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL library path and library (windows).
@@ -79,7 +61,9 @@ SOURCES += \
     settings.cpp \
     csvspecspage.cpp \
     runscriptspage.cpp \
-    mapshapefilelistadapter.cpp
+    mapshapefilelistadapter.cpp \
+    mapcontrolgraphicsmodel.cpp \
+    fishfarmmapmodel.cpp
 
 FORMS += \
     vesseleditormainwindow.ui \
@@ -93,7 +77,9 @@ HEADERS += \
     settings.h \
     csvspecspage.h \
     runscriptspage.h \
-    mapshapefilelistadapter.h
+    mapshapefilelistadapter.h \
+    mapcontrolgraphicsmodel.h \
+    fishfarmmapmodel.h
 
 RESOURCES += \
     vesseleditor.qrc

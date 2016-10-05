@@ -162,6 +162,12 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->fishfarmsCsvPage->setupIdLatLonCsvIndex(0,4,3);
     auto mapmodel = std::make_shared<FishfarmMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
     ui->fishfarmsCsvPage->setMapControlGraphicsModel(mapmodel);
+
+    ui->harbourCsvPage2->enableMap();
+    ui->harbourCsvPage2->setupMapInitialDisplayConditions(center, zoom);
+    ui->harbourCsvPage2->setupIdLatLonCsvIndex(3,2,1);
+    mapmodel = std::make_shared<FishfarmMapModel>(ui->harbourCsvPage2->getMapControlWidget());
+    ui->harbourCsvPage2->setMapControlGraphicsModel(mapmodel);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -233,6 +239,8 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 5:     // Harbour Specs
         ui->harbourCsvPage->setFilename(ui->gisPath->text() + "/POPULATIONS/Stock_prices_data.csv");
         ui->harbourCsvPage->load();
+        ui->harbourCsvPage2->setFilename(ui->gisPath->text() + "/GRAPH/harbours.dat");
+        ui->harbourCsvPage2->load();
         break;
     case 7:     // Shipping specs
         ui->ShippingCsvPage1->setFilename(ui->gisPath->text() + ShippingFeaturesFilename);

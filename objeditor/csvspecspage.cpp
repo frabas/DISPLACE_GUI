@@ -40,7 +40,7 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
 
     connect (ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, [this](QModelIndex from,QModelIndex to) {
         emit currentRowChanged(from.row());
-        int row = from.row();
+        int row = from.row()+1;     // Ids are one-based, rows are zero based.
         if (row < mData.size() && ui->map) {
             Data &dt = mData[row];
             ui->map->setMapFocusPoint(qmapcontrol::PointWorldCoord(dt.lon, dt.lat));
@@ -67,7 +67,7 @@ void CsvSpecsPage::load()
             std::map<int, int> indexlist;
 
             int n = 0;
-            for (auto fields: *datalist) {
+            for (QStringList fields: *datalist) {
                 if (n++ == 0) { // Skip headers
                     continue;
                 }
@@ -82,7 +82,7 @@ void CsvSpecsPage::load()
                     qWarning() << "Bad Lat: " << fields[mLatIndex];
                     throw CsvImporter::Exception(tr("Bad Lat field"));
                 }
-                float lon = fields[mLatIndex].toFloat(&ok);
+                float lon = fields[mLonIndex].toFloat(&ok);
                 if (!ok) {
                     qWarning() << "Bad Lon: " << fields[mLonIndex];
                     throw CsvImporter::Exception(tr("Bad Lon field"));

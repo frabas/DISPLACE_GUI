@@ -150,7 +150,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->fishfarmsCsvPage->enableMap();
     ui->fishfarmsCsvPage->setupMapInitialDisplayConditions(center, zoom);
-    ui->fishfarmsCsvPage->setupIdLatLonCsvIndex(0,3,4);
+    ui->fishfarmsCsvPage->setupIdLatLonCsvIndex(0,4,3);
     auto mapmodel = std::make_shared<FishfarmMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
     ui->fishfarmsCsvPage->setMapControlGraphicsModel(mapmodel);
 }

@@ -3,7 +3,8 @@
 QBrush *FishfarmGraphics::color = 0;
 
 FishfarmGraphics::FishfarmGraphics(float lat, float lon)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(mLon, mLat), QSizeF(20.0, 40.0), 11, 7, 17)
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(lon, lat), QSizeF(40.0, 40.0), 11, 7, 17),
+      mLat(lat), mLon(lon)
 {
     if (color == 0)
         color = new QBrush(Qt::darkYellow);
@@ -24,5 +25,5 @@ void FishfarmGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorld
     Q_UNUSED(rect);
 
     painter.setBrush(*color);
-    painter.drawEllipse(-10, -20, 20, 40);
+    painter.drawEllipse(-20, -20, 40, 40);
 }

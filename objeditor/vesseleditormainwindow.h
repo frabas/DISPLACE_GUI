@@ -48,6 +48,7 @@ private:
     Ui::VesselEditorMainWindow *ui;
     MapShapefileListAdapter *mVesMapListAdapter;
     MapShapefileListAdapter *mPopMapListAdapter;
+    MapShapefileListAdapter *mBenthosMapListAdapter;
 
     bool runScript(QString script);
     void fillRScriptsArgs(QStringList &args, const QString &script);

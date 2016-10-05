@@ -14,11 +14,11 @@
    <string>Objects Editor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>9</number>
+       <number>11</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -380,7 +380,34 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_23">
         <item>
-         <widget class="qmapcontrol::QMapControl" name="benthosShapefilesMap" native="true"/>
+         <widget class="QTabWidget" name="tabBenthosSubpages">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="tabBenthosSpecsSubpage">
+           <attribute name="title">
+            <string>Specs</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_25">
+            <item>
+             <widget class="CsvSpecsPage" name="benthosCsvPage" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabBenthosShapefileSubpage">
+           <attribute name="title">
+            <string>Shapefiles</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+            <item>
+             <widget class="QListView" name="benthosShapefilesList"/>
+            </item>
+            <item>
+             <widget class="qmapcontrol::QMapControl" name="benthosShapefilesMap" native="true"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>

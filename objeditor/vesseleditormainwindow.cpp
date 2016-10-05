@@ -60,6 +60,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     ui->popSpecsTab->setCurrentIndex(0);
     ui->tabShippingSpecsContainer->setCurrentIndex(0);
+    ui->tabBenthosSubpages->setCurrentIndex(0);
 
     ui->popSpecs1->setSeparator(QChar(';'));
     ui->popSpecs2->setSeparator(QChar(';'));
@@ -147,6 +148,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mPopMapListAdapter = new MapShapefileListAdapter(ui->popShapefilesMap);
     ui->popShapefilesList->setModel(mPopMapListAdapter);
+
+    mBenthosMapListAdapter = new MapShapefileListAdapter(ui->benthosShapefilesMap);
+    ui->benthosShapefilesList->setModel(mBenthosMapListAdapter);
 
     ui->fishfarmsCsvPage->enableMap();
     ui->fishfarmsCsvPage->setupMapInitialDisplayConditions(center, zoom);
@@ -236,6 +240,11 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 9:     // Fishfarms specs
         ui->fishfarmsCsvPage->setFilename(ui->gisPath->text() + FishfarmsFeaturesFilename);
         ui->fishfarmsCsvPage->load();
+        break;
+    case 11:    // Benthos Specs
+        mBenthosMapListAdapter->clearPaths();
+        mBenthosMapListAdapter->addPath(ui->gisPath->text() + "/HABITATS/");
+        mBenthosMapListAdapter->refresh();
         break;
     }
 }

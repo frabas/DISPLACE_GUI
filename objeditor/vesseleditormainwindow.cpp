@@ -6,7 +6,8 @@
 #include <csv/csvtablemodel.h>
 #include <csv/csvimporter.h>
 #include <csv/csvexporter.h>
-#include <fishfarmmapmodel.h>
+#include <singlepointmapmodel.h>
+#include <graphics/fishfarmgraphics.h>
 
 #include <fstream>
 
@@ -160,13 +161,19 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->fishfarmsCsvPage->enableMap();
     ui->fishfarmsCsvPage->setupMapInitialDisplayConditions(center, zoom);
     ui->fishfarmsCsvPage->setupIdLatLonCsvIndex(0,4,3);
-    auto mapmodel = std::make_shared<FishfarmMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
+    auto mapmodel = std::make_shared<SinglePointMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
+    mapmodel->setGeometryBuilder([](float lat, float lon) {
+        return std::make_shared<FishfarmGraphics>(lat, lon);
+    });
     ui->fishfarmsCsvPage->setMapControlGraphicsModel(mapmodel);
 
     ui->harbourCsvPage2->enableMap();
     ui->harbourCsvPage2->setupMapInitialDisplayConditions(center, zoom);
     ui->harbourCsvPage2->setupIdLatLonCsvIndex(3,2,1);
-    mapmodel = std::make_shared<FishfarmMapModel>(ui->harbourCsvPage2->getMapControlWidget());
+    mapmodel = std::make_shared<SinglePointMapModel>(ui->harbourCsvPage2->getMapControlWidget());
+    mapmodel->setGeometryBuilder([](float lat, float lon) {
+        return std::make_shared<FishfarmGraphics>(lat, lon);
+    });
     ui->harbourCsvPage2->setMapControlGraphicsModel(mapmodel);
 }
 

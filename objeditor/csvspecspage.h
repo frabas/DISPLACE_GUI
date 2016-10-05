@@ -43,8 +43,7 @@ public:
     void setupMapInitialDisplayConditions(const QPointF &center, int zoom);
     void setupIdLatLonCsvIndex(int id, int lat, int lon);
 
-   qmapcontrol::QMapControl *getMapControlWidget() const;
-
+    qmapcontrol::QMapControl *getMapControlWidget() const;
 signals:
    void currentRowChanged(int row);
 

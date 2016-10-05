@@ -27,7 +27,8 @@ SOURCES += qcustomplot.cpp \
     R/defaults.cpp \
     R/settings.cpp \
     appsettings.cpp \
-    graphics/fishfarmgraphics.cpp
+    graphics/fishfarmgraphics.cpp \
+    graphics/harbourgraphics.cpp
 
 HEADERS +=\
         qtcommons_global.h \
@@ -40,9 +41,13 @@ HEADERS +=\
     R/defaults.h \
     R/settings.h \
     appsettings.h \
-    graphics/fishfarmgraphics.h
+    graphics/fishfarmgraphics.h \
+    graphics/harbourgraphics.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+RESOURCES += \
+    qtcommons.qrc

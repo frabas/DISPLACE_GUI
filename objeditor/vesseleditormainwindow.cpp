@@ -8,6 +8,7 @@
 #include <csv/csvexporter.h>
 #include <singlepointmapmodel.h>
 #include <graphics/fishfarmgraphics.h>
+#include <graphics/harbourgraphics.h>
 
 #include <fstream>
 
@@ -172,7 +173,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->harbourCsvPage2->setupIdLatLonCsvIndex(3,2,1);
     mapmodel = std::make_shared<SinglePointMapModel>(ui->harbourCsvPage2->getMapControlWidget());
     mapmodel->setGeometryBuilder([](float lat, float lon) {
-        return std::make_shared<FishfarmGraphics>(lat, lon);
+        return std::make_shared<HarbourGraphics>(lat, lon);
     });
     ui->harbourCsvPage2->setMapControlGraphicsModel(mapmodel);
 }

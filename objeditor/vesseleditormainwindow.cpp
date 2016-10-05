@@ -145,7 +145,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->benthosShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->benthosShapefilesMap->setZoom(zoom);
 
-    ui->benthosCsvPage->setSaveEnabled(false);
+    ui->benthosCsvPage1->setSaveEnabled(false);
+    ui->benthosCsvPage2->setSaveEnabled(false);
 
     mVesMapListAdapter = new MapShapefileListAdapter(ui->vesselsShapefileMap);
     ui->vesselsShapefileList->setModel(mVesMapListAdapter);
@@ -246,6 +247,10 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->fishfarmsCsvPage->load();
         break;
     case 11:    // Benthos Specs
+        ui->benthosCsvPage1->setFilename(ui->gisPath->text() + "/HABITATS/prop_loss_on_habitat_after_one_passage_per_metier_per_sz.csv");
+        ui->benthosCsvPage1->load();
+        ui->benthosCsvPage2->setFilename(ui->gisPath->text() + "/HABITATS/tot_benthos_biomass_on_habitat_per_node_per_sz.csv");
+        ui->benthosCsvPage2->load();
         mBenthosMapListAdapter->clearPaths();
         mBenthosMapListAdapter->addPath(ui->gisPath->text() + "/HABITATS/");
         mBenthosMapListAdapter->refresh();

@@ -382,7 +382,7 @@
         <item>
          <widget class="QTabWidget" name="tabBenthosSubpages">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabBenthosSpecsSubpage">
            <attribute name="title">
@@ -390,7 +390,17 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_25">
             <item>
-             <widget class="CsvSpecsPage" name="benthosCsvPage" native="true"/>
+             <widget class="CsvSpecsPage" name="benthosCsvPage1" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabBenthosSpecsSubpage2">
+           <attribute name="title">
+            <string>Specs 2</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="CsvSpecsPage" name="benthosCsvPage2" native="true"/>
             </item>
            </layout>
           </widget>

@@ -29,6 +29,8 @@ public:
     void load();
     void save();
 
+    void setSaveEnabled(bool enabled = true);
+
     void setFilename(QString n) {
         mFilename = n;
     }

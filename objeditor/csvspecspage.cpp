@@ -141,6 +141,11 @@ void CsvSpecsPage::save()
 
 }
 
+void CsvSpecsPage::setSaveEnabled(bool enabled)
+{
+    ui->saveCsv->setEnabled(enabled);
+}
+
 void CsvSpecsPage::enableMap()
 {
     ui->map->setVisible(true);

@@ -16,8 +16,8 @@ macx:DESTDIR=$$LIBDESTDIR
 include (../QMapControl/QMapControl/QMapControl.pri)
 
 INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
-#LIBS += -L.. -lformats -l$$QMAPCONTROL_LIB  $$CGAL_LIBS
 
+win32: LIBS += -L.. -lformats -l$$QMAPCONTROL_LIB  $$CGAL_LIBS
 
 SOURCES += qcustomplot.cpp \
         R/env.cpp \

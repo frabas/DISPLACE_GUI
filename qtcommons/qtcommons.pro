@@ -18,6 +18,7 @@ include (../QMapControl/QMapControl/QMapControl.pri)
 INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
 
 win32: LIBS += -L.. -lformats -l$$QMAPCONTROL_LIB  $$CGAL_LIBS
+macx: LIBS += -L.. -lformats -l$$QMAPCONTROL_LIB  $$CGAL_LIBS
 
 SOURCES += qcustomplot.cpp \
         R/env.cpp \

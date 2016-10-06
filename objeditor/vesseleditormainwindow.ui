@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -188,12 +188,19 @@
            <attribute name="title">
             <string>Shapefiles</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
+            <item row="0" column="0">
              <widget class="QListView" name="popShapefilesList"/>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="qmapcontrol::QMapControl" name="popShapefilesMap" native="true"/>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="popShapefilesPath">
+              <property name="text">
+               <string>shapefiles path:</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -217,9 +224,9 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTabWidget" name="tabWidget_2">
+         <widget class="QTabWidget" name="tabVesselsSpecsTabWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tabVesselsSpecs">
            <attribute name="title">
@@ -245,16 +252,24 @@
            <attribute name="title">
             <string>Shapefiles</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
+            <item row="0" column="0">
              <widget class="QListView" name="vesselsShapefileList"/>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="qmapcontrol::QMapControl" name="vesselsShapefileMap" native="true"/>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="vesselsShapefilePath">
+              <property name="text">
+               <string>Shapefiles Path</string>
+              </property>
+             </widget>
             </item>
            </layout>
            <zorder>vesselsShapefileMap</zorder>
            <zorder>vesselsShapefileList</zorder>
+           <zorder>vesselsShapefilePath</zorder>
           </widget>
          </widget>
         </item>

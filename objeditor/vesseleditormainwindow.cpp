@@ -61,6 +61,7 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->tabWidget->setCurrentIndex(0);
     ui->popSpecsTab->setCurrentIndex(0);
+    ui->tabVesselsSpecsTabWidget->setCurrentIndex(0);
     ui->tabShippingSpecsContainer->setCurrentIndex(0);
     ui->tabBenthosSubpages->setCurrentIndex(0);
 
@@ -224,25 +225,31 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     switch (index) {
     default:
         break;
-    case 3:     // Vessels Specifications
+    case 3: {    // Vessels Specifications
         ui->vesselsCsvPage->setFilename(ui->gisPath->text() + VesselsSpecFilename);
         ui->vesselsCsvPage->load();
         ui->vesselsCsvPage_2->setFilename(ui->gisPath->text() + VesselsSpec2Filename);
         ui->vesselsCsvPage_2->load();
         mVesMapListAdapter->clearPaths();
-        mVesMapListAdapter->addPath(ui->gisPath->text() + "/FISHERIES/SpatialLayers/");
+        auto path = ui->gisPath->text() + "/FISHERIES/SpatialLayers/";
+        mVesMapListAdapter->addPath(path);
         mVesMapListAdapter->refresh();
+        ui->vesselsShapefilePath->setText(path);
+        }
         break;
-    case 1:     // Populations Specifications
+    case 1: {    // Populations Specifications
         ui->popSpecs1->setFilename(ui->gisPath->text() + Pop1SpecFilename);
         ui->popSpecs1->load();
         ui->popSpecs2->setFilename(ui->gisPath->text() + Pop2SpecFilename);
         ui->popSpecs2->load();
         ui->popSpecs3->setFilename(ui->gisPath->text() + Pop3SpecFilename);
         ui->popSpecs3->load();
+        auto path = ui->gisPath->text() + "/POPULATIONS/spatialLayers/";
         mPopMapListAdapter->clearPaths();
-        mPopMapListAdapter->addPath(ui->gisPath->text() + "/POPULATIONS/spatialLayers/");
+        mPopMapListAdapter->addPath(path);
         mPopMapListAdapter->refresh();
+        ui->popShapefilesPath->setText(path);
+        }
         break;
     case 5:     // Harbour Specs
         ui->harbourCsvPage->setFilename(ui->gisPath->text() + "/POPULATIONS/Stock_prices_data.csv");

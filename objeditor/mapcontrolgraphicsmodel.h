@@ -17,8 +17,8 @@ public:
     MapControlGraphicsModel &operator =(const MapControlGraphicsModel &) = default;
     MapControlGraphicsModel &operator =(MapControlGraphicsModel &&) = default;
 
-    virtual void addGraphicsData (int id, float lat, float lon) = 0;
-
+    virtual void addGraphicsData (int row, float lat, float lon) = 0;
+    virtual void updateGraphicsData (int row, float lat, float lon) = 0;
 public:
     qmapcontrol::QMapControl *map() const { return mMap; }
 

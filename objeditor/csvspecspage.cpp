@@ -11,9 +11,44 @@
 #include <LayerMapAdapter.h>
 #include <MapAdapterOSM.h>
 #include <MapAdapterOpenSeaMap.h>
+#include <GeometryPointShape.h>
 
 #include <QSortFilterProxyModel>
 #include <QMessageBox>
+
+#include <QItemDelegate>
+#include <QValidator>
+#include <QLineEdit>
+
+namespace {
+class CoordDelegate : public QItemDelegate {
+public:
+    explicit CoordDelegate(QObject *parent = nullptr)
+        : QItemDelegate(parent) {}
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    {
+        Q_UNUSED(option);
+        Q_UNUSED(index);
+
+        QLineEdit *editor = new QLineEdit(parent);
+        editor->setValidator(new QDoubleValidator);
+        return editor;
+    }
+    void setEditorData(QWidget *editor, const QModelIndex &index) const override
+    {
+        QString value =index.model()->data(index, Qt::EditRole).toString();
+        QLineEdit *line = static_cast<QLineEdit*>(editor);
+        line->setText(value);
+    }
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override
+    {
+        QLineEdit *line = static_cast<QLineEdit*>(editor);
+        QString value = line->text();
+        model->setData(index, value);
+    }
+};
+}
 
 CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
     QWidget(parent),
@@ -22,9 +57,9 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    mData = std::make_shared<QList<QStringList>> ();
     mModel = new CsvTableModel(std::make_shared<QList<QStringList>> ());
     mModel->setFirstLineHeaders(true);
+    connect (mModel, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)), this, SLOT(dataChanged(QModelIndex,QModelIndex,QVector<int>)));
 
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectItems);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -39,10 +74,12 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
 #endif
 
     connect (ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, [this](QModelIndex from,QModelIndex to) {
+        Q_UNUSED(to);
         emit currentRowChanged(from.row());
-        int row = from.row()+1;     // Ids are one-based, rows are zero based.
+        size_t row = from.row();     // Ids are one-based, rows are zero based.
         if (row < mData.size() && ui->map) {
             Data &dt = mData[row];
+//            qDebug()  << "Move: " << row << dt.lat << dt.lon;
             ui->map->setMapFocusPoint(qmapcontrol::PointWorldCoord(dt.lon, dt.lat));
         }
     });
@@ -66,11 +103,12 @@ void CsvSpecsPage::load()
         if (mIdIndex != -1 && mLatIndex != -1 && mLonIndex != -1) {
             std::map<int, int> indexlist;
 
-            int n = 0;
-            for (QStringList fields: *datalist) {
-                if (n++ == 0) { // Skip headers
+
+            for (int n = 0; n < datalist->size(); ++n) {
+                if (n == 0) { // Skip headers
                     continue;
                 }
+                QStringList fields = datalist->at(n);
                 bool ok;
                 int id = fields[mIdIndex].toInt(&ok);
                 if (!ok) {
@@ -96,21 +134,23 @@ void CsvSpecsPage::load()
                     indxlistit = std::get<0>(indexlist.insert(std::make_pair(id,0)));
                 }
 
+                size_t row = n-1;
+
                 Data d;
                 d.id = id;
                 d.lat = lat;
                 d.lon = lon;
                 d.index = cnt;
 
-                while (mData.size() <= id) {
+                while (mData.size() <= row) {
                     mData.emplace_back(Data());
                 }
-                mData[id] = d;
+                mData[row] = d;
 
                 std::get<1>(*indxlistit) = cnt;
 
                 if (mMapGraphicsModel != nullptr) {
-                    mMapGraphicsModel->addGraphicsData (id, lat, lon);
+                    mMapGraphicsModel->addGraphicsData (row, lat, lon);
                 }
             }
         }
@@ -170,10 +210,37 @@ void CsvSpecsPage::setupIdLatLonCsvIndex(int id, int lat, int lon)
     mIdIndex = id;
     mLatIndex = lat;
     mLonIndex = lon;
+
+    ui->tableView->setItemDelegateForColumn(lat, new CoordDelegate);
+    ui->tableView->setItemDelegateForColumn(lon, new CoordDelegate);
 }
 
 qmapcontrol::QMapControl *CsvSpecsPage::getMapControlWidget() const
 {
     return ui->map;
+}
+
+void CsvSpecsPage::dataChanged(QModelIndex from, QModelIndex to, QVector<int> roles)
+{
+    if (!roles.empty() &&!roles.contains(Qt::DisplayRole))
+        return;
+
+    if (mIdIndex == -1 || mLatIndex == -1 || mLonIndex == -1)
+        return;
+
+    // Check if lat and lon are contained.
+    for (int row = from.row(); row <= to.row(); ++row) {
+        if ( (from.column() <= mLatIndex && mLatIndex <= to.column()) ||
+             (from.column() <= mLonIndex && mLonIndex <= to.column()) ) {
+
+            auto lat = mModel->data(mModel->index(row, mLatIndex), Qt::DisplayRole).toDouble();
+            auto lon = mModel->data(mModel->index(row, mLonIndex), Qt::DisplayRole).toDouble();
+            mData[row].lat = lat;
+            mData[row].lon = lon;
+//            qDebug()  << "Changed: " << row << lat << lon;
+            mMapGraphicsModel->updateGraphicsData(row, lat, lon);
+            ui->map->setMapFocusPoint(qmapcontrol::PointWorldCoord(lon, lat));
+        }
+    }
 }
 

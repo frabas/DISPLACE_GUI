@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <memory>
+#include <QModelIndex>
 
 namespace Ui {
 class CsvSpecsPage;
@@ -46,6 +47,9 @@ public:
     qmapcontrol::QMapControl *getMapControlWidget() const;
 signals:
    void currentRowChanged(int row);
+
+private slots:
+   void dataChanged(QModelIndex,QModelIndex,QVector<int>);
 
 private:
     Ui::CsvSpecsPage *ui;

@@ -139,6 +139,7 @@ bool DecisionTreeManager::readFile (std::string filename)
         if (stream.eof())
             break;
 
+        boost::trim(line);
         if (boost::istarts_with(line, "#Tree")) {
             std::vector<std::string> fields;
             boost::split(fields, line, boost::is_any_of(" "));
@@ -150,6 +151,10 @@ bool DecisionTreeManager::readFile (std::string filename)
                 }
             } else if (fields[0] == "#TreeType:") {
                 treeType = treeTypeFromCode(fields[1]);
+                if (treeType == InvalidTreeType) {
+                    std::cerr << "Invalid TreeType: '" << fields[1] << "'\n";
+                    return false;
+                }
             }
         } else if (boost::istarts_with(line, "#")) {
             // ignore
@@ -280,5 +285,5 @@ DecisionTreeManager::TreeType DecisionTreeManager::treeTypeFromCode(std::string 
         if (strcmp(code.c_str(), mCodes[i]) == 0)
             return static_cast<TreeType>(i);
     }
-    return SIZE;
+    return InvalidTreeType;
 }

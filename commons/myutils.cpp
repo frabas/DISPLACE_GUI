@@ -53,8 +53,8 @@ T* end(T (&pArray)[N])
 
 namespace {
 
-template <typename KEY, typename VALUE>
-void read_multimap (istream &stream, std::multimap<KEY,VALUE> &mmap) {
+template <typename KEY, typename VALUE, typename CONTAINER>
+void read_map (istream &stream, CONTAINER &mmap) {
     string line;
     while(!stream.eof())
     {
@@ -63,7 +63,7 @@ void read_multimap (istream &stream, std::multimap<KEY,VALUE> &mmap) {
         if (line.empty())
             continue;
 
-        if (!std::isdigit(line[0]) && line[0] != '.')
+        if (!std::isdigit(line[0]) && line[0] != '.' && line[0] != '-')
             continue;
 
         std::stringstream ss (line);
@@ -1061,7 +1061,7 @@ fill in the vessel attributes into a multimap <integer, double>
 */
 void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &infos)
 {
-    read_multimap<int,double> (in, infos);
+    read_map<int,double, std::multimap<int,double>> (in, infos);
 }
 
 /**
@@ -1092,7 +1092,7 @@ fill in the vessel attributes into a multimap <int, string>
 */
 void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& infos)
 {
-    read_multimap<int,std::string>(in,infos);
+    read_map<int,std::string,std::multimap<int,std::string>>(in,infos);
 }
 
 
@@ -1102,7 +1102,7 @@ fill in the vessel attributes into a multimap <int, int>
 */
 void fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& infos)
 {
-    read_multimap<int,int>(in, infos);
+    read_map<int,int,std::multimap<int,int>>(in, infos);
 }
 
 
@@ -1113,19 +1113,7 @@ fill in the vessel attributes into a map <int, int>
 void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput)
 {
     UNUSED(namefolderinput);
-
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		int val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
-    dout(cout  << "read and set up the specification map<int, int> " << endl << flush);
-
-	// TO DO: test if infos.count(key) = NBSZGROUP
+    read_map<int,int,std::map<int,int>>(in,infos);
 }
 
 
@@ -1136,18 +1124,7 @@ fill in the vessel attributes into a map <int, int>
 void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, string namefolderinput)
 {
     UNUSED(namefolderinput);
-
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		double val;
-		in >> val;
-        infos.insert(make_pair(key,val));
-	}
-    dout(cout  << "read and set up the specification map<int, double> " << endl << flush);
-
+    read_map<int,double,std::map<int,double>>(in,infos);
 }
 
 
@@ -1158,18 +1135,7 @@ fill in the vessel attributes into a map <int, int>
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput)
 {
     UNUSED(namefolderinput);
-
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-        in >> key;
-		string val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
-    dout(cout  << "read and set up the specification map<int, string> " << endl << flush);
-
+    read_map<int,std::string,std::map<int,std::string>>(in,infos);
 }
 
 

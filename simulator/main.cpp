@@ -351,10 +351,7 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
 /**---------------------------------------------------------------**/
 int main(int argc, char* argv[])
 {
-
-    CrashHandler handler;
-    handler.initialize();
-
+    bool crash_handler_enabled  = true;
 	// default
 	string namefolderinput="fake";
 	string namefolderoutput="baseline";
@@ -379,6 +376,7 @@ int main(int argc, char* argv[])
 
     // -V xxx  Sets level of verbosity  (default: 0)
     // --use-gui => emits machine parsable data to stdout
+    // --disable-crashhandler or --debug => Disables crash handling code.
 
     /* run in command line with:
       C:\Users\fbas\Documents\GitHub\DISPLACE_GUI\build\release>displace -f "balticonly" -f2 "baseline" -s
@@ -459,6 +457,8 @@ int main(int argc, char* argv[])
         } else if (sw == "--num_threads") {
             optind++;
             num_threads = atoi(argv[optind]);
+        } else if (sw == "--disable-crash-handler" || sw == "--debug") {
+            crash_handler_enabled = false;
         } else {
             dout (cout << "Unknown switch: " << argv[optind] << endl);
         }
@@ -466,6 +466,10 @@ int main(int argc, char* argv[])
 	}
 
     UNUSED(dparam);
+
+    CrashHandler handler;
+    if (crash_handler_enabled)
+        handler.initialize();
 
     initIpcQueue();
     thread_vessel_init(num_threads);

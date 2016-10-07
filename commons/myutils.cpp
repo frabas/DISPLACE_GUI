@@ -1035,14 +1035,22 @@ fill in the vessel attributes into a multimap <integer, double>
 */
 void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &infos)
 {
-
 	string line;
-    while(!getline(in, line).eof())
+    while(!in.eof())
 	{
+        getline(in, line);
+        boost::trim(line);
+        if (line.empty())
+            continue;
+
+        if (boost::starts_with(line, "#"))
+            continue;
+
+        std::stringstream ss (line);
 		int key;
-		in >> key;
+        ss >> key;
 		double val;
-		in >> val;
+        ss >> val;
 		infos.insert(make_pair(key,val));
 	}
     dout(cout  << "read and set up the specification <int, double> " << endl << flush);

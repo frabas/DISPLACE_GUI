@@ -25,7 +25,7 @@ namespace {
 
 BOOST_AUTO_TEST_CASE( files_test )
 {
-    std::string testsuite1 = "#headings\n0 1.1\n1 1.200\r\n2 0\n3 100.0    \n4 4  ";
+    std::string testsuite1 = "#headings\n0 1.1\n1 1.200\r\n2 0\n3 100.0    \n4 4\n\r";
 
     std::istringstream is(testsuite1);
     std::multimap<int,double> info;
@@ -36,14 +36,10 @@ BOOST_AUTO_TEST_CASE( files_test )
 //        std::cout << i.first << "," <<i.second << "\n";
 //    }
 
-    #define CHECK(idx, value) { auto v = find<int,double>(info, 0); BOOST_CHECK_CLOSE(v, value, 1e-3); }
-
     BOOST_CHECK_EQUAL(info.size(), 5);
     BOOST_CHECK_CLOSE(find_id(info, 0), 1.1, 1);
     BOOST_CHECK_CLOSE(find_id(info,1), 1.2, 1);
     BOOST_CHECK_CLOSE(find_id(info,2), 0, 1);
     BOOST_CHECK_CLOSE(find_id(info,3), 100, 1);
     BOOST_CHECK_CLOSE(find_id(info,4), 4, 1);
-
-    #undef CHECK
 }

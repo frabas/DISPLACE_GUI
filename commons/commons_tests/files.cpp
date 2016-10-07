@@ -25,7 +25,7 @@ namespace {
 
 BOOST_AUTO_TEST_CASE( files_test )
 {
-    std::string testsuite1 = "#headings\n0 1.1\n1 1.200\r\n2 0\n3 100.0    \n4 4\n\r";
+    std::string testsuite1 = "headings\n0 1.1\n1 1.200\r\n2 0\n3 100.0    \n4 4\n\r";
 
     std::istringstream is(testsuite1);
     std::multimap<int,double> info;

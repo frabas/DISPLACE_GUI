@@ -1043,7 +1043,7 @@ void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &
         if (line.empty())
             continue;
 
-        if (boost::starts_with(line, "#"))
+        if (!std::isdigit(line[0]) && line[0] != '.')
             continue;
 
         std::stringstream ss (line);

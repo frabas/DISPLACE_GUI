@@ -331,6 +331,7 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
     }
 
     sort(ret.begin(), ret.end());
+    unique(ret.begin(), ret.end());
     return true;
 }
 

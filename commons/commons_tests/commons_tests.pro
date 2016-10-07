@@ -1,0 +1,27 @@
+include ("$$top_srcdir/localconfig.pri")
+
+QT=
+TARGET=commons_tests
+CONFIG += c++11
+
+DESTDIR = ../bin/test
+
+DEFINES=
+INCLUDEPATH=../../include ..
+LIBS=-L../.. -lformats -ldisplacecommons -lpthread -lrt
+
+!boost_test_included {
+    message("Boost::Test framework will be dynamically linked")
+    LIBS+=-lboost_unit_test_framework
+}
+boost_test_included {
+    message("Boost::Test framework will be compiled in")
+    DEFINES += HAVE_BOOST_TEST_COMPILED
+}
+
+SOURCES= main.cpp \
+    files.cpp
+
+HEADERS=
+
+OTHER_FILES +=

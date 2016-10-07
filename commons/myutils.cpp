@@ -51,6 +51,32 @@ T* end(T (&pArray)[N])
 	return &pArray[0] + N;
 }
 
+namespace {
+
+template <typename KEY, typename VALUE>
+void read_multimap (istream &stream, std::multimap<KEY,VALUE> &mmap) {
+    string line;
+    while(!stream.eof())
+    {
+        getline(stream, line);
+        boost::trim(line);
+        if (line.empty())
+            continue;
+
+        if (!std::isdigit(line[0]) && line[0] != '.')
+            continue;
+
+        std::stringstream ss (line);
+        KEY key;
+        ss >> key;
+        VALUE val;
+        ss >> val;
+        mmap.insert(make_pair(key,val));
+    }
+}
+
+}
+
 
 void remove_dups(vector<int>& seq)
 {
@@ -1035,29 +1061,8 @@ fill in the vessel attributes into a multimap <integer, double>
 */
 void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &infos)
 {
-	string line;
-    while(!in.eof())
-	{
-        getline(in, line);
-        boost::trim(line);
-        if (line.empty())
-            continue;
-
-        if (!std::isdigit(line[0]) && line[0] != '.')
-            continue;
-
-        std::stringstream ss (line);
-		int key;
-        ss >> key;
-		double val;
-        ss >> val;
-		infos.insert(make_pair(key,val));
-	}
-    dout(cout  << "read and set up the specification <int, double> " << endl << flush);
-
-	// TO DO: test if infos.count(key) = NBSZGROUP
+    read_multimap<int,double> (in, infos);
 }
-
 
 /**
 fill in the vessel attributes into a multimap <string, double>
@@ -1087,19 +1092,7 @@ fill in the vessel attributes into a multimap <int, string>
 */
 void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& infos)
 {
-
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		string val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
-    dout(cout  << "read and set up the specification <int, string> " << endl << flush);
-
-	// TO DO: test if infos.count(key) = NBSZGROUP
+    read_multimap<int,std::string>(in,infos);
 }
 
 
@@ -1109,19 +1102,7 @@ fill in the vessel attributes into a multimap <int, int>
 */
 void fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& infos)
 {
-
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		int val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
-    dout(cout  << "read and set up the specification multimap<int, int> " << endl << flush);
-
-	// TO DO: test if infos.count(key) = NBSZGROUP
+    read_multimap<int,int>(in, infos);
 }
 
 

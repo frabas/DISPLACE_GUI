@@ -13,6 +13,7 @@ class LineStringMapModel  : public MapControlGraphicsModel
 public:
     LineStringMapModel(qmapcontrol::QMapControl *);
 
+    void clear() override;
     void addGraphicsData(int row, int id, float lat, float lon) override;
     void updateGraphicsData(int row, float lat, float lon) override;
 

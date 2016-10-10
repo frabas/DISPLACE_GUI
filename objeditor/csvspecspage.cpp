@@ -97,6 +97,10 @@ CsvSpecsPage::~CsvSpecsPage()
 
 void CsvSpecsPage::load()
 {
+    if (mMapGraphicsModel != nullptr) {
+        mMapGraphicsModel->clear();
+    }
+
     try {
         CsvImporter i;
         i.setSeparator(mSeparator);
@@ -105,7 +109,6 @@ void CsvSpecsPage::load()
 
         if (mIdIndex != -1 && mLatIndex != -1 && mLonIndex != -1) {
             std::map<int, int> indexlist;
-
 
             for (int n = 0; n < datalist->size(); ++n) {
                 if (n == 0) { // Skip headers

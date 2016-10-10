@@ -14,6 +14,13 @@ LineStringMapModel::LineStringMapModel(qmapcontrol::QMapControl *control)
     mGraphicsLayer->setVisible(true);
 }
 
+void LineStringMapModel::clear()
+{
+    mGraphicsLayer->clearGeometries();
+    mGraphics.clear();
+    mLaneData.clear();
+}
+
 void LineStringMapModel::addGraphicsData(int row, int id, float lat, float lon)
 {
     while (mGraphics.size() <= (size_t)id)

@@ -13,6 +13,12 @@ SinglePointMapModel::SinglePointMapModel(qmapcontrol::QMapControl *map)
     map->addLayer(mGraphicsLayer);
 }
 
+void SinglePointMapModel::clear()
+{
+    mGraphicsLayer->clearGeometries();
+    mGraphics.clear();
+}
+
 void SinglePointMapModel::addGraphicsData(int row, int id, float lat, float lon)
 {
     Q_UNUSED(id);

@@ -13,6 +13,7 @@ class SinglePointMapModel : public MapControlGraphicsModel
 public:
     explicit SinglePointMapModel(qmapcontrol::QMapControl *map);
 
+    void clear() override;
     void addGraphicsData(int row, int id, float lat, float lon) override;
     void updateGraphicsData(int row, float lat, float lon) override;
 

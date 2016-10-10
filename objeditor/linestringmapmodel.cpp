@@ -44,7 +44,10 @@ void LineStringMapModel::updateGraphicsData(int row, float lat, float lon)
 
     auto points = mGraphics[ld.lane]->points();
     points[ld.coordid] = qmapcontrol::PointWorldCoord(lon, lat);
+
+    mGraphicsLayer->removeGeometry(mGraphics[ld.lane]);
     mGraphics[ld.lane]->setPoints(points);
+    mGraphicsLayer->addGeometry(mGraphics[ld.lane]);
 }
 
 void LineStringMapModel::setGeometryBuilder(LineStringMapModel::GeometryBuilder builder)

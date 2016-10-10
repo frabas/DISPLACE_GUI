@@ -125,12 +125,18 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->vesselsShapefileMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+    connect (ui->vesselsShapefileMap, &qmapcontrol::QMapControl::mapFocusPointChanged, [this](qmapcontrol::PointWorldCoord coord) {
+        ui->vesselsMapCoord->setText(tr("Center: %1, %2").arg(coord.longitude()).arg(coord.latitude()));
+    });
 
     ui->vesselsShapefileMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->vesselsShapefileMap->setZoom(zoom);
 
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->popShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+    connect (ui->popShapefilesMap, &qmapcontrol::QMapControl::mapFocusPointChanged, [this](qmapcontrol::PointWorldCoord coord) {
+        ui->popMapCoord->setText(tr("Center: %1, %2").arg(coord.longitude()).arg(coord.latitude()));
+    });
 
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->popShapefilesMap->setZoom(zoom);
@@ -139,6 +145,9 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
     ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
+    connect (ui->benthosShapefilesMap, &qmapcontrol::QMapControl::mapFocusPointChanged, [this](qmapcontrol::PointWorldCoord coord) {
+        ui->benthosMapCoords->setText(tr("Center: %1, %2").arg(coord.longitude()).arg(coord.latitude()));
+    });
 
     ui->benthosShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->benthosShapefilesMap->setZoom(zoom);

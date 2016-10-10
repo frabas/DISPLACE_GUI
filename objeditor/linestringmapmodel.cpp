@@ -9,7 +9,7 @@
 LineStringMapModel::LineStringMapModel(qmapcontrol::QMapControl *control)
     : MapControlGraphicsModel(control)
 {
-    mGraphicsLayer = std::make_shared<qmapcontrol::LayerGeometry>("Geometry");
+    mGraphicsLayer = std::make_shared<qmapcontrol::LayerGeometry>("Shiplanes");
     control->addLayer(mGraphicsLayer);
     mGraphicsLayer->setVisible(true);
 }
@@ -32,8 +32,10 @@ void LineStringMapModel::addGraphicsData(int row, int id, float lat, float lon)
     LaneData ld;
     ld.lane = id;
     ld.coordid = mGraphics[id]->points().size();
+    mGraphicsLayer->removeGeometry(mGraphics[id]);
     mGraphics[id]->addPoint(qmapcontrol::PointWorldCoord(lon,lat));
     mLaneData[row] = ld;
+    mGraphicsLayer->addGeometry(mGraphics[id]);
 }
 
 void LineStringMapModel::updateGraphicsData(int row, float lat, float lon)

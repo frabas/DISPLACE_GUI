@@ -72,7 +72,7 @@ namespace qmapcontrol
          * Fetches the list of points that form a line.
          * @return the list of points that form a line.
          */
-        std::vector<PointWorldCoord> points() const;
+        const std::vector<PointWorldCoord> &points() const;
 
         std::vector<PointWorldCoord> quadtree_points() const;
 

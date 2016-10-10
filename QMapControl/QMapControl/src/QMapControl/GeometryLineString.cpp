@@ -43,7 +43,7 @@ namespace qmapcontrol
     {
     }
 
-    std::vector<PointWorldCoord> GeometryLineString::points() const
+    const std::vector<PointWorldCoord> &GeometryLineString::points() const
     {
         // Return the points.
         return m_points;

@@ -84,7 +84,10 @@ CsvSpecsPage::CsvSpecsPage(QWidget *parent) :
         }
     });
 
-    ui->map->setVisible(false);
+    ui->mapFrame->setVisible(false);
+    connect(ui->map, &qmapcontrol::QMapControl::mapFocusPointChanged, [this](qmapcontrol::PointWorldCoord coord) {
+        ui->coord->setText(tr("Center: %1, %2").arg(coord.longitude()).arg(coord.latitude()));
+    });
 }
 
 CsvSpecsPage::~CsvSpecsPage()
@@ -188,7 +191,7 @@ void CsvSpecsPage::setSaveEnabled(bool enabled)
 
 void CsvSpecsPage::enableMap()
 {
-    ui->map->setVisible(true);
+    ui->mapFrame->setVisible(true);
 }
 
 void CsvSpecsPage::setMapControlGraphicsModel(std::shared_ptr<MapControlGraphicsModel> model)

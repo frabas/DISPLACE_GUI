@@ -491,6 +491,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>qmapcontrol::QMapControl</class>
+   <extends>QWidget</extends>
+   <header>QMapControl.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>CsvSpecsPage</class>
    <extends>QWidget</extends>
    <header>csvspecspage.h</header>
@@ -500,12 +506,6 @@
    <class>RunScriptsPage</class>
    <extends>QWidget</extends>
    <header>runscriptspage.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>qmapcontrol::QMapControl</class>
-   <extends>QWidget</extends>
-   <header>QMapControl.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

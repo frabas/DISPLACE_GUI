@@ -51,6 +51,8 @@ signals:
 private slots:
    void dataChanged(QModelIndex,QModelIndex,QVector<int>);
 
+   void on_saveCsv_clicked();
+
 private:
     Ui::CsvSpecsPage *ui;
 

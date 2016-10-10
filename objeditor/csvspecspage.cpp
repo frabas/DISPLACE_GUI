@@ -244,3 +244,8 @@ void CsvSpecsPage::dataChanged(QModelIndex from, QModelIndex to, QVector<int> ro
     }
 }
 
+
+void CsvSpecsPage::on_saveCsv_clicked()
+{
+    save();
+}

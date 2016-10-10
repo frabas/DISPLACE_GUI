@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>7</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -337,7 +337,7 @@
         <item>
          <widget class="QTabWidget" name="tabShippingSpecsContainer">
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tabShippingSpecsPage1">
            <attribute name="title">
@@ -356,16 +356,6 @@
            <layout class="QVBoxLayout" name="verticalLayout_16">
             <item>
              <widget class="CsvSpecsPage" name="ShippingCsvPage2" native="true"/>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tabShippingSpecsPage3">
-           <attribute name="title">
-            <string>Specs 3</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_17">
-            <item>
-             <widget class="CsvSpecsPage" name="ShippingCsvPage3" native="true"/>
             </item>
            </layout>
           </widget>

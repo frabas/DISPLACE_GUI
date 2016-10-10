@@ -13,7 +13,7 @@ class SinglePointMapModel : public MapControlGraphicsModel
 public:
     explicit SinglePointMapModel(qmapcontrol::QMapControl *map);
 
-    void addGraphicsData(int row, float lat, float lon) override;
+    void addGraphicsData(int row, int id, float lat, float lon) override;
     void updateGraphicsData(int row, float lat, float lon) override;
 
     using GeometryBuilder = std::function<std::shared_ptr<qmapcontrol::GeometryPointShape>(float lat, float lon)>;

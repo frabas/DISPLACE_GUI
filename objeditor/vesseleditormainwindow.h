@@ -32,8 +32,7 @@ public:
     static const QString Pop2SpecFilename;
     static const QString Pop3SpecFilename;
     static const QString ShippingFeaturesFilename;
-    static const QString ShippingLanesLatFilename;
-    static const QString ShippingLanesLonFilename;
+    static const QString ShippingLanesCoordFilename;
     static const QString FishfarmsFeaturesFilename;
 
 private slots:

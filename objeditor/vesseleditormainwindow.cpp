@@ -7,8 +7,10 @@
 #include <csv/csvimporter.h>
 #include <csv/csvexporter.h>
 #include <singlepointmapmodel.h>
+#include <linestringmapmodel.h>
 #include <graphics/fishfarmgraphics.h>
 #include <graphics/harbourgraphics.h>
+#include <graphics/shiplanesgraphics.h>
 
 #include <fstream>
 
@@ -40,8 +42,7 @@ const QString VesselEditorMainWindow::Pop2SpecFilename = "/POPULATIONS/Stock_spa
 const QString VesselEditorMainWindow::Pop3SpecFilename = "/POPULATIONS/Stock_biological_traits.csv";
 
 const QString VesselEditorMainWindow::ShippingFeaturesFilename = "/SHIPPING/shipsspe_features.csv";
-const QString VesselEditorMainWindow::ShippingLanesLatFilename = "/SHIPPING/shipsspe_lanes_lat.csv";
-const QString VesselEditorMainWindow::ShippingLanesLonFilename = "/SHIPPING/shipsspe_lanes_lon.csv";
+const QString VesselEditorMainWindow::ShippingLanesCoordFilename = "/SHIPPING/shipsspe_lanes_longlat.csv";
 
 const QString VesselEditorMainWindow::FishfarmsFeaturesFilename = "/FISHFARMS/fishfarms_features.csv";
 
@@ -163,20 +164,31 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->fishfarmsCsvPage->enableMap();
     ui->fishfarmsCsvPage->setupMapInitialDisplayConditions(center, zoom);
     ui->fishfarmsCsvPage->setupIdLatLonCsvIndex(0,4,3);
-    auto mapmodel = std::make_shared<SinglePointMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
-    mapmodel->setGeometryBuilder([](float lat, float lon) {
+    auto spoint_mapmodel = std::make_shared<SinglePointMapModel>(ui->fishfarmsCsvPage->getMapControlWidget());
+    spoint_mapmodel->setGeometryBuilder([](float lat, float lon) {
         return std::make_shared<FishfarmGraphics>(lat, lon);
     });
-    ui->fishfarmsCsvPage->setMapControlGraphicsModel(mapmodel);
+    ui->fishfarmsCsvPage->setMapControlGraphicsModel(spoint_mapmodel);
 
     ui->harbourCsvPage2->enableMap();
     ui->harbourCsvPage2->setupMapInitialDisplayConditions(center, zoom);
     ui->harbourCsvPage2->setupIdLatLonCsvIndex(3,2,1);
-    mapmodel = std::make_shared<SinglePointMapModel>(ui->harbourCsvPage2->getMapControlWidget());
-    mapmodel->setGeometryBuilder([](float lat, float lon) {
+    spoint_mapmodel = std::make_shared<SinglePointMapModel>(ui->harbourCsvPage2->getMapControlWidget());
+    spoint_mapmodel->setGeometryBuilder([](float lat, float lon) {
         return std::make_shared<HarbourGraphics>(lat, lon);
     });
-    ui->harbourCsvPage2->setMapControlGraphicsModel(mapmodel);
+    ui->harbourCsvPage2->setMapControlGraphicsModel(spoint_mapmodel);
+
+    ui->ShippingCsvPage2->enableMap();
+    ui->ShippingCsvPage2->setupMapInitialDisplayConditions(center, zoom);
+    ui->ShippingCsvPage2->setupIdLatLonCsvIndex(0,2,1);
+    auto lines_mapmodel = std::make_shared<LineStringMapModel>(ui->ShippingCsvPage2->getMapControlWidget());
+    lines_mapmodel->setGeometryBuilder([](float lat, float lon) {
+        Q_UNUSED(lat);
+        Q_UNUSED(lon);
+        return std::make_shared<ShipLanesGraphics>();
+    });
+    ui->ShippingCsvPage2->setMapControlGraphicsModel(lines_mapmodel);
 }
 
 VesselEditorMainWindow::~VesselEditorMainWindow()
@@ -260,10 +272,8 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 7:     // Shipping specs
         ui->ShippingCsvPage1->setFilename(ui->gisPath->text() + ShippingFeaturesFilename);
         ui->ShippingCsvPage1->load();
-        ui->ShippingCsvPage2->setFilename(ui->gisPath->text() + ShippingLanesLatFilename);
+        ui->ShippingCsvPage2->setFilename(ui->gisPath->text() + ShippingLanesCoordFilename);
         ui->ShippingCsvPage2->load();
-        ui->ShippingCsvPage3->setFilename(ui->gisPath->text() + ShippingLanesLonFilename);
-        ui->ShippingCsvPage3->load();
         break;
     case 9:     // Fishfarms specs
         ui->fishfarmsCsvPage->setFilename(ui->gisPath->text() + FishfarmsFeaturesFilename);

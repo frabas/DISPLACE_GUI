@@ -63,7 +63,8 @@ SOURCES += \
     runscriptspage.cpp \
     mapshapefilelistadapter.cpp \
     mapcontrolgraphicsmodel.cpp \
-    singlepointmapmodel.cpp
+    singlepointmapmodel.cpp \
+    linestringmapmodel.cpp
 
 FORMS += \
     vesseleditormainwindow.ui \
@@ -79,7 +80,8 @@ HEADERS += \
     runscriptspage.h \
     mapshapefilelistadapter.h \
     mapcontrolgraphicsmodel.h \
-    singlepointmapmodel.h
+    singlepointmapmodel.h \
+    linestringmapmodel.h
 
 RESOURCES += \
     vesseleditor.qrc

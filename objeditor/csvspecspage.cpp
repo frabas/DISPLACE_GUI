@@ -150,7 +150,7 @@ void CsvSpecsPage::load()
                 std::get<1>(*indxlistit) = cnt;
 
                 if (mMapGraphicsModel != nullptr) {
-                    mMapGraphicsModel->addGraphicsData (row, lat, lon);
+                    mMapGraphicsModel->addGraphicsData (row, id, lat, lon);
                 }
             }
         }

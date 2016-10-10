@@ -287,13 +287,15 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
     string vessel_name;
     int node;
     int n = 0;
-    while(!getline(in, line).eof())
+    while(!in.eof())
     {
+        getline(in, line);
         ++n;
         if (n == 1)
             continue;
-        in >> vessel_name;
-        in >> node;
+        std::stringstream ss (line);
+        ss >> vessel_name;
+        ss >> node;
         nodes.insert(node);
     }
 

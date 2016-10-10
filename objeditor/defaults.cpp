@@ -31,19 +31,19 @@ QString vesselsEditor::getDefaultRunScriptPath()
 
 QString vesselsEditor::defaults::getApplicationName()
 {
-    return "balticRTI";
+    return "testexample";
 }
 
 QString vesselsEditor::defaults::getApplicationPath()
 {
     return QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]
-            + "/GitHub/DISPLACE_input_balticRTI";
+            + "/GitHub/DISPLACE_input_testexample";
 }
 
 QString vesselsEditor::defaults::getGisDataPath()
 {
     return QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0]
-            + "/GitHub/DISPLACE_input_gis/balticRTI";
+            + "/GitHub/DISPLACE_input_gis/testexample";
 }
 
 QString vesselsEditor::defaults::getIGraphValue()

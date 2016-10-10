@@ -135,12 +135,6 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     ui->popShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
     ui->popShapefilesMap->setZoom(zoom);
 
-    ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));
-    ui->shippingShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("Seamark", std::make_shared<qmapcontrol::MapAdapterOpenSeaMap>()));
-
-    ui->shippingShapefilesMap->setMapFocusPoint(qmapcontrol::PointWorldCoord(center.x(), center.y()));
-    ui->shippingShapefilesMap->setZoom(zoom);
-
     ui->harbourCsvPage->setSaveEnabled(false);
 
     ui->benthosShapefilesMap->addLayer(std::make_shared<qmapcontrol::LayerMapAdapter>("OpenStreetMap", std::make_shared<qmapcontrol::MapAdapterOSM>()));

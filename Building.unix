@@ -35,6 +35,35 @@ $ dpkg-buildpackage -uc -B -j8
 Please ensure that the system is properly setup, as described in the Debian's New Maintainer's guide
 ( https://www.debian.org/doc/manuals/maint-guide/ )
 
+* Releasing sources for Debian
+
+It worth spending a few words about how to prepare the sources for deb package building.
+First, when a new version number is ready, it is needed to update the Changelog.
+It is a good practice to update it whenever ANY changes has been released, for example, bug fixing, feature implementation etc.
+Usually, you will update the changelog just before releasing the new version.
+
+To update the changelog with feature description, run
+
+dch -i
+
+This will increment the previous version number by one (appending ubuntu1).
+Them update the version number by running
+
+dch -v 0.9.0
+
+This will change the current "stanza" from, say, 0.8.8ubuntu1 to 0.9.0 UNRELEASED;
+"Unreleased" means that the package should be built for internal use. Any increment will be appended to the current version.
+When you have tested the new version and want to release it, run
+
+dch -r
+
+this will change "UNRELEASED" to "xenial" or whatever version of ubuntu you are building on.
+Now the source can be released, just run the release script with
+
+./release -v 0.9.0
+
+or tag the git version and run release without arguments (see -h for details).
+
 
 Compilation under linux
 -----------------------

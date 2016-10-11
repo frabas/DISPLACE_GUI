@@ -1,4 +1,10 @@
-displace (0.8.8) UNRELEASED; urgency=medium
+displace (0.9.0) xenial; urgency=medium
+
+  * New Object Editor Implemented.
+
+ -- HappyCactus <happycactus@Picachu>  Tue, 11 Oct 2016 17:46:37 +0200
+
+displace (0.8.8) unstable; urgency=medium
 
   [ Federico Fuga ]
   * Metiers Graphs implemented

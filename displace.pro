@@ -9,6 +9,14 @@ unix:!macx{
         commons/commons_tests
 }
 
+commons.depends = formats
+qtcommons.depends = QMapControl commons
+qtgui.depends = commons qtcommons QMapControl
+simulator.depends = commons
+dteditor.depends = commons qtcommons
+tseditor.depends = commons qtcommons
+objeditor.depends = commons qtcommons QMapControl
+
 !unit-test {
     message("Unit-test disabled")
 }

@@ -33,6 +33,7 @@ NAME=displace-$VERSION$MOD
 TEMP=../temp-src
 SRCPATH=$TEMP/$NAME
 
+rm -rf $SRCPATH
 mkdir -p $SRCPATH
 rsync -rav --progress --exclude .git --exclude .qt.conf --exclude \*~ --exclude \*.tar.gz --exclude build --exclude 3rd-party . $SRCPATH
 ( cd $TEMP && tar zcvf $NAME.tar.gz $NAME )

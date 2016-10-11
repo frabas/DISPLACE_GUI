@@ -38,6 +38,16 @@ include ("$$top_srcdir/QMapControl/QMapControl/QMapControl.pri")
 
 INCLUDEPATH+=../QMapControl/QMapControl/src/QMapControl/
 
+QMAPCONTROL_LIB=qmapcontrol
+
+CONFIG(debug,release|debug) {
+    DEFINES += DEBUG
+    QMAPCONTROL_LIB=qmapcontrold
+}
+CONFIG(release,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrol
+}
+
 LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL library path and library (windows).

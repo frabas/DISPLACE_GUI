@@ -30,11 +30,6 @@ RCC_DIR = resources
 # Build UI directory.
 UI_DIR = ui
 
-# Target install directory.
-isEmpty(DESTDIR) {
-    DESTDIR = lib
-}
-
 # Add Qt modules.
 QT +=                               \
     network                         \
@@ -42,11 +37,9 @@ QT +=                               \
 
 # Variables for clients
 
+QMAPCONTROL_LIB=qmapcontrol
 CONFIG(debug,release|debug) {
     QMAPCONTROL_LIB=qmapcontrold
-}
-CONFIG(release,release|debug) {
-    QMAPCONTROL_LIB=qmapcontrol
 }
 
 win32 {

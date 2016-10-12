@@ -17,7 +17,7 @@ CONFIG(release, debug|release) {
     TARGET = qmapcontrol
 }
 
-!isEmpty(DESTDIR) {
+isEmpty(DESTDIR) {
     DESTDIR=../../../../
 }
 

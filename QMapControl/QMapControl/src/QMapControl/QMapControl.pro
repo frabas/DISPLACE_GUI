@@ -17,9 +17,14 @@ CONFIG(release, debug|release) {
     TARGET = qmapcontrol
 }
 
+
+macx:DESTDIR=../../../$$LIBDESTDIR
+
 isEmpty(DESTDIR) {
     DESTDIR=../../../../
 }
+
+message("DestDir for QMapControl: $$DESTDIR")
 
 # Target version.
 VERSION = 1.0.0

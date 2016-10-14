@@ -77,11 +77,13 @@ INSTALL=$PWD/build
 APPNAME=DisplaceProject
 APPBUNDLE=$DESTDIR/$APPNAME.app
 
-EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor vsleditor"
+EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor objeditor"
 EXTRA_FRAMEWORKS=""
-EXTRA_LIBS="libGeographic libCGAL libgmp "
+# EXTRA_LIBS must be found as dependency in EXECUTABLES
+EXTRA_LIBS="libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
 QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
 
+# These INSTALL_EXTRA_LIBS will be installed regardless of the links
 INSTALL_EXTRA_LIBS=""
 
 
@@ -124,10 +126,10 @@ copy_lib()
 			fi
 			
 			if [ -r "$org_name" ] ; then
-				#echo "COPYING: $org_name $dest_name"
+				echo "COPYING: $org_name $dest_name"
 				cp -L $org_name $dest_name || exit 1
 		
-				#echo "Running: install_name_tool -id $new_name $dest_name"
+				echo "Running: install_name_tool -id $new_name $dest_name"
 				install_name_tool -id $new_name $dest_name || echo "- ***Error Running: install_name_tool -id $new_name $dest_name"
 			else
 				echo "Cannot read $org_name (`otool -L $T | grep $LIB`)"
@@ -239,8 +241,10 @@ update_links()
 	AB=$3
 	FRAMEWORK=$4
 
+	echo "++ Checking $LIB in $T"
 	libpath=`otool -L $T | grep $LIB`
-	if [ $? -eq 0 ] ; then			
+	if [ $? -eq 0 ] ; then		
+		echo "++ FOUND"	
 		#echo "Testing: otool -L $T | grep $LIB | awk '{ print \$1 }'"
 		org_name=`otool -L $T | grep $LIB | egrep -v '\:$' | head -1 | awk '{ print \$1 }'`			
 		echo "$org_name" | egrep '@executable_path/' > /dev/null
@@ -307,6 +311,12 @@ for app in $EXECUTABLES; do
 	done
 done
 
+for dlib in $APPBUNDLE/Contents/Frameworks/*.dylib ; do
+	for lib in $EXTRA_LIBS; do
+		copy_lib $dlib $lib $APPBUNDLE
+	done
+done
+
 # Remove the _debug libraries
 echo "Removing debug libraries"
 find $APPBUNDLE/Contents/Frameworks/ -name \*_debug -exec rm \{\} \;
@@ -334,11 +344,12 @@ for file in $QTLIBS; do
 done
 
 echo "Updating dynamic library references"
-for file in $CEXE $APPBUNDLE/Contents/Frameworks/* $PLUGINS ; do
-	echo $file | egrep '.*\.framework' > /dev/null
-	if [ $? -ne 0 ] ; then
-		fix_links $file
-	fi
+for file in $CEXE $APPBUNDLE/Contents/Frameworks/*.dylib $PLUGINS ; do
+	#echo $file | egrep '.*\.framework' > /dev/null
+	#if [ $? -ne 0 ] ; then
+	echo "Fixing: $file"
+	fix_links $file
+	#fi
 done
 
 for file in $EXTRA_FRAMEWORKS; do
@@ -354,8 +365,10 @@ done
 mkdir $APPBUNDLE/Contents/Resources/scripts
 cp $TOPDIR/scripts/*.R $APPBUNDLE/Contents/Resources/scripts
 
-# Applying owner:group and access rights
+}
 
+create_dmg() {
+# Applying owner:group and access rights
 echo "Applying permissions"
 sudo chown -R root:staff $APPBUNDLE
 sudo find $APPBUNDLE -type f -exec chmod 644 \{\} \;
@@ -363,10 +376,6 @@ sudo find $APPBUNDLE -type d -exec chmod 755 \{\} \;
 for app in $EXECUTABLES; do
 	sudo chmod +x $APPBUNDLE/Contents/MacOS/$app
 done
-
-}
-
-create_dmg() {
 
 rm -rf $INSTALL/install
 mkdir $INSTALL/install

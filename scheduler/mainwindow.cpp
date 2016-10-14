@@ -145,14 +145,31 @@ void MainWindow::on_action_Open_triggered()
 
 void MainWindow::on_action_Generate_Script_triggered()
 {
+    QString scriptext;
+#if defined (Q_OS_WIN)
+    scriptext = "bat";
+#else
+    scriptext = "sh";
+#endif
+
     QSettings s;
     QString out = QFileDialog::getSaveFileName(this, tr("Export Script file"),
                                                s.value("last_gen_script").toString(),
-                                               QString("Scheduler files (*.bat);;All files (*)")
+                                               QString("Scripts (*.%1);;All files (*)").arg(scriptext)
                                                );
 
     if (!out.isEmpty()) {
-        WindowsScriptGenerator gen;
+        QString templatename;
+#if defined(Q_OS_DARWIN) || defined(Q_OS_LINUX)
+        templatename = ":/scripts/unix-template";
+#elif defined (Q_OS_WIN)
+        templatename = ":/scripts/windows-template";
+#else
+        QMessageBox::warning(this, tr("Scheduler error"), tr("The scheduler script generator isn't supported in this platform!"));
+        return;
+#endif
+
+        WindowsScriptGenerator gen(templatename);
         QString err;
         if (!gen.generate(out, mScheduler.get(), &err)) {
             QMessageBox::warning(this, tr("Displace Scheduler editor"),

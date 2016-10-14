@@ -8,8 +8,10 @@
         <file>resources/icons/quit.png</file>
         <file>resources/icons/remove.png</file>
         <file>resources/icons/scheduler.png</file>
+        <file>resources/templates/unix-runqueue.txt</file>
     </qresource>
     <qresource prefix="/scripts">
         <file alias="windows-template">resources/templates/windows-runqueue.txt</file>
+        <file alias="unix-template">resources/templates/unix-runqueue.txt</file>
     </qresource>
 </RCC>

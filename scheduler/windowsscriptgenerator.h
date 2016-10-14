@@ -10,8 +10,9 @@ class SimulationRun;
 
 class WindowsScriptGenerator
 {
+    QString mTemplateName;
 public:
-    explicit WindowsScriptGenerator();
+    explicit WindowsScriptGenerator(const QString &templatename);
     virtual ~WindowsScriptGenerator() noexcept;
 
     virtual bool generate (QString path, SchedulerJob *scheduler, QString *errorMsg);

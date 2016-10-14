@@ -39,3 +39,17 @@ void AppSettings::initialize()
     QCoreApplication::setOrganizationDomain("dtu.aqua.dk");
     QCoreApplication::setApplicationName("vesseleditor");
 }
+
+QString AppSettings::getSimulatorAppName()
+{
+    QString appname;
+#if defined(Q_OS_DARWIN) || defined (Q_OS_LINUX)
+    appname = "displace";
+#elif defined (Q_OS_WIN)
+    appname = "displace.exe";
+#else
+    throw std::runtime_error("Platform simulator not supported.");
+#endif
+
+    return appname;
+}

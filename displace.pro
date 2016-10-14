@@ -13,6 +13,7 @@ commons.depends = formats
 qtcommons.depends = QMapControl commons
 qtgui.depends = commons qtcommons QMapControl
 simulator.depends = commons
+scheduler.depends = qtcommons
 dteditor.depends = commons qtcommons
 tseditor.depends = commons qtcommons
 objeditor.depends = commons qtcommons QMapControl

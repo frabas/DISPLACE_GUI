@@ -22,6 +22,8 @@ public:
 
     static const QString MapCenterPoint;
     static const QString MapZoom;
+
+    static QString getSimulatorAppName();
 };
 
 }

@@ -1,5 +1,6 @@
 #include "windowsscriptgenerator.h"
 
+#include <appsettings.h>
 #include <schedulerjob.h>
 
 #include <QApplication>
@@ -23,9 +24,8 @@ const QString WindowsScriptGenerator::sKeySimuOutName = "JobSimuOutName";
 const QString WindowsScriptGenerator::sKeySimuLength = "JobLenght";
 const QString WindowsScriptGenerator::sKeySimuNumThreads = "JobNumThreads";
 
-const QString WindowsScriptGenerator::sValueAppExec = "displace.exe";
-
-WindowsScriptGenerator::WindowsScriptGenerator()
+WindowsScriptGenerator::WindowsScriptGenerator(const QString &templatename)
+    : mTemplateName(templatename)
 {
 
 }
@@ -38,7 +38,7 @@ WindowsScriptGenerator::~WindowsScriptGenerator()
 bool WindowsScriptGenerator::generate(QString path, SchedulerJob *scheduler, QString *errorMsg)
 {
     try {
-        parseTemplate(":/scripts/windows-template");
+        parseTemplate(mTemplateName);
     } catch (QString s) {
         if (errorMsg != nullptr)
             *errorMsg = s;
@@ -72,6 +72,10 @@ bool WindowsScriptGenerator::generate(QString path, SchedulerJob *scheduler, QSt
 
 
     out.close();
+
+    auto perm = out.permissions();
+    out.setPermissions(perm | QFile::ExeOwner | QFile::ExeGroup);
+
     return true;
 }
 
@@ -169,7 +173,7 @@ bool WindowsScriptGenerator::getValue(QString key, QString &value)
     if (key == sKeyAppPath) {
         r = QDir::toNativeSeparators(QFileInfo(QApplication::applicationFilePath()).absolutePath());
     } else if (key == sKeyAppExec) {
-        r = sValueAppExec;
+        r = displace::AppSettings::getSimulatorAppName();
     }
 
     if (r.isEmpty())

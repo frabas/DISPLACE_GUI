@@ -56,9 +56,9 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES += \
-    scheduler.rc \
-    resources/templates/windows-runqueue.txt
+    scheduler.rc
 
+LIBS += -lqtcommons
 
 target.path=$${PREFIX}/bin
 INSTALLS += target

@@ -43,7 +43,7 @@ The data is arranged this way:
 
 - nrow lines containing an integer representing the starting node of an edge
 - nrow lines containing an integer representing the arrival node of an edge
-- nrow lines containing a float representing the weight/cost of an edge
+- nrow lines containing a float representing the weight/cost of an edge. The simulator will read it as integer, rounded.
 
 So information for the i-th edge can be located at line i, i+nrow and i+2*nrow
 
@@ -54,13 +54,19 @@ fields: No field i.e. everything in one column (but assuming 3 field implicitely
 separators:
 headings:
 
+- nrow lines containing an integer that are ignored by the simulator
+- nrow lines containing an integer that are ignored by the simulator
+- nrow lines containing an integer that represent the code area
+
 
 /graphsspe/coord*_with_landscape.dat
 
 purpose: associating a landscape code from the Benthos habitat layer
-fields: One field, with length = nb of nodes
+fields: One field
 separators: No
 headings: No
+
+nrow lines containing the landscape code.
 
 /graphsspe/metier_closure_a_graph*_quarter*.dat
 

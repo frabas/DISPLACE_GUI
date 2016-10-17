@@ -47,6 +47,10 @@ CONFIG(debug,release|debug) {
 CONFIG(release,release|debug) {
     QMAPCONTROL_LIB=qmapcontrol
 }
+win32 {
+    QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
+    CGAL_LIBS= -lCGAL -lgmp -lboost_system-mgw49-mt-1_57
+}
 
 LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 

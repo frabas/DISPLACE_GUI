@@ -2481,14 +2481,31 @@ bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_gra
         return false;
     }
 
+    std::vector<NodeBanningInfo> banning;
+    bool r = read_metier_closures(is, separator, banning);
+
+    if (r) {
+        for (auto &info : banning) {
+            for (auto id : info.banned) {
+                nodes.at(info.nodeId)->setBannedMetier(id);
+            }
+        }
+    }
+
+    is.close();
+    return r;
+}
+
+bool read_metier_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes)
+{
     // Format:
     // PolyId NodeId Metier [Metier[ Metier...]]
 
     int linenum = 0;
     try {
-        while (is) {
+        while (stream) {
             std::string line;
-            std::getline(is, line);
+            std::getline(stream, line);
 
             boost::trim(line);
             if (line.empty())
@@ -2497,22 +2514,23 @@ bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_gra
             std::vector<std::string> sr;
             boost::split(sr, line, boost::is_any_of(separator));
 
-            int nodeId = boost::lexical_cast<int>(sr[1]);
+            NodeBanningInfo info;
+            info.nodeId = boost::lexical_cast<int>(sr[1]);
             for (size_t i = 2; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
-                nodes.at(nodeId)->setBannedMetier(m);
+                info.banned.push_back(m);
             }
+            nodes.push_back(info);
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
-        cerr << "Bad Conversion on read_closure file " << filename << " line " << linenum <<
+        cerr << "Bad Conversion on read_closure file line " << linenum <<
                 " : " << ex.what() << "\n";
         return false;
     }
 
     return true;
 }
-
 
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
 vector<Population* >& populations,

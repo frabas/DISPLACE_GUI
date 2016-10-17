@@ -172,7 +172,13 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
 
 // Closure reading
+struct NodeBanningInfo {
+    int nodeId;
+    std::vector<int> banned;
+};
+
 bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
+bool read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 
 // SMS
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);

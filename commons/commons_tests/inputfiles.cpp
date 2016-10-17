@@ -10,6 +10,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <myutils.h>
+#include <readdata.h>
 #include <map>
 
 BOOST_AUTO_TEST_CASE( test_coord_dat )
@@ -101,3 +102,34 @@ BOOST_AUTO_TEST_CASE ( test_fill_from_code_marine_landscape_dat )
     fill_from_code_marine_landscape(is, i, 3);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
 }
+
+BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
+{
+    // TODO check for lines with just one field!
+    // TODO fix to load the poly id somehow?
+    std::istringstream is1("5 1 1 2 3 4   \n"
+                          "4 2 5 6 7 \n"
+                          "1001 3 100 \r\n" // three infos
+                            );
+
+
+    std::vector<int> nd1 {1,2,3,4};
+    std::vector<int> nd2 {5,6,7};
+    std::vector<int> nd3 {100};
+    std::vector<NodeBanningInfo> ban;
+
+    read_metier_closures(is1, " ", ban);
+    BOOST_CHECK_EQUAL(1, ban[0].nodeId);
+    BOOST_CHECK_EQUAL_COLLECTIONS(nd1.begin(), nd1.end(), ban[0].banned.begin(), ban[0].banned.end());
+    BOOST_CHECK_EQUAL(2, ban[1].nodeId);
+    BOOST_CHECK_EQUAL_COLLECTIONS(nd2.begin(), nd2.end(), ban[1].banned.begin(), ban[1].banned.end());
+    BOOST_CHECK_EQUAL(3, ban[2].nodeId);
+    BOOST_CHECK_EQUAL_COLLECTIONS(nd3.begin(), nd3.end(), ban[2].banned.begin(), ban[2].banned.end());
+
+    std::istringstream is2;
+    std::vector<NodeBanningInfo> ban2;
+
+    read_metier_closures(is2, " ", ban2);
+    BOOST_CHECK_EQUAL(0, ban2.size());
+}
+

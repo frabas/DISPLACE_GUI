@@ -20,7 +20,8 @@ boost_test_included {
 }
 
 SOURCES= main.cpp \
-    files.cpp
+    files.cpp \
+    inputfiles.cpp
 
 HEADERS=
 

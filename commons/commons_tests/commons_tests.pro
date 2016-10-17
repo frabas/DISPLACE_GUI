@@ -23,7 +23,8 @@ SOURCES= main.cpp \
     files.cpp \
     inputfiles_graphsspe.cpp \
     inputfiles_popsspe.cpp \
-    inputfiles_vesselsspe.cpp
+    inputfiles_vesselsspe.cpp \
+    inputfiles_shipsspe.cpp
 
 HEADERS=
 

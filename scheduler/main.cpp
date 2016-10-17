@@ -1,13 +1,12 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <appsettings.h>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QCoreApplication::setOrganizationName("Studiofuga");
-    QCoreApplication::setOrganizationDomain("studiofuga.com");
-    QCoreApplication::setApplicationName("displace_scheduler");
+    displace::AppSettings::initialize();
 
     MainWindow w;
     w.show();

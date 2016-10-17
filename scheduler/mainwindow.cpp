@@ -6,7 +6,7 @@
 #include <rundialog.h>
 #include <utils/MultifieldWriter.h>
 #include <utils/MultifieldReader.h>
-#include <windowsscriptgenerator.h>
+#include <schedulerscriptgenerator.h>
 
 #include <fstream>
 
@@ -169,7 +169,7 @@ void MainWindow::on_action_Generate_Script_triggered()
         return;
 #endif
 
-        WindowsScriptGenerator gen(templatename);
+        SchedulerScriptGenerator gen(templatename);
         QString err;
         if (!gen.generate(out, mScheduler.get(), &err)) {
             QMessageBox::warning(this, tr("Displace Scheduler editor"),

@@ -1,4 +1,4 @@
-#include "windowsscriptgenerator.h"
+#include "schedulerscriptgenerator.h"
 
 #include <appsettings.h>
 #include <schedulerjob.h>
@@ -7,35 +7,35 @@
 #include <QDir>
 #include <QTextStream>
 
-const QString WindowsScriptGenerator::sBeginHeader = "%%%Begin-Header%%%";
-const QString WindowsScriptGenerator::sEndHeader = "%%%End-Header%%%";
-const QString WindowsScriptGenerator::sBeginContent = "%%%Begin-Job%%%";
-const QString WindowsScriptGenerator::sEndContent = "%%%End-Job%%%";
-const QString WindowsScriptGenerator::sBeginFooter = "%%%Begin-Footer%%%";
-const QString WindowsScriptGenerator::sEndFooter = "%%%End-Footer%%%";
+const QString SchedulerScriptGenerator::sBeginHeader = "%%%Begin-Header%%%";
+const QString SchedulerScriptGenerator::sEndHeader = "%%%End-Header%%%";
+const QString SchedulerScriptGenerator::sBeginContent = "%%%Begin-Job%%%";
+const QString SchedulerScriptGenerator::sEndContent = "%%%End-Job%%%";
+const QString SchedulerScriptGenerator::sBeginFooter = "%%%Begin-Footer%%%";
+const QString SchedulerScriptGenerator::sEndFooter = "%%%End-Footer%%%";
 
-const QString WindowsScriptGenerator::sKeyAppPath = "AppPath";
-const QString WindowsScriptGenerator::sKeyAppExec = "AppExec";
+const QString SchedulerScriptGenerator::sKeyAppPath = "AppPath";
+const QString SchedulerScriptGenerator::sKeyAppExec = "AppExec";
 
-const QString WindowsScriptGenerator::sKeyJobName = "JobName";
-const QString WindowsScriptGenerator::sKeyJobPath = "JobPath";
-const QString WindowsScriptGenerator::sKeySimuName = "JobSimuName";
-const QString WindowsScriptGenerator::sKeySimuOutName = "JobSimuOutName";
-const QString WindowsScriptGenerator::sKeySimuLength = "JobLenght";
-const QString WindowsScriptGenerator::sKeySimuNumThreads = "JobNumThreads";
+const QString SchedulerScriptGenerator::sKeyJobName = "JobName";
+const QString SchedulerScriptGenerator::sKeyJobPath = "JobPath";
+const QString SchedulerScriptGenerator::sKeySimuName = "JobSimuName";
+const QString SchedulerScriptGenerator::sKeySimuOutName = "JobSimuOutName";
+const QString SchedulerScriptGenerator::sKeySimuLength = "JobLenght";
+const QString SchedulerScriptGenerator::sKeySimuNumThreads = "JobNumThreads";
 
-WindowsScriptGenerator::WindowsScriptGenerator(const QString &templatename)
+SchedulerScriptGenerator::SchedulerScriptGenerator(const QString &templatename)
     : mTemplateName(templatename)
 {
 
 }
 
-WindowsScriptGenerator::~WindowsScriptGenerator()
+SchedulerScriptGenerator::~SchedulerScriptGenerator()
 {
 
 }
 
-bool WindowsScriptGenerator::generate(QString path, SchedulerJob *scheduler, QString *errorMsg)
+bool SchedulerScriptGenerator::generate(QString path, SchedulerJob *scheduler, QString *errorMsg)
 {
     try {
         parseTemplate(mTemplateName);
@@ -79,7 +79,7 @@ bool WindowsScriptGenerator::generate(QString path, SchedulerJob *scheduler, QSt
     return true;
 }
 
-void WindowsScriptGenerator::parseTemplate(QString templatePath) throw (QString)
+void SchedulerScriptGenerator::parseTemplate(QString templatePath) throw (QString)
 {
     enum Status { None, Header, Content, Footer } status;
 
@@ -125,7 +125,7 @@ void WindowsScriptGenerator::parseTemplate(QString templatePath) throw (QString)
     f.close();
 }
 
-QString WindowsScriptGenerator::substKeywords(QString in)
+QString SchedulerScriptGenerator::substKeywords(QString in)
 {
     QString ret = in;
     QRegExp r("%%%([a-zA-Z]+)%%%");
@@ -144,7 +144,7 @@ QString WindowsScriptGenerator::substKeywords(QString in)
     return ret;
 }
 
-QString WindowsScriptGenerator::substKeywords(QString in, const SimulationRun &job)
+QString SchedulerScriptGenerator::substKeywords(QString in, const SimulationRun &job)
 {
     QString ret = in;
     QRegExp r("%%%([a-zA-Z]+)%%%");
@@ -167,7 +167,7 @@ QString WindowsScriptGenerator::substKeywords(QString in, const SimulationRun &j
     return ret;
 }
 
-bool WindowsScriptGenerator::getValue(QString key, QString &value)
+bool SchedulerScriptGenerator::getValue(QString key, QString &value)
 {
     QString r;
     if (key == sKeyAppPath) {
@@ -183,7 +183,7 @@ bool WindowsScriptGenerator::getValue(QString key, QString &value)
     return true;
 }
 
-bool WindowsScriptGenerator::getValue(QString key, const SimulationRun &job, QString &value)
+bool SchedulerScriptGenerator::getValue(QString key, const SimulationRun &job, QString &value)
 {
     QString r;
     if (key == sKeyJobName) {

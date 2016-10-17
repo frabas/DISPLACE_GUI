@@ -1,5 +1,5 @@
-#ifndef WINDOWSSCRIPTGENERATOR_H
-#define WINDOWSSCRIPTGENERATOR_H
+#ifndef SCHEDULERSCRIPTGENERATOR_H
+#define SCHEDULERSCRIPTGENERATOR_H
 
 #include <QString>
 #include <QFile>
@@ -8,12 +8,12 @@
 class SchedulerJob;
 class SimulationRun;
 
-class WindowsScriptGenerator
+class SchedulerScriptGenerator
 {
     QString mTemplateName;
 public:
-    explicit WindowsScriptGenerator(const QString &templatename);
-    virtual ~WindowsScriptGenerator() noexcept;
+    explicit SchedulerScriptGenerator(const QString &templatename);
+    virtual ~SchedulerScriptGenerator() noexcept;
 
     virtual bool generate (QString path, SchedulerJob *scheduler, QString *errorMsg);
 
@@ -42,4 +42,4 @@ private:
     static const QString sValueAppExec;
 };
 
-#endif // WINDOWSSCRIPTGENERATOR_H
+#endif // SCHEDULERSCRIPTGENERATOR_H

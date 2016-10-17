@@ -10,6 +10,28 @@ INCLUDEPATH += ../include/ ../commons ../qtcommons ../formats/
 
 include ("$$top_srcdir/localconfig.pri")
 
+LIBS += -lqtcommons
+
+QMAPCONTROL_LIB=qmapcontrol
+CONFIG(debug,release|debug) {
+    DEFINES += DEBUG
+    QMAPCONTROL_LIB=qmapcontrold
+}
+CONFIG(release,release|debug) {
+    QMAPCONTROL_LIB=qmapcontrol
+}
+
+LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
+
+# Add GDAL library path and library (windows).
+win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
+
+# Add GDAL library path and library (unix).
+unix:LIBS += -lgdal
+
+macx:LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
+
+
 win32 {
     DESTDIR = ..
 }
@@ -38,7 +60,7 @@ SOURCES += main.cpp\
     schedulerjobadapter.cpp \
     rundialog.cpp \
     batchcreatedialog.cpp \
-    windowsscriptgenerator.cpp
+    schedulerscriptgenerator.cpp
 
 HEADERS  += mainwindow.h \
     schedulerjob.h \
@@ -46,7 +68,7 @@ HEADERS  += mainwindow.h \
     schedulerjobadapter.h \
     rundialog.h \
     batchcreatedialog.h \
-    windowsscriptgenerator.h
+    schedulerscriptgenerator.h
 
 FORMS    += mainwindow.ui \
     rundialog.ui \
@@ -57,8 +79,6 @@ RESOURCES += \
 
 DISTFILES += \
     scheduler.rc
-
-LIBS += -lqtcommons
 
 target.path=$${PREFIX}/bin
 INSTALLS += target

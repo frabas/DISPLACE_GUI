@@ -69,3 +69,35 @@ BOOST_AUTO_TEST_CASE( test_graph_dat )
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_t.begin(), exp_t.end(), t.begin(), t.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_w.begin(), exp_w.end(), w.begin(), w.end());
 }
+
+BOOST_AUTO_TEST_CASE (test_code_area_for_graph_points_dat)
+{
+    std::istringstream is("0\n0\n0\n"   // ignored
+                          "0\n0\n0\n"   // ignored
+                          "1 \n"
+                          "2\n"
+                          "3\r\n" // three infos
+                            );
+
+
+    std::vector<int> i;
+    std::vector<int> exp_i {1,2,3};
+
+    fill_from_code_area(is, i, 3);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
+}
+
+BOOST_AUTO_TEST_CASE ( test_fill_from_code_marine_landscape_dat )
+{
+    std::istringstream is("1 \n"
+                          "2\n"
+                          "3\r\n" // three infos
+                            );
+
+
+    std::vector<int> i;
+    std::vector<int> exp_i {1,2,3};
+
+    fill_from_code_marine_landscape(is, i, 3);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
+}

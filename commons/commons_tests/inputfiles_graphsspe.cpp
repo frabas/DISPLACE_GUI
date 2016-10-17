@@ -1,7 +1,7 @@
-/** @file inputfiles.cpp
+/** @file inputfiles_graphsspe.cpp
  * @author Federico Fuga
  *
- * This file tests all files format listed in the inputformats.txt specification.
+ * This file tests /graphsspe/ files format listed in the inputformats.txt specification.
  *
  * */
 

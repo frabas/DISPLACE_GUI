@@ -21,7 +21,7 @@ boost_test_included {
 
 SOURCES= main.cpp \
     files.cpp \
-    inputfiles.cpp
+    inputfiles_graphsspe.cpp
 
 HEADERS=
 

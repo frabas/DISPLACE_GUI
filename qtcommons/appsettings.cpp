@@ -15,7 +15,7 @@ AppSettings::AppSettings()
 
 QPointF AppSettings::getMapCenterPoint() const
 {
-    return settings.value(MapCenterPoint, QVariant(QPointF(13.7507,43.7282))).toPointF();
+    return settings.value(MapCenterPoint, QVariant(QPointF(13.2343,54.9751))).toPointF();
 }
 
 void AppSettings::setMapCenterPoint(const QPointF &point)

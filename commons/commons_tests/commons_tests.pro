@@ -25,7 +25,8 @@ SOURCES= main.cpp \
     inputfiles_popsspe.cpp \
     inputfiles_vesselsspe.cpp \
     inputfiles_shipsspe.cpp \
-    inputfiles_metiersspe.cpp
+    inputfiles_metiersspe.cpp \
+    inputfiles_harboursspe.cpp
 
 HEADERS=
 

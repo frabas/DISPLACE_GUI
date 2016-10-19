@@ -28,7 +28,8 @@ SOURCES= main.cpp \
     inputfiles_metiersspe.cpp \
     inputfiles_harboursspe.cpp \
     inputfiles_benthosspe.cpp \
-    inputfiles_fishfarmsspe.cpp
+    inputfiles_fishfarmsspe.cpp \
+    inputfiles_simusspe.cpp
 
 HEADERS=
 

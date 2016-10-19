@@ -64,7 +64,23 @@ int read_config_file (string folder_name_parameterization,
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
+    std::cout << "Reading config file from " << filename << std::endl;
 
+    std::ifstream fstream (filename.c_str(), std::ios_base::in);
+    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+                            calib_w, calib_cpue, interesting_harbours);
+}
+
+int read_config_file (std::istream &stream,
+    int& nbpops,
+    int& nbbenthospops,
+    vector<int>& implicit_pops,
+    vector<int>& implicit_pops_level2,
+    vector<double>& calib_oth_landings,
+    vector<double>& calib_w,
+    vector<double>& calib_cpue,
+    vector<int> &interesting_harbours)
+{
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
             {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
@@ -72,9 +88,7 @@ int read_config_file (string folder_name_parameterization,
             {15,"implicit_pops_level2"},
     };
 
-    std::cout << "Reading config file from " << filename << std::endl;
-
-    if (!reader.importFromFile(filename, specs))
+    if (!reader.importFromStream(stream, specs))
         return false;
 
     nbpops = reader.getAs<int>("nbpops");

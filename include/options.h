@@ -61,6 +61,14 @@ public:
         return ret;
     }
 
+    friend bool operator == (const Option<OPT,N,TYPE> &o1, const Option<OPT,N,TYPE> &o2) {
+        for (int i = 0; i < N; ++i) {
+            if (o1.mOptions[i] != o2.mOptions[i])
+                return false;
+        }
+        return true;
+    }
+
 protected:
     TYPE mOptions[N];
     typedef std::map<std::string, OPT> Map;

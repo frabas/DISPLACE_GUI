@@ -167,7 +167,56 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
 
 BOOST_AUTO_TEST_CASE( test_config_dat )
 {
-    BOOST_CHECK(true); // fill_map_from_specifications<int,double>
+    int ex_nbpops = 2;
+    int ex_nbbenthospops = 22;
+    vector<int> ex_implicit_pops = { 1, 3 };
+    vector<int> ex_implicit_pops_level2 = {};
+    vector<double> ex_calib_oth_landings = { 2, 4 };
+    vector<double> ex_calib_w = { 16, 32.6};;
+    vector<double> ex_calib_cpue = {11, 11.11};
+    vector<int> ex_interesting_harbours = { 3, 6, 18, 29};
+
+    std::istringstream is("# nbpops\n"
+                          "2\n"
+                          "# nbbenthospops\n"
+                          "22\n"
+                          "# implicit stocks\n"
+                          "1 3\n"
+                          "# calib the other landings per stock\n"
+                          "2 4 \n"
+                          "# calib weight-at-szgroup per stock\n"
+                          "16 32.6 \n"
+                          "# calib the cpue multiplier per stock\n"
+                          "11 11.11 \n"
+                          "# Interesting harbours\n"
+                          "3 6 18 29\n"
+                          "# Implicit Pop Levels #2\n"
+                          "\n");
+
+    int nbpops;
+    int nbbenthospops;
+    vector<int> implicit_pops;
+    vector<int> implicit_pops_level2;
+    vector<double> calib_oth_landings;
+    vector<double> calib_w;
+    vector<double> calib_cpue;
+    vector<int> interesting_harbours;
+
+    int r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+                             calib_w, calib_cpue, interesting_harbours);
+
+    BOOST_CHECK(r == 0);
+    BOOST_CHECK_EQUAL(ex_nbpops, nbpops);
+    BOOST_CHECK_EQUAL(ex_nbbenthospops, nbbenthospops);
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_implicit_pops.begin(), ex_implicit_pops.end(), implicit_pops.begin(), implicit_pops.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_implicit_pops_level2.begin(), ex_implicit_pops_level2.end(), implicit_pops_level2.begin(), implicit_pops_level2.end());
+
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_calib_oth_landings.begin(), ex_calib_oth_landings.end(), calib_oth_landings.begin(), calib_oth_landings.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_calib_w.begin(), ex_calib_w.end(), calib_w.begin(), calib_w.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_calib_cpue.begin(), ex_calib_cpue.end(), calib_cpue.begin(), calib_cpue.end());
+
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_interesting_harbours.begin(), ex_interesting_harbours.end(), interesting_harbours.begin(), interesting_harbours.end());
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()

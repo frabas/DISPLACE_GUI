@@ -102,7 +102,14 @@ int read_scenario_config_file (string folder_name_parameterization,
                                displace::commons::Scenario &scenario)
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
+    std::cout << "Reading Scenario file from " << filename << std::endl;
 
+    std::ifstream f (filename.c_str(), std::ios_base::in);
+    return read_scenario_config_file(f,scenario);
+}
+
+int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
+{
     helpers::LineNumberReader reader;
 
     static const helpers::LineNumberReader::Specifications specs {
@@ -115,9 +122,7 @@ int read_scenario_config_file (string folder_name_parameterization,
         {49,"metier_closures"}
     };
 
-    std::cout << "Reading Scenario file from " << filename << std::endl;
-
-    if (!reader.importFromFile(filename, specs))
+    if (!reader.importFromStream(stream, specs))
         return false;
 
     auto dasf = reader.get("dyn_alloc_sce");

@@ -720,11 +720,11 @@ void fill_from_metier_specifications (istream& in, multimap<string, double>& inf
 fill in the vessel attributes
 @param the vessel specification file, ...
 */
-void fill_from_vessels_specifications (istream& in, vector<string>& names,
-vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vector<double>& vKWs,
-vector<double>& carrycapacities, vector<double>& tankcapacities,
-vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s, vector<double>& resttime_par2s,
+bool fill_from_vessels_specifications (istream& in, vector<string>& names,
+                                       vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vector<double>& vKWs,
+                                       vector<double>& carrycapacities, vector<double>& tankcapacities,
+                                       vector<double>& nbfpingspertrips,
+                                       vector<double>& resttime_par1s, vector<double>& resttime_par2s,
                                        vector<double>& av_trip_duration,
                                        vector<double>& mult_fuelcons_when_steaming,
                                        vector<double>& mult_fuelcons_when_fishing,
@@ -733,55 +733,57 @@ vector<double>& resttime_par1s, vector<double>& resttime_par2s,
 {
 
     std::string line;
-    while(!getline(in, line).eof())
-	{
-        VesselCalendar calendar;
+    try {
+        while(!getline(in, line).eof())
+        {
+            VesselCalendar calendar;
 
-        vector<string> fields;
+            vector<string> fields;
 
-        boost::split(fields, line, boost::is_any_of("|"));
+            boost::split(fields, line, boost::is_any_of("|"));
 
-        if (fields.size() > 15) {
-            try {
+            if (fields.size() < 15) {
+                return false;   // all fields are MANDATORY.
+            }
+
+            if (fields.size() > 15) {
                 calendar.weekEndStartDay = boost::lexical_cast<int>(fields[15]);
-            } catch (boost::bad_lexical_cast &x) {}
-        }
-        if (fields.size() > 16) {
-            try {
+            }
+            if (fields.size() > 16) {
                 calendar.weekEndEndDay = boost::lexical_cast<int>(fields[16]);
-            } catch (boost::bad_lexical_cast &x) {}
-        }
-        if (fields.size() > 17) {
-            try {
+            }
+            if (fields.size() > 17) {
                 calendar.workStartHour = boost::lexical_cast<int>(fields[17]);
-            } catch (boost::bad_lexical_cast &x) {}
-        }
-        if (fields.size() > 18) {
-            try {
+            }
+            if (fields.size() > 18) {
                 calendar.workEndHour = boost::lexical_cast<int>(fields[18]);
-            } catch (boost::bad_lexical_cast &x) {}
+            }
+
+            names.push_back(fields[0]);
+            speeds.push_back(boost::lexical_cast<double>(fields[1].c_str()));
+            fuelcons.push_back(boost::lexical_cast<double>(fields[2].c_str()));
+            lengths.push_back(boost::lexical_cast<double>(fields[3].c_str()));
+            vKWs.push_back(boost::lexical_cast<double>(fields[4].c_str()));
+            carrycapacities.push_back(boost::lexical_cast<double>(fields[5].c_str()));
+            tankcapacities.push_back(boost::lexical_cast<double>(fields[6].c_str()));
+            nbfpingspertrips.push_back(boost::lexical_cast<double>(fields[7].c_str()));
+            resttime_par1s.push_back(boost::lexical_cast<double>(fields[8].c_str()));
+            resttime_par2s.push_back(boost::lexical_cast<double>(fields[9].c_str()));
+            av_trip_duration.push_back(boost::lexical_cast<double>(fields[10].c_str()));
+            mult_fuelcons_when_steaming.push_back(boost::lexical_cast<double>(fields[11].c_str()));
+            mult_fuelcons_when_fishing.push_back(boost::lexical_cast<double>(fields[12].c_str()));
+            mult_fuelcons_when_returning.push_back(boost::lexical_cast<double>(fields[13].c_str()));
+            mult_fuelcons_when_inactive.push_back(boost::lexical_cast<double>(fields[14].c_str()));
+
+            calendars.push_back(calendar);
         }
-
-        names.push_back(fields[0]);
-        speeds.push_back(strtod(fields[1].c_str(),0));
-        fuelcons.push_back(strtod(fields[2].c_str(),0));
-        lengths.push_back(strtod(fields[3].c_str(),0));
-        vKWs.push_back(strtod(fields[4].c_str(),0));
-        carrycapacities.push_back(strtod(fields[5].c_str(),0));
-        tankcapacities.push_back(strtod(fields[6].c_str(),0));
-        nbfpingspertrips.push_back(strtod(fields[7].c_str(),0));
-        resttime_par1s.push_back(strtod(fields[8].c_str(),0));
-        resttime_par2s.push_back(strtod(fields[9].c_str(),0));
-        av_trip_duration.push_back(strtod(fields[10].c_str(),0));
-        mult_fuelcons_when_steaming.push_back(strtod(fields[11].c_str(),0));
-        mult_fuelcons_when_fishing.push_back(strtod(fields[12].c_str(),0));
-        mult_fuelcons_when_returning.push_back(strtod(fields[13].c_str(),0));
-        mult_fuelcons_when_inactive.push_back(strtod(fields[14].c_str(),0));
-
-        calendars.push_back(calendar);
+    } catch (boost::bad_lexical_cast &x) {
+        return false;
     }
-    cout  << "read and set up the general features of each vessel...OK" << endl;
 
+    dout(cout  << "read and set up the general features of each vessel...OK" << endl);
+
+    return true;
 }
 
 

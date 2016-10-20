@@ -176,17 +176,17 @@ void fill_in_param_sr (istream& in, vector<double>& param_sr);
 void fill_in_initial_tac (istream& in, vector<double>& initial_tac);
 void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max);
 void fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
-void fill_from_vessels_specifications (istream& in, vector<string>& names,
-vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths,  vector<double>& vKWs,
-vector<double>& carrycapacities, vector<double>& tankcapacities,
-vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s, vector<double>& resttime_par2s,
-vector<double>& av_trip_duration,
-                                       vector<double>& mult_fuelcons_when_steaming,
-                                       vector<double>& mult_fuelcons_when_fishing,
-                                       vector<double>& mult_fuelcons_when_returning,
-                                       vector<double>& mult_fuelcons_when_inactive,
-                                       vector<VesselCalendar> &calendars);
+bool fill_from_vessels_specifications(istream& in, vector<string>& names,
+                                      vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths,  vector<double>& vKWs,
+                                      vector<double>& carrycapacities, vector<double>& tankcapacities,
+                                      vector<double>& nbfpingspertrips,
+                                      vector<double>& resttime_par1s, vector<double>& resttime_par2s,
+                                      vector<double>& av_trip_duration,
+                                      vector<double>& mult_fuelcons_when_steaming,
+                                      vector<double>& mult_fuelcons_when_fishing,
+                                      vector<double>& mult_fuelcons_when_returning,
+                                      vector<double>& mult_fuelcons_when_inactive,
+                                      vector<VesselCalendar> &calendars);
 void fill_from_ships_specifications (istream& in, vector<string>& names, vector<double> &imos,
                                      vector<double> &yearbuilds, vector<string> &flags,
                                      vector<string> &types, vector<double> &typecodes,

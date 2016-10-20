@@ -125,23 +125,24 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
     vector<double> mult_fuelcons_when_inactive;
     vector<VesselCalendar> calendars;
 
-    fill_from_vessels_specifications (stream,
-                                      names,
-                                      speeds,
-                                      fuelcons,
-                                      lengths,
-                                      vKWs,
-                                      carrycapacities,
-                                      tankcapacities,
-                                      nbfpingspertrips,
-                                      resttime_par1s,
-                                      resttime_par2s,
-                                      av_trip_duration,
-                                      mult_fuelcons_when_steaming,
-                                      mult_fuelcons_when_fishing,
-                                      mult_fuelcons_when_returning,
-                                      mult_fuelcons_when_inactive,
-                                      calendars);
+    if (!fill_from_vessels_specifications (stream,
+                                           names,
+                                           speeds,
+                                           fuelcons,
+                                           lengths,
+                                           vKWs,
+                                           carrycapacities,
+                                           tankcapacities,
+                                           nbfpingspertrips,
+                                           resttime_par1s,
+                                           resttime_par2s,
+                                           av_trip_duration,
+                                           mult_fuelcons_when_steaming,
+                                           mult_fuelcons_when_fishing,
+                                           mult_fuelcons_when_returning,
+                                           mult_fuelcons_when_inactive,
+                                           calendars))
+        return false;
 
     for (size_t i = 0; i < names.size(); ++i) {
         Vessel v;
@@ -215,10 +216,11 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_betas_semester_dat )
 
 BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
 {
-    std::stringstream ss (
-                "DNK000001391|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22\n"
-                "DNK0000012s1|30|34.248397|5|18|270|75|1|0.5|3.78|2|1|0|0.1|0.1522|5|6|5|22\n"
-                );
+    std::string teststring;
+    teststring = "DNK000001391|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22\n"
+                 "DNK0000012s1|30|34.248397|5|18|270|75|1|0.5|3.78|2|1|0|0.1|0.1522|5|6|5|22\n";
+
+    std::istringstream ss (teststring);
 
     std::vector<Vessel> exp_ss = {
         Vessel("DNK000001391",10,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22),
@@ -230,6 +232,21 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     bool r = loadVessels(ss, r_ss);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
+
+    // Check for errors. Errors in double values
+    teststring = "DNK000001391|1c|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22\n";
+    ss.str(teststring);
+    ss.clear();
+    r = loadVessels(ss,r_ss);
+    BOOST_CHECK(!r);
+
+    // Check for errors. Errors in the number of fields
+    teststring = "DNK000001391|1c|34.18397|15|128|23170|\n";
+    ss.str(teststring);
+    ss.clear();
+    r = loadVessels(ss,r_ss);
+    BOOST_CHECK(!r);
+
 }
 
 BOOST_AUTO_TEST_CASE( test_vesselsspe_fgrounds_quarter_dat )

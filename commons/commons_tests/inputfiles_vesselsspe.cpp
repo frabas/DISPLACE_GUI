@@ -247,6 +247,18 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     r = loadVessels(ss,r_ss);
     BOOST_CHECK(!r);
 
+    // Check for errors: Missing newline should be catched
+    teststring = "DNK0000011|0|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22";
+    r_ss.clear();
+    exp_ss = {
+            Vessel("DNK0000011",0,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22)
+        };
+    ss.str(teststring);
+    ss.clear();
+    r = loadVessels(ss,r_ss);
+    BOOST_CHECK(r);
+    BOOST_CHECK_EQUAL(exp_ss.size(), r_ss.size());
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
 }
 
 BOOST_AUTO_TEST_CASE( test_vesselsspe_fgrounds_quarter_dat )

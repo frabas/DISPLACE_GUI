@@ -59,7 +59,7 @@ int read_scenario_config_file(string folder_name_parameterization,
 int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
 
 // vessel specific
-void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
+bool read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
 vector<double>& fuelcons,
                            vector<double>& lengths,
                            vector<double>& vKWs,

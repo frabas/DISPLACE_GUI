@@ -361,25 +361,25 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 
 
 //----------------
-void read_vessels_features(string a_quarter,
-vector<string>& vesselids,
-vector<double>& speeds,
-vector<double>& fuelcons,
-vector<double>& lengths,
-vector<double>& vKWs,
-vector<double>& carrycapacities,
-vector<double>& tankcapacities,
-vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s,
-vector<double>& resttime_par2s,
-vector<double>& av_trip_duration,
+bool read_vessels_features(string a_quarter,
+                           vector<string>& vesselids,
+                           vector<double>& speeds,
+                           vector<double>& fuelcons,
+                           vector<double>& lengths,
+                           vector<double>& vKWs,
+                           vector<double>& carrycapacities,
+                           vector<double>& tankcapacities,
+                           vector<double>& nbfpingspertrips,
+                           vector<double>& resttime_par1s,
+                           vector<double>& resttime_par2s,
+                           vector<double>& av_trip_duration,
                            vector<double>& mult_fuelcons_when_steaming,
                            vector<double>& mult_fuelcons_when_fishing,
                            vector<double>& mult_fuelcons_when_returning,
                            vector<double>& mult_fuelcons_when_inactive,
-string folder_name_parameterization,
-string inputfolder,
-int selected_vessels_only, vector<VesselCalendar> &calendars)
+                           string folder_name_parameterization,
+                           string inputfolder,
+                           int selected_vessels_only, vector<VesselCalendar> &calendars)
 {
 
 	string filename;
@@ -397,14 +397,18 @@ int selected_vessels_only, vector<VesselCalendar> &calendars)
 	if(vessels_features.fail())
 	{
 		open_file_error(filename.c_str());
-		// return 1;
+        return false;
 	}
 
-    fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, vKWs,
+    if (!fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, vKWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
                                      resttime_par1s, resttime_par2s, av_trip_duration,
                                      mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
-                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive, calendars);
+                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive, calendars)) {
+        vessels_features.close();
+        return false;
+    }
+
 	vessels_features.close();
 
 #ifdef VERBOSE
@@ -471,6 +475,8 @@ int selected_vessels_only, vector<VesselCalendar> &calendars)
 	}
     dout(cout << endl);
 #endif
+
+    return true;
 }
 
 

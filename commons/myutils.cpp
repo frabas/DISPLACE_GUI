@@ -734,8 +734,13 @@ bool fill_from_vessels_specifications (istream& in, vector<string>& names,
 
     std::string line;
     try {
-        while(!getline(in, line).eof())
+        while(!in.eof())
         {
+            getline(in, line);
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
             VesselCalendar calendar;
 
             vector<string> fields;

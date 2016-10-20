@@ -8,7 +8,20 @@ DESTDIR = ../bin/test
 
 DEFINES=
 INCLUDEPATH=../../include ..
-LIBS=-L../.. -lformats -ldisplacecommons -lpthread -lrt
+
+macx {
+    DESTDIR=$$EXEDESTDIR
+    CONFIG -= app_bundle
+
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L../$$LIBDESTDIR
+}
+
+LIBS+=-L.. -lformats -ldisplacecommons
+
+!macx{
+    LIBS += -lpthread -lrt
+}
 
 !boost_test_included {
     message("Boost::Test framework will be dynamically linked")

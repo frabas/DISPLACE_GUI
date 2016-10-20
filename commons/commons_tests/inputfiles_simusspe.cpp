@@ -15,6 +15,7 @@
 
 namespace boost {
 namespace test_tools {
+namespace tt_detail {
 
 template <typename KEY, typename VALUE>
 std::ostream &operator << (ostream &out, const std::map<KEY,VALUE> &mmap) {
@@ -38,7 +39,6 @@ std::ostream &operator << (std::ostream &stream, const ClosureOptions &opt) {
     stream << opt.option(Options::banned_metiers);
     return stream;
 }
-
 
 template<>
 struct print_log_value<displace::commons::Scenario>
@@ -73,6 +73,8 @@ struct print_log_value<displace::commons::Scenario>
               s1.dt_change_port;
     }
 };
+
+}
 }
 }
 

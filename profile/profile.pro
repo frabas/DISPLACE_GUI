@@ -8,7 +8,20 @@ DESTDIR = ../
 
 DEFINES=
 INCLUDEPATH=../include ../commons
-LIBS=-L.. -lformats -ldisplacecommons -lpthread -lrt
+
+macx {
+    DESTDIR=$$EXEDESTDIR
+    CONFIG -= app_bundle
+
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L$$LIBDESTDIR
+}
+
+LIBS+=-L.. -lformats -ldisplacecommons
+
+!macx{
+    LIBS += -lpthread -lrt
+}
 
 CONFIG(gprof) {
     QMAKE_CXXFLAGS += -pg

@@ -64,7 +64,23 @@ int read_config_file (string folder_name_parameterization,
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
+    std::cout << "Reading config file from " << filename << std::endl;
 
+    std::ifstream fstream (filename.c_str(), std::ios_base::in);
+    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+                            calib_w, calib_cpue, interesting_harbours);
+}
+
+int read_config_file (std::istream &stream,
+    int& nbpops,
+    int& nbbenthospops,
+    vector<int>& implicit_pops,
+    vector<int>& implicit_pops_level2,
+    vector<double>& calib_oth_landings,
+    vector<double>& calib_w,
+    vector<double>& calib_cpue,
+    vector<int> &interesting_harbours)
+{
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
             {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
@@ -72,9 +88,7 @@ int read_config_file (string folder_name_parameterization,
             {15,"implicit_pops_level2"},
     };
 
-    std::cout << "Reading config file from " << filename << std::endl;
-
-    if (!reader.importFromFile(filename, specs))
+    if (!reader.importFromStream(stream, specs))
         return false;
 
     nbpops = reader.getAs<int>("nbpops");
@@ -102,7 +116,14 @@ int read_scenario_config_file (string folder_name_parameterization,
                                displace::commons::Scenario &scenario)
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
+    std::cout << "Reading Scenario file from " << filename << std::endl;
 
+    std::ifstream f (filename.c_str(), std::ios_base::in);
+    return read_scenario_config_file(f,scenario);
+}
+
+int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
+{
     helpers::LineNumberReader reader;
 
     static const helpers::LineNumberReader::Specifications specs {
@@ -115,9 +136,7 @@ int read_scenario_config_file (string folder_name_parameterization,
         {49,"metier_closures"}
     };
 
-    std::cout << "Reading Scenario file from " << filename << std::endl;
-
-    if (!reader.importFromFile(filename, specs))
+    if (!reader.importFromStream(stream, specs))
         return false;
 
     auto dasf = reader.get("dyn_alloc_sce");
@@ -342,25 +361,25 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 
 
 //----------------
-void read_vessels_features(string a_quarter,
-vector<string>& vesselids,
-vector<double>& speeds,
-vector<double>& fuelcons,
-vector<double>& lengths,
-vector<double>& vKWs,
-vector<double>& carrycapacities,
-vector<double>& tankcapacities,
-vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s,
-vector<double>& resttime_par2s,
-vector<double>& av_trip_duration,
+bool read_vessels_features(string a_quarter,
+                           vector<string>& vesselids,
+                           vector<double>& speeds,
+                           vector<double>& fuelcons,
+                           vector<double>& lengths,
+                           vector<double>& vKWs,
+                           vector<double>& carrycapacities,
+                           vector<double>& tankcapacities,
+                           vector<double>& nbfpingspertrips,
+                           vector<double>& resttime_par1s,
+                           vector<double>& resttime_par2s,
+                           vector<double>& av_trip_duration,
                            vector<double>& mult_fuelcons_when_steaming,
                            vector<double>& mult_fuelcons_when_fishing,
                            vector<double>& mult_fuelcons_when_returning,
                            vector<double>& mult_fuelcons_when_inactive,
-string folder_name_parameterization,
-string inputfolder,
-int selected_vessels_only, vector<VesselCalendar> &calendars)
+                           string folder_name_parameterization,
+                           string inputfolder,
+                           int selected_vessels_only, vector<VesselCalendar> &calendars)
 {
 
 	string filename;
@@ -378,14 +397,18 @@ int selected_vessels_only, vector<VesselCalendar> &calendars)
 	if(vessels_features.fail())
 	{
 		open_file_error(filename.c_str());
-		// return 1;
+        return false;
 	}
 
-    fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, vKWs,
+    if (!fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, vKWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
                                      resttime_par1s, resttime_par2s, av_trip_duration,
                                      mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
-                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive, calendars);
+                                     mult_fuelcons_when_returning, mult_fuelcons_when_inactive, calendars)) {
+        vessels_features.close();
+        return false;
+    }
+
 	vessels_features.close();
 
 #ifdef VERBOSE
@@ -452,6 +475,8 @@ int selected_vessels_only, vector<VesselCalendar> &calendars)
 	}
     dout(cout << endl);
 #endif
+
+    return true;
 }
 
 

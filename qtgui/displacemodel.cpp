@@ -156,7 +156,8 @@ bool DisplaceModel::load(QString path, ModelType type)
 
 
         loadNodes();
-        loadVessels();
+        if (!loadVessels())
+            throw DisplaceException("CAnnot read Vessels Features");
         loadGraphs();
         initShips();
         initFishfarm();
@@ -1578,12 +1579,13 @@ bool DisplaceModel::loadVessels()
 
     cout << "read_vessels_features() in loadVessels()" << endl;
 
-    read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
+    if (!read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
                           carrycapacities, tankcapacities, nbfpingspertrips,
                           resttime_par1s, resttime_par2s, av_trip_duration,
                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
                           mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
-                          mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only, calendar);
+                          mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only, calendar))
+        return false;
 
 
     cout << "fill in multimaps in loadVessels()" << endl;
@@ -2018,7 +2020,7 @@ bool DisplaceModel::loadVessels()
 
     }
 
-    return false;
+    return true;
 }
 
 bool DisplaceModel::loadGraphs()

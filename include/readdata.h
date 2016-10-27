@@ -42,13 +42,24 @@ vector<double>& a_vector_line10,
 vector<double>& a_vector_line12,
 vector<int> &interesting_harbours);
 
+int read_config_file (std::istream &stream,
+int& a_int_line2,
+int& a_int_line4,
+vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
+vector<double>& a_vector_line8,
+vector<double>& a_vector_line10,
+vector<double>& a_vector_line12,
+vector<int> &interesting_harbours);
+
 int read_scenario_config_file(string folder_name_parameterization,
     string inputfolder,
     string namefolderoutput,
     displace::commons::Scenario &scenario);
 
+int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
+
 // vessel specific
-void read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
+bool read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
 vector<double>& fuelcons,
                            vector<double>& lengths,
                            vector<double>& vKWs,

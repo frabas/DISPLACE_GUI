@@ -85,6 +85,16 @@ public:
     }
 };
 
+class VesselTargetEvaluator : public dtree::StateEvaluator {
+public:
+    VesselTargetEvaluator() {}
+    double evaluate(int, Vessel *vessel) const {
+        vector<int> trgts= vessel->get_metier()->get_metier_target_stocks();
+        return trgts.at(0)  / VariableNames::variableBinCount(Variable::stockTargetIs); //WIP: should account for all the targets!
+    }
+};
+
+
 class MetierStateEvaluator : public dtree::StateEvaluator {
 public:
     MetierStateEvaluator() {}
@@ -121,7 +131,7 @@ public:
 
     VesselMonthIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *vessel) const {
-        return vessel->get_current_month();
+        return vessel->get_current_month() / VariableNames::variableBinCount(Variable::monthIs);
     }
 };
 
@@ -437,6 +447,8 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::MetierStateEvaluator);
         mStateEvaluators[dtree::vesselSizeIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSizeStateEvaluator);
+        mStateEvaluators[dtree::stockTargetIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTargetEvaluator);
         mStateEvaluators[dtree::lastTripRevenueIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::AverageRevenuesComparationStateEvaluator());
         mStateEvaluators[dtree::lastTripProfitIs] =

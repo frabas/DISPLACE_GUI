@@ -127,6 +127,7 @@ private:
         VesselCalendar calendar;
 
         int smartcatch, highpotentialcatch, notthatfar, mosthistoricallyused; // some relevant grounds
+        int current_month;
 
         pthread_mutex_t mutex;
 
@@ -219,6 +220,7 @@ public:
         int get_highpotentialcatch() const;
         int get_notthatfar() const;
         int get_mosthistoricallyused() const;
+        int get_current_month() const;
         const std::vector<std::vector<double> > &get_gshape_cpue_nodes_species() const;
         const std::vector<std::vector<double> > &get_gscale_cpue_nodes_species() const;
         const std::vector < std::vector<double> > &get_catch_pop_at_szgroup() const;
@@ -277,6 +279,7 @@ public:
         void set_highpotentialcatch (int highpotentialcatch);
         void set_notthatfar (int notthatfar);
         void set_mosthistoricallyused (int mosthistoricallyused);
+        void set_current_month (int current_month);
         void set_state (int _state);
 		void set_previous_harbour_idx (int previous_harbour_idx);
 		void set_reason_to_go_back (int _reason_to_go_back);

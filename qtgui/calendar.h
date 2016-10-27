@@ -91,6 +91,7 @@ private:
     QMap<int, int> mYears;
 
     static const QString days[];
+    static const QString months[];
 };
 
 #endif // CALENDAR_H

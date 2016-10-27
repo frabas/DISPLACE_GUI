@@ -115,6 +115,17 @@ public:
     }
 };
 
+class VesselMonthIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+
+    VesselMonthIsStateEvaluator() {}
+    double evaluate(int tstep, Vessel *vessel) const {
+        return vessel->get_current_month();
+    }
+};
+
+
 class VesselFuelTankStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
@@ -329,6 +340,7 @@ double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, Vesse
 	cumsteaming=0;
 	consotogetthere=0;
 	reason_to_go_back=0;
+    current_month=0; // Jan
 								 //  FILLED FROM DATA
 	carrycapacity= a_carrycapacity;
 	tankcapacity=a_tankcapacity; // FILLED FROM DATA
@@ -436,6 +448,8 @@ void Vessel::init()
         mStateEvaluators[dtree::windSpeedIs] = std::shared_ptr<dtree::StateEvaluator>(new displace::dtree::TimeSeriesEvaluator<displace::simulation::TimeSeriesManager::WSpeed>());
         mStateEvaluators[dtree::todayIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
+        mStateEvaluators[dtree::monthIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMonthIsStateEvaluator);
 
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
@@ -893,6 +907,10 @@ int Vessel::get_mosthistoricallyused () const
     return(mosthistoricallyused);
 }
 
+int Vessel::get_current_month () const
+{
+    return(current_month);
+}
 
 
 //------------------------------------------------------------//
@@ -1502,6 +1520,11 @@ void Vessel::set_notthatfar(int _notthatfar)
 void Vessel::set_mosthistoricallyused(int _mosthistoricallyused)
 {
      mosthistoricallyused=_mosthistoricallyused;
+}
+
+void Vessel::set_current_month(int _current_month)
+{
+     current_month=_current_month;
 }
 
 //------------------------------------------------------------//

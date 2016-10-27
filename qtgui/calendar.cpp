@@ -28,6 +28,11 @@ const QString Calendar::days[] = {
     "fri", "sat", "sun"
 };
 
+const QString Calendar::months[] = {
+    "Jan", "Feb", "Mar", "Apr",
+    "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+
 Calendar::Calendar()
 {
 }

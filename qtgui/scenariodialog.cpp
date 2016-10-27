@@ -37,8 +37,6 @@ static const char *dyn_alloc_options[] = {
     "LTMP",
     "FMSY",
     "area_closure",
-    "area_closure_netters",
-    "area_closure_trawlers",
     "fuelprice_plus20percent",
     "reduced_speed_10percent",
     "closer_grounds",

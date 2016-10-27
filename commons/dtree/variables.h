@@ -16,6 +16,7 @@ enum Variable {
     fishPriceTargetStockIs,      // goFishing
     fuelPriceIs,                  // goFishing
     todayIs,                      // goFishing
+    monthIs,                      // goFishing
 
     smartCatch,                  // ChooseGround
     highPotentialCatch,          // ChooseGround

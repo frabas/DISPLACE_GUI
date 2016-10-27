@@ -38,9 +38,6 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,reduced_speed_30percent);
     O(mMap,closer_grounds);
     O(mMap,closer_port);
-    O(mMap,area_closure_fuelprice_plus20percent);
-    O(mMap,increased_catch_power_5percent);
-    O(mMap,focus_on_high_profit_grounds_area_closure);
     O(mMap,focus_on_high_previous_cpue);
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);

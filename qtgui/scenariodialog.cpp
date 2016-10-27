@@ -32,28 +32,22 @@
 
 static const char *dyn_alloc_options[] = {
     "baseline",
+    "area_closure",
     "focus_on_high_profit_grounds" ,
+    "closer_grounds",
+    "closer_port",
+    "fuelprice_plus20percent",
+    "reduced_speed_10percent",
+    "shared_harbour_knowledge",
     "TACs",
     "LTMP",
     "FMSY",
-    "area_closure",
-    "fuelprice_plus20percent",
-    "reduced_speed_10percent",
-    "closer_grounds",
-    "closer_port",
-    "area_closure_fuelprice_plus20percent",
-    "increased_catch_power_5percent",
-    "focus_on_high_profit_grounds_area_closure",
-    "shared_harbour_knowledge",
-    "twoFoldTACconstr",
     "fishing_credits",
 };
 
 static const char *dyn_pop_options[] = {
     "baseline",
     "use_SMS",
-    "use_SMS_single",
-    "stop_mig_35065",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

@@ -227,7 +227,6 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // if a decision on the fish price is used in the GoFishing dtree...
                 // (interesting stocks for this vessel are given in Vessel::get_metier_target_stocks() )
                 // ***************make a dtree decision****************************
-                vessels[ index_v ]->set_current_month(tstep/720); // rough approx.
                 int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep,
                                                                          use_dtrees,
                                                                          implicit_pops,

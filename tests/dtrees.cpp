@@ -6,7 +6,19 @@
 #include <Vessel.h>
 #include <Metier.h>
 
+#include <dtree/vesselsevaluators.h>
+
 BOOST_AUTO_TEST_SUITE(Dtree)
+
+BOOST_AUTO_TEST_CASE( DTree_MonthIs )
+{
+    dtree::vessels::VesselMonthIsStateEvaluator eval;
+
+    BOOST_CHECK_CLOSE(0.0, eval.evaluate(0,nullptr), 1);
+    BOOST_CHECK_CLOSE(0.0909, eval.evaluate(730,nullptr), 1);
+    BOOST_CHECK_CLOSE(0.5454, eval.evaluate(4350,nullptr), 1);
+    BOOST_CHECK_CLOSE(0.0, eval.evaluate(8640,nullptr), 1);
+}
 
 BOOST_AUTO_TEST_CASE( Dtree )
 {

@@ -91,7 +91,8 @@ HEADERS= \
     tseries/timeseries.h \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h \
-    utils/CrashHandler.h
+    utils/CrashHandler.h \
+    dtree/vesselsevaluators.h
 
 ## Do not add this if you don't support IPC queues
 

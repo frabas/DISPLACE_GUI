@@ -229,6 +229,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // ***************make a dtree decision****************************
                 int go_fishing= vessels[ index_v ]->should_i_go_fishing( tstep,
                                                                          use_dtrees,
+                                                                         dyn_alloc_sce,
                                                                          implicit_pops,
                                                                          is_individual_vessel_quotas,
                                                                          check_all_stocks_before_going_fishing);

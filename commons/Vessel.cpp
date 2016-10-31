@@ -3952,7 +3952,9 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing)
+int Vessel::should_i_go_fishing(int tstep,
+                                bool use_the_tree, const DynAllocOptions& dyn_alloc_sce, vector<int>& implicit_pops,
+                                int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing)
 {
 
     lock();
@@ -4012,8 +4014,21 @@ int Vessel::should_i_go_fishing(int tstep, bool use_the_tree, vector<int>& impli
 
     dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
 
+    // TODO: check if do_sample() maintain the 0 probas in freq.....
+    int some_fgrounds_left=1;
+    if (dyn_alloc_sce.option(Options::area_closure))
+       {
+       double sumfreqs=0.0;
+       vector <double> freqs=this->get_freq_fgrounds();
+       for (int ff=0; ff<freqs.size(); ++ff) sumfreqs+=freqs.at(ff);
+       if(sumfreqs<0.00000001)
+           {
+           some_fgrounds_left=0;
+           cout << "no fground left for this vessel" << endl;
+           }
+       }
 
-    if( still_some_quotas)
+    if( still_some_quotas && some_fgrounds_left)
 	{
 
 		// PBLE HERE FOR THE USE OF THE DECISION TREE: WHICH TIMING SHOULD WE USE?

@@ -32,31 +32,31 @@ using namespace std;
 std::string getLastErrorMessage();
 void open_file_error(string filename);
 
-int read_config_file (string folder_name_parameterization,
-                      string inputfolder,
-                      int& a_int_line2,
-                      int& a_int_line4,
-                      vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
-                      vector<double>& a_vector_line8,
-                      vector<double>& a_vector_line10,
-                      vector<double>& a_vector_line12,
-                      vector<int> &interesting_harbours);
+bool read_config_file (string folder_name_parameterization,
+string inputfolder,
+int& a_int_line2,
+int& a_int_line4,
+vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
+vector<double>& a_vector_line8,
+vector<double>& a_vector_line10,
+vector<double>& a_vector_line12,
+vector<int> &interesting_harbours);
 
-int read_config_file (std::istream &stream,
-                      int& a_int_line2,
-                      int& a_int_line4,
-                      vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
-                      vector<double>& a_vector_line8,
-                      vector<double>& a_vector_line10,
-                      vector<double>& a_vector_line12,
-                      vector<int> &interesting_harbours);
+bool read_config_file (std::istream &stream,
+int& a_int_line2,
+int& a_int_line4,
+vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
+vector<double>& a_vector_line8,
+vector<double>& a_vector_line10,
+vector<double>& a_vector_line12,
+vector<int> &interesting_harbours);
 
-int read_scenario_config_file(string folder_name_parameterization,
-                              string inputfolder,
-                              string namefolderoutput,
-                              displace::commons::Scenario &scenario);
+bool read_scenario_config_file(string folder_name_parameterization,
+    string inputfolder,
+    string namefolderoutput,
+    displace::commons::Scenario &scenario);
 
-int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
+bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
 
 // vessel specific
 bool read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,

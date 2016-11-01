@@ -571,7 +571,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 	// config at the simusspe level
-    read_config_file (
+    if (!read_config_file (
 		folder_name_parameterization,
         inputfolder,
 		nbpops,
@@ -582,13 +582,19 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		calib_weight_at_szgroup,
         calib_cpue_multiplier,
         int_harbours
-		);
+        )) {
+        cerr << "Cannot read Config File: Bad format\n";
+        return 2;
+    }
 
-	read_scenario_config_file (
+    if (!read_scenario_config_file (
         folder_name_parameterization,
         inputfolder,
 		namefolderoutput,
-        scenario);
+        scenario)) {
+        cerr << "Cannot read scenario config file, Bad Format.\n";
+        return 2;
+    }
 
     dyn_alloc_sce = scenario.dyn_alloc_sce;
     dyn_pop_sce  = scenario.dyn_pop_sce;

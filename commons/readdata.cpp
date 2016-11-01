@@ -51,16 +51,16 @@ void open_file_error(string filename)
 read the settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-int read_config_file (string folder_name_parameterization,
-                      string inputfolder,
-                      int& nbpops,
-                      int& nbbenthospops,
-                      vector<int>& implicit_pops,
-                      vector<int>& implicit_pops_level2,
-                      vector<double>& calib_oth_landings,
-                      vector<double>& calib_w,
-                      vector<double>& calib_cpue,
-                      vector<int> &interesting_harbours)
+bool read_config_file(string folder_name_parameterization,
+    string inputfolder,
+    int& nbpops,
+    int& nbbenthospops,
+    vector<int>& implicit_pops,
+    vector<int>& implicit_pops_level2,
+    vector<double>& calib_oth_landings,
+    vector<double>& calib_w,
+    vector<double>& calib_cpue,
+    vector<int> &interesting_harbours)
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
@@ -71,15 +71,15 @@ int read_config_file (string folder_name_parameterization,
                             calib_w, calib_cpue, interesting_harbours);
 }
 
-int read_config_file (std::istream &stream,
-                      int& nbpops,
-                      int& nbbenthospops,
-                      vector<int>& implicit_pops,
-                      vector<int>& implicit_pops_level2,
-                      vector<double>& calib_oth_landings,
-                      vector<double>& calib_w,
-                      vector<double>& calib_cpue,
-                      vector<int> &interesting_harbours)
+bool read_config_file(std::istream &stream,
+    int& nbpops,
+    int& nbbenthospops,
+    vector<int>& implicit_pops,
+    vector<int>& implicit_pops_level2,
+    vector<double>& calib_oth_landings,
+    vector<double>& calib_w,
+    vector<double>& calib_cpue,
+    vector<int> &interesting_harbours)
 {
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
@@ -91,18 +91,22 @@ int read_config_file (std::istream &stream,
     if (!reader.importFromStream(stream, specs))
         return false;
 
-    nbpops = reader.getAs<int>("nbpops");
-    nbbenthospops= reader.getAs<int>("nbbenthospops");
-    implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
-    implicit_pops_level2 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops_level2"), " ");
-    calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
-    calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
-    calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
-    interesting_harbours = displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " ");
-
+    try {
+        nbpops = reader.getAs<int>("nbpops");
+        nbbenthospops= reader.getAs<int>("nbbenthospops");
+        implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
+        implicit_pops_level2 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops_level2"), " ");
+        calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
+        calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
+        calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
+        interesting_harbours = displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " ");
+    } catch (displace::formats::FormatException &x) {
+        cerr << x.what() << endl;
+        return false;
+    }
     cout << "read config file...OK" << endl << flush;
 
-    return 0;
+    return true;
 }
 
 
@@ -110,7 +114,7 @@ int read_config_file (std::istream &stream,
 read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
-int read_scenario_config_file (string folder_name_parameterization,
+bool read_scenario_config_file (string folder_name_parameterization,
                                string inputfolder,
                                string namefolderoutput,
                                displace::commons::Scenario &scenario)
@@ -122,7 +126,7 @@ int read_scenario_config_file (string folder_name_parameterization,
     return read_scenario_config_file(f,scenario);
 }
 
-int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
+bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario)
 {
     helpers::LineNumberReader reader;
 
@@ -139,57 +143,61 @@ int read_scenario_config_file(std::istream &stream, displace::commons::Scenario 
     if (!reader.importFromStream(stream, specs))
         return false;
 
-    auto dasf = reader.get("dyn_alloc_sce");
-    std::vector<std::string> das;
-    boost::split(das, dasf, boost::is_any_of(" "));
-    for (auto d : das) {
-        scenario.dyn_alloc_sce.setOption(d, true);
-    }
-
-    auto dpsf = reader.get("dyn_pop_sce");
-    std::vector<std::string> dps;
-    boost::split(dps, dpsf, boost::is_any_of(" "));
-    for (auto d : dps) {
-        scenario.dyn_pop_sce.setOption(d, true);
-    }
-
-    std::vector<int> metier_closures;
-    auto met_c = reader.get("metier_closures");
-    std::vector<std::string> closures;
-    boost::trim(met_c);
-    if (!met_c.empty()) {
-        boost::split(closures, met_c, boost::is_any_of(" "));
-        for (auto cl : closures) {
-            metier_closures.push_back(boost::lexical_cast<int>(cl));
+    try {
+        auto dasf = reader.get("dyn_alloc_sce");
+        std::vector<std::string> das;
+        boost::split(das, dasf, boost::is_any_of(" "));
+        for (auto d : das) {
+            scenario.dyn_alloc_sce.setOption(d, true);
         }
+
+        auto dpsf = reader.get("dyn_pop_sce");
+        std::vector<std::string> dps;
+        boost::split(dps, dpsf, boost::is_any_of(" "));
+        for (auto d : dps) {
+            scenario.dyn_pop_sce.setOption(d, true);
+        }
+
+        std::vector<int> metier_closures;
+        auto met_c = reader.get("metier_closures");
+        std::vector<std::string> closures;
+        boost::trim(met_c);
+        if (!met_c.empty()) {
+            boost::split(closures, met_c, boost::is_any_of(" "));
+            for (auto cl : closures) {
+                metier_closures.push_back(boost::lexical_cast<int>(cl));
+            }
+        }
+        scenario.closure_opts.setOption(Options::Closure_Opt::banned_metiers, metier_closures);
+
+        scenario.biolsce=reader.get("biolsce");
+        scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
+        scenario.freq_redispatch_the_pop=reader.getAs<int>("freq_redispatch_the_pop");
+        scenario.a_graph=reader.getAs<int>("a_graph");
+        scenario.nrow_coord=reader.getAs<int>("nrow_coord");
+        scenario.nrow_graph=reader.getAs<int>("nrow_graph");
+        scenario.a_port=reader.getAs<int>("a_port");
+        scenario.graph_res=reader.getAs<double>("graph_res");
+        scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
+        scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
+        scenario.dt_go_fishing=reader.get("dt_go_fishing");
+        scenario.dt_choose_ground=reader.get("dt_choose_ground");
+        scenario.dt_start_fishing=reader.get("dt_start_fishing");
+        scenario.dt_change_ground=reader.get("dt_change_ground");
+        scenario.dt_stop_fishing=reader.get("dt_stop_fishing");
+        scenario.dt_change_port=reader.get("dt_change_port");
+        scenario.use_dtrees=(reader.getAs<int>("use_dtrees") != 0);
+
+        scenario.tariff_pop = displace::formats::utils::stringToVector<int>(reader.get("tariff_pop"), " ");
+        scenario.freq_update_tariff_code = reader.getAs<int>("freq_update_tariff_code");
+        scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(reader.get("arbitary_breaks_for_tariff"), " ");
+
+        scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
+        scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
+    } catch (displace::formats::FormatException &x) {
+        cerr << x.what() << endl;
+        return false;
     }
-    scenario.closure_opts.setOption(Options::Closure_Opt::banned_metiers, metier_closures);
-
-    scenario.biolsce=reader.get("biolsce");
-    scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
-    scenario.freq_redispatch_the_pop=reader.getAs<int>("freq_redispatch_the_pop");
-    scenario.a_graph=reader.getAs<int>("a_graph");
-    scenario.nrow_coord=reader.getAs<int>("nrow_coord");
-    scenario.nrow_graph=reader.getAs<int>("nrow_graph");
-    scenario.a_port=reader.getAs<int>("a_port");
-    scenario.graph_res=reader.getAs<double>("graph_res");
-    scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
-    scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
-    scenario.dt_go_fishing=reader.get("dt_go_fishing");
-    scenario.dt_choose_ground=reader.get("dt_choose_ground");
-    scenario.dt_start_fishing=reader.get("dt_start_fishing");
-    scenario.dt_change_ground=reader.get("dt_change_ground");
-    scenario.dt_stop_fishing=reader.get("dt_stop_fishing");
-    scenario.dt_change_port=reader.get("dt_change_port");
-    scenario.use_dtrees=(reader.getAs<int>("use_dtrees") != 0);
-
-    scenario.tariff_pop = displace::formats::utils::stringToVector<int>(reader.get("tariff_pop"), " ");
-    scenario.freq_update_tariff_code = reader.getAs<int>("freq_update_tariff_code");
-    scenario.arbitary_breaks_for_tariff = displace::formats::utils::stringToVector<double>(reader.get("arbitary_breaks_for_tariff"), " ");
-
-    scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
-    scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
-
     cout << "read scenario config file...OK" <<  endl << flush;
     cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;
     cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  endl << flush;
@@ -197,7 +205,7 @@ int read_scenario_config_file(std::istream &stream, displace::commons::Scenario 
     // Update the internals when needed
     scenario.closure_opts.update();
 
-    return 0;
+    return true;
 }
 
 vector <int> read_tsteps_quarters(string folder_name_parameterization, string inputfolder)

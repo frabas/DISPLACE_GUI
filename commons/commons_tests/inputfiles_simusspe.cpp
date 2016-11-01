@@ -170,9 +170,23 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                            "# banned metiers\n"
                            "90 91 92");
 
-    int r = read_scenario_config_file(is, res);
-    BOOST_CHECK(r == 0);
+    bool r = read_scenario_config_file(is, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex, res);
+
+    // Check for errors: bad int
+    string test = "# dyn_alloc_sce\n"
+                  "baseline focus_on_high_profit_grounds\n"
+                  "# dyn_pop_sce\n"
+                  "baseline\n"
+                  "# biolsce\n"
+                  "1\n"
+                  "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n"
+                  "x\n";
+    is.str(test);
+    is.clear();
+    r = read_scenario_config_file(is,res);
+    BOOST_CHECK(!r);
 }
 
 BOOST_AUTO_TEST_CASE( test_config_dat )
@@ -212,10 +226,10 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     vector<double> calib_cpue;
     vector<int> interesting_harbours;
 
-    int r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+    bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
                              calib_w, calib_cpue, interesting_harbours);
 
-    BOOST_CHECK(r == 0);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex_nbpops, nbpops);
     BOOST_CHECK_EQUAL(ex_nbbenthospops, nbbenthospops);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex_implicit_pops.begin(), ex_implicit_pops.end(), implicit_pops.begin(), implicit_pops.end());
@@ -227,6 +241,18 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
 
     BOOST_CHECK_EQUAL_COLLECTIONS(ex_interesting_harbours.begin(), ex_interesting_harbours.end(), interesting_harbours.begin(), interesting_harbours.end());
 
+    // Check for errors: bad cast
+    string test = "# nbpops\n"
+                  "x\n"
+                  "# nbbenthospops\n"
+                  "22\n"
+                  "# implicit stocks\n";
+    is.str(test);
+    is.clear();
+    r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+                                  calib_w, calib_cpue, interesting_harbours);
+
+    BOOST_CHECK(!r);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

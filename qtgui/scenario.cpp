@@ -302,7 +302,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
 {
     displace::commons::Scenario scenario;
 
-    if (read_scenario_config_file (        
+    if (!read_scenario_config_file (
                 path.toStdString(),
                 modelname.toStdString(),
                 outputname.toStdString(),

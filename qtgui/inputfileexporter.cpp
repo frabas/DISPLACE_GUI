@@ -30,10 +30,12 @@ InputFileExporter::InputFileExporter()
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath, QString areacodepath, QString closedpath,
+                                    QString closedpath_month,
                                     bool export_closedpoly,
                                     DisplaceModel *currentModel, QString *error)
 {
     closedpath = closedpath.replace("?", "%1");
+    closedpath_month = closedpath_month.replace("?", "%1");
 
     QFile cfile(coordspath);
     if (!cfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -176,7 +178,44 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 clsfile[q].close();
             }
         }
+
+        // Months
+        for (int month = 0; month < 12; ++month) {
+            QString fn = closedpath_month.arg(month+1);
+            QFile f(fn);
+            if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                if (error)
+                    *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
+                        .arg(fn).arg(f.errorString());
+                return false;
+            }
+
+            clsstream.setDevice(&f);
+            bool r = outputClosedPolyFile(clsstream, currentModel, [month](const displace::NodePenalty &penalty) {
+                return penalty.closed && penalty.months[month];
+            });
+            f.close();
+            if (!r)
+                return false;
+        }
+
     }
     return true;
 
+}
+
+bool InputFileExporter::outputClosedPolyFile(QTextStream &clsstream, DisplaceModel *currentModel,
+                                             std::function<bool(const displace::NodePenalty &)> selector)
+{
+    auto &pl = currentModel->getPenaltyCollection();
+    for (auto p : pl) {
+        if (selector(p)) {
+            clsstream << p.polyId << " " << p.nodeId;
+            for (auto m : p.metiers)
+                clsstream << " " << m;
+            clsstream << "\n";
+        }
+    }
+
+    return true;
 }

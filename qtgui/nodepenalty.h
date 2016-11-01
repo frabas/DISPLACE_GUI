@@ -11,6 +11,7 @@ public:
 
     bool closed;
     std::vector<int> metiers;
+    std::vector<bool> months;
     bool q[4];
 
     int polyId;

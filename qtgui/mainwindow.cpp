@@ -1509,6 +1509,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
 
     if (dlg.exec() == QDialog::Accepted) {
         auto bannedMetiers = dlg.getBannedMetiers();
+        auto checkedMonths = dlg.getCheckedMonths();
 
         std::ostringstream ss;
         for (auto b : bannedMetiers)
@@ -1516,7 +1517,8 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
         qDebug() << "Banned Metiers: " << QString::fromStdString(ss.str());
 
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.isClosedForFishing(),
-                                        dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), bannedMetiers);
+                                                   dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
+                                                   bannedMetiers);
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
                              tr("Graph weights are changed, you'll need to recreate the shortest path."));
@@ -1673,11 +1675,12 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString landpath = savedlg.getLandscapeFilename();
         QString acpath = savedlg.getAreacodesFilename();
         QString polypath = savedlg.getClosedPolygonFilename();
+        auto polypathMomths = savedlg.getClosedPolygonFilenameMonthly();
         bool export_poly = savedlg.isClosedPolygonExportChecked();
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, export_poly, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, polypathMomths, export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;
@@ -1766,6 +1769,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         double weight = dlg.weight();
         QStringList shp = dlg.selectedShapefile();
         auto bannedMetiers = dlg.getBannedMetiers();
+        auto checkedMonths = dlg.getCheckedMonths();
         //std::vector<std::shared_ptr<OGRDataSource> dss;
 
         for (auto sh : shp) {
@@ -1781,7 +1785,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
                 OGRFeature *feature;
                 while ((feature = lr->GetNextFeature())) {
                     currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing(),
-                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), bannedMetiers);
+                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths, bannedMetiers);
                 }
             }
         }
@@ -1960,11 +1964,12 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString landpath = dlg.getLandscapeFilename();
         QString acpath = dlg.getAreacodesFilename();
         QString polypath = dlg.getClosedPolygonFilename();
+        auto polypathMomths = dlg.getClosedPolygonFilenameMonthly();
         bool export_poly = dlg.isClosedPolygonExportChecked();
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, export_poly, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath,polypathMomths, export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;

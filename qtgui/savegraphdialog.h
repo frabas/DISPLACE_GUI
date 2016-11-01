@@ -42,6 +42,7 @@ public:
     QString getLandscapeFilename() const;
     QString getAreacodesFilename() const;
     QString getClosedPolygonFilename() const;
+    QString getClosedPolygonFilenameMonthly() const;
     bool isClosedPolygonExportChecked() const;
 
 private slots:

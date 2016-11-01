@@ -71,6 +71,7 @@ public:
     bool isPenaltyQ4();
     double weight() const;
 
+    std::vector<bool> getCheckedMonths() const;
     std::vector<int> getBannedMetiers() const;
 
 private slots:
@@ -84,6 +85,7 @@ private:
     QGridLayout *mShapefileGrid, *mMetierGrid;
     std::vector<QCheckBox *> mShapefileCheckboxes;
     std::vector<QCheckBox *> mMetierCheckboxes;
+    std::vector<QCheckBox *> mMonthsCheckboxes;
 
     int clickCount = 0;
 };

@@ -24,6 +24,17 @@
 #include <QGridLayout>
 #include <QCheckBox>
 
+namespace {
+static const QString Months[] = {
+    QT_TR_NOOP("January"), QT_TR_NOOP("February"),
+    QT_TR_NOOP("March"), QT_TR_NOOP("April"),
+    QT_TR_NOOP("May"), QT_TR_NOOP("June"),
+    QT_TR_NOOP("July"), QT_TR_NOOP("August"),
+    QT_TR_NOOP("September"), QT_TR_NOOP("October"),
+    QT_TR_NOOP("November"), QT_TR_NOOP("December"),
+};
+}
+
 PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PathPenaltyDialog)
@@ -32,6 +43,15 @@ PathPenaltyDialog::PathPenaltyDialog(QWidget *parent) :
 
     ui->shapefileGroup->setLayout(mShapefileGrid = new QGridLayout);
     ui->metierGroup->setLayout(mMetierGrid = new QGridLayout);
+
+    auto monthsLayout = new QGridLayout;
+    for (int i = 0; i < 12; ++i) {
+        auto mcb = new QCheckBox(tr(Months[i].toStdString().c_str()));
+        monthsLayout->addWidget(mcb, i / 4, i % 4);
+        mMonthsCheckboxes.push_back(mcb);
+    }
+    ui->tabPageMonths->setLayout(monthsLayout);
+    ui->tabWidgetPeriods->setCurrentIndex(0);
 
     ui->ok->setEnabled(false);
 
@@ -113,6 +133,14 @@ bool PathPenaltyDialog::isPenaltyQ4()
 double PathPenaltyDialog::weight() const
 {
     return ui->weight->value();
+}
+
+std::vector<bool> PathPenaltyDialog::getCheckedMonths() const
+{
+    std::vector<bool> checkedMonths;
+    for (auto mcb : mMonthsCheckboxes)
+        checkedMonths.push_back(mcb->isChecked());
+    return checkedMonths;
 }
 
 std::vector<int> PathPenaltyDialog::getBannedMetiers() const

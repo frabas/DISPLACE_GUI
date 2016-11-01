@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>458</height>
+    <width>529</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,36 +80,6 @@
       <string>Output names</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Coordinates file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="coordFileName"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Graph File</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Landscape file</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="graphFileName"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="landscapeFileName"/>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
@@ -127,15 +97,55 @@
       <item row="4" column="1">
        <widget class="QLineEdit" name="areaCodeFileName"/>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Graph File</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Landscape file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Coordinates file</string>
+        </property>
+       </widget>
+      </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Closed polygon files</string>
+         <string>Closed polygon files (Quarterly)</string>
         </property>
        </widget>
       </item>
       <item row="5" column="1">
        <widget class="QLineEdit" name="closedPolyFilename"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="landscapeFileName"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="graphFileName"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="coordFileName"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Closed polygon files (Monthly)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="closedPolyFilename_Months"/>
       </item>
      </layout>
     </widget>

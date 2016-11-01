@@ -83,6 +83,11 @@ QString SaveGraphDialog::getClosedPolygonFilename() const
     return ui->outputFolder->text() + "/" + ui->closedPolyFilename->text();
 }
 
+QString SaveGraphDialog::getClosedPolygonFilenameMonthly() const
+{
+    return ui->outputFolder->text() + "/" + ui->closedPolyFilename_Months->text();
+}
+
 bool SaveGraphDialog::isClosedPolygonExportChecked() const
 {
     return ui->optClosedPoly->isChecked();

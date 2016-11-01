@@ -42,8 +42,17 @@
 #define INPUTFILEEXPORTER_H
 
 #include <QString>
+#include <functional>
 
 class DisplaceModel;
+
+namespace displace {
+class NodePenalty;
+}
+
+QT_BEGIN_NAMESPACE
+class QTextStream;
+QT_END_NAMESPACE
 
 class InputFileExporter
 {
@@ -51,7 +60,9 @@ public:
     InputFileExporter();
 
     bool exportGraph(QString graphpath, QString coordspath, QString landpath, QString areacodepath,
-                     QString closedpath, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
+                     QString closedpath, QString closedpath_month, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
+protected:
+    bool outputClosedPolyFile(QTextStream &clsstream, DisplaceModel *currentModel, std::function<bool(const displace::NodePenalty &)> selector);
 };
 
 #endif // INPUTFILEEXPORTER_H

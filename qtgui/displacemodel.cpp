@@ -913,7 +913,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
 }
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing,
-                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<int> bannedMetiers)
+                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, vector<int> bannedMetiers)
 {
     OGRLinearRing *gring = (OGRLinearRing *)OGRGeometryFactory::createGeometry(wkbLinearRing);
 
@@ -926,7 +926,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     gpoly->addRing(gring);
 
     addPenaltyToNodesByAddWeight(gpoly, weight, closed_for_fishing,
-                                  onQ1, onQ2, onQ3, onQ4, bannedMetiers);
+                                  onQ1, onQ2, onQ3, onQ4, checkedMonths, bannedMetiers);
 
     delete gpoly;
 }
@@ -962,7 +962,8 @@ void DisplaceModel::setCodeFromFeature (OGRGeometry *geometry, int code, std::fu
 }
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,
-                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<int> bannedMetiers)
+                                                 bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
+                                                 vector<int> bannedMetiers)
 {
     QList<int> penaltyNodes;
 
@@ -1006,6 +1007,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         pen.q[1] = onQ2;
         pen.q[2] = onQ3;
         pen.q[3] = onQ4;
+        pen.months = checkedMonths;
         pen.closed = closed_for_fishing;
         pen.polyId = 0;
         pen.metiers = bannedMetiers;

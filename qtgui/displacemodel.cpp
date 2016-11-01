@@ -157,9 +157,11 @@ bool DisplaceModel::load(QString path, ModelType type)
 
         loadNodes();
         if (!loadVessels())
-            throw DisplaceException("CAnnot read Vessels Features");
+            throw DisplaceException("Cannot read Vessels Features");
         loadGraphs();
-        initShips();
+        if (!initShips())
+            throw DisplaceException("Cannot read Ships Features");
+
         initFishfarm();
         initBenthos();
         initPopulations();
@@ -2107,10 +2109,11 @@ bool DisplaceModel::initShips()
     vector<double> vcruises;
     vector<double> lane_ids;
 
-    read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
+    if (!read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
                         loas, KWs, breadths, grosstonnages, nbunits, fueluses,NOxEmission_gperKWhs,
                         SOxEmission_percentpertotalfuelmasss, GHGEmissions, PMEmissions,
-                        vmaxs, vcruises, lane_ids, mInputName.toStdString(), mBasePath.toStdString());
+                        vmaxs, vcruises, lane_ids, mInputName.toStdString(), mBasePath.toStdString()))
+        return false;
 
     // read shipping lanes
     multimap<int, double> shiplanes_lat = read_shiplanes_lat(mInputName.toStdString(), mBasePath.toStdString());

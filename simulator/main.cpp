@@ -1984,12 +1984,15 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> vmaxs;
     vector<double> vcruises;
     vector<double> lane_ids;
-    read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
+    if (!read_ships_features(shipids, imos, yearbuilds, flags, types, typecodes,
                         loas, KWs, breadths, grosstonnages, nbunits,
                         fueluses,NOxEmission_gperKWhs, SOxEmission_percentpertotalfuelmasss,
                         GHGEmissions, PMEmissions,
                         vmaxs, vcruises, lane_ids,
-                        folder_name_parameterization, inputfolder);
+                        folder_name_parameterization, inputfolder)) {
+        cerr << "Error loading ship features. Bailing out.\n";
+        return 2;
+    }
 
     // read shipping lanes
     multimap<int, double> shiplanes_lat = read_shiplanes_lat( folder_name_parameterization, inputfolder);

@@ -796,7 +796,7 @@ bool fill_from_vessels_specifications (istream& in, vector<string>& names,
 fill in the vessel attributes
 @param the vessel specification file, ...
 */
-void fill_from_ships_specifications (istream& in,
+bool fill_from_ships_specifications (istream& in,
                                      vector<string>& names,
                                      vector<double>& imos,
                                      vector<double>& yearbuilds,
@@ -817,67 +817,65 @@ void fill_from_ships_specifications (istream& in,
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids)
 {
-	string name;
-	while(!std::getline(in, name, '|').eof())
-	{
-        string imo;
-        string yearbuild;
-        string flag;
-        string type;
-        string typecode;
-        string loa;
-        string KW;
-        string breadth;
-        string grosstonnage;
-        string nbunit;
-        string fueluse;
-        string NOxEmission_gperKWh;
-        string SOxEmission_percentpertotalfuelmass;
-        string GHGEmission;
-        string PMEmission;
-        string vmax;
-		string vcruise;
-		string lane_id;
-        std::getline(in, imo, '|');
-        std::getline(in, yearbuild, '|');
-        std::getline(in, flag, '|');
-        std::getline(in, type, '|');
-        std::getline(in, typecode, '|');
-        std::getline(in, loa, '|');
-        std::getline(in, KW, '|');
-        std::getline(in, breadth, '|');
-        std::getline(in, grosstonnage, '|');
-        std::getline(in, nbunit, '|');
-        std::getline(in, fueluse, '|');
-        std::getline(in, NOxEmission_gperKWh, '|');
-        std::getline(in, SOxEmission_percentpertotalfuelmass, '|');
-        std::getline(in, GHGEmission, '|');
-        std::getline(in, PMEmission, '|');
-        std::getline(in, vmax, '|');
-        std::getline(in, vcruise, '|');
-		std::getline(in, lane_id);
-		names.push_back(name);
-        imos.push_back(strtod(imo.c_str(),0));
-        yearbuilds.push_back(strtod(yearbuild.c_str(),0));
-        flags.push_back(flag);
-        types.push_back(type);
-        typecodes.push_back(strtod(typecode.c_str(),0));
-        loas.push_back(strtod(loa.c_str(),0));
-        KWs.push_back(strtod(KW.c_str(),0));
-        breadths.push_back(strtod(breadth.c_str(),0));
-        grosstonnages.push_back(strtod(grosstonnage.c_str(),0));
-        nbunits.push_back(strtod(nbunit.c_str(),0));
-        fueluses.push_back(strtod(fueluse.c_str(),0));
-        NOxEmission_gperKWhs.push_back(strtod(NOxEmission_gperKWh.c_str(),0));
-        SOxEmission_percentpertotalfuelmasss.push_back(strtod(SOxEmission_percentpertotalfuelmass.c_str(),0));
-        GHGEmissions.push_back(strtod(GHGEmission.c_str(),0));
-        PMEmissions.push_back(strtod(PMEmission.c_str(),0));
-        vmaxs.push_back(strtod(vmax.c_str(),0));
-		vcruises.push_back(strtod(vcruise.c_str(),0));
-		lane_ids.push_back(strtod(lane_id.c_str(),0));
-	}
+    try {
+        std::string line;
+        while (!in.eof()) {
+            getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            vector<string> fields;
+
+            boost::split(fields, line, boost::is_any_of("|"));
+
+            string name = fields[0];
+            double imo = boost::lexical_cast<double>(fields[1]);
+            double yearbuild = boost::lexical_cast<double>(fields[2]);
+            string flag = fields[3];
+            string type = fields[4];
+            double typecode = boost::lexical_cast<double>(fields[5]);
+            double loa = boost::lexical_cast<double>(fields[6]);
+            double KW = boost::lexical_cast<double>(fields[7]);
+            double breadth = boost::lexical_cast<double>(fields[8]);
+            double grosstonnage = boost::lexical_cast<double>(fields[9]);
+            double nbunit = boost::lexical_cast<double>(fields[10]);
+            double fueluse = boost::lexical_cast<double>(fields[11]);
+            double NOxEmission_gperKWh = boost::lexical_cast<double>(fields[12]);
+            double SOxEmission_percentpertotalfuelmass = boost::lexical_cast<double>(fields[13]);
+            double GHGEmission = boost::lexical_cast<double>(fields[14]);
+            double PMEmission = boost::lexical_cast<double>(fields[15]);
+            double vmax = boost::lexical_cast<double>(fields[16]);
+            double vcruise = boost::lexical_cast<double>(fields[17]);
+            double lane_id = boost::lexical_cast<double>(fields[18]);
+            names.push_back(name);
+            imos.push_back(imo);
+            yearbuilds.push_back(yearbuild);
+            flags.push_back(flag);
+            types.push_back(type);
+            typecodes.push_back(typecode);
+            loas.push_back(loa);
+            KWs.push_back(KW);
+            breadths.push_back(breadth);
+            grosstonnages.push_back(grosstonnage);
+            nbunits.push_back(nbunit);
+            fueluses.push_back(fueluse);
+            NOxEmission_gperKWhs.push_back(NOxEmission_gperKWh);
+            SOxEmission_percentpertotalfuelmasss.push_back(SOxEmission_percentpertotalfuelmass);
+            GHGEmissions.push_back(GHGEmission);
+            PMEmissions.push_back(PMEmission);
+            vmaxs.push_back(vmax);
+            vcruises.push_back(vcruise);
+            lane_ids.push_back(lane_id);
+        }
+    } catch (boost::bad_lexical_cast &) {
+        return false;
+    }
+
     dout(cout  << "read and set up the general features of each ship...OK" << endl << flush);
 
+    return true;
 }
 
 

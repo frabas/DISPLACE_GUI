@@ -75,7 +75,7 @@ vector<double>& mult_fuelcons_when_steaming,
 string folder_name_parameterization,
 string inputfolder,
 int selected_vessels_only, vector<VesselCalendar> &calendars);
-void read_ships_features(vector<string>& shipids, vector<double> &imos,
+bool read_ships_features(vector<string>& shipids, vector<double> &imos,
                          vector<double> &yearbuilds, vector<string> &flags,
                          vector<string> &types, vector<double> &typecodes,
                          vector<double> &loas, vector<double> &KWs, vector<double> &breadths,

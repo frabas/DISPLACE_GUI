@@ -134,7 +134,7 @@ bool loadShips(std::istream &stream, std::vector<Ship> &ships) {
     vector<double> vcruises;
     vector<double> lane_ids;
 
-    fill_from_ships_specifications (stream,
+    bool r = fill_from_ships_specifications (stream,
             names,
             imos,
             yearbuilds,
@@ -155,6 +155,9 @@ bool loadShips(std::istream &stream, std::vector<Ship> &ships) {
             vcruises,
             lane_ids
             );
+
+    if (!r)
+        return false;
 
     for (size_t i = 0; i < names.size(); ++i) {
         Ship v;
@@ -190,11 +193,15 @@ BOOST_AUTO_TEST_SUITE ( shipsspe )
 
 BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat )
 {
-    std::stringstream ss (
-                "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
-                "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
-                );
+    std::string teststring;
 
+    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
+                 "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n";
+
+    std::stringstream ss;
+
+    ss.str(teststring);
+    ss.clear();
     std::vector<Ship> exp_ss = {
         Ship("SHIP1",1000000,2006,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1),
         Ship("SHIP2",3000000,2003,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1)
@@ -203,6 +210,51 @@ BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat )
     std::vector<Ship> r_ss;
 
     bool r = loadShips(ss, r_ss);
+    BOOST_CHECK(r);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
+
+    // Check for errors
+    teststring = "SHIP1|1000000|20d6|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n";
+    ss.str(teststring);
+    ss.clear();
+    r = loadShips(ss, r_ss);
+    BOOST_CHECK(!r);
+
+    // Wrong number of records
+    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0\n";
+    ss.str(teststring);
+    ss.clear();
+    r_ss.clear();
+    r = loadShips(ss, r_ss);
+    BOOST_CHECK(!r);
+
+    // Wrong number of records
+    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|\n";
+    ss.str(teststring);
+    ss.clear();
+    r_ss.clear();
+    r = loadShips(ss, r_ss);
+    BOOST_CHECK(!r);
+
+
+    // missing newline, should return success as well
+    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
+                 "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1";
+    ss.str(teststring);
+    ss.clear();
+    r_ss.clear();
+    r = loadShips(ss, r_ss);
+    BOOST_CHECK(r);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
+
+    // Empty lines, should return success as well
+    teststring = "\n"
+                 "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n\n\n"
+                 "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1";
+    ss.str(teststring);
+    ss.clear();
+    r_ss.clear();
+    r = loadShips(ss, r_ss);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
 }

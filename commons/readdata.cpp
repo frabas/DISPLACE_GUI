@@ -481,7 +481,7 @@ bool read_vessels_features(string a_quarter,
 
 
 //----------------
-void read_ships_features(vector<string>& shipids,
+bool read_ships_features(vector<string>& shipids,
                            vector<double> &imos,
                            vector<double> &yearbuilds, vector<string> &flags,
                            vector<string> &types, vector<double> &typecodes,
@@ -512,7 +512,7 @@ void read_ships_features(vector<string>& shipids,
 		// return 1;
 	}
 
-    fill_from_ships_specifications(ships_features, shipids, imos,
+    bool r = fill_from_ships_specifications(ships_features, shipids, imos,
                                    yearbuilds, flags, types, typecodes,
                                    loas, KWs, breadths, grosstonnages, nbunits,
                                    fueluses, NOxEmission_gperKWhs,
@@ -521,7 +521,7 @@ void read_ships_features(vector<string>& shipids,
                                    vmaxs, vcruises, lane_ids);
 	ships_features.close();
 
-
+    return r;
 }
 
 

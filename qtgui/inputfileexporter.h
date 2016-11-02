@@ -42,6 +42,8 @@
 #define INPUTFILEEXPORTER_H
 
 #include <QString>
+
+#include <vector>
 #include <functional>
 
 class DisplaceModel;

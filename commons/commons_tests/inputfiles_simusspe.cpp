@@ -13,7 +13,7 @@
 #include <readdata.h>
 #include <comstructs.h>
 
-#if BOOST_VERSION_NUMBER <= 105900
+#if BOOST_VERSION <= 105900
 #define BOOST_NAMESPACE_TTDETAIL_BEGIN
 #define BOOST_NAMESPACE_TTDETAIL_END
 #else

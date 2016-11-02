@@ -32,15 +32,15 @@
 using namespace std;
 
 double myintegrand(double x, double S1, double S2){
-return 1/(1+exp((S1-S2*x)));
+    return 1/(1+exp((S1-S2*x)));
 }
 
 
 double trapezoidal(double a, double b, vector <double> sel){
-double sum=sel[a]*0.5;
-for (int i=a+1; i<b; i++) sum +=sel[i];
-sum+=sel[b]*0.5;
-return sum;
+    double sum=sel[a]*0.5;
+    for (int i=a+1; i<b; i++) sum +=sel[i];
+    sum+=sel[b]*0.5;
+    return sum;
 }
 
 
@@ -48,7 +48,7 @@ return sum;
 template <typename T, size_t N>
 T* end(T (&pArray)[N])
 {
-	return &pArray[0] + N;
+    return &pArray[0] + N;
 }
 
 namespace {
@@ -80,23 +80,23 @@ void read_map (istream &stream, CONTAINER &mmap) {
 
 void remove_dups(vector<int>& seq)
 {
-	sort( seq.begin(), seq.end() ) ;
-	seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
+    sort( seq.begin(), seq.end() ) ;
+    seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
 }
 
 
 // to keep the first element of all the keys only:
 multimap<int,int>  remove_dups(multimap<int,int>& original_map)
 {
-   multimap<int,int> new_map;
+    multimap<int,int> new_map;
 
-   while (original_map.size() > 0)
-      {
-       pair<int,int> element = *(original_map.begin());
-       new_map.insert(make_pair(element.first,element.second));
-       original_map.erase(element.first);
-      }
-return(new_map);
+    while (original_map.size() > 0)
+    {
+        pair<int,int> element = *(original_map.begin());
+        new_map.insert(make_pair(element.first,element.second));
+        original_map.erase(element.first);
+    }
+    return(new_map);
 }
 
 
@@ -124,17 +124,17 @@ bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair)
 /*
 void print( vector <string> & v )
 {
-	for (size_t n = 0; n < v.size(); n++)
-		cout << "\"" << v[ n ] << "\"\n";
-	cout << endl;
+    for (size_t n = 0; n < v.size(); n++)
+        cout << "\"" << v[ n ] << "\"\n";
+    cout << endl;
 }
 
 
 void print_d( vector <double> & v )
 {
-	for (size_t n = 0; n < v.size(); n++)
-		cout << "\"" << v[ n ] << "\"\n";
-	cout << endl;
+    for (size_t n = 0; n < v.size(); n++)
+        cout << "\"" << v[ n ] << "\"\n";
+    cout << endl;
 }
 */
 
@@ -142,15 +142,15 @@ void print_d( vector <double> & v )
 template <typename T1, typename T2>
 struct pair_first_less
 {
-	bool operator()(std::pair<T1,T2> p1, std::pair<T1,T2> p2) const
-	{
-		if(p1.first == p2.first)
-		{
-			//Otherwise the initial vertex_queue will have the size 2 { 0,source ; inf;n }
-			return p1.second < p2.second;
-		}
-		return p1.first < p2.first;
-	}
+    bool operator()(std::pair<T1,T2> p1, std::pair<T1,T2> p2) const
+    {
+        if(p1.first == p2.first)
+        {
+            //Otherwise the initial vertex_queue will have the size 2 { 0,source ; inf;n }
+            return p1.second < p2.second;
+        }
+        return p1.first < p2.first;
+    }
 };
 
 // TO DO: modify the Dijkstra algo to incorporate the potential
@@ -164,180 +164,180 @@ struct pair_first_less
 
 //simple compute paths function>>=
 void DijkstraComputePaths(vertex_t source,
-adjacency_map_t& adjacency_map,
-std::map<vertex_t, weight_t>& min_distance,
-std::map<vertex_t, vertex_t>& previous,
-std::vector<int> relevant_nodes)
+                          adjacency_map_t& adjacency_map,
+                          std::map<vertex_t, weight_t>& min_distance,
+                          std::map<vertex_t, vertex_t>& previous,
+                          std::vector<int> relevant_nodes)
 {
-	//initialize output parameters>>
-	for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
-		vertex_iter != adjacency_map.end();
-		vertex_iter++)
-	{
-		vertex_t v = vertex_iter->first;
-		//min_distance[v] = std::numeric_limits< double >::infinity();
-		min_distance[v] = 10000;
-	}
+    //initialize output parameters>>
+    for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
+         vertex_iter != adjacency_map.end();
+         vertex_iter++)
+    {
+        vertex_t v = vertex_iter->first;
+        //min_distance[v] = std::numeric_limits< double >::infinity();
+        min_distance[v] = 10000;
+    }
 
-	min_distance[source] = 0;
-	//visit each vertex u, always visiting vertex with smallest min_distance first>>
-	std::set< std::pair<weight_t, vertex_t>,
-		pair_first_less<weight_t, vertex_t> > vertex_queue;
-	for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
-		vertex_iter != adjacency_map.end();
-		vertex_iter++)
-	{
-		vertex_t v = vertex_iter->first;
-		vertex_queue.insert(std::pair<weight_t, vertex_t>(min_distance[v], v));
-	}
-	while (!relevant_nodes.empty() && !vertex_queue.empty())
-	{
-		vertex_t u = vertex_queue.begin()->second;
-		vertex_queue.erase(vertex_queue.begin());
-		// Visit each edge exiting u
-		for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
-			edge_iter != adjacency_map[u].end();
-			edge_iter++)
-		{
-			vertex_t v = edge_iter->target;
-								 // GET HERE THE DIST IN km (to the nearest km because an integer here)...
-			weight_t weight = edge_iter->weight;
-			//relax the edge (u,v)>>=
-			weight_t distance_through_u = min_distance[u] + weight;
-			//if (distance_through_u<700 && distance_through_u < min_distance[v])
-			//if ( distance_through_u < min_distance[v])
-			std::vector<int>::iterator invalid;
-			if (distance_through_u < min_distance[v])
-			{
-				//remove v from queue>>
-				vertex_queue.erase(std::pair<weight_t, vertex_t>(min_distance[v], v));
-				min_distance[v] = distance_through_u;
-				previous[v] = u;
+    min_distance[source] = 0;
+    //visit each vertex u, always visiting vertex with smallest min_distance first>>
+    std::set< std::pair<weight_t, vertex_t>,
+            pair_first_less<weight_t, vertex_t> > vertex_queue;
+    for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
+         vertex_iter != adjacency_map.end();
+         vertex_iter++)
+    {
+        vertex_t v = vertex_iter->first;
+        vertex_queue.insert(std::pair<weight_t, vertex_t>(min_distance[v], v));
+    }
+    while (!relevant_nodes.empty() && !vertex_queue.empty())
+    {
+        vertex_t u = vertex_queue.begin()->second;
+        vertex_queue.erase(vertex_queue.begin());
+        // Visit each edge exiting u
+        for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
+             edge_iter != adjacency_map[u].end();
+             edge_iter++)
+        {
+            vertex_t v = edge_iter->target;
+            // GET HERE THE DIST IN km (to the nearest km because an integer here)...
+            weight_t weight = edge_iter->weight;
+            //relax the edge (u,v)>>=
+            weight_t distance_through_u = min_distance[u] + weight;
+            //if (distance_through_u<700 && distance_through_u < min_distance[v])
+            //if ( distance_through_u < min_distance[v])
+            std::vector<int>::iterator invalid;
+            if (distance_through_u < min_distance[v])
+            {
+                //remove v from queue>>
+                vertex_queue.erase(std::pair<weight_t, vertex_t>(min_distance[v], v));
+                min_distance[v] = distance_through_u;
+                previous[v] = u;
 
-				//re-add v to queue>>=
-				vertex_queue.insert(std::pair<weight_t, vertex_t>(min_distance[v], v));
+                //re-add v to queue>>=
+                vertex_queue.insert(std::pair<weight_t, vertex_t>(min_distance[v], v));
 
-			}
+            }
 
-			// for speeding up the simu by reducing the size of the object "previous":
-			// remove v from list of dest nodes if it is a dest node
-			// then stop the search of paths if all dest nodes are reached...
-			invalid =remove(relevant_nodes.begin(), relevant_nodes.end(), v);
-			relevant_nodes.erase(invalid, relevant_nodes.end());
+            // for speeding up the simu by reducing the size of the object "previous":
+            // remove v from list of dest nodes if it is a dest node
+            // then stop the search of paths if all dest nodes are reached...
+            invalid =remove(relevant_nodes.begin(), relevant_nodes.end(), v);
+            relevant_nodes.erase(invalid, relevant_nodes.end());
 
-		}
+        }
 
-		//if(relevant_nodes.size()<7){
-		//    for (int i=0; i<relevant_nodes.size(); i++){
-		//    std::cout << relevant_nodes.at(i) <<" ";
-		//    }
-		//}
+        //if(relevant_nodes.size()<7){
+        //    for (int i=0; i<relevant_nodes.size(); i++){
+        //    std::cout << relevant_nodes.at(i) <<" ";
+        //    }
+        //}
 
-	}
+    }
 
 }
 
 
 //get shortest path function>>=
 std::list<vertex_t> DijkstraGetShortestPathTo(
-vertex_t target, std::map<vertex_t, vertex_t>& previous)
+        vertex_t target, std::map<vertex_t, vertex_t>& previous)
 {
-	std::list<vertex_t> path;
-	std::map<vertex_t, vertex_t>::iterator prev;
-	vertex_t vertex = target;
-	path.push_front(vertex);
-	while((prev = previous.find(vertex)) != previous.end())
-	{
-		vertex = prev->second;
-		path.push_front(vertex);
-	}
-	return path;
+    std::list<vertex_t> path;
+    std::map<vertex_t, vertex_t>::iterator prev;
+    vertex_t vertex = target;
+    path.push_front(vertex);
+    while((prev = previous.find(vertex)) != previous.end())
+    {
+        vertex = prev->second;
+        path.push_front(vertex);
+    }
+    return path;
 }
 
 
 // remove the keys that are not used in the map "previous"
 // according to all the potential destination nodes for a given source node
 void SimplifyThePreviousMap(
-int source,
-std::map<vertex_t, vertex_t>& previous,
-std::vector<int>& relevant_nodes,
-std::map<vertex_t, weight_t>& min_distance,
-string namesimu,
-string a_graph_name,
-string inputfolder)
+        int source,
+        std::map<vertex_t, vertex_t>& previous,
+        std::vector<int>& relevant_nodes,
+        std::map<vertex_t, weight_t>& min_distance,
+        string namesimu,
+        string a_graph_name,
+        string inputfolder)
 {
-	std::cout << "size before: " << previous.size()  << std::endl;
+    std::cout << "size before: " << previous.size()  << std::endl;
 
-	std::list<vertex_t> paths;
+    std::list<vertex_t> paths;
 
-	// 1. compute all paths from the source to the set of destinations
+    // 1. compute all paths from the source to the set of destinations
     for (unsigned int i=0; i<relevant_nodes.size(); i++)
-	{
-		std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i], previous);
+    {
+        std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i], previous);
 
-		//paths.merge(path); // concatenate
-		// we dont care about the order so replaced by:
-								 // concatenate
-		paths.insert (paths.end(),path.begin(),path.end());
+        //paths.merge(path); // concatenate
+        // we dont care about the order so replaced by:
+        // concatenate
+        paths.insert (paths.end(),path.begin(),path.end());
 
-	}
+    }
 
-	// 2. sort to speed up binary_search
-	paths.sort();
+    // 2. sort to speed up binary_search
+    paths.sort();
 
-	// 3. remove potential replicates (caution: the container need to be orderered first)
-	paths.unique();
+    // 3. remove potential replicates (caution: the container need to be orderered first)
+    paths.unique();
 
-	//std::cout << "all nodes used: " << std::endl;
-	//std::list<vertex_t>::iterator i;
-	//for(i=paths.begin(); i != paths.end(); ++i) std::cout << *i << " ";
-	//std::cout << std::endl;
+    //std::cout << "all nodes used: " << std::endl;
+    //std::list<vertex_t>::iterator i;
+    //for(i=paths.begin(); i != paths.end(); ++i) std::cout << *i << " ";
+    //std::cout << std::endl;
 
-	// 4. export but without the not used nodes (because they do not belong to at least one path)
-	// export into a file
-	std::ofstream a_previous_map;
-	stringstream out;
-	out << source;
-	string source_s = out.str();
+    // 4. export but without the not used nodes (because they do not belong to at least one path)
+    // export into a file
+    std::ofstream a_previous_map;
+    stringstream out;
+    out << source;
+    string source_s = out.str();
     std::string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".dat";
-	a_previous_map.open(filename.c_str());
-	a_previous_map << " key " << " value " << std::endl;
+    a_previous_map.open(filename.c_str());
+    a_previous_map << " key " << " value " << std::endl;
 
-	std::map<vertex_t, vertex_t>::iterator prev;
-	for ( prev=previous.begin() ; prev != previous.end(); prev++ )
-	{
-		vertex_t vertex = prev->first;
-		vertex_t vertex2 = prev->second;
+    std::map<vertex_t, vertex_t>::iterator prev;
+    for ( prev=previous.begin() ; prev != previous.end(); prev++ )
+    {
+        vertex_t vertex = prev->first;
+        vertex_t vertex2 = prev->second;
 
-		// check if the nodes of a line in 'previous' are in use (caution: on both columns)....
-		if(binary_search(paths.begin(), paths.end(), vertex) &&
-			binary_search(paths.begin(), paths.end(), vertex2))
-		{
-			a_previous_map << vertex  <<" " << vertex2 << std::endl;
+        // check if the nodes of a line in 'previous' are in use (caution: on both columns)....
+        if(binary_search(paths.begin(), paths.end(), vertex) &&
+                binary_search(paths.begin(), paths.end(), vertex2))
+        {
+            a_previous_map << vertex  <<" " << vertex2 << std::endl;
             dout(cout  << "line " << vertex << " " << vertex2 << " is kept!" << endl);
-		}
+        }
 
-	}
-	a_previous_map.close();
+    }
+    a_previous_map.close();
 
-	std::ofstream a_min_distance;
+    std::ofstream a_min_distance;
     std::string filename2= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".dat";
-	a_min_distance.open(filename2.c_str());
-	a_min_distance << " key " << " value " << std::endl;
+    a_min_distance.open(filename2.c_str());
+    a_min_distance << " key " << " value " << std::endl;
 
-	std::map<vertex_t, weight_t>::iterator dis;
-	for ( dis=min_distance.begin() ; dis != min_distance.end(); dis++ )
-	{
-		vertex_t vertex = dis->first;
-		vertex_t distance = dis->second;
-		if(binary_search(paths.begin(), paths.end(), vertex) )
-		{
-			a_min_distance << vertex  <<" " << distance << std::endl;
-		}
-		//std::cout << vertex << ": removed..." << std::endl;
+    std::map<vertex_t, weight_t>::iterator dis;
+    for ( dis=min_distance.begin() ; dis != min_distance.end(); dis++ )
+    {
+        vertex_t vertex = dis->first;
+        vertex_t distance = dis->second;
+        if(binary_search(paths.begin(), paths.end(), vertex) )
+        {
+            a_min_distance << vertex  <<" " << distance << std::endl;
+        }
+        //std::cout << vertex << ": removed..." << std::endl;
 
-	}
-	a_min_distance.close();
+    }
+    a_min_distance.close();
 
 }
 
@@ -350,24 +350,24 @@ string inputfolder)
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map)
 {
 
-	for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
-		vertex_iter != adjacency_map.end();
-		vertex_iter++)
-	{
-		vertex_t v = vertex_iter->first;
-		if(binary_search(nodes_to_be_closed.begin(), nodes_to_be_closed.end(), v))
-		{
+    for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
+         vertex_iter != adjacency_map.end();
+         vertex_iter++)
+    {
+        vertex_t v = vertex_iter->first;
+        if(binary_search(nodes_to_be_closed.begin(), nodes_to_be_closed.end(), v))
+        {
 
-			for (std::list<edge>::iterator edge_iter = adjacency_map[v].begin();
-				edge_iter != adjacency_map[v].end();
-				edge_iter++)
-			{
-				edge_iter->weight = 100000;
+            for (std::list<edge>::iterator edge_iter = adjacency_map[v].begin();
+                 edge_iter != adjacency_map[v].end();
+                 edge_iter++)
+            {
+                edge_iter->weight = 100000;
 
-			}
-		}
+            }
+        }
 
-	}
+    }
 }
 
 
@@ -376,30 +376,30 @@ fill in the separated vectors related to the coord object
 @param the coord file, ...
 */
 void fill_from_coord (istream& in, vector<double>& graph_coord_x,
-vector<double> & graph_coord_y,
-vector<int>& graph_coord_harbour, int nrow)
+                      vector<double> & graph_coord_y,
+                      vector<int>& graph_coord_harbour, int nrow)
 {
-	double val;
-	int val2;
+    double val;
+    int val2;
 
-	for (int i = 0; i < nrow; i++)
-	{
-		in >> val;
-		graph_coord_x.push_back(val);
-	}
-	for (int i2=nrow; i2 < (nrow+nrow); i2++)
-	{
-		in >> val;
-		graph_coord_y.push_back(val);
-	}
-	for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
-	{
-		in >> val2;
-		graph_coord_harbour.push_back(val2);
-	}
+    for (int i = 0; i < nrow; i++)
+    {
+        in >> val;
+        graph_coord_x.push_back(val);
+    }
+    for (int i2=nrow; i2 < (nrow+nrow); i2++)
+    {
+        in >> val;
+        graph_coord_y.push_back(val);
+    }
+    for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
+    {
+        in >> val2;
+        graph_coord_harbour.push_back(val2);
+    }
 
-	cout << "read coord with "
-		<< graph_coord_x.size() << " nodes" << endl << flush;
+    cout << "read coord with "
+         << graph_coord_x.size() << " nodes" << endl << flush;
 }
 
 
@@ -408,73 +408,73 @@ fill in the separated vectors related to the coord object
 @param the coord file, ...
 */
 void fill_from_graph (istream& in, vector<int>& graph_idx_dep,
-vector<int> & graph_idx_arr,
-vector<int>& graph_dist_km, int nrow)
+                      vector<int> & graph_idx_arr,
+                      vector<int>& graph_dist_km, int nrow)
 {
-	double val;
+    double val;
 
-	for (int i = 0; i < nrow; i++)
-	{
-		in >> val;
-		graph_idx_dep.push_back(val);
+    for (int i = 0; i < nrow; i++)
+    {
+        in >> val;
+        graph_idx_dep.push_back(val);
         dout(cout  << "val dep: " << val << endl);
-	}
-	for (int i2=nrow; i2 < (nrow+nrow); i2++)
-	{
-		in >> val;
-		graph_idx_arr.push_back(val);
+    }
+    for (int i2=nrow; i2 < (nrow+nrow); i2++)
+    {
+        in >> val;
+        graph_idx_arr.push_back(val);
         dout(cout  << "val arr: " << val << endl);
-	}
-	for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
-	{
-		in >> val;
-								 // caution: convert into imt to speedup c++
-		unsigned int val_int = static_cast<unsigned int>(val + 0.5);
-		graph_dist_km.push_back(val_int);
-	}
+    }
+    for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
+    {
+        in >> val;
+        // caution: convert into imt to speedup c++
+        unsigned int val_int = static_cast<unsigned int>(val + 0.5);
+        graph_dist_km.push_back(val_int);
+    }
 
-	cout << "read graph with "
-		<< graph_idx_dep.size() << " connections " << endl << flush;
+    cout << "read graph with "
+         << graph_idx_dep.size() << " connections " << endl << flush;
 }
 
 
 void fill_from_code_area (istream& in, vector<int>& graph_point_code_area, int nrow)
 {
-	double val;
-	int val2;
+    double val;
+    int val2;
 
-	for (int i = 0; i < nrow; i++)
-	{
-		in >> val;				 // first column: do nothing...
-	}
-	for (int i2=nrow; i2 < (nrow+nrow); i2++)
-	{
-		in >> val;				 // second column: do nothing...
-	}
-	for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
-	{
-		in >> val2;
-		graph_point_code_area.push_back(val2);
-	}
+    for (int i = 0; i < nrow; i++)
+    {
+        in >> val;				 // first column: do nothing...
+    }
+    for (int i2=nrow; i2 < (nrow+nrow); i2++)
+    {
+        in >> val;				 // second column: do nothing...
+    }
+    for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
+    {
+        in >> val2;
+        graph_point_code_area.push_back(val2);
+    }
 
     dout (cout << "read code area with "
-        << graph_point_code_area.size() << " nodes" << endl << flush);
+          << graph_point_code_area.size() << " nodes" << endl << flush);
 }
 
 
 void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape, int nrow)
 {
-	int val;
-	cout << "landscape codes are: ";
-	for (int i = 0; i < nrow; i++)
-	{
-		in >> val;
-		graph_point_code_landscape.push_back(val);
-		cout << val << " ";
-	}
+    int val;
+    cout << "landscape codes are: ";
+    for (int i = 0; i < nrow; i++)
+    {
+        in >> val;
+        graph_point_code_landscape.push_back(val);
+        cout << val << " ";
+    }
 
-	cout << "read code marine landscape with "
-		<< graph_point_code_landscape.size() << " nodes" << endl << flush;
+    cout << "read code marine landscape with "
+         << graph_point_code_landscape.size() << " nodes" << endl << flush;
 }
 
 
@@ -484,24 +484,24 @@ fill in the growth transition matrix
 */
 void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix)
 {
-	double val;
-	for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
-	{
-		for(unsigned int j = 0; j < percent_szgroup_per_age_matrix[i].size(); j++)
-		{
-			in>> val;
-			percent_szgroup_per_age_matrix[i][j] = val;
-		}
-	}
+    double val;
+    for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < percent_szgroup_per_age_matrix[i].size(); j++)
+        {
+            in>> val;
+            percent_szgroup_per_age_matrix[i][j] = val;
+        }
+    }
     dout(cout  << "read size matrix percent_age_per_szgroup"  << endl << flush);
-	for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
-	{
-		for(unsigned int j = 0; j < percent_szgroup_per_age_matrix[i].size(); j++)
-		{
+    for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < percent_szgroup_per_age_matrix[i].size(); j++)
+        {
             dout(cout  << percent_szgroup_per_age_matrix[i][j] << " ");
-		}
+        }
         dout(cout  << endl);
-	}
+    }
     dout(cout  << endl);
 
 }
@@ -513,24 +513,24 @@ fill in the growth transition matrix
 */
 void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix)
 {
-	double val;
-	for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
-	{
-		for(unsigned int j = 0; j < percent_age_per_szgroup_matrix[i].size(); j++)
-		{
-			in>> val;
-			percent_age_per_szgroup_matrix[i][j] = val;
-		}
-	}
+    double val;
+    for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < percent_age_per_szgroup_matrix[i].size(); j++)
+        {
+            in>> val;
+            percent_age_per_szgroup_matrix[i][j] = val;
+        }
+    }
     dout(cout  << "read size matrix percent_age_per_szgroup"  << endl << flush);
-	for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
-	{
-		for(unsigned int j = 0; j < percent_age_per_szgroup_matrix[i].size(); j++)
-		{
+    for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < percent_age_per_szgroup_matrix[i].size(); j++)
+        {
             dout(cout  << percent_age_per_szgroup_matrix[i][j] << " ");
-		}
+        }
         dout(cout  << endl);
-	}
+    }
     dout(cout  << endl);
 
 }
@@ -542,24 +542,24 @@ fill in the growth transition matrix
 */
 void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition)
 {
-	double val;
-	for(unsigned int i = 0; i < growth_transition.size(); i++)
-	{
-		for(unsigned int j = 0; j < growth_transition[i].size(); j++)
-		{
-			in>> val;
-			growth_transition[i][j] = val;
-		}
-	}
+    double val;
+    for(unsigned int i = 0; i < growth_transition.size(); i++)
+    {
+        for(unsigned int j = 0; j < growth_transition[i].size(); j++)
+        {
+            in>> val;
+            growth_transition[i][j] = val;
+        }
+    }
     dout(cout  << "read size matrix transition"  << endl << flush);
-	for(unsigned int i = 0; i < growth_transition.size(); i++)
-	{
-		for(unsigned int j = 0; j < growth_transition[i].size(); j++)
-		{
+    for(unsigned int i = 0; i < growth_transition.size(); i++)
+    {
+        for(unsigned int j = 0; j < growth_transition[i].size(); j++)
+        {
             dout(cout  << growth_transition[i][j] << " ");
-		}
+        }
         dout(cout  << endl);
-	}
+    }
     dout(cout  << endl);
 
 }
@@ -633,18 +633,18 @@ fill in
 */
 void fill_in_param_sr (istream& in, vector<double>& param_sr)
 {
-	double val;
-	for(unsigned int i = 0; i < param_sr.size(); i++)
-	{
-		in>> val;
-		param_sr[i] = val;
-	}
+    double val;
+    for(unsigned int i = 0; i < param_sr.size(); i++)
+    {
+        in>> val;
+        param_sr[i] = val;
+    }
     dout(cout  << "read param_sr"  << endl << flush);
 
-	for(unsigned int i = 0; i < param_sr.size(); i++)
-	{
+    for(unsigned int i = 0; i < param_sr.size(); i++)
+    {
         dout(cout  << param_sr[i] << " ");
-	}
+    }
     dout(cout  << endl);
 
 }
@@ -656,18 +656,18 @@ fill in
 */
 void fill_in_initial_tac (istream& in, vector<double>& initial_tac)
 {
-	double val;
-	for(unsigned int i = 0; i < initial_tac.size(); i++)
-	{
-		in>> val;
-		initial_tac[i] = val;
-	}
+    double val;
+    for(unsigned int i = 0; i < initial_tac.size(); i++)
+    {
+        in>> val;
+        initial_tac[i] = val;
+    }
     dout(cout  << "read initial_tac"  << endl << flush);
 
-	for(unsigned int i = 0; i < initial_tac.size(); i++)
-	{
+    for(unsigned int i = 0; i < initial_tac.size(); i++)
+    {
         dout(cout  << initial_tac[i] << " ");
-	}
+    }
     dout(cout  << endl);
 
 }
@@ -679,18 +679,18 @@ fill in
 */
 void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max)
 {
-	double val;
-	for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
-	{
-		in>> val;
-		fbar_ages_min_max[i] = val;
-	}
+    double val;
+    for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
+    {
+        in>> val;
+        fbar_ages_min_max[i] = val;
+    }
     dout(cout  << "read fbar_ages_min_max"  << endl << flush);
 
-	for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
-	{
+    for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
+    {
         dout(cout  << fbar_ages_min_max[i] << " ");
-	}
+    }
     dout(cout  << endl);
 
 }
@@ -703,15 +703,15 @@ fill in the vessel attributes into a multimap DOUBLE
 void fill_from_metier_specifications (istream& in, multimap<string, double>& infos)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		string key;
-		in >> key;
-		double val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        string key;
+        in >> key;
+        double val;
+        in >> val;
+        infos.insert(make_pair(key,val));
+    }
     dout(cout  << "read and set up the metier ogive specification  " << endl << flush);
 }
 
@@ -888,15 +888,15 @@ fill in the avai attributes into a map
 void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		double val;
-		in >> val;
-		avai[key]=val;
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        avai[key]=val;
+    }
     dout(cout  << "read pop avaibility per node " << endl << flush);
 }
 
@@ -908,15 +908,15 @@ fill in the avai attributes into a multimap
 void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		double val;
-		in >> val;
-		avai.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        avai.insert(make_pair(key,val));
+    }
     dout(cout  << "read the availability at szgroup " << endl << flush);
 }
 
@@ -928,15 +928,15 @@ fill in the oth_land attributes into a multimap
 void fill_from_oth_land (istream& in, map<int, double>& oth_land)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		double val;
-		in >> val;
-		oth_land.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        oth_land.insert(make_pair(key,val));
+    }
     dout(cout  << "read oth land " << endl << flush);
 }
 
@@ -967,15 +967,15 @@ fill in the attributes into a multimap
 void fill_from_relative_stability (istream& in, map<string, double>& relative_stability)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		string key;
-		in >> key;
-		double val;
-		in >> val;
-		relative_stability.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        string key;
+        in >> key;
+        double val;
+        in >> val;
+        relative_stability.insert(make_pair(key,val));
+    }
     dout(cout  << "read relative stability " << endl << flush);
 }
 
@@ -987,15 +987,15 @@ fill in the avai attributes into a multimap
 void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		int val;
-		in >> val;
-		a_map.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        int val;
+        in >> val;
+        a_map.insert(make_pair(key,val));
+    }
     dout(cout  << "read a map <int,int> " << endl << flush);
 }
 
@@ -1007,15 +1007,15 @@ fill in the avai attributes into a multimap
 void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		string val;
-		in >> val;
-		a_map.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        string val;
+        in >> val;
+        a_map.insert(make_pair(key,val));
+    }
     dout(cout  << "read a map <int,string> " << endl << flush);
 }
 
@@ -1027,15 +1027,15 @@ fill in the avai attributes into a multimap
 void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		int key;
-		in >> key;
-		double val;
-		in >> val;
-		nodes_in_polygons.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        nodes_in_polygons.insert(make_pair(key,val));
+    }
     dout(cout  << "read nodes_in_polygons " << endl << flush);
 }
 
@@ -1047,18 +1047,18 @@ fill in the vessel attributes into a multimap <string, integer>
 void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& infos)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		string key;
-		in >> key;
-		int val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        string key;
+        in >> key;
+        int val;
+        in >> val;
+        infos.insert(make_pair(key,val));
+    }
     dout(cout  << "read and set up the specification <string, integer> " << endl << flush);
 
-	// TO DO: test if infos.count(key) = NBSZGROUP
+    // TO DO: test if infos.count(key) = NBSZGROUP
 }
 
 
@@ -1078,18 +1078,18 @@ fill in the vessel attributes into a multimap <string, double>
 void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double>& infos)
 {
 
-	string line;
+    string line;
     while(!getline(in, line).eof())
     {
-		string key;
-		in >> key;
-		double val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
+        string key;
+        in >> key;
+        double val;
+        in >> val;
+        infos.insert(make_pair(key,val));
+    }
     dout(cout  << "read and set up the specification <string, double> " << endl << flush);
 
-	// TO DO: test if infos.count(key) = NBSZGROUP
+    // TO DO: test if infos.count(key) = NBSZGROUP
 }
 
 
@@ -1153,15 +1153,15 @@ fill in the vessel attributes into a map <int, int>
 void fill_map_from_specifications_s_d (istream& in, map<string, double>& infos)
 {
 
-	string line;
-	while(!getline(in, line).eof())
-	{
-		string key;
-		in >> key;
-		double val;
-		in >> val;
-		infos.insert(make_pair(key,val));
-	}
+    string line;
+    while(!getline(in, line).eof())
+    {
+        string key;
+        in >> key;
+        double val;
+        in >> val;
+        infos.insert(make_pair(key,val));
+    }
     dout(cout  << "read and set up the specification map<int, double> " << endl << flush);
 
 }
@@ -1169,35 +1169,35 @@ void fill_map_from_specifications_s_d (istream& in, map<string, double>& infos)
 
 vector<double> find_entries_s_d (multimap<string, double>& infos, string str)
 {
-	multimap<string, double>::iterator lower
-		= infos.lower_bound(str);
-	multimap<string, double>::iterator upper
-		= infos.upper_bound(str);
-	vector<double> result;
+    multimap<string, double>::iterator lower
+            = infos.lower_bound(str);
+    multimap<string, double>::iterator upper
+            = infos.upper_bound(str);
+    vector<double> result;
 
-	for(multimap<string, double>::iterator pos = lower;
-		pos!=upper; pos++)
-	{
-		result.push_back(pos->second);
-	}
-	return(result);
+    for(multimap<string, double>::iterator pos = lower;
+        pos!=upper; pos++)
+    {
+        result.push_back(pos->second);
+    }
+    return(result);
 }
 
 
 vector<int> find_entries_s_i (multimap<string, int>& infos, string str)
 {
-	multimap<string, int>::iterator lower
-		= infos.lower_bound(str);
-	multimap<string, int>::iterator upper
-		= infos.upper_bound(str);
-	vector<int> result;
+    multimap<string, int>::iterator lower
+            = infos.lower_bound(str);
+    multimap<string, int>::iterator upper
+            = infos.upper_bound(str);
+    vector<int> result;
 
-	for(multimap<string, int>::iterator pos = lower;
-		pos!=upper; pos++)
-	{
-		result.push_back(pos->second);
-	}
-	return(result);
+    for(multimap<string, int>::iterator pos = lower;
+        pos!=upper; pos++)
+    {
+        result.push_back(pos->second);
+    }
+    return(result);
 }
 
 
@@ -1205,50 +1205,50 @@ vector<double> find_entries_i_d (const multimap<int, double>& infos, int intg)
 {
 
     multimap<int, double>::const_iterator upper
-		= infos.upper_bound(intg);
-	vector<double> result;
+            = infos.upper_bound(intg);
+    vector<double> result;
 
     for(multimap<int, double>::const_iterator pos= infos.lower_bound(intg);
-		pos!=upper; pos++)
-	{
-		result.push_back(pos->second);
-	}
+        pos!=upper; pos++)
+    {
+        result.push_back(pos->second);
+    }
 
-	return(result);
+    return(result);
 }
 
 
 vector<int> find_entries_i_i (const multimap<int, int>& infos, int intg)
 {
     multimap<int, int>::const_iterator lower
-		= infos.lower_bound(intg);
+            = infos.lower_bound(intg);
     multimap<int, int>::const_iterator upper
-		= infos.upper_bound(intg);
-	vector<int> result;
+            = infos.upper_bound(intg);
+    vector<int> result;
 
     for(multimap<int, int>::const_iterator pos = lower;
-		pos!=upper; pos++)
-	{
-		result.push_back(pos->second);
-	}
-	return(result);
+        pos!=upper; pos++)
+    {
+        result.push_back(pos->second);
+    }
+    return(result);
 }
 
 
 vector<string> find_entries_i_s (multimap<int, string>& infos, int intg)
 {
-	multimap<int, string>::iterator lower
-		= infos.lower_bound(intg);
-	multimap<int, string>::iterator upper
-		= infos.upper_bound(intg);
-	vector<string> result;
+    multimap<int, string>::iterator lower
+            = infos.lower_bound(intg);
+    multimap<int, string>::iterator upper
+            = infos.upper_bound(intg);
+    vector<string> result;
 
-	for(multimap<int, string>::iterator pos = lower;
-		pos!=upper; pos++)
-	{
-		result.push_back(pos->second);
-	}
-	return(result);
+    for(multimap<int, string>::iterator pos = lower;
+        pos!=upper; pos++)
+    {
+        result.push_back(pos->second);
+    }
+    return(result);
 }
 
 
@@ -1256,82 +1256,82 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 {
     dout(cout  << "set_entries_d...BEGIN" << endl);
 
-	multimap<int, double>::iterator lower
-		= infos.lower_bound(itr);
-	multimap<int, double>::iterator upper
-		= infos.upper_bound(itr);
+    multimap<int, double>::iterator lower
+            = infos.lower_bound(itr);
+    multimap<int, double>::iterator upper
+            = infos.upper_bound(itr);
 
-	int i=0;
-	for(multimap<int, double>::iterator pos = lower;
-		pos!=upper; pos++)
-	{
-		pos->second = newval[i];
-		i++;
-	}
+    int i=0;
+    for(multimap<int, double>::iterator pos = lower;
+        pos!=upper; pos++)
+    {
+        pos->second = newval[i];
+        i++;
+    }
     dout(cout  << "set_entries_d...END" << endl);
 
 }
 
 
 vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
-const deque<map<vertex_t, vertex_t> >& path_shop,
-const deque<map<vertex_t, weight_t> >& min_distance_shop,
-int from,
-vector<int> grounds)
+                                         const deque<map<vertex_t, vertex_t> >& path_shop,
+                                         const deque<map<vertex_t, weight_t> >& min_distance_shop,
+                                         int from,
+                                         vector<int> grounds)
 {
     vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
-								 // tricky!
-	int idx = it - idx_path_shop.begin();
+    // tricky!
+    int idx = it - idx_path_shop.begin();
 
-	map<vertex_t, vertex_t> previous = path_shop.at(idx);
-	//std::list<map<int,int> >::iterator it_p = path_shop.begin();
-	// advance(it_p, idx-1);
-	//map<vertex_t, vertex_t> previous= *it_p;
+    map<vertex_t, vertex_t> previous = path_shop.at(idx);
+    //std::list<map<int,int> >::iterator it_p = path_shop.begin();
+    // advance(it_p, idx-1);
+    //map<vertex_t, vertex_t> previous= *it_p;
 
-	map<vertex_t, weight_t> min_distance = min_distance_shop.at(idx);
-	// std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
-	// advance(it_d, idx-1);
-	// map<vertex_t, weight_t> min_distance= *it_d;
+    map<vertex_t, weight_t> min_distance = min_distance_shop.at(idx);
+    // std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
+    // advance(it_d, idx-1);
+    // map<vertex_t, weight_t> min_distance= *it_d;
 
-	vector <double> distance_fgrounds;
-	for (unsigned int i=0; i<grounds.size(); i++)
-	{
-		vertex_t vx = grounds.at(i);
-		distance_fgrounds.push_back(min_distance[vx]);
+    vector <double> distance_fgrounds;
+    for (unsigned int i=0; i<grounds.size(); i++)
+    {
+        vertex_t vx = grounds.at(i);
+        distance_fgrounds.push_back(min_distance[vx]);
         dout(cout  << "distance to fishing ground " << min_distance[vx] << endl);
-	}
-	return(distance_fgrounds);
+    }
+    return(distance_fgrounds);
 }
 
 
 vector<double> scale_a_vector_to_1(vector<double> a_vector)
 {
-	// do the cumul....
-	double cum_a_vector=0;
+    // do the cumul....
+    double cum_a_vector=0;
     for(unsigned int a_element = 0; a_element < a_vector.size(); a_element++)
-	{
-								 //
-		cum_a_vector +=a_vector.at(a_element);
-	}
+    {
+        //
+        cum_a_vector +=a_vector.at(a_element);
+    }
 
-	// ...then, scale to 1
-	vector <double> freq_a_vector (a_vector.size());
-	if(cum_a_vector!=0)
-	{
+    // ...then, scale to 1
+    vector <double> freq_a_vector (a_vector.size());
+    if(cum_a_vector!=0)
+    {
         for(unsigned int a_node = 0; a_node < a_vector.size(); a_node++)
-		{
-			if(a_vector.at(a_node)==0)  cout << "a_vector.at(a_node) at 0 !! " << endl;
-			freq_a_vector.at(a_node)= a_vector.at(a_node) / cum_a_vector;
+        {
+            if(a_vector.at(a_node)==0)  cout << "a_vector.at(a_node) at 0 !! " << endl;
+            freq_a_vector.at(a_node)= a_vector.at(a_node) / cum_a_vector;
             dout(cout  << "scaled a_vector is then " << freq_a_vector.at(a_node) << endl);
-		}
-	}
-	else
-	{
+        }
+    }
+    else
+    {
 
-		cout << "cum_a_vector = 0 !! " << endl;
+        cout << "cum_a_vector = 0 !! " << endl;
 
-	}
-	return(freq_a_vector);
+    }
+    return(freq_a_vector);
 }
 
 
@@ -1340,44 +1340,44 @@ vector<double> scale_a_vector_to_1(vector<double> a_vector)
 //--------------------------------------------------------------------------------------//
 
 double decode_the_tree(string& tree, vector<string>& direction,
-map<string, int>& external_states, map<string, int>& internal_states)
+                       map<string, int>& external_states, map<string, int>& internal_states)
 {
 
-	vector<string> a_split_string;
+    vector<string> a_split_string;
 
     //dout(cout  << tree << endl);
     //dout(cout  << "the first delimiter is " << direction[0] << endl);
-	//if(direction.size() != (external_states.size()+internal_states.size()))
-	//{
+    //if(direction.size() != (external_states.size()+internal_states.size()))
+    //{
     //    dout(cout  << "pble: check the reading_direction object..." << endl);
-	//}
+    //}
     for (unsigned int i=0; i<direction.size(); i++)
-	{
-		string a_delimiter =direction[i];
-		int a_state;
-		if(external_states.count(a_delimiter)>0)
-		{
-								 // get the current status of the drivers....
-			a_state = external_states.find(a_delimiter)->second;
-		}
-		else
-		{
-								 // external not found, search for internal states instead.
-			a_state = internal_states.find(a_delimiter)->second;
-		}
-		//cout << "a tree " << tree << endl;
-		//cout << "a delimiter " << a_delimiter << endl;
-		//cout << "a state " << a_state << endl;
-								 // split the tree in 2 according to the driver
-		split( a_split_string, tree, a_delimiter, splitX::no_empties);
-		//print(a_split_string);
-		//   system("PAUSE");
-								 // keep only one branch (0 left or 1 right) and loop...
-		if(a_split_string.size()>1) tree = a_split_string[a_state];
+    {
+        string a_delimiter =direction[i];
+        int a_state;
+        if(external_states.count(a_delimiter)>0)
+        {
+            // get the current status of the drivers....
+            a_state = external_states.find(a_delimiter)->second;
+        }
+        else
+        {
+            // external not found, search for internal states instead.
+            a_state = internal_states.find(a_delimiter)->second;
+        }
+        //cout << "a tree " << tree << endl;
+        //cout << "a delimiter " << a_delimiter << endl;
+        //cout << "a state " << a_state << endl;
+        // split the tree in 2 according to the driver
+        split( a_split_string, tree, a_delimiter, splitX::no_empties);
+        //print(a_split_string);
+        //   system("PAUSE");
+        // keep only one branch (0 left or 1 right) and loop...
+        if(a_split_string.size()>1) tree = a_split_string[a_state];
 
-		//cout << "the tree is now reduced to " << tree << endl;
-	}
-	//cout << "the found value is: " << tree << endl;
+        //cout << "the tree is now reduced to " << tree << endl;
+    }
+    //cout << "the found value is: " << tree << endl;
 
-	return(atof(tree.c_str()));
+    return(atof(tree.c_str()));
 }

@@ -33,48 +33,48 @@ std::string getLastErrorMessage();
 void open_file_error(string filename);
 
 int read_config_file (string folder_name_parameterization,
-string inputfolder,
-int& a_int_line2,
-int& a_int_line4,
-vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
-vector<double>& a_vector_line8,
-vector<double>& a_vector_line10,
-vector<double>& a_vector_line12,
-vector<int> &interesting_harbours);
+                      string inputfolder,
+                      int& a_int_line2,
+                      int& a_int_line4,
+                      vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
+                      vector<double>& a_vector_line8,
+                      vector<double>& a_vector_line10,
+                      vector<double>& a_vector_line12,
+                      vector<int> &interesting_harbours);
 
 int read_config_file (std::istream &stream,
-int& a_int_line2,
-int& a_int_line4,
-vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
-vector<double>& a_vector_line8,
-vector<double>& a_vector_line10,
-vector<double>& a_vector_line12,
-vector<int> &interesting_harbours);
+                      int& a_int_line2,
+                      int& a_int_line4,
+                      vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
+                      vector<double>& a_vector_line8,
+                      vector<double>& a_vector_line10,
+                      vector<double>& a_vector_line12,
+                      vector<int> &interesting_harbours);
 
 int read_scenario_config_file(string folder_name_parameterization,
-    string inputfolder,
-    string namefolderoutput,
-    displace::commons::Scenario &scenario);
+                              string inputfolder,
+                              string namefolderoutput,
+                              displace::commons::Scenario &scenario);
 
 int read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
 
 // vessel specific
 bool read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
-vector<double>& fuelcons,
+                           vector<double>& fuelcons,
                            vector<double>& lengths,
                            vector<double>& vKWs,
                            vector<double>& carrycapacities,
                            vector<double>& tankcapacities,
-vector<double>& nbfpingspertrips,
-vector<double>& resttime_par1s,
-vector<double>& resttime_par2s,vector<double>& av_trip_duration,
-vector<double>& mult_fuelcons_when_steaming,
+                           vector<double>& nbfpingspertrips,
+                           vector<double>& resttime_par1s,
+                           vector<double>& resttime_par2s,vector<double>& av_trip_duration,
+                           vector<double>& mult_fuelcons_when_steaming,
                            vector<double>& mult_fuelcons_when_fishing,
                            vector<double>& mult_fuelcons_when_returning,
                            vector<double>& mult_fuelcons_when_inactive,
-string folder_name_parameterization,
-string inputfolder,
-int selected_vessels_only, vector<VesselCalendar> &calendars);
+                           string folder_name_parameterization,
+                           string inputfolder,
+                           int selected_vessels_only, vector<VesselCalendar> &calendars);
 bool read_ships_features(vector<string>& shipids, vector<double> &imos,
                          vector<double> &yearbuilds, vector<string> &flags,
                          vector<string> &types, vector<double> &typecodes,
@@ -142,7 +142,7 @@ multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, st
 multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder);
 
 // pop specific
-								 // beta per pop fro a given szgroup
+// beta per pop fro a given szgroup
 multimap<int, double> read_avai_betas(string a_semester, string szgroup, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
 multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_name_parameterization,  string inputfolder, string biolsce);
@@ -195,4 +195,4 @@ bool read_metier_closures (std::istream &stream, const string &separator, vector
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
 void write_SMS_OP_F_in_file(ofstream& SMS_F_in, vector<Population* >& populations, vector<int> stock_numbers);
 void read_SMS_OP_N_out_file(vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages, string sms_folder, string namesimu);
- 
+

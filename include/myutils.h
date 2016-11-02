@@ -49,15 +49,15 @@ using namespace std;
 
 template<double f(double, double, double)>
 double simpson(double a, double b, int n, double S1, double S2){
-double h=(b-a)/n;
-double sum=f(a, S1, S2)*0.5;
-for (int i=1; i<n; i++) sum+=f(a+i*h, S1, S2);
-sum+= f(b, S1, S2)*0.5;
+    double h=(b-a)/n;
+    double sum=f(a, S1, S2)*0.5;
+    for (int i=1; i<n; i++) sum+=f(a+i*h, S1, S2);
+    sum+= f(b, S1, S2)*0.5;
 
-double summid=0.0;
-for(int i=1; i<=n; i++) summid+=f(a+ (i-0.5)*h, S1, S2);
+    double summid=0.0;
+    for(int i=1; i<=n; i++) summid+=f(a+ (i-0.5)*h, S1, S2);
 
-return (sum + 2*summid)*h/3.0;
+    return (sum + 2*summid)*h/3.0;
 }
 
 
@@ -79,33 +79,33 @@ bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair);
 
 struct splitX
 {
-	enum empties_t { empties_ok, no_empties };
+    enum empties_t { empties_ok, no_empties };
 };
 
 template <typename Container>
 Container& split(
-Container&                            result,
-const typename Container::value_type& s,
-const typename Container::value_type& delimiters,
-splitX::empties_t                      empties = splitX::empties_ok )
+        Container&                            result,
+        const typename Container::value_type& s,
+        const typename Container::value_type& delimiters,
+        splitX::empties_t                      empties = splitX::empties_ok )
 {
-	result.clear();
-	size_t current;
-	size_t next = -1;
-	do
-	{
-		if (empties == splitX::no_empties)
-		{
-			next = s.find_first_not_of( delimiters, next + 1 );
-			if (next == Container::value_type::npos) break;
-			next -= 1;
-		}
-		current = next + 1;
-		next = s.find( delimiters, current );
-		result.push_back( s.substr( current, next - current ) );
-	}
-	while (next != Container::value_type::npos);
-	return result;
+    result.clear();
+    size_t current;
+    size_t next = -1;
+    do
+    {
+        if (empties == splitX::no_empties)
+        {
+            next = s.find_first_not_of( delimiters, next + 1 );
+            if (next == Container::value_type::npos) break;
+            next -= 1;
+        }
+        current = next + 1;
+        next = s.find( delimiters, current );
+        result.push_back( s.substr( current, next - current ) );
+    }
+    while (next != Container::value_type::npos);
+    return result;
 }
 
 
@@ -119,54 +119,54 @@ typedef int weight_t;			 // 'integer' instead of 'double' to speedup c++
 
 struct edge
 {
-	vertex_t target;
-	weight_t weight;
-	edge(vertex_t arg_target, weight_t arg_weight)
-		: target(arg_target), weight(arg_weight) { }
+    vertex_t target;
+    weight_t weight;
+    edge(vertex_t arg_target, weight_t arg_weight)
+        : target(arg_target), weight(arg_weight) { }
 };
 
 typedef std::map<vertex_t, std::list<edge> > adjacency_map_t;
 
 void DijkstraComputePaths(vertex_t source,
-adjacency_map_t& adjacency_map,
-std::map<vertex_t, weight_t>& min_distance,
-std::map<vertex_t, vertex_t>& previous,
-std::vector<int> relevant_nodes);
+                          adjacency_map_t& adjacency_map,
+                          std::map<vertex_t, weight_t>& min_distance,
+                          std::map<vertex_t, vertex_t>& previous,
+                          std::vector<int> relevant_nodes);
 
 std::list<vertex_t> DijkstraGetShortestPathTo(
-vertex_t target, std::map<vertex_t, vertex_t>& previous);
+        vertex_t target, std::map<vertex_t, vertex_t>& previous);
 
 void SimplifyThePreviousMap(
-int source,
-std::map<vertex_t, vertex_t>& previous,
-std::vector<int>& relevant_nodes,
-std::map<vertex_t, weight_t>& min_distance,
-string namesimu,
-string a_graph_name,
-string inputfolder);
+        int source,
+        std::map<vertex_t, vertex_t>& previous,
+        std::vector<int>& relevant_nodes,
+        std::map<vertex_t, weight_t>& min_distance,
+        string namesimu,
+        string a_graph_name,
+        string inputfolder);
 
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
 vector<double> compute_distance_fgrounds(const vector<int> &idx_path_shop,
-const deque<map<vertex_t, vertex_t> > &path_shop,
-const deque<map<vertex_t, weight_t> > &min_distance_shop,
-int from,
-vector<int> grounds);
+                                         const deque<map<vertex_t, vertex_t> > &path_shop,
+                                         const deque<map<vertex_t, weight_t> > &min_distance_shop,
+                                         int from,
+                                         vector<int> grounds);
 
 //---------------------------------------//
 // data input
 //---------------------------------------//
 
 void fill_from_coord (istream& in, vector<double>& graph_coord_x,
-vector<double> & graph_coord_y,
-vector<int>& graph_coord_harbour, int nrow);
+                      vector<double> & graph_coord_y,
+                      vector<int>& graph_coord_harbour, int nrow);
 void fill_from_graph (istream& in, vector<int>& graph_idx_dep,
-vector<int> & graph_idx_arr,
-vector<int>& graph_dist_km, int nrow);
+                      vector<int> & graph_idx_arr,
+                      vector<int>& graph_dist_km, int nrow);
 void fill_from_code_area (istream& in, vector<int>& graph_point_code_area,
-int nrow);
+                          int nrow);
 void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
-int nrow);
+                                      int nrow);
 void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
 void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
 void fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
@@ -253,5 +253,5 @@ void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, str
 //}
 
 double decode_the_tree(string& tree, vector<string>& direction,
-map<string, int>& external_states, map<string, int>& internal_states);
+                       map<string, int>& external_states, map<string, int>& internal_states);
 #endif

@@ -829,6 +829,8 @@ bool fill_from_ships_specifications (istream& in,
             vector<string> fields;
 
             boost::split(fields, line, boost::is_any_of("|"));
+            if (fields.size() < 19)
+                return false;
 
             string name = fields[0];
             double imo = boost::lexical_cast<double>(fields[1]);

@@ -62,7 +62,10 @@ public:
     bool exportGraph(QString graphpath, QString coordspath, QString landpath, QString areacodepath,
                      QString closedpath, QString closedpath_month, QString closedpath_vessz, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
 protected:
-    bool outputClosedPolyFile(QString filename, DisplaceModel *currentModel, std::function<bool(const displace::NodePenalty &)> selector, QString *error);
+    bool outputClosedPolyFile(QString filename, DisplaceModel *currentModel,
+                              std::function<bool(const displace::NodePenalty &)> selector,
+                              std::function<std::vector<int>(const displace::NodePenalty &)> dataGetter,
+                              QString *error);
 };
 
 #endif // INPUTFILEEXPORTER_H

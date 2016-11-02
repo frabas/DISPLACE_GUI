@@ -183,30 +183,33 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         // Months
         for (int month = 0; month < 12; ++month) {
             QString fn = closedpath_month.arg(month+1);
-            bool r = outputClosedPolyFile(fn, currentModel, [month](const displace::NodePenalty &penalty) {
-                return penalty.closed && penalty.months[month];
-            }, error);
+
+            auto monthSelectorFunc = [month](const displace::NodePenalty &penalty) { return penalty.closed && penalty.months[month]; };
+            auto outputMetierFunc = [](const displace::NodePenalty &penalty) { return penalty.metiers; };
+
+            bool r = outputClosedPolyFile(fn, currentModel, monthSelectorFunc, outputMetierFunc, error);
+            if (!r)
+                return false;
+
+            fn = closedpath_vessz.arg(month+1);
+
+            auto outputVesSizeFunc = [](const displace::NodePenalty &penalty) {
+                return penalty.vesSizes;
+            };
+
+            r = outputClosedPolyFile(fn, currentModel, monthSelectorFunc, outputVesSizeFunc, error);
             if (!r)
                 return false;
         }
-
-        // vessels Sizes
-        for (int sz = 0; sz < Vessel::NumLenghClasses; ++sz) {
-            QString fn = closedpath_vessz.arg(sz+1);
-            bool r = outputClosedPolyFile(fn, currentModel, [sz](const displace::NodePenalty &penalty) {
-                return penalty.closed && penalty.vesSizes[sz];
-            }, error);
-            if (!r)
-                return false;
-        }
-
     }
     return true;
 
 }
 
 bool InputFileExporter::outputClosedPolyFile(QString filename, DisplaceModel *currentModel,
-                                             std::function<bool(const displace::NodePenalty &)> selector, QString *error)
+                                             std::function<bool(const displace::NodePenalty &)> selector,
+                                             std::function<std::vector<int>(const displace::NodePenalty &)> dataGetter,
+                                             QString *error)
 {
     QFile f(filename);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -223,7 +226,7 @@ bool InputFileExporter::outputClosedPolyFile(QString filename, DisplaceModel *cu
     for (auto p : pl) {
         if (selector(p)) {
             clsstream << p.polyId << " " << p.nodeId;
-            for (auto m : p.metiers)
+            for (auto &m : dataGetter(p))
                 clsstream << " " << m;
             clsstream << "\n";
         }

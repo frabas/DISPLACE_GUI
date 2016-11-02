@@ -12,7 +12,7 @@ public:
     bool closed;
     std::vector<int> metiers;
     std::vector<bool> months;
-    std::vector<bool> vesSizes;
+    std::vector<int> vesSizes;
     bool q[4];
 
     int polyId;

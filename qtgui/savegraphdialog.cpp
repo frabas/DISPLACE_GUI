@@ -117,7 +117,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->landscapeFileName->setText(QString("coord%1_with_landscape.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));
     ui->closedPolyFilename_Months->setText(QString("metier_closure_a_graph%1_month?.dat").arg(gn));
-    ui->closedPolyFilename_VesSize->setText(QString("metier_closure_a_graph%1_size?.dat").arg(gn));
+    ui->closedPolyFilename_VesSize->setText(QString("vsize_closure_a_graph%1_month?.dat").arg(gn));
 }
 
 void SaveGraphDialog::on_cmdBrowse_clicked()

@@ -17,7 +17,7 @@ macx {
     LIBS += -L../$$LIBDESTDIR
 }
 
-LIBS+=-L.. -lformats -ldisplacecommons
+LIBS+=-L../.. -lformats -ldisplacecommons
 
 !macx{
     LIBS += -lpthread -lrt

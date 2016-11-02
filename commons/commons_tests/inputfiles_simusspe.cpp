@@ -13,9 +13,17 @@
 #include <readdata.h>
 #include <comstructs.h>
 
+#if BOOST_VERSION_NUMBER <= 105900
+#define BOOST_NAMESPACE_TTDETAIL_BEGIN
+#define BOOST_NAMESPACE_TTDETAIL_END
+#else
+#define BOOST_NAMESPACE_TTDETAIL_BEGIN namespace tt_detail {
+#define BOOST_NAMESPACE_TTDETAIL_END }
+#endif
+
 namespace boost {
 namespace test_tools {
-namespace tt_detail {
+BOOST_NAMESPACE_TTDETAIL_BEGIN
 
 template <typename KEY, typename VALUE>
 std::ostream &operator << (ostream &out, const std::map<KEY,VALUE> &mmap) {
@@ -74,7 +82,7 @@ struct print_log_value<displace::commons::Scenario>
     }
 };
 
-}
+BOOST_NAMESPACE_TTDETAIL_END
 }
 }
 

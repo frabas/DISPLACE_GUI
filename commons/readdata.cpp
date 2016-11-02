@@ -2189,7 +2189,9 @@ multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, i
         //return 1;
     }
     multimap<int, double> full_avai_szgroup_nodes_with_pop;
-    fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop);
+    if (!fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop))
+        throw std::runtime_error("Error while executuing: fill_from_avai_szgroup_nodes_with_pop");
+
     file_avai_szgroup_nodes_with_pop.close();
 
     // check input
@@ -2224,7 +2226,9 @@ vector< vector<double> > read_percent_szgroup_per_age_matrix(int a_pop, int nbsz
         // return 1;
     }
     vector< vector<double> > percent_szgroup_per_age_matrix(nbszgroup, vector<double>(nbage));
-    fill_in_percent_szgroup_per_age_matrix(file_percent_szgroup_per_age_matrix, percent_szgroup_per_age_matrix);
+    if (!fill_in_percent_szgroup_per_age_matrix(file_percent_szgroup_per_age_matrix, percent_szgroup_per_age_matrix))
+        throw std::runtime_error("Error while executuing: fill_in_percent_szgroup_per_age_matrix");
+
     file_percent_szgroup_per_age_matrix.close();
 
     return(percent_szgroup_per_age_matrix);
@@ -2248,7 +2252,9 @@ vector< vector<double> > read_percent_age_per_szgroup_matrix(int a_pop, int nbsz
         // return 1;
     }
     vector< vector<double> > percent_age_per_szgroup_matrix(nbszgroup, vector<double>(nbage));
-    fill_in_percent_age_per_szgroup_matrix(file_percent_age_per_szgroup_matrix, percent_age_per_szgroup_matrix);
+    if (!fill_in_percent_age_per_szgroup_matrix(file_percent_age_per_szgroup_matrix, percent_age_per_szgroup_matrix))
+        throw std::runtime_error("Error while executuing: fill_in_percent_age_per_szgroup_matrix");
+
     file_percent_age_per_szgroup_matrix.close();
 
     return(percent_age_per_szgroup_matrix);
@@ -2272,7 +2278,9 @@ vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup,
         // return 1;
     }
     vector< vector<double> > growth_transition_matrix(nbszgroup, vector<double>(nbszgroup));
-    fill_in_growth_transition(file_size_transition_matrix, growth_transition_matrix);
+    if (!fill_in_growth_transition(file_size_transition_matrix, growth_transition_matrix))
+        throw std::runtime_error("Error while executuing: fill_in_growth_trransition_matrix");
+
     file_size_transition_matrix.close();
 
     return(growth_transition_matrix);
@@ -2294,7 +2302,9 @@ vector< vector<double> > read_species_interactions_mortality_proportion_matrix(i
         // return 1;
     }
     vector< vector<double> > species_interactions_mortality_proportion_matrix(nbpops, vector<double>(nbpops));
-    fill_in_species_interactions_mortality_proportion_matrix(file_species_interactions, species_interactions_mortality_proportion_matrix);
+    if (!fill_in_species_interactions_mortality_proportion_matrix(file_species_interactions, species_interactions_mortality_proportion_matrix))
+        throw std::runtime_error("Error while executuing: fill_in_species_interactions_mortality_proportion_matrix");
+
     file_species_interactions.close();
 
     return(species_interactions_mortality_proportion_matrix);
@@ -2320,7 +2330,9 @@ vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops
         // return 1;
     }
     vector< vector<double> > selectivity_per_stock_ogives(nbpops, vector<double>(nbszgroup));
-    fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives, selectivity_per_stock_ogives);
+    if (!fill_in_selectivity_per_stock(file_selectivity_per_stock_ogives, selectivity_per_stock_ogives))
+        throw std::runtime_error("Error while executuing: fill_in_selectivity_per_stock");
+
     file_selectivity_per_stock_ogives.close();
 
     return(selectivity_per_stock_ogives);
@@ -2347,7 +2359,9 @@ vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, s
         // return 1;
     }
     vector<double> param_sr(2);
-    fill_in_param_sr(file_param_sr, param_sr);
+    if (!fill_in_param_sr(file_param_sr, param_sr))
+        throw std::runtime_error("Error while executuing: fill_in_param_sr");
+
     file_param_sr.close();
 
     return(param_sr);
@@ -2371,7 +2385,8 @@ vector<double>  read_initial_tac(int a_pop,  string folder_name_parameterization
         // return 1;
     }
     vector<double> initial_tac(1);
-    fill_in_initial_tac(file_initial_tac, initial_tac);
+    if (!fill_in_initial_tac(file_initial_tac, initial_tac))
+        throw std::runtime_error("Error while executuing: fill_in_initial_tac");
     file_initial_tac.close();
 
     return(initial_tac);
@@ -2396,7 +2411,8 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
     }
     // i.e. 6 columns: F min age, F max age, LTMP ftarget, Fpercent, TACpercent, Btrigger, F-MSY value
     vector<double> fbar_ages_min_max(7);
-    fill_in_fbar_ages_min_max(file_fbar_ages_min_max, fbar_ages_min_max);
+    if (!fill_in_fbar_ages_min_max(file_fbar_ages_min_max, fbar_ages_min_max))
+        throw std::runtime_error("bad file format while executing: fill_in_fbar_ages_min_max");
     file_fbar_ages_min_max.close();
 
     return(fbar_ages_min_max);

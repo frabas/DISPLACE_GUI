@@ -198,10 +198,7 @@ BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat )
     teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
                  "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n";
 
-    std::stringstream ss;
-
-    ss.str(teststring);
-    ss.clear();
+    std::stringstream ss(teststring);
     std::vector<Ship> exp_ss = {
         Ship("SHIP1",1000000,2006,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1),
         Ship("SHIP2",3000000,2003,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1)
@@ -214,47 +211,74 @@ BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat )
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
 
     // Check for errors
-    teststring = "SHIP1|1000000|20d6|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n";
-    ss.str(teststring);
-    ss.clear();
-    r = loadShips(ss, r_ss);
-    BOOST_CHECK(!r);
+}
 
+BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat_bad_double_value )
+{
+    std::string teststring = "SHIP1|1000000|20d6|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n";
+    std::stringstream ss(teststring);
+    std::vector<Ship> r_ss;
+
+    bool r = loadShips(ss, r_ss);
+    BOOST_CHECK(!r);
+}
+
+BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat_bad_fields_number )
+{
     // Wrong number of records
-    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0\n";
-    ss.str(teststring);
-    ss.clear();
-    r_ss.clear();
-    r = loadShips(ss, r_ss);
-    BOOST_CHECK(!r);
+    std::string teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0\n";
+    std::stringstream ss(teststring);
+    std::vector<Ship> r_ss;
 
+    bool r = loadShips(ss, r_ss);
+    BOOST_CHECK(!r);
+}
+
+BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat_bad_fields_number_2 )
+{
     // Wrong number of records
-    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|\n";
-    ss.str(teststring);
-    ss.clear();
-    r_ss.clear();
-    r = loadShips(ss, r_ss);
+    std::string teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|\n";
+    std::stringstream ss(teststring);
+    std::vector<Ship> r_ss;
+
+    bool r = loadShips(ss, r_ss);
     BOOST_CHECK(!r);
+}
 
-
+BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat_missing_newline )
+{
     // missing newline, should return success as well
-    teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
+    std::string teststring = "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n"
                  "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1";
-    ss.str(teststring);
-    ss.clear();
-    r_ss.clear();
-    r = loadShips(ss, r_ss);
+    std::vector<Ship> exp_ss = {
+        Ship("SHIP1",1000000,2006,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1),
+        Ship("SHIP2",3000000,2003,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1)
+    };
+
+    std::stringstream ss(teststring);
+    std::vector<Ship> r_ss;
+
+    bool r = loadShips(ss, r_ss);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
 
+}
+
+BOOST_AUTO_TEST_CASE( test_shipsspe_features_dat_empty_lines )
+{
     // Empty lines, should return success as well
-    teststring = "\n"
+    std::string teststring = "\n"
                  "SHIP1|1000000|2006|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1\n\n\n"
                  "SHIP2|3000000|2003|Greece|Tanker|1|250|30000|45|60000|0|200|9|0.1|0.2|0|20|10|1";
-    ss.str(teststring);
-    ss.clear();
-    r_ss.clear();
-    r = loadShips(ss, r_ss);
+    std::vector<Ship> exp_ss = {
+        Ship("SHIP1",1000000,2006,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1),
+        Ship("SHIP2",3000000,2003,"Greece","Tanker",1,250,30000,45,60000,0,200,9,0.1,0.2,0,20,10,1)
+    };
+
+    std::stringstream ss(teststring);
+    std::vector<Ship> r_ss;
+
+    bool r = loadShips(ss, r_ss);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
 }

@@ -43,6 +43,7 @@ public:
     QString getAreacodesFilename() const;
     QString getClosedPolygonFilename() const;
     QString getClosedPolygonFilenameMonthly() const;
+    QString getClosedPolygonFilenameVesSize() const;
     bool isClosedPolygonExportChecked() const;
 
 private slots:

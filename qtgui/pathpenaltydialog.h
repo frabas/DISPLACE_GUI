@@ -73,6 +73,7 @@ public:
 
     std::vector<bool> getCheckedMonths() const;
     std::vector<int> getBannedMetiers() const;
+    std::vector<bool> getVesSizeSelection() const;
 
 private slots:
     void on_ok_clicked();

@@ -21,14 +21,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QGroupBox" name="metierGroup">
-     <property name="title">
-      <string>Metiers</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="2">
+   <item row="10" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="cancel">
@@ -62,7 +55,7 @@
      </item>
     </layout>
    </item>
-   <item row="11" column="0">
+   <item row="9" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -82,14 +75,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QCheckBox" name="enableMetiers">
-     <property name="text">
-      <string>Select Metiers</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="2">
+   <item row="8" column="0" colspan="2">
     <widget class="QGroupBox" name="shapefileGroup">
      <property name="title">
       <string>Shapefiles</string>
@@ -109,9 +95,9 @@
    <item row="2" column="0" colspan="2">
     <widget class="QTabWidget" name="tabWidgetPeriods">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
-     <widget class="QWidget" name="tabWidgetPage1" native="true">
+     <widget class="QWidget" name="tabWidgetPage1">
       <attribute name="title">
        <string>Quarters</string>
       </attribute>
@@ -162,6 +148,69 @@
       <attribute name="title">
        <string>Months</string>
       </attribute>
+     </widget>
+     <widget class="QWidget" name="tabPageMetiers">
+      <attribute name="title">
+       <string>Metiers</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="enableMetiers">
+         <property name="text">
+          <string>Select Metiers</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="metierGroup">
+         <property name="title">
+          <string>Metiers</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabPageVesselsSizes">
+      <attribute name="title">
+       <string>Vessels sizes</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="cbSize0">
+         <property name="text">
+          <string>&lt; 15m</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="cbSize1">
+         <property name="text">
+          <string>15-18m</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="cbSize2">
+         <property name="text">
+          <string>18-24m</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="cbSize3">
+         <property name="text">
+          <string>24-40m</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="cbSize4">
+         <property name="text">
+          <string>&gt; 40m</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

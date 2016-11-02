@@ -45,11 +45,13 @@ class Benthos;
 
 class Vessel
 {
-private:
+public:
     enum LengthClass {
-        Under15 = 0, Between15and18, Between18and24, Between24and40, Over40
+        Under15 = 0, Between15and18, Between18and24, Between24and40, Over40,
+        NumLenghClasses
     };
 
+private:
         std::string name;
 		int idx_vessel;
 		//std::shared_ptr<Node> m_location;

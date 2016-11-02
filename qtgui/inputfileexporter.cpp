@@ -30,12 +30,13 @@ InputFileExporter::InputFileExporter()
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath, QString areacodepath, QString closedpath,
-                                    QString closedpath_month,
+                                    QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
                                     DisplaceModel *currentModel, QString *error)
 {
     closedpath = closedpath.replace("?", "%1");
     closedpath_month = closedpath_month.replace("?", "%1");
+    closedpath_vessz = closedpath_vessz.replace("?", "%1");
 
     QFile cfile(coordspath);
     if (!cfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -182,19 +183,19 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         // Months
         for (int month = 0; month < 12; ++month) {
             QString fn = closedpath_month.arg(month+1);
-            QFile f(fn);
-            if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-                if (error)
-                    *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
-                        .arg(fn).arg(f.errorString());
-                return false;
-            }
-
-            clsstream.setDevice(&f);
-            bool r = outputClosedPolyFile(clsstream, currentModel, [month](const displace::NodePenalty &penalty) {
+            bool r = outputClosedPolyFile(fn, currentModel, [month](const displace::NodePenalty &penalty) {
                 return penalty.closed && penalty.months[month];
-            });
-            f.close();
+            }, error);
+            if (!r)
+                return false;
+        }
+
+        // vessels Sizes
+        for (int sz = 0; sz < Vessel::NumLenghClasses; ++sz) {
+            QString fn = closedpath_vessz.arg(sz+1);
+            bool r = outputClosedPolyFile(fn, currentModel, [sz](const displace::NodePenalty &penalty) {
+                return penalty.closed && penalty.vesSizes[sz];
+            }, error);
             if (!r)
                 return false;
         }
@@ -204,9 +205,20 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
 
 }
 
-bool InputFileExporter::outputClosedPolyFile(QTextStream &clsstream, DisplaceModel *currentModel,
-                                             std::function<bool(const displace::NodePenalty &)> selector)
+bool InputFileExporter::outputClosedPolyFile(QString filename, DisplaceModel *currentModel,
+                                             std::function<bool(const displace::NodePenalty &)> selector, QString *error)
 {
+    QFile f(filename);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (error)
+            *error = QString(QObject::tr("Cannot open closed polygons file %1: %2"))
+                .arg(filename).arg(f.errorString());
+        return false;
+    }
+
+    QTextStream clsstream;
+    clsstream.setDevice(&f);
+
     auto &pl = currentModel->getPenaltyCollection();
     for (auto p : pl) {
         if (selector(p)) {
@@ -217,5 +229,6 @@ bool InputFileExporter::outputClosedPolyFile(QTextStream &clsstream, DisplaceMod
         }
     }
 
+    f.close();
     return true;
 }

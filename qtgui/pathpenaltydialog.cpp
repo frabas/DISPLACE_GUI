@@ -159,6 +159,17 @@ std::vector<int> PathPenaltyDialog::getBannedMetiers() const
     return r;
 }
 
+std::vector<bool> PathPenaltyDialog::getVesSizeSelection() const
+{
+    std::vector<bool> selection;
+    selection.push_back(ui->cbSize0->isChecked());
+    selection.push_back(ui->cbSize1->isChecked());
+    selection.push_back(ui->cbSize2->isChecked());
+    selection.push_back(ui->cbSize3->isChecked());
+    selection.push_back(ui->cbSize4->isChecked());
+    return selection;
+}
+
 void PathPenaltyDialog::on_ok_clicked()
 {
     if (ui->shapefileGroup->isVisible() && clickCount == 0)

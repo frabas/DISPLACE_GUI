@@ -1510,6 +1510,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
     if (dlg.exec() == QDialog::Accepted) {
         auto bannedMetiers = dlg.getBannedMetiers();
         auto checkedMonths = dlg.getCheckedMonths();
+        auto checkedVesSizes = dlg.getVesSizeSelection();
 
         std::ostringstream ss;
         for (auto b : bannedMetiers)
@@ -1518,6 +1519,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
 
         currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.isClosedForFishing(),
                                                    dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
+                                                   checkedVesSizes,
                                                    bannedMetiers);
         mMapController->redraw();
         QMessageBox::warning(this, tr("Penalties applied"),
@@ -1680,7 +1682,9 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, polypathMomths, export_poly, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath, polypathMomths,
+                                 savedlg.getClosedPolygonFilenameVesSize(),
+                                 export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;
@@ -1770,6 +1774,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         QStringList shp = dlg.selectedShapefile();
         auto bannedMetiers = dlg.getBannedMetiers();
         auto checkedMonths = dlg.getCheckedMonths();
+        auto checkedVesSizes = dlg.getVesSizeSelection();
         //std::vector<std::shared_ptr<OGRDataSource> dss;
 
         for (auto sh : shp) {
@@ -1785,7 +1790,9 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
                 OGRFeature *feature;
                 while ((feature = lr->GetNextFeature())) {
                     currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing(),
-                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths, bannedMetiers);
+                                                               dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
+                                                               checkedVesSizes,
+                                                               bannedMetiers);
                 }
             }
         }
@@ -1969,7 +1976,9 @@ void MainWindow::on_actionSave_Graph_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath,polypathMomths, export_poly, currentModel.get(), &error)) {
+        if (exporter.exportGraph(graphpath, coordspath, landpath, acpath, polypath,polypathMomths,
+                                 dlg.getClosedPolygonFilenameVesSize(),
+                                 export_poly, currentModel.get(), &error)) {
         } else {
             QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
             return;

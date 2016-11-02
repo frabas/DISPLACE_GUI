@@ -60,9 +60,9 @@ public:
     InputFileExporter();
 
     bool exportGraph(QString graphpath, QString coordspath, QString landpath, QString areacodepath,
-                     QString closedpath, QString closedpath_month, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
+                     QString closedpath, QString closedpath_month, QString closedpath_vessz, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
 protected:
-    bool outputClosedPolyFile(QTextStream &clsstream, DisplaceModel *currentModel, std::function<bool(const displace::NodePenalty &)> selector);
+    bool outputClosedPolyFile(QString filename, DisplaceModel *currentModel, std::function<bool(const displace::NodePenalty &)> selector, QString *error);
 };
 
 #endif // INPUTFILEEXPORTER_H

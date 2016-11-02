@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include <utils/MultifieldReader.h>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -50,33 +51,6 @@ T* end(T (&pArray)[N])
 {
     return &pArray[0] + N;
 }
-
-namespace {
-
-template <typename KEY, typename VALUE, typename CONTAINER>
-void read_map (istream &stream, CONTAINER &mmap) {
-    string line;
-    while(!stream.eof())
-    {
-        getline(stream, line);
-        boost::trim(line);
-        if (line.empty())
-            continue;
-
-        if (!std::isdigit(line[0]) && line[0] != '.' && line[0] != '-')
-            continue;
-
-        std::stringstream ss (line);
-        KEY key;
-        ss >> key;
-        VALUE val;
-        ss >> val;
-        mmap.insert(make_pair(key,val));
-    }
-}
-
-}
-
 
 void remove_dups(vector<int>& seq)
 {
@@ -375,7 +349,7 @@ void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjac
 fill in the separated vectors related to the coord object
 @param the coord file, ...
 */
-void fill_from_coord (istream& in, vector<double>& graph_coord_x,
+bool fill_from_coord(istream& in, vector<double>& graph_coord_x,
                       vector<double> & graph_coord_y,
                       vector<int>& graph_coord_harbour, int nrow)
 {
@@ -400,6 +374,7 @@ void fill_from_coord (istream& in, vector<double>& graph_coord_x,
 
     cout << "read coord with "
          << graph_coord_x.size() << " nodes" << endl << flush;
+    return true;
 }
 
 
@@ -407,7 +382,7 @@ void fill_from_coord (istream& in, vector<double>& graph_coord_x,
 fill in the separated vectors related to the coord object
 @param the coord file, ...
 */
-void fill_from_graph (istream& in, vector<int>& graph_idx_dep,
+bool fill_from_graph(istream& in, vector<int>& graph_idx_dep,
                       vector<int> & graph_idx_arr,
                       vector<int>& graph_dist_km, int nrow)
 {
@@ -435,10 +410,11 @@ void fill_from_graph (istream& in, vector<int>& graph_idx_dep,
 
     cout << "read graph with "
          << graph_idx_dep.size() << " connections " << endl << flush;
+    return true;
 }
 
 
-void fill_from_code_area (istream& in, vector<int>& graph_point_code_area, int nrow)
+bool fill_from_code_area(istream& in, vector<int>& graph_point_code_area, int nrow)
 {
     double val;
     int val2;
@@ -459,10 +435,11 @@ void fill_from_code_area (istream& in, vector<int>& graph_point_code_area, int n
 
     dout (cout << "read code area with "
           << graph_point_code_area.size() << " nodes" << endl << flush);
+    return true;
 }
 
 
-void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape, int nrow)
+bool fill_from_code_marine_landscape(istream& in, vector<int>& graph_point_code_landscape, int nrow)
 {
     int val;
     cout << "landscape codes are: ";
@@ -475,6 +452,7 @@ void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code
 
     cout << "read code marine landscape with "
          << graph_point_code_landscape.size() << " nodes" << endl << flush;
+    return true;
 }
 
 
@@ -482,7 +460,7 @@ void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code
 fill in the growth transition matrix
 @param the vector file, ...
 */
-void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix)
+bool fill_in_percent_szgroup_per_age_matrix(istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix)
 {
     double val;
     for(unsigned int i = 0; i < percent_szgroup_per_age_matrix.size(); i++)
@@ -504,6 +482,7 @@ void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double>
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -511,7 +490,7 @@ void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double>
 fill in the growth transition matrix
 @param the vector file, ...
 */
-void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix)
+bool fill_in_percent_age_per_szgroup_matrix(istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix)
 {
     double val;
     for(unsigned int i = 0; i < percent_age_per_szgroup_matrix.size(); i++)
@@ -533,6 +512,7 @@ void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double>
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -540,7 +520,7 @@ void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double>
 fill in the growth transition matrix
 @param the vector file, ...
 */
-void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition)
+bool fill_in_growth_transition(istream& in, vector< vector<double> >& growth_transition)
 {
     double val;
     for(unsigned int i = 0; i < growth_transition.size(); i++)
@@ -562,6 +542,7 @@ void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_tr
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -569,7 +550,7 @@ void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_tr
 fill in the species_interactions_mortality_proportion_matrix
 @param the vector file, ...
 */
-void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix)
+bool fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix)
 {
     double val;
     for(unsigned int i = 0; i < species_interactions_mortality_proportion_matrix.size(); i++)
@@ -591,6 +572,7 @@ void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vect
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -601,7 +583,7 @@ void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vect
 fill in the growth transition matrix
 @param the vector file, ...
 */
-void fill_in_selectivity_per_stock (istream& in, vector< vector<double> >& selectivity_per_stock)
+bool fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& selectivity_per_stock)
 {
     double val;
     for(unsigned int i = 0; i < selectivity_per_stock.size(); i++)
@@ -623,6 +605,7 @@ void fill_in_selectivity_per_stock (istream& in, vector< vector<double> >& selec
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -631,7 +614,7 @@ void fill_in_selectivity_per_stock (istream& in, vector< vector<double> >& selec
 fill in
 @param the vector file, ...
 */
-void fill_in_param_sr (istream& in, vector<double>& param_sr)
+bool fill_in_param_sr(istream& in, vector<double>& param_sr)
 {
     double val;
     for(unsigned int i = 0; i < param_sr.size(); i++)
@@ -647,6 +630,7 @@ void fill_in_param_sr (istream& in, vector<double>& param_sr)
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -654,7 +638,7 @@ void fill_in_param_sr (istream& in, vector<double>& param_sr)
 fill in
 @param the vector file, ...
 */
-void fill_in_initial_tac (istream& in, vector<double>& initial_tac)
+bool fill_in_initial_tac(istream& in, vector<double>& initial_tac)
 {
     double val;
     for(unsigned int i = 0; i < initial_tac.size(); i++)
@@ -670,6 +654,7 @@ void fill_in_initial_tac (istream& in, vector<double>& initial_tac)
     }
     dout(cout  << endl);
 
+    return true;
 }
 
 
@@ -677,22 +662,31 @@ void fill_in_initial_tac (istream& in, vector<double>& initial_tac)
 fill in
 @param the vector file, ...
 */
-void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max)
+bool fill_in_fbar_ages_min_max(istream& in, vector<double>& fbar_ages_min_max)
 {
-    double val;
-    for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
-    {
-        in>> val;
-        fbar_ages_min_max[i] = val;
-    }
-    dout(cout  << "read fbar_ages_min_max"  << endl << flush);
+    try {
+        for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
+        {
+            std::string field;
+            in>> field;
+            fbar_ages_min_max[i] = boost::lexical_cast<double>(field);
+        }
 
-    for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
-    {
-        dout(cout  << fbar_ages_min_max[i] << " ");
-    }
-    dout(cout  << endl);
+#if 0
+        dout(cout  << "read fbar_ages_min_max"  << endl << flush);
 
+        for(unsigned int i = 0; i < fbar_ages_min_max.size(); i++)
+        {
+            dout(cout  << fbar_ages_min_max[i] << " ");
+        }
+        dout(cout  << endl);
+#endif
+
+        return true;
+
+    } catch (boost::bad_lexical_cast &) {
+        return false;
+    }
 }
 
 
@@ -700,7 +694,7 @@ void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max)
 fill in the vessel attributes into a multimap DOUBLE
 @param the vessel specification file, ...
 */
-void fill_from_metier_specifications (istream& in, multimap<string, double>& infos)
+bool fill_from_metier_specifications(istream& in, multimap<string, double>& infos)
 {
 
     string line;
@@ -713,6 +707,7 @@ void fill_from_metier_specifications (istream& in, multimap<string, double>& inf
         infos.insert(make_pair(key,val));
     }
     dout(cout  << "read and set up the metier ogive specification  " << endl << flush);
+    return true;
 }
 
 
@@ -885,7 +880,7 @@ bool fill_from_ships_specifications (istream& in,
 fill in the avai attributes into a map
 @param the vessel specification file, ...
 */
-void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai)
+bool fill_from_avai_nodes_with_pop(istream& in, map<int, double>& avai)
 {
 
     string line;
@@ -898,6 +893,7 @@ void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai)
         avai[key]=val;
     }
     dout(cout  << "read pop avaibility per node " << endl << flush);
+    return true;
 }
 
 
@@ -905,7 +901,7 @@ void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai)
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai)
+bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& avai)
 {
 
     string line;
@@ -918,6 +914,7 @@ void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& 
         avai.insert(make_pair(key,val));
     }
     dout(cout  << "read the availability at szgroup " << endl << flush);
+    return true;
 }
 
 
@@ -925,7 +922,7 @@ void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& 
 fill in the oth_land attributes into a multimap
 @param the oth_land specification file, ...
 */
-void fill_from_oth_land (istream& in, map<int, double>& oth_land)
+bool fill_from_oth_land(istream& in, map<int, double>& oth_land)
 {
 
     string line;
@@ -938,13 +935,14 @@ void fill_from_oth_land (istream& in, map<int, double>& oth_land)
         oth_land.insert(make_pair(key,val));
     }
     dout(cout  << "read oth land " << endl << flush);
+    return true;
 }
 
 /**
 fill in the overall_migration_fluxes attributes into a multimap
 @param the overall_migration_fluxes specification file, ...
 */
-void fill_from_overall_migration_fluxes (istream& in, multimap<int, double>& overall_migration_fluxes)
+bool fill_from_overall_migration_fluxes(istream& in, multimap<int, double>& overall_migration_fluxes)
 {
 
     string line;
@@ -957,6 +955,7 @@ void fill_from_overall_migration_fluxes (istream& in, multimap<int, double>& ove
         overall_migration_fluxes.insert(make_pair(key,val));
     }
     dout(cout  << "read overall_migration_fluxes " << endl << flush);
+    return true;
 }
 
 
@@ -964,19 +963,9 @@ void fill_from_overall_migration_fluxes (istream& in, multimap<int, double>& ove
 fill in the attributes into a multimap
 @param the specification file, ...
 */
-void fill_from_relative_stability (istream& in, map<string, double>& relative_stability)
+bool fill_from_relative_stability (istream& in, map<string, double>& relative_stability)
 {
-
-    string line;
-    while(!getline(in, line).eof())
-    {
-        string key;
-        in >> key;
-        double val;
-        in >> val;
-        relative_stability.insert(make_pair(key,val));
-    }
-    dout(cout  << "read relative stability " << endl << flush);
+    return fill_map_from_specifications_s_d(in, relative_stability);
 }
 
 
@@ -984,19 +973,19 @@ void fill_from_relative_stability (istream& in, map<string, double>& relative_st
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map)
+bool fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map)
 {
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
 
-    string line;
-    while(!getline(in, line).eof())
-    {
-        int key;
-        in >> key;
-        int val;
-        in >> val;
-        a_map.insert(make_pair(key,val));
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,int>>(in, " ", [&a_map](std::tuple<int, int> v) {
+            a_map.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
     }
-    dout(cout  << "read a map <int,int> " << endl << flush);
 }
 
 
@@ -1004,19 +993,19 @@ void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map)
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map)
+bool fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map)
 {
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
 
-    string line;
-    while(!getline(in, line).eof())
-    {
-        int key;
-        in >> key;
-        string val;
-        in >> val;
-        a_map.insert(make_pair(key,val));
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,string>>(in, " ", [&a_map](std::tuple<int, string> v) {
+            a_map.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
     }
-    dout(cout  << "read a map <int,string> " << endl << flush);
 }
 
 
@@ -1024,7 +1013,7 @@ void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map)
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons)
+bool fill_from_nodes_in_polygons(istream& in, multimap<int, int>& nodes_in_polygons)
 {
 
     string line;
@@ -1037,6 +1026,8 @@ void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_poly
         nodes_in_polygons.insert(make_pair(key,val));
     }
     dout(cout  << "read nodes_in_polygons " << endl << flush);
+
+    return true;
 }
 
 
@@ -1044,52 +1035,57 @@ void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_poly
 fill in the vessel attributes into a multimap <string, integer>
 @param e.g. the vessel specification file, ...
 */
-void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& infos)
+bool fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& infos)
 {
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
 
-    string line;
-    while(!getline(in, line).eof())
-    {
-        string key;
-        in >> key;
-        int val;
-        in >> val;
-        infos.insert(make_pair(key,val));
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<string,int>>(in, " ", [&infos](std::tuple<string, int> v) {
+            infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
     }
-    dout(cout  << "read and set up the specification <string, integer> " << endl << flush);
-
-    // TO DO: test if infos.count(key) = NBSZGROUP
 }
 
 
-/**
-fill in the vessel attributes into a multimap <integer, double>
+/** @brief fill in the vessel attributes into a multimap <integer, double>. First line is an heading.
 @param e.g. the vessel specification file, ...
 */
-void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &infos)
+bool fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &infos)
 {
-    read_map<int,double, std::multimap<int,double>> (in, infos);
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,double>>(in, " ", [&infos](std::tuple<int, double> v) {
+            infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
 }
 
 /**
 fill in the vessel attributes into a multimap <string, double>
 @param e.g. the vessel specification file, ...
 */
-void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double>& infos)
+bool fill_multimap_from_specifications_s_d (istream& in, multimap<string, double>& infos)
 {
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
 
-    string line;
-    while(!getline(in, line).eof())
-    {
-        string key;
-        in >> key;
-        double val;
-        in >> val;
-        infos.insert(make_pair(key,val));
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<string,double>>(in, " ", [&infos](std::tuple<string, double> v) {
+            infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
     }
-    dout(cout  << "read and set up the specification <string, double> " << endl << flush);
-
-    // TO DO: test if infos.count(key) = NBSZGROUP
 }
 
 
@@ -1097,9 +1093,19 @@ void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double
 fill in the vessel attributes into a multimap <int, string>
 @param e.g. the vessel specification file, ...
 */
-void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& infos)
+bool fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& infos)
 {
-    read_map<int,std::string,std::multimap<int,std::string>>(in,infos);
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,string>>(in, " ", [&infos](std::tuple<int, string> v) {
+                                                              infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
 }
 
 
@@ -1107,62 +1113,102 @@ void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& 
 fill in the vessel attributes into a multimap <int, int>
 @param e.g. the vessel specification file, ...
 */
-void fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& infos)
+bool fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& infos)
 {
-    read_map<int,int,std::multimap<int,int>>(in, infos);
-}
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
 
-
-/**
-fill in the vessel attributes into a map <int, int>
-@param e.g. the vessel specification file, ...
-*/
-void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput)
-{
-    UNUSED(namefolderinput);
-    read_map<int,int,std::map<int,int>>(in,infos);
-}
-
-
-/**
-fill in the vessel attributes into a map <int, int>
-@param e.g. the vessel specification file, ...
-*/
-void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, string namefolderinput)
-{
-    UNUSED(namefolderinput);
-    read_map<int,double,std::map<int,double>>(in,infos);
-}
-
-
-/**
-fill in the vessel attributes into a map <int, int>
-@param e.g. the vessel specification file, ...
-*/
-void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput)
-{
-    UNUSED(namefolderinput);
-    read_map<int,std::string,std::map<int,std::string>>(in,infos);
-}
-
-
-/**
-fill in the vessel attributes into a map <int, int>
-@param e.g. the vessel specification file, ...
-*/
-void fill_map_from_specifications_s_d (istream& in, map<string, double>& infos)
-{
-
-    string line;
-    while(!getline(in, line).eof())
-    {
-        string key;
-        in >> key;
-        double val;
-        in >> val;
-        infos.insert(make_pair(key,val));
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,int>>(in, " ", [&infos](std::tuple<int, int> v) {
+                                                           infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
     }
-    dout(cout  << "read and set up the specification map<int, double> " << endl << flush);
+}
+
+
+/**
+fill in the vessel attributes into a map <int, int>
+@param e.g. the vessel specification file, ...
+*/
+bool fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput)
+{
+    UNUSED(namefolderinput);
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,int>>(in, " ", [&infos](std::tuple<int, int> v) {
+                                                           infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
+}
+
+
+/**
+fill in the vessel attributes into a map <int, int>
+@param e.g. the vessel specification file, ...
+*/
+bool fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, string namefolderinput)
+{
+    UNUSED(namefolderinput);
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,double>>(in, " ", [&infos](std::tuple<int, double> v) {
+                                                              infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
+}
+
+
+/**
+fill in the vessel attributes into a map <int, int>
+@param e.g. the vessel specification file, ...
+*/
+bool fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput)
+{
+    UNUSED(namefolderinput);
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<int,string>>(in, " ", [&infos](std::tuple<int, string> v) {
+                                                              infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
+}
+
+
+/**
+fill in the vessel attributes into a map <int, int>
+@param e.g. the vessel specification file, ...
+*/
+bool fill_map_from_specifications_s_d (istream& in, map<string, double>& infos)
+{
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<std::string,double>>(in, " ", [&infos](std::tuple<string, double> v) {
+                                                              infos.insert(v);
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
 
 }
 

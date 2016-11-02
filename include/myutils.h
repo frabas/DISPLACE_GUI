@@ -157,25 +157,25 @@ vector<double> compute_distance_fgrounds(const vector<int> &idx_path_shop,
 // data input
 //---------------------------------------//
 
-void fill_from_coord (istream& in, vector<double>& graph_coord_x,
+bool fill_from_coord (istream& in, vector<double>& graph_coord_x,
                       vector<double> & graph_coord_y,
                       vector<int>& graph_coord_harbour, int nrow);
-void fill_from_graph (istream& in, vector<int>& graph_idx_dep,
+bool fill_from_graph (istream& in, vector<int>& graph_idx_dep,
                       vector<int> & graph_idx_arr,
                       vector<int>& graph_dist_km, int nrow);
-void fill_from_code_area (istream& in, vector<int>& graph_point_code_area,
+bool fill_from_code_area (istream& in, vector<int>& graph_point_code_area,
                           int nrow);
-void fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
+bool fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
                                       int nrow);
-void fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
-void fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
-void fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
-void fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
-void fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);
-void fill_in_param_sr (istream& in, vector<double>& param_sr);
-void fill_in_initial_tac (istream& in, vector<double>& initial_tac);
-void fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max);
-void fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
+bool fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
+bool fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
+bool fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
+bool fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
+bool fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);
+bool fill_in_param_sr (istream& in, vector<double>& param_sr);
+bool fill_in_initial_tac (istream& in, vector<double>& initial_tac);
+bool fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max);
+bool fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
 bool fill_from_vessels_specifications(istream& in, vector<string>& names,
                                       vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths,  vector<double>& vKWs,
                                       vector<double>& carrycapacities, vector<double>& tankcapacities,
@@ -202,21 +202,21 @@ bool fill_from_ships_specifications (istream& in, vector<string>& names, vector<
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids);
 
-void fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
-void fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);
-void fill_from_oth_land (istream& in, map<int, double>& oth_land);
-void fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
-void fill_from_relative_stability (istream& in, map<string, double>& relative_stability);
-void fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
+bool fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
+bool fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);
+bool fill_from_oth_land (istream& in, map<int, double>& oth_land);
+bool fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
+bool fill_from_relative_stability(istream& in, map<string, double>& relative_stability);
+bool fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
 
-void fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& infos);
-void fill_multimap_from_specifications_s_d (istream& in, multimap<string, double>& infos);
-void fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& infos);
-void fill_multimap_from_specifications_i_d (istream& in, multimap<int, double>& infos);
-void fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& infos);
-void fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map);
-void fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map);
-void fill_map_from_specifications_s_d (istream& in, map<string, double>& a_map);
+bool fill_multimap_from_specifications_s_i(istream& in, multimap<string, int>& infos);
+bool fill_multimap_from_specifications_s_d(istream& in, multimap<string, double>& infos);
+bool fill_multimap_from_specifications_i_s(istream& in, multimap<int, string>& infos);
+bool fill_multimap_from_specifications_i_d(istream& in, multimap<int, double>& infos);
+bool fill_multimap_from_specifications_i_i(istream& in, multimap<int, int>& infos);
+bool fill_map_from_specifications_i_i(istream& in, map<int, int>& a_map);
+bool fill_map_from_specifications_i_s(istream& in, map<int, string>& a_map);
+bool fill_map_from_specifications_s_d(istream& in, map<string, double>& a_map);
 
 template <typename DTYPE>
 void fill_map_from_specifications (istream &in, map<int,DTYPE> &map) {
@@ -242,9 +242,9 @@ template <typename T, size_t N> T* end(T (&pArray)[N]);
 
 vector<double> scale_a_vector_to_1(vector<double> a_vector);
 
-void fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string namefolderinput);
-void fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, string namefolderinput);
-void fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, string namefolderinput);
+bool fill_map_from_specifications_i_i(istream& in, map<int, int>& infos, string namefolderinput);
+bool fill_map_from_specifications_i_s(istream& in, map<int, string>& infos, string namefolderinput);
+bool fill_map_from_specifications_i_d(istream& in, map<int, double>& infos, string namefolderinput);
 
 // generator
 //int my_rand(int a, int b)

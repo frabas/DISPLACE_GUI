@@ -35,7 +35,9 @@ BOOST_AUTO_TEST_CASE( test_fill_multimap_id )
     std::multimap<int,double> info;
     Finder<int, double, std::multimap<int,double> > find_id;
 
-    fill_multimap_from_specifications_i_d(is, info);
+    bool r = fill_multimap_from_specifications_i_d(is, info);
+    BOOST_CHECK(r);
+
     BOOST_CHECK_EQUAL(info.size(), 6);
     BOOST_CHECK_CLOSE(find_id(info,5), 1.1, 1);
     BOOST_CHECK_CLOSE(find_id(info,1), 1.2, 1);
@@ -45,15 +47,39 @@ BOOST_AUTO_TEST_CASE( test_fill_multimap_id )
     BOOST_CHECK_CLOSE(find_id(info,-1), -0.5, 1);
 }
 
+BOOST_AUTO_TEST_CASE( test_fill_multimap_id_fail_bad_cast )
+{
+    std::string testsuite1 = "headings\n5 1y\n1x";
+    std::multimap<int,double> info;
+
+    std::istringstream is(testsuite1);
+    bool r = fill_multimap_from_specifications_i_d(is, info);
+    BOOST_CHECK(!r);
+}
+
+// TODO enable this test (actually crashes)
+#if 0
+BOOST_AUTO_TEST_CASE( test_fill_multimap_id_fail_missing_field )
+{
+    std::string testsuite1 = "headings\n5\n1 5\n";
+    std::multimap<int,double> info;
+
+    std::istringstream is(testsuite1);
+    bool r = fill_multimap_from_specifications_i_d(is, info);
+    BOOST_CHECK(!r);
+}
+#endif
+
 BOOST_AUTO_TEST_CASE( test_fill_multimap_ii )
 {
-    std::string testsuite1 = "headings\n5 0\n1 1\r\n2 2\n3 3    \n4 4\n\rskipme\n-1 -5\n";
+    std::string testsuite1 = "headings\n5 0\n1 1\r\n2 2\n3 3    \n4 4\n\n-1 -5\n";
 
     std::istringstream is(testsuite1);
     std::multimap<int,int> info;
     Finder<int, int, std::multimap<int,int> > find_ii;
 
-    fill_multimap_from_specifications_i_i(is, info);
+    bool r = fill_multimap_from_specifications_i_i(is, info);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(info.size(), 6);
     BOOST_CHECK_EQUAL(find_ii(info,5), 0);
     BOOST_CHECK_EQUAL(find_ii(info,1), 1);
@@ -65,13 +91,15 @@ BOOST_AUTO_TEST_CASE( test_fill_multimap_ii )
 
 BOOST_AUTO_TEST_CASE( test_fill_multimap_is )
 {
-    std::string testsuite1 = "headings\n5 a\n1 b\r\n2 c\n3 d    \n4 e\n\rskipme\n";
+    std::string testsuite1 = "headings\n5 a\n1 b\r\n2 c\n3 d    \n4 e\n\r\n";
 
     std::istringstream is(testsuite1);
     std::multimap<int,std::string> info;
     Finder<int, std::string, std::multimap<int,std::string> > find_is;
 
-    fill_multimap_from_specifications_i_s(is, info);
+    bool r = fill_multimap_from_specifications_i_s(is, info);
+    BOOST_CHECK(r);
+
     BOOST_CHECK_EQUAL(info.size(), 5);
     BOOST_CHECK_EQUAL(find_is(info,5), std::string{"a"});
     BOOST_CHECK_EQUAL(find_is(info,1), std::string{"b"});
@@ -88,7 +116,8 @@ BOOST_AUTO_TEST_CASE( test_fill_map_id )
     std::map<int,double> info;
     Finder<int, double, std::map<int,double> > find_id;
 
-    fill_map_from_specifications_i_d(is, info, "dummy folder info");
+    bool r = fill_map_from_specifications_i_d(is, info, "dummy folder info");
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(info.size(), 5);
     BOOST_CHECK_CLOSE(find_id(info,5), 1.1, 1);
     BOOST_CHECK_CLOSE(find_id(info,1), 1.2, 1);
@@ -107,7 +136,8 @@ BOOST_AUTO_TEST_CASE( test_fill_map_ii )
     std::map<int,int> info;
     Finder<int, int, std::map<int,int> > find_ii;
 
-    fill_map_from_specifications_i_i(is, info, "dummy folder info");
+    bool r = fill_map_from_specifications_i_i(is, info, "dummy folder info");
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(info.size(), 5);
     BOOST_CHECK_EQUAL(find_ii(info,5), 0);
     BOOST_CHECK_EQUAL(find_ii(info,1), 1);
@@ -124,7 +154,8 @@ BOOST_AUTO_TEST_CASE( test_fill_map_is )
     std::map<int,std::string> info;
     Finder<int, std::string, std::map<int,std::string> > find_is;
 
-    fill_map_from_specifications_i_s(is, info, "dummy folder info");
+    bool r = fill_map_from_specifications_i_s(is, info, "dummy folder info");
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(info.size(), 5);
     BOOST_CHECK_EQUAL(find_is(info,5), std::string{"a"});
     BOOST_CHECK_EQUAL(find_is(info,1), std::string{"b"});

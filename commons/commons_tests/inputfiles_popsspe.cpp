@@ -62,11 +62,36 @@ BOOST_AUTO_TEST_CASE ( test_ctrysspe_relative_stability_semester_dat )
     std::map<std::string,double> info;
     Finder<std::string,double, std::map<std::string,double> > find_id;
 
-    fill_from_relative_stability(is, info);
+    bool r = fill_from_relative_stability(is, info);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(info.size(), 3);
     BOOST_CHECK_CLOSE(find_id(info,"DEN"), 33.0f, 0.1);
     BOOST_CHECK_CLOSE(find_id(info,"DEU"), 33.0f, 0.1);
     BOOST_CHECK_CLOSE(find_id(info,"SWE"), 33.0f, 0.1);
+}
+
+BOOST_AUTO_TEST_CASE ( test_ctrysspe_relative_stability_semester_dat_error_not_a_number )
+{
+    std::map<std::string,double> info;
+    string test = "ctry percent\nDEN xxx";
+    std::istringstream is(test);
+    bool r = fill_from_relative_stability(is, info);
+
+    BOOST_CHECK(!r);
+    BOOST_CHECK_EQUAL(info.size(), 0);
+}
+
+
+BOOST_AUTO_TEST_CASE ( test_ctrysspe_relative_stability_semester_dat_error_ending_newline )
+{
+    std::map<std::string,double> info;
+
+    string test = "ctry percent\nDEN 50.0\nDEU 50.0\n";
+    std::istringstream is(test);
+    bool r = fill_from_relative_stability(is, info);
+
+    BOOST_CHECK(r);
+    BOOST_CHECK_EQUAL(info.size(), 2);
 }
 
 // TODO simplify usage of fill_in_fbar_ages_min_max: Read values from files, don't expect result vector to have already the right number of values.
@@ -77,9 +102,40 @@ BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat )
     vector<double> ex = {4,6,0.46,0,0,0,0};
 
     std::istringstream ss ("4 6 0.46 0 0 0 0");
-    fill_in_fbar_ages_min_max(ss, res);
+    bool r = fill_in_fbar_ages_min_max(ss, res);
+
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex.begin(), ex.end(), res.begin(), res.end());
 }
+
+BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_error_wrong_number )
+{
+    // Error checking
+    vector<double> res(7);
+    string test = "4 6 xx 0 0 0 -1";
+    std::istringstream ss(test);
+
+    bool r = fill_in_fbar_ages_min_max(ss, res);
+    BOOST_CHECK(!r);
+}
+
+// This cannot be tested: function DOES require the array to have a specific size
+#if 0
+BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_error_not_initialized_value )
+{
+    vector<double> res;
+    // Check for uninitialized values?
+    string test = "4 6 10.0 0 0 0 -1";
+    vector<double> ex = {4,6,0.46,0,0,0,0};
+
+    std::istringstream ss(test);
+    bool r = fill_in_fbar_ages_min_max(ss, res);
+
+    BOOST_CHECK(r);
+    BOOST_CHECK_EQUAL(res.size(), 7);
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex.begin(), ex.end(), res.begin(), res.end());
+}
+#endif
 
 BOOST_AUTO_TEST_CASE ( test_overall_migration_fluxes_semester_biolsce_dat )
 {
@@ -91,7 +147,8 @@ BOOST_AUTO_TEST_CASE ( test_spe_initial_tac_dat )
     vector<double> ex = {11.4};
 
     std::istringstream ss ("11.4");
-    fill_in_initial_tac(ss, res);
+    bool r = fill_in_initial_tac(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex.begin(), ex.end(), res.begin(), res.end());
 }
 
@@ -103,7 +160,8 @@ BOOST_AUTO_TEST_CASE ( test_spe_percent_age_per_szgroup_biolsce_dat )
     };
 
     std::istringstream ss ("1 2 3\n4 5 6\n");
-    fill_in_percent_age_per_szgroup_matrix(ss, res);
+    bool r = fill_in_percent_age_per_szgroup_matrix(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[0].begin(), ex[0].end(), res[0].begin(), res[0].end());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[1].begin(), ex[1].end(), res[1].begin(), res[1].end());
@@ -117,7 +175,8 @@ BOOST_AUTO_TEST_CASE ( test_spe_percent_szgroup_per_age_biolsce_dat )
     };
 
     std::istringstream ss ("1 2 3\n4 5 6\n");
-    fill_in_percent_szgroup_per_age_matrix(ss, res);
+    bool r = fill_in_percent_szgroup_per_age_matrix(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[0].begin(), ex[0].end(), res[0].begin(), res[0].end());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[1].begin(), ex[1].end(), res[1].begin(), res[1].end());
@@ -131,7 +190,8 @@ BOOST_AUTO_TEST_CASE ( test_spe_size_transition_matrix_biolsce_dat )
     };
 
     std::istringstream ss ("1 2 3\n4 5 6\n");
-    fill_in_growth_transition(ss, res);
+    bool r = fill_in_growth_transition(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[0].begin(), ex[0].end(), res[0].begin(), res[0].end());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[1].begin(), ex[1].end(), res[1].begin(), res[1].end());
@@ -143,7 +203,8 @@ BOOST_AUTO_TEST_CASE ( test_spe_SSB_R_parameters_biolsce_dat )
     vector<double> ex = {3.3, 4.54};
 
     std::istringstream ss ("3.3\n4.54\n");
-    fill_in_param_sr(ss, res);
+    bool r = fill_in_param_sr(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex.begin(), ex.end(), res.begin(), res.end());
 }
 
@@ -153,7 +214,7 @@ BOOST_AUTO_TEST_CASE ( test_spe_stecf_oth_land_per_month_per_node_semester_dat )
     map<int,double> ex = { { 1, 0.5}, { 2, 1.5 }, {3, 2.5} };
 
     std::istringstream ss ("pt_graph landings\n1 0.5\n2 1.5\n3 2.5\n");
-    fill_from_oth_land(ss, res);
+    bool r = fill_from_oth_land(ss, res);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL(ex[0], res[0]);
     BOOST_CHECK_EQUAL(ex[1], res[1]);
@@ -167,7 +228,8 @@ BOOST_AUTO_TEST_CASE ( test_comcat_per_szgroup_done_by_hand_dat )
     multimap<int,int> ex = { { 1, 5}, { 2, 6 }, {3, 7} };
 
     std::istringstream ss ("stock comcat_per_szgroup\n1 5\n2 6\n3 7\n");
-    fill_multimap_from_specifications_i_i(ss, res);
+    bool r = fill_multimap_from_specifications_i_i(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL(fnd(ex,1), fnd(res,1));
     BOOST_CHECK_EQUAL(fnd(ex,2), fnd(res,2));
@@ -180,7 +242,8 @@ BOOST_AUTO_TEST_CASE ( test_hyperstability_param_dat )
     map<int,double> ex = { { 1, 0.5}, { 2, 1.5 }, {3, 2.5} };
 
     std::istringstream ss ("pop hyperstability_param\n1 0.5\n2 1.5\n3 2.5\n");
-    fill_map_from_specifications_i_d(ss, res, "dummy");
+    bool r = fill_map_from_specifications_i_d(ss, res, "dummy");
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL(ex[0], res[0]);
     BOOST_CHECK_EQUAL(ex[1], res[1]);
@@ -235,7 +298,8 @@ BOOST_AUTO_TEST_CASE ( test_species_interactions_mortality_proportion_matrix_bio
     };
 
     std::istringstream ss ("1 2.6 3\n.4 5 6\n");
-    fill_in_species_interactions_mortality_proportion_matrix(ss, res);
+    bool r = fill_in_species_interactions_mortality_proportion_matrix(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[0].begin(), ex[0].end(), res[0].begin(), res[0].end());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex[1].begin(), ex[1].end(), res[1].begin(), res[1].end());

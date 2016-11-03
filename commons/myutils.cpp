@@ -981,7 +981,7 @@ bool fill_map_from_specifications_i_i (istream& in, map<int, int>& a_map)
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,int>>(in, " ", [&a_map](std::tuple<int, int> v) {
-            a_map.insert(v);
+            a_map.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1001,7 +1001,7 @@ bool fill_map_from_specifications_i_s (istream& in, map<int, string>& a_map)
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,string>>(in, " ", [&a_map](std::tuple<int, string> v) {
-            a_map.insert(v);
+            a_map.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1043,7 +1043,7 @@ bool fill_multimap_from_specifications_s_i (istream& in, multimap<string, int>& 
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<string,int>>(in, " ", [&infos](std::tuple<string, int> v) {
-            infos.insert(v);
+            infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1062,7 +1062,7 @@ bool fill_multimap_from_specifications_i_d (istream& in, multimap<int, double> &
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,double>>(in, " ", [&infos](std::tuple<int, double> v) {
-            infos.insert(v);
+            infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1081,7 +1081,7 @@ bool fill_multimap_from_specifications_s_d (istream& in, multimap<string, double
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<string,double>>(in, " ", [&infos](std::tuple<string, double> v) {
-            infos.insert(v);
+            infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1101,7 +1101,7 @@ bool fill_multimap_from_specifications_i_s (istream& in, multimap<int, string>& 
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,string>>(in, " ", [&infos](std::tuple<int, string> v) {
-                                                              infos.insert(v);
+                                                              infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1121,7 +1121,7 @@ bool fill_multimap_from_specifications_i_i (istream& in, multimap<int, int>& inf
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,int>>(in, " ", [&infos](std::tuple<int, int> v) {
-                                                           infos.insert(v);
+                                                           infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1142,7 +1142,7 @@ bool fill_map_from_specifications_i_i (istream& in, map<int, int>& infos, string
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,int>>(in, " ", [&infos](std::tuple<int, int> v) {
-                                                           infos.insert(v);
+                                                           infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1163,7 +1163,7 @@ bool fill_map_from_specifications_i_d (istream& in, map<int, double>& infos, str
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,double>>(in, " ", [&infos](std::tuple<int, double> v) {
-                                                              infos.insert(v);
+                                                              infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1184,7 +1184,7 @@ bool fill_map_from_specifications_i_s (istream& in, map<int, string>& infos, str
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<int,string>>(in, " ", [&infos](std::tuple<int, string> v) {
-                                                              infos.insert(v);
+                                                              infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;
@@ -1204,7 +1204,7 @@ bool fill_map_from_specifications_s_d (istream& in, map<string, double>& infos)
     displace::formats::helpers::MultifieldReader reader;
     try {
         return reader.importFromStream<std::tuple<std::string,double>>(in, " ", [&infos](std::tuple<string, double> v) {
-                                                              infos.insert(v);
+                                                              infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
         });
     } catch (runtime_error &) {
         return false;

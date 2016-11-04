@@ -492,7 +492,8 @@ int main(int argc, char* argv[])
 	// scenarios for dynamic allocation of effort and biol sce
 
 	//for initial input data
-	string a_quarter= "quarter1";// start quarter
+    string a_month= "month1";// start quarter
+    string a_quarter= "quarter1";// start quarter
 								 // start semester
 	string a_semester= "semester1";
 
@@ -2134,7 +2135,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 #endif
 
-    if (!read_metier_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
+    if(dyn_alloc_sce.option(Options::area_monthly_closure)) if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+        exit (1);
+    }
+    if(dyn_alloc_sce.option(Options::area_closure)) if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
         exit (1);
     }
 
@@ -3030,6 +3034,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization,inputfolder);
     vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, inputfolder);
 	int count_quarters=1;
+    int count_months=1;
 
 	// get a vector v filled in with 1 to n
 	int nbvessels = vessels.size();
@@ -3192,9 +3197,23 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
        dout(cout  << "RE-READ DATA----------" << endl);
 
-		// RE-READ VESSEL DATA
-		// fill in with new input files for fgrounds and harbours, etc.
-		// if change of year-quarter or semester, to be quarter or semester-specific.
+
+       // EVENT => change of month
+       if(tstep>800 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
+       {
+           count_months+=1;
+           int a_month_i = count_months % 12;
+           if(a_month_i==0) a_month_i=12;
+           stringstream strg0;
+           strg0 <<  a_month_i;
+           string a_month= "month" + strg0.str();
+
+           // update the monthly closures
+           if (!read_metier_quarterly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+              exit(1);
+          }
+       }
+
 
         // EVENT => change of quarter
 		if(tstep>2000 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
@@ -3216,6 +3235,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			string a_semester= "semester" + strg2.str();
 
            outc(cout << "a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl);
+
+           // RE-READ VESSEL DATA
+           // fill in with new input files for fgrounds and harbours, etc.
+           // if change of year-quarter or semester, to be quarter or semester-specific.
 
             // RE-read general vessel features: do not forget to clear the vectors!
 			// not-quarter specific, clear anyway...
@@ -3334,7 +3357,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     nodes.at(polygon_nodes.at(a_idx))->setAreaType(1);
                     }
 #endif
-                if (!read_metier_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
+                 if(dyn_alloc_sce.option(Options::area_closure)) if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
                     exit(1);
                 }
 

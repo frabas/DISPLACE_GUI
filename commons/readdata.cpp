@@ -2514,13 +2514,44 @@ multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, stri
     return(nodes_in_polygons);
 }
 
-bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
+bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
 {
     UNUSED(folder_name_parameterization);
 
     const string separator=" ";
 
     string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_"+a_quarter+".dat";
+
+    ifstream is;
+    is.open(filename.c_str());
+    if(is.fail())
+    {
+        open_file_error(filename);
+        return false;
+    }
+
+    std::vector<NodeBanningInfo> banning;
+    bool r = read_metier_closures(is, separator, banning);
+
+    if (r) {
+        for (auto &info : banning) {
+            for (auto id : info.banned) {
+                nodes.at(info.nodeId)->setBannedMetier(id);
+            }
+        }
+    }
+
+    is.close();
+    return r;
+}
+
+bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder)
+{
+    UNUSED(folder_name_parameterization);
+
+    const string separator=" ";
+
+    string filename = inputfolder+"/graphsspe/metier_closure_"+a_graph+"_"+a_month+".dat";
 
     ifstream is;
     is.open(filename.c_str());

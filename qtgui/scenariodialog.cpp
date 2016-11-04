@@ -33,6 +33,7 @@
 static const char *dyn_alloc_options[] = {
     "baseline",
     "area_closure",
+    "area_monthly_closure",
     "focus_on_high_profit_grounds" ,
     "closer_grounds",
     "closer_port",

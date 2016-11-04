@@ -188,7 +188,8 @@ struct NodeBanningInfo {
     std::vector<int> banned;
 };
 
-bool read_metier_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
+bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
+bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
 bool read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 
 // SMS

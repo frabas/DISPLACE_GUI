@@ -119,14 +119,12 @@ BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_e
     BOOST_CHECK(!r);
 }
 
-// This cannot be tested: function DOES require the array to have a specific size
-#if 0
 BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_error_not_initialized_value )
 {
     vector<double> res;
     // Check for uninitialized values?
-    string test = "4 6 10.0 0 0 0 -1";
-    vector<double> ex = {4,6,0.46,0,0,0,0};
+    string test = "4 6 10.0 0 0 0 -1.5";
+    vector<double> ex = {4,6,10.0,0,0,0,-1.5};
 
     std::istringstream ss(test);
     bool r = fill_in_fbar_ages_min_max(ss, res);
@@ -135,7 +133,6 @@ BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_e
     BOOST_CHECK_EQUAL(res.size(), 7);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex.begin(), ex.end(), res.begin(), res.end());
 }
-#endif
 
 BOOST_AUTO_TEST_CASE ( test_overall_migration_fluxes_semester_biolsce_dat )
 {
@@ -215,6 +212,7 @@ BOOST_AUTO_TEST_CASE ( test_spe_stecf_oth_land_per_month_per_node_semester_dat )
 
     std::istringstream ss ("pt_graph landings\n1 0.5\n2 1.5\n3 2.5\n");
     bool r = fill_from_oth_land(ss, res);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
     BOOST_CHECK_EQUAL(ex[0], res[0]);
     BOOST_CHECK_EQUAL(ex[1], res[1]);

@@ -235,12 +235,13 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                                                                          check_all_stocks_before_going_fishing);
                 //}
                 // ***************implement a decision*****************************
+                bool do_nothing=0;
                 if(go_fishing)
                 {
 
                     //go fishing
                     outc(cout  << "GO FISHING" << endl);
-                    vessels[ index_v ]->choose_a_ground_and_go_fishing(
+                     do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
                         tstep, scenario, use_dtrees,
                         dyn_alloc_sce, create_a_path_shop,
                         idx_path_shop, path_shop, min_distance_shop,
@@ -253,7 +254,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
 
                 }
-                else
+                if(!go_fishing || do_nothing) // if not going and forced to do nothing because every locations is closed for this vessel, then:
                 {
                     //have some rest in the harbour
                     outc(cout  << "STAY IN HARBOUR" << endl);

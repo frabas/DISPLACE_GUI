@@ -329,7 +329,7 @@ public:
             const std::deque<std::map<vertex_t, vertex_t> > &path_shop,
             const std::deque<std::map<vertex_t, weight_t> > &min_distance_shop,
             std::ofstream& freq_distance);
-        void choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
+        bool choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
             const std::vector <int>& idx_path_shop,

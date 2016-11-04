@@ -3227,7 +3227,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
 
 
-void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
+bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
         const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
         const vector<int> &idx_path_shop,
@@ -3336,12 +3336,38 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
            }
        }
 
+       if (dyn_alloc_sce.option(Options::area_monthly_closure))
+       {
+           const vector <int> &grds = this->get_fgrounds();
+           for (int i=0; i<grds.size();++i)
+           {
+               int a_grd = grds.at(i);
+               if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) &&
+                    nodes.at(a_grd)->isVsizeBanned(this->get_length_class()))
+               {
+                   set_spe_freq_fground(i, 1e-8);
+               }
+           }
+       }
+
+
        // then, draw a ground from the frequencies (altered or not)...
        vector <double> freq_grds = this->get_freq_fgrounds();
 								 // need to convert in array, see myRutils.cpp
+
+       // ...unless all probas at 0 (because all grounds are closed)
+       double sum_probas=0.0;
+       for (int i=0; i<freq_grds.size(); ++i) sum_probas+=freq_grds.at(i);
+       if(sum_probas<1e-5)
+          {
+           cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
+           return(1); // do nothing
+          }
+
        vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
        ground=grounds[0];
-       }
+
+    }
 
 
 
@@ -3447,6 +3473,7 @@ void Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
            // no path found: assume the vessel stucks at its current location
        }
 
+return(0);
 }
 
 

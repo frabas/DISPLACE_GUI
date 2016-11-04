@@ -3240,19 +3240,19 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
            if(dyn_alloc_sce.option(Options::area_monthly_closure))
            {
-              dout(cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl);
+              cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
 
                // first of all restore initial freq_fgrounds
                freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
                for (unsigned int v=0; v<vessels.size(); v++)
                   {
                    spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vessels.at(v)->get_name());
-                    if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << "   spe_freq_fgrounds.size() is "<< spe_freq_fgrounds.size() << endl;
+                   // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << "   spe_freq_fgrounds.size() is "<< spe_freq_fgrounds.size() << endl;
                    vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
 
                    double sum_probas=0.0;
                    for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
-                   if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
+                   // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
                }
 
               // update the monthly closures

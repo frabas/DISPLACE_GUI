@@ -3345,16 +3345,16 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) &&
                     nodes.at(a_grd)->isVsizeBanned(this->get_length_class()))
                {
-                    if(this->get_name()=="DNK000038349") cout << "this ground is closed for this metier during this month!" << endl;
+                   // if(this->get_name()=="DNK000038349") cout << "this ground is closed for this metier during this month!" << endl;
                    set_spe_freq_fground(i, 1e-8);
                }
 
                // check for myfish graph1
-               if(this->get_name()=="DNK000038349")
-                {
-                   cout << " isMetierBanned   "  << nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) << endl;
-                   cout << " isVsizeBanned   " << nodes.at(a_grd)->isVsizeBanned(this->get_length_class()) << endl;
-                }
+               //if(this->get_name()=="DNK000038349")
+               // {
+               //    cout << " isMetierBanned   "  << nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) << endl;
+               //    cout << " isVsizeBanned   " << nodes.at(a_grd)->isVsizeBanned(this->get_length_class()) << endl;
+               // }
 
            }
        }
@@ -3550,7 +3550,11 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         dout(cout  << "distance to other grounds " << vertex_names[vx] << ": " << min_distance[vx] << endl);
 
 		// check for area_closure
-        if (dyn_alloc_sce.option(Options::area_closure) )
+        if (
+                (dyn_alloc_sce.option(Options::area_closure) && nodes.at(from)->isMetierBanned(this->get_metier()->get_name()))
+                || (dyn_alloc_sce.option(Options::area_monthly_closure)  && nodes.at(from)->isMetierBanned(this->get_metier()->get_name()) &&
+                                                                            nodes.at(from)->isVsizeBanned(this->get_length_class()))
+             )
 		{
 
             //	if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
@@ -3632,7 +3636,11 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         dout(cout  << "GO FISHING ON THE 2nd CLOSEST: " << vertex_names[next_ground] << endl);
 
 		// check for area_closure
-        if (dyn_alloc_sce.option(Options::area_closure))
+        if (
+                (dyn_alloc_sce.option(Options::area_closure) && !nodes.at(next_ground)->isMetierBanned(this->get_metier()->get_name())) ||
+                       (dyn_alloc_sce.option(Options::area_monthly_closure)  && !nodes.at(from)->isMetierBanned(this->get_metier()->get_name()) &&
+                                                            !nodes.at(from)->isVsizeBanned(this->get_length_class()))
+                )
 		{
 
             //if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), next_ground))
@@ -4048,21 +4056,8 @@ int Vessel::should_i_go_fishing(int tstep,
 
     dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
 
-    // TODO: check if do_sample() maintain the 0 probas in freq.....
-    int some_fgrounds_left=1;
-    if (dyn_alloc_sce.option(Options::area_closure))
-       {
-       double sumfreqs=0.0;
-       vector <double> freqs=this->get_freq_fgrounds();
-       for (int ff=0; ff<freqs.size(); ++ff) sumfreqs+=freqs.at(ff);
-       if(sumfreqs<0.00000001)
-           {
-           some_fgrounds_left=0;
-           cout << "no fground left for this vessel" << endl;
-           }
-       }
 
-    if( still_some_quotas && some_fgrounds_left)
+    if( still_some_quotas)
 	{
 
 		// PBLE HERE FOR THE USE OF THE DECISION TREE: WHICH TIMING SHOULD WE USE?

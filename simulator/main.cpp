@@ -2144,7 +2144,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
         exit (1);
         }
-    }
+
+     }
     if(dyn_alloc_sce.option(Options::area_closure))
     {
 
@@ -3211,7 +3212,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
        // EVENT => change of month
-       if(tstep>800 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
+       if(tstep>10 && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
        {
            count_months+=1;
            int a_month_i = count_months % 12;
@@ -3220,15 +3221,21 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            strg0 <<  a_month_i;
            string a_month= "month" + strg0.str();
 
-           if(dyn_alloc_sce.option(Options::area_closure))
+           if(dyn_alloc_sce.option(Options::area_monthly_closure))
            {
                // update the monthly closures
-              if (!read_metier_quarterly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+              if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
               exit(1);
               }
               if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
               exit(1);
               }
+
+              // check for myfish graph1
+              // cout << " isMetierBanned   "  << nodes.at(13)->isMetierBanned(vessels.at(v)->get_metier()->get_name()) << endl;
+              // cout << " isVsizeBanned   " << nodes.at(13)->isVsizeBanned(vessels.at(v)->get_length_class()) << endl;
+
+
            }
 
 

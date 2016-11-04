@@ -164,9 +164,21 @@ class Node
             mBannedMetiers[metier] = true;
         }
 
+        void setBannedVsize(int vsize) {
+            while (mBannedVsizes.size() <= (size_t)vsize)
+                mBannedVsizes.push_back(false);
+            mBannedVsizes[vsize] = true;
+        }
+
         bool isMetierBanned(int metier) const {
             if ((size_t)metier < mBannedMetiers.size())
                 return mBannedMetiers[metier];
+            return false;
+        }
+
+        bool isVsizeBanned(int vsize) const {
+            if ((size_t)vsize < mBannedVsizes.size())
+                return mBannedVsizes[vsize];
             return false;
         }
 
@@ -200,6 +212,7 @@ private:
         vector<double> tariffs;
 
         vector<bool> mBannedMetiers;
+        vector<bool> mBannedVsizes;
 
         static const vector<int> mUsualFGrounds;
         static const vector<double> mFreqUsualFGrounds;

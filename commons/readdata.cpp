@@ -2612,6 +2612,74 @@ bool read_metier_closures(istream &stream, const std::string &separator, vector<
     return true;
 }
 
+bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder)
+{
+    UNUSED(folder_name_parameterization);
+
+    const string separator=" ";
+
+    string filename = inputfolder+"/graphsspe/vsize_closure_"+a_graph+"_"+a_month+".dat";
+
+    ifstream is;
+    is.open(filename.c_str());
+    if(is.fail())
+    {
+        open_file_error(filename);
+        return false;
+    }
+
+    std::vector<NodeBanningInfo> banning;
+    bool r = read_vsize_closures(is, separator, banning);
+
+    if (r) {
+        for (auto &info : banning) {
+            for (auto id : info.banned) {
+                nodes.at(info.nodeId)->setBannedVsize(id);
+            }
+        }
+    }
+
+    is.close();
+    return r;
+}
+
+bool read_vsize_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes)
+{
+    // Format:
+    // PolyId NodeId Vessel Size [Vessel Size[ Vessel Size...]]
+
+    int linenum = 0;
+    try {
+        while (stream) {
+            std::string line;
+            std::getline(stream, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            std::vector<std::string> sr;
+            boost::split(sr, line, boost::is_any_of(separator));
+
+            NodeBanningInfo info;
+            info.nodeId = boost::lexical_cast<int>(sr[1]);
+            for (size_t i = 2; i < sr.size(); ++i) {
+                int m = boost::lexical_cast<int>(sr[i]);
+                info.banned.push_back(m);
+            }
+            nodes.push_back(info);
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on read_vsize_closure file line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
+    }
+
+    return true;
+}
+
+
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
                             vector<Population* >& populations,
                             vector<int> stock_numbers,

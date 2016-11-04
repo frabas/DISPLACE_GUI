@@ -2135,12 +2135,24 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 #endif
 
-    if(dyn_alloc_sce.option(Options::area_monthly_closure)) if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+    if(dyn_alloc_sce.option(Options::area_monthly_closure))
+    {
+
+        if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
         exit (1);
-    }
-    if(dyn_alloc_sce.option(Options::area_closure)) if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
+        }
+        if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
         exit (1);
+        }
     }
+    if(dyn_alloc_sce.option(Options::area_closure))
+    {
+
+        if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
+        exit (1);
+        }
+    }
+
 
     multimap<string, double> fishing_credits;
     if(dyn_alloc_sce.option(Options::fishing_credits))
@@ -3208,10 +3220,18 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            strg0 <<  a_month_i;
            string a_month= "month" + strg0.str();
 
-           // update the monthly closures
-           if (!read_metier_quarterly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+           if(dyn_alloc_sce.option(Options::area_closure))
+           {
+               // update the monthly closures
+              if (!read_metier_quarterly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
               exit(1);
-          }
+              }
+              if (!read_vsize_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
+              exit(1);
+              }
+           }
+
+
        }
 
 

@@ -188,9 +188,12 @@ struct NodeBanningInfo {
     std::vector<int> banned;
 };
 
+// area_closure and area_monthly_closure options
 bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
 bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
+bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string a_graph, string folder_name_parameterization, string inputfolder);
 bool read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
+bool read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes);
 
 // SMS
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);

@@ -3209,21 +3209,53 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
        dout(cout  << "RE-READ DATA----------" << endl);
-
+       string a_semester;
 
        // EVENT => change of month
        if(tstep>10 && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
        {
+           int a_quarter_i=1;
+           int a_semester_i=1;
+
            count_months+=1;
            int a_month_i = count_months % 12;
            if(a_month_i==0) a_month_i=12;
+           if(a_month_i==1 || a_month_i==2 || a_month_i==3) a_quarter_i=1;
+           if(a_month_i==4 || a_month_i==5 || a_month_i==6) a_quarter_i=2;
+           if(a_month_i==7 || a_month_i==8 || a_month_i==9) a_quarter_i=3;
+           if(a_month_i==10 || a_month_i==11 || a_month_i==12) a_quarter_i=4;
+           if(a_quarter_i==1 || a_quarter_i==2) a_semester_i=1;
+           if(a_quarter_i==3 || a_quarter_i==4) a_semester_i=2;
+
+           // casting into a string
            stringstream strg0;
+           stringstream strg1;
+           stringstream strg2;
            strg0 <<  a_month_i;
-           string a_month= "month" + strg0.str();
+           strg1 <<  a_quarter_i;
+           strg2 <<  a_semester_i;
+           a_month= "month" + strg0.str();
+           a_quarter= "quarter" + strg1.str();
+           a_semester= "semester" + strg2.str();
 
            if(dyn_alloc_sce.option(Options::area_monthly_closure))
            {
-               // update the monthly closures
+              dout(cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl);
+
+               // first of all restore initial freq_fgrounds
+               freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+               for (unsigned int v=0; v<vessels.size(); v++)
+                  {
+                   spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vessels.at(v)->get_name());
+                    if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << "   spe_freq_fgrounds.size() is "<< spe_freq_fgrounds.size() << endl;
+                   vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
+
+                   double sum_probas=0.0;
+                   for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
+                   if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
+               }
+
+              // update the monthly closures
               if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
               exit(1);
               }
@@ -3246,20 +3278,6 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		if(tstep>2000 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
 			//   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
 		{
-			count_quarters+=1;
-			int a_quarter_i = count_quarters % 4;
-			int a_semester_i=1;
-			if(a_quarter_i==0) a_quarter_i=4;
-			if(a_quarter_i==1 || a_quarter_i==2) a_semester_i=1;
-			if(a_quarter_i==3 || a_quarter_i==4) a_semester_i=2;
-
-			// casting into a string
-			stringstream strg1;
-			stringstream strg2;
-			strg1 <<  a_quarter_i;
-			strg2 <<  a_semester_i;
-			string a_quarter= "quarter" + strg1.str();
-			string a_semester= "semester" + strg2.str();
 
            outc(cout << "a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl);
 

@@ -3345,8 +3345,17 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                if (nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) &&
                     nodes.at(a_grd)->isVsizeBanned(this->get_length_class()))
                {
+                    if(this->get_name()=="DNK000038349") cout << "this ground is closed for this metier during this month!" << endl;
                    set_spe_freq_fground(i, 1e-8);
                }
+
+               // check for myfish graph1
+               if(this->get_name()=="DNK000038349")
+                {
+                   cout << " isMetierBanned   "  << nodes.at(a_grd)->isMetierBanned(this->get_metier()->get_name()) << endl;
+                   cout << " isVsizeBanned   " << nodes.at(a_grd)->isVsizeBanned(this->get_length_class()) << endl;
+                }
+
            }
        }
 
@@ -3360,7 +3369,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
        for (int i=0; i<freq_grds.size(); ++i) sum_probas+=freq_grds.at(i);
        if(sum_probas<1e-5)
           {
-           cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
+          if(this->get_name()=="DNK000038349") cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
            return(1); // do nothing
           }
 

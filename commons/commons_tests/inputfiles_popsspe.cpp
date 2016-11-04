@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_e
 {
     vector<double> res;
     // Check for uninitialized values?
-    string test = "4 6 10.0 0 0 0 -1.5";
+    string test = "4 6 10.0 0 0 0 -1.5\n";
     vector<double> ex = {4,6,10.0,0,0,0,-1.5};
 
     std::istringstream ss(test);

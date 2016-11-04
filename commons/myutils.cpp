@@ -669,8 +669,11 @@ bool fill_in_fbar_ages_min_max(istream& in, vector<double>& fbar_ages_min_max)
         while (!in.eof())
         {
             std::string field;
-            in>> field;
-            fbar_ages_min_max.emplace_back (boost::lexical_cast<double>(field));
+            in >> field;
+            boost::trim(field);
+            if (!field.empty()) {
+                fbar_ages_min_max.emplace_back (boost::lexical_cast<double>(field));
+            }
         }
 
 #if 0

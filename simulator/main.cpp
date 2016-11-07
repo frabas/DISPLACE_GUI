@@ -1581,7 +1581,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
 
 		// input data, read a other landings per node for this species
-        map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder);
+        map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, sp, folder_name_parameterization, inputfolder, fleetsce);
         map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, inputfolder);
 
 		// input data, growth transition, percent_szgroup_per_age_matrix
@@ -3214,7 +3214,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        dout(cout  << "RE-READ DATA----------" << endl);
        string a_semester;
 
-       // EVENT => change of month
+       // RE-READ DATA FOR EVENT => change of month
        if(tstep>10 && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
        {
            int a_quarter_i=1;
@@ -3241,6 +3241,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            a_quarter= "quarter" + strg1.str();
            a_semester= "semester" + strg2.str();
 
+
+           // this month, re-read for vessel-related data
            if(dyn_alloc_sce.option(Options::area_monthly_closure))
            {
               cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
@@ -3274,10 +3276,20 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            }
 
 
+
+           // this month, re-read for population-related data
+           for (unsigned int i=0; i<populations.size(); i++)
+           {
+               // read a other landings per node for this species
+               map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
+               populations.at(i)->set_oth_land(oth_land);
+           }
+
+
        }
 
 
-        // EVENT => change of quarter
+        // RE-READ DATA FOR EVENT => change of quarter
 		if(tstep>2000 && binary_search (tsteps_quarters.begin(), tsteps_quarters.end(), tstep))
 			//   if(tstep==3 || tstep==4) // use this to start from another quarter if test...
 		{
@@ -3715,7 +3727,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 					// read a other landings per node for this species
-                    map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder);
+                    map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
 					populations.at(i)->set_oth_land(oth_land);
 
                     // read migration fluxes in proportion per size group (if any)

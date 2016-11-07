@@ -1985,7 +1985,7 @@ map<int, double> read_hyperstability_param(string folder_name_parameterization, 
 
 
 
-map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder)
+map<int, double> read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce)
 {
     // casting a_pop into a string
     stringstream out;
@@ -1993,14 +1993,13 @@ map<int, double> read_oth_land_nodes_with_pop(string a_semester, int a_pop, stri
     string a_pop_s = out.str();
 
     string filename;
-    if(folder_name_parameterization=="final")
+    if(fleetsce=="")
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_oth_land_per_month_per_node_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_semester+".dat";
     }
     else
     {
-        //=> NEW_VERSION: replaced by:
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_stecf_oth_land_per_month_per_node_"+a_month+"_fleetsce"+fleetsce+".dat";
     }
 
     ifstream file_oth_land;

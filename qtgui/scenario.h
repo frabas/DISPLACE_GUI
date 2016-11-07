@@ -53,6 +53,7 @@ private:
     QStringList dyn_alloc_sce;
     QStringList dyn_pop_sce;
     QString biolsce;
+    QString fleetsce;
     int freq_do_growth;
     int freq_redispatch_the_pop;
     int graph;
@@ -89,7 +90,9 @@ public:
 
     void setDyn_pop_sce(const QStringList &value);
     QString getBiolsce() const;
+    QString getFleetsce() const;
     void setBiolsce(const QString &value);
+    void setFleetsce(const QString &value);
     int getFreqDoGrowth() const;
     void setFreqDoGrowth(int value);
     int  getFreqDispatchThePop() const;

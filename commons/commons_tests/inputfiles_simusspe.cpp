@@ -58,6 +58,7 @@ struct print_log_value<displace::commons::Scenario>
               s1.dyn_pop_sce.toString() << "," <<
               s1.closure_opts << "," <<
               s1.biolsce << "," <<
+              s1.fleetsce << "," <<
               s1.freq_do_growth << "," <<
               s1.freq_redispatch_the_pop << "," <<
               s1.a_graph << "," <<
@@ -180,6 +181,8 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                   "# dyn_pop_sce\n"
                   "baseline\n"
                   "# biolsce\n"
+                  "1\n"
+                  "# fleetsce\n"
                   "1\n"
                   "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n"
                   "x\n";

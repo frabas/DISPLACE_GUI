@@ -110,6 +110,7 @@ extern displace::commons::Scenario scenario;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
+extern string fleetsce;
 extern int create_a_path_shop;
 extern deque<map<vertex_t, vertex_t> > path_shop;
 extern deque<map<vertex_t, weight_t> >  min_distance_shop;

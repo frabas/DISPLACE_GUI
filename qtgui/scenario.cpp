@@ -37,6 +37,7 @@ Scenario::Scenario()
     : dyn_alloc_sce("baseline"),
       dyn_pop_sce("baseline"),
       biolsce("1"),
+      fleetsce("2"),
       freq_do_growth(4),
       freq_redispatch_the_pop(3),
       graph(0),
@@ -99,6 +100,16 @@ QString Scenario::getBiolsce() const
 void Scenario::setBiolsce(const QString &value)
 {
     biolsce = value;
+}
+
+QString Scenario::getFleetsce() const
+{
+    return fleetsce;
+}
+
+void Scenario::setFleetsce(const QString &value)
+{
+    fleetsce = value;
 }
 
 void Scenario::setFreqDoGrowth(int value)
@@ -276,6 +287,7 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << endl;
 
     stream << "# biolsce\n" << biolsce << endl;
+    stream << "# fleetsce\n" << fleetsce << endl;
     stream << "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_do_growth << endl;
     stream << "# Frequency to redispatch the pop (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n" << freq_redispatch_the_pop << endl;
     stream << "# a_graph\n" << graph << endl;
@@ -320,6 +332,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
     s.setDyn_alloc_sce(alsce);
     s.setDyn_pop_sce(popsce);
     s.setBiolsce(QString(scenario.biolsce.c_str()));
+    s.setFleetsce(QString(scenario.fleetsce.c_str()));
     s.setFreqDoGrowth(scenario.freq_do_growth);
     s.setFreqDispatchThePop(scenario.freq_redispatch_the_pop);
     s.setGraph(scenario.a_graph);

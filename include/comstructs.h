@@ -32,6 +32,7 @@ struct Scenario {
     PopSceOptions dyn_pop_sce;
     ClosureOptions closure_opts;
     std::string biolsce;
+    std::string fleetsce;
     int freq_do_growth;
     int freq_redispatch_the_pop;
     int a_graph;
@@ -63,6 +64,7 @@ struct Scenario {
                 s1.dyn_pop_sce == s2.dyn_pop_sce &&
                 s1.closure_opts == s2.closure_opts &&
                 s1.biolsce == s2.biolsce &&
+                s1.fleetsce == s2.fleetsce &&
                 s1.freq_do_growth == s2.freq_do_growth &&
                 s1.freq_redispatch_the_pop == s2.freq_redispatch_the_pop &&
                 s1.a_graph == s2.a_graph &&

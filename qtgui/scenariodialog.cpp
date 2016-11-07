@@ -63,6 +63,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     setDynPop(mScen.getDyn_pop_sce());
     setDynAlloc(mScen.getDyn_alloc_sce());
     ui->biol_sce->setText(mScen.getBiolsce());
+    ui->fleet_sce->setText(mScen.getFleetsce());
     ui->agraph->setValue(mScen.getGraph());
     ui->freqDoGrowth->setValue(mScen.getFreqDoGrowth());
     ui->freqDispatchThePop->setValue(mScen.getFreqDispatchThePop());
@@ -170,6 +171,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setDyn_alloc_sce(optionsAlloc);
 
     mScen.setBiolsce(ui->biol_sce->text());
+    mScen.setFleetsce(ui->fleet_sce->text());
     mScen.setGraph(ui->agraph->value());
     mScen.setFreqDoGrowth(ui->freqDoGrowth->value());
     mScen.setFreqDispatchThePop(ui->freqDispatchThePop->value());

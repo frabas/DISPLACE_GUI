@@ -131,13 +131,13 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
     helpers::LineNumberReader reader;
 
     static const helpers::LineNumberReader::Specifications specs {
-        {1,"dyn_alloc_sce"},{3,"dyn_pop_sce"},{5,"biolsce"},{7,"freq_do_growth"},{9,"freq_redispatch_the_pop"},
-        {11,"a_graph"},{13,"nrow_coord"},{15,"nrow_graph"},{17,"a_port"},{19,"graph_res"},
-        {21,"is_individual_vessel_quotas"},{23,"check_all_stocks_before_going_fishing"},{25,"dt_go_fishing"},
-        {27,"dt_choose_ground"},{29,"dt_start_fishing"},{31,"dt_change_ground"},{33,"dt_stop_fishing"},
-        {35,"dt_change_port"},{37,"use_dtrees"},{39,"tariff_pop"},{41,"freq_update_tariff_code"},
-        {43,"arbitary_breaks_for_tariff"},{45,"total_amount_credited"},{47,"tariff_annual_hcr_percent_change"},
-        {49,"metier_closures"}
+        {1,"dyn_alloc_sce"},{3,"dyn_pop_sce"},{5,"biolsce"},{7,"fleetsce"},{9,"freq_do_growth"},{11,"freq_redispatch_the_pop"},
+        {13,"a_graph"},{15,"nrow_coord"},{17,"nrow_graph"},{19,"a_port"},{21,"graph_res"},
+        {23,"is_individual_vessel_quotas"},{25,"check_all_stocks_before_going_fishing"},{27,"dt_go_fishing"},
+        {29,"dt_choose_ground"},{31,"dt_start_fishing"},{33,"dt_change_ground"},{35,"dt_stop_fishing"},
+        {37,"dt_change_port"},{39,"use_dtrees"},{41,"tariff_pop"},{43,"freq_update_tariff_code"},
+        {45,"arbitary_breaks_for_tariff"},{47,"total_amount_credited"},{49,"tariff_annual_hcr_percent_change"},
+        {51,"metier_closures"}
     };
 
     if (!reader.importFromStream(stream, specs))
@@ -171,6 +171,7 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         scenario.closure_opts.setOption(Options::Closure_Opt::banned_metiers, metier_closures);
 
         scenario.biolsce=reader.get("biolsce");
+        scenario.fleetsce=reader.get("fleetsce");
         scenario.freq_do_growth=reader.getAs<int>("freq_do_growth");
         scenario.freq_redispatch_the_pop=reader.getAs<int>("freq_redispatch_the_pop");
         scenario.a_graph=reader.getAs<int>("a_graph");

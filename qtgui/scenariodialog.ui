@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>635</width>
-    <height>619</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Bio Sce</string>
+      <string>Bio Static Sce</string>
      </property>
     </widget>
    </item>
@@ -53,42 +53,38 @@
     <widget class="QLineEdit" name="biol_sce"/>
    </item>
    <item row="4" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Fleet Static Sce</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="fleet_sce"/>
+   </item>
+   <item row="5" column="0">
     <widget class="QLabel" name="label_9">
      <property name="text">
       <string>Freq do growth</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QSpinBox" name="freqDoGrowth">
      <property name="maximum">
       <number>100000</number>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
       <string>Freq dispatch</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QSpinBox" name="freqDispatchThePop">
-     <property name="maximum">
-      <number>100000</number>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>AGraph</string>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="1">
-    <widget class="QSpinBox" name="agraph">
+    <widget class="QSpinBox" name="freqDispatchThePop">
      <property name="maximum">
       <number>100000</number>
      </property>
@@ -102,55 +98,69 @@
     </widget>
    </item>
    <item row="7" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>AGraph</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QSpinBox" name="agraph">
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
     <widget class="QLabel" name="label_8">
      <property name="text">
       <string>N Row Coord</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <widget class="QSpinBox" name="nrowcoord">
      <property name="maximum">
       <number>1000000</number>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>N Row Graph</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <widget class="QSpinBox" name="nrowgraph">
      <property name="maximum">
       <number>1000000</number>
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
+   <item row="10" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>A Port</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
+   <item row="10" column="1">
     <widget class="QSpinBox" name="aport">
      <property name="maximum">
       <number>100000</number>
      </property>
     </widget>
    </item>
-   <item row="10" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>Grid Resolution</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="11" column="1">
     <widget class="QDoubleSpinBox" name="gridres">
      <property name="suffix">
       <string> km</string>
@@ -163,7 +173,7 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="0" colspan="2">
+   <item row="12" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Options</string>
@@ -317,7 +327,7 @@
      </layout>
     </widget>
    </item>
-   <item row="12" column="0" colspan="2">
+   <item row="13" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="rename">

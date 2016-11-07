@@ -456,6 +456,7 @@ bool DbHelper::loadScenario(Scenario &sce)
     sce.setDyn_alloc_sce(getMetadata("sce::dyn_alloc_sce").split(" "));
     sce.setDyn_pop_sce(getMetadata("sce::dyn_pop_sce").split(" "));
     sce.setBiolsce(getMetadata("sce::biol_sce"));
+    sce.setFleetsce(getMetadata("sce::fleet_sce"));
     sce.setFreqDoGrowth(getMetadata("sce::freq_do_growth").toInt());
     sce.setFreqDispatchThePop(getMetadata("sce::freq_redispatch_the_pop").toInt());
 
@@ -474,6 +475,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     setMetadata("sce::dyn_alloc_sce", sce.getDyn_alloc_sce().join(" "));
     setMetadata("sce::dyn_pop_sce", sce.getDyn_pop_sce().join(" "));
     setMetadata("sce::biol_sce", sce.getBiolsce());
+    setMetadata("sce::fleet_sce", sce.getFleetsce());
     setMetadata("sce::freq_do_growth", QString::number(sce.getFreqDoGrowth()));
     setMetadata("sce::freq_redispatch_the_pop", QString::number(sce.getFreqDispatchThePop()));
 

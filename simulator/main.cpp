@@ -3215,7 +3215,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        string a_semester;
 
        // RE-READ DATA FOR EVENT => change of month
-       if(tstep>10 && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+       if(tstep>700 && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
        {
            int a_quarter_i=1;
            int a_semester_i=1;
@@ -3727,8 +3727,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 					// read a other landings per node for this species
-                    map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
-					populations.at(i)->set_oth_land(oth_land);
+                    //map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
+                    //populations.at(i)->set_oth_land(oth_land);
 
                     // read migration fluxes in proportion per size group (if any)
                     multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, i, folder_name_parameterization, inputfolder, biolsce);

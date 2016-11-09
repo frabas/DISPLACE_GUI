@@ -3262,10 +3262,14 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         ground=this->should_i_choose_this_ground(tstep,
                                                  nodes,
                                                  idx_path_shop,
+                                                 dyn_alloc_sce,
                                                  path_shop,
                                                  min_distance_shop); // use ChooseGround dtree along all possible grounds to define the next ground
-        if(ground==-1) cout << "Bad probabilities defined in the ChooseGround dtree...need a revision" << endl;
-
+        if(ground==-1)
+        {
+        dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << endl);
+         return (1); // do_nothing i.e. stay on quayside
+        }
     } else{
 
        // ************focus_on_high_previous_cpue********************//
@@ -3370,7 +3374,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
        if(sum_probas<1e-5)
           {
           if(this->get_name()=="DNK000038349") cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
-           return(1); // do nothing
+           return(1); // do_nothing
           }
 
        vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
@@ -4068,6 +4072,7 @@ int Vessel::should_i_go_fishing(int tstep,
         if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::GoFishing))
 		{
 
+            // TO DO: use this->getWorkDayStartHour(); to replace the hardcoding here....
             if((tstep % 24)==4) // hardcoded 4.am
             {
 
@@ -4101,7 +4106,7 @@ int Vessel::should_i_go_fishing(int tstep,
 			// DEFAULT-------------------------
 			// by default, if rest time is over...GO!
 			// (assumption: note that this rest time, which is drawn from a gamma distrib,
-			//    do not change whatever the scenario, which can in some cases be weird?)
+            //    do not change whatever the scenario, which can in some cases be weird given potentials for temporal effort reallocation...)
             if(this->get_timeforrest()<1) {
                 unlock();
                 return(1);
@@ -4126,7 +4131,10 @@ int Vessel::should_i_go_fishing(int tstep,
 
 
 
-int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const vector<int> &idx_path_shop,
+int Vessel::should_i_choose_this_ground(int tstep,
+                                        vector<Node *> &nodes,
+                                        const vector<int> &idx_path_shop,
+                                        const DynAllocOptions& dyn_alloc_sce,
                                         const deque<map<vertex_t, vertex_t> > &path_shop,
                                         const deque<map<vertex_t, weight_t> > &min_distance_shop)
 {
@@ -4144,14 +4152,16 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
 
 
         // 1. grounds of that vessel
-        vector <int> grds= this->get_fgrounds();
+         vector <int> grds= this->get_fgrounds();
 
         // 2. Pre-computing of the variable all grds together
         // (if the variable in the tree, and if this variable need computing from all grounds altogether)
         // e.g. for smartCatch or highPotentialCatch
 
-          vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();
-          // check
+         // by default:
+         vector<int>  grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the IsInAreaClosure tree evaluation
+
+         // check
           /*
            cout << this->get_name() << " has ground in closure ? " << endl;
           for (unsigned int i=0; i<grds_in_closure.size();++i)
@@ -4160,6 +4170,44 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
              }
           cout << endl;
          */
+
+       if(dyn_alloc_sce.option(Options::area_monthly_closure))
+       {
+        // fill in in list of closed fgrounds
+        vector<int>  grds_in_closure(0);
+        for (int i=0; i<grds.size();++i)
+          {
+              if (
+                   nodes.at(grds.at(i))->isMetierBanned(this->get_metier()->get_name()) &&
+                   nodes.at(grds.at(i))->isVsizeBanned(this->get_length_class())
+                   )
+              {
+                  grds_in_closure.push_back(grds.at(i));
+              }
+
+              // check for myfish graph1
+              /*if(this->get_name()=="DNK000038349")
+               {
+                  if(grds_in_closure.size()>0)
+                  {
+                      cout << " with ChooseGround tree, isMetierBanned   "  << nodes.at(grds.at(i))->isMetierBanned(this->get_metier()->get_name()) << endl;
+                      cout << " with ChooseGround tree,  isVsizeBanned   " << nodes.at(grds.at(i))->isVsizeBanned(this->get_length_class()) << endl;
+                      cout << " so the list of fgrounds in closure is updated to : " << endl;
+                      for(int j=0; j <grds_in_closure.size(); ++j)
+                      {
+                         cout << " " << grds_in_closure.at(j);
+                      }
+                      cout << endl;
+                  }
+
+              }
+              */
+
+          }
+        this->set_fgrounds_in_closed_areas(grds_in_closure); // for the IsInAreaClosure tree evaluation
+       }
+
+
 
 
         if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::smartCatch) == true)
@@ -4465,8 +4513,8 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
  // if here, then no ground has actually been found
         // (because of 1- a *non-complete* tree;
         // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
-        cout << "no one among relevant grounds......take the last ground evaluated... "<< ground << endl;
-        if(relevant_grounds_to_evaluate.size()>0) return (ground);
+        dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground << endl);
+        if(relevant_grounds_to_evaluate.size()>0 && ground==-1) return (-1); // do_nothing
 
         // ultimately, use the freq_fgrounds...(e.g. when all nodes are in closed areas)
         vector <double> freq_grds = this->get_freq_fgrounds();
@@ -4488,7 +4536,8 @@ int Vessel::should_i_choose_this_ground(int tstep, vector<Node *> &nodes, const 
         // then sample...
         vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
         ground=grounds[0];
-  return(ground);
+
+return(ground);
 
 }
 

@@ -2283,6 +2283,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         // inform grounds in closed areas
+        // TO DO: TO BE REMOVED BECAUSE DEPRECATED (replaced by area_monthly_closure)
         const vector <int> &grds = vessels[i]->get_fgrounds();
         vector <int> fgrounds_in_closed_areas;
         for(unsigned int i=0; i<grds.size();++i){
@@ -3447,6 +3448,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->updateCalendar(calendars[v]);
 
                 // inform grounds in closed areas
+                // TO DO: TO BE REMOVED BECAUSE DEPRECATED
                 const vector<int> &new_grds = vessels.at(v)->get_fgrounds();
                 vector<int> fgrounds_in_closed_areas;
                 for(unsigned int i=0; i<new_grds.size();++i)
@@ -3454,6 +3456,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
                 }
                vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
+
 
                 // ...also for the particular cpue_nodes_species element
                 dout(cout << "re-set vessels step2..."  << endl);

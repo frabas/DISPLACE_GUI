@@ -3249,12 +3249,17 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
               cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
 
                // first of all restore initial freq_fgrounds
+               fgrounds      = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
                freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
                for (unsigned int v=0; v<vessels.size(); v++)
                   {
+                   spe_fgrounds      = find_entries_s_i(fgrounds, vessels.at(v)->get_name());
                    spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vessels.at(v)->get_name());
+
                    // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << "   spe_freq_fgrounds.size() is "<< spe_freq_fgrounds.size() << endl;
+                   vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
                    vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
+                   // (caution: always read and set spe_fgrounds and spe_freq_fgrounds both each time....)
 
                    double sum_probas=0.0;
                    for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
@@ -3948,8 +3953,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                }
                else
                {
-               dout(cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl);
+               cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
                fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
+               freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                }
 
                // update the harbour

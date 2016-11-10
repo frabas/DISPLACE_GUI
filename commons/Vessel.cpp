@@ -3199,8 +3199,11 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     const vector <int> &grds = this->get_fgrounds();
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // need to convert in array, see myRutils.cpp
+
+    //cout << "do_sample 2 " << freq_grds.size() << " " << grds.size() << " " << this->get_name() << endl;
     vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
     int ground=grounds[0];
+    //cout << "end do_sample 2" << endl;
 
 
     //2. get possible metiers on this ground
@@ -3212,6 +3215,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
     if(metiers_on_grd.size()!=0)
     {
+    //cout << "do_sample 1" << endl;
     vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
     this->set_metier(  metiers[ a_met.at(0) ]  );
     }
@@ -3377,6 +3381,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
            return(1); // do_nothing
           }
 
+       //cout << "do_sample 3" << endl;
        vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
        ground=grounds[0];
 
@@ -3462,7 +3467,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 								 // need to convert in array, see myRutils.cpp
            if(metiers_on_grd.size()!=0)
              {
-              vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
+               //cout << "do_sample 4" << endl;
+               vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
              this->set_metier(  metiers[ a_met.at(0) ]  );
              }
            else
@@ -3726,6 +3732,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
     if(metiers_on_grd.size()!=0)
       {
+       //cout << "do_sample 5" << endl;
       vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
       this->set_metier(  metiers[ a_met[0] ]  );
       }
@@ -3823,6 +3830,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 	{
 		vector <double> freq_harbs = this->get_freq_harbours();
 								 // need to convert in array, see myRutils.cpp
+        //cout << "do_sample 6" << endl;
         vector<int> harbours = do_sample(1, harbs.size(), harbs, freq_harbs);
 		arr = harbours[0];
 	}
@@ -4245,7 +4253,7 @@ int Vessel::should_i_choose_this_ground(int tstep,
                int current_metier = this->get_metier()->get_name();
                int nbpops         = nodes.at(a_node)->get_nbpops();
                const vector <int> &grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
-               vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
+               const vector <double>         &freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
                vector<vector<double> > experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
                multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
                multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
@@ -4257,6 +4265,7 @@ int Vessel::should_i_choose_this_ground(int tstep,
 
                if(grounds_from_harbours.at(0)!=a_node)
                {
+                   //cout << this->get_name() << "check size for do_sample() " << grounds_from_harbours.size() << " " << freq_grounds_from_harbours.size() << endl;
                    this->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                    this->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                    this->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
@@ -4534,6 +4543,7 @@ int Vessel::should_i_choose_this_ground(int tstep,
             freq_grds.at(n)= freq_grds.at(n)/cumul;
         }
         // then sample...
+        //cout << "do_sample 7" << endl;
         vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
         ground=grounds[0];
 

@@ -223,6 +223,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 }
                 // ***************make a probable decision*************************
                 vessels[ index_v ]->which_metier_should_i_go_for(metiers);
+                dout(cout << vessels[ index_v ]->get_name() << " should go for metier " << vessels[ index_v ]->get_metier()->get_name() << endl);
 
                 // the metier should help informing to which fish price time series the vessel will be look at
                 // if a decision on the fish price is used in the GoFishing dtree...

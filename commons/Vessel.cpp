@@ -3200,11 +3200,23 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // need to convert in array, see myRutils.cpp
 
+    // check
+    //cout << "which_metier_should_i_go_for says possible grds for " << this->get_name() << " are " << endl;
+    //for (int gr=0; gr<grds.size(); ++gr) cout << grds.at(gr) << '\t';
+    //cout << endl;
+
+    // check
+    //cout << "which_metier_should_i_go_for says possible freq_grds for " << this->get_name() << " are " << endl;
+    //for (int gr=0; gr<freq_grds.size(); ++gr) cout << freq_grds.at(gr) << '\t';
+    //cout << endl;
+
     //cout << "do_sample 2 " << freq_grds.size() << " " << grds.size() << " " << this->get_name() << endl;
     vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);
     int ground=grounds[0];
     //cout << "end do_sample 2" << endl;
 
+    // check
+    //cout << "which_metier_should_i_go_for says current looked ground for " << this->get_name() << " is " << ground << endl;
 
     //2. get possible metiers on this ground
     const multimap<int, int> &poss_met        = this->get_possible_metiers();
@@ -3213,11 +3225,35 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
                              // need to convert in array, see myRutils.cpp
 
+    // check
+    //cout << "which_metier_should_i_go_for says possible metiers for " << this->get_name() << " are " << endl;
+    //for ( std::multimap< int, int, std::less< int > >::const_iterator iter =poss_met.begin();
+    //      iter != poss_met.end(); ++iter )
+    //      cout << iter->first << '\t' << iter->second << '\n';
+    //cout << endl;
+
+    // check
+    //cout << "which_metier_should_i_go_for says freq possible metiers for " << this->get_name() << " are " << endl;
+    //for ( std::multimap< int, double, std::less< int > >::const_iterator iter =freq_poss_met.begin();
+    //      iter != freq_poss_met.end(); ++iter )
+    //      cout << iter->first << '\t' << iter->second << '\n';
+    //cout << endl;
+
+    // check
+    //cout << "which_metier_should_i_go_for says possible metiers_on_grd for " << this->get_name() << " are " << endl;
+    //for (int gr=0; gr<metiers_on_grd.size(); ++gr) cout << metiers_on_grd.at(gr) << '\t';
+    //cout << endl;
+
+    // check
+    //cout << "which_metier_should_i_go_for says possible freq_metiers_on_grd for " << this->get_name() << " are " << endl;
+    //for (int gr=0; gr<freq_metiers_on_grd.size(); ++gr) cout << freq_metiers_on_grd.at(gr) << '\t';
+    //cout << endl;
+
     if(metiers_on_grd.size()!=0)
     {
-    //cout << "do_sample 1" << endl;
     vector<int>    a_met = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
-    this->set_metier(  metiers[ a_met.at(0) ]  );
+    //cout << "a_met from do_sample is " << a_met.at(0) << " and size of metiers is " << metiers.size() << endl;
+    this->set_metier(  metiers.at(a_met.at(0))  );
     }
     else
     {
@@ -3225,6 +3261,8 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
         cout << "no metier found on that ground " << ground << " for vessel " << this->get_name() << "...apply a dangerous fix! (but please check input data)" << endl;
      this->set_metier(  metiers[ 0 ]  ); // dangerous fix
     }
+
+    //cout << this->get_name() << ", which_metier_should_i_go_for says metier " << this->get_metier()->get_name() << endl;
 
 
 }
@@ -3328,7 +3366,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
        }
 
        // ****************area_closure**********************************//
-       if (dyn_alloc_sce.option(Options::area_closure) || scenario.closure_opts.isMetierBanned(this->get_metier()->get_name()))
+       if (dyn_alloc_sce.option(Options::area_closure)  || scenario.closure_opts.isMetierBanned(this->get_metier()->get_name()))
        {
            //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
            // compliance => 0.0001
@@ -3377,9 +3415,10 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
        for (int i=0; i<freq_grds.size(); ++i) sum_probas+=freq_grds.at(i);
        if(sum_probas<1e-5)
           {
-          if(this->get_name()=="DNK000038349") cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
+          //if(this->get_name()=="DNK000038349") cout << "all the grounds are closed for this vessel " << this->get_name() << endl;
            return(1); // do_nothing
           }
+
 
        //cout << "do_sample 3" << endl;
        vector<int> grounds = do_sample(1, grds.size(), grds, freq_grds);

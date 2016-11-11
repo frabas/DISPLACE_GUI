@@ -1876,6 +1876,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        outc(cout << "metier " << iter->first << endl);
 	}
    cout << "nb metiers: " << name_metiers.size() << endl;
+   cout << "!!CAUTION!! nb metiers retrieved from the metier_gear_widths_param_a.dat file...do not forget the headers in this file! " << endl;
 
 	// creation of a vector of metier from input data...
     metiers = vector <Metier*> (name_metiers.size());
@@ -2179,6 +2180,21 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		// quarter specific to capture a piece of seasonality in the fishnig activity
         possible_metiers = read_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
         freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
+
+
+        // check
+        cout << "possible metiers for " << vesselids[i] << " are " << endl;
+        for ( std::multimap< int, int, std::less< int > >::const_iterator iter =possible_metiers.begin();
+              iter != possible_metiers.end(); ++iter )
+              cout << iter->first << '\t' << iter->second << '\n';
+        cout << endl;
+
+        // check
+        cout << "freq possible metiers for " << vesselids[i] << " are " << endl;
+        for ( std::multimap< int, double, std::less< int > >::const_iterator iter =freq_possible_metiers.begin();
+              iter != freq_possible_metiers.end(); ++iter )
+              cout << iter->first << '\t' << iter->second << '\n';
+        cout << endl;
 
 		//cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
         gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
@@ -3955,7 +3971,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                {
                cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
                fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
-               freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
+               //freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                }
 
                // update the harbour

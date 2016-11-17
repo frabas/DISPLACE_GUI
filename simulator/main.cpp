@@ -2182,6 +2182,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
 
 
+#if 0
         // check
         cout << "possible metiers for " << vesselids[i] << " are " << endl;
         for ( std::multimap< int, int, std::less< int > >::const_iterator iter =possible_metiers.begin();
@@ -2195,6 +2196,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
               iter != freq_possible_metiers.end(); ++iter )
               cout << iter->first << '\t' << iter->second << '\n';
         cout << endl;
+# endif
 
 		//cpue_per_stk_on_nodes = read_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization);
         gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
@@ -3969,7 +3971,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                }
                else
                {
-               cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl;
+               dout(cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl);
                fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                //freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                }

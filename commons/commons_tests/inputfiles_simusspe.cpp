@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
     displace::commons::Scenario res;
     displace::commons::Scenario ex = {
         DynAllocOptions(), PopSceOptions(), ClosureOptions(),
-        "1",
+        "1", "2",
         1, 2, 56, 10140, 57555, 6,
         7.1,
         true, false, true,
@@ -126,6 +126,8 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                            "baseline\n"
                            "# biolsce\n"
                            "1\n"
+                           "# fleetsce\n"
+                           "2\n"
                            "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n"
                            "1\n"
                            "# Frequency to redispatch the pop (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n"
@@ -184,6 +186,8 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
                   "1\n"
                   "# fleetsce\n"
                   "1\n"
+                  "# biolsce\n"
+                  "2\n"
                   "# Frequency to apply growth (0:daily; 1:weekly; 2:monthly; 3:quarterly; 4:semester)\n"
                   "x\n";
     is.str(test);

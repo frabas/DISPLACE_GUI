@@ -169,6 +169,7 @@ double tariff_annual_hcr_percent_change;
 
 bool is_tacs;
 bool is_fishing_credits;
+bool is_discard_ban;
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
@@ -933,6 +934,15 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     } else{
        is_fishing_credits=0;
     }
+
+    if(dyn_alloc_sce.option(Options::discard_ban))
+    {
+      is_discard_ban=1;
+    } else{
+       is_discard_ban=0;
+    }
+
+
 
     if (!OutputExporter::instantiate(pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;

@@ -41,6 +41,7 @@ static const char *dyn_alloc_options[] = {
     "reduced_speed_10percent",
     "shared_harbour_knowledge",
     "TACs",
+    "discard_ban",
     "LTMP",
     "FMSY",
     "fishing_credits",

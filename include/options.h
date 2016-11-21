@@ -83,6 +83,7 @@ enum Dyn_Alloc {
     alloc_baseline,
     focus_on_high_profit_grounds,
     TACs,
+    discard_ban,
     LTMP,
     FMSY,
     area_closure,

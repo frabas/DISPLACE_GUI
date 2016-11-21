@@ -29,6 +29,7 @@ DynAllocOptions::DynAllocOptions()
     M(mMap,"baseline", alloc_baseline);
     O(mMap,focus_on_high_profit_grounds);
     O(mMap,TACs);
+    O(mMap,discard_ban);
     O(mMap,LTMP);
     O(mMap,FMSY);
     M(mMap,"area_closure", area_closure);

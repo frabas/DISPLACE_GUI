@@ -1598,7 +1598,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 
 void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes,
                       vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, bool& is_individual_vessel_quotas,
-                      bool& check_all_stocks_before_going_fishing, bool& is_fishing_credits)
+                      bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_fishing_credits)
 {
     lock();
 
@@ -2146,10 +2146,21 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // (indeed, this might not correspond to 'tot_catch_per_pop' when no biomass
 					//   or when removals > than that is actually available)
 					double a_cumul_weight_this_pop_this_vessel=0;
-                    for(unsigned int a_szgroup = 0; a_szgroup < catch_per_szgroup.size(); a_szgroup++)
-					{
-						a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup];
-					}
+                    if(is_discard_ban)
+                    {
+                       for(unsigned int a_szgroup = 0; a_szgroup < catch_per_szgroup.size(); a_szgroup++)
+                       {
+                         a_cumul_weight_this_pop_this_vessel +=catch_per_szgroup[a_szgroup];
+                       }
+                    }
+                    else
+                    {
+                        for(unsigned int a_szgroup = 0; a_szgroup < landings_per_szgroup.size(); a_szgroup++)
+                        {
+                          a_cumul_weight_this_pop_this_vessel +=landings_per_szgroup[a_szgroup];
+                        }
+
+                    }
 
                     // the management is also applied the first year, (caution, the first year is also the calibration year)
                     if(is_tacs)
@@ -2185,17 +2196,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         else
 						{
                             dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
-                            this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
-                                                              remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
+                                   this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
+                                                                  remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
+
                         }
-					}
+                    }
 					// 3. get the global tac for this pop
                     dout(cout  << "BEFORE " << populations.at(pop)->get_landings_so_far());
 
-					double so_far = (populations.at(pop)->get_landings_so_far()) +
-						a_cumul_weight_this_pop_this_vessel;
+                    double so_far=0.0;
+                    so_far = (populations.at(pop)->get_landings_so_far()) +
+                            a_cumul_weight_this_pop_this_vessel;
 								 // "real-time" update, accounting for this last bit of catches
-					populations.at(pop)->set_landings_so_far(so_far);
+                    populations.at(pop)->set_landings_so_far(so_far);
 					// note that oth_land (per node) are also added to landings_so_far but at the start of each month.
 
                     dout(cout  << "the new catch is  " << tot_catch_per_pop[pop] << endl);

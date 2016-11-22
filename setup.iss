@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.2"
+#define MyAppVersion "0.9.3"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -47,6 +47,7 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\dtreeeditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\tsereditor.exe; DestDir: {app}; Flags: ignoreversion
+Source: build\{#Build}\objeditor.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\scheduler.exe; DestDir: {app}; Flags: ignoreversion
 Source: build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll; DestDir: {app}; Flags: ignoreversion

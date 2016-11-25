@@ -2,7 +2,7 @@ Source: displace
 Section: science
 Priority: optional
 Maintainer: Displace Project Development Team <devel@displace-project.org>
-Build-Depends: debhelper (>= 8.0.0), libgdal-dev (>= 1.11), libcgal-dev (>= 4.2), libgeographic-dev (>= 1.21), qtbase5-dev (>= 5.2.1), g++ (>= 4.8)
+Build-Depends: debhelper (>= 8.0.0), libgdal-dev (>= 1.11), libcgal-dev (>= 4.2), libgeographic-dev (>= 1.21), qtbase5-dev (>= 5.2.1), g++ (>= 4.8), qt56base(>= 5.6)
 Standards-Version: 3.9.4
 Homepage: http://displace-project.org
 #Vcs-Git: git://git.debian.org/collab-maint/displace.git

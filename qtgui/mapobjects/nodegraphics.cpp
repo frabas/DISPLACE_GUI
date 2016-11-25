@@ -26,8 +26,8 @@
 #include <palettemanager.h>
 #include <QMapControl/Projection.h>
 
-#define PIE_W 40.0
-#define PIE_H 40.0
+#define PIE_W 10.0
+#define PIE_H 10.0
 
 NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int indx)
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(PIE_W, PIE_H), 11, 7, 17),

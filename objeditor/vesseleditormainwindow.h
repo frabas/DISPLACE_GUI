@@ -34,6 +34,7 @@ public:
     static const QString ShippingFeaturesFilename;
     static const QString ShippingLanesCoordFilename;
     static const QString FishfarmsFeaturesFilename;
+    static const QString WindmillsFeaturesFilename;
 
 private slots:
     void on_browseInputPath_clicked();

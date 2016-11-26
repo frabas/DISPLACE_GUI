@@ -29,6 +29,7 @@
 #include <objects/vesselentity.h>
 #include <objects/shipentity.h>
 #include <objects/fishfarmentity.h>
+#include <objects/windmillentity.h>
 #include <objects/populationentity.h>
 #include <objects/benthosentity.h>
 #include <objects/metiersentity.h>
@@ -49,6 +50,7 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Fishing Vessels"),
     QT_TR_NOOP_UTF8("Shipping"),
     QT_TR_NOOP_UTF8("Fishfarms"),
+    QT_TR_NOOP_UTF8("Windmills"),
     QT_TR_NOOP_UTF8("Fish Populations"),
     QT_TR_NOOP_UTF8("Benthos"),
     QT_TR_NOOP_UTF8("Metiers"),
@@ -79,6 +81,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         entityTemplates[Vessels] = new objecttree::VesselEntity(this);
         entityTemplates[Ships] = new objecttree::ShipEntity(this);
         entityTemplates[Fishfarms] = new objecttree::FishfarmEntity(this);
+        entityTemplates[Windmills] = new objecttree::WindmillEntity(this);
         entityTemplates[Populations] = new objecttree::PopulationEntity(this);
         entityTemplates[Benthos] = new objecttree::BenthosEntity(this);
         entityTemplates[Metiers] = new objecttree::MetiersEntity(this);

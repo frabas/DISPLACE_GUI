@@ -49,6 +49,7 @@
 #include <modelobjects/vesseldata.h>
 #include <modelobjects/shipdata.h>
 #include <modelobjects/fishfarmdata.h>
+#include <modelobjects/windmilldata.h>
 #include <modelobjects/benthos.h>
 #include <modelobjects/metierdata.h>
 #include <modelobjects/populationdata.h>
@@ -175,6 +176,11 @@ public:
     int getFishfarmCount() const;
     QString getFishfarmId(int idx) const;
     void updateFishfarm (int idx, float x, float y);
+
+    const QList<std::shared_ptr<WindmillData> > &getWindmillList() const { return mWindmills; }
+    int getWindmillCount() const;
+    QString getWindmillId(int idx) const;
+    void updateWindmill (int idx, float x, float y);
 
     const QList<std::shared_ptr<ShipData> > &getShipList() const { return mShips; }
     int getShipCount() const;
@@ -408,6 +414,7 @@ protected:
     bool loadGraphs();
     bool initShips();
     bool initFishfarm();
+    bool initWindmill();
     bool initBenthos();
     bool initPopulations();
     bool initNations();
@@ -450,6 +457,7 @@ private:
     bool mVesselsStatsDirty;
     bool mShipsStatsDirty;
     bool mFishfarmStatsDirty;
+    bool mWindmillStatsDirty;
 
     Scenario mScenario;
     Config mConfig;
@@ -467,6 +475,7 @@ private:
     QList<std::shared_ptr<VesselData> > mVessels;
     QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<FishfarmData> > mFishfarms;
+    QList<std::shared_ptr<WindmillData> > mWindmills;
     QList<std::shared_ptr<Benthos> > mBenthos;
     QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
     QList<std::shared_ptr<NationData> > mNations;

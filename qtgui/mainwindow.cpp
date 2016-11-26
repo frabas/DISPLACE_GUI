@@ -29,6 +29,7 @@
 #include <objects/vesselentity.h>
 #include <objects/shipentity.h>
 #include <objects/fishfarmentity.h>
+#include <objects/windmillentity.h>
 #include <simulator.h>
 #include <editpalettedialog.h>
 
@@ -722,6 +723,12 @@ void MainWindow::centerMapOnFishfarmId(int id)
     centerMap(qmapcontrol::PointWorldCoord(h->mFishfarm->get_x(), h->mFishfarm->get_y()));
 }
 
+void MainWindow::centerMapOnWindmillId(int id)
+{
+    std::shared_ptr<WindmillData> h(currentModel->getWindmillList()[id]);
+    centerMap(qmapcontrol::PointWorldCoord(h->mWindmill->get_x(), h->mWindmill->get_y()));
+}
+
 
 void MainWindow::on_cmdStart_clicked()
 {
@@ -875,6 +882,10 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
     case ObjectTreeModel::Fishfarms:
         centerMapOnFishfarmId((dynamic_cast<objecttree::FishfarmEntity *>(treemodel->entity(index)))->getFishfarmId());
+        break;
+
+    case ObjectTreeModel::Windmills:
+        centerMapOnWindmillId((dynamic_cast<objecttree::WindmillEntity *>(treemodel->entity(index)))->getWindmillId());
         break;
 
     default:    // nothing to do

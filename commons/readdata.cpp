@@ -1512,6 +1512,25 @@ map<int, double> read_size_per_farm(string folder_name_parameterization, string 
     return(size_per_farm);
 }
 
+// FOR WINDMILLS
+map<int, double> read_size_per_windmill(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/size_per_farm.dat";
+
+    ifstream file_size_per_windmill;
+    file_size_per_windmill.open(filename.c_str());
+    if(file_size_per_windmill.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    map<int, double> size_per_windmill;
+    fill_map_from_specifications(file_size_per_windmill,  size_per_windmill);
+    file_size_per_windmill.close();
+
+    return(size_per_windmill);
+}
 
 // FOR SHIPPING LANES
 multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, string inputfolder)

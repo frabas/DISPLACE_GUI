@@ -57,6 +57,7 @@ DisplaceModel::DisplaceModel()
       mVesselsStatsDirty(false),
       mShipsStatsDirty(false),
       mFishfarmStatsDirty(false),
+      mWindmillStatsDirty(false),
       mScenario(),
       mConfig(),
       mInterestingPop(),
@@ -163,6 +164,7 @@ bool DisplaceModel::load(QString path, ModelType type)
             throw DisplaceException("Cannot read Ships Features");
 
         initFishfarm();
+        initWindmill();
         initBenthos();
         initPopulations();
         initNations();
@@ -511,6 +513,15 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         // Fishfarm stats are not saved on db, but loaded on the fly
        // mStatsFishfarms.insertValue(tstep, mStatsFishfarmCollected);
        // mFishfarmStatsDirty = false;
+    }
+
+    if (mWindmillStatsDirty || force) {
+        //if (mDb)
+        //    mDb->addWindmillStats (mLastStats, mStatsWindmillCollected);
+
+        // Fishfarm stats are not saved on db, but loaded on the fly
+       // mStatsWindmills.insertValue(tstep, mStatsWindmillCollected);
+       // mWindmillStatsDirty = false;
     }
 
     if (mCalendar && mCalendar->isYear(tstep)) {
@@ -1113,11 +1124,21 @@ int DisplaceModel::getFishfarmCount() const
     return mFishfarms.size();
 }
 
+int DisplaceModel::getWindmillCount() const
+{
+    return mWindmills.size();
+}
+
+
 QString DisplaceModel::getFishfarmId(int idx) const
 {
     return QString::number(mFishfarms.at(idx)->mFishfarm->get_name());
 }
 
+QString DisplaceModel::getWindmillId(int idx) const
+{
+    return QString::number(mWindmills.at(idx)->mWindmill->get_name());
+}
 
 void DisplaceModel::updateFishfarm(int idx, float x, float y)
 {
@@ -1130,6 +1151,16 @@ void DisplaceModel::updateFishfarm(int idx, float x, float y)
     }
 }
 
+void DisplaceModel::updateWindmill(int idx, float x, float y)
+{
+    std::shared_ptr<WindmillData> ff(mWindmills.at(idx));
+    ff->mWindmill->set_x(x);
+    ff->mWindmill->set_y(y);
+
+    if (mDb) {
+      //  mDb->addWindmillPosition(idx, ff);
+    }
+}
 
 
 int DisplaceModel::getBenthosCount() const
@@ -2175,6 +2206,23 @@ bool DisplaceModel::initFishfarm()
     return true;
 }
 
+
+bool DisplaceModel::initWindmill()
+{
+    map<int, double> init_size_per_windmill = read_size_per_windmill(mInputName.toStdString(), mBasePath.toStdString());
+
+   for (auto iter : init_size_per_windmill) {
+       cout<<"create windmill " << iter.first << endl;
+
+       auto node = mNodes.at(iter.first);
+       auto wm = std::make_shared<Windmill>(iter.first, node->mNode.get(), iter.second);
+
+       auto wmd = std::make_shared<WindmillData>(wm);
+       mWindmills.push_back(wmd);
+   }
+
+    return true;
+}
 
 
 bool DisplaceModel::initBenthos()

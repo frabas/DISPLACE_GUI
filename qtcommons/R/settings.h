@@ -48,6 +48,8 @@ public:
 
         static const QString GenerateFishfarmsFiles;
 
+        static const QString GenerateWindmillsFiles;
+
         static const QString GenerateBenthosFiles;
     };
 };

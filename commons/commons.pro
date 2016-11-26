@@ -33,6 +33,7 @@ SOURCES= \
     myutils.cpp \
     Population.cpp \
     Fishfarm.cpp \
+    Windmill.cpp \
     Node.cpp \
     Tac.cpp \
     Benthos.cpp \
@@ -61,6 +62,7 @@ HEADERS= \
     ../include/Population.h \
     ../include/biomodule.h \
     ../include/Fishfarm.h \
+    ../include/Windmill.h \
     ../include/Node.h \
     ../include/Tac.h \
     ../include/Benthos.h \

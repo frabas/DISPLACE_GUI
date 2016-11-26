@@ -94,6 +94,7 @@
 #include "Ship.h"
 #include "Population.h"
 #include "Fishfarm.h"
+#include "Windmill.h"
 
 #include "Harbour.h"
 
@@ -149,6 +150,7 @@ vector <Vessel*> vessels;
 vector <Ship*> ships;
 vector <Population* > populations;
 vector <Fishfarm* > fishfarms;
+vector <Windmill* > windmills;
 int tstep;
 int nbpops;
 int nbbenthospops;
@@ -1390,18 +1392,38 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
    dout(cout  << "---------------------------" << endl);
 
    map<int, double> init_size_per_farm = read_size_per_farm(folder_name_parameterization, inputfolder);
-   cout << "Do the pop files init_prop_migrants_pops_per_szgroup need a check?" << endl;
+   cout << "Do the size_per_farm need a check?" << endl;
 
 
    // get the name of the pops
    // copy only unique elements of init_pops_per_szgroup into name_pops
    // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
-   cout << "Do the name_pops creation  need a check?" << endl;
+   cout << "Does the name_pops creation  need a check?" << endl;
 
     for(map<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end(); iter = init_size_per_farm.upper_bound( iter->first ) ) {
         Fishfarm *ff = new Fishfarm(iter->first, nodes.at(iter->first), iter->second);
         fishfarms.push_back(ff);
     }
+
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " WINDMILLS-RELATED STUFFS " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+
+    map<int, double> init_size_per_windmill = read_size_per_windmill(folder_name_parameterization, inputfolder);
+    cout << "Does the size_per_windmill need a check?" << endl;
+
+
+    // get the name of the pops
+    // copy only unique elements of init_pops_per_szgroup into name_pops
+    // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
+    cout << "Do the name_pops creation  need a check?" << endl;
+
+     for(map<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound( iter->first ) ) {
+         Windmill *wm = new Windmill(iter->first, nodes.at(iter->first), iter->second);
+         windmills.push_back(wm);
+     }
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);

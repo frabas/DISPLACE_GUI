@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>12</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -428,6 +428,36 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tabWindmillSpecs">
+       <attribute name="title">
+        <string>Windmills Specfications</string>
+       </attribute>
+       <widget class="CsvSpecsPage" name="windmillsCsvPage" native="true">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>13</y>
+          <width>1041</width>
+          <height>661</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tabWindmillsScriptsPage">
+       <attribute name="title">
+        <string>Windmills Scripts</string>
+       </attribute>
+       <widget class="RunScriptsPage" name="windmillsScriptsPage" native="true">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>13</y>
+          <width>1221</width>
+          <height>641</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
       <widget class="QWidget" name="tabBenthosSpecs">
        <attribute name="title">
         <string>Benthos Specifications</string>
@@ -462,7 +492,7 @@
            <attribute name="title">
             <string>Shapefiles</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0" columnstretch="1,1">
+           <layout class="QGridLayout" name="gridLayout_4" rowstretch="0" columnstretch="1,1">
             <item row="0" column="0">
              <widget class="QListView" name="benthosShapefilesList"/>
             </item>

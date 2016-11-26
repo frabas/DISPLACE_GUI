@@ -76,6 +76,7 @@ class NodeMapObject;
 class VesselMapObject;
 class ShipMapObject;
 class FishfarmMapObject;
+class WindmillMapObject;
 class EdgeLayer;
 class EdgeMapObject;
 class HarbourData;
@@ -236,6 +237,7 @@ public:
     void updateVesselPosition (int model, int idx);
     void updateShipPosition (int model, int idx);
     void updateFishfarmPosition (int model, int idx);
+    void updateWindmillPosition (int model, int idx);
 
     void updateNodes(int model);
 
@@ -333,6 +335,7 @@ private:
     MapObjectContainer<VesselMapObject> mVesselObjects[MainWindow::MAX_MODELS];
     MapObjectContainer<ShipMapObject> mShipObjects[MainWindow::MAX_MODELS];
     MapObjectContainer<FishfarmMapObject> mFishfarmObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<WindmillMapObject> mWindmillObjects[MainWindow::MAX_MODELS];
     MapObjectContainer<EdgeMapObject> mEdgeObjects[MainWindow::MAX_MODELS];
 
 //    std::shared_ptr<PaletteManager> mPaletteManager[MainWindow::MAX_MODELS];

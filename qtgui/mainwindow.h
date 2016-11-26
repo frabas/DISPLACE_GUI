@@ -229,6 +229,7 @@ protected:
     void centerMapOnVesselId (int id);
     void centerMapOnShipId (int id);
     void centerMapOnFishfarmId(int id);
+    void centerMapOnWindmillId(int id);
 
     void showPaletteDialog(PaletteRole role);
 

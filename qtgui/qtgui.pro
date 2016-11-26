@@ -169,7 +169,10 @@ SOURCES += \
     mapobjects/shipmapobject.cpp \
     objects/shipentity.cpp \
     objects/metiersentity.cpp \
-    dialogs/graphexportproperties.cpp
+    dialogs/graphexportproperties.cpp \
+    objects/windmillentity.cpp \
+    modelobjects/windmilldata.cpp \
+    mapobjects/windmillobject.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -287,7 +290,10 @@ HEADERS += \
     modelobjects/metierdata.h \
     objects/metiersentity.h \
     nodepenalty.h \
-    dialogs/graphexportproperties.h
+    dialogs/graphexportproperties.h \
+    objects/windmillentity.h \
+    modelobjects/windmilldata.h \
+    mapobjects/windmillobject.h
 
 RESOURCES += \
     qtgui.qrc

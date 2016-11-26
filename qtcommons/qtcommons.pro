@@ -30,7 +30,8 @@ SOURCES += qcustomplot.cpp \
     appsettings.cpp \
     graphics/fishfarmgraphics.cpp \
     graphics/harbourgraphics.cpp \
-    graphics/shiplanesgraphics.cpp
+    graphics/shiplanesgraphics.cpp \
+    graphics/windmillgraphics.cpp
 
 HEADERS +=\
         qtcommons_global.h \
@@ -45,7 +46,8 @@ HEADERS +=\
     appsettings.h \
     graphics/fishfarmgraphics.h \
     graphics/harbourgraphics.h \
-    graphics/shiplanesgraphics.h
+    graphics/shiplanesgraphics.h \
+    graphics/windmillgraphics.h
 
 unix {
     target.path = /usr/lib

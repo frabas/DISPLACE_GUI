@@ -9,6 +9,7 @@
 #include <singlepointmapmodel.h>
 #include <linestringmapmodel.h>
 #include <graphics/fishfarmgraphics.h>
+#include <graphics/windmillgraphics.h>
 #include <graphics/harbourgraphics.h>
 #include <graphics/shiplanesgraphics.h>
 
@@ -45,6 +46,8 @@ const QString VesselEditorMainWindow::ShippingFeaturesFilename = "/SHIPPING/ship
 const QString VesselEditorMainWindow::ShippingLanesCoordFilename = "/SHIPPING/shipsspe_lanes_longlat.csv";
 
 const QString VesselEditorMainWindow::FishfarmsFeaturesFilename = "/FISHFARMS/fishfarms_features.csv";
+
+const QString VesselEditorMainWindow::WindmillsFeaturesFilename = "/WINDMILLS/windmills_features.csv";
 
 VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -109,6 +112,8 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
 
     mButtons[btn++] = ui->fishfarmsScriptsPage->addScriptButton(tr("Generate Fishfarms Files"), settings.getScriptPath(R::Settings::Scripts::GenerateFishfarmsFiles), func, onPushed);
 
+    mButtons[btn++] = ui->windmillsScriptsPage->addScriptButton(tr("Generate Windmills Files"), settings.getScriptPath(R::Settings::Scripts::GenerateWindmillsFiles), func, onPushed);
+
     mButtons[btn++] = ui->benthosScriptsPage->addScriptButton(tr("Generate Benthos landscapes on Nodes"), settings.getScriptPath(R::Settings::Scripts::GenerateBenthosFiles), func, onPushed);
 
     mButtons[btn++] = ui->simuScriptsPage->addScriptButton(tr("Generate Simulations Config Files"), settings.getScriptPath(R::Settings::Scripts::GenerateSimulationsConfigFiles), func, onPushed);
@@ -172,6 +177,16 @@ VesselEditorMainWindow::VesselEditorMainWindow(QWidget *parent) :
         return std::make_shared<FishfarmGraphics>(lat, lon);
     });
     ui->fishfarmsCsvPage->setMapControlGraphicsModel(spoint_mapmodel);
+
+    ui->windmillsCsvPage->enableMap();
+    ui->windmillsCsvPage->setupMapInitialDisplayConditions(center, zoom);
+    ui->windmillsCsvPage->setupIdLatLonCsvIndex(0,4,3);
+    spoint_mapmodel = std::make_shared<SinglePointMapModel>(ui->windmillsCsvPage->getMapControlWidget());
+    spoint_mapmodel->setGeometryBuilder([](float lat, float lon) {
+        return std::make_shared<WindmillGraphics>(lat, lon);
+    });
+    ui->windmillsCsvPage->setMapControlGraphicsModel(spoint_mapmodel);
+
 
     ui->harbourCsvPage2->enableMap();
     ui->harbourCsvPage2->setupMapInitialDisplayConditions(center, zoom);
@@ -282,7 +297,11 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->fishfarmsCsvPage->setFilename(ui->gisPath->text() + FishfarmsFeaturesFilename);
         ui->fishfarmsCsvPage->load();
         break;
-    case 11:    // Benthos Specs
+    case 11:     // Windmills specs
+        ui->windmillsCsvPage->setFilename(ui->gisPath->text() + WindmillsFeaturesFilename);
+        ui->windmillsCsvPage->load();
+        break;
+    case 13:    // Benthos Specs
         ui->benthosCsvPage1->setFilename(ui->gisPath->text() + "/HABITATS/prop_loss_on_habitat_after_one_passage_per_metier_per_sz.csv");
         ui->benthosCsvPage1->load();
         ui->benthosCsvPage2->setFilename(ui->gisPath->text() + "/HABITATS/tot_benthos_biomass_on_habitat_per_node_per_sz.csv");

@@ -42,7 +42,9 @@ SOURCES= main.cpp \
     inputfiles_harboursspe.cpp \
     inputfiles_benthosspe.cpp \
     inputfiles_fishfarmsspe.cpp \
-    inputfiles_simusspe.cpp
+    inputfiles_windmillsspe.cpp \
+    inputfiles_simusspe.cpp \
+    inputfiles_windmillsspe.cpp
 
 HEADERS=
 

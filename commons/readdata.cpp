@@ -1516,7 +1516,7 @@ map<int, double> read_size_per_farm(string folder_name_parameterization, string 
 map<int, double> read_size_per_windmill(string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/size_per_farm.dat";
+    string filename=  inputfolder+"/windmillsspe_"+folder_name_parameterization+"/size_per_windmill.dat";
 
     ifstream file_size_per_windmill;
     file_size_per_windmill.open(filename.c_str());

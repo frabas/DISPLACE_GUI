@@ -26,11 +26,10 @@
 #include <palettemanager.h>
 #include <QMapControl/Projection.h>
 
-#define PIE_W 10.0
-#define PIE_H 10.0
+QSettings NodeGraphics::settings;
 
 NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int indx)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(PIE_W, PIE_H), 11, 7, 17),
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(piew(), pieh()), 11, 7, 17),
       mNode(node),
       mController(controller),
       mModelIndex(indx),
@@ -64,13 +63,30 @@ void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &
     Q_UNUSED(rect);
 
     painter.setBrush(mSelected ? QBrush(Qt::red) : c);
-    painter.drawEllipse(-PIE_W / 2, -PIE_W / 2, PIE_W, PIE_H);
+    painter.drawEllipse(-piew() / 2, -piew() / 2, piew(), pieh());
     if (mSelected) {
         painter.setPen(QPen(QBrush(Qt::red), 3));
         painter.setBrush(Qt::transparent);
-        painter.drawRect(-PIE_W, -PIE_W, 2*PIE_W, 2*PIE_H);
+        painter.drawRect(-piew(), -piew(), 2*piew(), 2*pieh());
     }
 }
+
+int NodeGraphics::piew()
+{
+    return settings.value("piew", 40).toInt();
+}
+
+int NodeGraphics::pieh()
+{
+    return settings.value("pieh", 40).toInt();
+}
+
+void NodeGraphics::setPieSize(int w, int h)
+{
+    settings.setValue("piew", w);
+    settings.setValue("pieh", h);
+}
+
 
 
 void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)

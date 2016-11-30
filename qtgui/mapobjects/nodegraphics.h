@@ -25,6 +25,7 @@
 #include <modelobjects/nodedata.h>
 
 #include <QBrush>
+#include <QSettings>
 
 class MapObjectsController;
 
@@ -41,6 +42,14 @@ public:
 
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+
+public:
+    static int piew();
+    static int pieh();
+    static void setPieSize(int w, int h);
+
+private:
+    static QSettings settings;
 };
 
 class NodeWithPopStatsGraphics : public NodeGraphics {

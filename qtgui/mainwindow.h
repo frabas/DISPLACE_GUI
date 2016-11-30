@@ -205,6 +205,8 @@ private slots:
 
     void on_actionClear_configuration_triggered();
 
+    void on_actionSet_Node_Symbol_Size_triggered();
+
 public slots:
     void end_ShortestPathCreated(bool);
 

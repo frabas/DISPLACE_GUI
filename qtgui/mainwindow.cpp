@@ -32,6 +32,7 @@
 #include <objects/windmillentity.h>
 #include <simulator.h>
 #include <editpalettedialog.h>
+#include <mapobjects/nodegraphics.h>
 
 #include <inputfileexporter.h>
 #include <inputfileparser.h>
@@ -2532,5 +2533,19 @@ void MainWindow::on_actionClear_configuration_triggered()
     if (r == QMessageBox::Yes) {
         QSettings s;
         s.clear();
+    }
+}
+
+void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
+{
+    bool ok;
+    int sz = QInputDialog::getInt(this, tr("Set Node Symbol size"),
+                                  tr("Symbol size, in pixels:"),
+                                  NodeGraphics::pieh(), 0, 100, 1, &ok);
+
+    if (ok) {
+        NodeGraphics::setPieSize(sz, sz);
+        QMessageBox::information(this, tr("Node Symbol Size"),
+                                 tr("Nodes symbol size has changed, restart / reload the current model"));
     }
 }

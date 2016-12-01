@@ -1671,7 +1671,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double decrease_factor_on_benthos_funcgroup;
     for (unsigned int funcid=0; funcid< this->get_loc()->get_benthos_tot_biomass().size(); funcid++)
     {
-         dout(cout  << "before " << this->get_loc()->get_benthos_tot_biomass(funcid));
+       // if(swept_area>0.0001)
+       // {
+
+        dout(cout  << "before " << this->get_loc()->get_benthos_tot_biomass(funcid));
+        dout(cout  << "for the landscape is " << a_landscape);
+        dout(cout  << "and the metier " <<  this->get_metier()->get_name());
          decrease_factor_on_benthos_funcgroup= 1-(1-(loss_after_1_passage_per_func_group.at(funcid)*(swept_area/(graph_res*graph_res)) ) );
          outc (cout << "for this func " << funcid << " the loss_after_1_passage_per_func_group is "
                     << loss_after_1_passage_per_func_group.at(funcid) << " for this landscape "<< a_landscape
@@ -1679,6 +1684,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     << decrease_factor_on_benthos_funcgroup << endl);
          this->get_loc()->set_benthos_tot_biomass(funcid, this->get_loc()->get_benthos_tot_biomass(funcid)*(1-decrease_factor_on_benthos_funcgroup));
          dout(cout  << "after " << this->get_loc()->get_benthos_tot_biomass(funcid));
+       //}
+
     }
 
 	// NODE ATTRIBUTES

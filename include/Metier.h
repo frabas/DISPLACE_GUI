@@ -21,6 +21,7 @@
 #ifndef METIER_H
 #define METIER_H
 
+#include <commons_global.h>
 #include <string>
 #include <iostream>
 #include <list>
@@ -29,7 +30,7 @@
 
 using namespace std;
 
-class Metier
+class COMMONSSHARED_EXPORT Metier
 {
 	private:
         int name = -1;

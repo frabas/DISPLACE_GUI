@@ -21,13 +21,14 @@
 #ifndef COMSTRUCTS_H
 #define COMSTRUCTS_H
 
+#include <commons_global.h>
 #include <options.h>
 #include <cmath>
 
 namespace displace {
 namespace commons {
 
-struct Scenario {
+struct COMMONSSHARED_EXPORT Scenario {
     DynAllocOptions dyn_alloc_sce;
     PopSceOptions dyn_pop_sce;
     ClosureOptions closure_opts;

@@ -1,6 +1,7 @@
 #ifndef TIMESERIESMANAGER_H
 #define TIMESERIESMANAGER_H
 
+#include <commons_global.h>
 #include <vector>
 #include <map>
 #include <memory>
@@ -10,7 +11,7 @@ namespace simulation {
 
 class TimeSeries;
 
-class TimeSeriesManager
+class COMMONSSHARED_EXPORT TimeSeriesManager
 {
 public:
     enum Variables { Fishprice = 0, Fuelprice, WSpeed,

@@ -21,6 +21,8 @@
 #ifndef FISHFARM_H
 #define FISHFARM_H
 
+#include <commons_global.h>
+
 #include <vector>
 #include <map>
 #include <string>
@@ -28,7 +30,7 @@
 #include "myutils.h"
 #include "Node.h"
 
-class Fishfarm
+class COMMONSSHARED_EXPORT Fishfarm
 {
     public:
         Fishfarm(int _name, Node *_node, double size);

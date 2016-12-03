@@ -1,6 +1,8 @@
 #ifndef BINARYGRAPHFILEWRITER_H
 #define BINARYGRAPHFILEWRITER_H
 
+#include <formats_globals.h>
+
 #include <utils/endian.h>
 
 #include <string>
@@ -17,7 +19,7 @@ namespace legacy {
 using namespace displace::formats::helpers;
 
 template <typename Key, typename Value>
-class BinaryGraphFileWriter {
+class FORMATSSHARED_EXPORT BinaryGraphFileWriter {
 
     FILE *mFile = nullptr;
 public:

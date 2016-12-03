@@ -22,7 +22,11 @@
 #include <tseries/timeseriesmanager.h>
 #include <tseries/timeseries.h>
 
+#if defined (_MSC_BUILD)
+#include <msvc/dirent.h>
+#else
 #include <dirent.h>
+#endif
 
 #include <string>
 #include <iostream>

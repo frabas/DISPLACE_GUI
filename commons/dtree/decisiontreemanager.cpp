@@ -26,7 +26,13 @@
 #include <comstructs.h>
 
 #include <string.h>
+
+#if defined(_MSC_BUILD)
+#include <msvc/dirent.h>
+#else
 #include <dirent.h>
+#endif
+
 #include <iostream>
 #include <fstream>
 

@@ -1,6 +1,7 @@
 #ifndef DECISIONTREE_H
 #define DECISIONTREE_H
 
+#include <commons_global.h>
 #include <dtree/decisiontreemanager.h>
 #include <list>
 #include <memory>
@@ -9,7 +10,7 @@ namespace dtree {
 
 class Node;
 
-class DecisionTree : public std::enable_shared_from_this<DecisionTree>
+class COMMONSSHARED_EXPORT DecisionTree : public std::enable_shared_from_this<DecisionTree>
 {
 public:
     DecisionTree();

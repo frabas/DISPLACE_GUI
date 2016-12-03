@@ -21,6 +21,7 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
+#include <commons_global.h>
 #include <vector>
 #include <map>
 #include <string>
@@ -29,7 +30,7 @@
 #include "Node.h"
 #include "Tac.h"
 
-class Population
+class COMMONSSHARED_EXPORT Population
 {
 	public:
         Population(int name,

@@ -41,6 +41,8 @@
 #ifndef GUIPROTO_STRUCT_H
 #define GUIPROTO_STRUCT_H
 
+#include <commons_global.h>
+
 /** @brief Message type, defines how should be interpreted the next data block */
 struct gui_msgtype {
     enum { CURRSTEP,
@@ -49,11 +51,11 @@ struct gui_msgtype {
          type;
 };
 
-struct gui_currstep {
+struct COMMONSSHARED_EXPORT gui_currstep {
     unsigned int tstep;
 };
 
-struct gui_movevessel {
+struct COMMONSSHARED_EXPORT gui_movevessel {
     unsigned int vid;
 };
 

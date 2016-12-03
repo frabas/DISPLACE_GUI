@@ -21,19 +21,20 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include<vector>
+#include <commons_global.h>
+#include <vector>
 #include <algorithm>
 #include<string>
 #include<map>
 #include "myutils.h"
 #include "myRutils.h"
 
-#include <pthread.h>
+#include <mutex>
 
 
 using namespace std;
 
-class Node
+class COMMONSSHARED_EXPORT Node
 {
 	public:
 
@@ -59,8 +60,8 @@ class Node
 		/**  destructor */
 		~Node();
 
-        void lock() { pthread_mutex_lock (&mutex); }
-        void unlock() { pthread_mutex_unlock (&mutex); }
+        void lock() { mutex.lock(); }
+        void unlock() { mutex.unlock(); }
 
 		int get_idx_node() const;
 		int get_code_area() const;
@@ -284,6 +285,6 @@ private:
 
         int area_type;
 
-        pthread_mutex_t mutex;
+        std::mutex mutex;
 };
 #endif							 // NODE_H

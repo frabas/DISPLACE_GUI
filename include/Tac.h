@@ -21,13 +21,14 @@
 #ifndef TAC_H
 #define TAC_H
 
+#include <commons_global.h>
 #include <vector>
 #include <map>
 #include <string>
 #include <iostream>
 #include "myutils.h"
 
-class Tac
+class COMMONSSHARED_EXPORT Tac
 {
 
 	public:

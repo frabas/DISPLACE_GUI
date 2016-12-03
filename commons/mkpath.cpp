@@ -33,14 +33,15 @@
 #include <errno.h>
 #include <string.h>
 
-#ifdef __WIN32
+#if defined(__WIN32) || defined(_MSC_BUILD)
+#include <direct.h>
 
 /* on mingw/windows there's no such function, so ignore permission */
 static int __cdecl mkdir(const char *const path, int permissions) {
     return mkdir(path);
 }
 
-#endif
+#else
 
 /* Code taken directly from mkdir(1).
 
@@ -77,3 +78,4 @@ int mkpath(const char * const path, int perms)
 	return (0);
 }
 
+#endif

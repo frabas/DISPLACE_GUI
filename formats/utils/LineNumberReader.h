@@ -5,6 +5,8 @@
 #ifndef DISPLACE_LINENUMBERREADER_H
 #define DISPLACE_LINENUMBERREADER_H
 
+#include <formats_globals.h>
+
 #include <formatexception.h>
 
 #include <map>
@@ -19,7 +21,7 @@ namespace displace {
     namespace formats {
         namespace helpers {
 
-            class LineNumberReader {
+            class FORMATSSHARED_EXPORT LineNumberReader {
             public:
                 using Specifications = std::map<int, std::string>;
 
@@ -37,7 +39,7 @@ namespace displace {
                         if (v.empty())
                             return T();
                         return boost::lexical_cast<T>(v);
-                    } catch (boost::bad_lexical_cast &x) {
+                    } catch (boost::bad_lexical_cast &) {
                         std::stringstream ss;
                         ss << "Bad format for key '" << key << "' value '" << get(key) << "'";
                         throw FormatException(ss.str());

@@ -4,11 +4,14 @@
 class Vessel;
 class Node;
 
+#include <commons_global.h>
+
+
 namespace dtree {
 
 /** \brief An abstract class to allow internal/External states to be evaluated
  */
-class StateEvaluator
+class COMMONSSHARED_EXPORT StateEvaluator
 {
 public:
     StateEvaluator() {}

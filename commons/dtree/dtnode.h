@@ -1,6 +1,7 @@
 #ifndef DTNODE_H
 #define DTNODE_H
 
+#include <commons_global.h>
 #include <dtree/variables.h>
 
 #include <memory>
@@ -15,7 +16,7 @@ class NodeExtra;
 /** \brief a decision tree node.
  *
  */
-class Node
+class COMMONSSHARED_EXPORT Node
 {
 public:
     explicit Node(std::shared_ptr<DecisionTree> node);

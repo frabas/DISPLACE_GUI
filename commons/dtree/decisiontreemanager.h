@@ -1,6 +1,7 @@
 #ifndef DECISIONTREEMANAGER_H
 #define DECISIONTREEMANAGER_H
 
+#include <commons_global.h>
 #include <dtree/variables.h>
 
 #include <string>
@@ -21,7 +22,7 @@ class DecisionTree;
 /** \brief A class that implements a Singleton for managing the Decision Trees for vessels
  *
  * */
-class DecisionTreeManager
+class COMMONSSHARED_EXPORT DecisionTreeManager
 {
 private:
     DecisionTreeManager();

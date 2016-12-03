@@ -41,11 +41,12 @@
 #ifndef MEMORYINFO_H
 #define MEMORYINFO_H
 
+#include <commons_global.h>
 #include <stddef.h>
 
 class MemoryInfoImpl;
 
-class MemoryInfo
+class COMMONSSHARED_EXPORT MemoryInfo
 {
 public:
     MemoryInfo();

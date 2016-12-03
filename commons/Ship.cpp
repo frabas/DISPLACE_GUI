@@ -36,8 +36,7 @@
 
 Ship::Ship()
 {
- pthread_mutex_init(&mutex,0);
- idx_ship = 0;
+    idx_ship = 0;
 }
 
 
@@ -56,7 +55,6 @@ Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_fl
            double a_vmax, double a_vcruise,
            vector<double> a_longs, vector<double> a_lats)
 {
- pthread_mutex_init(&mutex,0);
     count=0;
     idx_ship = idx;
 	origin_x =a_longs[0];

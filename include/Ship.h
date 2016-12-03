@@ -20,6 +20,9 @@
 
 #ifndef SHIP_H
 #define SHIP_H
+
+#include <commons_global.h>
+
 #include "myutils.h"
 #include "Node.h"				 // to get the inline functions...
 #include<vector>
@@ -28,9 +31,9 @@
 #include <list>
 
 
-#include <pthread.h>
+#include <mutex>
 
-class Ship
+class COMMONSSHARED_EXPORT Ship
 {
 	private:
 		string name;
@@ -49,7 +52,7 @@ class Ship
 
         double cumul_fueluse;
 
-        pthread_mutex_t mutex;
+        std::mutex mutex;
 
     public:
         Ship(int idx, string name,  double imo, double yearbuild, string flag,
@@ -62,8 +65,8 @@ class Ship
 		Ship();
 		~Ship();
 
-        void lock() { pthread_mutex_lock (&mutex); }
-        void unlock() { pthread_mutex_unlock (&mutex); }
+        void lock() { mutex.lock(); }
+        void unlock() { mutex.unlock(); }
 
 
 		// getters

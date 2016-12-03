@@ -22,7 +22,7 @@
 #include <vector>
 #include <time.h>
 #include <cmath>
-#include <pthread.h>
+#include <mutex>
 
 #include <helpers.h>
 
@@ -39,33 +39,31 @@ using namespace std;
 //----------------------------------
 /* A version of Marsaglia-MultiCarry */
 
-static pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
+static std::mutex glob_mutex;
 static unsigned int I1=1234, I2=5678;
 
 void set_seed(unsigned int i1, unsigned int i2)
 {
-    pthread_mutex_lock(&glob_mutex);
+    std::lock_guard<std::mutex> lock(glob_mutex);
     I1 = i1; I2 = i2;
-    pthread_mutex_unlock(&glob_mutex);
 }
 
 
 void get_seed(unsigned int *i1, unsigned int *i2)
 {
-    pthread_mutex_lock(&glob_mutex);
+    std::lock_guard<std::mutex> lock(glob_mutex);
     *i1 = I1; *i2 = I2;
-    pthread_mutex_unlock(&glob_mutex);
 }
 
 
 double unif_rand(void)
 {
-    pthread_mutex_lock(&glob_mutex);
+    std::lock_guard<std::mutex> lock(glob_mutex);
 
     I1= 36969*(I1 & 0177777) + (I1>>16);
     I2= 18000*(I2 & 0177777) + (I2>>16);
     double ret =((I1 << 16)^(I2 & 0177777)) * 2.328306437080797e-10;
-    pthread_mutex_unlock(&glob_mutex);
+
     return ret;
 }
 

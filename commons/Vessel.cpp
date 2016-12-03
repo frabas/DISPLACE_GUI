@@ -65,8 +65,6 @@ Vessel::~Vessel()
 
 Vessel::Vessel(Node* p_location, int idx, string a_name)
 {
-    pthread_mutex_init(&mutex,0);
-
 	m_location = p_location;
 	idx_vessel = idx;
 	p_location->set_vid(idx_vessel);
@@ -102,8 +100,6 @@ double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
 double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, int _firm_id, VesselCalendar cd)
     : calendar(cd)
 {
-    pthread_mutex_init(&mutex,0);
-
 	m_location = p_location;
 	idx_vessel = a_idx_vessel;
     firm_id=_firm_id;
@@ -289,7 +285,6 @@ void Vessel::init()
 Vessel::Vessel(string name, Node* a_location)
 : name(name), m_location(a_location)
 {
-    pthread_mutex_init(&mutex,0);
 }
 
 

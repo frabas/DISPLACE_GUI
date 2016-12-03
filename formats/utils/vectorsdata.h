@@ -28,7 +28,7 @@ std::vector<ResultType> stringToVector(std::string string, const char *separator
         try {
             ResultType v = boost::lexical_cast<ResultType>(x);
             c.push_back(v);
-        } catch (boost::bad_lexical_cast &ex) {
+        } catch (boost::bad_lexical_cast &) {
             std::stringstream ss;
             ss << "Bad format for value '" << x << "'";
             throw FormatException(ss.str());

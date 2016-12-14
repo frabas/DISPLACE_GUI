@@ -352,7 +352,7 @@ void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder
 
         // Check for shapefile inclusion
 
-        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end() && zone == 0; ++it) {
+        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = including.begin(); it != including.end() && zone != 1; ++it) {
             for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
                 OGRLayer *layer = (*it)->GetLayer(lr);
                 layer->ResetReading();
@@ -365,7 +365,7 @@ void GraphBuilder::fillWithNodes (displace::graphbuilders::GeographicGridBuilder
             }
         }
 
-        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end() && zone == 0; ++it) {
+        for (std::vector<std::shared_ptr<OGRDataSource> >::iterator it = excluding.begin(); it != excluding.end() && zone != 3; ++it) {
             for (int lr = 0; lr < (*it)->GetLayerCount(); ++lr) {
                 OGRLayer *layer = (*it)->GetLayer(lr);
                 layer->ResetReading();

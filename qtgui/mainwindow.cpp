@@ -1504,6 +1504,7 @@ void MainWindow::on_actionCreate_Graph_triggered()
         wdlg->setProgress(false, 100);
 
         GraphBuilderWorker *wrkr = new GraphBuilderWorker(this, gb, wdlg);
+        connect(wrkr, SIGNAL(totalChanged(int)), wdlg, SLOT(setTotal(int)));
         startBackgroundOperation(wrkr, wdlg);
     }
 }

@@ -9,6 +9,7 @@ class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedbac
     GraphBuilder *builder;
     WaitDialog *waitDialog;
     QList<GraphBuilder::Node> result;
+
 public:
     GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg)
         : BackgroundWorker(win),

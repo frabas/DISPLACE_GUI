@@ -61,6 +61,7 @@ signals:
     void workStarted();
     void workEnded();
     void progress(int n);
+    void totalChanged(int tot);
     void warning(QString,QString);
     void completed (bool success);
 

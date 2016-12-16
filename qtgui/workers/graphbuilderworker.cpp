@@ -9,7 +9,7 @@ void GraphBuilderWorker::execute()
 
 void GraphBuilderWorker::setMax (int m)
 {
-    waitDialog->setProgress(true, m);
+    emit totalChanged(m);
 }
 
 void GraphBuilderWorker::setStep(int step)

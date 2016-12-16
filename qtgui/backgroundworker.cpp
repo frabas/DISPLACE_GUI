@@ -51,6 +51,7 @@ BackgroundWorkerWithWaitDialog::BackgroundWorkerWithWaitDialog(MainWindow *main,
       mAborted(false)
 {
     connect (this, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
+    connect (this, SIGNAL(totalChanged(int)), mWaitDialog, SLOT(setTotal(int)));
     connect (this, SIGNAL(messageChanged(QString)), mWaitDialog, SLOT(setText(QString)));
     connect (this, SIGNAL(progressBarVisibilityChanged(bool,int)), mWaitDialog, SLOT(setProgress(bool,int)));
     connect (this, SIGNAL(abortButtonVisibilityChanged(bool)), mWaitDialog, SLOT(enableAbort(bool)));

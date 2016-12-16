@@ -70,6 +70,14 @@ void WaitDialog::setProgress(int pos, int max)
     ui->progress->setMaximum(max);
 }
 
+void WaitDialog::setTotal(int max)
+{
+    if (!ui->progress->isVisible())
+        ui->progress->setVisible(true);
+    ui->progress->setMinimum(0);
+    ui->progress->setMaximum(max);
+}
+
 void WaitDialog::enableAbort(bool enable)
 {
     if (enable)

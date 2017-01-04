@@ -7,7 +7,7 @@ CONFIG += c++11
 DESTDIR = ../
 
 DEFINES=
-INCLUDEPATH=../include ../commons
+INCLUDEPATH+=../include ../commons
 
 macx {
     DESTDIR=$$EXEDESTDIR

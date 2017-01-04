@@ -34,9 +34,10 @@ BOOST_AUTO_TEST_CASE( test_coord_dat )
     std::vector<double> exp_x {1.0, 2.5, 3.0};
     std::vector<double> exp_y {0.5, 3.0, 3.5};
     std::vector<int> exp_harb {1, 2, 3};
+    bool r;
 
-    fill_from_coord(is, x, y, harb, 3);
-
+    r = fill_from_coord(is, x, y, harb, 3);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_x.begin(), exp_x.end(), x.begin(), x.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_y.begin(), exp_y.end(), y.begin(), y.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_harb.begin(), exp_harb.end(), harb.begin(), harb.end());
@@ -64,8 +65,10 @@ BOOST_AUTO_TEST_CASE( test_graph_dat )
     std::vector<int> exp_t {2, 3, 1};
     std::vector<int> exp_w {1, 2, 3};
 
-    fill_from_graph(is, f, t, w, 3);
+    bool r;
 
+    r = fill_from_graph(is, f, t, w, 3);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_f.begin(), exp_f.end(), f.begin(), f.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_t.begin(), exp_t.end(), t.begin(), t.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_w.begin(), exp_w.end(), w.begin(), w.end());
@@ -83,8 +86,10 @@ BOOST_AUTO_TEST_CASE (test_code_area_for_graph_points_dat)
 
     std::vector<int> i;
     std::vector<int> exp_i {1,2,3};
+    bool r;
 
-    fill_from_code_area(is, i, 3);
+    r = fill_from_code_area(is, i, 3);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
 }
 
@@ -98,8 +103,10 @@ BOOST_AUTO_TEST_CASE ( test_fill_from_code_marine_landscape_dat )
 
     std::vector<int> i;
     std::vector<int> exp_i {1,2,3};
+    bool r;
 
-    fill_from_code_marine_landscape(is, i, 3);
+    r = fill_from_code_marine_landscape(is, i, 3);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
 }
 
@@ -117,8 +124,10 @@ BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
     std::vector<int> nd2 {5,6,7};
     std::vector<int> nd3 {100};
     std::vector<NodeBanningInfo> ban;
+    bool r;
 
-    read_metier_closures(is1, " ", ban);
+    r = read_metier_closures(is1, " ", ban);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(1, ban[0].nodeId);
     BOOST_CHECK_EQUAL_COLLECTIONS(nd1.begin(), nd1.end(), ban[0].banned.begin(), ban[0].banned.end());
     BOOST_CHECK_EQUAL(2, ban[1].nodeId);
@@ -129,7 +138,15 @@ BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
     std::istringstream is2;
     std::vector<NodeBanningInfo> ban2;
 
-    read_metier_closures(is2, " ", ban2);
+    r = read_metier_closures(is2, " ", ban2);
+    BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(0, ban2.size());
+
+    std::istringstream is3("5 x 1 2 3 4   \n"
+                          "4 2 y 6 7 \n"
+                          "1001 3 100 \r\n" // three infos
+                            );
+    r = read_metier_closures(is3, " ", ban2);
+    BOOST_CHECK(!r);
 }
 

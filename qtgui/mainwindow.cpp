@@ -1380,7 +1380,7 @@ void MainWindow::on_actionImport_Shapefile_triggered()
 
     QSettings sets;
     QString name =  QFileDialog::getOpenFileName(this, tr("Import shapefile"),
-                                         sets.value("import_shape").toString());
+                                         sets.value("import_shape").toString(), tr("*.shp;;*.*"));
 
     if (!name.isEmpty()) {
         QFileInfo info (name);

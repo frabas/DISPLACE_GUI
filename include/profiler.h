@@ -64,14 +64,14 @@ class AverageProfiler {
 private:
 #ifdef PROFILE
     struct timespec mstart;
-    double mcumtime;
+    double mcumtime, mMin, mMax;
     int mcumrun;
 #endif
 
 public:
     AverageProfiler()
 #ifdef PROFILE
-        : mstart(), mcumtime(0.0), mcumrun(0)
+        : mstart(), mcumtime(0.0), mcumrun(0), mMin(0), mMax(0)
 #endif
     {
 #ifdef PROFILE
@@ -87,6 +87,14 @@ public:
         double t = (double)now.tv_sec + (double)now.tv_nsec * 1e-9 - frm;
         mstart = now;
         mcumtime += t;
+        if (mcumrun == 0) {
+            mMin = t;
+            mMax = t;
+        } else {
+            mMin = std::min(mMin,t);
+            mMax = std::max(mMax,t);
+        }
+
         ++mcumrun;
         return t;
 #else
@@ -115,6 +123,9 @@ public:
         return 0.0;
 #endif
     }
+
+    double min() const { return mMin; }
+    double max() const { return mMax; }
 
     double total() {
 #ifdef PROFILE

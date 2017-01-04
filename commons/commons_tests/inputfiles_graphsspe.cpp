@@ -41,6 +41,14 @@ BOOST_AUTO_TEST_CASE( test_coord_dat )
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_x.begin(), exp_x.end(), x.begin(), x.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_y.begin(), exp_y.end(), y.begin(), y.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_harb.begin(), exp_harb.end(), harb.begin(), harb.end());
+
+    std::istringstream is2("3.0\r\n" // Long
+                          "1s.5\n"   // Lat
+                          "3  "     // harbour idx
+                          );
+
+    r = fill_from_coord(is2, x, y, harb, 1);
+    BOOST_CHECK(!r);
 }
 
 BOOST_AUTO_TEST_CASE( test_graph_dat )
@@ -72,6 +80,13 @@ BOOST_AUTO_TEST_CASE( test_graph_dat )
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_f.begin(), exp_f.end(), f.begin(), f.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_t.begin(), exp_t.end(), t.begin(), t.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_w.begin(), exp_w.end(), w.begin(), w.end());
+
+    std::istringstream is2("3\r\n" // from
+                          "1x\n"   // To
+                          "3.2  "  // Weights
+                          );
+    r = fill_from_graph(is2, f, t, w, 1);
+    BOOST_CHECK(!r);
 }
 
 BOOST_AUTO_TEST_CASE (test_code_area_for_graph_points_dat)
@@ -91,6 +106,14 @@ BOOST_AUTO_TEST_CASE (test_code_area_for_graph_points_dat)
     r = fill_from_code_area(is, i, 3);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
+
+    std::istringstream is2("0\n0\n"   // ignored
+                          "0\n0\n"   // ignored
+                          "1x \n"
+                          "3\r\n" // three infos
+                            );
+    r = fill_from_code_area(is2, i, 2);
+    BOOST_CHECK(!r);
 }
 
 BOOST_AUTO_TEST_CASE ( test_fill_from_code_marine_landscape_dat )

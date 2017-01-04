@@ -1117,7 +1117,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	vector<double> graph_coord_x;
 	vector<double> graph_coord_y;
 	vector<int> graph_coord_harbour;
-	fill_from_coord(coord_graph, graph_coord_x, graph_coord_y, graph_coord_harbour, nrow_coord);
+    if (!fill_from_coord(coord_graph, graph_coord_x, graph_coord_y, graph_coord_harbour, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_graph << " Bad format\n";
+        return 1;
+    }
 	coord_graph.close();
 
 	// input data, code area for each point of the graph (e.g. 1: NS, 2: BW, 3: BE, 10: open sea)
@@ -1129,7 +1132,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		return 1;
 	}
 	vector<int> graph_point_code_area;
-	fill_from_code_area(code_area_graph, graph_point_code_area, nrow_coord);
+    if (!fill_from_code_area(code_area_graph, graph_point_code_area, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_code_area_graph << " Bad format\n";
+        return 1;
+    }
 
 	// input data, for the marine landscape for each point of the graph (e.g. 111, 112, etc. e.g. see the BALANCE map coding)
 	ifstream code_landscape_graph;
@@ -1140,7 +1146,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		return 1;
 	}
 	vector<int> graph_point_code_landscape;
-	fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord);
+    if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_code_marine_landscape_graph << " Bad format\n";
+        return 1;
+    }
 
 	// check inputs
 	for (unsigned int i=0; i<graph_coord_harbour.size(); i++)

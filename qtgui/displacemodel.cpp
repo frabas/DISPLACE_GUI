@@ -1354,7 +1354,9 @@ bool DisplaceModel::loadNodes()
     vector<double> graph_coord_x;
     vector<double> graph_coord_y;
     vector<int> graph_coord_harbour;
-    fill_from_coord(coord_graph, graph_coord_x, graph_coord_y, graph_coord_harbour, nrow_coord);
+    if (!fill_from_coord(coord_graph, graph_coord_x, graph_coord_y, graph_coord_harbour, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_graph.c_str()));
     coord_graph.close();
 
     // input data, code area for each point of the graph (e.g. 1: NS, 2: BW, 3: BE, 10: open sea)
@@ -1367,7 +1369,9 @@ bool DisplaceModel::loadNodes()
                                 .arg(strerror(errno)));
     }
     vector<int> graph_point_code_area;
-    fill_from_code_area(code_area_graph, graph_point_code_area, nrow_coord);
+    if (!fill_from_code_area(code_area_graph, graph_point_code_area, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_code_area_graph.c_str()));
 
     // input data, for the marine landscape for each point of the graph (e.g. 111, 112, etc. e.g. see the BALANCE map coding)
     ifstream code_landscape_graph;
@@ -1379,7 +1383,10 @@ bool DisplaceModel::loadNodes()
                                 .arg(strerror(errno)));
     }
     vector<int> graph_point_code_landscape;
-    fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord);
+    if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_code_marine_landscape_graph.c_str()));
+
 
     // read harbour specific files
     multimap<int, string> harbour_names = read_harbour_names(mInputName.toStdString(), mBasePath.toStdString());

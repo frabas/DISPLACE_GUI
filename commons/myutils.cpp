@@ -353,27 +353,37 @@ bool fill_from_coord(istream& in, vector<double>& graph_coord_x,
                       vector<double> & graph_coord_y,
                       vector<int>& graph_coord_harbour, int nrow)
 {
-    double val;
-    int val2;
+    int linenum = 0;
 
-    for (int i = 0; i < nrow; i++)
-    {
-        in >> val;
-        graph_coord_x.push_back(val);
-    }
-    for (int i2=nrow; i2 < (nrow+nrow); i2++)
-    {
-        in >> val;
-        graph_coord_y.push_back(val);
-    }
-    for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
-    {
-        in >> val2;
-        graph_coord_harbour.push_back(val2);
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<double>(line);
+                graph_coord_x.push_back(val);
+            } else if (linenum < 2*nrow) {
+                double val = boost::lexical_cast<double>(line);
+                graph_coord_y.push_back(val);
+            } else if (linenum < 3*nrow) {
+                int val = boost::lexical_cast<int>(line);
+                graph_coord_harbour.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on fill_from_coord file line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
     }
 
-    cout << "read coord with "
-         << graph_coord_x.size() << " nodes" << endl << flush;
     return true;
 }
 
@@ -386,72 +396,101 @@ bool fill_from_graph(istream& in, vector<int>& graph_idx_dep,
                       vector<int> & graph_idx_arr,
                       vector<int>& graph_dist_km, int nrow)
 {
-    double val;
+    int linenum = 0;
 
-    for (int i = 0; i < nrow; i++)
-    {
-        in >> val;
-        graph_idx_dep.push_back(val);
-        dout(cout  << "val dep: " << val << endl);
-    }
-    for (int i2=nrow; i2 < (nrow+nrow); i2++)
-    {
-        in >> val;
-        graph_idx_arr.push_back(val);
-        dout(cout  << "val arr: " << val << endl);
-    }
-    for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
-    {
-        in >> val;
-        // caution: convert into imt to speedup c++
-        unsigned int val_int = static_cast<unsigned int>(val + 0.5);
-        graph_dist_km.push_back(val_int);
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<double>(line);
+                graph_idx_dep.push_back(val);
+            } else if (linenum < 2*nrow) {
+                double val = boost::lexical_cast<double>(line);
+                graph_idx_arr.push_back(val);
+            } else if (linenum < 3*nrow) {
+                double val = boost::lexical_cast<double>(line);
+                graph_dist_km.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on fill_from_graph file line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
     }
 
-    cout << "read graph with "
-         << graph_idx_dep.size() << " connections " << endl << flush;
     return true;
 }
 
 
 bool fill_from_code_area(istream& in, vector<int>& graph_point_code_area, int nrow)
 {
-    double val;
-    int val2;
+    int linenum = 0;
 
-    for (int i = 0; i < nrow; i++)
-    {
-        in >> val;				 // first column: do nothing...
-    }
-    for (int i2=nrow; i2 < (nrow+nrow); i2++)
-    {
-        in >> val;				 // second column: do nothing...
-    }
-    for (int i3=(nrow+nrow); i3 < (nrow+nrow+nrow); i3++)
-    {
-        in >> val2;
-        graph_point_code_area.push_back(val2);
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < 2*nrow) {
+                // ignore first two fields (groups really)
+            } else if (linenum < 3*nrow) {
+                int val = boost::lexical_cast<int>(line);
+                graph_point_code_area.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on fill_from_code_area file line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
     }
 
-    dout (cout << "read code area with "
-          << graph_point_code_area.size() << " nodes" << endl << flush);
     return true;
 }
 
 
 bool fill_from_code_marine_landscape(istream& in, vector<int>& graph_point_code_landscape, int nrow)
 {
-    int val;
-    cout << "landscape codes are: ";
-    for (int i = 0; i < nrow; i++)
-    {
-        in >> val;
-        graph_point_code_landscape.push_back(val);
-        cout << val << " ";
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                int val = boost::lexical_cast<int>(line);
+                graph_point_code_landscape.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on graph_point_code_landscape file line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
     }
 
-    cout << "read code marine landscape with "
-         << graph_point_code_landscape.size() << " nodes" << endl << flush;
     return true;
 }
 

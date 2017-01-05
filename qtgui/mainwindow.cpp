@@ -1385,7 +1385,7 @@ void MainWindow::on_actionImport_Shapefile_triggered()
     if (!name.isEmpty()) {
         QFileInfo info (name);
 
-        OGRDataSource *ds = OGRSFDriverRegistrar::Open(name.toStdString().c_str(), FALSE);
+        GDALDataset *ds = (GDALDataset*)OGROpen(name.toStdString().c_str(), 0, nullptr);
 
         QString layer;
 
@@ -1791,7 +1791,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
         //std::vector<std::shared_ptr<OGRDataSource> dss;
 
         for (auto sh : shp) {
-            std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, sh);
+            std::shared_ptr<GDALDataset> ds = mMapController->cloneShapefileDatasource(currentModelIdx, sh);
 //            dss.push_back(ds);
 
             int n = ds->GetLayerCount();
@@ -1818,11 +1818,12 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
 void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
-    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    std::shared_ptr<GDALDataset> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
     if (ds.get() == nullptr) {
         // not opened. get a new
 
-        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+        // TODO WATCHOUT! raw pointer shouldn't be embedded in smart pointers!
+        ds = std::shared_ptr<GDALDataset>((GDALDataset*)OGROpen(shp.toStdString().c_str(), 0, nullptr));
     }
 
     if (ds.get() == nullptr) {

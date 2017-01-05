@@ -68,9 +68,9 @@ public:
     }
 
     void setLimits (double lonMin, double lonMax, double latMin, double latMax) ;
-    void setIncludingShapefile1 (std::shared_ptr<OGRDataSource> src);
-    void setIncludingShapefile2 (std::shared_ptr<OGRDataSource> src);
-    void setExcludingShapefile (std::shared_ptr<OGRDataSource> src);
+    void setIncludingShapefile1 (std::shared_ptr<GDALDataset> src);
+    void setIncludingShapefile2 (std::shared_ptr<GDALDataset> src);
+    void setExcludingShapefile (std::shared_ptr<GDALDataset> src);
     void setExcludeZoneEdgeRemovalEnabled (bool en) {
         mRemoveEdgesInExcludeZone = en;
     }
@@ -122,9 +122,9 @@ private:
     int mMaxLinks, mMinLinks;
     int progress = 0;
 
-    std::shared_ptr<OGRDataSource> mShapefileInc1;
-    std::shared_ptr<OGRDataSource> mShapefileInc2;
-    std::shared_ptr<OGRDataSource> mShapefileExc;
+    std::shared_ptr<GDALDataset> mShapefileInc1;
+    std::shared_ptr<GDALDataset> mShapefileInc2;
+    std::shared_ptr<GDALDataset> mShapefileExc;
 
     Feedback *mFeedback = 0;
 };

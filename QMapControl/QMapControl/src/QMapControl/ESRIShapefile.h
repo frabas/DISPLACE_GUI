@@ -64,7 +64,7 @@ namespace qmapcontrol
          */
         explicit ESRIShapefile(const std::string& file_path, const std::string& layer_name, const int& zoom_minimum = 0, const int& zoom_maximum = 17);
 
-        explicit ESRIShapefile(OGRDataSource *datasource, const std::string& layer_name, const int& zoom_minimum = 0, const int& zoom_maximum = 17);
+        explicit ESRIShapefile(GDALDataset *datasource, const std::string& layer_name, const int& zoom_minimum = 0, const int& zoom_maximum = 17);
 
         //! Destructor.
         virtual ~ESRIShapefile();
@@ -149,7 +149,7 @@ namespace qmapcontrol
 
     private:
         /// The OGR data set of the ESRI Shapefile.
-        OGRDataSource* m_ogr_data_set;
+        GDALDataset* m_ogr_data_set;
 
         /// The layer name.
         std::string m_layer_name;

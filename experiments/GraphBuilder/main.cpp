@@ -106,16 +106,15 @@ int main()
         }
     }
 
-    auto outlayer = indataset->CreateLayer("clip", nullptr, wkbPoint, nullptr);
+    auto outlayer = indataset->CreateLayer("inpoly", nullptr, wkbPoint, nullptr);
     if (ptlayer->Clip(inlayer, outlayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
         cerr << "Error clipping\n";
     }
-/*
-    auto dellayer = indataset->CreateLayer("erase", nullptr, wkbPoint, nullptr);
-    if (ptlayer->Intersection(inlayer, dellayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
+
+    auto dellayer = indataset->CreateLayer("outpoly", nullptr, wkbPoint, nullptr);
+    if (ptlayer->SymDifference(outlayer, dellayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
         cerr << "Error clipping\n";
     }
-*/
 
 //    OGRDataSource::DestroyDataSource(indataset);
 

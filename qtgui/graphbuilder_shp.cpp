@@ -103,6 +103,9 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     toremove.mkpath(OUTDIR);
 #endif
 
+    OGRSpatialReference sr;
+    sr.SetWellKnownGeogCS( "WGS84" );
+
     // sanitize
     if (mShapefileExc.get() == 0)
         mRemoveEdgesInExcludeZone = false;

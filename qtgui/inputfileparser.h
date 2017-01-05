@@ -49,7 +49,7 @@
 #include <QSet>
 #include <QMap>
 
-#include <graphbuilder.h>
+#include <graphbuilder_shp.h>
 
 class HarbourData;
 

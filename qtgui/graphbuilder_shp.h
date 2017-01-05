@@ -1,51 +1,9 @@
-// --------------------------------------------------------------------------
-// DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
-// AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>
+#ifndef GRAPHBUILDER_SHP_H
+#define GRAPHBUILDER_SHP_H
 
-//    This program is free software; you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation; either version 2 of the License, or
-//    (at your option) any later version.
-
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-
-//    You should have received a copy of the GNU General Public License along
-//    with this program; if not, write to the Free Software Foundation, Inc.,
-//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-// --------------------------------------------------------------------------
-
-/* --------------------------------------------------------------------------
- * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
- * AND EFFORT DISPLACEMENT
- * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
- *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License along
- *    with this program; if not, write to the Free Software Foundation, Inc.,
- *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * --------------------------------------------------------------------------
- */
-#ifndef GRAPHBUILDER_H
-#define GRAPHBUILDER_H
-
-#include <QList>
-#include <QPointF>
-
-#include <memory>
 #include <gdal/ogrsf_frmts.h>
+#include <QPoint>
+#include <QList>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
@@ -57,15 +15,11 @@
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #pragma GCC diagnostic pop
 
-#include <utility>
-
 namespace displace {
 namespace graphbuilders {
 class GeographicGridBuilder;
 }
 }
-
-namespace deprecated {
 
 class GraphBuilder
 {
@@ -81,10 +35,10 @@ public:
     class Node {
     public:
         QPointF point;
-        int harbour;
+        int harbour = 0;
         QList<int> adiacencies;
         QList<double> weight;
-        bool good;
+        bool good = false;
 
         Node()
             : point(), harbour(0), adiacencies(), weight(), good(false) {
@@ -137,6 +91,12 @@ public:
     void setLinkLimits(double limit_km);
 
 private:
+    std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> createBuilder (Type type, double step);
+    void createGrid (std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
+                     OGRLayer *lyOut,
+                     OGRLayer *lyGrid,
+                     OGRLayer *lyIncluded);
+
     typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
     typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
 
@@ -151,8 +111,8 @@ private:
 
     typedef CDT::Point                                             Point;
 
-    void fillWithNodes(displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress);
-    void pushAd(QList<Node> &node, int source, int target);
+//    void fillWithNodes(displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress);
+//    void pushAd(QList<Node> &node, int source, int target);
 
     Type mType;
     bool mOutsideEnabled, mRemoveEdgesInExcludeZone;
@@ -165,8 +125,8 @@ private:
     std::shared_ptr<OGRDataSource> mShapefileInc2;
     std::shared_ptr<OGRDataSource> mShapefileExc;
 
-    Feedback *mFeedback;
+    //int progress;
+    Feedback *mFeedback = 0;
 };
-}
 
-#endif // GRAPHBUILDER_H
+#endif // GRAPHBUILDER_SHP_H

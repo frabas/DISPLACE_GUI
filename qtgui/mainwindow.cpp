@@ -65,7 +65,7 @@
 #include <mousemode/edgeaddmousemode.h>
 
 #include <graphinteractioncontroller.h>
-#include <graphbuilder.h>
+#include <graphbuilder_shp.h>
 
 #include <waitdialog.h>
 

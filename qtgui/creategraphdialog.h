@@ -42,7 +42,7 @@
 #define CREATEGRAPHDIALOG_H
 
 #include <QDialog>
-#include <graphbuilder.h>
+#include <graphbuilder_shp.h>
 
 namespace Ui {
 class CreateGraphDialog;

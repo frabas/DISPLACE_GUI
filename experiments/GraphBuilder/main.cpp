@@ -1,8 +1,7 @@
 #include <iostream>
 
-#include <ogrsf_frmts.h>
-#include <gdal.h>
-#include <gdal_priv.h>
+#include <gdal/ogrsf_frmts.h>
+#include <gdal/cpl_conv.h> // for CPLMalloc()
 
 using namespace std;
 
@@ -38,8 +37,6 @@ int main()
 
     const char* path = "sample.shp";
     OGRRegisterAll();
-    OGRDataSource *hDS;
-    //OGRSFDriver *indriver;
     OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
     auto indriver = registrar->GetDriverByName(indrivername.c_str());
 
@@ -109,10 +106,16 @@ int main()
         }
     }
 
-    auto outlayer = indataset->CreateLayer("out", nullptr, wkbPoint, nullptr);
+    auto outlayer = indataset->CreateLayer("clip", nullptr, wkbPoint, nullptr);
     if (ptlayer->Clip(inlayer, outlayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
         cerr << "Error clipping\n";
     }
+/*
+    auto dellayer = indataset->CreateLayer("erase", nullptr, wkbPoint, nullptr);
+    if (ptlayer->Intersection(inlayer, dellayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
+        cerr << "Error clipping\n";
+    }
+*/
 
     OGRDataSource::DestroyDataSource(indataset);
 

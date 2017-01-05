@@ -2,7 +2,7 @@
 #define GRAPHBUILDERWORKER_H
 
 #include <backgroundworker.h>
-#include <graphbuilder.h>
+#include <graphbuilder_shp.h>
 #include <mainwindow.h>
 
 class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedback {

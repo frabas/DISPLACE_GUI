@@ -36,7 +36,7 @@
 
 #include <QMapControl/Point.h>
 
-#include <graphbuilder.h>
+#include <graphbuilder_shp.h>
 #include <backgroundworker.h>
 
 #include <mousemode.h>

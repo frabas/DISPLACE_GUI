@@ -33,6 +33,8 @@
 #include <algo/simplegeodesiclinegraphbuilder.h>
 #include <algo/simpleplanargraphbuilder.h>
 
+using namespace deprecated;
+
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
 

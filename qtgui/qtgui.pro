@@ -172,7 +172,8 @@ SOURCES += \
     dialogs/graphexportproperties.cpp \
     objects/windmillentity.cpp \
     modelobjects/windmilldata.cpp \
-    mapobjects/windmillobject.cpp
+    mapobjects/windmillobject.cpp \
+    graphbuilder_shp.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -293,7 +294,8 @@ HEADERS += \
     dialogs/graphexportproperties.h \
     objects/windmillentity.h \
     modelobjects/windmilldata.h \
-    mapobjects/windmillobject.h
+    mapobjects/windmillobject.h \
+    graphbuilder_shp.h
 
 RESOURCES += \
     qtgui.qrc

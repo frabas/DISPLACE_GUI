@@ -354,7 +354,7 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
 
     std::shared_ptr<qmapcontrol::LayerESRIShapefile> newlayer(new qmapcontrol::LayerESRIShapefile(label.toStdString()));
     newlayer->addESRIShapefile(file);
-    addShapefileLayer(model_idx, layername, src, newlayer);
+    addShapefileLayer(model_idx, path, src, newlayer);
 
     return true;
 }
@@ -376,10 +376,15 @@ std::shared_ptr<ESRIShapefile> MapObjectsController::getShapefile(int model_idx,
 
 std::shared_ptr<GDALDataset> MapObjectsController::cloneShapefileDatasource(int model_idx, const QString &name)
 {
+    qDebug() << name;
     for (int i = 0; i < mShapefileLayers[model_idx].getCount(); ++i) {
+        qDebug() << i << mShapefileLayers[model_idx].getName(i);
         if (mShapefileLayers[model_idx].getName(i) == name) {
             const QString &fullpath = mShapefileLayers[model_idx].fullpath.at(i);
-            return std::shared_ptr<GDALDataset>((GDALDataset*)OGROpen(fullpath.toStdString().c_str(), 0, nullptr));
+            qDebug() << "Found " << i << fullpath;
+            auto r = std::shared_ptr<GDALDataset>((GDALDataset*)OGROpen(fullpath.toStdString().c_str(), 0, nullptr));
+            Q_ASSERT(r != nullptr);
+            return r;
         }
     }
 
@@ -472,10 +477,10 @@ void MapObjectsController::addTariffLayer(int model, int id, std::shared_ptr<Lay
 }
 
 
-void MapObjectsController::addShapefileLayer(int model, QString name, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
+void MapObjectsController::addShapefileLayer(int model, QString fullpath, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
     mMap->addLayer(layer);
-    mShapefileLayers[model].add(layer, name, show);
+    mShapefileLayers[model].add(layer, fullpath, show);
     mShapefiles[model].append(datasource);
 }
 

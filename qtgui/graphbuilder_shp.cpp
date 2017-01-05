@@ -131,7 +131,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         mFeedback->setMax(total);
     }
 
-//    progress = 0;
+    progress = 0;
 
     // create the grid.
 
@@ -143,27 +143,27 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
     auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
-    auto gridlayer1 = outdataset->CreateLayer("grid1", nullptr, wkbPoint, nullptr);
+    auto gridlayer1 = outdataset->CreateLayer("grid1", &sr, wkbPoint, nullptr);
 
     OGRLayer *outlayer = nullptr, *outlayer2 = nullptr;
 
     if (mShapefileInc1) {
         auto inclusionLayer = mShapefileInc1->GetLayer(0);
-        outlayer = outdataset->CreateLayer("Displace-IncludeGrid1", nullptr, wkbPoint, nullptr);
+        outlayer = outdataset->CreateLayer("Displace-IncludeGrid1", &sr, wkbPoint, nullptr);
         createGrid(builderInc1, outlayer, gridlayer1, inclusionLayer);
     }
 
-    auto gridlayer2 = memdataset->CreateLayer("grid2", nullptr, wkbPoint, nullptr);
+    auto gridlayer2 = memdataset->CreateLayer("grid2", &sr, wkbPoint, nullptr);
     if (mShapefileInc2) {
         auto inclusionLayer2 = mShapefileInc2->GetLayer(0);
-        outlayer2 = outdataset->CreateLayer("Displace-IncludeGrid2", nullptr, wkbPoint, nullptr);
+        outlayer2 = outdataset->CreateLayer("Displace-IncludeGrid2", &sr, wkbPoint, nullptr);
         createGrid(builderInc2, outlayer2, gridlayer2, inclusionLayer2);
     }
 
     OGRLayer *resultLayer;
 
     if (outlayer2) {
-        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", nullptr, wkbPoint, nullptr);
+        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", &sr, wkbPoint, nullptr);
         outlayer->Union(outlayer2, resultLayer, nullptr, nullptr, nullptr);
     } else {
         resultLayer = outdataset->CopyLayer(outlayer, "Displace-ResultGrid", nullptr);
@@ -213,7 +213,7 @@ void GraphBuilder::createGrid(std::shared_ptr<displace::graphbuilders::Geographi
         }
         OGRFeature::DestroyFeature(f);
 
-#if 0
+#if 1
         if (builder->isAtLineStart()) {
             ++progress;
 

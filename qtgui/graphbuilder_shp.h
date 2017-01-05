@@ -120,12 +120,12 @@ private:
     double mLatMin, mLatMax, mLonMin, mLonMax;
     double mLinkLimits;
     int mMaxLinks, mMinLinks;
+    int progress = 0;
 
     std::shared_ptr<OGRDataSource> mShapefileInc1;
     std::shared_ptr<OGRDataSource> mShapefileInc2;
     std::shared_ptr<OGRDataSource> mShapefileExc;
 
-    //int progress;
     Feedback *mFeedback = 0;
 };
 

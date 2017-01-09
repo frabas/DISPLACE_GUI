@@ -92,10 +92,16 @@ public:
 
 private:
     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> createBuilder (Type type, double step);
-    void createGrid (std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
+    void createGrid (OGRDataSource *tempDatasource,
+                     std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
                      OGRLayer *lyOut,
                      OGRLayer *lyGrid,
-                     OGRLayer *lyIncluded);
+                     OGRLayer *lyIncluded, OGRLayer *lyExclusion1, OGRLayer *lyExclusion2);
+
+    void clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out);
+    void diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds);
+    void copyLayerContent(OGRLayer *src, OGRLayer *dst);
+    void makePartProgress(double x);
 
     typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
     typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
@@ -127,6 +133,8 @@ private:
     std::shared_ptr<OGRDataSource> mShapefileExc;
 
     Feedback *mFeedback = 0;
+
+    static int waitfunc(double progress, const char *msg, void *thiz);
 };
 
 #endif // GRAPHBUILDER_SHP_H

@@ -146,30 +146,63 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
     auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
-    auto gridlayer1 = outdataset->CreateLayer("grid1", &sr, wkbPoint, nullptr);
+    OGRLayer *gridlayer1 = nullptr;
+    OGRLayer *gridlayer2 = nullptr;
+    OGRLayer *gridlayerOut = nullptr;
 
-    OGRLayer *outlayer = nullptr, *outlayer2 = nullptr;
+    OGRLayer *outlayer1 = nullptr, *outlayer2 = nullptr;
 
     if (mShapefileInc1) {
+        gridlayer1 = outdataset->CreateLayer("grid1", &sr, wkbPoint, nullptr);
         auto inclusionLayer = mShapefileInc1->GetLayer(0);
-        outlayer = outdataset->CreateLayer("Displace-IncludeGrid1", &sr, wkbPoint, nullptr);
-        createGrid(builderInc1, outlayer, gridlayer1, inclusionLayer);
+        OGRLayer *exclusionLayer = nullptr;
+        if (mShapefileInc2 && mStep1 < mStep2)
+            exclusionLayer = mShapefileInc2->GetLayer(0);
+        outlayer1 = outdataset->CreateLayer("Displace-IncludeGrid1", &sr, wkbPoint, nullptr);
+        createGrid(memdataset, builderInc1, outlayer1, gridlayer1, inclusionLayer, exclusionLayer, nullptr);
     }
 
-    auto gridlayer2 = memdataset->CreateLayer("grid2", &sr, wkbPoint, nullptr);
     if (mShapefileInc2) {
-        auto inclusionLayer2 = mShapefileInc2->GetLayer(0);
+        gridlayer2 = memdataset->CreateLayer("grid2", &sr, wkbPoint, nullptr);
+        auto inclusionLayer = mShapefileInc2->GetLayer(0);
+        OGRLayer *exclusionLayer = nullptr;
+        if (mShapefileInc1 && mStep2 < mStep1)
+            exclusionLayer = mShapefileInc1->GetLayer(0);
         outlayer2 = outdataset->CreateLayer("Displace-IncludeGrid2", &sr, wkbPoint, nullptr);
-        createGrid(builderInc2, outlayer2, gridlayer2, inclusionLayer2);
+        createGrid(memdataset, builderInc2, outlayer2, gridlayer2, inclusionLayer, exclusionLayer, nullptr);
     }
+
+    gridlayerOut = memdataset->CreateLayer("gridOut", &sr, wkbPoint, nullptr);
+    OGRLayer *exclusionLayer1 = nullptr, *exclusionLayer2 = nullptr;
+    if (mShapefileInc1)
+        exclusionLayer1 = mShapefileInc1->GetLayer(0);
+    if (mShapefileInc2)
+        exclusionLayer2 = mShapefileInc2->GetLayer(0);
+    OGRLayer *outLayerOut = outdataset->CreateLayer("Displace-OutGrid", &sr, wkbPoint, nullptr);
+    createGrid(memdataset, builderOut, outLayerOut, gridlayerOut, nullptr, exclusionLayer1, exclusionLayer2);
 
     OGRLayer *resultLayer;
-
-    if (outlayer2) {
-        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", &sr, wkbPoint, nullptr);
-        outlayer->Union(outlayer2, resultLayer, nullptr, nullptr, nullptr);
+    if (mShapefileExc) {
+        resultLayer = memdataset->CopyLayer(outLayerOut, "temp", nullptr);
     } else {
-        resultLayer = outdataset->CopyLayer(outlayer, "Displace-ResultGrid", nullptr);
+        resultLayer = outdataset->CopyLayer(outLayerOut, "Displace-ResultGrid", nullptr);
+    }
+
+    if (outlayer1) {
+        copyLayerContent(outlayer1, resultLayer);
+    }
+    if (outlayer2) {
+        copyLayerContent(outlayer2, resultLayer);
+    };
+
+
+    // here remove the other Exclusion Grid
+
+    if (mShapefileExc) {
+        auto tempLayer = resultLayer;
+        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", &sr);
+        exclusionLayer1 = mShapefileExc->GetLayer(0);
+        diff(tempLayer, exclusionLayer1, resultLayer, memdataset);
     }
 
     // build the list of results
@@ -195,12 +228,19 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     return res;
 }
 
-void GraphBuilder::createGrid(std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
+void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
+                              std::shared_ptr<displace::graphbuilders::GeographicGridBuilder> builder,
                               OGRLayer *lyOut,
                               OGRLayer *lyGrid,
-                              OGRLayer *lyIncluded
+                              OGRLayer *lyIncluded,
+                              OGRLayer *lyExclusion1,
+                              OGRLayer *lyExclusion2
                               )
 {
+    OGRLayer *gridout = lyGrid;
+    if (lyIncluded == nullptr && lyExclusion1 == nullptr && lyExclusion2 == nullptr)
+        gridout = lyOut;
+
     // First Include Grid
     builder->beginCreateGrid();
     while (!builder->atEnd()) {
@@ -209,28 +249,98 @@ void GraphBuilder::createGrid(std::shared_ptr<displace::graphbuilders::Geographi
         n.good = true;
 
         OGRPoint pt(n.point.x(),n.point.y());
-        auto f = OGRFeature::CreateFeature(lyGrid->GetLayerDefn());
+        auto f = OGRFeature::CreateFeature(gridout->GetLayerDefn());
         f->SetGeometry(&pt);
-        if (lyGrid->CreateFeature(f) != OGRERR_NONE) {
+        if (gridout->CreateFeature(f) != OGRERR_NONE) {
             throw std::runtime_error("Cannot create points");
         }
         OGRFeature::DestroyFeature(f);
 
-#if 1
         if (builder->isAtLineStart()) {
             ++progress;
 
             if (mFeedback)
                 mFeedback->setStep(progress);
         }
-#endif
     }
 
-    if (lyGrid->Clip(lyIncluded, lyOut, nullptr, nullptr, nullptr) != OGRERR_NONE) {
+    if (lyIncluded) {
+        if (lyExclusion1) {
+            if (lyExclusion2) {
+                auto tempOut1 = tempDatasource->CreateLayer("temp1");
+                clip (lyGrid, lyIncluded, tempOut1);
+                auto tempOut2 = tempDatasource->CreateLayer("temp1");
+                diff (tempOut1, lyExclusion1, tempOut2, tempDatasource);
+                diff (tempOut2, lyExclusion2, lyOut, tempDatasource);
+            } else {
+                auto tempOut1 = tempDatasource->CreateLayer("temp1");
+                clip (lyGrid, lyIncluded, tempOut1);
+                diff (tempOut1, lyExclusion1, lyOut, tempDatasource);
+            }
+        } else  {
+            clip (lyGrid, lyIncluded, lyOut);
+        }
+    } else {
+        if (lyExclusion1) {
+            if (lyExclusion2) {
+                auto tempOut1 = tempDatasource->CreateLayer("temp1");
+                diff (lyGrid, lyExclusion1, tempOut1, tempDatasource);
+                diff (tempOut1, lyExclusion2, lyOut, tempDatasource);
+            } else {
+                diff (lyGrid, lyExclusion1, lyOut, tempDatasource);
+            }
+        } else {
+            // Nothing to do, just return (lyGrid => lyOut)
+        }
+    }
+}
+
+void GraphBuilder::clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out)
+{
+    if (in->Clip(feature, out, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
         throw std::runtime_error("Error clipping");
     }
 }
 
+void GraphBuilder::diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds)
+{
+#if defined (DEBUG)
+    auto in1_copy = tempds->CopyLayer(in1, "copy");
+    in1 = in1_copy;
+#endif
+
+    auto temp = tempds->CreateLayer("temp", nullptr, wkbPoint, nullptr);
+    if (in1->Clip(in2, temp, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
+        throw std::runtime_error("Error clipping");
+    }
+    if (in1->SymDifference(temp, out, nullptr, waitfunc, (void *)this)) {
+        throw std::runtime_error("Error diffing");
+    }
+}
+
+void GraphBuilder::copyLayerContent(OGRLayer *src, OGRLayer *dst)
+{
+    OGRFeature *f ;
+    while ((f = src->GetNextFeature()) != nullptr) {
+        dst->CreateFeature(f);
+    }
+}
+
+void GraphBuilder::makePartProgress(double x)
+{
+    if (mFeedback)
+        mFeedback->setStep(x * 100);
+}
+
+int GraphBuilder::waitfunc(double progress, const char *msg, void *thiz)
+{
+    Q_UNUSED(thiz);
+    Q_UNUSED(msg);
+    qDebug() << "Progress: " << progress;
+    reinterpret_cast<GraphBuilder*>(thiz)->makePartProgress(progress);
+
+    return TRUE;
+}
 
 
 #if 0

@@ -501,7 +501,7 @@ private:
 
     /* Editor stuff */
     enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
-    GDALDataset *mDataSource;
+    OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
     int mNodesLayerIndex;
 

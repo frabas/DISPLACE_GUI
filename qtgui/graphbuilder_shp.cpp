@@ -56,17 +56,17 @@ void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double
     mLonMax = std::max(lonMin, lonMax);// * M_PI / 180.0;
 }
 
-void GraphBuilder::setIncludingShapefile1(std::shared_ptr<GDALDataset> src)
+void GraphBuilder::setIncludingShapefile1(std::shared_ptr<OGRDataSource> src)
 {
     mShapefileInc1 = src;
 }
 
-void GraphBuilder::setIncludingShapefile2(std::shared_ptr<GDALDataset> src)
+void GraphBuilder::setIncludingShapefile2(std::shared_ptr<OGRDataSource> src)
 {
     mShapefileInc2 = src;
 }
 
-void GraphBuilder::setExcludingShapefile(std::shared_ptr<GDALDataset> src)
+void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
 {
     mShapefileExc = src;
 }
@@ -139,14 +139,13 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     // create the grid.
 
     // Create an in-memory db
+    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
 
-    auto memdriver = (GDALDriver*)GDALGetDriverByName("memory");
-    auto memdataset = memdriver->Create("memory", 0, 0, 0, GDT_Unknown, nullptr);
-//    auto memdataset = memdriver->CreateDataSource("memory", nullptr );
+    auto memdriver = registrar->GetDriverByName("memory");
+    auto memdataset = memdriver->CreateDataSource("memory", nullptr );
 
-    auto outdriver = (GDALDriver*)GDALGetDriverByName("ESRI Shapefile");
-//    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
-    auto outdataset = outdriver->Create(OUTDIR.toStdString().c_str(), 0, 0, 0, GDT_Unknown, nullptr );
+    auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
+    auto outdataset = outdriver->CreateDataSource(OUTDIR.toStdString().c_str(), nullptr );
     auto gridlayer1 = outdataset->CreateLayer("grid1", &sr, wkbPoint, nullptr);
 
     OGRLayer *outlayer = nullptr, *outlayer2 = nullptr;
@@ -192,7 +191,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     qDebug() << "Results: " << res.size() << " of " << resultLayer->GetFeatureCount();
 #endif
 
-    //OGRDataSource::DestroyDataSource(outdataset);
+    OGRDataSource::DestroyDataSource(outdataset);
     return res;
 }
 

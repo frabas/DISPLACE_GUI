@@ -22,7 +22,6 @@
 #define PROFILER_H
 
 #include <time.h>
-#include <cmath>
 
 class Profiler {
 private:
@@ -63,9 +62,11 @@ public:
 
 class AverageProfiler {
 private:
+#ifdef PROFILE
     struct timespec mstart;
     double mcumtime, mMin, mMax;
     int mcumrun;
+#endif
 
 public:
     AverageProfiler()

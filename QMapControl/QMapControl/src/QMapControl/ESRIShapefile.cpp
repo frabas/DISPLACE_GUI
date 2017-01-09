@@ -28,8 +28,6 @@
 // Local includes.
 #include "Projection.h"
 
-#include <cmath>
-
 #include <QDebug>
 
 namespace qmapcontrol
@@ -41,10 +39,10 @@ namespace qmapcontrol
         OGRRegisterAll();
 
         // Open the file.
-        m_ogr_data_set = static_cast<GDALDataset *>(OGROpen(file_path.c_str(), 0, nullptr));
+        m_ogr_data_set = OGRSFDriverRegistrar::Open(file_path.c_str(), FALSE);
     }
 
-    ESRIShapefile::ESRIShapefile(GDALDataset *datasource, const std::string &layer_name, const int &zoom_minimum, const int &zoom_maximum)
+    ESRIShapefile::ESRIShapefile(OGRDataSource *datasource, const std::string &layer_name, const int &zoom_minimum, const int &zoom_maximum)
         : m_ogr_data_set(datasource), m_layer_name(layer_name), m_zoom_minimum(zoom_minimum), m_zoom_maximum(zoom_maximum)
     {
     }
@@ -55,8 +53,7 @@ namespace qmapcontrol
         if(m_ogr_data_set != nullptr)
         {
             // Close the data set.
-            //OGRDataSource::DestroyDataSource(m_ogr_data_set);
-            delete m_ogr_data_set;
+            OGRDataSource::DestroyDataSource(m_ogr_data_set);
         }
     }
 

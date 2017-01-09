@@ -35,12 +35,12 @@ int main()
     string indrivername = drv_shapefile;
     auto type = shp_memory;
 
-    const char* path = "/tmp/sample.shp";
+    const char* path = "sample.shp";
     OGRRegisterAll();
-//    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
-//    auto indriver = registrar->GetDriverByName(indrivername.c_str());
+    OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
+    auto indriver = registrar->GetDriverByName(indrivername.c_str());
 
-    auto indriver = (GDALDriver*)GDALGetDriverByName(indrivername.c_str());
+    //auto indriver = GDALDriverManager().GetDriverByName(indrivername.c_str());
 
     if( indriver == NULL )
     {
@@ -51,12 +51,12 @@ int main()
     auto *file = fopen(path, "r");
     if (file != nullptr) {
         fclose(file);
-        indriver->Delete(path);
-//        indriver->DeleteDataSource(path);
+        indriver->DeleteDataSource(path);
+        //indriver->Delete(path);
     }
 
-    //    auto indataset = indriver->CreateDataSource(path, nullptr );
-    auto indataset = indriver->Create(path, 0, 0, 0, GDT_Unknown, NULL );
+    auto indataset = indriver->CreateDataSource(path, nullptr );
+    //auto indataset = indriver->Create(path, 0, 0, 0, GDT_Unknown, NULL );
 
     auto inlayer = indataset->CreateLayer("base", nullptr, wkbPolygon, nullptr);
 
@@ -117,7 +117,7 @@ int main()
     }
 */
 
-//    OGRDataSource::DestroyDataSource(indataset);
+    OGRDataSource::DestroyDataSource(indataset);
 
     return 0;
 }

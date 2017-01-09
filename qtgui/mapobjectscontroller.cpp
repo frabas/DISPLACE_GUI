@@ -55,7 +55,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
       mLayers(MainWindow::MAX_MODELS, LayerListImpl(LayerMax)),
       mOutputLayers(MainWindow::MAX_MODELS, LayerListImpl(OutLayerMax)),
       mTariffsLayers(MainWindow::MAX_MODELS, LayerListImpl(TariffLayerMax)),
-      mShapefiles(MainWindow::MAX_MODELS, QList<std::shared_ptr<GDALDataset> >()),
+      mShapefiles(MainWindow::MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
       mShapefileLayers(MainWindow::MAX_MODELS, LayerVarListImpl<qmapcontrol::LayerESRIShapefile>()),
       mEditorMode(NoEditorMode),
       mClosing(false)
@@ -334,7 +334,7 @@ void MapObjectsController::showDetailsWidget(const PointWorldCoord &point, QWidg
 bool MapObjectsController::importShapefile(int model_idx, QString path, QString layername)
 {
     /// @bug The following code will result in a memory leak and/or double free bug.
-    std::shared_ptr<GDALDataset> src((GDALDataset*)OGROpen(path.toStdString().c_str(), 0, nullptr));
+    std::shared_ptr<OGRDataSource> src(OGRSFDriverRegistrar::Open(path.toStdString().c_str(), FALSE));
     if (!src.get()) {
         return false;
     }
@@ -354,7 +354,7 @@ bool MapObjectsController::importShapefile(int model_idx, QString path, QString 
 
     std::shared_ptr<qmapcontrol::LayerESRIShapefile> newlayer(new qmapcontrol::LayerESRIShapefile(label.toStdString()));
     newlayer->addESRIShapefile(file);
-    addShapefileLayer(model_idx, layername, src, newlayer);
+    addShapefileLayer(model_idx, src, newlayer);
 
     return true;
 }
@@ -374,16 +374,16 @@ std::shared_ptr<ESRIShapefile> MapObjectsController::getShapefile(int model_idx,
     return mShapefileLayers[model_idx].layers[idx]->getShapefile(0);
 }
 
-std::shared_ptr<GDALDataset> MapObjectsController::cloneShapefileDatasource(int model_idx, const QString &name)
+std::shared_ptr<OGRDataSource> MapObjectsController::cloneShapefileDatasource(int model_idx, const QString &name)
 {
     for (int i = 0; i < mShapefileLayers[model_idx].getCount(); ++i) {
         if (mShapefileLayers[model_idx].getName(i) == name) {
             const QString &fullpath = mShapefileLayers[model_idx].fullpath.at(i);
-            return std::shared_ptr<GDALDataset>((GDALDataset*)OGROpen(fullpath.toStdString().c_str(), 0, nullptr));
+            return std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(fullpath.toStdString().c_str(), FALSE));
         }
     }
 
-    return std::shared_ptr<GDALDataset>();
+    return std::shared_ptr<OGRDataSource>();
 }
 
 void MapObjectsController::setEditorMode(MapObjectsController::EditorModes mode)
@@ -472,10 +472,10 @@ void MapObjectsController::addTariffLayer(int model, int id, std::shared_ptr<Lay
 }
 
 
-void MapObjectsController::addShapefileLayer(int model, QString name, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
+void MapObjectsController::addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<qmapcontrol::LayerESRIShapefile> layer, bool show)
 {
     mMap->addLayer(layer);
-    mShapefileLayers[model].add(layer, name, show);
+    mShapefileLayers[model].add(layer, QString::fromLatin1(datasource->GetName()), show);
     mShapefiles[model].append(datasource);
 }
 

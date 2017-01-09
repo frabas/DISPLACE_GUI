@@ -303,7 +303,7 @@ protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addTariffLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility);
-    void addShapefileLayer(int model, QString fullpath, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
+    void addShapefileLayer(int model, QString name, std::shared_ptr<GDALDataset> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
     void delSelectedNodes(int model);

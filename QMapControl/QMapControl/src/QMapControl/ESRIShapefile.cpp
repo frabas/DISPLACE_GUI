@@ -27,7 +27,7 @@
 
 // Local includes.
 #include "Projection.h"
-
+#include <cmath>
 #include <QDebug>
 
 namespace qmapcontrol

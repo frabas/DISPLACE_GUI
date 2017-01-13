@@ -66,6 +66,8 @@ private:
     struct timespec mstart;
     double mcumtime, mMin, mMax;
     int mcumrun;
+#else
+    static constexpr double mMin = 0.0, mMax = 0.0;
 #endif
 
 public:

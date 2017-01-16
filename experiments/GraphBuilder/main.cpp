@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <gdal/ogrsf_frmts.h>
-#include <gdal/cpl_conv.h> // for CPLMalloc()
+#include <ogrsf_frmts.h>
+#include <cpl_conv.h> // for CPLMalloc()
 
 using namespace std;
 
@@ -35,7 +35,7 @@ int main()
     string indrivername = drv_shapefile;
     auto type = shp_memory;
 
-    const char* path = "sample.shp";
+    const char* path = "/Users/HappyCactus/temp/sample.shp";
     OGRRegisterAll();
     OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
     auto indriver = registrar->GetDriverByName(indrivername.c_str());
@@ -91,10 +91,15 @@ int main()
 
     auto ptlayer = indataset->CreateLayer("points", nullptr, wkbPoint, nullptr);
 
+    char     **papszOptions;
+    papszOptions = CSLSetNameValue( papszOptions, "SHPT", "ARC" );
+
+    auto gridlayer = indataset->CreateLayer("Grid", nullptr, wkbLineString, papszOptions);
     /////// Here add all points required
 
-    for (double y = -3; y < 3.1; y+=0.5) {
-        for (double x = -3; x < 3.1; x+= 0.5) {
+    const double stp = 0.5;
+    for (double y = -3; y < 3.1; y+=stp) {
+        for (double x = -3; x < 3.1; x+= stp) {
             OGRPoint pt(x,y);
             auto f = OGRFeature::CreateFeature(ptlayer->GetLayerDefn());
             f->SetGeometry(&pt);
@@ -103,6 +108,34 @@ int main()
                 return 1;
             }
             OGRFeature::DestroyFeature(f);
+
+            if (x > -3.2) {
+                OGRLineString line;
+                line.addPoint(x-stp, y);
+                line.addPoint(x,y);
+
+                auto f = OGRFeature::CreateFeature(gridlayer->GetLayerDefn());
+                f->SetGeometry(&line);
+                if (gridlayer->CreateFeature(f) != OGRERR_NONE) {
+                    cerr << "Cannot create Line\n";
+                    return 1;
+                }
+                OGRFeature::DestroyFeature(f);
+            }
+
+            if (y > -3.2) {
+                OGRLineString line;
+                line.addPoint(x,y-stp);
+                line.addPoint(x,y);
+
+                auto f = OGRFeature::CreateFeature(gridlayer->GetLayerDefn());
+                f->SetGeometry(&line);
+                if (gridlayer->CreateFeature(f) != OGRERR_NONE) {
+                    cerr << "Cannot create Line\n";
+                    return 1;
+                }
+                OGRFeature::DestroyFeature(f);
+            }
         }
     }
 
@@ -114,6 +147,11 @@ int main()
     auto dellayer = indataset->CreateLayer("outpoly", nullptr, wkbPoint, nullptr);
     if (ptlayer->SymDifference(outlayer, dellayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
         cerr << "Error clipping\n";
+    }
+
+    auto outgridlayer = indataset->CreateLayer("grid-oud", nullptr, wkbLineString, papszOptions);
+    if (gridlayer->Clip(inlayer, outgridlayer, nullptr, nullptr, nullptr) != OGRERR_NONE) {
+        cerr << "Cannot clip Grid Layer";
     }
 
     OGRDataSource::DestroyDataSource(indataset);

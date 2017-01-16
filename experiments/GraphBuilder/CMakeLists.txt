@@ -4,14 +4,13 @@ project(GraphBuilderUsingGdal)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(
-        /usr/local/include
-        /Library/Frameworks/GDAL.framework/unix/include
+        /Library/Frameworks/GDAL.framework/Versions/1.11/unix/include
 )
 
 link_directories(
         /usr/include/gdal
         /usr/local/lib
-        /Library/Frameworks/GDAL.framework/unix/lib
+        /Library/Frameworks/GDAL.framework/Versions/1.11/unix/lib
 )
 
 set(SOURCE_FILES main.cpp)

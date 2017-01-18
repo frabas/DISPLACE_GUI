@@ -196,6 +196,52 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     };
 
 
+    // Triangulate
+
+    CDT tri;
+    OGRFeature *feature;
+    resultLayer->ResetReading();
+    while ((feature = resultLayer->GetNextFeature()) != nullptr) {
+        const auto geometry(feature->GetGeometryRef());
+        assert(geometry != nullptr);
+        assert(wkbFlatten(geometry->getGeometryType()) == wkbPoint);
+
+        const auto point(static_cast<OGRPoint*>(geometry));
+        assert(point != nullptr);
+
+        CDT::Point pt(point->getX(), point->getY());
+        tri.insert(pt);
+    }
+
+    OGRLayer *layerEdges = outdataset->CreateLayer("Displace-InEdges", &sr, wkbLineString, nullptr);
+    OGRLayer *layerVoronoy = outdataset->CreateLayer("Displace-InVoronoy", &sr, wkbPolygon, nullptr);
+
+    qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
+    CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
+    while (vrt != tri.finite_vertices_end()) {
+        //        if (vrt != tri.infinite_vertex()) {
+        CDT::Vertex_circulator vc = tri.incident_vertices((CDT::Vertex_handle)vrt);
+        CDT::Vertex_circulator done(vc);
+
+        const auto &pt = vrt->point();
+        do {
+            if (vc != tri.infinite_vertex()) {
+                OGRLineString line;
+                line.addPoint(pt.x(), pt.y());
+                const auto &pt2 = vc->point();
+                line.addPoint(pt2.x(), pt2.y());
+
+                OGRFeature *f = OGRFeature::CreateFeature(layerEdges->GetLayerDefn());
+                f->SetGeometry(&line);
+                layerEdges->CreateFeature(f);
+                OGRFeature::DestroyFeature(f);
+            }
+            ++vc;
+        } while (vc != done);
+        //}
+        ++vrt;
+    }
+
     // here remove the other Exclusion Grid
 
     if (mShapefileExc) {

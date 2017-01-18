@@ -73,7 +73,7 @@ private:
 public:
     AverageProfiler()
 #ifdef PROFILE
-        : mstart(), mcumtime(0.0), mcumrun(0), mMin(0), mMax(0)
+        : mstart(), mcumtime(0.0), mMin(0), mMax(0), mcumrun(0)
 #endif
     {
 #ifdef PROFILE

@@ -297,6 +297,7 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
 
 void GraphBuilder::clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out)
 {
+    startNewPartProgress("Clipping");
     if (in->Clip(feature, out, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
         throw std::runtime_error("Error clipping");
     }
@@ -309,10 +310,12 @@ void GraphBuilder::diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSou
     in1 = in1_copy;
 #endif
 
+    startNewPartProgress("Clipping");
     auto temp = tempds->CreateLayer("temp", nullptr, wkbPoint, nullptr);
     if (in1->Clip(in2, temp, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
         throw std::runtime_error("Error clipping");
     }
+    startNewPartProgress("Removing Points");
     if (in1->SymDifference(temp, out, nullptr, waitfunc, (void *)this)) {
         throw std::runtime_error("Error diffing");
     }
@@ -328,15 +331,39 @@ void GraphBuilder::copyLayerContent(OGRLayer *src, OGRLayer *dst)
 
 void GraphBuilder::makePartProgress(double x)
 {
-    if (mFeedback)
-        mFeedback->setStep(x * 100);
+    if (mFeedback) {
+        int pro = static_cast<int>(std::trunc(x*100 + 0.5));
+
+        auto now = Timer::now();
+        std::chrono::duration<double> diff = now - mFeedbackStartTime;
+        auto detc = diff.count() / x;
+        long ela = static_cast<long>(std::trunc(diff.count()+0.5));
+        long etc = static_cast<long> (std::trunc(detc + 0.5)) - ela;
+
+//        qDebug() << "Progress: " << x << diff.count() << detc << etc;
+
+        if (pro != mFeedbackPreviousETC) {
+            QString msg = QString("%1 (%2%) - ELA: %3 - ETC: %4").arg(mFeedbackProgressMsg)
+                    .arg(pro)
+                    .arg(ela)
+                    .arg(etc);
+            mFeedback->setPartMessage(msg);
+            mFeedbackPreviousETC = etc;
+        }
+    }
+}
+
+void GraphBuilder::startNewPartProgress(QString msg)
+{
+    mFeedbackStartTime = Timer::now();
+    mFeedbackProgressMsg = msg;
+    mFeedbackPreviousETC = -1;
 }
 
 int GraphBuilder::waitfunc(double progress, const char *msg, void *thiz)
 {
     Q_UNUSED(thiz);
     Q_UNUSED(msg);
-    qDebug() << "Progress: " << progress;
     reinterpret_cast<GraphBuilder*>(thiz)->makePartProgress(progress);
 
     return TRUE;

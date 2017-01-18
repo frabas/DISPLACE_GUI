@@ -5,6 +5,8 @@
 #include <QPoint>
 #include <QList>
 
+#include <chrono>
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpragmas"
 #pragma GCC diagnostic ignored "-Wshift-negative-value"
@@ -28,6 +30,8 @@ public:
     public:
         virtual void setMax(int m) = 0;
         virtual void setStep(int step) = 0;
+        virtual void setMainMessage (QString) = 0;
+        virtual void setPartMessage (QString) = 0;
     };
 
     enum Type { Hex, Quad, HexTrivial, QuadTrivial };
@@ -102,6 +106,7 @@ private:
     void diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds);
     void copyLayerContent(OGRLayer *src, OGRLayer *dst);
     void makePartProgress(double x);
+    void startNewPartProgress(QString msg);
 
     typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
     typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
@@ -133,6 +138,11 @@ private:
     std::shared_ptr<OGRDataSource> mShapefileExc;
 
     Feedback *mFeedback = 0;
+
+    using Timer = std::chrono::system_clock;
+    std::chrono::time_point<Timer> mFeedbackStartTime;
+    QString mFeedbackProgressMsg;
+    long mFeedbackPreviousETC;
 
     static int waitfunc(double progress, const char *msg, void *thiz);
 };

@@ -11,15 +11,14 @@ class GraphBuilderWorker : public BackgroundWorker, public GraphBuilder::Feedbac
     QList<GraphBuilder::Node> result;
 
 public:
-    GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg)
-        : BackgroundWorker(win),
-          builder(b),
-          waitDialog(dlg) {
-    }
+    GraphBuilderWorker (MainWindow *win, GraphBuilder *b, WaitDialog *dlg);
 
     virtual void execute() override;
     void setMax (int m) override;
     void setStep(int step) override;
+
+    void setMainMessage(QString) override;
+    void setPartMessage(QString) override;
 };
 
 #endif // GRAPHBUILDERWORKER_H

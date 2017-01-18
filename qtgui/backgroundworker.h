@@ -64,6 +64,8 @@ signals:
     void totalChanged(int tot);
     void warning(QString,QString);
     void completed (bool success);
+    void mainMessage (QString);
+    void progressMessage (QString);
 
 public slots:
     void process();

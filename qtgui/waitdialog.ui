@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>311</width>
-    <height>117</height>
+    <height>135</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -37,6 +37,13 @@
     <widget class="QProgressBar" name="progress">
      <property name="value">
       <number>24</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="progressLabel">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>

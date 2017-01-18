@@ -73,6 +73,7 @@ public slots:
     void setTotal(int max);
     void enableAbort(bool enable);
     void setProgression (int level);
+    void setEta(QString txt);
 
 signals:
     void aborted();

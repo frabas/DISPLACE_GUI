@@ -37,6 +37,7 @@ WaitDialog::WaitDialog(QWidget *parent) :
     ui->progress->setVisible(false);
     ui->progress->setValue(0);
     ui->cmdAbort->setVisible(false);
+    ui->progressLabel->setVisible(false);
 
     connect (this, SIGNAL(self_set_progression(int)), this, SLOT(setProgression(int)), Qt::QueuedConnection);
 }
@@ -92,6 +93,13 @@ void WaitDialog::setProgression(int level)
         emit self_set_progression(level);
     else
         ui->progress->setValue(level);
+}
+
+void WaitDialog::setEta(QString txt)
+{
+    if (!ui->progressLabel->isVisible())
+        ui->progressLabel->setVisible(true);
+    ui->progressLabel->setText(txt);
 }
 
 void WaitDialog::on_cmdAbort_clicked()

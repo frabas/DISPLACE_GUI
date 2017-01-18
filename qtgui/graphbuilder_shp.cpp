@@ -156,23 +156,23 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         gridlayer1 = outdataset->CreateLayer("grid1", &sr, wkbPoint, nullptr);
         auto inclusionLayer = mShapefileInc1->GetLayer(0);
         OGRLayer *exclusionLayer = nullptr;
-        if (mShapefileInc2 && mStep1 < mStep2)
+        if (mShapefileInc2 && mStep2 < mStep1)
             exclusionLayer = mShapefileInc2->GetLayer(0);
         outlayer1 = outdataset->CreateLayer("Displace-IncludeGrid1", &sr, wkbPoint, nullptr);
         createGrid(memdataset, builderInc1, outlayer1, gridlayer1, inclusionLayer, exclusionLayer, nullptr);
     }
 
     if (mShapefileInc2) {
-        gridlayer2 = memdataset->CreateLayer("grid2", &sr, wkbPoint, nullptr);
+        gridlayer2 = outdataset->CreateLayer("grid2", &sr, wkbPoint, nullptr);
         auto inclusionLayer = mShapefileInc2->GetLayer(0);
         OGRLayer *exclusionLayer = nullptr;
-        if (mShapefileInc1 && mStep2 < mStep1)
+        if (mShapefileInc1 && mStep1 < mStep2)
             exclusionLayer = mShapefileInc1->GetLayer(0);
         outlayer2 = outdataset->CreateLayer("Displace-IncludeGrid2", &sr, wkbPoint, nullptr);
         createGrid(memdataset, builderInc2, outlayer2, gridlayer2, inclusionLayer, exclusionLayer, nullptr);
     }
 
-    gridlayerOut = memdataset->CreateLayer("gridOut", &sr, wkbPoint, nullptr);
+    gridlayerOut = outdataset->CreateLayer("gridOut", &sr, wkbPoint, nullptr);
     OGRLayer *exclusionLayer1 = nullptr, *exclusionLayer2 = nullptr;
     if (mShapefileInc1)
         exclusionLayer1 = mShapefileInc1->GetLayer(0);
@@ -195,6 +195,12 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         copyLayerContent(outlayer2, resultLayer);
     };
 
+    if (mShapefileExc) {
+        auto tempLayer = resultLayer;
+        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", &sr);
+        exclusionLayer1 = mShapefileExc->GetLayer(0);
+        diff(tempLayer, exclusionLayer1, resultLayer, memdataset);
+    }
 
     // Triangulate
 
@@ -214,7 +220,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 
     OGRLayer *layerEdges = outdataset->CreateLayer("Displace-InEdges", &sr, wkbLineString, nullptr);
-    OGRLayer *layerVoronoy = outdataset->CreateLayer("Displace-InVoronoy", &sr, wkbPolygon, nullptr);
 
     qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
     CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
@@ -245,10 +250,9 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     // here remove the other Exclusion Grid
 
     if (mShapefileExc) {
-        auto tempLayer = resultLayer;
-        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", &sr);
-        exclusionLayer1 = mShapefileExc->GetLayer(0);
-        diff(tempLayer, exclusionLayer1, resultLayer, memdataset);
+        auto tempLayer2 = layerEdges;
+        layerEdges = outdataset->CreateLayer("Displace-ResultEdges", &sr);
+        diff (tempLayer2, exclusionLayer1, layerEdges, memdataset);
     }
 
     // build the list of results

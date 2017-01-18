@@ -220,6 +220,12 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 
     OGRLayer *layerEdges = outdataset->CreateLayer("Displace-InEdges", &sr, wkbLineString, nullptr);
+    /*
+    OGRFieldDefn fromField( "From", OFTInteger );
+    OGRFieldDefn toField ("To", OFTInteger );
+    if( layerEdges->CreateField( &fromField ) != OGRERR_NONE  || layerEdges->CreateField( &toField) != OGRERR_NONE) {
+        throw std::runtime_error( "Creating Name field failed." );
+    }*/
 
     qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
     CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
@@ -253,6 +259,20 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         auto tempLayer2 = layerEdges;
         layerEdges = outdataset->CreateLayer("Displace-ResultEdges", &sr);
         diff (tempLayer2, exclusionLayer1, layerEdges, memdataset);
+
+
+        exclusionLayer1 = mShapefileExc->GetLayer(0);
+        exclusionLayer1->ResetReading();
+        OGRFeature *feature;
+        while (( feature = exclusionLayer1->GetNextFeature()) != nullptr) {
+            OGRGeometry *geometry = feature->GetGeometryRef();
+            layerEdges->ResetReading();
+            layerEdges->SetSpatialFilter(geometry);
+            OGRFeature *edgeF;
+            while ((edgeF = layerEdges->GetNextFeature()) != nullptr) {
+                layerEdges->DeleteFeature(edgeF->GetFID());
+            }
+        }
     }
 
     // build the list of results

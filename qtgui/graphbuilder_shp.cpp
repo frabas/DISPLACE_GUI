@@ -285,7 +285,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         {
             OGRPoint *point = (OGRPoint *) pt;
             Node n;
-            n.point = QPoint(point->getX(), point->getY());
+            n.point = QPointF(point->getX(), point->getY());
             n.good = true;
             res << n;
         }

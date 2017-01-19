@@ -38,6 +38,17 @@
 const double GraphBuilder::earthRadius = 6378137;   // ...
 
 
+typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
+typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
+
+typedef CGAL::Constrained_triangulation_face_base_2<K>           Fb;
+typedef CGAL::Triangulation_data_structure_2<Vb,Fb>              TDS;
+typedef CGAL::Exact_predicates_tag                               Itag;
+typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag> CDT;
+
+typedef CDT::Point                                             Point;
+
+
 GraphBuilder::GraphBuilder()
     : mType(Hex),
       mStep(0), mStep1(0), mStep2(0),
@@ -70,29 +81,6 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
 {
     mShapefileExc = src;
 }
-
-#if 0
-namespace GraphBuilderInternal {
-
-struct LinkData {
-    bool removed;
-    bool used;
-    double weight;
-    int id_from, id_to;
-
-    LinkData()
-        : removed(false), used(false), weight(0.0),
-          id_from(-1), id_to(-1) {
-    }
-};
-
-bool sortCriteria(const LinkData &l1, const LinkData &l2) {
-    return l1.weight < l2.weight;
-}
-
-}
-#endif
-
 
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 {
@@ -210,10 +198,15 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     auto nIdField = resultLayer->FindFieldIndex(idField.GetNameRef(), true);
     assert(nIdField != -1);
 
+    long prevFid = -1;
+    CDT::Vertex_handle prevHandle;
+    auto fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
+
     CDT tri;
     OGRFeature *feature;
     resultLayer->ResetReading();
     int id = 0;
+
     while ((feature = resultLayer->GetNextFeature()) != nullptr) {
         const auto geometry(feature->GetGeometryRef());
         assert(geometry != nullptr);
@@ -223,12 +216,21 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         assert(point != nullptr);
 
         feature->SetField(nIdField, id);
+        auto constrFid = feature->GetFieldAsInteger(fieldConstrain);
 
         CDT::Point pt(point->getX(), point->getY());
         auto handle = tri.insert(pt);
 
+        if (constrFid == prevFid) {
+            tri.insert_constraint(prevHandle, handle);
+        }
+        prevHandle = handle;
+        prevFid = feature->GetFID();
+
         handle->info() = id;
         ++id;
+
+        resultLayer->SetFeature(feature);
     }
 
     OGRLayer *layerEdges = outdataset->CreateLayer("Displace-InEdges", &sr, wkbLineString, nullptr);
@@ -363,7 +365,13 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
     if (lyIncluded == nullptr && lyExclusion1 == nullptr && lyExclusion2 == nullptr)
         gridout = lyOut;
 
+    OGRFieldDefn fldConstrain("Constrain", OFTInteger);
+    gridout->CreateField(&fldConstrain);
+    auto fieldConstrain = gridout->FindFieldIndex("Constrain", true);
+
     // First Include Grid
+    long oldFid = -1;
+
     builder->beginCreateGrid();
     while (!builder->atEnd()) {
         Node n;
@@ -372,13 +380,18 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
 
         OGRPoint pt(n.point.x(),n.point.y());
         auto f = OGRFeature::CreateFeature(gridout->GetLayerDefn());
+        if (oldFid != -1)
+            f->SetField(fieldConstrain, (int)oldFid);
+
         f->SetGeometry(&pt);
         if (gridout->CreateFeature(f) != OGRERR_NONE) {
             throw std::runtime_error("Cannot create points");
         }
+        oldFid = f->GetFID();
         OGRFeature::DestroyFeature(f);
 
         if (builder->isAtLineStart()) {
+            oldFid = -1;
             ++progress;
 
             if (mFeedback)

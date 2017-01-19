@@ -108,20 +108,6 @@ private:
     void makePartProgress(double x);
     void startNewPartProgress(QString msg);
 
-    typedef CGAL::Exact_predicates_inexact_constructions_kernel         K;
-    typedef CGAL::Triangulation_vertex_base_with_info_2<unsigned, K>    Vb;
-
-    /*
-    typedef CGAL::Triangulation_data_structure_2<Vb>                    Tds;
-    typedef CGAL::Delaunay_triangulation_2<K, Tds>                      Delaunay;*/
-
-    typedef CGAL::Constrained_triangulation_face_base_2<K>           Fb;
-    typedef CGAL::Triangulation_data_structure_2<Vb,Fb>              TDS;
-    typedef CGAL::Exact_predicates_tag                               Itag;
-    typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag> CDT;
-
-    typedef CDT::Point                                             Point;
-
 //    void fillWithNodes(displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress);
 //    void pushAd(QList<Node> &node, int source, int target);
 

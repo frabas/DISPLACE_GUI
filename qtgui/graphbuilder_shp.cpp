@@ -203,10 +203,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 
     // Triangulate
+    OGRFieldDefn idField ("pointId", OFTInteger );
+    if( resultLayer->CreateField( &idField ) != OGRERR_NONE ) {
+        throw std::runtime_error( "Creating Id field failed." );
+    }
+    auto nIdField = resultLayer->FindFieldIndex(idField.GetNameRef(), true);
+    assert(nIdField != -1);
 
     CDT tri;
     OGRFeature *feature;
     resultLayer->ResetReading();
+    int id = 0;
     while ((feature = resultLayer->GetNextFeature()) != nullptr) {
         const auto geometry(feature->GetGeometryRef());
         assert(geometry != nullptr);
@@ -215,22 +222,35 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         const auto point(static_cast<OGRPoint*>(geometry));
         assert(point != nullptr);
 
+        feature->SetField(nIdField, id);
+
         CDT::Point pt(point->getX(), point->getY());
-        tri.insert(pt);
+        auto handle = tri.insert(pt);
+
+        handle->info() = id;
+        ++id;
     }
 
     OGRLayer *layerEdges = outdataset->CreateLayer("Displace-InEdges", &sr, wkbLineString, nullptr);
-    /*
-    OGRFieldDefn fromField( "From", OFTInteger );
-    OGRFieldDefn toField ("To", OFTInteger );
-    if( layerEdges->CreateField( &fromField ) != OGRERR_NONE  || layerEdges->CreateField( &toField) != OGRERR_NONE) {
+    OGRFieldDefn fromField( "FromFid", OFTInteger );
+    OGRFieldDefn toField ("ToFid", OFTInteger );
+    OGRFieldDefn weightField ("Weight", OFTReal );
+    if( layerEdges->CreateField( &fromField ) != OGRERR_NONE
+            || layerEdges->CreateField( &toField) != OGRERR_NONE
+            || layerEdges->CreateField( &weightField ) != OGRERR_NONE
+            ) {
         throw std::runtime_error( "Creating Name field failed." );
-    }*/
+    }
+    auto fldFrom = layerEdges->FindFieldIndex(fromField.GetNameRef(), true);
+    assert(fldFrom != -1);
+    auto fldTo = layerEdges->FindFieldIndex(toField.GetNameRef(), true);
+    assert(fldTo != -1);
+    auto fldWeight = layerEdges->FindFieldIndex(weightField.GetNameRef(), true);
+    assert(fldWeight != -1);
 
     qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
     CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
     while (vrt != tri.finite_vertices_end()) {
-        //        if (vrt != tri.infinite_vertex()) {
         CDT::Vertex_circulator vc = tri.incident_vertices((CDT::Vertex_handle)vrt);
         CDT::Vertex_circulator done(vc);
 
@@ -244,12 +264,15 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
                 OGRFeature *f = OGRFeature::CreateFeature(layerEdges->GetLayerDefn());
                 f->SetGeometry(&line);
+                f->SetField(fldFrom, static_cast<int>(vrt->info()));
+                f->SetField(fldTo, static_cast<int>(vc->info()));
+                f->SetField(fldWeight, 100.0);          // TODO Fix this calculate
+
                 layerEdges->CreateFeature(f);
                 OGRFeature::DestroyFeature(f);
             }
             ++vc;
         } while (vc != done);
-        //}
         ++vrt;
     }
 
@@ -259,7 +282,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         auto tempLayer2 = layerEdges;
         layerEdges = outdataset->CreateLayer("Displace-ResultEdges", &sr);
         diff (tempLayer2, exclusionLayer1, layerEdges, memdataset);
-
 
         exclusionLayer1 = mShapefileExc->GetLayer(0);
         exclusionLayer1->ResetReading();
@@ -277,7 +299,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     // build the list of results
     QList<Node> res;
-#if 1
     resultLayer->ResetReading();
     while (auto f = resultLayer->GetNextFeature()) {
         auto pt = f->GetGeometryRef();
@@ -287,12 +308,34 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             Node n;
             n.point = QPointF(point->getX(), point->getY());
             n.good = true;
-            res << n;
+
+            int id = f->GetFieldAsInteger(nIdField);
+            assert(id != -1);
+
+            while (res.size() <= id)
+                res.push_back(Node());
+            res[id] = n;
         }
     }
 
+    // Fill the adiacencies.
+
+    layerEdges->ResetReading();
+    while (auto f = layerEdges->GetNextFeature()) {
+        auto from = static_cast<unsigned>(f->GetFieldAsInteger(fldFrom));
+        auto to = static_cast<unsigned>(f->GetFieldAsInteger(fldTo));
+        auto weight = f->GetFieldAsDouble(fldWeight);
+
+        auto &adj = res[from].adiacencies;
+        adj.push_back(to);
+        res[from].weight.push_back(weight);
+    }
+
     qDebug() << "Results: " << res.size() << " of " << resultLayer->GetFeatureCount();
-#endif
+
+    for (int i = 0; i < 10; ++i) {
+        qDebug() << i << res[i].point << res[i].adiacencies << res[i].weight;
+    }
 
     OGRDataSource::DestroyDataSource(outdataset);
     return res;

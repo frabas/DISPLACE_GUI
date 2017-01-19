@@ -248,6 +248,8 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     auto fldWeight = layerEdges->FindFieldIndex(weightField.GetNameRef(), true);
     assert(fldWeight != -1);
 
+    const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
+
     qDebug() << "Triangulation: " << tri.number_of_vertices() << " Vertices ";
     CDT::Finite_vertices_iterator vrt = tri.finite_vertices_begin();
     while (vrt != tri.finite_vertices_end()) {
@@ -266,7 +268,12 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
                 f->SetGeometry(&line);
                 f->SetField(fldFrom, static_cast<int>(vrt->info()));
                 f->SetField(fldTo, static_cast<int>(vc->info()));
-                f->SetField(fldWeight, 100.0);          // TODO Fix this calculate
+
+                // TODO: Filter out based on limits
+
+                double d;
+                geod.Inverse(pt.y(), pt.x(), pt2.y(), pt2.x(), d);
+                f->SetField(fldWeight, std::floor(d / 1000 + 0.5));
 
                 layerEdges->CreateFeature(f);
                 OGRFeature::DestroyFeature(f);

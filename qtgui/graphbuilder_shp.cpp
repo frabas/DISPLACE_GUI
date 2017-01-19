@@ -259,24 +259,26 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         const auto &pt = vrt->point();
         do {
             if (vc != tri.infinite_vertex()) {
-                OGRLineString line;
-                line.addPoint(pt.x(), pt.y());
                 const auto &pt2 = vc->point();
-                line.addPoint(pt2.x(), pt2.y());
-
-                OGRFeature *f = OGRFeature::CreateFeature(layerEdges->GetLayerDefn());
-                f->SetGeometry(&line);
-                f->SetField(fldFrom, static_cast<int>(vrt->info()));
-                f->SetField(fldTo, static_cast<int>(vc->info()));
-
-                // TODO: Filter out based on limits
 
                 double d;
                 geod.Inverse(pt.y(), pt.x(), pt2.y(), pt2.x(), d);
-                f->SetField(fldWeight, std::floor(d / 1000 + 0.5));
 
-                layerEdges->CreateFeature(f);
-                OGRFeature::DestroyFeature(f);
+                if (mLinkLimits < 1e-3 || d < mLinkLimits) {
+                    OGRLineString line;
+                    line.addPoint(pt.x(), pt.y());
+                    line.addPoint(pt2.x(), pt2.y());
+
+                    OGRFeature *f = OGRFeature::CreateFeature(layerEdges->GetLayerDefn());
+                    f->SetGeometry(&line);
+                    f->SetField(fldFrom, static_cast<int>(vrt->info()));
+                    f->SetField(fldTo, static_cast<int>(vc->info()));
+
+                    f->SetField(fldWeight, std::floor(d / 1000 + 0.5));
+
+                    layerEdges->CreateFeature(f);
+                    OGRFeature::DestroyFeature(f);
+                }
             }
             ++vc;
         } while (vc != done);

@@ -102,11 +102,19 @@ private:
                      OGRLayer *lyGrid,
                      OGRLayer *lyIncluded, OGRLayer *lyExclusion1, OGRLayer *lyExclusion2);
 
-    void clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out);
+    void clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out, OGRDataSource *tempds);
     void diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds);
+    void diffEdges (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds);
     void copyLayerContent(OGRLayer *src, OGRLayer *dst);
     void makePartProgress(double x);
     void startNewPartProgress(QString msg);
+    OGRLayer *createGridLayer (OGRDataSource *datasource, const char *const name);
+    OGRLayer *createEdgesLayer (OGRDataSource *datasource, const char *const name);
+    void deleteLayer(OGRDataSource *src, OGRLayer *layer);
+
+    int getFromFieldIndex (OGRLayer *layer);
+    int getToFieldIndex (OGRLayer *layer);
+    int getWeightFieldIndex (OGRLayer *layer);
 
 //    void fillWithNodes(displace::graphbuilders::GeographicGridBuilder *builder, QList<Node> &res, CDT &tri, std::vector<std::shared_ptr<OGRDataSource> > including, std::vector<std::shared_ptr<OGRDataSource> > excluding, bool outside, int &progress);
 //    void pushAd(QList<Node> &node, int source, int target);
@@ -118,6 +126,7 @@ private:
     double mLinkLimits;
     int mMaxLinks, mMinLinks;
     int progress = 0;
+    OGRSpatialReference mSpatialReference;
 
     std::shared_ptr<OGRDataSource> mShapefileInc1;
     std::shared_ptr<OGRDataSource> mShapefileInc2;

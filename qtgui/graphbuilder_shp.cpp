@@ -57,6 +57,7 @@ GraphBuilder::GraphBuilder()
       mShapefileInc1(), mShapefileInc2(), mShapefileExc(),
       mFeedback(0)
 {
+    mSpatialReference.SetWellKnownGeogCS( "WGS84" );
 }
 
 void GraphBuilder::setLimits(double lonMin, double lonMax, double latMin, double latMax)
@@ -90,9 +91,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     toremove.removeRecursively();
     toremove.mkpath(OUTDIR);
 #endif
-
-    OGRSpatialReference sr;
-    sr.SetWellKnownGeogCS( "WGS84" );
 
     // sanitize
     if (mShapefileExc.get() == 0)
@@ -129,7 +127,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     // Create an in-memory db
     OGRSFDriverRegistrar *registrar =  OGRSFDriverRegistrar::GetRegistrar();
 
-    auto memdriver = registrar->GetDriverByName("memory");
+    auto memdriver = registrar->GetDriverByName("memory"); // was memory
     auto memdataset = memdriver->CreateDataSource("memory", nullptr );
 
     auto outdriver = registrar->GetDriverByName("ESRI Shapefile");
@@ -141,42 +139,50 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     OGRLayer *outlayer1 = nullptr, *outlayer2 = nullptr;
 
     if (mShapefileInc1) {
-        gridlayer1 = outdataset->CreateLayer("grid1", &sr, wkbPoint, nullptr);
+        gridlayer1 = createGridLayer(outdataset, "grid1");
         auto inclusionLayer = mShapefileInc1->GetLayer(0);
         OGRLayer *exclusionLayer = nullptr;
         if (mShapefileInc2 && mStep2 < mStep1)
             exclusionLayer = mShapefileInc2->GetLayer(0);
-        outlayer1 = outdataset->CreateLayer("Displace-IncludeGrid1", &sr, wkbPoint, nullptr);
+        outlayer1 = createGridLayer(outdataset, "Displace-IncludeGrid1");
         createGrid(memdataset, builderInc1, outlayer1, gridlayer1, inclusionLayer, exclusionLayer, nullptr);
     }
 
     if (mShapefileInc2) {
-        gridlayer2 = outdataset->CreateLayer("grid2", &sr, wkbPoint, nullptr);
+        gridlayer2 = createGridLayer(outdataset, "grid2");
         auto inclusionLayer = mShapefileInc2->GetLayer(0);
         OGRLayer *exclusionLayer = nullptr;
         if (mShapefileInc1 && mStep1 < mStep2)
             exclusionLayer = mShapefileInc1->GetLayer(0);
-        outlayer2 = outdataset->CreateLayer("Displace-IncludeGrid2", &sr, wkbPoint, nullptr);
+        outlayer2 = createGridLayer(outdataset, "Displace-IncludeGrid2");
         createGrid(memdataset, builderInc2, outlayer2, gridlayer2, inclusionLayer, exclusionLayer, nullptr);
     }
 
     OGRLayer *exclusionLayer1 = nullptr, *exclusionLayer2 = nullptr;
+    OGRLayer *outLayerOut = nullptr;
+    OGRLayer *resultLayer = nullptr;
 
-    OGRLayer *outLayerOut = outdataset->CreateLayer("Displace-OutGrid", &sr, wkbPoint, nullptr);
-    gridlayerOut = outdataset->CreateLayer("gridOut", &sr, wkbPoint, nullptr);
     if (outsideEnabled()) {
+        gridlayerOut = createGridLayer(outdataset, "gridOut");
+        outLayerOut = createGridLayer(outdataset, "Displace-OutGrid");
+
         if (mShapefileInc1)
             exclusionLayer1 = mShapefileInc1->GetLayer(0);
         if (mShapefileInc2)
             exclusionLayer2 = mShapefileInc2->GetLayer(0);
         createGrid(memdataset, builderOut, outLayerOut, gridlayerOut, nullptr, exclusionLayer1, exclusionLayer2);
-    }
 
-    OGRLayer *resultLayer;
-    if (mShapefileExc) {
-        resultLayer = memdataset->CopyLayer(outLayerOut, "temp", nullptr);
+        if (mShapefileExc) {
+            resultLayer = outdataset->CopyLayer(outLayerOut, "exc1", nullptr);
+        } else {
+            resultLayer = outdataset->CopyLayer(outLayerOut, "Displace-ResultGrid", nullptr);
+        }
     } else {
-        resultLayer = outdataset->CopyLayer(outLayerOut, "Displace-ResultGrid", nullptr);
+        if (mShapefileExc) {
+            resultLayer = createGridLayer(outdataset, "exc1");
+        } else {
+            resultLayer = createGridLayer(outdataset, "Displace-ResultGrid");
+        }
     }
 
     if (outlayer1) {
@@ -188,7 +194,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     if (mShapefileExc) {
         auto tempLayer = resultLayer;
-        resultLayer = outdataset->CreateLayer("Displace-ResultGrid", &sr);
+        resultLayer = createGridLayer(outdataset, "Displace-ResultGrid");
         exclusionLayer1 = mShapefileExc->GetLayer(0);
         diff(tempLayer, exclusionLayer1, resultLayer, memdataset);
     }
@@ -204,6 +210,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     long prevFid = -1;
     CDT::Vertex_handle prevHandle;
     auto fieldConstrain = resultLayer->FindFieldIndex("Constrain", true);
+    assert(fieldConstrain != -1);
 
     CDT tri;
     OGRFeature *feature;
@@ -236,21 +243,13 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         resultLayer->SetFeature(feature);
     }
 
-    OGRLayer *layerEdges = outdataset->CreateLayer("Displace-InEdges", &sr, wkbLineString, nullptr);
-    OGRFieldDefn fromField( "FromFid", OFTInteger );
-    OGRFieldDefn toField ("ToFid", OFTInteger );
-    OGRFieldDefn weightField ("Weight", OFTReal );
-    if( layerEdges->CreateField( &fromField ) != OGRERR_NONE
-            || layerEdges->CreateField( &toField) != OGRERR_NONE
-            || layerEdges->CreateField( &weightField ) != OGRERR_NONE
-            ) {
-        throw std::runtime_error( "Creating Name field failed." );
-    }
-    auto fldFrom = layerEdges->FindFieldIndex(fromField.GetNameRef(), true);
+
+    OGRLayer *layerEdges = createEdgesLayer(outdataset, "Displace-InEdges");
+    auto fldFrom = getFromFieldIndex(layerEdges);
     assert(fldFrom != -1);
-    auto fldTo = layerEdges->FindFieldIndex(toField.GetNameRef(), true);
+    auto fldTo = getToFieldIndex(layerEdges);
     assert(fldTo != -1);
-    auto fldWeight = layerEdges->FindFieldIndex(weightField.GetNameRef(), true);
+    auto fldWeight = getWeightFieldIndex(layerEdges);
     assert(fldWeight != -1);
 
     const GeographicLib::Geodesic& geod = GeographicLib::Geodesic::WGS84();
@@ -292,14 +291,32 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     // here remove the other Exclusion Grid
 
+    int deletedField = -1;
     if (mShapefileExc) {
         auto tempLayer2 = layerEdges;
-        layerEdges = outdataset->CreateLayer("Displace-ResultEdges", &sr);
-        diff (tempLayer2, exclusionLayer1, layerEdges, memdataset);
+
+        layerEdges = createEdgesLayer(outdataset,"Displace-ResultEdges");
+        OGRFieldDefn delFld ("Deleted", OFTInteger);
+        layerEdges->CreateField(&delFld);
+        deletedField = layerEdges->FindFieldIndex("Deleted", TRUE);
+
+        fldFrom = getFromFieldIndex(layerEdges);
+        assert(fldFrom != -1);
+        fldTo = getToFieldIndex(layerEdges);
+        assert(fldTo != -1);
+        fldWeight = getWeightFieldIndex(layerEdges);
+        assert(fldWeight != -1);
+
+//        diffEdges(tempLayer2, exclusionLayer1, layerEdges, memdataset);
+        copyLayerContent(tempLayer2, layerEdges);
 
         exclusionLayer1 = mShapefileExc->GetLayer(0);
         exclusionLayer1->ResetReading();
+        qDebug()<< "Before removing features: " << layerEdges->GetFeatureCount();
+
         OGRFeature *feature;
+
+        int n = 0;
         while (( feature = exclusionLayer1->GetNextFeature()) != nullptr) {
             OGRGeometry *geometry = feature->GetGeometryRef();
             layerEdges->ResetReading();
@@ -307,8 +324,13 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
             OGRFeature *edgeF;
             while ((edgeF = layerEdges->GetNextFeature()) != nullptr) {
                 layerEdges->DeleteFeature(edgeF->GetFID());
+                //edgeF->SetField(deletedField, 1);
+                ++n;
+                //layerEdges->SetFeature(edgeF);
             }
         }
+
+        qDebug() << "Removed: " << n;
     }
 
     // build the list of results
@@ -334,8 +356,19 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
 
     // Fill the adiacencies.
 
+    int nEdges = 0;
+    layerEdges->SetSpatialFilter(nullptr);
     layerEdges->ResetReading();
+
+    qDebug()<< "Actual features: " << layerEdges->GetFeatureCount() << deletedField;
     while (auto f = layerEdges->GetNextFeature()) {
+        /*
+        if (deletedField != -1) {
+            auto isDeleted = f->GetFieldAsInteger(deletedField);
+            if (isDeleted != 0)
+                continue;   // Skip deleted fields.
+        }*/
+
         auto from = static_cast<unsigned>(f->GetFieldAsInteger(fldFrom));
         auto to = static_cast<unsigned>(f->GetFieldAsInteger(fldTo));
         auto weight = f->GetFieldAsDouble(fldWeight);
@@ -343,9 +376,10 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         auto &adj = res[from].adiacencies;
         adj.push_back(to);
         res[from].weight.push_back(weight);
+        ++nEdges;
     }
 
-    qDebug() << "Results: " << res.size() << " of " << resultLayer->GetFeatureCount();
+    qDebug() << "Results: " << res.size() << " of " << resultLayer->GetFeatureCount() << nEdges << " edges ";
 
     for (int i = 0; i < 10; ++i) {
         qDebug() << i << res[i].point << res[i].adiacencies << res[i].weight;
@@ -408,25 +442,29 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
     if (lyIncluded) {
         if (lyExclusion1) {
             if (lyExclusion2) {
-                auto tempOut1 = tempDatasource->CreateLayer("temp1");
-                clip (lyGrid, lyIncluded, tempOut1);
-                auto tempOut2 = tempDatasource->CreateLayer("temp1");
+                auto tempOut1 = createGridLayer(tempDatasource, "temp1");
+                clip (lyGrid, lyIncluded, tempOut1, tempDatasource);
+                auto tempOut2 = createGridLayer(tempDatasource, "temp2");
                 diff (tempOut1, lyExclusion1, tempOut2, tempDatasource);
                 diff (tempOut2, lyExclusion2, lyOut, tempDatasource);
+                deleteLayer(tempDatasource, tempOut1);
+                deleteLayer(tempDatasource, tempOut2);
             } else {
-                auto tempOut1 = tempDatasource->CreateLayer("temp1");
-                clip (lyGrid, lyIncluded, tempOut1);
+                auto tempOut1 = createGridLayer(tempDatasource, "temp1");
+                clip (lyGrid, lyIncluded, tempOut1, tempDatasource);
                 diff (tempOut1, lyExclusion1, lyOut, tempDatasource);
+                deleteLayer(tempDatasource, tempOut1);
             }
         } else  {
-            clip (lyGrid, lyIncluded, lyOut);
+            clip (lyGrid, lyIncluded, lyOut, tempDatasource);
         }
     } else {
         if (lyExclusion1) {
             if (lyExclusion2) {
-                auto tempOut1 = tempDatasource->CreateLayer("temp1");
+                auto tempOut1 = createGridLayer(tempDatasource, "temp1");
                 diff (lyGrid, lyExclusion1, tempOut1, tempDatasource);
                 diff (tempOut1, lyExclusion2, lyOut, tempDatasource);
+                deleteLayer(tempDatasource, tempOut1);
             } else {
                 diff (lyGrid, lyExclusion1, lyOut, tempDatasource);
             }
@@ -436,30 +474,55 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
     }
 }
 
-void GraphBuilder::clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out)
+void GraphBuilder::clip (OGRLayer *in, OGRLayer *feature, OGRLayer *out, OGRDataSource *tempds)
 {
     startNewPartProgress("Clipping");
-    if (in->Clip(feature, out, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
+    auto temp = createGridLayer(tempds, "tempclip");
+    if (in->Clip(feature, temp, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
         throw std::runtime_error("Error clipping");
     }
+    copyLayerContent(temp, out);
+    deleteLayer(tempds, temp);
 }
 
 void GraphBuilder::diff (OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds)
 {
+    /*
 #if defined (DEBUG)
     auto in1_copy = tempds->CopyLayer(in1, "copy");
     in1 = in1_copy;
-#endif
+#endif */
 
     startNewPartProgress("Clipping");
-    auto temp = tempds->CreateLayer("temp", nullptr, wkbPoint, nullptr);
+    auto temp = createGridLayer(tempds, "temp2");
     if (in1->Clip(in2, temp, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
         throw std::runtime_error("Error clipping");
     }
     startNewPartProgress("Removing Points");
-    if (in1->SymDifference(temp, out, nullptr, waitfunc, (void *)this)) {
+    auto temp3 = createGridLayer(tempds, "temp3");
+    if (in1->SymDifference(temp, temp3, nullptr, waitfunc, (void *)this)) {
         throw std::runtime_error("Error diffing");
     }
+    copyLayerContent(temp3, out);
+    deleteLayer(tempds, temp);
+    deleteLayer(tempds, temp3);
+}
+
+void GraphBuilder::diffEdges(OGRLayer *in1, OGRLayer *in2, OGRLayer *out, OGRDataSource *tempds)
+{
+    startNewPartProgress("Clipping");
+    auto temp = createEdgesLayer(tempds, "temp2");
+    if (in1->Clip(in2, temp, nullptr, waitfunc, (void *)this) != OGRERR_NONE) {
+        throw std::runtime_error("Error clipping");
+    }
+    startNewPartProgress("Removing Points");
+    auto temp3 = createEdgesLayer(tempds, "temp3");
+    if (in1->SymDifference(temp, temp3, nullptr, waitfunc, (void *)this)) {
+        throw std::runtime_error("Error diffing");
+    }
+    copyLayerContent(temp3, out);
+    deleteLayer(tempds, temp);
+    deleteLayer(tempds, temp3);
 }
 
 void GraphBuilder::copyLayerContent(OGRLayer *src, OGRLayer *dst)
@@ -499,6 +562,57 @@ void GraphBuilder::startNewPartProgress(QString msg)
     mFeedbackStartTime = Timer::now();
     mFeedbackProgressMsg = msg;
     mFeedbackPreviousETC = -1;
+}
+
+OGRLayer *GraphBuilder::createGridLayer(OGRDataSource *datasource, const char * const name)
+{
+    auto resultLayer = datasource->CreateLayer(name, &mSpatialReference, wkbPoint, nullptr);
+    OGRFieldDefn fldConstrain("Constrain", OFTInteger);
+    resultLayer->CreateField(&fldConstrain);
+    return resultLayer;
+}
+
+OGRLayer *GraphBuilder::createEdgesLayer(OGRDataSource *datasource, const char * const name)
+{
+    OGRLayer *layer = datasource->CreateLayer(name, &mSpatialReference, wkbLineString, nullptr);
+    OGRFieldDefn fromField( "FromFid", OFTInteger );
+    OGRFieldDefn toField ("ToFid", OFTInteger );
+    OGRFieldDefn weightField ("Weight", OFTReal );
+    if( layer->CreateField( &fromField ) != OGRERR_NONE
+            || layer->CreateField( &toField) != OGRERR_NONE
+            || layer->CreateField( &weightField ) != OGRERR_NONE
+            ) {
+        throw std::runtime_error( "Creating Name field failed." );
+    }
+
+    return layer;
+}
+
+void GraphBuilder::deleteLayer(OGRDataSource *src, OGRLayer *layer)
+{
+    for (int i = 0; i < src->GetLayerCount(); ++i) {
+        if (src->GetLayer(i) == layer) {
+            src->DeleteLayer(i);
+            return;
+        }
+    }
+
+    qDebug() << "Layer not found: " << layer->GetName();
+}
+
+int GraphBuilder::getFromFieldIndex(OGRLayer *layer)
+{
+    layer->FindFieldIndex("FromFid", true);
+}
+
+int GraphBuilder::getToFieldIndex(OGRLayer *layer)
+{
+    layer->FindFieldIndex("ToFid", true);
+}
+
+int GraphBuilder::getWeightFieldIndex(OGRLayer *layer)
+{
+    layer->FindFieldIndex("Weight", true);
 }
 
 int GraphBuilder::waitfunc(double progress, const char *msg, void *thiz)

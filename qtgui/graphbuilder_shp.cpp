@@ -160,14 +160,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         createGrid(memdataset, builderInc2, outlayer2, gridlayer2, inclusionLayer, exclusionLayer, nullptr);
     }
 
-    gridlayerOut = outdataset->CreateLayer("gridOut", &sr, wkbPoint, nullptr);
     OGRLayer *exclusionLayer1 = nullptr, *exclusionLayer2 = nullptr;
-    if (mShapefileInc1)
-        exclusionLayer1 = mShapefileInc1->GetLayer(0);
-    if (mShapefileInc2)
-        exclusionLayer2 = mShapefileInc2->GetLayer(0);
+
     OGRLayer *outLayerOut = outdataset->CreateLayer("Displace-OutGrid", &sr, wkbPoint, nullptr);
-    createGrid(memdataset, builderOut, outLayerOut, gridlayerOut, nullptr, exclusionLayer1, exclusionLayer2);
+    gridlayerOut = outdataset->CreateLayer("gridOut", &sr, wkbPoint, nullptr);
+    if (outsideEnabled()) {
+        if (mShapefileInc1)
+            exclusionLayer1 = mShapefileInc1->GetLayer(0);
+        if (mShapefileInc2)
+            exclusionLayer2 = mShapefileInc2->GetLayer(0);
+        createGrid(memdataset, builderOut, outLayerOut, gridlayerOut, nullptr, exclusionLayer1, exclusionLayer2);
+    }
 
     OGRLayer *resultLayer;
     if (mShapefileExc) {
@@ -365,9 +368,12 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
     if (lyIncluded == nullptr && lyExclusion1 == nullptr && lyExclusion2 == nullptr)
         gridout = lyOut;
 
-    OGRFieldDefn fldConstrain("Constrain", OFTInteger);
-    gridout->CreateField(&fldConstrain);
     auto fieldConstrain = gridout->FindFieldIndex("Constrain", true);
+    if (fieldConstrain == -1) {
+        OGRFieldDefn fldConstrain("Constrain", OFTInteger);
+        gridout->CreateField(&fldConstrain);
+        fieldConstrain = gridout->FindFieldIndex("Constrain", true);
+    }
 
     // First Include Grid
     long oldFid = -1;

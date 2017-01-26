@@ -4,6 +4,7 @@
 #include <gdal/ogrsf_frmts.h>
 #include <QPoint>
 #include <QList>
+#include <QString>
 
 #include <chrono>
 

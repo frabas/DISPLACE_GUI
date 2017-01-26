@@ -84,19 +84,15 @@ void GraphBuilder::setExcludingShapefile(std::shared_ptr<OGRDataSource> src)
 }
 
 QList<GraphBuilder::Node> GraphBuilder::buildGraph()
-{
-#ifdef DEBUG
-    const QString OUTDIR = "/tmp/DisplaceBuildGraph";
+{   
+    const QString OUTDIR = QString("%1/DisplaceBuildGraph").arg(QDir::tempPath());
     QDir toremove(OUTDIR);
     toremove.removeRecursively();
     toremove.mkpath(OUTDIR);
-#endif
 
     // sanitize
     if (mShapefileExc.get() == 0)
         mRemoveEdgesInExcludeZone = false;
-
-    qDebug() << "Type: " << mType;
 
     auto builderInc1 = createBuilder(mType, mStep1);
     auto builderInc2 = createBuilder(mType, mStep2);

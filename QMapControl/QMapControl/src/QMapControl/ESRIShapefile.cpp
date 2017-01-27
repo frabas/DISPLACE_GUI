@@ -238,12 +238,7 @@ namespace qmapcontrol
         else if(wkbFlatten(ogr_geometry->getGeometryType()) == wkbPolygon)
         {
             // Cast to a polygon.
-            const auto ogr_polygon_complex(static_cast<OGRPolygon*>(ogr_geometry));
-
-            auto tolerance = 0.001; // std::pow(2, zoom);
-            qDebug() << "Tolerance: " << tolerance << " Zoom: " << controller_zoom;
-            auto ogr_feature_simplified = ogr_polygon_complex->SimplifyPreserveTopology(tolerance);
-            auto ogr_polygon = static_cast<OGRPolygon*>(ogr_feature_simplified);
+            const auto ogr_polygon(static_cast<OGRPolygon*>(ogr_geometry));
 
             // Fetch the exterior ring.
             const auto ogr_exterior_ring(ogr_polygon->getExteriorRing());
@@ -300,19 +295,13 @@ namespace qmapcontrol
         {
             qDebug() << "MultiPoly";
             // Cast to a multi polygon.
-            const auto ogr_multi_polygon_cplx(static_cast<OGRMultiPolygon*>(ogr_geometry));
-            if(ogr_multi_polygon_cplx == nullptr)
+            const auto ogr_multi_polygon(static_cast<OGRMultiPolygon*>(ogr_geometry));
+            if(ogr_multi_polygon == nullptr)
             {
                 // No multi polygons!
             }
             else
             {
-                // reduce the pow argument to increase the precision
-                auto tolerance = 0.001 * std::pow(2, 11-controller_zoom);
-                qDebug() << "Tolerance: " << tolerance << " Zoom: " << controller_zoom;
-                auto ogr_feature_simplified = ogr_multi_polygon_cplx->SimplifyPreserveTopology(tolerance);
-                auto ogr_multi_polygon = static_cast<OGRMultiPolygon*>(ogr_feature_simplified);
-
                 QPainterPath path;
 
                 // Loop through each polygon.

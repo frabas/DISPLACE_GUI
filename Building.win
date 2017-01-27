@@ -86,20 +86,20 @@ $ cp libz.a /c/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64lib
 $ cp libz.dll.a /c/Qt/qt-5.3.1-x64-mingw482r4-seh-opengl/mingw64lib/libz.dll.a
 
 
-=== Compile GEOS 3.4.2
+=== Compile GEOS 3.5.0
 
-First download geos library from http://trac.osgeo.org/geos/ (at the time of writing, version is 3.4.2)
+First download geos library from http://trac.osgeo.org/geos/ (at the time of writing, version is 3.5.0)
 Unpack the tarbz2 file, enter the source dir and run configure
 
 $ ./configure --prefix=/usr/local
 
 Change capi/Makefile from
 
-libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
+libgeos_c_la_CPPFLAGS = $(AM_CPPFLAGS) -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
 
 to
 
-libgeos_c_la_CPPFLAGS = 
+libgeos_c_la_CPPFLAGS = $(AM_CPPFLAGS)
 
 
 then run make and make install
@@ -167,6 +167,13 @@ and change
 to ogr/ogrsfformats/generic/ogrsfdriverregistrar.cpp
 
 
+And finally, in GNUMakefile, line 40, remove the dependency of $(LIBGDAL) from frmts/o/*.lo. ie., the line
+
+$(LIBGDAL):	$(GDAL_OBJ:.o=.lo)
+
+should be
+
+$(LIBGDAL):
 
 
 Then run make:

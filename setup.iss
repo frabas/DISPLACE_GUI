@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.4"
+#define MyAppVersion "0.9.4RC1"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -60,7 +60,7 @@ Source: scripts\gen_ts.R; DestDir: {app}\scripts; Flags: ignoreversion
 Source: install\extra\bin\libgcc_s_seh-1.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libgdal-1.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libgeos_c-1.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libgeos-3-4-2.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\libgeos-3-5-0.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libproj-0.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libstdc++-6.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libwinpthread-1.dll; DestDir: {app}; Flags: ignoreversion

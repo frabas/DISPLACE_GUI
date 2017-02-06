@@ -276,3 +276,21 @@ $ make install
 DESTDIR can be used to change the destination directory.
 
 
+== Running under Qt Creator ==
+
+If you want to run the application under Qt Creator, you must add some path to the running environment.
+
+Go the the Projects / Run page and add the following string to the PATH variable of the Run Environment:
+
+
+C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64\lib;
+C:\Users\<yourprojectpath>\displace\install\extra\lib;
+C:\Users\<yourprojectpath>\displace\install\extra\bin;
+C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64\bin;
+
+Everything should be in the same line of course.
+
+Also, copy the platforms and sqldrivers directories installed under C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64\plugins
+on your build/debug and build/release directory, otherwise an error message will make the app crash.
+
+

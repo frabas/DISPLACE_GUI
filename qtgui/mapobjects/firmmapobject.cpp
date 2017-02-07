@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#include "fishfarmobject.h"
+#include "firmmapobject.h"
 
 #include <mapobjectscontroller.h>
 
@@ -32,17 +32,17 @@
 #include <QPainter>
 #include <QDebug>
 
-FishfarmMapObject::FishfarmMapObject(MapObjectsController *controller, FishfarmData *fishfarm)
+FirmMapObject::FirmMapObject(MapObjectsController *controller, FirmData *firm)
     : mController(controller),
-      mFishfarm(fishfarm),
+      mFirm(firm),
       mWidget(0)
 {
-    mGeometry = std::shared_ptr<FishfarmGraphics> (new FishfarmGraphics(mFishfarm));
+    mGeometry = std::shared_ptr<FirmGraphics> (new FirmGraphics(mFirm));
 
     mGeometry->setAncillaryData(new MapObjectsController::WidgetAncillaryData(this));
 }
 
-bool FishfarmMapObject::showProperties()
+bool FirmMapObject::showProperties()
 {
     if (!mWidget) {
         mWidget = new NodeDetailsWidget(mController->mapWidget());
@@ -55,59 +55,59 @@ bool FishfarmMapObject::showProperties()
     return true;
 }
 
-void FishfarmMapObject::updateProperties()
+void FirmMapObject::updateProperties()
 {
     if (!mWidget)
         return;
 
     QString text = QString("<b>Name</b>: %1<br/>"
                            "<b>Coords: </b>%2 %3<br/>")
-            .arg(QString::number(mFishfarm->mFishfarm->get_name()))
-            .arg(mFishfarm->mFishfarm->get_y())
-            .arg(mFishfarm->mFishfarm->get_x());
+            .arg(QString::number(mFirm->mFirm->get_idx()))
+            .arg(mFirm->mFirm->get_y())
+            .arg(mFirm->mFirm->get_x());
 
     text += "<br/>";
-    //text += QString("<b>Name again:</b> %1<br/>").arg(mFishfarm->mFishfarm->get_name());
+    //text += QString("<b>Name again:</b> %1<br/>").arg(mFirm->mFirm->get_name());
 
     mWidget->setText(text);
 }
 
-void FishfarmMapObject::fishfarmUpdated()
+void FirmMapObject::firmUpdated()
 {
     mGeometry->layer()->removeGeometry(mGeometry);
-    mGeometry->setCoord(qmapcontrol::PointWorldCoord(mFishfarm->mFishfarm->get_x(), mFishfarm->mFishfarm->get_y()));
+    mGeometry->setCoord(qmapcontrol::PointWorldCoord(mFirm->mFirm->get_x(), mFirm->mFirm->get_y()));
     mGeometry->layer()->addGeometry(mGeometry);
 }
 
 
 
 
-void FishfarmMapObject::widgetClosed()
+void FirmMapObject::widgetClosed()
 {
     mWidget = 0;
 }
 
 
-QBrush *FishfarmMapObject::FishfarmGraphics::color = 0;
+QBrush *FirmMapObject::FirmGraphics::color = 0;
 
-FishfarmMapObject::FishfarmGraphics::FishfarmGraphics(FishfarmData *fishfarm)
-    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(fishfarm->mFishfarm->get_x(), fishfarm->mFishfarm->get_y()), QSizeF(20.0, 40.0), 11, 7, 17),
-      mFishfarm(fishfarm)
+FirmMapObject::FirmGraphics::FirmGraphics(FirmData *firm)
+    : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(firm->mFirm->get_x(), firm->mFirm->get_y()), QSizeF(20.0, 40.0), 11, 7, 17),
+      mFirm(firm)
 {
     if (color == 0)
-        color = new QBrush(Qt::darkYellow);
+        color = new QBrush(Qt::darkBlue);
 
     setNonlinearZoomFactor(0.9);
 }
 
-void FishfarmMapObject::FishfarmGraphics::updated()
+void FirmMapObject::FirmGraphics::updated()
 {
-    setCoord(qmapcontrol::PointWorldCoord(mFishfarm->mFishfarm->get_x(), mFishfarm->mFishfarm->get_y()));
+    setCoord(qmapcontrol::PointWorldCoord(mFirm->mFirm->get_x(), mFirm->mFirm->get_y()));
     emit positionChanged(this);
     emit requestRedraw();
 }
 
-void FishfarmMapObject::FishfarmGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+void FirmMapObject::FirmGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);
 

@@ -48,6 +48,7 @@ public:
 private:
         std::string name;
         int idx_firm;
+        double x, y;
         std::vector <Vessel*> bunch_of_vessels;
 
         pthread_mutex_t mutex;
@@ -62,7 +63,13 @@ public:
 
         int get_idx () const;
         std::string get_name () const;
+        double get_x () const;
+        double get_y () const;
         std::vector<Vessel*> get_bunch_of_vessels();
+
+        void set_x (double x);
+        void set_y (double y);
+
 
         void lock() { pthread_mutex_lock (&mutex); }
         void unlock() { pthread_mutex_unlock (&mutex); }

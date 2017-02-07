@@ -173,7 +173,10 @@ SOURCES += \
     objects/windmillentity.cpp \
     modelobjects/windmilldata.cpp \
     mapobjects/windmillobject.cpp \
-    graphbuilder_shp.cpp
+    graphbuilder_shp.cpp \
+    objects/firmentity.cpp \
+    modelobjects/firmdata.cpp \
+    mapobjects/firmmapobject.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -295,7 +298,10 @@ HEADERS += \
     objects/windmillentity.h \
     modelobjects/windmilldata.h \
     mapobjects/windmillobject.h \
-    graphbuilder_shp.h
+    graphbuilder_shp.h \
+    objects/firmentity.h \
+    modelobjects/firmdata.h \
+    mapobjects/firmmapobject.h
 
 RESOURCES += \
     qtgui.qrc

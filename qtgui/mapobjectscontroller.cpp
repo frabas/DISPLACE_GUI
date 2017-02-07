@@ -24,6 +24,7 @@
 #include <mapobjects/harbourmapobject.h>
 #include <mapobjects/nodemapobject.h>
 #include <mapobjects/vesselmapobject.h>
+#include <mapobjects/firmmapobject.h>
 #include <mapobjects/shipmapobject.h>
 #include <mapobjects/fishfarmobject.h>
 #include <mapobjects/windmillobject.h>

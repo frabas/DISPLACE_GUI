@@ -55,6 +55,7 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mVesselsStatsDirty(false),
+      mFirmsStatsDirty(false),
       mShipsStatsDirty(false),
       mFishfarmStatsDirty(false),
       mWindmillStatsDirty(false),
@@ -1124,6 +1125,12 @@ int DisplaceModel::getFishfarmCount() const
     return mFishfarms.size();
 }
 
+
+int DisplaceModel::getFirmCount() const
+{
+    return mFirms.size();
+}
+
 int DisplaceModel::getWindmillCount() const
 {
     return mWindmills.size();
@@ -1133,6 +1140,11 @@ int DisplaceModel::getWindmillCount() const
 QString DisplaceModel::getFishfarmId(int idx) const
 {
     return QString::number(mFishfarms.at(idx)->mFishfarm->get_name());
+}
+
+QString DisplaceModel::getFirmId(int idx) const
+{
+    return QString::number(mFirms.at(idx)->mFirm->get_idx());
 }
 
 QString DisplaceModel::getWindmillId(int idx) const
@@ -1148,6 +1160,17 @@ void DisplaceModel::updateFishfarm(int idx, float x, float y)
 
     if (mDb) {
       //  mDb->addFishfarmPosition(idx, ff);
+    }
+}
+
+void DisplaceModel::updateFirm(int idx, float x, float y)
+{
+    std::shared_ptr<FirmData> fi(mFirms.at(idx));
+    fi->mFirm->set_x(x);
+    fi->mFirm->set_y(y);
+
+    if (mDb) {
+      //  mDb->addFirmPosition(idx, ff);
     }
 }
 

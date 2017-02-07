@@ -62,7 +62,7 @@ public:
         ShapefileLayers,
         OutputLayers,
         TariffsLayers,
-        Nodes, Harbours, Vessels, Ships, Fishfarms, Windmills, Populations, Benthos, Metiers,
+        Nodes, Harbours, Vessels, Firms, Ships, Fishfarms, Windmills, Populations, Benthos, Metiers,
         Nations, SizeGroups,
         LastCategory
     };

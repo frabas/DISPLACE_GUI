@@ -27,6 +27,7 @@
 #include <objects/harbourentity.h>
 #include <objects/nodeentity.h>
 #include <objects/vesselentity.h>
+#include <objects/firmentity.h>
 #include <objects/shipentity.h>
 #include <objects/fishfarmentity.h>
 #include <objects/windmillentity.h>
@@ -712,6 +713,13 @@ void MainWindow::centerMapOnVesselId(int id)
     centerMap(qmapcontrol::PointWorldCoord(h->mVessel->get_x(), h->mVessel->get_y()));
 }
 
+void MainWindow::centerMapOnFirmId(int id)
+{
+    std::shared_ptr<FirmData> h(currentModel->getFirmList()[id]);
+    centerMap(qmapcontrol::PointWorldCoord(h->mFirm->get_x(), h->mFirm->get_y()));
+}
+
+
 void MainWindow::centerMapOnShipId(int id)
 {
     std::shared_ptr<ShipData> h(currentModel->getShipList()[id]);
@@ -875,6 +883,10 @@ void MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
 
     case ObjectTreeModel::Vessels:
         centerMapOnVesselId((dynamic_cast<objecttree::VesselEntity *>(treemodel->entity(index)))->getVesselId());
+        break;
+
+    case ObjectTreeModel::Firms:
+        centerMapOnFirmId((dynamic_cast<objecttree::FirmEntity *>(treemodel->entity(index)))->getFirmId());
         break;
 
     case ObjectTreeModel::Ships:

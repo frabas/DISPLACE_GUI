@@ -229,6 +229,7 @@ protected:
     void centerMapOnHarbourId (int id);
     void centerMapOnNodeId (int id);
     void centerMapOnVesselId (int id);
+    void centerMapOnFirmId (int id);
     void centerMapOnShipId (int id);
     void centerMapOnFishfarmId(int id);
     void centerMapOnWindmillId(int id);

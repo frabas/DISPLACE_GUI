@@ -40,6 +40,8 @@
 Firm::Firm()
 {
     idx_firm = 0;
+    x=0;
+    y=0;
     init();
 }
 
@@ -58,6 +60,8 @@ Firm::Firm(std::string a_name, int a_idx_firm, std::vector<Vessel*> &a_bunch_of_
     idx_firm = a_idx_firm;
     bunch_of_vessels = a_bunch_of_vessels;
     name = a_name;
+    x=0;
+    y=0;
     dout(cout <<"firm creator...OK" << endl);
     init();
 }
@@ -82,6 +86,15 @@ int Firm::get_idx () const
     return(idx_firm);
 }
 
+double Firm::get_x () const
+{
+    return(x);
+}
+
+double Firm::get_y () const
+{
+    return(y);
+}
 
 
 
@@ -97,4 +110,13 @@ vector<Vessel*> Firm::get_bunch_of_vessels()
 }
 
 
+void Firm::set_x(double _x)
+{
+    x= _x;
+}
+
+void Firm::set_y(double _y)
+{
+    y= _y;
+}
 

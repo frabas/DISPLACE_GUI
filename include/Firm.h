@@ -1,0 +1,71 @@
+// --------------------------------------------------------------------------
+// DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
+// AND EFFORT DISPLACEMENT
+// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
+
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+// --------------------------------------------------------------------------
+
+#ifndef FIRM_H
+#define FIRM_H
+
+
+#include <string>
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <list>
+#include <map>
+#include <myutils.h>
+#include <options.h>
+#include <dtree/decisiontree.h>
+#include <dtree/stateevaluator.h>
+
+#include <pthread.h>
+
+typedef int vertex_t;
+
+class Node;
+class Metier;
+class Vessel;
+
+class Firm
+{
+public:
+
+private:
+        std::string name;
+        int idx_firm;
+        std::vector <Vessel*> bunch_of_vessels;
+
+        pthread_mutex_t mutex;
+
+protected:
+        void init();
+
+public:
+        Firm(std::string a_name, int a_idx_firm, std::vector<Vessel*> &a_bunch_of_vessels);
+        Firm();
+        ~Firm();
+
+        int get_idx () const;
+        std::string get_name () const;
+        std::vector<Vessel*> get_bunch_of_vessels();
+
+        void lock() { pthread_mutex_lock (&mutex); }
+        void unlock() { pthread_mutex_unlock (&mutex); }
+
+};
+#endif							 // FIRM_H

@@ -71,6 +71,7 @@ HEADERS= \
     ../include/Ship.h \
     ../include/Vessel.h \
     ../include/Metier.h \
+    ../include/Firm.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
     ../include/m_constants.h \

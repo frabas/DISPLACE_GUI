@@ -17,6 +17,7 @@ SOURCES= \
     Ship.cpp \
     Vessel.cpp \
     Metier.cpp \
+    Firm.cpp \
     myRutils.cpp \
     mkpath.cpp \
     memoryinfo.cpp \
@@ -45,6 +46,7 @@ HEADERS= \
     ../include/Ship.h \
     ../include/Vessel.h \
     ../include/Metier.h \
+    ../include/Firm.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
     ../include/m_constants.h \

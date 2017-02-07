@@ -41,6 +41,7 @@ SOURCES= \
     Ship.cpp \
     Vessel.cpp \
     Metier.cpp \
+    Firm.cpp \
     myRutils.cpp \
     mkpath.cpp \
     memoryinfo.cpp \
@@ -54,7 +55,8 @@ SOURCES= \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
-    utils/CrashHandler.cpp
+    utils/CrashHandler.cpp \
+
 
 HEADERS= \
     ../include/readdata.h \
@@ -70,6 +72,7 @@ HEADERS= \
     ../include/Ship.h \
     ../include/Vessel.h \
     ../include/Metier.h \
+    ../include/Firm.h \
     ../include/myRutils.h \
     ../include/mkpath.h \
     ../include/m_constants.h \
@@ -94,7 +97,8 @@ HEADERS= \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h \
     utils/CrashHandler.h \
-    dtree/vesselsevaluators.h
+    dtree/vesselsevaluators.h \
+
 
 ## Do not add this if you don't support IPC queues
 

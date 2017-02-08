@@ -31,6 +31,7 @@ struct Vessel {
     double mult_fuelcons_when_fishing;
     double mult_fuelcons_when_returning;
     double mult_fuelcons_when_inactive;
+    int firm_ids;
     VesselCalendar calendars;
 
     Vessel() {}
@@ -50,6 +51,7 @@ struct Vessel {
            double mult_fuelcons_when_fishing,
            double mult_fuelcons_when_returning,
            double mult_fuelcons_when_inactive,
+           int firm_ids,
            int westart,int  weend, int wrkstart, int wrkend
            ) :
         names(names),
@@ -88,6 +90,7 @@ struct Vessel {
             v1.mult_fuelcons_when_fishing == v2.mult_fuelcons_when_fishing &&
             v1.mult_fuelcons_when_returning == v2.mult_fuelcons_when_returning &&
             v1.mult_fuelcons_when_inactive == v2.mult_fuelcons_when_inactive &&
+            v1.firm_ids == v2.firm_ids &&
             v1.calendars == v2.calendars;
     }
 
@@ -123,6 +126,7 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;
+    vector<int> firm_ids;
     vector<VesselCalendar> calendars;
 
     if (!fill_from_vessels_specifications (stream,
@@ -141,6 +145,7 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
                                            mult_fuelcons_when_fishing,
                                            mult_fuelcons_when_returning,
                                            mult_fuelcons_when_inactive,
+                                           firm_ids,
                                            calendars))
         return false;
 
@@ -161,6 +166,7 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
         v.mult_fuelcons_when_fishing = mult_fuelcons_when_fishing[i];
         v.mult_fuelcons_when_returning = mult_fuelcons_when_returning[i];
         v.mult_fuelcons_when_inactive = mult_fuelcons_when_inactive[i];
+        v.firm_id= firm_ids[i];
         v.calendars = calendars[i];
 
         vessels.emplace_back(v);
@@ -217,8 +223,8 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_betas_semester_dat )
 BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
 {
     std::string teststring;
-    teststring = "DNK000001391|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22\n"
-                 "DNK0000012s1|30|34.248397|5|18|270|75|1|0.5|3.78|2|1|0|0.1|0.1522|5|6|5|22\n";
+    teststring = "DNK000001391|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1\n"
+                 "DNK0000012s1|30|34.248397|5|18|270|75|1|0.5|3.78|2|1|0|0.1|0.1522|5|6|5|22|2\n";
 
     std::istringstream ss (teststring);
 

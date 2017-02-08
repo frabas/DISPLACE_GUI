@@ -758,16 +758,24 @@ bool fill_from_metier_specifications(istream& in, multimap<string, double>& info
 fill in the vessel attributes
 @param the vessel specification file, ...
 */
-bool fill_from_vessels_specifications (istream& in, vector<string>& names,
-                                       vector<double>& speeds, vector<double>& fuelcons, vector<double>& lengths, vector<double>& vKWs,
-                                       vector<double>& carrycapacities, vector<double>& tankcapacities,
+bool fill_from_vessels_specifications (istream& in,
+                                       vector<string>& names,
+                                       vector<double>& speeds,
+                                       vector<double>& fuelcons,
+                                       vector<double>& lengths,
+                                       vector<double>& vKWs,
+                                       vector<double>& carrycapacities,
+                                       vector<double>& tankcapacities,
                                        vector<double>& nbfpingspertrips,
-                                       vector<double>& resttime_par1s, vector<double>& resttime_par2s,
+                                       vector<double>& resttime_par1s,
+                                       vector<double>& resttime_par2s,
                                        vector<double>& av_trip_duration,
                                        vector<double>& mult_fuelcons_when_steaming,
                                        vector<double>& mult_fuelcons_when_fishing,
                                        vector<double>& mult_fuelcons_when_returning,
-                                       vector<double>& mult_fuelcons_when_inactive, vector<VesselCalendar> &calendars)
+                                       vector<double>& mult_fuelcons_when_inactive,
+                                       vector<int>& firm_ids,
+                                       vector<VesselCalendar> &calendars)
 {
 
     std::string line;
@@ -817,6 +825,7 @@ bool fill_from_vessels_specifications (istream& in, vector<string>& names,
             mult_fuelcons_when_fishing.push_back(boost::lexical_cast<double>(fields[12].c_str()));
             mult_fuelcons_when_returning.push_back(boost::lexical_cast<double>(fields[13].c_str()));
             mult_fuelcons_when_inactive.push_back(boost::lexical_cast<double>(fields[14].c_str()));
+            firm_ids.push_back(boost::lexical_cast<int>(fields[15].c_str()));
 
             calendars.push_back(calendar);
         }

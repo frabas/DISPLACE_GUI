@@ -2103,13 +2103,14 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> mult_fuelcons_when_fishing;
     vector<double> mult_fuelcons_when_returning;
     vector<double> mult_fuelcons_when_inactive;	
+    vector<int> firm_ids;
     vector<VesselCalendar> calendars;
 
     if (!read_vessels_features(a_quarter, vesselids, speeds, fuelcons, lengths, vKWs,
 		carrycapacities, tankcapacities, nbfpingspertrips,
 		resttime_par1s, resttime_par2s, av_trip_duration,
 		mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
-		mult_fuelcons_when_returning, mult_fuelcons_when_inactive,
+        mult_fuelcons_when_returning, mult_fuelcons_when_inactive, firm_ids,
         folder_name_parameterization, inputfolder, selected_vessels_only, calendars)) {
         std::cerr << "Cannot read vessel features.\n";
         return -1;
@@ -2324,7 +2325,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			mult_fuelcons_when_fishing[i],
 			mult_fuelcons_when_returning[i],
             mult_fuelcons_when_inactive[i],
-                               calendars[i]
+            firm_ids[i],
+            calendars[i]
 			);
 
 		// some useful setters...
@@ -3393,6 +3395,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				mult_fuelcons_when_fishing,
 				mult_fuelcons_when_returning,
 				mult_fuelcons_when_inactive,
+                firm_ids,
                 folder_name_parameterization, inputfolder, selected_vessels_only, calendars)) {
                 std::cerr << "Cannot read vessels features.\n";
                 return -1;

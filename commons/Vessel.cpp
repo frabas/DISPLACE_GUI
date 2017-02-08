@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------
 // DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
 // AND EFFORT DISPLACEMENT
-// Copyright (c) 2012, 2013, 2014, 2015, 2016 Francois Bastardie <fba@aqua.dtu.dk>
+// Copyright (c) 2012, 2013, 2014, 2015, 2016, 2017 Francois Bastardie <fba@aqua.dtu.dk>
 
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -99,13 +99,14 @@ double a_speed, double a_fuelcons, double a_length, double a_KW,
 double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
 double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
 double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
-double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, VesselCalendar cd)
+double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, int _firm_id, VesselCalendar cd)
     : calendar(cd)
 {
     pthread_mutex_init(&mutex,0);
 
 	m_location = p_location;
 	idx_vessel = a_idx_vessel;
+    firm_id=_firm_id;
 	p_location->set_vid(a_idx_vessel);
 	x =m_location->get_x();
 	y =m_location->get_y();
@@ -301,6 +302,11 @@ Vessel::Vessel(string name, Node* a_location)
 int Vessel::get_idx () const
 {
 	return(idx_vessel);
+}
+
+int Vessel::get_firm_id () const
+{
+    return(firm_id);
 }
 
 
@@ -719,6 +725,11 @@ int Vessel::get_mosthistoricallyused () const
 void Vessel::set_previous_harbour_idx(int _previous_harbour_idx)
 {
 	previous_harbour_idx= _previous_harbour_idx;
+}
+
+void Vessel::set_firm_id(int _firm_id)
+{
+    firm_id= _firm_id;
 }
 
 

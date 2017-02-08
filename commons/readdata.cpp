@@ -386,6 +386,7 @@ bool read_vessels_features(string a_quarter,
                            vector<double>& mult_fuelcons_when_fishing,
                            vector<double>& mult_fuelcons_when_returning,
                            vector<double>& mult_fuelcons_when_inactive,
+                           vector<int>& firm_ids,
                            string folder_name_parameterization,
                            string inputfolder,
                            int selected_vessels_only, vector<VesselCalendar> &calendars)
@@ -413,7 +414,7 @@ bool read_vessels_features(string a_quarter,
                                           carrycapacities, tankcapacities, nbfpingspertrips,
                                           resttime_par1s, resttime_par2s, av_trip_duration,
                                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,
-                                          mult_fuelcons_when_returning, mult_fuelcons_when_inactive, calendars)) {
+                                          mult_fuelcons_when_returning, mult_fuelcons_when_inactive, firm_ids, calendars)) {
         vessels_features.close();
         return false;
     }

@@ -54,6 +54,7 @@ public:
 private:
         std::string name;
 		int idx_vessel;
+        int firm_id;
 		//std::shared_ptr<Node> m_location;
 		Node* m_location;
 		Metier* metier;
@@ -150,7 +151,9 @@ public:
             double  carrycapacity, double tankcapacity, double nbfpingspertrip,
             double resttime_par1, double resttime_par2, double av_trip_duration,
             double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
-            double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive, VesselCalendar cd
+            double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive,
+            int _firm_id,
+            VesselCalendar cd
             );
 		Vessel();
 		~Vessel();
@@ -160,7 +163,8 @@ public:
 
 		int get_idx () const;
         std::string get_name () const;
-		Node* get_loc() const;
+        int get_firm_id () const;
+        Node* get_loc() const;
 		Metier* get_metier() const;
 		double get_speed () const;
 		double get_length () const;
@@ -229,6 +233,7 @@ public:
 		int get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
+        void set_firm_id (int val);
         void set_speed (double val);
 		void set_resttime_par1 (double val);
 		void set_resttime_par2 (double val);

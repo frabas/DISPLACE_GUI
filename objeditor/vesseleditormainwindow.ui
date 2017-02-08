@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>12</number>
+       <number>13</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -454,6 +454,36 @@
           <y>13</y>
           <width>1221</width>
           <height>641</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tabFirmSpecs">
+       <attribute name="title">
+        <string>Firms Specifications</string>
+       </attribute>
+       <widget class="CsvSpecsPage" name="firmsCsvPage" native="true">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>1001</width>
+          <height>591</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tabFirmsScriptsPage">
+       <attribute name="title">
+        <string>Firms Scripts</string>
+       </attribute>
+       <widget class="RunScriptsPage" name="firmsScriptsPage" native="true">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>821</width>
+          <height>421</height>
          </rect>
         </property>
        </widget>

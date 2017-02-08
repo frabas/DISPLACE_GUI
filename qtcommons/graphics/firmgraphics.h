@@ -1,18 +1,18 @@
-#ifndef WINDMILLGRAPHICS_H
-#define WINDMILLGRAPHICS_H
+#ifndef FIRMGRAPHICS_H
+#define FIRMGRAPHICS_H
 
 #include <GeometryPointShapeScaled.h>
 
-class WindmillGraphics : public qmapcontrol::GeometryPointShapeScaled {
+class FirmGraphics : public qmapcontrol::GeometryPointShapeScaled {
     static QBrush *color;
 
     float mLat, mLon;
 public:
-    WindmillGraphics (float lat, float lon);
+    FirmGraphics (float lat, float lon);
 
     void updated(float lat, float lon);
 protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
-#endif // WINDMILLGRAPHICS_H
+#endif // FIRMGRAPHICS_H

@@ -1,5 +1,5 @@
-#ifndef FISHFARMMAPOBJECT_H
-#define FISHFARMMAPOBJECT_H
+#ifndef FISHFARMGRAPHICS_H
+#define FISHFARMGRAPHICS_H
 
 #include <GeometryPointShapeScaled.h>
 
@@ -15,4 +15,4 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
-#endif // FISHFARMMAPOBJECT_H
+#endif // FISHFARMGRAPHICS_H

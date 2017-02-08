@@ -50,6 +50,8 @@ public:
 
         static const QString GenerateWindmillsFiles;
 
+        static const QString GenerateFirmsFiles;
+
         static const QString GenerateBenthosFiles;
     };
 };

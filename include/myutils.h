@@ -207,6 +207,12 @@ bool fill_from_ships_specifications (istream& in, vector<string>& names, vector<
                                      vector<double>& vmaxs,
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids);
+bool fill_from_firms_specifications(istream& in,
+                                    vector<int> & firm_ids,
+                                    vector<string> & firm_names,
+                                    vector<int> & nb_vessels,
+                                    vector<double> & longs,
+                                    vector<double> & lats);
 
 bool fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
 bool fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);

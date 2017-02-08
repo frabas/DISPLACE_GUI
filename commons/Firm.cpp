@@ -53,15 +53,17 @@ Firm::~Firm()
 
 
 
-Firm::Firm(std::string a_name, int a_idx_firm, std::vector<Vessel*> &a_bunch_of_vessels)
+Firm::Firm(int idx, int a_idx_firm, std::string a_name, int a_nb_vessels, double lon, double lat, std::vector<Vessel*> &a_bunch_of_vessels)
 {
     pthread_mutex_init(&mutex,0);
 
     idx_firm = a_idx_firm;
+    nb_vessels=a_nb_vessels;
     bunch_of_vessels = a_bunch_of_vessels;
     name = a_name;
-    x=0;
-    y=0;
+    x=lon;
+    y=lat;
+    bunch_of_vessels=a_bunch_of_vessels;
     dout(cout <<"firm creator...OK" << endl);
     init();
 }
@@ -120,3 +122,7 @@ void Firm::set_y(double _y)
     y= _y;
 }
 
+void Firm::set_idx_firm(int _idx_firm)
+{
+    idx_firm= _idx_firm;
+}

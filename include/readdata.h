@@ -89,6 +89,16 @@ bool read_ships_features(vector<string>& shipids, vector<double> &imos,
                          vector<double> &PMEmissions,
                          vector<double>& vmaxs, vector<double>& vcruises, vector<double>& lane_ids,
                          string folder_name_parameterization, string inputfolder);
+bool read_firms_features(vector<int>& firm_ids,
+                         vector<string>& firm_names,
+                         vector<int>& nb_vessels,
+                         vector<double>& longs,
+                         vector<double>& lats,
+                         string folder_name_parameterization,
+                         string inputfolder);
+
+
+
 
 multimap<string, int> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, int> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);

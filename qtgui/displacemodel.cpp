@@ -164,6 +164,8 @@ bool DisplaceModel::load(QString path, ModelType type)
         if (!initShips())
             throw DisplaceException("Cannot read Ships Features");
 
+        //initFirm();
+
         initFishfarm();
         initWindmill();
         initBenthos();

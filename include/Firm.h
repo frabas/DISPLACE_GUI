@@ -48,6 +48,7 @@ public:
 private:
         std::string name;
         int idx_firm;
+        int nb_vessels;
         double x, y;
         std::vector <Vessel*> bunch_of_vessels;
 
@@ -57,7 +58,7 @@ protected:
         void init();
 
 public:
-        Firm(std::string a_name, int a_idx_firm, std::vector<Vessel*> &a_bunch_of_vessels);
+        Firm(int idx, int a_idx_firm, std::string a_name,  int a_nb_vessels, double lon, double lat, std::vector<Vessel*> &a_bunch_of_vessels);
         Firm();
         ~Firm();
 
@@ -69,6 +70,7 @@ public:
 
         void set_x (double x);
         void set_y (double y);
+        void set_idx_firm (int a_idx_firm);
 
 
         void lock() { pthread_mutex_lock (&mutex); }

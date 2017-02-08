@@ -928,6 +928,56 @@ bool fill_from_ships_specifications (istream& in,
 }
 
 
+
+/**
+fill in the vessel attributes
+@param the vessel specification file, ...
+*/
+bool fill_from_firms_specifications (istream& in,
+                                     vector<int> & firm_ids,
+                                     vector<string> & firm_names,
+                                     vector<int> & nb_vessels,
+                                     vector<double> & longs,
+                                     vector<double> & lats)
+{
+    try {
+        std::string line;
+        while (!in.eof()) {
+            getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            vector<string> fields;
+
+            boost::split(fields, line, boost::is_any_of("|"));
+            if (fields.size() < 5)
+                return false;
+
+            int id      = boost::lexical_cast<int>(fields[0]);
+            string name = fields[1];
+            double nb   = boost::lexical_cast<int>(fields[2]);
+            double lon  = boost::lexical_cast<double>(fields[3]);
+            double lat  = boost::lexical_cast<double>(fields[4]);
+            firm_ids.push_back(id);
+            firm_names.push_back(name);
+            nb_vessels.push_back(nb);
+            longs.push_back(lon);
+            lats.push_back(lat);
+            }
+    } catch (boost::bad_lexical_cast &) {
+        return false;
+    }
+
+    dout(cout  << "read and set up the firm features of each firm...OK" << endl << flush);
+
+    return true;
+}
+
+
+
+
 /**
 fill in the avai attributes into a map
 @param the vessel specification file, ...

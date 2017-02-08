@@ -491,6 +491,38 @@ bool read_vessels_features(string a_quarter,
 
 
 //----------------
+bool read_firms_features(vector<int>& firm_ids,
+                         vector<string>& firm_names,
+                         vector<int>& nb_vessels,
+                         vector<double>& longs,
+                         vector<double>& lats,
+                         string folder_name_parameterization,
+                         string inputfolder
+                         )
+{
+
+    string filename=  inputfolder+"/firmsspe_"+folder_name_parameterization+"/firms_specs.dat";
+
+    ifstream firms_features;
+    firms_features.open(filename.c_str());
+    if(firms_features.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+
+    bool r = fill_from_firms_specifications(firms_features, firm_ids,
+                                            firm_names, nb_vessels,
+                                            longs, lats);
+    firms_features.close();
+
+    return r;
+}
+
+
+
+
+//----------------
 bool read_ships_features(vector<string>& shipids,
                          vector<double> &imos,
                          vector<double> &yearbuilds, vector<string> &flags,
@@ -1552,6 +1584,8 @@ multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, st
 
     return(shipsspe_lanes_lat);
 }
+
+
 
 multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, string inputfolder)
 {

@@ -91,6 +91,7 @@
 #include "Benthos.h"
 #include "Metier.h"
 #include "Vessel.h"
+#include "Firm.h"
 #include "Ship.h"
 #include "Population.h"
 #include "Fishfarm.h"
@@ -2638,7 +2639,54 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " FIRM-RELATED STUFFS       " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
 
+    // read general firm features
+    vector<int> all_firm_ids;
+    vector<string> firm_names;
+    vector<int> nb_vessels_per_firm;
+    vector<double> some_longs;
+    vector<double> some_lats;
+    if (!read_firms_features(all_firm_ids, firm_names, nb_vessels_per_firm, some_longs, some_lats,
+                        folder_name_parameterization, inputfolder)) {
+        cerr << "Error loading firm features. Bailing out.\n";
+        return 2;
+    }
+
+
+    cout<<"find out vessels_of_the_firm for firm " << endl;
+
+/*
+    vector <Firm*> firms(all_firm_ids.size());
+    for (unsigned int i=0; i<all_firm_ids.size(); i++)
+    {
+
+        vector <Vessel*> vessels_of_the_firm();
+        for(int vv=0; vv<vessels.size();++vv)
+        {
+           if(vessels.at(vv)->get_firm_id()==all_firm_ids[i])
+           {
+           vessels_of_the_firm.push_back(vessels.at(vv));
+           }
+        }
+
+
+        cout<<"create firm " << all_firm_ids[i] << endl;
+
+            firms[i]= new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
+                               longs[i], lats[i], vessels_of_the_firm);
+            firms[i]->set_idx_firm(all_firm_ids[i]);
+
+       cout<<"at (" << firms[i]->get_x() << "," << firms[i]->get_y()  << ") "   << endl;
+
+    }
+    cout<<"Number of firms created: " << firms.size()  << endl;
+
+*/
 
 
 

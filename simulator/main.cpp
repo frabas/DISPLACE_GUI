@@ -111,6 +111,9 @@
 
 #include <version.h>
 
+
+#include "boost/bind.hpp"
+
 using namespace std;
 
 
@@ -340,6 +343,13 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
     sort(ret.begin(), ret.end());
     unique(ret.begin(), ret.end());
     return true;
+}
+
+
+
+bool test_not_belong_to_firm(const Vessel *v, int id)
+{
+    return v->get_firm_id()!=id;
 }
 
 
@@ -2660,33 +2670,37 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     cout<<"find out vessels_of_the_firm for firm " << endl;
 
-/*
+
     vector <Firm*> firms(all_firm_ids.size());
     for (unsigned int i=0; i<all_firm_ids.size(); i++)
     {
 
-        vector <Vessel*> vessels_of_the_firm();
-        for(int vv=0; vv<vessels.size();++vv)
-        {
-           if(vessels.at(vv)->get_firm_id()==all_firm_ids[i])
-           {
-           vessels_of_the_firm.push_back(vessels.at(vv));
-           }
-        }
+        vector <Vessel*> vessels_of_the_firm(vessels.size());
+
+
+        // select from a vector of objects
+        std::remove_copy_if(
+             vessels.begin(),
+             vessels.end(),
+             std::back_inserter(vessels_of_the_firm),
+             boost::bind(test_not_belong_to_firm, _1, all_firm_ids[i]) );
 
 
         cout<<"create firm " << all_firm_ids[i] << endl;
+        cout<<"with " << vessels_of_the_firm.size() << " vessels..." << endl;
 
-            firms[i]= new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
+        firms[i]= new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
                                longs[i], lats[i], vessels_of_the_firm);
             firms[i]->set_idx_firm(all_firm_ids[i]);
 
        cout<<"at (" << firms[i]->get_x() << "," << firms[i]->get_y()  << ") "   << endl;
+    //   cout<<" one of the vessel of this firm is " << firms[i]->get_bunch_of_vessels().at(0)->get_name()    << endl;
+
 
     }
     cout<<"Number of firms created: " << firms.size()  << endl;
 
-*/
+
 
 
 

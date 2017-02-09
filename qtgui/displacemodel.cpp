@@ -164,7 +164,7 @@ bool DisplaceModel::load(QString path, ModelType type)
         if (!initShips())
             throw DisplaceException("Cannot read Ships Features");
 
-        //initFirm();
+        initFirm();
 
         initFishfarm();
         initWindmill();
@@ -2257,6 +2257,37 @@ bool DisplaceModel::initWindmill()
 
     return true;
 }
+
+
+bool DisplaceModel::initFirm()
+{
+
+    // read general firm features
+    vector<int> all_firm_ids;
+    vector<string> firm_names;
+    vector<int> nb_vessels_per_firm;
+    vector<double> some_longs;
+    vector<double> some_lats;
+
+    if (!read_firms_features(all_firm_ids, firm_names, nb_vessels_per_firm, some_longs, some_lats,
+                        mInputName.toStdString(), mBasePath.toStdString()))
+    return false;
+
+
+   for (int id=0; id<all_firm_ids.size(); ++id) {
+       cout<<"create firm " << all_firm_ids.at(id) << endl;
+
+// TO DO:
+//       auto fi = std::make_shared<Firm>(id, all_firm_ids.at(id), firm_names.at(id),  nb_vessels_per_firm.at(id),
+//                                        some_longs.at(id), some_lats.at(id), a_bunch_of_vessels);
+
+//       auto fid = std::make_shared<FirmData>(fi);
+//       mFirms.push_back(fid);
+   }
+
+    return true;
+}
+
 
 
 bool DisplaceModel::initBenthos()

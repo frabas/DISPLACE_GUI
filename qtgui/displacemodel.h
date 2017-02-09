@@ -420,6 +420,7 @@ protected:
     bool loadVessels();
     bool loadGraphs();
     bool initShips();
+    bool initFirm();
     bool initFishfarm();
     bool initWindmill();
     bool initBenthos();

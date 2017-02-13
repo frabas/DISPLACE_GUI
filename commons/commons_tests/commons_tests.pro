@@ -19,11 +19,11 @@ macx {
 
 LIBS+=-L../.. -lformats -ldisplacecommons
 
-unix,!macx{
+unix:!macx{
     LIBS += -lpthread -lrt
 }
 
-unix,macx {
+unix {
     LIBS+=-lboost_unit_test_framework
 }
 win32 {

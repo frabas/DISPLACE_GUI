@@ -106,7 +106,26 @@ struct Vessel {
     }
 
     friend std::ostream &operator << (std::ostream &stream, const Vessel &v1) {
-        stream << v1.names;
+        stream << v1.names << ","
+                  << v1.speeds<< ","
+                  << v1.fuelcons<< ","
+                  << v1.lengths<< ","
+                  << v1.vKWs<< ","
+                  << v1.carrycapacities<< ","
+                  << v1.tankcapacities<< ","
+                  << v1.nbfpingspertrips<< ","
+                  << v1.resttime_par1s<< ","
+                  << v1.resttime_par2s<< ","
+                  << v1.av_trip_duration<< ","
+                  << v1.mult_fuelcons_when_steaming<< ","
+                  << v1.mult_fuelcons_when_fishing<< ","
+                  << v1.mult_fuelcons_when_returning<< ","
+                  << v1.mult_fuelcons_when_inactive<< ","
+                  << v1.firm_ids << ","
+                  << v1.calendars.weekEndStartDay << ","
+                  << v1.calendars.weekEndEndDay<< ","
+                  << v1.calendars.workStartHour << ","
+                  << v1.calendars.workEndHour << ",";
         return stream;
     }
 };
@@ -167,7 +186,7 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
         v.mult_fuelcons_when_fishing = mult_fuelcons_when_fishing[i];
         v.mult_fuelcons_when_returning = mult_fuelcons_when_returning[i];
         v.mult_fuelcons_when_inactive = mult_fuelcons_when_inactive[i];
-        v.firm_id= firm_ids[i];
+        v.firm_ids = firm_ids[i];
         v.calendars = calendars[i];
 
         vessels.emplace_back(v);

@@ -963,20 +963,19 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
         if(count!=0){
 
         // displace a proportion of N from departure node to neighbours nodes
-        vector <double> new_departure_N (departure_N.size());
-        for (int nei=0; nei<neighbour_nodes.size(); ++nei)
-           {
-               vector <double> arrival_N = list_of_nodes.at(nei)->get_Ns_pops_at_szgroup( this->get_name() );
-               vector <double> new_arrival_N (arrival_N.size());
-               for (int sz=0; sz<arrival_N.size(); ++sz)
+               vector <double> depN=departure_N;
+               for (int nei=0; nei<count; ++nei)
                   {
-                   double exchanged       = ((coeff.at(sz)*departure_N.at(sz))/count);
-                   new_arrival_N.at(sz)   = arrival_N.at(sz) + exchanged;
-                   new_departure_N.at(sz) = new_departure_N.at(sz) - exchanged;
-                  }
-               list_of_nodes.at(nei)->set_Ns_pops_at_szgroup( this->get_name(), new_arrival_N );//update arrival
-           }
-        list_of_nodes.at(n)->set_Ns_pops_at_szgroup( this->get_name(), new_departure_N ); //update departure
+                   vector <double> arrival_N = list_of_nodes.at(nei)->get_Ns_pops_at_szgroup( this->get_name() );
+                   for (int sz=0; sz<arrival_N.size(); ++sz)
+                      {
+                      double exchanged       = ((coeff.at(sz)*depN.at(sz))/count);
+                      arrival_N.at(sz)       = arrival_N.at(sz) + exchanged;
+                      departure_N.at(sz)     = departure_N.at(sz) - exchanged;
+                     }
+                   list_of_nodes.at(nei)->set_Ns_pops_at_szgroup( this->get_name(), arrival_N );//update arrival
+                   }
+               list_of_nodes.at(n)->set_Ns_pops_at_szgroup( this->get_name(), departure_N ); //update departure
 
        } // count!=0
 

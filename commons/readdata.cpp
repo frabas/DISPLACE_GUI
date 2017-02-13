@@ -2244,7 +2244,7 @@ multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, i
     }
     multimap<int, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop))
-        throw std::runtime_error("Error while executuing: fill_from_avai_szgroup_nodes_with_pop");
+        throw std::runtime_error("Error while executing: fill_from_avai_szgroup_nodes_with_pop");
 
     file_avai_szgroup_nodes_with_pop.close();
 
@@ -2261,6 +2261,39 @@ multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, i
 
     return(full_avai_szgroup_nodes_with_pop);
 }
+
+
+
+multimap<int, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop,
+                                                            string folder_name_parameterization, string inputfolder
+                                                            )
+{
+    // casting a_pop into a string
+    stringstream out;
+    out << a_pop;
+    string a_pop_s = out.str();
+
+    string filename;
+    filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_field_of_coeff_diffusion_this_pop_nodes_"+a_semester+".dat";
+
+    ifstream file_field_of_coeff_diffusion_this_pop;
+    file_field_of_coeff_diffusion_this_pop.open(filename.c_str());
+    if(file_field_of_coeff_diffusion_this_pop.fail())
+    {
+        open_file_error(filename);
+        //return 1;
+    }
+    multimap<int, double> field_of_coeff_diffusion_this_pop;
+    if (!fill_field_of_coeff_diffusion_this_pop (file_field_of_coeff_diffusion_this_pop, field_of_coeff_diffusion_this_pop))
+        throw std::runtime_error("Error while executing: fill_field_of_coeff_diffusion_this_pop");
+
+    file_field_of_coeff_diffusion_this_pop.close();
+
+
+    return(field_of_coeff_diffusion_this_pop);
+}
+
+
 
 
 vector< vector<double> > read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup,int nbage, string folder_name_parameterization, string inputfolder, string biolsce)

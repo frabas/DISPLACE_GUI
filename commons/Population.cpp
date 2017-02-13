@@ -43,6 +43,7 @@ Population::Population(int a_name,
                        const vector<double> &_param_sr,
                        const multimap<int, int> &lst_idx_nodes_per_pop,
                        const multimap<int, double> &_full_spatial_availability,
+                       const multimap<int, double> &field_of_coeff_diffusion_this_pop,
                        const map<int, double> &_oth_land,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
@@ -224,6 +225,10 @@ Population::Population(int a_name,
 	}
 
     dout(cout << endl);
+
+    // for diffusion of N per szgroup
+    this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop);
+
 
 	// distribute tot_N_at_szgroup on nodes knowing the avai spatial key
 	// i.e. update the multimap Ns_pops_at_szgroup of the nodes
@@ -473,6 +478,12 @@ vector< vector <double> > Population::get_percent_age_per_szgroup_matrix() const
 multimap<int,double>  Population::get_full_spatial_availability() const
 {
 	return(full_spatial_availability);
+}
+
+
+multimap<int,double>  Population::get_field_of_coeff_diffusion_this_pop() const
+{
+    return(field_of_coeff_diffusion_this_pop);
 }
 
 multimap<int,double>  Population::get_overall_migration_fluxes() const
@@ -754,6 +765,12 @@ void Population::set_full_spatial_availability(multimap<int,double> _full_spatia
 	full_spatial_availability= _full_spatial_availability;
 }
 
+void Population::set_field_of_coeff_diffusion_this_pop(multimap<int,double> _field_of_coeff_diffusion_this_pop)
+{
+    field_of_coeff_diffusion_this_pop= _field_of_coeff_diffusion_this_pop;
+}
+
+
 
 void Population::set_overall_migration_fluxes(multimap<int,double> _overall_migration_fluxes)
 {
@@ -886,6 +903,84 @@ void Population::aggregate_N()
     dout(cout<< "END aggregate_N()" << endl);
     dout(cout<< endl);
 }
+
+
+
+void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
+{
+
+
+
+    vector<Node*> list_of_nodes = this->get_list_nodes();
+    vector<int> list_of_nodes_idx;
+    for (int n=0; n<list_of_nodes.size(); ++n)
+       {
+       list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
+       }
+    random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
+    for (int n=0; n<list_of_nodes.size(); ++n)
+       {
+        int idx_node=this->get_name();
+
+        // get coeff of diffusion per szgroup for this node
+        multimap<int,double> field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
+        vector<double> coeff;
+        multimap<int,double>::iterator lower = field_of_coeff_diffusion_this_pop.lower_bound(idx_node);
+        multimap<int,double>::iterator upper = field_of_coeff_diffusion_this_pop.upper_bound(idx_node);
+        for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
+            coeff.push_back(pos->second);
+
+
+        // get the N for this pop on this node
+        vector<double> departure_N = list_of_nodes.at(n)->get_Ns_pops_at_szgroup(idx_node);
+
+        // get the neighbouring nodes
+        vector<int> neighbour_nodes;
+        vertex_t u = idx_node;
+        // Visit each edge exiting u
+        for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
+             edge_iter != adjacency_map[u].end();
+             edge_iter++)
+        {
+            neighbour_nodes.push_back(edge_iter->target);
+        }
+
+        // check if neighbouring nodes belong to the spatial extend of this pop
+        vector<int> neighbour_nodes_on_spatial_extent;
+        for (int nei=0; nei<neighbour_nodes.size(); ++nei)
+           {
+           std::vector<int>::iterator it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
+           while(it != list_of_nodes_idx.end())
+             {
+             neighbour_nodes_on_spatial_extent.push_back(nei);
+             }
+           }
+        int count = neighbour_nodes_on_spatial_extent.size();
+
+
+        // displace a proportion of N from departure node to neighbours nodes
+        vector <double> new_departure_N (departure_N.size());
+        for (int nei=0; nei<neighbour_nodes.size(); ++nei)
+           {
+               vector <double> arrival_N = list_of_nodes.at(nei)->get_Ns_pops_at_szgroup( this->get_name() );
+               vector <double> new_arrival_N (arrival_N.size());
+               for (int sz=0; n<arrival_N.size(); ++sz)
+                  {
+                   new_arrival_N.at(sz) = arrival_N.at(sz) + ((coeff.at(sz)*departure_N.at(sz))/count);
+                   new_departure_N.at(sz) = new_departure_N.at(sz) - ((coeff.at(sz)*departure_N.at(sz))/count);
+                  }
+               list_of_nodes.at(nei)->set_Ns_pops_at_szgroup( this->get_name(), new_arrival_N );//update arrival
+           }
+        list_of_nodes.at(n)->set_Ns_pops_at_szgroup( this->get_name(), new_departure_N ); //update departure
+
+       }
+
+
+}
+
+
+
+
 
 
 void Population::do_growth()

@@ -50,6 +50,7 @@ class Population
             const vector<double> &param_sr,
             const multimap<int,int> &lst_idx_nodes_per_pop,
             const multimap<int,double> &full_spatial_availability,
+            const multimap<int,double> &field_of_coeff_diffusion_this_pop,
             const map<int,double> &oth_land,
             const multimap<int, double> &overall_migration_fluxes,
             const map<string,double> &relative_stability_key,
@@ -106,6 +107,7 @@ class Population
 		vector< vector <double> >get_percent_szgroup_per_age_matrix() const;
 		vector< vector <double> >get_percent_age_per_szgroup_matrix() const;
 		multimap<int,double> get_full_spatial_availability() const;
+        multimap<int,double> get_field_of_coeff_diffusion_this_pop() const;
         multimap<int,double> get_overall_migration_fluxes() const;
         map<int,double> get_oth_land() const;
         double get_hyperstability_param() const;
@@ -147,6 +149,7 @@ class Population
 		void set_landings_so_far(double _landings_so_far);
         void set_param_sr(const vector<double>& _param_sr);
 		void set_full_spatial_availability(multimap<int,double> _full_spatial_availability);
+        void set_field_of_coeff_diffusion_this_pop(multimap<int,double> _field_of_coeff_diffusion_this_pop);
         void set_overall_migration_fluxes(multimap<int,double> _overall_migration_fluxes);
         void set_oth_land(map<int,double> _oth_land);
 		void set_oth_land_multiplier(double _a_multiplier);
@@ -154,6 +157,7 @@ class Population
 		void distribute_N();	 // split tot N among nodes
 		void aggregate_N();		 // aggregate from nodes
 								 // do a cumul for F
+        void diffuse_N_from_field(adjacency_map_t& adjacency_map);
 		void compute_tot_N_and_F_and_M_and_W_at_age();
 		double compute_fbar();
         vector <double> compute_SSB();
@@ -232,6 +236,7 @@ class Population
 		vector<Node* > list_nodes;
 								 // for sharing the total N by node
 		multimap<int,double> full_spatial_availability;
+        multimap<int,double> field_of_coeff_diffusion_this_pop;
         multimap<int,double> overall_migration_fluxes;
         map<int,double> oth_land;// for accounting for the depletion from non-described activities
 		vector< vector<double> > percent_szgroup_per_age_matrix;

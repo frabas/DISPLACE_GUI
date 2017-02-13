@@ -1019,6 +1019,27 @@ bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& a
     return true;
 }
 
+/**
+fill in the avai attributes into a multimap
+@param the avai specification file, ...
+*/
+bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& coeffs)
+{
+
+    string line;
+    while(!getline(in, line).eof())
+    {
+        int key;
+        in >> key;
+        double val;
+        in >> val;
+        coeffs.insert(make_pair(key,val));
+    }
+    dout(cout  << "read the coeff of diffusion at szgroup " << endl << flush);
+    return true;
+}
+
+
 
 /**
 fill in the oth_land attributes into a multimap

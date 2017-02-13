@@ -1632,7 +1632,14 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<int, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
         multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
 
-		// input data, read a other landings per node for this species
+        // input data
+        multimap<int, double> field_of_coeff_diffusion_this_pop;
+        if(dyn_pop_sce.option(Options::diffuseN))
+            {
+            field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder);
+            }
+
+        // input data, read a other landings per node for this species
         map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, sp, folder_name_parameterization, inputfolder, fleetsce);
         map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, inputfolder);
 
@@ -1679,6 +1686,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			param_sr,
 			lst_idx_nodes_per_pop,
 			full_avai_szgroup_nodes_with_pop,
+            field_of_coeff_diffusion_this_pop,
 			oth_land,
             overall_migration_fluxes,
 			relative_stability_key,
@@ -3323,6 +3331,26 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              dyn_pop_sce,
                                              dyn_alloc_sce);
 
+
+
+
+        if(dyn_pop_sce.option(Options::diffuseN))
+        {
+            // diffusion of pops on neighbour nodes
+            // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion
+            // we can assume that this coeff is larger when the node is just transitional vs. lower when the node is a residential area
+            // so a relevant proxy could actually be (the inverse of) full_avai_szgroup_nodes_with_pop
+            // converted in a point porportion field....
+           for (unsigned int sp=0; sp<populations.size(); sp++)
+           {
+               outc(cout << "...pop " << sp << endl;)
+               if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
+               {
+                   outc(cout << "......pop " << sp << endl;)
+                   populations.at(sp)->diffuse_N_from_field (adjacency_map); // per sz group
+               }
+           }
+        }
 
 
 

@@ -3334,7 +3334,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        if(dyn_pop_sce.option(Options::diffuseN))
+        if(dyn_pop_sce.option(Options::diffuseN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
             // diffusion of pops on neighbour nodes
             // field_of_coeff_diffusion_this_pop give the node specific coeffs of diffusion

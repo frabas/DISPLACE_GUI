@@ -909,7 +909,7 @@ void Population::aggregate_N()
 void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 {
 
-
+   cout << "start diffusion for this pop...." << endl;
 
     vector<Node*> list_of_nodes = this->get_list_nodes();
     vector<int> list_of_nodes_idx;
@@ -920,7 +920,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
     random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
-        int idx_node=this->get_name();
+        int idx_node=list_of_nodes.at(n)->get_idx_node();
 
         // get coeff of diffusion per szgroup for this node
         multimap<int,double> field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
@@ -932,7 +932,8 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 
         // get the N for this pop on this node
-        vector<double> departure_N = list_of_nodes.at(n)->get_Ns_pops_at_szgroup(idx_node);
+        vector<double> departure_N = list_of_nodes.at(n)->get_Ns_pops_at_szgroup(this->get_name());
+
 
         // get the neighbouring nodes
         vector<int> neighbour_nodes;
@@ -945,18 +946,20 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
             neighbour_nodes.push_back(edge_iter->target);
         }
 
+
         // check if neighbouring nodes belong to the spatial extend of this pop
         vector<int> neighbour_nodes_on_spatial_extent;
         for (int nei=0; nei<neighbour_nodes.size(); ++nei)
            {
            std::vector<int>::iterator it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
-           while(it != list_of_nodes_idx.end())
+           if(it != list_of_nodes_idx.end())
              {
              neighbour_nodes_on_spatial_extent.push_back(nei);
              }
            }
-        int count = neighbour_nodes_on_spatial_extent.size();
+        int count = neighbour_nodes_on_spatial_extent.size() /2; // divide by 2 because bidirectional links...
 
+        if(count!=0){
 
         // displace a proportion of N from departure node to neighbours nodes
         vector <double> new_departure_N (departure_N.size());
@@ -964,7 +967,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
            {
                vector <double> arrival_N = list_of_nodes.at(nei)->get_Ns_pops_at_szgroup( this->get_name() );
                vector <double> new_arrival_N (arrival_N.size());
-               for (int sz=0; n<arrival_N.size(); ++sz)
+               for (int sz=0; sz<arrival_N.size(); ++sz)
                   {
                    new_arrival_N.at(sz) = arrival_N.at(sz) + ((coeff.at(sz)*departure_N.at(sz))/count);
                    new_departure_N.at(sz) = new_departure_N.at(sz) - ((coeff.at(sz)*departure_N.at(sz))/count);
@@ -973,9 +976,11 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
            }
         list_of_nodes.at(n)->set_Ns_pops_at_szgroup( this->get_name(), new_departure_N ); //update departure
 
-       }
+       } // count!=0
 
+      } // node by node
 
+  cout << "stop diffusion for this pop...." << endl;
 }
 
 

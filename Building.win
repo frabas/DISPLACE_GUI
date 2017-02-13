@@ -234,8 +234,9 @@ $ sh bootstrap.sh --with-toolset=mingw
 
 and compile
 
-$ b2 -j4 --prefix=$BOOST_PREFIX --disable-filesystem2 --with-graph --with-thread --with-system toolset=gcc /
-    address-model=64 variant=release link=shared threading=multi install
+$ b2 -j4 --prefix=$BOOST_PREFIX --disable-filesystem2 --with-graph --with-thread --with-system --with-test \
+    toolset=gcc address-model=64 variant=release link=shared threading=multi \
+    install
 	
 
 	

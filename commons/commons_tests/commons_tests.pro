@@ -19,17 +19,15 @@ macx {
 
 LIBS+=-L../.. -lformats -ldisplacecommons
 
-!macx{
+unix,!macx{
     LIBS += -lpthread -lrt
 }
 
-!boost_test_included {
-    message("Boost::Test framework will be dynamically linked")
+unix,macx {
     LIBS+=-lboost_unit_test_framework
 }
-boost_test_included {
-    message("Boost::Test framework will be compiled in")
-    DEFINES += HAVE_BOOST_TEST_COMPILED
+win32 {
+    LIBS += -lboost_unit_test_framework-mgw49-mt-1_57
 }
 
 SOURCES= main.cpp \

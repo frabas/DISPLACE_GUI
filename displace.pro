@@ -3,10 +3,12 @@ CONFIG+=ordered
 SUBDIRS+=formats commons QMapControl qtcommons qtgui simulator dteditor tseditor objeditor \
     scheduler
 
-unix {
-    CONFIG += unit-test
-    SUBDIRS += tests profile \
-        commons/commons_tests
+CONFIG += unit-test
+SUBDIRS += tests \
+    commons/commons_tests
+
+unix,!macx {
+    SUBDIRS += profile \
 }
 
 commons.depends = formats

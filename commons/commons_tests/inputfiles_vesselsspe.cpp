@@ -69,6 +69,7 @@ struct Vessel {
         mult_fuelcons_when_fishing(mult_fuelcons_when_fishing),
         mult_fuelcons_when_returning(mult_fuelcons_when_returning),
         mult_fuelcons_when_inactive(mult_fuelcons_when_inactive),
+        firm_ids(firm_ids),
         calendars(westart,weend,wrkstart,wrkend) {
     }
 
@@ -229,8 +230,8 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     std::istringstream ss (teststring);
 
     std::vector<Vessel> exp_ss = {
-        Vessel("DNK000001391",10,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22),
-        Vessel("DNK0000012s1",30,34.248397,5,18,270,75,1,0.5,3.78,2,1,0,0.1,0.1522,5,6,5,22)
+        Vessel("DNK000001391",10,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22,1),
+        Vessel("DNK0000012s1",30,34.248397,5,18,270,75,1,0.5,3.78,2,1,0,0.1,0.1522,5,6,5,22,2)
     };
 
     std::vector<Vessel> r_ss;
@@ -240,7 +241,7 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_ss.begin(), exp_ss.end(), r_ss.begin(), r_ss.end());
 
     // Check for errors. Errors in double values
-    teststring = "DNK000001391|1c|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22\n";
+    teststring = "DNK000001391|1c|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1\n";
     ss.str(teststring);
     ss.clear();
     r = loadVessels(ss,r_ss);
@@ -254,10 +255,10 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     BOOST_CHECK(!r);
 
     // Check for errors: Missing newline should be catched
-    teststring = "DNK0000011|0|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22";
+    teststring = "DNK0000011|0|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1";
     r_ss.clear();
     exp_ss = {
-            Vessel("DNK0000011",0,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22)
+            Vessel("DNK0000011",0,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22,1)
         };
     ss.str(teststring);
     ss.clear();

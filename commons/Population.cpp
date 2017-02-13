@@ -935,7 +935,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
         vector<double> departure_N = list_of_nodes.at(n)->get_Ns_pops_at_szgroup(this->get_name());
 
 
-        // get the neighbouring nodes
+        // get the list of neighbouring nodes
         vector<int> neighbour_nodes;
         vertex_t u = idx_node;
         // Visit each edge exiting u
@@ -948,6 +948,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 
         // check if neighbouring nodes belong to the spatial extend of this pop
+        // (no diffusion outside....caution: possible border effects because of this assumption e.g. accumulation at the border)
         vector<int> neighbour_nodes_on_spatial_extent;
         for (int nei=0; nei<neighbour_nodes.size(); ++nei)
            {
@@ -969,8 +970,9 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
                vector <double> new_arrival_N (arrival_N.size());
                for (int sz=0; sz<arrival_N.size(); ++sz)
                   {
-                   new_arrival_N.at(sz) = arrival_N.at(sz) + ((coeff.at(sz)*departure_N.at(sz))/count);
-                   new_departure_N.at(sz) = new_departure_N.at(sz) - ((coeff.at(sz)*departure_N.at(sz))/count);
+                   double exchanged       = ((coeff.at(sz)*departure_N.at(sz))/count);
+                   new_arrival_N.at(sz)   = arrival_N.at(sz) + exchanged;
+                   new_departure_N.at(sz) = new_departure_N.at(sz) - exchanged;
                   }
                list_of_nodes.at(nei)->set_Ns_pops_at_szgroup( this->get_name(), new_arrival_N );//update arrival
            }

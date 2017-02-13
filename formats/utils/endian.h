@@ -11,7 +11,7 @@ namespace helpers {
 
 // Default are disabled
 
-#ifdef __APPLE__
+#ifdef __clang__
 #define DELETED {}
 #else
 #define DELETED =delete;

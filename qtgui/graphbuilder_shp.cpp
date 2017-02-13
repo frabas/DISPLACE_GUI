@@ -196,12 +196,7 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     }
 
     // Triangulate
-    OGRFieldDefn idField ("pointId", OFTInteger );
-    if( resultLayer->CreateField( &idField ) != OGRERR_NONE ) {
-        throw std::runtime_error( "Creating Id field failed." );
-    }
-    auto nIdField = resultLayer->FindFieldIndex(idField.GetNameRef(), true);
-    assert(nIdField != -1);
+    auto nIdField = getPointFieldIndex(resultLayer);
 
     long prevFid = -1;
     CDT::Vertex_handle prevHandle;
@@ -221,17 +216,17 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
         const auto point(static_cast<OGRPoint*>(geometry));
         assert(point != nullptr);
 
-        feature->SetField(nIdField, id);
+        auto id = feature->GetFieldAsInteger(nIdField);
         auto constrFid = feature->GetFieldAsInteger(fieldConstrain);
 
         CDT::Point pt(point->getX(), point->getY());
         auto handle = tri.insert(pt);
 
-        if (constrFid == prevFid) {
+        if (constrFid != -1 && constrFid == prevFid) {
             tri.insert_constraint(prevHandle, handle);
         }
         prevHandle = handle;
-        prevFid = feature->GetFID();
+        prevFid = id;
 
         handle->info() = id;
         ++id;
@@ -398,6 +393,7 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
     if (lyIncluded == nullptr && lyExclusion1 == nullptr && lyExclusion2 == nullptr)
         gridout = lyOut;
 
+    auto fId = getPointFieldIndex(gridout);
     auto fieldConstrain = gridout->FindFieldIndex("Constrain", true);
     if (fieldConstrain == -1) {
         OGRFieldDefn fldConstrain("Constrain", OFTInteger);
@@ -416,14 +412,15 @@ void GraphBuilder::createGrid(OGRDataSource *tempDatasource,
 
         OGRPoint pt(n.point.x(),n.point.y());
         auto f = OGRFeature::CreateFeature(gridout->GetLayerDefn());
-        if (oldFid != -1)
-            f->SetField(fieldConstrain, (int)oldFid);
+        auto id = mId++;
+        f->SetField(fId, id);
+        f->SetField(fieldConstrain, (int)oldFid);
 
         f->SetGeometry(&pt);
         if (gridout->CreateFeature(f) != OGRERR_NONE) {
             throw std::runtime_error("Cannot create points");
         }
-        oldFid = f->GetFID();
+        oldFid = id;
         OGRFeature::DestroyFeature(f);
 
         if (builder->isAtLineStart()) {
@@ -565,6 +562,7 @@ OGRLayer *GraphBuilder::createGridLayer(OGRDataSource *datasource, const char * 
     auto resultLayer = datasource->CreateLayer(name, &mSpatialReference, wkbPoint, nullptr);
     OGRFieldDefn fldConstrain("Constrain", OFTInteger);
     resultLayer->CreateField(&fldConstrain);
+    getPointFieldIndex(resultLayer);
     return resultLayer;
 }
 
@@ -598,17 +596,32 @@ void GraphBuilder::deleteLayer(OGRDataSource *src, OGRLayer *layer)
 
 int GraphBuilder::getFromFieldIndex(OGRLayer *layer)
 {
-    layer->FindFieldIndex("FromFid", true);
+    return layer->FindFieldIndex("FromFid", true);
 }
 
 int GraphBuilder::getToFieldIndex(OGRLayer *layer)
 {
-    layer->FindFieldIndex("ToFid", true);
+    return layer->FindFieldIndex("ToFid", true);
 }
 
 int GraphBuilder::getWeightFieldIndex(OGRLayer *layer)
 {
-    layer->FindFieldIndex("Weight", true);
+    return layer->FindFieldIndex("Weight", true);
+}
+
+int GraphBuilder::getPointFieldIndex(OGRLayer *layer)
+{
+    const auto FieldName = "pointId";
+    auto nIdField = layer->FindFieldIndex(FieldName, true);
+    if (nIdField == -1) {
+        OGRFieldDefn idField (FieldName, OFTInteger );
+        if( layer->CreateField( &idField ) != OGRERR_NONE ) {
+            throw std::runtime_error( "Creating Id field failed." );
+        }
+        nIdField = layer->FindFieldIndex(FieldName, true);
+        assert(nIdField != -1);
+    }
+    return nIdField;
 }
 
 int GraphBuilder::waitfunc(double progress, const char *msg, void *thiz)

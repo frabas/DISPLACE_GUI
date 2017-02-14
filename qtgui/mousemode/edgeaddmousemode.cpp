@@ -31,7 +31,7 @@ EdgeAddMouseMode::EdgeAddMouseMode(DisplaceModel *model)
 
 bool EdgeAddMouseMode::releaseEvent(const QPointF &point)
 {
-    QList<std::shared_ptr<NodeData> > nodes = mModel->getAllNodesWithin(point, 0.5);
+    QList<std::shared_ptr<NodeData> > nodes = mModel->getAllNodesWithin(point, 0.3);
 
     qDebug() << "Nodes IN " << point << nodes.size() << mStatus;
 

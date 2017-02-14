@@ -945,7 +945,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
         {
             neighbour_nodes.push_back(edge_iter->target);
         }
-
+        remove_dups(neighbour_nodes);
 
         // check if neighbouring nodes belong to the spatial extend of this pop
         // (no diffusion outside....caution: possible border effects because of this assumption e.g. accumulation at the border)
@@ -958,7 +958,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
              neighbour_nodes_on_spatial_extent.push_back(nei);
              }
            }
-        int count = neighbour_nodes_on_spatial_extent.size() /2; // divide by 2 because bidirectional links...
+        int count = neighbour_nodes_on_spatial_extent.size();
 
         if(count!=0){
 

@@ -27,11 +27,13 @@
 using namespace std;
 
 Benthos::Benthos(int _marine_landscape,
-const vector<Node *> &_nodes,
-const vector<double> &_tot_biomass)
+                    const vector<Node *> &_nodes,
+                    const vector<double> &_tot_biomass_per_funcgr,
+                    const vector<double> &_recovery_rates_per_funcgr)
 {
 	marine_landscape =_marine_landscape;
-	tot_biomass    =_tot_biomass;
+    tot_biomass_per_funcgr    =_tot_biomass_per_funcgr;
+    recovery_rates_per_funcgr=_recovery_rates_per_funcgr;
 
     dout(cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ");
 	vector<Node* > p_spe_nodes;
@@ -47,13 +49,13 @@ const vector<double> &_tot_biomass)
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);
-        for(unsigned int funcgr=0; funcgr<tot_biomass.size();funcgr++)
+        for(unsigned int funcgr=0; funcgr<tot_biomass_per_funcgr.size();funcgr++)
 		{
 								 // put an estimate of biomass per cell
-			p_spe_nodes[i]->add_benthos_tot_biomass_on_node(tot_biomass.at(funcgr) );
+            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(tot_biomass_per_funcgr.at(funcgr) );
 		}
         dout (cout << "nb func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
-            "this marine landscape " << marine_landscape << " is " << tot_biomass.size() << endl);
+            "this marine landscape " << marine_landscape << " is " << tot_biomass_per_funcgr.size() << endl);
 
 	}
 
@@ -72,11 +74,15 @@ int Benthos::get_marine_landscape() const
 }
 
 
-const vector<double> &Benthos::get_tot_biomass() const
+const vector<double> &Benthos::get_tot_biomass_per_funcgr() const
 {
-	return(tot_biomass);
+    return(tot_biomass_per_funcgr);
 }
 
+const vector<double> &Benthos::get_recovery_rates_per_funcgr() const
+{
+    return(recovery_rates_per_funcgr);
+}
 
 const vector<Node *> &Benthos::get_list_nodes() const
 {

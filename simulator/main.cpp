@@ -1330,7 +1330,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	// read estimates
     multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
 
-    multimap<int, double> recovery_rate        = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
+    multimap<int, double> recovery_rates_per_funcgr        = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
 
 	// 2. sort and unique
 	sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
@@ -1353,20 +1353,31 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		multimap<int,double>::iterator lower_land = estimates_biomass_per_cell.lower_bound(a_marine_landscape);
 		multimap<int,double>::iterator upper_land = estimates_biomass_per_cell.upper_bound(a_marine_landscape);
-		vector<double> init_tot_biomass_per_group;
+        vector<double> init_tot_biomass_per_funcgr;
 		for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
 		{
            outc(cout << pos->second << endl);
 								 // biomass per cell for this group specific to this landscape
-			init_tot_biomass_per_group.push_back(pos->second);
+            init_tot_biomass_per_funcgr.push_back(pos->second);
 		}
 
-        if(init_tot_biomass_per_group.size()!=(size_t)nbbenthospops)
+        if(init_tot_biomass_per_funcgr.size()!=(size_t)nbbenthospops)
 		{
            outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
 			cin>>aa;
 		}
+
+        multimap<int,double>::iterator lower_landd = recovery_rates_per_funcgr.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_landd = recovery_rates_per_funcgr.upper_bound(a_marine_landscape);
+        vector<double> init_recovery_rates_per_funcgr;
+        for (multimap<int, double>::iterator pos=lower_landd; pos != upper_landd; pos++)
+        {
+           outc(cout << pos->second << endl);
+                                 // logistic recovery rates for this group specific to this landscape
+            init_recovery_rates_per_funcgr.push_back(pos->second);
+        }
+
 
         // add e.g. 2 functional groups per shared
 		// and init with an arbitrary biomass.
@@ -1374,8 +1385,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		// belonging to this particular landscape
 
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
-			nodes,
-			init_tot_biomass_per_group);
+                                            nodes,
+                                            init_tot_biomass_per_funcgr,
+                                            init_recovery_rates_per_funcgr);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 
@@ -1402,7 +1414,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	//}
 
 	// check the biomasses
-	vector<double> biomass_per_funcgr = benthoss[0]->get_tot_biomass();
+    vector<double> biomass_per_funcgr = benthoss[0]->get_tot_biomass_per_funcgr();
    outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
 	for(unsigned int i=0 ; i<biomass_per_funcgr.size();  i++)
 	{

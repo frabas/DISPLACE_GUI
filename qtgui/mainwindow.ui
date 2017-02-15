@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -116,6 +116,7 @@
     <addaction name="actionAdd_Penalty_from_File"/>
     <addaction name="actionAdd_Penalty_on_Polygon"/>
     <addaction name="actionAssign_Landscape_codes"/>
+    <addaction name="actionAssign_Total_benthos_biomass"/>
     <addaction name="actionAssign_Area_codes"/>
     <addaction name="separator"/>
     <addaction name="actionMergeWeights"/>
@@ -239,7 +240,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../objeditor/vesseleditor.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -283,7 +284,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../objeditor/vesseleditor.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -942,7 +943,7 @@ L3</string>
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -951,7 +952,7 @@ L3</string>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -960,7 +961,7 @@ L3</string>
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1106,7 +1107,7 @@ L3</string>
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1145,7 +1146,7 @@ L3</string>
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1159,7 +1160,7 @@ L3</string>
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1327,6 +1328,11 @@ L3</string>
     <string>Set Node Symbol Size...</string>
    </property>
   </action>
+  <action name="actionAssign_Total_benthos_biomass">
+   <property name="text">
+    <string>Assign Benthos Total Biomass</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1343,9 +1349,9 @@ L3</string>
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../dteditor/dteditor.qrc"/>
   <include location="../objeditor/vesseleditor.qrc"/>
   <include location="../qtcommons/qtcommons.qrc"/>
-  <include location="../dteditor/dteditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

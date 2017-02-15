@@ -780,7 +780,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -955,6 +955,13 @@ void DisplaceModel::setLandscapeCodesFromFeature (OGRGeometry *geometry, int cod
     });
 }
 
+void DisplaceModel::setBenthosBiomassFromFeature (OGRGeometry *geometry, double bio)
+{
+    setBenthosBioFromFeature(geometry, bio, [&](std::shared_ptr<NodeData> nd, double b) {
+        nd->setBenthosBiomass(b);
+    });
+}
+
 void DisplaceModel::setAreaCodesFromFeature (OGRGeometry *geometry, int code)
 {
     setCodeFromFeature(geometry, code, [&](std::shared_ptr<NodeData> nd, int c) {
@@ -977,6 +984,23 @@ void DisplaceModel::setCodeFromFeature (OGRGeometry *geometry, int code, std::fu
         }
     }
 }
+
+void DisplaceModel::setBenthosBioFromFeature (OGRGeometry *geometry, double bio, std::function<void(std::shared_ptr<NodeData>,double)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,bio);
+            break;
+        }
+    }
+}
+
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,
                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
@@ -1369,6 +1393,9 @@ bool DisplaceModel::loadNodes()
     string filename_code_marine_landscape_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_landscape.dat";
 
+    string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
+
     coord_graph.open(filename_graph.c_str());
     if(coord_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
@@ -1411,6 +1438,20 @@ bool DisplaceModel::loadNodes()
     if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord))
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_code_marine_landscape_graph.c_str()));
+
+    // input data, for the benthos biomass for each point of the graph
+    ifstream code_benthos_graph;
+    code_benthos_graph.open(filename_code_benthos_biomass_graph.c_str());
+    if(code_benthos_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_code_benthos_biomass_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_benthos_biomass;
+    if (!fill_from_benthos_biomass(code_benthos_graph, graph_point_benthos_biomass, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_code_benthos_biomass_graph.c_str()));
 
 
     // read harbour specific files
@@ -1500,6 +1541,7 @@ bool DisplaceModel::loadNodes()
                                        graph_coord_harbour[i],
                                        graph_point_code_area[i],
                                        graph_point_code_landscape[i],
+                                       graph_point_benthos_biomass[i],
                                        nbpops,
                                        nbbenthospops,
                                        NBSZGROUP,
@@ -1526,6 +1568,7 @@ bool DisplaceModel::loadNodes()
                                  graph_coord_harbour[i],
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
+                                 graph_point_benthos_biomass[i],
                                  nbpops,
                                  nbbenthospops,
                                  NBSZGROUP));

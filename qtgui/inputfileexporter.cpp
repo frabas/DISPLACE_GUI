@@ -29,7 +29,7 @@ InputFileExporter::InputFileExporter()
 }
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
-                                    QString landpath, QString areacodepath, QString closedpath,
+                                    QString landpath, QString benthospath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
                                     DisplaceModel *currentModel, QString *error)
@@ -60,6 +60,18 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         landstream.setDevice(&landfile);
     }
 
+    QFile bfile(benthospath);
+    QTextStream bstream;
+    if (!benthospath.isEmpty()) {
+        if (!bfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open area code file %1: %2"))
+                    .arg(benthospath).arg(bfile.errorString());
+            return false;
+        }
+        bstream.setDevice(&bfile);
+    }
+
     QFile acfile(areacodepath);
     QTextStream acstream;
     if (!areacodepath.isEmpty()) {
@@ -71,6 +83,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         }
         acstream.setDevice(&acfile);
     }
+
 
     QTextStream clsstream;
     QFile clsfile[4];
@@ -93,6 +106,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             cstrm << x << endl;
             if (acfile.isOpen())
                 acstream << x << endl;
+            if (bfile.isOpen())
+                bstream << nd->get_benthos_biomass() << endl;
             if (landfile.isOpen())
                 landstream << nd->get_marine_landscape() << endl;
         }

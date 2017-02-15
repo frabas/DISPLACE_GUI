@@ -60,7 +60,9 @@ public:
     /* Proxy functions to avoid change too much code */
     int get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
+    int get_benthos_biomass() const { return mNode->get_benthos_biomass(); }
     void setMarineLandscape(int id) { mNode->setMarineLandscape(id); }
+    void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
 
     int get_code_area() const { return mNode->get_code_area(); }
     void setCodeArea(int id) { mNode->setCodeArea(id); }

@@ -1101,7 +1101,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 	// check the class Node
-    Node node (1, 1.0, 1.0, 0, 0, 0, nbpops, nbbenthospops, 5);
+    Node node (1, 1.0, 1.0, 0, 0, 0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
         << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
@@ -1118,6 +1118,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_graph=inputfolder+"/graphsspe/coord"+a_graph_s+".dat";
     string filename_code_area_graph=inputfolder+"/graphsspe/code_area_for_graph"+a_graph_s+"_points.dat";
     string filename_code_marine_landscape_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_landscape.dat";
+    string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
 
 	coord_graph.open(filename_graph.c_str());
 	if(coord_graph.fail())
@@ -1159,6 +1160,20 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	vector<int> graph_point_code_landscape;
     if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord)) {
         std::cerr << "Cannot parse " << filename_code_marine_landscape_graph << " Bad format\n";
+        return 1;
+    }
+
+    // input data, for the benthos total biomass for each point of the graph
+    ifstream benthos_biomass_graph;
+    benthos_biomass_graph.open(filename_code_benthos_biomass_graph.c_str());
+    if(benthos_biomass_graph.fail())
+    {
+        open_file_error(filename_code_benthos_biomass_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_benthos_biomass;
+    if (!fill_from_benthos_biomass(benthos_biomass_graph, graph_point_benthos_biomass, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_code_benthos_biomass_graph << " Bad format\n";
         return 1;
     }
 
@@ -1253,7 +1268,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_coord_harbour[i],
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
-				nbpops,
+                graph_point_benthos_biomass[i],
+                nbpops,
                 nbbenthospops,
 				NBSZGROUP,
 				a_name,
@@ -1275,6 +1291,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_coord_harbour[i],
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
+                graph_point_benthos_biomass[i],
 				nbpops,
                 nbbenthospops,
 				NBSZGROUP));

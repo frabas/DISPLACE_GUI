@@ -38,7 +38,7 @@ const multimap<int,int> Node::mUsualMetiers;
 const multimap<int,double> Node::mFreqUsualMetiers;
 
 
-Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, int nbpops,int nbbenthospops, int nbszgroups)
+Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, double _benthos_biomass, int nbpops,int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
 	idx_node= idx;
@@ -50,6 +50,7 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
+    benthos_biomass=_benthos_biomass;
 	if(_harbour!=0)
 	{
 		is_harbour = true;
@@ -73,7 +74,8 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 
 Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
            const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
-           const vector<int> &graph_point_marine_landscape, int nbpops, int nbbenthospops, int nbszgroups)
+           const vector<int> &graph_point_marine_landscape, const vector<double> &graph_benthos_biomass,
+           int nbpops, int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
 
@@ -90,7 +92,8 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
     harbour=graph_coord_harbour[idx];
 	code_area=graph_point_code_area[idx];
 	marine_landscape=graph_point_marine_landscape[idx];
-	if(harbour!=0)
+    benthos_biomass=graph_benthos_biomass[idx];
+    if(harbour!=0)
 	{
 		is_harbour = true;
 	}
@@ -114,6 +117,7 @@ Node::Node()
       harbour(0),
       code_area(0),
       marine_landscape(0),
+      benthos_biomass(0),
       is_harbour(false),
       cumftime(0),
       cumsweptarea(0),
@@ -167,6 +171,10 @@ int Node::get_marine_landscape() const
 	return(marine_landscape);
 }
 
+double Node::get_benthos_biomass() const
+{
+    return(benthos_biomass);
+}
 
 string Node::get_name() const
 {

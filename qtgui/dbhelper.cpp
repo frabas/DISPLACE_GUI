@@ -293,8 +293,8 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
     QSqlQuery q(mDb);
 
     res = q.prepare("INSERT INTO " + TBL_NODES
-                + "(_id,x,y,harbour,areacode,landscape,name) "
-                + "VALUES (?,?,?,?,?,?,?)");
+                + "(_id,x,y,harbour,areacode,landscape,benthosbiomass, name) "
+                + "VALUES (?,?,?,?,?,?,?,?)");
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
@@ -484,7 +484,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
 
 bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,name FROM " + TBL_NODES + " ORDER BY _id", mDb);
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,benthosbiomass, name FROM " + TBL_NODES + " ORDER BY _id", mDb);
     bool res = q.exec();
 
     DB_ASSERT(res,q);
@@ -496,11 +496,12 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         int harbour = q.value(3).toInt();
         int areacode = q.value(4).toInt();
         int landscape = q.value(5).toInt();
+        int benthosbiomass = q.value(6).toInt();
 
         int nbpops = model->getNBPops();
         int nbbenthospops = model->getNBBenthosPops();
         int szgroup = model->getSzGrupsCount();
-        QString name = q.value(6).toString();
+        QString name = q.value(7).toString();
 
         /* TODO: a,b,c,d */
         multimap<int,double> a;
@@ -511,9 +512,9 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;
         if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
+            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,benthosbiomass,nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
         } else {
-            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape, nbpops, nbbenthospops,  szgroup));
+            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape,benthosbiomass, nbpops, nbbenthospops,  szgroup));
         }
         std::shared_ptr<NodeData> n(new NodeData(nd, model));
 
@@ -989,6 +990,7 @@ bool DbHelper::checkNodesTable(int version)
                + "harbour INTEGER,"
                + "areacode INTEGER,"
                + "landscape INTEGER,"
+               + "benthosbiomass REAL,"
                + "name VARCHAR(32)"
                + ");"
                );

@@ -41,6 +41,7 @@ class Harbour : public Node
             int _harbour,
             int _code_area,
             int _code_landscape,
+            double _benthos_biomass,
             int nbpops,
             int nbbenthospops,
             int nbszgroups,

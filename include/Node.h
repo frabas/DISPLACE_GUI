@@ -39,11 +39,12 @@ class Node
 
 		/**  constructor */
 		Node ();
-        Node (int idx_node, double xval, double yval, int _harbour, int _code_area, int _marine_landscape, int nbpops, int nbbenthospops,  int nbszgroups);
+        Node (int idx_node, double xval, double yval, int _harbour, int _code_area, int _marine_landscape,  double _benthos_biomass, int nbpops, int nbbenthospops,  int nbszgroups);
         Node (int idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
             const vector<int> &graph_point_code_area,
             const vector<int> &graph_marine_landscape,
+            const vector<double> &graph_benthos_biomass,
             int nbpops,  int nbbenthospops, int nbszgroups);
 
 		/**  destructor */
@@ -57,7 +58,10 @@ class Node
         void setCodeArea(int id) {
             code_area = id;
         }
-
+        double get_benthos_biomass() const;
+        void setBenthosBiomass(double value) {
+        benthos_biomass = value;
+        }
 		int get_marine_landscape() const;
         void setMarineLandscape(int id) {
             marine_landscape = id;
@@ -192,7 +196,8 @@ private:
 		int harbour;
 		int code_area;
 		int marine_landscape;
-		bool is_harbour;
+        double benthos_biomass;
+        bool is_harbour;
 		int cumftime;
         double cumsweptarea;
         double cumcatches;

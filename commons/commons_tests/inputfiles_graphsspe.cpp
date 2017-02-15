@@ -133,6 +133,24 @@ BOOST_AUTO_TEST_CASE ( test_fill_from_code_marine_landscape_dat )
     BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
 }
 
+BOOST_AUTO_TEST_CASE ( test_fill_from_benthos_biomass_dat )
+{
+    std::istringstream is("1.0 \n"
+                          "1.0\n"
+                          "100.0\r\n" // three infos
+                            );
+
+
+    std::vector<double> i;
+    std::vector<double> exp_i {1.0,1.0,100.0};
+    bool r;
+
+    r = fill_from_benthos_biomass(is, i, 3);
+    BOOST_CHECK(r);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp_i.begin(), exp_i.end(), i.begin(), i.end());
+}
+
+
 BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
 {
     // TODO check for lines with just one field!

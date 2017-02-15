@@ -183,6 +183,7 @@ private slots:
     void on_actionExport_Populations_triggered();
     void on_actionExport_Nations_triggered();
     void on_actionAssign_Landscape_codes_triggered();
+    void on_actionAssign_Total_benthos_biomass_triggered();
     void on_actionAssign_Area_codes_triggered();
     void on_actionCalcPopDistribution_triggered();
     void on_actionLoadStockNames_triggered();
@@ -251,6 +252,9 @@ protected:
     void exportPlot (QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties);
 
     void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignBenthosBiomassFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+
+
 private:
     Ui::MainWindow *ui;
 

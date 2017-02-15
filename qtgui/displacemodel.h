@@ -413,6 +413,7 @@ public:
     QString linkedGraphFolder() const { return mGraphFolder; }
 
     void setLandscapeCodesFromFeature(OGRGeometry *geometry, int code);
+    void setBenthosBiomassFromFeature(OGRGeometry *geometry, double bio);
     void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
 
 protected:
@@ -435,6 +436,7 @@ protected:
     void checkStatsCollection(int tstep);
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
     void setCodeFromFeature(OGRGeometry *geometry, int code, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setBenthosBioFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
 
 signals:
     void parseOutput(QString, int);

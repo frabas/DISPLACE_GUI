@@ -40,6 +40,7 @@ public:
     QString getGraphFilename() const;
     QString getCoordsFilename() const;
     QString getLandscapeFilename() const;
+    QString getBenthosFilename() const;
     QString getAreacodesFilename() const;
     QString getClosedPolygonFilename() const;
     QString getClosedPolygonFilenameMonthly() const;

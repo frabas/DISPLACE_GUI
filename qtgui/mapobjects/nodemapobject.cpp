@@ -120,8 +120,8 @@ void NodeMapObject::updateProperties()
     QString text = QString("<b>Name</b>: %1 <b>id</b>: %4<br/>"
                            "<b>Coords: </b>%2 %3<br/>"
                            "<b>Landscape: </b>%5<br/>"
-                           "<b>Benthos Biomass: </b>%5<br/>"
-                           "<b>Code Area: </b>%6<br/>")
+                           "<b>Benthos Biomass: </b>%6<br/>"
+                           "<b>Code Area: </b>%7<br/>")
             .arg(QString::fromStdString(mNode->get_name()))
             .arg(mNode->get_y())
             .arg(mNode->get_x())

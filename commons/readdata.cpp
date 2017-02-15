@@ -1278,6 +1278,26 @@ multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int
     return(metiers_loss_after_one_passage);
 }
 
+multimap<int, double> read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/logistic_recovery_rates_per_month_per_funcgr.dat";
+
+    ifstream logistic_recovery_rates_per_month_per_funcgr;
+    logistic_recovery_rates_per_month_per_funcgr.open(filename.c_str());
+    if(logistic_recovery_rates_per_month_per_funcgr.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> rates_per_month_per_funcgr;
+    fill_multimap_from_specifications_i_d(logistic_recovery_rates_per_month_per_funcgr,  rates_per_month_per_funcgr);
+    logistic_recovery_rates_per_month_per_funcgr.close();
+
+    return(rates_per_month_per_funcgr);
+}
+
+
 
 multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder)
 {

@@ -1330,6 +1330,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	// read estimates
     multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
 
+    multimap<int, double> recovery_rate        = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
+
 	// 2. sort and unique
 	sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
 	std::vector<int>::iterator it;

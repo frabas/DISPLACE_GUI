@@ -16,7 +16,7 @@
 BOOST_AUTO_TEST_SUITE ( benthosspe )
 
 
-BOOST_AUTO_TEST_CASE( test_estimates_biomass_per_cell_per_funcgr_per_landscape_dat )
+BOOST_AUTO_TEST_CASE( test_prop_funcgr_biomass_per_node_per_landscape_dat )
 {
     BOOST_CHECK(true); // fill_multimap_from_specifications_i_d
 }

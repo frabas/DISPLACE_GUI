@@ -144,8 +144,7 @@ class Node
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);
 		void export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop);
         void export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep, int funcgroup);
-		void recover_benthos_tot_biomass_per_funcgroup();
-		void export_popnodes_cumftime(ofstream& popnodes, int tstep);
+        void export_popnodes_cumftime(ofstream& popnodes, int tstep);
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches(ofstream& popnodes, int tstep);
         void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
@@ -196,7 +195,7 @@ private:
 		int harbour;
 		int code_area;
 		int marine_landscape;
-        double benthos_biomass;
+        double benthos_biomass;  // total bio on node from the GIS graph file
         bool is_harbour;
 		int cumftime;
         double cumsweptarea;
@@ -212,8 +211,8 @@ private:
         vector<double> cumcatches_per_pop;
         vector<int> vid;		 // list of index of vessels currently on the node
 		vector<int> pop_names_on_node;
-								 // possibly per functional group
-		vector<double> benthos_tot_biomass;
+
+        vector<double> benthos_tot_biomass;  // total bio on node per funcgr from sharing benthos_biomass per funcgr (this sharing is specific to Benthos landscape)
         vector<double> tariffs;
 
         vector<bool> mBannedMetiers;

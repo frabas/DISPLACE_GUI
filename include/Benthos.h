@@ -33,20 +33,22 @@ class Benthos
 	public:
 		Benthos(int marine_landscape,
             const vector<Node* > &nodes,
-            const vector<double> &tot_biomass,
+            const vector<double> &prop_funcgr_per_node,
             const vector<double> &recovery_rates_per_funcgr);
 		virtual ~Benthos();
 		int get_marine_landscape() const;
         const vector<Node* > &get_list_nodes() const;
-        const vector<double> &get_tot_biomass_per_funcgr() const;
+        const vector<double> &get_prop_funcgr_per_node() const;
         const vector<double> &get_recovery_rates_per_funcgr() const;
+        void recover_benthos_tot_biomass_per_funcgroup();
+
     protected:
 	private:
 		int marine_landscape;
 								 // area distribution
 		vector<Node* > list_nodes;
 								 // total biomass per functional group
-        vector<double> tot_biomass_per_funcgr;
+        vector<double> prop_funcgr_per_node;
         vector<double> recovery_rates_per_funcgr;
 };
 #endif							 // BENTHOS_H

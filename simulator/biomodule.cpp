@@ -23,6 +23,7 @@
 #include <Population.h>
 #include <Node.h>
 #include <Vessel.h>
+#include <Benthos.h>
 #include <options.h>
 #include <readdata.h>
 #include <helpers.h>
@@ -115,9 +116,12 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           int freq_do_growth,
                           const multimap<int, double> &init_weight_per_szgroup,
                           const vector<vector <double> >&species_interactions_mortality_proportion_matrix,
-                          vector<Population* >& populations, vector<Node* >&nodes,
+                          vector<Population* >& populations,
+                          vector<Node* >&nodes,
                           vector<Vessel* >& vessels,
-                          const PopSceOptions &dyn_pop_sce, const DynAllocOptions &dyn_alloc_sce)
+                          vector<Benthos* >& benthoss,
+                          const PopSceOptions &dyn_pop_sce,
+                          const DynAllocOptions &dyn_alloc_sce)
 {
 
 
@@ -1073,9 +1077,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     }
 
     // a recovery of the benthos biomasses on node
-    for (unsigned int n=0; n<nodes.size(); n++)
+    for (unsigned int b=0; b<benthoss.size(); b++)
     {
-        nodes.at(n)->recover_benthos_tot_biomass_per_funcgroup();
+        benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup();
     }
 
     /* Flush and updates all statistics */

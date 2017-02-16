@@ -1328,7 +1328,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------" << endl);
 
 	// read estimates
-    multimap<int, double> estimates_biomass_per_cell= read_estimates_biomass_per_cell_per_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
+    multimap<int, double> prop_funcgr_per_node             = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
 
     multimap<int, double> recovery_rates_per_funcgr        = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
 
@@ -1351,17 +1351,17 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
        outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-		multimap<int,double>::iterator lower_land = estimates_biomass_per_cell.lower_bound(a_marine_landscape);
-		multimap<int,double>::iterator upper_land = estimates_biomass_per_cell.upper_bound(a_marine_landscape);
-        vector<double> init_tot_biomass_per_funcgr;
+        multimap<int,double>::iterator lower_land = prop_funcgr_per_node.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_land = prop_funcgr_per_node.upper_bound(a_marine_landscape);
+        vector<double> init_prop_funcgr_per_node;
 		for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
 		{
            outc(cout << pos->second << endl);
 								 // biomass per cell for this group specific to this landscape
-            init_tot_biomass_per_funcgr.push_back(pos->second);
+            init_prop_funcgr_per_node.push_back(pos->second);
 		}
 
-        if(init_tot_biomass_per_funcgr.size()!=(size_t)nbbenthospops)
+        if(init_prop_funcgr_per_node.size()!=(size_t)nbbenthospops)
 		{
            outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
@@ -1386,7 +1386,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
                                             nodes,
-                                            init_tot_biomass_per_funcgr,
+                                            init_prop_funcgr_per_node,
                                             init_recovery_rates_per_funcgr);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
@@ -1414,11 +1414,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	//}
 
 	// check the biomasses
-    vector<double> biomass_per_funcgr = benthoss[0]->get_tot_biomass_per_funcgr();
+    vector<double> a_prop_funcgr_per_node = benthoss[0]->get_prop_funcgr_per_node();
    outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
-	for(unsigned int i=0 ; i<biomass_per_funcgr.size();  i++)
+    for(unsigned int gr=0 ; gr<a_prop_funcgr_per_node.size();  gr++)
 	{
-       outc(cout << biomass_per_funcgr[i] << " " );
+       outc(cout << a_prop_funcgr_per_node[gr] << " " );
 	}
    outc(cout << endl);
 
@@ -3359,6 +3359,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              populations,
                                              nodes,
                                              vessels,
+                                             benthoss,
                                              dyn_pop_sce,
                                              dyn_alloc_sce);
 

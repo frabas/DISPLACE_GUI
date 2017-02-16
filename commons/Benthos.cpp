@@ -28,12 +28,12 @@ using namespace std;
 
 Benthos::Benthos(int _marine_landscape,
                     const vector<Node *> &_nodes,
-                    const vector<double> &_tot_biomass_per_funcgr,
+                    const vector<double> &_prop_funcgr_per_node,
                     const vector<double> &_recovery_rates_per_funcgr)
 {
-	marine_landscape =_marine_landscape;
-    tot_biomass_per_funcgr    =_tot_biomass_per_funcgr;
-    recovery_rates_per_funcgr=_recovery_rates_per_funcgr;
+    marine_landscape          = _marine_landscape;
+    prop_funcgr_per_node      = _prop_funcgr_per_node;
+    recovery_rates_per_funcgr = _recovery_rates_per_funcgr;
 
     dout(cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ");
 	vector<Node* > p_spe_nodes;
@@ -49,13 +49,13 @@ Benthos::Benthos(int _marine_landscape,
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);
-        for(unsigned int funcgr=0; funcgr<tot_biomass_per_funcgr.size();funcgr++)
+        for(unsigned int funcgr=0; funcgr<prop_funcgr_per_node.size();funcgr++)
 		{
-								 // put an estimate of biomass per cell
-            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(tot_biomass_per_funcgr.at(funcgr) );
+                // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
+            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_benthos_biomass() * prop_funcgr_per_node.at(funcgr) );
 		}
-        dout (cout << "nb func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
-            "this marine landscape " << marine_landscape << " is " << tot_biomass_per_funcgr.size() << endl);
+        dout (cout << "prop func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
+            "this marine landscape " << marine_landscape << " is " << prop_funcgr_per_node.size() << endl);
 
 	}
 
@@ -74,9 +74,9 @@ int Benthos::get_marine_landscape() const
 }
 
 
-const vector<double> &Benthos::get_tot_biomass_per_funcgr() const
+const vector<double> &Benthos::get_prop_funcgr_per_node() const
 {
-    return(tot_biomass_per_funcgr);
+    return(prop_funcgr_per_node);
 }
 
 const vector<double> &Benthos::get_recovery_rates_per_funcgr() const
@@ -88,3 +88,24 @@ const vector<Node *> &Benthos::get_list_nodes() const
 {
 	return(list_nodes);
 }
+
+
+
+
+void Benthos::recover_benthos_tot_biomass_per_funcgroup()
+{
+    // A MAGIC NUMBER HERE FOR THE TIME BEING...
+    // i.e. 1% per month
+    // TO DO: INFORM WITH DATA.
+
+ //   dout(cout  << "the benthos recovering...." << endl);
+
+ //   int landsc = this->get_marine_landscape();
+
+ //   for(unsigned int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
+//	{
+//		benthos_tot_biomass.at(funcgr)=benthos_tot_biomass.at(funcgr)*1.01;
+//	}
+
+}
+

@@ -1139,21 +1139,6 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int 
 
 
 
-void Node::recover_benthos_tot_biomass_per_funcgroup()
-{
-	// A MAGIC NUMBER HERE FOR THE TIME BEING...
-	// i.e. 1% per month
-	// TO DO: INFORM WITH DATA.
-
-    dout(cout  << "the benthos recovering...." << endl);
-
-    for(unsigned int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
-	{
-		benthos_tot_biomass.at(funcgr)=benthos_tot_biomass.at(funcgr)*1.01;
-	}
-
-}
-
 
 void Node::setAreaType(int _area_type)
 {

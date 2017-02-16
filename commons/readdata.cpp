@@ -1524,23 +1524,23 @@ multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_pa
 
 
 // FOR BENTHOS
-multimap<int, double> read_estimates_biomass_per_cell_per_funcgr_per_landscape(string folder_name_parameterization, string inputfolder)
+multimap<int, double> read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/estimates_biomass_per_cell_per_funcgr_per_landscape.dat";
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/prop_funcgr_biomass_per_node_per_landscape.dat";
 
-    ifstream file_estimates_biomass_per_cell;
-    file_estimates_biomass_per_cell.open(filename.c_str());
-    if(file_estimates_biomass_per_cell.fail())
+    ifstream file_prop_funcgr_per_node;
+    file_prop_funcgr_per_node.open(filename.c_str());
+    if(file_prop_funcgr_per_node.fail())
     {
         open_file_error(filename.c_str());
         //return 1;
     }
-    multimap<int, double> estimates_biomass_per_cell;
-    fill_multimap_from_specifications_i_d(file_estimates_biomass_per_cell,  estimates_biomass_per_cell);
-    file_estimates_biomass_per_cell.close();
+    multimap<int, double> prop_funcgr_per_node;
+    fill_multimap_from_specifications_i_d(file_prop_funcgr_per_node,  prop_funcgr_per_node);
+    file_prop_funcgr_per_node.close();
 
-    return(estimates_biomass_per_cell);
+    return(prop_funcgr_per_node);
 }
 
 

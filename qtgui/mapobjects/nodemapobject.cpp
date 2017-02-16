@@ -127,11 +127,22 @@ void NodeMapObject::updateProperties()
             .arg(mNode->get_x())
             .arg(mNode->get_idx_node())
             .arg(mNode->get_marine_landscape())
-            .arg(mNode->get_init_benthos_biomass()) // TO DO: write the actual biomass instead! i.e. replace by something like:
-            //.arg(mNode->get_benthos_biomass()) // this returns a vector over funcgrp which is not handled here!
+            .arg(mNode->get_init_benthos_biomass())
             .arg(mNode->get_code_area());
 
+
+
+
+
+    std::ostringstream ss;
     vector <double> tariffs=mNode->get_tariffs();
+    text += QString("<br/><b>Tariffs</b><br/>");
+    for (int gr=0; gr<tariffs.size(); ++gr) {
+       ss << tariffs.at(gr) << ",";
+    }
+    text += QString::fromStdString(ss.str());
+
+
 
     cout << "updateProperties here!" << tariffs.at(0) << endl;
 

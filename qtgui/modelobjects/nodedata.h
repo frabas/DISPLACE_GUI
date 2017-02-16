@@ -60,7 +60,8 @@ public:
     /* Proxy functions to avoid change too much code */
     int get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
-    int get_benthos_biomass() const { return mNode->get_benthos_biomass(); }
+    double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
+    vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     void setMarineLandscape(int id) { mNode->setMarineLandscape(id); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
 

@@ -117,7 +117,7 @@ Node::Node()
       harbour(0),
       code_area(0),
       marine_landscape(0),
-      benthos_biomass(0),
+      benthos_biomass(1),
       is_harbour(false),
       cumftime(0),
       cumsweptarea(0),
@@ -171,10 +171,16 @@ int Node::get_marine_landscape() const
 	return(marine_landscape);
 }
 
-double Node::get_benthos_biomass() const
+double Node::get_init_benthos_biomass() const
 {
     return(benthos_biomass);
 }
+
+vector<double> Node::get_benthos_biomass_per_funcgr() const
+{
+    return(benthos_tot_biomass);
+}
+
 
 string Node::get_name() const
 {

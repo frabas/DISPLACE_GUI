@@ -58,7 +58,8 @@ class Node
         void setCodeArea(int id) {
             code_area = id;
         }
-        double get_benthos_biomass() const;
+        double get_init_benthos_biomass() const;
+        vector<double> get_benthos_biomass_per_funcgr() const;
         void setBenthosBiomass(double value) {
         benthos_biomass = value;
         }

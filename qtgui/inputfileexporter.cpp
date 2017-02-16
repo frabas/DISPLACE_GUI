@@ -107,7 +107,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             if (acfile.isOpen())
                 acstream << x << endl;
             if (bfile.isOpen())
-                bstream << nd->get_benthos_biomass() << endl;
+                bstream << nd->get_init_benthos_biomass() << endl;
             if (landfile.isOpen())
                 landstream << nd->get_marine_landscape() << endl;
         }

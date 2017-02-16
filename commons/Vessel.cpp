@@ -1673,10 +1673,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 	// FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
-    int a_landscape =           this->get_loc()->get_marine_landscape();
-    double a_benthos_biomass =           this->get_loc()->get_benthos_biomass();
-    multimap<int,double> loss=  this->get_metier()->get_loss_after_1_passage();
-	vector<double> loss_after_1_passage_per_func_group=find_entries_i_d (loss,  a_landscape);
+    int a_landscape                  =           this->get_loc()->get_marine_landscape();
+    vector<double> a_benthos_biomass =           this->get_loc()->get_benthos_biomass_per_funcgr();
+    multimap<int,double> loss        =           this->get_metier()->get_loss_after_1_passage();
+    vector<double> loss_after_1_passage_per_func_group= find_entries_i_d (loss,  a_landscape);
 
 
     // THEN, DEPLETE THE UNDERLYING BENTHOS ON THIS NODE...

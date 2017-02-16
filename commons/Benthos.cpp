@@ -52,7 +52,7 @@ Benthos::Benthos(int _marine_landscape,
         for(unsigned int funcgr=0; funcgr<prop_funcgr_per_node.size();funcgr++)
 		{
                 // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
-            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_benthos_biomass() * prop_funcgr_per_node.at(funcgr) );
+            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_per_node.at(funcgr) );
 		}
         dout (cout << "prop func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
             "this marine landscape " << marine_landscape << " is " << prop_funcgr_per_node.size() << endl);
@@ -94,18 +94,27 @@ const vector<Node *> &Benthos::get_list_nodes() const
 
 void Benthos::recover_benthos_tot_biomass_per_funcgroup()
 {
-    // A MAGIC NUMBER HERE FOR THE TIME BEING...
-    // i.e. 1% per month
-    // TO DO: INFORM WITH DATA.
+    dout(cout  << "the benthos recovering...." << endl);
 
- //   dout(cout  << "the benthos recovering...." << endl);
+   //carrying capacity
+   double K = 500; // caution: harcoding for now
 
- //   int landsc = this->get_marine_landscape();
+   vector<Node *> list_nodes_this_landsc= get_list_nodes();
+   vector<double> all_benthos_tot_biomass = list_nodes_this_landsc.at(0)->get_benthos_tot_biomass();
 
- //   for(unsigned int funcgr = 0; funcgr < benthos_tot_biomass.size(); funcgr++)
-//	{
-//		benthos_tot_biomass.at(funcgr)=benthos_tot_biomass.at(funcgr)*1.01;
-//	}
+   for(unsigned int n=0; n<list_nodes_this_landsc.size(); n++)
+   {
+      // Pitcher et al. 2016
+      for(unsigned int funcgr = 0; funcgr < all_benthos_tot_biomass.size(); funcgr++)
+       {
+          double benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
+          double new_benthos_tot_biomass =(benthos_tot_biomass*K)/
+                                         (benthos_tot_biomass+
+                                           (K-benthos_tot_biomass)* exp(-get_recovery_rates_per_funcgr().at(funcgr)));
+
+          list_nodes_this_landsc.at(n)->set_benthos_tot_biomass(funcgr,  new_benthos_tot_biomass); // update on node
+      }
+   }
 
 }
 

@@ -1958,7 +1958,7 @@ void MainWindow::on_actionAssign_Landscape_codes_triggered()
 
 void MainWindow::on_actionAssign_Total_benthos_biomass_triggered()
 {
-    QString title = tr("Set Total Benthos Biomass ('gram_per_sq_meter' field required)");
+    QString title = tr("Set Total Benthos Biomass ('grsqmeter' field required - gram per squared meter)");
 
     if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
         return;
@@ -1968,7 +1968,7 @@ void MainWindow::on_actionAssign_Total_benthos_biomass_triggered()
     dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
 
     if (dlg.exec() == QDialog::Accepted) {
-        const char * fieldname = "gram_per_sq_meter";
+        const char * fieldname = "grsqmeter";
         QString shp = dlg.selectedShapefile();
 
         assignBenthosBiomassFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int bio) {

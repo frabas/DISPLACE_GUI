@@ -33,6 +33,7 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
 
     ui->optAreaCodes->setChecked(true);
     ui->optLandscape->setChecked(true);
+    ui->optBenthosBio->setChecked(true);
     ui->optClosedPoly->setChecked(true);
     ui->optCustomize->setChecked(true); // force updating
     ui->optCustomize->setChecked(false);
@@ -73,7 +74,7 @@ QString SaveGraphDialog::getLandscapeFilename() const
 
 QString SaveGraphDialog::getBenthosFilename() const
 {
-    if (ui->optLandscape->isChecked())
+    if (ui->optBenthosBio->isChecked())
         return ui->outputFolder->text() + "/" + ui->benthosFileName->text();
     return QString();
 }

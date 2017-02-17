@@ -1331,6 +1331,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, double> prop_funcgr_per_node             = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
 
     multimap<int, double> recovery_rates_per_funcgr        = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
+    multimap<int, double> benthos_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
+
 
 	// 2. sort and unique
 	sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
@@ -1378,6 +1380,16 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             init_recovery_rates_per_funcgr.push_back(pos->second);
         }
 
+        multimap<int,double>::iterator lower_landdd = benthos_carrying_capacity_K_per_landscape_per_funcgr.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_landdd = benthos_carrying_capacity_K_per_landscape_per_funcgr.upper_bound(a_marine_landscape);
+        vector<double> init_benthos_carrying_capacity_K_per_landscape_per_funcgr;
+        for (multimap<int, double>::iterator pos=lower_landdd; pos != upper_landdd; pos++)
+        {
+           outc(cout << pos->second << endl);
+                                 // logistic recovery rates for this group specific to this landscape
+            init_benthos_carrying_capacity_K_per_landscape_per_funcgr.push_back(pos->second);
+        }
+
 
         // add e.g. 2 functional groups per shared
 		// and init with an arbitrary biomass.
@@ -1387,7 +1399,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
                                             nodes,
                                             init_prop_funcgr_per_node,
-                                            init_recovery_rates_per_funcgr);
+                                            init_recovery_rates_per_funcgr,
+                                            init_benthos_carrying_capacity_K_per_landscape_per_funcgr);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 

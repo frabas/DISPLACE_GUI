@@ -29,11 +29,13 @@ using namespace std;
 Benthos::Benthos(int _marine_landscape,
                     const vector<Node *> &_nodes,
                     const vector<double> &_prop_funcgr_per_node,
-                    const vector<double> &_recovery_rates_per_funcgr)
+                    const vector<double> &_recovery_rates_per_funcgr,
+                    const vector<double> &_benthos_carrying_capacity_K_per_landscape_per_funcgr)
 {
     marine_landscape          = _marine_landscape;
     prop_funcgr_per_node      = _prop_funcgr_per_node;
     recovery_rates_per_funcgr = _recovery_rates_per_funcgr;
+    benthos_carrying_capacity_K_per_landscape_per_funcgr=_benthos_carrying_capacity_K_per_landscape_per_funcgr;
 
     dout(cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ");
 	vector<Node* > p_spe_nodes;
@@ -84,6 +86,13 @@ const vector<double> &Benthos::get_recovery_rates_per_funcgr() const
     return(recovery_rates_per_funcgr);
 }
 
+const vector<double> &Benthos::get_benthos_carrying_capacity_K_per_landscape_per_funcgr() const
+{
+    return(benthos_carrying_capacity_K_per_landscape_per_funcgr);
+}
+
+
+
 const vector<Node *> &Benthos::get_list_nodes() const
 {
 	return(list_nodes);
@@ -96,9 +105,6 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup()
 {
     dout(cout  << "the benthos recovering...." << endl);
 
-   //carrying capacity
-   double K = 500; // caution: harcoding for now
-
    vector<Node *> list_nodes_this_landsc= get_list_nodes();
    vector<double> all_benthos_tot_biomass = list_nodes_this_landsc.at(0)->get_benthos_tot_biomass();
 
@@ -107,6 +113,7 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup()
       // Pitcher et al. 2016
       for(unsigned int funcgr = 0; funcgr < all_benthos_tot_biomass.size(); funcgr++)
        {
+          double K                       = get_benthos_carrying_capacity_K_per_landscape_per_funcgr().at(funcgr);
           double benthos_tot_biomass     = list_nodes_this_landsc.at(n)->get_benthos_tot_biomass(funcgr);
           double new_benthos_tot_biomass =(benthos_tot_biomass*K)/
                                          (benthos_tot_biomass+

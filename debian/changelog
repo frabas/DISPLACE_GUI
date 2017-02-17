@@ -1,3 +1,12 @@
+displace (0.9.5) xenial; urgency=medium
+
+  * Improved graph creation
+  * Diffuse option model
+  * firm groups
+  * Stronger data loading
+
+ -- Federico Fuga <fuga@studiofuga.com>  Fri, 17 Feb 2017 12:31:44 +0100
+
 displace (0.9.3ubuntu1) xenial; urgency=medium
 
   [ Federico Fuga ]

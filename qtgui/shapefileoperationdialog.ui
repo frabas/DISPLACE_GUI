@@ -40,7 +40,7 @@
    <item row="0" column="0">
     <widget class="QRadioButton" name="radioSelectShapefile">
      <property name="text">
-      <string>Select imported shapefile</string>
+      <string>Select imported WGS84 shapefile</string>
      </property>
      <property name="checked">
       <bool>true</bool>

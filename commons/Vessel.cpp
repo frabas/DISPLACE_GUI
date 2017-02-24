@@ -4164,8 +4164,7 @@ int Vessel::should_i_go_fishing(int tstep,
         if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::GoFishing))
 		{
 
-            // TO DO: use this->getWorkDayStartHour(); to replace the hardcoding here....
-            if((tstep % 24)==4) // hardcoded 4.am
+            if((tstep % 24)==this->getWorkDayStartHour())
             {
 
 

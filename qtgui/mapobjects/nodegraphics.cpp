@@ -73,12 +73,12 @@ void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &
 
 int NodeGraphics::piew()
 {
-    return settings.value("piew", 30).toInt();
+    return settings.value("piew", 10).toInt();
 }
 
 int NodeGraphics::pieh()
 {
-    return settings.value("pieh", 30).toInt();
+    return settings.value("pieh", 10).toInt();
 }
 
 void NodeGraphics::setPieSize(int w, int h)

@@ -170,7 +170,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             if (nd) {
                 int m = nd->getAdiacencyCount();
                 for (int j = 0; j < m; ++j) {
-                    gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << endl;
+                    //gstrm << FileFormatHelper::roundWeight(currentModel->getNodesList()[i]->getAdiacencyWeight(j)) << endl;
+                    gstrm << currentModel->getNodesList()[i]->getAdiacencyWeight(j) << endl;
                 }
             }
         }

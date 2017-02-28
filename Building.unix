@@ -123,6 +123,11 @@ Compilation under HPC (without qt)
 
 The simulator can be compiled without the Qt support, for example on HPC, to run simulations only.
 The following components, that depends only on stdc++ library and boost::regex.
+
+First loaded required tools:
+
+$ module load gcc\5.3.0
+
 Run the main makefile from the source root directory:
 
 $ make -f Makefile.hpc

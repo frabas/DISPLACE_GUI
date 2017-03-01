@@ -151,6 +151,9 @@ double NodeWithPopStatsGraphics::getValueForPop(int pop) const
     case BenthosBiomass:
         return mNode->getBenthosBiomass(pop);
         break;
+    case BenthosNumber:
+        return mNode->getBenthosNumber(pop);
+        break;
     default:
         Q_ASSERT(false);    /* Prevents this from happening */
     }

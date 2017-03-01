@@ -39,12 +39,15 @@ class Node
 
 		/**  constructor */
 		Node ();
-        Node (int idx_node, double xval, double yval, int _harbour, int _code_area, int _marine_landscape,  double _benthos_biomass, int nbpops, int nbbenthospops,  int nbszgroups);
+        Node (int idx_node, double xval, double yval, int _harbour, int _code_area,
+              int _marine_landscape,  double _benthos_biomass, double _benthos_number,
+              int nbpops, int nbbenthospops,  int nbszgroups);
         Node (int idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
             const vector<int> &graph_point_code_area,
             const vector<int> &graph_marine_landscape,
             const vector<double> &graph_benthos_biomass,
+            const vector<double> &graph_benthos_number,
             int nbpops,  int nbbenthospops, int nbszgroups);
 
 		/**  destructor */
@@ -152,7 +155,8 @@ class Node
 		void export_popnodes(ofstream& popnodes, multimap<int,double> weight_at_szgroup, int tstep);
 		void export_popnodes_impact(ofstream& popnodes, int tstep, int pop);
 		void export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop);
-        void export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep, int funcgroup);
+        void export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnodes, int tstep, int funcgroup);
+        void export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes, int tstep, int funcgroup);
         void export_popnodes_cumftime(ofstream& popnodes, int tstep);
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches(ofstream& popnodes, int tstep);

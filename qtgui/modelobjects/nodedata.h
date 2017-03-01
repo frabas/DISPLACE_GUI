@@ -57,13 +57,16 @@ public:
     explicit NodeData(std::shared_ptr<Node> nd, DisplaceModel *model);
     virtual ~NodeData();
 
-    /* Proxy functions to avoid change too much code */
+    /* Proxy functions to avoid changing too much code */
     int get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
     double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
+    double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }
+    vector<double> get_benthos_number_per_funcgr() const { return mNode->get_benthos_number_per_funcgr(); }
     void setMarineLandscape(int id) { mNode->setMarineLandscape(id); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
+    void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
 
     int get_code_area() const { return mNode->get_code_area(); }
     void setCodeArea(int id) { mNode->setCodeArea(id); }
@@ -123,6 +126,10 @@ public:
     double getBenthosBiomass(int func) const {
         return mBenthosBiomass[func];
     }
+    void setBenthosNumber(int func, double benthosnumber);
+    double getBenthosNumber(int func) const {
+        return mBenthosNumber[func];
+    }
 
     int getHarbourId() const;
     void setHarbourId(int value);
@@ -153,6 +160,7 @@ private:
     double *mImpact;
     double *mCumcatchesPerPop;
     double *mBenthosBiomass;
+    double *mBenthosNumber;
     int areaType;
 
     AdiacencyList mAdiacency;

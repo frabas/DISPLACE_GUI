@@ -1050,6 +1050,7 @@ void MainWindow::on_actionImport_results_triggered()
             "popnodes_cumcatches_%1.dat", "popnodes_tariffs_%1.dat",
             "popnodes_impact_%1.dat", "popnodes_cumulcatches_per_pop_%1.dat",
             "benthosnodes_tot_biomasses_%1.dat",
+            "benthosnodes_tot_numbers_%1.dat",
             "popdyn_%1.dat", "popdyn_F_%1.dat", "popdyn_SSB_%1.dat",
             "loglike_%1.dat"
         };

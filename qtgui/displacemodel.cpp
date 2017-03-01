@@ -614,6 +614,13 @@ void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid,
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBenthosNumber(funcid, benthosnumber);
+    mNodesStatsDirty = true;
+}
+
 
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
@@ -780,7 +787,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1396,6 +1403,9 @@ bool DisplaceModel::loadNodes()
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
 
+    string filename_code_benthos_number_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_benthos_total_number.dat";
+
     coord_graph.open(filename_graph.c_str());
     if(coord_graph.fail()) {
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
@@ -1452,6 +1462,20 @@ bool DisplaceModel::loadNodes()
     if (!fill_from_benthos_biomass(code_benthos_graph, graph_point_benthos_biomass, nrow_coord))
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_code_benthos_biomass_graph.c_str()));
+
+    // input data, for the benthos number for each point of the graph
+    ifstream code_benthos_number_graph;
+    code_benthos_number_graph.open(filename_code_benthos_number_graph.c_str());
+    if(code_benthos_number_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_code_benthos_number_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_benthos_number;
+    if (!fill_from_benthos_number(code_benthos_number_graph, graph_point_benthos_number, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_code_benthos_number_graph.c_str()));
 
 
     // read harbour specific files
@@ -1542,6 +1566,7 @@ bool DisplaceModel::loadNodes()
                                        graph_point_code_area[i],
                                        graph_point_code_landscape[i],
                                        graph_point_benthos_biomass[i],
+                                       graph_point_benthos_number[i],
                                        nbpops,
                                        nbbenthospops,
                                        NBSZGROUP,
@@ -1569,6 +1594,7 @@ bool DisplaceModel::loadNodes()
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
                                  graph_point_benthos_biomass[i],
+                                 graph_point_benthos_number[i],
                                  nbpops,
                                  nbbenthospops,
                                  NBSZGROUP));

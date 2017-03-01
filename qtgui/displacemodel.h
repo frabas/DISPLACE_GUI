@@ -378,6 +378,7 @@ public:
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
+    void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
@@ -414,6 +415,7 @@ public:
 
     void setLandscapeCodesFromFeature(OGRGeometry *geometry, int code);
     void setBenthosBiomassFromFeature(OGRGeometry *geometry, double bio);
+    void setBenthosNumberFromFeature(OGRGeometry *geometry, double nb);
     void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
 
 protected:

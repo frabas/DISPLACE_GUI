@@ -38,7 +38,9 @@ const multimap<int,int> Node::mUsualMetiers;
 const multimap<int,double> Node::mFreqUsualMetiers;
 
 
-Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int _marine_landscape, double _benthos_biomass, int nbpops,int nbbenthospops, int nbszgroups)
+Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
+           int _marine_landscape, double _benthos_biomass, double _benthos_number,
+           int nbpops,int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
 	idx_node= idx;
@@ -51,7 +53,8 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
     benthos_biomass=_benthos_biomass;
-	if(_harbour!=0)
+    benthos_number=_benthos_number;
+    if(_harbour!=0)
 	{
 		is_harbour = true;
 	}
@@ -73,8 +76,11 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area, int
 
 
 Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
-           const vector<int> &graph_coord_harbour, const vector<int> &graph_point_code_area,
-           const vector<int> &graph_point_marine_landscape, const vector<double> &graph_benthos_biomass,
+           const vector<int> &graph_coord_harbour,
+           const vector<int> &graph_point_code_area,
+           const vector<int> &graph_point_marine_landscape,
+           const vector<double> &graph_benthos_biomass,
+           const vector<double> &graph_benthos_number,
            int nbpops, int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
@@ -93,6 +99,7 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 	code_area=graph_point_code_area[idx];
 	marine_landscape=graph_point_marine_landscape[idx];
     benthos_biomass=graph_benthos_biomass[idx];
+    benthos_number=graph_benthos_number[idx];
     if(harbour!=0)
 	{
 		is_harbour = true;
@@ -118,6 +125,7 @@ Node::Node()
       code_area(0),
       marine_landscape(0),
       benthos_biomass(1),
+      benthos_number(1),
       is_harbour(false),
       cumftime(0),
       cumsweptarea(0),
@@ -1169,15 +1177,27 @@ void Node::set_is_harbour(int id)
 }
 
 
-void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosnodes, int tstep, int funcgr)
+void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnodes, int tstep, int funcgr)
 {
 
     dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
 
-	benthosnodes << setprecision(3) << fixed;
+    benthosbiomassnodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / biomass func group id
-    benthosnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+    benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_biomass.at(funcgr) << " " <<  endl;
+
+}
+
+void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes, int tstep, int funcgr)
+{
+
+    dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
+
+    benthosnumbernodes << setprecision(3) << fixed;
+    // pop/ tstep / node / long / lat / number func group id
+    benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " <<  endl;
 
 }
 

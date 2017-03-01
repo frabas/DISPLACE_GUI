@@ -144,7 +144,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
     DB_ASSERT(r,sq);
 
     r = sq2.prepare("INSERT INTO " + TBL_BENTHOSPOPNODES_STATS
-        + "(statid,tstep,nodeid,funcid, benthosbiomass) VALUES(?,?,?,?,?)");
+        + "(statid,tstep,nodeid,funcid, benthosbiomass, benthosnumber) VALUES(?,?,?,?,?,?)");
     DB_ASSERT(r,sq2);
 
     foreach (std::shared_ptr<NodeData> n, nodes) {
@@ -184,6 +184,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
             sq2.addBindValue(n->get_idx_node());
             sq2.addBindValue(j);
             sq2.addBindValue(n->getBenthosBiomass(j));
+            sq2.addBindValue(n->getBenthosNumber(j));
 
             res = sq2.exec();
             DB_ASSERT(res,sq2);
@@ -293,8 +294,8 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
     QSqlQuery q(mDb);
 
     res = q.prepare("INSERT INTO " + TBL_NODES
-                + "(_id,x,y,harbour,areacode,landscape,benthosbiomass, name) "
-                + "VALUES (?,?,?,?,?,?,?,?)");
+                + "(_id,x,y,harbour,areacode,landscape,benthosbiomass,benthosnumber, name) "
+                + "VALUES (?,?,?,?,?,?,?,?,?)");
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
@@ -304,6 +305,8 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
     q.addBindValue(node->get_harbour());
     q.addBindValue(node->get_code_area());
     q.addBindValue(node->get_marine_landscape());
+    q.addBindValue(node->get_init_benthos_biomass());
+    q.addBindValue(node->get_init_benthos_number());
     if (node->get_harbour()) {
         q.addBindValue(QString::fromStdString(node->get_name()));
     } else {
@@ -484,7 +487,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
 
 bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,benthosbiomass, name FROM " + TBL_NODES + " ORDER BY _id", mDb);
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,benthosbiomass,benthosnumber, name FROM " + TBL_NODES + " ORDER BY _id", mDb);
     bool res = q.exec();
 
     DB_ASSERT(res,q);
@@ -497,11 +500,12 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         int areacode = q.value(4).toInt();
         int landscape = q.value(5).toInt();
         int benthosbiomass = q.value(6).toInt();
+        int benthosnumber = q.value(7).toInt();
 
         int nbpops = model->getNBPops();
         int nbbenthospops = model->getNBBenthosPops();
         int szgroup = model->getSzGrupsCount();
-        QString name = q.value(7).toString();
+        QString name = q.value(8).toString();
 
         /* TODO: a,b,c,d */
         multimap<int,double> a;
@@ -512,9 +516,9 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;
         if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,benthosbiomass,nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
+            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,benthosbiomass, benthosnumber, nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
         } else {
-            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape,benthosbiomass, nbpops, nbbenthospops,  szgroup));
+            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape,benthosbiomass, benthosnumber, nbpops, nbbenthospops,  szgroup));
         }
         std::shared_ptr<NodeData> n(new NodeData(nd, model));
 
@@ -641,7 +645,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         }
     }
 
-    q.prepare ("SELECT nodeid,funcid,benthosbiomass FROM " + TBL_BENTHOSPOPNODES_STATS
+    q.prepare ("SELECT nodeid,funcid,benthosbiomass,benthosnumber FROM " + TBL_BENTHOSPOPNODES_STATS
                + " WHERE tstep=?");
     DB_ASSERT(res,q);
 
@@ -653,6 +657,10 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         double benthosbiomass = q.value(2).toDouble();
         if (nid < nodes.size()) {
             nodes.at(nid)->setBenthosBiomass(funcid,benthosbiomass);
+        }
+        double benthosnumber = q.value(3).toDouble();
+        if (nid < nodes.size()) {
+            nodes.at(nid)->setBenthosNumber(funcid,benthosnumber);
         }
     }
 
@@ -991,6 +999,7 @@ bool DbHelper::checkNodesTable(int version)
                + "areacode INTEGER,"
                + "landscape INTEGER,"
                + "benthosbiomass REAL,"
+               + "benthosnumber REAL,"
                + "name VARCHAR(32)"
                + ");"
                );
@@ -1051,7 +1060,8 @@ bool DbHelper::checkNodesStats(int version)
                + "tstep INTEGER,"
                + "nodeid INTEGER,"
                + "funcid INTEGER,"
-               + "benthosbiomass REAL"
+               + "benthosbiomass REAL,"
+               + "benthosnumber REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }

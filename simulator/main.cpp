@@ -1101,7 +1101,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 	// check the class Node
-    Node node (1, 1.0, 1.0, 0, 0, 0,0, nbpops, nbbenthospops, 5);
+    Node node (1, 1.0, 1.0, 0, 0, 0,0, 0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
         << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
@@ -1119,6 +1119,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_code_area_graph=inputfolder+"/graphsspe/code_area_for_graph"+a_graph_s+"_points.dat";
     string filename_code_marine_landscape_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_landscape.dat";
     string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
+    string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
 
 	coord_graph.open(filename_graph.c_str());
 	if(coord_graph.fail())
@@ -1163,7 +1164,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 1;
     }
 
-    // input data, for the benthos total biomass for each point of the graph
+    // input data, for the benthos total BIOMASS for each point of the graph
     ifstream benthos_biomass_graph;
     benthos_biomass_graph.open(filename_code_benthos_biomass_graph.c_str());
     if(benthos_biomass_graph.fail())
@@ -1176,6 +1177,21 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         std::cerr << "Cannot parse " << filename_code_benthos_biomass_graph << " Bad format\n";
         return 1;
     }
+
+    // input data, for the benthos total NUMBER for each point of the graph
+    ifstream benthos_number_graph;
+    benthos_number_graph.open(filename_code_benthos_number_graph.c_str());
+    if(benthos_number_graph.fail())
+    {
+        open_file_error(filename_code_benthos_number_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_benthos_number;
+    if (!fill_from_benthos_number(benthos_number_graph, graph_point_benthos_number, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_code_benthos_number_graph << " Bad format\n";
+        return 1;
+    }
+
 
 	// check inputs
 	for (unsigned int i=0; i<graph_coord_harbour.size(); i++)
@@ -1269,6 +1285,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
                 graph_point_benthos_biomass[i],
+                graph_point_benthos_number[i],
                 nbpops,
                 nbbenthospops,
 				NBSZGROUP,
@@ -1292,7 +1309,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
                 graph_point_benthos_biomass[i],
-				nbpops,
+                graph_point_benthos_number[i],
+                nbpops,
                 nbbenthospops,
 				NBSZGROUP));
             dout (cout <<  nodes[i]->get_x() << " " << nodes[i]->get_y() << " " << nodes[i]->get_is_harbour()
@@ -3242,10 +3260,15 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_tariffs.open(filename.c_str());
     std::string popnodes_tariffs_filename = filename;
 
-    ofstream benthosnodes;
+    ofstream benthosbiomassnodes;
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
-	benthosnodes.open(filename.c_str());
-    std::string popnodes_benthos_filename = filename;
+    benthosbiomassnodes.open(filename.c_str());
+    std::string popnodes_benthos_biomass_filename = filename;
+
+    ofstream benthosnumbernodes;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_numbers_"+namesimu+".dat";
+    benthosnumbernodes.open(filename.c_str());
+    std::string popnodes_benthos_number_filename = filename;
 
 	filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_cpue"+namesimu+".dat";
 	freq_cpue.open(filename.c_str());
@@ -3377,7 +3400,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
-                                             benthosnodes,
+                                             benthosbiomassnodes,
+                                             benthosnumbernodes,
                                              nbbenthospops,
                                              path,
                                              use_gnuplot,
@@ -3393,7 +3417,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
                                              popnodes_tariffs_filename,
-                                             popnodes_benthos_filename,
+                                             popnodes_benthos_biomass_filename,
+                                             popnodes_benthos_number_filename,
                                              tsteps_quarters,
                                              tsteps_semesters,
                                              tsteps_years,

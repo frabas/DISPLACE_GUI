@@ -171,6 +171,8 @@ bool fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code
                                       int nrow);
 bool fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);
+bool fill_from_benthos_number (istream& in, vector<double>& graph_point_benthos_number,
+                                      int nrow);
 bool fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
 bool fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
 bool fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);

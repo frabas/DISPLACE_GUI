@@ -89,7 +89,8 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           ofstream &popnodes_tariffs,
                           ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
-                          ofstream &benthosnodes,
+                          ofstream &benthosbiomassnodes,
+                          ofstream &benthosnumbernodes,
                           int nbbenthospops,
                           char *path,
                           bool use_gnuplot,
@@ -105,7 +106,8 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           const string & popnodes_cumsweptarea_filename,
                           const string & popnodes_cumcatches_filename,
                           const string & popnodes_tariffs_filename,
-                          const string & popnodes_benthos_filename,
+                          const string & popnodes_benthos_biomass_filename,
+                          const string & popnodes_benthos_number_filename,
                           const vector<int> & tsteps_quarters, const vector<int> & tsteps_semesters,
                           const vector<int> & tsteps_years, const vector<int> & tsteps_months,
                           const vector<int> & implicit_pops,
@@ -1073,7 +1075,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     {
         for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
         {
-                   nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosnodes, tstep, funcgroup);
+                   nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
         }
     }
 
@@ -1083,6 +1085,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup();
     }
 
+    for (unsigned int n=0; n<nodes.size(); n++)
+    {
+        for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
+        {
+                   nodes.at(n)->export_benthos_tot_number_per_funcgroup(benthosnumbernodes, tstep, funcgroup);
+        }
+    }
     // a recovery of the benthos number on node
     //for (unsigned int b=0; b<benthoss.size(); b++)
     //{
@@ -1105,8 +1114,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         popnodes_cumulcatches_per_pop.flush();
         guiSendUpdateCommand(popnodes_cumulcatches_per_pop_filename, tstep);
 
-        benthosnodes.flush();
-        guiSendUpdateCommand(popnodes_benthos_filename, tstep);
+        benthosbiomassnodes.flush();
+        guiSendUpdateCommand(popnodes_benthos_biomass_filename, tstep);
+
+        benthosnumbernodes.flush();
+        guiSendUpdateCommand(popnodes_benthos_number_filename, tstep);
 
         if (export_vmslike) {
             popnodes_inc.flush();

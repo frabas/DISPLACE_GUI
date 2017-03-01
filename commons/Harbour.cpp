@@ -28,6 +28,7 @@ int _harbour,
 int _code_area,
 int _code_landscape,
 double _benthos_biomass,
+double _benthos_number,
 int nbpops,
 int nbbenthospops,
 int nbszgroups,
@@ -37,7 +38,7 @@ multimap<int, double> _mean_fish_price_per_pop_per_cat,
 map<int, double> _fuelprice,
 vector<int> _usual_fgrounds,
 vector<double> _freq_usual_fgrounds)
-: Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, _benthos_biomass, nbpops, nbbenthospops, nbszgroups)
+: Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, _benthos_biomass, _benthos_number, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
 	//mean_fish_price_per_met_per_pop= _mean_fish_price_per_met_per_pop;
@@ -61,7 +62,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(int idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0)
 {
 
 }

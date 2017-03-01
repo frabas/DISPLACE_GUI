@@ -55,6 +55,7 @@ public:
         GraphNodeWithPopImpact,
         GraphNodeWithPopCumcatches,
         GraphNodeWithBenthosBiomass,
+        GraphNodeWithBenthosNumber,
         GraphNodeWithTariffs
     };
 

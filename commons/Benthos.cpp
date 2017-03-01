@@ -33,9 +33,13 @@ Benthos::Benthos(int _marine_landscape,
                     const vector<double> &_meanw_funcgr_per_node,
                     const vector<double> &_recovery_rates_per_funcgr,
                     const vector<double> &_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
-                    const vector<double> &_benthos_number_carrying_capacity_K_per_landscape_per_funcgr
+                    const vector<double> &_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
+                    bool is_impact_benthos_N
                     )
 {
+
+    cout << "creating benthos for " << _marine_landscape << endl;
+
     marine_landscape                  = _marine_landscape;
     prop_funcgr_biomass_per_node      = _prop_funcgr_biomass_per_node;
     prop_funcgr_number_per_node       = _prop_funcgr_number_per_node;
@@ -58,20 +62,29 @@ Benthos::Benthos(int _marine_landscape,
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);
-        for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
-		{
-                // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
-            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_biomass_per_node.at(funcgr) );
-		}
-        for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
-        {
-                // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
-            p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_number() * prop_funcgr_number_per_node.at(funcgr) );
-        }
-        dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node() <<
-            "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
+        if(is_impact_benthos_N)
+          {
 
+            for(unsigned int funcgr=0; funcgr<prop_funcgr_number_per_node.size();funcgr++)
+               {
+               // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
+               p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_number() * prop_funcgr_number_per_node.at(funcgr) );
+               }
+               dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node() <<
+                      "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
+        }
+        else
+        {
+            for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
+               {
+                // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
+               p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_biomass_per_node.at(funcgr) );
+               }
+
+         }
 	}
+
+    cout << "creating benthos for " << _marine_landscape <<" ...OK" << endl;
 
 }
 

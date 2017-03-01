@@ -110,6 +110,7 @@ enum Pop_Sce {
     white_noise_on_avai,
     with_stochast_oth_land,
     stop_mig_35065,
+    impact_benthos_N,
 
     Pop_Sce_last
 };

@@ -50,7 +50,8 @@ static const char *dyn_alloc_options[] = {
 static const char *dyn_pop_options[] = {
     "baseline",
     "use_SMS",
-    "diffuseN"
+    "impact_benthos_N",
+    "diffuseN",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

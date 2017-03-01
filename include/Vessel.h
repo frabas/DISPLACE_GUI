@@ -304,8 +304,10 @@ public:
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
         void find_next_point_on_the_graph(std::vector<Node* >& nodes);
-        void do_catch(std::ofstream& export_individual_tacs, std::vector<Population* >& populations, std::vector<Node* >& nodes, std::vector<int>& implicit_pops, int& tstep, double &graph_res,
-                      bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing, bool &is_discard_ban, bool &is_fishing_credits);
+        void do_catch(std::ofstream& export_individual_tacs, std::vector<Population* >& populations,
+                      std::vector<Node* >& nodes, std::vector<int>& implicit_pops, int& tstep, double &graph_res,
+                      bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
+                      bool &is_discard_ban, bool &is_fishing_credits, bool &is_impact_benthos_N);
 		void clear_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();
         void compute_experiencedcpue_fgrounds();

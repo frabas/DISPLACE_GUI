@@ -1070,33 +1070,44 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
     }
 
-    //...and export the benthos biomasses on node
-    for (unsigned int n=0; n<nodes.size(); n++)
-    {
-        for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
-        {
-                   nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
-        }
-    }
 
-    // a recovery of the benthos biomasses on node
-    for (unsigned int b=0; b<benthoss.size(); b++)
-    {
-        benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup();
-    }
 
-    for (unsigned int n=0; n<nodes.size(); n++)
+    if(dyn_pop_sce.option(Options::impact_benthos_N))
     {
-        for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
-        {
+        //...and export the benthos numbers on node
+       for (unsigned int n=0; n<nodes.size(); n++)
+          {
+          for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
+             {
                    nodes.at(n)->export_benthos_tot_number_per_funcgroup(benthosnumbernodes, tstep, funcgroup);
+             }
+          }
+
+       // a recovery of the benthos number on node
+       for (unsigned int b=0; b<benthoss.size(); b++)
+           {
+                  benthoss.at(b)->recover_benthos_tot_number_per_funcgroup();
+           }
+     }
+    else
+    {
+        //...and export the benthos biomasses on node
+        for (unsigned int n=0; n<nodes.size(); n++)
+        {
+            for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
+            {
+                       nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
+            }
         }
+
+        // a recovery of the benthos biomasses on node
+        for (unsigned int b=0; b<benthoss.size(); b++)
+        {
+            benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup();
+        }
+
     }
-    // a recovery of the benthos number on node
-    //for (unsigned int b=0; b<benthoss.size(); b++)
-    //{
-    //    benthoss.at(b)->recover_benthos_tot_number_per_funcgroup();
-    //}
+
 
     /* Flush and updates all statistics */
     if (use_gui) {

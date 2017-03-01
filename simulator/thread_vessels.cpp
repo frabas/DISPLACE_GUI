@@ -106,6 +106,7 @@ extern double tariff_annual_hcr_percent_change;
 extern bool is_tacs;
 extern bool is_fishing_credits;
 extern bool is_discard_ban;
+extern bool is_impact_benthos_N;
 extern vector <int> implicit_pops;
 extern displace::commons::Scenario scenario;
 extern DynAllocOptions dyn_alloc_sce;
@@ -345,7 +346,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         {
                             dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
                             vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res,
-                                                         is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing, is_discard_ban, is_fishing_credits);
+                                                         is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing,
+                                                         is_discard_ban, is_fishing_credits, is_impact_benthos_N);
 
                             // check
                             //if(vessels[ index_v ]->get_loc()->get_idx_node()==430)

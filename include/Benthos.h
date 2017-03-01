@@ -31,14 +31,14 @@
 class Benthos
 {
 	public:
-		Benthos(int marine_landscape,
+        Benthos(int marine_landscape,
             const vector<Node* > &nodes,
             const vector<double> &prop_funcgr_biomass_per_node,
             const vector<double> &prop_funcgr_number_per_node,
             const vector<double> &meanw_funcgr_number_per_node,
             const vector<double> &recovery_rates_per_funcgr,
             const vector<double> &benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
-            const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr);
+            const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr, bool is_impact_benthos_N);
         virtual ~Benthos();
 		int get_marine_landscape() const;
         const vector<Node* > &get_list_nodes() const;

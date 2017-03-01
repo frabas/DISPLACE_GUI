@@ -1297,25 +1297,44 @@ multimap<int, double> read_logistic_recovery_rates_per_month_per_funcgr(string f
     return(rates_per_month_per_funcgr);
 }
 
-multimap<int, double> read_benthos_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder)
+multimap<int, double> read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder)
 {
 
-    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/benthos_carrying_capacity_K_per_landscape_per_funcgr.dat";
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.dat";
 
-    ifstream benthos_carrying_capacity_K_per_landscape_per_funcgr;
-    benthos_carrying_capacity_K_per_landscape_per_funcgr.open(filename.c_str());
-    if(benthos_carrying_capacity_K_per_landscape_per_funcgr.fail())
+    ifstream benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
+    benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.open(filename.c_str());
+    if(benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.fail())
     {
         open_file_error(filename.c_str());
         //return 1;
     }
     multimap<int, double> K_per_landscape_per_funcgr;
-    fill_multimap_from_specifications_i_d(benthos_carrying_capacity_K_per_landscape_per_funcgr,  K_per_landscape_per_funcgr);
-    benthos_carrying_capacity_K_per_landscape_per_funcgr.close();
+    fill_multimap_from_specifications_i_d(benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,  K_per_landscape_per_funcgr);
+    benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.close();
 
     return(K_per_landscape_per_funcgr);
 }
 
+
+multimap<int, double> read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/benthos_number_carrying_capacity_K_per_landscape_per_funcgr.dat";
+
+    ifstream benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
+    benthos_number_carrying_capacity_K_per_landscape_per_funcgr.open(filename.c_str());
+    if(benthos_number_carrying_capacity_K_per_landscape_per_funcgr.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> K_per_landscape_per_funcgr;
+    fill_multimap_from_specifications_i_d(benthos_number_carrying_capacity_K_per_landscape_per_funcgr,  K_per_landscape_per_funcgr);
+    benthos_number_carrying_capacity_K_per_landscape_per_funcgr.close();
+
+    return(K_per_landscape_per_funcgr);
+}
 
 
 multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder)

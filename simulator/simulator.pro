@@ -17,7 +17,7 @@ macx {
 QMAKE_CXXFLAGS += -fpermissive
 CONFIG += c++11
 
-LIBS+= -L.. ldisplacecommons -lformats 
+LIBS+= -L.. -ldisplacecommons -lformats
 
 macx {
     LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/

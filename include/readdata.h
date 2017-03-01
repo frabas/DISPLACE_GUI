@@ -141,7 +141,8 @@ map<int, double> read_gear_widths_param_b(string folder_name_parameterization, s
 map<int, string> read_gear_widths_model_type(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_benthos_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
+multimap<int, double> read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
+multimap<int, double> read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
 multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);
 vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder);
 

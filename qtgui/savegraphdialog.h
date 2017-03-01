@@ -41,6 +41,7 @@ public:
     QString getCoordsFilename() const;
     QString getLandscapeFilename() const;
     QString getBenthosFilename() const;
+    QString getBenthosNbFilename() const;
     QString getAreacodesFilename() const;
     QString getClosedPolygonFilename() const;
     QString getClosedPolygonFilenameMonthly() const;

@@ -61,7 +61,7 @@ class InputFileExporter
 public:
     InputFileExporter();
 
-    bool exportGraph(QString graphpath, QString coordspath, QString landpath,  QString benthospath, QString areacodepath,
+    bool exportGraph(QString graphpath, QString coordspath, QString landpath,  QString benthospath, QString benthosnbpath, QString areacodepath,
                      QString closedpath, QString closedpath_month, QString closedpath_vessz, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
 protected:
     bool outputClosedPolyFile(QString filename, DisplaceModel *currentModel,

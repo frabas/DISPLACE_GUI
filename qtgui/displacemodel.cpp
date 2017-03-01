@@ -969,6 +969,13 @@ void DisplaceModel::setBenthosBiomassFromFeature (OGRGeometry *geometry, double 
     });
 }
 
+void DisplaceModel::setBenthosNumberFromFeature (OGRGeometry *geometry, double nb)
+{
+    setBenthosNbFromFeature(geometry, nb, [&](std::shared_ptr<NodeData> nd, double n) {
+        nd->setBenthosNumber(n);
+    });
+}
+
 void DisplaceModel::setAreaCodesFromFeature (OGRGeometry *geometry, int code)
 {
     setCodeFromFeature(geometry, code, [&](std::shared_ptr<NodeData> nd, int c) {
@@ -1008,6 +1015,21 @@ void DisplaceModel::setBenthosBioFromFeature (OGRGeometry *geometry, double bio,
     }
 }
 
+void DisplaceModel::setBenthosNbFromFeature (OGRGeometry *geometry, double nb, std::function<void(std::shared_ptr<NodeData>,double)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,nb);
+            break;
+        }
+    }
+}
 
 void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,
                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,

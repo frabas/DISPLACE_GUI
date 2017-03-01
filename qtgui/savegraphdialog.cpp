@@ -34,6 +34,7 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
     ui->optAreaCodes->setChecked(true);
     ui->optLandscape->setChecked(true);
     ui->optBenthosBio->setChecked(true);
+    ui->optBenthosNb->setChecked(true);
     ui->optClosedPoly->setChecked(true);
     ui->optCustomize->setChecked(true); // force updating
     ui->optCustomize->setChecked(false);
@@ -79,6 +80,14 @@ QString SaveGraphDialog::getBenthosFilename() const
     return QString();
 }
 
+
+QString SaveGraphDialog::getBenthosNbFilename() const
+{
+    if (ui->optBenthosNb->isChecked())
+        return ui->outputFolder->text() + "/" + ui->benthosNbFileName->text();
+    return QString();
+}
+
 QString SaveGraphDialog::getAreacodesFilename() const
 {
     if (ui->optAreaCodes->isChecked())
@@ -113,6 +122,7 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
     ui->areaCodeFileName->setEnabled(checked);
     ui->landscapeFileName->setEnabled(checked);
     ui->benthosFileName->setEnabled(checked);
+    ui->benthosNbFileName->setEnabled(checked);
     ui->closedPolyFilename->setEnabled(checked);
     ui->closedPolyFilename_Months->setEnabled(checked);
     ui->closedPolyFilename_VesSize->setEnabled(checked);
@@ -125,6 +135,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->areaCodeFileName->setText(QString("code_area_for_graph%1_points.dat").arg(gn));
     ui->landscapeFileName->setText(QString("coord%1_with_landscape.dat").arg(gn));
     ui->benthosFileName->setText(QString("coord%1_with_benthos_total_biomass.dat").arg(gn));
+    ui->benthosNbFileName->setText(QString("coord%1_with_benthos_total_number.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));
     ui->closedPolyFilename_Months->setText(QString("metier_closure_a_graph%1_month?.dat").arg(gn));
     ui->closedPolyFilename_VesSize->setText(QString("vsize_closure_a_graph%1_month?.dat").arg(gn));

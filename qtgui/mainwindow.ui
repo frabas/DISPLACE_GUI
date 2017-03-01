@@ -117,6 +117,7 @@
     <addaction name="actionAdd_Penalty_on_Polygon"/>
     <addaction name="actionAssign_Landscape_codes"/>
     <addaction name="actionAssign_Total_benthos_biomass"/>
+    <addaction name="actionAssign_Total_benthos_number"/>
     <addaction name="actionAssign_Area_codes"/>
     <addaction name="separator"/>
     <addaction name="actionMergeWeights"/>
@@ -1331,6 +1332,11 @@ L3</string>
   <action name="actionAssign_Total_benthos_biomass">
    <property name="text">
     <string>Assign Benthos Total Biomass</string>
+   </property>
+  </action>
+  <action name="actionAssign_Total_benthos_number">
+   <property name="text">
+    <string>Assign Benthos Total Number</string>
    </property>
   </action>
  </widget>

@@ -439,6 +439,7 @@ protected:
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
     void setCodeFromFeature(OGRGeometry *geometry, int code, std::function<void (std::shared_ptr<NodeData>, int)> func);
     void setBenthosBioFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
+    void setBenthosNbFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
 
 signals:
     void parseOutput(QString, int);

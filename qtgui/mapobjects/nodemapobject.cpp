@@ -126,6 +126,7 @@ void NodeMapObject::updateProperties()
                            "<b>Coords: </b>%2 %3<br/>"
                            "<b>Landscape: </b>%5<br/>"
                            "<b>Init Benthos Biomass: </b>%6<br/>"
+                           "<b>Init Benthos Number: </b>%6<br/>"
                            "<b>Code Area: </b>%7<br/>")
             .arg(QString::fromStdString(mNode->get_name()))
             .arg(mNode->get_y())
@@ -133,6 +134,7 @@ void NodeMapObject::updateProperties()
             .arg(mNode->get_idx_node())
             .arg(mNode->get_marine_landscape())
             .arg(mNode->get_init_benthos_biomass())
+            .arg(mNode->get_init_benthos_number())
             .arg(mNode->get_code_area());
 
 

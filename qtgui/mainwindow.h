@@ -184,6 +184,7 @@ private slots:
     void on_actionExport_Nations_triggered();
     void on_actionAssign_Landscape_codes_triggered();
     void on_actionAssign_Total_benthos_biomass_triggered();
+    void on_actionAssign_Total_benthos_number_triggered();
     void on_actionAssign_Area_codes_triggered();
     void on_actionCalcPopDistribution_triggered();
     void on_actionLoadStockNames_triggered();
@@ -253,6 +254,7 @@ protected:
 
     void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignBenthosBiomassFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignBenthosNumberFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 
 
 private:

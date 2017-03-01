@@ -371,6 +371,7 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionAdd_Penalty_on_Polygon->setEnabled(e);
     ui->actionAssign_Landscape_codes->setEnabled(e);
     ui->actionAssign_Total_benthos_biomass->setEnabled(e);
+    ui->actionAssign_Total_benthos_number->setEnabled(e);
     ui->actionAssign_Area_codes->setEnabled(e);
     ui->actionMergeWeights->setEnabled(e);
     ui->actionMergePings->setEnabled(e);
@@ -1703,6 +1704,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString coordspath = savedlg.getCoordsFilename();
         QString landpath = savedlg.getLandscapeFilename();
         QString benthospath = savedlg.getBenthosFilename();
+        QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
         QString polypath = savedlg.getClosedPolygonFilename();
         auto polypathMomths = savedlg.getClosedPolygonFilenameMonthly();
@@ -1710,7 +1712,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, benthospath, acpath, polypath, polypathMomths,
+        if (exporter.exportGraph(graphpath, coordspath, landpath, benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
@@ -1936,6 +1938,59 @@ void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString sh
 }
 
 
+void MainWindow::assignBenthosNumberFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                double nb = feature->GetFieldAsDouble(fld);
+                func(feature->GetGeometryRef(), nb);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+
 
 void MainWindow::on_actionAssign_Landscape_codes_triggered()
 {
@@ -1974,6 +2029,26 @@ void MainWindow::on_actionAssign_Total_benthos_biomass_triggered()
 
         assignBenthosBiomassFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int bio) {
             currentModel->setBenthosBiomassFromFeature(geom, bio); } );
+    }
+}
+
+void MainWindow::on_actionAssign_Total_benthos_number_triggered()
+{
+    QString title = tr("Set Total Benthos Number ('nbsqmeter' field required - nb per squared meter)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "nbsqmeter";
+        QString shp = dlg.selectedShapefile();
+
+        assignBenthosNumberFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int nb) {
+            currentModel->setBenthosNumberFromFeature(geom, nb); } );
     }
 }
 
@@ -2073,6 +2148,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString coordspath = dlg.getCoordsFilename();
         QString landpath = dlg.getLandscapeFilename();
         QString benthospath = dlg.getBenthosFilename();
+        QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
         QString polypath = dlg.getClosedPolygonFilename();
         auto polypathMomths = dlg.getClosedPolygonFilenameMonthly();
@@ -2080,11 +2156,11 @@ void MainWindow::on_actionSave_Graph_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, benthospath, acpath, polypath,polypathMomths,
+        if (exporter.exportGraph(graphpath, coordspath, landpath, benthospath, benthosnbpath, acpath, polypath,polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
-            QMessageBox::warning(this, tr("Error Saving greph/coords file"), error);
+            QMessageBox::warning(this, tr("Error Saving graph/coords file"), error);
             return;
         }
     }

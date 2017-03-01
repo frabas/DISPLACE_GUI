@@ -1581,6 +1581,43 @@ multimap<int, double> read_prop_funcgr_biomass_per_node_per_landscape(string fol
     return(prop_funcgr_per_node);
 }
 
+multimap<int, double> read_prop_funcgr_number_per_node_per_landscape(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/prop_funcgr_number_per_node_per_landscape.dat";
+
+    ifstream file_prop_funcgr_per_node;
+    file_prop_funcgr_per_node.open(filename.c_str());
+    if(file_prop_funcgr_per_node.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> prop_funcgr_per_node;
+    fill_multimap_from_specifications_i_d(file_prop_funcgr_per_node,  prop_funcgr_per_node);
+    file_prop_funcgr_per_node.close();
+
+    return(prop_funcgr_per_node);
+}
+
+multimap<int, double> read_meanw_funcgr_per_landscape(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/meanw_funcgr_per_landscape.dat";
+
+    ifstream file_meanw_funcgr_per_node;
+    file_meanw_funcgr_per_node.open(filename.c_str());
+    if(file_meanw_funcgr_per_node.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> meanw_funcgr_per_node;
+    fill_multimap_from_specifications_i_d(file_meanw_funcgr_per_node,  meanw_funcgr_per_node);
+    file_meanw_funcgr_per_node.close();
+
+    return(meanw_funcgr_per_node);
+}
 
 
 // FOR FISHFARMS

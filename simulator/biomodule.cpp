@@ -1083,6 +1083,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         benthoss.at(b)->recover_benthos_tot_biomass_per_funcgroup();
     }
 
+    // a recovery of the benthos number on node
+    //for (unsigned int b=0; b<benthoss.size(); b++)
+    //{
+    //    benthoss.at(b)->recover_benthos_tot_number_per_funcgroup();
+    //}
+
     /* Flush and updates all statistics */
     if (use_gui) {
         popnodes_cumftime.flush();

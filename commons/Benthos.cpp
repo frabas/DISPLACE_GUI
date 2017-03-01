@@ -28,15 +28,19 @@ using namespace std;
 
 Benthos::Benthos(int _marine_landscape,
                     const vector<Node *> &_nodes,
-                    const vector<double> &_prop_funcgr_per_node,
+                    const vector<double> &_prop_funcgr_biomass_per_node,
+                    const vector<double> &_prop_funcgr_number_per_node,
+                    const vector<double> &_meanw_funcgr_per_node,
                     const vector<double> &_recovery_rates_per_funcgr,
                     const vector<double> &_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                     const vector<double> &_benthos_number_carrying_capacity_K_per_landscape_per_funcgr
                     )
 {
-    marine_landscape          = _marine_landscape;
-    prop_funcgr_per_node      = _prop_funcgr_per_node;
-    recovery_rates_per_funcgr = _recovery_rates_per_funcgr;
+    marine_landscape                  = _marine_landscape;
+    prop_funcgr_biomass_per_node      = _prop_funcgr_biomass_per_node;
+    prop_funcgr_number_per_node       = _prop_funcgr_number_per_node;
+    meanw_funcgr_per_node             = _meanw_funcgr_per_node;
+    recovery_rates_per_funcgr         = _recovery_rates_per_funcgr;
     benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr=_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
     benthos_number_carrying_capacity_K_per_landscape_per_funcgr=_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
 
@@ -54,13 +58,18 @@ Benthos::Benthos(int _marine_landscape,
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
 	{
 		list_nodes.push_back(p_spe_nodes[i]);
-        for(unsigned int funcgr=0; funcgr<prop_funcgr_per_node.size();funcgr++)
+        for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
 		{
                 // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
-            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_per_node.at(funcgr) );
+            p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_biomass_per_node.at(funcgr) );
 		}
-        dout (cout << "prop func. grp. on this node " << p_spe_nodes[i]->get_idx_node() <<
-            "this marine landscape " << marine_landscape << " is " << prop_funcgr_per_node.size() << endl);
+        for(unsigned int funcgr=0; funcgr<prop_funcgr_biomass_per_node.size();funcgr++)
+        {
+                // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
+            p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_number() * prop_funcgr_number_per_node.at(funcgr) );
+        }
+        dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node() <<
+            "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
 
 	}
 
@@ -79,9 +88,19 @@ int Benthos::get_marine_landscape() const
 }
 
 
-const vector<double> &Benthos::get_prop_funcgr_per_node() const
+const vector<double> &Benthos::get_prop_funcgr_biomass_per_node() const
 {
-    return(prop_funcgr_per_node);
+    return(prop_funcgr_biomass_per_node);
+}
+
+const vector<double> &Benthos::get_prop_funcgr_number_per_node() const
+{
+    return(prop_funcgr_number_per_node);
+}
+
+const vector<double> &Benthos::get_meanw_funcgr_per_node() const
+{
+    return(meanw_funcgr_per_node);
 }
 
 const vector<double> &Benthos::get_recovery_rates_per_funcgr() const
@@ -132,3 +151,27 @@ void Benthos::recover_benthos_tot_biomass_per_funcgroup()
 
 }
 
+
+void Benthos::recover_benthos_tot_number_per_funcgroup()
+{
+    dout(cout  << "the benthos recovering...." << endl);
+
+   vector<Node *> list_nodes_this_landsc= get_list_nodes();
+   vector<double> all_benthos_tot_number = list_nodes_this_landsc.at(0)->get_benthos_tot_number();
+
+   for(unsigned int n=0; n<list_nodes_this_landsc.size(); n++)
+   {
+      // Pitcher et al. 2016
+      for(unsigned int funcgr = 0; funcgr < all_benthos_tot_number.size(); funcgr++)
+       {
+          double K                       = get_benthos_number_carrying_capacity_K_per_landscape_per_funcgr().at(funcgr);
+          double benthos_tot_number     = list_nodes_this_landsc.at(n)->get_benthos_tot_number(funcgr);
+          double new_benthos_tot_number =(benthos_tot_number*K)/
+                                         (benthos_tot_number+
+                                           (K-benthos_tot_number)* exp(-get_recovery_rates_per_funcgr().at(funcgr)));
+
+          list_nodes_this_landsc.at(n)->set_benthos_tot_number(funcgr,  new_benthos_tot_number); // update on node
+      }
+   }
+
+}

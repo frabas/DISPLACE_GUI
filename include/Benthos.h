@@ -33,18 +33,23 @@ class Benthos
 	public:
 		Benthos(int marine_landscape,
             const vector<Node* > &nodes,
-            const vector<double> &prop_funcgr_per_node,
+            const vector<double> &prop_funcgr_biomass_per_node,
+            const vector<double> &prop_funcgr_number_per_node,
+            const vector<double> &meanw_funcgr_number_per_node,
             const vector<double> &recovery_rates_per_funcgr,
             const vector<double> &benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
             const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr);
         virtual ~Benthos();
 		int get_marine_landscape() const;
         const vector<Node* > &get_list_nodes() const;
-        const vector<double> &get_prop_funcgr_per_node() const;
+        const vector<double> &get_prop_funcgr_biomass_per_node() const;
+        const vector<double> &get_prop_funcgr_number_per_node() const;
+        const vector<double> &get_meanw_funcgr_per_node() const;
         const vector<double> &get_recovery_rates_per_funcgr() const;
         const vector<double> &get_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr() const;
         const vector<double> &get_benthos_number_carrying_capacity_K_per_landscape_per_funcgr() const;
         void recover_benthos_tot_biomass_per_funcgroup();
+        void recover_benthos_tot_number_per_funcgroup();
 
     protected:
 	private:
@@ -52,7 +57,9 @@ class Benthos
 								 // area distribution
 		vector<Node* > list_nodes;
 								 // total biomass per functional group
-        vector<double> prop_funcgr_per_node;
+        vector<double> prop_funcgr_biomass_per_node;
+        vector<double> prop_funcgr_number_per_node;
+        vector<double> meanw_funcgr_per_node;
         vector<double> recovery_rates_per_funcgr;
         vector<double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
         vector<double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;

@@ -63,7 +63,12 @@ class Node
         void setBenthosBiomass(double value) {
         benthos_biomass = value;
         }
-		int get_marine_landscape() const;
+        double get_init_benthos_number() const;
+        vector<double> get_benthos_number_per_funcgr() const;
+        void setBenthosNumber(double value) {
+        benthos_number = value;
+        }
+        int get_marine_landscape() const;
         void setMarineLandscape(int id) {
             marine_landscape = id;
         }
@@ -99,6 +104,8 @@ class Node
         vector<double> get_avai_pops_at_selected_szgroup(int name_pop) const;
 		double get_benthos_tot_biomass(int funcgr) const;
         const vector<double>& get_benthos_tot_biomass() const;
+        double get_benthos_tot_number(int funcgr) const;
+        const vector<double>& get_benthos_tot_number() const;
         double get_tariffs(int type) const;
         const vector<double>& get_tariffs() const;
         vector< vector<double> >  get_Ns_pops_at_szgroup() const;
@@ -130,6 +137,7 @@ class Node
         void add_to_cumcatches_per_pop(double catches, int pop);
         void set_pop_names_on_node(int name_pop);
 		void set_benthos_tot_biomass(int funcgr, double value);
+        void set_benthos_tot_number(int funcgr, double value);
         void set_tariffs(vector<double> values);
         void set_tariffs(int type, double value);
         void clear_pop_names_on_node();
@@ -151,6 +159,7 @@ class Node
         void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
+        void add_benthos_tot_number_on_node(double tot_number_this_group);
 
         void setAreaType(int _area_type);
         int evaluateAreaType();
@@ -197,6 +206,7 @@ private:
 		int code_area;
 		int marine_landscape;
         double benthos_biomass;  // total bio on node from the GIS graph file
+        double benthos_number;  // total bio on node from the GIS graph file
         bool is_harbour;
 		int cumftime;
         double cumsweptarea;
@@ -214,6 +224,7 @@ private:
 		vector<int> pop_names_on_node;
 
         vector<double> benthos_tot_biomass;  // total bio on node per funcgr from sharing benthos_biomass per funcgr (this sharing is specific to Benthos landscape)
+        vector<double> benthos_tot_number;  // total bio on node per funcgr from sharing benthos_number per funcgr (this sharing is specific to Benthos landscape)
         vector<double> tariffs;
 
         vector<bool> mBannedMetiers;

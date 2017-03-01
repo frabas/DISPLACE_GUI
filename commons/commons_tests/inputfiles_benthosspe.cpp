@@ -21,4 +21,10 @@ BOOST_AUTO_TEST_CASE( test_prop_funcgr_biomass_per_node_per_landscape_dat )
     BOOST_CHECK(true); // fill_multimap_from_specifications_i_d
 }
 
+
+BOOST_AUTO_TEST_CASE( test_prop_funcgr_number_per_node_per_landscape_dat )
+{
+    BOOST_CHECK(true); // fill_multimap_from_specifications_i_d
+}
+
 BOOST_AUTO_TEST_SUITE_END()

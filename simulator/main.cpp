@@ -1328,9 +1328,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------" << endl);
 
 	// read estimates
-    multimap<int, double> prop_funcgr_per_node             = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
+    multimap<int, double> prop_funcgr_biomass_per_node    = read_prop_funcgr_biomass_per_node_per_landscape(folder_name_parameterization,  inputfolder);
+    multimap<int, double> prop_funcgr_number_per_node     = read_prop_funcgr_number_per_node_per_landscape(folder_name_parameterization,  inputfolder);
+    multimap<int, double> meanw_funcgr_per_node           = read_meanw_funcgr_per_landscape(folder_name_parameterization,  inputfolder);
 
-    multimap<int, double> recovery_rates_per_funcgr        = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
+    multimap<int, double> recovery_rates_per_funcgr       = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
     multimap<int, double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
     multimap<int, double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr = read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(folder_name_parameterization, inputfolder);
 
@@ -1354,17 +1356,39 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
        outc(cout << "a marine landscape " << a_marine_landscape << endl);
 
-        multimap<int,double>::iterator lower_land = prop_funcgr_per_node.lower_bound(a_marine_landscape);
-        multimap<int,double>::iterator upper_land = prop_funcgr_per_node.upper_bound(a_marine_landscape);
-        vector<double> init_prop_funcgr_per_node;
+        multimap<int,double>::iterator lower_land = prop_funcgr_number_per_node.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_land = prop_funcgr_number_per_node.upper_bound(a_marine_landscape);
+        vector<double> init_prop_funcgr_number_per_node;
 		for (multimap<int, double>::iterator pos=lower_land; pos != upper_land; pos++)
 		{
            outc(cout << pos->second << endl);
 								 // biomass per cell for this group specific to this landscape
-            init_prop_funcgr_per_node.push_back(pos->second);
+            init_prop_funcgr_number_per_node.push_back(pos->second);
 		}
 
-        if(init_prop_funcgr_per_node.size()!=(size_t)nbbenthospops)
+        multimap<int,double>::iterator lower_land2 = prop_funcgr_biomass_per_node.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_land2 = prop_funcgr_biomass_per_node.upper_bound(a_marine_landscape);
+        vector<double> init_prop_funcgr_biomass_per_node;
+        for (multimap<int, double>::iterator pos=lower_land2; pos != upper_land2; pos++)
+        {
+           outc(cout << pos->second << endl);
+                                 // biomass per cell for this group specific to this landscape
+            init_prop_funcgr_biomass_per_node.push_back(pos->second);
+        }
+
+
+        multimap<int,double>::iterator lower_land3 = meanw_funcgr_per_node.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_land3 = meanw_funcgr_per_node.upper_bound(a_marine_landscape);
+        vector<double> init_meanw_funcgr_per_node;
+        for (multimap<int, double>::iterator pos=lower_land3; pos != upper_land3; pos++)
+        {
+           outc(cout << pos->second << endl);
+                                 // biomass per cell for this group specific to this landscape
+            init_meanw_funcgr_per_node.push_back(pos->second);
+        }
+
+
+        if(init_prop_funcgr_biomass_per_node.size()!=(size_t)nbbenthospops)
 		{
            outc(cout << a_marine_landscape << "error for benthos file: the file is likely to get an extra blank space here. remove and rerun." << endl);
 			int aa;
@@ -1408,7 +1432,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		benthoss[landscape] =   new Benthos(a_marine_landscape,
                                             nodes,
-                                            init_prop_funcgr_per_node,
+                                            init_prop_funcgr_biomass_per_node,
+                                            init_prop_funcgr_number_per_node,
+                                            init_meanw_funcgr_per_node,
                                             init_recovery_rates_per_funcgr,
                                             init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                             init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr);
@@ -1438,7 +1464,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	//}
 
 	// check the biomasses
-    vector<double> a_prop_funcgr_per_node = benthoss[0]->get_prop_funcgr_per_node();
+    vector<double> a_prop_funcgr_per_node = benthoss[0]->get_prop_funcgr_biomass_per_node();
    outc(cout << "check biomass per func. gr. for benthos shared 0  " << endl);
     for(unsigned int gr=0 ; gr<a_prop_funcgr_per_node.size();  gr++)
 	{

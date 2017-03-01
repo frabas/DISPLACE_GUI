@@ -132,6 +132,7 @@ Node::Node()
       vid(),
       pop_names_on_node(),
       benthos_tot_biomass(),
+      benthos_tot_number(),
       tariffs(),
       m_nbpops(0),
       m_nbbenthospops(0),
@@ -176,9 +177,19 @@ double Node::get_init_benthos_biomass() const
     return(benthos_biomass);
 }
 
+double Node::get_init_benthos_number() const
+{
+    return(benthos_number);
+}
+
 vector<double> Node::get_benthos_biomass_per_funcgr() const
 {
     return(benthos_tot_biomass);
+}
+
+vector<double> Node::get_benthos_number_per_funcgr() const
+{
+    return(benthos_tot_number);
 }
 
 
@@ -390,6 +401,20 @@ const vector <double> &Node::get_benthos_tot_biomass() const
 {
 
 	return(benthos_tot_biomass);
+}
+
+
+double  Node::get_benthos_tot_number(int funcgr) const
+{
+
+    return(benthos_tot_number.at(funcgr));
+}
+
+
+const vector <double> &Node::get_benthos_tot_number() const
+{
+
+    return(benthos_tot_number);
 }
 
 double  Node::get_tariffs(int type) const
@@ -670,6 +695,12 @@ void  Node::set_benthos_tot_biomass(int funcgr, double value)
 {
 
 	benthos_tot_biomass.at(funcgr)= value;
+}
+
+void  Node::set_benthos_tot_number(int funcgr, double value)
+{
+
+    benthos_tot_number.at(funcgr)= value;
 }
 
 void  Node::set_tariffs(int type, double value)
@@ -1121,6 +1152,13 @@ void Node::add_benthos_tot_biomass_on_node(double tot_biomass_this_group)
 {
 
 	benthos_tot_biomass.push_back(tot_biomass_this_group);
+
+}
+
+void Node::add_benthos_tot_number_on_node(double tot_number_this_group)
+{
+
+    benthos_tot_number.push_back(tot_number_this_group);
 
 }
 

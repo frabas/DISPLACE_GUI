@@ -39,8 +39,8 @@ const multimap<int,double> Node::mFreqUsualMetiers;
 
 
 Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
-           int _marine_landscape, double _benthos_biomass, double _benthos_number,
-           int nbpops,int nbbenthospops, int nbszgroups)
+           int _marine_landscape, double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
+           int nbpops, int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
 	idx_node= idx;
@@ -54,6 +54,7 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
 	marine_landscape=_marine_landscape;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
+    benthos_meanweight=_benthos_meanweight;
     if(_harbour!=0)
 	{
 		is_harbour = true;
@@ -80,7 +81,7 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
            const vector<int> &graph_point_code_area,
            const vector<int> &graph_point_marine_landscape,
            const vector<double> &graph_benthos_biomass,
-           const vector<double> &graph_benthos_number,
+           const vector<double> &graph_benthos_number, double initmw,
            int nbpops, int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
@@ -100,6 +101,7 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 	marine_landscape=graph_point_marine_landscape[idx];
     benthos_biomass=graph_benthos_biomass[idx];
     benthos_number=graph_benthos_number[idx];
+    benthos_meanweight=initmw;
     if(harbour!=0)
 	{
 		is_harbour = true;
@@ -141,6 +143,7 @@ Node::Node()
       pop_names_on_node(),
       benthos_tot_biomass(),
       benthos_tot_number(),
+      benthos_tot_meanweight(),
       tariffs(),
       m_nbpops(0),
       m_nbbenthospops(0),
@@ -190,6 +193,11 @@ double Node::get_init_benthos_number() const
     return(benthos_number);
 }
 
+double Node::get_init_benthos_meanweight() const
+{
+    return(benthos_meanweight);
+}
+
 vector<double> Node::get_benthos_biomass_per_funcgr() const
 {
     return(benthos_tot_biomass);
@@ -199,6 +207,13 @@ vector<double> Node::get_benthos_number_per_funcgr() const
 {
     return(benthos_tot_number);
 }
+
+vector<double> Node::get_benthos_meanweight_per_funcgr() const
+{
+    return(benthos_tot_meanweight);
+}
+
+
 
 
 string Node::get_name() const
@@ -423,6 +438,19 @@ const vector <double> &Node::get_benthos_tot_number() const
 {
 
     return(benthos_tot_number);
+}
+
+double  Node::get_benthos_tot_meanweight(int funcgr) const
+{
+
+    return(benthos_tot_meanweight.at(funcgr));
+}
+
+
+const vector <double> &Node::get_benthos_tot_meanweight() const
+{
+
+    return(benthos_tot_meanweight);
 }
 
 double  Node::get_tariffs(int type) const
@@ -709,6 +737,12 @@ void  Node::set_benthos_tot_number(int funcgr, double value)
 {
 
     benthos_tot_number.at(funcgr)= value;
+}
+
+void  Node::set_benthos_tot_meanweight(int funcgr, double value)
+{
+
+    benthos_tot_meanweight.at(funcgr)= value;
 }
 
 void  Node::set_tariffs(int type, double value)
@@ -1170,6 +1204,14 @@ void Node::add_benthos_tot_number_on_node(double tot_number_this_group)
 
 }
 
+void Node::add_benthos_tot_meanweight_on_node(double meanweight_this_group)
+{
+
+    benthos_tot_meanweight.push_back(meanweight_this_group);
+
+}
+
+
 void Node::set_is_harbour(int id)
 {
     harbour = id;
@@ -1182,10 +1224,13 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
 
     dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
 
+    double benthosnumber=0;
+    if(benthos_tot_meanweight.at(funcgr)!=0)  benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr);
+
     benthosbiomassnodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / biomass func group id
     benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_biomass.at(funcgr) << " " <<  endl;
+        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_biomass.at(funcgr) << " " << benthosnumber << " " << endl;
 
 }
 
@@ -1194,10 +1239,12 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
 
     dout(cout  << "export benthos on nodes for use in e.g. a GIS engine" << endl);
 
+    double benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr);
+
     benthosnumbernodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id
     benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " <<  endl;
+        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " " << endl;
 
 }
 

@@ -787,7 +787,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1589,6 +1589,7 @@ bool DisplaceModel::loadNodes()
                                        graph_point_code_landscape[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
+                                       0, // because benthos mean weight is not informed by GIS layer
                                        nbpops,
                                        nbbenthospops,
                                        NBSZGROUP,
@@ -1617,6 +1618,7 @@ bool DisplaceModel::loadNodes()
                                  graph_point_code_landscape[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
+                                 0,// because benthos mean weight is not informed by GIS layer
                                  nbpops,
                                  nbbenthospops,
                                  NBSZGROUP));

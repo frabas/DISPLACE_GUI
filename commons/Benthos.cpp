@@ -69,6 +69,10 @@ Benthos::Benthos(int _marine_landscape,
                {
                // put an estimate of number per node for this funcgr as total on node times the proportion of the funcgr on that node
                p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_number() * prop_funcgr_number_per_node.at(funcgr) );
+               //...and deduce biomass from N*meanw
+               p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_number()*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr) );
+               // add meanweight
+               p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
                }
                dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node() <<
                       "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
@@ -79,6 +83,10 @@ Benthos::Benthos(int _marine_landscape,
                {
                 // put an estimate of biomass per node for this funcgr as total on node times the proportion of the funcgr on that node
                p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_biomass() * prop_funcgr_biomass_per_node.at(funcgr) );
+               //...and deduce N from B/meanw
+               if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_biomass()/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr) );
+               // add meanweight
+               p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
                }
 
          }

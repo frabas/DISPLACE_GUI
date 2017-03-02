@@ -129,6 +129,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerBenthosNumber[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Number")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosNumber, mStatsLayerBenthosNumber[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerBenthosMeanweight[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Mean Weight")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerBenthosMeanweight, mStatsLayerBenthosMeanweight[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
     // mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
    // addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
@@ -444,6 +447,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerCumcatchesPerPop[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
     mStatsLayerBenthosNumber[model_n]->clearGeometries();
+    mStatsLayerBenthosMeanweight[model_n]->clearGeometries();
     //mStatsLayerTariffs[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
     mStatsLayerTariffAll[model_n]->clearGeometries();
@@ -526,6 +530,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosNumber, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosNumber[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBenthosMeanweight, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerBenthosMeanweight[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     //obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);
     //mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

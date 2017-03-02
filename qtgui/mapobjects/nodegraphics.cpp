@@ -154,6 +154,9 @@ double NodeWithPopStatsGraphics::getValueForPop(int pop) const
     case BenthosNumber:
         return mNode->getBenthosNumber(pop);
         break;
+    case BenthosMeanweight:
+        return mNode->getBenthosMeanweight(pop);
+        break;
     default:
         Q_ASSERT(false);    /* Prevents this from happening */
     }

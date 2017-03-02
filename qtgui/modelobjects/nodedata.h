@@ -64,9 +64,12 @@ public:
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }
     vector<double> get_benthos_number_per_funcgr() const { return mNode->get_benthos_number_per_funcgr(); }
+    double get_init_benthos_meanweight() const { return mNode->get_init_benthos_meanweight(); }
+    vector<double> get_benthos_meanweight_per_funcgr() const { return mNode->get_benthos_meanweight_per_funcgr(); }
     void setMarineLandscape(int id) { mNode->setMarineLandscape(id); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
+    void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }
 
     int get_code_area() const { return mNode->get_code_area(); }
     void setCodeArea(int id) { mNode->setCodeArea(id); }
@@ -130,6 +133,10 @@ public:
     double getBenthosNumber(int func) const {
         return mBenthosNumber[func];
     }
+    void setBenthosMeanweight(int func, double benthosmeanweight);
+    double getBenthosMeanweight(int func) const {
+        return mBenthosMeanweight[func];
+    }
 
     int getHarbourId() const;
     void setHarbourId(int value);
@@ -161,6 +168,7 @@ private:
     double *mCumcatchesPerPop;
     double *mBenthosBiomass;
     double *mBenthosNumber;
+    double *mBenthosMeanweight;
     int areaType;
 
     AdiacencyList mAdiacency;

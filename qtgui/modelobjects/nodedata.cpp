@@ -41,6 +41,7 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mCumcatchesPerPop = new double[N];
         mBenthosBiomass = new double[N2];
         mBenthosNumber = new double[N2];
+        mBenthosMeanweight = new double[N2];
         for (int i = 0; i < N; ++i) {
             mPop[i] = 0.0;
             mPopW[i] = 0.0;
@@ -52,6 +53,9 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         }
         for (int j = 0; j < N2; ++j) {
             mBenthosNumber[j] = 0.0;
+        }
+        for (int j = 0; j < N2; ++j) {
+            mBenthosMeanweight[j] = 0.0;
         }
 
     }
@@ -65,6 +69,7 @@ NodeData::~NodeData()
     delete []mCumcatchesPerPop;
     delete []mBenthosBiomass;
     delete []mBenthosNumber;
+    delete []mBenthosMeanweight;
 }
 
 int NodeData::getPopCount() const
@@ -151,6 +156,11 @@ void NodeData::setBenthosBiomass(int func, double benthosbiomass)
 void NodeData::setBenthosNumber(int func, double benthosnumber)
 {
     mBenthosNumber[func] = benthosnumber;
+}
+
+void NodeData::setBenthosMeanweight(int func, double benthosmeanweight)
+{
+    mBenthosMeanweight[func] = benthosmeanweight;
 }
 
 int NodeData::getHarbourId() const

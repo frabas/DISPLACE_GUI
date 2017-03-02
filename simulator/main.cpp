@@ -1109,7 +1109,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 	// check the class Node
-    Node node (1, 1.0, 1.0, 0, 0, 0,0, 0, nbpops, nbbenthospops, 5);
+    Node node (1, 1.0, 1.0, 0, 0, 0,0, 0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
         << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
@@ -1294,6 +1294,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_point_code_landscape[i],
                 graph_point_benthos_biomass[i],
                 graph_point_benthos_number[i],
+                0, // meanweight not set from a GIS layer....
                 nbpops,
                 nbbenthospops,
 				NBSZGROUP,
@@ -1318,6 +1319,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_point_code_landscape[i],
                 graph_point_benthos_biomass[i],
                 graph_point_benthos_number[i],
+                0, // meanweight not set from a GIS layer....
                 nbpops,
                 nbbenthospops,
 				NBSZGROUP));

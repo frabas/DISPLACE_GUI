@@ -56,6 +56,7 @@ public:
         GraphNodeWithPopCumcatches,
         GraphNodeWithBenthosBiomass,
         GraphNodeWithBenthosNumber,
+        GraphNodeWithBenthosMeanweight,
         GraphNodeWithTariffs
     };
 

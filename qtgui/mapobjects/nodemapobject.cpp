@@ -76,6 +76,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::BenthosNumber, mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithBenthosMeanweight:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::BenthosMeanweight, mNode.get(), mController, indx));
+        break;
+
     case GraphNodeWithTariffs:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithTariffsGraphics(mNode.get(), mController, indx));
@@ -197,6 +202,10 @@ void NodeMapObject::updateProperties()
         text += updateStatText("Benthos Number");
         break;
 
+    case GraphNodeWithBenthosMeanweight:
+        text += updateStatText("Benthos Mean Weight");
+        break;
+
     case GraphNodeWithTariffs:
         text += QString("<br/><b>Tariffs (type 0):</b> %1<br/>")
                 .arg(tariffs.at(0));
@@ -249,6 +258,9 @@ QString NodeMapObject::updateStatText(QString prefix)
             break;
         case GraphNodeWithBenthosNumber:
             val = mNode->getBenthosNumber(i);
+            break;
+        case GraphNodeWithBenthosMeanweight:
+            val = mNode->getBenthosMeanweight(i);
             break;
         default:
             throw std::runtime_error("Unhandled case in updateStatText");

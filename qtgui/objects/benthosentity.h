@@ -42,6 +42,8 @@ public:
     virtual int columnCount() const;
     virtual QVariant data(const QModelIndex &index, int role) const;
 
+    Qt::ItemFlags flags(Qt::ItemFlags defFlags, const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 };
 
 

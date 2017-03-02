@@ -60,6 +60,7 @@
 #include <outputfileparser.h>
 #include <graphbuilder_shp.h>
 #include <objects/metiersentity.h>
+#include <utils/interestinglist.h>
 
 #include <QObject>
 #include <QString>
@@ -312,6 +313,11 @@ public:
     void clearInterestingPop();
     void clearInterestingPop2();
 
+    void setInterestingBenthos(int n) { mInterestingBenthos.set(n); }
+    void remInterestingBenthos(int n) { mInterestingBenthos.rem(n); }
+    bool isInterestingBenthos(int n) const { return mInterestingBenthos.has(n); }
+    void clrInterestingBenthos() { mInterestingBenthos.clear(); }
+
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
     void setInterestingSizeTotal(bool b) { mInterestingSizeTotal = b; }
@@ -482,6 +488,8 @@ private:
     QList<int> mInterestingSizes;
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
+    InterestingList<int> mInterestingBenthos;
+
     QList<displace::NodePenalty> mPenaltyNodes;
 
     QList<std::shared_ptr<HarbourData>> mHarbours;

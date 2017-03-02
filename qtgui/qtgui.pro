@@ -301,7 +301,8 @@ HEADERS += \
     graphbuilder_shp.h \
     objects/firmentity.h \
     modelobjects/firmdata.h \
-    mapobjects/firmmapobject.h
+    mapobjects/firmmapobject.h \
+    utils/interestinglist.h
 
 RESOURCES += \
     qtgui.qrc

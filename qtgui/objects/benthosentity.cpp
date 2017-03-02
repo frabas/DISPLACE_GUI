@@ -63,6 +63,8 @@ QVariant BenthosEntity::data(const QModelIndex &index, int role) const
     if (mId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
             return QString("%1").arg(model->getModel()->getBenthosList()[mId]->getId());
+        if (role == Qt::CheckStateRole)
+            return QVariant(model->getModel()->isInterestingBenthos(index.row()) ? Qt::Checked : Qt::Unchecked);
         if (role == Qt::TextColorRole)
             return model->getMapControl()->getPalette(model->getModelIdx(), PopulationRole).color(mId);
         /*
@@ -75,4 +77,26 @@ QVariant BenthosEntity::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+}
+
+
+Qt::ItemFlags objecttree::BenthosEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defFlags | Qt::ItemIsUserCheckable;
+}
+
+bool objecttree::BenthosEntity::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(index.column() == 0 && role == Qt::CheckStateRole) {
+        if (value.toInt() == 0) {
+            model->getModel()->remInterestingBenthos(index.row());
+        } else {
+            model->getModel()->setInterestingBenthos(index.row());
+        }
+        model->getStatsController()->updateStats(model->getModel());
+        model->getMapControl()->updateNodes(model->getModelIdx());
+        return true;
+    }
+    return false;
 }

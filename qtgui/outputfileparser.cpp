@@ -341,6 +341,8 @@ void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceMo
             int nodeid = fields[2].toInt();
             double benthosbiomass = fields[5].toDouble();
             model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
+            double benthosnumber = fields[6].toDouble(); // deduced from B/meanw
+            model->collectPopBenthosNumber (step, nodeid, funcid, benthosnumber);
         }
     }
 
@@ -371,6 +373,8 @@ void OutputFileParser::parsePopBenthosNumber(QFile *file, int tstep, DisplaceMod
             int nodeid = fields[2].toInt();
             double benthosnumber = fields[5].toDouble();
             model->collectPopBenthosNumber (step, nodeid, funcid, benthosnumber);
+            double benthosbiomass = fields[6].toDouble();  // deduced from N*meanw
+            model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
         }
     }
 

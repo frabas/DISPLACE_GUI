@@ -151,7 +151,7 @@ namespace utils
     template <typename T1, typename T2>
     struct print_container_helper<T, TChar, TCharTraits, TDelimiters>::printer<std::pair<T1, T2>>
     {
-        using ostream_type = print_container_helper<T, TChar, TCharTraits, TDelimiters>::ostream_type;
+        using ostream_type = typename print_container_helper<T, TChar, TCharTraits, TDelimiters>::ostream_type;
 
         static void print_body(const std::pair<T1, T2> & c, ostream_type & stream)
         {
@@ -168,7 +168,7 @@ namespace utils
     template <typename ...Args>
     struct print_container_helper<T, TChar, TCharTraits, TDelimiters>::printer<std::tuple<Args...>>
     {
-        using ostream_type = print_container_helper<T, TChar, TCharTraits, TDelimiters>::ostream_type;
+        using ostream_type = typename print_container_helper<T, TChar, TCharTraits, TDelimiters>::ostream_type;
         using element_type = std::tuple<Args...>;
 
         template <std::size_t I> struct Int { };

@@ -420,6 +420,9 @@ public:
     QString linkedGraphFolder() const { return mGraphFolder; }
 
     void setLandscapeCodesFromFeature(OGRGeometry *geometry, int code);
+    void setWindFromFeature(OGRGeometry *geometry, double wind);
+    void setSSTFromFeature(OGRGeometry *geometry, double sst);
+    void setSalinityFromFeature(OGRGeometry *geometry, double psu);
     void setBenthosBiomassFromFeature(OGRGeometry *geometry, double bio);
     void setBenthosNumberFromFeature(OGRGeometry *geometry, double nb);
     void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
@@ -444,6 +447,9 @@ protected:
     void checkStatsCollection(int tstep);
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
     void setCodeFromFeature(OGRGeometry *geometry, int code, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setWdFromFeature(OGRGeometry *geometry, double wd, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setTFromFeature(OGRGeometry *geometry, double t, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setSalFromFeature(OGRGeometry *geometry, double sal, std::function<void (std::shared_ptr<NodeData>, int)> func);
     void setBenthosBioFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
     void setBenthosNbFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
 

@@ -33,6 +33,9 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
 
     ui->optAreaCodes->setChecked(true);
     ui->optLandscape->setChecked(true);
+    ui->optWind->setChecked(true);
+    ui->optSST->setChecked(true);
+    ui->optSalinity->setChecked(true);
     ui->optBenthosBio->setChecked(true);
     ui->optBenthosNb->setChecked(true);
     ui->optClosedPoly->setChecked(true);
@@ -70,6 +73,27 @@ QString SaveGraphDialog::getLandscapeFilename() const
 {
     if (ui->optLandscape->isChecked())
         return ui->outputFolder->text() + "/" + ui->landscapeFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getWindFilename() const
+{
+    if (ui->optWind->isChecked())
+        return ui->outputFolder->text() + "/" + ui->windFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getSSTFilename() const
+{
+    if (ui->optSST->isChecked())
+        return ui->outputFolder->text() + "/" + ui->sstFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getSalinityFilename() const
+{
+    if (ui->optSalinity->isChecked())
+        return ui->outputFolder->text() + "/" + ui->salinityFileName->text();
     return QString();
 }
 
@@ -121,6 +145,9 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
     ui->coordFileName->setEnabled(checked);
     ui->areaCodeFileName->setEnabled(checked);
     ui->landscapeFileName->setEnabled(checked);
+    ui->windFileName->setEnabled(checked);
+    ui->sstFileName->setEnabled(checked);
+    ui->salinityFileName->setEnabled(checked);
     ui->benthosFileName->setEnabled(checked);
     ui->benthosNbFileName->setEnabled(checked);
     ui->closedPolyFilename->setEnabled(checked);
@@ -134,6 +161,9 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->graphFileName->setText(QString("graph%1.dat").arg(gn));
     ui->areaCodeFileName->setText(QString("code_area_for_graph%1_points.dat").arg(gn));
     ui->landscapeFileName->setText(QString("coord%1_with_landscape.dat").arg(gn));
+    ui->windFileName->setText(QString("coord%1_with_wind.dat").arg(gn));
+    ui->sstFileName->setText(QString("coord%1_with_sst.dat").arg(gn));
+    ui->salinityFileName->setText(QString("coord%1_with_salinity.dat").arg(gn));
     ui->benthosFileName->setText(QString("coord%1_with_benthos_total_biomass.dat").arg(gn));
     ui->benthosNbFileName->setText(QString("coord%1_with_benthos_total_number.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));

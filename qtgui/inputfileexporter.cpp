@@ -29,7 +29,8 @@ InputFileExporter::InputFileExporter()
 }
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
-                                    QString landpath, QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
+                                    QString landpath,  QString windpath, QString sstpath, QString salinitypath,
+                                    QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
                                     DisplaceModel *currentModel, QString *error)
@@ -58,6 +59,42 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             return false;
         }
         landstream.setDevice(&landfile);
+    }
+
+    QFile windfile(windpath);
+    QTextStream windstream;
+    if (!windpath.isEmpty()) {
+        if (!windfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open wind file %1: %2"))
+                    .arg(windpath).arg(windfile.errorString());
+            return false;
+        }
+        windstream.setDevice(&windfile);
+    }
+
+    QFile sstfile(sstpath);
+    QTextStream sststream;
+    if (!sstpath.isEmpty()) {
+        if (!sstfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open sst file %1: %2"))
+                    .arg(sstpath).arg(sstfile.errorString());
+            return false;
+        }
+        sststream.setDevice(&sstfile);
+    }
+
+    QFile salinityfile(salinitypath);
+    QTextStream salinitystream;
+    if (!salinitypath.isEmpty()) {
+        if (!salinityfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open sst file %1: %2"))
+                    .arg(salinitypath).arg(salinityfile.errorString());
+            return false;
+        }
+        salinitystream.setDevice(&salinityfile);
     }
 
     QFile bfile(benthospath);
@@ -124,6 +161,12 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 bnbstream << nd->get_init_benthos_number() << endl;
             if (landfile.isOpen())
                 landstream << nd->get_marine_landscape() << endl;
+            if (windfile.isOpen())
+                windstream << nd->get_wind() << endl;
+            if (sstfile.isOpen())
+                sststream << nd->get_sst() << endl;
+            if (salinityfile.isOpen())
+                salinitystream << nd->get_salinity() << endl;
         }
     }
     for (int i = 0; i < n; ++i) {
@@ -147,6 +190,9 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     cfile.close();
     acfile.close();
     landfile.close();
+    windfile.close();
+    sstfile.close();
+    salinityfile.close();
     bfile.close();
     bnbfile.close();
 

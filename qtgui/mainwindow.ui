@@ -119,6 +119,9 @@
     <addaction name="actionAssign_Total_benthos_biomass"/>
     <addaction name="actionAssign_Total_benthos_number"/>
     <addaction name="actionAssign_Area_codes"/>
+    <addaction name="actionAssign_Wind"/>
+    <addaction name="actionAssign_SST"/>
+    <addaction name="actionAssign_Salinity"/>
     <addaction name="separator"/>
     <addaction name="actionMergeWeights"/>
     <addaction name="actionMergePings"/>
@@ -1142,7 +1145,7 @@ L3</string>
   </action>
   <action name="actionAdd_Penalty_on_Polygon">
    <property name="text">
-    <string>Add Penalty on Polygon</string>
+    <string>Add Penalty on Polygon...</string>
    </property>
   </action>
   <action name="actionSave_Graph">
@@ -1331,12 +1334,27 @@ L3</string>
   </action>
   <action name="actionAssign_Total_benthos_biomass">
    <property name="text">
-    <string>Assign Benthos Total Biomass</string>
+    <string>Assign Benthos Total Biomass...</string>
    </property>
   </action>
   <action name="actionAssign_Total_benthos_number">
    <property name="text">
-    <string>Assign Benthos Total Number</string>
+    <string>Assign Benthos Total Number...</string>
+   </property>
+  </action>
+  <action name="actionAssign_Wind">
+   <property name="text">
+    <string>Assign Wind...</string>
+   </property>
+  </action>
+  <action name="actionAssign_SST">
+   <property name="text">
+    <string>Assign SST...</string>
+   </property>
+  </action>
+  <action name="actionAssign_Salinity">
+   <property name="text">
+    <string>Assign Salinity...</string>
    </property>
   </action>
  </widget>

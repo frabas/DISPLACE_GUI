@@ -295,8 +295,8 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
     QSqlQuery q(mDb);
 
     res = q.prepare("INSERT INTO " + TBL_NODES
-                + "(_id,x,y,harbour,areacode,landscape,benthosbiomass,benthosnumber,benthosmeanweight, name) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?)");
+                + "(_id,x,y,harbour,areacode,landscape,wind,sst,salinity,benthosbiomass,benthosnumber,benthosmeanweight, name) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
@@ -306,6 +306,9 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
     q.addBindValue(node->get_harbour());
     q.addBindValue(node->get_code_area());
     q.addBindValue(node->get_marine_landscape());
+    q.addBindValue(node->get_wind());
+    q.addBindValue(node->get_sst());
+    q.addBindValue(node->get_salinity());
     q.addBindValue(node->get_init_benthos_biomass());
     q.addBindValue(node->get_init_benthos_number());
     if (node->get_harbour()) {
@@ -488,7 +491,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
 
 bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model)
 {
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape,benthosbiomass,benthosnumber,benthosmeanweight,name FROM " + TBL_NODES + " ORDER BY _id", mDb);
+    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape, wind, sst, salinity, benthosbiomass,benthosnumber,benthosmeanweight,name FROM " + TBL_NODES + " ORDER BY _id", mDb);
     bool res = q.exec();
 
     DB_ASSERT(res,q);
@@ -500,14 +503,17 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         int harbour = q.value(3).toInt();
         int areacode = q.value(4).toInt();
         int landscape = q.value(5).toInt();
-        int benthosbiomass = q.value(6).toInt();
-        int benthosnumber = q.value(7).toInt();
-        double benthosmeanweight = q.value(8).toDouble();
+        int wind = q.value(6).toInt();
+        int sst = q.value(7).toInt();
+        int salinity = q.value(8).toInt();
+        int benthosbiomass = q.value(9).toInt();
+        int benthosnumber = q.value(10).toInt();
+        double benthosmeanweight = q.value(11).toDouble();
 
         int nbpops = model->getNBPops();
         int nbbenthospops = model->getNBBenthosPops();
         int szgroup = model->getSzGrupsCount();
-        QString name = q.value(9).toString();
+        QString name = q.value(12).toString();
 
         /* TODO: a,b,c,d */
         multimap<int,double> a;
@@ -518,9 +524,11 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;
         if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape,benthosbiomass, benthosnumber,benthosmeanweight, nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
+            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape, wind, sst, salinity,
+                                                            benthosbiomass, benthosnumber,benthosmeanweight, nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
         } else {
-            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape,benthosbiomass, benthosnumber,benthosmeanweight, nbpops, nbbenthospops,  szgroup));
+            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape,  wind, sst, salinity,
+                                                benthosbiomass, benthosnumber,benthosmeanweight, nbpops, nbbenthospops,  szgroup));
         }
         std::shared_ptr<NodeData> n(new NodeData(nd, model));
 
@@ -1004,6 +1012,9 @@ bool DbHelper::checkNodesTable(int version)
                + "harbour INTEGER,"
                + "areacode INTEGER,"
                + "landscape INTEGER,"
+               + "wind REAL,"
+               + "sst REAL,"
+               + "salinity REAL,"
                + "benthosbiomass REAL,"
                + "benthosnumber REAL,"
                + "benthosmeanweight REAL,"

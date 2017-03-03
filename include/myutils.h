@@ -169,6 +169,12 @@ bool fill_from_code_area (istream& in, vector<int>& graph_point_code_area,
                           int nrow);
 bool fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
                                       int nrow);
+bool fill_from_wind (istream& in, vector<double>& graph_point_wind,
+                                      int nrow);
+bool fill_from_sst (istream& in, vector<double>& graph_point_sst,
+                                      int nrow);
+bool fill_from_salinity (istream& in, vector<double>& graph_point_salinity,
+                                      int nrow);
 bool fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);
 bool fill_from_benthos_number (istream& in, vector<double>& graph_point_benthos_number,

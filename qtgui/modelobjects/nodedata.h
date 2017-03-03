@@ -60,6 +60,9 @@ public:
     /* Proxy functions to avoid changing too much code */
     int get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
+    double get_wind() const { return mNode->get_wind(); }
+    double get_sst() const { return mNode->get_sst(); }
+    double get_salinity() const { return mNode->get_salinity(); }
     double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }
@@ -67,6 +70,9 @@ public:
     double get_init_benthos_meanweight() const { return mNode->get_init_benthos_meanweight(); }
     vector<double> get_benthos_meanweight_per_funcgr() const { return mNode->get_benthos_meanweight_per_funcgr(); }
     void setMarineLandscape(int id) { mNode->setMarineLandscape(id); }
+    void setWind(double w) { mNode->setWind(w); }
+    void setSST(double t) { mNode->setSST(t); }
+    void setSalinity(double s) { mNode->setSalinity(s); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
     void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }

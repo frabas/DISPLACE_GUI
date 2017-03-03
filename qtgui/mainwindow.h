@@ -183,6 +183,9 @@ private slots:
     void on_actionExport_Populations_triggered();
     void on_actionExport_Nations_triggered();
     void on_actionAssign_Landscape_codes_triggered();
+    void on_actionAssign_Wind_triggered();
+    void on_actionAssign_SST_triggered();
+    void on_actionAssign_Salinity_triggered();
     void on_actionAssign_Total_benthos_biomass_triggered();
     void on_actionAssign_Total_benthos_number_triggered();
     void on_actionAssign_Area_codes_triggered();
@@ -253,6 +256,9 @@ protected:
     void exportPlot (QString outpath, StatsController::StatType type, int subtype, const GraphProperties &properties);
 
     void assignCodesFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignWindFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignSSTFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignSalinityFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignBenthosBiomassFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignBenthosNumberFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 

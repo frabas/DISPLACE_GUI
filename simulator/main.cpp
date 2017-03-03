@@ -1109,7 +1109,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 	// check the class Node
-    Node node (1, 1.0, 1.0, 0, 0, 0,0, 0,0, nbpops, nbbenthospops, 5);
+    Node node (1, 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
         << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
@@ -1126,6 +1126,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_graph=inputfolder+"/graphsspe/coord"+a_graph_s+".dat";
     string filename_code_area_graph=inputfolder+"/graphsspe/code_area_for_graph"+a_graph_s+"_points.dat";
     string filename_code_marine_landscape_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_landscape.dat";
+    string filename_wind_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_wind.dat";
+    string filename_sst_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_sst.dat";
+    string filename_salinity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_salinity.dat";
     string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
     string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
 
@@ -1169,6 +1172,48 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	vector<int> graph_point_code_landscape;
     if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord)) {
         std::cerr << "Cannot parse " << filename_code_marine_landscape_graph << " Bad format\n";
+        return 1;
+    }
+
+    // input data, for the WIND for each point of the graph
+    ifstream wind_graph;
+    wind_graph.open(filename_wind_graph.c_str());
+    if(wind_graph.fail())
+    {
+        open_file_error(filename_wind_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_wind;
+    if (!fill_from_wind(wind_graph, graph_point_wind, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_wind_graph << " Bad format\n";
+        return 1;
+    }
+
+    // input data, for the SST for each point of the graph
+    ifstream sst_graph;
+    sst_graph.open(filename_sst_graph.c_str());
+    if(sst_graph.fail())
+    {
+        open_file_error(filename_sst_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_sst;
+    if (!fill_from_sst(sst_graph, graph_point_sst, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_sst_graph << " Bad format\n";
+        return 1;
+    }
+
+    // input data, for the SST for each point of the graph
+    ifstream salinity_graph;
+    salinity_graph.open(filename_salinity_graph.c_str());
+    if(salinity_graph.fail())
+    {
+        open_file_error(filename_salinity_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_salinity;
+    if (!fill_from_salinity(salinity_graph, graph_point_salinity, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_salinity_graph << " Bad format\n";
         return 1;
     }
 
@@ -1292,6 +1337,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_coord_harbour[i],
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
+                graph_point_wind[i],
+                graph_point_sst[i],
+                graph_point_salinity[i],
                 graph_point_benthos_biomass[i],
                 graph_point_benthos_number[i],
                 0, // meanweight not set from a GIS layer....
@@ -1317,6 +1365,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 				graph_coord_harbour[i],
 				graph_point_code_area[i],
 				graph_point_code_landscape[i],
+                graph_point_wind[i],
+                graph_point_sst[i],
+                graph_point_salinity[i],
                 graph_point_benthos_biomass[i],
                 graph_point_benthos_number[i],
                 0, // meanweight not set from a GIS layer....

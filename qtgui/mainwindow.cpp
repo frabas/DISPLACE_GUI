@@ -373,6 +373,9 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionAssign_Total_benthos_biomass->setEnabled(e);
     ui->actionAssign_Total_benthos_number->setEnabled(e);
     ui->actionAssign_Area_codes->setEnabled(e);
+    ui->actionAssign_Wind->setEnabled(e);
+    ui->actionAssign_SST->setEnabled(e);
+    ui->actionAssign_Salinity->setEnabled(e);
     ui->actionMergeWeights->setEnabled(e);
     ui->actionMergePings->setEnabled(e);
     ui->actionCalcPopDistribution->setEnabled(e);
@@ -1703,6 +1706,9 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString graphpath = savedlg.getGraphFilename();
         QString coordspath = savedlg.getCoordsFilename();
         QString landpath = savedlg.getLandscapeFilename();
+        QString windpath = savedlg.getLandscapeFilename();
+        QString sstpath = savedlg.getLandscapeFilename();
+        QString salinitypath = savedlg.getLandscapeFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -1712,7 +1718,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, benthospath, benthosnbpath, acpath, polypath, polypathMomths,
+        if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath, benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
@@ -1885,6 +1891,169 @@ void MainWindow::assignCodesFromShapefileGen (QString title, QString shp, const 
 
 }
 
+
+
+
+void MainWindow::assignSSTFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+
+void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+
+
+
 void MainWindow::assignBenthosBiomassFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
     std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
@@ -2011,6 +2180,68 @@ void MainWindow::on_actionAssign_Landscape_codes_triggered()
             currentModel->setLandscapeCodesFromFeature(geom, code); } );
     }
 }
+
+void MainWindow::on_actionAssign_Wind_triggered()
+{
+    QString title = tr("Set Wind (speed) ('wind' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "wind";
+        QString shp = dlg.selectedShapefile();
+
+        assignWindFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setWindFromFeature(geom, code); } );
+    }
+}
+
+void MainWindow::on_actionAssign_SST_triggered()
+{
+    QString title = tr("Set Sea Surface Temperature ('sst' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "sst";
+        QString shp = dlg.selectedShapefile();
+
+        assignSSTFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setSSTFromFeature(geom, code); } );
+    }
+}
+
+
+void MainWindow::on_actionAssign_Salinity_triggered()
+{
+    QString title = tr("Set Salinity ('psu' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "psu";
+        QString shp = dlg.selectedShapefile();
+
+        assignSalinityFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setSalinityFromFeature(geom, code); } );
+    }
+}
+
 
 void MainWindow::on_actionAssign_Total_benthos_biomass_triggered()
 {
@@ -2147,6 +2378,9 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString graphpath = dlg.getGraphFilename();
         QString coordspath = dlg.getCoordsFilename();
         QString landpath = dlg.getLandscapeFilename();
+        QString windpath = dlg.getLandscapeFilename();
+        QString sstpath = dlg.getLandscapeFilename();
+        QString salinitypath = dlg.getLandscapeFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2156,7 +2390,7 @@ void MainWindow::on_actionSave_Graph_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, benthospath, benthosnbpath, acpath, polypath,polypathMomths,
+        if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath, benthospath, benthosnbpath, acpath, polypath,polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {

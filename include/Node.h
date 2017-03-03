@@ -40,12 +40,17 @@ class Node
 		/**  constructor */
 		Node ();
         Node (int idx_node, double xval, double yval, int _harbour, int _code_area,
-              int _marine_landscape,  double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
+              int _marine_landscape,
+              double _wind, double _sst, double _salinity,
+              double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
               int nbpops, int nbbenthospops,  int nbszgroups);
         Node (int idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
             const vector<int> &graph_point_code_area,
             const vector<int> &graph_marine_landscape,
+            const vector<double> &graph_marine_wind,
+            const vector<double> &graph_marine_sst,
+            const vector<double> &graph_marine_salinity,
             const vector<double> &graph_benthos_biomass,
             const vector<double> &graph_benthos_number,
             double initmw,
@@ -82,7 +87,23 @@ class Node
         void setMarineLandscape(int id) {
             marine_landscape = id;
         }
-								 // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
+
+        double get_wind() const;
+        void setWind(double w) {
+            wind = w;
+        }
+
+        double get_sst() const;
+        void setSST(double t) {
+            sst = t;
+        }
+
+        double get_salinity() const;
+        void setSalinity(double s) {
+            salinity = s;
+        }
+
+        // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 		virtual string get_name() const;
 		//virtual double get_prices(string met, int pop) ; // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 								 // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
@@ -220,6 +241,9 @@ private:
 		int harbour;
 		int code_area;
 		int marine_landscape;
+        double wind;
+        double sst;
+        double salinity;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file
         double benthos_meanweight;  // total bio on node from the GIS graph file

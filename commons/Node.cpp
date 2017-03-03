@@ -39,7 +39,8 @@ const multimap<int,double> Node::mFreqUsualMetiers;
 
 
 Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
-           int _marine_landscape, double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
+           int _marine_landscape, double _wind, double _sst, double _salinity,
+           double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            int nbpops, int nbbenthospops, int nbszgroups)
 {
     pthread_mutex_init(&mutex, 0);
@@ -52,6 +53,9 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
+    wind=_wind;
+    sst=_sst;
+    salinity=_salinity;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;
@@ -80,6 +84,9 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
            const vector<int> &graph_coord_harbour,
            const vector<int> &graph_point_code_area,
            const vector<int> &graph_point_marine_landscape,
+           const vector<double> &graph_point_wind,
+           const vector<double> &graph_point_sst,
+           const vector<double> &graph_point_salinity,
            const vector<double> &graph_benthos_biomass,
            const vector<double> &graph_benthos_number, double initmw,
            int nbpops, int nbbenthospops, int nbszgroups)
@@ -99,6 +106,9 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
     harbour=graph_coord_harbour[idx];
 	code_area=graph_point_code_area[idx];
 	marine_landscape=graph_point_marine_landscape[idx];
+    wind=graph_point_wind[idx];
+    sst=graph_point_sst[idx];
+    salinity=graph_point_salinity[idx];
     benthos_biomass=graph_benthos_biomass[idx];
     benthos_number=graph_benthos_number[idx];
     benthos_meanweight=initmw;
@@ -126,6 +136,9 @@ Node::Node()
       harbour(0),
       code_area(0),
       marine_landscape(0),
+      wind(0),
+      sst(0),
+      salinity(0),
       benthos_biomass(1),
       benthos_number(1),
       is_harbour(false),
@@ -181,6 +194,21 @@ int Node::get_code_area() const
 int Node::get_marine_landscape() const
 {
 	return(marine_landscape);
+}
+
+double Node::get_wind() const
+{
+    return(wind);
+}
+
+double Node::get_sst() const
+{
+    return(sst);
+}
+
+double Node::get_salinity() const
+{
+    return(salinity);
 }
 
 double Node::get_init_benthos_biomass() const

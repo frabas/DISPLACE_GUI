@@ -787,7 +787,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -962,6 +962,27 @@ void DisplaceModel::setLandscapeCodesFromFeature (OGRGeometry *geometry, int cod
     });
 }
 
+void DisplaceModel::setWindFromFeature (OGRGeometry *geometry, double wind)
+{
+    setWdFromFeature(geometry, wind, [&](std::shared_ptr<NodeData> nd, double w) {
+        nd->setWind(w);
+    });
+}
+
+void DisplaceModel::setSSTFromFeature (OGRGeometry *geometry, double sst)
+{
+    setTFromFeature(geometry, sst, [&](std::shared_ptr<NodeData> nd, double t) {
+        nd->setSST(t);
+    });
+}
+
+void DisplaceModel::setSalinityFromFeature (OGRGeometry *geometry, double psu)
+{
+    setSalFromFeature(geometry, psu, [&](std::shared_ptr<NodeData> nd, double s) {
+        nd->setSalinity(s);
+    });
+}
+
 void DisplaceModel::setBenthosBiomassFromFeature (OGRGeometry *geometry, double bio)
 {
     setBenthosBioFromFeature(geometry, bio, [&](std::shared_ptr<NodeData> nd, double b) {
@@ -994,6 +1015,54 @@ void DisplaceModel::setCodeFromFeature (OGRGeometry *geometry, int code, std::fu
             int id = ftr->GetFieldAsInteger(FLD_NODEID);
             std::shared_ptr<NodeData> nd = mNodes[id];
             func(nd,code);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setWdFromFeature (OGRGeometry *geometry, double wd, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,wd);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setTFromFeature (OGRGeometry *geometry, double t, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,t);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setSalFromFeature (OGRGeometry *geometry, double sal, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,sal);
             break;
         }
     }
@@ -1422,6 +1491,15 @@ bool DisplaceModel::loadNodes()
     string filename_code_marine_landscape_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_landscape.dat";
 
+    string filename_wind_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_wind.dat";
+
+    string filename_sst_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_sst.dat";
+
+    string filename_salinity_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_salinity.dat";
+
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
 
@@ -1470,6 +1548,49 @@ bool DisplaceModel::loadNodes()
     if (!fill_from_code_marine_landscape(code_landscape_graph, graph_point_code_landscape, nrow_coord))
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_code_marine_landscape_graph.c_str()));
+
+    // input data, for the wind for each point of the graph
+    ifstream wind_graph;
+    wind_graph.open(filename_wind_graph.c_str());
+    if(wind_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_wind_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_wind;
+    if (!fill_from_wind(wind_graph, graph_point_wind, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_wind_graph.c_str()));
+
+    // input data, for the sst for each point of the graph
+    ifstream sst_graph;
+    sst_graph.open(filename_sst_graph.c_str());
+    if(sst_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_sst_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_sst;
+    if (!fill_from_sst(sst_graph, graph_point_sst, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_sst_graph.c_str()));
+
+    // input data, for the salinity for each point of the graph
+    ifstream salinity_graph;
+    salinity_graph.open(filename_salinity_graph.c_str());
+    if(salinity_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_salinity_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_salinity;
+    if (!fill_from_salinity(salinity_graph, graph_point_salinity, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_salinity_graph.c_str()));
+
 
     // input data, for the benthos biomass for each point of the graph
     ifstream code_benthos_graph;
@@ -1587,6 +1708,9 @@ bool DisplaceModel::loadNodes()
                                        graph_coord_harbour[i],
                                        graph_point_code_area[i],
                                        graph_point_code_landscape[i],
+                                       graph_point_wind[i],
+                                       graph_point_sst[i],
+                                       graph_point_salinity[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // because benthos mean weight is not informed by GIS layer
@@ -1616,6 +1740,9 @@ bool DisplaceModel::loadNodes()
                                  graph_coord_harbour[i],
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
+                                 graph_point_wind[i],
+                                 graph_point_sst[i],
+                                 graph_point_salinity[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0,// because benthos mean weight is not informed by GIS layer

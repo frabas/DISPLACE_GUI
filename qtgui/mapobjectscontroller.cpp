@@ -54,6 +54,7 @@ MapObjectsController::MapObjectsController(qmapcontrol::QMapControl *map)
     : mMap(map),
       mModelVisibility(MainWindow::MAX_MODELS, false),
       mLayers(MainWindow::MAX_MODELS, LayerListImpl(LayerMax)),
+      mEnvLayers(MainWindow::MAX_MODELS, LayerListImpl(EnvLayerMax)),
       mOutputLayers(MainWindow::MAX_MODELS, LayerListImpl(OutLayerMax)),
       mTariffsLayers(MainWindow::MAX_MODELS, LayerListImpl(TariffLayerMax)),
       mShapefiles(MainWindow::MAX_MODELS, QList<std::shared_ptr<OGRDataSource> >()),
@@ -144,6 +145,14 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
+    mStatsLayerWind[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Wind")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerWind, mStatsLayerWind[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerSST[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#SST")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerSST, mStatsLayerSST[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerSalinity[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Salinity")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerSalinity, mStatsLayerSalinity[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all")).arg(model_n).toStdString()));
     addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
@@ -249,6 +258,7 @@ void MapObjectsController::setModelVisibility(int model, MapObjectsController::V
     mModelVisibility[model] = visible;
 
     mLayers[model].updateVisibility(visible);
+    mEnvLayers[model].updateVisibility(visible);
     mOutputLayers[model].updateVisibility(visible);
     mTariffsLayers[model].updateVisibility(visible);
 }
@@ -260,6 +270,11 @@ void MapObjectsController::setLayerVisibility(int model, ObjectTreeModel::Catego
         mLayers[model].setVisible(layer, visibility);
         if (isModelActive(model))
             mLayers[model].layer(layer)->setVisible(visibility);
+        break;
+    case ObjectTreeModel::EnvLayers:
+        mEnvLayers[model].setVisible(layer, visibility);
+        if (isModelActive(model))
+            mEnvLayers[model].layer(layer)->setVisible(visibility);
         break;
     case ObjectTreeModel::OutputLayers:
         mOutputLayers[model].setVisible(layer, visibility);
@@ -289,6 +304,8 @@ bool MapObjectsController::isLayerVisible(int model, ObjectTreeModel::Category t
     switch (type) {
     case ObjectTreeModel::Layers:
         return mLayers[model].isVisible(layer);
+    case ObjectTreeModel::EnvLayers:
+        return mEnvLayers[model].isVisible(layer);
     case ObjectTreeModel::OutputLayers:
         return mOutputLayers[model].isVisible(layer);
     case ObjectTreeModel::TariffsLayers:
@@ -472,6 +489,12 @@ void MapObjectsController::addOutputLayer(int model, OutLayerIds id, std::shared
 {
     mMap->addLayer(layer);
     mOutputLayers[model].setLayer(id,layer, visibility);
+}
+
+void MapObjectsController::addEnvLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility)
+{
+    mMap->addLayer(layer);
+    mEnvLayers[model].setLayer(id,layer, visibility);
 }
 
 void MapObjectsController::addTariffLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility)

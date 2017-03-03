@@ -223,6 +223,14 @@ public:
      TariffLayerMax
     };
 
+    enum EnvLayerIds {
+        EnvLayerWind,
+        EnvLayerSST,
+        EnvLayerSalinity,
+
+     EnvLayerMax
+    };
+
     enum EditorModes {
         NoEditorMode,
         EdgeEditorMode, NodeEditorMode
@@ -247,6 +255,7 @@ public:
         switch (type) {
         case ObjectTreeModel::Layers: return &mLayers[model];
         case ObjectTreeModel::ShapefileLayers: return &mShapefileLayers[model];
+        case ObjectTreeModel::EnvLayers: return &mEnvLayers[model];
         case ObjectTreeModel::OutputLayers: return &mOutputLayers[model];
         case ObjectTreeModel::TariffsLayers: return &mTariffsLayers[model];
         default:
@@ -305,6 +314,7 @@ protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addOutputLayer(int model, OutLayerIds id, std::shared_ptr<Layer> layer, bool visibility);
     void addTariffLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility);
+    void addEnvLayer(int model, int id, std::shared_ptr<Layer> layer, bool visibility);
     void addShapefileLayer(int model, std::shared_ptr<OGRDataSource> datasource, std::shared_ptr<LayerESRIShapefile> layer, bool show = true);
 
     void delSelectedEdges(int model);
@@ -362,16 +372,21 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBenthosNumber [MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBenthosMeanweight [MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffs [MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerEnv [MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumsweptarea[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatches[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerWind[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSST[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSalinity[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 
     QVector<LayerListImpl> mLayers;
+    QVector<LayerListImpl> mEnvLayers;
     QVector<LayerListImpl> mOutputLayers;
     QVector<LayerListImpl> mTariffsLayers;
     QVector<QList<std::shared_ptr<OGRDataSource> > > mShapefiles;

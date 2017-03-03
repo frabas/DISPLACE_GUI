@@ -44,6 +44,7 @@ QList<objecttree::ObjectTreeEntity *> ObjectTreeModel::entityTemplates;
 QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Layers"),
     QT_TR_NOOP_UTF8("Shapefile Layers"),
+    QT_TR_NOOP_UTF8("Environmental forcing"),
     QT_TR_NOOP_UTF8("Monthly Output Layers"),
     QT_TR_NOOP_UTF8("Monthly Tariffs"),
     QT_TR_NOOP_UTF8("Nodes"),
@@ -76,6 +77,7 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
 
         entityTemplates[Layers] = new objecttree::LayerEntity(Layers, this);
         entityTemplates[ShapefileLayers] = new objecttree::ShapefileLayerEntity(this);
+        entityTemplates[EnvLayers] = new objecttree::LayerEntity(EnvLayers, this);
         entityTemplates[OutputLayers] = new objecttree::LayerEntity(OutputLayers, this);
         entityTemplates[TariffsLayers] = new objecttree::LayerEntity(TariffsLayers, this);
         entityTemplates[Harbours] = new objecttree::HarbourEntity(this);

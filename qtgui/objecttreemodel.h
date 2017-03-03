@@ -60,6 +60,7 @@ public:
     enum Category {
         Layers = 0,
         ShapefileLayers,
+        EnvLayers,
         OutputLayers,
         TariffsLayers,
         Nodes, Harbours, Vessels, Firms, Ships, Fishfarms, Windmills, Populations, Benthos, Metiers,

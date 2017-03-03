@@ -30,12 +30,12 @@ win32 {
     #MINGW=C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64
     #SDK=$$MINGW
 
-    SDK=$$top_srcdir/install/extra
+    SDK=$$top_srcdir/install/msvc
 
     QMC_GDAL_INC = $$SDK/include
     QMC_GDAL_LIB = $$SDK/lib
 
-    INCLUDEPATH += $$SDK/include/ $$SDK/include/boost-1_57
+    INCLUDEPATH += $$SDK/include/ $$SDK/include
     LIBS += -L$$SDK/lib
     
     CONFIG += boost_test_included

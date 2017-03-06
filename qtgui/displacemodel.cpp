@@ -68,6 +68,7 @@ DisplaceModel::DisplaceModel()
       mInterestingSizeMin(false),
       mInterestingSizeMax(false),
       mInterestingSizes(),
+      mFuncGroups(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this)),
       mShortestPathFolder()
@@ -92,6 +93,12 @@ DisplaceModel::DisplaceModel()
     connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
     connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
     connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
+
+    mFuncGroups->setValuesFormatString(tr("Functional Group #%1"));
+    mFuncGroups->addSpecialValue(tr("Total"));
+    mFuncGroups->addSpecialValue(tr("Average"), true);
+    mFuncGroups->addSpecialValue(tr("Min"));
+    mFuncGroups->addSpecialValue(tr("Max"));
 }
 
 void DisplaceModel::createFeaturesLayer()

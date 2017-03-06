@@ -64,7 +64,7 @@ public:
         OutputLayers,
         TariffsLayers,
         Nodes, Harbours, Vessels, Firms, Ships, Fishfarms, Windmills, Populations, Benthos, Metiers,
-        Nations, SizeGroups,
+        Nations, SizeGroups, BenthosFunctionalGroups,
         LastCategory
     };
 

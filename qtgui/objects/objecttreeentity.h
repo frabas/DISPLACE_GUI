@@ -50,6 +50,8 @@ public:
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     virtual QMenu *contextMenu() const;
+
+    virtual void modelChanged(int idx) {}
 };
 
 }

@@ -176,7 +176,8 @@ SOURCES += \
     graphbuilder_shp.cpp \
     objects/firmentity.cpp \
     modelobjects/firmdata.cpp \
-    mapobjects/firmmapobject.cpp
+    mapobjects/firmmapobject.cpp \
+    objects/bfunctionalgroupsentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -302,7 +303,9 @@ HEADERS += \
     objects/firmentity.h \
     modelobjects/firmdata.h \
     mapobjects/firmmapobject.h \
-    utils/interestinglist.h
+    utils/interestinglist.h \
+    objects/bfunctionalgroupsentity.h \
+    utils/interestinglistwithspecialvalues.h
 
 RESOURCES += \
     qtgui.qrc

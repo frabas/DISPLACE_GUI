@@ -7,8 +7,10 @@ template<typename T>
 class InterestingList {
 private:
     QList<T> list;
+    QString mLabelFormat;
 public:
     InterestingList() {}
+    virtual ~InterestingList() noexcept = default;
 
     void set(T n) {
         if (!list.contains(n))
@@ -26,6 +28,10 @@ public:
 
     void clear() {
         list.clear();
+    }
+
+    size_t count() {
+        return list.size();
     }
 };
 

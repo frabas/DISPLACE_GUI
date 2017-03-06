@@ -61,6 +61,7 @@
 #include <graphbuilder_shp.h>
 #include <objects/metiersentity.h>
 #include <utils/interestinglist.h>
+#include <utils/interestinglistwithspecialvalues.h>
 
 #include <QObject>
 #include <QString>
@@ -98,6 +99,9 @@ public:
         LiveModelType, EditorModelType, OfflineModelType,
         EmptyModelType
     };
+
+    enum SpecialGroups { Total, Average, Min, Max,
+                          LastSpecialGroup };
 
     DisplaceModel();
 
@@ -330,6 +334,8 @@ public:
 
     const QList<int> &getInterestingSizes() const { return mInterestingSizes; }
 
+    std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
+
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingSize(int n);
 
@@ -495,6 +501,7 @@ private:
     QList<int> mInterestingHarb;
     QList<int> mInterestingNations;
     InterestingList<int> mInterestingBenthos;
+    std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
 
     QList<displace::NodePenalty> mPenaltyNodes;
 

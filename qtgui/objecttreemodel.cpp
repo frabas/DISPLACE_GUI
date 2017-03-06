@@ -36,6 +36,7 @@
 #include <objects/metiersentity.h>
 #include <objects/nationentity.h>
 #include <objects/szgroupentity.h>
+#include <objects/bfunctionalgroupsentity.h>
 
 #include <displacemodel.h>
 #include <QMapControl/QMapControl.h>
@@ -59,6 +60,7 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Metiers"),
     QT_TR_NOOP_UTF8("Nations"),
     QT_TR_NOOP_UTF8("Size Groups or Age"),
+    QT_TR_NOOP_UTF8("Functional Groups"),
 };
 
 ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent) :
@@ -92,6 +94,9 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         entityTemplates[Metiers] = new objecttree::MetiersEntity(this);
         entityTemplates[Nations] = new objecttree::NationEntity(this);
         entityTemplates[SizeGroups] = new objecttree::SzGroupEntity(this);
+
+        auto funcgroups = new objecttree::BFunctionalGroupsEntity(this, nullptr);
+        entityTemplates[BenthosFunctionalGroups] = funcgroups;
     }
 }
 
@@ -176,6 +181,9 @@ void ObjectTreeModel::setCurrentModel(int idx, DisplaceModel *model)
     beginResetModel();
     mModel = model;
     mModelIdx = idx;
+    for (auto entity : entityTemplates) {
+        entity->modelChanged(idx);
+    }
     endResetModel();
 }
 

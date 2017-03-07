@@ -1,6 +1,6 @@
 include ("$$top_srcdir/localconfig.pri")
 
-QT=
+QT=core
 TARGET=unittest
 CONFIG += c++11
 

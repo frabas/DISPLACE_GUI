@@ -31,8 +31,8 @@
 
 using namespace std;
 
-std::string getLastErrorMessage();
-void open_file_error(string filename);
+std::string COMMONSSHARED_EXPORT getLastErrorMessage();
+void COMMONSSHARED_EXPORT open_file_error(string filename);
 
 bool COMMONSSHARED_EXPORT read_config_file (string folder_name_parameterization,
 string inputfolder,

@@ -6,9 +6,11 @@
 namespace displace {
 namespace vesselsEditor {
 
+#if 0
     QString __attribute__((deprecated)) getScriptsPath();
     QString __attribute__((deprecated)) getDefaultConfigScriptPath();
     QString __attribute__((deprecated)) getDefaultRunScriptPath();
+#endif
 
     namespace defaults {
         QString getApplicationName();

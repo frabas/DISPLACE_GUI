@@ -21,11 +21,14 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
+#include <commons_global.h>
+
 /* Hint: in Qt Creator you can fix the dout << "blablah"; with dout(cout<<"blablah"); using find/replace regexp
  * find: cout(.*);  replace: dout(cout \1);
  * */
 
-extern int verbosity;
+extern int COMMONSSHARED_EXPORT verbosity;
+
 #define outv(l,x) { if (verbosity >= l) { x; } }
 
 #define dout(x) outv(3,x)

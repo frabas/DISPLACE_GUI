@@ -5,7 +5,7 @@
 
 namespace dtree {
 
-class COMMONSSHARED_EXPORT NodeExtra {
+class NodeExtra {
 public:
     NodeExtra() {}
     virtual ~NodeExtra() {}

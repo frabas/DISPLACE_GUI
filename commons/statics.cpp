@@ -1,7 +1,8 @@
 
 /* Statics data repository */
 
+#include <commons_global.h>
 
-int verbosity = 0;
+int COMMONSSHARED_EXPORT verbosity = 0;
 
 

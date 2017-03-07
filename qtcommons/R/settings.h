@@ -23,7 +23,7 @@ public:
     void setScriptPath (const QString &scriptName, const QString &path);
     void resetScriptPath (const QString &scriptName);
 
-    class Scripts {
+    class QTCOMMONSSHARED_EXPORT Scripts {
     public:
         static const QString GenerateVesselsConfigFiles;
         static const QString RunVesselsConfigFiles;

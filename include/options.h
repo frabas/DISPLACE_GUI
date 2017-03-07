@@ -49,7 +49,9 @@ public:
         return mOptions[option];
     }
 
-    std::string toString() const {
+    template <typename _CTYPE = TYPE>
+    typename std::enable_if<std::is_same<_CTYPE, bool>::value, std::string>::type
+    toString() const {
         std::string ret;
         ConstIterator it = mMap.begin();
         while (it != mMap.end()) {

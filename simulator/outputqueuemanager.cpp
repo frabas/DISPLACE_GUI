@@ -22,7 +22,6 @@
 
 #include <outputmessage.h>
 
-#include <mutexlocker.h>
 #include <helpers.h>
 
 #include <iostream>
@@ -61,16 +60,12 @@ OutputQueueManager::OutputQueueManager()
       mType(Binary),
       mOutStream(std::cout)
 {
-    pthread_mutex_init(&mMutex, 0);
-    sem_init(&mSemaphore, 0, 0);
 }
 
 OutputQueueManager::OutputQueueManager(std::ostream &stream)
     : mType (TextWithStdOut),
       mOutStream (stream)
 {
-    pthread_mutex_init(&mMutex, 0);
-    sem_init(&mSemaphore, 0, 0);
 }
 
 void OutputQueueManager::disableIpcQueue ()
@@ -84,32 +79,33 @@ void OutputQueueManager::start()
 
     args->obj = this;
 
-    MutexLocker locker (&mMutex);
+    std::unique_lock<std::mutex> locker(mMutex);
     UNUSED(locker);
-    mThreadId = pthread_create(&mThread, 0, thread_trampoline, reinterpret_cast<void *>(args));
+    mThread = std::move(std::thread([args]() {
+        thread_trampoline(args);
+    }));
 }
 
 void OutputQueueManager::finish()
 {
     enqueue(std::shared_ptr<OutputMessage>(new QuitMessage));
 
-    void *out;
-    pthread_join(mThread, &out);
+    if (mThread.joinable())
+        mThread.join();
 }
 
 void OutputQueueManager::enqueue(std::shared_ptr<OutputMessage> msg)
 {
-    MutexLocker locker(&mMutex);
-
+    std::unique_lock<std::mutex>(mMutex);
     mQueue.push(msg);
-    sem_post(&mSemaphore);
+    mCond.notify_one();
 }
 
 void *OutputQueueManager::thread_trampoline(void *args)
 {
     ThreadArgs *arguments = reinterpret_cast<ThreadArgs *>(args);
 
-    pthread_mutex_lock (&arguments->obj->mMutex);
+    arguments->obj->mMutex.lock();
     return arguments->obj->thread(arguments);
 }
 
@@ -117,22 +113,21 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
 {
     UNUSED(args);
 
-    pthread_mutex_unlock (&mMutex);
+    mMutex.unlock();
 
     bool exit = false;
     size_t len;
     char buffer [1024];
 
     while (!exit) {
-        sem_wait(&mSemaphore);
-        lock();
-        if (mQueue.empty()) {
-            unlock();
-            continue;
-        }
+
+        std::unique_lock<std::mutex> locker(mMutex);
+        while (mQueue.empty())
+            mCond.wait(locker);
+
         std::shared_ptr<OutputMessage> msg = mQueue.front();
         mQueue.pop();
-        unlock();
+        locker.unlock();
 
         exit = !msg->process();
 

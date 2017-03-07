@@ -2,12 +2,12 @@
 
 #include <Vessel.h>
 #include <helpers.h>
-#include <mutexlocker.h>
+#include <mutex>
 
 #include <Node.h>
 #include <Metier.h>
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 extern bool use_gui;
 
 VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vessel *v, const std::vector<Population* >& populations, vector<int> &implicit_pops)

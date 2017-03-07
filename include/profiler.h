@@ -131,8 +131,8 @@ public:
 #endif
     }
 
-    double min() const { return mMin; }
-    double max() const { return mMax; }
+   // double min() const { return mMin; }
+   // double max() const { return mMax; }
 
     double total() {
 #ifdef PROFILE

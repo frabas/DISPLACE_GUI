@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include <commons_global.h>
+
 template <typename OPT, int N, typename TYPE>
 class Option
 {
@@ -123,19 +125,19 @@ enum Closure_Opt {
 
 } // namespace
 
-class DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last, bool>
+class COMMONSSHARED_EXPORT DynAllocOptions : public Option<Options::Dyn_Alloc,  Options::Dyn_Alloc_last, bool>
 {
 public:
     DynAllocOptions();
 };
 
-class PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last, bool>
+class COMMONSSHARED_EXPORT PopSceOptions : public Option<Options::Pop_Sce, Options::Pop_Sce_last, bool>
 {
 public:
     PopSceOptions();
 };
 
-class ClosureOptions : public Option<Options::Closure_Opt, Options::Closure_Opt_last, std::vector<int>> {
+class COMMONSSHARED_EXPORT ClosureOptions : public Option<Options::Closure_Opt, Options::Closure_Opt_last, std::vector<int>> {
     std::vector<bool> mBannedMetiers;
 public:
     void update();

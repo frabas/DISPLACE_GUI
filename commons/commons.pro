@@ -80,7 +80,6 @@ HEADERS= \
     ../include/memoryinfo.h \
     ../include/helpers.h \
     ../include/options.h \
-    ../include/mutexlocker.h \
     ../include/guiproto_struct.h \
     ../include/version.h \
     ../include/utils/make_unique.h \

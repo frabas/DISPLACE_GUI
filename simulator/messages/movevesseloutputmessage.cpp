@@ -1,9 +1,9 @@
 #include "movevesseloutputmessage.h"
-#include <mutexlocker.h>
+#include <mutex>
 #include <Vessel.h>
 #include <helpers.h>
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 
 MoveVesselOutputMessage::MoveVesselOutputMessage(int _tstep, Vessel *vessel)
 {
@@ -24,7 +24,7 @@ bool MoveVesselOutputMessage::process()
 
 bool MoveVesselOutputMessage::send(ostream &strm)
 {
-    MutexLocker locker(&glob_mutex);
+    std::unique_lock<std::mutex> locker(glob_mutex);
 
     strm << "=V" << data.tstep << " "
         << data.idx << " "

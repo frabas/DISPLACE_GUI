@@ -29,10 +29,6 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <direct.h>
-#endif
-
-#ifdef WINDOWS
-#include <direct.h>
 #define GetCurrentDir _getcwd
 #else
 #include <unistd.h>
@@ -110,7 +106,7 @@
 #endif
 
 #include <version.h>
-
+#include <mutex>
 
 #include "boost/bind.hpp"
 
@@ -148,7 +144,7 @@ MemoryInfo memInfo;
 
 //OutputQueueManager mOutQueue(std::cout);  // Use Text stream
 
-pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
+std::mutex glob_mutex;
 vector<int> ve;
 vector <Vessel*> vessels;
 vector <Ship*> ships;
@@ -273,12 +269,12 @@ ofstream export_individual_tacs;
 
 static void lock()
 {
-    pthread_mutex_lock(&glob_mutex);
+    glob_mutex.lock();
 }
 
 static void unlock()
 {
-    pthread_mutex_unlock(&glob_mutex);
+    glob_mutex.unlock();
 }
 
 bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
@@ -568,7 +564,7 @@ int main(int argc, char* argv[])
 
 #ifdef _WIN32
     // for gnuplot installed for at least MinGW_with_gcc_4.6.2
-char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
+const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #else
     char *path = 0;
 #endif
@@ -3377,13 +3373,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	// get a vector v filled in with 1 to n
 	int nbvessels = vessels.size();
-    pthread_mutex_lock (&glob_mutex);
+    glob_mutex.lock();
     ve = vector<int> (nbvessels);
     for (unsigned int idx =0; idx < ve.size(); idx++)
 	{
 		ve[idx] =  idx ;
 	}
-    pthread_mutex_unlock (&glob_mutex);
+    glob_mutex.unlock();
 
 	// init
 	vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
@@ -4825,6 +4821,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	popnodes_start.close();
 	popnodes_end.close();
 
+    // disable gnuplot
+#if 0
 	#ifdef _WIN32
 	if(use_gnuplot)
 	{
@@ -4835,7 +4833,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		pclose(pipe4);
 	}
 	#endif
-
+#endif
 	//delete[] nodes;
 	//delete[] vessels;
 

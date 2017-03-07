@@ -23,7 +23,7 @@ macx {
     CONFIG -= app_bundle
 }
 
-LIBS += -lpthread
+unix:LIBS += -lpthread
 
 unix:!macx {
     LIBS += -lrt

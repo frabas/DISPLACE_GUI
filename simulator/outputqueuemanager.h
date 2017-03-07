@@ -43,8 +43,8 @@
 
 #include <ipcqueue.h>
 
-#include <pthread.h>
-#include <semaphore.h>
+#include <thread>
+#include <condition_variable>
 
 #include <queue>
 #include <list>
@@ -66,14 +66,6 @@ public:
     void start();
     void finish();
 
-    void lock() {
-        pthread_mutex_lock(&mMutex);
-    }
-
-    void unlock() {
-        pthread_mutex_unlock(&mMutex);
-    }
-
     void enqueue(std::shared_ptr<OutputMessage> msg);
 
 private:
@@ -89,10 +81,9 @@ private:
 
     /* == members == */
 
-    int mThreadId;
-    pthread_t mThread;
-    pthread_mutex_t mMutex;
-    sem_t mSemaphore;
+    std::thread mThread;
+    std::mutex mMutex;
+    std::condition_variable mCond;
 
     std::queue<std::shared_ptr<OutputMessage> > mQueue;
 

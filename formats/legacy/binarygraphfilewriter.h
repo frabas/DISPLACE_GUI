@@ -12,6 +12,12 @@
 
 #include <system_error>
 
+#ifdef _MSC_VER
+#define PACKED
+#else
+#define PACKED __attribute__ ((__packed__))
+#endif
+
 namespace displace {
 namespace formats {
 namespace legacy {
@@ -32,10 +38,12 @@ public:
             throw std::system_error(errno,std::generic_category());
         }
 
-        struct __attribute__ ((__packed__)) {
+        #pragma pack(push,1)
+        struct PACKED {
             uint32_t signature;
             uint8_t keysize, valuesize;
         } header;
+        #pragma pack(pop)
 
         header.signature = toLittleEndian((uint32_t)0x01020304);
         header.keysize = sizeof(Key);
@@ -48,10 +56,12 @@ public:
     }
 
     bool write (Key key, Value value) {
-        struct __attribute__ ((__packed__)) {
+        #pragma pack(push,1)
+        struct PACKED {
             Key k;
             Value v;
         } rec;
+        #pragma pack(pop)
 
         rec.k = toLittleEndian(key);
         rec.v = toLittleEndian(value);

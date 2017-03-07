@@ -123,7 +123,7 @@ SOURCES +=                                  \
 INCLUDEPATH += $$QMC_GDAL_INC
 
 # Add GDAL library path and library (windows).
-win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
+win32:LIBS += -L$$QMC_GDAL_LIB -lgdal_i
 
 # Add GDAL library path and library (unix).
 unix:!macx:LIBS += -L$$QMC_GDAL_LIB -lgdal

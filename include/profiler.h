@@ -21,6 +21,11 @@
 #ifndef PROFILER_H
 #define PROFILER_H
 
+// profiling is unsupported on MsVC.
+#if defined (PROFILE) && defined (_MSC_VER)
+#undef PROFILE
+#endif
+
 #include <time.h>
 
 class Profiler {

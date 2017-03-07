@@ -64,11 +64,11 @@ Source: install\extra\bin\libgeos-3-5-0.dll; DestDir: {app}; Flags: ignoreversio
 Source: install\extra\bin\libproj-0.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libstdc++-6.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libwinpthread-1.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libCGAL.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\bin\libCGAL-vc140-mt-4.9.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\libgmp-10.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\lib\libboost_system-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\lib\libboost_thread-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\lib\libboost_regex-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\lib\libboost_system-vc140-mt-1_62.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\lib\libboost_thread-vc140-mt-1_62.dll; DestDir: {app}; Flags: ignoreversion
+Source: install\extra\lib\libboost_regex-vc140-mt-1_62.dll; DestDir: {app}; Flags: ignoreversion
 
 Source: install\extra\bin\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
 Source: install\extra\bin\Qt5Concurrent{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion

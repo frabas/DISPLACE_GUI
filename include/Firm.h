@@ -33,7 +33,7 @@
 #include <dtree/decisiontree.h>
 #include <dtree/stateevaluator.h>
 
-#include <pthread.h>
+#include <mutex>
 
 typedef int vertex_t;
 
@@ -52,7 +52,7 @@ private:
         double x, y;
         std::vector <Vessel*> bunch_of_vessels;
 
-        pthread_mutex_t mutex;
+        std::mutex mutex;
 
 protected:
         void init();
@@ -73,8 +73,8 @@ public:
         void set_idx_firm (int a_idx_firm);
 
 
-        void lock() { pthread_mutex_lock (&mutex); }
-        void unlock() { pthread_mutex_unlock (&mutex); }
+        void lock() { mutex.lock(); }
+        void unlock() { mutex.unlock(); }
 
 };
 #endif							 // FIRM_H

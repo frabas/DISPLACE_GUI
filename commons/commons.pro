@@ -8,7 +8,7 @@ macx:DESTDIR=$$LIBDESTDIR
 
 DEFINES += COMMONS_LIBRARY
 INCLUDEPATH +=../include/ ../formats .
-LIBS += $$CONAN_LIBS -L.. -lformats
+LIBS += -L.. -lformats
 
 win32 {
     # No crash handler support for Windows

@@ -1,9 +1,10 @@
 #ifndef FISHFARMGRAPHICS_H
 #define FISHFARMGRAPHICS_H
 
+#include <qtcommons_global.h>
 #include <GeometryPointShapeScaled.h>
 
-class FishfarmGraphics : public qmapcontrol::GeometryPointShapeScaled {
+class QTCOMMONSSHARED_EXPORT FishfarmGraphics : public qmapcontrol::GeometryPointShapeScaled {
     static QBrush *color;
 
     float mLat, mLon;

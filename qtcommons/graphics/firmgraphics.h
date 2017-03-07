@@ -1,9 +1,10 @@
 #ifndef FIRMGRAPHICS_H
 #define FIRMGRAPHICS_H
 
+#include <qtcommons_global.h>
 #include <GeometryPointShapeScaled.h>
 
-class FirmGraphics : public qmapcontrol::GeometryPointShapeScaled {
+class QTCOMMONSSHARED_EXPORT FirmGraphics : public qmapcontrol::GeometryPointShapeScaled {
     static QBrush *color;
 
     float mLat, mLon;

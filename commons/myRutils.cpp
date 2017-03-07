@@ -18,6 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+#include <commons_global.h>
 #include <iostream>
 #include <vector>
 #include <time.h>
@@ -42,21 +43,21 @@ using namespace std;
 static std::mutex glob_mutex;
 static unsigned int I1=1234, I2=5678;
 
-void set_seed(unsigned int i1, unsigned int i2)
+void COMMONSSHARED_EXPORT set_seed(unsigned int i1, unsigned int i2)
 {
     std::lock_guard<std::mutex> lock(glob_mutex);
     I1 = i1; I2 = i2;
 }
 
 
-void get_seed(unsigned int *i1, unsigned int *i2)
+void COMMONSSHARED_EXPORT get_seed(unsigned int *i1, unsigned int *i2)
 {
     std::lock_guard<std::mutex> lock(glob_mutex);
     *i1 = I1; *i2 = I2;
 }
 
 
-double unif_rand(void)
+double COMMONSSHARED_EXPORT unif_rand(void)
 {
     std::lock_guard<std::mutex> lock(glob_mutex);
 
@@ -68,7 +69,7 @@ double unif_rand(void)
 }
 
 
-void revsort(double *a, int *ib, int n)
+void COMMONSSHARED_EXPORT revsort(double *a, int *ib, int n)
 {
     /* Sort a[] into descending order by "heapsort";
      * sort ib[] alongside;
@@ -138,7 +139,7 @@ void revsort(double *a, int *ib, int n)
 
 /* Unequal probability sampling; with-replacement case */
 
-void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
+void COMMONSSHARED_EXPORT ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 {
     double rU;
     int i, j;
@@ -182,7 +183,7 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 }
 
 
-vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::vector<double> &proba)
+vector<int> COMMONSSHARED_EXPORT do_sample( int n, int nval, const std::vector<int> &val, const std::vector<double> &proba)
 {
     using Rec = std::tuple<int, double>;
     class RecGreater {
@@ -265,7 +266,7 @@ vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::
 //----------------------------------
 //----------------------------------
 
-double exp_rand(void)
+double COMMONSSHARED_EXPORT exp_rand(void)
 {
     /* q[k-1] = sum(log(2)^k / k!)  k=1,..,n, */
     /* The highest n (here 16) is determined by q[n-1] = 1.0 */
@@ -325,7 +326,7 @@ double exp_rand(void)
 //----------------------------------
 //----------------------------------
 
-double fmax2(double x, double y)
+double COMMONSSHARED_EXPORT fmax2(double x, double y)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(y))
@@ -335,7 +336,7 @@ double fmax2(double x, double y)
 }
 
 
-double fmin2(double x, double y)
+double COMMONSSHARED_EXPORT fmin2(double x, double y)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(y))
@@ -346,8 +347,11 @@ double fmin2(double x, double y)
 
 
 // disable warnings
+#if defined (__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+
 
 //----------------------------------
 //----------------------------------
@@ -356,7 +360,7 @@ double fmin2(double x, double y)
 //----------------------------------
 //----------------------------------
 #define repeat for(;;)
-double norm_rand(void)
+double COMMONSSHARED_EXPORT norm_rand(void)
 {
 
     const static double a[32] =
@@ -491,11 +495,13 @@ double norm_rand(void)
 
 }
 
+#if defined (__GNUC__)
 #pragma GCC diagnostic pop
+#endif
 
 //#include "nmath.h"
 //a=>shape
-double rgamma(double a, double scale)
+double COMMONSSHARED_EXPORT rgamma(double a, double scale)
 {
     /* Constants : */
     const static double sqrt32 = 5.656854;
@@ -673,13 +679,13 @@ double rgamma(double a, double scale)
 }
 
 
-double rnorm(double mu, double sigma)
+double COMMONSSHARED_EXPORT rnorm(double mu, double sigma)
 {
     return mu + sigma * norm_rand();
 }
 
 
-double rlnorm(double meanlog, double sdlog)
+double COMMONSSHARED_EXPORT rlnorm(double meanlog, double sdlog)
 {
 
     return exp(rnorm(meanlog, sdlog));

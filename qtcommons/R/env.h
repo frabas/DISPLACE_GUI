@@ -1,6 +1,7 @@
 #ifndef ENV_H
 #define ENV_H
 
+#include <qtcommons_global.h>
 #include <QSettings>
 #include <QProcessEnvironment>
 
@@ -8,7 +9,7 @@
 namespace displace {
 namespace R {
 
-class Env
+class QTCOMMONSSHARED_EXPORT Env
 {
 public:
     Env();

@@ -1,4 +1,3 @@
-CONFIG -= qt
 CONFIG += console
 
 TARGET=displace

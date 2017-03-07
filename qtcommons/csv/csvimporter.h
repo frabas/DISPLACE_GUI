@@ -1,11 +1,12 @@
 #ifndef CSVIMPORTER_H
 #define CSVIMPORTER_H
 
+#include <qtcommons_global.h>
 #include <QList>
 #include <QStringList>
 #include <QException>
 
-class CsvImporter
+class QTCOMMONSSHARED_EXPORT CsvImporter
 {
 public:
     class Exception : public QException {

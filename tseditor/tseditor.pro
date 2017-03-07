@@ -55,7 +55,7 @@ win32 {
 LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS
 
 # Add GDAL library path and library (windows).
-win32:LIBS += -L$$QMC_GDAL_LIB -lgdal
+win32:LIBS += -L$$QMC_GDAL_LIB -lgdal_i
 
 # Add GDAL library path and library (unix).
 unix:LIBS += -lgdal

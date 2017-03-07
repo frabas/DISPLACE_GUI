@@ -25,7 +25,7 @@ namespace legacy {
 using namespace displace::formats::helpers;
 
 template <typename Key, typename Value>
-class FORMATSSHARED_EXPORT BinaryGraphFileWriter {
+class BinaryGraphFileWriter {
 
     FILE *mFile = nullptr;
 public:

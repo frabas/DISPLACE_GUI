@@ -1,13 +1,14 @@
 #ifndef R_SETTINGS_H
 #define R_SETTINGS_H
 
+#include <qtcommons_global.h>
 #include <QString>
 #include <QSettings>
 
 namespace displace {
 namespace R {
 
-class Settings
+class QTCOMMONSSHARED_EXPORT Settings
 {
     QSettings mSettings;
     static const char *const BasePathKey;

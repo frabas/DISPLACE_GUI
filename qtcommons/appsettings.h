@@ -1,12 +1,14 @@
 #ifndef APPSETTINGS_H
 #define APPSETTINGS_H
 
+#include <qtcommons_global.h>
+
 #include <QString>
 #include <QSettings>
 
 namespace displace {
 
-class AppSettings
+class QTCOMMONSSHARED_EXPORT AppSettings
 {
     QSettings settings;
 public:

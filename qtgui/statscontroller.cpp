@@ -93,6 +93,18 @@ void StatsController::setMetiersPlot(QCustomPlot *plot)
     mPlotMetiers->addItem(mMetTimeLine);
 }
 
+void StatsController::setBenthosPlot(QCustomPlot *plot)
+{
+    mBenthosFuncGroupsPlot = plot;
+    mBenthosFuncGroupsPlot->legend->setVisible(true);
+
+    if (mBenthosTimeLine != 0)
+        delete mBenthosTimeLine;
+
+    mBenthosTimeLine = new QCPItemLine(mBenthosFuncGroupsPlot);
+    mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
+}
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)
@@ -135,6 +147,12 @@ void StatsController::setHarbourStat(StatsController::HarboursStat stat)
 void StatsController::setMetiersStat(StatsController::MetiersStat stat)
 {
     mSelectedMetiersStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setBenthosStat(StatsController::BenthosStat stat)
+{
+    mSelectedBenthosStat = stat;
     updateStats(mLastModel);
 }
 

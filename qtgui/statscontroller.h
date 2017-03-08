@@ -57,6 +57,7 @@ public:
     void setHarboursPlot(QCustomPlot *plot);
     void setNationsPlot(QCustomPlot *plot);
     void setMetiersPlot(QCustomPlot *plot);
+    void setBenthosPlot(QCustomPlot *plot);
 
     void updateStats(DisplaceModel *model);
 
@@ -79,6 +80,10 @@ public:
     enum MetiersStat { M_Catches, M_Revenues, M_Gav };
     void setMetiersStat(MetiersStat stat);
     MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
+
+    enum class BenthosStat { B_TotBiomass, B_Number, B_MeanWeight};
+    void setBenthosStat(BenthosStat stat);
+    BenthosStat getBenthosStat() const { return mSelectedBenthosStat; }
 
     /* == */
 
@@ -118,6 +123,11 @@ private:
     QCustomPlot *mPlotMetiers;
     MetiersStat mSelectedMetiersStat = M_Catches;
     QCPItemLine *mMetTimeLine;
+
+    /* Benthos Functional Groups */
+    QCustomPlot *mBenthosFuncGroupsPlot;
+    BenthosStat mSelectedBenthosStat = BenthosStat::B_TotBiomass;
+    QCPItemLine *mBenthosTimeLine;
 
 
     DisplaceModel *mLastModel;

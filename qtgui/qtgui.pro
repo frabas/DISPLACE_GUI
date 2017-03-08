@@ -177,7 +177,8 @@ SOURCES += \
     objects/firmentity.cpp \
     modelobjects/firmdata.cpp \
     mapobjects/firmmapobject.cpp \
-    objects/bfunctionalgroupsentity.cpp
+    objects/bfunctionalgroupsentity.cpp \
+    plots/benthosstatsplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -305,7 +306,9 @@ HEADERS += \
     mapobjects/firmmapobject.h \
     utils/interestinglist.h \
     objects/bfunctionalgroupsentity.h \
-    utils/interestinglistwithspecialvalues.h
+    utils/interestinglistwithspecialvalues.h \
+    plots/benthosstatsplot.h \
+    plots/plottypes.h
 
 RESOURCES += \
     qtgui.qrc

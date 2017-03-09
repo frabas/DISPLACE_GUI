@@ -308,6 +308,9 @@ bool DisplaceModel::clearStats()
     mStatsMetiers.clear();
     mStatsMetiersCollected.clear();
 
+    mStatsBenthos.clear();
+    mStatsBenthosCollected.clear();
+
     return true;
 }
 
@@ -534,10 +537,17 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
        // mWindmillStatsDirty = false;
     }
 
+    if (mStatsBenthosCollected.dirty() || force) {
+        mStatsBenthos.insertValue(tstep, mStatsBenthosCollected);
+        mStatsBenthosCollected.setDirty(false);
+    }
+
     if (mCalendar && mCalendar->isYear(tstep)) {
         mStatsNationsCollected.clear();
         mStatsHarboursCollected.clear();
         mStatsMetiersCollected.clear();
+        mStatsBenthosCollected.clear();
+
 #if 0       // Not sure if this is needed. Disabling it for now.
         for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
             mStatsPopulationsCollected[i].clear();
@@ -620,7 +630,7 @@ void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid,
     mNodes.at(node_idx)->setBenthosBiomass(funcid, benthosbiomass);
     mNodesStatsDirty = true;
 
-    mStatsBenthosCollected.collectBiomass(step, funcid, node_idx, benthosbiomass);
+    mStatsBenthosCollected.collectBiomass(step, funcid,  mNodes.at(node_idx)->get_marine_landscape(), benthosbiomass);
 }
 
 void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber)
@@ -629,7 +639,7 @@ void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, 
     mNodes.at(node_idx)->setBenthosNumber(funcid, benthosnumber);
     mNodesStatsDirty = true;
 
-    mStatsBenthosCollected.collectNumber(step, funcid, node_idx, benthosnumber);
+    mStatsBenthosCollected.collectNumber(step, funcid, mNodes.at(node_idx)->get_marine_landscape(), benthosnumber);
 }
 
 

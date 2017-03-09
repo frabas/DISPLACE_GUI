@@ -98,9 +98,9 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         }
     }
 
-    int nsteps = model->getPopulationsValuesCount();
+    int nsteps = model->getBenthosStatistics().getUniqueValuesCount();
 
-    DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
+    auto it = model->getBenthosStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
         int ninterPop = interBenthosList.size();
         for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
@@ -172,22 +172,24 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         break;
     }
 
-
     mPlot->rescaleAxes();
     mPlot->replot();
 }
 
-double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int popid, int szid, displace::plot::BenthosStat stattype)
+double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::BenthosStat stattype)
 {
     switch (stattype) {
     case BenthosStat::B_TotBiomass:
-        return model->getPopulationsAtStep(tstep, popid).getAggregateAt(szid);
+        return model->getBenthosStatistics().getValue(tstep).biomassForBenthosAndFuncGroup(benthos, funcgroup);
+        //return model->getPopulationsAtStep(tstep, popid).getAggregateAt(szid);
     case BenthosStat::B_Number:
-        return model->getPopulationsAtStep(tstep, popid).getMortalityAt(szid);
+        return model->getBenthosStatistics().getValue(tstep).numberForBenthosAndFuncGroup(benthos, funcgroup);
+        //return model->getPopulationsAtStep(tstep, popid).getMortalityAt(szid);
     case BenthosStat::B_MeanWeight: {
+        /*
         auto &x = model->getPopulationsAtStep(tstep, popid).getSSB();
         if (szid < x.size())
-            return x.at(szid);
+            return x.at(szid);*/
         return 0;
         }
     }

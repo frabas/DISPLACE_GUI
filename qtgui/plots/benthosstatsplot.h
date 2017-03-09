@@ -31,7 +31,7 @@ public:
     void update(DisplaceModel *model, displace::plot::BenthosStat stat);
 
 private:
-    double getStatValue(DisplaceModel *model, int tstep, int popid, int szid, displace::plot::BenthosStat stattype);
+    double getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::BenthosStat stattype);
 };
 
 #endif // BENTHOSSTATSPLOT_H

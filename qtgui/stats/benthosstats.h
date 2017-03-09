@@ -19,7 +19,10 @@ public:
 
 private:
     bool mDirty = false;
-    QVector<StatData> mDataPerFuncId;
+    QVector<QVector<StatData>> mDataPerBenthosAndFuncId;
+
+    StatData &get(int funcid, int benthos);
+    const StatData &get(int funcid, int benthos) const;
 
 public:
     BenthosStats();
@@ -28,8 +31,11 @@ public:
     void setDirty(bool dirty = true) { mDirty = dirty; }
     void clear();
 
-    void collectBiomass(int step, int funcid, int node_idx, double biomass);
+    void collectBiomass(int step, int funcid, int benthosid, double biomass);
     void collectNumber (int step, int funcid, int node_idx, double number);
+
+    double biomassForBenthosAndFuncGroup(int benthos, int funcgroup) const;
+    double numberForBenthosAndFuncGroup(int benthos, int funcgroup) const;
 };
 
 #endif // BENTHOSSTATS_H

@@ -283,6 +283,10 @@ public:
         return mStatsMetiers.getValue(step).at(idx);
     }*/
 
+    /* Benthos Statistics */
+    const BenthosStatsContainer &getBenthosStatistics() { return mStatsBenthos; }
+
+
     /* Scenario and configuration */
 
     Scenario scenario() const;

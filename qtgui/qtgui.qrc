@@ -54,5 +54,6 @@
         <file>icons/tseditor.png</file>
         <file>palettes/tariffs_colors.p2c</file>
         <file>icons/scheduler.png</file>
+        <file>palettes/benthos_colors.p2c</file>
     </qresource>
 </RCC>

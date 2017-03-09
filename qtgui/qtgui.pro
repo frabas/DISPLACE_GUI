@@ -342,3 +342,6 @@ icons.path=$${PREFIX}/share/pixmaps
 icons.files=icons/displace.png
 
 INSTALLS += target icons extra
+
+DISTFILES += \
+    palettes/benthos_colors.p2c

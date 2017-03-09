@@ -64,10 +64,8 @@ QVariant BenthosEntity::data(const QModelIndex &index, int role) const
         if (role == Qt::DisplayRole)
             return QString("%1").arg(model->getModel()->getBenthosList()[mId]->getId());
         // Disable the tickmarks, we don't need them... yet.
-#if 0
         if (role == Qt::CheckStateRole)
             return QVariant(model->getModel()->isInterestingBenthos(index.row()) ? Qt::Checked : Qt::Unchecked);
-#endif
         if (role == Qt::TextColorRole)
             return model->getMapControl()->getPalette(model->getModelIdx(), PopulationRole).color(mId);
 

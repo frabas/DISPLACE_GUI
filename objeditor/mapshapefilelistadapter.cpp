@@ -43,7 +43,7 @@ void MapShapefileListAdapter::refresh()
         for (auto file: files) {
             QString name = file.filePath().mid(path.length());
             try {
-                mEntries.emplace_back(std::move(MapEntry(file.filePath(), mMapController, name)));
+                mEntries.emplace_back(MapEntry(file.filePath(), mMapController, name));
             } catch (std::runtime_error &x) {
                 qWarning() << "Cannot load : " << file.filePath();
                 if (!errorShown) {

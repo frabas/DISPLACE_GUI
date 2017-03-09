@@ -15,8 +15,8 @@ public:
         }
         ~Exception() throw () {}
 
-        void raise() const { throw *this; }
-        Exception *clone() const { return new Exception(*this); }
+        void raise() const override { throw *this; }
+        Exception *clone() const override { return new Exception(*this); }
 
         const char *what() const noexcept override {
             return mWhat.toStdString().c_str();

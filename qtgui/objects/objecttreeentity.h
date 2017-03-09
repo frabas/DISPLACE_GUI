@@ -51,7 +51,7 @@ public:
 
     virtual QMenu *contextMenu() const;
 
-    virtual void modelChanged(int idx) {}
+    virtual void modelChanged(int) {}
 };
 
 }

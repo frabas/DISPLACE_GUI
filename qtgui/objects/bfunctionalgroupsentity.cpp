@@ -53,14 +53,14 @@ int BFunctionalGroupsEntity::columnCount() const
 QVariant BFunctionalGroupsEntity::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DisplayRole) {
-        if (index.row() < mList->getSpecialValuesCount())
+        if ((size_t)index.row() < mList->getSpecialValuesCount())
             return mList->getSpecialName(index.row());
         else
             return mList->getFormatString().arg(index.row() - mList->getSpecialValuesCount());
     }
 
     if (role == Qt::CheckStateRole) {
-        if (index.row() < mList->getSpecialValuesCount())
+        if ((size_t)index.row() < mList->getSpecialValuesCount())
             return mList->isSpecialValueSelected(index.row()) ? Qt::Checked : Qt::Unchecked;
         else
             return mList->has(index.row() - mList->getSpecialValuesCount()) ? Qt::Checked : Qt::Unchecked;
@@ -79,7 +79,7 @@ bool BFunctionalGroupsEntity::setData(const QModelIndex &index, const QVariant &
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         bool sel = value.toInt() != 0;
-        if (index.row() < mList->getSpecialValuesCount())
+        if ((size_t)index.row() < mList->getSpecialValuesCount())
             mList->setSpecialValueSelected(index.row(), sel);
         else {
             if (sel)

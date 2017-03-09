@@ -6,33 +6,35 @@
 template<typename T>
 class InterestingList {
 private:
-    QList<T> list;
+    QList<T> mList;
     QString mLabelFormat;
 public:
     InterestingList() {}
     virtual ~InterestingList() noexcept = default;
 
     void set(T n) {
-        if (!list.contains(n))
-            list.append(n);
-            qSort(list);
+        if (!mList.contains(n))
+            mList.append(n);
+            qSort(mList);
     }
 
     void rem(T n) {
-        list.removeAll(n);
+        mList.removeAll(n);
     }
 
     bool has(T n) const {
-        return list.contains(n);
+        return mList.contains(n);
     }
 
     void clear() {
-        list.clear();
+        mList.clear();
     }
 
     size_t count() {
-        return list.size();
+        return mList.size();
     }
+
+    const QList<T> &list() const { return mList; }
 };
 
 #endif // INTERESTINGLIST_H

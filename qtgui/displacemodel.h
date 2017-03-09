@@ -62,6 +62,7 @@
 #include <objects/metiersentity.h>
 #include <utils/interestinglist.h>
 #include <utils/interestinglistwithspecialvalues.h>
+#include <stats/benthosstats.h>
 
 #include <QObject>
 #include <QString>
@@ -94,6 +95,7 @@ public:
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
     typedef QVector<MetierStats> MetiersStats;
     typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
+    typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -317,6 +319,7 @@ public:
     void clearInterestingPop();
     void clearInterestingPop2();
 
+    QList<int> getInterestingBenthos() const { return mInterestingBenthos.list(); }
     void setInterestingBenthos(int n) { mInterestingBenthos.set(n); }
     void remInterestingBenthos(int n) { mInterestingBenthos.rem(n); }
     bool isInterestingBenthos(int n) const { return mInterestingBenthos.has(n); }
@@ -524,6 +527,8 @@ private:
     HarboursStats mStatsHarboursCollected;
     MetiersStatsContainer mStatsMetiers;
     MetiersStats mStatsMetiersCollected;
+    BenthosStatsContainer mStatsBenthos;
+    BenthosStats mStatsBenthosCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<QString, int> mStockNames;

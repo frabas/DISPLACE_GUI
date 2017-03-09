@@ -619,6 +619,8 @@ void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid,
     checkStatsCollection(step);
     mNodes.at(node_idx)->setBenthosBiomass(funcid, benthosbiomass);
     mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectBiomass(step, funcid, node_idx, benthosbiomass);
 }
 
 void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber)
@@ -626,6 +628,8 @@ void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, 
     checkStatsCollection(step);
     mNodes.at(node_idx)->setBenthosNumber(funcid, benthosnumber);
     mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectNumber(step, funcid, node_idx, benthosnumber);
 }
 
 

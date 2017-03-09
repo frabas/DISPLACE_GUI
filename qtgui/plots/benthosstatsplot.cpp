@@ -13,7 +13,7 @@ BenthosStatsPlot::BenthosStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
       mTimeline(timeline),
       pen(QColor(0,0,255,200))
 {
-    mPalette = PaletteManager::instance()->palette(PopulationRole);
+    mPalette = PaletteManager::instance()->palette(BenthosRole);
 }
 
 void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat stat)
@@ -21,13 +21,16 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
     mPlot->clearGraphs();
     double val;
 
-    QList<int> interPopList = model->getInterestingPops();
-    QList<int> interSizeList = model->getInterestingSizes();
+    QList<int> interBenthosList = model->getInterestingBenthos();
+
+    auto funcGroups = model->getFunctionalGroupsList();
+    QList<int> interFuncGroupsList = funcGroups->list();
+
     QList<int> graphList;
-    bool showtotal = model->isInterestingSizeTotal();
-    bool showavg =  model->isInterestingSizeAvg();
-    bool showmin =  model->isInterestingSizeMin();
-    bool showmax =  model->isInterestingSizeMax();
+    bool showtotal = funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
+    bool showavg =  funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Average);
+    bool showmin =  funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Min);
+    bool showmax =  funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
 
     if (showmax)
         graphList.push_front(-4);
@@ -39,15 +42,15 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         graphList.push_front(-1);
 
     if (graphList.size() == 0)
-        graphList.append(interSizeList);
+        graphList.append(interFuncGroupsList);
 
     /* If no size is selected, but aggregate is selected, select all sizes */
-    if (interSizeList.size() == 0 && graphList.size() != 0) {
+    if (interFuncGroupsList.size() == 0 && graphList.size() != 0) {
         for(int i = 0; i < model->getSzGrupsCount(); ++i)
-            interSizeList.push_back(i);
+            interFuncGroupsList.push_back(i);
     }
 
-    int szNum = interSizeList.size();
+    int szNum = interFuncGroupsList.size();
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -60,11 +63,11 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         mTimeline->end->setCoords(t, timelineMax);
     }
 
-    foreach (int ipop, interPopList) {
+    foreach (int funcgrp, interBenthosList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlot->addGraph();
-            QColor col = mPalette.colorByIndex(ipop);
+            QColor col = mPalette.colorByIndex(funcgrp);
 
             graph->setLineStyle(QCPGraph::lsLine);
             graph->setPen(QPen(QBrush(col),2));
@@ -74,19 +77,19 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
             switch (graphList[igraph]) {
             case -4:
-                graph->setName(QString(QObject::tr("Pop %1 Max")).arg(ipop));
+                graph->setName(QString(QObject::tr("FuncGrp %1 Max")).arg(funcgrp));
                 break;
             case -3:
-                graph->setName(QString(QObject::tr("Pop %1 Min")).arg(ipop));
+                graph->setName(QString(QObject::tr("FuncGrp %1 Min")).arg(funcgrp));
                 break;
             case -2:
-                graph->setName(QString(QObject::tr("Pop %1 Avg")).arg(ipop));
+                graph->setName(QString(QObject::tr("FuncGrp %1 Avg")).arg(funcgrp));
                 break;
             case -1:
-                graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ipop));
+                graph->setName(QString(QObject::tr("FuncGrp %1 Total")).arg(funcgrp));
                 break;
             default:
-                graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ipop).arg(graphList[igraph]+1));
+                graph->setName(QString(QObject::tr("Benthos %1 FuncGrp %2")).arg(funcgrp).arg(graphList[igraph]+1));
             }
 
             graphs.push_back(graph);
@@ -99,13 +102,13 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
     DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
     for (int istep = 0; istep <nsteps; ++istep) {
-        int ninterPop = interPopList.size();
+        int ninterPop = interBenthosList.size();
         for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
 
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
-                val = getStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], stat);
+            for (int iInterSize = 0; iInterSize < interFuncGroupsList.size(); ++iInterSize) {
+                val = getStatValue(model, it.key(), interBenthosList[iinterpPop], interFuncGroupsList[iInterSize], stat);
                 if (iInterSize == 0) {
                     mMin = val;
                     mMax = val;
@@ -139,7 +142,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
                     val = mTot;
                     break;
                 default:
-                    val = getStatValue(model, it.key(), interPopList[iinterpPop], graphList[isz], stat);
+                    val = getStatValue(model, it.key(), interBenthosList[iinterpPop], graphList[isz], stat);
                     break;
                 }
 

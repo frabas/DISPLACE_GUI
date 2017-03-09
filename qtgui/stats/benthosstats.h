@@ -2,6 +2,7 @@
 #define BENTHOSSTATS_H
 
 #include <QVector>
+#include <mutex>
 
 class BenthosStats
 {
@@ -20,12 +21,20 @@ public:
 private:
     bool mDirty = false;
     QVector<QVector<StatData>> mDataPerBenthosAndFuncId;
+    mutable std::mutex mMutex;
 
     StatData &get(int funcid, int benthos);
     const StatData &get(int funcid, int benthos) const;
 
 public:
     BenthosStats();
+    ~BenthosStats() noexcept = default;
+
+    BenthosStats(const BenthosStats& b);
+    BenthosStats(BenthosStats &&b);
+
+    BenthosStats &operator = (const BenthosStats &b);
+    BenthosStats &operator = (BenthosStats &&b);
 
     bool dirty() const { return mDirty; }
     void setDirty(bool dirty = true) { mDirty = dirty; }

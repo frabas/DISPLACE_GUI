@@ -5,8 +5,46 @@ BenthosStats::BenthosStats()
 
 }
 
+BenthosStats::BenthosStats(const BenthosStats &b)
+{
+    std::unique_lock<std::mutex> l1(mMutex);
+    std::unique_lock<std::mutex> l2(b.mMutex);
+
+    mDirty = b.mDirty;
+    mDataPerBenthosAndFuncId = b.mDataPerBenthosAndFuncId;
+}
+
+BenthosStats::BenthosStats(BenthosStats &&b)
+{
+    std::unique_lock<std::mutex> l1(mMutex);
+    std::unique_lock<std::mutex> l2(b.mMutex);
+
+    mDirty = std::move(b.mDirty);
+    mDataPerBenthosAndFuncId = std::move(b.mDataPerBenthosAndFuncId);
+}
+
+BenthosStats &BenthosStats::operator =(const BenthosStats &b)
+{
+    std::unique_lock<std::mutex> l1(mMutex);
+    std::unique_lock<std::mutex> l2(b.mMutex);
+
+    mDirty = b.mDirty;
+    mDataPerBenthosAndFuncId = b.mDataPerBenthosAndFuncId;
+}
+
+BenthosStats &BenthosStats::operator =(BenthosStats &&b)
+{
+    std::unique_lock<std::mutex> l1(mMutex);
+    std::unique_lock<std::mutex> l2(b.mMutex);
+
+    mDirty = std::move(b.mDirty);
+    mDataPerBenthosAndFuncId = std::move(b.mDataPerBenthosAndFuncId);
+}
+
 BenthosStats::StatData &BenthosStats::get(int funcid, int benthos)
 {
+    std::unique_lock<std::mutex> l(mMutex);
+
     while (mDataPerBenthosAndFuncId.length() <= benthos)
         mDataPerBenthosAndFuncId.push_back(QVector<StatData>());
 
@@ -19,6 +57,7 @@ BenthosStats::StatData &BenthosStats::get(int funcid, int benthos)
 
 const BenthosStats::StatData &BenthosStats::get(int funcid, int benthos) const
 {
+    std::unique_lock<std::mutex> l(mMutex);
     auto &v = mDataPerBenthosAndFuncId[benthos];
     return v[funcid];
 }
@@ -26,6 +65,7 @@ const BenthosStats::StatData &BenthosStats::get(int funcid, int benthos) const
 
 void BenthosStats::clear()
 {
+    std::unique_lock<std::mutex> l(mMutex);
     for (int i = 0; i < mDataPerBenthosAndFuncId.length(); ++i) {
         auto &v = mDataPerBenthosAndFuncId[i];
         for (int j = 0; j < v.length(); ++j)

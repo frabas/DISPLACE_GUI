@@ -50,6 +50,13 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
             interFuncGroupsList.push_back(i);
     }
 
+    /* If no benthos is selected, select all benthos */
+    if (interBenthosList.size() == 0) {
+        for (int i = 0; i < model->getBenthosCount(); ++i) {
+            interBenthosList.push_back(i);
+        }
+    }
+
     int szNum = interFuncGroupsList.size();
     int graphNum = graphList.size();
 
@@ -99,8 +106,6 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
     }
 
     int nsteps = model->getBenthosStatistics().getUniqueValuesCount();
-
-    qDebug() << "Plotting benthos graph: " << interBenthosList << interFuncGroupsList;
 
     auto it = model->getBenthosStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {

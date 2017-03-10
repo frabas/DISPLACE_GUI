@@ -167,15 +167,15 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
     switch (stat) {
     case BenthosStat::B_TotBiomass:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("Numbers"));
+        mPlot->yAxis->setLabel(QObject::tr("Biomass"));
         break;
     case BenthosStat::B_Number:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("F"));
+        mPlot->yAxis->setLabel(QObject::tr("Number"));
         break;
     case BenthosStat::B_MeanWeight:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("SSB (kg)"));
+        mPlot->yAxis->setLabel(QObject::tr("Mean Weight (gram/sq_m)"));
         break;
     }
 

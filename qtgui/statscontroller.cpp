@@ -347,7 +347,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat
     switch (popStat) {
     case Aggregate:
         plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotPopulations->yAxis->setLabel(QObject::tr("Numbers"));
+        plotPopulations->yAxis->setLabel(QObject::tr("Numbers ('000)"));
         break;
     case Mortality:
         plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));

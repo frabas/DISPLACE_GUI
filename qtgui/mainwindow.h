@@ -212,6 +212,8 @@ private slots:
 
     void on_actionSet_Node_Symbol_Size_triggered();
 
+    void on_benthosStatSelector_currentIndexChanged(int index);
+
 public slots:
     void end_ShortestPathCreated(bool);
 

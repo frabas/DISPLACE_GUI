@@ -2952,3 +2952,8 @@ void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
                                  tr("Nodes symbol size has changed, restart / reload the current model"));
     }
 }
+
+void MainWindow::on_benthosStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setBenthosStat(static_cast<displace::plot::BenthosStat>(index));
+}

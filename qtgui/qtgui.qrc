@@ -55,5 +55,7 @@
         <file>palettes/tariffs_colors.p2c</file>
         <file>icons/scheduler.png</file>
         <file>palettes/benthos_colors.p2c</file>
+        <file>icons/metier.png</file>
+        <file>icons/benthos.png</file>
     </qresource>
 </RCC>

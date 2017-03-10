@@ -43,8 +43,10 @@ public:
     void collectBiomass(int step, int funcid, int benthosid, double biomass);
     void collectNumber (int step, int funcid, int node_idx, double number);
 
-    double biomassForBenthosAndFuncGroup(int benthos, int funcgroup) const;
-    double numberForBenthosAndFuncGroup(int benthos, int funcgroup) const;
+    double biomassForBenthosAndFuncGroup(int funcgroup, int benthos) const;
+    double numberForBenthosAndFuncGroup(int funcgroup, int benthos) const;
+
+    static const BenthosStats::StatData NoData;
 };
 
 #endif // BENTHOSSTATS_H

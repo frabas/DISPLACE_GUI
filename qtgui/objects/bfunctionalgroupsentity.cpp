@@ -39,7 +39,7 @@ int BFunctionalGroupsEntity::rowCount() const
 {
     if (model->getModel() != 0 && model->getModelIdx() != -1) {
         if (mGroupIndex == -1)
-            return mList->getSpecialValuesCount() + model->getModel()->config().getNbbenthospops();    // Total, Average
+            return mList->getSpecialValuesCount() + model->getModel()->getNumFuncGroups();    // Total, Average
     }
 
     return 0;

@@ -353,6 +353,15 @@ void DisplaceModel::simulationEnded()
     }
 }
 
+int DisplaceModel::getBenthosIdx(int benthosId) const
+{
+    auto p = mBenthosInfo.find(benthosId);
+    if (p == mBenthosInfo.end()) // not found throw exception
+        throw std::runtime_error("Benthos not found");
+
+    return (*p)->getIdx();
+}
+
 int DisplaceModel::getHarboursCount() const
 {
     return mHarbours.size();
@@ -630,7 +639,9 @@ void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid,
     mNodes.at(node_idx)->setBenthosBiomass(funcid, benthosbiomass);
     mNodesStatsDirty = true;
 
-    mStatsBenthosCollected.collectBiomass(step, funcid,  mNodes.at(node_idx)->get_marine_landscape(), benthosbiomass);
+    mStatsBenthosCollected.collectBiomass(step, funcid,
+                                          getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                          benthosbiomass);
 }
 
 void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber)
@@ -639,7 +650,9 @@ void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, 
     mNodes.at(node_idx)->setBenthosNumber(funcid, benthosnumber);
     mNodesStatsDirty = true;
 
-    mStatsBenthosCollected.collectNumber(step, funcid, mNodes.at(node_idx)->get_marine_landscape(), benthosnumber);
+    mStatsBenthosCollected.collectNumber(step, funcid,
+                                         getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                         benthosnumber);
 }
 
 
@@ -1443,6 +1456,11 @@ void DisplaceModel::clearInterestingPop()
 void DisplaceModel::clearInterestingPop2()
 {
     mInterestingPop2.clear();
+}
+
+int DisplaceModel::getNumFuncGroups() const
+{
+    return config().getNbbenthospops();
 }
 
 void DisplaceModel::setInterestingSize(int n)
@@ -2554,7 +2572,9 @@ bool DisplaceModel::initBenthos()
     }
 
     qSort(ids);
+    int idx = 0;
     foreach (int id, ids) {
+        mBenthosInfo[id]->setIdx(idx++);
         mBenthos.push_back(mBenthosInfo[id]);
     }
 

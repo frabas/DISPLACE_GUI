@@ -46,7 +46,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
     /* If no size is selected, but aggregate is selected, select all sizes */
     if (interFuncGroupsList.size() == 0 && graphList.size() != 0) {
-        for(int i = 0; i < model->getSzGrupsCount(); ++i)
+        for(int i = 0; i < model->getNumFuncGroups(); ++i)
             interFuncGroupsList.push_back(i);
     }
 
@@ -100,16 +100,18 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
     int nsteps = model->getBenthosStatistics().getUniqueValuesCount();
 
+    qDebug() << "Plotting benthos graph: " << interBenthosList << interFuncGroupsList;
+
     auto it = model->getBenthosStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
-        int ninterPop = interBenthosList.size();
-        for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
+        int nInterBenthos = interBenthosList.size();
+        for (int iInterBenthos = 0; iInterBenthos < nInterBenthos; ++iInterBenthos) {
 
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int iInterSize = 0; iInterSize < interFuncGroupsList.size(); ++iInterSize) {
-                val = getStatValue(model, it.key(), interBenthosList[iinterpPop], interFuncGroupsList[iInterSize], stat);
-                if (iInterSize == 0) {
+            for (int iInterFuncGroup = 0; iInterFuncGroup < interFuncGroupsList.size(); ++iInterFuncGroup) {
+                val = getStatValue(model, it.key(), interBenthosList[iInterBenthos], interFuncGroupsList[iInterFuncGroup], stat);
+                if (iInterFuncGroup == 0) {
                     mMin = val;
                     mMax = val;
                 } else {
@@ -124,11 +126,11 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
             if (szNum > 0)
                 mAvg /= szNum;
 
-            for (int isz = 0; isz < graphNum; ++isz) {
-                int gidx = iinterpPop * graphNum + isz;
+            for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
+                int gidx = iInterBenthos * graphNum + iGraph;
 
                 keyData[gidx] << it.key();
-                switch (graphList[isz]) {
+                switch (graphList[iGraph]) {
                 case -4:
                     val = mMax;
                     break;
@@ -142,7 +144,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
                     val = mTot;
                     break;
                 default:
-                    val = getStatValue(model, it.key(), interBenthosList[iinterpPop], graphList[isz], stat);
+                    val = getStatValue(model, it.key(), interBenthosList[iInterBenthos], graphList[iGraph], stat);
                     break;
                 }
 
@@ -180,11 +182,9 @@ double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int benth
 {
     switch (stattype) {
     case BenthosStat::B_TotBiomass:
-        return model->getBenthosStatistics().getValue(tstep).biomassForBenthosAndFuncGroup(benthos, funcgroup);
-        //return model->getPopulationsAtStep(tstep, popid).getAggregateAt(szid);
+        return model->getBenthosStatistics().getValue(tstep).biomassForBenthosAndFuncGroup(funcgroup, benthos);
     case BenthosStat::B_Number:
-        return model->getBenthosStatistics().getValue(tstep).numberForBenthosAndFuncGroup(benthos, funcgroup);
-        //return model->getPopulationsAtStep(tstep, popid).getMortalityAt(szid);
+        return model->getBenthosStatistics().getValue(tstep).numberForBenthosAndFuncGroup(funcgroup, benthos);
     case BenthosStat::B_MeanWeight: {
         /*
         auto &x = model->getPopulationsAtStep(tstep, popid).getSSB();

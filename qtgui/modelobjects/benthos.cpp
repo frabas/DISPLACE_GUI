@@ -35,3 +35,13 @@ void Benthos::appendNode(NodeData *node)
 {
     mNodes.append(node);
 }
+
+int Benthos::getIdx() const
+{
+    return mIdx;
+}
+
+void Benthos::setIdx(int idx)
+{
+    mIdx = idx;
+}

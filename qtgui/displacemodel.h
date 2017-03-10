@@ -148,6 +148,7 @@ public:
     int getSzGrupsCount() const {
         return mConfig.getSzGroups();
     }
+    int getBenthosIdx(int benthosId) const;
 
     int getSimulationSteps() const;
     void setSimulationSteps(int value);
@@ -341,6 +342,7 @@ public:
 
     const QList<int> &getInterestingSizes() const { return mInterestingSizes; }
 
+    int getNumFuncGroups() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
 
     /** \brief insert the pop into the list of interest for pops */

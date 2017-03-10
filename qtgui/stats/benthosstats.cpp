@@ -1,5 +1,8 @@
 #include "benthosstats.h"
 
+
+const BenthosStats::StatData BenthosStats::NoData;
+
 BenthosStats::BenthosStats()
 {
 
@@ -30,6 +33,8 @@ BenthosStats &BenthosStats::operator =(const BenthosStats &b)
 
     mDirty = b.mDirty;
     mDataPerBenthosAndFuncId = b.mDataPerBenthosAndFuncId;
+
+    return *this;
 }
 
 BenthosStats &BenthosStats::operator =(BenthosStats &&b)
@@ -39,6 +44,8 @@ BenthosStats &BenthosStats::operator =(BenthosStats &&b)
 
     mDirty = std::move(b.mDirty);
     mDataPerBenthosAndFuncId = std::move(b.mDataPerBenthosAndFuncId);
+
+    return *this;
 }
 
 BenthosStats::StatData &BenthosStats::get(int funcid, int benthos)
@@ -58,7 +65,14 @@ BenthosStats::StatData &BenthosStats::get(int funcid, int benthos)
 const BenthosStats::StatData &BenthosStats::get(int funcid, int benthos) const
 {
     std::unique_lock<std::mutex> l(mMutex);
+
+    if (mDataPerBenthosAndFuncId.size() <= benthos)
+        return NoData;    // no data available, return empty data.
+
     auto &v = mDataPerBenthosAndFuncId[benthos];
+    if (v.size() <= funcid)
+        return NoData;// no data available, return empty data.
+
     return v[funcid];
 }
 
@@ -90,12 +104,12 @@ void BenthosStats::collectNumber(int step, int funcid, int benthosid, double num
     setDirty();
 }
 
-double BenthosStats::biomassForBenthosAndFuncGroup(int benthos, int funcgroup) const
+double BenthosStats::biomassForBenthosAndFuncGroup(int funcgroup, int benthos) const
 {
     return get(funcgroup,benthos).biomass;
 }
 
-double BenthosStats::numberForBenthosAndFuncGroup(int benthos, int funcgroup) const
+double BenthosStats::numberForBenthosAndFuncGroup(int funcgroup, int benthos) const
 {
     return get(funcgroup,benthos).number;
 }

@@ -131,8 +131,8 @@ void NodeMapObject::updateProperties()
                            "<b>Coords: </b>%2 %3<br/>"
                            "<b>Landscape: </b>%5<br/>"
                            "<b>Init Benthos Biomass: </b>%6<br/>"
-                           "<b>Init Benthos Number: </b>%6<br/>"
-                           "<b>Code Area: </b>%7<br/>")
+                           "<b>Init Benthos Number: </b>%7<br/>"
+                           "<b>Code Area: </b>%8<br/>")
             .arg(QString::fromStdString(mNode->get_name()))
             .arg(mNode->get_y())
             .arg(mNode->get_x())
@@ -149,14 +149,10 @@ void NodeMapObject::updateProperties()
     std::ostringstream ss;
     vector <double> tariffs=mNode->get_tariffs();
     text += QString("<br/><b>Tariffs</b><br/>");
-    for (int gr=0; gr<tariffs.size(); ++gr) {
+    for (size_t gr=0; gr<tariffs.size(); ++gr) {
        ss << tariffs.at(gr) << ",";
     }
     text += QString::fromStdString(ss.str());
-
-
-
-    cout << "updateProperties here!" << tariffs.at(0) << endl;
 
     switch (mRole) {
     default:
@@ -234,7 +230,7 @@ QString NodeMapObject::updateStatText(QString prefix)
 {
     QString text = "<br/>";
 
-    QList<int> ilist = mNode->getModel()->getInterestingPops();
+    QList<int> ilist = getInterestingList();
     double tot = 0.0;
 
     foreach(int i, ilist) {
@@ -277,6 +273,32 @@ QString NodeMapObject::updateStatText(QString prefix)
 
     return text;
 }
+
+QList<int> NodeMapObject::getInterestingList() const
+{
+    QList<int> ilist ;
+
+    switch (mRole) {
+    case GraphNodeWithBenthosBiomass:
+    case GraphNodeWithBenthosNumber:
+    case GraphNodeWithBenthosMeanweight:
+        ilist = mNode->getModel()->getFunctionalGroupsList()->list();
+        if (ilist.size() == 0) {
+            for (int i = 0; i < mNode->getModel()->getBenthosPopulationsCount(); ++i)
+                ilist.push_back(i);
+        }
+        break;
+    default:
+        ilist = mNode->getModel()->getInterestingPops();
+        if (ilist.size() == 0) {
+            for (int i = 0; i < mNode->getModel()->getPopulationsCount(); ++i)
+                ilist.push_back(i);
+        }
+        break;
+    }
+    return ilist;
+}
+
 
 void NodeMapObject::toolButtonClicked()
 {

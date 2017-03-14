@@ -76,6 +76,7 @@ public:
 
 protected:
     QString updateStatText(QString prefix);
+    QList<int> getInterestingList() const;
 
 private slots:
     void toolButtonClicked();

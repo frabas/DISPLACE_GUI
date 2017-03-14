@@ -10,11 +10,13 @@ public:
     struct StatData {
         double biomass = 0.0;
         double number = 0.0;
+        double meanweight = 0.0;
 
         StatData() {}
         void clear() {
             biomass = 0.0;
             number = 0.0;
+            meanweight = 0.0;
         }
     };
 
@@ -41,7 +43,8 @@ public:
     void clear();
 
     void collectBiomass(int step, int funcid, int benthosid, double biomass);
-    void collectNumber (int step, int funcid, int node_idx, double number);
+    void collectNumber (int step, int funcid, int benthosid, double number);
+    void collectMeanWeight(int step, int funcid, int benthosid, double number);
 
     double biomassForBenthosAndFuncGroup(int funcgroup, int benthos) const;
     double numberForBenthosAndFuncGroup(int funcgroup, int benthos) const;

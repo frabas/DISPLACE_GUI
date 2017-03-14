@@ -655,6 +655,16 @@ void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, 
                                          benthosnumber);
 }
 
+void DisplaceModel::collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBenthosNumber(funcid, meanweight);
+    mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectMeanWeight(step, funcid,
+                                         getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                         meanweight);
+}
 
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {

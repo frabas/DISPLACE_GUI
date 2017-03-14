@@ -1258,7 +1258,8 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
     benthosbiomassnodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / biomass func group id
     benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_biomass.at(funcgr) << " " << benthosnumber << " " << endl;
+        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_biomass.at(funcgr) << " " << benthosnumber << " " <<
+                           benthos_tot_meanweight.at(funcgr) << endl;
 
 }
 
@@ -1272,7 +1273,8 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
     benthosnumbernodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id
     benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " " << endl;
+        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
+                       benthos_tot_meanweight.at(funcgr) << endl;
 
 }
 

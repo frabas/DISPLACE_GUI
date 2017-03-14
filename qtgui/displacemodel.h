@@ -400,6 +400,7 @@ public:
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
+    void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);

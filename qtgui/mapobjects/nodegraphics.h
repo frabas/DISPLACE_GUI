@@ -67,6 +67,7 @@ protected:
 
     Type getType() const { return mType; }
     double getValueForPop(int pop) const;
+    QList<int> getInterestingList() const;
 
 private:
     Type mType;

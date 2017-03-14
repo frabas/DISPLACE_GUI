@@ -658,7 +658,7 @@ void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, 
 void DisplaceModel::collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight)
 {
     checkStatsCollection(step);
-    mNodes.at(node_idx)->setBenthosNumber(funcid, meanweight);
+    mNodes.at(node_idx)->setBenthosMeanweight(funcid, meanweight);
     mNodesStatsDirty = true;
 
     mStatsBenthosCollected.collectMeanWeight(step, funcid,

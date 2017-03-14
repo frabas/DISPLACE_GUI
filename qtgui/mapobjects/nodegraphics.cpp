@@ -96,6 +96,11 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 
     QList<int> ilist = mNode->getModel()->getInterestingPops();
 
+    if (ilist.size() == 0) {
+        for (int i = 0; i < mNode->getModel()->getPopulationsCount(); ++i)
+            ilist.push_back(i);
+    }
+
     for (int i = 0; i < ilist.size(); ++i) {
         tot += getValueForPop(ilist[i]);
     }

@@ -1708,7 +1708,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         { // impact on biomass instead...
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_bio                    = this->get_loc()->get_benthos_tot_biomass(funcid);
-            double next_bio                       = (area_ratio1*current_bio) - (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));
+            double next_bio                       = (area_ratio1*current_bio) + (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));
             this->get_loc()->set_benthos_tot_biomass(funcid, next_bio); // update
         }
         outc (cout << "for this func " << funcid << " the loss_after_1_passage_per_func_group is "

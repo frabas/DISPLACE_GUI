@@ -1,3 +1,12 @@
+displace (0.9.6) xenial; urgency=medium
+
+  * Benthos management in simulation
+  * Benthos data collection
+  * Benthos data display
+  * Fixes 
+
+ -- Federico Fuga <fuga@studiofuga.com>  Tue, 14 Mar 2017 13:58:16 +0100
+
 displace (0.9.5) xenial; urgency=medium
 
   * Improved graph creation

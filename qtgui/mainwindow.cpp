@@ -215,6 +215,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mStatsController->setHarboursPlot(ui->plotHarbours);
     mStatsController->setNationsPlot(ui->plotNations);
     mStatsController->setMetiersPlot(ui->plotMetiers);
+    mStatsController->setBenthosPlot(ui->plotBenthos);
 
     /* Tree model setup */
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
@@ -2950,4 +2951,9 @@ void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
         QMessageBox::information(this, tr("Node Symbol Size"),
                                  tr("Nodes symbol size has changed, restart / reload the current model"));
     }
+}
+
+void MainWindow::on_benthosStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setBenthosStat(static_cast<displace::plot::BenthosStat>(index));
 }

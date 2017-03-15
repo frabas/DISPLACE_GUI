@@ -183,7 +183,7 @@ bool PopulationDistributionDataMergerStrategy::saveOutput(QString out)
 
             for (int i = 0; i < num_col_indiv; ++i) {
                 if (isGroupSelected(i)) {
-                    double v = (std::abs(sumpop < 1e-5) ? 0 : resl.value().population[i] / sumpop);
+                    double v = (std::abs(sumpop) < 1e-5 ? 0 : resl.value().population[i] / sumpop);
                     *outstream[2 * resl.value().stock + resl.value().semester] << resl.value().node << " " << v << endl;
                 }
             }

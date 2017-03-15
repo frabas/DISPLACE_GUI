@@ -94,7 +94,7 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     Q_UNUSED(rect);
     double tot = 0.0f;
 
-    QList<int> ilist = mNode->getModel()->getInterestingPops();
+    QList<int> ilist = getInterestingList();
 
     for (int i = 0; i < ilist.size(); ++i) {
         tot += getValueForPop(ilist[i]);
@@ -161,6 +161,33 @@ double NodeWithPopStatsGraphics::getValueForPop(int pop) const
         Q_ASSERT(false);    /* Prevents this from happening */
     }
 
+
+    throw std::runtime_error("Unexpected switch in getValueForPop");
+}
+
+QList<int> NodeWithPopStatsGraphics::getInterestingList() const
+{
+    QList<int> ilist ;
+
+    switch (mType) {
+    case BenthosBiomass:
+    case BenthosMeanweight:
+    case BenthosNumber:
+        ilist = mNode->getModel()->getFunctionalGroupsList()->list();
+        if (ilist.size() == 0) {
+            for (int i = 0; i < mNode->getModel()->getBenthosPopulationsCount(); ++i)
+                ilist.push_back(i);
+        }
+        break;
+    default:
+        ilist = mNode->getModel()->getInterestingPops();
+        if (ilist.size() == 0) {
+            for (int i = 0; i < mNode->getModel()->getPopulationsCount(); ++i)
+                ilist.push_back(i);
+        }
+        break;
+    }
+    return ilist;
 }
 
 

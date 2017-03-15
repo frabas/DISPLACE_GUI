@@ -23,6 +23,8 @@
 #include <QVector>
 #include <QtAlgorithms>
 
+#include <plots/benthosstatsplot.h>
+
 double StatsController::timelineMax = 1e20;
 double StatsController::timelineMin = -1e20;
 
@@ -93,6 +95,23 @@ void StatsController::setMetiersPlot(QCustomPlot *plot)
     mPlotMetiers->addItem(mMetTimeLine);
 }
 
+void StatsController::setBenthosPlot(QCustomPlot *plot)
+{
+    mBenthosFuncGroupsPlot = plot;
+    mBenthosFuncGroupsPlot->legend->setVisible(true);
+
+    if (mBenthosTimeLine != 0)
+        delete mBenthosTimeLine;
+
+    if (mBenthosPlotController != nullptr)
+        delete mBenthosPlotController;
+
+    mBenthosTimeLine = new QCPItemLine(mBenthosFuncGroupsPlot);
+    mBenthosPlotController = new BenthosStatsPlot(plot, mBenthosTimeLine);
+
+    mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
+}
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)
@@ -110,6 +129,10 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mPlotMetiers) {
         updateMetiersStats(model, mSelectedMetiersStat, mPlotMetiers, mMetTimeLine);
     }
+    if (mBenthosFuncGroupsPlot) {
+        updateBenthosStats(model, mSelectedBenthosStat);
+    }
+
 
     mLastModel = model;
 }
@@ -135,6 +158,12 @@ void StatsController::setHarbourStat(StatsController::HarboursStat stat)
 void StatsController::setMetiersStat(StatsController::MetiersStat stat)
 {
     mSelectedMetiersStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setBenthosStat(displace::plot::BenthosStat stat)
+{
+    mSelectedBenthosStat = stat;
     updateStats(mLastModel);
 }
 
@@ -318,7 +347,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat
     switch (popStat) {
     case Aggregate:
         plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotPopulations->yAxis->setLabel(QObject::tr("Numbers"));
+        plotPopulations->yAxis->setLabel(QObject::tr("Numbers ('000)"));
         break;
     case Mortality:
         plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -602,5 +631,10 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
 
     plotMetiers->rescaleAxes();
     plotMetiers->replot();
+}
+
+void StatsController::updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat)
+{
+    mBenthosPlotController->update(model, stat);
 }
 

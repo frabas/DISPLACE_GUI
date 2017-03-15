@@ -45,7 +45,10 @@
 #include <qcustomplot.h>
 #include <palettemanager.h>
 
+#include <plots/plottypes.h>
+
 class DisplaceModel;
+class BenthosStatsPlot;
 
 class StatsController : public QObject
 {
@@ -57,6 +60,7 @@ public:
     void setHarboursPlot(QCustomPlot *plot);
     void setNationsPlot(QCustomPlot *plot);
     void setMetiersPlot(QCustomPlot *plot);
+    void setBenthosPlot(QCustomPlot *plot);
 
     void updateStats(DisplaceModel *model);
 
@@ -80,6 +84,9 @@ public:
     void setMetiersStat(MetiersStat stat);
     MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
 
+    void setBenthosStat(displace::plot::BenthosStat stat);
+    displace::plot::BenthosStat getBenthosStat() const { return mSelectedBenthosStat; }
+
     /* == */
 
     void initPlots();
@@ -95,6 +102,7 @@ protected:
     void updateNationStats(DisplaceModel *model, NationsStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
     void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
     void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
+    void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
 
 private:
     Palette mPalette;
@@ -119,6 +127,11 @@ private:
     MetiersStat mSelectedMetiersStat = M_Catches;
     QCPItemLine *mMetTimeLine;
 
+    /* Benthos Functional Groups */
+    QCustomPlot *mBenthosFuncGroupsPlot = nullptr;
+    displace::plot::BenthosStat mSelectedBenthosStat = displace::plot::BenthosStat::B_TotBiomass;
+    QCPItemLine *mBenthosTimeLine = nullptr;
+    BenthosStatsPlot *mBenthosPlotController = nullptr;
 
     DisplaceModel *mLastModel;
 

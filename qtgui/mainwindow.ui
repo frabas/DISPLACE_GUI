@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -244,7 +244,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../dteditor/dteditor.qrc">
+          <iconset resource="../objeditor/vesseleditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -288,7 +288,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../dteditor/dteditor.qrc">
+          <iconset resource="../objeditor/vesseleditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -340,7 +340,7 @@
         <item>
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
@@ -576,6 +576,10 @@
            </layout>
           </widget>
           <widget class="QWidget" name="metiersTab">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/metier.png</normaloff>:/icons/metier.png</iconset>
+           </attribute>
            <attribute name="title">
             <string>Metiers</string>
            </attribute>
@@ -639,6 +643,77 @@
             </item>
             <item>
              <widget class="QCustomPlot" name="plotMetiers" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="benthosTab">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/benthos.png</normaloff>:/icons/benthos.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Benthos</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QComboBox" name="benthosStatSelector">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Total Biomass</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Benthos Number</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Total Mean Weight</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QCustomPlot" name="plotBenthos" native="true"/>
             </item>
            </layout>
           </widget>
@@ -947,7 +1022,7 @@ L3</string>
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="../objeditor/vesseleditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -956,7 +1031,7 @@ L3</string>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="../objeditor/vesseleditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -965,7 +1040,7 @@ L3</string>
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="../objeditor/vesseleditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1064,7 +1139,7 @@ L3</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -1085,7 +1160,7 @@ L3</string>
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -1111,7 +1186,7 @@ L3</string>
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="../objeditor/vesseleditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1150,7 +1225,7 @@ L3</string>
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="../objeditor/vesseleditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1164,7 +1239,7 @@ L3</string>
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="../objeditor/vesseleditor.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1237,7 +1312,7 @@ L3</string>
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -1373,9 +1448,8 @@ L3</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../dteditor/dteditor.qrc"/>
-  <include location="../objeditor/vesseleditor.qrc"/>
   <include location="../qtcommons/qtcommons.qrc"/>
+  <include location="../objeditor/vesseleditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

@@ -70,9 +70,9 @@ void OutputFileParser::parse(QString path, int tstep, int period)
     } else if (name.startsWith("popnodes_cumulcatches_per_pop_")) {
         parsePopCumcatchesPerPop(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_biomasses_")) {
-        parsePopBenthosBiomass(&file, tstep, mModel, period);
+        parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_numbers_")) {
-        parsePopBenthosNumber(&file, tstep, mModel, period);
+        parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_F_")) {
         parsePopdynF(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_SSB_")) {
@@ -319,9 +319,10 @@ void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, Displace
         model->commitNodesStatsFromSimu(step);
 }
 
-void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceModel *model, int period)
+void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
+    bool ok;
 
     int step, last_period = -1;
     while (!strm.atEnd()) {
@@ -339,42 +340,18 @@ void OutputFileParser::parsePopBenthosBiomass(QFile *file, int tstep, DisplaceMo
             }
             int funcid = fields[0].toInt();
             int nodeid = fields[2].toInt();
-            double benthosbiomass = fields[5].toDouble();
-            model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
-            double benthosnumber = fields[6].toDouble(); // deduced from B/meanw
+
+            double benthosnumber = fields[5].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong benthosnumber %1").arg(fields[5]).toStdString());
             model->collectPopBenthosNumber (step, nodeid, funcid, benthosnumber);
-        }
-    }
 
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
-}
-
-
-void OutputFileParser::parsePopBenthosNumber(QFile *file, int tstep, DisplaceModel *model, int period)
-{
-    QTextStream strm (file);
-
-    int step, last_period = -1;
-    while (!strm.atEnd()) {
-        QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        step = fields[1].toInt();
-
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-            int funcid = fields[0].toInt();
-            int nodeid = fields[2].toInt();
-            double benthosnumber = fields[5].toDouble();
-            model->collectPopBenthosNumber (step, nodeid, funcid, benthosnumber);
-            double benthosbiomass = fields[6].toDouble();  // deduced from N*meanw
+            double benthosbiomass = fields[6].toDouble(&ok);  // deduced from N*meanw
+            if (!ok) throw std::runtime_error(QString("wrong benthosbiomass %1").arg(fields[6]).toStdString());
             model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
+
+            double meanweight = fields[7].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong meanwieght %1").arg(fields[7]).toStdString());
+            model->collectPopBenthosMeanWeight(step, nodeid, funcid, meanweight);
         }
     }
 

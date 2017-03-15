@@ -62,6 +62,7 @@
 #include <objects/metiersentity.h>
 #include <utils/interestinglist.h>
 #include <utils/interestinglistwithspecialvalues.h>
+#include <stats/benthosstats.h>
 
 #include <QObject>
 #include <QString>
@@ -94,6 +95,7 @@ public:
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
     typedef QVector<MetierStats> MetiersStats;
     typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
+    typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -146,6 +148,7 @@ public:
     int getSzGrupsCount() const {
         return mConfig.getSzGroups();
     }
+    int getBenthosIdx(int benthosId) const;
 
     int getSimulationSteps() const;
     void setSimulationSteps(int value);
@@ -281,6 +284,10 @@ public:
         return mStatsMetiers.getValue(step).at(idx);
     }*/
 
+    /* Benthos Statistics */
+    const BenthosStatsContainer &getBenthosStatistics() { return mStatsBenthos; }
+
+
     /* Scenario and configuration */
 
     Scenario scenario() const;
@@ -317,6 +324,7 @@ public:
     void clearInterestingPop();
     void clearInterestingPop2();
 
+    QList<int> getInterestingBenthos() const { return mInterestingBenthos.list(); }
     void setInterestingBenthos(int n) { mInterestingBenthos.set(n); }
     void remInterestingBenthos(int n) { mInterestingBenthos.rem(n); }
     bool isInterestingBenthos(int n) const { return mInterestingBenthos.has(n); }
@@ -334,6 +342,7 @@ public:
 
     const QList<int> &getInterestingSizes() const { return mInterestingSizes; }
 
+    int getNumFuncGroups() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
 
     /** \brief insert the pop into the list of interest for pops */
@@ -391,6 +400,7 @@ public:
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
+    void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
@@ -524,6 +534,8 @@ private:
     HarboursStats mStatsHarboursCollected;
     MetiersStatsContainer mStatsMetiers;
     MetiersStats mStatsMetiersCollected;
+    BenthosStatsContainer mStatsBenthos;
+    BenthosStats mStatsBenthosCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<QString, int> mStockNames;

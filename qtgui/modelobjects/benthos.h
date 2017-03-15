@@ -29,6 +29,7 @@ class NodeData;
 class Benthos
 {
     int mBenthosId;
+    int mIdx;
     QList<NodeData *> mNodes;
 
 public:
@@ -39,6 +40,9 @@ public:
 
     void setNodes(const QList<NodeData *> &nodes);
     void appendNode (NodeData *node);
+
+    int getIdx() const;
+    void setIdx(int idx);
 };
 
 #endif // BENTHOS_H

@@ -308,6 +308,9 @@ bool DisplaceModel::clearStats()
     mStatsMetiers.clear();
     mStatsMetiersCollected.clear();
 
+    mStatsBenthos.clear();
+    mStatsBenthosCollected.clear();
+
     return true;
 }
 
@@ -348,6 +351,15 @@ void DisplaceModel::simulationEnded()
         mDb->flushBuffers();
         mDb->createIndexes();
     }
+}
+
+int DisplaceModel::getBenthosIdx(int benthosId) const
+{
+    auto p = mBenthosInfo.find(benthosId);
+    if (p == mBenthosInfo.end()) // not found throw exception
+        throw std::runtime_error("Benthos not found");
+
+    return (*p)->getIdx();
 }
 
 int DisplaceModel::getHarboursCount() const
@@ -534,10 +546,17 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
        // mWindmillStatsDirty = false;
     }
 
+    if (mStatsBenthosCollected.dirty() || force) {
+        mStatsBenthos.insertValue(tstep, mStatsBenthosCollected);
+        mStatsBenthosCollected.setDirty(false);
+    }
+
     if (mCalendar && mCalendar->isYear(tstep)) {
         mStatsNationsCollected.clear();
         mStatsHarboursCollected.clear();
         mStatsMetiersCollected.clear();
+        mStatsBenthosCollected.clear();
+
 #if 0       // Not sure if this is needed. Disabling it for now.
         for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
             mStatsPopulationsCollected[i].clear();
@@ -619,6 +638,10 @@ void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid,
     checkStatsCollection(step);
     mNodes.at(node_idx)->setBenthosBiomass(funcid, benthosbiomass);
     mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectBiomass(step, funcid,
+                                          getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                          benthosbiomass);
 }
 
 void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber)
@@ -626,8 +649,22 @@ void DisplaceModel::collectPopBenthosNumber(int step, int node_idx, int funcid, 
     checkStatsCollection(step);
     mNodes.at(node_idx)->setBenthosNumber(funcid, benthosnumber);
     mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectNumber(step, funcid,
+                                         getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                         benthosnumber);
 }
 
+void DisplaceModel::collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBenthosMeanweight(funcid, meanweight);
+    mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectMeanWeight(step, funcid,
+                                         getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                         meanweight);
+}
 
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
@@ -1429,6 +1466,11 @@ void DisplaceModel::clearInterestingPop()
 void DisplaceModel::clearInterestingPop2()
 {
     mInterestingPop2.clear();
+}
+
+int DisplaceModel::getNumFuncGroups() const
+{
+    return config().getNbbenthospops();
 }
 
 void DisplaceModel::setInterestingSize(int n)
@@ -2540,7 +2582,9 @@ bool DisplaceModel::initBenthos()
     }
 
     qSort(ids);
+    int idx = 0;
     foreach (int id, ids) {
+        mBenthosInfo[id]->setIdx(idx++);
         mBenthos.push_back(mBenthosInfo[id]);
     }
 

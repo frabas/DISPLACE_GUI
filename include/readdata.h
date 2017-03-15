@@ -131,27 +131,27 @@ int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(int i, string 
 void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 // metier specific
-map<int, int> read_metiers_types(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_sel_ogives(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_dis_ogives(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
-multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder) ;
-map<int, double> read_percent_revenue_completenesses(string folder_name_parameterization, string inputfolder);
-map<int, double> read_metiers_fspeed(string folder_name_parameterization, string inputfolder);
-map<int, double> read_gear_widths_param_a(string folder_name_parameterization, string inputfolder);
-map<int, double> read_gear_widths_param_b(string folder_name_parameterization, string inputfolder);
-map<int, string> read_gear_widths_model_type(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
-multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);
-vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder);
+map<int, int> COMMONSSHARED_EXPORT read_metiers_types(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_sel_ogives(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_dis_ogives(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
+multimap<int, int> COMMONSSHARED_EXPORT read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder) ;
+map<int, double> COMMONSSHARED_EXPORT read_percent_revenue_completenesses(string folder_name_parameterization, string inputfolder);
+map<int, double> COMMONSSHARED_EXPORT read_metiers_fspeed(string folder_name_parameterization, string inputfolder);
+map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_a(string folder_name_parameterization, string inputfolder);
+map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_b(string folder_name_parameterization, string inputfolder);
+map<int, string> COMMONSSHARED_EXPORT read_gear_widths_model_type(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
+multimap<int, int> COMMONSSHARED_EXPORT read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);
+vector< vector<double> > COMMONSSHARED_EXPORT read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroups, string folder_name_parameterization, string inputfolder);
 
 // benthos specific
 multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_biomass_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_prop_funcgr_number_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_meanw_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_prop_funcgr_number_per_node_per_landscape(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_meanw_funcgr_per_landscape(string folder_name_parameterization, string inputfolder);
 
 // fishfarms specific
 map<int, double> COMMONSSHARED_EXPORT read_size_per_farm(string folder_name_parameterization, string inputfolder);

@@ -170,26 +170,26 @@ bool COMMONSSHARED_EXPORT fill_from_code_area (istream& in, vector<int>& graph_p
                           int nrow);
 bool COMMONSSHARED_EXPORT fill_from_code_marine_landscape (istream& in, vector<int>& graph_point_code_landscape,
                                       int nrow);
-bool fill_from_wind (istream& in, vector<double>& graph_point_wind,
+bool COMMONSSHARED_EXPORT fill_from_wind (istream& in, vector<double>& graph_point_wind,
                                       int nrow);
-bool fill_from_sst (istream& in, vector<double>& graph_point_sst,
+bool COMMONSSHARED_EXPORT fill_from_sst (istream& in, vector<double>& graph_point_sst,
                                       int nrow);
-bool fill_from_salinity (istream& in, vector<double>& graph_point_salinity,
+bool COMMONSSHARED_EXPORT fill_from_salinity (istream& in, vector<double>& graph_point_salinity,
                                       int nrow);
-bool fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
+bool COMMONSSHARED_EXPORT fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);
-bool fill_from_benthos_number (istream& in, vector<double>& graph_point_benthos_number,
+bool COMMONSSHARED_EXPORT fill_from_benthos_number (istream& in, vector<double>& graph_point_benthos_number,
                                       int nrow);
-bool fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
-bool fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
-bool fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
-bool fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
-bool fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);
-bool fill_in_param_sr (istream& in, vector<double>& param_sr);
-bool fill_in_initial_tac (istream& in, vector<double>& initial_tac);
-bool fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max);
-bool fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
-bool fill_from_vessels_specifications(istream& in, vector<string>& names,
+bool COMMONSSHARED_EXPORT fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
+bool COMMONSSHARED_EXPORT fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
+bool COMMONSSHARED_EXPORT fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
+bool COMMONSSHARED_EXPORT fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
+bool COMMONSSHARED_EXPORT fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);
+bool COMMONSSHARED_EXPORT fill_in_param_sr (istream& in, vector<double>& param_sr);
+bool COMMONSSHARED_EXPORT fill_in_initial_tac (istream& in, vector<double>& initial_tac);
+bool COMMONSSHARED_EXPORT fill_in_fbar_ages_min_max (istream& in, vector<double>& fbar_ages_min_max);
+bool COMMONSSHARED_EXPORT fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
+bool COMMONSSHARED_EXPORT fill_from_vessels_specifications(istream& in, vector<string>& names,
                                       vector<double>& speeds,
                                       vector<double>& fuelcons,
                                       vector<double>& lengths,
@@ -266,7 +266,7 @@ void COMMONSSHARED_EXPORT set_entries_d (multimap<int, double>& infos, int itr, 
 
 template <typename T, size_t N> T* end(T (&pArray)[N]);
 
-vector<double> scale_a_vector_to_1(vector<double> a_vector);
+vector<double> COMMONSSHARED_EXPORT scale_a_vector_to_1(vector<double> a_vector);
 
 bool COMMONSSHARED_EXPORT fill_map_from_specifications_i_i(istream& in, map<int, int>& infos, string namefolderinput);
 bool COMMONSSHARED_EXPORT fill_map_from_specifications_i_s(istream& in, map<int, string>& infos, string namefolderinput);

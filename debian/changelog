@@ -1,3 +1,9 @@
+displace (0.9.7) xenial; urgency=medium
+
+  * Fix bug in benthos equations
+
+ -- Federico Fuga <fuga@studiofuga.com>  Thu, 16 Mar 2017 10:22:14 +0100
+
 displace (0.9.6) xenial; urgency=medium
 
   * Benthos management in simulation

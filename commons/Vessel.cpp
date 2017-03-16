@@ -1679,6 +1679,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double area_ratio1 = ((graph_res*graph_res)-swept_area)/(graph_res*graph_res);
     double area_ratio2 = swept_area/(graph_res*graph_res);
 
+    if(area_ratio1<0)
+       {
+        area_ratio1=0;
+        area_ratio2=1;
+       }
+
     for (unsigned int funcid=0; funcid< this->get_loc()->get_benthos_tot_biomass().size(); funcid++)
     {
        // if(swept_area>0.0001)
@@ -1696,14 +1702,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         {
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_nb                    = this->get_loc()->get_benthos_tot_number(funcid);
-            double next_nb                       = (area_ratio1*current_nb) - (area_ratio2*current_nb*(1-decrease_factor_on_benthos_funcgroup));
+            double next_nb                       = (area_ratio1*current_nb) + (area_ratio2*current_nb*(1-decrease_factor_on_benthos_funcgroup));
             this->get_loc()->set_benthos_tot_number(funcid, next_nb); // update
         }
         else
         { // impact on biomass instead...
             decrease_factor_on_benthos_funcgroup  = 1-exp(loss_after_1_passage_per_func_group.at(funcid));
             double current_bio                    = this->get_loc()->get_benthos_tot_biomass(funcid);
-            double next_bio                       = (area_ratio1*current_bio) - (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));
+            double next_bio                       = (area_ratio1*current_bio) + (area_ratio2*current_bio*(1-decrease_factor_on_benthos_funcgroup));
             this->get_loc()->set_benthos_tot_biomass(funcid, next_bio); // update
         }
         outc (cout << "for this func " << funcid << " the loss_after_1_passage_per_func_group is "

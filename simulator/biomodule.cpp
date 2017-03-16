@@ -258,6 +258,18 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     }
 }
 
+// export initial SSB
+if(tstep==0)
+{
+    for (unsigned int sp=0; sp<populations.size(); sp++)
+    {
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
+        {
+    populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
+    populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
+        }
+    }
+}
 
 
 dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
@@ -864,6 +876,8 @@ for (unsigned int sp=0; sp<populations.size(); sp++)
                outc(cout << sp << ": implicit pop => no dynamic simulated..." << endl);
             }
         }
+
+
 
 
 // restart month detection

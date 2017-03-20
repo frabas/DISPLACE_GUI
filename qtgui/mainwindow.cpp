@@ -1707,9 +1707,9 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString graphpath = savedlg.getGraphFilename();
         QString coordspath = savedlg.getCoordsFilename();
         QString landpath = savedlg.getLandscapeFilename();
-        QString windpath = savedlg.getLandscapeFilename();
-        QString sstpath = savedlg.getLandscapeFilename();
-        QString salinitypath = savedlg.getLandscapeFilename();
+        QString windpath = savedlg.getWindFilename();
+        QString sstpath = savedlg.getSSTFilename();
+        QString salinitypath = savedlg.getSalinityFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -2379,9 +2379,9 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString graphpath = dlg.getGraphFilename();
         QString coordspath = dlg.getCoordsFilename();
         QString landpath = dlg.getLandscapeFilename();
-        QString windpath = dlg.getLandscapeFilename();
-        QString sstpath = dlg.getLandscapeFilename();
-        QString salinitypath = dlg.getLandscapeFilename();
+        QString windpath = dlg.getWindFilename();
+        QString sstpath = dlg.getSSTFilename();
+        QString salinitypath = dlg.getSalinityFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();

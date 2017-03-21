@@ -56,7 +56,8 @@ CONFIG(profile) {
 SOURCES= main.cpp \
     thread_vessels.cpp \
     biomodule.cpp \
-    outputexporter.cpp
+    outputexporter.cpp \
+    getRSS.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -82,7 +83,8 @@ HEADERS= \
     values.h \
     biomodule.h \
     messages/noipc.h \
-    outputexporter.h
+    outputexporter.h \
+    getrss.h
 
 !no_ipc {
     SOURCES += \

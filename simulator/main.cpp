@@ -24,7 +24,7 @@
 #include <assert.h>
 
 #include <utils/CrashHandler.h>
-#include <utils/getrss.h>
+#include <getrss.h>
 
 // for Windows
 #ifdef _WIN32
@@ -111,7 +111,6 @@
 #endif
 
 #include <version.h>
-#include <utils/getrss.h>
 
 #include "boost/bind.hpp"
 
@@ -4812,10 +4811,21 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     finalizeIpcQueue();
 
-    std::cout << "*** Memory Statistics:\n";
-    std::cout << "  RSS: " << getCurrentRSS() << "\n";
-    std::cout << " Peak: " << getPeakRSS() << "\n";
-    std::cout << "\n\n";
+
+    string memstat = pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/memstats_"+namesimu+".dat";
+
+
+    std::ofstream stats (memstat);
+    std::ostringstream sstat ;
+
+    sstat << "*** Memory Statistics:\n";
+    sstat << "  RSS: " << getCurrentRSS()/(1024*1024) << "Mb\n";
+    sstat << " Peak: " << getPeakRSS()/(1024*1024) << "Mb\n";
+    sstat << "\n\n";
+
+    std::cout << sstat.str();
+    stats << sstat.str();
+
 
 	// close all....
     OutputExporter::instance().close();

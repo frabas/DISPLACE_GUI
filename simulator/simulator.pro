@@ -57,7 +57,8 @@ SOURCES= main.cpp \
     thread_vessels.cpp \
     biomodule.cpp \
     outputexporter.cpp \
-    getRSS.cpp
+    getRSS.cpp \
+    memstats.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -84,7 +85,8 @@ HEADERS= \
     biomodule.h \
     messages/noipc.h \
     outputexporter.h \
-    getrss.h
+    getrss.h \
+    memstats.h
 
 !no_ipc {
     SOURCES += \

@@ -26,6 +26,11 @@
 #include <utils/CrashHandler.h>
 #include <getrss.h>
 
+#if defined (__linux)
+#include <memstats.h>
+#endif
+
+
 // for Windows
 #ifdef _WIN32
 #include <windows.h>
@@ -4812,19 +4817,43 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     finalizeIpcQueue();
 
 
-    string memstat = pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/memstats_"+namesimu+".dat";
+    {
+        string memstat = pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/memstats_"+namesimu+".dat";
 
 
-    std::ofstream stats (memstat);
-    std::ostringstream sstat ;
+        std::ofstream stats (memstat);
+        std::ostringstream sstat ;
 
-    sstat << "*** Memory Statistics:\n";
-    sstat << "  RSS: " << getCurrentRSS()/(1024*1024) << "Mb\n";
-    sstat << " Peak: " << getPeakRSS()/(1024*1024) << "Mb\n";
-    sstat << "\n\n";
+        sstat << "*** Memory Statistics:\n";
+#if !defined (__linux)
 
-    std::cout << sstat.str();
-    stats << sstat.str();
+        sstat << "  RSS: " << getCurrentRSS()/(1024*1024) << "Mb\n";
+        sstat << " Peak: " << getPeakRSS()/(1024*1024) << "Mb\n";
+        sstat << "\n\n";
+#else
+        MemStats statsColl;
+        statsColl.collect();
+
+        sstat << "       VM: " << statsColl.vm()/(1024*1024) << "Mb\n";
+        sstat << "      RSS: " << statsColl.rss()/(1024*1024) << "Mb\n";
+        sstat << " Peak RSS: " << getPeakRSS()/(1024*1024) << "Mb\n";
+#endif
+        std::cout << sstat.str();
+        stats << sstat.str();
+
+#if 0
+        std::ostringstream ss;
+        std::ifstream status("/proc/self/status", std::ios_base::in);
+        std::string line;
+        while (std::getline(status,line)) {
+            ss << line << "\n";
+        }
+
+        status.close();
+        std::cout << ss.str();
+        stats << ss.str();
+#endif
+    }
 
 
 	// close all....

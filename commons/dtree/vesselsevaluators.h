@@ -141,7 +141,7 @@ private:
 public:
     VesselSmartCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        bool isSmart= (fground==v->get_smartcatch());
+        bool isSmart= (types::NodeId(fground)==v->get_smartcatch());
         //cout << "smartcatch on this ground evaluated at " <<  isSmart << endl;
         return  isSmart ? 1.0 : 0.0; // Is yes or no the tested ground a smart catch?
         }
@@ -153,7 +153,7 @@ private:
 public:
     VesselHighPotentialCatchStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        bool isHighPotential=(fground==v->get_highpotentialcatch());
+        bool isHighPotential=(types::NodeId(fground)==v->get_highpotentialcatch());
         //cout << "highpotentialcatch on this ground evaluated at " << isHighPotential<< endl;
         return   isHighPotential ? 1.0 : 0.0; // Is yes or no the tested ground the highest cpue ground?
         }
@@ -164,7 +164,7 @@ private:
 public:
     VesselNotThatFarStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        bool isNotFar = (fground==v->get_notthatfar());
+        bool isNotFar = (types::NodeId(fground)==v->get_notthatfar());
         //cout << "notthatfar on this ground evaluated at " << isNotFar << endl;
         return  isNotFar ? 1.0 : 0.0; // Is yes or no the closest ground?
         }
@@ -175,7 +175,7 @@ private:
 public:
     VesselKnowledgeOfThisGroundStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        bool isWellKnown = (fground==v->get_mosthistoricallyused());
+        bool isWellKnown = (types::NodeId(fground)==v->get_mosthistoricallyused());
         //cout << "mosthistoricallyused on this ground evaluated at " << isWellKnown << endl;
         return  isWellKnown ? 1.0 : 0.0; // Is yes or no the ground has been the most historically frequent?
         }
@@ -186,8 +186,8 @@ private:
 public:
     VesselRiskOfBycatchIsStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        vector <int> the_grds = v->get_fgrounds();
-        int idx_node_r= find(the_grds.begin(), the_grds.end(), fground) - the_grds.begin();    // relative node index to this vessel
+        auto the_grds = v->get_fgrounds();
+        int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
         //cout << "risk of bycatch on this ground being evaluated..." << endl;
         vector <double> prop_bycatch = v->get_experienced_bycatch_prop_on_fgrounds();
         //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
@@ -201,8 +201,8 @@ private:
 public:
     VesselIsInAreaClosureEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-          vector <int> lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
-          std::vector<int>::iterator it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), fground);
+          auto lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
+          auto it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), types::NodeId(fground));
           bool isIt= (it != lst_fgrounds_in_closed_areas.end()); // found
           //cout << "isinareaclosure on this ground evaluated at "  << isIt << endl;
           return  isIt ? 1.0 : 0.0; // Is yes or no in closed area?

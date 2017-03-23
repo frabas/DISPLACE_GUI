@@ -22,6 +22,7 @@
 #define __MYUTILS_H (1)
 
 #include <vesselcalendar.h>
+#include <idtypes.h>
 
 #include<vector>
 #include<deque>
@@ -65,8 +66,10 @@ double simpson(double a, double b, int n, double S1, double S2){
 double trapezoidal(double a, double b, vector <double> sel);
 double myintegrand(double x, double S1, double S2);
 
-
+[[deprecated]]
 void remove_dups(vector<int>& seq);
+
+[[deprecated]]
 multimap<int,int>  remove_dups(multimap<int,int>& original_map); // keep the first pair of all keys
 
 // remove key-value duplicates
@@ -153,7 +156,7 @@ vector<double> compute_distance_fgrounds(const vector<int> &idx_path_shop,
                                          const deque<map<vertex_t, vertex_t> > &path_shop,
                                          const deque<map<vertex_t, weight_t> > &min_distance_shop,
                                          int from,
-                                         vector<int> grounds);
+                                         vector<types::NodeId> grounds);
 
 //---------------------------------------//
 // data input
@@ -254,6 +257,18 @@ void fill_map_from_specifications (istream &in, map<int,DTYPE> &map) {
         in >> val;
         map.insert(make_pair(key,val));
     }
+}
+
+template <typename K, typename V>
+std::vector<V> find_entries(const std::multimap<K,V> &infos, K val) {
+    auto upper = infos.upper_bound(val);
+    vector<V> result;
+
+    for(auto pos= infos.lower_bound(val); pos!=upper; pos++) {
+        result.push_back(pos->second);
+    }
+
+    return(result);
 }
 
 vector<double> find_entries_s_d (multimap<string, double>& infos, string str);

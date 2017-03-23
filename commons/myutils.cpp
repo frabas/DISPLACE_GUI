@@ -58,7 +58,6 @@ void remove_dups(vector<int>& seq)
     seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
 }
 
-
 // to keep the first element of all the keys only:
 multimap<int,int>  remove_dups(multimap<int,int>& original_map)
 {
@@ -1598,7 +1597,7 @@ vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
                                          const deque<map<vertex_t, vertex_t> >& path_shop,
                                          const deque<map<vertex_t, weight_t> >& min_distance_shop,
                                          int from,
-                                         vector<int> grounds)
+                                         vector<types::NodeId> grounds)
 {
     vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
     // tricky!
@@ -1617,7 +1616,7 @@ vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
     vector <double> distance_fgrounds;
     for (unsigned int i=0; i<grounds.size(); i++)
     {
-        vertex_t vx = grounds.at(i);
+        vertex_t vx = grounds.at(i).toIndex();
         distance_fgrounds.push_back(min_distance[vx]);
         dout(cout  << "distance to fishing ground " << min_distance[vx] << endl);
     }

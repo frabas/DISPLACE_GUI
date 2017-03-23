@@ -35,7 +35,7 @@ const vector<double> Node::mFreqUsualFGrounds;
 const vector<types::NodeId> Node::mUsualFGroundsMet;
 const vector<double> Node::mFreqUsualFGroundsMet;
 const multimap<types::NodeId,int> Node::mUsualMetiers;
-const multimap<types::NodeId,double> Node::mFreqUsualMetiers;
+const multimap<int,double> Node::mFreqUsualMetiers;
 
 
 Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code_area,
@@ -283,7 +283,7 @@ const vector<double> &Node::get_freq_usual_fgrounds() const
     return mFreqUsualFGrounds;
 }
 
-void Node::set_usual_fgrounds(const vector <int> &_usual_fgrounds)
+void Node::set_usual_fgrounds(const vector<types::NodeId> &_usual_fgrounds)
 {
     UNUSED(_usual_fgrounds);
 //    mUsualFGrounds = _usual_fgrounds;
@@ -308,13 +308,13 @@ vector<double> Node::get_freq_usual_fgrounds_this_met(int met)
     return mFreqUsualFGroundsMet;
 }
 
-void Node::set_usual_fgrounds_per_met(multimap <int,int> _usual_fgrounds_per_met)
+void Node::set_usual_fgrounds_per_met(multimap<int, types::NodeId> _usual_fgrounds_per_met)
 {
     UNUSED(_usual_fgrounds_per_met);
 }
 
 
-void Node::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgrounds_per_met)
+void Node::set_freq_usual_fgrounds_per_met(multimap<int, double> _freq_usual_fgrounds_per_met)
 {
     UNUSED(_freq_usual_fgrounds_per_met);
 }
@@ -326,18 +326,18 @@ const multimap<types::NodeId,int> &Node::get_usual_metiers() const
 }
 
 
-const multimap<types::NodeId,double> &Node::get_freq_usual_metiers() const
+const multimap<int, double> &Node::get_freq_usual_metiers() const
 {
     return mFreqUsualMetiers;
 }
 
-void Node::set_usual_metiers(multimap<int,int> _usual_metiers)
+void Node::set_usual_metiers(multimap<types::NodeId, int> _usual_metiers)
 {
     UNUSED(_usual_metiers);
 }
 
 
-void Node::set_freq_usual_metiers(multimap<int,double> _freq_usual_metiers)
+void Node::set_freq_usual_metiers(multimap<int, double> _freq_usual_metiers)
 {
     UNUSED(_freq_usual_metiers);
 }

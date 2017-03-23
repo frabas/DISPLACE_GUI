@@ -115,13 +115,13 @@ class Node
         virtual double get_fuelprices(int vsize) ;
         virtual const vector<types::NodeId> &get_usual_fgrounds() const;
         virtual const vector<double> &get_freq_usual_fgrounds () const;
-        virtual void set_usual_fgrounds (const vector<int> &usual_fgrounds);
+        virtual void set_usual_fgrounds (const vector<types::NodeId> &usual_fgrounds);
         virtual void set_freq_usual_fgrounds (const vector<double> &_freq_usual_fgrounds);
         virtual const multimap<types::NodeId, int> &get_usual_metiers() const;
-        virtual const multimap<types::NodeId, double> &get_freq_usual_metiers() const;
-        virtual void set_usual_metiers (multimap <int,int> usual_metiers);
+        virtual const multimap<int, double> &get_freq_usual_metiers() const;
+        virtual void set_usual_metiers (multimap <types::NodeId,int> usual_metiers);
         virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers);
-        virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met);
+        virtual void set_usual_fgrounds_per_met (multimap <int,types::NodeId> usual_fgrounds_per_met);
         virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met);
         virtual vector<types::NodeId> get_usual_fgrounds_this_met(int met);
         virtual vector<double> get_freq_usual_fgrounds_this_met(int met);
@@ -279,7 +279,7 @@ private:
         static const vector<types::NodeId> mUsualFGroundsMet;
         static const vector<double> mFreqUsualFGroundsMet;
         static const multimap<types::NodeId,int> mUsualMetiers;
-        static const multimap<types::NodeId,double> mFreqUsualMetiers;
+        static const multimap<int,double> mFreqUsualMetiers;
 
         int m_nbpops;
         int m_nbbenthospops;

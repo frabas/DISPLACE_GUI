@@ -30,21 +30,21 @@
 
 
 
-const vector<int> Node::mUsualFGrounds;
+const vector<types::NodeId> Node::mUsualFGrounds;
 const vector<double> Node::mFreqUsualFGrounds;
-const vector<int> Node::mUsualFGroundsMet;
+const vector<types::NodeId> Node::mUsualFGroundsMet;
 const vector<double> Node::mFreqUsualFGroundsMet;
-const multimap<int,int> Node::mUsualMetiers;
-const multimap<int,double> Node::mFreqUsualMetiers;
+const multimap<types::NodeId,int> Node::mUsualMetiers;
+const multimap<types::NodeId,double> Node::mFreqUsualMetiers;
 
 
-Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
+Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code_area,
            int _marine_landscape, double _wind, double _sst, double _salinity,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            int nbpops, int nbbenthospops, int nbszgroups)
+    : idx_node(idx)
 {
     pthread_mutex_init(&mutex, 0);
-	idx_node= idx;
 	x=xval;
 	y=yval;
 	cumftime=0;
@@ -79,8 +79,8 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
 
 }
 
-
-Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
+/*
+Node::Node(types::NodeId idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
            const vector<int> &graph_coord_harbour,
            const vector<int> &graph_point_code_area,
            const vector<int> &graph_point_marine_landscape,
@@ -127,7 +127,7 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 
 
 }
-
+*/
 
 Node::Node()
     : idx_node(0),
@@ -175,12 +175,12 @@ Node::~Node()
 }
 
 
-int Node::get_idx_node() const
+types::NodeId Node::get_idx_node() const
 {
 	return(idx_node);
 }
 
-void Node::set_idx_node(int idx)
+void Node::set_idx_node(types::NodeId idx)
 {
     idx_node = idx;
 }
@@ -273,7 +273,7 @@ double Node::get_fuelprices(int vsize)
 	return(0);
 }
 
-const vector<int> &Node::get_usual_fgrounds() const
+const vector<types::NodeId> &Node::get_usual_fgrounds() const
 {
     return mUsualFGrounds;
 }
@@ -295,7 +295,7 @@ void Node::set_freq_usual_fgrounds(const vector <double> &_freq_usual_fgrounds)
 //    mFreqUsualFGrounds = _freq_usual_fgrounds;
 }
 
-vector<int> Node::get_usual_fgrounds_this_met(int met)
+vector<types::NodeId> Node::get_usual_fgrounds_this_met(int met)
 {
     UNUSED(met);
     return mUsualFGroundsMet;
@@ -320,13 +320,13 @@ void Node::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgr
 }
 
 
-const multimap<int,int> &Node::get_usual_metiers() const
+const multimap<types::NodeId,int> &Node::get_usual_metiers() const
 {
      return mUsualMetiers;
 }
 
 
-const multimap<int,double> &Node::get_freq_usual_metiers() const
+const multimap<types::NodeId,double> &Node::get_freq_usual_metiers() const
 {
     return mFreqUsualMetiers;
 }

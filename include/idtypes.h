@@ -37,10 +37,14 @@ public:
 
 struct NodeTag {};
 
-using NodeId = Id<uint16_t, NodeTag>;
+class NodeId : public Id<uint16_t, NodeTag> {
+public:
+    NodeId() : Id((uint16_t)-1) {}
+    explicit NodeId(uint16_t v) : Id(v) {}
+};
 
 namespace special {
-    static const NodeId InvalidNodeId = NodeId((uint16_t)-1);
+    static const NodeId InvalidNodeId;
 }
 
 }

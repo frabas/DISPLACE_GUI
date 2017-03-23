@@ -42,9 +42,9 @@ Population::Population(int a_name,
                        const vector<double> &init_proprecru_at_szgroup,
                        const vector<double> &_param_sr,
                        const multimap<int, int> &lst_idx_nodes_per_pop,
-                       const multimap<int, double> &_full_spatial_availability,
-                       const multimap<int, double> &field_of_coeff_diffusion_this_pop,
-                       const map<int, double> &_oth_land,
+                       const multimap<types::NodeId, double> &_full_spatial_availability,
+                       const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
+                       const map<types::NodeId, double> &_oth_land,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
@@ -205,11 +205,11 @@ Population::Population(int a_name,
 	*/
 	// REPLACE BY: (TO ONLY USE THE NODES LISTED IN THE AVAI FILE...)
 	vector<Node* > p_spe_nodes;
-	for(multimap<int, double>::iterator iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
+    for(auto iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
 		iter = full_spatial_availability.upper_bound( iter->first ) )
 	{
-		p_spe_nodes.push_back (nodes[  iter->first  ]);
-		nodes[ iter->first ]->set_pop_names_on_node(a_name);;
+        p_spe_nodes.push_back (nodes[  iter->first.toIndex()  ]);
+        nodes[ iter->first.toIndex() ]->set_pop_names_on_node(a_name);;
 
 	}
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
@@ -475,13 +475,13 @@ vector< vector <double> > Population::get_percent_age_per_szgroup_matrix() const
 }
 
 
-multimap<int,double>  Population::get_full_spatial_availability() const
+multimap<types::NodeId,double>  Population::get_full_spatial_availability() const
 {
 	return(full_spatial_availability);
 }
 
 
-multimap<int,double>  Population::get_field_of_coeff_diffusion_this_pop() const
+multimap<types::NodeId,double>  Population::get_field_of_coeff_diffusion_this_pop() const
 {
     return(field_of_coeff_diffusion_this_pop);
 }
@@ -493,7 +493,7 @@ multimap<int,double>  Population::get_overall_migration_fluxes() const
 
 
 
-map<int,double>  Population::get_oth_land() const
+map<types::NodeId,double>  Population::get_oth_land() const
 {
 	return(oth_land);
 }
@@ -760,12 +760,12 @@ void Population::set_param_sr(const vector<double>& _param_sr)
 }
 
 
-void Population::set_full_spatial_availability(multimap<int,double> _full_spatial_availability)
+void Population::set_full_spatial_availability(multimap<types::NodeId,double> _full_spatial_availability)
 {
 	full_spatial_availability= _full_spatial_availability;
 }
 
-void Population::set_field_of_coeff_diffusion_this_pop(multimap<int,double> _field_of_coeff_diffusion_this_pop)
+void Population::set_field_of_coeff_diffusion_this_pop(multimap<types::NodeId,double> _field_of_coeff_diffusion_this_pop)
 {
     field_of_coeff_diffusion_this_pop= _field_of_coeff_diffusion_this_pop;
 }
@@ -778,7 +778,7 @@ void Population::set_overall_migration_fluxes(multimap<int,double> _overall_migr
 }
 
 
-void Population::set_oth_land(map<int,double> _oth_land)
+void Population::set_oth_land(map<types::NodeId,double> _oth_land)
 {
 	oth_land= _oth_land;
 }
@@ -811,13 +811,13 @@ void Population::distribute_N()
 	{
 
 		// get a node
-		int idx_node = list_nodes[idx]->get_idx_node();
+        auto idx_node = list_nodes[idx]->get_idx_node();
 
 		// get avai for this node
 		vector<double> avai_this_node;
-		multimap<int,double>::iterator lower = full_spatial_availability.lower_bound(idx_node);
-		multimap<int,double>::iterator upper = full_spatial_availability.upper_bound(idx_node);
-		for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
+        auto lower = full_spatial_availability.lower_bound(idx_node);
+        auto upper = full_spatial_availability.upper_bound(idx_node);
+        for (auto pos=lower; pos != upper; pos++)
 			avai_this_node.push_back(pos->second);
 
 		// check avai
@@ -912,7 +912,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
    cout << "start diffusion for this pop...." << endl;
 
     vector<Node*> list_of_nodes = this->get_list_nodes();
-    vector<int> list_of_nodes_idx;
+    vector<types::NodeId> list_of_nodes_idx;
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
@@ -920,14 +920,14 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
     random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
-        int idx_node=list_of_nodes.at(n)->get_idx_node();
+        auto idx_node=list_of_nodes.at(n)->get_idx_node();
 
         // get coeff of diffusion per szgroup for this node
-        multimap<int,double> field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
+        auto field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
         vector<double> coeff;
-        multimap<int,double>::iterator lower = field_of_coeff_diffusion_this_pop.lower_bound(idx_node);
-        multimap<int,double>::iterator upper = field_of_coeff_diffusion_this_pop.upper_bound(idx_node);
-        for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
+        auto lower = field_of_coeff_diffusion_this_pop.lower_bound(idx_node);
+        auto upper = field_of_coeff_diffusion_this_pop.upper_bound(idx_node);
+        for (auto pos=lower; pos != upper; pos++)
             coeff.push_back(pos->second);
 
 
@@ -936,23 +936,24 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 
         // get the list of neighbouring nodes
-        vector<int> neighbour_nodes;
-        vertex_t u = idx_node;
+        vector<types::NodeId> neighbour_nodes;
+        vertex_t u = idx_node.toIndex();
         // Visit each edge exiting u
         for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
              edge_iter != adjacency_map[u].end();
              edge_iter++)
         {
-            neighbour_nodes.push_back(edge_iter->target);
+            neighbour_nodes.push_back(types::NodeId(edge_iter->target));
         }
-        remove_dups(neighbour_nodes);
+
+        std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
 
         // check if neighbouring nodes belong to the spatial extend of this pop
         // (no diffusion outside....caution: possible border effects because of this assumption e.g. accumulation at the border)
         vector<int> neighbour_nodes_on_spatial_extent;
         for (int nei=0; nei<neighbour_nodes.size(); ++nei)
            {
-           std::vector<int>::iterator it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
+           auto it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
            if(it != list_of_nodes_idx.end())
              {
              neighbour_nodes_on_spatial_extent.push_back(nei);

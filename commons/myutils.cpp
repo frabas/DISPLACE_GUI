@@ -96,8 +96,8 @@ struct pair_first_less
 //simple compute paths function>>=
 void DijkstraComputePaths(vertex_t source,
                           adjacency_map_t& adjacency_map,
-                          std::map<vertex_t, weight_t>& min_distance,
-                          std::map<vertex_t, vertex_t>& previous,
+                          spp::sparse_hash_map<vertex_t, weight_t> &min_distance,
+                          spp::sparse_hash_map<vertex_t, vertex_t> &previous,
                           std::vector<types::NodeId> relevant_nodes)
 {
     //initialize output parameters>>
@@ -170,10 +170,10 @@ void DijkstraComputePaths(vertex_t source,
 
 //get shortest path function>>=
 std::list<vertex_t> DijkstraGetShortestPathTo(
-        vertex_t target, std::map<vertex_t, vertex_t>& previous)
+        vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t>& previous)
 {
     std::list<vertex_t> path;
-    std::map<vertex_t, vertex_t>::iterator prev;
+    spp::sparse_hash_map<vertex_t, vertex_t>::iterator prev;
     vertex_t vertex = target;
     path.push_front(vertex);
     while((prev = previous.find(vertex)) != previous.end())
@@ -189,9 +189,9 @@ std::list<vertex_t> DijkstraGetShortestPathTo(
 // according to all the potential destination nodes for a given source node
 void SimplifyThePreviousMap(
         int source,
-        std::map<vertex_t, vertex_t>& previous,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
         std::vector<types::NodeId>& relevant_nodes,
-        std::map<vertex_t, weight_t>& min_distance,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
         string namesimu,
         string a_graph_name,
         string inputfolder)
@@ -233,7 +233,7 @@ void SimplifyThePreviousMap(
     a_previous_map.open(filename.c_str());
     a_previous_map << " key " << " value " << std::endl;
 
-    std::map<vertex_t, vertex_t>::iterator prev;
+    spp::sparse_hash_map<vertex_t, vertex_t>::iterator prev;
     for ( prev=previous.begin() ; prev != previous.end(); prev++ )
     {
         vertex_t vertex = prev->first;
@@ -255,7 +255,7 @@ void SimplifyThePreviousMap(
     a_min_distance.open(filename2.c_str());
     a_min_distance << " key " << " value " << std::endl;
 
-    std::map<vertex_t, weight_t>::iterator dis;
+    spp::sparse_hash_map<vertex_t, weight_t>::iterator dis;
     for ( dis=min_distance.begin() ; dis != min_distance.end(); dis++ )
     {
         vertex_t vertex = dis->first;
@@ -1551,8 +1551,8 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 
 
 vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
-                                         const deque<map<vertex_t, vertex_t> >& path_shop,
-                                         const deque<map<vertex_t, weight_t> >& min_distance_shop,
+                                         const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
+                                         const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                          int from,
                                          vector<types::NodeId> grounds)
 {
@@ -1560,12 +1560,12 @@ vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
     // tricky!
     int idx = it - idx_path_shop.begin();
 
-    map<vertex_t, vertex_t> previous = path_shop.at(idx);
+    auto previous = path_shop.at(idx);
     //std::list<map<int,int> >::iterator it_p = path_shop.begin();
     // advance(it_p, idx-1);
     //map<vertex_t, vertex_t> previous= *it_p;
 
-    map<vertex_t, weight_t> min_distance = min_distance_shop.at(idx);
+    auto min_distance = min_distance_shop.at(idx);
     // std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
     // advance(it_d, idx-1);
     // map<vertex_t, weight_t> min_distance= *it_d;

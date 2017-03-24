@@ -20,6 +20,7 @@
 
 #include"readdata.h"
 #include <helpers.h>
+#include <idtypes.h>
 #include <idtypeshelpers.h>
 
 #include <utils/LineNumberReader.h>
@@ -2603,7 +2604,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 }
 
 
-map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
+spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
     dout(cout <<"BEGIN: read map previous" << endl);
 
@@ -2613,7 +2614,7 @@ map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId s
     string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".bin";
 
     bool r;
-    map<types::NodeId::type, types::NodeId::type> previous;		 //key, value
+    spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> previous;		 //key, value
     try {
         displace::formats::legacy::BinaryGraphFileReader rdr;
         r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&previous](uint16_t key, uint16_t value) {
@@ -2634,7 +2635,7 @@ map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId s
     return previous;
 }
 
-map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
+spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
 {
     dout(cout <<"BEGIN: read min_distance" << endl);
 
@@ -2644,7 +2645,7 @@ map<types::NodeId::type, int> read_min_distance(types::NodeId source, string nam
     string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".bin";
 
     bool r;
-    map<types::NodeId::type, int> min_distance;		 //key, value
+    spp::sparse_hash_map<types::NodeId::type, int> min_distance;		 //key, value
     try {
         displace::formats::legacy::BinaryGraphFileReader rdr;
         r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&min_distance](uint16_t key, uint16_t value) {

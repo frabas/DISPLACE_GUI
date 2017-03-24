@@ -21,6 +21,8 @@
 #ifndef __MYUTILS_H
 #define __MYUTILS_H (1)
 
+#include <sparsepp/spp.h>
+
 #include <vesselcalendar.h>
 #include <idtypes.h>
 
@@ -169,17 +171,16 @@ typedef std::map<vertex_t, std::list<edge> > adjacency_map_t;
 
 void DijkstraComputePaths(vertex_t source,
                           adjacency_map_t& adjacency_map,
-                          std::map<vertex_t, weight_t>& min_distance,
-                          std::map<vertex_t, vertex_t>& previous,
+                          spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
+                          spp::sparse_hash_map<vertex_t, vertex_t>& previous,
                           std::vector<types::NodeId> relevant_nodes);
 
-std::list<vertex_t> DijkstraGetShortestPathTo(
-        vertex_t target, std::map<vertex_t, vertex_t>& previous);
+std::list<vertex_t> DijkstraGetShortestPathTo(vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t> &previous);
 
 void SimplifyThePreviousMap(int source,
-        std::map<vertex_t, vertex_t>& previous,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
         std::vector<types::NodeId> &relevant_nodes,
-        std::map<vertex_t, weight_t>& min_distance,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
         string namesimu,
         string a_graph_name,
         string inputfolder);
@@ -187,8 +188,8 @@ void SimplifyThePreviousMap(int source,
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
 vector<double> compute_distance_fgrounds(const vector<int> &idx_path_shop,
-                                         const deque<map<vertex_t, vertex_t> > &path_shop,
-                                         const deque<map<vertex_t, weight_t> > &min_distance_shop,
+                                         const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
+                                         const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                          int from,
                                          vector<types::NodeId> grounds);
 

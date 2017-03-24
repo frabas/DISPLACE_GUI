@@ -2811,8 +2811,8 @@ ofstream& freq_cpue)
 
 
 vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_shop,
-                                        const deque <map<vertex_t, vertex_t> >& path_shop,
-                                        const deque <map<vertex_t, weight_t> >& min_distance_shop)
+                                        const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
+                                        const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop)
 {
     vector <double> freq_grds = this->get_freq_fgrounds();
                                  // get_experiencedcpue_fgrounds_per_pop is scaled to 1
@@ -2941,8 +2941,8 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
 void Vessel::alloc_on_high_profit_grounds(int tstep,
                                           const vector <int>& idx_path_shop,
-                                          const deque <map<vertex_t, vertex_t> >& path_shop,
-                                          const deque <map<vertex_t, weight_t> >& min_distance_shop,
+                                          const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
+                                          const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                           ofstream& freq_profit)
 {
 
@@ -3015,8 +3015,8 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
 void Vessel::alloc_while_saving_fuel(int tstep,
                                      const vector <int>& idx_path_shop,
-                                     const deque <map<vertex_t, vertex_t> >& path_shop,
-                                     const deque <map<vertex_t, weight_t> >& min_distance_shop
+                                     const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
+                                     const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop
                                      )
 {
     UNUSED(tstep);
@@ -3175,8 +3175,8 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 
 
 void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& idx_path_shop,
-const deque<map<vertex_t, vertex_t> >& path_shop,
-const deque<map<vertex_t, weight_t> >& min_distance_shop,
+const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
+const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
 ofstream& freq_distance)
 {
 	// this is implicitly minimizing the fuel cost i.e. redirect the
@@ -3335,11 +3335,11 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         const DynAllocOptions& dyn_alloc_sce,
         int create_a_path_shop,
         const vector<int> &idx_path_shop,
-        const deque<map<vertex_t, vertex_t> > &path_shop,
-        const deque<map<vertex_t, weight_t> > &min_distance_shop,
+        const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
+        const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
         adjacency_map_t& adjacency_map,
-        map<vertex_t, weight_t>& min_distance,
-        map<vertex_t, vertex_t>& previous,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
         vector <types::NodeId>& relevant_nodes,
         multimap<int, int>& nodes_in_polygons,
         vector<string>& vertex_names,
@@ -3601,11 +3601,11 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         const DynAllocOptions &dyn_alloc_sce,
         int create_a_path_shop,
         const vector<int> &idx_path_shop,
-        const deque<map<vertex_t, vertex_t> > &path_shop,
-        const deque<map<vertex_t, weight_t> > &min_distance_shop,
+        const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
+        const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
         adjacency_map_t& adjacency_map,
-        map<vertex_t, weight_t>& min_distance,
-        map<vertex_t, vertex_t>& previous,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
         vector <types::NodeId>& relevant_nodes,
         const multimap<int, int>& nodes_in_polygons,
         vector<string>& vertex_names,
@@ -3857,11 +3857,11 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         const DynAllocOptions &dyn_alloc_sce,
         int create_a_path_shop,
         const vector<int> &idx_path_shop,
-        const deque<map<vertex_t, vertex_t> > &path_shop,
-        const deque<map<vertex_t, weight_t> > &min_distance_shop,
+        const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
+        const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
         adjacency_map_t& adjacency_map,
-        map<vertex_t, weight_t>& min_distance,
-        map<vertex_t, vertex_t>& previous,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
         vector <types::NodeId>& relevant_nodes,
         vector<string>& vertex_names,
         vector<Node* >& nodes,
@@ -4242,8 +4242,8 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                                         vector<Node *> &nodes,
                                         const vector<int> &idx_path_shop,
                                         const DynAllocOptions& dyn_alloc_sce,
-                                        const deque<map<vertex_t, vertex_t> > &path_shop,
-                                        const deque<map<vertex_t, weight_t> > &min_distance_shop)
+                                        const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
+                                        const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop)
 {
 
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
@@ -4700,11 +4700,11 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
                                   const vector <int>& idx_path_shop,
-                                  const deque<map<vertex_t, vertex_t> >& path_shop,
-                                  const deque<map<vertex_t, weight_t> >& min_distance_shop,
+                                  const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
+                                  const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                   adjacency_map_t& adjacency_map,
-                                  map<vertex_t, weight_t>& min_distance,
-                                  map<vertex_t, vertex_t>& previous,
+                                  spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
+                                  spp::sparse_hash_map<vertex_t, vertex_t>& previous,
                                   const vector <types::NodeId>& relevant_nodes,
                                   vector<string>& vertex_names,
                                   vector<Node* >& nodes,

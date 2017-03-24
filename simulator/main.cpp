@@ -198,8 +198,8 @@ ClosureOptions closure_opts;
 string biolsce;
 string fleetsce;
 int create_a_path_shop;
-deque<map<vertex_t, vertex_t> > path_shop;
-deque<map<vertex_t, weight_t> >  min_distance_shop;
+deque<spp::sparse_hash_map<vertex_t, vertex_t> > path_shop;
+deque<spp::sparse_hash_map<vertex_t, weight_t> >  min_distance_shop;
 vector <types::NodeId> idx_path_shop;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
@@ -3084,8 +3084,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		// for-loop over potential departure node
 		// TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
-        map<vertex_t, weight_t> min_distance;
-        map<vertex_t, vertex_t> previous;
+        spp::sparse_hash_map<vertex_t, weight_t> min_distance;
+        spp::sparse_hash_map<vertex_t, vertex_t> previous;
         min_distance.clear();
 		previous.clear();
 		//for (int i=3100; i<relevant_nodes.size(); i++) // change for this to debug in case the creation fails...

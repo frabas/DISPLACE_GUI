@@ -114,8 +114,8 @@ extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
 extern string fleetsce;
 extern int create_a_path_shop;
-extern deque<map<vertex_t, vertex_t> > path_shop;
-extern deque<map<vertex_t, weight_t> >  min_distance_shop;
+extern deque<spp::sparse_hash_map<vertex_t, vertex_t> > path_shop;
+extern deque<spp::sparse_hash_map<vertex_t, weight_t> >  min_distance_shop;
 extern vector <int> idx_path_shop;
 extern adjacency_map_t adjacency_map;
 extern vector<string> vertex_names;
@@ -172,8 +172,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     UNUSED(dt);
 
 
-    map<vertex_t, weight_t> min_distance;
-    map<vertex_t, vertex_t> previous;
+    spp::sparse_hash_map<vertex_t, weight_t> min_distance;
+    spp::sparse_hash_map<vertex_t, vertex_t> previous;
     vector <double> dist_to_ports;
 
     dout(cout  << "----------" << endl);

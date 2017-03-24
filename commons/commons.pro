@@ -83,6 +83,8 @@ HEADERS= \
     ../include/guiproto_struct.h \
     ../include/version.h \
     ../include/utils/make_unique.h \
+    ../include/vesselcalendar.h \
+    ../include/idtypes.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \

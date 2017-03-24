@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE( test_scenario_dat )
     displace::commons::Scenario ex = {
         DynAllocOptions(), PopSceOptions(), ClosureOptions(),
         "1", "2",
-        1, 2, 56, 10140, 57555, 6,
+        1, 2, 56, 10140, 57555, types::NodeId(6),
         7.1,
         true, false, true,
         { 100, 101 },
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     vector<double> ex_calib_oth_landings = { 2, 4 };
     vector<double> ex_calib_w = { 16, 32.6};;
     vector<double> ex_calib_cpue = {11, 11.11};
-    vector<int> ex_interesting_harbours = { 3, 6, 18, 29};
+    vector<types::NodeId> ex_interesting_harbours = { types::NodeId(3), types::NodeId(6), types::NodeId(18), types::NodeId(29)};
 
     std::istringstream is("# nbpops\n"
                           "2\n"
@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     vector<double> calib_oth_landings;
     vector<double> calib_w;
     vector<double> calib_cpue;
-    vector<int> interesting_harbours;
+    vector<types::NodeId> interesting_harbours;
 
     bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
                              calib_w, calib_cpue, interesting_harbours);

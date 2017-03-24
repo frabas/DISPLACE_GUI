@@ -52,48 +52,6 @@ T* end(T (&pArray)[N])
     return &pArray[0] + N;
 }
 
-void remove_dups(vector<int>& seq)
-{
-    sort( seq.begin(), seq.end() ) ;
-    seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
-}
-
-// to keep the first element of all the keys only:
-multimap<int,int>  remove_dups(multimap<int,int>& original_map)
-{
-    multimap<int,int> new_map;
-
-    while (original_map.size() > 0)
-    {
-        pair<int,int> element = *(original_map.begin());
-        new_map.insert(make_pair(element.first,element.second));
-        original_map.erase(element.first);
-    }
-    return(new_map);
-}
-
-
-// to remove key-value duplicates:
-multimap<int,int>::const_iterator find_pair(const multimap<int,int>& map, const pair<int, int>& pair)
-{
-    std::pair<multimap<int, int>::const_iterator ,multimap<int, int>::const_iterator > range = map.equal_range(pair.first);
-    for (multimap<int, int>::const_iterator p = range.first; p != range.second; ++p)
-        if (p->second == pair.second)
-            return p;
-    return map.end();
-}
-
-bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair)
-{
-    if (find_pair(map, pair) == map.end()) {
-        map.insert(pair);
-        return true;
-    }
-    return false;
-}
-
-
-
 /*
 void print( vector <string> & v )
 {
@@ -140,7 +98,7 @@ void DijkstraComputePaths(vertex_t source,
                           adjacency_map_t& adjacency_map,
                           std::map<vertex_t, weight_t>& min_distance,
                           std::map<vertex_t, vertex_t>& previous,
-                          std::vector<int> relevant_nodes)
+                          std::vector<types::NodeId> relevant_nodes)
 {
     //initialize output parameters>>
     for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
@@ -179,7 +137,6 @@ void DijkstraComputePaths(vertex_t source,
             weight_t distance_through_u = min_distance[u] + weight;
             //if (distance_through_u<700 && distance_through_u < min_distance[v])
             //if ( distance_through_u < min_distance[v])
-            std::vector<int>::iterator invalid;
             if (distance_through_u < min_distance[v])
             {
                 //remove v from queue>>
@@ -195,7 +152,7 @@ void DijkstraComputePaths(vertex_t source,
             // for speeding up the simu by reducing the size of the object "previous":
             // remove v from list of dest nodes if it is a dest node
             // then stop the search of paths if all dest nodes are reached...
-            invalid =remove(relevant_nodes.begin(), relevant_nodes.end(), v);
+            auto invalid =remove(relevant_nodes.begin(), relevant_nodes.end(), types::NodeId(v));
             relevant_nodes.erase(invalid, relevant_nodes.end());
 
         }
@@ -233,7 +190,7 @@ std::list<vertex_t> DijkstraGetShortestPathTo(
 void SimplifyThePreviousMap(
         int source,
         std::map<vertex_t, vertex_t>& previous,
-        std::vector<int>& relevant_nodes,
+        std::vector<types::NodeId>& relevant_nodes,
         std::map<vertex_t, weight_t>& min_distance,
         string namesimu,
         string a_graph_name,
@@ -246,7 +203,7 @@ void SimplifyThePreviousMap(
     // 1. compute all paths from the source to the set of destinations
     for (unsigned int i=0; i<relevant_nodes.size(); i++)
     {
-        std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i], previous);
+        std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i].toIndex(), previous);
 
         //paths.merge(path); // concatenate
         // we dont care about the order so replaced by:
@@ -1154,7 +1111,7 @@ bool fill_from_avai_nodes_with_pop(istream& in, map<int, double>& avai)
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& avai)
+bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<types::NodeId, double>& avai)
 {
 
     string line;
@@ -1164,7 +1121,7 @@ bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& a
         in >> key;
         double val;
         in >> val;
-        avai.insert(make_pair(key,val));
+        avai.insert(make_pair(types::NodeId(key),val));
     }
     dout(cout  << "read the availability at szgroup " << endl << flush);
     return true;
@@ -1174,7 +1131,7 @@ bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& a
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& coeffs)
+bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId, double>& coeffs)
 {
 
     string line;
@@ -1184,7 +1141,7 @@ bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& 
         in >> key;
         double val;
         in >> val;
-        coeffs.insert(make_pair(key,val));
+        coeffs.insert(make_pair(types::NodeId(key),val));
     }
     dout(cout  << "read the coeff of diffusion at szgroup " << endl << flush);
     return true;
@@ -1196,7 +1153,7 @@ bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& 
 fill in the oth_land attributes into a multimap
 @param the oth_land specification file, ...
 */
-bool fill_from_oth_land(istream& in, map<int, double>& oth_land)
+bool fill_from_oth_land(istream& in, map<types::NodeId, double>& oth_land)
 {
 
     string line;
@@ -1206,7 +1163,7 @@ bool fill_from_oth_land(istream& in, map<int, double>& oth_land)
         in >> key;
         double val;
         in >> val;
-        oth_land.insert(make_pair(key,val));
+        oth_land.insert(make_pair(types::NodeId(key),val));
     }
     dout(cout  << "read oth land " << endl << flush);
     return true;

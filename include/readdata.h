@@ -40,7 +40,7 @@ vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
 vector<double>& a_vector_line8,
 vector<double>& a_vector_line10,
 vector<double>& a_vector_line12,
-vector<int> &interesting_harbours);
+vector<types::NodeId> &interesting_harbours);
 
 bool read_config_file (std::istream &stream,
 int& a_int_line2,
@@ -49,7 +49,7 @@ vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
 vector<double>& a_vector_line8,
 vector<double>& a_vector_line10,
 vector<double>& a_vector_line12,
-vector<int> &interesting_harbours);
+vector<types::NodeId> &interesting_harbours);
 
 bool read_scenario_config_file(string folder_name_parameterization,
     string inputfolder,
@@ -100,9 +100,9 @@ bool read_firms_features(vector<int>& firm_ids,
 
 
 
-multimap<string, int> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, int> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, int> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> read_freq_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
@@ -111,21 +111,21 @@ multimap<string, double> read_vessels_tacs(string a_semester, string folder_name
 
 multimap<string, double> read_initial_fishing_credits(string folder_name_parameterization, string inputfolder);
 
-multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
-multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
-multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
+multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
 
 
 
 // harbour specific
-multimap<int, string> read_harbour_names(string folder_name_parameterization, string inputfolder);
-int read_prices_per_harbour(int i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
-int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, string> read_harbour_names(string folder_name_parameterization, string inputfolder);
+int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
+int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
 void read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 // metier specific
@@ -172,10 +172,10 @@ multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameteri
 multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
 multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
-multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
@@ -185,7 +185,7 @@ vector<double> read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name
 vector<double> read_initial_tac(int a_pop,  string folder_name_parameterization, string inputfolder);
 map<int, int> read_tac_percent_simulated(string folder_name_parameterization, string inputfolder);
 map<int, double> read_hyperstability_param(string folder_name_parameterization, string inputfolder);
-map<int, double> read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce);
+map<types::NodeId, double> read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce);
 map<string, double> read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
 multimap<int, double> read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
@@ -197,15 +197,15 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 vector <int> read_tsteps_years(string folder_name_parameterization, string inputfolder);
 
 //shortPaths
-map<int, int> read_maps_previous(int source, string namesimu, string inputfolder, string a_graph_name);
-map<int, int> read_min_distance(int source, string namesimu, string inputfolder, string a_graph_name);
+map<int, int> read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+map<int, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
 
 // area based management
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
 
 // Closure reading
 struct NodeBanningInfo {
-    int nodeId;
+    types::NodeId nodeId;
     std::vector<int> banned;
 };
 

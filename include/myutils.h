@@ -66,16 +66,51 @@ double simpson(double a, double b, int n, double S1, double S2){
 double trapezoidal(double a, double b, vector <double> sel);
 double myintegrand(double x, double S1, double S2);
 
-[[deprecated]]
-void remove_dups(vector<int>& seq);
+template <typename T>
+void remove_dups(vector<T>& seq)
+{
+    sort( seq.begin(), seq.end() ) ;
+    seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
+}
 
-[[deprecated]]
-multimap<int,int>  remove_dups(multimap<int,int>& original_map); // keep the first pair of all keys
+
+// to keep the first element of all the keys only:
+template<typename K, typename V>
+multimap<K,V>  remove_dups(multimap<K,V>& original_map)
+{
+    multimap<K,V> new_map;
+
+    while (original_map.size() > 0)
+    {
+        auto element = *(original_map.begin());
+        new_map.insert(make_pair(element.first,element.second));
+        original_map.erase(element.first);
+    }
+    return(new_map);
+}
+
 
 // remove key-value duplicates
-multimap<int,int>::const_iterator find_pair(const multimap<int,int>& map, const pair<int, int>& pair);
-bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair);
+// to remove key-value duplicates:
+template <typename K, typename V>
+typename multimap<K,V>::const_iterator find_pair(const multimap<K,V>& map, const pair<K, V>& pair)
+{
+    auto range = map.equal_range(pair.first);
+    for (auto p = range.first; p != range.second; ++p)
+        if (p->second == pair.second)
+            return p;
+    return map.end();
+}
 
+template <typename K, typename V>
+bool insert_if_not_present(multimap<K,V>& map, const pair<K,V>& pair)
+{
+    if (find_pair(map, pair) == map.end()) {
+        map.insert(pair);
+        return true;
+    }
+    return false;
+}
 
 //void print( vector <string> & v );
 //void print_d( vector <double> & v );
@@ -136,15 +171,14 @@ void DijkstraComputePaths(vertex_t source,
                           adjacency_map_t& adjacency_map,
                           std::map<vertex_t, weight_t>& min_distance,
                           std::map<vertex_t, vertex_t>& previous,
-                          std::vector<int> relevant_nodes);
+                          std::vector<types::NodeId> relevant_nodes);
 
 std::list<vertex_t> DijkstraGetShortestPathTo(
         vertex_t target, std::map<vertex_t, vertex_t>& previous);
 
-void SimplifyThePreviousMap(
-        int source,
+void SimplifyThePreviousMap(int source,
         std::map<vertex_t, vertex_t>& previous,
-        std::vector<int>& relevant_nodes,
+        std::vector<types::NodeId> &relevant_nodes,
         std::map<vertex_t, weight_t>& min_distance,
         string namesimu,
         string a_graph_name,
@@ -230,9 +264,9 @@ bool fill_from_firms_specifications(istream& in,
                                     vector<double> & lats);
 
 bool fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
-bool fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);
-bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& coeffs);
-bool fill_from_oth_land (istream& in, map<int, double>& oth_land);
+bool fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<types::NodeId, double> &avai);
+bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId, double> &coeffs);
+bool fill_from_oth_land (istream& in, map<types::NodeId, double> &oth_land);
 bool fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
 bool fill_from_relative_stability(istream& in, map<string, double>& relative_stability);
 bool fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);

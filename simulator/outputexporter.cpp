@@ -56,7 +56,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     logbook.tstepdep = v->get_tstep_dep();
     logbook.rtbb = v->get_reason_to_go_back();
     logbook.cumstm = v->get_cumsteaming();
-    logbook.node = v->get_loc()->get_idx_node();
+    logbook.node = v->get_loc()->get_idx_node().toIndex();
     logbook.idx = v->get_idx();
     name = v->get_name();
     logbook.timeatsea = v->get_timeatsea();

@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-
+#include <idtypes.h>
 
 #include <helpers.h>
 #include <assert.h>
@@ -164,7 +164,7 @@ int tstep;
 int nbpops;
 int nbbenthospops;
 int a_graph;
-int a_port;
+types::NodeId a_port;
 int nrow_coord;
 int nrow_graph;
 double graph_res;
@@ -190,7 +190,7 @@ vector <int> explicit_pops;
 vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
 vector <double> calib_cpue_multiplier;
-vector <int> int_harbours;
+vector <types::NodeId> int_harbours;
 displace::commons::Scenario scenario;
 DynAllocOptions dyn_alloc_sce;
 PopSceOptions dyn_pop_sce;
@@ -200,7 +200,7 @@ string fleetsce;
 int create_a_path_shop;
 deque<map<vertex_t, vertex_t> > path_shop;
 deque<map<vertex_t, weight_t> >  min_distance_shop;
-vector <int> idx_path_shop;
+vector <types::NodeId> idx_path_shop;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
 vector<map<vertex_t, vertex_t> > paths_shop;
@@ -208,15 +208,15 @@ vector<map<vertex_t, weight_t> > min_distances_shop;
 vector <int> idx_paths_shop;
 //map<vertex_t, weight_t> min_distance;
 //map<vertex_t, vertex_t> previous;
-vector<int> relevant_nodes;
+vector<types::NodeId> relevant_nodes;
 multimap<int, int> nodes_in_polygons;
-multimap<int, int> possible_metiers;
-multimap<int, double> freq_possible_metiers;
-multimap<int, double> gshape_cpue_per_stk_on_nodes;
-multimap<int, double> gscale_cpue_per_stk_on_nodes;
-vector<int> spe_fgrounds;
-vector<int> spe_fgrounds_init;
-vector<int> spe_harbours;
+multimap<types::NodeId, int> possible_metiers;
+multimap<types::NodeId, double> freq_possible_metiers;
+multimap<types::NodeId, double> gshape_cpue_per_stk_on_nodes;
+multimap<types::NodeId, double> gscale_cpue_per_stk_on_nodes;
+vector<types::NodeId> spe_fgrounds;
+vector<types::NodeId> spe_fgrounds_init;
+vector<types::NodeId> spe_harbours;
 vector<double> spe_freq_fgrounds;
 vector<double> spe_freq_fgrounds_init;
 vector<double> spe_freq_harbours;
@@ -224,7 +224,7 @@ vector<double> spe_vessel_betas_per_pop;
 vector<double> spe_percent_tac_per_pop;
 vector<double> spe_fishing_credits;
 vector <Node* > nodes;
-multimap<int, string> harbour_names;
+multimap<types::NodeId, string> harbour_names;
 vector<int> name_metiers;
 ofstream freq_cpue;
 ofstream freq_profit;
@@ -286,7 +286,7 @@ static void unlock()
     pthread_mutex_unlock(&glob_mutex);
 }
 
-bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
+bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<types::NodeId> &nodes)
 {
     string filename=  inputfolder + "/vesselsspe_"+folder_name_parameterization+"/vesselsspe_" + ftype + "_" + a_quarter + ".dat";
     ifstream in;
@@ -310,7 +310,7 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
         std::stringstream ss (line);
         ss >> vessel_name;
         ss >> node;
-        nodes.insert(node);
+        nodes.insert(types::NodeId(node));
     }
 
    outc(cout << "Loaded: " << filename << " " << n << " lines, " << nodes.size() << " relevant nodes");
@@ -319,9 +319,9 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
     return true;
 }
 
-bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<int> &ret)
+bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<types::NodeId> &ret)
 {
-    set<int> nodes;
+    set<types::NodeId> nodes;
 
     if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter1", nodes))
         return false;
@@ -340,7 +340,7 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
     if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "harbours", "quarter4", nodes))
         return false;
 
-    set<int>::iterator it = nodes.begin();
+    auto it = nodes.begin();
     while (it != nodes.end()) {
         ret.push_back(*it);
         ++it;
@@ -1114,7 +1114,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 	// check the class Node
-    Node node (1, 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0, nbpops, nbbenthospops, 5);
+    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
         << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
 	node.set_xy(2,2);
@@ -1277,12 +1277,14 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		if(graph_coord_harbour[i])
 		{
+            types::NodeId nId(i);
+
 			string a_name="none";
-			int a_point=0;
+            types::NodeId a_point;
 			// get the name of this harbour
-			multimap<int,string>::iterator lower_g = harbour_names.lower_bound(i);
-			multimap<int,string>::iterator upper_g = harbour_names.upper_bound(i);
-			for (multimap<int, string>::iterator pos=lower_g; pos != upper_g; pos++)
+            auto lower_g = harbour_names.lower_bound(nId);
+            auto upper_g = harbour_names.upper_bound(nId);
+            for (auto pos=lower_g; pos != upper_g; pos++)
 			{
 				a_point= pos->first;
 				a_name= pos->second;
@@ -1290,7 +1292,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             map<int,double> init_fuelprices;
 			multimap<int, double> fishprices_each_species_per_cat;
-            if(a_name!="none" && a_point== (int)i)
+            if(a_name!="none" && a_point== nId)
 			{
                outc(cout << "load prices for port " << a_name << " which is point " << a_point << endl);
                 int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, folder_name_parameterization, inputfolder);
@@ -1330,13 +1332,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			}
 
 
-            vector <int> init_usual_fgrounds;
-            init_usual_fgrounds.push_back(0);
+            vector <types::NodeId> init_usual_fgrounds;
+            init_usual_fgrounds.push_back(types::NodeId(0));
 
             vector <double> init_freq_usual_fgrounds;
             init_freq_usual_fgrounds.push_back(1.0);
 
-            nodes[i] =    (new Harbour(i,
+            nodes[i] =    (new Harbour(types::NodeId(i),
 				graph_coord_x[i],
 				graph_coord_y[i],
 				graph_coord_harbour[i],
@@ -1364,7 +1366,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		}
 		else
 		{
-			nodes[i] =    (new Node(i,
+            nodes[i] =    (new Node(types::NodeId(i),
 				graph_coord_x[i],
 				graph_coord_y[i],
 				graph_coord_harbour[i],
@@ -1678,7 +1680,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "Do the pop files init_proprecru_per_szgroup need a check?" << endl;
     multimap<int, double> init_proprecru_per_szgroup = read_init_proprecru_per_szgroup(folder_name_parameterization, inputfolder, biolsce);
     cout << "Do the pop files lst_idx_nodes_per_pop need a check?" << endl;
-    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
+    multimap<int, types::NodeId> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
     cout << "Do the pop files selected_szgroups need a check?" << endl;
     multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
 	// CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
@@ -1820,18 +1822,18 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			init_proprecru_per_szgroup.push_back(pos->second);
 
 		// input data, avai per szgroup on nodes and presence of the pop
-        multimap<int, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
-        multimap<int, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
+        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
+        multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
 
         // input data
-        multimap<int, double> field_of_coeff_diffusion_this_pop;
+        multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
         if(dyn_pop_sce.option(Options::diffuseN))
             {
             field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder);
             }
 
         // input data, read a other landings per node for this species
-        map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, sp, folder_name_parameterization, inputfolder, fleetsce);
+        map<types::NodeId, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, sp, folder_name_parameterization, inputfolder, fleetsce);
         map<string, double> relative_stability_key= read_relative_stability_keys(a_semester, sp, folder_name_parameterization, inputfolder);
 
 		// input data, growth transition, percent_szgroup_per_age_matrix
@@ -1896,14 +1898,14 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
 		{
-           outc(cout << "inform avai on nodes " << endl);
+            outc(cout << "inform avai on nodes " << endl);
 
             // get the vector of nodes of presence for this pop (an optimization to avoid looping over all nodes...)
-           outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-			vector <int> nodes_with_presence;
-			multimap<int,int>::iterator lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
-			multimap<int,int>::iterator upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
-			for (multimap<int, int>::iterator a_pos=lower_pop; a_pos != upper_pop; a_pos++)
+            outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
+            vector <types::NodeId> nodes_with_presence;
+            auto lower_pop = lst_idx_nodes_per_pop.lower_bound(sp);
+            auto upper_pop = lst_idx_nodes_per_pop.upper_bound(sp);
+            for (auto a_pos=lower_pop; a_pos != upper_pop; a_pos++)
 			{
 				nodes_with_presence.push_back (a_pos->second);
 			}
@@ -1913,10 +1915,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			for (unsigned int n=0; n< nodes_with_presence.size(); n++)
 			{
                 dout(cout  << ".");
-				vector<double> spat_avai_per_selected_szgroup = find_entries_i_d (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
+                auto spat_avai_per_selected_szgroup = find_entries (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
 				if(!spat_avai_per_selected_szgroup.empty())
 				{
-					nodes.at(nodes_with_presence.at(n))->set_avai_pops_at_selected_szgroup(sp, spat_avai_per_selected_szgroup);
+                    nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(sp, spat_avai_per_selected_szgroup);
 				}
 				else
 				{
@@ -2054,20 +2056,20 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if(dyn_alloc_sce.option(Options::fishing_credits))
     {
-        multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, inputfolder, a_graph_name);
+        auto initial_tariffs_on_nodes= read_initial_tariffs_on_nodes( folder_name_parameterization, inputfolder, a_graph_name);
 
 
        // init
        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
        {
 
-        int idx_node=nodes.at(a_idx)->get_idx_node();
+        auto idx_node=nodes.at(a_idx)->get_idx_node();
 
         // initial tariff for this particular node
-        multimap<int,double>::iterator lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
-        multimap<int,double>::iterator upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
+        auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
+        auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
         vector<double> init_tariffs;
-        for (multimap<int, double>::iterator pos=lower_init_cr; pos != upper_init_cr; pos++)
+        for (auto pos=lower_init_cr; pos != upper_init_cr; pos++)
             init_tariffs.push_back(pos->second);
 
         if(initial_tariffs_on_nodes.count(idx_node)==0) init_tariffs.push_back(0); // put 0 if this node is not informed
@@ -2328,9 +2330,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	// read the more complex objects (i.e. when several info for a same vessel)...
 	// also quarter specific but semester specific for the betas because of the survey design they are comning from...
-    multimap<string, int> fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
-    multimap<string, int> harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
+    auto fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
+    auto fgrounds_init = read_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
+    auto harbours = read_harbours(a_quarter, folder_name_parameterization, inputfolder);
 
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
     multimap<string, double> freq_fgrounds_init = read_freq_fgrounds_init(a_quarter, folder_name_parameterization, inputfolder);
@@ -2468,11 +2470,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		// read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
 		// for creating the vessel object, search into the multimaps
-		spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
-        spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids[i]);
+        spe_fgrounds = find_entries(fgrounds, vesselids[i]);
+        spe_fgrounds_init = find_entries(fgrounds_init, vesselids[i]);
         spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
         spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
-        spe_harbours = find_entries_s_i(harbours, vesselids[i]);
+        spe_harbours = find_entries(harbours, vesselids[i]);
 		spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
 		spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
 		spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
@@ -2488,11 +2490,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
-		int start_harbour;
+        types::NodeId start_harbour;
 		if(!spe_harbours.empty())
 		{
 								 // need to convert in array, see myRutils.cpp
-            vector<int> one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
+            auto one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
 			start_harbour= one_harbour[0];
 		}
 		else
@@ -2500,13 +2502,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			// if missing info for a given vessel for this quarter
            outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
 								 // CAUTION: LIKE A MAGIC NUMBER HERE!!!
-			start_harbour=find_entries_s_i(harbours, vesselids[0])[0];
+            start_harbour=find_entries(harbours, vesselids[0])[0];
 			spe_harbours.push_back(start_harbour);
 			spe_freq_harbours.push_back(1);
            outc(cout << "then take node: " << start_harbour << endl);
 		}
 
-		vessels[i]= new Vessel(nodes[start_harbour],
+        vessels[i]= new Vessel(nodes[start_harbour.toIndex()],
 			i,
 			vesselids[i],
 			nbpops,
@@ -2555,10 +2557,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // inform grounds in closed areas
         // TO DO: TO BE REMOVED BECAUSE DEPRECATED (replaced by area_monthly_closure)
-        const vector <int> &grds = vessels[i]->get_fgrounds();
-        vector <int> fgrounds_in_closed_areas;
+        const auto &grds = vessels[i]->get_fgrounds();
+        vector <types::NodeId> fgrounds_in_closed_areas;
         for(unsigned int i=0; i<grds.size();++i){
-            if(nodes.at(grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
+            if(nodes.at(grds.at(i).toIndex())->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
         }
         vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
 
@@ -2632,8 +2634,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		// a vector of vector (with dims [relative index of fishing ground nodes;  pops])
 		// we use a vector of vector instead of a multimap in order to speed up the simulation
 		// by avoiding a (costly) call to find_entries_i_d() in the do_catch() method
-		vector<int> gshape_name_nodes_with_cpue;
-		for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
+        vector<types::NodeId> gshape_name_nodes_with_cpue;
+        for(auto iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
 			iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
 		{
 			gshape_name_nodes_with_cpue.push_back (iter->first);
@@ -2641,8 +2643,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // sort and unique
         sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-        std::vector<int>::iterator it;
-        it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        auto it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
         gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
 
 
@@ -2655,9 +2656,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         for (unsigned int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
 		{
 								 // look into the multimap...
-			vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            auto gshape_cpue_species = find_entries (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
 								 // look into the multimap...
-			vector<double> gscale_cpue_species = find_entries_i_d (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            auto gscale_cpue_species = find_entries (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
 			if(!gshape_cpue_species.empty())
 			{
 								 // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
@@ -2672,7 +2673,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 		double expected_cpue=0;
 		vector <vector<double> > gshape_cpue_nodes_species = vessels.at(i)->get_gshape_cpue_nodes_species();
 		vector <vector<double> > gscale_cpue_nodes_species = vessels.at(i)->get_gscale_cpue_nodes_species();
-        const vector <int> &fgrounds= vessels.at(i)->get_fgrounds();
+        const auto &fgrounds= vessels.at(i)->get_fgrounds();
         vector <double> expected_cpue_this_pop (nbpops);
 		for(int pop = 0; pop < nbpops; pop++)
 		{
@@ -2800,16 +2801,16 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	}
 
 	//check vessel specifications
-   outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specific harbours:" << endl);
-	vector<int> harbs = vessels[0]->get_harbours();
+    outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specific harbours:" << endl);
+    auto harbs = vessels[0]->get_harbours();
     for (unsigned int i=0; i<harbs.size(); i++)
 	{
        outc(cout <<  harbs[i] << " "  << endl);
 	}
 
 	//check vessel specifications
-   outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specfic grounds:" << endl);
-	vector<int> grds = vessels[0]->get_fgrounds();
+    outc(cout << " vessel"<< vessels[0]->get_idx()  <<" have the specfic grounds:" << endl);
+    auto grds = vessels[0]->get_fgrounds();
     for (unsigned int i=0; i<grds.size(); i++)
 	{
        outc(cout <<  grds[i] << " "  << endl);
@@ -3109,13 +3110,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			{
                outc(cout << "compute all paths for the node: "<< relevant_nodes.at(i) << endl);
 								 // from the source to all nodes
-				DijkstraComputePaths(relevant_nodes.at(i), adjacency_map, min_distance, previous, relevant_nodes);
+                DijkstraComputePaths(relevant_nodes.at(i).toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
 
 				// remove unecessary entry keys in the map "previous" for optimisation and speed-up the simus
 				// (i.e. to increase the speed of the previous.find() algo...)
                 //out(cout << "simplify the map for the node: "<< relevant_nodes.at(i) << endl);
 								 // 'previous' is not modified but a new 'previous' is exported into a file here....
-				SimplifyThePreviousMap(relevant_nodes.at(i), previous,
+                SimplifyThePreviousMap(relevant_nodes.at(i).toIndex(), previous,
                     relevant_nodes, min_distance,
                     namefolderinput, inputfolder, a_graph_name);
                 min_distance.clear();
@@ -3603,8 +3604,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
                for (unsigned int v=0; v<vessels.size(); v++)
                   {
-                   spe_fgrounds      = find_entries_s_i(fgrounds, vessels.at(v)->get_name());
-                   spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vessels.at(v)->get_name());
+                   spe_fgrounds      = find_entries(fgrounds, vessels.at(v)->get_name());
+                   spe_freq_fgrounds = find_entries(freq_fgrounds, vessels.at(v)->get_name());
 
                    // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << "   spe_freq_fgrounds.size() is "<< spe_freq_fgrounds.size() << endl;
                    vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
@@ -3637,7 +3638,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            for (unsigned int i=0; i<populations.size(); i++)
            {
                // read a other landings per node for this species
-               map<int, double> oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
+               auto oth_land= read_oth_land_nodes_with_pop(a_semester, a_month, i, folder_name_parameterization, inputfolder, fleetsce);
                populations.at(i)->set_oth_land(oth_land);
            }
 
@@ -3710,9 +3711,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
-				spe_fgrounds = find_entries_s_i(fgrounds, vesselids.at(v));
-                spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids.at(v));
-                spe_harbours = find_entries_s_i(harbours, vesselids.at(v));
+                spe_fgrounds = find_entries(fgrounds, vesselids.at(v));
+                spe_fgrounds_init = find_entries(fgrounds_init, vesselids.at(v));
+                spe_harbours = find_entries(harbours, vesselids.at(v));
 				spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids.at(v));
                 spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids.at(v));
                 spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids.at(v));
@@ -3725,10 +3726,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					// if missing info for a given vessel for this quarter
                    outc(cout << "no specified harbour in this quarter for this vessel..." << endl);
                                  // CAUTION: TAKEN FROM THE PREVIOUS QUARTER!
-					int start_harbour=vessels.at(v)->get_harbours()[0];
+                    auto start_harbour=vessels.at(v)->get_harbours()[0];
 					spe_harbours.push_back(start_harbour);
 					spe_freq_harbours.push_back(1);
-                   outc(cout << "then take node: " << start_harbour << endl);
+                    outc(cout << "then take node: " << start_harbour << endl);
 				}
 
 				// RE-SET VESSELS..
@@ -3805,28 +3806,28 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 // inform grounds in closed areas
                 // TO DO: TO BE REMOVED BECAUSE DEPRECATED
-                const vector<int> &new_grds = vessels.at(v)->get_fgrounds();
-                vector<int> fgrounds_in_closed_areas;
+                const auto &new_grds = vessels.at(v)->get_fgrounds();
+                vector<types::NodeId> fgrounds_in_closed_areas;
                 for(unsigned int i=0; i<new_grds.size();++i)
                 {
-                    if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
+                    if(nodes.at(new_grds.at(i).toIndex())->evaluateAreaType()==1)
+                        fgrounds_in_closed_areas.push_back(new_grds.at(i));
                 }
-               vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+                vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
 
 
 
                 // ...also for the particular cpue_nodes_species element
                 dout(cout << "re-set vessels step2..."  << endl);
-                vector<int> gshape_name_nodes_with_cpue;
-				for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
-					iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
+                vector<types::NodeId> gshape_name_nodes_with_cpue;
+                for(auto iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
+                    iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
 				{
 					gshape_name_nodes_with_cpue.push_back (iter->first);
 				}
                 // sort and unique
                 sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-                std::vector<int>::iterator it;
-                it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+                auto it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
                 gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
 
 				// init cpue_nodes_species for this vessel
@@ -3838,9 +3839,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 for (unsigned int n=0; n< gshape_name_nodes_with_cpue.size(); n++)
 				{
 								 // look into the multimap...
-					vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+                    auto gshape_cpue_species = find_entries (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
 								 // look into the multimap...
-					vector<double> gscale_cpue_species = find_entries_i_d (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+                    auto gscale_cpue_species = find_entries (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
 					if(!gshape_cpue_species.empty())
 					{
 								 // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
@@ -3856,7 +3857,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 double expected_cpue=0;
 				vector <vector<double> > gshape_cpue_nodes_species = vessels.at(v)->get_gshape_cpue_nodes_species();
 				vector <vector<double> > gscale_cpue_nodes_species = vessels.at(v)->get_gscale_cpue_nodes_species();
-                const vector <int> &fgrounds= vessels.at(v)->get_fgrounds();
+                const auto &fgrounds= vessels.at(v)->get_fgrounds();
 				vector <double> expected_cpue_this_pop (nbpops);
 				for(int pop = 0; pop < nbpops; pop++)
 				{
@@ -3965,7 +3966,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 				//
 								 // to force re-computation of the fuel saving scenario
-				vessels.at(v)->set_previous_harbour_idx(0);
+
+                // TODO check: nodeId=0 is a valid value. Perhaps it should be changed to InvalidNodeId ?
+                vessels.at(v)->set_previous_harbour_idx(types::NodeId(0));
 
 				// send a message to the vessel to force it for a change in fishing grounds (for the vessels that are fishing now or on their way to fish)
 				// because we have just changed the list of fishing grounds! so maybe some vessels are fishing on some nodes
@@ -4082,8 +4085,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					out << i;
 
 					// read a new spatial_availability
-                    multimap<int,double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
-                    multimap<int,double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
+                    auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
+                    auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
 					populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
 					// read a other landings per node for this species
@@ -4100,11 +4103,11 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     //then, re-set the list_nodes and the pop_names_on_node
 					// from the new area distribution given by this new spatial avai
 					vector<Node* > list_nodes;
-					for(multimap<int, double>::iterator iter=avai_szgroup_nodes_with_pop.begin(); iter != avai_szgroup_nodes_with_pop.end();
+                    for(auto iter=avai_szgroup_nodes_with_pop.begin(); iter != avai_szgroup_nodes_with_pop.end();
 						iter = avai_szgroup_nodes_with_pop.upper_bound( iter->first ) )
 					{
-						list_nodes.push_back (nodes[  iter->first  ]);
-						nodes[ iter->first ]->set_pop_names_on_node(i);
+                        list_nodes.push_back (nodes[  iter->first.toIndex()  ]);
+                        nodes[ iter->first.toIndex() ]->set_pop_names_on_node(i);
 						//   check per node
 						//   vector <int> pop_names = nodes[ iter->first ]->get_pop_names_on_node();
 						//   cout << "Node " << iter->first << endl;
@@ -4134,15 +4137,15 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					}
 
 					// re-read presence node for this semester
-                    multimap<int, int> lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
+                    auto lst_idx_nodes_per_pop= read_lst_idx_nodes_per_pop(a_semester, folder_name_parameterization, inputfolder, str_rand_avai_file);
 
                     // finally, re-init avai (for selected szgroup) on each node for this pop (the avai used in export_impact)
 					// 1. get the vector of nodes of presence for this pop (optimisztion to avoid looping over all nodes...)
-                   outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
-					vector <int> nodes_with_presence;
-					multimap<int,int>::iterator lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
-					multimap<int,int>::iterator upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
-					for (multimap<int, int>::iterator a_pos=lower_pop; a_pos != upper_pop; a_pos++)
+                    outc(cout << "first find the list of nodes with presence for this pop (this quarter)..." << endl);
+                    vector <types::NodeId> nodes_with_presence;
+                    auto lower_pop = lst_idx_nodes_per_pop.lower_bound(i);
+                    auto upper_pop = lst_idx_nodes_per_pop.upper_bound(i);
+                    for (auto a_pos=lower_pop; a_pos != upper_pop; a_pos++)
 					{
 						nodes_with_presence.push_back (a_pos->second);
 					}
@@ -4152,10 +4155,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					for (unsigned int n=0; n< nodes_with_presence.size(); n++)
 					{
                         dout(cout  << ".");
-						vector<double> spat_avai_per_selected_szgroup = find_entries_i_d (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
+                        auto spat_avai_per_selected_szgroup = find_entries (avai_szgroup_nodes_with_pop, nodes_with_presence.at(n));
 						if(!spat_avai_per_selected_szgroup.empty())
 						{
-							nodes.at(nodes_with_presence.at(n))->set_avai_pops_at_selected_szgroup(i, spat_avai_per_selected_szgroup);
+                            nodes.at(nodes_with_presence.at(n).toIndex())->set_avai_pops_at_selected_szgroup(i, spat_avai_per_selected_szgroup);
 						}
 						else
 						{
@@ -4210,9 +4213,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            if(nodes.at(i)->get_is_harbour())
               {
                vector<int>  vids_on_harbours =nodes.at(i)->get_vid();
-               vector<int> fgrounds;
-               multimap<int, double> grounds_cpues_harbour_knowledge;
-               multimap<int, int> grounds_mets_harbour_knowledge;
+               vector<types::NodeId> fgrounds;
+               multimap<types::NodeId, double> grounds_cpues_harbour_knowledge;
+               multimap<int, types::NodeId> grounds_mets_harbour_knowledge;
                multimap<int, double> freq_grounds_mets_harbour_knowledge;
                vector<double> cpue_fgrounds;
                vector<double> freq_fgrounds;
@@ -4222,21 +4225,21 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   dout(cout << "there are some vids on " <<  nodes.at(i)->get_name() << endl);
                   for (unsigned int vi=0; vi<vids_on_harbours.size(); ++vi)
                     {
-                    vector<int>   some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
-                    vector<double> some_cpues  = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
+                    auto some_grounds = vessels.at(vids_on_harbours.at(vi))->get_fgrounds();
+                    auto some_cpues  = vessels.at(vids_on_harbours.at(vi))->get_experiencedcpue_fgrounds();
 
-                    const multimap<int, int> &poss_met  = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
+                    const auto &poss_met  = vessels.at(vids_on_harbours.at(vi))->get_possible_metiers();
                     for (unsigned int gr=0; gr<some_grounds.size(); ++gr)
                       {
 
                       // cpues
-                      int a_ground = some_grounds.at(gr);
+                      auto a_ground = some_grounds.at(gr);
                       double a_cpue= some_cpues.at(gr);
                       grounds_cpues_harbour_knowledge.insert(make_pair(a_ground,a_cpue));
                       fgrounds.push_back(some_grounds.at(gr));
 
                       // mets
-                      vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, a_ground );
+                      auto metiers_on_grd = find_entries( poss_met, a_ground );
                       if(metiers_on_grd.size()!=0)
                       {
 
@@ -4260,9 +4263,8 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
                      {
                      int cnt = grounds_cpues_harbour_knowledge.count(fgrounds.at(gr));
-                     multimap<int,double>::iterator it;
                      double sum =0;
-                     for (it=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).first; it!=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).second; ++it)
+                     for (auto it=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).first; it!=grounds_cpues_harbour_knowledge.equal_range(fgrounds.at(gr)).second; ++it)
                         {
                          sum += (*it).second;
                         }
@@ -4305,7 +4307,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                else
                {
                dout(cout << "there are NO vids on " <<  nodes.at(i)->get_name() << endl);
-               fgrounds.push_back(i); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
+               fgrounds.push_back(types::NodeId(i)); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                //freq_fgrounds.push_back(0.0000001); // CAUTION, an harbour should not be a fground! just used to detect that no fground informed
                }
 
@@ -4343,23 +4345,23 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
 
             //1. draw a ground
-            vector <int>    grds      = vessels.at(v)->get_fgrounds();
-            vector <double> freq_grds = vessels.at(v)->get_freq_fgrounds();
+            auto grds      = vessels.at(v)->get_fgrounds();
+            auto freq_grds = vessels.at(v)->get_freq_fgrounds();
                                          // need to convert in array, see myRutils.cpp
             if(!grds.empty())
             {
             int idx_max = max_element (freq_grds.begin(), freq_grds.end()) - freq_grds.begin();
-            int ground=grds.at(idx_max);
+            auto ground=grds.at(idx_max);
             cout << vessels.at(v)->get_name() << ": ground is " << ground << endl;
 
 
             //2. get possible metiers on this ground
-            const multimap<int, int>    &poss_met        = vessels.at(v)->get_possible_metiers();
-            const multimap<int, double> &freq_poss_met   = vessels.at(v)->get_freq_possible_metiers();
-            vector<int>    metiers_on_grd      = find_entries_i_i( poss_met, ground );
-            vector<double> freq_metiers_on_grd = find_entries_i_d( freq_poss_met, ground );
+            const auto    &poss_met        = vessels.at(v)->get_possible_metiers();
+            const auto &freq_poss_met   = vessels.at(v)->get_freq_possible_metiers();
+            auto metiers_on_grd      = find_entries( poss_met, ground );
+            auto freq_metiers_on_grd = find_entries( freq_poss_met, ground );
                                      // need to convert in array, see myRutils.cpp
-            vector<int>    a_met               = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
+            auto a_met               = do_sample(1, metiers_on_grd.size(), metiers_on_grd, freq_metiers_on_grd);
 
             if(metiers_on_grd.size()!=0)
             {
@@ -4370,23 +4372,23 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_metier(  metiers[ 0 ]  );   // dangerous fix
             }
 
-            vector <int>    harbs      = vessels.at(v)->get_harbours();
-            vector <double> freq_harbs = vessels.at(v)->get_freq_harbours();
+            auto harbs      = vessels.at(v)->get_harbours();
+            auto freq_harbs = vessels.at(v)->get_freq_harbours();
             if(freq_harbs.empty())
             {
               cout << "check why..." << endl;
             }
 
             int idx_max2               = max_element (freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
-            int a_node                 = harbs.at(idx_max2);  // cause the decision is taken in harbour...
-            cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node)->get_idx_node() << " is in harb?`" <<
-                    nodes.at(a_node)->get_is_harbour() << " ...cause the decision is taken in harbour..." << endl;
+            auto a_node = harbs.at(idx_max2);  // cause the decision is taken in harbour...
+            cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node.toIndex())->get_idx_node() << " is in harb?`" <<
+                    nodes.at(a_node.toIndex())->get_is_harbour() << " ...cause the decision is taken in harbour..." << endl;
             int current_metier = vessels.at(v)->get_metier()->get_name();
             cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
-            int nbpops         = nodes.at(a_node)->get_nbpops();
+            int nbpops         = nodes.at(a_node.toIndex())->get_nbpops();
             // TO DO:
-            vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds_this_met(current_metier);
-            vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds_this_met(current_metier);
+            auto grounds_from_harbours        = nodes.at(a_node.toIndex())->get_usual_fgrounds_this_met(current_metier);
+            auto freq_grounds_from_harbours   = nodes.at(a_node.toIndex())->get_freq_usual_fgrounds_this_met(current_metier);
             //vector <int>            grounds_from_harbours        = nodes.at(a_node)->get_usual_fgrounds();
             //vector <double>         freq_grounds_from_harbours   = nodes.at(a_node)->get_freq_usual_fgrounds();
             if(grounds_from_harbours.size()==1)
@@ -4398,12 +4400,12 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vector <double>         experiencedcpue_fgrounds(grounds_from_harbours.size());
             vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (grounds_from_harbours.size(), vector<double>(nbpops));
             vector <double>         freq_experiencedcpue_fgrounds(grounds_from_harbours.size());
-            multimap  <int,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
-            multimap  <int,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
+            multimap  <types::NodeId,int>     possible_metiers_from_harbours;     // = nodes.at(a_node)->get_usual_metiers();
+            multimap  <types::NodeId,double>  freq_possible_metiers_from_harbours; //= nodes.at(a_node)->get_freq_usual_metiers();
             for(unsigned int gr=0; gr<grounds_from_harbours.size();++gr)
                { // rebuild assuming deploying one metier spread over the entire range from this harbour...
-               possible_metiers_from_harbours.insert(std::pair<int,int>(grounds_from_harbours.at(gr),current_metier));
-               freq_possible_metiers_from_harbours.insert(std::pair<int,double>(grounds_from_harbours.at(gr), 1.0));
+               possible_metiers_from_harbours.insert(std::make_pair(grounds_from_harbours.at(gr),current_metier));
+               freq_possible_metiers_from_harbours.insert(std::make_pair(grounds_from_harbours.at(gr), 1.0));
                }
 
             cout << vessels.at(v)->get_name() << ": grounds_from_harbours is " <<  endl;
@@ -4475,11 +4477,12 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             vessels.at(v)->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
 
             // inform grounds in closed areas
-            vector<int> new_grds = vessels.at(v)->get_fgrounds();
-            vector<int> fgrounds_in_closed_areas;
+            auto new_grds = vessels.at(v)->get_fgrounds();
+            vector<types::NodeId> fgrounds_in_closed_areas;
             for(unsigned int i=0; i<new_grds.size();++i)
             {
-                if(nodes.at(new_grds.at(i))->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(new_grds.at(i));
+                if(nodes.at(new_grds.at(i).toIndex())->evaluateAreaType()==1)
+                    fgrounds_in_closed_areas.push_back(new_grds.at(i));
             }
            vessels.at(v)->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
           }
@@ -4579,7 +4582,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        cout << " Update the tariff map....at " << tstep << endl;
 
          // obtain the list of idx relevant nodes for these tariff pops
-         vector <int> list_nodes_idx;
+         vector <types::NodeId> list_nodes_idx;
          for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
          {
             dout(cout << "Get the list of nodes for the tariff pop " << populations.at(tariff_pop.at(ipop))->get_name() << endl);
@@ -4608,9 +4611,9 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          {
              for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
              {
-                cumcatches+= nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop);
+                cumcatches+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
              }
-             cumeffort+= nodes[list_nodes_idx.at(inode)]->get_cumftime();
+             cumeffort+= nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
          }
          //cout << " cumcatches of reference for the update is.... " << cumcatches << endl;
          //cout << " cumeffort of reference for the update is.... " << cumeffort << endl;
@@ -4623,13 +4626,13 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          double tariff_this_node, node_lpue, nb_times_diff, effort_on_this_node;
          for (unsigned int inode=0; inode < list_nodes_idx.size(); ++inode)
          {
-             tariff_this_node =  nodes[list_nodes_idx.at(inode)]->get_tariffs().at(0);
+             tariff_this_node =  nodes[list_nodes_idx.at(inode).toIndex()]->get_tariffs().at(0);
 
-             effort_on_this_node = nodes[list_nodes_idx.at(inode)]->get_cumftime();
+             effort_on_this_node = nodes[list_nodes_idx.at(inode).toIndex()]->get_cumftime();
              double cumcatches_this_node=0;
              for (unsigned int ipop=0; ipop <tariff_pop.size();++ipop)
              {
-                cumcatches_this_node+=nodes[list_nodes_idx.at(inode)]->get_cumcatches_per_pop().at(ipop);
+                cumcatches_this_node+=nodes[list_nodes_idx.at(inode).toIndex()]->get_cumcatches_per_pop().at(ipop);
              }
              node_lpue = cumcatches_this_node /effort_on_this_node;
 
@@ -4661,7 +4664,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             if(count1==count2)  updated_tariff =arbitary_breaks_for_tariff.at(count2);
 
             // update the tariff (unless the effort on this node is 0)
-            if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode)]->set_tariffs(0, updated_tariff);
+            if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
             //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
 
          }

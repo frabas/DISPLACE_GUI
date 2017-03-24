@@ -85,6 +85,7 @@ HEADERS= \
     ../include/utils/make_unique.h \
     ../include/vesselcalendar.h \
     ../include/idtypes.h \
+    ../include/idtypeshelpers.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \

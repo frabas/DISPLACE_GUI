@@ -48,7 +48,7 @@ class Population
             vector<double> init_M_at_szgroup,
             const vector<double> &init_proprecru_at_szgroup,
             const vector<double> &param_sr,
-            const multimap<int,int> &lst_idx_nodes_per_pop,
+            const multimap<int,types::NodeId> &lst_idx_nodes_per_pop,
             const multimap<types::NodeId,double> &full_spatial_availability,
             const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
             const map<types::NodeId,double> &oth_land,

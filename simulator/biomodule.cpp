@@ -290,7 +290,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector<Node* > a_list_nodes       = populations.at(sp)->get_list_nodes();
             
 
-            map<int,double> map_oth           = populations.at(sp)->get_oth_land();
+            auto map_oth           = populations.at(sp)->get_oth_land();
 
             outc(cout << "landings so far for this pop " << sp << ", before applying oth_land " <<
                 populations.at(name_pop)->get_landings_so_far() << endl);
@@ -370,8 +370,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         sort (polygon_nodes.begin(), polygon_nodes.end());
                         */
                         //if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node()))
-                        int grd= a_list_nodes.at(n)->get_idx_node();
-                        if (nodes.at(grd)->evaluateAreaType()==1 ) // TO DO: should be improved to allow other in the restricted area concerning explicit vessels only...
+                        auto grd= a_list_nodes.at(n)->get_idx_node();
+                        if (nodes.at(grd.toIndex())->evaluateAreaType()==1 ) // TO DO: should be improved to allow other in the restricted area concerning explicit vessels only...
                         {
                             // then, this is a closed node!
                             cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node;
@@ -442,7 +442,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 vector <double> pressure_per_szgroup_pop= a_list_nodes.at(n)->get_pressure_pops_at_szgroup(name_pop);
 
                 // a check
-                if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
+                if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436 && name_pop==9)
                 {
                    outc(cout << "N_at_szgroup_at_month_start" << endl);
                     for(unsigned int i=0; i<N_at_szgroup_at_month_start.size(); i++)
@@ -474,7 +474,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 }
 
                 //check
-                if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
+                if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436 && name_pop==9)
                 {
                    outc(cout << "N_at_szgroup" << endl);
                     for(unsigned int i=0; i<N_at_szgroup.size(); i++)
@@ -486,7 +486,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 {
 
                     // check
-                    if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
+                    if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436 && name_pop==9)
                     {
                        outc(cout << "pressure_per_szgroup_pop" << endl);
                         for(unsigned int i=0; i<pressure_per_szgroup_pop.size(); i++)
@@ -496,7 +496,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     }
 
                     // check
-                    if(a_list_nodes.at(n)->get_idx_node()==2436 && name_pop==9)
+                    if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436 && name_pop==9)
                     {
                        outc(cout << "tot_removals " << tot_removals << endl);
                        outc(cout << "tot_B " << tot_B << endl);

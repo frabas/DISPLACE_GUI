@@ -2,10 +2,12 @@
 
 help() {
   cat << __EOF
-Usage: memtest.sh [-m] [-p path] [-h] [MOD] [MODEL]
+Usage: memtest.sh [-p path] [-m|-c]  [-h] [MOD] [MODEL]
 
-  -m          Run massif
   -p path     Run an alternative binary (build/release-qt)
+  -m          Run massif
+  -c          Run memcheck
+  --steps n   Run n steps
   -h          Show this help
 
   MOD         The mod (testexample)
@@ -24,16 +26,26 @@ STEPS=8762
 while [ "$1" != "" ] ; do
   case "$1" in
     -m)
-      RUN="valgrind --tool=massif --massif-out-file=${SRC}/massive.out"
+      RUN="valgrind --tool=massif --massif-out-file=${SRC}/massif.out"
       shift
       ;;
+    -c)
+      RUN="valgrind --tool=memcheck --log-file=${SRC}/memcheck.out"
+      shift
+      ;;    
     -p)
       shift
       MYPATH=`realpath $1`
       shift
       ;;
+    --steps)
+      shift
+      STEPS=$1
+      shift
+      ;;
     -h)
       help
+      exit 1
       ;;
     *)
       break

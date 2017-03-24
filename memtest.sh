@@ -21,8 +21,6 @@ MODEL=baseline
 SIMU=simu2
 STEPS=8762
 
-export LD_LIBRARY_PATH=${MYPATH}
-
 while [ "$1" != "" ] ; do
   case "$1" in
     -m)
@@ -49,6 +47,8 @@ fi
 if [ "$2" != "" ] ; then
   MODEL=$2
 fi
+
+export LD_LIBRARY_PATH=${MYPATH}
 
 SIM=/home/happycactus/Documents/Progetti/displace/Applications/DISPLACE_input_${MOD}
 

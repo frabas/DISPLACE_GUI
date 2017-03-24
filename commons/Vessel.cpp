@@ -4014,9 +4014,8 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 	{
         dout(cout << "new roadmap to port is: ");
 		// check
-		list<int>::iterator pos;
 		list<vertex_t> lst = this->get_roadmap();
-		for(pos=lst.begin(); pos!=lst.end(); pos++)
+        for(auto pos=lst.begin(); pos!=lst.end(); pos++)
 		{
             dout(cout << *pos << " ");
 		}

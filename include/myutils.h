@@ -154,7 +154,7 @@ Container& split(
 //---------------------------------------//
 
 //simple graph type definition headers>>
-typedef int vertex_t;
+typedef types::NodeId::type vertex_t;
 typedef int weight_t;			 // 'integer' instead of 'double' to speedup c++
 
 struct edge

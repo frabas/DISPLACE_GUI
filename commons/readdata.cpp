@@ -2603,7 +2603,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 }
 
 
-map<int, int> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
+map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
     dout(cout <<"BEGIN: read map previous" << endl);
 
@@ -2613,7 +2613,7 @@ map<int, int> read_maps_previous(types::NodeId source, string namesimu,  string 
     string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".bin";
 
     bool r;
-    map<int, int> previous;		 //key, value
+    map<types::NodeId::type, types::NodeId::type> previous;		 //key, value
     try {
         displace::formats::legacy::BinaryGraphFileReader rdr;
         r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&previous](uint16_t key, uint16_t value) {
@@ -2634,7 +2634,7 @@ map<int, int> read_maps_previous(types::NodeId source, string namesimu,  string 
     return previous;
 }
 
-map<int, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
+map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
 {
     dout(cout <<"BEGIN: read min_distance" << endl);
 
@@ -2644,7 +2644,7 @@ map<int, int> read_min_distance(types::NodeId source, string namesimu, string in
     string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".bin";
 
     bool r;
-    map<int, int> min_distance;		 //key, value
+    map<types::NodeId::type, int> min_distance;		 //key, value
     try {
         displace::formats::legacy::BinaryGraphFileReader rdr;
         r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&min_distance](uint16_t key, uint16_t value) {

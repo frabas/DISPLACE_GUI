@@ -11,6 +11,9 @@ class Id {
 private:
     C id;
 public:
+    using type = C;
+    using traits = Type;
+
     explicit Id(C x) : id(x) {}
 
     friend std::ostream &operator << (std::ostream &ss, const Id &c) {

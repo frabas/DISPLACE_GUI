@@ -109,7 +109,7 @@ void PopulationDistributionDataMergerStrategy::processLine (int linenum, QString
     foreach (std::shared_ptr<NodeData> node, nodes) {
         QMutexLocker lock(&mutex);
 
-        res.node = node->get_idx_node();
+        res.node = node->get_idx_node().toIndex();
         ResultKey key = genResultKey(res);
 
         double dist;

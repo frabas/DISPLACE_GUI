@@ -79,6 +79,8 @@
 
 #include <R/rconsole.h>
 
+#include <idtypeshelpers.h>
+
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
@@ -114,6 +116,16 @@ const int MainWindow::playTimerDefault = 20;
 const int MainWindow::playTimerRates[] = {
     50, 40, 25, 20, 15, 10, 5, 2, 1
 };
+
+namespace types { namespace helpers {
+template <typename IDX, typename C>
+QList<IDX> toIdQList(const QList<C> &c) {
+    QList<IDX> l;
+    for (auto v : c)
+        l.push_back(IDX(v));
+    return l;
+}
+} } // Ns
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -607,8 +619,8 @@ void MainWindow::editorAddEdge(int from, int to)
 
     qDebug() << "EDGE" << from << to << d;
 
-    int id1 = currentModel->addEdge(from, to, d / 1000.0);
-    int id2 = currentModel->addEdge(to, from, d / 1000.0);
+    int id1 = currentModel->addEdge(types::NodeId(from), types::NodeId(to), d / 1000.0);
+    int id2 = currentModel->addEdge(types::NodeId(to), types::NodeId(from), d / 1000.0);
 
     mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[from]->getAdiacencyByIdx(id1), true);
     mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[to]->getAdiacencyByIdx(id2), true);
@@ -2431,7 +2443,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
     if (dlg.exec() == QDialog::Accepted) {
         if (dlg.isRemoveLinksSet()) {
             foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
-                currentModel->getNodesList()[harbour->mHarbour->get_idx_node()]->removeAllAdiacencies();
+                currentModel->getNodesList()[harbour->mHarbour->get_idx_node().toIndex()]->removeAllAdiacencies();
             }
         }
 
@@ -2442,7 +2454,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
 #endif
 
         foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
-            int harbid = harbour->mHarbour->get_idx_node();
+            auto harbid = harbour->mHarbour->get_idx_node();
             QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
 
             double distance = dlg.getMaxDinstance();
@@ -2472,11 +2484,11 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                     else
                         n = min(snodes.count(), dlg.getMaxLinks());
                     for (int i = 0; i < n; ++i) {
-                        int nodeid = snodes[i].node->get_idx_node();
+                        auto nodeid = snodes[i].node->get_idx_node();
                         int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
                         int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid]->getAdiacencyByIdx(he_id), true);
-                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid]->getAdiacencyByIdx(te_id), true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid.toIndex()]->getAdiacencyByIdx(he_id), true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid.toIndex()]->getAdiacencyByIdx(te_id), true);
                     }
                 }
             } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());
@@ -2766,7 +2778,7 @@ void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
         QList<int> isn = checker.getIsolatedNodes();
 
         mMapController->clearNodeSelection(currentModelIdx);
-        mMapController->selectNodes(currentModelIdx, isn);
+        mMapController->selectNodes(currentModelIdx, types::helpers::toIdQList<types::NodeId>(isn));
 
         std::shared_ptr<NodeData> nd = currentModel->getNodesList()[isn[0]];
         map->setMapFocusPoint(qmapcontrol::PointWorldCoord(nd->get_x(), nd->get_y()));

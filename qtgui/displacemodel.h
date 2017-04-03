@@ -353,14 +353,14 @@ public:
     bool isInterestingSize(int n);
 
     /* Interesting harbours - see pop */
-    const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
+    const QList<types::NodeId> &getInterestingHarbours() const { return mInterestingHarb; }
 
     /** \brief insert the pop into the list of interest for pops */
-    void setInterestingHarb(int n);
+    void setInterestingHarb(types::NodeId n);
 
     /** \brief remove the pop from the list of interest for pops */
-    void remInterestingHarb(int n);
-    bool isInterestingHarb(int n);
+    void remInterestingHarb(types::NodeId n);
+    bool isInterestingHarb(types::NodeId n);
 
     /* Interesting Nations */
     const QList<int> &getInterestingNations() const { return mInterestingNations; }
@@ -413,8 +413,8 @@ public:
     void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
     bool removeNode(std::shared_ptr<NodeData> node);
-    int addEdge(std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
-    int addEdge(int srcidx, int targetidx, double weight);
+    int addEdge(std::shared_ptr<NodeData> nodedata, types::NodeId targetidx, double weight);
+    int addEdge(types::NodeId srcidx, types::NodeId targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing, bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, vector<int> bannedMetiers);
@@ -508,7 +508,7 @@ private:
     QList<int> mInterestingPop2;
     bool mInterestingSizeTotal, mInterestingSizeAvg, mInterestingSizeMin, mInterestingSizeMax;
     QList<int> mInterestingSizes;
-    QList<int> mInterestingHarb;
+    QList<types::NodeId> mInterestingHarb;
     QList<int> mInterestingNations;
     InterestingList<int> mInterestingBenthos;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;

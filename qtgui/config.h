@@ -41,6 +41,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <idtypes.h>
+
 #include <QList>
 #include <QString>
 
@@ -57,7 +59,7 @@ class Config
     QList <double> m_calib_cpue_multiplier;
 
 public:
-    QList <int> m_interesting_harbours;
+    QList <types::NodeId> m_interesting_harbours;
 
 public:
     Config();

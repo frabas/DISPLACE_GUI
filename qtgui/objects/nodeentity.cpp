@@ -77,7 +77,7 @@ QVariant NodeEntity::data(const QModelIndex &index, int role) const
     //    return model->getModel()->getNodeId(mNodeId);
 
         std::shared_ptr<NodeData> n (model->getModel()->getNodesList()[mNodeId]);
-                return n->get_idx_node();
+                return n->get_idx_node().toIndex();
     }
     return QVariant();
 }

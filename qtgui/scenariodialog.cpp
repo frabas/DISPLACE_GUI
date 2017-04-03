@@ -70,7 +70,7 @@ ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :
     ui->agraph->setValue(mScen.getGraph());
     ui->freqDoGrowth->setValue(mScen.getFreqDoGrowth());
     ui->freqDispatchThePop->setValue(mScen.getFreqDispatchThePop());
-    ui->aport->setValue(mScen.getA_port());
+    ui->aport->setValue(mScen.getA_port().toIndex());
     ui->gridres->setValue(mScen.getGraph_res());
     ui->individualQuotas->setChecked(mScen.getIs_individual_vessel_quotas());
     ui->checkAllStocks->setChecked(mScen.getIs_check_all_stocks_before_going_fishing());
@@ -178,7 +178,7 @@ void ScenarioDialog::on_ScenarioDialog_accepted()
     mScen.setGraph(ui->agraph->value());
     mScen.setFreqDoGrowth(ui->freqDoGrowth->value());
     mScen.setFreqDispatchThePop(ui->freqDispatchThePop->value());
-    mScen.setA_port(ui->aport->value());
+    mScen.setA_port(types::NodeId(ui->aport->value()));
     mScen.setGraph_res(ui->gridres->value());
     mScen.setIs_individual_vessel_quotas(ui->individualQuotas->isChecked());
     mScen.setIs_check_all_stocks_before_going_fishing(ui->checkAllStocks->isChecked());

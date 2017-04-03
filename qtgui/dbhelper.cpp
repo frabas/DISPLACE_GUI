@@ -148,7 +148,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
     DB_ASSERT(r,sq2);
 
     foreach (std::shared_ptr<NodeData> n, nodes) {
-        q.addBindValue(n->get_idx_node());
+        q.addBindValue(n->get_idx_node().toIndex());
         q.addBindValue(tstep);
         q.addBindValue(n->get_cumftime());
         q.addBindValue(n->get_cumsweptarea());
@@ -165,7 +165,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
         for (int i = 0; i < n->getPopCount(); ++i) {
             sq.addBindValue(statid);
             sq.addBindValue(tstep);
-            sq.addBindValue(n->get_idx_node());
+            sq.addBindValue(n->get_idx_node().toIndex());
             sq.addBindValue(i);
             sq.addBindValue(n->getPop(i));
             sq.addBindValue(n->getPopW(i));
@@ -181,7 +181,7 @@ void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > 
         for (int j = 0; j < n->getBenthosPopCount(); ++j) {
             sq2.addBindValue(statid);
             sq2.addBindValue(tstep);
-            sq2.addBindValue(n->get_idx_node());
+            sq2.addBindValue(n->get_idx_node().toIndex());
             sq2.addBindValue(j);
             sq2.addBindValue(n->getBenthosBiomass(j));
             sq2.addBindValue(n->getBenthosNumber(j));
@@ -300,7 +300,7 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
 
     Q_ASSERT_X(res, __FUNCTION__, q.lastError().text().toStdString().c_str());
 
-    q.addBindValue(node->get_idx_node());
+    q.addBindValue(node->get_idx_node().toIndex());
     q.addBindValue(node->get_x());
     q.addBindValue(node->get_y());
     q.addBindValue(node->get_harbour());
@@ -334,7 +334,7 @@ void DbHelper::addVesselDetails(int idx, std::shared_ptr<VesselData> vessel)
 
     q.addBindValue(idx);
     q.addBindValue(QString::fromUtf8(vessel->mVessel->get_name().c_str()));
-    q.addBindValue(vessel->mVessel->get_loc()->get_idx_node());
+    q.addBindValue(vessel->mVessel->get_loc()->get_idx_node().toIndex());
     res = q.exec();
 
     DB_ASSERT(res,q);
@@ -403,12 +403,12 @@ bool DbHelper::loadConfig(Config &cfg)
     }
     cfg.setCalib_cpue_multiplier(vl);
 
-    ipops.clear();
+    QList<types::NodeId> ihbs;
     lsi = getMetadata("config::int_harbours").split(" ");
     foreach (QString i, lsi) {
-        ipops.push_back(i.toInt());
+        ihbs.push_back(types::NodeId(i.toInt()));
     }
-    cfg.m_interesting_harbours = ipops;
+    cfg.m_interesting_harbours = ihbs;
 
     return true;
 }
@@ -443,9 +443,9 @@ bool DbHelper::saveConfig(const Config &cfg)
     setMetadata("config::calib_cpue_multiplier", str.join(" "));
 
     str.clear();
-    il = cfg.m_interesting_harbours;
-    foreach (int d, il)
-        str.push_back(QString::number(d));
+    auto ih = cfg.m_interesting_harbours;
+    foreach (auto d, ih)
+        str.push_back(QString::number(d.toIndex()));
     setMetadata("config::int_harbours", str.join(" "));
 
     return true;
@@ -456,7 +456,7 @@ bool DbHelper::loadScenario(Scenario &sce)
     sce.setGraph(getMetadata("sce::graph").toInt());
     sce.setNrow_graph(getMetadata("sce::nrow_graph").toInt());
     sce.setNrow_coord(getMetadata("sce::nrow_coord").toInt());
-    sce.setA_port(getMetadata("sce::aport").toInt());
+    sce.setA_port(types::NodeId(getMetadata("sce::aport").toInt()));
     sce.setGraph_res(getMetadata("sce::graph_res").toDouble());
     sce.setIs_individual_vessel_quotas(getMetadata("sce::is_individual_vessel_quotas").toDouble());
     sce.setIs_check_all_stocks_before_going_fishing(getMetadata("sce::check_all_stocks_before_going_fishing").toDouble());
@@ -475,7 +475,7 @@ bool DbHelper::saveScenario(const Scenario &sce)
     setMetadata("sce::graph", QString::number(sce.getGraph()));
     setMetadata("sce::nrow_graph", QString::number(sce.getNrow_graph()));
     setMetadata("sce::nrow_coord", QString::number(sce.getNrow_coord()));
-    setMetadata("sce::aport", QString::number(sce.getA_port()));
+    setMetadata("sce::aport", QString::number(sce.getA_port().toIndex()));
     setMetadata("sce::graph_res", QString::number(sce.getGraph_res()));
     setMetadata("sce::is_individual_vessel_quotas", (sce.getIs_individual_vessel_quotas() ? "1" : "0"));
     setMetadata("sce::check_all_stocks_before_going_fishing", (sce.getIs_check_all_stocks_before_going_fishing() ? "1" : "0"));
@@ -518,16 +518,16 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         /* TODO: a,b,c,d */
         multimap<int,double> a;
         map<int,double> b;
-        vector<int> c;
+        vector<types::NodeId> c;
         vector<double> d;
 
         std::shared_ptr<Node> nd;
         std::shared_ptr<Harbour> h;
         if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(idx, x, y, harbour,areacode,landscape, wind, sst, salinity,
+            nd = h = std::shared_ptr<Harbour> (new Harbour(types::NodeId(idx), x, y, harbour,areacode,landscape, wind, sst, salinity,
                                                             benthosbiomass, benthosnumber,benthosmeanweight, nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
         } else {
-            nd = std::shared_ptr<Node>(new Node(idx, x, y, harbour, areacode, landscape,  wind, sst, salinity,
+            nd = std::shared_ptr<Node>(new Node(types::NodeId(idx), x, y, harbour, areacode, landscape,  wind, sst, salinity,
                                                 benthosbiomass, benthosnumber,benthosmeanweight, nbpops, nbbenthospops,  szgroup));
         }
         std::shared_ptr<NodeData> n(new NodeData(nd, model));

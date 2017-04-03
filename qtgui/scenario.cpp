@@ -163,12 +163,12 @@ void Scenario::setNrow_graph(int value)
     nrow_graph = value;
 }
 
-int Scenario::getA_port() const
+types::NodeId Scenario::getA_port() const
 {
     return a_port;
 }
 
-void Scenario::setA_port(int value)
+void Scenario::setA_port(types::NodeId value)
 {
     a_port = value;
 }
@@ -293,7 +293,7 @@ bool Scenario::save(QString path, QString modelname, QString outputname, QString
     stream << "# a_graph\n" << graph << endl;
     stream << "# nrow_coord\n" << nrow_coord << endl;
     stream << "# nrow_graph\n" << nrow_graph << endl;
-    stream << "# a_port\n" << a_port << endl;
+    stream << "# a_port\n" << a_port.toIndex() << endl;
     stream << "# grid res km\n" << graph_res << endl;
     stream << "# is_individual_vessel_quotas\n" << is_individual_vessel_quotas << endl;
     stream << "#  check all stocks before going fishing (otherwise, explicit pops only)\n" << check_all_stocks_before_going_fishing << endl;

@@ -471,7 +471,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
     static const QPen pen(QColor(0,0,255,200));
     plot->clearGraphs();
 
-    QList<int> ipl = model->getInterestingHarbours();
+    auto ipl = model->getInterestingHarbours();
 
     int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
@@ -482,7 +482,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
         timeline->end->setCoords(t, timelineMax);
     }
 
-    foreach (int ip, ipl) {
+    foreach (auto ip, ipl) {
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
@@ -498,32 +498,32 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
         graph->setBrush(QBrush(col));
         ++cnt;
 
-        graph->setName(QString::fromStdString(model->getHarbourData(ip).mHarbour->get_name()));
+        graph->setName(QString::fromStdString(model->getHarbourData(ip.toIndex()).mHarbour->get_name()));
 
         int n = model->getHarboursStatsCount();
         DisplaceModel::HarboursStatsContainer::Container::const_iterator it = model->getHarboursStatsFirstValue();
         for (int i = 0; i <n; ++i) {
-            if (it.value().size() > ip) {
+            if (it.value().size() > ip.toIndex()) {
                 keyData << it.key();
 
                 switch (stat) {
                 case H_Catches:
-                    valueData << it.value().at(ip).mCumCatches;
+                    valueData << it.value().at(ip.toIndex()).mCumCatches;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
                 case H_Earnings:
-                    valueData << it.value().at(ip).mCumProfit;
+                    valueData << it.value().at(ip.toIndex()).mCumProfit;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
                 case H_Gav:
-                    valueData << it.value().at(ip).mGav;
+                    valueData << it.value().at(ip.toIndex()).mGav;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("GAV (Euro)"));
                     break;
                 case H_Vpuf:
-                    valueData << it.value().at(ip).mVpuf;
+                    valueData << it.value().at(ip.toIndex()).mVpuf;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
                     break;

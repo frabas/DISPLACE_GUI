@@ -79,7 +79,7 @@ bool IsolatedSubgraphChecker::process()
         std::shared_ptr<NodeData> node = mModel->getNodesList().at(i);
 
         for (int j = 0; j < node->getAdiacencyCount(); ++j) {
-            edges.push_back(std::make_pair(i, node->getAdiacencyByIdx(j)->target.lock()->get_idx_node()));
+            edges.push_back(std::make_pair(i, node->getAdiacencyByIdx(j)->target.lock()->get_idx_node().toIndex()));
         }
         vis.addNode(i);
     }

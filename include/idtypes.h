@@ -37,6 +37,8 @@ public:
 
 };
 
+template <typename X>
+bool inline isIdInvalid(const X &t) = delete;
 
 struct NodeTag {};
 
@@ -48,6 +50,16 @@ public:
 
 namespace special {
     static const NodeId InvalidNodeId;
+}
+
+template <>
+bool inline isIdInvalid(const int &n) {
+    return n == -1;
+}
+
+template <>
+bool inline isIdInvalid(const NodeId &t) {
+    return t == special::InvalidNodeId;
 }
 
 }

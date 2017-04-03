@@ -40,12 +40,12 @@ bool EdgeAddMouseMode::releaseEvent(const QPointF &point)
 
     switch (mStatus) {
     case 0:     // first node
-        mNodeFrom = nodes[0]->get_idx_node();
+        mNodeFrom = nodes[0]->get_idx_node().toIndex();
         showMessage(QString(tr("Select second node")));
         ++mStatus;
         break;
     case 1:
-        mNodeTo = nodes[0]->get_idx_node();
+        mNodeTo = nodes[0]->get_idx_node().toIndex();
         emit edgeAdded(mNodeFrom, mNodeTo);
         showMessage(QString(tr("Edge created.")));
         break;

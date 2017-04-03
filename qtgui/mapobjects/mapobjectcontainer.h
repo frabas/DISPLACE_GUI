@@ -3,11 +3,12 @@
 
 #include <QList>
 #include <QMap>
+#include <idtypes.h>
 
 /** \brief A generic Container class form Map Objects
  *
  * */
-template <typename Obj>
+template <typename Obj, typename Idx = int>
 class MapObjectContainer
 {
     class ObjC {
@@ -15,7 +16,7 @@ class MapObjectContainer
         QList<Obj *> mList;
     };
 
-    QMap<int, ObjC *> mMap;
+    QMap<Idx, ObjC *> mMap;
 
 public:
     MapObjectContainer()
@@ -28,11 +29,11 @@ public:
     /** @brief add an object with the specified id and role
      *
      * */
-    int add (int id, Obj *object, int role) {
-        if (id == -1)
-            id = mMap.size();
+    Idx add (Idx id, Obj *object, int role) {
+        if (types::isIdInvalid(id))
+            id = Idx(mMap.size());
 
-        typename QMap<int,ObjC *>::iterator it = mMap.find(id);
+        typename QMap<Idx,ObjC *>::iterator it = mMap.find(id);
         ObjC *cont;
         if (it == mMap.end()) {
             // not found: add it
@@ -49,8 +50,8 @@ public:
         return id;
     }
 
-    Obj *get(int id, int role) {
-        typename QMap<int,ObjC *>::iterator it = mMap.find(id);
+    Obj *get(Idx id, int role) {
+        auto it = mMap.find(id);
         if (it == mMap.end()) {
             return nullptr;
         }
@@ -65,7 +66,7 @@ public:
         mMap.clear();
     }
 
-    typedef typename QMap<int,ObjC *>::const_iterator Iterator;
+    typedef typename QMap<Idx,ObjC *>::const_iterator Iterator;
 
     Iterator begin() {
         return mMap.constBegin();
@@ -91,8 +92,8 @@ public:
      * it is responsibility of the caller to de-allocate the pointer returned
      * @return The Pointer to the object removed.
      * */
-    Obj *remove (int id, int role) {
-        typename QMap<int,ObjC *>::iterator it = mMap.find(id);
+    Obj *remove (Idx id, int role) {
+        auto it = mMap.find(id);
         if (it == mMap.end()) {
             return nullptr;
         }
@@ -109,8 +110,8 @@ public:
      * It is responsibility of the caller to de-allocate the objects returned with the pointer list.
      * @return A List od pointers to the objects removed.
      * */
-    QList<Obj *> remove (int id) {
-        typename QMap<int,ObjC *>::iterator it = mMap.find(id);
+    QList<Obj *> remove (Idx id) {
+        auto it = mMap.find(id);
         if (it == mMap.end()) {
             return QList<Obj *>();
         }

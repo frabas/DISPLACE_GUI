@@ -136,7 +136,7 @@ void NodeMapObject::updateProperties()
             .arg(QString::fromStdString(mNode->get_name()))
             .arg(mNode->get_y())
             .arg(mNode->get_x())
-            .arg(mNode->get_idx_node())
+            .arg(mNode->get_idx_node().toIndex())
             .arg(mNode->get_marine_landscape())
             .arg(mNode->get_init_benthos_biomass())
             .arg(mNode->get_init_benthos_number())
@@ -171,7 +171,7 @@ void NodeMapObject::updateProperties()
             std::shared_ptr<NodeData> t = e->target.lock();
             if (t.get() != nullptr)
                 text += QString("Node <b>%1</b> weight <b>%2</b><br/>")
-                        .arg(t->get_idx_node())
+                        .arg(t->get_idx_node().toIndex())
                         .arg(e->weight);
         }
         break;

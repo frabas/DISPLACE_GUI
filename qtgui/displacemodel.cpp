@@ -380,7 +380,7 @@ int DisplaceModel::getNodesCount() const
 QString DisplaceModel::getNodeId(int idx) const
 {
    // return QString::fromStdString(mNodes.at(idx)->get_name());
-    return QString::number(mNodes.at(idx)->get_idx_node());
+    return QString::number(mNodes.at(idx)->get_idx_node().toIndex());
 }
 
 QList<std::shared_ptr<NodeData> > DisplaceModel::getAllNodesWithin(const QPointF &centerpoint, double dist_km) const
@@ -802,7 +802,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
     QList<std::shared_ptr<NodeData> > newnodes;
     QList<std::shared_ptr<HarbourData> > newharbours;
-    QList<int> translated_nodes;
+    QList<types::NodeId> translated_nodes;
     int nodeidx = mNodes.count();
     int cntr = 0;
     foreach(GraphBuilder::Node node, nodes) {
@@ -823,15 +823,15 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
 
             std::shared_ptr<Node> nd;
 
-            translated_nodes.push_back(nodeidx + cntr);
+            translated_nodes.push_back(types::NodeId(nodeidx + cntr));
             if (node.harbour) {
-                std::shared_ptr<Harbour> h(new Harbour(nodeidx + cntr, node.point.x(), node.point.y(), node.harbour));
+                std::shared_ptr<Harbour> h(new Harbour(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(), node.harbour));
                 nd = h;
                 std::shared_ptr<HarbourData> hd(new HarbourData(h));
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(nodeidx + cntr, node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -845,7 +845,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
             newnodes.push_back(nodedata);
             ++cntr;
         } else {
-            translated_nodes.push_back(-1);
+            translated_nodes.push_back(types::special::InvalidNodeId);
         }
     }
 
@@ -888,8 +888,8 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
     // update scenario nrow_coord, nrow_graph
     qDebug() << "1) Node " << node->get_idx_node() << " has " << node.use_count() << " instances";
 
-    mNodes[node->get_idx_node()].reset();       // removed
-    mNodesLayer->SetAttributeFilter(QString("%1 = %2").arg(FLD_NODEID).arg(node->get_idx_node()).toStdString().c_str());
+    mNodes[node->get_idx_node().toIndex()].reset();       // removed
+    mNodesLayer->SetAttributeFilter(QString("%1 = %2").arg(FLD_NODEID).arg(node->get_idx_node().toIndex()).toStdString().c_str());
 
     OGRFeature *ftr;
     while ((ftr = mNodesLayer->GetNextFeature())) {
@@ -911,19 +911,19 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
  * @param weight
  * @return Adiacency id for that node
  */
-int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, double weight)
+int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, types::NodeId targetidx, double weight)
 {
-    std::shared_ptr<NodeData> tg = mNodes.at(targetidx);
+    std::shared_ptr<NodeData> tg = mNodes.at(targetidx.toIndex());
     int i = nodedata->appendAdiancency(tg, weight);
 
     OGRFeature *e = OGRFeature::CreateFeature(mNodesLayer->GetLayerDefn());
     e->SetField(FLD_TYPE, (int)OgrTypeEdge);
-    e->SetField(FLD_NODEID, nodedata->get_idx_node());
+    e->SetField(FLD_NODEID, nodedata->get_idx_node().toIndex());
     e->SetField(FLD_EDGEID, i);
 
     OGRLineString edge;
     edge.addPoint(nodedata->get_x(), nodedata->get_y());
-    edge.addPoint(mNodes[targetidx]->get_x(), mNodes[targetidx]->get_y());
+    edge.addPoint(mNodes[targetidx.toIndex()]->get_x(), mNodes[targetidx.toIndex()]->get_y());
     e->SetGeometry(&edge);
 
     mNodesLayer->CreateFeature(e);
@@ -939,9 +939,9 @@ int DisplaceModel::addEdge (std::shared_ptr<NodeData> nodedata, int targetidx, d
  * @param weight
  * @return Adiacency id
  */
-int DisplaceModel::addEdge(int srcidx, int targetidx, double weight)
+int DisplaceModel::addEdge(types::NodeId srcidx, types::NodeId targetidx, double weight)
 {
-    return addEdge(mNodes[srcidx], targetidx, weight);
+    return addEdge(mNodes[srcidx.toIndex()], targetidx, weight);
 }
 
 bool DisplaceModel::exportGraph(const QString &path)
@@ -967,7 +967,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
     foreach (std::shared_ptr<HarbourData> h, list) {
         int hid = mHarbours.size();
         int nid = mNodes.size();
-        h->mHarbour->set_idx_node(nid);
+        h->mHarbour->set_idx_node(types::NodeId(nid));
 //        h->mHarbour->set_is_harbour(hid);
         mHarbours.push_back(h);
 
@@ -1490,19 +1490,19 @@ bool DisplaceModel::isInterestingSize(int n)
     return mInterestingSizes.contains(n);
 }
 
-void DisplaceModel::setInterestingHarb(int n)
+void DisplaceModel::setInterestingHarb(types::NodeId n)
 {
     if (!mInterestingHarb.contains(n))
         mInterestingHarb.append(n);
     qSort(mInterestingHarb);
 }
 
-void DisplaceModel::remInterestingHarb(int n)
+void DisplaceModel::remInterestingHarb(types::NodeId n)
 {
     mInterestingHarb.removeAll(n);
 }
 
-bool DisplaceModel::isInterestingHarb(int n)
+bool DisplaceModel::isInterestingHarb(types::NodeId n)
 {
     return mInterestingHarb.contains(n);
 }
@@ -1518,7 +1518,7 @@ void DisplaceModel::parseOutputStatsFile(QString file, int tstep)
 bool DisplaceModel::loadNodes()
 {
     int nrow_coord = mScenario.getNrow_coord();
-    int a_port = mScenario.getA_port();
+    auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
     int nbbenthospops = mConfig.getNbbenthospops();
@@ -1671,7 +1671,7 @@ bool DisplaceModel::loadNodes()
 
 
     // read harbour specific files
-    multimap<int, string> harbour_names = read_harbour_names(mInputName.toStdString(), mBasePath.toStdString());
+    auto harbour_names = read_harbour_names(mInputName.toStdString(), mBasePath.toStdString());
 
     // creation of a vector of nodes from coord
     // and check with the coord in input.
@@ -1685,12 +1685,14 @@ bool DisplaceModel::loadNodes()
     {
         if(graph_coord_harbour[i])
         {
+            types::NodeId inode(i);
+
             string a_name="none";
-            int a_point=0;
+            types::NodeId a_point(0);
             // get the name of this harbour
-            multimap<int,string>::iterator lower_g = harbour_names.lower_bound(i);
-            multimap<int,string>::iterator upper_g = harbour_names.upper_bound(i);
-            for (multimap<int, string>::iterator pos=lower_g; pos != upper_g; pos++)
+            auto lower_g = harbour_names.lower_bound(inode);
+            auto upper_g = harbour_names.upper_bound(inode);
+            for (auto pos=lower_g; pos != upper_g; pos++)
             {
                 a_point= pos->first;
                 a_name= pos->second;
@@ -1698,7 +1700,7 @@ bool DisplaceModel::loadNodes()
 
             map<int,double> init_fuelprices;
             multimap<int, double> fishprices_each_species_per_cat;
-            if(a_name!="none" && a_point== i)
+            if(a_name!="none" && a_point== inode)
             {
 
                 cout << "load prices for port " << a_name << " which is point " << a_point << endl;
@@ -1744,14 +1746,16 @@ bool DisplaceModel::loadNodes()
                 cout << "...OK" << endl;
 
             }
-            vector <int> usual_fgrounds;
-            usual_fgrounds.push_back(0);
+
+            // TODO check this, node 0 is a valid node.
+            vector <types::NodeId> usual_fgrounds;
+            usual_fgrounds.push_back(types::NodeId(0));
 
             vector <double> freq_usual_fgrounds;
             freq_usual_fgrounds.push_back(1.0);
 
             cout << "create an harbour..." << endl;
-            std::shared_ptr<Harbour> h (new Harbour(i,
+            std::shared_ptr<Harbour> h (new Harbour(types::NodeId(i),
                                        graph_coord_x[i],
                                        graph_coord_y[i],
                                        graph_coord_harbour[i],
@@ -1783,7 +1787,7 @@ bool DisplaceModel::loadNodes()
         else
         {
             //cout << "create a node..." << endl;
-            std::shared_ptr<Node> nd (new Node(i,
+            std::shared_ptr<Node> nd (new Node(types::NodeId(i),
                                  graph_coord_x[i],
                                  graph_coord_y[i],
                                  graph_coord_harbour[i],
@@ -1845,19 +1849,19 @@ bool DisplaceModel::loadNodes()
     a_graph_name=a_graph_name+a_graph_s;
     if(binary_search (dyn_alloc_sce.begin(), dyn_alloc_sce.end(), "fishing_credits"))
     {
-        multimap<int, double> initial_tariffs_on_nodes= read_initial_tariffs_on_nodes(  mInputName.toStdString(), mBasePath.toStdString(), a_graph_name);
+        auto initial_tariffs_on_nodes= read_initial_tariffs_on_nodes(  mInputName.toStdString(), mBasePath.toStdString(), a_graph_name);
 
 
         // init
        for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
        {
-        int idx_node=mNodes.at(a_idx)->get_idx_node();
+        auto idx_node=mNodes.at(a_idx)->get_idx_node();
 
         // initial tariff for this particular node
-        multimap<int,double>::iterator lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
-        multimap<int,double>::iterator upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
+        auto lower_init_cr = initial_tariffs_on_nodes.lower_bound(idx_node);
+        auto upper_init_cr = initial_tariffs_on_nodes.upper_bound(idx_node);
         vector<double> init_tariffs;
-        for (multimap<int, double>::iterator pos=lower_init_cr; pos != upper_init_cr; pos++)
+        for (auto pos=lower_init_cr; pos != upper_init_cr; pos++)
             init_tariffs.push_back(pos->second);
 
         if(initial_tariffs_on_nodes.count(idx_node)==0) init_tariffs.push_back(0); // put 0 if this node is not informed
@@ -1884,7 +1888,7 @@ bool DisplaceModel::loadNodes()
 bool DisplaceModel::loadVessels()
 {
     int nrow_coord = mScenario.getNrow_coord();
-    int a_port = mScenario.getA_port();
+    auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
     string a_quarter= "quarter1";// start quarter
@@ -1933,11 +1937,11 @@ bool DisplaceModel::loadVessels()
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
     cout << "read_fgrounds in loadVessels()" << endl;
-    multimap<string, int> fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    auto fgrounds = read_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
     cout << "read_fgrounds_init in loadVessels()" << endl;
-    multimap<string, int> fgrounds_init = read_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    auto fgrounds_init = read_fgrounds_init(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
     cout << "read_harbours in loadVessels()" << endl;
-    multimap<string, int> harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
+    auto harbours = read_harbours(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
 
     cout << "read_freq_fgrounds in loadVessels()" << endl;
     multimap<string, double> freq_fgrounds = read_freq_fgrounds(a_quarter, mInputName.toStdString(), mBasePath.toStdString());
@@ -1988,13 +1992,13 @@ bool DisplaceModel::loadVessels()
 
     //creation of a vector of vessels from vesselids, graph, harbours and fgrounds
     // and check the start coord
-    multimap<int, int> possible_metiers;
-    multimap<int, double> freq_possible_metiers;
-    multimap<int, double> gshape_cpue_per_stk_on_nodes;
-    multimap<int, double> gscale_cpue_per_stk_on_nodes;
-    vector<int> spe_fgrounds;
-    vector<int> spe_fgrounds_init;
-    vector<int> spe_harbours;
+    multimap<types::NodeId, int> possible_metiers;
+    multimap<types::NodeId, double> freq_possible_metiers;
+    multimap<types::NodeId, double> gshape_cpue_per_stk_on_nodes;
+    multimap<types::NodeId, double> gscale_cpue_per_stk_on_nodes;
+    vector<types::NodeId> spe_fgrounds;
+    vector<types::NodeId> spe_fgrounds_init;
+    vector<types::NodeId> spe_harbours;
     vector<double> spe_freq_fgrounds;
     vector<double> spe_freq_fgrounds_init;
     vector<double> spe_freq_harbours;
@@ -2026,11 +2030,11 @@ bool DisplaceModel::loadVessels()
 
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps
-        spe_fgrounds = find_entries_s_i(fgrounds, vesselids[i]);
-        spe_fgrounds_init = find_entries_s_i(fgrounds_init, vesselids[i]);
-        spe_freq_fgrounds = find_entries_s_d(freq_fgrounds, vesselids[i]);
-        spe_freq_fgrounds_init = find_entries_s_d(freq_fgrounds_init, vesselids[i]);
-        spe_harbours = find_entries_s_i(harbours, vesselids[i]);
+        spe_fgrounds = find_entries(fgrounds, vesselids[i]);
+        spe_fgrounds_init = find_entries(fgrounds_init, vesselids[i]);
+        spe_freq_fgrounds = find_entries(freq_fgrounds, vesselids[i]);
+        spe_freq_fgrounds_init = find_entries(freq_fgrounds_init, vesselids[i]);
+        spe_harbours = find_entries(harbours, vesselids[i]);
         spe_freq_harbours = find_entries_s_d(freq_harbours, vesselids[i]);
         spe_vessel_betas_per_pop = find_entries_s_d(vessels_betas, vesselids[i]);
         spe_percent_tac_per_pop = find_entries_s_d(vessels_tacs, vesselids[i]);
@@ -2046,11 +2050,12 @@ bool DisplaceModel::loadVessels()
         }
 
         // choose a departure (node) harbour for this vessel according to the observed frequency in data
-        int start_harbour;
+        types::NodeId start_harbour;
+
         if(!spe_harbours.empty())
         {
                                  // need to convert in array, see myRutils.cpp
-            vector<int> one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
+            auto one_harbour = do_sample(1, spe_harbours.size(), spe_harbours, spe_freq_harbours);
             start_harbour= one_harbour[0];
         }
         else
@@ -2058,13 +2063,13 @@ bool DisplaceModel::loadVessels()
             // if missing info for a given vessel for this quarter
             cout << "no specified harbour in this quarter for this vessel..." << endl;
                                  // CAUTION: LIKE A MAGIC NUMBER HERE!!!
-            start_harbour=find_entries_s_i(harbours, vesselids[0])[0];
+            start_harbour=find_entries(harbours, vesselids[0])[0];
             spe_harbours.push_back(start_harbour);
             spe_freq_harbours.push_back(1);
             cout << "then take node: " << start_harbour << endl;
         }
 
-        std::shared_ptr<Vessel> v (new Vessel(mNodes.at(start_harbour)->mNode.get(),
+        std::shared_ptr<Vessel> v (new Vessel(mNodes.at(start_harbour.toIndex())->mNode.get(),
             i,
             vesselids[i],
             nbpops,
@@ -2184,8 +2189,8 @@ bool DisplaceModel::loadVessels()
         // a vector of vector (with dims [relative index of fishing ground nodes;  pops])
         // we use a vector of vector instead of a multimap in order to speed up the simulation
         // by avoiding a (costly) call to find_entries_i_d() in the do_catch() method
-        vector<int> gshape_name_nodes_with_cpue;
-        for(multimap<int, double>::iterator iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
+        vector<types::NodeId> gshape_name_nodes_with_cpue;
+        for(auto iter=gshape_cpue_per_stk_on_nodes.begin(); iter != gshape_cpue_per_stk_on_nodes.end();
             iter = gshape_cpue_per_stk_on_nodes.upper_bound( iter->first ) )
         {
             gshape_name_nodes_with_cpue.push_back (iter->first);
@@ -2193,8 +2198,7 @@ bool DisplaceModel::loadVessels()
 
         // sort and unique
         sort(gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
-        std::vector<int>::iterator it;
-        it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
+        auto it = std::unique (gshape_name_nodes_with_cpue.begin(), gshape_name_nodes_with_cpue.end());
         gshape_name_nodes_with_cpue.resize( std::distance(gshape_name_nodes_with_cpue.begin(),it) );
 
 
@@ -2207,9 +2211,9 @@ bool DisplaceModel::loadVessels()
         for (size_t n=0; n< gshape_name_nodes_with_cpue.size(); n++)
         {
                                  // look into the multimap...
-            vector<double> gshape_cpue_species = find_entries_i_d (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            auto gshape_cpue_species = find_entries (gshape_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
                                  // look into the multimap...
-            vector<double> gscale_cpue_species = find_entries_i_d (gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
+            auto gscale_cpue_species = find_entries(gscale_cpue_per_stk_on_nodes, gshape_name_nodes_with_cpue[n]);
             if(!gshape_cpue_species.empty())
             {
                                  // caution here: the n is the relative index of the node for this vessel i.e. this is not the graph index of the node (because it would have been useless to create a huge matrix filled in by 0 just to preserve the graph idex in this case!)
@@ -2225,7 +2229,7 @@ bool DisplaceModel::loadVessels()
         double expected_cpue=0;
         vector <vector<double> > gshape_cpue_nodes_species = mVessels.at(i)->mVessel->get_gshape_cpue_nodes_species();
         vector <vector<double> > gscale_cpue_nodes_species = mVessels.at(i)->mVessel->get_gscale_cpue_nodes_species();
-        vector <int> fgrounds= mVessels.at(i)->mVessel->get_fgrounds();
+        auto fgrounds= mVessels.at(i)->mVessel->get_fgrounds();
         vector <double> expected_cpue_this_pop (nbpops);
         for(int pop = 0; pop < nbpops; pop++)
         {

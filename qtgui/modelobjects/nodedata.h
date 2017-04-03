@@ -58,7 +58,7 @@ public:
     virtual ~NodeData();
 
     /* Proxy functions to avoid changing too much code */
-    int get_idx_node() const { return mNode->get_idx_node(); }
+    types::NodeId get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
     double get_wind() const { return mNode->get_wind(); }
     double get_sst() const { return mNode->get_sst(); }
@@ -93,8 +93,8 @@ public:
     void set_cumcatches(int i) { mNode->set_cumcatches(i); }
     vector<double> get_tariffs() const { return mNode->get_tariffs(); }
     void set_tariffs(vector<double> tariffs) { mNode->set_tariffs(tariffs); }
-    const vector<int> &get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }
-    void set_usual_fgrounds(vector<int> usual_fgrounds) { mNode->set_usual_fgrounds(usual_fgrounds); }
+    const vector<types::NodeId> &get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }
+    void set_usual_fgrounds(vector<types::NodeId> usual_fgrounds) { mNode->set_usual_fgrounds(usual_fgrounds); }
     const vector<double> &get_freq_usual_fgrounds() { return mNode->get_freq_usual_fgrounds(); }
     void set_freq_usual_fgrounds(vector<double> freq_usual_fgrounds) { mNode->set_freq_usual_fgrounds(freq_usual_fgrounds); }
     int evaluateAreaType() { return mNode->evaluateAreaType(); }

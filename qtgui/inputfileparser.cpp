@@ -84,9 +84,9 @@ bool InputFileParser::parseShortestPath(const QString &path, int nodeid, QList<Q
     return false;
 }
 
-bool InputFileParser::isShortestPathPresent(const QString &path, int nodeid)
+bool InputFileParser::isShortestPathPresent(const QString &path, types::NodeId nodeid)
 {
-    QString filename = QString("%1/previous_%2.dat").arg(path).arg(nodeid);
+    QString filename = QString("%1/previous_%2.dat").arg(path).arg(nodeid.toIndex());
     return QFile(filename).exists();
 }
 

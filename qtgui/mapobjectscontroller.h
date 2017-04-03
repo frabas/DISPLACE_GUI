@@ -296,7 +296,7 @@ public:
     EditorModes getEditorMode() const { return mEditorMode; }
 
     void clearNodeSelection(int model);
-    void selectNodes(int model, QList<int> nodes);
+    void selectNodes(int model, QList<types::NodeId> nodes);
     void delSelected(int model);
 
     QSet<EdgeMapObject *> edgeSelection(int model) const { return mEdgeSelection[model]; }
@@ -342,13 +342,13 @@ private:
     qmapcontrol::QMapControl *mMap;
     std::shared_ptr<DisplaceModel> mModels[MainWindow::MAX_MODELS];
 
-    MapObjectContainer<HarbourMapObject> mHarbourObjects[MainWindow::MAX_MODELS];
-    MapObjectContainer<NodeMapObject> mNodeObjects[MainWindow::MAX_MODELS];
-    MapObjectContainer<VesselMapObject> mVesselObjects[MainWindow::MAX_MODELS];
-    MapObjectContainer<ShipMapObject> mShipObjects[MainWindow::MAX_MODELS];
-    MapObjectContainer<FishfarmMapObject> mFishfarmObjects[MainWindow::MAX_MODELS];
-    MapObjectContainer<WindmillMapObject> mWindmillObjects[MainWindow::MAX_MODELS];
-    MapObjectContainer<EdgeMapObject> mEdgeObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<HarbourMapObject, types::NodeId> mHarbourObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<NodeMapObject, types::NodeId> mNodeObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<VesselMapObject, int> mVesselObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<ShipMapObject, int> mShipObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<FishfarmMapObject, int> mFishfarmObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<WindmillMapObject, int> mWindmillObjects[MainWindow::MAX_MODELS];
+    MapObjectContainer<EdgeMapObject, int> mEdgeObjects[MainWindow::MAX_MODELS];
 
 //    std::shared_ptr<PaletteManager> mPaletteManager[MainWindow::MAX_MODELS];
 

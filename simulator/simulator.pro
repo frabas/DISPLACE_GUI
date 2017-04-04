@@ -26,6 +26,11 @@ macx {
 
 LIBS += -lpthread
 
+win32 {
+    # For GetProcessMemoryInfo()
+    LIBS += -lpsapi
+}
+
 unix:!macx {
     LIBS += -lrt
 }

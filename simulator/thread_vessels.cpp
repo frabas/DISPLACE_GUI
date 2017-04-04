@@ -341,7 +341,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     // ***************implement a decision************************************
                     else // Yes, keep go on catching on this ground...
                     {
-                        outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
+                        outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
                         //#pragma omp critical(docatch)
                         {
                             dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
@@ -350,7 +350,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                                                          is_discard_ban, is_fishing_credits, is_impact_benthos_N);
 
                             // check
-                            //if(vessels[ index_v ]->get_loc()->get_idx_node()==430)
+                            //if(vessels[ index_v ]->get_loc()->get_idx_node().toIndex()==430)
                             //{
                             //    vector <double> N_at_szgroup= vessels[ index_v ]->get_loc()->get_Ns_pops_at_szgroup(3);
                             //
@@ -433,7 +433,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
         // find.next.pt.on.the.graph()
         vessels[ index_v ]->find_next_point_on_the_graph(nodes);
 
-        outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
+        outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
 
         //dout(cout  << "roadmap (out): ");
         //lst = vessels[ index_v ]->get_roadmap();

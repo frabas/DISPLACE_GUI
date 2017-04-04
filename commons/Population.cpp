@@ -221,7 +221,7 @@ Population::Population(int a_name,
 	{
 								 // caution: here is tot N on the node! need to call distribute_N()
 		list_nodes.at(i)->set_Ns_pops_at_szgroup(a_name, tot_N_at_szgroup);
-        dout(cout  << list_nodes.at(i)->get_idx_node() << " ");
+        dout(cout  << list_nodes.at(i)->get_idx_node().toIndex() << " ");
 	}
 
     dout(cout << endl);

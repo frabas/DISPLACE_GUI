@@ -1558,7 +1558,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 	// check
     for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
 	{
-        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
+        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node().toIndex() <<
             " nb func. gr. " << nodes.at(a_idx)->get_benthos_tot_biomass().size() << endl);
 
         if(nodes.at(a_idx)->get_benthos_tot_biomass().size()!=(size_t)nbbenthospops)
@@ -1572,7 +1572,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // check the area distribution for benthos shared 0
 	//vector<Node* > some_nodes= benthoss.at(0)-> get_list_nodes();
 	//for(int a_idx=0; a_idx<some_nodes.size(); a_idx++){
-	//    cout << some_nodes.at(a_idx)->get_idx_node() << endl;
+    //    cout << some_nodes.at(a_idx)->get_idx_node().toIndex() << endl;
 	//}
 
 	// check the biomasses
@@ -2005,7 +2005,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	// check the update of a node (will be useful for the pop model and removals of catches)
 	vector<int> names_on_node= nodes[2579]->get_pop_names_on_node();
-   outc(cout << "pop names on this node " << nodes[2579]->get_idx_node() << endl);
+   outc(cout << "pop names on this node " << nodes[2579]->get_idx_node().toIndex() << endl);
 	for (unsigned int i=0; i<names_on_node.size(); i++)
 	{
        outc(cout << names_on_node[i] << " ");
@@ -2081,10 +2081,10 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        // check
        for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
        {
-        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
+        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node().toIndex() <<
             " has tariffs 0 " << nodes.at(a_idx)->get_tariffs().at(0) << endl);
 
-        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node() <<
+        dout(cout << "this node " << nodes.at(a_idx)->get_idx_node().toIndex() <<
             " has tariffs 1 " << nodes.at(a_idx)->get_tariffs().at(1) << endl);
        }
     }
@@ -2384,7 +2384,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
         {
-        if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node()))
+        if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node().toIndex()))
            {
             nodes.at(a_idx)->setAreaType(1);
            } else{
@@ -2788,7 +2788,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 		// check
         outc(cout << "create vessel " << vessels[i]->get_idx()  << " " << vessels[i]->get_name() << " " << vessels[i]->get_nationality() <<" on "
-			<< vessels[i]->get_loc()->get_idx_node() << " with coordinates "
+            << vessels[i]->get_loc()->get_idx_node().toIndex() << " with coordinates "
             << vessels[i]->get_loc()->get_x() << " " << vessels[i]->get_loc()->get_y() << endl);
 		//   << " and metier " << vessels[i]->get_metier()->get_name() <<  endl;
 		//vector<double> a_ogive = vessels[i]->get_metier()->get_selectivity_ogive() ;
@@ -2827,7 +2827,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     /*  //check movement
 	  // (caution: take really care of this piece of code that is able to uncouple the vessel to the graph if altered,
 	  // i.e. the "go straight" symptom)
-	  int old_node = vessels[0]->get_loc()->get_idx_node();
+      int old_node = vessels[0]->get_loc()->get_idx_node().toIndex();
 	  Node* p_node = new Node(1588, graph_coord_x, graph_coord_y, graph_coord_harbour, nbpops, 5);
 	  vessels[0]->move_to(p_node);
 	  dout << "move vessel "<< vessels[0]->get_idx() <<" on "
@@ -2838,7 +2838,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 	  // check the update of a node (will be useful for the pop model and removals of catches)
 	  vector<int> tab2= nodes[old_node]->get_vid();
-      dout(cout  << "idx vessel(s) on this node " << nodes[old_node]->get_idx_node() << endl);
+      dout(cout  << "idx vessel(s) on this node " << nodes[old_node]->get_idx_node().toIndex() << endl);
 	  for (int i=0; i<tab2.size(); i++)
 	  {
           dout(cout  << tab2[i] << " ");
@@ -3757,7 +3757,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                  // TO DO: improve this bottleneck.....because too costly when polygon_nodes is large 
                  /*for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
                     {
-                    if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node()))
+                    if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node().toIndex()))
                        {
                         nodes.at(a_idx)->setAreaType(1);
                        } else{
@@ -4121,7 +4121,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 					for(unsigned int n=0; n<list_nodes.size(); n++)
 					{
 						list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
-                        dout(cout   << list_nodes[n]->get_idx_node() << " ");
+                        dout(cout   << list_nodes[n]->get_idx_node().toIndex() << " ");
 					}
                     dout(cout  << endl);
 
@@ -4381,7 +4381,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             int idx_max2               = max_element (freq_harbs.begin(), freq_harbs.end()) - freq_harbs.begin();
             auto a_node = harbs.at(idx_max2);  // cause the decision is taken in harbour...
-            cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node.toIndex())->get_idx_node() << " is in harb?`" <<
+            cout << vessels.at(v)->get_name() << ": " << nodes.at(a_node.toIndex())->get_idx_node().toIndex() << " is in harb?`" <<
                     nodes.at(a_node.toIndex())->get_is_harbour() << " ...cause the decision is taken in harbour..." << endl;
             int current_metier = vessels.at(v)->get_metier()->get_name();
             cout << vessels.at(v)->get_name() << ": current_metier is " << current_metier << endl;
@@ -4637,7 +4637,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
              node_lpue = cumcatches_this_node /effort_on_this_node;
 
              nb_times_diff    =  node_lpue/mean_lpue;
-             //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " is .... " << nb_times_diff << endl;
+             //cout << "nb_times_diff on the node" << nodes[list_nodes_idx.at(inode)]->get_idx_node().toIndex() << " is .... " << nb_times_diff << endl;
 
 
 
@@ -4665,7 +4665,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // update the tariff (unless the effort on this node is 0)
             if(effort_on_this_node!=0) nodes[list_nodes_idx.at(inode).toIndex()]->set_tariffs(0, updated_tariff);
-            //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node() << " as .... " <<  updated_tariff << endl;
+            //cout << "...then set tariff on " << nodes[list_nodes_idx.at(inode)]->get_idx_node().toIndex() << " as .... " <<  updated_tariff << endl;
 
          }
 
@@ -4696,7 +4696,7 @@ char *path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 			{
 				bool is_harbour = vessels[ i ]->get_loc()->get_is_harbour();
                 cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
-                    <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl;
+                    <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node().toIndex() << endl;
 
 			}
 

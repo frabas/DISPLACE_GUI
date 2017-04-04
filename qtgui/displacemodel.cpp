@@ -886,7 +886,7 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
 {
     // remove from: mNodesLayer, mNodes,
     // update scenario nrow_coord, nrow_graph
-    qDebug() << "1) Node " << node->get_idx_node() << " has " << node.use_count() << " instances";
+    qDebug() << "1) Node " << node->get_idx_node().toIndex() << " has " << node.use_count() << " instances";
 
     mNodes[node->get_idx_node().toIndex()].reset();       // removed
     mNodesLayer->SetAttributeFilter(QString("%1 = %2").arg(FLD_NODEID).arg(node->get_idx_node().toIndex()).toStdString().c_str());
@@ -2350,7 +2350,7 @@ bool DisplaceModel::loadVessels()
 
         // check
         cout << "create vessel " << v->get_idx()  << " " << v->get_name() << " " << v->get_nationality() <<" on "
-            << v->get_loc()->get_idx_node() << " with coordinates "
+            << v->get_loc()->get_idx_node().toIndex() << " with coordinates "
             << v->get_loc()->get_x() << " " << v->get_loc()->get_y() << endl;
         //   << " and metier " << v->get_metier()->get_name() <<  endl;
         //vector<double> a_ogive = v->get_metier()->get_selectivity_ogive() ;

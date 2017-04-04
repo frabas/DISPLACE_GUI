@@ -1425,9 +1425,9 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 	{
 
 		//do a discrete jump on the final node
-        dout (cout << "JUMP?? FROM NODE " << this->get_loc()->get_idx_node()
+        dout (cout << "JUMP?? FROM NODE " << this->get_loc()->get_idx_node().toIndex()
 			<< " " << this->get_loc()->get_x() << " " << this->get_loc()->get_y()
-			<<  " TO NODE " << nodes[*pos]->get_idx_node()
+            <<  " TO NODE " << nodes[*pos]->get_idx_node().toIndex()
             << " " << nodes[*pos]->get_x() << " " << nodes[*pos]->get_y()  << endl);
 
 		double dist_for_one_ping = this->get_speed() * PING_RATE * NAUTIC;
@@ -1471,12 +1471,12 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 	}
 	else
 	{
-        dout(cout  << "SEMI-CONTINUOUS MOVE...from here " << this->get_loc()->get_idx_node() << endl);
-        dout(cout  << " to NODE " << nodes[*pos]->get_idx_node() << endl);
+        dout(cout  << "SEMI-CONTINUOUS MOVE...from here " << this->get_loc()->get_idx_node().toIndex() << endl);
+        dout(cout  << " to NODE " << nodes[*pos]->get_idx_node().toIndex() << endl);
 		bool flag = false;
 		// travel on the graph as long as dist_traveled is reached.
-        dout(cout << "SEMI-CONTINUOUS MOVE...FROM NODE " << this->get_loc()->get_idx_node()
-            << " TO NODE " << nodes[*pos]->get_idx_node() << endl);
+        dout(cout << "SEMI-CONTINUOUS MOVE...FROM NODE " << this->get_loc()->get_idx_node().toIndex()
+            << " TO NODE " << nodes[*pos]->get_idx_node().toIndex() << endl);
 		next_x= nodes[*pos]->get_x();
 		next_y= nodes[*pos]->get_y();
         dout(cout  << "x " << x << " y " << y  << " next_x " << next_x << " next_y " << next_y << endl);
@@ -1485,7 +1485,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 		this->set_distprevpos(dist_next_node) ;
 		double b = bearing (x, y, next_x, next_y);
 		this->set_course(b);
-        dout(cout  << "bearing between " << this->get_loc()->get_idx_node() << " and " <<nodes[*pos]->get_idx_node() <<" " << b << endl);
+        dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[*pos]->get_idx_node().toIndex() <<" " << b << endl);
         dout(cout  << "START BEARING " << this->get_course() <<endl);
 
         dout(cout << "distance to next node (before moving): " << dist_next_node
@@ -1509,13 +1509,13 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 			}
 			// change the current node
 			// this->move_to(nodes[*pos]);
-            // dout(cout  << "pass through node " << nodes[*pos]->get_idx_node() << endl);
+            // dout(cout  << "pass through node " << nodes[*pos]->get_idx_node().toIndex() << endl);
 			//  x = next_x;
 			// y = next_y;
 			if(roadmap.size()>1)
 			{
 				this->move_to(nodes[*pos]);
-                dout(cout  << "pass through node " << nodes[*pos]->get_idx_node() << endl);
+                dout(cout  << "pass through node " << nodes[*pos]->get_idx_node().toIndex() << endl);
 				x = next_x;
 				y = next_y;
 								 // erode
@@ -1563,7 +1563,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 		{
 			pos= roadmap.begin();
 			b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
-            dout(cout  << "bearing between " << this->get_loc()->get_idx_node() << " and " <<nodes[*pos]->get_idx_node() <<" " << b << endl);
+            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[*pos]->get_idx_node().toIndex() <<" " << b << endl);
 			//  } else{
 			//       b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
 			// }
@@ -1750,13 +1750,13 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
         vector<double> fishing_credits = this->get_fishing_credits();
         // check
-        cout << "this node " << this->get_loc()->get_idx_node() <<
+        cout << "this node " << this->get_loc()->get_idx_node().toIndex() <<
         " has tariffs0 " << tariff_this_cell.at(0) << endl;
         cout << "this vessel " << this->get_name() <<
         " has credits " << fishing_credits.at(0) << endl;
         fishing_credits.at(0) = fishing_credits.at(0) - tariff_this_cell.at(0);
         this->set_fishing_credits(fishing_credits);
-        cout << "this vessel " << this->get_loc()->get_idx_node() <<
+        cout << "this vessel " << this->get_loc()->get_idx_node().toIndex() <<
         " has remaining credits " << this->get_fishing_credits().at(0) << endl;
     }
 
@@ -1780,7 +1780,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 				/*
 				// check
-				if(this->get_loc()->get_idx_node()==186 && namepop==3)
+                if(this->get_loc()->get_idx_node().toIndex()==186 && namepop==3)
 				{
 					vector <double> N_at_szgroup= this->get_loc()->get_Ns_pops_at_szgroup(3);
 					vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
@@ -2168,7 +2168,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     this->get_loc()->set_removals_pops_at_szgroup(  namepop, removals_per_szgroup);
 
 					/*
-					if(this->get_loc()->get_idx_node()==186 && namepop==3)
+                    if(this->get_loc()->get_idx_node().toIndex()==186 && namepop==3)
 					{
 						vector <double> N_at_szgroup= this->get_loc()->get_Ns_pops_at_szgroup(3);
 						vector <double> removals_at_szgroup= this->get_loc()->get_removals_pops_at_szgroup(3);
@@ -3492,7 +3492,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
        //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
        //int ground=grds[0];
-       outc(cout  << this->get_name() << " GO FISHING ON " << ground << endl);
+       outc(cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl);
 
 
        // get the shortest path between source and destination
@@ -3588,7 +3588,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
        }
        else
        {
-           outc(cout << "pble calculating from " << from << " to " << ground << endl);
+           outc(cout << "pble calculating from " << from.toIndex() << " to " << ground.toIndex() << endl);
            this->move_to(nodes.at(from.toIndex())) ;
            // no path found: assume the vessel stucks at its current location
        }
@@ -3633,7 +3633,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 	// with the list of intermediate nodes
 	vector <double> dist_to_others;
     auto from = this->get_loc()->get_idx_node();
-    dout(cout  << "current node: " << from << endl);
+    dout(cout  << "current node: " << from.toIndex() << endl);
 	min_distance.clear();
 	previous.clear();
 
@@ -3668,11 +3668,11 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
              )
 		{
 
-            //	if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from))
+            //	if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from.toIndex()))
             // if(nodes.at(from)->evaluateAreaType()==1) // area closed?
             if (nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()))
 		{
-                dout(cout  << "gosh... I am fishing in a closed area there! " << from <<  endl);
+                dout(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
                 double dist_to_this_node = dist( nodes.at(from.toIndex())->get_x(),
                     nodes.at(from.toIndex())->get_y(),
 					nodes.at(vx)->get_x(),
@@ -3784,7 +3784,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
 	if(path.empty())
 	{
-        dout(cout << this->get_name() << " when changing from "<< from << " to this new ground: " << next_ground << " you should stop here because my path is empty!");
+        dout(cout << this->get_name() << " when changing from "<< from.toIndex() << " to this new ground: " << next_ground << " you should stop here because my path is empty!");
 		// as we detected something wrong here, we try to recover(!):
         for(unsigned int i=0; i<grds.size(); i++)
 		{
@@ -3803,7 +3803,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     if(path.empty())
     {
     // still empty!!
-    outc(cout << "pble calculating from " << from << " to " << next_ground << endl);
+    outc(cout << "pble calculating from " << from.toIndex() << " to " << next_ground << endl);
     this->move_to(nodes.at(from.toIndex())) ;
     // no path found: assume the vessel stucks at its current location
     } else{
@@ -3815,7 +3815,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground << endl);
 
-    dout(cout  << "We change from "<< from << " to this new ground: " << next_ground << endl);
+    dout(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground << endl);
 	//list<vertex_t>::iterator pos;
 	//for(pos=path.begin(); pos!=path.end(); pos++)
 	//{
@@ -3989,7 +3989,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 	{
 		// still no path!....
         dout (cout << "still no path found in shop for vessel " << this->get_name() <<
-            " going to arr " << arr << " from " << from << " then compute it..." << endl);
+            " going to arr " << arr << " from " << from.toIndex() << " then compute it..." << endl);
 
 		//compute a path!  (24Feb14 but disabled because too time consuming!)
 		//system("PAUSE");
@@ -4426,7 +4426,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         } else{
             this->set_smartcatch(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "smartCatchGround is " << smartCatchGround << endl);
+        outc(cout << "smartCatchGround is " << smartCatchGround.toIndex() << endl);
     }
 
 
@@ -4487,7 +4487,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         } else{
             this->set_highpotentialcatch(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "highPotentialCatchGround is " << highPotentialCatchGround << endl);
+        outc(cout << "highPotentialCatchGround is " << highPotentialCatchGround.toIndex() << endl);
 
     }
 
@@ -4527,7 +4527,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         } else{
             this->set_mosthistoricallyused(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround << endl);
+        outc(cout << "knowledgeOfThisGround is " << knowledgeOfThisGround.toIndex() << endl);
 
     }
 
@@ -4571,7 +4571,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         } else{
             this->set_notthatfar(types::special::InvalidNodeId);  // grounds are all included in closed areas...
         }
-        outc(cout << "notThatFarGround is " << notThatFarGround << endl);
+        outc(cout << "notThatFarGround is " << notThatFarGround.toIndex() << endl);
     }
 
 
@@ -4582,7 +4582,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
     for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
         ground=relevant_grounds_to_evaluate.at(it);
-        outc(cout << "Evaluate for ground... "<< ground << endl);
+        outc(cout << "Evaluate for ground... "<< ground.toIndex() << endl);
 
         // Caution with a logical leaks: each ground is evaluated once and only once,
         // meanwhile the smartCatch ground can be likely the same than the highPotentialCatch, notThatFar, etc.
@@ -4616,7 +4616,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     // if here, then no ground has actually been found
     // (because of 1- a *non-complete* tree;
     // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
-    dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground << endl);
+    dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl);
     if(relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)
         return (types::special::InvalidNodeId); // do_nothing
 

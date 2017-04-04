@@ -1084,7 +1084,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 
 	popnodes << setprecision(3) << fixed;
 	// tstep / node / long / lat / tot N sp0 / tot N sp1 /...
-	popnodes << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y();
 
     double totN_this_pop, totW_this_pop;
@@ -1119,7 +1119,7 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-	popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		impact_on_pops.at(pop) << " " <<  endl;
 
@@ -1133,7 +1133,7 @@ void Node::export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, i
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot cumcatches pop
-    popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches_per_pop.at(pop) << " " <<  endl;
 
@@ -1149,7 +1149,7 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
 
 	popnodes << setprecision(3) << fixed;
 	// pop/ tstep / node / long / lat /  impact sz0 / impact sz1 /...
-	popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() ;
 
     for(unsigned int sz = 0; sz < impact_on_pops.size(); sz++)
@@ -1170,7 +1170,7 @@ void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-	popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		cumftime << " " <<  endl;
 
@@ -1184,7 +1184,7 @@ void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  swept area
-    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumsweptarea << " " <<  endl;
 
@@ -1198,7 +1198,7 @@ void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
-    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches << " " <<  endl;
 
@@ -1212,7 +1212,7 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tariffs
-    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         tariffs.at(0) << " " <<  endl;
 
@@ -1257,7 +1257,7 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
 
     benthosbiomassnodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
-    benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+    benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " "  <<
                            benthos_tot_meanweight.at(funcgr) << endl;
 
@@ -1272,7 +1272,7 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
 
     benthosnumbernodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
-    benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+    benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
                        benthos_tot_meanweight.at(funcgr) << endl;
 

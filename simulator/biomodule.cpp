@@ -300,27 +300,27 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             int a_source_node_idx=0;
             for(unsigned int n=0; n<a_list_nodes.size(); n++)
             {
-                dout(cout << a_list_nodes.at(n)->get_idx_node() << " ");
+                dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
 
                 // a check
                 /*
                  vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
                 vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(9);
-                if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
+                if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436&& name_pop==9) {
                    outc(cout << "N_at_szgroup before oth_land" << endl);
                 }
                 for(unsigned int i=0; i<N_at_szgroup.size(); i++)
                 {
-                    if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
+                    if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436&& name_pop==9) {
                         outc(cout << N_at_szgroup.at(i) << endl);
                     }
                 }
-                if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
+                if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436&& name_pop==9) {
                    outc(cout << "removals_per_szgroup before oth_land" << endl);
                 }
                 for(unsigned int i=0; i<removals_per_szgroup.size(); i++)
                 {
-                    if(a_list_nodes.at(n)->get_idx_node()==2436&& name_pop==9) {
+                    if(a_list_nodes.at(n)->get_idx_node().toIndex()==2436&& name_pop==9) {
                         outc(cout << removals_per_szgroup.at(i) << endl);
                     }
                 }
@@ -342,7 +342,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     oth_land_this_pop_this_node= oth_land_this_pop_this_node*a_rnorm;
                 }
 
-                dout (cout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node()
+                dout (cout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node().toIndex()
                     << ": " << oth_land_this_pop_this_node << endl);
 
                 if(oth_land_this_pop_this_node!=0)
@@ -369,13 +369,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         }
                         sort (polygon_nodes.begin(), polygon_nodes.end());
                         */
-                        //if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node()))
+                        //if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node().toIndex()))
                         auto grd= a_list_nodes.at(n)->get_idx_node();
                         if (nodes.at(grd.toIndex())->evaluateAreaType()==1 ) // TO DO: should be improved to allow other in the restricted area concerning explicit vessels only...
                         {
                             // then, this is a closed node!
                             cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node;
-                            dout(cout  << " this is a polygon node ! " << a_list_nodes.at(n)->get_idx_node() << endl);
+                            dout(cout  << " this is a polygon node ! " << a_list_nodes.at(n)->get_idx_node().toIndex() << endl);
                             dout(cout  << " the cumul to be displaced for this pop is " << cumul_oth_land_to_be_displaced << endl);
                          // the relative node idx with oth_land to be displaced....
                             a_source_node_idx = n;
@@ -393,7 +393,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             if(dist_to_this_node<200)
                             {
                                 oth_land_this_pop_this_node+= cumul_oth_land_to_be_displaced;
-                                dout(cout  <<  cumul_oth_land_to_be_displaced << " oth_land displaced on " << a_list_nodes.at(n)->get_idx_node()  << endl);
+                                dout(cout  <<  cumul_oth_land_to_be_displaced << " oth_land displaced on " << a_list_nodes.at(n)->get_idx_node().toIndex()  << endl);
 
                          // reinit
                                 cumul_oth_land_to_be_displaced=0.0;
@@ -435,7 +435,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             vector <double>wsz = populations[name_pop]->get_weight_at_szgroup();
             for (unsigned int n=0; n<a_list_nodes.size(); n++)
             {
-                dout(cout  << "node" << a_list_nodes.at(n)->get_idx_node() << endl);
+                dout(cout  << "node" << a_list_nodes.at(n)->get_idx_node().toIndex() << endl);
                 vector <double> N_at_szgroup_at_month_start= a_list_nodes.at(n)->get_Ns_pops_at_szgroup_at_month_start(name_pop);
                 vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(name_pop);
                 vector <double> removals_per_szgroup= a_list_nodes.at(n)->get_removals_pops_at_szgroup(name_pop);
@@ -512,13 +512,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             if(tot_B<0) {
                                 lock();
                                 cout << "negative tot B!! for this pop " << name_pop << " " <<
-                                    "on node " << a_list_nodes.at(n)->get_idx_node() << endl;
+                                    "on node " << a_list_nodes.at(n)->get_idx_node().toIndex() << endl;
                                 unlock();
                             }
                             if(tot_removals<0) {
                                 lock();
                                 cout << "negative tot_removals!! for this pop " << name_pop << " " <<
-                                    "on node " << a_list_nodes.at(n)->get_idx_node() << endl;
+                                    "on node " << a_list_nodes.at(n)->get_idx_node().toIndex() << endl;
                                 unlock();
                             }
                         }
@@ -738,7 +738,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                        //           " given sp is " << sp << endl; // we should expect to always get a value!=0 here....
                        if(std::find(species_on_node.begin(), species_on_node.end(), spp) == species_on_node.end())
                         {
-                            //cout << "...but spp not found on this node " <<  a_list_nodes.at(n)->get_idx_node() << " so no effect..." << endl;
+                            //cout << "...but spp not found on this node " <<  a_list_nodes.at(n)->get_idx_node().toIndex() << " so no effect..." << endl;
                             a_prop_M.at(spp)=0.0; // put 0 in prop if pop not found on this node
                         }
                     }

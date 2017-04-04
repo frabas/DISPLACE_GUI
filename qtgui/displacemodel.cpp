@@ -900,7 +900,7 @@ bool DisplaceModel::removeNode(std::shared_ptr<NodeData> node)
     // TODO: Remove mPenaltyNodesQ1..4
 
 
-    qDebug() << "2) Node " << node->get_idx_node() << " has " << node.use_count() << " instances";
+    qDebug() << "2) Node " << node->get_idx_node().toIndex() << " has " << node.use_count() << " instances";
     return true;
 }
 

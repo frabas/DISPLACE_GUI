@@ -311,6 +311,7 @@ void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
     q.addBindValue(node->get_salinity());
     q.addBindValue(node->get_init_benthos_biomass());
     q.addBindValue(node->get_init_benthos_number());
+    q.addBindValue(node->get_init_benthos_meanweight());
     if (node->get_harbour()) {
         q.addBindValue(QString::fromStdString(node->get_name()));
     } else {
@@ -1079,7 +1080,7 @@ bool DbHelper::checkNodesStats(int version)
                + "nodeid INTEGER,"
                + "funcid INTEGER,"
                + "benthosbiomass REAL,"
-               + "benthosnumber REAL"
+               + "benthosnumber REAL,"
                + "benthosmeanweight REAL"
                + ");");
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());

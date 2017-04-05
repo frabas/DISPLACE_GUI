@@ -51,6 +51,14 @@ public:
             it->second.setWeight(w);
         }
     }
+
+    PathShop::Data getNode(types::NodeId id) const {
+        auto it = map.find(id);
+        if (it == map.end())
+            throw PathShop::NodeNotFoundException();
+        return it->second;
+    }
+
 };
 
 PathShop::PathShop()
@@ -61,6 +69,11 @@ PathShop::PathShop()
 PathShop::~PathShop()
 {
     delete d;
+}
+
+PathShop::Data PathShop::getNode(types::NodeId id) const
+{
+    return d->getNode(id);
 }
 
 PathShop PathShop::readFromFiles(const std::string &prevstream, const std::string &weighstream)

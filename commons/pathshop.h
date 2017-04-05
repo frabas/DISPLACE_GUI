@@ -33,8 +33,12 @@ public:
         double getWeight() const { return weight; }
     };
 
+    class NodeNotFoundException : public std::exception { using exception::exception; };
+
     PathShop();
     virtual ~PathShop();
+
+    Data getNode (types::NodeId id) const;
 
     static PathShop readFromFiles (const std::__cxx11::string &prevstream, const std::__cxx11::string &weighstream);
 };

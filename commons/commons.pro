@@ -55,7 +55,8 @@ SOURCES= \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
-    utils/CrashHandler.cpp
+    utils/CrashHandler.cpp \
+    pathshop.cpp
 
 
 HEADERS= \
@@ -100,7 +101,8 @@ HEADERS= \
     tseries/timeseriesmanager.h \
     dtree/evaluators/timeseriesevaluator.h \
     utils/CrashHandler.h \
-    dtree/vesselsevaluators.h
+    dtree/vesselsevaluators.h \
+    pathshop.h
 
 
 ## Do not add this if you don't support IPC queues

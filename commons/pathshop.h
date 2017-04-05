@@ -4,6 +4,7 @@
 #include <idtypes.h>
 
 #include <memory>
+#include <string>
 
 class PathShop
 {
@@ -40,7 +41,7 @@ public:
 
     Data getNode (types::NodeId id) const;
 
-    static PathShop readFromFiles (const std::__cxx11::string &prevstream, const std::__cxx11::string &weighstream);
+    static PathShop readFromFiles (const std::string &prevstream, const std::string &weighstream);
 };
 
 #endif // PATHSHOP_H

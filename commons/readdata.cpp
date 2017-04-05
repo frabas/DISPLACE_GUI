@@ -55,15 +55,15 @@ read the settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
 bool read_config_file(string folder_name_parameterization,
-    string inputfolder,
-    int& nbpops,
-    int& nbbenthospops,
-    vector<int>& implicit_pops,
-    vector<int>& implicit_pops_level2,
-    vector<double>& calib_oth_landings,
-    vector<double>& calib_w,
-    vector<double>& calib_cpue,
-    vector<types::NodeId> &interesting_harbours)
+                      string inputfolder,
+                      int& nbpops,
+                      int& nbbenthospops,
+                      vector<int>& implicit_pops,
+                      vector<int>& implicit_pops_level2,
+                      vector<double>& calib_oth_landings,
+                      vector<double>& calib_w,
+                      vector<double>& calib_cpue,
+                      vector<types::NodeId> &interesting_harbours)
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
@@ -75,14 +75,14 @@ bool read_config_file(string folder_name_parameterization,
 }
 
 bool read_config_file(std::istream &stream,
-    int& nbpops,
-    int& nbbenthospops,
-    vector<int>& implicit_pops,
-    vector<int>& implicit_pops_level2,
-    vector<double>& calib_oth_landings,
-    vector<double>& calib_w,
-    vector<double>& calib_cpue,
-    vector<types::NodeId> &interesting_harbours)
+                      int& nbpops,
+                      int& nbbenthospops,
+                      vector<int>& implicit_pops,
+                      vector<int>& implicit_pops_level2,
+                      vector<double>& calib_oth_landings,
+                      vector<double>& calib_w,
+                      vector<double>& calib_cpue,
+                      vector<types::NodeId> &interesting_harbours)
 {
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
@@ -118,9 +118,9 @@ read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
 bool read_scenario_config_file (string folder_name_parameterization,
-                               string inputfolder,
-                               string namefolderoutput,
-                               displace::commons::Scenario &scenario)
+                                string inputfolder,
+                                string namefolderoutput,
+                                displace::commons::Scenario &scenario)
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
     std::cout << "Reading Scenario file from " << filename << std::endl;
@@ -2266,8 +2266,8 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
 
 
 multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semester,
-                                                       int a_pop, string folder_name_parameterization, string inputfolder,
-                                                       string str_rand_avai_file)
+                                                                 int a_pop, string folder_name_parameterization, string inputfolder,
+                                                                 string str_rand_avai_file)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2315,8 +2315,8 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
 
 
 multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop,
-                                                            string folder_name_parameterization, string inputfolder,
-                                                            string str_rand_avai_file)
+                                                                      string folder_name_parameterization, string inputfolder,
+                                                                      string str_rand_avai_file)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2363,8 +2363,8 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
 
 
 multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop,
-                                                            string folder_name_parameterization, string inputfolder
-                                                            )
+                                                                       string folder_name_parameterization, string inputfolder
+                                                                       )
 {
     // casting a_pop into a string
     stringstream out;

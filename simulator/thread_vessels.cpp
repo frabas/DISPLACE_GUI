@@ -154,14 +154,14 @@ static void manage_ship(thread_data_t *dt, int idx_v)
 {
     UNUSED(dt);
     dout(cout << "idx_v is " << idx_v << " " << ships.size() << endl);
-       ships.at(idx_v - 5000)->lock();
-         pthread_mutex_lock (&glob_mutex);
-           dout(cout<<"before at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
-            ships.at(idx_v - 5000)->move();
-            dout(cout<<"after at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
-            mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
-         pthread_mutex_unlock (&glob_mutex);
-       ships.at(idx_v - 5000)->unlock();
+    ships.at(idx_v - 5000)->lock();
+    pthread_mutex_lock (&glob_mutex);
+    dout(cout<<"before at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
+    ships.at(idx_v - 5000)->move();
+    dout(cout<<"after at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
+    mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
+    pthread_mutex_unlock (&glob_mutex);
+    ships.at(idx_v - 5000)->unlock();
 }
 
 
@@ -245,16 +245,16 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
                     //go fishing
                     outc(cout  << "GO FISHING" << endl);
-                     do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
-                        tstep, scenario, use_dtrees,
-                        dyn_alloc_sce, create_a_path_shop,
-                        idx_path_shop, path_shop, min_distance_shop,
-                        adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-                        vertex_names,
-                        nodes,
-                        metiers,
-                        freq_cpue, freq_profit, freq_distance
-                        );
+                    do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
+                                tstep, scenario, use_dtrees,
+                                dyn_alloc_sce, create_a_path_shop,
+                                idx_path_shop, path_shop, min_distance_shop,
+                                adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
+                                vertex_names,
+                                nodes,
+                                metiers,
+                                freq_cpue, freq_profit, freq_distance
+                                );
 
 
                 }
@@ -278,17 +278,17 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
                 int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
-                    external_states_relevant_for_stopping_fishing,
-                    use_dtrees,
-                    tstep,
-                    dyn_alloc_sce, create_a_path_shop,
-                    idx_path_shop, path_shop, min_distance_shop,
-                    adjacency_map, min_distance, previous, relevant_nodes,
-                    vertex_names,
-                    nodes,
-                    metiers,
-                    freq_cpue, freq_distance,
-                    dist_to_ports);
+                            external_states_relevant_for_stopping_fishing,
+                            use_dtrees,
+                            tstep,
+                            dyn_alloc_sce, create_a_path_shop,
+                            idx_path_shop, path_shop, min_distance_shop,
+                            adjacency_map, min_distance, previous, relevant_nodes,
+                            vertex_names,
+                            nodes,
+                            metiers,
+                            freq_cpue, freq_distance,
+                            dist_to_ports);
 
                 //....unless we got a message (e.g. at the end of a year-quarter)
                 dout(cout  << "message: " << vessels[ index_v ]->read_message() << endl);
@@ -298,10 +298,10 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 {
                     if(vessels[ index_v ]->get_fgrounds().size()<3)
                     {
-                         //in this case, forced to go back to port instead!
+                        //in this case, forced to go back to port instead!
                         stop_fishing=true;
                     }
-                         //in this case, forced to change!
+                    //in this case, forced to change!
                     force_another_ground=true;
                     // reset my mail box
                     vessels[ index_v ]->reset_message();
@@ -315,26 +315,26 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     map<string,int> external_states_relevant_for_change_ground;
                     external_states_relevant_for_change_ground.insert(make_pair(" none ",0));
                     int another_ground = vessels[ index_v ]->should_i_change_ground(
-                        external_states_relevant_for_change_ground, false);
+                                external_states_relevant_for_change_ground, false);
 
                     // TO DO: do not change of ground if nodes are too far from each other e.g. nsea in myfish app
                     // so also need to test for current node code_area to see if vessel *allowed* to change grounds...
 
                     // ***************implement the decision************************************
-                         // ...but not on this ground!
+                    // ...but not on this ground!
                     if(another_ground || force_another_ground )
                     {
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(
-                            tstep,
-                            dyn_alloc_sce, create_a_path_shop,
-                            idx_path_shop, path_shop, min_distance_shop,
-                            adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-                            vertex_names,
-                            nodes,
-                            metiers,
-                            freq_cpue, freq_distance
-                            );
+                                    tstep,
+                                    dyn_alloc_sce, create_a_path_shop,
+                                    idx_path_shop, path_shop, min_distance_shop,
+                                    adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
+                                    vertex_names,
+                                    nodes,
+                                    metiers,
+                                    freq_cpue, freq_distance
+                                    );
                         outc(cout  << "GOOD JOB, FISHERS! "  << endl);
 
                     }
@@ -399,16 +399,16 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     outc(cout  << "RETURN TO PORT, NOW! "  << endl);
                     pthread_mutex_lock(&glob_mutex);
                     vessels[ index_v ]->choose_a_port_and_then_return(
-                        tstep,
-                        dyn_alloc_sce, create_a_path_shop,
-                        idx_path_shop, path_shop, min_distance_shop,
-                        adjacency_map, min_distance, previous, relevant_nodes,
-                        vertex_names,
-                        nodes,
-                        metiers,
-                        freq_cpue, freq_distance,
-                        dist_to_ports
-                        );
+                                tstep,
+                                dyn_alloc_sce, create_a_path_shop,
+                                idx_path_shop, path_shop, min_distance_shop,
+                                adjacency_map, min_distance, previous, relevant_nodes,
+                                vertex_names,
+                                nodes,
+                                metiers,
+                                freq_cpue, freq_distance,
+                                dist_to_ports
+                                );
 
                     pthread_mutex_unlock(&glob_mutex);
                 }
@@ -465,7 +465,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     {
         pthread_mutex_lock(&::mutex);
         vmslike2   << vessels[ index_v ]->get_x() << " "
-            << vessels[ index_v ]->get_y() <<  endl;
+                   << vessels[ index_v ]->get_y() <<  endl;
         pthread_mutex_unlock(&::mutex);
     }
     vessels[index_v]->unlock();
@@ -490,7 +490,7 @@ static void *thread(void *args)
 
         int nextidx = works.front();
         works.pop();
-//        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
+        //        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
         pthread_mutex_unlock(&work_mutex);
 
         if(nextidx<5000) // caution: assuming no more 5000 fishing vessels
@@ -504,7 +504,7 @@ static void *thread(void *args)
 
         pthread_mutex_lock(&work_mutex);
         --uncompleted_works;
-//        cout << "Thr " << data->thread_idx << " Completed, " << uncompleted_works << " rem\n";
+        //        cout << "Thr " << data->thread_idx << " Completed, " << uncompleted_works << " rem\n";
         pthread_cond_signal(&completion_cond);
         pthread_mutex_unlock(&work_mutex);
     }
@@ -566,7 +566,7 @@ void thread_vessel_signal_exit()
     exit_flag = true;
     void *rv;
     for (int i = 0; i < numthreads; ++i) {
-//        thread_vessel_insert_job(-1);
+        //        thread_vessel_insert_job(-1);
         pthread_mutex_lock(&work_mutex);
         pthread_cond_signal(&work_cond);
         pthread_mutex_unlock(&work_mutex);
@@ -589,7 +589,7 @@ void thread_vessel_wait_completed()
         pthread_cond_wait(&completion_cond, &work_mutex);
     }
 
-//    cout << " MAIN: completed " << endl;
+    //    cout << " MAIN: completed " << endl;
     pthread_mutex_unlock(&work_mutex);
 }
 

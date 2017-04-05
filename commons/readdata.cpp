@@ -2668,6 +2668,25 @@ spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId s
     return min_distance;
 }
 
+PathShop read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
+{
+    dout(cout <<"BEGIN: read map previous" << endl);
+
+    stringstream out1;
+    out1 << source.toIndex();
+    string source_s1 = out1.str();
+    string filename_previous= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s1+".bin";
+
+    dout(cout <<"BEGIN: read min_distance" << endl);
+
+    stringstream out2;
+    out2 << source.toIndex();
+    string source_s2 = out2.str();
+    string filename_weight= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s2+".bin";
+
+    return PathShop::readFromFiles(filename_previous, filename_weight);
+}
+
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
 {
     UNUSED(folder_name_parameterization);

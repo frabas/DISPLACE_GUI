@@ -20,6 +20,8 @@
 
 #include"myutils.h"
 #include"Population.h"
+#include "pathshop.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -197,8 +199,9 @@ vector <int> read_tsteps_months(string folder_name_parameterization, string inpu
 vector <int> read_tsteps_years(string folder_name_parameterization, string inputfolder);
 
 //shortPaths
-spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
-spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> __attribute__((deprecated)) read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, int> __attribute__((deprecated)) read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+PathShop read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name);
 
 // area based management
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);

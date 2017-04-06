@@ -43,7 +43,7 @@ public:
     void setWeight(types::NodeId node, weight_t w) {
         auto it = map.find(node);
         if (it == map.end()) {
-            Data data;
+            PathShop::Data data;
             data.setNode(node);
             data.setWeight(w);
             map.insert(std::make_pair(node, data));

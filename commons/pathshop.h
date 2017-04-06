@@ -22,7 +22,7 @@ public:
         weight_t weight;
 
     public:
-        Data();
+        Data() {}
 
         void setNode(types::NodeId n) { node = n; }
         types::NodeId getNode() const { return node; }

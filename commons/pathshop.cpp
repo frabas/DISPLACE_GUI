@@ -31,7 +31,7 @@ public:
     void setPrevious(types::NodeId node, types::NodeId previous) {
         auto it = map.find(node);
         if (it == map.end()) {
-            Data data;
+            PathShop::Data data;
             data.setNode(node);
             data.setPreviousNode(previous);
             map.insert(std::make_pair(node, data));

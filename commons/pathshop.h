@@ -19,7 +19,7 @@ public:
         types::NodeId node;
         types::NodeId previous;
 
-        weight_t weight;
+        weight_t weight = 0;
 
     public:
         Data() {}

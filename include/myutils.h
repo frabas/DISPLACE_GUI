@@ -42,6 +42,7 @@
 #include <math.h>
 
 #include <cstddef>
+#include <pathshop.h>
 
 using namespace std;
 
@@ -175,7 +176,8 @@ void DijkstraComputePaths(vertex_t source,
                           spp::sparse_hash_map<vertex_t, vertex_t>& previous,
                           std::vector<types::NodeId> relevant_nodes);
 
-std::list<vertex_t> DijkstraGetShortestPathTo(vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t> &previous);
+std::list<vertex_t> __attribute__((deprecated)) DijkstraGetShortestPathTo(vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t> &previous);
+std::list<types::NodeId> DijkstraGetShortestPathTo(types::NodeId target, const PathShop &pathshop);
 
 void SimplifyThePreviousMap(int source,
         spp::sparse_hash_map<vertex_t, vertex_t>& previous,

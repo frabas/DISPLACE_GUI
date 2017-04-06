@@ -184,6 +184,25 @@ std::list<vertex_t> DijkstraGetShortestPathTo(
     return path;
 }
 
+std::list<types::NodeId> DijkstraGetShortestPathTo(types::NodeId target, const PathShop &pathshop)
+{
+    std::list<types::NodeId> path;
+    auto vertex = target;
+    path.push_front(vertex);
+    while (true) {
+        try {
+            auto node = pathshop.getNode(vertex);
+            vertex = node.getPreviousNode();
+            path.push_front(vertex);
+        } catch (PathShop::NodeNotFoundException &) {
+            // end of path
+            break;
+        }
+    }
+
+    return path;
+}
+
 
 // remove the keys that are not used in the map "previous"
 // according to all the potential destination nodes for a given source node

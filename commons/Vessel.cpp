@@ -488,7 +488,7 @@ const multimap<types::NodeId, double> &Vessel::get_freq_possible_metiers() const
 }
 
 
-const list<vertex_t> &Vessel::get_roadmap() const
+const list<types::NodeId> &Vessel::get_roadmap() const
 {
     return(roadmap);
 }
@@ -1029,7 +1029,7 @@ void Vessel::set_freq_experiencedcpue_fgrounds_per_pop (const vector<vector<doub
 }
 
 
-void Vessel::set_roadmap (const list<vertex_t> &_roadmap)
+void Vessel::set_roadmap (const list<types::NodeId> &_roadmap)
 {
     roadmap=_roadmap;
 }
@@ -1410,10 +1410,10 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 
     assert(roadmap.size() > 0);
 
-    list<vertex_t>::iterator pos = roadmap.begin();
-    list<vertex_t>::iterator pos2 = roadmap.end();
+    list<types::NodeId>::iterator pos = roadmap.begin();
+    list<types::NodeId>::iterator pos2 = roadmap.end();
 
-    bool returning_to_harbour= nodes[*(--pos2)]->get_is_harbour();
+    bool returning_to_harbour= nodes[(*(--pos2)).toIndex()]->get_is_harbour();
     dout(cout  <<  " returning_to_harbour " << returning_to_harbour  << endl);
 
     if(roadmap.size()==0)
@@ -1427,15 +1427,15 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
         //do a discrete jump on the final node
         dout (cout << "JUMP?? FROM NODE " << this->get_loc()->get_idx_node().toIndex()
               << " " << this->get_loc()->get_x() << " " << this->get_loc()->get_y()
-              <<  " TO NODE " << nodes[*pos]->get_idx_node()
-                << " " << nodes[*pos]->get_x() << " " << nodes[*pos]->get_y()  << endl);
+              <<  " TO NODE " << nodes[(*pos).toIndex()]->get_idx_node().toIndex()
+                << " " << nodes[(*pos).toIndex()]->get_x() << " " << nodes[(*pos).toIndex()]->get_y()  << endl);
 
         double dist_for_one_ping = this->get_speed() * PING_RATE * NAUTIC;
-        double dist_next_node = dist(this->get_x(), this->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
+        double dist_next_node = dist(this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
         if(dist_for_one_ping > dist_next_node)
         {
             dout(cout  << "YES: JUMP!!" << endl);
-            this->move_to(nodes[*pos]);
+            this->move_to(nodes[(*pos).toIndex()]);
             next_x= this->get_loc()->get_x();
             next_y= this->get_loc()->get_y();
             x = next_x;
@@ -1446,7 +1446,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
         else
         {
             dout(cout  << "NO: APPROACH!!" << endl);
-            double b = bearing (this->get_x(), this->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
+            double b = bearing (this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
             vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
             this->set_xy(xy[0], xy[1]);
             set_distprevpos(dist_for_one_ping) ;
@@ -1472,20 +1472,20 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
     else
     {
         dout(cout  << "SEMI-CONTINUOUS MOVE...from here " << this->get_loc()->get_idx_node().toIndex() << endl);
-        dout(cout  << " to NODE " << nodes[*pos]->get_idx_node().toIndex() << endl);
+        dout(cout  << " to NODE " << nodes[(*pos).toIndex()]->get_idx_node().toIndex() << endl);
         bool flag = false;
         // travel on the graph as long as dist_traveled is reached.
         dout(cout << "SEMI-CONTINUOUS MOVE...FROM NODE " << this->get_loc()->get_idx_node().toIndex()
-             << " TO NODE " << nodes[*pos]->get_idx_node() << endl);
-        next_x= nodes[*pos]->get_x();
-        next_y= nodes[*pos]->get_y();
+             << " TO NODE " << nodes[(*pos).toIndex()]->get_idx_node() << endl);
+        next_x= nodes[(*pos).toIndex()]->get_x();
+        next_y= nodes[(*pos).toIndex()]->get_y();
         dout(cout  << "x " << x << " y " << y  << " next_x " << next_x << " next_y " << next_y << endl);
         double dist_next_node = dist(x, y, next_x, next_y);
         double dist_traveled = this->get_speed() * PING_RATE * NAUTIC;
         this->set_distprevpos(dist_next_node) ;
         double b = bearing (x, y, next_x, next_y);
         this->set_course(b);
-        dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[*pos]->get_idx_node().toIndex() <<" " << b << endl);
+        dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << endl);
         dout(cout  << "START BEARING " << this->get_course() <<endl);
 
         dout(cout << "distance to next node (before moving): " << dist_next_node
@@ -1494,8 +1494,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
         double dist_sauv;		 // required to get the remaining dist
         while(dist_traveled > dist_next_node)
         {
-            next_x= nodes[*pos]->get_x();
-            next_y= nodes[*pos]->get_y();
+            next_x= nodes[(*pos).toIndex()]->get_x();
+            next_y= nodes[(*pos).toIndex()]->get_y();
             double dist_next_node = dist(x, y, next_x, next_y);
             dist_sauv = dist_traveled;
             dist_traveled = dist_traveled - dist_next_node;
@@ -1514,8 +1514,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
             // y = next_y;
             if(roadmap.size()>1)
             {
-                this->move_to(nodes[*pos]);
-                dout(cout  << "pass through node " << nodes[*pos]->get_idx_node().toIndex() << endl);
+                this->move_to(nodes[(*pos).toIndex()]);
+                dout(cout  << "pass through node " << nodes[(*pos).toIndex()]->get_idx_node().toIndex() << endl);
                 x = next_x;
                 y = next_y;
                 // erode
@@ -1525,13 +1525,13 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
             else
             {
                 double dist_for_one_ping = this->get_speed() * PING_RATE * NAUTIC;
-                double dist_next_node = dist(this->get_x(), this->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
+                double dist_next_node = dist(this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
                 if(dist_for_one_ping > dist_next_node)
                 {
 
                     dout(cout  << "YES: JUMP TO THE FINAL NODE" << endl);
                     // JUMP
-                    this->move_to(nodes[*pos]);
+                    this->move_to(nodes[(*pos).toIndex()]);
                     next_x= this->get_loc()->get_x();
                     next_y= this->get_loc()->get_y();
                     x = next_x;	 // note: correct 24Feb14: was missing then was creating overlapped nodes, which was creating the straight line symptom due to dist at nan!!
@@ -1546,7 +1546,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
                 else
                 {
                     dout(cout  << "NO: APPROACH THE FINAL NODE" << endl);
-                    b = bearing (this->get_x(), this->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
+                    b = bearing (this->get_x(), this->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
                     vector<double> xy = destB(this->get_x(), this->get_y(), b, dist_for_one_ping);
                     this->set_xy(xy[0], xy[1]);
                     set_distprevpos(dist_for_one_ping) ;
@@ -1562,8 +1562,8 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
         if(!flag)
         {
             pos= roadmap.begin();
-            b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
-            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[*pos]->get_idx_node().toIndex() <<" " << b << endl);
+            b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[(*pos).toIndex()]->get_x(), nodes[(*pos).toIndex()]->get_y());
+            dout(cout  << "bearing between " << this->get_loc()->get_idx_node().toIndex() << " and " <<nodes[(*pos).toIndex()]->get_idx_node().toIndex() <<" " << b << endl);
             //  } else{
             //       b = bearing (this->get_loc()->get_x(), this->get_loc()->get_y(), nodes[*pos]->get_x(), nodes[*pos]->get_y());
             // }
@@ -2811,6 +2811,7 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 
 
 vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_shop,
+                                                  const std::vector<PathShop> &pathshops,
                                                   const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
                                                   const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop)
 {
@@ -2827,8 +2828,8 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
     // distance to all grounds (through the graph...)
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
-    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop,
-                                                                  path_shop, min_distance_shop, from.toIndex(), the_grounds);
+    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
+                                                                  path_shop, min_distance_shop, from, the_grounds);
 
     // vsize
     int length_class =this->get_length_class();
@@ -2941,6 +2942,7 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
 void Vessel::alloc_on_high_profit_grounds(int tstep,
                                           const vector <int>& idx_path_shop,
+                                          const std::vector<PathShop> &pathshops,
                                           const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
                                           const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                           ofstream& freq_profit)
@@ -2949,6 +2951,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
     vector<double> profit_per_fgrounds = expected_profit_on_grounds(
                 idx_path_shop,
+                pathshops,
                 path_shop,
                 min_distance_shop);
 
@@ -3015,6 +3018,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
 void Vessel::alloc_while_saving_fuel(int tstep,
                                      const vector <int>& idx_path_shop,
+                                     const std::vector<PathShop> &pathshops,
                                      const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
                                      const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop
                                      )
@@ -3036,8 +3040,8 @@ void Vessel::alloc_while_saving_fuel(int tstep,
         // distance to all grounds (through the graph...)
         auto from = this->get_loc()->get_idx_node();
         auto the_grounds = this->get_fgrounds();
-        vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop,
-                                                                      path_shop, min_distance_shop, from.toIndex(), the_grounds);
+        vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
+                                                                      path_shop, min_distance_shop, from, the_grounds);
 
         // find the freq for the 3 most used grounds and track their idx.
         // the value
@@ -3175,6 +3179,7 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 
 
 void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& idx_path_shop,
+                                     const std::vector<PathShop> &pathshops,
                                      const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
                                      const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                      ofstream& freq_distance)
@@ -3198,8 +3203,8 @@ void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& idx_path_sho
 
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
-    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop,
-                                                                  path_shop, min_distance_shop, from.toIndex(), the_grounds);
+    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
+                                                                  path_shop, min_distance_shop, from, the_grounds);
     // we could have computed here as well the fuel to be used for reaching each ground...
 
     vector <double> freq_distance_fgrounds= scale_a_vector_to_1(distance_fgrounds);
@@ -3335,6 +3340,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                                             const DynAllocOptions& dyn_alloc_sce,
                                             int create_a_path_shop,
                                             const vector<int> &idx_path_shop,
+                                            const vector<PathShop> &pathshops,
                                             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
                                             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                             adjacency_map_t& adjacency_map,
@@ -3366,6 +3372,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         ground=this->should_i_choose_this_ground(tstep,
                                                  nodes,
                                                  idx_path_shop,
+                                                 pathshops,
                                                  dyn_alloc_sce,
                                                  path_shop,
                                                  min_distance_shop); // use ChooseGround dtree along all possible grounds to define the next ground
@@ -3390,6 +3397,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
             this->alloc_on_high_profit_grounds(tstep,
                                                idx_path_shop,
+                                               pathshops,
                                                path_shop,
                                                min_distance_shop,
                                                freq_profit);
@@ -3406,6 +3414,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
                 this->alloc_while_saving_fuel(tstep,
                                               idx_path_shop,
+                                              pathshops,
                                               path_shop,
                                               min_distance_shop);
             }
@@ -3422,6 +3431,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         {
             this->alloc_on_closer_grounds(tstep,
                                           idx_path_shop,
+                                          pathshops,
                                           path_shop,
                                           min_distance_shop,
                                           freq_distance);
@@ -3500,6 +3510,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     auto from = this->get_loc()->get_idx_node();
     this->set_previous_harbour_idx(from);
 
+    PathShop curr_path_shop;
 
     if(!create_a_path_shop)
     {
@@ -3510,18 +3521,19 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     }
     else						 // replaced by:
     {
-        auto it = find (idx_path_shop.begin(), idx_path_shop.end(), from.toIndex());
-        // tricky!
-        int idx = it - idx_path_shop.begin();
+        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        int idx = it - relevant_nodes.begin();
 
-        previous=path_shop.at(idx);
-        min_distance=min_distance_shop.at(idx);
+      //  previous=path_shop.at(idx);
+      //  min_distance=min_distance_shop.at(idx);
+      curr_path_shop = pathshops.at(idx);
     }
-    vertex_t vx = ground.toIndex();		 // destination
-    dout(cout  << "distance to fishing ground " << vertex_names[vx] << ": " << min_distance[vx] << endl);
+
+    dout(cout  << "find path to fishing ground " << ground.toIndex() << endl);
 
 
-    list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
+    //list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
+    list<types::NodeId> path = DijkstraGetShortestPathTo(ground, curr_path_shop);
 
 
     if(path.size()>1)			 // i.e no path has been found if path.size()==1...
@@ -3531,8 +3543,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         min_distance.clear();
         previous.clear();
         // show the roadmap
-        list<vertex_t> road= this->get_roadmap();
-        list<vertex_t>::iterator road_iter = road.begin();
+        list<types::NodeId> road= this->get_roadmap();
+        list<types::NodeId>::iterator road_iter = road.begin();
 
         // check path
         //    dout(cout << "path: ");
@@ -3601,6 +3613,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                                                   const DynAllocOptions &dyn_alloc_sce,
                                                   int create_a_path_shop,
                                                   const vector<int> &idx_path_shop,
+                                                  const std::vector<PathShop> &pathshops,
                                                   const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
                                                   const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                                   adjacency_map_t& adjacency_map,
@@ -3857,6 +3870,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
                                            const DynAllocOptions &dyn_alloc_sce,
                                            int create_a_path_shop,
                                            const vector<int> &idx_path_shop,
+                                           const std::vector<PathShop> &pathshops,
                                            const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
                                            const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                            adjacency_map_t& adjacency_map,
@@ -4014,10 +4028,10 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     {
         dout(cout << "new roadmap to port is: ");
         // check
-        list<vertex_t> lst = this->get_roadmap();
+        list<types::NodeId> lst = this->get_roadmap();
         for(auto pos=lst.begin(); pos!=lst.end(); pos++)
         {
-            dout(cout << *pos << " ");
+            dout(cout << *pos.toIndex() << " ");
         }
         dout(cout << endl);
     }
@@ -4321,6 +4335,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         outc(cout << "compute smartCatchGround"  << endl);
 
         vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
+                                                                                     pathshops,
                                                                                      path_shop,
                                                                                      min_distance_shop);
 
@@ -4537,7 +4552,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
         auto from = this->get_loc()->get_idx_node();
         vector <double> distance_to_grounds = compute_distance_fgrounds
-                (idx_path_shop,
+                (idx_path_shop, pathshops,
                  path_shop, min_distance_shop, from.toIndex(), grds);
 
         // keep only the grds out the closed areas...

@@ -96,7 +96,7 @@ private:
         std::vector< std::vector<double> > cpue_nodes_species;
         std::vector< std::vector<double> > gshape_cpue_nodes_species;
         std::vector< std::vector<double> > gscale_cpue_nodes_species;
-        std::list<vertex_t> roadmap;
+        std::list<types::NodeId> roadmap;
 								 // because movement is semi-continuous...
 		double x, y, prev_x, prev_y, next_x, next_y, course;
 								 // fixed
@@ -193,7 +193,7 @@ public:
         const std::vector<int> &get_idx_used_metiers_this_trip ();
         const multimap<types::NodeId, int> &get_possible_metiers() const;
         const multimap<types::NodeId, double> &get_freq_possible_metiers() const;
-        const std::list<vertex_t> &get_roadmap () const;
+        const std::list<types::NodeId> &get_roadmap () const;
 		bool get_inharbour() const;
 		bool get_inactive() const;
 		bool get_natio() const;
@@ -277,7 +277,7 @@ public:
         void set_freq_experiencedcpue_fgrounds(const std::vector<double> &newval);
         void set_freq_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
 		void clear_idx_used_metiers_this_trip();
-        void set_roadmap (const std::list<vertex_t> &_roadmap);
+        void set_roadmap (const std::list<types::NodeId> &_roadmap);
 		void set_inharbour (bool logic);
 		void set_inactive (bool logic);
 		void set_natio (bool logic);
@@ -322,18 +322,22 @@ public:
 		void alloc_on_high_previous_cpue(int tstep,
             std::ofstream& freq_cpue);
         void alloc_on_high_profit_grounds(int tstep, const std::vector<int> &idx_path_shop,
+            const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
             std::ofstream& freq_profit);
         std::vector<double> expected_profit_on_grounds(const std::vector<int> &idx_path_shop,
+            const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop
             );
         void alloc_while_saving_fuel(int tstep, const std::vector<int> &idx_path_shop,
+           const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop
             );
         void alloc_on_closer_grounds(int tstep, const std::vector<int> &idx_path_shop,
+            const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
             std::ofstream& freq_distance);
@@ -341,6 +345,7 @@ public:
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
             const std::vector <int>& idx_path_shop,
+            const std::vector <PathShop>& pathshops,
             const std::deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
             const std::deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
             adjacency_map_t& adjacencymap,
@@ -358,6 +363,7 @@ public:
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
             const std::vector <int>& idx_path_shop,
+            const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
             adjacency_map_t& adjacency_map,
@@ -374,6 +380,7 @@ public:
             const DynAllocOptions &dyn_alloc_sce,
             int create_a_path_shop,
             const std::vector <int>& idx_path_shop,
+            const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
             adjacency_map_t& adjacency_map,
@@ -395,6 +402,7 @@ public:
         types::NodeId should_i_choose_this_ground(int tstep,
                                         std::vector<Node*>& nodes,
                                         const std::vector <int>& idx_path_shop,
+                                        const std::vector<PathShop> &pathshops,
                                         const DynAllocOptions &dyn_alloc_sce,
                                         const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
                                         const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop);
@@ -405,6 +413,7 @@ public:
             const DynAllocOptions& dyn_alloc_sce,
             int create_a_path_shop,
             const std::vector<int> &idx_path_shop,
+            const std::vector<PathShop> &pathshops,
             const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
             const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
             adjacency_map_t& adjacency_map,

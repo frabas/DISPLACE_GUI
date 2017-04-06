@@ -3074,6 +3074,8 @@ int main(int argc, char* argv[])
     // list<map<vertex_t, vertex_t> > path_shop (relevant_nodes.size());
     // list<map<vertex_t, weight_t> >  min_distance_shop(relevant_nodes.size());
 
+    vector <PathShop> pathshops;
+
     if(!create_a_path_shop)
     {
         outc(cout << "you chose to do not create a path shop...the computation will take far more time." << endl);
@@ -3100,10 +3102,13 @@ int main(int argc, char* argv[])
 
                 dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i) << endl);
                 // these maps come from SimplifyThePreviousMap()
-                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
-                dout(cout  << ":: "<<  endl);
+                //previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                //dout(cout  << ":: "<<  endl);
                 // these maps come from SimplifyThePreviousMap()
-                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                //min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+
+                PathShop curr_path_shop =read_graph_details(types::NodeId(relevant_nodes.at(i)),  namefolderinput,   inputfolder,  a_graph_name);
+                pathshops.push_back(curr_path_shop);
 
             }
             else

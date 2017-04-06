@@ -1572,35 +1572,43 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 }
 
 
-vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
+vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
+                                         const std::vector<PathShop> &pathshops,
                                          const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
                                          const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
-                                         int from,
+                                         types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
-    vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
-    // tricky!
-    int idx = it - idx_path_shop.begin();
+    vector<int>::const_iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+    int idx = it - relevant_nodes.begin();
 
-    auto previous = path_shop.at(idx);
-    //std::list<map<int,int> >::iterator it_p = path_shop.begin();
-    // advance(it_p, idx-1);
-    //map<vertex_t, vertex_t> previous= *it_p;
-
-    auto min_distance = min_distance_shop.at(idx);
-    // std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
-    // advance(it_d, idx-1);
-    // map<vertex_t, weight_t> min_distance= *it_d;
 
     vector <double> distance_fgrounds;
     for (unsigned int i=0; i<grounds.size(); i++)
-    {
-        vertex_t vx = grounds.at(i).toIndex();
-        distance_fgrounds.push_back(min_distance[vx]);
-        dout(cout  << "distance to fishing ground " << min_distance[vx] << endl);
+      {
+      double dist=0.0;
+      auto vertex = grounds.at(i);
+
+      while (true) {
+        try {
+            auto node = pathshops.at(idx).getNode(vertex);
+            vertex = node.getPreviousNode();
+            dist   = node.getWeight();
+            if (!types::isIdInvalid(vertex))
+                distance_fgrounds.push_back(dist);
+            else
+                break;
+        } catch (PathShop::NodeNotFoundException &) {
+            // end of path
+            break;
+        }
+      }
     }
-    return(distance_fgrounds);
+
+
+ return(distance_fgrounds);
 }
+
 
 
 vector<double> scale_a_vector_to_1(vector<double> a_vector)

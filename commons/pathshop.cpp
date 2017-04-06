@@ -28,6 +28,20 @@ public:
 
     }
 
+    void set(types::NodeId node, types::NodeId previous, weight_t weight) {
+        auto it = map.find(node);
+        if (it == map.end()) {
+            PathShop::Data data;
+            data.setNode(node);
+            data.setPreviousNode(previous);
+            data.setWeight(weight);
+            map.insert(std::make_pair(node, data));
+        } else {
+            it->second.setPreviousNode(previous);
+            it->second.setWeight(weight);
+        }
+    }
+
     void setPrevious(types::NodeId node, types::NodeId previous) {
         auto it = map.find(node);
         if (it == map.end()) {
@@ -86,6 +100,16 @@ PathShop PathShop::readFromFiles(const std::string &prevstream, const std::strin
         return true;
     });
 
+    return shop;
+}
+
+PathShop PathShop::readFromData(const std::vector<InitData> &data)
+{
+    PathShop shop;
+
+    for (auto d : data) {
+        shop.d->set(types::NodeId(std::get<0>(d)), types::NodeId(std::get<1>(d)), weight_t(std::get<2>(d)));
+    }
     return shop;
 }
 

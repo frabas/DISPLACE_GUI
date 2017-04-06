@@ -193,7 +193,10 @@ std::list<types::NodeId> DijkstraGetShortestPathTo(types::NodeId target, const P
         try {
             auto node = pathshop.getNode(vertex);
             vertex = node.getPreviousNode();
-            path.push_front(vertex);
+            if (!types::isIdInvalid(vertex))
+                path.push_front(vertex);
+            else
+                break;
         } catch (PathShop::NodeNotFoundException &) {
             // end of path
             break;

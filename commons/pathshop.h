@@ -5,6 +5,8 @@
 
 #include <memory>
 #include <string>
+#include <vector>
+#include <tuple>
 
 class PathShop
 {
@@ -42,6 +44,9 @@ public:
     Data getNode (types::NodeId id) const;
 
     static PathShop readFromFiles (const std::string &prevstream, const std::string &weighstream);
+
+    using InitData = std::tuple<types::NodeId::type, types::NodeId::type, weight_t>;
+    static PathShop readFromData(const std::vector<InitData> &data);
 };
 
 #endif // PATHSHOP_H

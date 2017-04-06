@@ -62,13 +62,8 @@ public:
 };
 
 PathShop::PathShop()
-    : d(new Private())
+    : d(std::make_shared<Private>())
 {
-}
-
-PathShop::~PathShop()
-{
-    delete d;
 }
 
 PathShop::Data PathShop::getNode(types::NodeId id) const

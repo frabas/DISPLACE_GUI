@@ -12,7 +12,7 @@ class PathShop
 
     class Private;
 
-    Private *d;
+    std::shared_ptr<Private> d;
 public:
     class Data {
     private:
@@ -37,7 +37,7 @@ public:
     class NodeNotFoundException : public std::exception { using exception::exception; };
 
     PathShop();
-    virtual ~PathShop();
+    virtual ~PathShop() noexcept = default;
 
     Data getNode (types::NodeId id) const;
 

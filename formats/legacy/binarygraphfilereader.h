@@ -44,7 +44,6 @@ public:
             throw std::system_error(0,std::generic_category(), "Bad header or sizes");
         }
 
-        int nm = 0;
         while (!feof(file)) {
             struct __attribute__ ((__packed__)) {
                 Key k;

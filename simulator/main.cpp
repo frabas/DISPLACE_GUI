@@ -2974,74 +2974,6 @@ int main(int argc, char* argv[])
 
     // create a shop of paths
 
-#if 0
-    bool do_it=false;
-    if(do_it)					 // test
-    {
-        int origin = 1;			 // departure node
-        vector<int> dest;
-        dest.push_back(500);
-        dest.push_back(600);
-        dest.push_back(12487);
-        // from the source to all nodes
-        DijkstraComputePaths(origin, adjacency_map, min_distance, previous, dest);
-        ofstream paths;
-        string a_file =pathoutput+"/DISPLACE_outputs/paths.dat";
-        paths.open(a_file.c_str());
-        vertex_t v = 12487;		 // destination
-        outc(cout << "Distance to " << vertex_names[v] << ": " << min_distance[v] << endl);
-        list<vertex_t> path = DijkstraGetShortestPathTo(v, previous);
-        list<vertex_t>::iterator path_iter = path.begin();
-
-        outc(cout << "Path: ");
-        for( ; path_iter != path.end(); path_iter++)
-        {
-            outc(cout << vertex_names[*path_iter] << " " );
-            paths << vertex_names[*path_iter] << " ";
-        }
-        outc(cout << endl);
-
-        // check "previous" content
-        // std::map<vertex_t, vertex_t>::iterator prev;
-        // for ( prev=previous.begin() ; prev != previous.end(); prev++ )
-        // {
-        //   if((prev->first) ==1759) outc(cout << prev->first  <<" " << prev->second << std::endl);
-        //   if((prev->second) ==1759) outc(cout << prev->first  <<" " << prev->second << std::endl);
-        // }
-
-        // store in path shops (avoiding recomputing all possible paths from a given departure!!!)
-        // ...and clean
-        paths_shop.push_back(previous);
-        min_distances_shop.push_back(min_distance);
-        idx_paths_shop.push_back(origin);
-        min_distance.clear();
-        previous.clear();
-        paths.close();
-
-        // retrieve the object 'previous' specific to a given origin node
-        // 1. find the idx in the idx_paths_shop object
-        vector<int>::iterator it;
-        it = find (idx_paths_shop.begin(), idx_paths_shop.end(), 1);
-        int idx = it - idx_paths_shop.begin();
-        outc(cout << "The element is found at idx " << idx << endl);
-        // 2. then use this idx as index in the paths_shop to retrieve the object 'previous'
-        previous=paths_shop[idx];
-        min_distance=min_distances_shop[idx];
-        // 3....and compute a new path to a new destination from this same origin!
-        vertex_t v2 = 12487;	 // destination
-        list<vertex_t> path2 = DijkstraGetShortestPathTo(v2, previous);
-        list<vertex_t>::iterator path2_iter = path2.begin();
-        outc(cout << "Path2: ");
-        for( ; path2_iter != path2.end(); path2_iter++)
-        {
-            outc(cout << vertex_names[*path2_iter] << " " );
-        }
-        outc(cout << endl);
-        min_distance.clear();
-        previous.clear();
-
-    }							 // end test
-#endif
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
@@ -3086,10 +3018,10 @@ int main(int argc, char* argv[])
 
         // for-loop over potential departure node
         // TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
-        spp::sparse_hash_map<vertex_t, weight_t> min_distance;
-        spp::sparse_hash_map<vertex_t, vertex_t> previous;
-        min_distance.clear();
-        previous.clear();
+        //spp::sparse_hash_map<vertex_t, weight_t> min_distance;
+        //spp::sparse_hash_map<vertex_t, vertex_t> previous;
+        //min_distance.clear();
+        //previous.clear();
         //for (int i=3100; i<relevant_nodes.size(); i++) // change for this to debug in case the creation fails...
         for (unsigned int i=0; i<relevant_nodes.size(); i++)
         {
@@ -3135,12 +3067,12 @@ int main(int argc, char* argv[])
 
             // store in path shops (in order to avoid recomputing the all possible paths from a given departure!!!)
             // ...and clean
-            path_shop.push_back(previous);
-            min_distance_shop.push_back(min_distance);
-            idx_path_shop.push_back(relevant_nodes.at(i));
+            //path_shop.push_back(previous);
+            //min_distance_shop.push_back(min_distance);
+            //idx_path_shop.push_back(relevant_nodes.at(i));
 
-            min_distance.clear();
-            previous.clear();
+            //min_distance.clear();
+            //previous.clear();
 
         }
 

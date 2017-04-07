@@ -3523,16 +3523,12 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     {
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
         int idx = it - relevant_nodes.begin();
-
-      //  previous=path_shop.at(idx);
-      //  min_distance=min_distance_shop.at(idx);
-      curr_path_shop = pathshops.at(idx);
+        curr_path_shop = pathshops.at(idx);
     }
 
     dout(cout  << "find path to fishing ground " << ground.toIndex() << endl);
 
 
-    //list<vertex_t> path = DijkstraGetShortestPathTo(vx, previous);
     list<types::NodeId> path = DijkstraGetShortestPathTo(ground, curr_path_shop);
 
 
@@ -3647,8 +3643,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     vector <double> dist_to_others;
     auto from = this->get_loc()->get_idx_node();
     dout(cout  << "current node: " << from.toIndex() << endl);
-    min_distance.clear();
-    previous.clear();
+    //min_distance.clear();
+    //previous.clear();
+    PathShop curr_path_shop;
 
     if(!create_a_path_shop)
     {
@@ -3657,21 +3654,28 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     }
     else						 // replaced by:
     {
-        vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from.toIndex());
+     //   vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from.toIndex());
         // tricky!
-        int idx = it - idx_path_shop.begin();
+     //   int idx = it - idx_path_shop.begin();
 
-        previous=path_shop.at(idx);
-        min_distance=min_distance_shop.at(idx);
+     //   previous=path_shop.at(idx);
+     //   min_distance=min_distance_shop.at(idx);
+
+        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        int idx = it - relevant_nodes.begin();
+        curr_path_shop = pathshops.at(idx);
+
 
     }
 
+    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
+                                                                  path_shop, min_distance_shop, from, grds);
 
     for (unsigned int i =0; i< grds.size(); i++)
     {
 
-        vertex_t vx = grds.at(i).toIndex();// destination
-        dout(cout  << "distance to other grounds " << vertex_names[vx] << ": " << min_distance[vx] << endl);
+        types::NodeId vx = types::NodeId(grds.at(i));// destination
+        dout(cout  << "distance to other grounds " << vx << ": " << vx.toIndex() << endl);
 
         // check for area_closure
         if (
@@ -3688,18 +3692,18 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                 dout(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
                 double dist_to_this_node = dist( nodes.at(from.toIndex())->get_x(),
                                                  nodes.at(from.toIndex())->get_y(),
-                                                 nodes.at(vx)->get_x(),
-                                                 nodes.at(vx)->get_y()
+                                                 nodes.at(vx.toIndex())->get_x(),
+                                                 nodes.at(vx.toIndex())->get_y()
                                                  );
 
                 //	if(!binary_search (polygon_nodes.begin(), polygon_nodes.end(), vx)
 
                 //if(nodes.at(vx)->evaluateAreaType()!=1
-                if (!nodes.at(vx)->isMetierBanned(this->get_metier()->get_name())
+                if (!nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name())
                         // looking around in a radius of 200 km among the grounds I know...
                         &&  dist_to_this_node < 200)
                 {
-                    dout(cout  << "this node " << vx << " is actually outside the closed area: steam away!!!" << endl);
+                    dout(cout  << "this node " << vx.toIndex() << " is actually outside the closed area: steam away!!!" << endl);
                     // force to steam away by assigning a very low distance
                     dist_to_others.push_back(1);
                 }
@@ -3714,7 +3718,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
             else
             {
 
-                dist_to_others.push_back(min_distance[vx]);
+                dist_to_others.push_back(distance_fgrounds[vx.toIndex()]);
 
             }
 
@@ -3722,12 +3726,12 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         else
         {
 
-            dist_to_others.push_back(min_distance[vx]);
+            dist_to_others.push_back(distance_fgrounds[vx.toIndex()]);
 
         }
 
     }
-    vertex_t next_ground;
+    types::NodeId next_ground;
     double lowest =10000;		 // init
     int idx_lowest=0;
     for(unsigned int i=0; i<dist_to_others.size(); i++)
@@ -3756,12 +3760,12 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                 idx_scdlowest =i;
             }
         }
-        next_ground = grds[idx_scdlowest].toIndex();
-        dout(cout  << "GO FISHING ON THE 2nd CLOSEST: " << vertex_names[next_ground] << endl);
+        next_ground = types::NodeId(grds[idx_scdlowest]);
+        dout(cout  << "GO FISHING ON THE 2nd CLOSEST: " << next_ground.toIndex() << endl);
 
         // check for area_closure
         if (
-                (dyn_alloc_sce.option(Options::area_closure) && !nodes.at(next_ground)->isMetierBanned(this->get_metier()->get_name())) ||
+                (dyn_alloc_sce.option(Options::area_closure) && !nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name())) ||
                 (dyn_alloc_sce.option(Options::area_monthly_closure)  && !nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
                  !nodes.at(from.toIndex())->isVsizeBanned(this->get_length_class()))
                 )
@@ -3769,9 +3773,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
             //if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), next_ground))
             //if(nodes.at(next_ground)->evaluateAreaType()!=1)
-            if (!nodes.at(next_ground)->isMetierBanned(this->get_metier()->get_name()))
+            if (!nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
             {
-                dout(cout  << "this NEXT node " << next_ground << " is actually within a closed area!!!" << endl);
+                dout(cout  << "this NEXT node " << next_ground.toIndex() << " is actually within a closed area!!!" << endl);
                 finally_I_should_go_for_the_closest = true;
                 // the closest might also be inside the closed area but at least we will oscillate back to outside
 
@@ -3782,8 +3786,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
     if(!a_vect[0] || finally_I_should_go_for_the_closest)
     {
-        next_ground = grds[idx_lowest].toIndex();
-        dout(cout  << "GO FISHING ON THE CLOSEST: " <<   vertex_names[next_ground] << endl);
+        next_ground = types::NodeId(grds[idx_lowest]);
+        dout(cout  << "GO FISHING ON THE CLOSEST: " <<   next_ground.toIndex() << endl);
         // in this case, get a time and fuel bonus for free! (i.e. note the MINUS sign!)
         // (in order to somehow correct for the discretisation creating jumps between sequential fgrounds)
         this->set_timeatsea(this->get_timeatsea() - PING_RATE);
@@ -3792,18 +3796,18 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         this->set_cumfuelcons(cumfuelcons);
         this->set_consotogetthere( this->get_consotogetthere() - (this->get_fuelcons()*PING_RATE) ) ;
     }
-    list<vertex_t> path = DijkstraGetShortestPathTo(next_ground, previous);
+    list<types::NodeId> path = DijkstraGetShortestPathTo(next_ground, curr_path_shop);
     path.pop_front();			 // delete the first node (departure) because we are lying in...
 
     if(path.empty())
     {
-        dout(cout << this->get_name() << " when changing from "<< from.toIndex() << " to this new ground: " << next_ground << " you should stop here because my path is empty!");
+        dout(cout << this->get_name() << " when changing from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << " you should stop here because my path is empty!");
         // as we detected something wrong here, we try to recover(!):
         for(unsigned int i=0; i<grds.size(); i++)
         {
-            next_ground = grds[i].toIndex();
-            dout(cout << "then try to change for this new ground: " << next_ground << endl);
-            path = DijkstraGetShortestPathTo(next_ground, previous);
+            next_ground =  types::NodeId(grds[i]);
+            dout(cout << "then try to change for this new ground: " << next_ground.toIndex() << endl);
+            path = DijkstraGetShortestPathTo(next_ground, curr_path_shop);
             path.pop_front();	 // delete the first node (departure) because we are lying in...
             if(!path.empty())
             {
@@ -3816,19 +3820,19 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     if(path.empty())
     {
         // still empty!!
-        outc(cout << "pble calculating from " << from << " to " << next_ground << endl);
+        outc(cout << "pble calculating from " << from.toIndex() << " to " << next_ground.toIndex() << endl);
         this->move_to(nodes.at(from.toIndex())) ;
         // no path found: assume the vessel stucks at its current location
     } else{
         this->set_roadmap(path);
     }
 
-    min_distance.clear();
-    previous.clear();
+    //min_distance.clear();
+    //previous.clear();
 
-    dout(cout  << "WELL...GO FISHING ON " << next_ground << endl);
+    dout(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
 
-    dout(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground << endl);
+    dout(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl);
     //list<vertex_t>::iterator pos;
     //for(pos=path.begin(); pos!=path.end(); pos++)
     //{
@@ -3840,8 +3844,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     // according to the observed frequency in data
     const auto &poss_met        = this->get_possible_metiers();
     const auto &freq_poss_met= this->get_freq_possible_metiers();
-    auto metiers_on_grd      = find_entries( poss_met, types::NodeId(next_ground) );
-    auto freq_metiers_on_grd = find_entries( freq_poss_met, types::NodeId(next_ground ));
+    auto metiers_on_grd      = find_entries( poss_met, next_ground );
+    auto freq_metiers_on_grd = find_entries( freq_poss_met, next_ground );
     // need to convert in array, see myRutils.cpp
 
     if(metiers_on_grd.size()!=0)
@@ -3893,9 +3897,10 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
     auto harbs = this->get_harbours();
     auto from = this->get_loc()->get_idx_node();
-    dist_to_ports.clear();
-    min_distance.clear();
-    previous.clear();
+    //dist_to_ports.clear();
+    //min_distance.clear();
+    //previous.clear();
+    PathShop curr_path_shop;
     // get the shortest path between source and destination
     // with the list of intermediate nodes
 
@@ -3906,17 +3911,19 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     }
     else						 // replaced by:
     {
-        auto it = find (idx_path_shop.begin(), idx_path_shop.end(), from.toIndex());
-        // tricky!
-        int idx = it - idx_path_shop.begin();
 
-        previous=path_shop.at(idx);
-        min_distance=min_distance_shop.at(idx);
-
+        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        int idx = it - relevant_nodes.begin();
+        curr_path_shop = pathshops.at(idx);
     }
 
+    vector <double> distance_to_harb = compute_distance_fgrounds(idx_path_shop, pathshops,
+                                                                  path_shop, min_distance_shop, from, harbs);
+
+
+
     // the 'arr' node will either be the closest port, or the more frequent port:
-    vertex_t arr;
+    types::NodeId arr;
 
     //*************************closer_port**************************//
     if (dyn_alloc_sce.option(Options::closer_port))			 // dyn sce.
@@ -3924,9 +3931,9 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         for (unsigned int i =0; i< harbs.size(); i++)
         {
             // destination
-            vertex_t vx = harbs[i].toIndex();
-            dout(cout  << "distance to harbour " << vertex_names[vx] << ": " << min_distance[vx] << endl);
-            dist_to_ports.push_back(min_distance[vx]);
+            types::NodeId vx = types::NodeId(harbs[i]);
+            dout(cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb[vx.toIndex()] << endl);
+            dist_to_ports.push_back(distance_to_harb[vx.toIndex()]);
         }
         // init
         double lowest =dist_to_ports[0];
@@ -3939,7 +3946,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
                 idx_lowest =i;
             }
         }
-        arr = harbs[idx_lowest].toIndex(); // destination: nearest port
+        arr = types::NodeId(harbs[idx_lowest]); // destination: nearest port
     }
     else						 // ....otherwise (e.g. baseline), choose a harbour according to its frequency in data...
     {
@@ -3947,18 +3954,18 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         // need to convert in array, see myRutils.cpp
         //cout << "do_sample 6" << endl;
         auto harbours = do_sample(1, harbs.size(), harbs, freq_harbs);
-        arr = harbours[0].toIndex();
+        arr = types::NodeId(harbours[0]);
     }
 
-    dout(cout  << "from " << from << endl);
-    dout(cout  << "choose " << arr << endl);
-    list<vertex_t> path = DijkstraGetShortestPathTo(arr, previous);
+    dout(cout  << "from " << from.toIndex() << endl);
+    dout(cout  << "choose " << arr.toIndex() << endl);
+    list<types::NodeId> path = DijkstraGetShortestPathTo(arr, curr_path_shop);
 
     // check the path
     // list<int>::iterator pos;
     //for(pos=path.begin(); pos!=path.end(); pos++)
     //{
-    //    dout(cout << *pos << " ");
+    //    dout(cout << (*pos).toIndex() << " ");
     //}
     //cout << endl;
 
@@ -3970,23 +3977,18 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
         if(!create_a_path_shop)
         {
-            min_distance.clear();
-            previous.clear();
             // from the source to all nodes
-            DijkstraComputePaths(arr, adjacency_map, min_distance, previous, relevant_nodes);
+            // TO DO: ADAPT TO NEW STRUCTURE DijkstraComputePaths(arr, adjacency_map, min_distance, previous, relevant_nodes);
         }
         else					 // replaced by:
         {
-            vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), arr);
-            // tricky!
-            int idx = it - idx_path_shop.begin();
-
-            previous=path_shop.at(idx);
-            min_distance=min_distance_shop.at(idx);
+            auto it = find (relevant_nodes.begin(), relevant_nodes.end(), arr.toIndex());
+            int idx = it - relevant_nodes.begin();
+            curr_path_shop = pathshops.at(idx);
 
         }
 
-        path = DijkstraGetShortestPathTo(from.toIndex(), previous);
+        path = DijkstraGetShortestPathTo(arr, curr_path_shop);
         reverse(path.begin(), path.end());
 
         // check
@@ -4031,7 +4033,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         list<types::NodeId> lst = this->get_roadmap();
         for(auto pos=lst.begin(); pos!=lst.end(); pos++)
         {
-            dout(cout << *pos.toIndex() << " ");
+            dout(cout << (*pos).toIndex() << " ");
         }
         dout(cout << endl);
     }
@@ -4255,6 +4257,7 @@ int Vessel::should_i_go_fishing(int tstep,
 types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                                                   vector<Node *> &nodes,
                                                   const vector<int> &idx_path_shop,
+                                                  const std::vector<PathShop> &pathshops,
                                                   const DynAllocOptions& dyn_alloc_sce,
                                                   const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
                                                   const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop)
@@ -4553,7 +4556,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         auto from = this->get_loc()->get_idx_node();
         vector <double> distance_to_grounds = compute_distance_fgrounds
                 (idx_path_shop, pathshops,
-                 path_shop, min_distance_shop, from.toIndex(), grds);
+                 path_shop, min_distance_shop, from, grds);
 
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out3;
@@ -4715,6 +4718,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
                                   const vector <int>& idx_path_shop,
+                                  const std::vector<PathShop> &pathshops,
                                   const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
                                   const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                   adjacency_map_t& adjacency_map,
@@ -4786,43 +4790,34 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
         {
             const auto &harbs = this->get_harbours();
             auto from = this->get_loc()->get_idx_node();
-            min_distance.clear();
-            previous.clear();
+           PathShop curr_path_shop;
 
             if(!create_a_path_shop)
             {
                 // from the source to all nodes
-                DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+                // TO DO: ADAPT TO NEW DATA STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
             }
             else				 // replaced by:
             {
-                auto it = find (idx_path_shop.begin(), idx_path_shop.end(), from.toIndex());
-                // tricky!
-                int idx = it - idx_path_shop.begin();
-
-                previous=path_shop.at(idx);
-                //std::list<map<int,int> >::iterator it_p = path_shop.begin();
-                //advance(it_p, idx-1);
-                //previous= *it_p;
-
-                min_distance=min_distance_shop.at(idx);
-                //std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
-                //advance(it_d, idx-1);
-                //min_distance= *it_d;
+               auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+               int idx = it - relevant_nodes.begin();
+               curr_path_shop = pathshops.at(idx);
 
             }
+
+
+            vector <double> distance_to_harb = compute_distance_fgrounds(idx_path_shop, pathshops,
+                                                                          path_shop, min_distance_shop, from, harbs);
 
             for (unsigned int i =0; i< harbs.size(); i++)
             {
                 // get the shortest distance between source and destination
                 // with the list of intermediate nodes
                 // destination
-                vertex_t vx = harbs[i].toIndex();
-                dout(cout  << "distance to harbour " << vertex_names[vx] << ": " << min_distance[vx] << endl);
-                dist_to_ports.push_back(min_distance[vx]);
+                types::NodeId vx = types::NodeId(harbs[i]);
+                dout(cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb.at(vx.toIndex()) << endl);
+                dist_to_ports.push_back(distance_to_harb.at(vx.toIndex()));
             }
-            min_distance.clear();
-            previous.clear();
             vector<double>::iterator where = min_element (dist_to_ports.begin(), dist_to_ports.end());
             a_min_dist = *where;
             dout(cout  << "minimum dist to port is " << *where << endl);

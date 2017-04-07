@@ -190,7 +190,7 @@ void SimplifyThePreviousMap(int source,
 void closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
 vector<double> compute_distance_fgrounds(const vector<int> &relevant_nodes,
-                                         const std::vector<PathShop *> &pathshops,
+                                         const std::vector<PathShop> &pathshops,
                                          types::NodeId from,
                                          vector<types::NodeId> grounds);
 

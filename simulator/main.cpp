@@ -200,7 +200,7 @@ string fleetsce;
 int create_a_path_shop;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
-vector<types::NodeId> relevant_nodes;
+vector<int> relevant_nodes;
 multimap<int, int> nodes_in_polygons;
 multimap<types::NodeId, int> possible_metiers;
 multimap<types::NodeId, double> freq_possible_metiers;
@@ -225,7 +225,7 @@ ofstream vmslike2;
 ofstream vmslike3;
 vector <Metier*> metiers;
 ofstream export_individual_tacs;
-vector <PathShop*> pathshops;
+vector <PathShop> pathshops;
 
 #ifdef NO_IPC
 #include <messages/noipc.h>
@@ -279,7 +279,7 @@ static void unlock()
     pthread_mutex_unlock(&glob_mutex);
 }
 
-bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<types::NodeId> &nodes)
+bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
 {
     string filename=  inputfolder + "/vesselsspe_"+folder_name_parameterization+"/vesselsspe_" + ftype + "_" + a_quarter + ".dat";
     ifstream in;
@@ -303,7 +303,7 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
         std::stringstream ss (line);
         ss >> vessel_name;
         ss >> node;
-        nodes.insert(types::NodeId(node));
+        nodes.insert(node);
     }
 
     outc(cout << "Loaded: " << filename << " " << n << " lines, " << nodes.size() << " relevant nodes");
@@ -312,9 +312,9 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
     return true;
 }
 
-bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<types::NodeId> &ret)
+bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<int> &ret)
 {
-    set<types::NodeId> nodes;
+    set<int> nodes;
 
     if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter1", nodes))
         return false;
@@ -2995,11 +2995,7 @@ int main(int argc, char* argv[])
     }
     outc(cout << endl);
 
-    // initialize objects for a shop of paths
-    // list<map<vertex_t, vertex_t> > path_shop (relevant_nodes.size());
-    // list<map<vertex_t, weight_t> >  min_distance_shop(relevant_nodes.size());
 
-    pathshops = vector <PathShop*> (relevant_nodes.size());
 
     if(!create_a_path_shop)
     {
@@ -3032,9 +3028,8 @@ int main(int argc, char* argv[])
                 // these maps come from SimplifyThePreviousMap()
                 //min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
 
-                PathShop* curr_path_shop;
-                curr_path_shop =read_graph_details(types::NodeId(relevant_nodes.at(i)),  namefolderinput,   inputfolder,  a_graph_name);
-                pathshops.at(i) = curr_path_shop;
+                PathShop curr_path_shop =read_graph_details(types::NodeId(relevant_nodes.at(i)),  namefolderinput,   inputfolder,  a_graph_name);
+                pathshops.push_back(curr_path_shop);
 
             }
             else

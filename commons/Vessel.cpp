@@ -2810,7 +2810,7 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 }
 
 
-vector<double> Vessel::expected_profit_on_grounds(const std::vector<int> &relevant_nodes, const std::vector<PathShop*> &pathshops)
+vector<double> Vessel::expected_profit_on_grounds(const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops)
 {
 
     outc(cout << "compute expected profit on grounds " << endl);
@@ -2940,7 +2940,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<int> &releva
 
 }
 
-void Vessel::alloc_on_high_profit_grounds(int tstep, const std::vector<int> &relevant_nodes, const std::vector<PathShop*> &pathshops,
+void Vessel::alloc_on_high_profit_grounds(int tstep, const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops,
                                           ofstream& freq_profit)
 {
 
@@ -3010,7 +3010,7 @@ void Vessel::alloc_on_high_profit_grounds(int tstep, const std::vector<int> &rel
 
 void Vessel::alloc_while_saving_fuel(int tstep,
                                      const vector <int>& relevant_nodes,
-                                     const std::vector<PathShop*> &pathshops
+                                     const std::vector<PathShop> &pathshops
                                      )
 {
     UNUSED(tstep);
@@ -3169,7 +3169,7 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 
 
 void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& relevant_nodes,
-                                     const std::vector<PathShop*> &pathshops,
+                                     const std::vector<PathShop> &pathshops,
                                      ofstream& freq_distance)
 {
     // this is implicitly minimizing the fuel cost i.e. redirect the
@@ -3327,7 +3327,7 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
                                             const DynAllocOptions& dyn_alloc_sce,
                                             int create_a_path_shop,
-                                            const vector<PathShop*> &pathshops,
+                                            const vector<PathShop> &pathshops,
                                             adjacency_map_t& adjacency_map,
                                             vector <int>& relevant_nodes,
                                             multimap<int, int>& nodes_in_polygons,
@@ -3502,12 +3502,23 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     }
     else						 // replaced by:
     {
-        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
-        int idx = it - relevant_nodes.begin();
-        curr_path_shop = *(pathshops.at(idx));
-    }
+        std::vector<int>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        int idx;
+        if (it != relevant_nodes.end())
+        {
+           idx = it - relevant_nodes.begin();
+           curr_path_shop = pathshops.at(idx);
+        }
+        else
+        {
+            cout << from.toIndex() << " not found in the relevant nodes!!" <<endl;
 
-    dout(cout  << "find path to fishing ground " << ground.toIndex() << endl);
+        }
+
+        outc(cout  << "find path to fishing ground " << ground.toIndex() <<endl);
+        outc(cout  << "from the current_path_shop of node " << relevant_nodes.at(idx) <<endl);
+        outc(cout  << "starting from the node " << from.toIndex() <<endl);
+    }
 
 
     list<types::NodeId> path = DijkstraGetShortestPathTo(ground, curr_path_shop);
@@ -3519,15 +3530,15 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         this->set_roadmap(path);
         // show the roadmap
         list<types::NodeId> road= this->get_roadmap();
-        list<types::NodeId>::iterator road_iter = road.begin();
 
         // check path
-        //    dout(cout << "path: ");
-        //    for( ; road_iter != road.end(); road_iter++)
-        //    {
-        //       dout(cout << vertex_names[*road_iter] << " " );
-        //    }
-        //    dout(cout << endl);
+        list<types::NodeId>::iterator road_iter = road.begin();
+            dout(cout << "path: ");
+            for( ; road_iter != road.end(); road_iter++)
+            {
+               dout(cout << *road_iter << " " );
+            }
+            dout(cout << endl);
 
         // then, call to find.next.pt.on.the.graph()
         this-> find_next_point_on_the_graph_unlocked(nodes);
@@ -3587,7 +3598,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 void Vessel::choose_another_ground_and_go_fishing(int tstep,
                                                   const DynAllocOptions &dyn_alloc_sce,
                                                   int create_a_path_shop,
-                                                  const std::vector<PathShop*> &pathshops,
+                                                  const std::vector<PathShop> &pathshops,
                                                   adjacency_map_t& adjacency_map,
                                                   vector <int>& relevant_nodes,
                                                   const multimap<int, int>& nodes_in_polygons,
@@ -3628,7 +3639,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     {
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
         int idx = it - relevant_nodes.begin();
-        curr_path_shop = *(pathshops.at(idx));
+        curr_path_shop = pathshops.at(idx);
 
 
     }
@@ -3830,7 +3841,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 void Vessel::choose_a_port_and_then_return(int tstep,
                                            const DynAllocOptions &dyn_alloc_sce,
                                            int create_a_path_shop,
-                                           const std::vector<PathShop*> &pathshops,
+                                           const std::vector<PathShop> &pathshops,
                                            adjacency_map_t& adjacency_map,
                                            vector <int>& relevant_nodes,
                                            vector<Node* >& nodes,
@@ -3864,7 +3875,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
         int idx = it - relevant_nodes.begin();
-        curr_path_shop = *(pathshops.at(idx));
+        curr_path_shop = pathshops.at(idx);
     }
 
     vector <double> distance_to_harb = compute_distance_fgrounds(relevant_nodes, pathshops,
@@ -3934,7 +3945,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         {
             auto it = find (relevant_nodes.begin(), relevant_nodes.end(), arr.toIndex());
             int idx = it - relevant_nodes.begin();
-            curr_path_shop = *(pathshops.at(idx));
+            curr_path_shop = pathshops.at(idx);
 
         }
 
@@ -3945,7 +3956,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         //list<int>::iterator pos;
         //for(pos=path.begin(); pos!=path.end(); pos++)
         //{c
-        //    dout(cout << (*pos).toIndex() << " ");
+        //    dout(cout << *pos << " ");
         //}
         //cout << endl;
         // CAUTION => THIS IS ONLY A FIX!
@@ -4203,7 +4214,7 @@ int Vessel::should_i_go_fishing(int tstep,
 types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                                                   vector<Node *> &nodes,
                                                   const vector<int> &relevant_nodes,
-                                                  const std::vector<PathShop*> &pathshops,
+                                                  const std::vector<PathShop> &pathshops,
                                                   const DynAllocOptions& dyn_alloc_sce
                                                 )
 {
@@ -4659,7 +4670,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
                                   int tstep,
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
-                                  const std::vector<PathShop*> &pathshops,
+                                  const std::vector<PathShop> &pathshops,
                                   adjacency_map_t& adjacency_map,
                                   const vector <int>& relevant_nodes,
                                   vector<Node* >& nodes,

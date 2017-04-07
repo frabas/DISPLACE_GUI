@@ -1573,7 +1573,7 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 
 
 vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
-                                         const std::vector<PathShop*> &pathshops,
+                                         const std::vector<PathShop> &pathshops,
                                          types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
@@ -1592,7 +1592,7 @@ vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
 
       while (true) {
         try {
-            auto node = pathshops.at(idx)->getNode(vertex);
+            auto node = pathshops.at(idx).getNode(vertex);
             vertex = node.getPreviousNode();
             dist   = node.getWeight();
             if (!types::isIdInvalid(vertex))

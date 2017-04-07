@@ -141,7 +141,7 @@ extern ofstream vmslike2;
 extern ofstream vmslike3;
 extern vector <Metier*> metiers;
 extern ofstream export_individual_tacs;
-extern vector<PathShop*> pathshops;
+extern vector<PathShop> pathshops;
 
 extern void guiSendVesselLogbook(const std::string &line);
 

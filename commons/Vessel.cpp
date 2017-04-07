@@ -2810,10 +2810,7 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 }
 
 
-vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_shop,
-                                                  const std::vector<PathShop> &pathshops,
-                                                  const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
-                                                  const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop)
+vector<double> Vessel::expected_profit_on_grounds(const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops)
 {
     vector <double> freq_grds = this->get_freq_fgrounds();
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
@@ -2828,8 +2825,7 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
     // distance to all grounds (through the graph...)
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
-    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
-                                                                  path_shop, min_distance_shop, from, the_grounds);
+    vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops, from, the_grounds);
 
     // vsize
     int length_class =this->get_length_class();
@@ -2940,20 +2936,12 @@ vector<double> Vessel::expected_profit_on_grounds(const vector <int>& idx_path_s
 
 }
 
-void Vessel::alloc_on_high_profit_grounds(int tstep,
-                                          const vector <int>& idx_path_shop,
-                                          const std::vector<PathShop> &pathshops,
-                                          const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
-                                          const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
+void Vessel::alloc_on_high_profit_grounds(int tstep, const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops,
                                           ofstream& freq_profit)
 {
 
 
-    vector<double> profit_per_fgrounds = expected_profit_on_grounds(
-                idx_path_shop,
-                pathshops,
-                path_shop,
-                min_distance_shop);
+    vector<double> profit_per_fgrounds = expected_profit_on_grounds(relevant_nodes, pathshops);
 
 
     vector <double> freq_grds = this->get_freq_fgrounds();
@@ -3017,10 +3005,8 @@ void Vessel::alloc_on_high_profit_grounds(int tstep,
 
 
 void Vessel::alloc_while_saving_fuel(int tstep,
-                                     const vector <int>& idx_path_shop,
-                                     const std::vector<PathShop> &pathshops,
-                                     const deque <spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
-                                     const deque <spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop
+                                     const vector <int>& relevant_nodes,
+                                     const std::vector<PathShop> &pathshops
                                      )
 {
     UNUSED(tstep);
@@ -3040,8 +3026,8 @@ void Vessel::alloc_while_saving_fuel(int tstep,
         // distance to all grounds (through the graph...)
         auto from = this->get_loc()->get_idx_node();
         auto the_grounds = this->get_fgrounds();
-        vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
-                                                                      path_shop, min_distance_shop, from, the_grounds);
+        vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                       from, the_grounds);
 
         // find the freq for the 3 most used grounds and track their idx.
         // the value
@@ -3178,10 +3164,8 @@ void Vessel::alloc_while_saving_fuel(int tstep,
 }
 
 
-void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& idx_path_shop,
+void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& relevant_nodes,
                                      const std::vector<PathShop> &pathshops,
-                                     const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
-                                     const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                      ofstream& freq_distance)
 {
     // this is implicitly minimizing the fuel cost i.e. redirect the
@@ -3203,8 +3187,8 @@ void Vessel::alloc_on_closer_grounds(int tstep, const vector <int>& idx_path_sho
 
     auto from = this->get_loc()->get_idx_node();
     auto the_grounds = this->get_fgrounds();
-    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
-                                                                  path_shop, min_distance_shop, from, the_grounds);
+    vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                  from, the_grounds);
     // we could have computed here as well the fuel to be used for reaching each ground...
 
     vector <double> freq_distance_fgrounds= scale_a_vector_to_1(distance_fgrounds);
@@ -3339,16 +3323,10 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::Scenario &scenario, bool use_the_tree,
                                             const DynAllocOptions& dyn_alloc_sce,
                                             int create_a_path_shop,
-                                            const vector<int> &idx_path_shop,
                                             const vector<PathShop> &pathshops,
-                                            const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
-                                            const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                             adjacency_map_t& adjacency_map,
-                                            spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
-                                            spp::sparse_hash_map<vertex_t, vertex_t>& previous,
-                                            vector <types::NodeId>& relevant_nodes,
+                                            vector <int>& relevant_nodes,
                                             multimap<int, int>& nodes_in_polygons,
-                                            vector<string>& vertex_names,
                                             vector<Node* >& nodes,
                                             vector <Metier*>& metiers,
                                             ofstream& freq_cpue,
@@ -3356,7 +3334,6 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                                             ofstream& freq_distance
                                             )
 {
-    UNUSED(vertex_names);
 
     this->set_tstep_dep(tstep);	 // store departure date
 
@@ -3371,11 +3348,10 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
         ground=this->should_i_choose_this_ground(tstep,
                                                  nodes,
-                                                 idx_path_shop,
+                                                 relevant_nodes,
                                                  pathshops,
-                                                 dyn_alloc_sce,
-                                                 path_shop,
-                                                 min_distance_shop); // use ChooseGround dtree along all possible grounds to define the next ground
+                                                 dyn_alloc_sce
+                                                 ); // use ChooseGround dtree along all possible grounds to define the next ground
         if(ground==types::special::InvalidNodeId)
         {
             dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << endl);
@@ -3396,10 +3372,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         {
 
             this->alloc_on_high_profit_grounds(tstep,
-                                               idx_path_shop,
+                                               relevant_nodes,
                                                pathshops,
-                                               path_shop,
-                                               min_distance_shop,
                                                freq_profit);
         }
 
@@ -3413,10 +3387,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             {
 
                 this->alloc_while_saving_fuel(tstep,
-                                              idx_path_shop,
-                                              pathshops,
-                                              path_shop,
-                                              min_distance_shop);
+                                              relevant_nodes,
+                                              pathshops);
             }
             else
             {
@@ -3430,10 +3402,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         if (dyn_alloc_sce.option(Options::closer_grounds))		 // dyn sce.
         {
             this->alloc_on_closer_grounds(tstep,
-                                          idx_path_shop,
+                                          relevant_nodes,
                                           pathshops,
-                                          path_shop,
-                                          min_distance_shop,
                                           freq_distance);
         }
 
@@ -3514,10 +3484,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     if(!create_a_path_shop)
     {
-        min_distance.clear();
-        previous.clear();
         // from the source to all nodes
-        DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+       // TO DO: ADAPT TO NEW STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
     }
     else						 // replaced by:
     {
@@ -3536,8 +3504,6 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     {
         path.pop_front();		 // delete the first node (departure) because we are lying in...
         this->set_roadmap(path);
-        min_distance.clear();
-        previous.clear();
         // show the roadmap
         list<types::NodeId> road= this->get_roadmap();
         list<types::NodeId>::iterator road_iter = road.begin();
@@ -3608,16 +3574,10 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 void Vessel::choose_another_ground_and_go_fishing(int tstep,
                                                   const DynAllocOptions &dyn_alloc_sce,
                                                   int create_a_path_shop,
-                                                  const vector<int> &idx_path_shop,
                                                   const std::vector<PathShop> &pathshops,
-                                                  const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
-                                                  const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                                   adjacency_map_t& adjacency_map,
-                                                  spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
-                                                  spp::sparse_hash_map<vertex_t, vertex_t>& previous,
-                                                  vector <types::NodeId>& relevant_nodes,
+                                                  vector <int>& relevant_nodes,
                                                   const multimap<int, int>& nodes_in_polygons,
-                                                  vector<string>& vertex_names,
                                                   vector<Node* >& nodes,
                                                   vector <Metier*>& metiers,
                                                   ofstream& freq_cpue,
@@ -3627,7 +3587,6 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     UNUSED(tstep);
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
-    UNUSED(vertex_names);
 
     lock();
 
@@ -3650,17 +3609,10 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     if(!create_a_path_shop)
     {
         // from the source to all nodes
-        DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+        // TO DO: ADAPT TO THE NEW STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
     }
     else						 // replaced by:
     {
-     //   vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from.toIndex());
-        // tricky!
-     //   int idx = it - idx_path_shop.begin();
-
-     //   previous=path_shop.at(idx);
-     //   min_distance=min_distance_shop.at(idx);
-
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
         int idx = it - relevant_nodes.begin();
         curr_path_shop = pathshops.at(idx);
@@ -3668,8 +3620,8 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
     }
 
-    vector <double> distance_fgrounds = compute_distance_fgrounds(idx_path_shop, pathshops,
-                                                                  path_shop, min_distance_shop, from, grds);
+    vector <double> distance_fgrounds = compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                  from, grds);
 
     for (unsigned int i =0; i< grds.size(); i++)
     {
@@ -3827,18 +3779,10 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         this->set_roadmap(path);
     }
 
-    //min_distance.clear();
-    //previous.clear();
 
     dout(cout  << "WELL...GO FISHING ON " << next_ground.toIndex() << endl);
 
     dout(cout  << "We change from "<< from.toIndex() << " to this new ground: " << next_ground.toIndex() << endl);
-    //list<vertex_t>::iterator pos;
-    //for(pos=path.begin(); pos!=path.end(); pos++)
-    //{
-    //    dout(cout << *pos << " ");
-    //    dout(cout << endl);
-    //}
 
     // for this vessel, select the metier specific to this particular fishing ground
     // according to the observed frequency in data
@@ -3873,15 +3817,9 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 void Vessel::choose_a_port_and_then_return(int tstep,
                                            const DynAllocOptions &dyn_alloc_sce,
                                            int create_a_path_shop,
-                                           const vector<int> &idx_path_shop,
                                            const std::vector<PathShop> &pathshops,
-                                           const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
-                                           const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop,
                                            adjacency_map_t& adjacency_map,
-                                           spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
-                                           spp::sparse_hash_map<vertex_t, vertex_t>& previous,
-                                           vector <types::NodeId>& relevant_nodes,
-                                           vector<string>& vertex_names,
+                                           vector <int>& relevant_nodes,
                                            vector<Node* >& nodes,
                                            vector <Metier*>& metiers,
                                            ofstream& freq_cpue,
@@ -3893,7 +3831,6 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
     UNUSED(metiers);
-    UNUSED(vertex_names);
 
     auto harbs = this->get_harbours();
     auto from = this->get_loc()->get_idx_node();
@@ -3907,7 +3844,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     if(!create_a_path_shop)
     {
         // from the source to all nodes
-        DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+        // TO DO: ADAPT TO THE NEW DATA STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
     }
     else						 // replaced by:
     {
@@ -3917,8 +3854,8 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         curr_path_shop = pathshops.at(idx);
     }
 
-    vector <double> distance_to_harb = compute_distance_fgrounds(idx_path_shop, pathshops,
-                                                                  path_shop, min_distance_shop, from, harbs);
+    vector <double> distance_to_harb = compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                 from, harbs);
 
 
 
@@ -4009,8 +3946,6 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
         //compute a path!  (24Feb14 but disabled because too time consuming!)
         //system("PAUSE");
-        //min_distance.clear();
-        //previous.clear();
         //DijkstraComputePaths(arr, adjacency_map, min_distance, previous, relevant_nodes); // from the source to all nodes
         //print_out=true;
 
@@ -4024,8 +3959,6 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     // (NOTE: if the 'arr' node is not in the 'previous' object of 'from',
     // then the path is only consistited of 'arr' and then will be blank here because removed by pop_front!!!! => bug)
     this->set_roadmap(path);
-    min_distance.clear();
-    previous.clear();
     if(print_out)
     {
         dout(cout << "new roadmap to port is: ");
@@ -4256,11 +4189,10 @@ int Vessel::should_i_go_fishing(int tstep,
 
 types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                                                   vector<Node *> &nodes,
-                                                  const vector<int> &idx_path_shop,
+                                                  const vector<int> &relevant_nodes,
                                                   const std::vector<PathShop> &pathshops,
-                                                  const DynAllocOptions& dyn_alloc_sce,
-                                                  const deque<spp::sparse_hash_map<vertex_t, vertex_t> > &path_shop,
-                                                  const deque<spp::sparse_hash_map<vertex_t, weight_t> > &min_distance_shop)
+                                                  const DynAllocOptions& dyn_alloc_sce
+                                                )
 {
 
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
@@ -4337,10 +4269,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     {
         outc(cout << "compute smartCatchGround"  << endl);
 
-        vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(idx_path_shop,
-                                                                                     pathshops,
-                                                                                     path_shop,
-                                                                                     min_distance_shop);
+        vector<double> expected_profit_per_ground = this->expected_profit_on_grounds(relevant_nodes, pathshops);
 
         // a check
 
@@ -4555,8 +4484,8 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
         auto from = this->get_loc()->get_idx_node();
         vector <double> distance_to_grounds = compute_distance_fgrounds
-                (idx_path_shop, pathshops,
-                 path_shop, min_distance_shop, from, grds);
+                                                    (relevant_nodes, pathshops,
+                                                     from, grds);
 
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out3;
@@ -4717,15 +4646,9 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
                                   int tstep,
                                   const DynAllocOptions& dyn_alloc_sce,
                                   int create_a_path_shop,
-                                  const vector <int>& idx_path_shop,
                                   const std::vector<PathShop> &pathshops,
-                                  const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
-                                  const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                   adjacency_map_t& adjacency_map,
-                                  spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
-                                  spp::sparse_hash_map<vertex_t, vertex_t>& previous,
-                                  const vector <types::NodeId>& relevant_nodes,
-                                  vector<string>& vertex_names,
+                                  const vector <int>& relevant_nodes,
                                   vector<Node* >& nodes,
                                   vector <Metier*>& metiers,
                                   ofstream& freq_cpue,
@@ -4740,7 +4663,6 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
     UNUSED(metiers);
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
-    UNUSED(vertex_names);
 
 
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StopFishing))
@@ -4806,8 +4728,8 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
             }
 
 
-            vector <double> distance_to_harb = compute_distance_fgrounds(idx_path_shop, pathshops,
-                                                                          path_shop, min_distance_shop, from, harbs);
+            vector <double> distance_to_harb = compute_distance_fgrounds(relevant_nodes, pathshops,
+                                                                          from, harbs);
 
             for (unsigned int i =0; i< harbs.size(); i++)
             {

@@ -198,16 +198,8 @@ ClosureOptions closure_opts;
 string biolsce;
 string fleetsce;
 int create_a_path_shop;
-deque<spp::sparse_hash_map<vertex_t, vertex_t> > path_shop;
-deque<spp::sparse_hash_map<vertex_t, weight_t> >  min_distance_shop;
-vector <types::NodeId> idx_path_shop;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
-vector<map<vertex_t, vertex_t> > paths_shop;
-vector<map<vertex_t, weight_t> > min_distances_shop;
-vector <int> idx_paths_shop;
-//map<vertex_t, weight_t> min_distance;
-//map<vertex_t, vertex_t> previous;
 vector<types::NodeId> relevant_nodes;
 multimap<int, int> nodes_in_polygons;
 multimap<types::NodeId, int> possible_metiers;
@@ -233,6 +225,7 @@ ofstream vmslike2;
 ofstream vmslike3;
 vector <Metier*> metiers;
 ofstream export_individual_tacs;
+vector <PathShop> pathshops;
 
 #ifdef NO_IPC
 #include <messages/noipc.h>
@@ -3006,7 +2999,6 @@ int main(int argc, char* argv[])
     // list<map<vertex_t, vertex_t> > path_shop (relevant_nodes.size());
     // list<map<vertex_t, weight_t> >  min_distance_shop(relevant_nodes.size());
 
-    vector <PathShop> pathshops;
 
     if(!create_a_path_shop)
     {
@@ -3047,32 +3039,25 @@ int main(int argc, char* argv[])
             {
                 outc(cout << "compute all paths for the node: "<< relevant_nodes.at(i) << endl);
                 // from the source to all nodes
-                DijkstraComputePaths(relevant_nodes.at(i).toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+              // TO DO: ADAPT TO THE NEW DATA STRUCTURE:  DijkstraComputePaths(relevant_nodes.at(i).toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
 
                 // remove unecessary entry keys in the map "previous" for optimisation and speed-up the simus
                 // (i.e. to increase the speed of the previous.find() algo...)
                 //out(cout << "simplify the map for the node: "<< relevant_nodes.at(i) << endl);
                 // 'previous' is not modified but a new 'previous' is exported into a file here....
-                SimplifyThePreviousMap(relevant_nodes.at(i).toIndex(), previous,
-                                       relevant_nodes, min_distance,
-                                       namefolderinput, inputfolder, a_graph_name);
-                min_distance.clear();
-                previous.clear();
+
+                //SimplifyThePreviousMap(relevant_nodes.at(i).toIndex(), previous,
+                //                       relevant_nodes, min_distance,
+                //                       namefolderinput, inputfolder, a_graph_name);
+                //min_distance.clear();
+                //previous.clear();
                 // these maps come from SimplifyThePreviousMap()
-                previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                //previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
                 // these maps come from SimplifyThePreviousMap()
-                min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
+                //min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
 
             }
 
-            // store in path shops (in order to avoid recomputing the all possible paths from a given departure!!!)
-            // ...and clean
-            //path_shop.push_back(previous);
-            //min_distance_shop.push_back(min_distance);
-            //idx_path_shop.push_back(relevant_nodes.at(i));
-
-            //min_distance.clear();
-            //previous.clear();
 
         }
 
@@ -3082,56 +3067,6 @@ int main(int argc, char* argv[])
 
 
 
-        // check by using it:
-        // retrieve the object 'previous' specific to a given origin node
-        // 1. find the idx in the idx_paths_shop object
-        /*
-        vector<int>::iterator it3;
-        int an_origin = 2125;
-        vertex_t v3 = 140; // default destination
-        if(namefolderinput=="fake")
-        {
-            v3 = 13; // destination
-            an_origin= 1600;
-        }
-        if(namefolderinput=="balticonly")
-        {
-            v3 = 144; // destination
-            an_origin= 190;
-            // v3 = 725; // destination balticonly_old
-            // an_origin= 77; //balticonly_old
-        }
-        it3 = find (idx_path_shop.begin(), idx_path_shop.end(), an_origin);
-        int idx3 = it3 - idx_path_shop.begin(); // tricky!
-       outc(cout << "This element is found at idx " << idx3 << endl);
-        // 2. then use this idx as index in the paths_shop to retrieve the object 'previous'
-       outc(cout << "retrieve 'previous' for this element " << endl);
-
-        previous=path_shop.at(idx3); // if the path_shop is a list
-        //std::list<map<int,int> >::iterator it_p = path_shop.begin(); // if the path_shop is a list
-        //advance(it_p, idx3-1);
-        //previous= *it_p;
-
-       outc(cout << "retrieve 'min_distance' for this element " << endl);
-
-        min_distance=min_distance_shop.at(idx3);
-        //std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
-        //advance(it_d, idx3-1);
-        //min_distance= *it_d;
-
-        // 3....and compute a new path to a new destination from this same origin!
-        list<vertex_t> path3 = DijkstraGetShortestPathTo(v3, previous);
-        list<vertex_t>::iterator path3_iter = path3.begin();
-       outc(cout << "Path3: ");
-        for( ; path3_iter != path3.end(); path3_iter++)
-        {
-           outc(cout << vertex_names[*path3_iter] << " " );
-        }
-       outc(cout << "distance to the destination " << vertex_names[v3] << ": " << min_distance[v3] << endl);
-       outc(cout << endl);
-        min_distance.clear();
-        previous.clear();
-        */
 
     }
 

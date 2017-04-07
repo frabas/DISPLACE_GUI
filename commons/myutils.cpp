@@ -1574,8 +1574,6 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 
 vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
                                          const std::vector<PathShop> &pathshops,
-                                         const deque<spp::sparse_hash_map<vertex_t, vertex_t> >& path_shop,
-                                         const deque<spp::sparse_hash_map<vertex_t, weight_t> >& min_distance_shop,
                                          types::NodeId from,
                                          vector<types::NodeId> grounds)
 {

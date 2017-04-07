@@ -114,13 +114,10 @@ extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
 extern string fleetsce;
 extern int create_a_path_shop;
-extern deque<spp::sparse_hash_map<vertex_t, vertex_t> > path_shop;
-extern deque<spp::sparse_hash_map<vertex_t, weight_t> >  min_distance_shop;
-extern vector <int> idx_path_shop;
 extern adjacency_map_t adjacency_map;
 extern vector<string> vertex_names;
 //extern map<vertex_t, vertex_t> previous;
-extern vector<types::NodeId> relevant_nodes;
+extern vector<int> relevant_nodes;
 extern multimap<int, int> nodes_in_polygons;
 extern multimap<int, int> possible_metiers;
 extern multimap<int, double> freq_possible_metiers;
@@ -144,7 +141,7 @@ extern ofstream vmslike2;
 extern ofstream vmslike3;
 extern vector <Metier*> metiers;
 extern ofstream export_individual_tacs;
-//extern vector <double> dist_to_ports;
+extern vector<PathShop> pathshops;
 
 extern void guiSendVesselLogbook(const std::string &line);
 
@@ -247,10 +244,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     outc(cout  << "GO FISHING" << endl);
                     do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
                                 tstep, scenario, use_dtrees,
-                                dyn_alloc_sce, create_a_path_shop,
-                                idx_path_shop, path_shop, min_distance_shop,
-                                adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-                                vertex_names,
+                                dyn_alloc_sce, create_a_path_shop,  pathshops,
+                                adjacency_map, relevant_nodes, nodes_in_polygons,
                                 nodes,
                                 metiers,
                                 freq_cpue, freq_profit, freq_distance
@@ -282,9 +277,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                             use_dtrees,
                             tstep,
                             dyn_alloc_sce, create_a_path_shop,
-                            idx_path_shop, path_shop, min_distance_shop,
-                            adjacency_map, min_distance, previous, relevant_nodes,
-                            vertex_names,
+                            pathshops,
+                            adjacency_map, relevant_nodes,
                             nodes,
                             metiers,
                             freq_cpue, freq_distance,
@@ -328,9 +322,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(
                                     tstep,
                                     dyn_alloc_sce, create_a_path_shop,
-                                    idx_path_shop, path_shop, min_distance_shop,
-                                    adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-                                    vertex_names,
+                                    pathshops,
+                                    adjacency_map,relevant_nodes, nodes_in_polygons,
                                     nodes,
                                     metiers,
                                     freq_cpue, freq_distance
@@ -400,13 +393,15 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                     pthread_mutex_lock(&glob_mutex);
                     vessels[ index_v ]->choose_a_port_and_then_return(
                                 tstep,
-                                dyn_alloc_sce, create_a_path_shop,
-                                idx_path_shop, path_shop, min_distance_shop,
-                                adjacency_map, min_distance, previous, relevant_nodes,
-                                vertex_names,
+                                dyn_alloc_sce,
+                                create_a_path_shop,
+                                pathshops,
+                                adjacency_map,
+                                relevant_nodes,
                                 nodes,
                                 metiers,
-                                freq_cpue, freq_distance,
+                                freq_cpue,
+                                freq_distance,
                                 dist_to_ports
                                 );
 

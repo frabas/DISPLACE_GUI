@@ -2812,6 +2812,9 @@ void Vessel::alloc_on_high_previous_cpue(int tstep,
 
 vector<double> Vessel::expected_profit_on_grounds(const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops)
 {
+
+    outc(cout << "compute expected profit on grounds " << endl);
+
     vector <double> freq_grds = this->get_freq_fgrounds();
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
     vector <vector<double> > past_freq_cpue_grds_pops = this-> get_freq_experiencedcpue_fgrounds_per_pop();
@@ -2931,6 +2934,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<int> &releva
     }
 
 
+    outc(cout << "compute expected profit on grounds...OK " << endl);
 
     return(profit_per_fgrounds);
 
@@ -3335,6 +3339,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                                             )
 {
 
+    outc(cout << " choose a ground and go fishing " << endl);
+
     this->set_tstep_dep(tstep);	 // store departure date
 
     // choose a fishing ground
@@ -3346,6 +3352,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChooseGround)){
 
+        outc(cout << " should i choose this ground" << endl);
         ground=this->should_i_choose_this_ground(tstep,
                                                  nodes,
                                                  relevant_nodes,
@@ -3363,6 +3370,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         if (dyn_alloc_sce.option(Options::focus_on_high_previous_cpue))
         {
 
+            outc(cout << " alloc on high previous cpue" << endl);
             this->alloc_on_high_previous_cpue(tstep,
                                               freq_cpue);
         }
@@ -3371,6 +3379,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         if (dyn_alloc_sce.option(Options::focus_on_high_profit_grounds))
         {
 
+            outc(cout << " alloc on high profit grounds" << endl);
             this->alloc_on_high_profit_grounds(tstep,
                                                relevant_nodes,
                                                pathshops,
@@ -3386,6 +3395,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             if(from!=this->get_previous_harbour_idx())
             {
 
+                outc(cout << " alloc while saving fuel" << endl);
                 this->alloc_while_saving_fuel(tstep,
                                               relevant_nodes,
                                               pathshops);
@@ -3401,6 +3411,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         // ****************closer_grounds**********************************//
         if (dyn_alloc_sce.option(Options::closer_grounds))		 // dyn sce.
         {
+            outc(cout << " alloc on closer grounds" << endl);
             this->alloc_on_closer_grounds(tstep,
                                           relevant_nodes,
                                           pathshops,
@@ -3413,6 +3424,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             //this->alter_freq_fgrounds_for_nodes_in_polygons(nodes_in_polygons);
             // compliance => 0.0001
             // replaced by:
+            outc(cout << " alloc accounting for area closures" << endl);
             const auto &grds = this->get_fgrounds();
             for (int i=0; i<grds.size();++i)
             {
@@ -3427,6 +3439,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         if (dyn_alloc_sce.option(Options::area_monthly_closure))
         {
             const auto &grds = this->get_fgrounds();
+            outc(cout << " alloc accounting for monthly area closures" << endl);
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
@@ -3464,7 +3477,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
         //cout << "do_sample 3" << endl;
         auto grounds = do_sample(1, grds.size(), grds, freq_grds);
-        ground=grounds[0];
+        ground= types::NodeId(grounds[0]);
 
     }
 
@@ -3472,7 +3485,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
     //int ground=grds[0];
-    outc(cout  << this->get_name() << " GO FISHING ON " << ground << endl);
+    outc(cout  << this->get_name() << " GO FISHING ON " << ground.toIndex() << endl);
 
 
     // get the shortest path between source and destination
@@ -3627,7 +3640,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     {
 
         types::NodeId vx = types::NodeId(grds.at(i));// destination
-        dout(cout  << "distance to other grounds " << vx << ": " << vx.toIndex() << endl);
+        dout(cout  << "test the other ground "<< vx.toIndex() << endl);
 
         // check for area_closure
         if (
@@ -3670,7 +3683,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
             else
             {
 
-                dist_to_others.push_back(distance_fgrounds[vx.toIndex()]);
+                dist_to_others.push_back(distance_fgrounds[i]);
 
             }
 
@@ -3678,7 +3691,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         else
         {
 
-            dist_to_others.push_back(distance_fgrounds[vx.toIndex()]);
+            dist_to_others.push_back(distance_fgrounds[i]);
 
         }
 
@@ -3942,7 +3955,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     {
         // still no path!....
         dout (cout << "still no path found in shop for vessel " << this->get_name() <<
-              " going to arr " << arr << " from " << from << " then compute it..." << endl);
+              " going to arr " << arr.toIndex() << " from " << from.toIndex() << " then compute it..." << endl);
 
         //compute a path!  (24Feb14 but disabled because too time consuming!)
         //system("PAUSE");
@@ -4664,6 +4677,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
     UNUSED(freq_cpue);
     UNUSED(freq_distance);
 
+    outc (cout<< "should I  stop fishing??" << endl);
 
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StopFishing))
     {
@@ -4712,34 +4726,11 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
         {
             const auto &harbs = this->get_harbours();
             auto from = this->get_loc()->get_idx_node();
-           PathShop curr_path_shop;
-
-            if(!create_a_path_shop)
-            {
-                // from the source to all nodes
-                // TO DO: ADAPT TO NEW DATA STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-            }
-            else				 // replaced by:
-            {
-               auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
-               int idx = it - relevant_nodes.begin();
-               curr_path_shop = pathshops.at(idx);
-
-            }
 
 
-            vector <double> distance_to_harb = compute_distance_fgrounds(relevant_nodes, pathshops,
+            vector <double> dist_to_ports = compute_distance_fgrounds(relevant_nodes, pathshops,
                                                                           from, harbs);
 
-            for (unsigned int i =0; i< harbs.size(); i++)
-            {
-                // get the shortest distance between source and destination
-                // with the list of intermediate nodes
-                // destination
-                types::NodeId vx = types::NodeId(harbs[i]);
-                dout(cout  << "distance to harbour " << vx.toIndex() << ": " << distance_to_harb.at(vx.toIndex()) << endl);
-                dist_to_ports.push_back(distance_to_harb.at(vx.toIndex()));
-            }
             vector<double>::iterator where = min_element (dist_to_ports.begin(), dist_to_ports.end());
             a_min_dist = *where;
             dout(cout  << "minimum dist to port is " << *where << endl);

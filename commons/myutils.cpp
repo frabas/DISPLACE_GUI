@@ -1577,9 +1577,12 @@ vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
                                          types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
+    outc (cout  << "look at the distances " << endl);
+
     vector<int>::const_iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
     int idx = it - relevant_nodes.begin();
 
+    outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
 
     vector <double> distance_fgrounds;
     for (unsigned int i=0; i<grounds.size(); i++)
@@ -1603,6 +1606,7 @@ vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
       }
     }
 
+    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< endl);
 
  return(distance_fgrounds);
 }

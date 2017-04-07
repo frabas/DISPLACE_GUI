@@ -169,14 +169,11 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     UNUSED(dt);
 
 
-    spp::sparse_hash_map<vertex_t, weight_t> min_distance;
-    spp::sparse_hash_map<vertex_t, vertex_t> previous;
     vector <double> dist_to_ports;
 
     dout(cout  << "----------" << endl);
     pthread_mutex_lock (&glob_mutex);
     int index_v =  ve[idx_v];
-    //dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
     outc(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name()<< " " << endl);
     pthread_mutex_unlock (&glob_mutex);
 
@@ -305,6 +302,8 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 // go on fishing...
                 if(!stop_fishing)
                 {
+                    outc(cout  << "OK, I´LL CONTINUE FISHING!" << endl);
+
                     // ***************make a decision************************************
                     map<string,int> external_states_relevant_for_change_ground;
                     external_states_relevant_for_change_ground.insert(make_pair(" none ",0));

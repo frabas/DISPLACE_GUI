@@ -3521,7 +3521,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
     }
     else						 // replaced by:
     {
-        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         int idx = it - relevant_nodes.begin();
         curr_path_shop = pathshops.at(idx);
     }
@@ -3661,7 +3661,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
      //   previous=path_shop.at(idx);
      //   min_distance=min_distance_shop.at(idx);
 
-        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         int idx = it - relevant_nodes.begin();
         curr_path_shop = pathshops.at(idx);
 
@@ -3912,7 +3912,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
     else						 // replaced by:
     {
 
-        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+        auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
         int idx = it - relevant_nodes.begin();
         curr_path_shop = pathshops.at(idx);
     }
@@ -3982,7 +3982,7 @@ void Vessel::choose_a_port_and_then_return(int tstep,
         }
         else					 // replaced by:
         {
-            auto it = find (relevant_nodes.begin(), relevant_nodes.end(), arr.toIndex());
+            auto it = find (relevant_nodes.begin(), relevant_nodes.end(), arr);
             int idx = it - relevant_nodes.begin();
             curr_path_shop = pathshops.at(idx);
 
@@ -4799,7 +4799,7 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
             }
             else				 // replaced by:
             {
-               auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+               auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
                int idx = it - relevant_nodes.begin();
                curr_path_shop = pathshops.at(idx);
 

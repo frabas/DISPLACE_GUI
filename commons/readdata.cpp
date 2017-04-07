@@ -2668,7 +2668,7 @@ spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId s
     return min_distance;
 }
 
-PathShop read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
+PathShop* read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
     dout(cout <<"BEGIN: read map previous" << endl);
 

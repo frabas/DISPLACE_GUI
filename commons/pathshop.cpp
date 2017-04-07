@@ -85,7 +85,7 @@ PathShop::Data PathShop::getNode(types::NodeId id) const
     return d->getNode(id);
 }
 
-PathShop PathShop::readFromFiles(const std::string &prevstream, const std::string &weighstream)
+PathShop* PathShop::readFromFiles(const std::string &prevstream, const std::string &weighstream)
 {
     PathShop shop;
 
@@ -100,7 +100,7 @@ PathShop PathShop::readFromFiles(const std::string &prevstream, const std::strin
         return true;
     });
 
-    return shop;
+    return &shop;
 }
 
 PathShop PathShop::readFromData(const std::vector<InitData> &data)

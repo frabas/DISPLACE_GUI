@@ -117,7 +117,7 @@ extern int create_a_path_shop;
 extern adjacency_map_t adjacency_map;
 extern vector<string> vertex_names;
 //extern map<vertex_t, vertex_t> previous;
-extern vector<int> relevant_nodes;
+extern vector<types::NodeId> relevant_nodes;
 extern multimap<int, int> nodes_in_polygons;
 extern multimap<int, int> possible_metiers;
 extern multimap<int, double> freq_possible_metiers;

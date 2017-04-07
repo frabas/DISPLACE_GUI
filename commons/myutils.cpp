@@ -157,11 +157,6 @@ void DijkstraComputePaths(vertex_t source,
 
         }
 
-        //if(relevant_nodes.size()<7){
-        //    for (int i=0; i<relevant_nodes.size(); i++){
-        //    std::cout << relevant_nodes.at(i) <<" ";
-        //    }
-        //}
 
     }
 
@@ -1572,14 +1567,14 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 }
 
 
-vector<double> compute_distance_fgrounds(const vector <int>& relevant_nodes,
+vector<double> compute_distance_fgrounds(const vector<types::NodeId> &relevant_nodes,
                                          const std::vector<PathShop> &pathshops,
                                          types::NodeId from,
                                          vector<types::NodeId> grounds)
 {
     outc (cout  << "look at the distances " << endl);
 
-    vector<int>::const_iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from.toIndex());
+    vector<types::NodeId>::const_iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
     int idx = it - relevant_nodes.begin();
 
     outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);

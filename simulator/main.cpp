@@ -200,7 +200,7 @@ string fleetsce;
 int create_a_path_shop;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
-vector<int> relevant_nodes;
+vector<types::NodeId> relevant_nodes;
 multimap<int, int> nodes_in_polygons;
 multimap<types::NodeId, int> possible_metiers;
 multimap<types::NodeId, double> freq_possible_metiers;
@@ -279,7 +279,7 @@ static void unlock()
     pthread_mutex_unlock(&glob_mutex);
 }
 
-bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<int> &nodes)
+bool load_relevant_nodes (string folder_name_parameterization, string inputfolder, string ftype, string a_quarter, set<types::NodeId> &nodes)
 {
     string filename=  inputfolder + "/vesselsspe_"+folder_name_parameterization+"/vesselsspe_" + ftype + "_" + a_quarter + ".dat";
     ifstream in;
@@ -303,7 +303,7 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
         std::stringstream ss (line);
         ss >> vessel_name;
         ss >> node;
-        nodes.insert(node);
+        nodes.insert(types::NodeId(node));
     }
 
     outc(cout << "Loaded: " << filename << " " << n << " lines, " << nodes.size() << " relevant nodes");
@@ -312,9 +312,9 @@ bool load_relevant_nodes (string folder_name_parameterization, string inputfolde
     return true;
 }
 
-bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<int> &ret)
+bool load_relevant_nodes(string folder_name_parameterization, string inputfolder, vector<types::NodeId> &ret)
 {
-    set<int> nodes;
+    set<types::NodeId> nodes;
 
     if (!load_relevant_nodes(folder_name_parameterization, inputfolder, "fgrounds", "quarter1", nodes))
         return false;
@@ -335,7 +335,7 @@ bool load_relevant_nodes(string folder_name_parameterization, string inputfolder
 
     auto it = nodes.begin();
     while (it != nodes.end()) {
-        ret.push_back(*it);
+        ret.push_back(types::NodeId(*it));
         ++it;
     }
 
@@ -2991,7 +2991,7 @@ int main(int argc, char* argv[])
     outc(cout << "relevant nodes: " << endl);
     for(unsigned int i=0; i<relevant_nodes.size(); i++)
     {
-        outc(cout << relevant_nodes.at(i) << " " );
+        outc(cout << relevant_nodes.at(i).toIndex() << " " );
     }
     outc(cout << endl);
 
@@ -3021,20 +3021,20 @@ int main(int argc, char* argv[])
             if(read_preexisting_paths)
             {
 
-                dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i) << endl);
+                dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
                 // these maps come from SimplifyThePreviousMap()
                 //previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
                 //dout(cout  << ":: "<<  endl);
                 // these maps come from SimplifyThePreviousMap()
                 //min_distance = read_min_distance(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
 
-                PathShop curr_path_shop =read_graph_details(types::NodeId(relevant_nodes.at(i)),  namefolderinput,   inputfolder,  a_graph_name);
+                PathShop curr_path_shop =read_graph_details(relevant_nodes.at(i),  namefolderinput,   inputfolder,  a_graph_name);
                 pathshops.push_back(curr_path_shop);
 
             }
             else
             {
-                outc(cout << "compute all paths for the node: "<< relevant_nodes.at(i) << endl);
+                outc(cout << "compute all paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
                 // from the source to all nodes
               // TO DO: ADAPT TO THE NEW DATA STRUCTURE:  DijkstraComputePaths(relevant_nodes.at(i).toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
 

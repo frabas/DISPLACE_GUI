@@ -321,12 +321,12 @@ public:
         void alter_freq_fgrounds_for_nodes_in_polygons(std::multimap <int, int> nodes_in_polygons);
 		void alloc_on_high_previous_cpue(int tstep,
             std::ofstream& freq_cpue);
-        void alloc_on_high_profit_grounds(int tstep, const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops,
+        void alloc_on_high_profit_grounds(int tstep, const std::vector<types::NodeId> &relevant_nodes, const std::vector<PathShop> &pathshops,
             std::ofstream& freq_profit);
-        std::vector<double> expected_profit_on_grounds(const std::vector<int> &relevant_nodes, const std::vector<PathShop> &pathshops);
-        void alloc_while_saving_fuel(int tstep, const std::vector<int> &relevant_nodes,
+        std::vector<double> expected_profit_on_grounds(const std::vector<types::NodeId> &relevant_nodes, const std::vector<PathShop> &pathshops);
+        void alloc_while_saving_fuel(int tstep, const std::vector<types::NodeId> &relevant_nodes,
            const std::vector<PathShop> &pathshops);
-        void alloc_on_closer_grounds(int tstep, const std::vector<int> &relevant_nodes,
+        void alloc_on_closer_grounds(int tstep, const std::vector<types::NodeId> &relevant_nodes,
             const std::vector<PathShop> &pathshops,
             std::ofstream& freq_distance);
 
@@ -335,7 +335,7 @@ public:
             int create_a_path_shop,
             const std::vector <PathShop>& pathshops,
             adjacency_map_t& adjacencymap,
-            vector<int> &relevant_nodes,
+            vector<types::NodeId> &relevant_nodes,
             std::multimap<int, int>& nodes_in_polygons,
             std::vector<Node* >& nodes,
             std::vector <Metier*>& metiers,
@@ -349,7 +349,7 @@ public:
             int create_a_path_shop,
             const std::vector<PathShop> &pathshops,
             adjacency_map_t& adjacency_map,
-            vector<int> &relevant_nodes,
+            vector<types::NodeId> &relevant_nodes,
             const std::multimap<int, int> &nodes_in_polygons,
             std::vector<Node* >& nodes,
             std::vector <Metier*>& metiers,
@@ -360,7 +360,7 @@ public:
             int create_a_path_shop,
             const std::vector<PathShop> &pathshops,
             adjacency_map_t& adjacency_map,
-            vector<int> &relevant_nodes,
+            vector<types::NodeId> &relevant_nodes,
             std::vector<Node* >& nodes,
             std::vector <Metier*>& metiers,
             std::ofstream& freq_cpue,
@@ -374,7 +374,7 @@ public:
         int should_i_start_fishing(std::map<std::string, int>& external_states, bool use_the_tree);
         types::NodeId should_i_choose_this_ground(int tstep,
                                         std::vector<Node*>& nodes,
-                                        const std::vector <int>& relevant_nodes,
+                                        const std::vector <types::NodeId>& relevant_nodes,
                                         const std::vector<PathShop> &pathshops,
                                         const DynAllocOptions &dyn_alloc_sce);
         int should_i_change_ground(std::map<std::string, int>& external_states, bool use_the_tree);
@@ -385,7 +385,7 @@ public:
             int create_a_path_shop,
             const std::vector<PathShop> &pathshops,
             adjacency_map_t& adjacency_map,
-            const vector<int> &relevant_nodes,
+            const vector<types::NodeId> &relevant_nodes,
             std::vector<Node* >& nodes,
             std::vector <Metier*>& metiers,
             std::ofstream& freq_cpue,

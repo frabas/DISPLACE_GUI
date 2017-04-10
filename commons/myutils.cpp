@@ -1582,8 +1582,9 @@ vector<double> compute_distance_fgrounds(const vector<types::NodeId> &relevant_n
     vector <double> distance_fgrounds;
     for (unsigned int i=0; i<grounds.size(); i++)
       {
-      double dist=0.0;
+      double dist=1.0;
       auto vertex = grounds.at(i);
+      distance_fgrounds.push_back(dist);
 
       while (true) {
         try {
@@ -1591,7 +1592,7 @@ vector<double> compute_distance_fgrounds(const vector<types::NodeId> &relevant_n
             vertex = node.getPreviousNode();
             dist   = node.getWeight();
             if (!types::isIdInvalid(vertex))
-                distance_fgrounds.push_back(dist);
+                distance_fgrounds.at(i)+=dist;
             else
                 break;
         } catch (PathShop::NodeNotFoundException &) {

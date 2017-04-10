@@ -120,9 +120,11 @@ double Harbour::get_prices_per_cat(int pop, int cat)
 	//print_d(spe_prices);
 	if(!spe_prices.empty())
 	{
-        dout(cout  << "harbour "<< this->get_name() << endl);
+        dout(cout  << "fish price on harbour "<< this->get_name() << " and pop " << pop << endl);
 								 // caution to relative vector index here....
-		a_price=spe_prices.at(cat);
+        dout(cout  << "...for this cat "<< cat << "is:" << endl);
+        a_price=spe_prices.at(cat);
+        dout(cout  << a_price << endl);
 
 	}
 	else

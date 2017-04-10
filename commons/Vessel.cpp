@@ -2814,6 +2814,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
 {
 
     outc(cout << "compute expected profit on grounds " << endl);
+//cout << "compute expected profit on grounds " << endl;
 
     vector <double> freq_grds = this->get_freq_fgrounds();
     // get_experiencedcpue_fgrounds_per_pop is scaled to 1
@@ -2876,6 +2877,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
 
         if(tot_revenue==0) // we shouldn´t expect this...
         {
+ // cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl;
             outc(cout << this->get_name() << ": Pblm in metier definition vs. targets (past cpues on tgrt pops from gscale gshape likely to be 0s)...then expand the search to all pops! "  << endl);
             for(unsigned int pop=0; pop<past_freq_cpue_grds_pops.at(gr).size(); ++pop)
             {
@@ -2890,16 +2892,22 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
         }
 
 
-        //cout << "given the capacity "   << this->get_carrycapacity() << ", the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
+ //cout << "given the capacity "   << this->get_carrycapacity() << ", the expected revenue on this ground is " << revenue_per_fgrounds.at(gr) << endl;
+ //cout << "ground " << gr << endl;
 
         //2. compute the expected cost when steaming
         // time given the shortest distance divided by the speed...
         double time_for_steaming=0;
         // *2 because WE NEED TO GO BACK TO PORT!
+ //cout << "size of distance_fgrounds " << distance_fgrounds.size() << endl;
         time_for_steaming= (distance_fgrounds.at(gr)/this->get_speed())*2;
-        //if(tstep>1) cout << "the expected time to reach this ground is " << time_for_steaming << endl;
-        scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
-        //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
+ //cout << "the expected time to reach this ground is " << time_for_steaming << endl;
+ //cout << "fuel price " << this->get_loc()->get_fuelprices(length_class) << endl;
+ //cout << "this->get_mult_fuelcons_when_steaming() " << this->get_mult_fuelcons_when_steaming()<< endl;
+ //cout << "fuel cons " <<  this->get_fuelcons() << endl;
+
+ scost_per_fgrounds.at(gr)=   time_for_steaming * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming();
+ //cout << "the expected scost on this ground is " << scost_per_fgrounds.at(gr) << endl;
 
         //3. compute the expected cost when fishing
         double time_to_be_full_of_catches_if_infinite_fuel_tank=0;
@@ -2907,7 +2915,7 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
         if(cpue_this_node!=0)
         {
             time_to_be_full_of_catches_if_infinite_fuel_tank = this->get_carrycapacity() / cpue_this_node;
-            //if(tstep>1) dout(cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl);
+//cout << "the expected time to fill in the capacity on this ground is " << time_to_be_full_of_catches_if_infinite_fuel_tank << endl;
         }
         else
         {
@@ -2917,23 +2925,24 @@ vector<double> Vessel::expected_profit_on_grounds(const std::vector<types::NodeI
         double time_for_fishing_given_fuel_tank= (this->get_tankcapacity() -
                                                   ( time_for_steaming * this->get_fuelcons() *  this->get_mult_fuelcons_when_steaming())) /
                 (this->get_fuelcons()) ;// (tank - expected tot fuelcons when steaming) / conso per hour when fishing
-        //if(tstep>1) dout(cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl);
+//cout << "the expected time to empty the fuel tank on this ground is " << time_for_fishing_given_fuel_tank << endl;
 
         double time_for_fishing= min(time_to_be_full_of_catches_if_infinite_fuel_tank, time_for_fishing_given_fuel_tank);
-        //if(tstep>1) dout(cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl);
+//cout << "then, the expected time for fishing on this ground is " << time_for_fishing << endl;
 
         fcost_per_fgrounds.at(gr)=time_for_fishing * this->get_loc()->get_fuelprices(length_class) * this->get_fuelcons()  *  this->get_mult_fuelcons_when_fishing();
-        //cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
+//cout << "the expected fcost on this ground is " << fcost_per_fgrounds.at(gr) << endl;
 
         //4. then compute the expected profit for this ground
         profit_per_fgrounds.at(gr)= revenue_per_fgrounds.at(gr) -
                 scost_per_fgrounds.at(gr) -
                 fcost_per_fgrounds.at(gr);
-        //cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
+ //cout << "the expected profit on this ground is " << profit_per_fgrounds.at(gr) << endl;
 
     }
 
 
+ //cout << "compute expected profit on grounds...OK " << endl;
     outc(cout << "compute expected profit on grounds...OK " << endl);
 
     return(profit_per_fgrounds);

@@ -24,7 +24,7 @@ namespace displace {
 namespace formats {
 namespace legacy {
 
-class FORMATSSHARED_EXPORT BinaryGraphFileReader {
+class BinaryGraphFileReader {
 public:
     BinaryGraphFileReader() {
     }

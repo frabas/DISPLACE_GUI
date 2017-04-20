@@ -51,19 +51,25 @@ CONFIG(release,release|debug) {
 #   QMAKE_LFLAGS_RELEASE=
 }
 
+GEOGRAPHICLIB=Geographic
+
 win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 
     CGAL_LIBS= -lCGAL-vc140-mt-4.9 -lgmp -lboost_system-vc140-mt-1_62
+    CONFIG(debug,release|debug){
+        GEOGRAPHICLIB=Geographic_d
+    }
 }
 
 unix {
     CGAL_LIBS= -lCGAL -lgmp
 }
 
+
 DEFINES += HAVE_GEOGRAPHICLIB
-LIBS += -lGeographic
+LIBS += -l$$GEOGRAPHICLIB
 
 !macx {
     QMAKE_CXXFLAGS += -frounding-math

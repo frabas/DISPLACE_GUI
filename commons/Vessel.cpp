@@ -3506,9 +3506,19 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     if(!create_a_path_shop)
     {
-        // from the source to all nodes
-       // TO DO: ADAPT TO NEW STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-    }
+        std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
+        if (it != relevant_nodes.end())
+        {
+           cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
+           relevant_nodes.push_back(from);
+           spp::sparse_hash_map <vertex_t, vertex_t> previous;
+           spp::sparse_hash_map <vertex_t, weight_t> min_distance;
+           DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+           //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
+           //pathshops.push_back(on_the_fly_pathshop);
+           cout << from.toIndex() << " add to the pathshops...ok" <<endl;
+        }
+     }
     else						 // replaced by:
     {
         std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
@@ -3520,8 +3530,14 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         }
         else
         {
-            cout << from.toIndex() << " not found in the relevant nodes!!" <<endl;
-
+            cout << from.toIndex() << " not found in the relevant nodes!! find a path on the fly and add to the pathshops" <<endl;
+            relevant_nodes.push_back(from);
+            spp::sparse_hash_map <vertex_t, vertex_t> previous;
+            spp::sparse_hash_map <vertex_t, weight_t> min_distance;
+            DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+            //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
+            //pathshops.push_back(on_the_fly_pathshop);
+            cout << from.toIndex() << " add to the pathshops...ok" <<endl;
         }
 
         outc(cout  << "find path to fishing ground " << ground.toIndex() <<endl);
@@ -3641,9 +3657,19 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
     if(!create_a_path_shop)
     {
-        // from the source to all nodes
-        // TO DO: ADAPT TO THE NEW STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-    }
+        std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
+        if (it != relevant_nodes.end())
+        {
+           cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
+           relevant_nodes.push_back(from);
+           spp::sparse_hash_map <vertex_t, vertex_t> previous;
+           spp::sparse_hash_map <vertex_t, weight_t> min_distance;
+           DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+           //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
+           //pathshops.push_back(on_the_fly_pathshop);
+           cout << from.toIndex() << " add to the pathshops...ok" <<endl;
+        }
+      }
     else						 // replaced by:
     {
         auto it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
@@ -3876,9 +3902,19 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
     if(!create_a_path_shop)
     {
-        // from the source to all nodes
-        // TO DO: ADAPT TO THE NEW DATA STRUCTURE: DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
-    }
+        std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
+        if (it != relevant_nodes.end())
+        {
+           cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
+           relevant_nodes.push_back(from);
+           spp::sparse_hash_map <vertex_t, vertex_t> previous;
+           spp::sparse_hash_map <vertex_t, weight_t> min_distance;
+           DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+           //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
+           //pathshops.push_back(on_the_fly_pathshop);
+           cout << from.toIndex() << " add to the pathshops...ok" <<endl;
+        }
+      }
     else						 // replaced by:
     {
 
@@ -3947,8 +3983,18 @@ void Vessel::choose_a_port_and_then_return(int tstep,
 
         if(!create_a_path_shop)
         {
-            // from the source to all nodes
-            // TO DO: ADAPT TO NEW STRUCTURE DijkstraComputePaths(arr, adjacency_map, min_distance, previous, relevant_nodes);
+            std::vector<types::NodeId>::iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
+            if (it != relevant_nodes.end())
+            {
+               cout << from.toIndex() << " create path shop on the fly!! find a path on the fly and add to the pathshops" <<endl;
+               relevant_nodes.push_back(from);
+               spp::sparse_hash_map <vertex_t, vertex_t> previous;
+               spp::sparse_hash_map <vertex_t, weight_t> min_distance;
+               DijkstraComputePaths(from.toIndex(), adjacency_map, min_distance, previous, relevant_nodes);
+               //PathShop on_the_fly_pathshop = PathShop::createFromHashMaps(min_distance, previous); // TO DO
+               //pathshops.push_back(on_the_fly_pathshop);
+               cout << from.toIndex() << " add to the pathshops...ok" <<endl;
+            }
         }
         else					 // replaced by:
         {

@@ -3007,11 +3007,6 @@ int main(int argc, char* argv[])
 
         // for-loop over potential departure node
         // TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
-        //spp::sparse_hash_map<vertex_t, weight_t> min_distance;
-        //spp::sparse_hash_map<vertex_t, vertex_t> previous;
-        //min_distance.clear();
-        //previous.clear();
-        //for (int i=3100; i<relevant_nodes.size(); i++) // change for this to debug in case the creation fails...
         for (unsigned int i=0; i<relevant_nodes.size(); i++)
         {
             outc(cout << ".");

@@ -1,3 +1,9 @@
+displace (0.9.7ubuntu1) UNRELEASED; urgency=medium
+
+  * Optimized memory footprint
+
+ -- Federico Fuga <fuga@studiofuga.com>  Tue, 02 May 2017 18:44:18 +0200
+
 displace (0.9.7) xenial; urgency=medium
 
   * Fix bug in benthos equations

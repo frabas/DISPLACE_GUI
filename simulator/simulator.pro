@@ -6,7 +6,7 @@ TEMPLATE=app
 
 DESTDIR = ../
 
-INCLUDEPATH=../include ../commons ../formats
+INCLUDEPATH=../include ../commons ../formats ../sparsepp
 
 include ("$$top_srcdir/localconfig.pri")
 macx {

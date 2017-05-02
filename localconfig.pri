@@ -81,8 +81,6 @@ macx {
     LIBS += -L$$LIBDESTDIR
 }
 
-INCLUDEPATH += $$top_srcdir/sparsepp
-
 MOC_DIR = moc
 UI_DIR = ui
 OBJECTS_DIR = obj

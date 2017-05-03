@@ -1,8 +1,8 @@
-displace (0.9.7ubuntu1) UNRELEASED; urgency=medium
+displace (0.9.8) xenial; urgency=medium
 
   * Optimized memory footprint
 
- -- Federico Fuga <fuga@studiofuga.com>  Tue, 02 May 2017 18:44:18 +0200
+ -- Federico Fuga <fuga@studiofuga.com>  Wed, 03 May 2017 10:56:49 +0200
 
 displace (0.9.7) xenial; urgency=medium
 

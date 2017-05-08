@@ -130,8 +130,8 @@ private:
 public:
     VesselEndOfTheDayIsStateEvaluator() {}
     double evaluate(int tstep, Vessel *vessel) const {
-          return (tstep % 24) < vessel->getWorkDayEndHour() ? 1.0 : 0.0; // hardcoded return for daily trip after 22 p.m. //0: "true" node; 1: "false"
-        }
+              return ((int)((tstep % 24)+0.5) == vessel->getWorkDayEndHour() ? 0.0 : 1.0); // hardcoded return for daily trip after 10 p.m. //0: "true" node; 1: "false"
+          }
 };
 
 

@@ -935,6 +935,7 @@ bool fill_from_vessels_specifications (istream& in,
                 calendar.workEndHour = boost::lexical_cast<int>(fields[18]);
             }
 
+
             names.push_back(fields[0]);
             speeds.push_back(boost::lexical_cast<double>(fields[1].c_str()));
             fuelcons.push_back(boost::lexical_cast<double>(fields[2].c_str()));

@@ -8,7 +8,7 @@ CONFIG += c++11
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
-INCLUDEPATH +=../include/ ../formats .
+INCLUDEPATH +=../include/ ../formats . ../sparsepp
 LIBS += -L.. -lformats
 
 win32 {

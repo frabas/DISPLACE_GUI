@@ -258,6 +258,13 @@ bool fill_from_ships_specifications (istream& in, vector<string>& names, vector<
                                      vector<double>& vmaxs,
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids);
+bool fill_from_fishfarms_specifications(istream& in,
+                                    vector<int> & fishfarms_ids,
+                                    vector<string> & fishfarms_names,
+                                    vector<int> & idx_nodes,
+                                    vector<double> &sizes,
+                                    vector<double> & longs,
+                                    vector<double> & lats);
 bool fill_from_firms_specifications(istream& in,
                                     vector<int> & firm_ids,
                                     vector<string> & firm_names,

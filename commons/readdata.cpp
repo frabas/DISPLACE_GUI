@@ -525,6 +525,44 @@ bool read_firms_features(vector<int>& firm_ids,
 
 
 
+
+//----------------
+bool read_fishfarms_features(vector<int>& fishfarms_ids,
+                         vector<string>& fishfarms_names,
+                         vector<int>& idx_nodes,
+                         vector<double>& sizes,
+                         vector<double>& longs,
+                         vector<double>& lats,
+                         string folder_name_parameterization,
+                         string inputfolder
+                         )
+{
+
+    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/fishfarmsspe_features.dat";
+
+    ifstream fishfarms_features;
+    fishfarms_features.open(filename.c_str());
+    if(fishfarms_features.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+
+    bool r = fill_from_fishfarms_specifications(fishfarms_features,
+                                                fishfarms_ids,
+                                                fishfarms_names,
+                                                idx_nodes,
+                                                sizes,
+                                                longs,
+                                                lats);
+    fishfarms_features.close();
+
+    return r;
+}
+
+
+
+
 //----------------
 bool read_ships_features(vector<string>& shipids,
                          vector<double> &imos,

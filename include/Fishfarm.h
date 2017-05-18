@@ -31,12 +31,16 @@
 class Fishfarm
 {
     public:
-        Fishfarm(int _name, Node *_node, double size);
+        Fishfarm(int _name, string _stringname, Node *_node, double _size, double _farm_original_long, double _farm_original_lat);
 
         Fishfarm();
         virtual ~Fishfarm();
                                  // Copy constructor
         int get_name() const;
+        string get_stringname() const;
+        double get_size() const;
+        double get_farm_original_long() const;
+        double get_farm_original_lat() const;
         double get_x() const;
         double get_y() const;
         void set_x(double value);
@@ -45,6 +49,8 @@ class Fishfarm
     protected:
     private:
         int name;
+        string stringname;
+        double farm_original_long, farm_original_lat;
         double x, y;
         double size;
 };

@@ -1597,19 +1597,37 @@ int main(int argc, char* argv[])
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
 
-    map<int, double> init_size_per_farm = read_size_per_farm(folder_name_parameterization, inputfolder);
-    cout << "Do the size_per_farm need a check?" << endl;
 
-
-    // get the name of the pops
-    // copy only unique elements of init_pops_per_szgroup into name_pops
-    // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
-    cout << "Does the name_pops creation  need a check?" << endl;
-
-    for(map<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_farm.end(); iter = init_size_per_farm.upper_bound( iter->first ) ) {
-        Fishfarm *ff = new Fishfarm(iter->first, nodes.at(iter->first), iter->second);
-        fishfarms.push_back(ff);
+    // read general firm features
+    vector<int> all_fishfarms_ids;
+    vector<string> fishfarms_names;
+    vector<int> idx_nodes;
+    vector<double> fishfarms_size;
+    vector<double> fishfarms_longs;
+    vector<double> fishfarms_lats;
+    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, fishfarms_size, fishfarms_longs, fishfarms_lats,
+                             folder_name_parameterization, inputfolder)) {
+        cerr << "Error loading fishfarms features. Bailing out.\n";
+        return 2;
     }
+
+
+    vector <Fishfarm*> fishfarms(all_fishfarms_ids.size());
+    for(unsigned int i=0; i<all_fishfarms_ids.size();i++)
+    {
+
+       fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]),
+                       fishfarms_size[i], fishfarms_longs[i], fishfarms_lats[i]);
+
+       cout << fishfarms[i]->get_name() << endl;
+       cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
+
+    }
+
+    cout << "all fishfarms created...." << endl;
+
+
+
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
@@ -1621,12 +1639,8 @@ int main(int argc, char* argv[])
     cout << "Does the size_per_windmill need a check?" << endl;
 
 
-    // get the name of the pops
-    // copy only unique elements of init_pops_per_szgroup into name_pops
-    // DEADLY BUG: MAKE SURE THAT NO BLANK IS LEFT IN THE VERY END OF THE .DAT FILE...
-    cout << "Do the name_pops creation  need a check?" << endl;
 
-    for(map<int, double>::iterator iter=init_size_per_farm.begin(); iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound( iter->first ) ) {
+    for(map<int, double>::iterator iter=init_size_per_windmill.begin(); iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound( iter->first ) ) {
         Windmill *wm = new Windmill(iter->first, nodes.at(iter->first), iter->second);
         windmills.push_back(wm);
     }

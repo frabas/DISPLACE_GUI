@@ -28,9 +28,9 @@
 #include <iterator>
 
 
-Fishfarm::Fishfarm(int _name, Node *_node, double _size)
-    : name(_name), x(_node->get_x()), y(_node->get_y()),
-      size(_size)
+Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, double _size, double _farm_original_long, double _farm_original_lat)
+    : name(_name), stringname(_stringname), x(_node->get_x()), y(_node->get_y()),
+      size(_size), farm_original_long(_farm_original_long), farm_original_lat(_farm_original_lat)
 {
 }
 
@@ -42,6 +42,27 @@ Fishfarm::~Fishfarm()
 int Fishfarm::get_name() const
 {
     return(name);
+}
+
+string Fishfarm::get_stringname() const
+{
+    return(stringname);
+}
+
+double Fishfarm::get_size() const
+{
+    return(size);
+}
+
+
+double Fishfarm::get_farm_original_long() const
+{
+    return(farm_original_long);
+}
+
+double Fishfarm::get_farm_original_lat() const
+{
+    return(farm_original_lat);
 }
 
 double Fishfarm::get_x() const

@@ -2498,19 +2498,34 @@ bool DisplaceModel::initShips()
 
 bool DisplaceModel::initFishfarm()
 {
-    map<int, double> init_size_per_farm = read_size_per_farm(mInputName.toStdString(), mBasePath.toStdString());
 
-   for (auto iter : init_size_per_farm) {
-       cout<<"create fishfarm " << iter.first << endl;
+    // read general fishfarms features
+    vector<int> all_fishfarms_ids;
+    vector<string> fishfarms_names;
+    vector<int> idx_nodes;
+    vector<double> fishfarms_sizes;
+    vector<double> fishfarms_longs;
+    vector<double> fishfarms_lats;
 
-       auto node = mNodes.at(iter.first);
-       auto ff = std::make_shared<Fishfarm>(iter.first, node->mNode.get(), iter.second);
+    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
+                        mInputName.toStdString(), mBasePath.toStdString()))
+    return false;
 
-       auto ffd = std::make_shared<FishfarmData>(ff);
-       mFishfarms.push_back(ffd);
+
+   for (int id=0; id<all_fishfarms_ids.size(); ++id) {
+       cout<<"create fishfarms " << all_fishfarms_ids.at(id) << endl;
+
+// TO DO:
+//       auto fi = std::make_shared<Fishfarm>(id, all_fishfarms_ids.at(id), fishfarms_names.at(id),  idx_nodes.at(id),
+//                                        fishfarms_longs.at(id),fishfarms_lats.at(id));
+
+//       auto fid = std::make_shared<FishFarmData>(fi);
+//       mFishfarms.push_back(fid);
    }
 
     return true;
+
+
 }
 
 

@@ -79,7 +79,8 @@ Population::Population(int a_name,
 	landings_so_far= 0.0;
 
 	// init...
-	for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
+    dout(cout << "init..." << name << endl);
+    for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
 	{
 		tot_N_at_szgroup.push_back(0);
         true_tot_N_at_szgroup.push_back(0);
@@ -105,8 +106,9 @@ Population::Population(int a_name,
 		tot_F_at_age_last_quarter.push_back(0);
 	}
 
-	// for catch equation
-								 // for the catch equation
+    // for catch equation
+    dout(cout << "loading parameters for the catch equation" << name << endl);
+                                 // for the catch equation
 	this->set_selected_szgroups(_selected_szgroups);
 
 	// ...then fill in with avai0_beta
@@ -129,6 +131,7 @@ Population::Population(int a_name,
 								 // set the pop-specific beta from glm for szgroup7
 	this->set_avai7_beta(_avai7_beta);
 
+    dout(cout << "calib..." << name << endl);
     // CALIB: if increased then improve the catch rate of the simulated vessels....
     // look at the config.dat for calibration values
 
@@ -136,6 +139,7 @@ Population::Population(int a_name,
 	this->set_cpue_multiplier(1*a_calib_cpue_multiplier);
 
 	// ...then fill in with start pop
+    dout(cout << "set the overall N_at_szgroup..." << name << endl);
                                  // set the overall N_at_szgroup
 	this->set_tot_N_at_szgroup(init_tot_N_at_szgroup);
 
@@ -145,6 +149,7 @@ Population::Population(int a_name,
 
     // ...then fill in with start info
                                  // set the migrant prop
+    dout(cout << "set the prop_migrants..." << name << endl);
     this->set_prop_migrants_in_tot_N_at_szgroup(init_prop_migrants_in_tot_N_at_szgroup);
 
     // ...then fill in with start pop
@@ -163,6 +168,7 @@ Population::Population(int a_name,
 	// CALIB: if decreased then smaller fish then higher F because numbers of fish for a given TAC increased....
     // look at the config.dat for calibration values
 
+    dout(cout << "calib the weight at szgroup..." << name << endl);
     for(unsigned int i=0; i < init_weight_at_szgroup.size(); i++)
 	{
 		init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
@@ -170,16 +176,21 @@ Population::Population(int a_name,
 
 	this->set_weight_at_szgroup(init_weight_at_szgroup);
 
-	// ...then fill in with start pop
-	this->set_comcat_at_szgroup(init_comcat_at_szgroup);
+    dout(cout << "fill in with start pop..." << name << endl);
+    // ...then fill in with start pop
+    dout(cout << "for comcat..." << name << endl);
+    this->set_comcat_at_szgroup(init_comcat_at_szgroup);
 
 	// ...then fill in with start pop
-	this->set_maturity_at_szgroup(init_maturity_at_szgroup);
+    dout(cout << "for maturity..." << name << endl);
+    this->set_maturity_at_szgroup(init_maturity_at_szgroup);
 
 	// ...then fill in with start pop
-	this->set_fecundity_at_szgroup(init_fecundity_at_szgroup);
+    dout(cout << "for fecundity..." << name << endl);
+    this->set_fecundity_at_szgroup(init_fecundity_at_szgroup);
 
 	// ...then fill in with start pop
+    dout(cout << "for natural mortality..." << name << endl);
     for(unsigned int i=0; i < init_M_at_szgroup.size(); i++)
 	{
 		init_M_at_szgroup.at(i)=init_M_at_szgroup.at(i);
@@ -188,7 +199,8 @@ Population::Population(int a_name,
 	this->set_M_at_szgroup(init_M_at_szgroup);
 
 	// ...then fill in with start pop
-	this->set_proprecru_at_szgroup(init_proprecru_at_szgroup);
+    dout(cout << "for prop recru..." << name << endl);
+    this->set_proprecru_at_szgroup(init_proprecru_at_szgroup);
 
 	// fill in the list of nodes specific to this particular pop
 	/*   vector<Node* > p_spe_nodes;
@@ -204,7 +216,9 @@ Population::Population(int a_name,
 		   list_nodes.push_back(p_spe_nodes[i]);
 	*/
 	// REPLACE BY: (TO ONLY USE THE NODES LISTED IN THE AVAI FILE...)
-	vector<Node* > p_spe_nodes;
+    dout(cout << "set up the list of nodes for this pop" << name << endl);
+
+    vector<Node* > p_spe_nodes;
     for(auto iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
 		iter = full_spatial_availability.upper_bound( iter->first ) )
 	{
@@ -226,6 +240,9 @@ Population::Population(int a_name,
 
     dout(cout << endl);
 
+
+    dout(cout << "field_of_coeff_diffusion_this_pop " << name << endl);
+
     // for diffusion of N per szgroup
     this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop);
 
@@ -242,7 +259,9 @@ Population::Population(int a_name,
 
 	}
 
-	// init tac
+    dout(cout << "init tac " << name << endl);
+
+    // init tac
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
 	oth_land_multiplier=1.0;
 

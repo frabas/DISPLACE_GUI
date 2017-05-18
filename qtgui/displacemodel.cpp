@@ -2515,12 +2515,12 @@ bool DisplaceModel::initFishfarm()
    for (int id=0; id<all_fishfarms_ids.size(); ++id) {
        cout<<"create fishfarms " << all_fishfarms_ids.at(id) << endl;
 
-// TO DO:
-//       auto fi = std::make_shared<Fishfarm>(id, all_fishfarms_ids.at(id), fishfarms_names.at(id),  idx_nodes.at(id),
-//                                        fishfarms_longs.at(id),fishfarms_lats.at(id));
+       auto node = mNodes.at(idx_nodes.at(id));
+       auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id),   node->mNode.get(),
+                                        fishfarms_sizes.at(id), fishfarms_longs.at(id),fishfarms_lats.at(id));
 
-//       auto fid = std::make_shared<FishFarmData>(fi);
-//       mFishfarms.push_back(fid);
+       auto fid = std::make_shared<FishfarmData>(fi);
+       mFishfarms.push_back(fid);
    }
 
     return true;
@@ -2565,12 +2565,24 @@ bool DisplaceModel::initFirm()
    for (int id=0; id<all_firm_ids.size(); ++id) {
        cout<<"create firm " << all_firm_ids.at(id) << endl;
 
-// TO DO:
-//       auto fi = std::make_shared<Firm>(id, all_firm_ids.at(id), firm_names.at(id),  nb_vessels_per_firm.at(id),
-//                                        some_longs.at(id), some_lats.at(id), a_bunch_of_vessels);
 
-//       auto fid = std::make_shared<FirmData>(fi);
-//       mFirms.push_back(fid);
+    // TO DO: FIX THIS BELOW CODE
+       // vector <Vessel*> vessels_of_the_firm(mVessels.size());
+
+
+       // select from a vector of objects
+     //  std::remove_copy_if(
+      //             mVessels.begin(),
+      //             mVessels.end(),
+      //             std::back_inserter(vessels_of_the_firm),
+      //             boost::bind(test_not_belong_to_firm, _1, all_firm_ids.at(id)) );
+
+
+  //     auto fi = std::make_shared<Firm>(id, all_firm_ids.at(id), firm_names.at(id),  nb_vessels_per_firm.at(id),
+   //                                     some_longs.at(id), some_lats.at(id), vessels_of_the_firm);
+
+   //    auto fid = std::make_shared<FirmData>(fi);
+   //    mFirms.push_back(fid);
    }
 
     return true;

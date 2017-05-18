@@ -20,6 +20,43 @@ BOOST_AUTO_TEST_CASE( DTree_MonthIs )
     BOOST_CHECK_CLOSE(0.0, eval.evaluate(8640,nullptr), 1);
 }
 
+BOOST_AUTO_TEST_CASE ( DTree_VesselEndOfTheDayIs )
+{
+    Vessel v1;
+    VesselCalendar cal1(0,6,19,6);
+    v1.updateCalendar(cal1);
+    dtree::vessels::VesselEndOfTheDayIsStateEvaluator eval1;
+
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(0, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(5, &v1), 1);
+    BOOST_CHECK_CLOSE(0.0, eval1.evaluate(6, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(7, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(18, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(19, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(20, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(29, &v1), 1);
+    BOOST_CHECK_CLOSE(0.0, eval1.evaluate(30, &v1), 1);
+    BOOST_CHECK_CLOSE(1.0, eval1.evaluate(31, &v1), 1);
+
+
+    Vessel v2;
+    VesselCalendar cal2(0,6,6,22);
+    v2.updateCalendar(cal2);
+    dtree::vessels::VesselEndOfTheDayIsStateEvaluator eval2;
+
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(0, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(5, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(6, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(7, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(21, &v2), 1);
+    BOOST_CHECK_CLOSE(0.0, eval2.evaluate(22, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(23, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(45, &v2), 1);
+    BOOST_CHECK_CLOSE(0.0, eval2.evaluate(46, &v2), 1);
+    BOOST_CHECK_CLOSE(1.0, eval2.evaluate(47, &v2), 1);
+
+}
+
 BOOST_AUTO_TEST_CASE( Dtree )
 {
     dtree::DecisionTreeManager *manager = dtree::DecisionTreeManager::manager();

@@ -32,6 +32,7 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, double _size, dou
     : name(_name), stringname(_stringname), x(_node->get_x()), y(_node->get_y()),
       size(_size), farm_original_long(_farm_original_long), farm_original_lat(_farm_original_lat)
 {
+ p_location_ff=_node;
 }
 
 Fishfarm::~Fishfarm()
@@ -47,6 +48,11 @@ int Fishfarm::get_name() const
 string Fishfarm::get_stringname() const
 {
     return(stringname);
+}
+
+Node* Fishfarm::get_loc_ff() const
+{
+    return(p_location_ff);
 }
 
 double Fishfarm::get_size() const

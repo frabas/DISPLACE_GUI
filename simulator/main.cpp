@@ -1619,6 +1619,8 @@ int main(int argc, char* argv[])
        fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]),
                        fishfarms_size[i], fishfarms_longs[i], fishfarms_lats[i]);
 
+       nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
+
        cout << fishfarms[i]->get_name() << endl;
        cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
 

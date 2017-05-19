@@ -147,6 +147,7 @@ class Node
         vector< vector<double> >  get_Ns_pops_at_szgroup() const;
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
+        vector<int> get_ff_names_on_node();
         const vector<double>& get_impact_on_pops ();
         const vector<double>& get_cumcatches_per_pop ();
         int get_cumftime() const;
@@ -172,7 +173,8 @@ class Node
         void add_to_cumcatches(double catches);
         void add_to_cumcatches_per_pop(double catches, int pop);
         void set_pop_names_on_node(int name_pop);
-		void set_benthos_tot_biomass(int funcgr, double value);
+        void set_ff_names_on_node(int name_ff);
+        void set_benthos_tot_biomass(int funcgr, double value);
         void set_benthos_tot_number(int funcgr, double value);
         void set_benthos_tot_meanweight(int funcgr, double value);
         void set_tariffs(vector<double> values);
@@ -265,6 +267,7 @@ private:
         vector<double> cumcatches_per_pop;
         vector<int> vid;		 // list of index of vessels currently on the node
 		vector<int> pop_names_on_node;
+        vector<int> ff_names_on_node;
 
         vector<double> benthos_tot_biomass;  // total bio on node per funcgr from sharing benthos_biomass per funcgr (this sharing is specific to Benthos landscape)
         vector<double> benthos_tot_number;  // total bio on node per funcgr from sharing benthos_number per funcgr (this sharing is specific to Benthos landscape)

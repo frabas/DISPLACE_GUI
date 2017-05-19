@@ -530,6 +530,11 @@ vector<int> Node::get_pop_names_on_node ()
 	return(pop_names_on_node);
 }
 
+vector<int> Node::get_ff_names_on_node ()
+{
+    return(ff_names_on_node);
+}
+
 
 const vector<double>& Node::get_impact_on_pops ()
 {
@@ -742,6 +747,10 @@ void Node::set_pop_names_on_node(int name_pop)
 	pop_names_on_node.push_back(name_pop);
 }
 
+void Node::set_ff_names_on_node(int name_ff)
+{
+    ff_names_on_node.push_back(name_ff);
+}
 
 void Node::clear_pop_names_on_node()
 {

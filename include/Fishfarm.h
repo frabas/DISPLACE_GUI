@@ -38,6 +38,7 @@ class Fishfarm
                                  // Copy constructor
         int get_name() const;
         string get_stringname() const;
+        Node* get_loc_ff() const;
         double get_size() const;
         double get_farm_original_long() const;
         double get_farm_original_lat() const;
@@ -50,6 +51,7 @@ class Fishfarm
     private:
         int name;
         string stringname;
+        Node* p_location_ff;
         double farm_original_long, farm_original_lat;
         double x, y;
         double size;

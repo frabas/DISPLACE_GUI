@@ -1131,7 +1131,7 @@ bool fill_from_fishfarms_specifications (istream& in,
                                      vector<double>& meanw_at_starts,
                                      vector<double>& price_per_kg_at_starts,
                                      vector<double>& target_meanw_at_harvests,
-                                     vector<double>& nb_fish_at_harvests,
+                                     vector<int>& nb_fish_at_harvests,
                                      vector<double>& meanw_at_harvests,
                                      vector<double>& prop_harvest_kg_solds,
                                      vector<double>& kg_eggs_per_kgs,
@@ -1202,7 +1202,7 @@ bool fill_from_fishfarms_specifications (istream& in,
             double meanw_at_start= boost::lexical_cast<double>(fields[20]);
             double price_per_kg_at_start= boost::lexical_cast<double>(fields[21]);
             double target_meanw_at_harvest= boost::lexical_cast<double>(fields[22]);
-            double nb_fish_at_harvest= boost::lexical_cast<double>(fields[23]);
+            int nb_fish_at_harvest= boost::lexical_cast<int>(fields[23]);
             double meanw_at_harvest= boost::lexical_cast<double>(fields[24]);
             double prop_harvest_kg_sold= boost::lexical_cast<double>(fields[25]);
             double kg_eggs_per_kg= boost::lexical_cast<double>(fields[26]);

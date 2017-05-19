@@ -2518,13 +2518,13 @@ bool DisplaceModel::initFishfarm()
     vector<double> fulton_condition_factors;
     vector<string> meanw_growth_model_types;
     vector<int>    start_day_growings;
-    vector<int>    end_day_harvest;
-    vector<int>    nb_days_fallowing_period;
+    vector<int>    end_day_harvests;
+    vector<int>    nb_days_fallowing_periods;
     vector<int>    nb_fish_at_starts;
     vector<double> meanw_at_starts;
     vector<double> price_per_kg_at_starts;
     vector<double> target_meanw_at_harvests;
-    vector<double> nb_fish_at_harvests;
+    vector<int> nb_fish_at_harvests;
     vector<double> meanw_at_harvests;
     vector<double> prop_harvest_kg_solds;
     vector<double> kg_eggs_per_kgs;
@@ -2533,7 +2533,7 @@ bool DisplaceModel::initFishfarm()
     vector<double> P_in_fish_kg_0_5pers;
     vector<string> feed_types;
     vector<double> feed_price_per_kgs;
-    vector<double> total_feed_kg;
+    vector<double> total_feed_kgs;
     vector<double> prop_N_in_feeds;
     vector<double> prop_P_in_feeds;
     vector<double> total_feed_N_kgs;
@@ -2569,8 +2569,8 @@ bool DisplaceModel::initFishfarm()
                                  fulton_condition_factors,
                                  meanw_growth_model_types,
                                  start_day_growings,
-                                 end_day_harvest,
-                                 nb_days_fallowing_period,
+                                 end_day_harvests,
+                                 nb_days_fallowing_periods,
                                  nb_fish_at_starts,
                                  meanw_at_starts,
                                  price_per_kg_at_starts,
@@ -2584,7 +2584,7 @@ bool DisplaceModel::initFishfarm()
                                  P_in_fish_kg_0_5pers,
                                  feed_types,
                                  feed_price_per_kgs,
-                                 total_feed_kg,
+                                 total_feed_kgs,
                                  prop_N_in_feeds,
                                  prop_P_in_feeds,
                                  total_feed_N_kgs,
@@ -2614,7 +2614,24 @@ bool DisplaceModel::initFishfarm()
 
        auto node = mNodes.at(idx_nodes.at(id));
        auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id),   node->mNode.get(),
-                                        fishfarms_sizes.at(id), fishfarms_longs.at(id),fishfarms_lats.at(id));
+                                        fishfarms_sizes.at(id), fishfarms_longs.at(id),fishfarms_lats.at(id),
+                                            mean_SSTs.at(id), mean_salinities.at(id), mean_windspeeds.at(id), mean_currentspeeds.at(id),
+                                            max_depths.at(id), diss_O2_mg_per_ls.at(id),
+                                            Linf_mms.at(id), K_ys.at(id), t0_ys.at(id), fulton_condition_factors.at(id), meanw_growth_model_types.at(id),
+                                            start_day_growings.at(id), end_day_harvests.at(id), nb_days_fallowing_periods.at(id),
+                                            nb_fish_at_starts.at(id), meanw_at_starts.at(id),
+                                            price_per_kg_at_starts.at(id), target_meanw_at_harvests.at(id), nb_fish_at_harvests.at(id), meanw_at_harvests.at(id),
+                                            prop_harvest_kg_solds.at(id), kg_eggs_per_kgs.at(id), price_eggs_per_kgs.at(id),
+                                            N_in_fish_kg_3pers.at(id), P_in_fish_kg_0_5pers.at(id),
+                                            feed_types.at(id), feed_price_per_kgs.at(id), total_feed_kgs.at(id), prop_N_in_feeds.at(id), prop_P_in_feeds.at(id),
+                                            total_feed_N_kgs.at(id), total_feed_P_kgs.at(id),
+                                            feed_type_vets.at(id), feed_vet_price_per_kgs.at(id), total_feed_vet_kgs.at(id), prop_N_in_feed_vets.at(id), prop_P_in_feed_vets.at(id),
+                                            total_feed_vet_N_kgs.at(id), total_feed_vet_P_kgs.at(id),
+                                            annual_discharge_N_kgs.at(id), annual_discharge_P_kgs.at(id),
+                                            annual_discharge_C_kgs.at(id), annual_discharge_heavymetals_kgs.at(id),
+                                            annual_discharge_medecine_kgs.at(id), net_harvest_kg_per_sqkm_ys.at(id),
+                                            market_price_sold_fishs.at(id), operating_cost_per_days.at(id), annual_profits.at(id)
+                                            );
 
        auto fid = std::make_shared<FishfarmData>(fi);
        mFishfarms.push_back(fid);

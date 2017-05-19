@@ -1617,13 +1617,13 @@ int main(int argc, char* argv[])
     vector<double> fulton_condition_factors;
     vector<string> meanw_growth_model_types;
     vector<int>    start_day_growings;
-    vector<int>    end_day_harvest;
-    vector<int>    nb_days_fallowing_period;
+    vector<int>    end_day_harvests;
+    vector<int>    nb_days_fallowing_periods;
     vector<int>    nb_fish_at_starts;
     vector<double> meanw_at_starts;
     vector<double> price_per_kg_at_starts;
     vector<double> target_meanw_at_harvests;
-    vector<double> nb_fish_at_harvests;
+    vector<int> nb_fish_at_harvests;
     vector<double> meanw_at_harvests;
     vector<double> prop_harvest_kg_solds;
     vector<double> kg_eggs_per_kgs;
@@ -1632,7 +1632,7 @@ int main(int argc, char* argv[])
     vector<double> P_in_fish_kg_0_5pers;
     vector<string> feed_types;
     vector<double> feed_price_per_kgs;
-    vector<double> total_feed_kg;
+    vector<double> total_feed_kgs;
     vector<double> prop_N_in_feeds;
     vector<double> prop_P_in_feeds;
     vector<double> total_feed_N_kgs;
@@ -1666,8 +1666,8 @@ int main(int argc, char* argv[])
                                  fulton_condition_factors,
                                  meanw_growth_model_types,
                                  start_day_growings,
-                                 end_day_harvest,
-                                 nb_days_fallowing_period,
+                                 end_day_harvests,
+                                 nb_days_fallowing_periods,
                                  nb_fish_at_starts,
                                  meanw_at_starts,
                                  price_per_kg_at_starts,
@@ -1681,7 +1681,7 @@ int main(int argc, char* argv[])
                                  P_in_fish_kg_0_5pers,
                                  feed_types,
                                  feed_price_per_kgs,
-                                 total_feed_kg,
+                                 total_feed_kgs,
                                  prop_N_in_feeds,
                                  prop_P_in_feeds,
                                  total_feed_N_kgs,
@@ -1713,7 +1713,23 @@ int main(int argc, char* argv[])
     {
 
        fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]),
-                       fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i]);
+                       fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
+                                  mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i], max_depths[i], diss_O2_mg_per_ls[i],
+                                  Linf_mms[i], K_ys[i], t0_ys[i], fulton_condition_factors[i], meanw_growth_model_types[i],
+                                  start_day_growings[i], end_day_harvests[i], nb_days_fallowing_periods[i],
+                                  nb_fish_at_starts[i], meanw_at_starts[i],
+                                  price_per_kg_at_starts[i], target_meanw_at_harvests[i], nb_fish_at_harvests[i], meanw_at_harvests[i],
+                                  prop_harvest_kg_solds[i], kg_eggs_per_kgs[i], price_eggs_per_kgs[i],
+                                  N_in_fish_kg_3pers[i], P_in_fish_kg_0_5pers[i],
+                                  feed_types[i], feed_price_per_kgs[i], total_feed_kgs[i], prop_N_in_feeds[i], prop_P_in_feeds[i],
+                                  total_feed_N_kgs[i], total_feed_P_kgs[i],
+                                  feed_type_vets[i], feed_vet_price_per_kgs[i], total_feed_vet_kgs[i], prop_N_in_feed_vets[i], prop_P_in_feed_vets[i],
+                                  total_feed_vet_N_kgs[i], total_feed_vet_P_kgs[i],
+                                  annual_discharge_N_kgs[i], annual_discharge_P_kgs[i],
+                                  annual_discharge_C_kgs[i], annual_discharge_heavymetals_kgs[i],
+                                  annual_discharge_medecine_kgs[i], net_harvest_kg_per_sqkm_ys[i],
+                                  market_price_sold_fishs[i], operating_cost_per_days[i], annual_profits[i]
+                                  );
 
        nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
 

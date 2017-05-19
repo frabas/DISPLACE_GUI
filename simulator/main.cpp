@@ -1602,11 +1602,107 @@ int main(int argc, char* argv[])
     vector<int> all_fishfarms_ids;
     vector<string> fishfarms_names;
     vector<int> idx_nodes;
-    vector<double> fishfarms_size;
+    vector<double> fishfarms_sizes;
     vector<double> fishfarms_longs;
     vector<double> fishfarms_lats;
-    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, fishfarms_size, fishfarms_longs, fishfarms_lats,
-                             folder_name_parameterization, inputfolder)) {
+    vector<double> mean_SSTs;
+    vector<double> mean_salinities;
+    vector<double> mean_windspeeds;
+    vector<double> mean_currentspeeds;
+    vector<double> max_depths;
+    vector<double> diss_O2_mg_per_ls;
+    vector<double> Linf_mms;
+    vector<double> K_ys;
+    vector<double> t0_ys;
+    vector<double> fulton_condition_factors;
+    vector<string> meanw_growth_model_types;
+    vector<int>    start_day_growings;
+    vector<int>    end_day_harvest;
+    vector<int>    nb_days_fallowing_period;
+    vector<int>    nb_fish_at_starts;
+    vector<double> meanw_at_starts;
+    vector<double> price_per_kg_at_starts;
+    vector<double> target_meanw_at_harvests;
+    vector<double> nb_fish_at_harvests;
+    vector<double> meanw_at_harvests;
+    vector<double> prop_harvest_kg_solds;
+    vector<double> kg_eggs_per_kgs;
+    vector<double> price_eggs_per_kgs;
+    vector<double> N_in_fish_kg_3pers;
+    vector<double> P_in_fish_kg_0_5pers;
+    vector<string> feed_types;
+    vector<double> feed_price_per_kgs;
+    vector<double> total_feed_kg;
+    vector<double> prop_N_in_feeds;
+    vector<double> prop_P_in_feeds;
+    vector<double> total_feed_N_kgs;
+    vector<double> total_feed_P_kgs;
+    vector<string> feed_type_vets;
+    vector<double> feed_vet_price_per_kgs;
+    vector<double> total_feed_vet_kgs;
+    vector<double> prop_N_in_feed_vets;
+    vector<double> prop_P_in_feed_vets;
+    vector<double> total_feed_vet_N_kgs;
+    vector<double> total_feed_vet_P_kgs;
+    vector<double> annual_discharge_N_kgs;
+    vector<double> annual_discharge_P_kgs;
+    vector<double> annual_discharge_C_kgs;
+    vector<double> annual_discharge_heavymetals_kgs;
+    vector<double> annual_discharge_medecine_kgs;
+    vector<double> net_harvest_kg_per_sqkm_ys;
+    vector<double> market_price_sold_fishs;
+    vector<double> operating_cost_per_days;
+    vector<double> annual_profits;
+    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
+                                 mean_SSTs,
+                                 mean_salinities,
+                                 mean_windspeeds,
+                                 mean_currentspeeds,
+                                 max_depths,
+                                 diss_O2_mg_per_ls,
+                                 Linf_mms,
+                                 K_ys,
+                                 t0_ys,
+                                 fulton_condition_factors,
+                                 meanw_growth_model_types,
+                                 start_day_growings,
+                                 end_day_harvest,
+                                 nb_days_fallowing_period,
+                                 nb_fish_at_starts,
+                                 meanw_at_starts,
+                                 price_per_kg_at_starts,
+                                 target_meanw_at_harvests,
+                                 nb_fish_at_harvests,
+                                 meanw_at_harvests,
+                                 prop_harvest_kg_solds,
+                                 kg_eggs_per_kgs,
+                                 price_eggs_per_kgs,
+                                 N_in_fish_kg_3pers,
+                                 P_in_fish_kg_0_5pers,
+                                 feed_types,
+                                 feed_price_per_kgs,
+                                 total_feed_kg,
+                                 prop_N_in_feeds,
+                                 prop_P_in_feeds,
+                                 total_feed_N_kgs,
+                                 total_feed_P_kgs,
+                                 feed_type_vets,
+                                 feed_vet_price_per_kgs,
+                                 total_feed_vet_kgs,
+                                 prop_N_in_feed_vets,
+                                 prop_P_in_feed_vets,
+                                 total_feed_vet_N_kgs,
+                                 total_feed_vet_P_kgs,
+                                 annual_discharge_N_kgs,
+                                 annual_discharge_P_kgs,
+                                 annual_discharge_C_kgs,
+                                 annual_discharge_heavymetals_kgs,
+                                 annual_discharge_medecine_kgs,
+                                 net_harvest_kg_per_sqkm_ys,
+                                 market_price_sold_fishs,
+                                 operating_cost_per_days,
+                                 annual_profits,
+                               folder_name_parameterization, inputfolder)) {
         cerr << "Error loading fishfarms features. Bailing out.\n";
         return 2;
     }
@@ -1617,7 +1713,7 @@ int main(int argc, char* argv[])
     {
 
        fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]),
-                       fishfarms_size[i], fishfarms_longs[i], fishfarms_lats[i]);
+                       fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i]);
 
        nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
 

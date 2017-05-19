@@ -1112,7 +1112,56 @@ bool fill_from_fishfarms_specifications (istream& in,
                                      vector<int> & idx_nodes,
                                      vector<double> & sizes,
                                      vector<double> & longs,
-                                     vector<double> & lats)
+                                     vector<double> & lats,
+                                     vector<double>& mean_SSTs,
+                                     vector<double>& mean_salinities,
+                                     vector<double>& mean_windspeeds,
+                                     vector<double>& mean_currentspeeds,
+                                     vector<double>& max_depths,
+                                     vector<double>& diss_O2_mg_per_ls,
+                                     vector<double>& Linf_mms,
+                                     vector<double>& K_ys,
+                                     vector<double>& t0_ys,
+                                     vector<double>& fulton_condition_factors,
+                                     vector<string>& meanw_growth_model_types,
+                                     vector<int>&    start_day_growings,
+                                     vector<int>&    end_day_harvests,
+                                     vector<int>&    nb_days_fallowing_periods,
+                                     vector<int>&    nb_fish_at_starts,
+                                     vector<double>& meanw_at_starts,
+                                     vector<double>& price_per_kg_at_starts,
+                                     vector<double>& target_meanw_at_harvests,
+                                     vector<double>& nb_fish_at_harvests,
+                                     vector<double>& meanw_at_harvests,
+                                     vector<double>& prop_harvest_kg_solds,
+                                     vector<double>& kg_eggs_per_kgs,
+                                     vector<double>& price_eggs_per_kgs,
+                                     vector<double>& N_in_fish_kg_3pers,
+                                     vector<double>& P_in_fish_kg_0_5pers,
+                                     vector<string>& feed_types,
+                                     vector<double>& feed_price_per_kgs,
+                                     vector<double>& total_feed_kgs,
+                                     vector<double>& prop_N_in_feeds,
+                                     vector<double>& prop_P_in_feeds,
+                                     vector<double>& total_feed_N_kgs,
+                                     vector<double>& total_feed_P_kgs,
+                                     vector<string>& feed_type_vets,
+                                     vector<double>& feed_vet_price_per_kgs,
+                                     vector<double>& total_feed_vet_kgs,
+                                     vector<double>& prop_N_in_feed_vets,
+                                     vector<double>& prop_P_in_feed_vets,
+                                     vector<double>& total_feed_vet_N_kgs,
+                                     vector<double>& total_feed_vet_P_kgs,
+                                     vector<double>& annual_discharge_N_kgs,
+                                     vector<double>& annual_discharge_P_kgs,
+                                     vector<double>& annual_discharge_C_kgs,
+                                     vector<double>& annual_discharge_heavymetals_kgs,
+                                     vector<double>& annual_discharge_medecine_kgs,
+                                     vector<double>& net_harvest_kg_per_sqkm_ys,
+                                     vector<double>& market_price_sold_fishs,
+                                     vector<double>& operating_cost_per_days,
+                                     vector<double>& annual_profits
+                                         )
 {
     try {
         std::string line;
@@ -1135,12 +1184,110 @@ bool fill_from_fishfarms_specifications (istream& in,
             double size = boost::lexical_cast<double>(fields[2]);
             double lon  = boost::lexical_cast<double>(fields[3]);
             double lat  = boost::lexical_cast<double>(fields[4]);
+            double mean_SST= boost::lexical_cast<double>(fields[5]);
+            double mean_salinity= boost::lexical_cast<double>(fields[6]);
+            double mean_windspeed= boost::lexical_cast<double>(fields[7]);
+            double mean_currentspeed= boost::lexical_cast<double>(fields[8]);
+            double max_depth= boost::lexical_cast<double>(fields[9]);
+            double diss_O2_mg_per_l= boost::lexical_cast<double>(fields[10]);
+            double Linf_mm= boost::lexical_cast<double>(fields[11]);
+            double K_y= boost::lexical_cast<double>(fields[12]);
+            double t0_y= boost::lexical_cast<double>(fields[13]);
+            double fulton_condition_factor= boost::lexical_cast<double>(fields[14]);
+            string meanw_growth_model_type= boost::lexical_cast<string>(fields[15]);
+            double start_day_growing= boost::lexical_cast<double>(fields[16]);
+            int end_day_harvest= boost::lexical_cast<int>(fields[17]);
+            int nb_days_fallowing_period= boost::lexical_cast<int>(fields[18]);
+            int nb_fish_at_start= boost::lexical_cast<int>(fields[19]);
+            double meanw_at_start= boost::lexical_cast<double>(fields[20]);
+            double price_per_kg_at_start= boost::lexical_cast<double>(fields[21]);
+            double target_meanw_at_harvest= boost::lexical_cast<double>(fields[22]);
+            double nb_fish_at_harvest= boost::lexical_cast<double>(fields[23]);
+            double meanw_at_harvest= boost::lexical_cast<double>(fields[24]);
+            double prop_harvest_kg_sold= boost::lexical_cast<double>(fields[25]);
+            double kg_eggs_per_kg= boost::lexical_cast<double>(fields[26]);
+            double price_eggs_per_kg= boost::lexical_cast<double>(fields[27]);
+            double N_in_fish_kg_3per= boost::lexical_cast<double>(fields[28]);
+            double P_in_fish_kg_0_5per= boost::lexical_cast<double>(fields[29]);
+            string feed_type= boost::lexical_cast<string>(fields[30]);
+            double feed_price_per_kg= boost::lexical_cast<double>(fields[31]);
+            double total_feed_kg= boost::lexical_cast<double>(fields[32]);
+            double prop_N_in_feed= boost::lexical_cast<double>(fields[33]);
+            double prop_P_in_feed= boost::lexical_cast<double>(fields[34]);
+            double total_feed_N_kg= boost::lexical_cast<double>(fields[35]);
+            double total_feed_P_kg= boost::lexical_cast<double>(fields[36]);
+            string feed_type_vet= boost::lexical_cast<string>(fields[37]);
+            double feed_vet_price_per_kg= boost::lexical_cast<double>(fields[38]);
+            double total_feed_vet_kg= boost::lexical_cast<double>(fields[39]);
+            double prop_N_in_feed_vet= boost::lexical_cast<double>(fields[40]);
+            double prop_P_in_feed_vet= boost::lexical_cast<double>(fields[41]);
+            double total_feed_vet_N_kg= boost::lexical_cast<double>(fields[42]);
+            double total_feed_vet_P_kg= boost::lexical_cast<double>(fields[43]);
+            double annual_discharge_N_kg= boost::lexical_cast<double>(fields[44]);
+            double annual_discharge_P_kg= boost::lexical_cast<double>(fields[45]);
+            double annual_discharge_C_kg= boost::lexical_cast<double>(fields[46]);
+            double annual_discharge_heavymetals_kg= boost::lexical_cast<double>(fields[47]);
+            double annual_discharge_medecine_kg= boost::lexical_cast<double>(fields[48]);
+            double net_harvest_kg_per_sqkm_y= boost::lexical_cast<double>(fields[49]);
+            double market_price_sold_fish= boost::lexical_cast<double>(fields[50]);
+            double operating_cost_per_day= boost::lexical_cast<double>(fields[51]);
+            double annual_profit= boost::lexical_cast<double>(fields[52]);
+
             fishfarms_ids.push_back(id);
             fishfarms_names.push_back(name);
             idx_nodes.push_back(n);
             sizes.push_back(size);
             longs.push_back(lon);
             lats.push_back(lat);
+            mean_SSTs.push_back(mean_SST);
+            mean_salinities.push_back(mean_salinity);
+            mean_windspeeds.push_back(mean_windspeed);
+            mean_currentspeeds.push_back(mean_currentspeed);
+            max_depths.push_back(max_depth);
+            diss_O2_mg_per_ls.push_back(diss_O2_mg_per_l);
+            Linf_mms.push_back(Linf_mm);
+            K_ys.push_back(K_y);
+            t0_ys.push_back(t0_y);
+            fulton_condition_factors.push_back(fulton_condition_factor);
+            meanw_growth_model_types.push_back(meanw_growth_model_type);
+            start_day_growings.push_back(start_day_growing);
+            end_day_harvests.push_back(end_day_harvest);
+            nb_days_fallowing_periods.push_back(nb_days_fallowing_period);
+            nb_fish_at_starts.push_back(nb_fish_at_start);
+            meanw_at_starts.push_back(meanw_at_start);
+            price_per_kg_at_starts.push_back(price_per_kg_at_start);
+            target_meanw_at_harvests.push_back(target_meanw_at_harvest);
+            nb_fish_at_harvests.push_back(nb_fish_at_harvest);
+            meanw_at_harvests.push_back(meanw_at_harvest);
+            prop_harvest_kg_solds.push_back(prop_harvest_kg_sold);
+            kg_eggs_per_kgs.push_back(kg_eggs_per_kg);
+            price_eggs_per_kgs.push_back(price_eggs_per_kg);
+            N_in_fish_kg_3pers.push_back(N_in_fish_kg_3per);
+            P_in_fish_kg_0_5pers.push_back(P_in_fish_kg_0_5per);
+            feed_types.push_back(feed_type);
+            feed_price_per_kgs.push_back(feed_price_per_kg);
+            total_feed_kgs.push_back(total_feed_kg);
+            prop_N_in_feeds.push_back(prop_N_in_feed);
+            prop_P_in_feeds.push_back(prop_P_in_feed);
+            total_feed_N_kgs.push_back(total_feed_N_kg);
+            total_feed_P_kgs.push_back(total_feed_P_kg);
+            feed_type_vets.push_back(feed_type_vet);
+            feed_vet_price_per_kgs.push_back(feed_vet_price_per_kg);
+            total_feed_vet_kgs.push_back(total_feed_vet_kg);
+            prop_N_in_feed_vets.push_back(prop_N_in_feed_vet);
+            prop_P_in_feed_vets.push_back(prop_P_in_feed_vet);
+            total_feed_vet_N_kgs.push_back(total_feed_vet_N_kg);
+            total_feed_vet_P_kgs.push_back(total_feed_vet_P_kg);
+            annual_discharge_N_kgs.push_back(annual_discharge_N_kg);
+            annual_discharge_P_kgs.push_back(annual_discharge_P_kg);
+            annual_discharge_C_kgs.push_back(annual_discharge_C_kg);
+            annual_discharge_heavymetals_kgs.push_back(annual_discharge_heavymetals_kg);
+            annual_discharge_medecine_kgs.push_back(annual_discharge_medecine_kg);
+            net_harvest_kg_per_sqkm_ys.push_back(net_harvest_kg_per_sqkm_y);
+            market_price_sold_fishs.push_back(market_price_sold_fish);
+            operating_cost_per_days.push_back(operating_cost_per_day);
+            annual_profits.push_back(annual_profit);
+
             }
     } catch (boost::bad_lexical_cast &) {
         return false;

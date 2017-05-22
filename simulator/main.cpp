@@ -1742,7 +1742,6 @@ int main(int argc, char* argv[])
 
 
 
-
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
     dout(cout  << " WINDMILLS-RELATED STUFFS " << endl);
@@ -4664,6 +4663,15 @@ int main(int argc, char* argv[])
                 }
             }
 
+        }
+
+
+
+        dout(cout  << "THE FISHFARM LOOP----------" << endl);
+        for(unsigned int i=0; i<fishfarms.size();i++)
+        {
+           int start=fishfarms.at(i)->get_start_day_growing();
+           if((int)(tstep/24) >start) fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep-(start*24));
         }
 
 

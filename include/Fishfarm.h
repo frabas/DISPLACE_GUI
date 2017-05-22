@@ -28,6 +28,8 @@
 #include "myutils.h"
 #include "Node.h"
 
+
+
 class Fishfarm
 {
     public:
@@ -89,7 +91,7 @@ class Fishfarm
         void set_sim_net_discharge_medecine(double value);
 
 
-        void compute_current_sim_individual_mean_kg_in_farm();  // methods for growth modelling
+        void compute_current_sim_individual_mean_kg_in_farm(int tstep);  // methods for growth modelling
         void compute_profit_in_farm();  // methods for fishfarm economy
         void compute_discharge_on_farm();  // methods for envirnmental impact on node
 

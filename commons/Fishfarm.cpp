@@ -28,6 +28,10 @@
 #include <iterator>
 
 
+
+//#include <exprtk.hpp> // too large for the use we want
+
+
 Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, double _size, double _farm_original_long, double _farm_original_lat,
                    double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                    double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor,
@@ -252,10 +256,81 @@ void Fishfarm::set_sim_net_discharge_medecine(double _value)
 }
 
 
-void Fishfarm::compute_current_sim_individual_mean_kg_in_farm()
+void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep)
 {
-    ;
+
+    double tstep_in_y=0.0;
+    if(get_meanw_growth_model_type()=="((fulton_condition_factor/100000*Linf_mm^3)*(1-exp(-K_y*(tstep-t0_y)))^3)"){
+        tstep_in_y= (tstep+1)/8764.0;
+        sim_individual_mean_kg=((get_fulton_condition_factor()/100000*pow(get_Linf_mm(),3))*pow((1-exp(-get_K_y()*(tstep_in_y-get_t0_y()))),3));
+        cout << "sim_individual_mean_kg on this farm is " << sim_individual_mean_kg << " at " << tstep_in_y << " given " << tstep <<  endl;
+        dout(cout << "sim_individual_mean_kg on this farm is " << sim_individual_mean_kg << endl;)
+    } else{
+    cout << "sorry, not the expected growth model for fishfarm...." << endl;
+    }
+
+
+
+
+   // because input the model is not very flexible we wish to replace by a proper mathematical expression parser:
+
+
+
+    /* QT?
+     * string growth_model_expr=get_meanw_growth_model_type(); // we expect something like: "((fulton_condition_factor/100000*Linf_mm^3)*(1-exp(-K_y*(tstep-t0_y)))^3)"
+    double Linf  =get_Linf_mm();
+    double K     =get_K_y();
+    double to    =get_t0_y();
+    double q     =get_fulton_condition_factor();
+    double t     =tstep/8764;
+
+    QScriptEngine engine;
+    engine.globalObject().setProperty("Linf_mm", Linf);
+    engine.globalObject().setProperty("K_y", K);
+    engine.globalObject().setProperty("t0_y", to);
+    engine.globalObject().setProperty("fulton_condition_factor", q);
+    engine.globalObject().setProperty("tstep", t);
+    sim_individual_mean_kg= engine.evaluate(growth_model_expr).toNumber();
+    */  // => QT not used for the standalone simulator!!
+
+
+
+    // exprtk syntax?
+/*
+    typedef exprtk::symbol_table<double> symbol_table_t;
+    typedef exprtk::expression<double>     expression_t;
+    typedef exprtk::parser<double>             parser_t;
+
+    double Linf  =get_Linf_mm();
+    double K     =get_K_y();
+    double to    =get_t0_y();
+    double q     =get_fulton_condition_factor();
+    double t     =tstep/8764;
+
+    symbol_table_t symbol_table;
+    symbol_table.add_variable("Linf_mm", Linf);
+    symbol_table.add_variable("K_y", K);
+    symbol_table.add_variable("t0_y", to);
+    symbol_table.add_variable("fulton_condition_factor", q);
+    symbol_table.add_variable("t0_y", t);
+    symbol_table.add_constants();
+
+    expression_t expression;
+    expression.register_symbol_table(symbol_table);
+
+    parser_t parser;
+    parser.compile(growth_model_expr, expression);
+
+    sim_individual_mean_kg=expression.value();
+   cout << "sim_individual_mean_kg on this farm is " << sim_individual_mean_kg << endl;
+
+*/ // THIS LIBRARY IS TOO LARGE....too many sections error
+
 }
+
+
+
+
 
 void Fishfarm::compute_profit_in_farm()
 {

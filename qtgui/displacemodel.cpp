@@ -2503,6 +2503,7 @@ bool DisplaceModel::initFishfarm()
     vector<int> all_fishfarms_ids;
     vector<string> fishfarms_names;
     vector<int> idx_nodes;
+    vector<int> is_actives;
     vector<double> fishfarms_sizes;
     vector<double> fishfarms_longs;
     vector<double> fishfarms_lats;
@@ -2556,7 +2557,7 @@ bool DisplaceModel::initFishfarm()
     vector<double> annual_profits;
 
 
-    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
+    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, is_actives, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
                                  mean_SSTs,
                                  mean_salinities,
                                  mean_windspeeds,
@@ -2613,7 +2614,7 @@ bool DisplaceModel::initFishfarm()
        cout<<"create fishfarms " << all_fishfarms_ids.at(id) << endl;
 
        auto node = mNodes.at(idx_nodes.at(id));
-       auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id),   node->mNode.get(),
+       auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id),   node->mNode.get(), is_actives.at(id),
                                         fishfarms_sizes.at(id), fishfarms_longs.at(id),fishfarms_lats.at(id),
                                             mean_SSTs.at(id), mean_salinities.at(id), mean_windspeeds.at(id), mean_currentspeeds.at(id),
                                             max_depths.at(id), diss_O2_mg_per_ls.at(id),

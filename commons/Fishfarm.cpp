@@ -32,7 +32,7 @@
 //#include <exprtk.hpp> // too large for the use we want
 
 
-Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, double _size, double _farm_original_long, double _farm_original_lat,
+Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                    double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                    double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor,
                    string _meanw_growth_model_type,
@@ -48,9 +48,9 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, double _size, dou
                    double _annual_discharge_N_kg, double _annual_discharge_P_kg,
                    double _annual_discharge_C_kg, double _annual_discharge_heavymetals_kg,
                    double _annual_discharge_medecine_kg, double _net_harvest_kg_per_sqkm_y,
-                   double _market_price_sold_fish, double _operating_cost_per_days, double _annual_profit
+                   double _market_price_sold_fish, double _operating_cost_per_day, double _annual_profit
                    )
-    : name(_name), stringname(_stringname), x(_node->get_x()), y(_node->get_y()),
+    : name(_name), stringname(_stringname), x(_node->get_x()), y(_node->get_y()), is_active(_is_active),
       size(_size), farm_original_long(_farm_original_long), farm_original_lat(_farm_original_lat),
       mean_SST(_mean_SST), mean_salinity(_mean_salinity), mean_windspeed(_mean_windspeed), mean_currentspeed(_mean_currentspeed), max_depth(_max_depth), diss_O2_mg_per_l(_diss_O2_mg_per_l),
       Linf_mm(_Linf_mm), K_y(_K_y), t0_y(_t0_y), fulton_condition_factor(_fulton_condition_factor),
@@ -68,11 +68,12 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, double _size, dou
       annual_discharge_N_kg(_annual_discharge_N_kg), annual_discharge_P_kg(_annual_discharge_P_kg),
       annual_discharge_C_kg (_annual_discharge_C_kg), annual_discharge_heavymetals_kg(_annual_discharge_heavymetals_kg),
       annual_discharge_medecine_kg (_annual_discharge_medecine_kg),  net_harvest_kg_per_sqkm_y(_net_harvest_kg_per_sqkm_y),
-      market_price_sold_fish(_market_price_sold_fish), operating_cost_per_days(_operating_cost_per_days), annual_profit(_annual_profit)
+      market_price_sold_fish(_market_price_sold_fish), operating_cost_per_day(_operating_cost_per_day), annual_profit(_annual_profit)
 
 
 {
  p_location_ff=_node;
+ is_running=is_active;
 }
 
 Fishfarm::~Fishfarm()
@@ -103,6 +104,17 @@ Node* Fishfarm::get_loc_ff() const
     return(p_location_ff);
 }
 
+
+int Fishfarm::get_is_active() const
+{
+    return(is_active);
+}
+
+int Fishfarm::get_is_running() const
+{
+    return(is_running);
+}
+
 double Fishfarm::get_size() const
 {
     return(size);
@@ -129,6 +141,11 @@ double Fishfarm::get_y() const
     return(y);
 }
 
+
+double Fishfarm::get_meanw_at_start() const
+{
+    return(meanw_at_start);
+}
 
 double Fishfarm::get_Linf_mm() const
 {
@@ -196,6 +213,46 @@ double Fishfarm::get_sim_net_discharge_medecine() const
 }
 
 
+double Fishfarm::get_start_day_growing() const
+{
+    return(start_day_growing);
+}
+
+double Fishfarm::get_end_day_harvest() const
+{
+    return(end_day_harvest);
+}
+
+double Fishfarm::get_prop_harvest_kg_sold() const
+{
+    return(prop_harvest_kg_sold);
+}
+
+double Fishfarm::get_nb_fish_at_harvest() const
+{
+    return(nb_fish_at_harvest);
+}
+
+double Fishfarm::get_market_price_sold_fish() const
+{
+    return(market_price_sold_fish);
+}
+
+double Fishfarm::get_nb_fish_at_start() const
+{
+    return(nb_fish_at_start);
+}
+
+double Fishfarm::get_price_per_kg_at_start() const
+{
+    return(price_per_kg_at_start);
+}
+
+
+double Fishfarm::get_operating_cost_per_day() const
+{
+    return(operating_cost_per_day);
+}
 
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -214,6 +271,15 @@ void Fishfarm::set_y(double _y)
     y= _y;
 }
 
+void Fishfarm::set_is_active(int _is_active)
+{
+    is_active= _is_active;
+}
+
+void Fishfarm::set_is_running(int _is_running)
+{
+    is_running= _is_running;
+}
 
 
 void Fishfarm::set_sim_individual_mean_kg(double _value)
@@ -260,13 +326,28 @@ void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep)
 {
 
     double tstep_in_y=0.0;
-    if(get_meanw_growth_model_type()=="((fulton_condition_factor/100000*Linf_mm^3)*(1-exp(-K_y*(tstep-t0_y)))^3)"){
+    if(get_meanw_growth_model_type()=="((fulton_condition_factor/100000*Linf_mm^3)*(1-exp(-K_y*(tstep-t0_y)))^3)")
+    {
         tstep_in_y= (tstep+1)/8764.0;
-        sim_individual_mean_kg=((get_fulton_condition_factor()/100000*pow(get_Linf_mm(),3))*pow((1-exp(-get_K_y()*(tstep_in_y-get_t0_y()))),3));
-        cout << "sim_individual_mean_kg on this farm is " << sim_individual_mean_kg << " at " << tstep_in_y << " given " << tstep <<  endl;
-        dout(cout << "sim_individual_mean_kg on this farm is " << sim_individual_mean_kg << endl;)
-    } else{
-    cout << "sorry, not the expected growth model for fishfarm...." << endl;
+
+        // find out the start age: guess from mean weight to age (this->get_meanw_at_start() returns in kilo)
+        double ad_hoc_factor=1.1; // because condition_factor is not a fixed value for younger fish
+        double length_at_start =  cbrt (this->get_meanw_at_start()*1000/(get_fulton_condition_factor()*ad_hoc_factor/100000)) ; // inverse of W=qL^3 with weight in gram and L in mm
+        dout(cout << "length_at_start on this farm is " << length_at_start << " mm" << endl;)
+cout << "length_at_start on this farm is " << length_at_start << endl;
+        double start_age_in_y = -1/get_K_y() *log(1-length_at_start/get_Linf_mm()) + get_t0_y(); // (inverse vbfg)
+        dout(cout << "start_age_in_y on this farm is " << start_age_in_y << endl;)
+cout << "start_age_in_y on this farm is " << start_age_in_y << endl;
+
+        // growth model: from age to weight (also adding the initial age of the fish computed from the known start meanw)
+        this->set_sim_individual_mean_kg( ((get_fulton_condition_factor()/100000*pow(get_Linf_mm(),3))*pow((1-exp(-get_K_y()*(tstep_in_y+(start_age_in_y)-get_t0_y()))),3))  /1000);  // converted from g to kg
+
+        dout(cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_mean_kg()  << endl;)
+cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_mean_kg() << endl;
+    }
+    else
+    {
+       cout << "sorry, not the expected growth model for fishfarm...." << endl;
     }
 
 
@@ -334,7 +415,11 @@ void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep)
 
 void Fishfarm::compute_profit_in_farm()
 {
-    ;
+   double harvested_fish_kg = this->get_sim_individual_mean_kg()*this->get_prop_harvest_kg_sold()*this->get_nb_fish_at_harvest();
+   double revenue           = harvested_fish_kg*this->get_market_price_sold_fish();
+   double cost              = (this->get_nb_fish_at_start()*this->get_meanw_at_start()*this->get_price_per_kg_at_start()) +
+                               ((this->get_end_day_harvest()-this->get_start_day_growing())*this->get_operating_cost_per_day());
+   this->set_sim_annual_profit(revenue-cost);
 }
 
 void Fishfarm::compute_discharge_on_farm()

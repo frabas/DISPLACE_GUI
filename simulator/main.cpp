@@ -1602,6 +1602,7 @@ int main(int argc, char* argv[])
     vector<int> all_fishfarms_ids;
     vector<string> fishfarms_names;
     vector<int> idx_nodes;
+    vector<int> is_actives;
     vector<double> fishfarms_sizes;
     vector<double> fishfarms_longs;
     vector<double> fishfarms_lats;
@@ -1653,7 +1654,7 @@ int main(int argc, char* argv[])
     vector<double> market_price_sold_fishs;
     vector<double> operating_cost_per_days;
     vector<double> annual_profits;
-    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
+    if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, is_actives, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
                                  mean_SSTs,
                                  mean_salinities,
                                  mean_windspeeds,
@@ -1712,7 +1713,7 @@ int main(int argc, char* argv[])
     for(unsigned int i=0; i<all_fishfarms_ids.size();i++)
     {
 
-       fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]),
+       fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), is_actives[i],
                        fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
                                   mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i], max_depths[i], diss_O2_mg_per_ls[i],
                                   Linf_mms[i], K_ys[i], t0_ys[i], fulton_condition_factors[i], meanw_growth_model_types[i],
@@ -3552,6 +3553,15 @@ int main(int argc, char* argv[])
         //----------------------------------------//
         //----------------------------------------//
 
+        // fishfarms for new year
+        if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+         {
+             for(unsigned int i=0; i<fishfarms.size();++i)
+             {
+                 fishfarms.at(i)->set_is_running(1);
+             }
+         }
+
 
 
         dout(cout  << "RE-READ DATA----------" << endl);
@@ -4670,8 +4680,22 @@ int main(int argc, char* argv[])
         dout(cout  << "THE FISHFARM LOOP----------" << endl);
         for(unsigned int i=0; i<fishfarms.size();i++)
         {
-           int start=fishfarms.at(i)->get_start_day_growing();
-           if((int)(tstep/24) >start) fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep-(start*24));
+
+            if(fishfarms.at(i)->get_is_active()==1)
+            {
+               int start  = fishfarms.at(i)->get_start_day_growing();
+               int end    = fishfarms.at(i)->get_end_day_harvest();
+               if((int)(tstep/24) ==end)
+               {
+                  fishfarms.at(i)->compute_profit_in_farm();
+                  cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
+                  fishfarms.at(i)->set_is_running(0);
+               }
+               else
+               {
+                  if(fishfarms.at(i)->get_is_running()==1 && (int)(tstep/24) >start) fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep);
+               }
+            }
         }
 
 

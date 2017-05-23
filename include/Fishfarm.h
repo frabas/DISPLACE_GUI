@@ -33,7 +33,7 @@
 class Fishfarm
 {
     public:
-        Fishfarm(int _name, string _stringname, Node *_node, double _size, double _farm_original_long, double _farm_original_lat,
+        Fishfarm(int _name, string _stringname, Node *_node, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                  double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                  double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor, string _meanw_growth_model_type,
                  int _start_day_growing, int _end_day_harvest, int _nb_days_fallowing_period,
@@ -48,7 +48,7 @@ class Fishfarm
                  double _annual_discharge_N_kg, double _annual_discharge_P_kg,
                  double _annual_discharge_C_kg, double _annual_discharge_heavymetals_kg,
                  double _annual_discharge_medecine_kg, double _net_harvest_kg_per_sqkm_y,
-                 double _market_price_sold_fish, double _operating_cost_per_days, double _annual_profit
+                 double _market_price_sold_fish, double _operating_cost_per_day, double _annual_profit
                  );
 
         Fishfarm();
@@ -57,6 +57,10 @@ class Fishfarm
         int get_name() const;
         string get_stringname() const;
         Node* get_loc_ff() const;
+
+        int get_is_active() const;
+        int get_is_running() const;
+
         double get_size() const;
         double get_farm_original_long() const;
         double get_farm_original_lat() const;
@@ -68,6 +72,7 @@ class Fishfarm
         double get_t0_y() const;
         double get_fulton_condition_factor() const;
         string get_meanw_growth_model_type() const;
+        double get_meanw_at_start() const;
 
         double get_sim_individual_mean_kg() const; // for tracking
         double get_sim_kg_harvested() const;
@@ -78,8 +83,24 @@ class Fishfarm
         double get_sim_net_discharge_C() const;
         double get_sim_net_discharge_medecine() const;
 
+        double get_start_day_growing() const; // for main-loop
+        double get_end_day_harvest() const;
+
+
+        double get_prop_harvest_kg_sold() const; // for economic model
+        double get_nb_fish_at_harvest() const;
+        double get_market_price_sold_fish() const;
+        double get_nb_fish_at_start() const;
+        double get_price_per_kg_at_start() const;
+        double get_operating_cost_per_day() const;
+
+
+
         void set_x(double value);
         void set_y(double value);
+
+        void set_is_active(int value);
+        void set_is_running(int value);
 
         void set_sim_individual_mean_kg(double value);
         void set_sim_kg_harvested(double value);
@@ -103,6 +124,9 @@ class Fishfarm
         string stringname;
         Node* p_location_ff;
 
+        int is_active;
+        int is_running;
+
         double farm_original_long, farm_original_lat;
         double x, y;
         double size;
@@ -122,7 +146,7 @@ class Fishfarm
         double annual_discharge_N_kg, annual_discharge_P_kg;
         double annual_discharge_C_kg, annual_discharge_heavymetals_kg;
         double annual_discharge_medecine_kg, net_harvest_kg_per_sqkm_y;
-        double market_price_sold_fish, operating_cost_per_days, annual_profit;
+        double market_price_sold_fish, operating_cost_per_day, annual_profit;
 
 
         // tracked data

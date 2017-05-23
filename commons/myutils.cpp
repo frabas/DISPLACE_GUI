@@ -1110,6 +1110,7 @@ bool fill_from_fishfarms_specifications (istream& in,
                                      vector<int> & fishfarms_ids,
                                      vector<string> & fishfarms_names,
                                      vector<int> & idx_nodes,
+                                     vector<int> & is_actives,
                                      vector<double> & sizes,
                                      vector<double> & longs,
                                      vector<double> & lats,
@@ -1181,6 +1182,7 @@ bool fill_from_fishfarms_specifications (istream& in,
             int id      = boost::lexical_cast<int>(fields[0]);
             string name = fields[1];
             double n    = boost::lexical_cast<int>(fields[53]);
+            int is_active  = boost::lexical_cast<int>(fields[54]);
             double size = boost::lexical_cast<double>(fields[2]);
             double lon  = boost::lexical_cast<double>(fields[3]);
             double lat  = boost::lexical_cast<double>(fields[4]);
@@ -1236,6 +1238,7 @@ bool fill_from_fishfarms_specifications (istream& in,
             fishfarms_ids.push_back(id);
             fishfarms_names.push_back(name);
             idx_nodes.push_back(n);
+            is_actives.push_back(is_active);
             sizes.push_back(size);
             longs.push_back(lon);
             lats.push_back(lat);

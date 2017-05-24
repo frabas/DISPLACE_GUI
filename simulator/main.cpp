@@ -1619,6 +1619,7 @@ int main(int argc, char* argv[])
     vector<string> meanw_growth_model_types;
     vector<int>    start_day_growings;
     vector<int>    end_day_harvests;
+    vector<int>    nbyears_for_growths;
     vector<int>    nb_days_fallowing_periods;
     vector<int>    nb_fish_at_starts;
     vector<double> meanw_at_starts;
@@ -1654,6 +1655,8 @@ int main(int argc, char* argv[])
     vector<double> market_price_sold_fishs;
     vector<double> operating_cost_per_days;
     vector<double> annual_profits;
+
+
     if (!read_fishfarms_features(all_fishfarms_ids, fishfarms_names, idx_nodes, is_actives, fishfarms_sizes, fishfarms_longs, fishfarms_lats,
                                  mean_SSTs,
                                  mean_salinities,
@@ -1668,6 +1671,7 @@ int main(int argc, char* argv[])
                                  meanw_growth_model_types,
                                  start_day_growings,
                                  end_day_harvests,
+                                 nbyears_for_growths,
                                  nb_days_fallowing_periods,
                                  nb_fish_at_starts,
                                  meanw_at_starts,
@@ -1717,7 +1721,7 @@ int main(int argc, char* argv[])
                        fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
                                   mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i], max_depths[i], diss_O2_mg_per_ls[i],
                                   Linf_mms[i], K_ys[i], t0_ys[i], fulton_condition_factors[i], meanw_growth_model_types[i],
-                                  start_day_growings[i], end_day_harvests[i], nb_days_fallowing_periods[i],
+                                  start_day_growings[i], end_day_harvests[i], nbyears_for_growths[i], nb_days_fallowing_periods[i],
                                   nb_fish_at_starts[i], meanw_at_starts[i],
                                   price_per_kg_at_starts[i], target_meanw_at_harvests[i], nb_fish_at_harvests[i], meanw_at_harvests[i],
                                   prop_harvest_kg_solds[i], kg_eggs_per_kgs[i], price_eggs_per_kgs[i],
@@ -1736,6 +1740,7 @@ int main(int argc, char* argv[])
 
        cout << fishfarms[i]->get_name() << endl;
        cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
+       cout <<"end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()    << endl;
 
     }
 
@@ -3372,6 +3377,7 @@ int main(int argc, char* argv[])
     vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, inputfolder);
     int count_quarters=1;
     int count_months=1;
+    double a_year=1.0;
 
     // get a vector v filled in with 1 to n
     int nbvessels = vessels.size();
@@ -3553,14 +3559,21 @@ int main(int argc, char* argv[])
         //----------------------------------------//
         //----------------------------------------//
 
-        // fishfarms for new year
-        if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+         if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
          {
+            a_year+=1;
+
+
+
+             // fishfarms for new year
              for(unsigned int i=0; i<fishfarms.size();++i)
              {
                  fishfarms.at(i)->set_is_running(1);
              }
+
+
          }
+         //cout << "a_year " << a_year << endl;
 
 
 
@@ -3582,6 +3595,8 @@ int main(int argc, char* argv[])
             if(a_month_i==10 || a_month_i==11 || a_month_i==12) a_quarter_i=4;
             if(a_quarter_i==1 || a_quarter_i==2) a_semester_i=1;
             if(a_quarter_i==3 || a_quarter_i==4) a_semester_i=2;
+
+
 
             // casting into a string
             stringstream strg0;
@@ -4685,7 +4700,7 @@ int main(int argc, char* argv[])
             {
                int start  = fishfarms.at(i)->get_start_day_growing();
                int end    = fishfarms.at(i)->get_end_day_harvest();
-               if((int)(tstep/24) ==end)
+               if((int)(tstep/a_year/24) ==end && fishfarms.at(i)->get_is_running()==1)
                {
                   fishfarms.at(i)->compute_profit_in_farm();
                   cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
@@ -4693,7 +4708,7 @@ int main(int argc, char* argv[])
                }
                else
                {
-                  if(fishfarms.at(i)->get_is_running()==1 && (int)(tstep/24) >start) fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep);
+                  if(fishfarms.at(i)->get_is_running()==1 && (int)(tstep/a_year/24) >start) fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
                }
             }
         }

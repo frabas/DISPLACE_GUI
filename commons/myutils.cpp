@@ -1127,6 +1127,7 @@ bool fill_from_fishfarms_specifications (istream& in,
                                      vector<string>& meanw_growth_model_types,
                                      vector<int>&    start_day_growings,
                                      vector<int>&    end_day_harvests,
+                                     vector<int>&    nbyears_for_growths,
                                      vector<int>&    nb_days_fallowing_periods,
                                      vector<int>&    nb_fish_at_starts,
                                      vector<double>& meanw_at_starts,
@@ -1181,8 +1182,8 @@ bool fill_from_fishfarms_specifications (istream& in,
 
             int id      = boost::lexical_cast<int>(fields[0]);
             string name = fields[1];
-            double n    = boost::lexical_cast<int>(fields[53]);
-            int is_active  = boost::lexical_cast<int>(fields[54]);
+            double n    = boost::lexical_cast<int>(fields[54]);
+            int is_active  = boost::lexical_cast<int>(fields[55]);
             double size = boost::lexical_cast<double>(fields[2]);
             double lon  = boost::lexical_cast<double>(fields[3]);
             double lat  = boost::lexical_cast<double>(fields[4]);
@@ -1199,41 +1200,42 @@ bool fill_from_fishfarms_specifications (istream& in,
             string meanw_growth_model_type= boost::lexical_cast<string>(fields[15]);
             double start_day_growing= boost::lexical_cast<double>(fields[16]);
             int end_day_harvest= boost::lexical_cast<int>(fields[17]);
-            int nb_days_fallowing_period= boost::lexical_cast<int>(fields[18]);
-            int nb_fish_at_start= boost::lexical_cast<int>(fields[19]);
-            double meanw_at_start= boost::lexical_cast<double>(fields[20]);
-            double price_per_kg_at_start= boost::lexical_cast<double>(fields[21]);
-            double target_meanw_at_harvest= boost::lexical_cast<double>(fields[22]);
-            int nb_fish_at_harvest= boost::lexical_cast<int>(fields[23]);
-            double meanw_at_harvest= boost::lexical_cast<double>(fields[24]);
-            double prop_harvest_kg_sold= boost::lexical_cast<double>(fields[25]);
-            double kg_eggs_per_kg= boost::lexical_cast<double>(fields[26]);
-            double price_eggs_per_kg= boost::lexical_cast<double>(fields[27]);
-            double N_in_fish_kg_3per= boost::lexical_cast<double>(fields[28]);
-            double P_in_fish_kg_0_5per= boost::lexical_cast<double>(fields[29]);
-            string feed_type= boost::lexical_cast<string>(fields[30]);
-            double feed_price_per_kg= boost::lexical_cast<double>(fields[31]);
-            double total_feed_kg= boost::lexical_cast<double>(fields[32]);
-            double prop_N_in_feed= boost::lexical_cast<double>(fields[33]);
-            double prop_P_in_feed= boost::lexical_cast<double>(fields[34]);
-            double total_feed_N_kg= boost::lexical_cast<double>(fields[35]);
-            double total_feed_P_kg= boost::lexical_cast<double>(fields[36]);
-            string feed_type_vet= boost::lexical_cast<string>(fields[37]);
-            double feed_vet_price_per_kg= boost::lexical_cast<double>(fields[38]);
-            double total_feed_vet_kg= boost::lexical_cast<double>(fields[39]);
-            double prop_N_in_feed_vet= boost::lexical_cast<double>(fields[40]);
-            double prop_P_in_feed_vet= boost::lexical_cast<double>(fields[41]);
-            double total_feed_vet_N_kg= boost::lexical_cast<double>(fields[42]);
-            double total_feed_vet_P_kg= boost::lexical_cast<double>(fields[43]);
-            double annual_discharge_N_kg= boost::lexical_cast<double>(fields[44]);
-            double annual_discharge_P_kg= boost::lexical_cast<double>(fields[45]);
-            double annual_discharge_C_kg= boost::lexical_cast<double>(fields[46]);
-            double annual_discharge_heavymetals_kg= boost::lexical_cast<double>(fields[47]);
-            double annual_discharge_medecine_kg= boost::lexical_cast<double>(fields[48]);
-            double net_harvest_kg_per_sqkm_y= boost::lexical_cast<double>(fields[49]);
-            double market_price_sold_fish= boost::lexical_cast<double>(fields[50]);
-            double operating_cost_per_day= boost::lexical_cast<double>(fields[51]);
-            double annual_profit= boost::lexical_cast<double>(fields[52]);
+            int nbyears_for_growth= boost::lexical_cast<int>(fields[18]);
+            int nb_days_fallowing_period= boost::lexical_cast<int>(fields[19]);
+            int nb_fish_at_start= boost::lexical_cast<int>(fields[20]);
+            double meanw_at_start= boost::lexical_cast<double>(fields[21]);
+            double price_per_kg_at_start= boost::lexical_cast<double>(fields[22]);
+            double target_meanw_at_harvest= boost::lexical_cast<double>(fields[23]);
+            int nb_fish_at_harvest= boost::lexical_cast<int>(fields[24]);
+            double meanw_at_harvest= boost::lexical_cast<double>(fields[25]);
+            double prop_harvest_kg_sold= boost::lexical_cast<double>(fields[26]);
+            double kg_eggs_per_kg= boost::lexical_cast<double>(fields[27]);
+            double price_eggs_per_kg= boost::lexical_cast<double>(fields[28]);
+            double N_in_fish_kg_3per= boost::lexical_cast<double>(fields[29]);
+            double P_in_fish_kg_0_5per= boost::lexical_cast<double>(fields[30]);
+            string feed_type= boost::lexical_cast<string>(fields[31]);
+            double feed_price_per_kg= boost::lexical_cast<double>(fields[32]);
+            double total_feed_kg= boost::lexical_cast<double>(fields[33]);
+            double prop_N_in_feed= boost::lexical_cast<double>(fields[34]);
+            double prop_P_in_feed= boost::lexical_cast<double>(fields[35]);
+            double total_feed_N_kg= boost::lexical_cast<double>(fields[36]);
+            double total_feed_P_kg= boost::lexical_cast<double>(fields[37]);
+            string feed_type_vet= boost::lexical_cast<string>(fields[38]);
+            double feed_vet_price_per_kg= boost::lexical_cast<double>(fields[39]);
+            double total_feed_vet_kg= boost::lexical_cast<double>(fields[40]);
+            double prop_N_in_feed_vet= boost::lexical_cast<double>(fields[41]);
+            double prop_P_in_feed_vet= boost::lexical_cast<double>(fields[42]);
+            double total_feed_vet_N_kg= boost::lexical_cast<double>(fields[43]);
+            double total_feed_vet_P_kg= boost::lexical_cast<double>(fields[44]);
+            double annual_discharge_N_kg= boost::lexical_cast<double>(fields[45]);
+            double annual_discharge_P_kg= boost::lexical_cast<double>(fields[46]);
+            double annual_discharge_C_kg= boost::lexical_cast<double>(fields[47]);
+            double annual_discharge_heavymetals_kg= boost::lexical_cast<double>(fields[48]);
+            double annual_discharge_medecine_kg= boost::lexical_cast<double>(fields[49]);
+            double net_harvest_kg_per_sqkm_y= boost::lexical_cast<double>(fields[50]);
+            double market_price_sold_fish= boost::lexical_cast<double>(fields[51]);
+            double operating_cost_per_day= boost::lexical_cast<double>(fields[52]);
+            double annual_profit= boost::lexical_cast<double>(fields[53]);
 
             fishfarms_ids.push_back(id);
             fishfarms_names.push_back(name);
@@ -1255,6 +1257,7 @@ bool fill_from_fishfarms_specifications (istream& in,
             meanw_growth_model_types.push_back(meanw_growth_model_type);
             start_day_growings.push_back(start_day_growing);
             end_day_harvests.push_back(end_day_harvest);
+            nbyears_for_growths.push_back(nbyears_for_growth);
             nb_days_fallowing_periods.push_back(nb_days_fallowing_period);
             nb_fish_at_starts.push_back(nb_fish_at_start);
             meanw_at_starts.push_back(meanw_at_start);

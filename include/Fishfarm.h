@@ -36,7 +36,7 @@ class Fishfarm
         Fishfarm(int _name, string _stringname, Node *_node, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                  double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                  double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor, string _meanw_growth_model_type,
-                 int _start_day_growing, int _end_day_harvest, int _nb_days_fallowing_period,
+                 int _start_day_growing, int _end_day_harvest, int _nbyears_for_growth, int _nb_days_fallowing_period,
                  int _nb_fish_at_start, double _meanw_at_start,
                  double _price_per_kg_at_start, double _target_meanw_at_harvest, int _nb_fish_at_harvest, double _meanw_at_harvest,
                  double _prop_harvest_kg_sold, double _kg_eggs_per_kg, double _price_eggs_per_kg,
@@ -93,6 +93,14 @@ class Fishfarm
         double get_nb_fish_at_start() const;
         double get_price_per_kg_at_start() const;
         double get_operating_cost_per_day() const;
+        double get_kg_eggs_per_kg() const;
+        double get_price_eggs_per_kg() const;
+        double get_feed_price_per_kg() const;
+        double get_total_feed_kg() const;
+        double get_feed_vet_price_per_kg() const;
+        double get_total_feed_vet_kg() const;
+        int get_nbyears_for_growth() const;
+
 
 
 
@@ -112,9 +120,9 @@ class Fishfarm
         void set_sim_net_discharge_medecine(double value);
 
 
-        void compute_current_sim_individual_mean_kg_in_farm(int tstep);  // methods for growth modelling
+        void compute_current_sim_individual_mean_kg_in_farm(int tstep, double a_year);  // methods for growth modelling
         void compute_profit_in_farm();  // methods for fishfarm economy
-        void compute_discharge_on_farm();  // methods for envirnmental impact on node
+        void compute_discharge_on_farm(int tstep);  // methods for envirnmental impact on node
 
 
 
@@ -133,7 +141,7 @@ class Fishfarm
         double mean_SST, mean_salinity, mean_windspeed, mean_currentspeed, max_depth, diss_O2_mg_per_l;
         double Linf_mm,  K_y, t0_y,  fulton_condition_factor;
         string meanw_growth_model_type;
-        int start_day_growing, end_day_harvest, nb_days_fallowing_period, nb_fish_at_start, nb_fish_at_harvest;
+        int start_day_growing, end_day_harvest, nbyears_for_growth, nb_days_fallowing_period, nb_fish_at_start, nb_fish_at_harvest;
         double meanw_at_start, price_per_kg_at_start, target_meanw_at_harvest, meanw_at_harvest;
         double prop_harvest_kg_sold, kg_eggs_per_kg, price_eggs_per_kg;
         double N_in_fish_kg_3per, P_in_fish_kg_0_5per;
@@ -147,7 +155,6 @@ class Fishfarm
         double annual_discharge_C_kg, annual_discharge_heavymetals_kg;
         double annual_discharge_medecine_kg, net_harvest_kg_per_sqkm_y;
         double market_price_sold_fish, operating_cost_per_day, annual_profit;
-
 
         // tracked data
         double sim_individual_mean_kg;

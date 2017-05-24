@@ -2520,6 +2520,7 @@ bool DisplaceModel::initFishfarm()
     vector<string> meanw_growth_model_types;
     vector<int>    start_day_growings;
     vector<int>    end_day_harvests;
+    vector<int>    nbyears_for_growths;
     vector<int>    nb_days_fallowing_periods;
     vector<int>    nb_fish_at_starts;
     vector<double> meanw_at_starts;
@@ -2571,6 +2572,7 @@ bool DisplaceModel::initFishfarm()
                                  meanw_growth_model_types,
                                  start_day_growings,
                                  end_day_harvests,
+                                 nbyears_for_growths,
                                  nb_days_fallowing_periods,
                                  nb_fish_at_starts,
                                  meanw_at_starts,
@@ -2619,7 +2621,7 @@ bool DisplaceModel::initFishfarm()
                                             mean_SSTs.at(id), mean_salinities.at(id), mean_windspeeds.at(id), mean_currentspeeds.at(id),
                                             max_depths.at(id), diss_O2_mg_per_ls.at(id),
                                             Linf_mms.at(id), K_ys.at(id), t0_ys.at(id), fulton_condition_factors.at(id), meanw_growth_model_types.at(id),
-                                            start_day_growings.at(id), end_day_harvests.at(id), nb_days_fallowing_periods.at(id),
+                                            start_day_growings.at(id), end_day_harvests.at(id),nbyears_for_growths.at(id), nb_days_fallowing_periods.at(id),
                                             nb_fish_at_starts.at(id), meanw_at_starts.at(id),
                                             price_per_kg_at_starts.at(id), target_meanw_at_harvests.at(id), nb_fish_at_harvests.at(id), meanw_at_harvests.at(id),
                                             prop_harvest_kg_solds.at(id), kg_eggs_per_kgs.at(id), price_eggs_per_kgs.at(id),

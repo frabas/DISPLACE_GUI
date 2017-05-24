@@ -36,7 +36,7 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, d
                    double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                    double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor,
                    string _meanw_growth_model_type,
-                   int _start_day_growing, int _end_day_harvest, int _nb_days_fallowing_period,
+                   int _start_day_growing, int _end_day_harvest, int _nbyears_for_growth, int _nb_days_fallowing_period,
                    int _nb_fish_at_start, double _meanw_at_start,
                    double _price_per_kg_at_start, double _target_meanw_at_harvest, int _nb_fish_at_harvest, double _meanw_at_harvest,
                    double _prop_harvest_kg_sold, double _kg_eggs_per_kg, double _price_eggs_per_kg,
@@ -55,7 +55,7 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, d
       mean_SST(_mean_SST), mean_salinity(_mean_salinity), mean_windspeed(_mean_windspeed), mean_currentspeed(_mean_currentspeed), max_depth(_max_depth), diss_O2_mg_per_l(_diss_O2_mg_per_l),
       Linf_mm(_Linf_mm), K_y(_K_y), t0_y(_t0_y), fulton_condition_factor(_fulton_condition_factor),
       meanw_growth_model_type(_meanw_growth_model_type),
-      start_day_growing(_start_day_growing), end_day_harvest(_end_day_harvest), nb_days_fallowing_period(_nb_days_fallowing_period),
+      start_day_growing(_start_day_growing), end_day_harvest(_end_day_harvest), nbyears_for_growth(_nbyears_for_growth), nb_days_fallowing_period(_nb_days_fallowing_period),
       nb_fish_at_start(_nb_fish_at_start), meanw_at_start(_meanw_at_start),
       price_per_kg_at_start(_price_per_kg_at_start), target_meanw_at_harvest(_target_meanw_at_harvest), nb_fish_at_harvest(_nb_fish_at_harvest), meanw_at_harvest(_meanw_at_harvest),
       prop_harvest_kg_sold(_prop_harvest_kg_sold), kg_eggs_per_kg(_kg_eggs_per_kg), price_eggs_per_kg(_price_eggs_per_kg),
@@ -223,6 +223,11 @@ double Fishfarm::get_end_day_harvest() const
     return(end_day_harvest);
 }
 
+int Fishfarm::get_nbyears_for_growth() const
+{
+    return(nbyears_for_growth);
+}
+
 double Fishfarm::get_prop_harvest_kg_sold() const
 {
     return(prop_harvest_kg_sold);
@@ -253,6 +258,40 @@ double Fishfarm::get_operating_cost_per_day() const
 {
     return(operating_cost_per_day);
 }
+
+double Fishfarm::get_kg_eggs_per_kg() const
+{
+    return(kg_eggs_per_kg);
+}
+
+double Fishfarm::get_price_eggs_per_kg() const
+{
+    return(price_eggs_per_kg);
+}
+
+double Fishfarm::get_feed_price_per_kg() const
+{
+    return(feed_price_per_kg);
+}
+
+double Fishfarm::get_total_feed_kg() const
+{
+    return(total_feed_kg);
+}
+
+double Fishfarm::get_feed_vet_price_per_kg() const
+{
+    return(feed_vet_price_per_kg);
+}
+
+double Fishfarm::get_total_feed_vet_kg() const
+{
+    return(total_feed_vet_kg);
+}
+
+
+
+
 
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -322,13 +361,20 @@ void Fishfarm::set_sim_net_discharge_medecine(double _value)
 }
 
 
-void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep)
+void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep, double a_year)
 {
 
     double tstep_in_y=0.0;
     if(get_meanw_growth_model_type()=="((fulton_condition_factor/100000*Linf_mm^3)*(1-exp(-K_y*(tstep-t0_y)))^3)")
     {
-        tstep_in_y= (tstep+1)/8764.0;
+        if(this->get_nbyears_for_growth()==1)
+        {
+            tstep_in_y= ( (tstep+1)-(8762.0*(a_year-1)) )/8762.0; // reset each year
+        }
+        else
+        {
+           cout << "TO DO: not implemented yet for nbyears_for_growth!=1" << endl;
+        }
 
         // find out the start age: guess from mean weight to age (this->get_meanw_at_start() returns in kilo)
         double ad_hoc_factor=1.1; // because condition_factor is not a fixed value for younger fish
@@ -416,20 +462,21 @@ cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_me
 void Fishfarm::compute_profit_in_farm()
 {
    double harvested_fish_kg = this->get_sim_individual_mean_kg()*this->get_prop_harvest_kg_sold()*this->get_nb_fish_at_harvest();
-   double revenue           = harvested_fish_kg*this->get_market_price_sold_fish();
+   double revenue           = harvested_fish_kg*this->get_market_price_sold_fish() +
+                               this->get_kg_eggs_per_kg()*harvested_fish_kg*this->get_price_eggs_per_kg();
    double cost              = (this->get_nb_fish_at_start()*this->get_meanw_at_start()*this->get_price_per_kg_at_start()) +
-                               ((this->get_end_day_harvest()-this->get_start_day_growing())*this->get_operating_cost_per_day());
+                              (this->get_feed_price_per_kg()*this->get_total_feed_kg()) +
+                              (this->get_feed_vet_price_per_kg()*this->get_total_feed_vet_kg())+
+                              ((this->get_end_day_harvest()-this->get_start_day_growing())*this->get_operating_cost_per_day());
    this->set_sim_annual_profit(revenue-cost);
 }
 
-void Fishfarm::compute_discharge_on_farm()
+void Fishfarm::compute_discharge_on_farm(int tstep)
 {
-    ;
+ //  current_fish_kg=this->get_sim_individual_mean_kg();
+ //   set_sim_net_discharge_N() ;
+ //   set_sim_net_discharge_P() ;
 }
-
-
-
-
 
 
 

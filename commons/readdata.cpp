@@ -547,6 +547,7 @@ bool read_fishfarms_features(vector<int>& fishfarms_ids,
                          vector<string>& meanw_growth_model_types,
                          vector<int>&    start_day_growings,
                          vector<int>&    end_day_harvests,
+                         vector<int>&    nbyears_for_growths,
                          vector<int>&    nb_days_fallowing_periods,
                          vector<int>&    nb_fish_at_starts,
                          vector<double>& meanw_at_starts,
@@ -598,6 +599,8 @@ bool read_fishfarms_features(vector<int>& fishfarms_ids,
         // return 1;
     }
 
+
+
     bool r = fill_from_fishfarms_specifications(fishfarms_features,
                                                 fishfarms_ids,
                                                 fishfarms_names,
@@ -619,6 +622,7 @@ bool read_fishfarms_features(vector<int>& fishfarms_ids,
                                                 meanw_growth_model_types,
                                                 start_day_growings,
                                                 end_day_harvests,
+                                                nbyears_for_growths,
                                                 nb_days_fallowing_periods,
                                                 nb_fish_at_starts,
                                                 meanw_at_starts,

@@ -226,6 +226,7 @@ ofstream vmslike3;
 vector <Metier*> metiers;
 ofstream export_individual_tacs;
 vector <PathShop> pathshops;
+ofstream fishfarmslogs;
 
 #ifdef NO_IPC
 #include <messages/noipc.h>
@@ -3369,6 +3370,10 @@ int main(int argc, char* argv[])
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_distance"+namesimu+".dat";
     freq_distance.open(filename.c_str());
 
+    ofstream fishfarmslogs;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/fishfarmslogs_"+namesimu+".dat";
+    fishfarmslogs.open(filename.c_str());
+
 
     // read list of tsteps with discrete events
     vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, inputfolder);
@@ -4700,30 +4705,38 @@ int main(int argc, char* argv[])
             {
                int start  = fishfarms.at(i)->get_start_day_growing();
                int end    = fishfarms.at(i)->get_end_day_harvest();
-               if((int)(tstep/a_year/24) ==end && fishfarms.at(i)->get_is_running()==1)
+               if((int)((tstep+1)/24  -(8762.0/24*(a_year-1))) ==end && fishfarms.at(i)->get_is_running()==1)
                {
-                  fishfarms.at(i)->compute_profit_in_farm();
-                  cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
+                  fishfarms.at(i)->compute_profit_in_farm(); // discrete event
+                  //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
+                  fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
+                  //...and reset
                   fishfarms.at(i)->set_is_running(0);
+                  fishfarms.at(i)->set_sim_individual_mean_kg(0.0);
+                  fishfarms.at(i)->set_sim_kg_harvested(0.0);
+                  fishfarms.at(i)->set_sim_kg_eggs_harvested(0.0);
+                  fishfarms.at(i)->set_sim_net_discharge_N(0.0);
+                  fishfarms.at(i)->set_sim_net_discharge_P(0.0);
+                  fishfarms.at(i)->set_sim_annual_profit(0.0);
                }
                else
                {
-                  if(fishfarms.at(i)->get_is_running()==1 && (int)(tstep/a_year/24) >start)
+                 if(fishfarms.at(i)->get_is_running()==1 && (int)( (tstep+1)/24 -(8762.0/24*(a_year-1)) ) >start)
+
                   {
                       // fish growth...
                       fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
 
                       //...environmental impact
                       fishfarms.at(i)->compute_discharge_on_farm(tstep);
-                      cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
-                      cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
-                  }
+                      //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
+                      //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
 
+                      fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
+                  }
                }
             }
 
-
-        //export_fishfarms_indicators(); // TO DO
         }
 
 

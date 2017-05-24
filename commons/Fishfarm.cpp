@@ -74,6 +74,17 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, d
 {
  p_location_ff=_node;
  is_running=is_active;
+
+ sim_individual_mean_kg=0;
+ sim_previous_individual_mean_kg=0;
+ sim_kg_harvested=0;
+ sim_kg_eggs_harvested=0;
+ sim_annual_profit=0;
+ sim_net_discharge_N=0;
+ sim_net_discharge_P=0;
+ sim_net_discharge_C=0;
+ sim_net_discharge_medecine=0;
+
 }
 
 Fishfarm::~Fishfarm()
@@ -514,12 +525,18 @@ cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_me
 void Fishfarm::compute_profit_in_farm()
 {
    double harvested_fish_kg = this->get_sim_individual_mean_kg()*this->get_prop_harvest_kg_sold()*this->get_nb_fish_at_harvest();
+
+   this->set_sim_kg_harvested(harvested_fish_kg);
+   this->set_sim_kg_eggs_harvested(get_kg_eggs_per_kg()*harvested_fish_kg);
+
    double revenue           = harvested_fish_kg*this->get_market_price_sold_fish() +
                                this->get_kg_eggs_per_kg()*harvested_fish_kg*this->get_price_eggs_per_kg();
+
    double cost              = (this->get_nb_fish_at_start()*this->get_meanw_at_start()*this->get_price_per_kg_at_start()) +
                               (this->get_feed_price_per_kg()*this->get_total_feed_kg()) +
                               (this->get_feed_vet_price_per_kg()*this->get_total_feed_vet_kg())+
                               ((this->get_end_day_harvest()-this->get_start_day_growing())*this->get_operating_cost_per_day());
+
    this->set_sim_annual_profit(revenue-cost);
 }
 
@@ -533,20 +550,54 @@ void Fishfarm::compute_discharge_on_farm(int tstep)
     double nb_days_growing_period = this->get_end_day_harvest() - this->get_start_day_growing();
 
     // discharge_N
-    double N_in_fish              = (current_fish_kg-previous_fish_kg)*this->get_N_in_fish_kg_3per();
-    double N_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_N_in_feed() +
-                             this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
-    double N_discharge =N_input-N_in_fish;
-    this->set_sim_net_discharge_N(N_discharge);
-    // this->node->add_to_Nitrogen(N_discharge); // TO DO
+    double N_in_fish=0;
+    double N_input=0;
+    double N_discharge=0;
+    double P_in_fish=0;
+    double P_input=0;
+    double P_discharge=0;
+    if(previous_fish_kg>0){
 
-    // discharge_P
-    double P_in_fish              = (current_fish_kg-previous_fish_kg)*this->get_P_in_fish_kg_0_5per();
-    double P_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_P_in_feed() +
+        // discharge_N
+        N_in_fish  = (current_fish_kg-previous_fish_kg)*this->get_N_in_fish_kg_3per();
+        N_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_N_in_feed() +
                              this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
-    double P_discharge =P_input-P_in_fish;
-    this->set_sim_net_discharge_P(P_input-P_in_fish);
+        N_discharge = N_input-N_in_fish;
+
+        // discharge_P
+        P_in_fish              = (current_fish_kg-previous_fish_kg)*this->get_P_in_fish_kg_0_5per();
+        P_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_P_in_feed() +
+                                 this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
+        P_discharge =P_input-P_in_fish;
+    }
+
+    // write away
+    this->set_sim_net_discharge_N(N_discharge);
+   // this->node->add_to_Nitrogen(N_discharge); // TO DO
+    this->set_sim_net_discharge_P(P_discharge);
     // this->node->add_to_Phosporous(P_discharge); // TO DO
 
+
 }
+
+
+void Fishfarm::export_fishfarms_indicators(ofstream& fishfarmlogs, int tstep)
+{
+
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+
+    fishfarmlogs << setprecision(5) << fixed;
+    // tstep / node / long / lat /  etc.
+    fishfarmlogs << " " << tstep << " " << this->p_location_ff->get_idx_node().toIndex() << " "<<
+        this->get_farm_original_long() << " " << this->get_farm_original_lat() << " " << this->get_name() << " " <<
+        this->get_sim_individual_mean_kg() << " "    << this->get_sim_kg_harvested() << " " <<
+        this->get_sim_kg_eggs_harvested() << " " << this->get_sim_annual_profit() << " " <<
+        this->get_sim_net_discharge_N() << " " << this->get_sim_net_discharge_P() << " " <<  endl;
+
+}
+
+
+
 

@@ -133,6 +133,7 @@ class Fishfarm
         void compute_profit_in_farm();  // methods for fishfarm economy
         void compute_discharge_on_farm(int tstep);  // methods for envirnmental impact on node
 
+        void export_fishfarms_indicators(ofstream& fishfarmlogs, int tstep);
 
 
     protected:

@@ -75,6 +75,7 @@ class Fishfarm
         double get_meanw_at_start() const;
 
         double get_sim_individual_mean_kg() const; // for tracking
+        double get_sim_previous_individual_mean_kg() const; // for tracking
         double get_sim_kg_harvested() const;
         double get_sim_kg_eggs_harvested() const;
         double get_sim_annual_profit() const;
@@ -101,8 +102,16 @@ class Fishfarm
         double get_total_feed_vet_kg() const;
         int get_nbyears_for_growth() const;
 
-
-
+        double get_total_feed_N_kg() const;
+        double get_total_feed_vet_N_kg() const;
+        double get_total_feed_P_kg() const;
+        double get_total_feed_vet_P_kg() const;
+        double get_N_in_fish_kg_3per() const;
+        double get_P_in_fish_kg_0_5per() const;
+        double get_prop_N_in_feed() const;
+        double get_prop_P_in_feed() const;
+        double get_prop_N_in_feed_vet() const;
+        double get_prop_P_in_feed_vet() const;
 
         void set_x(double value);
         void set_y(double value);
@@ -149,7 +158,7 @@ class Fishfarm
         double feed_price_per_kg, total_feed_kg, prop_N_in_feed, prop_P_in_feed;
         double total_feed_N_kg, total_feed_P_kg;
         string feed_type_vet;
-        double feed_vet_price_per_kg, total_feed_vet_kg, prop_N_in_feed_vets, prop_P_in_feed_vet;
+        double feed_vet_price_per_kg, total_feed_vet_kg, prop_N_in_feed_vet, prop_P_in_feed_vet;
         double total_feed_vet_N_kg, total_feed_vet_P_kg;
         double annual_discharge_N_kg, annual_discharge_P_kg;
         double annual_discharge_C_kg, annual_discharge_heavymetals_kg;
@@ -157,7 +166,7 @@ class Fishfarm
         double market_price_sold_fish, operating_cost_per_day, annual_profit;
 
         // tracked data
-        double sim_individual_mean_kg;
+        double sim_previous_individual_mean_kg, sim_individual_mean_kg;
         double sim_kg_harvested;
         double sim_kg_eggs_harvested;
         double sim_annual_profit;

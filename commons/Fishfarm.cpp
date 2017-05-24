@@ -43,7 +43,7 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, d
                    double _N_in_fish_kg_3per, double _P_in_fish_kg_0_5per,
                    string _feed_types, double _feed_price_per_kg, double _total_feed_kg, double _prop_N_in_feed, double _prop_P_in_feed,
                    double _total_feed_N_kg, double _total_feed_P_kg,
-                   string _feed_type_vet, double _feed_vet_price_per_kg, double _total_feed_vet_kg, double _prop_N_in_feed_vets, double _prop_P_in_feed_vet,
+                   string _feed_type_vet, double _feed_vet_price_per_kg, double _total_feed_vet_kg, double _prop_N_in_feed_vet, double _prop_P_in_feed_vet,
                    double _total_feed_vet_N_kg, double _total_feed_vet_P_kg,
                    double _annual_discharge_N_kg, double _annual_discharge_P_kg,
                    double _annual_discharge_C_kg, double _annual_discharge_heavymetals_kg,
@@ -63,7 +63,7 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, d
       feed_types(_feed_types), feed_price_per_kg(_feed_price_per_kg), total_feed_kg(_total_feed_kg), prop_N_in_feed(_prop_N_in_feed), prop_P_in_feed(_prop_P_in_feed),
       total_feed_N_kg(_total_feed_N_kg), total_feed_P_kg(_total_feed_P_kg),
       feed_type_vet(_feed_type_vet), feed_vet_price_per_kg(_feed_vet_price_per_kg), total_feed_vet_kg(_total_feed_vet_kg),
-      prop_N_in_feed_vets(_prop_N_in_feed_vets), prop_P_in_feed_vet(_prop_P_in_feed_vet),
+      prop_N_in_feed_vet(_prop_N_in_feed_vet), prop_P_in_feed_vet(_prop_P_in_feed_vet),
       total_feed_vet_N_kg(_total_feed_vet_N_kg), total_feed_vet_P_kg(_total_feed_vet_P_kg),
       annual_discharge_N_kg(_annual_discharge_N_kg), annual_discharge_P_kg(_annual_discharge_P_kg),
       annual_discharge_C_kg (_annual_discharge_C_kg), annual_discharge_heavymetals_kg(_annual_discharge_heavymetals_kg),
@@ -175,6 +175,11 @@ string Fishfarm::get_meanw_growth_model_type() const
 double Fishfarm::get_sim_individual_mean_kg() const
 {
     return(sim_individual_mean_kg);
+}
+
+double Fishfarm::get_sim_previous_individual_mean_kg() const
+{
+    return(sim_previous_individual_mean_kg);
 }
 
 double Fishfarm::get_sim_kg_harvested() const
@@ -289,9 +294,55 @@ double Fishfarm::get_total_feed_vet_kg() const
     return(total_feed_vet_kg);
 }
 
+double Fishfarm::get_total_feed_N_kg() const
+{
+    return(total_feed_N_kg);
+}
 
+double Fishfarm::get_total_feed_vet_N_kg() const
+{
+    return(total_feed_vet_N_kg);
+}
 
+double Fishfarm::get_total_feed_P_kg() const
+{
+    return(total_feed_P_kg);
+}
 
+double Fishfarm::get_total_feed_vet_P_kg() const
+{
+    return(total_feed_vet_P_kg);
+}
+
+double Fishfarm::get_N_in_fish_kg_3per() const
+{
+    return(N_in_fish_kg_3per);
+}
+
+double Fishfarm::get_P_in_fish_kg_0_5per() const
+{
+    return(P_in_fish_kg_0_5per);
+}
+
+double Fishfarm::get_prop_N_in_feed() const
+{
+    return(prop_N_in_feed);
+}
+
+double Fishfarm::get_prop_N_in_feed_vet() const
+{
+    return(prop_N_in_feed_vet);
+}
+
+double Fishfarm::get_prop_P_in_feed() const
+{
+    return(prop_P_in_feed);
+}
+
+double Fishfarm::get_prop_P_in_feed_vet() const
+{
+    return(prop_P_in_feed_vet);
+}
 
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -323,6 +374,7 @@ void Fishfarm::set_is_running(int _is_running)
 
 void Fishfarm::set_sim_individual_mean_kg(double _value)
 {
+    sim_previous_individual_mean_kg=get_sim_individual_mean_kg();
     sim_individual_mean_kg= _value;
 }
 void Fishfarm::set_sim_kg_harvested(double _value)
@@ -471,12 +523,30 @@ void Fishfarm::compute_profit_in_farm()
    this->set_sim_annual_profit(revenue-cost);
 }
 
+
+
 void Fishfarm::compute_discharge_on_farm(int tstep)
 {
- //  current_fish_kg=this->get_sim_individual_mean_kg();
- //   set_sim_net_discharge_N() ;
- //   set_sim_net_discharge_P() ;
+
+    double current_fish_kg        = this->get_sim_individual_mean_kg();
+    double previous_fish_kg       = this->get_sim_previous_individual_mean_kg();
+    double nb_days_growing_period = this->get_end_day_harvest() - this->get_start_day_growing();
+
+    // discharge_N
+    double N_in_fish              = (current_fish_kg-previous_fish_kg)*this->get_N_in_fish_kg_3per();
+    double N_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_N_in_feed() +
+                             this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
+    double N_discharge =N_input-N_in_fish;
+    this->set_sim_net_discharge_N(N_discharge);
+    // this->node->add_to_Nitrogen(N_discharge); // TO DO
+
+    // discharge_P
+    double P_in_fish              = (current_fish_kg-previous_fish_kg)*this->get_P_in_fish_kg_0_5per();
+    double P_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_P_in_feed() +
+                             this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
+    double P_discharge =P_input-P_in_fish;
+    this->set_sim_net_discharge_P(P_input-P_in_fish);
+    // this->node->add_to_Phosporous(P_discharge); // TO DO
+
 }
-
-
 

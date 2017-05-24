@@ -4708,9 +4708,22 @@ int main(int argc, char* argv[])
                }
                else
                {
-                  if(fishfarms.at(i)->get_is_running()==1 && (int)(tstep/a_year/24) >start) fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
+                  if(fishfarms.at(i)->get_is_running()==1 && (int)(tstep/a_year/24) >start)
+                  {
+                      // fish growth...
+                      fishfarms.at(i)->compute_current_sim_individual_mean_kg_in_farm(tstep, a_year);
+
+                      //...environmental impact
+                      fishfarms.at(i)->compute_discharge_on_farm(tstep);
+                      cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
+                      cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
+                  }
+
                }
             }
+
+
+        //export_fishfarms_indicators(); // TO DO
         }
 
 

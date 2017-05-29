@@ -32,7 +32,7 @@
 //#include <exprtk.hpp> // too large for the use we want
 
 
-Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
+Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _farmtype, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                    double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                    double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor,
                    string _meanw_growth_model_type,
@@ -50,7 +50,7 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _is_active, d
                    double _annual_discharge_medecine_kg, double _net_harvest_kg_per_sqkm_y,
                    double _market_price_sold_fish, double _operating_cost_per_day, double _annual_profit
                    )
-    : name(_name), stringname(_stringname), x(_node->get_x()), y(_node->get_y()), is_active(_is_active),
+    : name(_name), stringname(_stringname), x(_node->get_x()), y(_node->get_y()), farmtype(_farmtype), is_active(_is_active),
       size(_size), farm_original_long(_farm_original_long), farm_original_lat(_farm_original_lat),
       mean_SST(_mean_SST), mean_salinity(_mean_salinity), mean_windspeed(_mean_windspeed), mean_currentspeed(_mean_currentspeed), max_depth(_max_depth), diss_O2_mg_per_l(_diss_O2_mg_per_l),
       Linf_mm(_Linf_mm), K_y(_K_y), t0_y(_t0_y), fulton_condition_factor(_fulton_condition_factor),
@@ -115,6 +115,10 @@ Node* Fishfarm::get_loc_ff() const
     return(p_location_ff);
 }
 
+int Fishfarm::get_farmtype() const
+{
+    return(farmtype);
+}
 
 int Fishfarm::get_is_active() const
 {
@@ -589,9 +593,9 @@ void Fishfarm::export_fishfarms_indicators(ofstream& fishfarmlogs, int tstep)
 
 
     fishfarmlogs << setprecision(5) << fixed;
-    // tstep / node / long / lat /  etc.
+    // tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
     fishfarmlogs << " " << tstep << " " << this->p_location_ff->get_idx_node().toIndex() << " "<<
-        this->get_farm_original_long() << " " << this->get_farm_original_lat() << " " << this->get_name() << " " <<
+        this->get_farm_original_long() << " " << this->get_farm_original_lat() << " " << this->get_farmtype() << " " << this->get_name() << " " <<
         this->get_sim_individual_mean_kg() << " "    << this->get_sim_kg_harvested() << " " <<
         this->get_sim_kg_eggs_harvested() << " " << this->get_sim_annual_profit() << " " <<
         this->get_sim_net_discharge_N() << " " << this->get_sim_net_discharge_P() << " " <<  endl;

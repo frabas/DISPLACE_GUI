@@ -60,6 +60,7 @@ public:
     /* Proxy functions to avoid changing too much code */
     types::NodeId get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
+    int get_ff_names_on_node() const { return mNode->get_ff_names_on_node().at(0); }
     double get_wind() const { return mNode->get_wind(); }
     double get_sst() const { return mNode->get_sst(); }
     double get_salinity() const { return mNode->get_salinity(); }
@@ -77,7 +78,8 @@ public:
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
     void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }
 
-    int get_code_area() const { return mNode->get_code_area(); }
+
+      int get_code_area() const { return mNode->get_code_area(); }
     void setCodeArea(int id) { mNode->setCodeArea(id); }
 
     virtual string get_name() const { return mNode->get_name(); }
@@ -144,6 +146,41 @@ public:
         return mBenthosMeanweight[func];
     }
 
+
+    void setFishfarmFishMeanWeight(int farmid, double meanw_kg);
+    double getFishfarmFishMeanWeight(int farm) const {
+        return mFishfarmMeanweight[farm];
+    }
+
+    void setFishfarmFishHarvestedKg(int farmid, double fish_harvested_kg);
+    double getFishfarmFishHarvestedKg(int farm) const {
+        return mFishfarmFishHarvestedKg[farm];
+    }
+
+    void setFishfarmEggsHarvestedKg(int farmid, double eggs_harvested_kg);
+    double getFishfarmEggsHarvestedKg(int farm) const {
+        return mFishfarmEggsHarvestedKg[farm];
+    }
+
+    void setFishfarmAnnualProfit(int farmid, double fishfarm_annualprofit);
+    double getFishfarmAnnualProfit(int farm) const {
+        return mFishfarmAnnualProfit[farm];
+    }
+
+    void setFishfarmNetDischargeN(int farmid, double fishfarm_netdischargeN);
+    double getFishfarmNetDischargeN(int farm) const {
+        return mFishfarmNetDischargeN[farm];
+    }
+
+    void setFishfarmNetDischargeP(int farmid, double fishfarm_netdischargeP);
+    double getFishfarmNetDischargeP(int farm) const {
+        return mFishfarmNetDischargeP[farm];
+    }
+
+
+
+
+
     int getHarbourId() const;
     void setHarbourId(int value);
 
@@ -175,6 +212,15 @@ private:
     double *mBenthosBiomass;
     double *mBenthosNumber;
     double *mBenthosMeanweight;
+
+    double *mFishfarmMeanweight;
+    double *mFishfarmFishHarvestedKg;
+    double *mFishfarmEggsHarvestedKg;
+    double *mFishfarmAnnualProfit;
+    double *mFishfarmNetDischargeN;
+    double *mFishfarmNetDischargeP;
+
+
     int areaType;
 
     AdiacencyList mAdiacency;

@@ -311,6 +311,9 @@ bool DisplaceModel::clearStats()
     mStatsBenthos.clear();
     mStatsBenthosCollected.clear();
 
+    mStatsFishfarms.clear();
+    mStatsFishfarmsCollected.clear();
+
     return true;
 }
 
@@ -361,6 +364,9 @@ int DisplaceModel::getBenthosIdx(int benthosId) const
 
     return (*p)->getIdx();
 }
+
+
+
 
 int DisplaceModel::getHarboursCount() const
 {
@@ -665,6 +671,77 @@ void DisplaceModel::collectPopBenthosMeanWeight (int step, int node_idx, int fun
                                          getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
                                          meanweight);
 }
+
+
+
+void DisplaceModel::collectFishfarmFishMeanWeight(int step, int node_idx, int farmid, double meanw_kg)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmid, meanw_kg);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectMeanWeightKg(step, farmid,
+                                          mNodes.at(node_idx)->get_ff_names_on_node(),
+                                          meanw_kg);
+}
+
+void DisplaceModel::collectFishfarmFishHarvestedKg(int step, int node_idx, int farmid, double fish_harvested_kg)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmFishHarvestedKg(farmid, fish_harvested_kg);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectFishHarvestedKg(step, farmid,
+                                         mNodes.at(node_idx)->get_ff_names_on_node(),
+                                          fish_harvested_kg);
+}
+
+void DisplaceModel::collectFishfarmEggsHarvestedKg(int step, int node_idx, int farmid, double eggs_harvested_kg)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmEggsHarvestedKg(farmid, eggs_harvested_kg);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectEggsHarvestedKg(step, farmid,
+                                          mNodes.at(node_idx)->get_ff_names_on_node(),
+                                          eggs_harvested_kg);
+}
+
+
+void DisplaceModel::collectFishfarmAnnualProfit(int step, int node_idx, int farmid, double fishfarm_annualprofit)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmAnnualProfit(farmid, fishfarm_annualprofit);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectFishfarmAnnualProfit(step, farmid,
+                                          mNodes.at(node_idx)->get_ff_names_on_node(),
+                                          fishfarm_annualprofit);
+}
+
+void DisplaceModel::collectFishfarmNetDischargeN(int step, int node_idx, int farmid, double fishfarm_netdischargeN)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmNetDischargeN(farmid, fishfarm_netdischargeN);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectNetDischargeN(step, farmid,
+                                          mNodes.at(node_idx)->get_ff_names_on_node(),
+                                          fishfarm_netdischargeN);
+}
+
+
+void DisplaceModel::collectFishfarmNetDischargeP(int step, int node_idx, int farmid, double fishfarm_netdischargeP)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmNetDischargeP(farmid, fishfarm_netdischargeP);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectNetDischargeP(step, farmid,
+                                         mNodes.at(node_idx)->get_ff_names_on_node(),
+                                          fishfarm_netdischargeP);
+}
+
 
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
@@ -2616,7 +2693,7 @@ bool DisplaceModel::initFishfarm()
        cout<<"create fishfarms " << all_fishfarms_ids.at(id) << endl;
 
        auto node = mNodes.at(idx_nodes.at(id));
-       auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id),   node->mNode.get(), is_actives.at(id),
+       auto fi = std::make_shared<Fishfarm>(all_fishfarms_ids.at(id), fishfarms_names.at(id),   node->mNode.get(), 0, is_actives.at(id),
                                         fishfarms_sizes.at(id), fishfarms_longs.at(id),fishfarms_lats.at(id),
                                             mean_SSTs.at(id), mean_salinities.at(id), mean_windspeeds.at(id), mean_currentspeeds.at(id),
                                             max_depths.at(id), diss_O2_mg_per_ls.at(id),

@@ -179,7 +179,8 @@ SOURCES += \
     mapobjects/firmmapobject.cpp \
     objects/bfunctionalgroupsentity.cpp \
     plots/benthosstatsplot.cpp \
-    stats/benthosstats.cpp
+    stats/benthosstats.cpp \
+    stats/fishfarmsstats.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -310,7 +311,8 @@ HEADERS += \
     utils/interestinglistwithspecialvalues.h \
     plots/benthosstatsplot.h \
     plots/plottypes.h \
-    stats/benthosstats.h
+    stats/benthosstats.h \
+    stats/fishfarmsstats.h
 
 RESOURCES += \
     qtgui.qrc

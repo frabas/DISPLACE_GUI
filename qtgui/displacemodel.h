@@ -18,26 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-/* --------------------------------------------------------------------------
- * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
- * AND EFFORT DISPLACEMENT
- * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
- *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License along
- *    with this program; if not, write to the Free Software Foundation, Inc.,
- *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * --------------------------------------------------------------------------
- */
 #ifndef DISPLACEMODEL_H
 #define DISPLACEMODEL_H
 
@@ -63,6 +43,7 @@
 #include <utils/interestinglist.h>
 #include <utils/interestinglistwithspecialvalues.h>
 #include <stats/benthosstats.h>
+#include <stats/fishfarmsstats.h>
 
 #include <QObject>
 #include <QString>
@@ -96,6 +77,9 @@ public:
     typedef QVector<MetierStats> MetiersStats;
     typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
+    typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
+
+
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -288,6 +272,10 @@ public:
     const BenthosStatsContainer &getBenthosStatistics() { return mStatsBenthos; }
 
 
+    /* Fishfarms Statistics */
+    const FishfarmsStatsContainer &getFishfarmsStatistics() { return mStatsFishfarms; }
+
+
     /* Scenario and configuration */
 
     Scenario scenario() const;
@@ -401,6 +389,14 @@ public:
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
     void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
+
+    void collectFishfarmFishMeanWeight (int step, int node_idx, int farmid, double meanw_kg);
+    void collectFishfarmFishHarvestedKg (int step, int node_idx, int farmid, double fish_harvested_kg);
+    void collectFishfarmEggsHarvestedKg (int step, int node_idx, int farmid, double eggs_harvested_kg);
+    void collectFishfarmAnnualProfit (int step, int node_idx, int farmid, double fishfarm_annualprofit);
+    void collectFishfarmNetDischargeN (int step, int node_idx, int farmid, double fishfarm_netdischargeN);
+    void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, double fishfarm_netdischargeP);
+
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
@@ -536,6 +532,8 @@ private:
     MetiersStats mStatsMetiersCollected;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
+    FishfarmsStatsContainer mStatsFishfarms;
+    FishfarmsStats mStatsFishfarmsCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<QString, int> mStockNames;

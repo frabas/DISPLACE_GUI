@@ -33,7 +33,7 @@
 class Fishfarm
 {
     public:
-        Fishfarm(int _name, string _stringname, Node *_node, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
+        Fishfarm(int _name, string _stringname, Node *_node, int farmtype, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                  double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                  double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor, string _meanw_growth_model_type,
                  int _start_day_growing, int _end_day_harvest, int _nbyears_for_growth, int _nb_days_fallowing_period,
@@ -57,6 +57,8 @@ class Fishfarm
         int get_name() const;
         string get_stringname() const;
         Node* get_loc_ff() const;
+
+        int get_farmtype() const;
 
         int get_is_active() const;
         int get_is_running() const;
@@ -141,6 +143,8 @@ class Fishfarm
         int name;
         string stringname;
         Node* p_location_ff;
+
+        int farmtype;
 
         int is_active;
         int is_running;

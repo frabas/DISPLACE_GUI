@@ -35,6 +35,7 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
     if (nd) {
         int N = nd->get_nbpops();
         int N2 = nd->get_nbbenthospops();
+        int N3 = 1; // only one farm per node?
         mPop = new double[N] ;
         mPopW = new double[N] ;
         mImpact = new double[N];
@@ -42,6 +43,13 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mBenthosBiomass = new double[N2];
         mBenthosNumber = new double[N2];
         mBenthosMeanweight = new double[N2];
+        mFishfarmMeanweight = new double[N3];
+        mFishfarmFishHarvestedKg = new double[N3];
+        mFishfarmEggsHarvestedKg = new double[N3];
+        mFishfarmAnnualProfit = new double[N3];
+        mFishfarmNetDischargeN = new double[N3];
+        mFishfarmNetDischargeP = new double[N3];
+
         for (int i = 0; i < N; ++i) {
             mPop[i] = 0.0;
             mPopW[i] = 0.0;
@@ -57,6 +65,26 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         for (int j = 0; j < N2; ++j) {
             mBenthosMeanweight[j] = 0.0;
         }
+
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmMeanweight[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmFishHarvestedKg[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmEggsHarvestedKg[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmAnnualProfit[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmNetDischargeN[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmNetDischargeP[j] = 0.0;
+        }
+
 
     }
 }
@@ -162,6 +190,37 @@ void NodeData::setBenthosMeanweight(int func, double benthosmeanweight)
 {
     mBenthosMeanweight[func] = benthosmeanweight;
 }
+
+void NodeData::setFishfarmFishMeanWeight(int farm, double fishfarmfishmeanweight)
+{
+    mFishfarmMeanweight[farm] = fishfarmfishmeanweight;
+}
+
+void NodeData::setFishfarmFishHarvestedKg(int farm, double fishfarmfishharvestedkg)
+{
+    mFishfarmFishHarvestedKg[farm] = fishfarmfishharvestedkg;
+}
+
+void NodeData::setFishfarmEggsHarvestedKg(int farm, double fishfarmeggsharvestedkg)
+{
+    mFishfarmEggsHarvestedKg[farm] = fishfarmeggsharvestedkg;
+}
+
+void NodeData::setFishfarmAnnualProfit(int farm, double fishfarmannualprofit)
+{
+    mFishfarmAnnualProfit[farm] = fishfarmannualprofit;
+}
+
+void NodeData::setFishfarmNetDischargeN(int farm, double fishfarmnetdischargeN)
+{
+    mFishfarmNetDischargeN[farm] = fishfarmnetdischargeN;
+}
+
+void NodeData::setFishfarmNetDischargeP(int farm, double fishfarmnetdischargeP)
+{
+    mFishfarmNetDischargeP[farm] = fishfarmnetdischargeP;
+}
+
 
 int NodeData::getHarbourId() const
 {

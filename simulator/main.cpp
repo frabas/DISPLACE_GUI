@@ -1718,7 +1718,7 @@ int main(int argc, char* argv[])
     for(unsigned int i=0; i<all_fishfarms_ids.size();i++)
     {
 
-       fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), is_actives[i],
+       fishfarms[i]= new Fishfarm(all_fishfarms_ids[i], fishfarms_names[i], nodes.at(idx_nodes[i]), 0, is_actives[i],
                        fishfarms_sizes[i], fishfarms_longs[i], fishfarms_lats[i],
                                   mean_SSTs[i], mean_salinities[i], mean_windspeeds[i], mean_currentspeeds[i], max_depths[i], diss_O2_mg_per_ls[i],
                                   Linf_mms[i], K_ys[i], t0_ys[i], fulton_condition_factors[i], meanw_growth_model_types[i],

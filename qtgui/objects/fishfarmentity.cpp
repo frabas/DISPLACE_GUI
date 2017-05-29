@@ -68,6 +68,9 @@ QVariant FishfarmEntity::data(const QModelIndex &index, int role) const
             std::shared_ptr<FishfarmData> ff = model->getModel()->getFishfarmList()[mFishfarmId];
             return QString("%1 %2").arg(ff->mFishfarm->get_y()).arg(ff->mFishfarm->get_x());
         }
+
+
+     model->getModel()->setInterestingFarmTypes(index.row());
     }
 
     return QVariant();

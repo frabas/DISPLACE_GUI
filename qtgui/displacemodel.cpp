@@ -1436,6 +1436,8 @@ int DisplaceModel::getBenthosCount() const
     return mBenthos.size();
 }
 
+
+
 void DisplaceModel::addMetier(int id)
 {
     auto m  = std::make_shared<objecttree::MetiersInterest>();
@@ -1548,6 +1550,17 @@ void DisplaceModel::clearInterestingPop2()
 int DisplaceModel::getNumFuncGroups() const
 {
     return config().getNbbenthospops();
+}
+
+int DisplaceModel::getNumFishfarmIDs() const
+{
+    // return config().FishfarmIDsGroups();
+    return 20; // TO DO: detect nb of farms
+}
+
+int DisplaceModel::getFishfarmsTypeCount() const
+{
+    return 1; // TO DO: detect nb of type of farms
 }
 
 void DisplaceModel::setInterestingSize(int n)

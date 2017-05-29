@@ -18,26 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-/* --------------------------------------------------------------------------
- * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
- * AND EFFORT DISPLACEMENT
- * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
- *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License along
- *    with this program; if not, write to the Free Software Foundation, Inc.,
- *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * --------------------------------------------------------------------------
- */
+
 #ifndef STATSCONTROLLER_H
 #define STATSCONTROLLER_H
 
@@ -49,6 +30,7 @@
 
 class DisplaceModel;
 class BenthosStatsPlot;
+class FishfarmsStatsPlot;
 
 class StatsController : public QObject
 {
@@ -61,6 +43,7 @@ public:
     void setNationsPlot(QCustomPlot *plot);
     void setMetiersPlot(QCustomPlot *plot);
     void setBenthosPlot(QCustomPlot *plot);
+    void setFishfarmsPlot(QCustomPlot *plot);
 
     void updateStats(DisplaceModel *model);
 
@@ -87,6 +70,9 @@ public:
     void setBenthosStat(displace::plot::BenthosStat stat);
     displace::plot::BenthosStat getBenthosStat() const { return mSelectedBenthosStat; }
 
+    void setFishfarmsStat(displace::plot::FishfarmsStat stat);
+    displace::plot::FishfarmsStat getFishfarmsStat() const { return mSelectedFishfarmsStat; }
+
     /* == */
 
     void initPlots();
@@ -103,6 +89,7 @@ protected:
     void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
     void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
+    void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
 
 private:
     Palette mPalette;
@@ -132,6 +119,12 @@ private:
     displace::plot::BenthosStat mSelectedBenthosStat = displace::plot::BenthosStat::B_TotBiomass;
     QCPItemLine *mBenthosTimeLine = nullptr;
     BenthosStatsPlot *mBenthosPlotController = nullptr;
+
+    /* Fishfarm farmtype Groups */
+    QCustomPlot *mfarmTypeGroupsPlot = nullptr;
+    displace::plot::FishfarmsStat mSelectedFishfarmsStat = displace::plot::FishfarmsStat::FF_FishMeanWeight;
+    QCPItemLine *mFishfarmsTimeLine = nullptr;
+    FishfarmsStatsPlot *mFishfarmsPlotController = nullptr;
 
     DisplaceModel *mLastModel;
 

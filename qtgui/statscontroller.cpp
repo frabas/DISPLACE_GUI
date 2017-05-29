@@ -24,6 +24,7 @@
 #include <QtAlgorithms>
 
 #include <plots/benthosstatsplot.h>
+#include <plots/fishfarmsstatsplot.h>
 
 double StatsController::timelineMax = 1e20;
 double StatsController::timelineMin = -1e20;
@@ -45,6 +46,8 @@ StatsController::StatsController(QObject *parent)
       mLastModel(0)
 {
     mPalette = PaletteManager::instance()->palette(PopulationRole);
+
+    cout << "Stats controller is created" << endl;
 }
 
 void StatsController::setPopulationPlot(QCustomPlot *plot)
@@ -112,6 +115,30 @@ void StatsController::setBenthosPlot(QCustomPlot *plot)
     mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
 }
 
+void StatsController::setFishfarmsPlot(QCustomPlot *plot)
+{
+   cout << "Set fishfarm plot" << endl;
+
+    mfarmTypeGroupsPlot = plot;
+    mfarmTypeGroupsPlot->legend->setVisible(true);
+
+    if (mFishfarmsTimeLine != 0)
+        delete mFishfarmsTimeLine;
+
+    if (mFishfarmsPlotController != nullptr)
+        delete mFishfarmsPlotController;
+
+    mFishfarmsTimeLine = new QCPItemLine(mfarmTypeGroupsPlot);
+    mFishfarmsPlotController = new FishfarmsStatsPlot(plot, mFishfarmsTimeLine);
+
+    mfarmTypeGroupsPlot->addItem(mFishfarmsTimeLine);
+
+    cout << "Set fishfarm plot...ok" << endl;
+
+}
+
+
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)
@@ -131,6 +158,9 @@ void StatsController::updateStats(DisplaceModel *model)
     }
     if (mBenthosFuncGroupsPlot) {
         updateBenthosStats(model, mSelectedBenthosStat);
+    }
+    if (mfarmTypeGroupsPlot) {
+        updateFishfarmsStats(model, mSelectedFishfarmsStat);
     }
 
 
@@ -166,6 +196,13 @@ void StatsController::setBenthosStat(displace::plot::BenthosStat stat)
     mSelectedBenthosStat = stat;
     updateStats(mLastModel);
 }
+
+void StatsController::setFishfarmsStat(displace::plot::FishfarmsStat stat)
+{
+    mSelectedFishfarmsStat = stat;
+    updateStats(mLastModel);
+}
+
 
 void StatsController::initPlots()
 {
@@ -638,3 +675,7 @@ void StatsController::updateBenthosStats(DisplaceModel *model, displace::plot::B
     mBenthosPlotController->update(model, stat);
 }
 
+void StatsController::updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat)
+{
+    mFishfarmsPlotController->update(model, stat);
+}

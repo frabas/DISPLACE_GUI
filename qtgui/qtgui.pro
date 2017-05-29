@@ -180,7 +180,8 @@ SOURCES += \
     objects/bfunctionalgroupsentity.cpp \
     plots/benthosstatsplot.cpp \
     stats/benthosstats.cpp \
-    stats/fishfarmsstats.cpp
+    stats/fishfarmsstats.cpp \
+    plots/fishfarmsstatsplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -312,7 +313,8 @@ HEADERS += \
     plots/benthosstatsplot.h \
     plots/plottypes.h \
     stats/benthosstats.h \
-    stats/fishfarmsstats.h
+    stats/fishfarmsstats.h \
+    plots/fishfarmsstatsplot.h
 
 RESOURCES += \
     qtgui.qrc

@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -336,15 +336,15 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>0</number>
+           <number>5</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
-            <iconset resource="../qtcommons/qtcommons.qrc">
+            <iconset resource="qtgui.qrc">
              <normaloff>:/icons/harbour.png</normaloff>:/icons/harbour.png</iconset>
            </attribute>
            <attribute name="title">
@@ -714,6 +714,57 @@
             </item>
             <item>
              <widget class="QCustomPlot" name="plotBenthos" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="FishfarmsTab">
+           <attribute name="title">
+            <string>Fishfarms</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="fishfarmsStatSelector">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="currentText">
+               <string>Total Biomass</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Total Biomass</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Benthos Number</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Total Mean Weight</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <spacer name="horizontalSpacer_24">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>208</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QCustomPlot" name="plotFishfarms" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1139,7 +1190,7 @@ L3</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -1160,7 +1211,7 @@ L3</string>
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -1312,7 +1363,7 @@ L3</string>
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="qtgui.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -1437,7 +1488,7 @@ L3</string>
   <customwidget>
    <class>qmapcontrol::QMapControl</class>
    <extends>QWidget</extends>
-   <header>QMapControl/QMapControl.h</header>
+   <header>QMapControl.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1448,8 +1499,8 @@ L3</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../qtcommons/qtcommons.qrc"/>
   <include location="../objeditor/vesseleditor.qrc"/>
+  <include location="../dteditor/dteditor.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

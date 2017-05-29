@@ -18,7 +18,7 @@
 #define QT_DEBUG ""
 #define QT_DIR "C:\Qt\5.6\msvc2015_64"
 #define QT_PLUGINS_DIR "C:\Qt\5.6\msvc2015_64\plugins"
-#define SDK_DIR "..\displace-build\install"
+#define SDK_DIR "install\msvc"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -68,7 +68,7 @@ Source: "{#SDK_DIR}\lib\CGAL_core-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ig
 Source: "{#SDK_DIR}\lib\gmp.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion

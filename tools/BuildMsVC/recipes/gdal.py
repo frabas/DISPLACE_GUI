@@ -8,7 +8,6 @@ class gdal(Recipe):
 
     url="http://download.osgeo.org/gdal/1.11.5/gdal-1.11.5.tar.gz"
     archive = "gdal-1.11.5.tar.gz"
-    BuildType = "Release"
 
     def __init__(self, env):
         super(gdal, self).__init__(env)
@@ -28,7 +27,7 @@ class gdal(Recipe):
         self.setDownloaded()
         return True
 
-    def build(self):
+    def compile(self):
         os.chdir(self.path)
 
         with open("nmake.local", "w") as cfg:
@@ -65,7 +64,7 @@ class gdal(Recipe):
             self.setBuilt()
         return result
 
-    def install(self):
+    def deploy(self):
         os.chdir(self.bldpath)
 
         cmdline = ["nmake", 
@@ -79,5 +78,18 @@ class gdal(Recipe):
         #os.chdir(self.env.getInstallDir())
         #helpers.move(glob.glob("bin\\*.dll"), "lib\\")
         
+        self.setInstalled()
+        return True
+
+    def build(self):
+        if not self.compile():
+            return False
+        self.setBuilt()
+        return True
+
+    def install(self):
+        if not self.deploy():
+            return False
+
         self.setInstalled()
         return True

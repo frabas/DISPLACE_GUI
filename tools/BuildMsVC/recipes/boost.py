@@ -11,14 +11,14 @@ class Boost(Recipe):
 
     def __init__(self, env):
         super(Boost, self).__init__(env)
-        self.path = os.path.join(env.getBuildDir(), "boost_1_62_0")
+        self.path = os.path.join(env.getBuildDir(), "boost_1_63_0")
 
     def name(self):
         return "Boost"
 
     def download(self):
-        archive = "boost_1_62_0.zip"
-        url = 'https://sourceforge.net/projects/boost/files/boost/1.62.0/{}'.format(archive)
+        archive = "boost_1_63_0.zip"
+        url = 'https://sourceforge.net/projects/boost/files/boost/1.63.0/{}'.format(archive)
         if helpers.download(url, archive):
             self.setDownloaded()
         else:
@@ -29,11 +29,13 @@ class Boost(Recipe):
 
     def getB2Options(self):
         return ["address-model=64",
-                "variant=release",
-				"--build-type=complete",
+                "toolset=msvc",
                 "link=shared", 
                 "threading=multi",
-				"runtime-link=shared"
+		"runtime-link=shared",
+                "--with-regex",
+                "--with-test",
+                "--with-program_options",
                 ]
 
     def build(self):
@@ -47,9 +49,23 @@ class Boost(Recipe):
             return False
 
         cmdline = ["b2"]
+        cmdline.append("variant=release")
         cmdline.extend(self.getB2Options())
+        cmdline.append("stage")
                    
         result = helpers.execute(cmdline, os.path.join(self.path, "build-out.txt"), os.path.join(self.path, "build-err.txt"))
+
+        if not result:
+            return False
+
+        cmdline = ["b2"]
+        cmdline.append("variant=debug")
+        cmdline.extend(self.getB2Options())
+        cmdline.append("define=_ITERATOR_DEBUG_LEVEL=2")
+        cmdline.append("stage")
+                   
+        result = helpers.execute(cmdline, os.path.join(self.path, "build-out.txt"), os.path.join(self.path, "build-err.txt"))
+        
 
         if result:
             self.setBuilt()
@@ -61,6 +77,7 @@ class Boost(Recipe):
 
         cmdline = ["b2"]
         cmdline.append('--prefix={}'.format(self.env.getInstallDir()))
+        cmdline.append("variant=release,debug")
         cmdline.extend(self.getB2Options())
         cmdline.append("install")
 
@@ -72,8 +89,8 @@ class Boost(Recipe):
         # Fix the include tree
         os.chdir(self.env.getInstallIncludeDir())
         shutil.rmtree ("boost", ignore_errors = True)
-        shutil.move(os.path.join("boost-1_62","boost"), ".")
-        os.rmdir("boost-1_62")
+        shutil.move(os.path.join("boost-1_63","boost"), ".")
+        os.rmdir("boost-1_63")
 
         self.setInstalled()
 

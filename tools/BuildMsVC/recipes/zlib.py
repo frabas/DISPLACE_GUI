@@ -33,17 +33,13 @@ class Zlib(Recipe):
             zf.extractall()
         return True
 
-    def build(self):
+    def buildVersion(self, type):
         print ("Entering: ", self.path)
         os.chdir(self.path)
         cmdline = ["MSBuild.exe", "zlibvc.sln"]
-        #cmdline.append('/p:ForceImportBeforeCppTargets={}\force-debug-information-for-sln.props'.format(self.env.getDataDir()))
-        #cmdline.append('/m:{}'.format(os.environ.get("NUMBER_OF_PROCESSORS")))
-        #cmdline.append('/toolsversion:{}'.format(format(os.environ.get("TOOLS_VERSION"))))
         cmdline.append("/p:BuildInParallel=true")
-        cmdline.append('/p:Configuration={}'.format(self.BuildType))
-        #cmdline.append('/p:Platform={}'.format(format(os.environ.get("BUILDPLATFORM"))))
-        #cmdline.append('/p:PlatformToolset={}'.format(format(os.environ.get("PLATFORM_TOOLSET"))))
+        cmdline.append('/p:Configuration={}'.format(type))
+        cmdline.append("/t:zlibvc")
 
         out = open(os.path.join(self.homepath, "build-out.txt"), "w")
         err = open(os.path.join(self.homepath, "build-err.txt"), "w")
@@ -57,8 +53,16 @@ class Zlib(Recipe):
         result = process.returncode == 0
         if result:
             self.setBuilt()
-        return result
-
+        return result		
+		
+    def build(self):
+        '''if not self.buildVersion("Debug"):
+          return False
+        '''
+        if not self.buildVersion("Release"):
+            return False
+        return True
+		
     def install(self):
         os.chdir(os.path.join(self.path, "x64", 'ZlibDll{}'.format(self.BuildType)))
         helpers.copy(glob.glob("*.lib"), self.env.getInstallLibDir())

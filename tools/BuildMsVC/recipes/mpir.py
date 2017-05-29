@@ -10,7 +10,6 @@ class mpir(Recipe):
     url = "https://github.com/BrianGladman/mpir/archive/master.zip"
 
     Processor = "gc" # Check MPIR documentation. Build Generic Intel version
-    BuildType = "Release"
 
     def __init__(self, env):
         super(mpir, self).__init__(env)
@@ -41,13 +40,13 @@ class mpir(Recipe):
         shutil.move(self.unpackdir, self.path)            
         return True
 
-    def build(self):
+    def compile(self, btype):
         os.chdir(self.bldpath)
         cmdline = ["msbuild", 
                    self.Processor,
                    "DLL",
                    "x64",
-                   self.BuildType
+                   btype
                    ]
         cmdline.append("/p:BuildInParallel=true")
         #cmdline.append('/p:Configuration={}'.format(self.BuildType))
@@ -57,26 +56,43 @@ class mpir(Recipe):
             self.setBuilt()
         return result
 
-    def install(self):
+    def build(self):
+        #if not self.compile("Debug"):
+        #    return False
+        if not self.compile("Release"):
+            return False
+        self.setBuilt()
+        return True
+
+    def installType(self, btype):
         relpath = os.path.join(self.bldpath, 
                                'dll_mpir_{}'.format(self.Processor),
                                "x64",
-                               self.BuildType)
+                               btype)
         os.chdir(relpath)
-        hdrdir = os.path.join(self.env.getInstallIncludeDir(),
-                              "mpir")
+        hdrdir = self.env.getInstallIncludeDir()
         libdir = self.env.getInstallLibDir()
 
         helpers.mkdir(hdrdir)
         helpers.copy(glob.glob("*.h"), hdrdir)
         #print ('Copy: {} from {} to {}'.format(glob.glob("*.h"), relpath, hdrdir))
         helpers.copy(glob.glob("*.dll"), libdir)
-        helpers.copy(glob.glob("*.lib"), libdir)
-        
+        helpers.copy(glob.glob("*.lib"), libdir)        
+        return True        
+
+    def install(self):
+        #if not self.installType("Debug"):
+        #    return False
+        if not self.installType("Release"):
+            return False
+
         # Copy mpir.dll to gmp.dll
+        libdir = self.env.getInstallLibDir()
         os.chdir(libdir)
         shutil.copy("mpir.dll", "gmp.dll")
         shutil.copy("mpir.lib", "gmp.lib")
-        
+        #shutil.copy("mpird.dll", "gmpd.dll")
+        #shutil.copy("mpird.lib", "gmpd.lib")
+
         self.setInstalled()
         return True

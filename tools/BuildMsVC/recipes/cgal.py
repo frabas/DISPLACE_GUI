@@ -7,7 +7,6 @@ class cgal(Recipe):
 
     url = "https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-4.9/CGAL-4.9.zip"
     archive = "CGAL-4.9.zip"
-    BuildType = "Release"
 
     def __init__(self, env):
         super(cgal, self).__init__(env)
@@ -27,7 +26,7 @@ class cgal(Recipe):
         
         return True
 
-    def build(self):
+    def compile(self, btype):
         os.chdir(self.path)
         if os.path.exists("src\\CGAL_ImageIO"):
             shutil.rmtree("src\\CGAL_ImageIO")
@@ -43,7 +42,7 @@ class cgal(Recipe):
 
         cmdline = ["cmake", self.path,
                    "-G", "Visual Studio 14 2015 Win64",
-                   "-DCMAKE_BUILD_TYPE=Release", 
+                   '-DCMAKE_BUILD_TYPE={}'.format(btype), 
                    ]
                    #'-DCMAKE_INSTALL_PREFIX={}'.format(self.env.getInstallDir()),
 
@@ -54,18 +53,25 @@ class cgal(Recipe):
 
         #cmdline = ["msbuild", "CGAL.sln", "/p:BuildInParallel=true", "/p:Platform=x64"]
         #cmdline.append('/p:Configuration={}'.format(self.BuildType))
-        cmdline = ["cmake", "--build", ".", "--config", self.BuildType]
+        cmdline = ["cmake", "--build", ".", "--config", btype]
 
         result = helpers.execute(cmdline, "compile-out.txt", "compile-err.txt")
-        if result:
-            self.setBuilt()
         return result
 
+    def build(self):
+        if not self.compile("Debug"):
+            return False
+        if not self.compile("Release"):
+            return False
+        self.setBuilt()
+        return True
+        
     def install(self):
         os.chdir(self.bldpath)
 
         libdir = self.env.getInstallLibDir()
         helpers.copy(glob.glob("lib\\Release\\*.lib"), libdir)
+        helpers.copy(glob.glob("lib\\Debug\\*.lib"), libdir)
         helpers.copy(glob.glob("bin\\*.dll"), libdir)
 
         hdrdir = os.path.join(self.env.getInstallIncludeDir(), "CGAL")

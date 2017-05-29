@@ -67,9 +67,9 @@ Source: "{#SDK_DIR}\lib\CGAL-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ignorev
 Source: "{#SDK_DIR}\lib\CGAL_core-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\gmp.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_62.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_62.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_62.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion

@@ -11,7 +11,6 @@ class mpfr(Recipe):
     #url = "http://www.mpfr.org/mpfr-current/mpfr-3.1.5.zip"
 
     Processor = "gc" # Check MPIR documentation. Build Generic Intel version
-    BuildType = "Release"
 
     def __init__(self, env):
         super(mpfr, self).__init__(env)
@@ -32,30 +31,44 @@ class mpfr(Recipe):
         shutil.move(self.unpackdir, self.path)            
         return True
 
-    def build(self):
+    def compile(self, btype):
         os.chdir(self.bldpath)
         cmdline = ["msbuild", "dll_mpfr.sln", "/t:dll_mpfr"
                    ]
         cmdline.append("/p:BuildInParallel=true")
-        cmdline.append('/p:Configuration={}'.format(self.BuildType))
+        cmdline.append('/p:Configuration={}'.format(btype))
         cmdline.append("/p:Platform=x64")
 
         result = helpers.execute(cmdline, "build-out.txt", "build-err.txt")
-        if result:
-            self.setBuilt()
         return result
 
-    def install(self):
+    def deploy(self, btype):
         relpath = os.path.join(self.path, 
                                "dll",
                                "x64",
-                               self.BuildType)
+                               btype)
         os.chdir(relpath)
         libdir = self.env.getInstallLibDir()
 
         helpers.copy(glob.glob("*.h"), self.env.getInstallIncludeDir())
         helpers.copy(glob.glob("*.dll"), libdir)
-        helpers.copy(glob.glob("*.lib"), libdir)
-        
+        helpers.copy(glob.glob("*.lib"), libdir)        
+        return True
+
+
+    def build(self):
+        if not self.compile("Debug"):
+            return False
+        if not self.compile("Release"):
+            return False
+        self.setBuilt()
+        return True
+
+    def install(self):
+        if not self.deploy("Debug"):
+            return False
+        if not self.deploy("Release"):
+            return False
+
         self.setInstalled()
         return True

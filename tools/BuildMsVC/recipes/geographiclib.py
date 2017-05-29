@@ -10,7 +10,6 @@ class geographiclib(Recipe):
 
     url="https://sourceforge.net/projects/geographiclib/files/distrib/GeographicLib-1.47.zip"
     archive = "GeographicLib-1.47.zip"
-    BuildType = "Release"
 
     def __init__(self, env):
         super(geographiclib, self).__init__(env)
@@ -30,14 +29,16 @@ class geographiclib(Recipe):
         self.setDownloaded()
         return True
 
-    def build(self):
+    def build_type(self, build_type):
         os.chdir(self.path)
         helpers.mkdir (self.bldpath)
         os.chdir(self.bldpath)
+        helpers.mkdir (build_type)
+        os.chdir(build_type)
 
         cmdline = ["cmake", self.path,
                    "-G", "Visual Studio 14 2015 Win64",
-                   "-DCMAKE_BUILD_TYPE=Release", 
+                   '-DCMAKE_BUILD_TYPE=Release'.format(build_type), 
                    '-DCMAKE_INSTALL_PREFIX={}'.format(self.env.getInstallDir())
                    ]
 
@@ -46,18 +47,26 @@ class geographiclib(Recipe):
             print("Cannot configure.")
             return False
 
-        cmdline = ["cmake", "--build", ".", "--config", self.BuildType]
+        cmdline = ["cmake", "--build", ".", "--config", build_type]
 
         result = helpers.execute(cmdline, "compile-out.txt", "compile-err.txt")
         if result:
             self.setBuilt()
         return result
 
-    def install(self):
+    def build(self):
+        result = self.build_type("Debug")
+        if not result:
+            return result
+        result = self.build_type("Release")
+        return result
+
+    def install_type(self, build_type):
         os.chdir(self.bldpath)
+        os.chdir(build_type)
 
         cmdline = ["cmake", 
-                   "--build", ".", "--config", self.BuildType, "--target", "install"]
+                   "--build", ".", "--config", build_type, "--target", "install"]
         result = helpers.execute(cmdline, "install-out.txt", "install-err.txt")
         if not result:
             return False
@@ -67,3 +76,11 @@ class geographiclib(Recipe):
         
         self.setInstalled()
         return True
+
+    def install(self):
+        result = self.install_type("Debug")
+        if not result:
+            return result
+        result = self.install_type("Release")
+        return result
+    

@@ -8,7 +8,6 @@ class proj4(Recipe):
 
     url = "http://download.osgeo.org/proj/proj-4.9.3.tar.gz"
     archive = "proj-4.9.3.tar.gz"
-    BuildType = "Release"
 
     def __init__(self, env):
         super(proj4, self).__init__(env)
@@ -28,7 +27,7 @@ class proj4(Recipe):
         self.setDownloaded()
         return True
 
-    def build(self):
+    def compile(self, btype):
         os.chdir(self.path)
         helpers.mkdir (self.bldpath)
         os.chdir(self.bldpath)
@@ -40,7 +39,7 @@ class proj4(Recipe):
 
         cmdline = ["cmake", self.path,
                    "-G", "Visual Studio 14 2015 Win64",
-                   "-DCMAKE_BUILD_TYPE=Release", 
+                   '-DCMAKE_BUILD_TYPE={}'.format(btype), 
                    ]
 
         result = helpers.execute(cmdline, "configure-out.txt", "configure-err.txt")
@@ -48,19 +47,34 @@ class proj4(Recipe):
             print("Cannot configure.")
             return False
 
-        cmdline = ["cmake", "--build", ".", "--config", self.BuildType]
+        cmdline = ["cmake", "--build", ".", "--config", btype]
 
         result = helpers.execute(cmdline, "compile-out.txt", "compile-err.txt")
         if result:
             self.setBuilt()
         return result
 
-    def install(self):
+    def build(self):
+        if not self.compile("Debug"):
+            return False
+        if not self.compile("Release"):
+            return False
+        self.setBuilt()
+        return True
+
+    def deploy(self, btype):
         os.chdir(self.bldpath)
 
-        cmdline = ["cmake", "--build", ".", "--config", self.BuildType, "--target", "INSTALL"]
+        cmdline = ["cmake", "--build", ".", "--config", btype, "--target", "INSTALL"]
         result = helpers.execute(cmdline, "compile-out.txt", "compile-err.txt")
         if not result:
+            return False
+        return True
+
+    def install(self):
+        if not self.deploy("Debug"):
+            return False
+        if not self.deploy("Release"):
             return False
 
         os.chdir(self.env.getInstallDir())

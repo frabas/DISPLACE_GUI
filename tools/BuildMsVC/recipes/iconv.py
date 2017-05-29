@@ -28,14 +28,14 @@ class iconv(Recipe):
         self.setDownloaded()
         return True
 
-    def build(self):
+    def compile(self, btype):
         os.chdir(self.path)
         helpers.mkdir (self.bldpath)
         os.chdir(self.bldpath)
 
         cmdline = ["cmake", self.path,
                    "-G", "Visual Studio 14 2015 Win64",
-                   "-DCMAKE_BUILD_TYPE=Release", 
+                   '-DCMAKE_BUILD_TYPE={}'.format(btype), 
                    '-DCMAKE_INSTALL_PREFIX={}'.format(self.env.getInstallDir())
                    ]
 
@@ -44,25 +44,35 @@ class iconv(Recipe):
             print("Cannot configure.")
             return False
 
-        #cmdline = ["nmake", "/f", "makefile.vc", "MSVC_VER=1400"]
-        cmdline = ["cmake", "--build", ".", "--config", self.BuildType]
+        cmdline = ["cmake", "--build", ".", "--config", btype]
 
         result = helpers.execute(cmdline, "compile-out.txt", "compile-err.txt")
-        if result:
-            self.setBuilt()
         return result
 
-    def install(self):
+    def build(self):
+        if not self.compile("Debug"):
+            return False
+        if not self.compile("Release"):
+            return False
+        self.setBuilt()
+        return True
+
+    def deploy(self, btype):
         os.chdir(self.bldpath)
 
         cmdline = ["cmake", 
-                   "--build", ".", "--config", self.BuildType, "--target", "install"]
+                   "--build", ".", "--config", btype, "--target", "install"]
         result = helpers.execute(cmdline, "install-out.txt", "install-err.txt")
         if not result:
             return False
+        return True
 
+    def install(self):
+        if not self.deploy("Debug"):
+            return False
+        if not self.deploy("Release"):
+            return False
         os.chdir(self.env.getInstallDir())
         helpers.move(glob.glob("bin\\*.dll"), "lib\\")
-        
         self.setInstalled()
         return True

@@ -32,8 +32,8 @@ win32 {
 
     DEFINES += BOOST_ALL_NO_LIB _WINSOCKAPI_
 
-    #SDK=$$top_srcdir/install/msvc
-    SDK=$$top_srcdir/../displace-build/install
+    SDK=$$top_srcdir/install/msvc
+    #SDK=$$top_srcdir/../displace-build/install
 
     QMC_GDAL_INC = $$SDK/include
     QMC_GDAL_LIB = $$SDK/lib

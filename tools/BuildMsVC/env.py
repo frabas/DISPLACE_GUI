@@ -12,7 +12,7 @@ class Env(object):
     def __init__(self):
         self.cwd = os.getcwd()
         self.builddir = os.path.join(self.cwd, "build")
-        self.installdir = os.path.join(self.cwd, "install")
+        self.installdir = os.path.join(self.cwd, "install", "msvc")
         self.statedir = os.path.join(self.builddir, "state")
         self.datadir = os.path.join(self.cwd, "data")
 

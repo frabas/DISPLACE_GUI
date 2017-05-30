@@ -1229,7 +1229,7 @@ QProcess *MainWindow::prepareAppExecutableStart(QString exename)
     ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->setProgram(app);
 
-    connect (ed, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), [this, ed, app](QProcess::ProcessError err) {
+    connect (ed, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), [this, ed, app](QProcess::ProcessError /*err*/) {
        QMessageBox::warning(this, tr("Failed to start"),
                             QString(tr("The process %1 failed to start")).arg(app));
     });

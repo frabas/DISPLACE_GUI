@@ -319,7 +319,7 @@ public:
     void clrInterestingBenthos() { mInterestingBenthos.clear(); }
 
     QList<int> getInterestingFarmTypes() const { return mInterestingFishfarmsTypes.list(); }
-    setInterestingFarmTypes(int n) { mInterestingFishfarmsTypes.set(n); }
+    void setInterestingFarmTypes(int n) { mInterestingFishfarmsTypes.set(n); }
 
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }

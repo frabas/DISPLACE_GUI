@@ -1795,7 +1795,7 @@ bool DisplaceModel::loadNodes()
 
                 cout << "load prices for port " << a_name << " which is point " << a_point << endl;
                 //int er = read_prices_per_harbour(a_point, a_quarter, prices, mName.toStdString());
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
+                read_prices_per_harbour_each_pop_per_cat(a_point,  a_quarter, fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
                 // if not OK then deadly bug: possible NA or Inf in harbour files need to be checked (step 7)
                 cout << "....OK" << endl;
             }
@@ -1805,7 +1805,7 @@ bool DisplaceModel::loadNodes()
                 cout << a_point << " : harbour not found in the harbour names (probably because no declared landings from studied vessels in those ports)" << endl;
                 //int er = read_prices_per_harbour(a_port, "quarter1", prices, mName.toStdString()); // delete later on when final parameterisation
                 cout << "then go for the port: " << a_port  << " instead" <<  endl;
-                int er2 = read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
+                read_prices_per_harbour_each_pop_per_cat(a_port, "quarter1", fishprices_each_species_per_cat, mInputName.toStdString(), mBasePath.toStdString());
                 cout << "....OK" << endl;
 
             }
@@ -1943,7 +1943,7 @@ bool DisplaceModel::loadNodes()
 
 
         // init
-       for(unsigned int a_idx=0; a_idx<mNodes.size(); a_idx++)
+       for(size_t a_idx=0; a_idx<mNodes.size(); a_idx++)
        {
         auto idx_node=mNodes.at(a_idx)->get_idx_node();
 
@@ -1977,8 +1977,8 @@ bool DisplaceModel::loadNodes()
 
 bool DisplaceModel::loadVessels()
 {
-    int nrow_coord = mScenario.getNrow_coord();
-    auto a_port = mScenario.getA_port();
+    //int nrow_coord = mScenario.getNrow_coord();
+    //auto a_port = mScenario.getA_port();
     vector<string> dyn_alloc_sce = mScenario.getDyn_alloc_sce_asVector();
     int nbpops = mConfig.getNbpops();
     string a_quarter= "quarter1";// start quarter
@@ -2702,7 +2702,7 @@ bool DisplaceModel::initFishfarm()
     return false;
 
 
-   for (int id=0; id<all_fishfarms_ids.size(); ++id) {
+   for (size_t id=0; id<all_fishfarms_ids.size(); ++id) {
        cout<<"create fishfarms " << all_fishfarms_ids.at(id) << endl;
 
        auto node = mNodes.at(idx_nodes.at(id));
@@ -2769,7 +2769,7 @@ bool DisplaceModel::initFirm()
     return false;
 
 
-   for (int id=0; id<all_firm_ids.size(); ++id) {
+   for (size_t id=0; id<all_firm_ids.size(); ++id) {
        cout<<"create firm " << all_firm_ids.at(id) << endl;
 
 

@@ -42,6 +42,8 @@ bool SingleClickMouseMode::releaseEvent(const QPointF &point)
 
 bool SingleClickMouseMode::endMode(bool success)
 {
+    Q_UNUSED(success);
+
     return true;
 }
 

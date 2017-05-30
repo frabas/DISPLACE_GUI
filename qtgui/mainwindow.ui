@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -344,7 +344,7 @@
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
-            <iconset resource="qtgui.qrc">
+            <iconset resource="../qtcommons/qtcommons.qrc">
              <normaloff>:/icons/harbour.png</normaloff>:/icons/harbour.png</iconset>
            </attribute>
            <attribute name="title">
@@ -1190,7 +1190,7 @@ L3</string>
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
    </property>
    <property name="text">
@@ -1211,7 +1211,7 @@ L3</string>
   </action>
   <action name="actionProperties">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/info.png</normaloff>:/icons/info.png</iconset>
    </property>
    <property name="text">
@@ -1363,7 +1363,7 @@ L3</string>
   </action>
   <action name="actionDecision_Trees_Editor">
    <property name="icon">
-    <iconset resource="../dteditor/dteditor.qrc">
+    <iconset resource="qtgui.qrc">
      <normaloff>:/icons/dteditor.png</normaloff>:/icons/dteditor.png</iconset>
    </property>
    <property name="text">
@@ -1488,7 +1488,7 @@ L3</string>
   <customwidget>
    <class>qmapcontrol::QMapControl</class>
    <extends>QWidget</extends>
-   <header>QMapControl.h</header>
+   <header>QMapControl/QMapControl.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1500,7 +1500,7 @@ L3</string>
  </customwidgets>
  <resources>
   <include location="../objeditor/vesseleditor.qrc"/>
-  <include location="../dteditor/dteditor.qrc"/>
+  <include location="../qtcommons/qtcommons.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

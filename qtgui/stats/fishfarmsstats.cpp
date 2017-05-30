@@ -1,5 +1,5 @@
 #include "fishfarmsstats.h"
-#include <iostream>
+
 
 const FishfarmsStats::StatData FishfarmsStats::NoData;
 
@@ -10,7 +10,7 @@ FishfarmsStats::FishfarmsStats()
 
 FishfarmsStats::FishfarmsStats(const FishfarmsStats &b)
 {
-  std::cout << "FishfarmsStats creator1" << std::endl;
+  cout << "FishfarmsStats creator1" << endl;
     std::unique_lock<std::mutex> l1(mMutex);
     std::unique_lock<std::mutex> l2(b.mMutex);
 
@@ -20,7 +20,7 @@ FishfarmsStats::FishfarmsStats(const FishfarmsStats &b)
 
 FishfarmsStats::FishfarmsStats(FishfarmsStats &&b)
 {
-    std::cout << "FishfarmsStats creator2" << std::endl;
+    cout << "FishfarmsStats creator2" << endl;
     std::unique_lock<std::mutex> l1(mMutex);
     std::unique_lock<std::mutex> l2(b.mMutex);
 

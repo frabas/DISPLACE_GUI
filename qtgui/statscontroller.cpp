@@ -45,9 +45,7 @@ StatsController::StatsController(QObject *parent)
       mMetTimeLine(0),
       mLastModel(0)
 {
-    cout << "Stats controller is being created" << endl;
-
-   // mPalette = PaletteManager::instance()->palette(PopulationRole);
+    mPalette = PaletteManager::instance()->palette(PopulationRole);
 
     cout << "Stats controller is created" << endl;
 }

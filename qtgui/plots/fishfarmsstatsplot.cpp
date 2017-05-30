@@ -14,7 +14,7 @@ FishfarmsStatsPlot::FishfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
       mTimeline(timeline),
       pen(QColor(0,0,255,200))
 {
-   // mPalette = PaletteManager::instance()->palette(FishfarmRole);
+    mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
 void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsStat stat)

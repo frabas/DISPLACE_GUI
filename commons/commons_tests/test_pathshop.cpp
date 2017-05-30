@@ -86,13 +86,19 @@ BOOST_AUTO_TEST_CASE ( test_dijkstra )
     PathShop ps = PathShop::readFromData(data);
 
     auto r1 = DijkstraGetShortestPathTo(types::NodeId(2), ps);
-    BOOST_CHECK_EQUAL(std::list<vertex_t> ({1, 2}), toList(r1));
+    auto exp = std::list<vertex_t> ({1, 2});
+    auto r = toList(r1);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp.begin(), exp.end(), r.begin(), r.end());
 
     auto r2 = DijkstraGetShortestPathTo(types::NodeId(3), ps);
-    BOOST_CHECK_EQUAL(std::list<vertex_t>({1, 3}), toList(r2));
+    exp = std::list<vertex_t> ({1, 3});
+    r = toList(r2);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp.begin(), exp.end(), r.begin(), r.end());
 
     auto r3 = DijkstraGetShortestPathTo(types::NodeId(1), ps);
-    BOOST_CHECK_EQUAL(std::list<vertex_t>({1}), toList(r3));
+    exp = std::list<vertex_t> ({1});
+    r = toList(r3);
+    BOOST_CHECK_EQUAL_COLLECTIONS(exp.begin(), exp.end(), r.begin(), r.end());
 
     // Disable this test, it is not correct
     //auto r4 = DijkstraGetShortestPathTo(types::NodeId(4), ps);

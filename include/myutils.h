@@ -181,8 +181,8 @@ void COMMONSSHARED_EXPORT DijkstraComputePaths(vertex_t source,
                           spp::sparse_hash_map<vertex_t, vertex_t>& previous,
                           std::vector<types::NodeId> relevant_nodes);
 
-std::list<vertex_t>  COMMONSSHARED_EXPORT __attribute__((deprecated)) DijkstraGetShortestPathTo(vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t> &previous);
-std::list<types::NodeId> DijkstraGetShortestPathTo(types::NodeId target, const PathShop &pathshop);
+std::list<vertex_t>  COMMONSSHARED_EXPORT DijkstraGetShortestPathTo(vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t> &previous);
+std::list<types::NodeId> COMMONSSHARED_EXPORT DijkstraGetShortestPathTo(types::NodeId target, const PathShop &pathshop);
 
 void COMMONSSHARED_EXPORT SimplifyThePreviousMap(int source,
         spp::sparse_hash_map<vertex_t, vertex_t>& previous,
@@ -360,7 +360,7 @@ void fill_map_from_specifications (istream &in, map<int,DTYPE> &map) {
 }
 
 template <typename K, typename V>
-std::vector<V> COMMONSSHARED_EXPORT find_entries(const std::multimap<K,V> &infos, K val) {
+std::vector<V> find_entries(const std::multimap<K,V> &infos, K val) {
     auto upper = infos.upper_bound(val);
     vector<V> result;
 

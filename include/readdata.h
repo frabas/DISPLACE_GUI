@@ -152,7 +152,7 @@ bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
                              vector<double>& annual_profits,
                              string folder_name_parameterization,
                              string inputfolder);
-bool read_firms_features(vector<int>& firm_ids,
+bool COMMONSSHARED_EXPORT read_firms_features(vector<int>& firm_ids,
                          vector<string>& firm_names,
                          vector<int>& nb_vessels,
                          vector<double>& longs,
@@ -260,8 +260,8 @@ vector <int> COMMONSSHARED_EXPORT read_tsteps_months(string folder_name_paramete
 vector <int> COMMONSSHARED_EXPORT read_tsteps_years(string folder_name_parameterization, string inputfolder);
 
 //shortPaths
-spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> COMMONSSHARED_EXPORT __attribute__((deprecated)) read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
-spp::sparse_hash_map<types::NodeId::type, int> COMMONSSHARED_EXPORT __attribute__((deprecated)) read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> COMMONSSHARED_EXPORT read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, int> COMMONSSHARED_EXPORT read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
 PathShop COMMONSSHARED_EXPORT read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name);
 
 // area based management

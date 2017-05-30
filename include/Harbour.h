@@ -36,7 +36,7 @@ using namespace std;
 class COMMONSSHARED_EXPORT Harbour : public Node
 {
 	public:
-        Harbour(int idx,
+        Harbour(types::NodeId idx,
             double xval,
             double yval,
             int _harbour,
@@ -55,28 +55,28 @@ class COMMONSSHARED_EXPORT Harbour : public Node
         //multimap<string, double> mean_fish_price_per_met_per_pop,
             multimap<int, double> mean_fish_price_per_pop_per_cat,
             map<int, double> fuelprice,
-            vector<int> usual_fgrounds,
+            vector<types::NodeId> usual_fgrounds,
             vector<double> freq_usual_fgrounds);
         Harbour(string name);
 		Harbour();
-        Harbour(int idx,double xval,double yval,int _harbour);
+        Harbour(types::NodeId idx,double xval,double yval,int _harbour);
 
 		~Harbour();
         virtual string get_name() const override;
 		//virtual double get_prices(string met, int pop) ;
         virtual double get_prices_per_cat(int pop, int cat) override;
         virtual double get_fuelprices(int vsize)  override;
-        virtual const vector<int> &get_usual_fgrounds () const override;
+        virtual const vector<types::NodeId> &get_usual_fgrounds () const override;
         virtual const vector<double> &get_freq_usual_fgrounds () const override;
-        virtual void set_usual_fgrounds (const vector <int> &usual_fgrounds) override;
+        virtual void set_usual_fgrounds (const vector <types::NodeId> &usual_fgrounds) override;
         virtual void set_freq_usual_fgrounds (const vector <double> &freq_usual_fgrounds) override;
-        virtual const multimap<int, int> &get_usual_metiers() const override;
+        virtual const multimap<types::NodeId, int> &get_usual_metiers() const override;
         virtual const multimap<int,double> &get_freq_usual_metiers () const override;
-        virtual void set_usual_metiers (multimap<int, int> usual_metiers) override;
+        virtual void set_usual_metiers (multimap<types::NodeId, int> usual_metiers) override;
         virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers) override;
-        virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met) override;
+        virtual void set_usual_fgrounds_per_met (multimap<int, types::NodeId> usual_fgrounds_per_met) override;
         virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met) override;
-        virtual vector<int> get_usual_fgrounds_this_met(int met) override;
+        virtual vector<types::NodeId> get_usual_fgrounds_this_met(int met) override;
         virtual vector<double> get_freq_usual_fgrounds_this_met(int met) override;
 
 
@@ -86,11 +86,11 @@ class COMMONSSHARED_EXPORT Harbour : public Node
         map<int, double>  fuelprice;
 		//multimap<string, double> mean_fish_price_per_met_per_pop;
 		multimap<int, double> mean_fish_price_per_pop_per_cat;
-        vector <int> usual_fgrounds;
+        vector <types::NodeId> usual_fgrounds;
         vector <double> freq_usual_fgrounds;
-        multimap<int, int> usual_metiers;
+        multimap<types::NodeId, int> usual_metiers;
         multimap<int, double> freq_usual_metiers;
-        multimap<int, int> usual_fgrounds_per_met;
+        multimap<int, types::NodeId> usual_fgrounds_per_met;
         multimap<int, double> freq_usual_fgrounds_per_met;
 
 };

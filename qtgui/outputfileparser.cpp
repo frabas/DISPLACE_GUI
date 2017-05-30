@@ -81,6 +81,8 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopdyn(&file, tstep, mModel, period);
     } else if (name.startsWith("loglike_")) {
         parseVessels(&file, tstep, mModel, period);
+    } else if (name.startsWith("fishfarmslogs_")) {
+        parseFishfarmslogsStats(&file, tstep, mModel, period);
     } else { /* Don't know how to handle... */
         qDebug() << "File isn't recognized: " << path;
     }
@@ -359,6 +361,60 @@ void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceMode
         model->commitNodesStatsFromSimu(step);
 }
 
+
+void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+    bool ok;
+
+    int step, last_period = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[1].toInt();
+
+        if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+            int farmid = fields[4].toInt();
+            int nodeid = fields[1].toInt();
+
+            // tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
+
+            double meanw_kg = fields[6].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong meanw_kg %1").arg(fields[5]).toStdString());
+            model->collectFishfarmFishMeanWeight (step, nodeid, farmid, meanw_kg);
+
+            double fish_harvested_kg = fields[7].toDouble(&ok);  // deduced from N*meanw
+            if (!ok) throw std::runtime_error(QString("wrong fish_harvested_kg %1").arg(fields[6]).toStdString());
+            model->collectFishfarmFishHarvestedKg (step, nodeid, farmid, fish_harvested_kg);
+
+            double eggs_harvested_kg = fields[8].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong eggs_harvested_kg %1").arg(fields[7]).toStdString());
+            model->collectFishfarmEggsHarvestedKg(step, nodeid, farmid, eggs_harvested_kg);
+
+            double fishfarm_annualprofit = fields[9].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong fishfarm_annualprofit %1").arg(fields[7]).toStdString());
+            model->collectFishfarmAnnualProfit(step, nodeid, farmid, fishfarm_annualprofit);
+
+            double fishfarm_netdischargeN = fields[10].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeN %1").arg(fields[7]).toStdString());
+            model->collectFishfarmNetDischargeN(step, nodeid, farmid, fishfarm_netdischargeN);
+
+            double fishfarm_netdischargeP = fields[11].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeP %1").arg(fields[7]).toStdString());
+            model->collectFishfarmNetDischargeP(step, nodeid, farmid, fishfarm_netdischargeP);
+        }
+    }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
+}
 
 
 void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model, int period)

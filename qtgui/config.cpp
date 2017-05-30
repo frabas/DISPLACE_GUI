@@ -164,8 +164,8 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
     stream << endl;
 
     stream <<"# Interesting harbours"<< endl;
-    foreach (int a, m_interesting_harbours)
-        stream << a << " ";
+    for (auto a : m_interesting_harbours)
+        stream << a.toIndex() << " ";
     stream << endl;
 
     file.close();
@@ -182,7 +182,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
 
     std::vector <int> implicit_pops;
     std::vector <int> implicit_pops_level2;
-    std::vector <int> implicit_harbours;
+    std::vector <types::NodeId> implicit_harbours;
     std::vector <double> calib_oth_landings;
     std::vector <double> calib_weight_at_szgroup;
     std::vector <double> calib_cpue_multiplier;
@@ -214,7 +214,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         config.m_calib_weight_at_szgroup.push_back(*it);
     for (std::vector<double>::iterator it = calib_cpue_multiplier.begin(); it != calib_cpue_multiplier.end(); ++it)
         config.m_calib_cpue_multiplier.push_back(*it);
-    for (std::vector<int>::iterator it = implicit_harbours.begin(); it != implicit_harbours.end(); ++it)
+    for (auto it = implicit_harbours.begin(); it != implicit_harbours.end(); ++it)
         config.m_interesting_harbours.push_back(*it);
 
     qSort(config.m_interesting_harbours);

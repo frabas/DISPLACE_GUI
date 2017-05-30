@@ -321,8 +321,14 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
     case 15:    // Benthos Specs
         ui->benthosCsvPage1->setFilename(ui->gisPath->text() + "/HABITATS/prop_loss_on_habitat_after_one_passage_per_metier_per_sz.csv");
         ui->benthosCsvPage1->load();
-        ui->benthosCsvPage2->setFilename(ui->gisPath->text() + "/HABITATS/tot_benthos_biomass_on_habitat_per_node_per_sz.csv");
+        ui->benthosCsvPage2->setFilename(ui->gisPath->text() + "/HABITATS/benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.csv");
         ui->benthosCsvPage2->load();
+        ui->benthosCsvPage3->setFilename(ui->gisPath->text() + "/HABITATS/prop_funcgr_biomass_per_node_per_landscape.csv");
+        ui->benthosCsvPage3->load();
+        ui->benthosCsvPage4->setFilename(ui->gisPath->text() + "/HABITATS/meanw_funcgr_per_landscape.csv");
+        ui->benthosCsvPage4->load();
+        ui->benthosCsvPage5->setFilename(ui->gisPath->text() + "/HABITATS/logistic_recovery_rates_per_month_per_funcgr.csv");
+        ui->benthosCsvPage5->load();
         mBenthosMapListAdapter->clearPaths();
         mBenthosMapListAdapter->addPath(ui->gisPath->text() + "/HABITATS/");
         mBenthosMapListAdapter->refresh();

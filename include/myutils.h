@@ -22,7 +22,10 @@
 #define __MYUTILS_H (1)
 
 #include <commons_global.h>
+#include <sparsepp/spp.h>
+
 #include <vesselcalendar.h>
+#include <idtypes.h>
 
 #include<vector>
 #include<deque>
@@ -40,6 +43,7 @@
 #include <math.h>
 
 #include <cstddef>
+#include <pathshop.h>
 
 using namespace std;
 
@@ -66,14 +70,55 @@ double simpson(double a, double b, int n, double S1, double S2){
 double COMMONSSHARED_EXPORT trapezoidal(double a, double b, vector <double> sel);
 double COMMONSSHARED_EXPORT myintegrand(double x, double S1, double S2);
 
+template <typename T>
+void remove_dups(vector<T>& seq)
+{
+    sort( seq.begin(), seq.end() ) ;
+    seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
+}
 
 void COMMONSSHARED_EXPORT remove_dups(vector<int>& seq);
 multimap<int,int> COMMONSSHARED_EXPORT  remove_dups(multimap<int,int>& original_map); // keep the first pair of all keys
 
+// to keep the first element of all the keys only:
+template<typename K, typename V>
+multimap<K,V>  remove_dups(multimap<K,V>& original_map)
+{
+    multimap<K,V> new_map;
+
+    while (original_map.size() > 0)
+    {
+        auto element = *(original_map.begin());
+        new_map.insert(make_pair(element.first,element.second));
+        original_map.erase(element.first);
+    }
+    return(new_map);
+}
+
+
 // remove key-value duplicates
 multimap<int,int>::const_iterator COMMONSSHARED_EXPORT find_pair(const multimap<int,int>& map, const pair<int, int>& pair);
 bool COMMONSSHARED_EXPORT insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair);
+// to remove key-value duplicates:
+template <typename K, typename V>
+typename multimap<K,V>::const_iterator find_pair(const multimap<K,V>& map, const pair<K, V>& pair)
+{
+    auto range = map.equal_range(pair.first);
+    for (auto p = range.first; p != range.second; ++p)
+        if (p->second == pair.second)
+            return p;
+    return map.end();
+}
 
+template <typename K, typename V>
+bool insert_if_not_present(multimap<K,V>& map, const pair<K,V>& pair)
+{
+    if (find_pair(map, pair) == map.end()) {
+        map.insert(pair);
+        return true;
+    }
+    return false;
+}
 
 //void print( vector <string> & v );
 //void print_d( vector <double> & v );
@@ -117,7 +162,7 @@ Container& split(
 //---------------------------------------//
 
 //simple graph type definition headers>>
-typedef int vertex_t;
+typedef types::NodeId::type vertex_t;
 typedef int weight_t;			 // 'integer' instead of 'double' to speedup c++
 
 struct COMMONSSHARED_EXPORT edge
@@ -132,29 +177,27 @@ typedef std::map<vertex_t, std::list<edge> > adjacency_map_t;
 
 void COMMONSSHARED_EXPORT DijkstraComputePaths(vertex_t source,
                           adjacency_map_t& adjacency_map,
-                          std::map<vertex_t, weight_t>& min_distance,
-                          std::map<vertex_t, vertex_t>& previous,
-                          std::vector<int> relevant_nodes);
+                          spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
+                          spp::sparse_hash_map<vertex_t, vertex_t>& previous,
+                          std::vector<types::NodeId> relevant_nodes);
 
-std::list<vertex_t> COMMONSSHARED_EXPORT DijkstraGetShortestPathTo(
-        vertex_t target, std::map<vertex_t, vertex_t>& previous);
+std::list<vertex_t>  COMMONSSHARED_EXPORT __attribute__((deprecated)) DijkstraGetShortestPathTo(vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t> &previous);
+std::list<types::NodeId> DijkstraGetShortestPathTo(types::NodeId target, const PathShop &pathshop);
 
-void COMMONSSHARED_EXPORT SimplifyThePreviousMap(
-        int source,
-        std::map<vertex_t, vertex_t>& previous,
-        std::vector<int>& relevant_nodes,
-        std::map<vertex_t, weight_t>& min_distance,
+void COMMONSSHARED_EXPORT SimplifyThePreviousMap(int source,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
+        std::vector<types::NodeId> &relevant_nodes,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
         string namesimu,
         string a_graph_name,
         string inputfolder);
 
 void COMMONSSHARED_EXPORT closeSomeNodes(std::vector<int>& nodes_to_be_closed, adjacency_map_t& adjacency_map);
 
-vector<double> COMMONSSHARED_EXPORT compute_distance_fgrounds(const vector<int> &idx_path_shop,
-                                         const deque<map<vertex_t, vertex_t> > &path_shop,
-                                         const deque<map<vertex_t, weight_t> > &min_distance_shop,
-                                         int from,
-                                         vector<int> grounds);
+vector<double> COMMONSSHARED_EXPORT compute_distance_fgrounds(const vector<types::NodeId> &relevant_nodes,
+                                         const std::vector<PathShop> &pathshops,
+                                         types::NodeId from,
+                                         vector<types::NodeId> grounds);
 
 //---------------------------------------//
 // data input
@@ -220,17 +263,76 @@ bool COMMONSSHARED_EXPORT fill_from_ships_specifications (istream& in, vector<st
                                      vector<double>& vmaxs,
                                      vector<double>& vcruises,
                                      vector<double>& lane_ids);
-bool COMMONSSHARED_EXPORT fill_from_firms_specifications(istream& in,
+bool COMMONSSHARED_EXPORT fill_from_fishfarms_specifications(istream& in,
+                                    vector<int> & fishfarms_ids,
+                                    vector<string> & fishfarms_names,
+                                    vector<int> & idx_nodes,
+                                    vector<int> & is_actives,
+                                    vector<double> &sizes,
+                                    vector<double> & longs,
+                                    vector<double> & lats,
+                                    vector<double>& mean_SSTs,
+                                    vector<double>& mean_salinities,
+                                    vector<double>& mean_windspeeds,
+                                    vector<double>& mean_currentspeeds,
+                                    vector<double>& max_depths,
+                                    vector<double>& diss_O2_mg_per_ls,
+                                    vector<double>& Linf_mms,
+                                    vector<double>& K_ys,
+                                    vector<double>& t0_ys,
+                                    vector<double>& fulton_condition_factors,
+                                    vector<string>& meanw_growth_model_types,
+                                    vector<int>&    start_day_growings,
+                                    vector<int>&    end_day_harvests,
+                                    vector<int> &   nbyears_for_growths,
+                                    vector<int>&    nb_days_fallowing_periods,
+                                    vector<int>&    nb_fish_at_starts,
+                                    vector<double>& meanw_at_starts,
+                                    vector<double>& price_per_kg_at_starts,
+                                    vector<double>& target_meanw_at_harvests,
+                                    vector<int>& nb_fish_at_harvests,
+                                    vector<double>& meanw_at_harvests,
+                                    vector<double>& prop_harvest_kg_solds,
+                                    vector<double>& kg_eggs_per_kgs,
+                                    vector<double>& price_eggs_per_kgs,
+                                    vector<double>& N_in_fish_kg_3pers,
+                                    vector<double>& P_in_fish_kg_0_5pers,
+                                    vector<string>& feed_types,
+                                    vector<double>& feed_price_per_kgs,
+                                    vector<double>& total_feed_kg,
+                                    vector<double>& prop_N_in_feeds,
+                                    vector<double>& prop_P_in_feeds,
+                                    vector<double>& total_feed_N_kgs,
+                                    vector<double>& total_feed_P_kgs,
+                                    vector<string>& feed_type_vets,
+                                    vector<double>& feed_vet_price_per_kgs,
+                                    vector<double>& total_feed_vet_kgs,
+                                    vector<double>& prop_N_in_feed_vets,
+                                    vector<double>& prop_P_in_feed_vets,
+                                    vector<double>& total_feed_vet_N_kgs,
+                                    vector<double>& total_feed_vet_P_kgs,
+                                    vector<double>& annual_discharge_N_kgs,
+                                    vector<double>& annual_discharge_P_kgs,
+                                    vector<double>& annual_discharge_C_kgs,
+                                    vector<double>& annual_discharge_heavymetals_kgs,
+                                    vector<double>& annual_discharge_medecine_kgs,
+                                    vector<double>& net_harvest_kg_per_sqkm_ys,
+                                    vector<double>& market_price_sold_fishs,
+                                    vector<double>& operating_cost_per_days,
+                                    vector<double>& annual_profits
+                                    );
+bool fill_from_firms_specifications(istream& in,
                                     vector<int> & firm_ids,
                                     vector<string> & firm_names,
                                     vector<int> & nb_vessels,
                                     vector<double> & longs,
-                                    vector<double> & lats);
+                                    vector<double> & lats
+                                    );
 
 bool COMMONSSHARED_EXPORT fill_from_avai_nodes_with_pop (istream& in, map<int, double>& avai);
-bool COMMONSSHARED_EXPORT fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<int, double>& avai);
-bool COMMONSSHARED_EXPORT fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& coeffs);
-bool COMMONSSHARED_EXPORT fill_from_oth_land (istream& in, map<int, double>& oth_land);
+bool COMMONSSHARED_EXPORT fill_from_avai_szgroup_nodes_with_pop (istream& in, multimap<types::NodeId, double> &avai);
+bool COMMONSSHARED_EXPORT fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId, double> &coeffs);
+bool COMMONSSHARED_EXPORT fill_from_oth_land (istream& in, map<types::NodeId, double> &oth_land);
 bool COMMONSSHARED_EXPORT fill_from_overall_migration_fluxes (istream& in, multimap<int, double> &overall_migration_fluxes);
 bool COMMONSSHARED_EXPORT fill_from_relative_stability(istream& in, map<string, double>& relative_stability);
 bool COMMONSSHARED_EXPORT fill_from_nodes_in_polygons (istream& in, multimap<int, int>& nodes_in_polygons);
@@ -255,6 +357,18 @@ void fill_map_from_specifications (istream &in, map<int,DTYPE> &map) {
         in >> val;
         map.insert(make_pair(key,val));
     }
+}
+
+template <typename K, typename V>
+std::vector<V> COMMONSSHARED_EXPORT find_entries(const std::multimap<K,V> &infos, K val) {
+    auto upper = infos.upper_bound(val);
+    vector<V> result;
+
+    for(auto pos= infos.lower_bound(val); pos!=upper; pos++) {
+        result.push_back(pos->second);
+    }
+
+    return(result);
 }
 
 vector<double> COMMONSSHARED_EXPORT find_entries_s_d (multimap<string, double>& infos, string str);

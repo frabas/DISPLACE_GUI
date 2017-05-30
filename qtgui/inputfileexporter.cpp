@@ -212,7 +212,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
             if (nd) {
                 int m = nd->getAdiacencyCount();
                 for (int j = 0; j < m; ++j) {
-                    gstrm << nd->get_idx_node() << endl;
+                    gstrm << nd->get_idx_node().toIndex() << endl;
                 }
             }
         }
@@ -223,7 +223,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 for (int j = 0; j < m; ++j) {
                     std::shared_ptr<NodeData> n = nd->getAdiacencyByIdx(j)->target.lock();
                     if (n.get() != nullptr)
-                        gstrm << n->get_idx_node() << endl;
+                        gstrm << n->get_idx_node().toIndex() << endl;
                 }
             }
         }

@@ -55,7 +55,7 @@ Benthos::Benthos(int _marine_landscape,
 		if(_nodes[n]->get_marine_landscape()== marine_landscape)
 		{
 			p_spe_nodes.push_back (_nodes[  n  ]);
-            dout(cout << _nodes[  n  ]->get_idx_node() << " ");
+            dout(cout << _nodes[  n  ]->get_idx_node().toIndex() << " ");
 		}
 	}
     dout(cout << endl);
@@ -74,7 +74,7 @@ Benthos::Benthos(int _marine_landscape,
                // add meanweight
                p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
                }
-               dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node() <<
+               dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
                       "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
         }
         else

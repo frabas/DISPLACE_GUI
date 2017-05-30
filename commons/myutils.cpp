@@ -52,49 +52,6 @@ T* end(T (&pArray)[N])
     return &pArray[0] + N;
 }
 
-void remove_dups(vector<int>& seq)
-{
-    sort( seq.begin(), seq.end() ) ;
-    seq.erase( unique( seq.begin(), seq.end() ), seq.end() ) ;
-}
-
-
-// to keep the first element of all the keys only:
-multimap<int,int>  remove_dups(multimap<int,int>& original_map)
-{
-    multimap<int,int> new_map;
-
-    while (original_map.size() > 0)
-    {
-        pair<int,int> element = *(original_map.begin());
-        new_map.insert(make_pair(element.first,element.second));
-        original_map.erase(element.first);
-    }
-    return(new_map);
-}
-
-
-// to remove key-value duplicates:
-multimap<int,int>::const_iterator find_pair(const multimap<int,int>& map, const pair<int, int>& pair)
-{
-    std::pair<multimap<int, int>::const_iterator ,multimap<int, int>::const_iterator > range = map.equal_range(pair.first);
-    for (multimap<int, int>::const_iterator p = range.first; p != range.second; ++p)
-        if (p->second == pair.second)
-            return p;
-    return map.end();
-}
-
-bool insert_if_not_present(multimap<int,int>& map, const pair<int, int>& pair)
-{
-    if (find_pair(map, pair) == map.end()) {
-        map.insert(pair);
-        return true;
-    }
-    return false;
-}
-
-
-
 /*
 void print( vector <string> & v )
 {
@@ -139,9 +96,9 @@ struct pair_first_less
 //simple compute paths function>>=
 void DijkstraComputePaths(vertex_t source,
                           adjacency_map_t& adjacency_map,
-                          std::map<vertex_t, weight_t>& min_distance,
-                          std::map<vertex_t, vertex_t>& previous,
-                          std::vector<int> relevant_nodes)
+                          spp::sparse_hash_map<vertex_t, weight_t> &min_distance,
+                          spp::sparse_hash_map<vertex_t, vertex_t> &previous,
+                          std::vector<types::NodeId> relevant_nodes)
 {
     //initialize output parameters>>
     for (adjacency_map_t::iterator vertex_iter = adjacency_map.begin();
@@ -180,7 +137,6 @@ void DijkstraComputePaths(vertex_t source,
             weight_t distance_through_u = min_distance[u] + weight;
             //if (distance_through_u<700 && distance_through_u < min_distance[v])
             //if ( distance_through_u < min_distance[v])
-            std::vector<int>::iterator invalid;
             if (distance_through_u < min_distance[v])
             {
                 //remove v from queue>>
@@ -196,16 +152,11 @@ void DijkstraComputePaths(vertex_t source,
             // for speeding up the simu by reducing the size of the object "previous":
             // remove v from list of dest nodes if it is a dest node
             // then stop the search of paths if all dest nodes are reached...
-            invalid =remove(relevant_nodes.begin(), relevant_nodes.end(), v);
+            auto invalid =remove(relevant_nodes.begin(), relevant_nodes.end(), types::NodeId(v));
             relevant_nodes.erase(invalid, relevant_nodes.end());
 
         }
 
-        //if(relevant_nodes.size()<7){
-        //    for (int i=0; i<relevant_nodes.size(); i++){
-        //    std::cout << relevant_nodes.at(i) <<" ";
-        //    }
-        //}
 
     }
 
@@ -214,10 +165,10 @@ void DijkstraComputePaths(vertex_t source,
 
 //get shortest path function>>=
 std::list<vertex_t> DijkstraGetShortestPathTo(
-        vertex_t target, std::map<vertex_t, vertex_t>& previous)
+        vertex_t target, spp::sparse_hash_map<vertex_t, vertex_t>& previous)
 {
     std::list<vertex_t> path;
-    std::map<vertex_t, vertex_t>::iterator prev;
+    spp::sparse_hash_map<vertex_t, vertex_t>::iterator prev;
     vertex_t vertex = target;
     path.push_front(vertex);
     while((prev = previous.find(vertex)) != previous.end())
@@ -228,14 +179,36 @@ std::list<vertex_t> DijkstraGetShortestPathTo(
     return path;
 }
 
+std::list<types::NodeId> DijkstraGetShortestPathTo(types::NodeId target, const PathShop &pathshop)
+{
+    std::list<types::NodeId> path;
+    auto vertex = target;
+    path.push_front(vertex);
+    while (true) {
+        try {
+            auto node = pathshop.getNode(vertex);
+            vertex = node.getPreviousNode();
+            if (!types::isIdInvalid(vertex))
+                path.push_front(vertex);
+            else
+                break;
+        } catch (PathShop::NodeNotFoundException &) {
+            // end of path
+            break;
+        }
+    }
+
+    return path;
+}
+
 
 // remove the keys that are not used in the map "previous"
 // according to all the potential destination nodes for a given source node
 void SimplifyThePreviousMap(
         int source,
-        std::map<vertex_t, vertex_t>& previous,
-        std::vector<int>& relevant_nodes,
-        std::map<vertex_t, weight_t>& min_distance,
+        spp::sparse_hash_map<vertex_t, vertex_t>& previous,
+        std::vector<types::NodeId>& relevant_nodes,
+        spp::sparse_hash_map<vertex_t, weight_t>& min_distance,
         string namesimu,
         string a_graph_name,
         string inputfolder)
@@ -247,7 +220,7 @@ void SimplifyThePreviousMap(
     // 1. compute all paths from the source to the set of destinations
     for (unsigned int i=0; i<relevant_nodes.size(); i++)
     {
-        std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i], previous);
+        std::list<vertex_t> path = DijkstraGetShortestPathTo(relevant_nodes[i].toIndex(), previous);
 
         //paths.merge(path); // concatenate
         // we dont care about the order so replaced by:
@@ -277,7 +250,7 @@ void SimplifyThePreviousMap(
     a_previous_map.open(filename.c_str());
     a_previous_map << " key " << " value " << std::endl;
 
-    std::map<vertex_t, vertex_t>::iterator prev;
+    spp::sparse_hash_map<vertex_t, vertex_t>::iterator prev;
     for ( prev=previous.begin() ; prev != previous.end(); prev++ )
     {
         vertex_t vertex = prev->first;
@@ -299,7 +272,7 @@ void SimplifyThePreviousMap(
     a_min_distance.open(filename2.c_str());
     a_min_distance << " key " << " value " << std::endl;
 
-    std::map<vertex_t, weight_t>::iterator dis;
+    spp::sparse_hash_map<vertex_t, weight_t>::iterator dis;
     for ( dis=min_distance.begin() ; dis != min_distance.end(); dis++ )
     {
         vertex_t vertex = dis->first;
@@ -962,6 +935,7 @@ bool fill_from_vessels_specifications (istream& in,
                 calendar.workEndHour = boost::lexical_cast<int>(fields[18]);
             }
 
+
             names.push_back(fields[0]);
             speeds.push_back(boost::lexical_cast<double>(fields[1].c_str()));
             fuelcons.push_back(boost::lexical_cast<double>(fields[2].c_str()));
@@ -1082,8 +1056,8 @@ bool fill_from_ships_specifications (istream& in,
 
 
 /**
-fill in the vessel attributes
-@param the vessel specification file, ...
+fill in the firms attributes
+@param the firm specification file, ...
 */
 bool fill_from_firms_specifications (istream& in,
                                      vector<int> & firm_ids,
@@ -1128,6 +1102,208 @@ bool fill_from_firms_specifications (istream& in,
 }
 
 
+/**
+fill in the fishfarms attributes
+@param the fishfarm specification file, ...
+*/
+bool fill_from_fishfarms_specifications (istream& in,
+                                     vector<int> & fishfarms_ids,
+                                     vector<string> & fishfarms_names,
+                                     vector<int> & idx_nodes,
+                                     vector<int> & is_actives,
+                                     vector<double> & sizes,
+                                     vector<double> & longs,
+                                     vector<double> & lats,
+                                     vector<double>& mean_SSTs,
+                                     vector<double>& mean_salinities,
+                                     vector<double>& mean_windspeeds,
+                                     vector<double>& mean_currentspeeds,
+                                     vector<double>& max_depths,
+                                     vector<double>& diss_O2_mg_per_ls,
+                                     vector<double>& Linf_mms,
+                                     vector<double>& K_ys,
+                                     vector<double>& t0_ys,
+                                     vector<double>& fulton_condition_factors,
+                                     vector<string>& meanw_growth_model_types,
+                                     vector<int>&    start_day_growings,
+                                     vector<int>&    end_day_harvests,
+                                     vector<int>&    nbyears_for_growths,
+                                     vector<int>&    nb_days_fallowing_periods,
+                                     vector<int>&    nb_fish_at_starts,
+                                     vector<double>& meanw_at_starts,
+                                     vector<double>& price_per_kg_at_starts,
+                                     vector<double>& target_meanw_at_harvests,
+                                     vector<int>& nb_fish_at_harvests,
+                                     vector<double>& meanw_at_harvests,
+                                     vector<double>& prop_harvest_kg_solds,
+                                     vector<double>& kg_eggs_per_kgs,
+                                     vector<double>& price_eggs_per_kgs,
+                                     vector<double>& N_in_fish_kg_3pers,
+                                     vector<double>& P_in_fish_kg_0_5pers,
+                                     vector<string>& feed_types,
+                                     vector<double>& feed_price_per_kgs,
+                                     vector<double>& total_feed_kgs,
+                                     vector<double>& prop_N_in_feeds,
+                                     vector<double>& prop_P_in_feeds,
+                                     vector<double>& total_feed_N_kgs,
+                                     vector<double>& total_feed_P_kgs,
+                                     vector<string>& feed_type_vets,
+                                     vector<double>& feed_vet_price_per_kgs,
+                                     vector<double>& total_feed_vet_kgs,
+                                     vector<double>& prop_N_in_feed_vets,
+                                     vector<double>& prop_P_in_feed_vets,
+                                     vector<double>& total_feed_vet_N_kgs,
+                                     vector<double>& total_feed_vet_P_kgs,
+                                     vector<double>& annual_discharge_N_kgs,
+                                     vector<double>& annual_discharge_P_kgs,
+                                     vector<double>& annual_discharge_C_kgs,
+                                     vector<double>& annual_discharge_heavymetals_kgs,
+                                     vector<double>& annual_discharge_medecine_kgs,
+                                     vector<double>& net_harvest_kg_per_sqkm_ys,
+                                     vector<double>& market_price_sold_fishs,
+                                     vector<double>& operating_cost_per_days,
+                                     vector<double>& annual_profits
+                                         )
+{
+    try {
+        std::string line;
+        while (!in.eof()) {
+            getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            vector<string> fields;
+
+            boost::split(fields, line, boost::is_any_of("|"));
+            if (fields.size() < 5)
+                return false;
+
+            int id      = boost::lexical_cast<int>(fields[0]);
+            string name = fields[1];
+            double n    = boost::lexical_cast<int>(fields[54]);
+            int is_active  = boost::lexical_cast<int>(fields[55]);
+            double size = boost::lexical_cast<double>(fields[2]);
+            double lon  = boost::lexical_cast<double>(fields[3]);
+            double lat  = boost::lexical_cast<double>(fields[4]);
+            double mean_SST= boost::lexical_cast<double>(fields[5]);
+            double mean_salinity= boost::lexical_cast<double>(fields[6]);
+            double mean_windspeed= boost::lexical_cast<double>(fields[7]);
+            double mean_currentspeed= boost::lexical_cast<double>(fields[8]);
+            double max_depth= boost::lexical_cast<double>(fields[9]);
+            double diss_O2_mg_per_l= boost::lexical_cast<double>(fields[10]);
+            double Linf_mm= boost::lexical_cast<double>(fields[11]);
+            double K_y= boost::lexical_cast<double>(fields[12]);
+            double t0_y= boost::lexical_cast<double>(fields[13]);
+            double fulton_condition_factor= boost::lexical_cast<double>(fields[14]);
+            string meanw_growth_model_type= boost::lexical_cast<string>(fields[15]);
+            double start_day_growing= boost::lexical_cast<double>(fields[16]);
+            int end_day_harvest= boost::lexical_cast<int>(fields[17]);
+            int nbyears_for_growth= boost::lexical_cast<int>(fields[18]);
+            int nb_days_fallowing_period= boost::lexical_cast<int>(fields[19]);
+            int nb_fish_at_start= boost::lexical_cast<int>(fields[20]);
+            double meanw_at_start= boost::lexical_cast<double>(fields[21]);
+            double price_per_kg_at_start= boost::lexical_cast<double>(fields[22]);
+            double target_meanw_at_harvest= boost::lexical_cast<double>(fields[23]);
+            int nb_fish_at_harvest= boost::lexical_cast<int>(fields[24]);
+            double meanw_at_harvest= boost::lexical_cast<double>(fields[25]);
+            double prop_harvest_kg_sold= boost::lexical_cast<double>(fields[26]);
+            double kg_eggs_per_kg= boost::lexical_cast<double>(fields[27]);
+            double price_eggs_per_kg= boost::lexical_cast<double>(fields[28]);
+            double N_in_fish_kg_3per= boost::lexical_cast<double>(fields[29]);
+            double P_in_fish_kg_0_5per= boost::lexical_cast<double>(fields[30]);
+            string feed_type= boost::lexical_cast<string>(fields[31]);
+            double feed_price_per_kg= boost::lexical_cast<double>(fields[32]);
+            double total_feed_kg= boost::lexical_cast<double>(fields[33]);
+            double prop_N_in_feed= boost::lexical_cast<double>(fields[34]);
+            double prop_P_in_feed= boost::lexical_cast<double>(fields[35]);
+            double total_feed_N_kg= boost::lexical_cast<double>(fields[36]);
+            double total_feed_P_kg= boost::lexical_cast<double>(fields[37]);
+            string feed_type_vet= boost::lexical_cast<string>(fields[38]);
+            double feed_vet_price_per_kg= boost::lexical_cast<double>(fields[39]);
+            double total_feed_vet_kg= boost::lexical_cast<double>(fields[40]);
+            double prop_N_in_feed_vet= boost::lexical_cast<double>(fields[41]);
+            double prop_P_in_feed_vet= boost::lexical_cast<double>(fields[42]);
+            double total_feed_vet_N_kg= boost::lexical_cast<double>(fields[43]);
+            double total_feed_vet_P_kg= boost::lexical_cast<double>(fields[44]);
+            double annual_discharge_N_kg= boost::lexical_cast<double>(fields[45]);
+            double annual_discharge_P_kg= boost::lexical_cast<double>(fields[46]);
+            double annual_discharge_C_kg= boost::lexical_cast<double>(fields[47]);
+            double annual_discharge_heavymetals_kg= boost::lexical_cast<double>(fields[48]);
+            double annual_discharge_medecine_kg= boost::lexical_cast<double>(fields[49]);
+            double net_harvest_kg_per_sqkm_y= boost::lexical_cast<double>(fields[50]);
+            double market_price_sold_fish= boost::lexical_cast<double>(fields[51]);
+            double operating_cost_per_day= boost::lexical_cast<double>(fields[52]);
+            double annual_profit= boost::lexical_cast<double>(fields[53]);
+
+            fishfarms_ids.push_back(id);
+            fishfarms_names.push_back(name);
+            idx_nodes.push_back(n);
+            is_actives.push_back(is_active);
+            sizes.push_back(size);
+            longs.push_back(lon);
+            lats.push_back(lat);
+            mean_SSTs.push_back(mean_SST);
+            mean_salinities.push_back(mean_salinity);
+            mean_windspeeds.push_back(mean_windspeed);
+            mean_currentspeeds.push_back(mean_currentspeed);
+            max_depths.push_back(max_depth);
+            diss_O2_mg_per_ls.push_back(diss_O2_mg_per_l);
+            Linf_mms.push_back(Linf_mm);
+            K_ys.push_back(K_y);
+            t0_ys.push_back(t0_y);
+            fulton_condition_factors.push_back(fulton_condition_factor);
+            meanw_growth_model_types.push_back(meanw_growth_model_type);
+            start_day_growings.push_back(start_day_growing);
+            end_day_harvests.push_back(end_day_harvest);
+            nbyears_for_growths.push_back(nbyears_for_growth);
+            nb_days_fallowing_periods.push_back(nb_days_fallowing_period);
+            nb_fish_at_starts.push_back(nb_fish_at_start);
+            meanw_at_starts.push_back(meanw_at_start);
+            price_per_kg_at_starts.push_back(price_per_kg_at_start);
+            target_meanw_at_harvests.push_back(target_meanw_at_harvest);
+            nb_fish_at_harvests.push_back(nb_fish_at_harvest);
+            meanw_at_harvests.push_back(meanw_at_harvest);
+            prop_harvest_kg_solds.push_back(prop_harvest_kg_sold);
+            kg_eggs_per_kgs.push_back(kg_eggs_per_kg);
+            price_eggs_per_kgs.push_back(price_eggs_per_kg);
+            N_in_fish_kg_3pers.push_back(N_in_fish_kg_3per);
+            P_in_fish_kg_0_5pers.push_back(P_in_fish_kg_0_5per);
+            feed_types.push_back(feed_type);
+            feed_price_per_kgs.push_back(feed_price_per_kg);
+            total_feed_kgs.push_back(total_feed_kg);
+            prop_N_in_feeds.push_back(prop_N_in_feed);
+            prop_P_in_feeds.push_back(prop_P_in_feed);
+            total_feed_N_kgs.push_back(total_feed_N_kg);
+            total_feed_P_kgs.push_back(total_feed_P_kg);
+            feed_type_vets.push_back(feed_type_vet);
+            feed_vet_price_per_kgs.push_back(feed_vet_price_per_kg);
+            total_feed_vet_kgs.push_back(total_feed_vet_kg);
+            prop_N_in_feed_vets.push_back(prop_N_in_feed_vet);
+            prop_P_in_feed_vets.push_back(prop_P_in_feed_vet);
+            total_feed_vet_N_kgs.push_back(total_feed_vet_N_kg);
+            total_feed_vet_P_kgs.push_back(total_feed_vet_P_kg);
+            annual_discharge_N_kgs.push_back(annual_discharge_N_kg);
+            annual_discharge_P_kgs.push_back(annual_discharge_P_kg);
+            annual_discharge_C_kgs.push_back(annual_discharge_C_kg);
+            annual_discharge_heavymetals_kgs.push_back(annual_discharge_heavymetals_kg);
+            annual_discharge_medecine_kgs.push_back(annual_discharge_medecine_kg);
+            net_harvest_kg_per_sqkm_ys.push_back(net_harvest_kg_per_sqkm_y);
+            market_price_sold_fishs.push_back(market_price_sold_fish);
+            operating_cost_per_days.push_back(operating_cost_per_day);
+            annual_profits.push_back(annual_profit);
+
+            }
+    } catch (boost::bad_lexical_cast &) {
+        return false;
+    }
+
+    dout(cout  << "read and set up the fishfarms features of each farm...OK" << endl << flush);
+
+    return true;
+}
+
 
 
 /**
@@ -1155,7 +1331,7 @@ bool fill_from_avai_nodes_with_pop(istream& in, map<int, double>& avai)
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& avai)
+bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<types::NodeId, double>& avai)
 {
 
     string line;
@@ -1165,7 +1341,7 @@ bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& a
         in >> key;
         double val;
         in >> val;
-        avai.insert(make_pair(key,val));
+        avai.insert(make_pair(types::NodeId(key),val));
     }
     dout(cout  << "read the availability at szgroup " << endl << flush);
     return true;
@@ -1175,7 +1351,7 @@ bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<int, double>& a
 fill in the avai attributes into a multimap
 @param the avai specification file, ...
 */
-bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& coeffs)
+bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<types::NodeId, double>& coeffs)
 {
 
     string line;
@@ -1185,7 +1361,7 @@ bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& 
         in >> key;
         double val;
         in >> val;
-        coeffs.insert(make_pair(key,val));
+        coeffs.insert(make_pair(types::NodeId(key),val));
     }
     dout(cout  << "read the coeff of diffusion at szgroup " << endl << flush);
     return true;
@@ -1197,7 +1373,7 @@ bool fill_field_of_coeff_diffusion_this_pop(istream& in, multimap<int, double>& 
 fill in the oth_land attributes into a multimap
 @param the oth_land specification file, ...
 */
-bool fill_from_oth_land(istream& in, map<int, double>& oth_land)
+bool fill_from_oth_land(istream& in, map<types::NodeId, double>& oth_land)
 {
 
     string line;
@@ -1207,7 +1383,7 @@ bool fill_from_oth_land(istream& in, map<int, double>& oth_land)
         in >> key;
         double val;
         in >> val;
-        oth_land.insert(make_pair(key,val));
+        oth_land.insert(make_pair(types::NodeId(key),val));
     }
     dout(cout  << "read oth land " << endl << flush);
     return true;
@@ -1594,35 +1770,46 @@ void set_entries_d (multimap<int, double>& infos, int itr, vector<double> newval
 }
 
 
-vector<double> compute_distance_fgrounds(const vector <int>& idx_path_shop,
-                                         const deque<map<vertex_t, vertex_t> >& path_shop,
-                                         const deque<map<vertex_t, weight_t> >& min_distance_shop,
-                                         int from,
-                                         vector<int> grounds)
+vector<double> compute_distance_fgrounds(const vector<types::NodeId> &relevant_nodes,
+                                         const std::vector<PathShop> &pathshops,
+                                         types::NodeId from,
+                                         vector<types::NodeId> grounds)
 {
-    vector<int>::const_iterator it = find (idx_path_shop.begin(), idx_path_shop.end(), from);
-    // tricky!
-    int idx = it - idx_path_shop.begin();
+    outc (cout  << "look at the distances " << endl);
 
-    map<vertex_t, vertex_t> previous = path_shop.at(idx);
-    //std::list<map<int,int> >::iterator it_p = path_shop.begin();
-    // advance(it_p, idx-1);
-    //map<vertex_t, vertex_t> previous= *it_p;
+    vector<types::NodeId>::const_iterator it = find (relevant_nodes.begin(), relevant_nodes.end(), from);
+    int idx = it - relevant_nodes.begin();
 
-    map<vertex_t, weight_t> min_distance = min_distance_shop.at(idx);
-    // std::list<map<int,int> >::iterator it_d = min_distance_shop.begin();
-    // advance(it_d, idx-1);
-    // map<vertex_t, weight_t> min_distance= *it_d;
+    outc (cout  << "look at the distances from node " <<   from.toIndex() << endl);
 
     vector <double> distance_fgrounds;
     for (unsigned int i=0; i<grounds.size(); i++)
-    {
-        vertex_t vx = grounds.at(i);
-        distance_fgrounds.push_back(min_distance[vx]);
-        dout(cout  << "distance to fishing ground " << min_distance[vx] << endl);
+      {
+      double dist=1.0;
+      auto vertex = grounds.at(i);
+      distance_fgrounds.push_back(dist);
+
+      while (true) {
+        try {
+            auto node = pathshops.at(idx).getNode(vertex);
+            vertex = node.getPreviousNode();
+            dist   = node.getWeight();
+            if (!types::isIdInvalid(vertex))
+                distance_fgrounds.at(i)+=dist;
+            else
+                break;
+        } catch (PathShop::NodeNotFoundException &) {
+            // end of path
+            break;
+        }
+      }
     }
-    return(distance_fgrounds);
+
+    outc(cout  << "look at the distances from node " << from.toIndex()  <<"  ...OK "<< endl);
+
+ return(distance_fgrounds);
 }
+
 
 
 vector<double> scale_a_vector_to_1(vector<double> a_vector)

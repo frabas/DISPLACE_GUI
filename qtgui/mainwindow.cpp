@@ -79,6 +79,8 @@
 
 #include <R/rconsole.h>
 
+#include <idtypeshelpers.h>
+
 #include <QMapControl/QMapControl.h>
 #include <QMapControl/ImageManager.h>
 
@@ -114,6 +116,16 @@ const int MainWindow::playTimerDefault = 20;
 const int MainWindow::playTimerRates[] = {
     50, 40, 25, 20, 15, 10, 5, 2, 1
 };
+
+namespace types { namespace helpers {
+template <typename IDX, typename C>
+QList<IDX> toIdQList(const QList<C> &c) {
+    QList<IDX> l;
+    for (auto v : c)
+        l.push_back(IDX(v));
+    return l;
+}
+} } // Ns
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -167,6 +179,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mMemoryWatchTimer.start(2500);
 
+    cout << "Connect gui to simulator" << endl;
     mSimulation = new Simulator();
     mSimulation->setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
@@ -182,6 +195,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
     connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 
+    cout << "Connect gui to simulator...OK" << endl;
+
     ui->cmdProfileEnable->setChecked(false);
     ui->profilingOutput->setVisible(false);
 
@@ -192,6 +207,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 
+    cout << "Connect map widget " << endl;
     map = ui->mapWidget;
     mMapController = new MapObjectsController(map);
     connect (mMapController, SIGNAL(edgeSelectionChanged(int)), this, SLOT(edgeSelectionsChanged(int)));
@@ -204,24 +220,45 @@ MainWindow::MainWindow(QWidget *parent) :
 
     map->setBackgroundColour(Qt::white);
 
+    cout << "Connect map widget...OK " << endl;
+
     QPixmap pixmap;
     pixmap.fill( Qt::white );
     qmapcontrol::ImageManager::get().setLoadingPixmap(pixmap);
 
     /* Stats windows setup */
+    cout << "Connect Stats windows " << endl;
 
     mStatsController = new StatsController(this);
+    cout << "for Pop " << endl;
     mStatsController->setPopulationPlot(ui->plotPopulations);
+    cout << "for Pop...ok " << endl;
+    cout << "for Harbour " << endl;
     mStatsController->setHarboursPlot(ui->plotHarbours);
+    cout << "for Harbour...ok " << endl;
+    cout << "for Nations " << endl;
     mStatsController->setNationsPlot(ui->plotNations);
+    cout << "for Nations...ok " << endl;
+    cout << "for Metiers " << endl;
     mStatsController->setMetiersPlot(ui->plotMetiers);
+    cout << "for Metiers...ok " << endl;
+    cout << "for Benthos " << endl;
     mStatsController->setBenthosPlot(ui->plotBenthos);
+    cout << "for Benthos...ok " << endl;
+    cout << "for Fishfarms " << endl;
+    mStatsController->setFishfarmsPlot(ui->plotFishfarms);
+    cout << "for Fishfarms...ok " << endl;
+
+    cout << "Connect Stats windows...OK " << endl;
 
     /* Tree model setup */
+    cout << "Tree model setup " << endl;
     treemodel = new ObjectTreeModel(mMapController, mStatsController);
     ui->treeView->setModel(treemodel);
     ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect (ui->treeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(treeViewContextMenuRequested(QPoint)));
+
+    cout << "Tree model setup...OK " << endl;
 
     ui->actionGraph->setChecked(false);
     on_actionGraph_toggled(false);  /* Force action function execution */
@@ -392,6 +429,7 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
     cout << "is simulator process state changed?" <<  endl;
 
     if (models[0] != 0) {
+        cout << "is there any model?" <<  endl;
         ui->cmdStart->setEnabled(newstate == QProcess::NotRunning);
         ui->cmdStop->setEnabled(newstate == QProcess::Running);
         ui->cmdSetup->setEnabled(newstate == QProcess::NotRunning);
@@ -401,12 +439,15 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
 
         if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
             models[0]->simulationEnded();
+            cout << "there is a model..." <<  endl;
         }
     } else {
+        cout << "there is no model yet..." <<  endl;
         ui->cmdStart->setEnabled(false);
         ui->cmdStop->setEnabled(false);
         ui->cmdSetup->setEnabled(false);
         simulatorProcessStepChanged(-1);
+        cout << "and..." <<  endl;
     }
 }
 
@@ -607,8 +648,8 @@ void MainWindow::editorAddEdge(int from, int to)
 
     qDebug() << "EDGE" << from << to << d;
 
-    int id1 = currentModel->addEdge(from, to, d / 1000.0);
-    int id2 = currentModel->addEdge(to, from, d / 1000.0);
+    int id1 = currentModel->addEdge(types::NodeId(from), types::NodeId(to), d / 1000.0);
+    int id2 = currentModel->addEdge(types::NodeId(to), types::NodeId(from), d / 1000.0);
 
     mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[from]->getAdiacencyByIdx(id1), true);
     mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[to]->getAdiacencyByIdx(id2), true);
@@ -1188,7 +1229,7 @@ QProcess *MainWindow::prepareAppExecutableStart(QString exename)
     ed->setWorkingDirectory(qApp->applicationDirPath());
     ed->setProgram(app);
 
-    connect (ed, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), [this, ed, app](QProcess::ProcessError err) {
+    connect (ed, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), [this, ed, app](QProcess::ProcessError /*err*/) {
        QMessageBox::warning(this, tr("Failed to start"),
                             QString(tr("The process %1 failed to start")).arg(app));
     });
@@ -1707,9 +1748,9 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString graphpath = savedlg.getGraphFilename();
         QString coordspath = savedlg.getCoordsFilename();
         QString landpath = savedlg.getLandscapeFilename();
-        QString windpath = savedlg.getLandscapeFilename();
-        QString sstpath = savedlg.getLandscapeFilename();
-        QString salinitypath = savedlg.getLandscapeFilename();
+        QString windpath = savedlg.getWindFilename();
+        QString sstpath = savedlg.getSSTFilename();
+        QString salinitypath = savedlg.getSalinityFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -2379,9 +2420,9 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString graphpath = dlg.getGraphFilename();
         QString coordspath = dlg.getCoordsFilename();
         QString landpath = dlg.getLandscapeFilename();
-        QString windpath = dlg.getLandscapeFilename();
-        QString sstpath = dlg.getLandscapeFilename();
-        QString salinitypath = dlg.getLandscapeFilename();
+        QString windpath = dlg.getWindFilename();
+        QString sstpath = dlg.getSSTFilename();
+        QString salinitypath = dlg.getSalinityFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2431,7 +2472,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
     if (dlg.exec() == QDialog::Accepted) {
         if (dlg.isRemoveLinksSet()) {
             foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
-                currentModel->getNodesList()[harbour->mHarbour->get_idx_node()]->removeAllAdiacencies();
+                currentModel->getNodesList()[harbour->mHarbour->get_idx_node().toIndex()]->removeAllAdiacencies();
             }
         }
 
@@ -2442,7 +2483,7 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
 #endif
 
         foreach (std::shared_ptr<HarbourData> harbour, currentModel->getHarbourList()) {
-            int harbid = harbour->mHarbour->get_idx_node();
+            auto harbid = harbour->mHarbour->get_idx_node();
             QPointF pos(harbour->mHarbour->get_x(), harbour->mHarbour->get_y());
 
             double distance = dlg.getMaxDinstance();
@@ -2472,11 +2513,11 @@ void MainWindow::on_actionLink_Harbours_to_Graph_triggered()
                     else
                         n = min(snodes.count(), dlg.getMaxLinks());
                     for (int i = 0; i < n; ++i) {
-                        int nodeid = snodes[i].node->get_idx_node();
+                        auto nodeid = snodes[i].node->get_idx_node();
                         int he_id = currentModel->addEdge(harbid, nodeid, snodes[i].weight / 1000.0);
                         int te_id = currentModel->addEdge(nodeid, harbid, snodes[i].weight / 1000.0);
-                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid]->getAdiacencyByIdx(he_id), true);
-                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid]->getAdiacencyByIdx(te_id), true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[harbid.toIndex()]->getAdiacencyByIdx(he_id), true);
+                        mMapController->addEdge(currentModelIdx, currentModel->getNodesList()[nodeid.toIndex()]->getAdiacencyByIdx(te_id), true);
                     }
                 }
             } while (snodes.size() == 0 && dlg.isAvoidLonelyHarboursSet());
@@ -2766,7 +2807,7 @@ void MainWindow::on_actionCheck_for_isolated_subgraphs_triggered()
         QList<int> isn = checker.getIsolatedNodes();
 
         mMapController->clearNodeSelection(currentModelIdx);
-        mMapController->selectNodes(currentModelIdx, isn);
+        mMapController->selectNodes(currentModelIdx, types::helpers::toIdQList<types::NodeId>(isn));
 
         std::shared_ptr<NodeData> nd = currentModel->getNodesList()[isn[0]];
         map->setMapFocusPoint(qmapcontrol::PointWorldCoord(nd->get_x(), nd->get_y()));
@@ -2957,3 +2998,9 @@ void MainWindow::on_benthosStatSelector_currentIndexChanged(int index)
 {
     mStatsController->setBenthosStat(static_cast<displace::plot::BenthosStat>(index));
 }
+
+void MainWindow::on_fishfarmsStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setFishfarmsStat(static_cast<displace::plot::FishfarmsStat>(index));
+}
+

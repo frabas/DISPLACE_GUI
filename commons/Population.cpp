@@ -41,10 +41,10 @@ Population::Population(int a_name,
                        vector<double> init_M_at_szgroup,
                        const vector<double> &init_proprecru_at_szgroup,
                        const vector<double> &_param_sr,
-                       const multimap<int, int> &lst_idx_nodes_per_pop,
-                       const multimap<int, double> &_full_spatial_availability,
-                       const multimap<int, double> &field_of_coeff_diffusion_this_pop,
-                       const map<int, double> &_oth_land,
+                       const multimap<int, types::NodeId> &lst_idx_nodes_per_pop,
+                       const multimap<types::NodeId, double> &_full_spatial_availability,
+                       const multimap<types::NodeId, double> &field_of_coeff_diffusion_this_pop,
+                       const map<types::NodeId, double> &_oth_land,
                        const multimap<int, double> &overall_migration_fluxes,
                        const map<string, double> &relative_stability_key,
                        const vector<vector<double> > &_percent_szgroup_per_age_matrix,
@@ -79,7 +79,8 @@ Population::Population(int a_name,
 	landings_so_far= 0.0;
 
 	// init...
-	for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
+    dout(cout << "init..." << name << endl);
+    for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
 	{
 		tot_N_at_szgroup.push_back(0);
         true_tot_N_at_szgroup.push_back(0);
@@ -105,8 +106,9 @@ Population::Population(int a_name,
 		tot_F_at_age_last_quarter.push_back(0);
 	}
 
-	// for catch equation
-								 // for the catch equation
+    // for catch equation
+    dout(cout << "loading parameters for the catch equation" << name << endl);
+                                 // for the catch equation
 	this->set_selected_szgroups(_selected_szgroups);
 
 	// ...then fill in with avai0_beta
@@ -129,6 +131,7 @@ Population::Population(int a_name,
 								 // set the pop-specific beta from glm for szgroup7
 	this->set_avai7_beta(_avai7_beta);
 
+    dout(cout << "calib..." << name << endl);
     // CALIB: if increased then improve the catch rate of the simulated vessels....
     // look at the config.dat for calibration values
 
@@ -136,6 +139,7 @@ Population::Population(int a_name,
 	this->set_cpue_multiplier(1*a_calib_cpue_multiplier);
 
 	// ...then fill in with start pop
+    dout(cout << "set the overall N_at_szgroup..." << name << endl);
                                  // set the overall N_at_szgroup
 	this->set_tot_N_at_szgroup(init_tot_N_at_szgroup);
 
@@ -145,6 +149,7 @@ Population::Population(int a_name,
 
     // ...then fill in with start info
                                  // set the migrant prop
+    dout(cout << "set the prop_migrants..." << name << endl);
     this->set_prop_migrants_in_tot_N_at_szgroup(init_prop_migrants_in_tot_N_at_szgroup);
 
     // ...then fill in with start pop
@@ -163,6 +168,7 @@ Population::Population(int a_name,
 	// CALIB: if decreased then smaller fish then higher F because numbers of fish for a given TAC increased....
     // look at the config.dat for calibration values
 
+    dout(cout << "calib the weight at szgroup..." << name << endl);
     for(unsigned int i=0; i < init_weight_at_szgroup.size(); i++)
 	{
 		init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
@@ -170,16 +176,21 @@ Population::Population(int a_name,
 
 	this->set_weight_at_szgroup(init_weight_at_szgroup);
 
-	// ...then fill in with start pop
-	this->set_comcat_at_szgroup(init_comcat_at_szgroup);
+    dout(cout << "fill in with start pop..." << name << endl);
+    // ...then fill in with start pop
+    dout(cout << "for comcat..." << name << endl);
+    this->set_comcat_at_szgroup(init_comcat_at_szgroup);
 
 	// ...then fill in with start pop
-	this->set_maturity_at_szgroup(init_maturity_at_szgroup);
+    dout(cout << "for maturity..." << name << endl);
+    this->set_maturity_at_szgroup(init_maturity_at_szgroup);
 
 	// ...then fill in with start pop
-	this->set_fecundity_at_szgroup(init_fecundity_at_szgroup);
+    dout(cout << "for fecundity..." << name << endl);
+    this->set_fecundity_at_szgroup(init_fecundity_at_szgroup);
 
 	// ...then fill in with start pop
+    dout(cout << "for natural mortality..." << name << endl);
     for(unsigned int i=0; i < init_M_at_szgroup.size(); i++)
 	{
 		init_M_at_szgroup.at(i)=init_M_at_szgroup.at(i);
@@ -188,7 +199,8 @@ Population::Population(int a_name,
 	this->set_M_at_szgroup(init_M_at_szgroup);
 
 	// ...then fill in with start pop
-	this->set_proprecru_at_szgroup(init_proprecru_at_szgroup);
+    dout(cout << "for prop recru..." << name << endl);
+    this->set_proprecru_at_szgroup(init_proprecru_at_szgroup);
 
 	// fill in the list of nodes specific to this particular pop
 	/*   vector<Node* > p_spe_nodes;
@@ -204,12 +216,14 @@ Population::Population(int a_name,
 		   list_nodes.push_back(p_spe_nodes[i]);
 	*/
 	// REPLACE BY: (TO ONLY USE THE NODES LISTED IN THE AVAI FILE...)
-	vector<Node* > p_spe_nodes;
-	for(multimap<int, double>::iterator iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
+    dout(cout << "set up the list of nodes for this pop" << name << endl);
+
+    vector<Node* > p_spe_nodes;
+    for(auto iter=full_spatial_availability.begin(); iter != full_spatial_availability.end();
 		iter = full_spatial_availability.upper_bound( iter->first ) )
 	{
-		p_spe_nodes.push_back (nodes[  iter->first  ]);
-		nodes[ iter->first ]->set_pop_names_on_node(a_name);;
+        p_spe_nodes.push_back (nodes[  iter->first.toIndex()  ]);
+        nodes[ iter->first.toIndex() ]->set_pop_names_on_node(a_name);;
 
 	}
     for(unsigned int i=0; i<p_spe_nodes.size(); i++)
@@ -221,10 +235,13 @@ Population::Population(int a_name,
 	{
 								 // caution: here is tot N on the node! need to call distribute_N()
 		list_nodes.at(i)->set_Ns_pops_at_szgroup(a_name, tot_N_at_szgroup);
-        dout(cout  << list_nodes.at(i)->get_idx_node() << " ");
+        dout(cout  << list_nodes.at(i)->get_idx_node().toIndex() << " ");
 	}
 
     dout(cout << endl);
+
+
+    dout(cout << "field_of_coeff_diffusion_this_pop " << name << endl);
 
     // for diffusion of N per szgroup
     this->set_field_of_coeff_diffusion_this_pop(field_of_coeff_diffusion_this_pop);
@@ -242,7 +259,9 @@ Population::Population(int a_name,
 
 	}
 
-	// init tac
+    dout(cout << "init tac " << name << endl);
+
+    // init tac
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
 	oth_land_multiplier=1.0;
 
@@ -475,13 +494,13 @@ vector< vector <double> > Population::get_percent_age_per_szgroup_matrix() const
 }
 
 
-multimap<int,double>  Population::get_full_spatial_availability() const
+multimap<types::NodeId,double>  Population::get_full_spatial_availability() const
 {
 	return(full_spatial_availability);
 }
 
 
-multimap<int,double>  Population::get_field_of_coeff_diffusion_this_pop() const
+multimap<types::NodeId,double>  Population::get_field_of_coeff_diffusion_this_pop() const
 {
     return(field_of_coeff_diffusion_this_pop);
 }
@@ -493,7 +512,7 @@ multimap<int,double>  Population::get_overall_migration_fluxes() const
 
 
 
-map<int,double>  Population::get_oth_land() const
+map<types::NodeId,double>  Population::get_oth_land() const
 {
 	return(oth_land);
 }
@@ -760,12 +779,12 @@ void Population::set_param_sr(const vector<double>& _param_sr)
 }
 
 
-void Population::set_full_spatial_availability(multimap<int,double> _full_spatial_availability)
+void Population::set_full_spatial_availability(multimap<types::NodeId,double> _full_spatial_availability)
 {
 	full_spatial_availability= _full_spatial_availability;
 }
 
-void Population::set_field_of_coeff_diffusion_this_pop(multimap<int,double> _field_of_coeff_diffusion_this_pop)
+void Population::set_field_of_coeff_diffusion_this_pop(multimap<types::NodeId,double> _field_of_coeff_diffusion_this_pop)
 {
     field_of_coeff_diffusion_this_pop= _field_of_coeff_diffusion_this_pop;
 }
@@ -778,7 +797,7 @@ void Population::set_overall_migration_fluxes(multimap<int,double> _overall_migr
 }
 
 
-void Population::set_oth_land(map<int,double> _oth_land)
+void Population::set_oth_land(map<types::NodeId,double> _oth_land)
 {
 	oth_land= _oth_land;
 }
@@ -811,13 +830,13 @@ void Population::distribute_N()
 	{
 
 		// get a node
-		int idx_node = list_nodes[idx]->get_idx_node();
+        auto idx_node = list_nodes[idx]->get_idx_node();
 
 		// get avai for this node
 		vector<double> avai_this_node;
-		multimap<int,double>::iterator lower = full_spatial_availability.lower_bound(idx_node);
-		multimap<int,double>::iterator upper = full_spatial_availability.upper_bound(idx_node);
-		for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
+        auto lower = full_spatial_availability.lower_bound(idx_node);
+        auto upper = full_spatial_availability.upper_bound(idx_node);
+        for (auto pos=lower; pos != upper; pos++)
 			avai_this_node.push_back(pos->second);
 
 		// check avai
@@ -912,7 +931,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
    cout << "start diffusion for this pop...." << endl;
 
     vector<Node*> list_of_nodes = this->get_list_nodes();
-    vector<int> list_of_nodes_idx;
+    vector<types::NodeId> list_of_nodes_idx;
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
@@ -920,14 +939,14 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
     random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
-        int idx_node=list_of_nodes.at(n)->get_idx_node();
+        auto idx_node=list_of_nodes.at(n)->get_idx_node();
 
         // get coeff of diffusion per szgroup for this node
-        multimap<int,double> field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
+        auto field_of_coeff_diffusion_this_pop = this->get_field_of_coeff_diffusion_this_pop();
         vector<double> coeff;
-        multimap<int,double>::iterator lower = field_of_coeff_diffusion_this_pop.lower_bound(idx_node);
-        multimap<int,double>::iterator upper = field_of_coeff_diffusion_this_pop.upper_bound(idx_node);
-        for (multimap<int, double>::iterator pos=lower; pos != upper; pos++)
+        auto lower = field_of_coeff_diffusion_this_pop.lower_bound(idx_node);
+        auto upper = field_of_coeff_diffusion_this_pop.upper_bound(idx_node);
+        for (auto pos=lower; pos != upper; pos++)
             coeff.push_back(pos->second);
 
 
@@ -936,23 +955,24 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
 
         // get the list of neighbouring nodes
-        vector<int> neighbour_nodes;
-        vertex_t u = idx_node;
+        vector<types::NodeId> neighbour_nodes;
+        vertex_t u = idx_node.toIndex();
         // Visit each edge exiting u
         for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
              edge_iter != adjacency_map[u].end();
              edge_iter++)
         {
-            neighbour_nodes.push_back(edge_iter->target);
+            neighbour_nodes.push_back(types::NodeId(edge_iter->target));
         }
-        remove_dups(neighbour_nodes);
+
+        std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
 
         // check if neighbouring nodes belong to the spatial extend of this pop
         // (no diffusion outside....caution: possible border effects because of this assumption e.g. accumulation at the border)
         vector<int> neighbour_nodes_on_spatial_extent;
         for (int nei=0; nei<neighbour_nodes.size(); ++nei)
            {
-           std::vector<int>::iterator it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
+           auto it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
            if(it != list_of_nodes_idx.end())
              {
              neighbour_nodes_on_spatial_extent.push_back(nei);

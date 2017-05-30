@@ -20,6 +20,9 @@
 
 #include"readdata.h"
 #include <helpers.h>
+#include <idtypes.h>
+#include <idtypeshelpers.h>
+
 #include <utils/LineNumberReader.h>
 #include <boost/lexical_cast.hpp>
 #include <utils/vectorsdata.h>
@@ -52,15 +55,15 @@ read the settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
 bool read_config_file(string folder_name_parameterization,
-    string inputfolder,
-    int& nbpops,
-    int& nbbenthospops,
-    vector<int>& implicit_pops,
-    vector<int>& implicit_pops_level2,
-    vector<double>& calib_oth_landings,
-    vector<double>& calib_w,
-    vector<double>& calib_cpue,
-    vector<int> &interesting_harbours)
+                      string inputfolder,
+                      int& nbpops,
+                      int& nbbenthospops,
+                      vector<int>& implicit_pops,
+                      vector<int>& implicit_pops_level2,
+                      vector<double>& calib_oth_landings,
+                      vector<double>& calib_w,
+                      vector<double>& calib_cpue,
+                      vector<types::NodeId> &interesting_harbours)
 {
 
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/config.dat";
@@ -72,14 +75,14 @@ bool read_config_file(string folder_name_parameterization,
 }
 
 bool read_config_file(std::istream &stream,
-    int& nbpops,
-    int& nbbenthospops,
-    vector<int>& implicit_pops,
-    vector<int>& implicit_pops_level2,
-    vector<double>& calib_oth_landings,
-    vector<double>& calib_w,
-    vector<double>& calib_cpue,
-    vector<int> &interesting_harbours)
+                      int& nbpops,
+                      int& nbbenthospops,
+                      vector<int>& implicit_pops,
+                      vector<int>& implicit_pops_level2,
+                      vector<double>& calib_oth_landings,
+                      vector<double>& calib_w,
+                      vector<double>& calib_cpue,
+                      vector<types::NodeId> &interesting_harbours)
 {
     helpers::LineNumberReader reader;
     static const helpers::LineNumberReader::Specifications specs {
@@ -99,7 +102,7 @@ bool read_config_file(std::istream &stream,
         calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
         calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
         calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
-        interesting_harbours = displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " ");
+        interesting_harbours = types::helpers::toIdVector<types::NodeId>(displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " "));
     } catch (displace::formats::FormatException &x) {
         cerr << x.what() << endl;
         return false;
@@ -115,9 +118,9 @@ read the scenario specific settings for the siums given the case study
 @param the vectors to be filled in, ...
 */
 bool read_scenario_config_file (string folder_name_parameterization,
-                               string inputfolder,
-                               string namefolderoutput,
-                               displace::commons::Scenario &scenario)
+                                string inputfolder,
+                                string namefolderoutput,
+                                displace::commons::Scenario &scenario)
 {
     string filename = inputfolder+"/simusspe_"+folder_name_parameterization+"/"+namefolderoutput+".dat";
     std::cout << "Reading Scenario file from " << filename << std::endl;
@@ -177,7 +180,7 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         scenario.a_graph=reader.getAs<int>("a_graph");
         scenario.nrow_coord=reader.getAs<int>("nrow_coord");
         scenario.nrow_graph=reader.getAs<int>("nrow_graph");
-        scenario.a_port=reader.getAs<int>("a_port");
+        scenario.a_port=types::NodeId(reader.getAs<int>("a_port"));
         scenario.graph_res=reader.getAs<double>("graph_res");
         scenario.is_individual_vessel_quotas= (reader.getAs<int>("is_individual_vessel_quotas") != 0);
         scenario.check_all_stocks_before_going_fishing=(reader.getAs<int>("check_all_stocks_before_going_fishing") != 0);
@@ -522,6 +525,148 @@ bool read_firms_features(vector<int>& firm_ids,
 
 
 
+
+//----------------
+bool read_fishfarms_features(vector<int>& fishfarms_ids,
+                         vector<string>& fishfarms_names,
+                         vector<int>& idx_nodes,
+                         vector<int>& is_actives,
+                         vector<double>& sizes,
+                         vector<double>& longs,
+                         vector<double>& lats,
+                         vector<double>& mean_SSTs,
+                         vector<double>& mean_salinities,
+                         vector<double>& mean_windspeeds,
+                         vector<double>& mean_currentspeeds,
+                         vector<double>& max_depths,
+                         vector<double>& diss_O2_mg_per_ls,
+                         vector<double>& Linf_mms,
+                         vector<double>& K_ys,
+                         vector<double>& t0_ys,
+                         vector<double>& fulton_condition_factors,
+                         vector<string>& meanw_growth_model_types,
+                         vector<int>&    start_day_growings,
+                         vector<int>&    end_day_harvests,
+                         vector<int>&    nbyears_for_growths,
+                         vector<int>&    nb_days_fallowing_periods,
+                         vector<int>&    nb_fish_at_starts,
+                         vector<double>& meanw_at_starts,
+                         vector<double>& price_per_kg_at_starts,
+                         vector<double>& target_meanw_at_harvests,
+                         vector<int>& nb_fish_at_harvests,
+                         vector<double>& meanw_at_harvests,
+                         vector<double>& prop_harvest_kg_solds,
+                         vector<double>& kg_eggs_per_kgs,
+                         vector<double>& price_eggs_per_kgs,
+                         vector<double>& N_in_fish_kg_3pers,
+                         vector<double>& P_in_fish_kg_0_5pers,
+                         vector<string>& feed_types,
+                         vector<double>& feed_price_per_kgs,
+                         vector<double>& total_feed_kgs,
+                         vector<double>& prop_N_in_feeds,
+                         vector<double>& prop_P_in_feeds,
+                         vector<double>& total_feed_N_kgs,
+                         vector<double>& total_feed_P_kgs,
+                         vector<string>& feed_type_vets,
+                         vector<double>& feed_vet_price_per_kgs,
+                         vector<double>& total_feed_vet_kgs,
+                         vector<double>& prop_N_in_feed_vets,
+                         vector<double>& prop_P_in_feed_vets,
+                         vector<double>& total_feed_vet_N_kgs,
+                         vector<double>& total_feed_vet_P_kgs,
+                         vector<double>& annual_discharge_N_kgs,
+                         vector<double>& annual_discharge_P_kgs,
+                         vector<double>& annual_discharge_C_kgs,
+                         vector<double>& annual_discharge_heavymetals_kgs,
+                         vector<double>& annual_discharge_medecine_kgs,
+                         vector<double>& net_harvest_kg_per_sqkm_ys,
+                         vector<double>& market_price_sold_fishs,
+                         vector<double>& operating_cost_per_days,
+                         vector<double>& annual_profits,
+                         string folder_name_parameterization,
+                         string inputfolder
+                         )
+{
+
+
+    string filename=  inputfolder+"/fishfarmsspe_"+folder_name_parameterization+"/fishfarmsspe_features.dat";
+
+    ifstream fishfarms_features;
+    fishfarms_features.open(filename.c_str());
+    if(fishfarms_features.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+
+
+
+    bool r = fill_from_fishfarms_specifications(fishfarms_features,
+                                                fishfarms_ids,
+                                                fishfarms_names,
+                                                idx_nodes,
+                                                is_actives,
+                                                sizes,
+                                                longs,
+                                                lats,
+                                                mean_SSTs,
+                                                mean_salinities,
+                                                mean_windspeeds,
+                                                mean_currentspeeds,
+                                                max_depths,
+                                                diss_O2_mg_per_ls,
+                                                Linf_mms,
+                                                K_ys,
+                                                t0_ys,
+                                                fulton_condition_factors,
+                                                meanw_growth_model_types,
+                                                start_day_growings,
+                                                end_day_harvests,
+                                                nbyears_for_growths,
+                                                nb_days_fallowing_periods,
+                                                nb_fish_at_starts,
+                                                meanw_at_starts,
+                                                price_per_kg_at_starts,
+                                                target_meanw_at_harvests,
+                                                nb_fish_at_harvests,
+                                                meanw_at_harvests,
+                                                prop_harvest_kg_solds,
+                                                kg_eggs_per_kgs,
+                                                price_eggs_per_kgs,
+                                                N_in_fish_kg_3pers,
+                                                P_in_fish_kg_0_5pers,
+                                                feed_types,
+                                                feed_price_per_kgs,
+                                                total_feed_kgs,
+                                                prop_N_in_feeds,
+                                                prop_P_in_feeds,
+                                                total_feed_N_kgs,
+                                                total_feed_P_kgs,
+                                                feed_type_vets,
+                                                feed_vet_price_per_kgs,
+                                                total_feed_vet_kgs,
+                                                prop_N_in_feed_vets,
+                                                prop_P_in_feed_vets,
+                                                total_feed_vet_N_kgs,
+                                                total_feed_vet_P_kgs,
+                                                annual_discharge_N_kgs,
+                                                annual_discharge_P_kgs,
+                                                annual_discharge_C_kgs,
+                                                annual_discharge_heavymetals_kgs,
+                                                annual_discharge_medecine_kgs,
+                                                net_harvest_kg_per_sqkm_ys,
+                                                market_price_sold_fishs,
+                                                operating_cost_per_days,
+                                                annual_profits
+                                                );
+    fishfarms_features.close();
+
+    return r;
+}
+
+
+
+
 //----------------
 bool read_ships_features(vector<string>& shipids,
                          vector<double> &imos,
@@ -567,7 +712,7 @@ bool read_ships_features(vector<string>& shipids,
 }
 
 
-multimap<int, string> read_harbour_names(string folder_name_parameterization, string inputfolder)
+multimap<types::NodeId, string> read_harbour_names(string folder_name_parameterization, string inputfolder)
 {
 
     //input data,
@@ -595,17 +740,17 @@ multimap<int, string> read_harbour_names(string folder_name_parameterization, st
     }
     cout << endl;*/
 
-    return(harbour_names);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(harbour_names));
 }
 
 
-int read_prices_per_harbour(int i, string a_quarter, multimap<string, double>& prices_per_harbour,
+int read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double>& prices_per_harbour,
                             string folder_name_parameterization, string inputfolder)
 {
 
     // casting sp into a string
     stringstream out;
-    out << i;
+    out << i.toIndex();
 
     //input data, harbour characteristics
     string filename=  inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+".dat";
@@ -660,14 +805,14 @@ void read_fuel_prices_per_vsize(map<int, double>& fuel_prices_per_vsize,
 }
 
 
-int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter,
+int read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter,
                                              multimap<int, double>& prices_per_harbour_each_species_per_cat,
                                              string folder_name_parameterization, string inputfolder)
 {
 
     // casting sp into a string
     stringstream out;
-    out << i;
+    out << i.toIndex();
 
     //input data, harbour characteristics
     string filename = inputfolder+"/harboursspe_"+folder_name_parameterization+"/"+out.str()+"_"+a_quarter+"_each_species_per_cat.dat";
@@ -700,7 +845,7 @@ int read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter,
 }
 
 
-multimap<string, int> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder)
+multimap<string, types::NodeId> read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder)
 {
 
     //input data, vessel characteristics: fishing grounds
@@ -729,12 +874,12 @@ multimap<string, int> read_fgrounds(string a_quarter, string folder_name_paramet
     dout(cout << endl);
 #endif
 
-    return(fgrounds);
+    return(types::helpers::toValueIdMultimap<types::NodeId>(fgrounds));
 }
 
 
 
-multimap<string, int> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder)
+multimap<string, types::NodeId> read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder)
 {
 
     //input data, vessel characteristics: fishing grounds
@@ -763,12 +908,12 @@ multimap<string, int> read_fgrounds_init(string a_quarter, string folder_name_pa
     dout(cout << endl);
 #endif
 
-    return(fgrounds_init);
+    return(types::helpers::toValueIdMultimap<types::NodeId>(fgrounds_init));
 }
 
 
 
-multimap<string, int> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)
+multimap<string, types::NodeId> read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder)
 {
 
     //input data, vessel characteristics: specfic-harbour list
@@ -796,7 +941,7 @@ multimap<string, int> read_harbours(string a_quarter, string folder_name_paramet
     dout(cout << endl);
 #endif
 
-    return(harbours);
+    return(types::helpers::toValueIdMultimap<types::NodeId>(harbours));
 }
 
 
@@ -1004,7 +1149,7 @@ multimap<string, double> read_initial_fishing_credits(string folder_name_paramet
 
 
 
-multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+multimap<types::NodeId, int> read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
     //input data, vessel characteristics: possible metiers for this vessel
@@ -1037,11 +1182,11 @@ multimap<int, int> read_possible_metiers(string a_quarter, string a_vessel, stri
     }
 #endif
 
-    return(possible_metiers);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(possible_metiers));
 }
 
 
-multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+multimap<types::NodeId, double> read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
     // frequence on ground of possible metiers for this vessels
@@ -1074,11 +1219,11 @@ multimap<int, double> read_freq_possible_metiers(string a_quarter, string a_vess
     }
 #endif
 
-    return(freq_possible_metiers);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(freq_possible_metiers));
 }
 
 
-multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+multimap<types::NodeId, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
     // frequence on ground of possible metiers for this vessels
@@ -1111,11 +1256,11 @@ multimap<int, double> read_cpue_per_stk_on_nodes(string a_quarter, string a_vess
     }
 #endif
 
-    return(cpue_per_stk_on_nodes);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(cpue_per_stk_on_nodes));
 }
 
 
-multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+multimap<types::NodeId, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
     // frequence on ground of possible metiers for this vessels
@@ -1148,11 +1293,11 @@ multimap<int, double> read_gshape_cpue_per_stk_on_nodes(string a_quarter, string
     }
 #endif
 
-    return(gshape_cpue_per_stk_on_nodes);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(gshape_cpue_per_stk_on_nodes));
 }
 
 
-multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
+multimap<types::NodeId, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder)
 {
 
     // frequence on ground of possible metiers for this vessels
@@ -1185,12 +1330,12 @@ multimap<int, double> read_gscale_cpue_per_stk_on_nodes(string a_quarter, string
     }
 #endif
 
-    return(gscale_cpue_per_stk_on_nodes);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(gscale_cpue_per_stk_on_nodes));
 }
 
 
 
-multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name)
+multimap<types::NodeId, double> read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name)
 {
 
     // obtained from looking at average cpue on nodes for the explicit species
@@ -1225,7 +1370,7 @@ multimap<int, double> read_initial_tariffs_on_nodes(string folder_name_parameter
     }
 #endif
 
-    return(initial_tariffs_on_nodes);
+    return(types::helpers::toKeyIdMultimap<types::NodeId>(initial_tariffs_on_nodes));
 }
 
 
@@ -2002,7 +2147,7 @@ multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_paramet
 }
 
 
-multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file)
+multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file)
 {
 
     string filename;
@@ -2042,7 +2187,7 @@ multimap<int, int> read_lst_idx_nodes_per_pop(string a_semester, string folder_n
 
     // TODO (fba#5#): remove possible replicates in the list of nodes per pop
 
-    return(lst_idx_nodes_per_pop);
+    return(types::helpers::toValueIdMultimap<types::NodeId>(lst_idx_nodes_per_pop));
 }
 
 
@@ -2134,7 +2279,7 @@ map<int, double> read_hyperstability_param(string folder_name_parameterization, 
 
 
 
-map<int, double> read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce)
+map<types::NodeId, double> read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2158,7 +2303,7 @@ map<int, double> read_oth_land_nodes_with_pop(string a_semester, string a_month,
         open_file_error(filename);
         //return 1;
     }
-    map<int, double> oth_land;
+    map<types::NodeId, double> oth_land;
     fill_from_oth_land (file_oth_land, oth_land);
     file_oth_land.close();
 
@@ -2262,9 +2407,9 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
 }
 
 
-multimap<int, double> read_avai_szgroup_nodes_with_pop(string a_semester,
-                                                       int a_pop, string folder_name_parameterization, string inputfolder,
-                                                       string str_rand_avai_file)
+multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semester,
+                                                                 int a_pop, string folder_name_parameterization, string inputfolder,
+                                                                 string str_rand_avai_file)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2288,7 +2433,7 @@ multimap<int, double> read_avai_szgroup_nodes_with_pop(string a_semester,
         open_file_error(filename);
         //return 1;
     }
-    multimap<int, double> avai_szgroup_nodes_with_pop;
+    multimap<types::NodeId, double> avai_szgroup_nodes_with_pop;
     fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, avai_szgroup_nodes_with_pop);
     file_avai_szgroup_nodes_with_pop.close();
 
@@ -2311,9 +2456,9 @@ multimap<int, double> read_avai_szgroup_nodes_with_pop(string a_semester,
 }
 
 
-multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop,
-                                                            string folder_name_parameterization, string inputfolder,
-                                                            string str_rand_avai_file)
+multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop,
+                                                                      string folder_name_parameterization, string inputfolder,
+                                                                      string str_rand_avai_file)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2337,7 +2482,7 @@ multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, i
         open_file_error(filename);
         //return 1;
     }
-    multimap<int, double> full_avai_szgroup_nodes_with_pop;
+    multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop;
     if (!fill_from_avai_szgroup_nodes_with_pop (file_avai_szgroup_nodes_with_pop, full_avai_szgroup_nodes_with_pop))
         throw std::runtime_error("Error while executing: fill_from_avai_szgroup_nodes_with_pop");
 
@@ -2359,9 +2504,9 @@ multimap<int, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, i
 
 
 
-multimap<int, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop,
-                                                            string folder_name_parameterization, string inputfolder
-                                                            )
+multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop,
+                                                                       string folder_name_parameterization, string inputfolder
+                                                                       )
 {
     // casting a_pop into a string
     stringstream out;
@@ -2378,7 +2523,7 @@ multimap<int, double> read_field_of_coeff_diffusion_this_pop(string a_semester, 
         open_file_error(filename);
         //return 1;
     }
-    multimap<int, double> field_of_coeff_diffusion_this_pop;
+    multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
     if (!fill_field_of_coeff_diffusion_this_pop (file_field_of_coeff_diffusion_this_pop, field_of_coeff_diffusion_this_pop))
         throw std::runtime_error("Error while executing: fill_field_of_coeff_diffusion_this_pop");
 
@@ -2601,17 +2746,17 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 }
 
 
-map<int, int> read_maps_previous(int source, string namesimu,  string inputfolder, string a_graph_name)
+spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
     dout(cout <<"BEGIN: read map previous" << endl);
 
     stringstream out;
-    out << source;
+    out << source.toIndex();
     string source_s = out.str();
     string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s+".bin";
 
     bool r;
-    map<int, int> previous;		 //key, value
+    spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> previous;		 //key, value
     try {
         displace::formats::legacy::BinaryGraphFileReader rdr;
         r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&previous](uint16_t key, uint16_t value) {
@@ -2629,21 +2774,20 @@ map<int, int> read_maps_previous(int source, string namesimu,  string inputfolde
     }
     dout(cout <<"END: read map previous" << endl);
 
-    return(previous);
+    return previous;
 }
 
-map<int, int> read_min_distance(int source, string namesimu, string inputfolder, string a_graph_name)
+spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
 {
-
     dout(cout <<"BEGIN: read min_distance" << endl);
 
     stringstream out;
-    out << source;
+    out << source.toIndex();
     string source_s = out.str();
     string filename= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s+".bin";
 
     bool r;
-    map<int, int> min_distance;		 //key, value
+    spp::sparse_hash_map<types::NodeId::type, int> min_distance;		 //key, value
     try {
         displace::formats::legacy::BinaryGraphFileReader rdr;
         r = rdr.importFromStream<uint16_t,uint16_t>(filename, [&min_distance](uint16_t key, uint16_t value) {
@@ -2663,7 +2807,26 @@ map<int, int> read_min_distance(int source, string namesimu, string inputfolder,
 
     dout(cout <<"END: read min_distance" << endl);
 
-    return(min_distance);
+    return min_distance;
+}
+
+PathShop read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
+{
+    dout(cout <<"BEGIN: read map previous" << endl);
+
+    stringstream out1;
+    out1 << source.toIndex();
+    string source_s1 = out1.str();
+    string filename_previous= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s1+".bin";
+
+    dout(cout <<"BEGIN: read min_distance" << endl);
+
+    stringstream out2;
+    out2 << source.toIndex();
+    string source_s2 = out2.str();
+    string filename_weight= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s2+".bin";
+
+    return PathShop::readFromFiles(filename_previous, filename_weight);
 }
 
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)
@@ -2718,7 +2881,7 @@ bool read_metier_quarterly_closures (vector <Node*> &nodes, string a_quarter, st
     if (r) {
         for (auto &info : banning) {
             for (auto id : info.banned) {
-                nodes.at(info.nodeId)->setBannedMetier(id);
+                nodes.at(info.nodeId.toIndex())->setBannedMetier(id);
             }
         }
     }
@@ -2749,7 +2912,7 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
     if (r) {
         for (auto &info : banning) {
             for (auto id : info.banned) {
-                nodes.at(info.nodeId)->setBannedMetier(id);
+                nodes.at(info.nodeId.toIndex())->setBannedMetier(id);
             }
         }
     }
@@ -2777,7 +2940,7 @@ bool read_metier_closures(istream &stream, const std::string &separator, vector<
             boost::split(sr, line, boost::is_any_of(separator));
 
             NodeBanningInfo info;
-            info.nodeId = boost::lexical_cast<int>(sr[1]);
+            info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[1]));
             for (size_t i = 2; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
                 info.banned.push_back(m);
@@ -2816,7 +2979,7 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
     if (r) {
         for (auto &info : banning) {
             for (auto id : info.banned) {
-                nodes.at(info.nodeId)->setBannedVsize(id);
+                nodes.at(info.nodeId.toIndex())->setBannedVsize(id);
             }
         }
     }
@@ -2844,7 +3007,7 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
             boost::split(sr, line, boost::is_any_of(separator));
 
             NodeBanningInfo info;
-            info.nodeId = boost::lexical_cast<int>(sr[1]);
+            info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[1]));
             for (size_t i = 2; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
                 info.banned.push_back(m);

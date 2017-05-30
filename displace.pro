@@ -33,6 +33,7 @@ objeditor.depends = commons qtcommons QMapControl
 
 OTHER_FILES += \
     Readme.txt \
+    Makefile.hpc \
     Building.win Building.unix Building.MacOSX \
     localconfig.pri \
     COPYRIGHT.txt \

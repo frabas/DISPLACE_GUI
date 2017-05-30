@@ -21,6 +21,7 @@
 #ifndef COMSTRUCTS_H
 #define COMSTRUCTS_H
 
+#include <idtypes.h>
 #include <commons_global.h>
 #include <options.h>
 #include <cmath>
@@ -39,7 +40,7 @@ struct COMMONSSHARED_EXPORT Scenario {
     int a_graph;
     int nrow_coord;
     int nrow_graph;
-    int a_port;
+    types::NodeId a_port;
     double graph_res;
     bool is_individual_vessel_quotas;
     bool check_all_stocks_before_going_fishing;

@@ -64,7 +64,7 @@ QVariant HarbourEntity::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
         return model->getModel()->getHarbourId(mHarbourId);
     if (role == Qt::CheckStateRole)
-        return QVariant(model->getModel()->isInterestingHarb(index.row()) ? Qt::Checked : Qt::Unchecked);
+        return QVariant(model->getModel()->isInterestingHarb(types::NodeId(index.row())) ? Qt::Checked : Qt::Unchecked);
     return QVariant();
 }
 
@@ -78,9 +78,9 @@ bool HarbourEntity::setData(const QModelIndex &index, const QVariant &value, int
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
-            model->getModel()->remInterestingHarb(index.row());
+            model->getModel()->remInterestingHarb(types::NodeId(index.row()));
         } else {
-            model->getModel()->setInterestingHarb(index.row());
+            model->getModel()->setInterestingHarb(types::NodeId(index.row()));
         }
         model->getStatsController()->updateStats(model->getModel());
         model->getMapControl()->updateNodes(model->getModelIdx());

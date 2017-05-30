@@ -1,3 +1,9 @@
+displace (0.9.8) xenial; urgency=medium
+
+  * Optimized memory footprint
+
+ -- Federico Fuga <fuga@studiofuga.com>  Wed, 03 May 2017 10:56:49 +0200
+
 displace (0.9.7) xenial; urgency=medium
 
   * Fix bug in benthos equations

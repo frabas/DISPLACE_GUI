@@ -122,7 +122,7 @@ void MergerStrategy::processLine (int linenum, QString line)
     }
 
     if (nearestNode)
-        idx = nearestNode->get_idx_node();
+        idx = nearestNode->get_idx_node().toIndex();
 
     // update the field.
     while (entry.size() < col_pt_graph)

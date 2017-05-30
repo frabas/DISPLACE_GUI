@@ -41,6 +41,7 @@
 #ifndef SCENARIO_H
 #define SCENARIO_H
 
+#include <idtypes.h>
 #include <QString>
 #include <QList>
 #include <QStringList>
@@ -59,7 +60,7 @@ private:
     int graph;
     int nrow_coord;
     int nrow_graph;
-    int a_port;
+    types::NodeId a_port;
     double graph_res;
     bool is_individual_vessel_quotas;
     bool check_all_stocks_before_going_fishing;
@@ -103,8 +104,8 @@ public:
     void setNrow_coord(int value);
     int getNrow_graph() const;
     void setNrow_graph(int value);
-    int getA_port() const;
-    void setA_port(int value);
+    types::NodeId getA_port() const;
+    void setA_port(types::NodeId value);
     double getGraph_res() const;
     void setGraph_res(double value);
     bool getIs_individual_vessel_quotas() const;

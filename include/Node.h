@@ -21,8 +21,10 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <idtypes.h>
+
+#include<vector>
 #include <commons_global.h>
-#include <vector>
 #include <algorithm>
 #include<string>
 #include<map>
@@ -40,12 +42,13 @@ class COMMONSSHARED_EXPORT Node
 
 		/**  constructor */
 		Node ();
-        Node (int idx_node, double xval, double yval, int _harbour, int _code_area,
+        Node (types::NodeId idx_node, double xval, double yval, int _harbour, int _code_area,
               int _marine_landscape,
               double _wind, double _sst, double _salinity,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
               int nbpops, int nbbenthospops,  int nbszgroups);
-        Node (int idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
+        /*
+        Node (types::NodeId idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
             const vector<int> &graph_coord_harbour,
             const vector<int> &graph_point_code_area,
             const vector<int> &graph_marine_landscape,
@@ -55,7 +58,7 @@ class COMMONSSHARED_EXPORT Node
             const vector<double> &graph_benthos_biomass,
             const vector<double> &graph_benthos_number,
             double initmw,
-            int nbpops,  int nbbenthospops, int nbszgroups);
+            int nbpops,  int nbbenthospops, int nbszgroups);*/
 
 		/**  destructor */
 		~Node();
@@ -63,7 +66,7 @@ class COMMONSSHARED_EXPORT Node
         void lock() { mutex.lock(); }
         void unlock() { mutex.unlock(); }
 
-		int get_idx_node() const;
+        types::NodeId get_idx_node() const;
 		int get_code_area() const;
         void setCodeArea(int id) {
             code_area = id;
@@ -111,17 +114,17 @@ class COMMONSSHARED_EXPORT Node
 		virtual double get_prices_per_cat(int pop, int cat) ;
 								 // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
         virtual double get_fuelprices(int vsize) ;
-        virtual const vector<int> &get_usual_fgrounds () const;
+        virtual const vector<types::NodeId> &get_usual_fgrounds() const;
         virtual const vector<double> &get_freq_usual_fgrounds () const;
-        virtual void set_usual_fgrounds (const vector<int> &usual_fgrounds);
+        virtual void set_usual_fgrounds (const vector<types::NodeId> &usual_fgrounds);
         virtual void set_freq_usual_fgrounds (const vector<double> &_freq_usual_fgrounds);
-        virtual const multimap<int,int> &get_usual_metiers () const;
-        virtual const multimap<int,double> &get_freq_usual_metiers () const;
-        virtual void set_usual_metiers (multimap <int,int> usual_metiers);
+        virtual const multimap<types::NodeId, int> &get_usual_metiers() const;
+        virtual const multimap<int, double> &get_freq_usual_metiers() const;
+        virtual void set_usual_metiers (multimap <types::NodeId,int> usual_metiers);
         virtual void set_freq_usual_metiers (multimap <int,double> freq_usual_metiers);
-        virtual void set_usual_fgrounds_per_met (multimap <int,int> usual_fgrounds_per_met);
+        virtual void set_usual_fgrounds_per_met (multimap <int,types::NodeId> usual_fgrounds_per_met);
         virtual void set_freq_usual_fgrounds_per_met (multimap <int,double> freq_usual_fgrounds_per_met);
-        virtual vector<int> get_usual_fgrounds_this_met(int met);
+        virtual vector<types::NodeId> get_usual_fgrounds_this_met(int met);
         virtual vector<double> get_freq_usual_fgrounds_this_met(int met);
 
 
@@ -145,6 +148,7 @@ class COMMONSSHARED_EXPORT Node
         vector< vector<double> >  get_Ns_pops_at_szgroup() const;
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
+        vector<int> get_ff_names_on_node();
         const vector<double>& get_impact_on_pops ();
         const vector<double>& get_cumcatches_per_pop ();
         int get_cumftime() const;
@@ -170,7 +174,8 @@ class COMMONSSHARED_EXPORT Node
         void add_to_cumcatches(double catches);
         void add_to_cumcatches_per_pop(double catches, int pop);
         void set_pop_names_on_node(int name_pop);
-		void set_benthos_tot_biomass(int funcgr, double value);
+        void set_ff_names_on_node(int name_ff);
+        void set_benthos_tot_biomass(int funcgr, double value);
         void set_benthos_tot_number(int funcgr, double value);
         void set_benthos_tot_meanweight(int funcgr, double value);
         void set_tariffs(vector<double> values);
@@ -206,7 +211,7 @@ class COMMONSSHARED_EXPORT Node
         int get_nszgroups() const { return m_nszgrp; }
 
         void set_is_harbour(int id);
-        void set_idx_node(int idx);
+        void set_idx_node(types::NodeId idx);
 
         void setBannedMetier(int metier) {
             while (mBannedMetiers.size() <= (size_t)metier)
@@ -236,7 +241,7 @@ protected:
         void reinit(vector<double> &vec, unsigned int sz);
         void reinit(vector<vector<double> > &vec, unsigned int sz, unsigned int subsz);
 private:
-		int idx_node;
+        types::NodeId idx_node;
 		double x;
 		double y;
 		int harbour;
@@ -263,6 +268,7 @@ private:
         vector<double> cumcatches_per_pop;
         vector<int> vid;		 // list of index of vessels currently on the node
 		vector<int> pop_names_on_node;
+        vector<int> ff_names_on_node;
 
         vector<double> benthos_tot_biomass;  // total bio on node per funcgr from sharing benthos_biomass per funcgr (this sharing is specific to Benthos landscape)
         vector<double> benthos_tot_number;  // total bio on node per funcgr from sharing benthos_number per funcgr (this sharing is specific to Benthos landscape)
@@ -272,11 +278,11 @@ private:
         vector<bool> mBannedMetiers;
         vector<bool> mBannedVsizes;
 
-        static const vector<int> mUsualFGrounds;
+        static const vector<types::NodeId> mUsualFGrounds;
         static const vector<double> mFreqUsualFGrounds;
-        static const vector<int> mUsualFGroundsMet;
+        static const vector<types::NodeId> mUsualFGroundsMet;
         static const vector<double> mFreqUsualFGroundsMet;
-        static const multimap<int,int> mUsualMetiers;
+        static const multimap<types::NodeId,int> mUsualMetiers;
         static const multimap<int,double> mFreqUsualMetiers;
 
         int m_nbpops;

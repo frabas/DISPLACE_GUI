@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<palette role="1758238872" type="displace" name="FISHFARMS_COLORS">
+<color value="0" rgb="0,255,255"/>
+<color value="0.1" rgb="92,255,223"/>
+<color value="0.5" rgb="185,255,115"/>
+<color value="1" rgb="255,238,0"/>
+<color value="2" rgb="255,173,0"/>
+<color value="5" rgb="255,59,0"/>
+<color value="10" rgb="255,0,0"/>
+</palette>

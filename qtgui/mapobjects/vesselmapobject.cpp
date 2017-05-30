@@ -97,7 +97,7 @@ void VesselMapObject::updateProperties()
     text += QString("<b>Reason To go Back:</b> %1<br/>").arg(mVessel->mVessel->get_reason_to_go_back());
 
     if (mVessel->mVessel->get_roadmap().size() > 0) {
-        text += QString("<b>Final Destination:</b> %1<br/>").arg(mVessel->mVessel->get_roadmap().back());
+        text += QString("<b>Final Destination:</b> %1<br/>").arg(mVessel->mVessel->get_roadmap().back().toIndex());
     }
 
     mWidget->setText(text);

@@ -3,11 +3,12 @@ TARGET=displacecommons
 DESTDIR=../
 CONFIG += c++11 dll
 
+
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
 DEFINES += COMMONS_LIBRARY
-INCLUDEPATH +=../include/ ../formats .
+INCLUDEPATH +=../include/ ../formats . ../sparsepp
 LIBS += -L.. -lformats
 
 win32 {
@@ -57,6 +58,7 @@ SOURCES= \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
+    pathshop.cpp
 
 
 HEADERS= \
@@ -83,6 +85,9 @@ HEADERS= \
     ../include/guiproto_struct.h \
     ../include/version.h \
     ../include/utils/make_unique.h \
+    ../include/vesselcalendar.h \
+    ../include/idtypes.h \
+    ../include/idtypeshelpers.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \
@@ -98,7 +103,8 @@ HEADERS= \
     dtree/evaluators/timeseriesevaluator.h \
     utils/CrashHandler.h \
     dtree/vesselsevaluators.h \
-    commons_global.h
+    commons_global.h \
+    pathshop.h
 
 
 ## Do not add this if you don't support IPC queues

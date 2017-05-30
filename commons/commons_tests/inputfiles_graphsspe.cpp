@@ -186,11 +186,11 @@ BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
 
     r = read_metier_closures(is1, " ", ban);
     BOOST_CHECK(r);
-    BOOST_CHECK_EQUAL(1, ban[0].nodeId);
+    BOOST_CHECK_EQUAL(types::NodeId(1), ban[0].nodeId);
     BOOST_CHECK_EQUAL_COLLECTIONS(nd1.begin(), nd1.end(), ban[0].banned.begin(), ban[0].banned.end());
-    BOOST_CHECK_EQUAL(2, ban[1].nodeId);
+    BOOST_CHECK_EQUAL(types::NodeId(2), ban[1].nodeId);
     BOOST_CHECK_EQUAL_COLLECTIONS(nd2.begin(), nd2.end(), ban[1].banned.begin(), ban[1].banned.end());
-    BOOST_CHECK_EQUAL(3, ban[2].nodeId);
+    BOOST_CHECK_EQUAL(types::NodeId(3), ban[2].nodeId);
     BOOST_CHECK_EQUAL_COLLECTIONS(nd3.begin(), nd3.end(), ban[2].banned.begin(), ban[2].banned.end());
 
     std::istringstream is2;

@@ -18,26 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-/* --------------------------------------------------------------------------
- * DISPLACE: DYNAMIC INDIVIDUAL VESSEL-BASED SPATIAL PLANNING
- * AND EFFORT DISPLACEMENT
- * Copyright (c) 2012, 2013, 2014 Francois Bastardie <fba@aqua.dtu.dk>
- *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License along
- *    with this program; if not, write to the Free Software Foundation, Inc.,
- *    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * --------------------------------------------------------------------------
- */
 #ifndef DISPLACEMODEL_H
 #define DISPLACEMODEL_H
 
@@ -63,6 +43,7 @@
 #include <utils/interestinglist.h>
 #include <utils/interestinglistwithspecialvalues.h>
 #include <stats/benthosstats.h>
+#include <stats/fishfarmsstats.h>
 
 #include <QObject>
 #include <QString>
@@ -96,6 +77,9 @@ public:
     typedef QVector<MetierStats> MetiersStats;
     typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
+    typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
+
+
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -288,6 +272,10 @@ public:
     const BenthosStatsContainer &getBenthosStatistics() { return mStatsBenthos; }
 
 
+    /* Fishfarms Statistics */
+    const FishfarmsStatsContainer &getFishfarmsStatistics() { return mStatsFishfarms; }
+
+
     /* Scenario and configuration */
 
     Scenario scenario() const;
@@ -330,6 +318,9 @@ public:
     bool isInterestingBenthos(int n) const { return mInterestingBenthos.has(n); }
     void clrInterestingBenthos() { mInterestingBenthos.clear(); }
 
+    QList<int> getInterestingFarmTypes() const { return mInterestingFishfarmsTypes.list(); }
+    void setInterestingFarmTypes(int n) { mInterestingFishfarmsTypes.set(n); }
+
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
     void setInterestingSizeTotal(bool b) { mInterestingSizeTotal = b; }
@@ -345,6 +336,10 @@ public:
     int getNumFuncGroups() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
 
+    int getNumFishfarmIDs() const;
+    std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsIDsGroupsList() const { return mInterestingFishfarmsIDsGroups; }
+    int getFishfarmsTypeCount() const;
+
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingSize(int n);
 
@@ -353,14 +348,14 @@ public:
     bool isInterestingSize(int n);
 
     /* Interesting harbours - see pop */
-    const QList<int> &getInterestingHarbours() const { return mInterestingHarb; }
+    const QList<types::NodeId> &getInterestingHarbours() const { return mInterestingHarb; }
 
     /** \brief insert the pop into the list of interest for pops */
-    void setInterestingHarb(int n);
+    void setInterestingHarb(types::NodeId n);
 
     /** \brief remove the pop from the list of interest for pops */
-    void remInterestingHarb(int n);
-    bool isInterestingHarb(int n);
+    void remInterestingHarb(types::NodeId n);
+    bool isInterestingHarb(types::NodeId n);
 
     /* Interesting Nations */
     const QList<int> &getInterestingNations() const { return mInterestingNations; }
@@ -402,6 +397,14 @@ public:
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
     void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
 
+    void collectFishfarmFishMeanWeight (int step, int node_idx, int farmid, double meanw_kg);
+    void collectFishfarmFishHarvestedKg (int step, int node_idx, int farmid, double fish_harvested_kg);
+    void collectFishfarmEggsHarvestedKg (int step, int node_idx, int farmid, double eggs_harvested_kg);
+    void collectFishfarmAnnualProfit (int step, int node_idx, int farmid, double fishfarm_annualprofit);
+    void collectFishfarmNetDischargeN (int step, int node_idx, int farmid, double fishfarm_netdischargeN);
+    void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, double fishfarm_netdischargeP);
+
+
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value);
@@ -413,8 +416,8 @@ public:
     void clearAllNodes();
     bool addGraph(const QList<GraphBuilder::Node> &points, MapObjectsController *controller);
     bool removeNode(std::shared_ptr<NodeData> node);
-    int addEdge(std::shared_ptr<NodeData> nodedata, int targetidx, double weight);
-    int addEdge(int srcidx, int targetidx, double weight);
+    int addEdge(std::shared_ptr<NodeData> nodedata, types::NodeId targetidx, double weight);
+    int addEdge(types::NodeId srcidx, types::NodeId targetidx, double weight);
     bool exportGraph(const QString &path);
     bool importHarbours (QList<std::shared_ptr<HarbourData> > &list);
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing, bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, vector<int> bannedMetiers);
@@ -508,10 +511,12 @@ private:
     QList<int> mInterestingPop2;
     bool mInterestingSizeTotal, mInterestingSizeAvg, mInterestingSizeMin, mInterestingSizeMax;
     QList<int> mInterestingSizes;
-    QList<int> mInterestingHarb;
+    QList<types::NodeId> mInterestingHarb;
     QList<int> mInterestingNations;
-    InterestingList<int> mInterestingBenthos;
+    InterestingList<int> mInterestingBenthos;  
+    InterestingList<int> mInterestingFishfarmsTypes;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
+    std::shared_ptr<InterestingListWithSpecialValues<int>> mInterestingFishfarmsIDsGroups;
 
     QList<displace::NodePenalty> mPenaltyNodes;
 
@@ -536,6 +541,8 @@ private:
     MetiersStats mStatsMetiersCollected;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
+    FishfarmsStatsContainer mStatsFishfarms;
+    FishfarmsStats mStatsFishfarmsCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<QString, int> mStockNames;

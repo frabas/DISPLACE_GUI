@@ -206,7 +206,6 @@ QList<GraphBuilder::Node> GraphBuilder::buildGraph()
     CDT tri;
     OGRFeature *feature;
     resultLayer->ResetReading();
-    int id = 0;
 
     while ((feature = resultLayer->GetNextFeature()) != nullptr) {
         const auto geometry(feature->GetGeometryRef());

@@ -32,7 +32,8 @@ SOURCES= \
     dtree/externalstatemanager.cpp \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
-    utils/CrashHandler.cpp
+    utils/CrashHandler.cpp \
+    pathshop.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -77,7 +78,7 @@ HEADERS= \
 DEFINES=-DNO_IPC
 
 LIBS=-L../formats -lformats -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I../formats -I. -fpic
+CPPFLAGS=${CPPDEBUG} -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I../formats -I. -I../sparsepp/ -fpic
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

@@ -24,6 +24,7 @@
 #include <QtAlgorithms>
 
 #include <plots/benthosstatsplot.h>
+#include <plots/fishfarmsstatsplot.h>
 
 double StatsController::timelineMax = 1e20;
 double StatsController::timelineMin = -1e20;
@@ -45,6 +46,8 @@ StatsController::StatsController(QObject *parent)
       mLastModel(0)
 {
     mPalette = PaletteManager::instance()->palette(PopulationRole);
+
+    cout << "Stats controller is created" << endl;
 }
 
 void StatsController::setPopulationPlot(QCustomPlot *plot)
@@ -112,6 +115,30 @@ void StatsController::setBenthosPlot(QCustomPlot *plot)
     mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
 }
 
+void StatsController::setFishfarmsPlot(QCustomPlot *plot)
+{
+   cout << "Set fishfarm plot" << endl;
+
+    mfarmTypeGroupsPlot = plot;
+    mfarmTypeGroupsPlot->legend->setVisible(true);
+
+    if (mFishfarmsTimeLine != 0)
+        delete mFishfarmsTimeLine;
+
+    if (mFishfarmsPlotController != nullptr)
+        delete mFishfarmsPlotController;
+
+    mFishfarmsTimeLine = new QCPItemLine(mfarmTypeGroupsPlot);
+    mFishfarmsPlotController = new FishfarmsStatsPlot(plot, mFishfarmsTimeLine);
+
+    mfarmTypeGroupsPlot->addItem(mFishfarmsTimeLine);
+
+    cout << "Set fishfarm plot...ok" << endl;
+
+}
+
+
+
 void StatsController::updateStats(DisplaceModel *model)
 {
     if (!model)
@@ -131,6 +158,9 @@ void StatsController::updateStats(DisplaceModel *model)
     }
     if (mBenthosFuncGroupsPlot) {
         updateBenthosStats(model, mSelectedBenthosStat);
+    }
+    if (mfarmTypeGroupsPlot) {
+        updateFishfarmsStats(model, mSelectedFishfarmsStat);
     }
 
 
@@ -166,6 +196,13 @@ void StatsController::setBenthosStat(displace::plot::BenthosStat stat)
     mSelectedBenthosStat = stat;
     updateStats(mLastModel);
 }
+
+void StatsController::setFishfarmsStat(displace::plot::FishfarmsStat stat)
+{
+    mSelectedFishfarmsStat = stat;
+    updateStats(mLastModel);
+}
+
 
 void StatsController::initPlots()
 {
@@ -471,7 +508,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
     static const QPen pen(QColor(0,0,255,200));
     plot->clearGraphs();
 
-    QList<int> ipl = model->getInterestingHarbours();
+    auto ipl = model->getInterestingHarbours();
 
     int cnt = 0;
     Palette::Iterator col_it = mPalette.begin();
@@ -482,7 +519,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
         timeline->end->setCoords(t, timelineMax);
     }
 
-    foreach (int ip, ipl) {
+    foreach (auto ip, ipl) {
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
@@ -498,32 +535,32 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
         graph->setBrush(QBrush(col));
         ++cnt;
 
-        graph->setName(QString::fromStdString(model->getHarbourData(ip).mHarbour->get_name()));
+        graph->setName(QString::fromStdString(model->getHarbourData(ip.toIndex()).mHarbour->get_name()));
 
         int n = model->getHarboursStatsCount();
         DisplaceModel::HarboursStatsContainer::Container::const_iterator it = model->getHarboursStatsFirstValue();
         for (int i = 0; i <n; ++i) {
-            if (it.value().size() > ip) {
+            if (it.value().size() > ip.toIndex()) {
                 keyData << it.key();
 
                 switch (stat) {
                 case H_Catches:
-                    valueData << it.value().at(ip).mCumCatches;
+                    valueData << it.value().at(ip.toIndex()).mCumCatches;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
                 case H_Earnings:
-                    valueData << it.value().at(ip).mCumProfit;
+                    valueData << it.value().at(ip.toIndex()).mCumProfit;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
                     break;
                 case H_Gav:
-                    valueData << it.value().at(ip).mGav;
+                    valueData << it.value().at(ip.toIndex()).mGav;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("GAV (Euro)"));
                     break;
                 case H_Vpuf:
-                    valueData << it.value().at(ip).mVpuf;
+                    valueData << it.value().at(ip.toIndex()).mVpuf;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
                     break;
@@ -638,3 +675,7 @@ void StatsController::updateBenthosStats(DisplaceModel *model, displace::plot::B
     mBenthosPlotController->update(model, stat);
 }
 
+void StatsController::updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat)
+{
+    mFishfarmsPlotController->update(model, stat);
+}

@@ -70,13 +70,13 @@ void HarbourMapObject::updateProperties()
                            "<b>Node Id: %2<br />"
                            "<b>Coords: </b>%3 %4<br/>")
             .arg(QString::fromStdString(mHarbour->mHarbour->get_name()))
-            .arg(mHarbour->mHarbour->get_idx_node())
+            .arg(mHarbour->mHarbour->get_idx_node().toIndex())
             .arg(mHarbour->mHarbour->get_y())
             .arg(mHarbour->mHarbour->get_x());
 
     text += "<br/>";
 
-    HarbourStats s = mModel->retrieveHarbourIdxStatAtStep(mHarbour->mHarbour->get_idx_node(), mModel->getCurrentStep());
+    HarbourStats s = mModel->retrieveHarbourIdxStatAtStep(mHarbour->mHarbour->get_idx_node().toIndex(), mModel->getCurrentStep());
 
     text += QString("<b>Cumul Catches:</b> %1<br/>").arg(s.mCumCatches);
     text += QString("<b>Profit:</b> %1<br/>").arg(s.mCumProfit);

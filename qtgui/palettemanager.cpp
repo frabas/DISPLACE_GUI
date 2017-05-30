@@ -30,7 +30,8 @@ const QString PaletteManager::defaultPaletteFileNames[] = {
     ":/palettes/heat_colors_12.p2c",
     ":/palettes/pop_colors.p2c",
     ":/palettes/tariffs_colors.p2c",
-    ":/palettes/benthos_colors.p2c"
+    ":/palettes/benthos_colors.p2c",
+    ":/palettes/fishfarms_colors.p2c"
 };
 
 Palette::Palette()

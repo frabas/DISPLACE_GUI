@@ -20,6 +20,7 @@
 
 #include "mapobjectscontroller.h"
 
+#include <idtypes.h>
 #include <displacemodel.h>
 #include <mapobjects/harbourmapobject.h>
 #include <mapobjects/nodemapobject.h>
@@ -242,7 +243,7 @@ void MapObjectsController::updateWindmillPosition(int model, int idx)
 
 void MapObjectsController::updateNodes(int model)
 {
-    MapObjectContainer<NodeMapObject>::Iterator it = mNodeObjects[model].begin();
+    auto it = mNodeObjects[model].begin();
     while (!mNodeObjects[model].atEnd(it)) {
         NodeMapObject *obj = mNodeObjects[model].get(it, NodeMapObject::GraphNodeRole);
         obj->updateProperties();
@@ -426,9 +427,9 @@ void MapObjectsController::clearNodeSelection(int model)
     }
 }
 
-void MapObjectsController::selectNodes(int model, QList<int> nodes)
+void MapObjectsController::selectNodes(int model, QList<types::NodeId> nodes)
 {
-    foreach (int node, nodes) {
+    foreach (auto node, nodes) {
         NodeMapObject *nmo = mNodeObjects[model].get(node, NodeMapObject::GraphNodeRole);
         nmo->setSelection(true);
         nodeSelectionHasChanged(nmo);
@@ -516,22 +517,24 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     if (nd->isDeleted())
         return;
 
+    auto idxnode = nd->get_idx_node();
+
     NodeMapObject *obj = new NodeMapObject(this, model_n, NodeMapObject::GraphNodeRole, nd);
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
 
     mGraphLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     /* add here other roles */
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopStatsRole, nd);
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumFTimeRole, nd);
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerCumftime[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerCumsweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesRole, nd);
@@ -601,7 +604,7 @@ void MapObjectsController::addHarbour(int model_n, std::shared_ptr<HarbourData> 
 
     mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    std::shared_ptr<NodeData> nd = mModels[model_n]->getNodesList()[h->mHarbour->get_idx_node()];
+    auto nd = mModels[model_n]->getNodesList()[h->mHarbour->get_idx_node().toIndex()];
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);
     }
@@ -660,7 +663,7 @@ void MapObjectsController::delSelectedNodes(int model)
         // remove the node
 
 //        mGraphLayer[model]->removeGeometry();
-        QList<NodeMapObject *> objs = mNodeObjects[model].remove(nd->get_idx_node());
+        auto objs = mNodeObjects[model].remove(nd->get_idx_node());
         foreach (NodeMapObject *obj, objs) {
             if (obj) {
                 std::shared_ptr<qmapcontrol::Geometry> geom = obj->getGeometryEntity();

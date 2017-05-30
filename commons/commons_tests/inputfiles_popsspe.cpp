@@ -207,16 +207,16 @@ BOOST_AUTO_TEST_CASE ( test_spe_SSB_R_parameters_biolsce_dat )
 
 BOOST_AUTO_TEST_CASE ( test_spe_stecf_oth_land_per_month_per_node_semester_dat )
 {
-    map<int,double> res;
-    map<int,double> ex = { { 1, 0.5}, { 2, 1.5 }, {3, 2.5} };
+    map<types::NodeId,double> res;
+    map<types::NodeId,double> ex = { { types::NodeId(1), 0.5}, { types::NodeId(2), 1.5 }, {types::NodeId(3), 2.5} };
 
     std::istringstream ss ("pt_graph landings\n1 0.5\n2 1.5\n3 2.5\n");
     bool r = fill_from_oth_land(ss, res);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(ex.size(), res.size());
-    BOOST_CHECK_EQUAL(ex[0], res[0]);
-    BOOST_CHECK_EQUAL(ex[1], res[1]);
-    BOOST_CHECK_EQUAL(ex[2], res[2]);
+    BOOST_CHECK_EQUAL(ex[types::NodeId(0)], res[types::NodeId(0)]);
+    BOOST_CHECK_EQUAL(ex[types::NodeId(1)], res[types::NodeId(1)]);
+    BOOST_CHECK_EQUAL(ex[types::NodeId(2)], res[types::NodeId(2)]);
 }
 
 BOOST_AUTO_TEST_CASE ( test_comcat_per_szgroup_done_by_hand_dat )

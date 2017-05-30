@@ -41,6 +41,7 @@
 #ifndef INPUTFILEPARSER_H
 #define INPUTFILEPARSER_H
 
+#include <idtypes.h>
 #include <memory>
 
 #include <QList>
@@ -60,7 +61,7 @@ public:
 
     bool parseHarbourFile (const QString &path, QList<std::shared_ptr<HarbourData> > &list, QString *error);
     bool parseShortestPath (const QString &path, int nodeid, QList<QPair<int, int> > &graph);
-    bool isShortestPathPresent (const QString &path, int nodeid);
+    bool isShortestPathPresent (const QString &path, types::NodeId nodeid);
 
     bool parseGraph(const QString &graphpath, const QString &coordsPath, QList<GraphBuilder::Node> &nodes, QString *error);
 

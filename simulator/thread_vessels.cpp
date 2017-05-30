@@ -111,13 +111,10 @@ extern PopSceOptions dyn_pop_sce;
 extern string biolsce;
 extern string fleetsce;
 extern int create_a_path_shop;
-extern deque<map<vertex_t, vertex_t> > path_shop;
-extern deque<map<vertex_t, weight_t> >  min_distance_shop;
-extern vector <int> idx_path_shop;
 extern adjacency_map_t adjacency_map;
 extern vector<string> vertex_names;
 //extern map<vertex_t, vertex_t> previous;
-extern vector<int> relevant_nodes;
+extern vector<types::NodeId> relevant_nodes;
 extern multimap<int, int> nodes_in_polygons;
 extern multimap<int, int> possible_metiers;
 extern multimap<int, double> freq_possible_metiers;
@@ -141,7 +138,8 @@ extern ofstream vmslike2;
 extern ofstream vmslike3;
 extern vector <Metier*> metiers;
 extern ofstream export_individual_tacs;
-//extern vector <double> dist_to_ports;
+extern vector<PathShop> pathshops;
+extern ofstream fishfarmslogs;
 
 extern void guiSendVesselLogbook(const std::string &line);
 
@@ -167,15 +165,12 @@ static void manage_ship(int idx_v)
 
 static void manage_vessel(int idx_v)
 {
-    map<vertex_t, weight_t> min_distance;
-    map<vertex_t, vertex_t> previous;
     vector <double> dist_to_ports;
 
     dout(cout  << "----------" << endl);
 
     glob_mutex.lock();
     int index_v =  ve[idx_v];
-    //dout(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name() << " " << endl);
     outc(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name()<< " " << endl);
     glob_mutex.unlock();
 
@@ -241,16 +236,14 @@ static void manage_vessel(int idx_v)
 
                     //go fishing
                     outc(cout  << "GO FISHING" << endl);
-                     do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
-                        tstep, scenario, use_dtrees,
-                        dyn_alloc_sce, create_a_path_shop,
-                        idx_path_shop, path_shop, min_distance_shop,
-                        adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-                        vertex_names,
-                        nodes,
-                        metiers,
-                        freq_cpue, freq_profit, freq_distance
-                        );
+                    do_nothing = vessels[ index_v ]->choose_a_ground_and_go_fishing(
+                                tstep, scenario, use_dtrees,
+                                dyn_alloc_sce, create_a_path_shop,  pathshops,
+                                adjacency_map, relevant_nodes, nodes_in_polygons,
+                                nodes,
+                                metiers,
+                                freq_cpue, freq_profit, freq_distance
+                                );
 
 
                 }
@@ -274,17 +267,16 @@ static void manage_vessel(int idx_v)
                 map<string,int> external_states_relevant_for_stopping_fishing;
                 external_states_relevant_for_stopping_fishing.insert(make_pair(" none ",0));
                 int stop_fishing = vessels[ index_v ]->should_i_stop_fishing(
-                    external_states_relevant_for_stopping_fishing,
-                    use_dtrees,
-                    tstep,
-                    dyn_alloc_sce, create_a_path_shop,
-                    idx_path_shop, path_shop, min_distance_shop,
-                    adjacency_map, min_distance, previous, relevant_nodes,
-                    vertex_names,
-                    nodes,
-                    metiers,
-                    freq_cpue, freq_distance,
-                    dist_to_ports);
+                            external_states_relevant_for_stopping_fishing,
+                            use_dtrees,
+                            tstep,
+                            dyn_alloc_sce, create_a_path_shop,
+                            pathshops,
+                            adjacency_map, relevant_nodes,
+                            nodes,
+                            metiers,
+                            freq_cpue, freq_distance,
+                            dist_to_ports);
 
                 //....unless we got a message (e.g. at the end of a year-quarter)
                 dout(cout  << "message: " << vessels[ index_v ]->read_message() << endl);
@@ -294,10 +286,10 @@ static void manage_vessel(int idx_v)
                 {
                     if(vessels[ index_v ]->get_fgrounds().size()<3)
                     {
-                         //in this case, forced to go back to port instead!
+                        //in this case, forced to go back to port instead!
                         stop_fishing=true;
                     }
-                         //in this case, forced to change!
+                    //in this case, forced to change!
                     force_another_ground=true;
                     // reset my mail box
                     vessels[ index_v ]->reset_message();
@@ -307,37 +299,38 @@ static void manage_vessel(int idx_v)
                 // go on fishing...
                 if(!stop_fishing)
                 {
+                    outc(cout  << "OK, I´LL CONTINUE FISHING!" << endl);
+
                     // ***************make a decision************************************
                     map<string,int> external_states_relevant_for_change_ground;
                     external_states_relevant_for_change_ground.insert(make_pair(" none ",0));
                     int another_ground = vessels[ index_v ]->should_i_change_ground(
-                        external_states_relevant_for_change_ground, false);
+                                external_states_relevant_for_change_ground, false);
 
                     // TO DO: do not change of ground if nodes are too far from each other e.g. nsea in myfish app
                     // so also need to test for current node code_area to see if vessel *allowed* to change grounds...
 
                     // ***************implement the decision************************************
-                         // ...but not on this ground!
+                    // ...but not on this ground!
                     if(another_ground || force_another_ground )
                     {
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(
-                            tstep,
-                            dyn_alloc_sce, create_a_path_shop,
-                            idx_path_shop, path_shop, min_distance_shop,
-                            adjacency_map, min_distance, previous, relevant_nodes, nodes_in_polygons,
-                            vertex_names,
-                            nodes,
-                            metiers,
-                            freq_cpue, freq_distance
-                            );
+                                    tstep,
+                                    dyn_alloc_sce, create_a_path_shop,
+                                    pathshops,
+                                    adjacency_map,relevant_nodes, nodes_in_polygons,
+                                    nodes,
+                                    metiers,
+                                    freq_cpue, freq_distance
+                                    );
                         outc(cout  << "GOOD JOB, FISHERS! "  << endl);
 
                     }
                     // ***************implement a decision************************************
                     else // Yes, keep go on catching on this ground...
                     {
-                        outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
+                        outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
                         //#pragma omp critical(docatch)
                         {
                             dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
@@ -346,7 +339,7 @@ static void manage_vessel(int idx_v)
                                                          is_discard_ban, is_fishing_credits, is_impact_benthos_N);
 
                             // check
-                            //if(vessels[ index_v ]->get_loc()->get_idx_node()==430)
+                            //if(vessels[ index_v ]->get_loc()->get_idx_node().toIndex()==430)
                             //{
                             //    vector <double> N_at_szgroup= vessels[ index_v ]->get_loc()->get_Ns_pops_at_szgroup(3);
                             //
@@ -395,16 +388,18 @@ static void manage_vessel(int idx_v)
                     outc(cout  << "RETURN TO PORT, NOW! "  << endl);
                     glob_mutex.lock();
                     vessels[ index_v ]->choose_a_port_and_then_return(
-                        tstep,
-                        dyn_alloc_sce, create_a_path_shop,
-                        idx_path_shop, path_shop, min_distance_shop,
-                        adjacency_map, min_distance, previous, relevant_nodes,
-                        vertex_names,
-                        nodes,
-                        metiers,
-                        freq_cpue, freq_distance,
-                        dist_to_ports
-                        );
+                                tstep,
+                                dyn_alloc_sce,
+                                create_a_path_shop,
+                                pathshops,
+                                adjacency_map,
+                                relevant_nodes,
+                                nodes,
+                                metiers,
+                                freq_cpue,
+                                freq_distance,
+                                dist_to_ports
+                                );
 
                     glob_mutex.unlock();
                 }
@@ -429,7 +424,7 @@ static void manage_vessel(int idx_v)
         // find.next.pt.on.the.graph()
         vessels[ index_v ]->find_next_point_on_the_graph(nodes);
 
-        outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node() << endl);
+        outc(cout  << "CURRENT LAST POS " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
 
         //dout(cout  << "roadmap (out): ");
         //lst = vessels[ index_v ]->get_roadmap();
@@ -461,7 +456,7 @@ static void manage_vessel(int idx_v)
     {
         ::mutex.lock();
         vmslike2   << vessels[ index_v ]->get_x() << " "
-            << vessels[ index_v ]->get_y() <<  endl;
+                   << vessels[ index_v ]->get_y() <<  endl;
         ::mutex.unlock();
     }
     vessels[index_v]->unlock();
@@ -485,7 +480,7 @@ static void *thread_manage_func()
 
         int nextidx = works.front();
         works.pop();
-//        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
+        //        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
         locker.unlock();
 
         if(nextidx<5000) // caution: assuming no more 5000 fishing vessels
@@ -499,7 +494,7 @@ static void *thread_manage_func()
 
         locker.lock();
         --uncompleted_works;
-//        cout << "Thr " << data->thread_idx << " Completed, " << uncompleted_works << " rem\n";
+        //        cout << "Thr " << data->thread_idx << " Completed, " << uncompleted_works << " rem\n";
         completion_cond.notify_all();
         locker.unlock();
     }
@@ -563,7 +558,7 @@ void thread_vessel_signal_exit()
     exit_flag = true;
     void *rv;
     for (int i = 0; i < numthreads; ++i) {
-//        thread_vessel_insert_job(-1);
+        //        thread_vessel_insert_job(-1);
         std::unique_lock<std::mutex> locker(work_mutex);
         work_cond.notify_all();
 #ifdef _WIN32

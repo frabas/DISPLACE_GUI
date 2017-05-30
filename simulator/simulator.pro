@@ -5,7 +5,7 @@ TEMPLATE=app
 
 DESTDIR = ../
 
-INCLUDEPATH=../include ../commons ../formats
+INCLUDEPATH=../include ../commons ../formats ../sparsepp
 
 include ("$$top_srcdir/localconfig.pri")
 macx {
@@ -24,6 +24,11 @@ macx {
 }
 
 unix:LIBS += -lpthread
+
+win32 {
+    # For GetProcessMemoryInfo()
+    LIBS += -lpsapi
+}
 
 unix:!macx {
     LIBS += -lrt
@@ -55,7 +60,8 @@ CONFIG(profile) {
 SOURCES= main.cpp \
     thread_vessels.cpp \
     biomodule.cpp \
-    outputexporter.cpp
+    outputexporter.cpp \
+    getRSS.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -81,7 +87,14 @@ HEADERS= \
     values.h \
     biomodule.h \
     messages/noipc.h \
-    outputexporter.h
+    outputexporter.h \
+    getrss.h
+
+unix:!macx {
+    SOURCES += memstats.cpp
+    HEADERS += memstats.h
+}
+
 
 !no_ipc {
     SOURCES += \

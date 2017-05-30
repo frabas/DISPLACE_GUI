@@ -31,12 +31,70 @@ using namespace std;
 void revsort(double *a, int *ib, int n);
 // in random.c
 void ProbSampleReplace(int n, double *p, int *perm, int nans, int *ans);
-vector<int> do_sample( int n, int nval, const std::vector<int> &val, const std::vector<double> &proba);
+double unif_rand(void);
+
+template <typename I>
+std::vector<I> do_sample( int n, int nval, const std::vector<I> &val, const std::vector<double> &proba)
+{
+    using Rec = std::tuple<I, double>;
+    class RecGreater {
+    public:
+        bool operator () (const Rec&v1, const Rec&v2) const {
+            return std::get<1>(v1) > std::get<1>(v2);
+        }
+    };
+
+    if (val.size() == 0 || proba.size() == 0 || nval == 0)
+        return vector<I>();
+
+    if (nval != (int)val.size() || nval != (int)proba.size())
+        throw std::invalid_argument("do_sample requires nval == val.size() == proba.size()");
+
+    double total = 0.0;
+
+    for (auto pr : proba) {
+        total += pr;
+    }
+
+    vector<Rec> prb;
+    for (int i = 0; i < (int)val.size(); ++i) {
+        prb.push_back(std::make_pair(val[i], proba[i]/ total));
+    }
+
+    vector<I> res;
+    res.reserve(n);
+
+    int nans = n;
+
+    double rU;
+    int nm1 = nval - 1;
+
+    /* sort the probabilities into descending order */
+    std::sort(prb.begin(), prb.end(), RecGreater());
+
+    /* compute cumulative probabilities */
+    for (int i = 1 ; i < nval; i++) {
+        std::get<1>(prb[i]) += std::get<1>(prb[i - 1]);
+    }
+
+    /* compute the sample */
+    for (int i = 0; i < nans; i++)
+    {
+        rU = unif_rand();
+        int j;
+        for (j = 0; j < nm1; j++)
+        {
+            if (rU <= std::get<1>(prb[j]))
+                break;
+        }
+        res.push_back(std::get<0>(prb[j]));
+    }
+    return res;
+}
 
 //svn.r-project.org/R/trunk/src/nmath/
 void set_seed(unsigned int i1, unsigned int i2);
 void get_seed(unsigned int *i1, unsigned int *i2);
-double unif_rand(void);
 double exp_rand(void);
 double fmax2(double x, double y);
 double fmin2(double x, double y);

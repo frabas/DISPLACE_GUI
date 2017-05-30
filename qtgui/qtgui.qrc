@@ -57,5 +57,7 @@
         <file>palettes/benthos_colors.p2c</file>
         <file>icons/metier.png</file>
         <file>icons/benthos.png</file>
+        <file>palettes/fishfarms_colors.p2c</file>
+        <file>icons/fishfarm.png</file>
     </qresource>
 </RCC>

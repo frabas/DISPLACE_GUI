@@ -53,7 +53,7 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
     strm_min << " key  value" << endl;
 
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-        vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
+        vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
@@ -82,7 +82,7 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
 
 
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-        vertex_descriptor nd = vertex(n->get_idx_node(), mGraph);
+        vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
@@ -111,7 +111,7 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
             std::shared_ptr<NodeData::Edge> edge = node->getAdiacencyByIdx(n);
             std::shared_ptr<NodeData> tg = edge->target.lock();
             if (tg.get() != nullptr) {
-                mEdges.push_back(Edge(node->get_idx_node(), tg->get_idx_node()));
+                mEdges.push_back(Edge(node->get_idx_node().toIndex(), tg->get_idx_node().toIndex()));
                 mWeights.push_back(edge->weight);
             }
         }
@@ -130,7 +130,7 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
 
     vertex_descriptor s;
 
-    s = vertex(node->get_idx_node(), mGraph);
+    s = vertex(node->get_idx_node().toIndex(), mGraph);
     dijkstra_shortest_paths(mGraph, s,
                              predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
                              distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
@@ -139,8 +139,8 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
     if (format == Text)
         ext = "dat";
 
-    QString mindist = QString("%1/min_distance_%2.%3").arg(path).arg(node->get_idx_node()).arg(ext);
-    QString prev = QString("%1/previous_%2.%3").arg(path).arg(node->get_idx_node()).arg(ext);
+    QString mindist = QString("%1/min_distance_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
+    QString prev = QString("%1/previous_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
 
     switch (format) {
     case Binary:

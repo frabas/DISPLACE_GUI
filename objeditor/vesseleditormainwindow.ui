@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>13</number>
+       <number>15</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -496,7 +496,7 @@
         <item>
          <widget class="QTabWidget" name="tabBenthosSubpages">
           <property name="currentIndex">
-           <number>0</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="tabBenthosSpecsSubpage">
            <attribute name="title">
@@ -517,6 +517,51 @@
              <widget class="CsvSpecsPage" name="benthosCsvPage2" native="true"/>
             </item>
            </layout>
+          </widget>
+          <widget class="QWidget" name="tabBenthosSpecsSubpage3">
+           <attribute name="title">
+            <string>Specs 3</string>
+           </attribute>
+           <widget class="CsvSpecsPage" name="benthosCsvPage3" native="true">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>10</y>
+              <width>786</width>
+              <height>490</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabBenthosSpecsSubpage4">
+           <attribute name="title">
+            <string>Specs 4</string>
+           </attribute>
+           <widget class="CsvSpecsPage" name="benthosCsvPage4" native="true">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>786</width>
+              <height>490</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabBenthosSpecsSubpage5">
+           <attribute name="title">
+            <string>Specs 5</string>
+           </attribute>
+           <widget class="CsvSpecsPage" name="benthosCsvPage5" native="true">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>786</width>
+              <height>490</height>
+             </rect>
+            </property>
+           </widget>
           </widget>
           <widget class="QWidget" name="tabBenthosShapefileSubpage">
            <attribute name="title">

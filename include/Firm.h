@@ -35,7 +35,7 @@
 
 #include <mutex>
 
-typedef int vertex_t;
+typedef types::NodeId::type vertex_t;
 
 class Node;
 class Metier;

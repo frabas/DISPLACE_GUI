@@ -30,20 +30,20 @@
 
 
 
-const vector<int> Node::mUsualFGrounds;
+const vector<types::NodeId> Node::mUsualFGrounds;
 const vector<double> Node::mFreqUsualFGrounds;
-const vector<int> Node::mUsualFGroundsMet;
+const vector<types::NodeId> Node::mUsualFGroundsMet;
 const vector<double> Node::mFreqUsualFGroundsMet;
-const multimap<int,int> Node::mUsualMetiers;
+const multimap<types::NodeId,int> Node::mUsualMetiers;
 const multimap<int,double> Node::mFreqUsualMetiers;
 
 
-Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
+Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code_area,
            int _marine_landscape, double _wind, double _sst, double _salinity,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            int nbpops, int nbbenthospops, int nbszgroups)
+    : idx_node(idx)
 {
-	idx_node= idx;
 	x=xval;
 	y=yval;
 	cumftime=0;
@@ -78,8 +78,8 @@ Node::Node(int idx, double xval, double yval,  int _harbour, int _code_area,
 
 }
 
-
-Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
+/*
+Node::Node(types::NodeId idx, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
            const vector<int> &graph_coord_harbour,
            const vector<int> &graph_point_code_area,
            const vector<int> &graph_point_marine_landscape,
@@ -124,7 +124,7 @@ Node::Node(int idx, const vector<double> &graph_coord_x, const vector<double> &g
 
 
 }
-
+*/
 
 Node::Node()
     : idx_node(0),
@@ -168,12 +168,12 @@ Node::~Node()
 }
 
 
-int Node::get_idx_node() const
+types::NodeId Node::get_idx_node() const
 {
 	return(idx_node);
 }
 
-void Node::set_idx_node(int idx)
+void Node::set_idx_node(types::NodeId idx)
 {
     idx_node = idx;
 }
@@ -266,7 +266,7 @@ double Node::get_fuelprices(int vsize)
 	return(0);
 }
 
-const vector<int> &Node::get_usual_fgrounds() const
+const vector<types::NodeId> &Node::get_usual_fgrounds() const
 {
     return mUsualFGrounds;
 }
@@ -276,7 +276,7 @@ const vector<double> &Node::get_freq_usual_fgrounds() const
     return mFreqUsualFGrounds;
 }
 
-void Node::set_usual_fgrounds(const vector <int> &_usual_fgrounds)
+void Node::set_usual_fgrounds(const vector<types::NodeId> &_usual_fgrounds)
 {
     UNUSED(_usual_fgrounds);
 //    mUsualFGrounds = _usual_fgrounds;
@@ -288,7 +288,7 @@ void Node::set_freq_usual_fgrounds(const vector <double> &_freq_usual_fgrounds)
 //    mFreqUsualFGrounds = _freq_usual_fgrounds;
 }
 
-vector<int> Node::get_usual_fgrounds_this_met(int met)
+vector<types::NodeId> Node::get_usual_fgrounds_this_met(int met)
 {
     UNUSED(met);
     return mUsualFGroundsMet;
@@ -301,36 +301,36 @@ vector<double> Node::get_freq_usual_fgrounds_this_met(int met)
     return mFreqUsualFGroundsMet;
 }
 
-void Node::set_usual_fgrounds_per_met(multimap <int,int> _usual_fgrounds_per_met)
+void Node::set_usual_fgrounds_per_met(multimap<int, types::NodeId> _usual_fgrounds_per_met)
 {
     UNUSED(_usual_fgrounds_per_met);
 }
 
 
-void Node::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgrounds_per_met)
+void Node::set_freq_usual_fgrounds_per_met(multimap<int, double> _freq_usual_fgrounds_per_met)
 {
     UNUSED(_freq_usual_fgrounds_per_met);
 }
 
 
-const multimap<int,int> &Node::get_usual_metiers() const
+const multimap<types::NodeId,int> &Node::get_usual_metiers() const
 {
      return mUsualMetiers;
 }
 
 
-const multimap<int,double> &Node::get_freq_usual_metiers() const
+const multimap<int, double> &Node::get_freq_usual_metiers() const
 {
     return mFreqUsualMetiers;
 }
 
-void Node::set_usual_metiers(multimap<int,int> _usual_metiers)
+void Node::set_usual_metiers(multimap<types::NodeId, int> _usual_metiers)
 {
     UNUSED(_usual_metiers);
 }
 
 
-void Node::set_freq_usual_metiers(multimap<int,double> _freq_usual_metiers)
+void Node::set_freq_usual_metiers(multimap<int, double> _freq_usual_metiers)
 {
     UNUSED(_freq_usual_metiers);
 }
@@ -521,6 +521,11 @@ double Node::get_cumcatches() const
 vector<int> Node::get_pop_names_on_node ()
 {
 	return(pop_names_on_node);
+}
+
+vector<int> Node::get_ff_names_on_node ()
+{
+    return(ff_names_on_node);
 }
 
 
@@ -734,6 +739,10 @@ void Node::set_pop_names_on_node(int name_pop)
 	pop_names_on_node.push_back(name_pop);
 }
 
+void Node::set_ff_names_on_node(int name_ff)
+{
+    ff_names_on_node.push_back(name_ff);
+}
 
 void Node::clear_pop_names_on_node()
 {
@@ -1076,7 +1085,7 @@ void Node::export_popnodes(ofstream& popnodes,  multimap<int,double> weight_at_s
 
 	popnodes << setprecision(3) << fixed;
 	// tstep / node / long / lat / tot N sp0 / tot N sp1 /...
-	popnodes << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y();
 
     double totN_this_pop, totW_this_pop;
@@ -1111,7 +1120,7 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-	popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		impact_on_pops.at(pop) << " " <<  endl;
 
@@ -1125,7 +1134,7 @@ void Node::export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, i
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot cumcatches pop
-    popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches_per_pop.at(pop) << " " <<  endl;
 
@@ -1141,7 +1150,7 @@ void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int
 
 	popnodes << setprecision(3) << fixed;
 	// pop/ tstep / node / long / lat /  impact sz0 / impact sz1 /...
-	popnodes << pop << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() ;
 
     for(unsigned int sz = 0; sz < impact_on_pops.size(); sz++)
@@ -1162,7 +1171,7 @@ void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-	popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		cumftime << " " <<  endl;
 
@@ -1176,7 +1185,7 @@ void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  swept area
-    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumsweptarea << " " <<  endl;
 
@@ -1190,7 +1199,7 @@ void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
-    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches << " " <<  endl;
 
@@ -1204,7 +1213,7 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tariffs
-    popnodes << " " << tstep << " " << this->get_idx_node() << " "<<
+    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         tariffs.at(0) << " " <<  endl;
 
@@ -1249,7 +1258,7 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
 
     benthosbiomassnodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
-    benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+    benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " "  <<
                            benthos_tot_meanweight.at(funcgr) << endl;
 
@@ -1264,7 +1273,7 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
 
     benthosnumbernodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
-    benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node() << " "<<
+    benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
                        benthos_tot_meanweight.at(funcgr) << endl;
 

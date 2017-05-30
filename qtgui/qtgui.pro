@@ -26,7 +26,7 @@ macx {
 #    QMAKE_PRE_LINK = make dummy
 }
 
-INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons ../formats
+INCLUDEPATH+=../include/ ../QMapControl/QMapControl/src/ ../commons ../qtcommons ../formats ../sparsepp
 
 include (../QMapControl/QMapControl/QMapControl.pri)
 include ("$$top_srcdir/localconfig.pri")
@@ -185,7 +185,9 @@ SOURCES += \
     mapobjects/firmmapobject.cpp \
     objects/bfunctionalgroupsentity.cpp \
     plots/benthosstatsplot.cpp \
-    stats/benthosstats.cpp
+    stats/benthosstats.cpp \
+    stats/fishfarmsstats.cpp \
+    plots/fishfarmsstatsplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -316,7 +318,9 @@ HEADERS += \
     utils/interestinglistwithspecialvalues.h \
     plots/benthosstatsplot.h \
     plots/plottypes.h \
-    stats/benthosstats.h
+    stats/benthosstats.h \
+    stats/fishfarmsstats.h \
+    plots/fishfarmsstatsplot.h
 
 RESOURCES += \
     qtgui.qrc

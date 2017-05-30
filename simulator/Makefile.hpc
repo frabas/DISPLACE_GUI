@@ -8,7 +8,9 @@ LIBDIR?=${PREFIX}/lib
 SOURCES= main.cpp \
     thread_vessels.cpp \
     biomodule.cpp \
-    outputexporter.cpp
+    outputexporter.cpp \
+    getRSS.cpp \
+    memstats.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -40,7 +42,7 @@ HEADERS= \
 DEFINES=-DNO_IPC
 
 LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I.
+CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I. -I../sparsepp/
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

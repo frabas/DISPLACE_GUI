@@ -71,10 +71,10 @@ bool ConfigDialog::get(Config &config) const
             return false;
     }
 
-    QList<int> ih;
+    QList<types::NodeId> ih;
     l = ui->m_int_harbours->text().split(" ", QString::SkipEmptyParts);
     foreach(QString s, l) {
-        ih.push_back(s.toInt(&ok));
+        ih.push_back(types::NodeId(s.toInt(&ok)));
         if (!ok)
             return false;
     }
@@ -125,10 +125,10 @@ void ConfigDialog::set(const Config &config)
 
     ui->m_calib_weight_at_szgroup->setText(il4.join(" "));
 
-    l1 = config.m_interesting_harbours;
+    auto hl = config.m_interesting_harbours;
     il.clear();
-    foreach (int i, l1)
-        il << QString::number(i);
+    foreach (auto i, hl)
+        il << QString::number(i.toIndex());
 
     ui->m_int_harbours->setText(il.join(" "));
 }
@@ -136,9 +136,9 @@ void ConfigDialog::set(const Config &config)
 void ConfigDialog::on_readFromTree_clicked()
 {
     QString x;
-    const QList<int> & list = mModel->getInterestingHarbours();
-    foreach(int i, list) {
-        x += QString::number(i) + " ";
+    const auto & list = mModel->getInterestingHarbours();
+    foreach(auto i, list) {
+        x += QString::number(i.toIndex()) + " ";
     }
 
     ui->m_int_harbours->setText(x);

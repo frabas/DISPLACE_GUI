@@ -22,6 +22,8 @@
 
 #include"myutils.h"
 #include"Population.h"
+#include "pathshop.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -42,7 +44,7 @@ vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
 vector<double>& a_vector_line8,
 vector<double>& a_vector_line10,
 vector<double>& a_vector_line12,
-vector<int> &interesting_harbours);
+vector<types::NodeId> &interesting_harbours);
 
 bool COMMONSSHARED_EXPORT read_config_file (std::istream &stream,
 int& a_int_line2,
@@ -51,7 +53,7 @@ vector<int>& a_vector_line6, vector<int> &implicit_pops_level2,
 vector<double>& a_vector_line8,
 vector<double>& a_vector_line10,
 vector<double>& a_vector_line12,
-vector<int> &interesting_harbours);
+vector<types::NodeId> &interesting_harbours);
 
 bool COMMONSSHARED_EXPORT read_scenario_config_file(string folder_name_parameterization,
     string inputfolder,
@@ -91,7 +93,66 @@ bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<do
                          vector<double> &PMEmissions,
                          vector<double>& vmaxs, vector<double>& vcruises, vector<double>& lane_ids,
                          string folder_name_parameterization, string inputfolder);
-bool COMMONSSHARED_EXPORT read_firms_features(vector<int>& firm_ids,
+
+bool COMMONSSHARED_EXPORT read_fishfarms_features(vector<int>& fishfarms_ids,
+                         vector<string>& fishfarms_names,
+                         vector<int>& idx_nodes,
+                         vector<int>& is_actives,
+                         vector<double>& sizes,
+                         vector<double>& longs,
+                         vector<double>& lats,
+                             vector<double>& mean_SSTs,
+                             vector<double>& mean_salinities,
+                             vector<double>& mean_windspeeds,
+                             vector<double>& mean_currentspeeds,
+                             vector<double>& max_depths,
+                             vector<double>& diss_O2_mg_per_ls,
+                             vector<double>& Linf_mms,
+                             vector<double>& K_ys,
+                             vector<double>& t0_ys,
+                             vector<double>& fulton_condition_factors,
+                             vector<string>& meanw_growth_model_types,
+                             vector<int>&    start_day_growings,
+                             vector<int>&    end_day_harvests,
+                             vector<int>&    nbyears_for_growths,
+                             vector<int>&    nb_days_fallowing_periods,
+                             vector<int>&    nb_fish_at_starts,
+                             vector<double>& meanw_at_starts,
+                             vector<double>& price_per_kg_at_starts,
+                             vector<double>& target_meanw_at_harvests,
+                             vector<int>& nb_fish_at_harvests,
+                             vector<double>& meanw_at_harvests,
+                             vector<double>& prop_harvest_kg_solds,
+                             vector<double>& kg_eggs_per_kgs,
+                             vector<double>& price_eggs_per_kgs,
+                             vector<double>& N_in_fish_kg_3pers,
+                             vector<double>& P_in_fish_kg_0_5pers,
+                             vector<string>& feed_types,
+                             vector<double>& feed_price_per_kgs,
+                             vector<double>& total_feed_kg,
+                             vector<double>& prop_N_in_feeds,
+                             vector<double>& prop_P_in_feeds,
+                             vector<double>& total_feed_N_kgs,
+                             vector<double>& total_feed_P_kgs,
+                             vector<string>& feed_type_vets,
+                             vector<double>& feed_vet_price_per_kgs,
+                             vector<double>& total_feed_vet_kgs,
+                             vector<double>& prop_N_in_feed_vets,
+                             vector<double>& prop_P_in_feed_vets,
+                             vector<double>& total_feed_vet_N_kgs,
+                             vector<double>& total_feed_vet_P_kgs,
+                             vector<double>& annual_discharge_N_kgs,
+                             vector<double>& annual_discharge_P_kgs,
+                             vector<double>& annual_discharge_C_kgs,
+                             vector<double>& annual_discharge_heavymetals_kgs,
+                             vector<double>& annual_discharge_medecine_kgs,
+                             vector<double>& net_harvest_kg_per_sqkm_ys,
+                             vector<double>& market_price_sold_fishs,
+                             vector<double>& operating_cost_per_days,
+                             vector<double>& annual_profits,
+                             string folder_name_parameterization,
+                             string inputfolder);
+bool read_firms_features(vector<int>& firm_ids,
                          vector<string>& firm_names,
                          vector<int>& nb_vessels,
                          vector<double>& longs,
@@ -102,9 +163,9 @@ bool COMMONSSHARED_EXPORT read_firms_features(vector<int>& firm_ids,
 
 
 
-multimap<string, int> COMMONSSHARED_EXPORT read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, int> COMMONSSHARED_EXPORT read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
-multimap<string, int> COMMONSSHARED_EXPORT read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
+multimap<string, types::NodeId> COMMONSSHARED_EXPORT read_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> COMMONSSHARED_EXPORT read_freq_fgrounds(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> COMMONSSHARED_EXPORT read_freq_fgrounds_init(string a_quarter, string folder_name_parameterization, string inputfolder);
 multimap<string, double> COMMONSSHARED_EXPORT read_freq_harbours(string a_quarter, string folder_name_parameterization, string inputfolder);
@@ -113,21 +174,21 @@ multimap<string, double> COMMONSSHARED_EXPORT read_vessels_tacs(string a_semeste
 
 multimap<string, double> COMMONSSHARED_EXPORT read_initial_fishing_credits(string folder_name_parameterization, string inputfolder);
 
-multimap<int, int> COMMONSSHARED_EXPORT read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, int> COMMONSSHARED_EXPORT read_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_freq_possible_metiers(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
-multimap<int, double> COMMONSSHARED_EXPORT read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
-multimap<int, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gshape_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_gscale_cpue_per_stk_on_nodes(string a_quarter, string a_vessel, string folder_name_parameterization, string inputfolder);
 
-multimap<int, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_initial_tariffs_on_nodes(string folder_name_parameterization, string inputfolder, string a_graph_name);
 
 
 
 // harbour specific
-multimap<int, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);
-int COMMONSSHARED_EXPORT read_prices_per_harbour(int i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
-int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(int i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
+multimap<types::NodeId, string> COMMONSSHARED_EXPORT read_harbour_names(string folder_name_parameterization, string inputfolder);
+int COMMONSSHARED_EXPORT read_prices_per_harbour(types::NodeId i, string a_quarter, multimap<string, double>& prices_per_harbour, string folder_name_parameterization, string inputfolder);
+int COMMONSSHARED_EXPORT read_prices_per_harbour_each_pop_per_cat(types::NodeId i, string a_quarter, multimap<int, double>& prices_per_harbour_each_species_per_cat, string folder_name_parameterization, string inputfolder);
 void COMMONSSHARED_EXPORT read_fuel_prices_per_vsize(map<int, double> &fuel_prices_per_vsize, string folder_name_parameterization, string inputfolder);
 
 // metier specific
@@ -174,10 +235,10 @@ multimap<int, double> COMMONSSHARED_EXPORT read_init_weight_per_szgroup(string f
 multimap<int, int> COMMONSSHARED_EXPORT read_init_comcat_per_szgroup(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_init_M_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
 multimap<int, double> COMMONSSHARED_EXPORT read_init_proprecru_per_szgroup(string folder_name_parameterization, string inputfolder, string biolsce);
-multimap<int, int> COMMONSSHARED_EXPORT read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> COMMONSSHARED_EXPORT read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> COMMONSSHARED_EXPORT read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
-multimap<int, double> COMMONSSHARED_EXPORT read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
+multimap<int, types::NodeId> COMMONSSHARED_EXPORT read_lst_idx_nodes_per_pop(string a_semester, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string str_rand_avai_file);
+multimap<types::NodeId, double> COMMONSSHARED_EXPORT read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 vector< vector<double> > COMMONSSHARED_EXPORT read_growth_transition_matrix(int a_pop, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
@@ -187,7 +248,7 @@ vector<double> COMMONSSHARED_EXPORT read_fbar_ages_min_max_and_ftarget(int a_pop
 vector<double> COMMONSSHARED_EXPORT read_initial_tac(int a_pop,  string folder_name_parameterization, string inputfolder);
 map<int, int> COMMONSSHARED_EXPORT read_tac_percent_simulated(string folder_name_parameterization, string inputfolder);
 map<int, double> COMMONSSHARED_EXPORT read_hyperstability_param(string folder_name_parameterization, string inputfolder);
-map<int, double> COMMONSSHARED_EXPORT read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce);
+map<types::NodeId, double> COMMONSSHARED_EXPORT read_oth_land_nodes_with_pop(string a_semester, string a_month, int a_pop, string folder_name_parameterization, string inputfolder, string fleetsce);
 map<string, double> COMMONSSHARED_EXPORT read_relative_stability_keys(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_selected_szgroups_per_pop(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_overall_migration_fluxes(string a_semester, int a_pop, string folder_name_parameterization, string inputfolder, string biolsce);
@@ -199,15 +260,16 @@ vector <int> COMMONSSHARED_EXPORT read_tsteps_months(string folder_name_paramete
 vector <int> COMMONSSHARED_EXPORT read_tsteps_years(string folder_name_parameterization, string inputfolder);
 
 //shortPaths
-map<int, int> COMMONSSHARED_EXPORT read_maps_previous(int source, string namesimu, string inputfolder, string a_graph_name);
-map<int, int> COMMONSSHARED_EXPORT read_min_distance(int source, string namesimu, string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> COMMONSSHARED_EXPORT __attribute__((deprecated)) read_maps_previous(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+spp::sparse_hash_map<types::NodeId::type, int> COMMONSSHARED_EXPORT __attribute__((deprecated)) read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name);
+PathShop COMMONSSHARED_EXPORT read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name);
 
 // area based management
 multimap<int, int> COMMONSSHARED_EXPORT read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder);
 
 // Closure reading
 struct COMMONSSHARED_EXPORT NodeBanningInfo {
-    int nodeId;
+    types::NodeId nodeId;
     std::vector<int> banned;
 };
 

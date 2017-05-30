@@ -21,7 +21,7 @@
 #include "Harbour.h"
 #include <helpers.h>
 
-Harbour::Harbour(int idx,
+Harbour::Harbour(types::NodeId idx,
 double xval,
 double yval,
 int _harbour,
@@ -40,7 +40,7 @@ string _name,
 //multimap<string, double> _mean_fish_price_per_met_per_pop,
 multimap<int, double> _mean_fish_price_per_pop_per_cat,
 map<int, double> _fuelprice,
-vector<int> _usual_fgrounds,
+vector<types::NodeId> _usual_fgrounds,
 vector<double> _freq_usual_fgrounds)
 : Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, _wind,_sst,_salinity,
        _benthos_biomass, _benthos_number,_benthos_meanweight, nbpops, nbbenthospops, nbszgroups)
@@ -66,7 +66,7 @@ Harbour::Harbour()
 {
 }
 
-Harbour::Harbour(int idx, double xval, double yval, int _harbour)
+Harbour::Harbour(types::NodeId idx, double xval, double yval, int _harbour)
     : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0)
 {
 
@@ -120,9 +120,11 @@ double Harbour::get_prices_per_cat(int pop, int cat)
 	//print_d(spe_prices);
 	if(!spe_prices.empty())
 	{
-        dout(cout  << "harbour "<< this->get_name() << endl);
+        dout(cout  << "fish price on harbour "<< this->get_name() << " and pop " << pop << endl);
 								 // caution to relative vector index here....
-		a_price=spe_prices.at(cat);
+        dout(cout  << "...for this cat "<< cat << "is:" << endl);
+        a_price=spe_prices.at(cat);
+        dout(cout  << a_price << endl);
 
 	}
 	else
@@ -150,7 +152,7 @@ double Harbour::get_fuelprices(int vsize)
 }
 
 
-const vector<int> &Harbour::get_usual_fgrounds() const
+const vector<types::NodeId> &Harbour::get_usual_fgrounds() const
 {
     return(usual_fgrounds);
 }
@@ -161,7 +163,7 @@ const vector<double> &Harbour::get_freq_usual_fgrounds() const
     return(freq_usual_fgrounds);
 }
 
-void Harbour::set_usual_fgrounds(const vector<int> &_usual_fgrounds)
+void Harbour::set_usual_fgrounds(const vector<types::NodeId> &_usual_fgrounds)
 {
     usual_fgrounds=_usual_fgrounds;
 }
@@ -172,9 +174,9 @@ void Harbour::set_freq_usual_fgrounds(const vector <double> &_freq_usual_fground
     freq_usual_fgrounds=_freq_usual_fgrounds;
 }
 
-vector<int> Harbour::get_usual_fgrounds_this_met(int met)
+vector<types::NodeId> Harbour::get_usual_fgrounds_this_met(int met)
 {
-    vector<int> usual_fgrounds_this_met  = find_entries_i_i( usual_fgrounds_per_met, met );
+    auto usual_fgrounds_this_met  = find_entries( usual_fgrounds_per_met, met );
 
     return(usual_fgrounds_this_met);
 }
@@ -187,19 +189,19 @@ vector<double> Harbour::get_freq_usual_fgrounds_this_met(int met)
     return(freq_usual_fgrounds_this_met);
 }
 
-void Harbour::set_usual_fgrounds_per_met(multimap <int,int> _usual_fgrounds_per_met)
+void Harbour::set_usual_fgrounds_per_met(multimap<int, types::NodeId> _usual_fgrounds_per_met)
 {
     usual_fgrounds_per_met=_usual_fgrounds_per_met;
 }
 
 
-void Harbour::set_freq_usual_fgrounds_per_met(multimap <int,double> _freq_usual_fgrounds_per_met)
+void Harbour::set_freq_usual_fgrounds_per_met(multimap<int, double> _freq_usual_fgrounds_per_met)
 {
     freq_usual_fgrounds_per_met=_freq_usual_fgrounds_per_met;
 }
 
 
-const multimap<int,int> &Harbour::get_usual_metiers() const
+const multimap<types::NodeId, int> &Harbour::get_usual_metiers() const
 {
     return(usual_metiers);
 }
@@ -210,7 +212,7 @@ const multimap<int, double> &Harbour::get_freq_usual_metiers() const
     return(freq_usual_metiers);
 }
 
-void Harbour::set_usual_metiers(multimap <int, int> _usual_metiers)
+void Harbour::set_usual_metiers(multimap<types::NodeId, int> _usual_metiers)
 {
  usual_metiers=_usual_metiers;
 }

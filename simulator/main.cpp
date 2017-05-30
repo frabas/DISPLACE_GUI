@@ -4732,8 +4732,12 @@ int main(int argc, char* argv[])
                       //cout << "discharge N from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_N() << "kg" << endl;
                       //cout << "discharge P from farm " << i << " is " << fishfarms.at(i)->get_sim_net_discharge_P() << "kg" << endl;
 
-                      fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
-                  }
+                       if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+                       {
+
+                           fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
+                       }
+                   }
                }
             }
 

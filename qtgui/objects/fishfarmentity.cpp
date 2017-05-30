@@ -22,6 +22,7 @@
 
 #include <objecttreemodel.h>
 #include <displacemodel.h>
+#include <mapobjectscontroller.h>
 
 namespace objecttree {
 
@@ -63,17 +64,42 @@ QVariant FishfarmEntity::data(const QModelIndex &index, int role) const
 {
     if (mFishfarmId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
-            return model->getModel()->getFishfarmId(mFishfarmId);
+              return QString("%1").arg(model->getModel()->getFishfarmId(mFishfarmId));
+        if (role == Qt::CheckStateRole)
+            return QVariant(model->getModel()->isInterestingFishfarms(index.row()) ? Qt::Checked : Qt::Unchecked);
         if (role == Qt::ToolTipRole) {
             std::shared_ptr<FishfarmData> ff = model->getModel()->getFishfarmList()[mFishfarmId];
             return QString("%1 %2").arg(ff->mFishfarm->get_y()).arg(ff->mFishfarm->get_x());
         }
 
 
-     model->getModel()->setInterestingFarmTypes(index.row());
+     model->getModel()->setInterestingFishfarms(index.row());
     }
 
     return QVariant();
 }
 
 }
+
+
+Qt::ItemFlags objecttree::FishfarmEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defFlags | Qt::ItemIsUserCheckable;
+}
+
+bool objecttree::FishfarmEntity::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(index.column() == 0 && role == Qt::CheckStateRole) {
+        if (value.toInt() == 0) {
+            model->getModel()->remInterestingFishfarms(index.row());
+        } else {
+            model->getModel()->setInterestingFishfarms(index.row());
+        }
+        model->getStatsController()->updateStats(model->getModel());
+        //model->getMapControl()->updateNodes(model->getModelIdx());
+        return true;
+    }
+    return false;
+}
+

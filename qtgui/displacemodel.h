@@ -318,8 +318,11 @@ public:
     bool isInterestingBenthos(int n) const { return mInterestingBenthos.has(n); }
     void clrInterestingBenthos() { mInterestingBenthos.clear(); }
 
-    QList<int> getInterestingFarmTypes() const { return mInterestingFishfarmsTypes.list(); }
-    void setInterestingFarmTypes(int n) { mInterestingFishfarmsTypes.set(n); }
+    QList<int> getInterestingFishfarms() const { return mInterestingFishfarms.list(); }
+    void setInterestingFishfarms(int n) { mInterestingFishfarms.set(n); }
+    void remInterestingFishfarms(int n) { mInterestingFishfarms.rem(n); }
+    bool isInterestingFishfarms(int n) const { return mInterestingFishfarms.has(n); }
+    void clrInterestingFishfarms() { mInterestingFishfarms.clear(); }
 
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
@@ -337,7 +340,7 @@ public:
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
 
     int getNumFishfarmIDs() const;
-    std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsIDsGroupsList() const { return mInterestingFishfarmsIDsGroups; }
+    std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsTypeGroupsList() const { return mInterestingFishfarmsIDsGroups; }
     int getFishfarmsTypeCount() const;
 
     /** \brief insert the pop into the list of interest for pops */
@@ -397,12 +400,12 @@ public:
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
     void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
 
-    void collectFishfarmFishMeanWeight (int step, int node_idx, int farmid, double meanw_kg);
-    void collectFishfarmFishHarvestedKg (int step, int node_idx, int farmid, double fish_harvested_kg);
-    void collectFishfarmEggsHarvestedKg (int step, int node_idx, int farmid, double eggs_harvested_kg);
-    void collectFishfarmAnnualProfit (int step, int node_idx, int farmid, double fishfarm_annualprofit);
-    void collectFishfarmNetDischargeN (int step, int node_idx, int farmid, double fishfarm_netdischargeN);
-    void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, double fishfarm_netdischargeP);
+    void collectFishfarmFishMeanWeight (int step, int node_idx, int farmtype, double meanw_kg);
+    void collectFishfarmFishHarvestedKg (int step, int node_idx, int farmtype, double fish_harvested_kg);
+    void collectFishfarmEggsHarvestedKg (int step, int node_idx, int farmtype, double eggs_harvested_kg);
+    void collectFishfarmAnnualProfit (int step, int node_idx, int farmtype, double fishfarm_annualprofit);
+    void collectFishfarmNetDischargeN (int step, int node_idx, int farmtype, double fishfarm_netdischargeN);
+    void collectFishfarmNetDischargeP (int step, int node_idx, int farmtype, double fishfarm_netdischargeP);
 
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
@@ -514,7 +517,7 @@ private:
     QList<types::NodeId> mInterestingHarb;
     QList<int> mInterestingNations;
     InterestingList<int> mInterestingBenthos;  
-    InterestingList<int> mInterestingFishfarmsTypes;
+    InterestingList<int> mInterestingFishfarms;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mInterestingFishfarmsIDsGroups;
 

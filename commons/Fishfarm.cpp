@@ -447,16 +447,16 @@ void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep, double 
         double ad_hoc_factor=1.1; // because condition_factor is not a fixed value for younger fish
         double length_at_start =  cbrt (this->get_meanw_at_start()*1000/(get_fulton_condition_factor()*ad_hoc_factor/100000)) ; // inverse of W=qL^3 with weight in gram and L in mm
         dout(cout << "length_at_start on this farm is " << length_at_start << " mm" << endl;)
-cout << "length_at_start on this farm is " << length_at_start << endl;
+//cout << "length_at_start on this farm is " << length_at_start << endl;
         double start_age_in_y = -1/get_K_y() *log(1-length_at_start/get_Linf_mm()) + get_t0_y(); // (inverse vbfg)
         dout(cout << "start_age_in_y on this farm is " << start_age_in_y << endl;)
-cout << "start_age_in_y on this farm is " << start_age_in_y << endl;
+//cout << "start_age_in_y on this farm is " << start_age_in_y << endl;
 
         // growth model: from age to weight (also adding the initial age of the fish computed from the known start meanw)
         this->set_sim_individual_mean_kg( ((get_fulton_condition_factor()/100000*pow(get_Linf_mm(),3))*pow((1-exp(-get_K_y()*(tstep_in_y+(start_age_in_y)-get_t0_y()))),3))  /1000);  // converted from g to kg
 
         dout(cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_mean_kg()  << endl;)
-cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_mean_kg() << endl;
+//cout << "sim_individual_mean_kg on this farm is " << this->get_sim_individual_mean_kg() << endl;
     }
     else
     {

@@ -56,12 +56,12 @@ public:
     void collectNetDischargeN(int step, int farmid, int farmtypeid, double net_discharge_N);
     void collectNetDischargeP(int step, int farmid, int farmtypeid, double net_discharge_P);
 
-    double meanwForFarmTypeAndFarmGroup(int farmid, int farmtypeid) const;
-    double fishharvestedkgForFarmTypeAndFarmGroup(int farmid, int farmtypeid) const;
-    double eggsharvestedkgForFarmTypeAndFarmGroup(int farmid, int farmtypeid) const;
-    double annualprofitForFarmTypeAndFarmGroup(int farmid, int farmtypeid) const;
-    double netdischargeNForFarmTypeAndFarmGroup(int farmid, int farmtypeid) const;
-    double netdischargePForFarmTypeAndFarmGroup(int farmid, int farmtypeid) const;
+    double meanwForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double fishharvestedkgForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double eggsharvestedkgForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double annualprofitForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double netdischargeNForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double netdischargePForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
 
     static const FishfarmsStats::StatData NoData;
 };

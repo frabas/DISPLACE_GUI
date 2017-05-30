@@ -31,7 +31,7 @@ public:
     void update(DisplaceModel *model, displace::plot::FishfarmsStat stat);
 
 private:
-    double getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::FishfarmsStat stattype);
+    double getStatValue(DisplaceModel *model, int tstep, int farmtype, int farmid, displace::plot::FishfarmsStat stattype);
 };
 
 

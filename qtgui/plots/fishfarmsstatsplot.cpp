@@ -25,7 +25,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
     QList<int>  interFishfarmsIDsList= model->getInterestingFishfarms();
 
 
-    auto farmsTypeGroups = model->getFishfarmsTypeGroupsList();
+    auto farmsTypeGroups = model->getFishfarmsTypesList();
     QList<int> interFishfarmsTypesList = farmsTypeGroups->list();
 
     QList<int> graphList;
@@ -48,13 +48,13 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
     /* If no farm is selected, but aggregate is selected, select all farms */
     if (interFishfarmsTypesList.size() == 0 && graphList.size() != 0) {
-        for(int i = 0; i < model->getNumFishfarmIDs(); ++i)
+        for(int i = 0; i < model->getNumFishfarmTypes(); ++i)
             interFishfarmsTypesList.push_back(i);
     }
 
     /* If no fishfarms type is selected, select all fishfarms type */
     if (interFishfarmsIDsList.size() == 0) {
-        for (int i = 0; i < model->getFishfarmsTypeCount(); ++i) {
+        for (int i = 0; i < model->getFishfarmsCount(); ++i) {
             interFishfarmsIDsList.push_back(i);
         }
     }

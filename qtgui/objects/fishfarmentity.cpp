@@ -50,7 +50,7 @@ QModelIndex FishfarmEntity::index(int row, int column, const QModelIndex &parent
 int FishfarmEntity::rowCount() const
 {
     if (mFishfarmId == -1 && model->getModel() != 0)
-        return model->getModel()->getFishfarmCount();
+        return model->getModel()->getFishfarmsCount();
 
     return 0;
 }

@@ -69,7 +69,7 @@ DisplaceModel::DisplaceModel()
       mInterestingSizeMax(false),
       mInterestingSizes(),
       mFuncGroups(std::make_shared<InterestingListWithSpecialValues<int>>()),
-      mInterestingFishfarmsIDsGroups(std::make_shared<InterestingListWithSpecialValues<int>>()),
+      mFishfarmsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this)),
       mShortestPathFolder()
@@ -101,11 +101,11 @@ DisplaceModel::DisplaceModel()
     mFuncGroups->addSpecialValue(tr("Min"));
     mFuncGroups->addSpecialValue(tr("Max"));
 
-    mInterestingFishfarmsIDsGroups->setValuesFormatString(tr("Functional Group #%1"));
-    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Total"));
-    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Average"), true);
-    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Min"));
-    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Max"));
+    mFishfarmsTypes->setValuesFormatString(tr("Fishfarm Type #%1"));
+    mFishfarmsTypes->addSpecialValue(tr("Total"));
+    mFishfarmsTypes->addSpecialValue(tr("Average"), true);
+    mFishfarmsTypes->addSpecialValue(tr("Min"));
+    mFishfarmsTypes->addSpecialValue(tr("Max"));
 }
 
 void DisplaceModel::createFeaturesLayer()
@@ -1372,7 +1372,7 @@ void DisplaceModel::updateShip(int tstep, int idx, float x, float y, float cours
 
 
 
-int DisplaceModel::getFishfarmCount() const
+int DisplaceModel::getFishfarmsCount() const
 {
     return mFishfarms.size();
 }
@@ -1559,16 +1559,12 @@ int DisplaceModel::getNumFuncGroups() const
     return config().getNbbenthospops();
 }
 
-int DisplaceModel::getNumFishfarmIDs() const
+int DisplaceModel::getNumFishfarmTypes() const
 {
-    // return config().FishfarmIDsGroups();
-    return 20; // TO DO: detect nb of farms
+    // return config().getNumFishfarmTypes();
+    return 1; // TO DO: detect nb of farms type
 }
 
-int DisplaceModel::getFishfarmsTypeCount() const
-{
-    return 1; // TO DO: detect nb of type of farms
-}
 
 void DisplaceModel::setInterestingSize(int n)
 {

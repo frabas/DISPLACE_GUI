@@ -166,7 +166,7 @@ public:
     void updateVessel (int tstep, int idx, float x, float y, float course, float fuel, int state );
 
     const QList<std::shared_ptr<FishfarmData> > &getFishfarmList() const { return mFishfarms; }
-    int getFishfarmCount() const;
+    int getFishfarmsCount() const;
     QString getFishfarmId(int idx) const;
     void updateFishfarm (int idx, float x, float y);
 
@@ -339,9 +339,8 @@ public:
     int getNumFuncGroups() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
 
-    int getNumFishfarmIDs() const;
-    std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsTypeGroupsList() const { return mInterestingFishfarmsIDsGroups; }
-    int getFishfarmsTypeCount() const;
+    int getNumFishfarmTypes() const;
+    std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsTypesList() const { return mFishfarmsTypes; }
 
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingSize(int n);
@@ -519,7 +518,7 @@ private:
     InterestingList<int> mInterestingBenthos;  
     InterestingList<int> mInterestingFishfarms;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
-    std::shared_ptr<InterestingListWithSpecialValues<int>> mInterestingFishfarmsIDsGroups;
+    std::shared_ptr<InterestingListWithSpecialValues<int>> mFishfarmsTypes;
 
     QList<displace::NodePenalty> mPenaltyNodes;
 

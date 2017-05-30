@@ -37,6 +37,7 @@
 #include <objects/nationentity.h>
 #include <objects/szgroupentity.h>
 #include <objects/bfunctionalgroupsentity.h>
+#include <objects/ffarmtypesentity.h>
 
 #include <displacemodel.h>
 #include <QMapControl/QMapControl.h>
@@ -97,6 +98,11 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
 
         auto funcgroups = new objecttree::BFunctionalGroupsEntity(this, nullptr);
         entityTemplates[BenthosFunctionalGroups] = funcgroups;
+
+        auto farmtypes = new objecttree::FFarmTypesEntity(this, nullptr);
+        entityTemplates[FishfarmsTypes] = farmtypes;
+
+
     }
 }
 

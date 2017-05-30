@@ -10,7 +10,6 @@ FishfarmsStats::FishfarmsStats()
 
 FishfarmsStats::FishfarmsStats(const FishfarmsStats &b)
 {
-  cout << "FishfarmsStats creator1" << endl;
     std::unique_lock<std::mutex> l1(mMutex);
     std::unique_lock<std::mutex> l2(b.mMutex);
 
@@ -20,7 +19,6 @@ FishfarmsStats::FishfarmsStats(const FishfarmsStats &b)
 
 FishfarmsStats::FishfarmsStats(FishfarmsStats &&b)
 {
-    cout << "FishfarmsStats creator2" << endl;
     std::unique_lock<std::mutex> l1(mMutex);
     std::unique_lock<std::mutex> l2(b.mMutex);
 

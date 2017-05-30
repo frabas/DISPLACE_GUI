@@ -69,6 +69,7 @@ DisplaceModel::DisplaceModel()
       mInterestingSizeMax(false),
       mInterestingSizes(),
       mFuncGroups(std::make_shared<InterestingListWithSpecialValues<int>>()),
+      mInterestingFishfarmsIDsGroups(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this)),
       mShortestPathFolder()
@@ -99,6 +100,12 @@ DisplaceModel::DisplaceModel()
     mFuncGroups->addSpecialValue(tr("Average"), true);
     mFuncGroups->addSpecialValue(tr("Min"));
     mFuncGroups->addSpecialValue(tr("Max"));
+
+    mInterestingFishfarmsIDsGroups->setValuesFormatString(tr("Functional Group #%1"));
+    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Total"));
+    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Average"), true);
+    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Min"));
+    mInterestingFishfarmsIDsGroups->addSpecialValue(tr("Max"));
 }
 
 void DisplaceModel::createFeaturesLayer()

@@ -30,13 +30,24 @@ class FishfarmStats;
 
 class FishfarmData
 {
+
+    int mIdx;
+    int mFishfarmId;
+
 public:
     std::shared_ptr<Fishfarm> mFishfarm; /* This is crap too. */
 
     FishfarmData(std::shared_ptr<Fishfarm> fishfarm);
 
+    int getId() const { return mFishfarmId; }
+
+
     double getX() const;
     double getY() const;
+
+    int getIdx() const;
+    void setIdx(int idx);
+
 
 private:
     double mX;

@@ -22,7 +22,9 @@
 
 FishfarmData::FishfarmData(std::shared_ptr<Fishfarm> fishfarm)
     : mFishfarm(fishfarm)
+
 {
+    mFishfarmId= fishfarm->get_name();
 }
 
 double FishfarmData::getX() const
@@ -33,4 +35,14 @@ double FishfarmData::getX() const
 double FishfarmData::getY() const
 {
     return mY;
+}
+
+int FishfarmData::getIdx() const
+{
+    return mIdx;
+}
+
+void FishfarmData::setIdx(int idx)
+{
+    mIdx = idx;
 }

@@ -3373,6 +3373,7 @@ int main(int argc, char* argv[])
     ofstream fishfarmslogs;
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/fishfarmslogs_"+namesimu+".dat";
     fishfarmslogs.open(filename.c_str());
+    std::string fishfarmslogs_filename = filename;
 
 
     // read list of tsteps with discrete events
@@ -4743,6 +4744,16 @@ int main(int argc, char* argv[])
 
         }
 
+        // Flush and updates all statistics for fsihfarms
+        if (use_gui)
+        {
+
+            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+            {
+            fishfarmslogs.flush();
+            guiSendUpdateCommand(fishfarmslogs_filename, tstep);
+            }
+        }
 
 
 

@@ -55,8 +55,6 @@ Firm::~Firm()
 
 Firm::Firm(int idx, int a_idx_firm, std::string a_name, int a_nb_vessels, double lon, double lat, std::vector<Vessel*> &a_bunch_of_vessels)
 {
-    pthread_mutex_init(&mutex,0);
-
     idx_firm = a_idx_firm;
     nb_vessels=a_nb_vessels;
     bunch_of_vessels = a_bunch_of_vessels;

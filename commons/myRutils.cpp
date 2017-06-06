@@ -18,11 +18,12 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
+#include <commons_global.h>
 #include <iostream>
 #include <vector>
 #include <time.h>
 #include <cmath>
-#include <pthread.h>
+#include <mutex>
 
 #include <helpers.h>
 
@@ -39,38 +40,36 @@ using namespace std;
 //----------------------------------
 /* A version of Marsaglia-MultiCarry */
 
-static pthread_mutex_t glob_mutex = PTHREAD_MUTEX_INITIALIZER;
+static std::mutex glob_mutex;
 static unsigned int I1=1234, I2=5678;
 
-void set_seed(unsigned int i1, unsigned int i2)
+void COMMONSSHARED_EXPORT set_seed(unsigned int i1, unsigned int i2)
 {
-    pthread_mutex_lock(&glob_mutex);
+    std::lock_guard<std::mutex> lock(glob_mutex);
     I1 = i1; I2 = i2;
-    pthread_mutex_unlock(&glob_mutex);
 }
 
 
-void get_seed(unsigned int *i1, unsigned int *i2)
+void COMMONSSHARED_EXPORT get_seed(unsigned int *i1, unsigned int *i2)
 {
-    pthread_mutex_lock(&glob_mutex);
+    std::lock_guard<std::mutex> lock(glob_mutex);
     *i1 = I1; *i2 = I2;
-    pthread_mutex_unlock(&glob_mutex);
 }
 
 
-double unif_rand(void)
+double COMMONSSHARED_EXPORT unif_rand(void)
 {
-    pthread_mutex_lock(&glob_mutex);
+    std::lock_guard<std::mutex> lock(glob_mutex);
 
     I1= 36969*(I1 & 0177777) + (I1>>16);
     I2= 18000*(I2 & 0177777) + (I2>>16);
     double ret =((I1 << 16)^(I2 & 0177777)) * 2.328306437080797e-10;
-    pthread_mutex_unlock(&glob_mutex);
+
     return ret;
 }
 
 
-void revsort(double *a, int *ib, int n)
+void COMMONSSHARED_EXPORT revsort(double *a, int *ib, int n)
 {
     /* Sort a[] into descending order by "heapsort";
      * sort ib[] alongside;
@@ -140,7 +139,7 @@ void revsort(double *a, int *ib, int n)
 
 /* Unequal probability sampling; with-replacement case */
 
-void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
+void COMMONSSHARED_EXPORT ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 {
     double rU;
     int i, j;
@@ -183,6 +182,77 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 
 }
 
+
+vector<int> COMMONSSHARED_EXPORT do_sample( int n, int nval, const std::vector<int> &val, const std::vector<double> &proba)
+{
+    using Rec = std::tuple<int, double>;
+    class RecGreater {
+    public:
+        bool operator () (const Rec&v1, const Rec&v2) const {
+            return std::get<1>(v1) > std::get<1>(v2);
+        }
+    };
+
+    if (val.size() == 0 || proba.size() == 0 || nval == 0)
+        return vector<int>();
+
+    if (nval != (int)val.size() || nval != (int)proba.size())
+        throw std::invalid_argument("do_sample requires nval == val.size() == proba.size()");
+
+    double total = 0.0;
+
+    for (auto pr : proba) {
+        total += pr;
+    }
+
+    vector<Rec> prb;
+    for (int i = 0; i < (int)val.size(); ++i) {
+        prb.push_back(std::make_pair(val[i], proba[i]/ total));
+    }
+
+    vector<int> res;
+    res.reserve(n);
+
+    int nans = n;
+
+    double rU;
+    int nm1 = nval - 1;
+
+    //    for (auto x : prb)
+    //        cout << "[ " << std::get<0>(x) <<"," << std::get<1>(x) << "] ";
+    //    cout << endl;
+
+    /* sort the probabilities into descending order */
+    std::sort(prb.begin(), prb.end(), RecGreater());
+
+    //    for (auto x : prb)
+    //        cout << "[ " << std::get<0>(x) <<"," << std::get<1>(x) << "] ";
+    //    cout << endl;
+
+    /* compute cumulative probabilities */
+    for (int i = 1 ; i < nval; i++) {
+        std::get<1>(prb[i]) += std::get<1>(prb[i - 1]);
+    }
+
+    /* compute the sample */
+    for (int i = 0; i < nans; i++)
+    {
+        rU = unif_rand();
+        int j;
+        for (j = 0; j < nm1; j++)
+        {
+            if (rU <= std::get<1>(prb[j]))
+                break;
+        }
+        //        cout << j << "," << rU << "," << std::get<1>(prb[j]) << "," << std::get<0>(prb[j]) << endl;
+        res.push_back(std::get<0>(prb[j]));
+    }
+
+    //    cout << "----" << endl;
+    return res;
+}
+
+
 //----------------------------------
 //----------------------------------
 //----------------------------------
@@ -196,7 +266,7 @@ void ProbSampleReplace(int nval, double *proba, int *perm, int nans, int *ans)
 //----------------------------------
 //----------------------------------
 
-double exp_rand(void)
+double COMMONSSHARED_EXPORT exp_rand(void)
 {
     /* q[k-1] = sum(log(2)^k / k!)  k=1,..,n, */
     /* The highest n (here 16) is determined by q[n-1] = 1.0 */
@@ -256,7 +326,7 @@ double exp_rand(void)
 //----------------------------------
 //----------------------------------
 
-double fmax2(double x, double y)
+double COMMONSSHARED_EXPORT fmax2(double x, double y)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(y))
@@ -266,7 +336,7 @@ double fmax2(double x, double y)
 }
 
 
-double fmin2(double x, double y)
+double COMMONSSHARED_EXPORT fmin2(double x, double y)
 {
 #ifdef IEEE_754
     if (ISNAN(x) || ISNAN(y))
@@ -277,8 +347,11 @@ double fmin2(double x, double y)
 
 
 // disable warnings
+#if defined (__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+
 
 //----------------------------------
 //----------------------------------
@@ -287,7 +360,7 @@ double fmin2(double x, double y)
 //----------------------------------
 //----------------------------------
 #define repeat for(;;)
-double norm_rand(void)
+double COMMONSSHARED_EXPORT norm_rand(void)
 {
 
     const static double a[32] =
@@ -422,11 +495,13 @@ double norm_rand(void)
 
 }
 
+#if defined (__GNUC__)
 #pragma GCC diagnostic pop
+#endif
 
 //#include "nmath.h"
 //a=>shape
-double rgamma(double a, double scale)
+double COMMONSSHARED_EXPORT rgamma(double a, double scale)
 {
     /* Constants : */
     const static double sqrt32 = 5.656854;
@@ -604,13 +679,13 @@ double rgamma(double a, double scale)
 }
 
 
-double rnorm(double mu, double sigma)
+double COMMONSSHARED_EXPORT rnorm(double mu, double sigma)
 {
     return mu + sigma * norm_rand();
 }
 
 
-double rlnorm(double meanlog, double sdlog)
+double COMMONSSHARED_EXPORT rlnorm(double meanlog, double sdlog)
 {
 
     return exp(rnorm(meanlog, sdlog));

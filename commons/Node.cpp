@@ -44,7 +44,6 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
            int nbpops, int nbbenthospops, int nbszgroups)
     : idx_node(idx)
 {
-    pthread_mutex_init(&mutex, 0);
 	x=xval;
 	y=yval;
 	cumftime=0;
@@ -91,8 +90,6 @@ Node::Node(types::NodeId idx, const vector<double> &graph_coord_x, const vector<
            const vector<double> &graph_benthos_number, double initmw,
            int nbpops, int nbbenthospops, int nbszgroups)
 {
-    pthread_mutex_init(&mutex, 0);
-
     UNUSED(nbpops);
     UNUSED(nbbenthospops);
     UNUSED(nbszgroups);
@@ -162,10 +159,6 @@ Node::Node()
       m_nbbenthospops(0),
       m_nszgrp(0)
 {
-
-
-
-    pthread_mutex_init(&mutex, 0);
 }
 
 
@@ -548,9 +541,8 @@ const vector<double>& Node::get_cumcatches_per_pop ()
 
 void Node::set_vid (int val)
 {
-    pthread_mutex_lock(&mutex);
+    std::lock_guard<std::mutex> guard(mutex);
     vid.push_back(val);
-    pthread_mutex_unlock(&mutex);
 }
 
 void Node::set_cumftime(int tot)

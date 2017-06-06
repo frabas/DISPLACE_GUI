@@ -2,11 +2,12 @@
 #define FORMATEXCEPTION_H
 
 #include <stdexcept>
+#include <formats_globals.h>
 
 namespace displace {
 namespace formats {
 
-class FormatException : public std::runtime_error {
+class FORMATSSHARED_EXPORT FormatException : public std::runtime_error {
 public:
     explicit FormatException(const char *msg)
         : std::runtime_error(msg) {}

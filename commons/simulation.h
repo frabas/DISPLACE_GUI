@@ -38,7 +38,7 @@ namespace simulation {
  * manage all the data using a simulation Object.
  * So the interface is subject to change (at least the accessing functions).
  */
-class Simulation
+class COMMONSSHARED_EXPORT Simulation
 {
 private:
     Simulation();

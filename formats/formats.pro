@@ -1,5 +1,3 @@
-CONFIG -= qt
-
 TEMPLATE= lib
 TARGET=formats
 DESTDIR=../
@@ -8,6 +6,7 @@ CONFIG += c++11
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
+DEFINES += FORMATS_LIBRARY
 INCLUDEPATH += .
 
 win32 {
@@ -28,7 +27,8 @@ HEADERS = \
     legacy/binarygraphfilereader.h \
     utils/endian.h \
     legacy/binarygraphfilewriter.h \
-    utils/portable_endian.h
+    utils/portable_endian.h \
+    formats_globals.h
 
 SOURCES = legacy/ConfigFileReader.cpp  \
     utils/KeyValueReader.cpp \

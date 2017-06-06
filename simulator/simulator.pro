@@ -1,4 +1,3 @@
-CONFIG -= qt
 CONFIG += console
 
 TARGET=displace
@@ -24,7 +23,7 @@ macx {
     CONFIG -= app_bundle
 }
 
-LIBS += -lpthread
+unix:LIBS += -lpthread
 
 win32 {
     # For GetProcessMemoryInfo()

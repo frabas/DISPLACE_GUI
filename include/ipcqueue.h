@@ -41,6 +41,7 @@
 #ifndef IPCQUEUE_H
 #define IPCQUEUE_H
 
+#include <commons_global.h>
 #include <ipcmsgtypes.h>
 #include <boost/interprocess/containers/list.hpp>
 #include <boost/interprocess/managed_shared_memory.hpp>
@@ -54,7 +55,7 @@
 /** @brief implements a CircularBuffer to be used in a boost::interprocess::managed_heap_memory
  * @note DO NOT implements ANY virtual method in this class! Pointers are not portable across processes!
  */
-class IpcQueue
+class COMMONSSHARED_EXPORT IpcQueue
 {
 public:
     IpcQueue();

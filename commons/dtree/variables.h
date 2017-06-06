@@ -1,6 +1,7 @@
 #ifndef DTREEVARIABLES_H
 #define DTREEVARIABLES_H
 
+#include <commons_global.h>
 #include <string>
 #include <vector>
 
@@ -53,7 +54,7 @@ enum Variable {
     VarLast
 };
 
-class VariableNames {
+class COMMONSSHARED_EXPORT VariableNames {
 public:
     static const int VERSION;
 

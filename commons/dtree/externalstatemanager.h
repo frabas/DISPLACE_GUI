@@ -1,6 +1,7 @@
 #ifndef EXTERNALSTATEMANAGER_H
 #define EXTERNALSTATEMANAGER_H
 
+#include <commons_global.h>
 #include <dtree/stateevaluator.h>
 #include <dtree/variables.h>
 
@@ -8,7 +9,7 @@
 
 /** \brief A monostate/singleton class to manage External States variables
  * */
-class ExternalStateManager
+class COMMONSSHARED_EXPORT ExternalStateManager
 {
     static ExternalStateManager *sInstance;
 

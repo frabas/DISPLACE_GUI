@@ -5,6 +5,8 @@
 #ifndef DISPLACE_MULTIFIELDREADER_H
 #define DISPLACE_MULTIFIELDREADER_H
 
+#include <formats_globals.h>
+
 #include <string>
 #include <tuple>
 #include <vector>

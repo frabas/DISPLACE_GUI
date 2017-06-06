@@ -1,11 +1,11 @@
 #include "outputexporter.h"
 
-#include <mutexlocker.h>
+#include <mutex>
 #include <Vessel.h>
 #include <Metier.h>
 #include <Node.h>
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 using namespace std;
 
 std::shared_ptr<OutputExporter> OutputExporter::mInstance = nullptr;
@@ -21,7 +21,7 @@ OutputExporter::OutputExporter(const string &basepath, const string &namesimu)
 
 void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
 {
-    MutexLocker l(&glob_mutex);
+    std::unique_lock<std::mutex> locker(glob_mutex);
 
     mVmsLike << tstep << " "
                 //<< vessels[ index_v ]->get_idx() << " "
@@ -158,7 +158,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
         ss  << *it2 << " " ;
     ss  << " " << std::endl;
 
-    MutexLocker l(&glob_mutex);
+    std::unique_lock<std::mutex> l(glob_mutex);
 
     mLogLike << ss.str();
 }

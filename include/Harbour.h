@@ -21,6 +21,7 @@
 #ifndef HARBOUR_H
 #define HARBOUR_H
 
+#include <commons_global.h>
 #include <string>
 #include <iostream>
 #include <vector>
@@ -32,7 +33,7 @@
 
 using namespace std;
 
-class Harbour : public Node
+class COMMONSSHARED_EXPORT Harbour : public Node
 {
 	public:
         Harbour(types::NodeId idx,

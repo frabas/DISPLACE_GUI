@@ -21,6 +21,8 @@
 #ifndef VESSEL_H
 #define VESSEL_H
 
+#include <commons_global.h>
+
 #include <vesselcalendar.h>
 
 #include <string>
@@ -34,7 +36,7 @@
 #include <dtree/decisiontree.h>
 #include <dtree/stateevaluator.h>
 
-#include <pthread.h>
+#include <mutex>
 
 typedef types::NodeId::type vertex_t;
 
@@ -43,7 +45,7 @@ class Metier;
 class Population;
 class Benthos;
 
-class Vessel
+class COMMONSSHARED_EXPORT Vessel
 {
 public:
     enum LengthClass {
@@ -132,7 +134,7 @@ private:
         types::NodeId smartcatch;
         types::NodeId highpotentialcatch, notthatfar, mosthistoricallyused; // some relevant grounds
 
-        pthread_mutex_t mutex;
+        std::mutex mutex;
 
 protected:
         void init();
@@ -159,8 +161,8 @@ public:
 		Vessel();
 		~Vessel();
 
-        void lock() { pthread_mutex_lock (&mutex); }
-        void unlock() { pthread_mutex_unlock (&mutex); }
+        void lock() { mutex.lock(); }
+        void unlock() { mutex.unlock(); }
 
 		int get_idx () const;
         std::string get_name () const;

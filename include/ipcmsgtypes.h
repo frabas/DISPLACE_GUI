@@ -41,6 +41,7 @@
 #ifndef IPCMSGTYPES_H
 #define IPCMSGTYPES_H
 
+#include <commons_global.h>
 #include <stddef.h>
 
 enum IpcMessageTypes {
@@ -55,20 +56,20 @@ enum IpcMessageTypes {
 namespace displace {
 namespace ipc {
 
-struct MoveVesselMessage {
+struct COMMONSSHARED_EXPORT MoveVesselMessage {
     unsigned int tstep = 0, tstep_dep = 0;
     unsigned int idx = -1;
     double x = 0,y = 0,course = 0,cumfuelcons = 0;
     int state = -1;
 };
 
-struct MoveShipMessage {
+struct COMMONSSHARED_EXPORT MoveShipMessage {
     unsigned int tstep = 0;
     unsigned int idx = -1;
     double x = 0,y = 0,course = 0;
 };
 
-struct VesselLogbookMessage {
+struct COMMONSSHARED_EXPORT VesselLogbookMessage {
     unsigned int tstep = 0, tstepdep = 0;
     int rtbb = 0, node = -1, idx = -1;
     double cumstm = 0, timeatsea = 0,cumfcons = 0,travdist = 0, revenue_from_av_prices = 0, revenue_explicit_from_av_prices = 0, fuelcost = 0, gav2 = 0;

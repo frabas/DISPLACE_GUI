@@ -1,9 +1,10 @@
 #ifndef WINDMILLGRAPHICS_H
 #define WINDMILLGRAPHICS_H
 
+#include <qtcommons_global.h>
 #include <GeometryPointShapeScaled.h>
 
-class WindmillGraphics : public qmapcontrol::GeometryPointShapeScaled {
+class QTCOMMONSSHARED_EXPORT WindmillGraphics : public qmapcontrol::GeometryPointShapeScaled {
     static QBrush *color;
 
     float mLat, mLon;

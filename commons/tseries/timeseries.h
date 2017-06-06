@@ -1,6 +1,7 @@
 #ifndef TIMESERIES_H
 #define TIMESERIES_H
 
+#include <commons_global.h>
 #include <vector>
 #include <cmath>
 #include <iostream>
@@ -8,7 +9,7 @@
 namespace displace {
 namespace simulation {
 
-class TimeSeries
+class COMMONSSHARED_EXPORT TimeSeries
 {
 public:
     TimeSeries();

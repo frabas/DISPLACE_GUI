@@ -28,7 +28,7 @@
 #include "myutils.h"
 #include "Node.h"
 
-class Windmill
+class COMMONSSHARED_EXPORT Windmill
 {
     public:
         Windmill(int _name, Node *_node, double size);

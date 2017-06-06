@@ -1,13 +1,14 @@
 #ifndef CSVTABLEMODEL_H
 #define CSVTABLEMODEL_H
 
+#include <qtcommons_global.h>
 #include <QAbstractTableModel>
 #include <QList>
 #include <QStringList>
 
 #include <memory>
 
-class CsvTableModel : public QAbstractTableModel
+class QTCOMMONSSHARED_EXPORT CsvTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

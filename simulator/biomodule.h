@@ -30,8 +30,6 @@
 
 using namespace std;
 
-#include <pthread.h>
-#include <semaphore.h>
 #include <errno.h>
 
 // for Windows
@@ -61,7 +59,7 @@ int applyBiologicalModule(int tstep, const string &namesimu,
                           ofstream &benthosbiomassnodes,
                           ofstream &benthosnumbernodes,
                           int nbbenthospops,
-                          char *path,
+                          const char *path,
                           bool use_gnuplot,
                           bool use_gui,
                           const string & popdyn_N_filename,

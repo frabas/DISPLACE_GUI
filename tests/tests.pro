@@ -1,6 +1,6 @@
 include ("$$top_srcdir/localconfig.pri")
 
-QT=
+QT=core
 TARGET=unittest
 CONFIG += c++11
 
@@ -27,7 +27,7 @@ unix {
     LIBS+=-lboost_unit_test_framework
 }
 win32 {
-    LIBS += -lboost_unit_test_framework-mgw49-mt-1_57
+    LIBS += -lboost_unit_test_framework-vc140-mt-1_63
 }
 
 SOURCES= main.cpp \

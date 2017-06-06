@@ -21,6 +21,7 @@
 #ifndef BENTHOS_H
 #define BENTHOS_H
 
+#include <commons_global.h>
 #include <vector>
 #include <map>
 #include <string>
@@ -28,7 +29,7 @@
 #include "myutils.h"
 #include "Node.h"
 
-class Benthos
+class COMMONSSHARED_EXPORT Benthos
 {
 	public:
         Benthos(int marine_landscape,

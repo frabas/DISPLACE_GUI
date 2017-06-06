@@ -1,14 +1,15 @@
 #ifndef R_DEFAULTS_H
 #define R_DEFAULTS_H
 
+#include <qtcommons_global.h>
 #include <QString>
 
 namespace displace {
 namespace R {
 namespace defaults {
 
-    QString getRScriptsPath();
-    QString getScriptFileName(const QString &name);
+    QString QTCOMMONSSHARED_EXPORT getRScriptsPath();
+    QString QTCOMMONSSHARED_EXPORT getScriptFileName(const QString &name);
 
 }
 }

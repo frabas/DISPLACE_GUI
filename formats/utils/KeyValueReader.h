@@ -5,6 +5,8 @@
 #ifndef DISPLACE_KEYVALUEREADER_H
 #define DISPLACE_KEYVALUEREADER_H
 
+#include <formats_globals.h>
+
 #include <map>
 #include <string>
 #include <tuple>
@@ -14,7 +16,7 @@ namespace displace {
     namespace formats {
         namespace helpers {
 
-            class KeyValueReader {
+            class FORMATSSHARED_EXPORT KeyValueReader {
             public:
                 KeyValueReader();
 

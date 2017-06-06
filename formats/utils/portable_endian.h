@@ -61,7 +61,9 @@
 #elif defined(__WINDOWS__)
 
 #	include <winsock2.h>
+#   if !defined(_MSC_BUILD)
 #	include <sys/param.h>
+#   endif
 
 #	if BYTE_ORDER == LITTLE_ENDIAN
 

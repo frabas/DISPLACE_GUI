@@ -1,9 +1,9 @@
 #include "moveshipoutputmessage.h"
-#include <mutexlocker.h>
+#include <mutex>
 #include <Ship.h>
 #include <helpers.h>
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 
 MoveShipOutputMessage::MoveShipOutputMessage(int _tstep, Ship *ship)
 {
@@ -21,7 +21,7 @@ bool MoveShipOutputMessage::process()
 
 bool MoveShipOutputMessage::send(ostream &strm)
 {
-    MutexLocker locker(&glob_mutex);
+    std::unique_lock<std::mutex> locker(glob_mutex);
 
     strm << "=X" << data.tstep << " "
         << data.idx << " "

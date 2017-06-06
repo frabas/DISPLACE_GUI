@@ -1,14 +1,13 @@
-CONFIG -= qt
-
 TEMPLATE= lib
 TARGET=displacecommons
 DESTDIR=../
-CONFIG += c++11
+CONFIG += c++11 dll
 
 
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR
 
+DEFINES += COMMONS_LIBRARY
 INCLUDEPATH +=../include/ ../formats . ../sparsepp
 LIBS += -L.. -lformats
 
@@ -28,6 +27,8 @@ macx {
     # No crash handler support for MacOS
     DEFINES += NO_CRASHHANDLER
 }
+
+message("Link Path: $$LIBS")
 
 SOURCES= \
     readdata.cpp \
@@ -81,7 +82,6 @@ HEADERS= \
     ../include/memoryinfo.h \
     ../include/helpers.h \
     ../include/options.h \
-    ../include/mutexlocker.h \
     ../include/guiproto_struct.h \
     ../include/version.h \
     ../include/utils/make_unique.h \
@@ -103,6 +103,7 @@ HEADERS= \
     dtree/evaluators/timeseriesevaluator.h \
     utils/CrashHandler.h \
     dtree/vesselsevaluators.h \
+    commons_global.h \
     pathshop.h
 
 

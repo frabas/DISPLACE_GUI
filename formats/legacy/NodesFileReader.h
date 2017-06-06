@@ -5,6 +5,8 @@
 #ifndef DISPLACE_NODESFILEREADER_H
 #define DISPLACE_NODESFILEREADER_H
 
+#include <formats_globals.h>
+
 #include <functional>
 #include <iostream>
 #include <string>
@@ -18,7 +20,7 @@ namespace displace {
     namespace formats {
         namespace legacy {
 
-            class NodesFileReader {
+            class FORMATSSHARED_EXPORT NodesFileReader {
             public:
                 template<typename CoordType, typename AttributeType>
                 using Node = std::tuple<CoordType, CoordType, AttributeType>;

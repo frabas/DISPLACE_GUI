@@ -48,10 +48,15 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
+#if defined (__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+#if defined (__GNUC__)
 #pragma GCC diagnostic pop
+#endif
 
 #include <boost/property_map/property_map.hpp>
 

@@ -11,6 +11,13 @@ unix,!macx {
     SUBDIRS += profile \
 }
 
+win32 {
+    CONFIG(debug,release|debug){
+        DEFINES += _HAS_ITERATOR_DEBUGGING=0
+        DEFINES += -D_SECURE_SCL=1
+    }
+}
+
 commons.depends = formats
 qtcommons.depends = QMapControl commons
 qtgui.depends = commons qtcommons QMapControl

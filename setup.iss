@@ -11,11 +11,14 @@
 ;#define Build "debug"
 ;#define QT_DEBUG "d"
 
+; Download install/vc_redist.x64.exe from
+; https://www.microsoft.com/it-it/download/details.aspx?id=48145
+
 #define Build "release"
 #define QT_DEBUG ""
-#define MINGW_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin"
-#define QT_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl\bin"
-#define QT_PLUGINS_DIR "C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl\plugins"
+#define QT_DIR "C:\Qt\5.6\msvc2015_64"
+#define QT_PLUGINS_DIR "C:\Qt\5.6\msvc2015_64\plugins"
+#define SDK_DIR "install\msvc"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -44,46 +47,45 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: build\{#Build}\displacegui.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\dtreeeditor.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\tsereditor.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\objeditor.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\displace.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\scheduler.exe; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\displacecommons.dll; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\formats.dll; DestDir: {app}; Flags: ignoreversion
-Source: build\{#Build}\qtcommons.dll; DestDir: {app}; Flags: ignoreversion
+Source: "build\{#Build}\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\dtreeeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\tsereditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\displacecommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\{#Build}\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: scripts\gen_ts.R; DestDir: {app}\scripts; Flags: ignoreversion
+Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 
-Source: install\extra\bin\libgcc_s_seh-1.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libgdal-1.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libgeos_c-1.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libgeos-3-5-0.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libproj-0.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libstdc++-6.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libwinpthread-1.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libCGAL.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\libgmp-10.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\lib\libboost_system-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\lib\libboost_thread-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\lib\libboost_regex-mgw49-mt-1_57.dll; DestDir: {app}; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\gdal111.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\geos.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\geos_c.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\CGAL-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\CGAL_core-vc140-mt-4.9.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\gmp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: install\extra\bin\Qt5Core{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Concurrent{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Gui{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Network{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5OpenGL{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5PrintSupport{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Sql{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Widgets{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\Qt5Xml{#QT_DEBUG}.dll; DestDir: {app}; Flags: ignoreversion
-Source: install\extra\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Gui{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Network{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5OpenGL{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5PrintSupport{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Sql{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Widgets{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: {#QT_DIR}\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion
 
-Source: install\extra\bin\platforms\qminimal{#QT_DEBUG}.dll; DestDir: {app}\platforms; Flags: ignoreversion
-Source: install\extra\bin\platforms\qwindows{#QT_DEBUG}.dll; DestDir: {app}\platforms; Flags: ignoreversion
-Source: install\extra\bin\sqldrivers\qsqlite{#QT_DEBUG}.dll; DestDir: {app}\sqldrivers; Flags: ignoreversion
+Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
+Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
@@ -93,5 +95,5 @@ Name: {group}\Decision Tree Editor; Filename: {app}\dtreeeditor.exe; Tasks: ; La
 Name: {group}\Time Series Editor; Filename: {app}\tsereditor.exe
 
 [Run]
-;Filename: {tmp}\vcredist_x86.exe; Parameters: /q; WorkingDir: {tmp}
+Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent

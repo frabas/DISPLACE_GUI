@@ -9,6 +9,7 @@
 
 using namespace displace;
 
+#if 0
 QString vesselsEditor::getScriptsPath()
 {
 #if !defined( __APPLE__ )
@@ -27,7 +28,7 @@ QString vesselsEditor::getDefaultRunScriptPath()
 {
     return R::defaults::getScriptFileName(R::Settings::Scripts::RunVesselsConfigFiles);
 }
-
+#endif
 
 QString vesselsEditor::defaults::getApplicationName()
 {

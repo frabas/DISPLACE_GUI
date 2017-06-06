@@ -1,6 +1,7 @@
 #ifndef PATHSHOP_H
 #define PATHSHOP_H
 
+#include <commons_global.h>
 #include <idtypes.h>
 
 #include <memory>
@@ -8,7 +9,7 @@
 #include <vector>
 #include <tuple>
 
-class PathShop
+class COMMONSSHARED_EXPORT PathShop
 {
     using weight_t = uint16_t;
 

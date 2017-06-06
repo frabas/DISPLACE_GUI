@@ -47,11 +47,13 @@
 
 using namespace std;
 
-#include <pthread.h>
-#include <semaphore.h>
+#include <thread>
+#include <condition_variable>
 #include <errno.h>
 
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 // for Windows
 #ifdef _WIN32
@@ -59,21 +61,16 @@ using namespace std;
 #include <direct.h>
 #endif
 
-struct thread_data_t {
-    pthread_t thread;
-    int thread_idx;
-};
-
 static unsigned int numthreads;
 static std::queue<int> works;
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t work_cond = PTHREAD_COND_INITIALIZER;
-static pthread_mutex_t work_mutex = PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t completion_cond = PTHREAD_COND_INITIALIZER;
+static std::mutex mutex ;
+static std::condition_variable work_cond;
+static std::mutex work_mutex;
+static std::condition_variable completion_cond;
 static unsigned int uncompleted_works;
 
 static bool exit_flag;
-static thread_data_t *thread_data;
+static std::thread *thread_data;
 
 #ifndef NO_IPC
 extern OutputQueueManager mOutQueue;
@@ -81,7 +78,7 @@ extern OutputQueueManager mOutQueue;
 static OutputQueueManager mOutQueue;
 #endif
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 extern bool use_gui;
 extern bool use_dtrees;
 extern bool use_gnuplot;
@@ -148,35 +145,34 @@ extern void guiSendVesselLogbook(const std::string &line);
 
 
 
-static void manage_ship(thread_data_t *dt, int idx_v)
+static void manage_ship(int idx_v)
 {
-    UNUSED(dt);
     dout(cout << "idx_v is " << idx_v << " " << ships.size() << endl);
     ships.at(idx_v - 5000)->lock();
-    pthread_mutex_lock (&glob_mutex);
+
+    std::unique_lock<std::mutex> locker(glob_mutex);
     dout(cout<<"before at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
     ships.at(idx_v - 5000)->move();
     dout(cout<<"after at (" << ships.at(idx_v - 5000)->get_x() << "," << ships.at(idx_v - 5000)->get_y()  << ") "   << endl);
     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveShipOutputMessage(tstep, ships.at(idx_v - 5000))));
-    pthread_mutex_unlock (&glob_mutex);
+    locker.unlock();
+
     ships.at(idx_v - 5000)->unlock();
 }
 
 
 
 
-static void manage_vessel(thread_data_t *dt, int idx_v)
+static void manage_vessel(int idx_v)
 {
-    UNUSED(dt);
-
-
     vector <double> dist_to_ports;
 
     dout(cout  << "----------" << endl);
-    pthread_mutex_lock (&glob_mutex);
+
+    glob_mutex.lock();
     int index_v =  ve[idx_v];
     outc(cout  <<  ve[idx_v] << " idx of the vessel " << vessels[ ve[idx_v] ]->get_name()<< " " << endl);
-    pthread_mutex_unlock (&glob_mutex);
+    glob_mutex.unlock();
 
     // check roadmap
     vessels[index_v]->lock();
@@ -390,7 +386,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                 else
                 {
                     outc(cout  << "RETURN TO PORT, NOW! "  << endl);
-                    pthread_mutex_lock(&glob_mutex);
+                    glob_mutex.lock();
                     vessels[ index_v ]->choose_a_port_and_then_return(
                                 tstep,
                                 dyn_alloc_sce,
@@ -405,7 +401,7 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
                                 dist_to_ports
                                 );
 
-                    pthread_mutex_unlock(&glob_mutex);
+                    glob_mutex.unlock();
                 }
 
             }
@@ -458,10 +454,10 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
     // realtime gnuplot
     if(use_gnuplot)
     {
-        pthread_mutex_lock(&::mutex);
+        ::mutex.lock();
         vmslike2   << vessels[ index_v ]->get_x() << " "
                    << vessels[ index_v ]->get_y() <<  endl;
-        pthread_mutex_unlock(&::mutex);
+        ::mutex.unlock();
     }
     vessels[index_v]->unlock();
 
@@ -469,39 +465,38 @@ static void manage_vessel(thread_data_t *dt, int idx_v)
 
 
 
-static void *thread(void *args)
+static void *thread_manage_func()
 {
-    thread_data_t *data = (thread_data_t *)args;
-
     while (!exit_flag) {
-        pthread_mutex_lock(&work_mutex);
+        std::unique_lock<std::mutex> locker(work_mutex);
         while (works.size() == 0 && !exit_flag) {
-            pthread_cond_wait(&work_cond, &work_mutex);
+            work_cond.wait(locker);
         }
         if (exit_flag) {
-            pthread_mutex_unlock(&work_mutex);
+            // todo: is this correct?
+            locker.unlock();
             break;
         }
 
         int nextidx = works.front();
         works.pop();
         //        cout << "Thr " << data->thread_idx << " work " << nextidx << endl;
-        pthread_mutex_unlock(&work_mutex);
+        locker.unlock();
 
         if(nextidx<5000) // caution: assuming no more 5000 fishing vessels
         {
-            manage_vessel(data, nextidx);
+            manage_vessel(nextidx);
         }
         else
         {
-            manage_ship(data, nextidx);
+            manage_ship(nextidx);
         }
 
-        pthread_mutex_lock(&work_mutex);
+        locker.lock();
         --uncompleted_works;
         //        cout << "Thr " << data->thread_idx << " Completed, " << uncompleted_works << " rem\n";
-        pthread_cond_signal(&completion_cond);
-        pthread_mutex_unlock(&work_mutex);
+        completion_cond.notify_all();
+        locker.unlock();
     }
 
     return 0;
@@ -514,11 +509,13 @@ void thread_vessel_init (int n)
     exit_flag = false;
 
     numthreads = n;
-    thread_data = new thread_data_t[numthreads];
+    thread_data = new std::thread[numthreads];
     for (unsigned int i = 0; i < numthreads; ++i) {
-        thread_data[i].thread_idx = i;
-        pthread_create(&thread_data[i].thread, 0, thread, (void *)&thread_data[i]);
+        thread_data[i] = std::move(std::thread([]() {
+            thread_manage_func();
+        }));
 
+#if 0 // TODO: cannot implement this in a portable way.
         struct sched_param tparam;
         int policy;
 
@@ -537,23 +534,23 @@ void thread_vessel_init (int n)
 #endif
 
         pthread_setschedparam(thread_data[i].thread, policy, &tparam);
+#endif
     }
 }
 
 void thread_vessel_prepare()
 {
-    pthread_mutex_lock(&work_mutex);
+    work_mutex.lock();
     uncompleted_works = 0;
-    pthread_mutex_unlock(&work_mutex);
+    work_mutex.unlock();
 }
 
 void thread_vessel_insert_job(int idx)
 {
-    pthread_mutex_lock(&work_mutex);
+    std::unique_lock<std::mutex> locker(work_mutex);
     works.push(idx);
     ++uncompleted_works;
-    pthread_cond_signal(&work_cond);
-    pthread_mutex_unlock(&work_mutex);
+    work_cond.notify_one();
 }
 
 void thread_vessel_signal_exit()
@@ -562,9 +559,8 @@ void thread_vessel_signal_exit()
     void *rv;
     for (int i = 0; i < numthreads; ++i) {
         //        thread_vessel_insert_job(-1);
-        pthread_mutex_lock(&work_mutex);
-        pthread_cond_signal(&work_cond);
-        pthread_mutex_unlock(&work_mutex);
+        std::unique_lock<std::mutex> locker(work_mutex);
+        work_cond.notify_all();
 #ifdef _WIN32
         Sleep(1000);
 #else
@@ -573,26 +569,22 @@ void thread_vessel_signal_exit()
 
     }
     for (int i = 0; i < numthreads; ++i)
-        pthread_join(thread_data[i].thread, &rv);
+        thread_data[i].join();
 }
 
 void thread_vessel_wait_completed()
 {
-    pthread_mutex_lock(&work_mutex);
+    std::unique_lock<std::mutex> locker(work_mutex);
 
     while (uncompleted_works > 0) {
-        pthread_cond_wait(&completion_cond, &work_mutex);
+        completion_cond.wait(locker);
     }
-
-    //    cout << " MAIN: completed " << endl;
-    pthread_mutex_unlock(&work_mutex);
 }
 
 
 void thread_vessel_deinit()
 {
-    pthread_mutex_lock(&work_mutex);
+    std::unique_lock<std::mutex> locker(work_mutex);
     works.empty();
     exit_flag = true;
-    pthread_mutex_unlock (&work_mutex);
 }

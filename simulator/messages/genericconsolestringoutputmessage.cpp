@@ -1,10 +1,10 @@
 #include "genericconsolestringoutputmessage.h"
 
-#include <mutexlocker.h>
+#include <mutex>
 #include <iostream>
 #include <algorithm>
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 
 GenericConsoleStringOutputMessage::GenericConsoleStringOutputMessage(const std::string &txt)
     : msg(txt)
@@ -18,7 +18,7 @@ bool GenericConsoleStringOutputMessage::process()
 
 bool GenericConsoleStringOutputMessage::send(std::ostream &strm)
 {
-    MutexLocker l(&glob_mutex);
+    std::unique_lock<std::mutex> locker(glob_mutex);
     strm << msg;
 
     return true;

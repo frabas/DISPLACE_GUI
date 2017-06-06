@@ -38,17 +38,13 @@
 
 using namespace std;
 
-#include <pthread.h>
-#include <semaphore.h>
+#include <thread>
+#include <condition_variable>
 #include <errno.h>
 
 // for Windows
 #ifdef _WIN32
 #include <windows.h>
-#include <direct.h>
-#endif
-
-#ifdef WINDOWS
 #include <direct.h>
 #define GetCurrentDir _getcwd
 #else
@@ -60,16 +56,18 @@ using namespace std;
 extern AverageProfiler mPopExportProfile;
 #endif
 
-extern pthread_mutex_t glob_mutex;
+extern std::mutex glob_mutex;
 
+// todo: remove this, better use a unique_lock<> instead
 static void lock()
 {
-    pthread_mutex_lock(&glob_mutex);
+    glob_mutex.lock();
 }
 
+// todo: remove this, better use a unique_lock<> instead
 static void unlock()
 {
-    pthread_mutex_unlock(&glob_mutex);
+    glob_mutex.unlock();
 }
 
 
@@ -92,7 +90,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           ofstream &benthosbiomassnodes,
                           ofstream &benthosnumbernodes,
                           int nbbenthospops,
-                          char *path,
+                          const char *path,
                           bool use_gnuplot,
                           bool use_gui,
                           const string & popdyn_N_filename,

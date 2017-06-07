@@ -1895,9 +1895,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     // compute the avai*sel term
                     double avai_betas=0.0;
+                    double avai_beta_param;
                     for (int selszi=0; selszi<avai_pops_at_selected_szgroup.size();++selszi)
                         {
-                        avai_betas +=  populations[pop]->get_avai0_beta()* avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
+                        if(selszi==0) avai_beta_param =populations[pop]->get_avai0_beta();
+                        if(selszi==1) avai_beta_param =populations[pop]->get_avai2_beta();
+                        if(selszi==2) avai_beta_param =populations[pop]->get_avai3_beta();
+                        if(selszi==3) avai_beta_param =populations[pop]->get_avai5_beta();
+                        if(selszi==4) avai_beta_param =populations[pop]->get_avai7_beta(); // TO DO: simplify this crap...
+                        avai_betas +=  avai_beta_param * avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
                         }
 
 

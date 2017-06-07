@@ -112,23 +112,23 @@ Population::Population(int a_name,
 	this->set_selected_szgroups(_selected_szgroups);
 
 	// ...then fill in with avai0_beta
-								 // set the pop-specific beta from glm for szgroup0
+                                 // set the pop-specific beta from glm for szgroup selected id0
 	this->set_avai0_beta(_avai0_beta);
 
-	// ...then fill in with avai0_beta
-								 // set the pop-specific beta from glm for szgroup2
+    // ...then fill in with avai2_beta
+                                 // set the pop-specific beta from glm for szgroup selected id1
 	this->set_avai2_beta(_avai2_beta);
 
-	// ...then fill in with avai0_beta
-								 // set the pop-specific beta from glm for szgroup3
+    // ...then fill in with avai3_beta
+                                 // set the pop-specific beta from glm for szgroup selected id2
 	this->set_avai3_beta(_avai3_beta);
 
-	// ...then fill in with avai0_beta
-								 // set the pop-specific beta from glm for szgroup5
+    // ...then fill in with avai5_beta
+                                 // set the pop-specific beta from glm for szgroup selected id3
 	this->set_avai5_beta(_avai5_beta);
 
-	// ...then fill in with avai0_beta
-								 // set the pop-specific beta from glm for szgroup7
+    // ...then fill in with avai7_beta
+                                 // set the pop-specific beta from glm for szgroup selected id4
 	this->set_avai7_beta(_avai7_beta);
 
     dout(cout << "calib..." << name << endl);

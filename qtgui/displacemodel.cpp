@@ -1965,15 +1965,6 @@ bool DisplaceModel::loadNodes()
     }
 
 
-    /* Not sure if we need this...
-    // init
-    for (unsigned int i=0; i< nodes.size(); i++)
-    {
-        nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
-        // caution:magic number...i.e. from the R poisson regression on cpue
-        nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops,SEL_NBSZGROUP);
-    }
-    */
 
     return true;
 }

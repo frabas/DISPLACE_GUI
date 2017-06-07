@@ -1893,23 +1893,23 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // rescaling multiplying by 1000, see R code.
                     vector<double> avai_pops_at_selected_szgroup = nodes.at(idx_node.toIndex())->get_avai_pops_at_selected_szgroup(pop);
 
+                    // compute the avai*sel term
+                    double avai_betas=0.0;
+                    for (int selszi=0; selszi<avai_pops_at_selected_szgroup.size();++selszi)
+                        {
+                        avai_betas +=  populations[pop]->get_avai0_beta()* avai_pops_at_selected_szgroup.at(selszi) *1000 *selectivity_per_stock[pop][selected_szgroups.at(selszi)];
+                        }
+
+
                     // vessel effect
-                    tot_catch_per_pop[pop] = min(tot, exp(v_betas_per_pop[pop]*1 +
-                                                          // metier effect
-                                                          m_betas_per_pop[pop]*1 +
-                                                          // avai effect szgroup 0
-                                                          populations[pop]->get_avai0_beta()* avai_pops_at_selected_szgroup[0] *1000 *selectivity_per_stock[pop][selected_szgroups.at(0)] +
-                            //szgroup 2
-                            populations[pop]->get_avai2_beta()* avai_pops_at_selected_szgroup[1] *1000 *selectivity_per_stock[pop][selected_szgroups.at(1)]+
-                            //szgroup 3
-                            populations[pop]->get_avai3_beta()* avai_pops_at_selected_szgroup[2] *1000 *selectivity_per_stock[pop][selected_szgroups.at(2)]+
-                            //szgroup 5
-                            populations[pop]->get_avai5_beta()* avai_pops_at_selected_szgroup[3] *1000 *selectivity_per_stock[pop][selected_szgroups.at(3)]+
-                            //szgroup 7
-                            populations[pop]->get_avai7_beta()* avai_pops_at_selected_szgroup[4] *1000 *selectivity_per_stock[pop][selected_szgroups.at(4)]
-                            // poisson regression, see the R code
-                            )*populations[pop]->get_cpue_multiplier() );
-                    // 'min' is there for not allowing catching more than available!
+                    tot_catch_per_pop[pop] = min(tot, exp( // vessel effect
+                                                     v_betas_per_pop[pop]*1 +
+                                                   // metier effect
+                                                      m_betas_per_pop[pop]*1 +
+                                                   // avai*sel effect
+                                                          avai_betas  // poisson regression, see the R code
+                                                )*populations[pop]->get_cpue_multiplier() );
+                                        // 'min' is there for not allowing catching more than available!
 
                     dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);
 
@@ -1960,7 +1960,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     vector<double> new_avai_pops_at_selected_szgroup=avai_pops_at_selected_szgroup;
 
 
-
+                    int a_count=0;
                     for(int szgroup=0; szgroup <(int)avail_biomass.size(); szgroup++)
                     {
                         if(avail_biomass[szgroup]!=0)
@@ -2082,31 +2082,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 // (note that Ns_at_szgroup_pop[szgroup]/totN[szgroup] = avai just after a distribute_N event.)
                                 // init
                                 double val=0;
-                                if(szgroup==0 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                                {
+                                if(szgroup==selected_szgroups.at(a_count) && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                                   {
                                     val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                                    new_avai_pops_at_selected_szgroup.at(0)=val;
-                                }
-                                if(szgroup==2 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                                {
-                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                                    new_avai_pops_at_selected_szgroup.at(1)=val;
-                                }
-                                if(szgroup==3 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                                {
-                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                                    new_avai_pops_at_selected_szgroup.at(2)=val;
-                                }
-                                if(szgroup==5 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                                {
-                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                                    new_avai_pops_at_selected_szgroup.at(3)=val;
-                                }
-                                if(szgroup==7 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
-                                {
-                                    val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
-                                    new_avai_pops_at_selected_szgroup.at(4)=val;
-                                }
+                                    new_avai_pops_at_selected_szgroup.at(a_count)=val;
+                                    a_count+=1;
+                                    }
                                 nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
 
                                 /*

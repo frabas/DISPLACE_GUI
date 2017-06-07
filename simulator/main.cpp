@@ -1380,12 +1380,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     assert(nodes.size() > 0);
 
-    // init
-    for (unsigned int i=0; i< nodes.size(); i++)
-    {
-        nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
-        nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops,SEL_NBSZGROUP);
-    }
 
 
 
@@ -1809,6 +1803,27 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     multimap<int, int> selected_szgroups= read_selected_szgroups_per_pop(folder_name_parameterization, inputfolder);
     // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!  // CAUTION: DO NOT LEFT BLANK AT THE END OF THE FILES!!!!
 
+
+    // init
+    // detect nb of selected szgroups arbitrary from pop0
+    // and init the vector of vector avai object on node
+    multimap<int,int>::iterator lselsz = selected_szgroups.lower_bound(0);
+    multimap<int,int>::iterator uselsz = selected_szgroups.upper_bound(0);
+    vector<int> selected_szgroups_pop0;
+    for (multimap<int, int>::iterator pos=lselsz; pos != uselsz; pos++)
+    {
+        selected_szgroups_pop0.push_back(pos->second);
+    }
+
+    for (unsigned int i=0; i< nodes.size(); i++)
+    {
+        nodes.at(i)->init_Ns_pops_at_szgroup(nbpops, NBSZGROUP);
+        nodes.at(i)->init_avai_pops_at_selected_szgroup(nbpops, selected_szgroups_pop0.size());
+    }
+
+
+
+
     cout << "Does the pop file tac_percent_simulated need a check?" << endl;
     map<int, int> tac_percent_simulated= read_tac_percent_simulated(folder_name_parameterization, inputfolder);
     cout << "Does the pop file hyperstability_param need a check?" << endl;
@@ -1843,6 +1858,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         dout(cout  << endl);
 
         outc(cout << "pop_name: " <<  sp << endl);
+
+
 
         // avai0 beta for this particular pop
         multimap<int,double>::iterator lower_0 = avai0_betas.lower_bound(sp);
@@ -3772,7 +3789,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
                 sort (polygon_nodes.begin(), polygon_nodes.end());
 
-                
+
                 // TO DO: improve this bottleneck.....because too costly when polygon_nodes is large
                 /*for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
                     {
@@ -4951,16 +4968,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // disable gnuplot
 #if 0
-	#ifdef _WIN32
-	if(use_gnuplot)
-	{
+    #ifdef _WIN32
+    if(use_gnuplot)
+    {
        outc(cout << "type a char to close" << endl);
-		getchar();				 //This line keeps the gnuplot window open after the code runs through.
-		pclose(pipe2);
-		pclose(pipe3);
-		pclose(pipe4);
-	}
-	#endif
+        getchar();				 //This line keeps the gnuplot window open after the code runs through.
+        pclose(pipe2);
+        pclose(pipe3);
+        pclose(pipe4);
+    }
+    #endif
 #endif
     //delete[] nodes;
     //delete[] vessels;

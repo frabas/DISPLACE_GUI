@@ -96,7 +96,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
                const vector<double> &_vessel_betas_per_pop,
                const vector<double> &_percent_tac_per_pop,
                const multimap<types::NodeId, int> &_possible_metiers, const multimap<types::NodeId, double> &_freq_possible_metiers,
-               int _vid_is_active, double a_speed, double a_fuelcons, double a_length, double a_KW,
+               int a_vid_is_active, double a_speed, double a_fuelcons, double a_length, double a_KW,
                double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
                double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
                double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
@@ -129,7 +129,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     possible_metiers = _possible_metiers;
     // overwrite by the setter() in main...
     freq_possible_metiers = _freq_possible_metiers;
-    vid_is_active=_vid_is_active;
+    vid_is_active=a_vid_is_active;
     speed = a_speed;			 //  *0.8; // CAUTION try to calib
     fuelcons = a_fuelcons;
     length = a_length;

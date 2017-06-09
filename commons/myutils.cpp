@@ -924,16 +924,16 @@ bool fill_from_vessels_specifications (istream& in,
             }
 
             if (fields.size() > 16) {
-                calendar.weekEndStartDay = boost::lexical_cast<int>(fields[17]);
+                calendar.weekEndStartDay = boost::lexical_cast<int>(fields[16]);
             }
             if (fields.size() > 17) {
-                calendar.weekEndEndDay = boost::lexical_cast<int>(fields[18]);
+                calendar.weekEndEndDay = boost::lexical_cast<int>(fields[17]);
             }
             if (fields.size() > 18) {
-                calendar.workStartHour = boost::lexical_cast<int>(fields[19]);
+                calendar.workStartHour = boost::lexical_cast<int>(fields[18]);
             }
             if (fields.size() > 19) {
-                calendar.workEndHour = boost::lexical_cast<int>(fields[20]);
+                calendar.workEndHour = boost::lexical_cast<int>(fields[19]);
             }
 
 
@@ -953,7 +953,7 @@ bool fill_from_vessels_specifications (istream& in,
             mult_fuelcons_when_fishing.push_back(boost::lexical_cast<double>(fields[13].c_str()));
             mult_fuelcons_when_returning.push_back(boost::lexical_cast<double>(fields[14].c_str()));
             mult_fuelcons_when_inactive.push_back(boost::lexical_cast<double>(fields[15].c_str()));
-            firm_ids.push_back(boost::lexical_cast<int>(fields[16].c_str()));
+            firm_ids.push_back(boost::lexical_cast<int>(fields[20].c_str()));
 
             calendars.push_back(calendar);
         }

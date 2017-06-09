@@ -32,6 +32,9 @@
 #define qInfo qDebug
 #endif
 
+//#define RUN_MEMCHECK_ON_CHILD
+
+
 QString Simulator::SET_NUMTHREADS ("simul_numthreads");
 QString Simulator::SET_VERBOSITY ("simulator_verbosity");
 
@@ -97,6 +100,11 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     QStringList arguments;
     QSettings set;
 
+#if defined(RUN_MEMCHECK_ON_CHILD)
+    arguments.push_back("--tool=memcheck");
+    arguments.push_back(QApplication::applicationDirPath() + "/displace");
+#endif
+
     arguments.push_back("-f");
     arguments.push_back(name);
 
@@ -125,17 +133,26 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     arguments.push_back("--num_threads");
     arguments.push_back(QString::number(set.value(SET_NUMTHREADS, 4).toInt()));
 
+#ifdef DEBUG
+    arguments.push_back("--debug");
+#endif
+
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
     connect(mSimulation, SIGNAL(readyReadStandardError()), this, SLOT(readyReadStandardError()));
     connect(mSimulation, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
     connect(mSimulation, SIGNAL(started()), this, SLOT(started()));
+    connect(mSimulation, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
     connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
     qInfo() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
 
+#if defined(RUN_MEMCHECK_ON_CHILD)
+    mSimulation->start("valgrind", arguments);
+#else
     mSimulation->start(QApplication::applicationDirPath() + "/displace", arguments);
+#endif
 
     return true;
 }
@@ -162,6 +179,7 @@ QProcess::ProcessState Simulator::processState() const
 void Simulator::error(QProcess::ProcessError error)
 {
     Q_UNUSED(error);
+    qWarning() << "Process Error: " << error << mSimulation->errorString();
     emit log(QString("Process error: %1").arg(mSimulation->errorString()));
 }
 

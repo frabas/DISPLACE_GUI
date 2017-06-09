@@ -75,15 +75,9 @@ void OutputQueueManager::disableIpcQueue ()
 
 void OutputQueueManager::start()
 {
-    ThreadArgs *args = new ThreadArgs();
-
-    args->obj = this;
-
     std::unique_lock<std::mutex> locker(mMutex);
     UNUSED(locker);
-    mThread = std::move(std::thread([args]() {
-        thread_trampoline(args);
-    }));
+    mThread = std::thread(std::bind(&OutputQueueManager::thread, this));
 }
 
 void OutputQueueManager::finish()
@@ -96,38 +90,26 @@ void OutputQueueManager::finish()
 
 void OutputQueueManager::enqueue(std::shared_ptr<OutputMessage> msg)
 {
-    std::unique_lock<std::mutex>(mMutex);
+    std::unique_lock<std::mutex> locker(mMutex);
     mQueue.push(msg);
-    mCond.notify_one();
+    mCond.notify_all();
 }
 
-void *OutputQueueManager::thread_trampoline(void *args)
+void OutputQueueManager::thread()
 {
-    ThreadArgs *arguments = reinterpret_cast<ThreadArgs *>(args);
-
-    arguments->obj->mMutex.lock();
-    return arguments->obj->thread(arguments);
-}
-
-void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
-{
-    UNUSED(args);
-
-    mMutex.unlock();
-
     bool exit = false;
     size_t len;
     char buffer [1024];
 
     while (!exit) {
+        std::shared_ptr<OutputMessage> msg;
+        {
+            std::unique_lock<std::mutex> locker(mMutex);
+            mCond.wait(locker, [&]() { return !mQueue.empty(); });
 
-        std::unique_lock<std::mutex> locker(mMutex);
-        while (mQueue.empty())
-            mCond.wait(locker);
-
-        std::shared_ptr<OutputMessage> msg = mQueue.front();
-        mQueue.pop();
-        locker.unlock();
+            msg = mQueue.front();
+            mQueue.pop();
+        }
 
         exit = !msg->process();
 
@@ -151,6 +133,4 @@ void *OutputQueueManager::thread(OutputQueueManager::ThreadArgs *args)
             }
         }
     }
-
-    return 0;
 }

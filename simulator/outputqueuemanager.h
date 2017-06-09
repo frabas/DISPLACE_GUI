@@ -69,14 +69,7 @@ public:
     void enqueue(std::shared_ptr<OutputMessage> msg);
 
 private:
-    /** @brief The pthread-style entry point to the thread. */
-    static void *thread_trampoline(void *);
-
-    struct ThreadArgs {
-        OutputQueueManager *obj;
-    };
-
-    void *thread(ThreadArgs *args);
+    void thread();
 
 
     /* == members == */

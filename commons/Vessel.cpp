@@ -1854,7 +1854,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // init
                 vector <double>new_Ns_at_szgroup_pop = Ns_at_szgroup_pop;
                 //init
-                double tot,tot2                     = 0;
+                double tot = 0;
+                double tot2                     = 0;
                 double tot_avai_for_land            = 0;
                 double tot_avai_for_disc            = 0;
                 int    MLS_cat                      = m_mls_cat_per_pop[pop];
@@ -1894,7 +1895,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 //    cin >> a;
                 //}
 
-                if(tot!=0)
+                if(std::fabs(tot) > 1e-3)
                 {
                     // remember that metier at NA in parameterisation (see the Rcode) have been set to -20
                     // in order to avoid (potentially high!) catches with the wrong metier

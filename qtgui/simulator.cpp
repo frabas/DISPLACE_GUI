@@ -32,7 +32,8 @@
 #define qInfo qDebug
 #endif
 
-//#define RUN_MEMCHECK_ON_CHILD
+//#define RUN_VALGRIND_ON_CHILD
+//#define VALGRIND_TOOL "helgrind"
 
 
 QString Simulator::SET_NUMTHREADS ("simul_numthreads");
@@ -100,8 +101,8 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     QStringList arguments;
     QSettings set;
 
-#if defined(RUN_MEMCHECK_ON_CHILD)
-    arguments.push_back("--tool=memcheck");
+#if defined(RUN_VALGRIND_ON_CHILD)
+    arguments.push_back("--tool=" VALGRIND_TOOL);
     arguments.push_back(QApplication::applicationDirPath() + "/displace");
 #endif
 
@@ -148,7 +149,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     qInfo() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
 
-#if defined(RUN_MEMCHECK_ON_CHILD)
+#if defined(RUN_VALGRIND_ON_CHILD)
     mSimulation->start("valgrind", arguments);
 #else
     mSimulation->start(QApplication::applicationDirPath() + "/displace", arguments);

@@ -55,7 +55,8 @@ public:
 
 private:
         std::string name;
-		int idx_vessel;
+        int vid_is_active;
+        int idx_vessel;
         int firm_id;
 		//std::shared_ptr<Node> m_location;
 		Node* m_location;
@@ -146,17 +147,27 @@ public:
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name);
         Vessel(Node* a_location, int idx_vessel, std::string name);
         //Vessel(std::shared_ptr<Node> a_location, int idx_vessel, std::string name, int nbpops, int nbszgroups, std::vector<int> harbours, std::vector<int> fgrounds,
-        Vessel(Node* a_location, int idx_vessel, std::string name, int nbpops, int nbszgroups, const vector<types::NodeId> &harbours, const std::vector<types::NodeId> &fgrounds, const std::vector<types::NodeId> &fgrounds_init,
-            const std::vector<double> &freq_harbours, const std::vector<double> &freq_fgrounds, const std::vector<double> &freq_fgrounds_init, const std::vector<double> &vessel_betas_per_pop,
-            const std::vector<double> &percent_tac_per_pop,
-            const multimap<types::NodeId, int> &possible_metiers, const multimap<types::NodeId, double> &freq_possible_metiers,
-            double speed, double fuelcons, double length, double KW,
-            double  carrycapacity, double tankcapacity, double nbfpingspertrip,
-            double resttime_par1, double resttime_par2, double av_trip_duration,
-            double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
-            double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive,
-            int _firm_id,
-            VesselCalendar cd
+        Vessel(Node* a_location,
+               int idx_vessel,
+               std::string name,
+               int nbpops, int nbszgroups,
+               const vector<types::NodeId> &harbours,
+               const std::vector<types::NodeId> &fgrounds,
+               const std::vector<types::NodeId> &fgrounds_init,
+               const std::vector<double> &freq_harbours,
+               const std::vector<double> &freq_fgrounds,
+               const std::vector<double> &freq_fgrounds_init,
+               const std::vector<double> &vessel_betas_per_pop,
+               const std::vector<double> &percent_tac_per_pop,
+               const multimap<types::NodeId, int> &possible_metiers,
+               const multimap<types::NodeId, double> &freq_possible_metiers,
+               int vid_is_active, double speed, double fuelcons, double length, double KW,
+               double  carrycapacity, double tankcapacity, double nbfpingspertrip,
+               double resttime_par1, double resttime_par2, double av_trip_duration,
+               double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
+               double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive,
+               int _firm_id,
+               VesselCalendar cd
             );
 		Vessel();
 		~Vessel();
@@ -166,6 +177,7 @@ public:
 
 		int get_idx () const;
         std::string get_name () const;
+        int get_vid_is_active () const;
         int get_firm_id () const;
         Node* get_loc() const;
 		Metier* get_metier() const;
@@ -237,6 +249,7 @@ public:
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
         void set_firm_id (int val);
+        void set_vid_is_active (int val);
         void set_speed (double val);
 		void set_resttime_par1 (double val);
 		void set_resttime_par2 (double val);

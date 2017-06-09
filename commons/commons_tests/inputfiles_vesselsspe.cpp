@@ -17,6 +17,7 @@ namespace {
 
 struct Vessel {
     string names;
+    int vid_is_actives;
     double speeds;
     double fuelcons;
     double lengths;
@@ -37,6 +38,7 @@ struct Vessel {
     Vessel() {}
 
     Vessel(string names,
+           int vid_is_actives,
            double speeds,
            double fuelcons,
            double lengths,
@@ -55,6 +57,7 @@ struct Vessel {
            int westart,int  weend, int wrkstart, int wrkend
            ) :
         names(names),
+        vid_is_actives(vid_is_actives),
         speeds(speeds),
         fuelcons(fuelcons),
         lengths(lengths),
@@ -77,6 +80,7 @@ struct Vessel {
     friend bool operator == (const Vessel &v1, const Vessel &v2) {
         return
             v1.names == v2.names &&
+            v1.vid_is_actives == v2.vid_is_actives &&
             v1.speeds == v2.speeds &&
             v1.fuelcons == v2.fuelcons &&
             v1.lengths == v2.lengths &&
@@ -107,6 +111,7 @@ struct Vessel {
 
     friend std::ostream &operator << (std::ostream &stream, const Vessel &v1) {
         stream << v1.names << ","
+               << v1.vid_is_actives<< ","
                   << v1.speeds<< ","
                   << v1.fuelcons<< ","
                   << v1.lengths<< ","
@@ -132,6 +137,7 @@ struct Vessel {
 
 bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
     vector<string> names;
+    vector<int> vid_is_actives;
     vector<double> speeds;
     vector<double> fuelcons;
     vector<double> lengths;
@@ -151,6 +157,7 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
 
     if (!fill_from_vessels_specifications (stream,
                                            names,
+                                           vid_is_actives,
                                            speeds,
                                            fuelcons,
                                            lengths,
@@ -172,6 +179,7 @@ bool loadVessels(std::istream &stream, std::vector<Vessel> &vessels) {
     for (size_t i = 0; i < names.size(); ++i) {
         Vessel v;
         v.names = names[i];
+        v.vid_is_actives = vid_is_actives[i];
         v.speeds = speeds[i];
         v.fuelcons = fuelcons[i];
         v.lengths = lengths[i];
@@ -243,14 +251,14 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_betas_semester_dat )
 BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
 {
     std::string teststring;
-    teststring = "DNK000001391|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1\n"
-                 "DNK0000012s1|30|34.248397|5|18|270|75|1|0.5|3.78|2|1|0|0.1|0.1522|5|6|5|22|2\n";
+    teststring = "DNK000001391|1|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1\n"
+                 "DNK0000012s1|1|30|34.248397|5|18|270|75|1|0.5|3.78|2|1|0|0.1|0.1522|5|6|5|22|2\n";
 
     std::istringstream ss (teststring);
 
     std::vector<Vessel> exp_ss = {
-        Vessel("DNK000001391",10,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22,1),
-        Vessel("DNK0000012s1",30,34.248397,5,18,270,75,1,0.5,3.78,2,1,0,0.1,0.1522,5,6,5,22,2)
+        Vessel("DNK000001391",1,10,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22,1),
+        Vessel("DNK0000012s1",1,30,34.248397,5,18,270,75,1,0.5,3.78,2,1,0,0.1,0.1522,5,6,5,22,2)
     };
 
     std::vector<Vessel> r_ss;
@@ -274,10 +282,10 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     BOOST_CHECK(!r);
 
     // Check for errors: Missing newline should be catched
-    teststring = "DNK0000011|0|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1";
+    teststring = "DNK0000011|1|0|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1";
     r_ss.clear();
     exp_ss = {
-            Vessel("DNK0000011",0,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22,1)
+            Vessel("DNK0000011",1,0,34.18397,15,128,23170,7565,10,0.4485,336.7618,20,1,0,1.1,0.15,5,6,5,22,1)
         };
     ss.str(teststring);
     ss.clear();

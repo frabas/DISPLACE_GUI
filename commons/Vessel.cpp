@@ -74,6 +74,7 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
     y =m_location->get_y();
     course=0;
     name = a_name;
+    vid_is_active=1;
     inharbour = true;
     timeforrest = 0.0;
     state = 3;
@@ -89,13 +90,13 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
 }
 
 
-Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, int nbszgroups,
+Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, int nbszgroups,
                const vector<types::NodeId> &_harbours, const vector<types::NodeId> &_fgrounds, const vector<types::NodeId> &_fgrounds_init,
                const vector<double> &_freq_harbours, const vector<double> &_freq_fgrounds, const vector<double> &_freq_fgrounds_init,
                const vector<double> &_vessel_betas_per_pop,
                const vector<double> &_percent_tac_per_pop,
                const multimap<types::NodeId, int> &_possible_metiers, const multimap<types::NodeId, double> &_freq_possible_metiers,
-               double a_speed, double a_fuelcons, double a_length, double a_KW,
+               int _vid_is_active, double a_speed, double a_fuelcons, double a_length, double a_KW,
                double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
                double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
                double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
@@ -128,6 +129,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name, int nbpops, i
     possible_metiers = _possible_metiers;
     // overwrite by the setter() in main...
     freq_possible_metiers = _freq_possible_metiers;
+    vid_is_active=_vid_is_active;
     speed = a_speed;			 //  *0.8; // CAUTION try to calib
     fuelcons = a_fuelcons;
     length = a_length;
@@ -318,6 +320,10 @@ string Vessel::get_name () const
     return(name);
 }
 
+int Vessel::get_vid_is_active () const
+{
+    return(vid_is_active);
+}
 
 Node* Vessel::get_loc() const
 {
@@ -729,6 +735,11 @@ void Vessel::set_firm_id(int _firm_id)
     firm_id= _firm_id;
 }
 
+
+void Vessel::set_vid_is_active(int _vid_is_active)
+{
+    vid_is_active= _vid_is_active;
+}
 
 void Vessel::set_speed(double _speed)
 {
@@ -1895,7 +1906,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     // compute the avai*sel term
                     double avai_betas=0.0;
-                    double avai_beta_param;
+                    double avai_beta_param=0;
                     for (int selszi=0; selszi<avai_pops_at_selected_szgroup.size();++selszi)
                         {
                         if(selszi==0) avai_beta_param =populations[pop]->get_avai0_beta();

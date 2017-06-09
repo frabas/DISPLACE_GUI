@@ -63,7 +63,10 @@ bool COMMONSSHARED_EXPORT read_scenario_config_file(string folder_name_parameter
 bool COMMONSSHARED_EXPORT read_scenario_config_file(std::istream &stream, displace::commons::Scenario &scenario);
 
 // vessel specific
-bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter, vector<string>& vesselids, vector<double>& speeds,
+bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
+                           vector<string>& vesselids,
+                           vector<int>& vid_is_actives,
+                           vector<double>& speeds,
                            vector<double>& fuelcons,
                            vector<double>& lengths,
                            vector<double>& vKWs,

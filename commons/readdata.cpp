@@ -375,6 +375,7 @@ vector <int> read_tsteps_years(string folder_name_parameterization, string input
 //----------------
 bool read_vessels_features(string a_quarter,
                            vector<string>& vesselids,
+                           vector<int>& vid_is_actives,
                            vector<double>& speeds,
                            vector<double>& fuelcons,
                            vector<double>& lengths,
@@ -413,7 +414,8 @@ bool read_vessels_features(string a_quarter,
         return false;
     }
 
-    if (!fill_from_vessels_specifications(vessels_features, vesselids, speeds, fuelcons, lengths, vKWs,
+    if (!fill_from_vessels_specifications(vessels_features, vesselids, vid_is_actives,
+                                          speeds, fuelcons, lengths, vKWs,
                                           carrycapacities, tankcapacities, nbfpingspertrips,
                                           resttime_par1s, resttime_par2s, av_trip_duration,
                                           mult_fuelcons_when_steaming, mult_fuelcons_when_fishing,

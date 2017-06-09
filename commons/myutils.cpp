@@ -885,6 +885,7 @@ fill in the vessel attributes
 */
 bool fill_from_vessels_specifications (istream& in,
                                        vector<string>& names,
+                                       vector<int>& vid_is_actives,
                                        vector<double>& speeds,
                                        vector<double>& fuelcons,
                                        vector<double>& lengths,
@@ -918,40 +919,41 @@ bool fill_from_vessels_specifications (istream& in,
 
             boost::split(fields, line, boost::is_any_of("|"));
 
-            if (fields.size() < 15) {
+            if (fields.size() < 16) {
                 return false;   // all fields are MANDATORY.
             }
 
-            if (fields.size() > 15) {
-                calendar.weekEndStartDay = boost::lexical_cast<int>(fields[15]);
-            }
             if (fields.size() > 16) {
-                calendar.weekEndEndDay = boost::lexical_cast<int>(fields[16]);
+                calendar.weekEndStartDay = boost::lexical_cast<int>(fields[17]);
             }
             if (fields.size() > 17) {
-                calendar.workStartHour = boost::lexical_cast<int>(fields[17]);
+                calendar.weekEndEndDay = boost::lexical_cast<int>(fields[18]);
             }
             if (fields.size() > 18) {
-                calendar.workEndHour = boost::lexical_cast<int>(fields[18]);
+                calendar.workStartHour = boost::lexical_cast<int>(fields[19]);
+            }
+            if (fields.size() > 19) {
+                calendar.workEndHour = boost::lexical_cast<int>(fields[20]);
             }
 
 
             names.push_back(fields[0]);
-            speeds.push_back(boost::lexical_cast<double>(fields[1].c_str()));
-            fuelcons.push_back(boost::lexical_cast<double>(fields[2].c_str()));
-            lengths.push_back(boost::lexical_cast<double>(fields[3].c_str()));
-            vKWs.push_back(boost::lexical_cast<double>(fields[4].c_str()));
-            carrycapacities.push_back(boost::lexical_cast<double>(fields[5].c_str()));
-            tankcapacities.push_back(boost::lexical_cast<double>(fields[6].c_str()));
-            nbfpingspertrips.push_back(boost::lexical_cast<double>(fields[7].c_str()));
-            resttime_par1s.push_back(boost::lexical_cast<double>(fields[8].c_str()));
-            resttime_par2s.push_back(boost::lexical_cast<double>(fields[9].c_str()));
-            av_trip_duration.push_back(boost::lexical_cast<double>(fields[10].c_str()));
-            mult_fuelcons_when_steaming.push_back(boost::lexical_cast<double>(fields[11].c_str()));
-            mult_fuelcons_when_fishing.push_back(boost::lexical_cast<double>(fields[12].c_str()));
-            mult_fuelcons_when_returning.push_back(boost::lexical_cast<double>(fields[13].c_str()));
-            mult_fuelcons_when_inactive.push_back(boost::lexical_cast<double>(fields[14].c_str()));
-            firm_ids.push_back(boost::lexical_cast<int>(fields[15].c_str()));
+            vid_is_actives.push_back(boost::lexical_cast<int>(fields[1].c_str()));
+            speeds.push_back(boost::lexical_cast<double>(fields[2].c_str()));
+            fuelcons.push_back(boost::lexical_cast<double>(fields[3].c_str()));
+            lengths.push_back(boost::lexical_cast<double>(fields[4].c_str()));
+            vKWs.push_back(boost::lexical_cast<double>(fields[5].c_str()));
+            carrycapacities.push_back(boost::lexical_cast<double>(fields[6].c_str()));
+            tankcapacities.push_back(boost::lexical_cast<double>(fields[7].c_str()));
+            nbfpingspertrips.push_back(boost::lexical_cast<double>(fields[8].c_str()));
+            resttime_par1s.push_back(boost::lexical_cast<double>(fields[9].c_str()));
+            resttime_par2s.push_back(boost::lexical_cast<double>(fields[10].c_str()));
+            av_trip_duration.push_back(boost::lexical_cast<double>(fields[11].c_str()));
+            mult_fuelcons_when_steaming.push_back(boost::lexical_cast<double>(fields[12].c_str()));
+            mult_fuelcons_when_fishing.push_back(boost::lexical_cast<double>(fields[13].c_str()));
+            mult_fuelcons_when_returning.push_back(boost::lexical_cast<double>(fields[14].c_str()));
+            mult_fuelcons_when_inactive.push_back(boost::lexical_cast<double>(fields[15].c_str()));
+            firm_ids.push_back(boost::lexical_cast<int>(fields[16].c_str()));
 
             calendars.push_back(calendar);
         }

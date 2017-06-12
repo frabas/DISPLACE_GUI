@@ -118,6 +118,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
             for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
                 val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
+
                 if (iInterFishfarmTypes == 0) {
                     mMin = val;
                     mMax = val;

@@ -371,7 +371,7 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        step = fields[1].toInt();
+        step = fields[0].toInt();
 
         if (step == tstep || tstep == -1) {
             if (period != -1) {

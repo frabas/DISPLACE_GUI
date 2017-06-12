@@ -546,8 +546,8 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         //    mDb->addFishfarmStats (mLastStats, mStatsFishfarmCollected);
 
         // Fishfarm stats are not saved on db, but loaded on the fly
-       // mStatsFishfarms.insertValue(tstep, mStatsFishfarmCollected);
-       // mFishfarmStatsDirty = false;
+        mStatsFishfarms.insertValue(tstep, mStatsFishfarmsCollected);
+        mFishfarmStatsDirty = false;
     }
 
     if (mWindmillStatsDirty || force) {

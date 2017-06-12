@@ -594,7 +594,7 @@ void Fishfarm::export_fishfarms_indicators(ofstream& fishfarmlogs, int tstep)
 
     fishfarmlogs << setprecision(5) << fixed;
     // tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
-    fishfarmlogs << " " << tstep << " " << this->p_location_ff->get_idx_node().toIndex() << " "<<
+    fishfarmlogs <<  tstep << " " << this->p_location_ff->get_idx_node().toIndex() << " "<<
         this->get_farm_original_long() << " " << this->get_farm_original_lat() << " " << this->get_farmtype() << " " << this->get_name() << " " <<
         this->get_sim_individual_mean_kg() << " "    << this->get_sim_kg_harvested() << " " <<
         this->get_sim_kg_eggs_harvested() << " " << this->get_sim_annual_profit() << " " <<

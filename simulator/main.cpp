@@ -3020,7 +3020,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     for (unsigned int i=0; i<all_firm_ids.size(); i++)
     {
 
-        vector <Vessel*> vessels_of_the_firm(vessels.size());
+       // vector <Vessel*> vessels_of_the_firm(vessels.size());
+        vector <Vessel*> vessels_of_the_firm;
+
+        cout<<"vessels_of_the_firm with " << vessels_of_the_firm.size() << " vessels..." << endl;
 
 
         // select from a vector of objects

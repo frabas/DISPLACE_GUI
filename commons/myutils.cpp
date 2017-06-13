@@ -1388,18 +1388,7 @@ fill in the overall_migration_fluxes attributes into a multimap
 */
 bool fill_from_overall_migration_fluxes(istream& in, multimap<int, double>& overall_migration_fluxes)
 {
-
-    string line;
-    while(!getline(in, line).eof())
-    {
-        int key;
-        in >> key;
-        double val;
-        in >> val;
-        overall_migration_fluxes.insert(make_pair(key,val));
-    }
-    dout(cout  << "read overall_migration_fluxes " << endl << flush);
-    return true;
+    return fill_multimap_from_specifications_i_d(in, overall_migration_fluxes);
 }
 
 

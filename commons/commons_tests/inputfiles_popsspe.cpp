@@ -136,6 +136,24 @@ BOOST_AUTO_TEST_CASE ( test_spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_dat_e
 
 BOOST_AUTO_TEST_CASE ( test_overall_migration_fluxes_semester_biolsce_dat )
 {
+    string test="#Header\n10 0.1\n20 0.1";
+    multimap<int,double> ex {std::make_pair(10,0.1), std::make_pair(20, 0.1)};
+    multimap<int,double> res;
+
+    std::istringstream ss(test);
+    bool r = fill_from_overall_migration_fluxes(ss, res);
+
+    BOOST_CHECK(r);
+    BOOST_CHECK(ex == res);
+
+    // Just an empty line
+    test="\n";
+    ss.str(test);
+    ss.clear();
+    res.clear();
+    r = fill_from_overall_migration_fluxes(ss, res);
+    BOOST_CHECK(r);
+    BOOST_CHECK(res.empty());
 }
 
 BOOST_AUTO_TEST_CASE ( test_spe_initial_tac_dat )

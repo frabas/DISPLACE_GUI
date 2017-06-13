@@ -919,23 +919,14 @@ bool fill_from_vessels_specifications (istream& in,
 
             boost::split(fields, line, boost::is_any_of("|"));
 
-            if (fields.size() < 16) {
+            if (fields.size() < 21) {
                 return false;   // all fields are MANDATORY.
             }
 
-            if (fields.size() > 16) {
-                calendar.weekEndStartDay = boost::lexical_cast<int>(fields[16]);
-            }
-            if (fields.size() > 17) {
-                calendar.weekEndEndDay = boost::lexical_cast<int>(fields[17]);
-            }
-            if (fields.size() > 18) {
-                calendar.workStartHour = boost::lexical_cast<int>(fields[18]);
-            }
-            if (fields.size() > 19) {
-                calendar.workEndHour = boost::lexical_cast<int>(fields[19]);
-            }
-
+            calendar.weekEndStartDay = boost::lexical_cast<int>(fields[16]);
+            calendar.weekEndEndDay = boost::lexical_cast<int>(fields[17]);
+            calendar.workStartHour = boost::lexical_cast<int>(fields[18]);
+            calendar.workEndHour = boost::lexical_cast<int>(fields[19]);
 
             names.push_back(fields[0]);
             vid_is_actives.push_back(boost::lexical_cast<int>(fields[1].c_str()));

@@ -281,6 +281,13 @@ BOOST_AUTO_TEST_CASE( test_vesselsspe_features_quarter_dat )
     r = loadVessels(ss,r_ss);
     BOOST_CHECK(!r);
 
+    // Check for errors. missing last field (that should be mandatory?)
+    teststring = "DNK000001391|1|10|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22\n";
+    ss.str(teststring);
+    ss.clear();
+    r = loadVessels(ss,r_ss);
+    BOOST_CHECK(!r);
+
     // Check for errors: Missing newline should be catched
     teststring = "DNK0000011|1|0|34.18397|15|128|23170|7565|10|0.4485|336.7618|20|1|0|1.1|0.15|5|6|5|22|1";
     r_ss.clear();

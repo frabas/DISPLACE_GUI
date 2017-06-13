@@ -1731,6 +1731,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        nodes.at(idx_nodes[i])->set_ff_names_on_node(all_fishfarms_ids[i]);
 
        cout << fishfarms[i]->get_name() << endl;
+       cout << "on node " << idx_nodes[i] << " put ffarm " << nodes.at(idx_nodes[i])->get_ff_names_on_node().at(0) << endl;
        cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
        cout <<"end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()    << endl;
 

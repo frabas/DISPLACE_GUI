@@ -239,6 +239,9 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
     case Metiers:
         updateMetiersStats(model, static_cast<MetiersStat>(subtype), plot, line);
         break;
+
+
+
     }
 }
 

@@ -399,12 +399,12 @@ public:
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
     void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
 
-    void collectFishfarmFishMeanWeight (int step, int node_idx, int farmtype, double meanw_kg);
-    void collectFishfarmFishHarvestedKg (int step, int node_idx, int farmtype, double fish_harvested_kg);
-    void collectFishfarmEggsHarvestedKg (int step, int node_idx, int farmtype, double eggs_harvested_kg);
-    void collectFishfarmAnnualProfit (int step, int node_idx, int farmtype, double fishfarm_annualprofit);
-    void collectFishfarmNetDischargeN (int step, int node_idx, int farmtype, double fishfarm_netdischargeN);
-    void collectFishfarmNetDischargeP (int step, int node_idx, int farmtype, double fishfarm_netdischargeP);
+    void collectFishfarmFishMeanWeight (int step, int node_idx, int farmid, int farmtype, double meanw_kg);
+    void collectFishfarmFishHarvestedKg (int step, int node_idx,  int farmid, int farmtype, double fish_harvested_kg);
+    void collectFishfarmEggsHarvestedKg (int step, int node_idx, int farmid, int farmtype, double eggs_harvested_kg);
+    void collectFishfarmAnnualProfit (int step, int node_idx, int farmid, int farmtype, double fishfarm_annualprofit);
+    void collectFishfarmNetDischargeN (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeN);
+    void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeP);
 
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
@@ -547,6 +547,7 @@ private:
     FishfarmsStats mStatsFishfarmsCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
+    QMap<int, std::shared_ptr<Fishfarm> > mFishfarmInfo;
     QMap<QString, int> mStockNames;
 
     // --- Working objects

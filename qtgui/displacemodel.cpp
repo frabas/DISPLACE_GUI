@@ -681,72 +681,80 @@ void DisplaceModel::collectPopBenthosMeanWeight (int step, int node_idx, int fun
 
 
 
-void DisplaceModel::collectFishfarmFishMeanWeight(int step, int node_idx, int farmtype, double meanw_kg)
+void DisplaceModel::collectFishfarmFishMeanWeight(int step, int node_idx, int farmid, int farmtype, double meanw_kg)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
     mNodesStatsDirty = true;
 
-    mStatsFishfarmsCollected.collectMeanWeightKg(step, farmtype,
-                                          mNodes.at(node_idx)->get_ff_names_on_node(),
-                                          meanw_kg);
+
+
+    mStatsFishfarmsCollected.collectMeanWeightKg(step,
+                                                 farmid, // mNodes.at(node_idx)->get_ff_names_on_node().at(0) does not work
+                                                 farmtype,
+                                                 meanw_kg);
 }
 
-void DisplaceModel::collectFishfarmFishHarvestedKg(int step, int node_idx, int farmtype, double fish_harvested_kg)
+void DisplaceModel::collectFishfarmFishHarvestedKg(int step, int node_idx, int farmid, int farmtype, double fish_harvested_kg)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setFishfarmFishHarvestedKg(farmtype, fish_harvested_kg);
     mNodesStatsDirty = true;
 
-    mStatsFishfarmsCollected.collectFishHarvestedKg(step, farmtype,
-                                         mNodes.at(node_idx)->get_ff_names_on_node(),
-                                          fish_harvested_kg);
+    mStatsFishfarmsCollected.collectFishHarvestedKg(step,
+                                                    farmid,
+                                                    farmtype,
+                                                    fish_harvested_kg);
 }
 
-void DisplaceModel::collectFishfarmEggsHarvestedKg(int step, int node_idx, int farmtype, double eggs_harvested_kg)
+void DisplaceModel::collectFishfarmEggsHarvestedKg(int step, int node_idx, int farmid, int farmtype, double eggs_harvested_kg)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setFishfarmEggsHarvestedKg(farmtype, eggs_harvested_kg);
     mNodesStatsDirty = true;
 
-    mStatsFishfarmsCollected.collectEggsHarvestedKg(step, farmtype,
-                                          mNodes.at(node_idx)->get_ff_names_on_node(),
-                                          eggs_harvested_kg);
+    mStatsFishfarmsCollected.collectEggsHarvestedKg(step,
+                                                    farmid,
+                                                    farmtype,
+                                                    eggs_harvested_kg);
 }
 
 
-void DisplaceModel::collectFishfarmAnnualProfit(int step, int node_idx, int farmtype, double fishfarm_annualprofit)
+void DisplaceModel::collectFishfarmAnnualProfit(int step, int node_idx, int farmid, int farmtype, double fishfarm_annualprofit)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setFishfarmAnnualProfit(farmtype, fishfarm_annualprofit);
     mNodesStatsDirty = true;
 
-    mStatsFishfarmsCollected.collectFishfarmAnnualProfit(step, farmtype,
-                                          mNodes.at(node_idx)->get_ff_names_on_node(),
-                                          fishfarm_annualprofit);
+    mStatsFishfarmsCollected.collectFishfarmAnnualProfit(step,
+                                                         farmid,
+                                                         farmtype,
+                                                         fishfarm_annualprofit);
 }
 
-void DisplaceModel::collectFishfarmNetDischargeN(int step, int node_idx, int farmtype, double fishfarm_netdischargeN)
+void DisplaceModel::collectFishfarmNetDischargeN(int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeN)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setFishfarmNetDischargeN(farmtype, fishfarm_netdischargeN);
     mNodesStatsDirty = true;
 
-    mStatsFishfarmsCollected.collectNetDischargeN(step, farmtype,
-                                          mNodes.at(node_idx)->get_ff_names_on_node(),
-                                          fishfarm_netdischargeN);
+    mStatsFishfarmsCollected.collectNetDischargeN(step,
+                                                  farmid,
+                                                  farmtype,
+                                                  fishfarm_netdischargeN);
 }
 
 
-void DisplaceModel::collectFishfarmNetDischargeP(int step, int node_idx, int farmtype, double fishfarm_netdischargeP)
+void DisplaceModel::collectFishfarmNetDischargeP(int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeP)
 {
     checkStatsCollection(step);
     mNodes.at(node_idx)->setFishfarmNetDischargeP(farmtype, fishfarm_netdischargeP);
     mNodesStatsDirty = true;
 
-    mStatsFishfarmsCollected.collectNetDischargeP(step, farmtype,
-                                         mNodes.at(node_idx)->get_ff_names_on_node(),
-                                          fishfarm_netdischargeP);
+    mStatsFishfarmsCollected.collectNetDischargeP(step,
+                                                  farmid,
+                                                  farmtype,
+                                                  fishfarm_netdischargeP);
 }
 
 

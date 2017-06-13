@@ -244,7 +244,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../objeditor/vesseleditor.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
          <property name="iconSize">
@@ -288,7 +288,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../objeditor/vesseleditor.qrc">
+          <iconset resource="../dteditor/dteditor.qrc">
            <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
          </property>
         </widget>
@@ -340,11 +340,11 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>5</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
-            <iconset resource="qtgui.qrc">
+            <iconset resource="../qtcommons/qtcommons.qrc">
              <normaloff>:/icons/harbour.png</normaloff>:/icons/harbour.png</iconset>
            </attribute>
            <attribute name="title">
@@ -1092,7 +1092,7 @@ L3</string>
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1101,7 +1101,7 @@ L3</string>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
    </property>
    <property name="text">
@@ -1110,7 +1110,7 @@ L3</string>
   </action>
   <action name="actionLoad_results">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1256,7 +1256,7 @@ L3</string>
   </action>
   <action name="actionLoad_Graph">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
    </property>
    <property name="text">
@@ -1295,7 +1295,7 @@ L3</string>
   </action>
   <action name="actionSave_Graph">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
    </property>
    <property name="text">
@@ -1309,7 +1309,7 @@ L3</string>
   </action>
   <action name="actionAbort_Operation">
    <property name="icon">
-    <iconset resource="../objeditor/vesseleditor.qrc">
+    <iconset resource="../dteditor/dteditor.qrc">
      <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
    </property>
    <property name="text">
@@ -1518,8 +1518,9 @@ L3</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../objeditor/vesseleditor.qrc"/>
   <include location="../dteditor/dteditor.qrc"/>
+  <include location="../objeditor/vesseleditor.qrc"/>
+  <include location="../qtcommons/qtcommons.qrc"/>
   <include location="qtgui.qrc"/>
  </resources>
  <connections/>

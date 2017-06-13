@@ -60,7 +60,7 @@ public:
     /* Proxy functions to avoid changing too much code */
     types::NodeId get_idx_node() const { return mNode->get_idx_node(); }
     int get_marine_landscape() const { return mNode->get_marine_landscape(); }
-    int get_ff_names_on_node() const { return mNode->get_ff_names_on_node().at(0); }
+    vector<int> get_ff_names_on_node() const { return mNode->get_ff_names_on_node(); }
     double get_wind() const { return mNode->get_wind(); }
     double get_sst() const { return mNode->get_sst(); }
     double get_salinity() const { return mNode->get_salinity(); }

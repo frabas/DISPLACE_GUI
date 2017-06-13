@@ -101,7 +101,10 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     QStringList arguments;
     QSettings set;
 
+    QString executable (QApplication::applicationDirPath() + "/displace");
+
 #if defined(RUN_VALGRIND_ON_CHILD)
+    executable = "valgrind";
     arguments.push_back("--tool=" VALGRIND_TOOL);
     arguments.push_back(QApplication::applicationDirPath() + "/displace");
 #endif
@@ -146,14 +149,10 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     connect(mSimulation, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
     connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
-    qInfo() << "Running: " << (QApplication::applicationDirPath() + "/displace" ) << "from" << folder << " with arguments: " << arguments;
+    qInfo() << "Running: " << executable << "from" << folder << " with arguments: " << arguments;
     mSimulation->setWorkingDirectory(folder);
 
-#if defined(RUN_VALGRIND_ON_CHILD)
-    mSimulation->start("valgrind", arguments);
-#else
-    mSimulation->start(QApplication::applicationDirPath() + "/displace", arguments);
-#endif
+    mSimulation->start(executable, arguments);
 
     return true;
 }

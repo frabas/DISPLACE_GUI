@@ -53,8 +53,8 @@ struct Vessel {
            double mult_fuelcons_when_fishing,
            double mult_fuelcons_when_returning,
            double mult_fuelcons_when_inactive,
-           int firm_ids,
-           int westart,int  weend, int wrkstart, int wrkend
+           int westart,int  weend, int wrkstart, int wrkend,
+           int firm_ids
            ) :
         names(names),
         vid_is_actives(vid_is_actives),

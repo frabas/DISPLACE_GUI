@@ -549,7 +549,7 @@ bool fill_from_salinity(istream& in, vector<double>& graph_point_salinity, int n
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
-        cerr << "Bad Conversion on graph_point_salinity file line " << linenum <<
+        cerr << "Bad Conversion on fill_from_salinity file line " << linenum <<
                 " : " << ex.what() << "\n";
         return false;
     }
@@ -573,7 +573,7 @@ bool fill_from_benthos_biomass(istream& in, vector<double>& graph_point_benthos_
                 continue;
 
             if (linenum < nrow) {
-                double val = boost::lexical_cast<int>(line);
+                double val = boost::lexical_cast<double>(line);
                 graph_point_benthos_biomass.push_back(val);
             } else {
                 break;  // finish.
@@ -581,7 +581,7 @@ bool fill_from_benthos_biomass(istream& in, vector<double>& graph_point_benthos_
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
-        cerr << "Bad Conversion on graph_point_benthos_biomass file line " << linenum <<
+        cerr << "Bad Conversion on fill_from_benthos_biomass file line " << linenum <<
                 " : " << ex.what() << "\n";
         return false;
     }
@@ -603,7 +603,7 @@ bool fill_from_benthos_number(istream& in, vector<double>& graph_point_benthos_n
                 continue;
 
             if (linenum < nrow) {
-                double val = boost::lexical_cast<int>(line);
+                double val = boost::lexical_cast<double>(line);
                 graph_point_benthos_number.push_back(val);
             } else {
                 break;  // finish.

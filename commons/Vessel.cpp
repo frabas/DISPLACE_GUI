@@ -4748,10 +4748,8 @@ int Vessel::should_i_stop_fishing(const map<string,int>& external_states, bool u
 
         //STOP FISHING!
         if(unif_rand()<the_value) {
-            unlock();
             return(1);
         } else {
-            unlock();
             return(0);		 // DON´T STOP!
         }
 

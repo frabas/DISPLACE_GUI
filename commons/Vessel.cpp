@@ -2104,7 +2104,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                    {
                                     val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
                                     new_avai_pops_at_selected_szgroup.at(a_count)=val;
-                                    a_count+=1;
+                                    if(a_count<(selected_szgroups.size()-1)) a_count+=1;
                                     }
                                 nodes.at(idx_node.toIndex())->set_avai_pops_at_selected_szgroup(pop, new_avai_pops_at_selected_szgroup);
 

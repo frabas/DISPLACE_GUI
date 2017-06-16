@@ -318,11 +318,11 @@ public:
     bool isInterestingBenthos(int n) const { return mInterestingBenthos.has(n); }
     void clrInterestingBenthos() { mInterestingBenthos.clear(); }
 
-    QList<int> getInterestingFishfarms() const { return mInterestingFishfarms.list(); }
-    void setInterestingFishfarms(int n) { mInterestingFishfarms.set(n); }
-    void remInterestingFishfarms(int n) { mInterestingFishfarms.rem(n); }
-    bool isInterestingFishfarms(int n) const { return mInterestingFishfarms.has(n); }
-    void clrInterestingFishfarms() { mInterestingFishfarms.clear(); }
+    QList<int> getInterestingFishfarms() const { return mFishfarmsTypes->list(); }
+    void setInterestingFishfarms(int n) { mFishfarmsTypes->set(n); }
+    void remInterestingFishfarms(int n) { mFishfarmsTypes->rem(n); }
+    bool isInterestingFishfarms(int n) const { return mFishfarmsTypes->has(n); }
+    void clrInterestingFishfarms() { mFishfarmsTypes->clear(); }
 
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
@@ -516,7 +516,6 @@ private:
     QList<types::NodeId> mInterestingHarb;
     QList<int> mInterestingNations;
     InterestingList<int> mInterestingBenthos;  
-    InterestingList<int> mInterestingFishfarms;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFishfarmsTypes;
 

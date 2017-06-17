@@ -97,13 +97,11 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
         entityTemplates[Nations] = new objecttree::NationEntity(this);
         entityTemplates[SizeGroups] = new objecttree::SzGroupEntity(this);
 
-        auto funcgroups = new objecttree::BFunctionalGroupsEntity(this, nullptr);
+        funcgroups = new objecttree::BFunctionalGroupsEntity(this, nullptr);
         entityTemplates[BenthosFunctionalGroups] = funcgroups;
 
-        auto farmtypes = new objecttree::FFarmTypesEntity(this, nullptr);
+        farmtypes = new objecttree::FFarmTypesEntity(this, nullptr);
         entityTemplates[FishfarmsTypes] = farmtypes;
-
-
     }
 }
 
@@ -188,6 +186,12 @@ void ObjectTreeModel::setCurrentModel(int idx, DisplaceModel *model)
     beginResetModel();
     mModel = model;
     mModelIdx = idx;
+
+    if (mModel) {
+        farmtypes->setInterestingList(mModel->getFishfarmsTypesList());
+        funcgroups->setInterestingList(mModel->getFunctionalGroupsList());
+    }
+
     for (auto entity : entityTemplates) {
         entity->modelChanged(idx);
     }

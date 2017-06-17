@@ -50,6 +50,8 @@ class StatsController;
 
 namespace objecttree {
 class ObjectTreeEntity;
+class FFarmTypesEntity;
+class BFunctionalGroupsEntity;
 }
 
 class ObjectTreeModel : public QAbstractItemModel
@@ -104,6 +106,8 @@ private:
     DisplaceModel *mModel;
     int mModelIdx;
 
+    objecttree::FFarmTypesEntity *farmtypes;
+    objecttree::BFunctionalGroupsEntity *funcgroups;
 protected:
     // helper functions
 

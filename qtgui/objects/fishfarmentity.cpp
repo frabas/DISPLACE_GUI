@@ -64,13 +64,17 @@ QVariant FishfarmEntity::data(const QModelIndex &index, int role) const
 {
     if (mFishfarmId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
-            return QString("%1").arg(model->getModel()->getFishfarmList()[mFishfarmId]->getId());
+          //    return QString("%1").arg(model->getModel()->getFishfarmId(mFishfarmId));
+        return QString("%1").arg(model->getModel()->getFishfarmList()[mFishfarmId]->getId());
         if (role == Qt::CheckStateRole)
             return QVariant(model->getModel()->isInterestingFishfarms(index.row()) ? Qt::Checked : Qt::Unchecked);
         if (role == Qt::ToolTipRole) {
             std::shared_ptr<FishfarmData> ff = model->getModel()->getFishfarmList()[mFishfarmId];
             return QString("%1 %2").arg(ff->mFishfarm->get_y()).arg(ff->mFishfarm->get_x());
         }
+
+
+     model->getModel()->setInterestingFishfarms(index.row());
     }
 
     return QVariant();

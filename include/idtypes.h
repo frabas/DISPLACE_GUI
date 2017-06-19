@@ -39,7 +39,7 @@ public:
 
 #if !defined (__APPLE__)
 template <typename X>
-bool inline isIdInvalid(const X &) = delete
+bool inline isIdInvalid(const X &) = delete;
 #else
 template <typename X>
 bool inline isIdInvalid(const X &) { return true; }

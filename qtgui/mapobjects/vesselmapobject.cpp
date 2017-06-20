@@ -105,11 +105,9 @@ void VesselMapObject::updateProperties()
 
 void VesselMapObject::vesselUpdated()
 {
-#if 0 // this makes the app unresponsive.
     mGeometry->layer()->removeGeometry(mGeometry);
     mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
     mGeometry->layer()->addGeometry(mGeometry);
-#endif
 }
 
 void VesselMapObject::widgetClosed()

@@ -355,13 +355,14 @@ void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceMode
             if (!ok) throw std::runtime_error(QString("wrong meanweight %1").arg(fields[7]).toStdString());
             model->collectPopBenthosMeanWeight(step, nodeid, funcid, meanweight);
 
-            double benthosnumberOverK = fields[8].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong benthosnumberOverK %1").arg(fields[8]).toStdString());
+            double benthosbiomassOverK = fields[8].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong benthosbiomassOverK %1").arg(fields[8]).toStdString());
+            model->collectPopBenthosBiomassOverK(step, nodeid, funcid, benthosbiomassOverK);
+
+            double benthosnumberOverK = fields[9].toDouble(&ok);
+            if (!ok) throw std::runtime_error(QString("wrong benthosnumberOverK %1").arg(fields[9]).toStdString());
             model->collectPopBenthosNumberOverK(step, nodeid, funcid, benthosnumberOverK);
 
-            double benthosbiomassOverK = fields[9].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong benthosbiomassOverK %1").arg(fields[9]).toStdString());
-            model->collectPopBenthosNumberOverK(step, nodeid, funcid, benthosbiomassOverK);
         }
     }
 

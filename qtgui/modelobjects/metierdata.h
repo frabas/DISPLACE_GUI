@@ -18,6 +18,7 @@ public:
     double revenueAV = 0.0;
     double gav = 0.0;
     double mTotCatches = 0.0;
+    double vpuf = 0.0;
 
     QList<double> mCatchesPerPop;
 };

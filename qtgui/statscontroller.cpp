@@ -610,6 +610,10 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
         break;
+    case M_Vpuf:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("VPUF (Euro per Litre)"));
+        break;
     }
 
     foreach (auto  d, dl) {
@@ -658,6 +662,9 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                     break;
                 case M_Gav:
                     valueData << it.value().at(ip).gav;
+                    break;
+                case M_Vpuf:
+                    valueData << it.value().at(ip).vpuf;
                     break;
                 }
             }

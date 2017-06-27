@@ -847,7 +847,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf += stats.vpuf();
+    mStatsNationsCollected[nat].mVpuf = stats.vpuf();
 
     // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
     int hidx = -1;
@@ -858,7 +858,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
         mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
         mStatsHarboursCollected[hidx].mGav += stats.gav;
-        mStatsHarboursCollected[hidx].mVpuf += stats.vpuf();
+        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf();
     }
 
     int midx = stats.metierId;
@@ -870,6 +870,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
         mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
         mStatsMetiersCollected[midx].gav += stats.gav;
+        mStatsMetiersCollected[midx].vpuf =  stats.vpuf();
     }
 
     int n = stats.mCatches.size();

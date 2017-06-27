@@ -2875,6 +2875,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, StatsController::M_Catches, r);
         exportPlot (out + QString("/metiers_revenues.%1").arg(r.format), StatsController::Metiers, StatsController::M_Revenues, r);
         exportPlot (out + QString("/metiers_gav.%1").arg(r.format), StatsController::Metiers, StatsController::M_Gav, r);
+        exportPlot (out + QString("/metiers_vpuf.%1").arg(r.format), StatsController::Metiers, StatsController::M_Vpuf, r);
 
         s.setValue("allplots_out", out);
     }

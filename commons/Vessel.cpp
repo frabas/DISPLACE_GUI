@@ -1811,7 +1811,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                 // // // // // //
                 // HARDCODING SPECIFIC TO MYFISH MIG (TO BE REMOVED!!!)
-                if(pop==10 && this->get_loc()->get_x()<12)
+                /*if(pop==10 && this->get_loc()->get_x()<12)
                 {
                     vector <double> initial_wsz;
                     initial_wsz.push_back(0.0001266451);
@@ -1830,7 +1830,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     initial_wsz.push_back(4.223748);
                     wsz=initial_wsz; // replace if sd22
                 }
-                // // // // // //
+                */// // // // // //
 
 
 

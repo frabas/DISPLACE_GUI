@@ -71,7 +71,8 @@ HEADERS +=                                      \
 # Third-party headers: QProgressIndicator
     QProgressIndicator.h                        \
     m_constants.h \
-    MapAdapterOpenSeaMap.h
+    MapAdapterOpenSeaMap.h \
+    geometrydb.h
 
 # Add source files.
 SOURCES +=                                      \
@@ -105,7 +106,8 @@ SOURCES +=                                      \
     QMapControl.cpp                             \
 # Third-party sources: QProgressIndicator
     QProgressIndicator.cpp \
-    MapAdapterOpenSeaMap.cpp
+    MapAdapterOpenSeaMap.cpp \
+    geometrydb.cpp
 
 # Include GDAL-required files.
 

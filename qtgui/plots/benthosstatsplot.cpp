@@ -164,7 +164,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
     }
 
 
-    switch (stat) {
+    switch (stat) { // stat is the index in the selecting combo box
     case BenthosStat::B_TotBiomass:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Biomass"));

@@ -1323,7 +1323,7 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthos_tot_biomass.at(funcgr)/benthos_tot_biomass_K.at(funcgr);
 
     benthosbiomassnodes << setprecision(3) << fixed;
-    // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
+    // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id / benthosnumberoverK / benthosbiomassoverK
     benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " "  <<
                            benthos_tot_meanweight.at(funcgr) << " " << benthosnumberoverK  << " " << benthosbiomassoverK << endl;
@@ -1344,7 +1344,7 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthosbiomass/benthos_tot_biomass_K.at(funcgr);
 
     benthosnumbernodes << setprecision(3) << fixed;
-    // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
+    // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id / benthosnumberoverK / benthosbiomassoverK
     benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
                        benthos_tot_meanweight.at(funcgr) <<  " " << benthosnumberoverK  << " " << benthosbiomassoverK << endl;

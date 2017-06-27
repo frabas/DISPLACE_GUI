@@ -45,7 +45,7 @@ class COMMONSSHARED_EXPORT Node
         Node (types::NodeId idx_node, double xval, double yval, int _harbour, int _code_area,
               int _marine_landscape,
               double _wind, double _sst, double _salinity,
-              double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
+              double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
               int nbpops, int nbbenthospops,  int nbszgroups);
         /*
         Node (types::NodeId idx_node, const vector<double> &graph_coord_x, const vector<double> &graph_coord_y,
@@ -143,6 +143,10 @@ class COMMONSSHARED_EXPORT Node
         const vector<double>& get_benthos_tot_number() const;
         double get_benthos_tot_meanweight(int funcgr) const;
         const vector<double>& get_benthos_tot_meanweight() const;
+        double get_benthos_tot_number_K(int funcgr) const;
+        const vector<double>& get_benthos_tot_number_K() const;
+        double get_benthos_tot_biomass_K(int funcgr) const;
+        const vector<double>& get_benthos_tot_biomass_K() const;
         double get_tariffs(int type) const;
         const vector<double>& get_tariffs() const;
         vector< vector<double> >  get_Ns_pops_at_szgroup() const;
@@ -178,6 +182,8 @@ class COMMONSSHARED_EXPORT Node
         void set_benthos_tot_biomass(int funcgr, double value);
         void set_benthos_tot_number(int funcgr, double value);
         void set_benthos_tot_meanweight(int funcgr, double value);
+        void set_benthos_tot_biomass_K(int funcgr, double value);
+        void set_benthos_tot_number_K(int funcgr, double value);
         void set_tariffs(vector<double> values);
         void set_tariffs(int type, double value);
         void clear_pop_names_on_node();
@@ -202,6 +208,8 @@ class COMMONSSHARED_EXPORT Node
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
         void add_benthos_tot_number_on_node(double tot_number_this_group);
         void add_benthos_tot_meanweight_on_node(double meanweight_this_group);
+        void add_benthos_tot_biomass_K_on_node(double tot_biomass_K_this_group);
+        void add_benthos_tot_number_K_on_node(double tot_number_K_this_group);
 
         void setAreaType(int _area_type);
         int evaluateAreaType();
@@ -253,6 +261,8 @@ private:
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file
         double benthos_meanweight;  // total bio on node from the GIS graph file
+        double benthos_biomass_K;
+        double benthos_number_K;
         bool is_harbour;
 		int cumftime;
         double cumsweptarea;
@@ -273,6 +283,9 @@ private:
         vector<double> benthos_tot_biomass;  // total bio on node per funcgr from sharing benthos_biomass per funcgr (this sharing is specific to Benthos landscape)
         vector<double> benthos_tot_number;  // total bio on node per funcgr from sharing benthos_number per funcgr (this sharing is specific to Benthos landscape)
         vector<double> benthos_tot_meanweight;  // meanweight on node per funcgr (this sharing is specific to Benthos landscape)
+        vector<double> benthos_tot_biomass_K;  // vect over funcgrs
+        vector<double> benthos_tot_number_K;  // vect over funcgrs
+
         vector<double> tariffs;
 
         vector<bool> mBannedMetiers;

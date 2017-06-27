@@ -43,6 +43,8 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mBenthosBiomass = new double[N2];
         mBenthosNumber = new double[N2];
         mBenthosMeanweight = new double[N2];
+        mBenthosBiomassOverK=new double[N2];
+        mBenthosNumberOverK=new double[N2];
         mFishfarmMeanweight = new double[N3];
         mFishfarmFishHarvestedKg = new double[N3];
         mFishfarmEggsHarvestedKg = new double[N3];
@@ -64,6 +66,13 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         }
         for (int j = 0; j < N2; ++j) {
             mBenthosMeanweight[j] = 0.0;
+        }
+
+        for (int j = 0; j < N2; ++j) {
+            mBenthosBiomassOverK[j] = 0.0;
+        }
+        for (int j = 0; j < N2; ++j) {
+            mBenthosNumberOverK[j] = 0.0;
         }
 
         for (int j = 0; j < N3; ++j) {
@@ -189,6 +198,16 @@ void NodeData::setBenthosNumber(int func, double benthosnumber)
 void NodeData::setBenthosMeanweight(int func, double benthosmeanweight)
 {
     mBenthosMeanweight[func] = benthosmeanweight;
+}
+
+void NodeData::setBenthosBiomassOverK(int func, double benthosbiomassoverK)
+{
+    mBenthosBiomassOverK[func] = benthosbiomassoverK;
+}
+
+void NodeData::setBenthosNumberOverK(int func, double benthosnumberoverK)
+{
+    mBenthosNumberOverK[func] = benthosnumberoverK;
 }
 
 void NodeData::setFishfarmFishMeanWeight(int farm, double fishfarmfishmeanweight)

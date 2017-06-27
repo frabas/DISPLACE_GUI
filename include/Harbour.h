@@ -48,6 +48,8 @@ class COMMONSSHARED_EXPORT Harbour : public Node
             double _benthos_biomass,
             double _benthos_number,
             double _benthos_meanweight,
+            double _benthos_biomass_K,
+            double _benthos_number_K,
             int nbpops,
             int nbbenthospops,
             int nbszgroups,

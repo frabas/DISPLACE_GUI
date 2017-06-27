@@ -398,6 +398,8 @@ public:
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
     void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
+    void collectPopBenthosBiomassOverK(int step, int node_idx, int funcid, double benthosbiomassoverK);
+    void collectPopBenthosNumberOverK(int step, int node_idx, int funcid, double benthosnumberoverK);
 
     void collectFishfarmFishMeanWeight (int step, int node_idx, int farmid, int farmtype, double meanw_kg);
     void collectFishfarmFishHarvestedKg (int step, int node_idx,  int farmid, int farmtype, double fish_harvested_kg);

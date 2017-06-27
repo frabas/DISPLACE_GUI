@@ -112,6 +112,22 @@ void BenthosStats::collectMeanWeight(int step, int funcid, int benthosid, double
     setDirty();
 }
 
+void BenthosStats::collectBiomassOverK(int step, int funcid, int benthosid, double biomassOverK)
+{
+    Q_UNUSED(step);
+
+    get(funcid,benthosid).biomassOverK = biomassOverK;
+    setDirty();
+}
+
+void BenthosStats::collectNumberOverK(int step, int funcid, int benthosid, double numberOverK)
+{
+    Q_UNUSED(step);
+
+    get(funcid,benthosid).numberOverK = numberOverK;
+    setDirty();
+}
+
 double BenthosStats::biomassForBenthosAndFuncGroup(int funcgroup, int benthos) const
 {
     return get(funcgroup,benthos).biomass;
@@ -120,4 +136,14 @@ double BenthosStats::biomassForBenthosAndFuncGroup(int funcgroup, int benthos) c
 double BenthosStats::numberForBenthosAndFuncGroup(int funcgroup, int benthos) const
 {
     return get(funcgroup,benthos).number;
+}
+
+double BenthosStats::biomassOverKForBenthosAndFuncGroup(int funcgroup, int benthos) const
+{
+    return get(funcgroup,benthos).biomassOverK;
+}
+
+double BenthosStats::numberOverKForBenthosAndFuncGroup(int funcgroup, int benthos) const
+{
+    return get(funcgroup,benthos).numberOverK;
 }

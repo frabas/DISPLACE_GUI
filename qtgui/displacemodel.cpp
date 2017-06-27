@@ -680,6 +680,28 @@ void DisplaceModel::collectPopBenthosMeanWeight (int step, int node_idx, int fun
 }
 
 
+void DisplaceModel::collectPopBenthosBiomassOverK(int step, int node_idx, int funcid, double benthosbiomassoverK)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBenthosBiomassOverK(funcid, benthosbiomassoverK);
+    mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectBiomassOverK(step, funcid,
+                                          getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                          benthosbiomassoverK);
+}
+
+void DisplaceModel::collectPopBenthosNumberOverK(int step, int node_idx, int funcid, double benthosnumberoverK)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBenthosNumberOverK(funcid, benthosnumberoverK);
+    mNodesStatsDirty = true;
+
+    mStatsBenthosCollected.collectNumberOverK(step, funcid,
+                                          getBenthosIdx(mNodes.at(node_idx)->get_marine_landscape()),
+                                          benthosnumberoverK);
+}
+
 
 void DisplaceModel::collectFishfarmFishMeanWeight(int step, int node_idx, int farmid, int farmtype, double meanw_kg)
 {
@@ -923,7 +945,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1868,6 +1890,8 @@ bool DisplaceModel::loadNodes()
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // because benthos mean weight is not informed by GIS layer
+                                       0, // because  is not informed by GIS layer
+                                       0, // because  is not informed by GIS layer
                                        nbpops,
                                        nbbenthospops,
                                        NBSZGROUP,
@@ -1900,6 +1924,8 @@ bool DisplaceModel::loadNodes()
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0,// because benthos mean weight is not informed by GIS layer
+                                 0,// because is not informed by GIS layer
+                                 0,// because is not informed by GIS layer
                                  nbpops,
                                  nbbenthospops,
                                  NBSZGROUP));

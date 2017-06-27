@@ -41,6 +41,7 @@ const multimap<int,double> Node::mFreqUsualMetiers;
 Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code_area,
            int _marine_landscape, double _wind, double _sst, double _salinity,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
+           double _benthos_biomass_K, double _benthos_number_K,
            int nbpops, int nbbenthospops, int nbszgroups)
     : idx_node(idx)
 {
@@ -58,6 +59,9 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;
+    benthos_biomass_K=_benthos_biomass_K;
+    benthos_number_K=_benthos_number_K;
+
     if(_harbour!=0)
 	{
 		is_harbour = true;
@@ -154,6 +158,8 @@ Node::Node()
       benthos_tot_biomass(),
       benthos_tot_number(),
       benthos_tot_meanweight(),
+      benthos_tot_biomass_K(0),
+      benthos_tot_number_K(0),
       tariffs(),
       m_nbpops(0),
       m_nbbenthospops(0),
@@ -474,6 +480,33 @@ const vector <double> &Node::get_benthos_tot_meanweight() const
     return(benthos_tot_meanweight);
 }
 
+double  Node::get_benthos_tot_biomass_K(int funcgr) const
+{
+
+    return(benthos_tot_biomass_K.at(funcgr));
+}
+
+
+const vector <double> &Node::get_benthos_tot_biomass_K() const
+{
+
+    return(benthos_tot_biomass_K);
+}
+
+double  Node::get_benthos_tot_number_K(int funcgr) const
+{
+
+    return(benthos_tot_number_K.at(funcgr));
+}
+
+
+const vector <double> &Node::get_benthos_tot_number_K() const
+{
+
+    return(benthos_tot_number_K);
+}
+
+
 double  Node::get_tariffs(int type) const
 {
 
@@ -773,6 +806,19 @@ void  Node::set_benthos_tot_meanweight(int funcgr, double value)
 
     benthos_tot_meanweight.at(funcgr)= value;
 }
+
+void  Node::set_benthos_tot_biomass_K(int funcgr, double value)
+{
+
+    benthos_tot_biomass_K.at(funcgr)= value;
+}
+
+void  Node::set_benthos_tot_number_K(int funcgr, double value)
+{
+
+    benthos_tot_number_K.at(funcgr)= value;
+}
+
 
 void  Node::set_tariffs(int type, double value)
 {
@@ -1240,6 +1286,20 @@ void Node::add_benthos_tot_meanweight_on_node(double meanweight_this_group)
 
 }
 
+void Node::add_benthos_tot_biomass_K_on_node(double tot_biomass_K_this_group)
+{
+
+    benthos_tot_biomass_K.push_back(tot_biomass_K_this_group);
+
+}
+
+void Node::add_benthos_tot_number_K_on_node(double tot_number_K_this_group)
+{
+
+    benthos_tot_number_K.push_back(tot_number_K_this_group);
+
+}
+
 
 void Node::set_is_harbour(int id)
 {
@@ -1256,11 +1316,17 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
     double benthosnumber=0;
     if(benthos_tot_meanweight.at(funcgr)!=0)  benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr);
 
+    double benthosnumberoverK=0;
+    if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)  benthosnumberoverK = benthosnumber/benthos_tot_meanweight.at(funcgr);
+
+    double benthosbiomassoverK=0;
+    if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthos_tot_biomass.at(funcgr)/benthos_tot_biomass_K.at(funcgr);
+
     benthosbiomassnodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
     benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " "  <<
-                           benthos_tot_meanweight.at(funcgr) << endl;
+                           benthos_tot_meanweight.at(funcgr) << " " << benthosnumberoverK  << " " << benthosbiomassoverK << endl;
 
 }
 
@@ -1271,11 +1337,18 @@ void Node::export_benthos_tot_number_per_funcgroup(ofstream& benthosnumbernodes,
 
     double benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr);
 
+    double benthosnumberoverK=0;
+    if(!benthos_tot_number_K.empty() &&benthos_tot_number_K.at(funcgr)!=0)  benthosnumberoverK = benthos_tot_number.at(funcgr)/benthos_tot_meanweight.at(funcgr);
+
+    double benthosbiomassoverK=0;
+    if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthosbiomass/benthos_tot_biomass_K.at(funcgr);
+
     benthosnumbernodes << setprecision(3) << fixed;
     // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id
     benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
-                       benthos_tot_meanweight.at(funcgr) << endl;
+                       benthos_tot_meanweight.at(funcgr) <<  " " << benthosnumberoverK  << " " << benthosbiomassoverK << endl;
+
 
 }
 

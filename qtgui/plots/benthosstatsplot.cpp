@@ -177,6 +177,14 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Mean Weight (gram/sq_m)"));
         break;
+    case BenthosStat::B_TotBiomassOverK:
+        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlot->yAxis->setLabel(QObject::tr("B/K"));
+        break;
+    case BenthosStat::B_NumberOverK:
+        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlot->yAxis->setLabel(QObject::tr("N/K"));
+        break;
     }
 
     mPlot->rescaleAxes();
@@ -197,6 +205,13 @@ double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int benth
             return x.at(szid);*/
         return 0;
         }
+    case BenthosStat::B_TotBiomassOverK:
+        return model->getBenthosStatistics().getValue(tstep).biomassOverKForBenthosAndFuncGroup(funcgroup, benthos);
+    case BenthosStat::B_NumberOverK:
+        return model->getBenthosStatistics().getValue(tstep).numberOverKForBenthosAndFuncGroup(funcgroup, benthos);
+
+
+
     }
 
     return 0;

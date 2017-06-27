@@ -1105,7 +1105,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     // check the class Node
-    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0, nbpops, nbbenthospops, 5);
+    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
           << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
     node.set_xy(2,2);
@@ -1341,6 +1341,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // meanweight not set from a GIS layer....
+                                       0, // biomass_K not set from a GIS layer....
+                                       0, // number_K not set from a GIS layer....
                                        nbpops,
                                        nbbenthospops,
                                        NBSZGROUP,
@@ -1369,6 +1371,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     graph_point_benthos_biomass[i],
                                     graph_point_benthos_number[i],
                                     0, // meanweight not set from a GIS layer....
+                                    0, // biomass_K not set from a GIS layer....
+                                    0, // number_K not set from a GIS layer....
                                     nbpops,
                                     nbbenthospops,
                                     NBSZGROUP));

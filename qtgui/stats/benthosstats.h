@@ -11,12 +11,16 @@ public:
         double biomass = 0.0;
         double number = 0.0;
         double meanweight = 0.0;
+        double biomassOverK = 0.0;
+        double numberOverK = 0.0;
 
         StatData() {}
         void clear() {
             biomass = 0.0;
             number = 0.0;
             meanweight = 0.0;
+            biomassOverK = 0.0;
+            numberOverK = 0.0;
         }
     };
 
@@ -45,9 +49,13 @@ public:
     void collectBiomass(int step, int funcid, int benthosid, double biomass);
     void collectNumber (int step, int funcid, int benthosid, double number);
     void collectMeanWeight(int step, int funcid, int benthosid, double number);
+    void collectBiomassOverK(int step, int funcid, int benthosid, double biomass);
+    void collectNumberOverK(int step, int funcid, int benthosid, double number);
 
     double biomassForBenthosAndFuncGroup(int funcgroup, int benthos) const;
     double numberForBenthosAndFuncGroup(int funcgroup, int benthos) const;
+    double biomassOverKForBenthosAndFuncGroup(int funcgroup, int benthos) const;
+    double numberOverKForBenthosAndFuncGroup(int funcgroup, int benthos) const;
 
     static const BenthosStats::StatData NoData;
 };

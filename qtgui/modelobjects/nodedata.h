@@ -145,6 +145,14 @@ public:
     double getBenthosMeanweight(int func) const {
         return mBenthosMeanweight[func];
     }
+    void setBenthosBiomassOverK(int func, double benthosbiomassoverK);
+    double getBenthosBiomassOverK(int func) const {
+        return mBenthosBiomassOverK[func];
+    }
+    void setBenthosNumberOverK(int func, double benthosnumberoverK);
+    double getBenthosNumberOverK(int func) const {
+        return mBenthosNumberOverK[func];
+    }
 
 
     void setFishfarmFishMeanWeight(int farmid, double meanw_kg);
@@ -212,6 +220,8 @@ private:
     double *mBenthosBiomass;
     double *mBenthosNumber;
     double *mBenthosMeanweight;
+    double *mBenthosBiomassOverK;
+    double *mBenthosNumberOverK;
 
     double *mFishfarmMeanweight;
     double *mFishfarmFishHarvestedKg;

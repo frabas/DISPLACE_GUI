@@ -73,7 +73,9 @@ Benthos::Benthos(int _marine_landscape,
                p_spe_nodes[i]->add_benthos_tot_biomass_on_node(p_spe_nodes[i]->get_init_benthos_number()*meanw_funcgr_per_node.at(funcgr) * prop_funcgr_number_per_node.at(funcgr) );
                // add meanweight
                p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
-               }
+               // add carryingcap K
+               p_spe_nodes[i]->add_benthos_tot_number_K_on_node(benthos_number_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr) );
+            }
                dout (cout << "prop func. grp. biomass on this node " << p_spe_nodes[i]->get_idx_node().toIndex() <<
                       "this marine landscape " << marine_landscape << " is " << prop_funcgr_biomass_per_node.size() << endl);
         }
@@ -87,10 +89,12 @@ Benthos::Benthos(int _marine_landscape,
                if(meanw_funcgr_per_node.at(funcgr)!=0) p_spe_nodes[i]->add_benthos_tot_number_on_node(p_spe_nodes[i]->get_init_benthos_biomass()/meanw_funcgr_per_node.at(funcgr) * prop_funcgr_biomass_per_node.at(funcgr) );
                // add meanweight
                p_spe_nodes[i]->add_benthos_tot_meanweight_on_node(meanw_funcgr_per_node.at(funcgr));
+               // add carryingcap K
+               p_spe_nodes[i]->add_benthos_tot_biomass_K_on_node(benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr.at(funcgr) );
                }
 
          }
-	}
+    }
 
     cout << "creating benthos for " << _marine_landscape <<" ...OK" << endl;
 

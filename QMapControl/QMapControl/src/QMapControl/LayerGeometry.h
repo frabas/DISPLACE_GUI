@@ -38,7 +38,7 @@
 #include "Geometry.h"
 #include "GeometryWidget.h"
 #include "Layer.h"
-#include "QuadTreeContainer.h"
+#include "geometrydb.h"
 
 namespace qmapcontrol
 {
@@ -147,7 +147,7 @@ namespace qmapcontrol
 
     private:
         /// List of geometries drawn by this layer.
-        QuadTreeContainer<std::shared_ptr<Geometry>> m_geometries;
+        GeometryDB m_geometries;
 
         /// Mutex to protect geometries.
         mutable QReadWriteLock m_geometries_mutex;

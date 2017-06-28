@@ -88,7 +88,7 @@ void ShipMapObject::updateProperties()
 
 void ShipMapObject::shipUpdated()
 {
-    mGeometry->layer()->removeGeometry(mGeometry);
+    mGeometry->layer()->removeGeometry(mGeometry, true);
     mGeometry->setCoord(qmapcontrol::PointWorldCoord(mShip->mShip->get_x(), mShip->mShip->get_y()));
     mGeometry->layer()->addGeometry(mGeometry);
 }

@@ -634,6 +634,14 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("VPUF (Euro per Litre)"));
         break;
+    case M_SweptArea:
+       plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        break;
+    case M_RevenuesPerSweptArea:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/km^2)"));
+        break;
     }
 
     foreach (auto  d, dl) {
@@ -685,6 +693,12 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                     break;
                 case M_Vpuf:
                     valueData << it.value().at(ip).vpuf;
+                    break;
+                case M_SweptArea:
+                    valueData << it.value().at(ip).mSweptArea;
+                    break;
+                case M_RevenuesPerSweptArea:
+                    valueData << it.value().at(ip).mRevenuePerSweptArea;
                     break;
                 }
             }

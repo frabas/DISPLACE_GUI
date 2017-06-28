@@ -63,7 +63,7 @@ public:
     void setHarbourStat(HarboursStat stat);
     HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
 
-    enum MetiersStat { M_Catches, M_Revenues, M_Gav, M_Vpuf };
+    enum MetiersStat { M_Catches, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea };
     void setMetiersStat(MetiersStat stat);
     MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
 

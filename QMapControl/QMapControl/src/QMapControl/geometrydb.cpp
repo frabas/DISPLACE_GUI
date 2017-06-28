@@ -24,6 +24,7 @@ class GeometryDBImpl {
     int nIdField;
 
     std::vector<GeometryDB::GeometryPtr> mObjects;
+    std::vector<int> mEmptyObjects;
 public:
     GeometryDBImpl() {
         std::unique_lock<std::mutex> lock(globMutex);
@@ -61,8 +62,14 @@ public:
     bool insert(const PointWorldCoord& point, const GeometryDB::GeometryPtr& object) {
         std::unique_lock<std::mutex> lock(mutex);
 
-        int pos = mObjects.size();
-        mObjects.push_back(object);
+        int pos;
+        if (mEmptyObjects.empty()) {
+            pos = mObjects.size();
+            mObjects.push_back(object);
+        } else {
+            pos = mEmptyObjects.back();
+            mEmptyObjects.pop_back();
+        }
 
         OGRPoint pt(point.latitude(),point.longitude());
         auto f = OGRFeature::CreateFeature(layer->GetLayerDefn());
@@ -72,6 +79,29 @@ public:
         OGRFeature::DestroyFeature(f);
 
         return true;
+    }
+
+    void move(const PointWorldCoord& point, const GeometryDB::GeometryPtr& object, const PointWorldCoord& newpoint) {
+        std::unique_lock<std::mutex> lock(mutex);
+
+        QRect r(point.longitude() - 0.1, point.latitude() - 0.1, point.longitude() + 0.1, point.latitude() + 0.1);
+        layer->ResetReading();
+        layer->SetSpatialFilterRect(r.left(), r.top(), r.right(), r.bottom());
+
+        OGRFeature *feature;
+        while ((feature = layer->GetNextFeature()) != nullptr) {
+            int id = feature->GetFieldAsInteger(nIdField);
+            if (mObjects.at(id) == object) {
+                auto pt = feature->GetGeometryRef();
+                if( pt != NULL && wkbFlatten(pt->getGeometryType()) == wkbPoint )
+                {
+                    OGRPoint *point = (OGRPoint *) pt;
+                    point->setX(newpoint.longitude());
+                    point->setY(newpoint.latitude());
+                }
+            }
+        }
+
     }
 
     void erase(const PointWorldCoord& point, const GeometryDB::GeometryPtr& object) {
@@ -85,7 +115,8 @@ public:
         while ((feature = layer->GetNextFeature()) != nullptr) {
             int id = feature->GetFieldAsInteger(nIdField);
             if (mObjects.at(id) == object) {
-                mObjects.at(id).reset();
+                mEmptyObjects.push_back(id);
+                mObjects.at(id) = nullptr;
                 layer->DeleteFeature(feature->GetFID());
             }
         }

@@ -47,7 +47,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     struct VesselLogbookMessage {
         unsigned int tstep, tstepdep;
         int rtbb, node, idx;
-        double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, gav2;
+        double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, gav2, sweptarea, revenuepersweptarea;
         size_t popnum;
         double pop[];
     } logbook;
@@ -131,7 +131,17 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     length_class =v->get_length_class();
     logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
     logbook.gav2=logbook.revenue_from_av_prices-logbook.fuelcost;
-
+    
+    logbook.sweptarea=v->get_sweptareathistrip();
+    if(logbook.sweptarea>0)
+    {
+          logbook.revenuepersweptarea=logbook.revenue_from_av_prices/logbook.sweptarea;
+    } 
+    else
+    {
+     logbook.revenuepersweptarea=0;   
+    }   
+    
     std::ostringstream ss;
 
     ss << setprecision(0) << fixed;
@@ -154,6 +164,8 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     ss  << logbook.fuelcost << " " ;
     ss  << 0 << " " ;
     ss  << logbook.gav2 << " " ;
+    ss  << logbook.sweptarea << " " ;
+    ss  << logbook.revenuepersweptarea << " " ;
     for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
         ss  << *it2 << " " ;
     ss  << " " << std::endl;

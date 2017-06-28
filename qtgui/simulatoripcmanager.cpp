@@ -88,6 +88,8 @@ void SimulatorIpcManager::threadStarted()
                     stats.revenueExAV = data->revenue_explicit_from_av_prices;
                     stats.fuelCost = data->fuelcost;
                     stats.gav = data->gav2;
+                    stats.sweptArea = data->sweptarea;
+                    stats.revenuePerSweptArea = data->revenuepersweptarea;
 
                     emit vesselLogbookReceived(stats);
                 }

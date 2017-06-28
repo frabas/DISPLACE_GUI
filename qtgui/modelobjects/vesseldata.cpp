@@ -115,4 +115,34 @@ void VesselData::setGav(double value)
 }
 
 
+double VesselData::getSweptArea() const
+{
+    return sweptArea;
+}
+
+void VesselData::setSweptArea(double value)
+{
+    sweptArea = value;
+}
+
+void VesselData::addSweptArea(double value)
+{
+    sweptArea += value;
+}
+
+double VesselData::getRevenuePerSweptArea() const
+{
+    return revenuePerSweptArea;
+}
+
+void VesselData::setRevenuePerSweptArea(double value)
+{
+    revenuePerSweptArea = value;
+}
+
+void VesselData::addRevenuePerSweptArea(double value)
+{
+    revenuePerSweptArea += value;
+}
+
 

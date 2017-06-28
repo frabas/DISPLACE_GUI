@@ -245,8 +245,8 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselS
     QSqlQuery q(mDb),qn(mDb);
 
     bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
-                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,explicit_revenue_av,cumfuel,fuelcost,gav)"
-                       + " VALUES(?,?,?,?,?,?,?,?,?,?)");
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,explicit_revenue_av,cumfuel,fuelcost,gav,sweptarea, revenuepersweptarea)"
+                       + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
@@ -264,6 +264,8 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselS
     q.addBindValue(stats.cumFuelCons);
     q.addBindValue(stats.fuelCost);
     q.addBindValue(stats.gav);
+    q.addBindValue(stats.sweptArea);
+    q.addBindValue(stats.revenuePerSweptArea);
 
     r = q.exec();
     DB_ASSERT(r,q);

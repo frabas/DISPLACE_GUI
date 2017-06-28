@@ -96,7 +96,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
                const vector<double> &_vessel_betas_per_pop,
                const vector<double> &_percent_tac_per_pop,
                const multimap<types::NodeId, int> &_possible_metiers, const multimap<types::NodeId, double> &_freq_possible_metiers,
-               int a_vid_is_active, double a_speed, double a_fuelcons, double a_length, double a_KW,
+               int a_vid_is_active, double a_speed, double a_fuelcons,  double a_length, double a_KW,
                double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
                double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
                double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
@@ -161,6 +161,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     distprevpos=0;
     timeatsea=0;
     traveled_dist_this_trip=0;
+    areasweptthistrip=0;
     inactive=true;
     natio=true;					 // FILLED FROM DATA
     message=0;					 // no message
@@ -558,6 +559,11 @@ double Vessel::get_fuelcons () const
 double Vessel::get_cumfuelcons () const
 {
     return(cumfuelcons);
+}
+
+double Vessel::get_sweptareathistrip () const
+{
+    return(areasweptthistrip);
 }
 
 
@@ -1086,6 +1092,11 @@ void Vessel::set_timeforrest(double _timeforrest)
 void Vessel::set_cumfuelcons(double _cumfuelcons)
 {
     cumfuelcons=_cumfuelcons;
+}
+
+void Vessel::set_sweptareathistrip(double _sweptareathistrip)
+{
+    areasweptthistrip=_sweptareathistrip;
 }
 
 
@@ -1678,7 +1689,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
          << ", swept area this fishing event is then:" << swept_area
          << " compared to the cell area which is " << graph_res*graph_res << endl ;);
     this->get_loc()->add_to_cumsweptarea(swept_area);
-
+    this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);
 
     // FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
     int a_landscape                  =           this->get_loc()->get_marine_landscape();
@@ -4066,6 +4077,7 @@ void Vessel::reinit_after_a_trip()
     this-> set_inactive(true);
     // re-init some other stuffs after the trip
     this-> set_cumfuelcons(0);
+    this-> set_sweptareathistrip(0);
     this-> set_consotogetthere(0);
     this-> set_cumsteaming(0);
     this-> set_cumcatches(0);

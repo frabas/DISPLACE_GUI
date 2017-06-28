@@ -599,6 +599,8 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.revenueExAV = toDouble(fields[10 + pop + 3]);
         v.fuelCost = toDouble(fields[10 + pop + 4]);
         v.gav = toDouble(fields[10 + pop + 6]);
+        v.sweptArea = toDouble(fields[10 + pop + 7]);
+        v.revenuePerSweptArea = toDouble(fields[10 + pop + 8]);
 
     } catch (std::exception &x) {
         qWarning() << "Error parsing Vessel Stat Line: " << x.what();

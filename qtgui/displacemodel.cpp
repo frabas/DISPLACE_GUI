@@ -818,6 +818,8 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->mVessel->set_reason_to_go_back(stats.reasonToGoBack);
         vessel->mVessel->set_timeatsea(stats.timeAtSea);
         vessel->addCumFuelCons(stats.cumFuelCons);
+        vessel->addSweptArea(stats.sweptArea);
+        vessel->addRevenuePerSweptArea(stats.revenuePerSweptArea);
         nat = vessel->getNationality();
     } else {
         // retrieve nationality from vessel name

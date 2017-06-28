@@ -105,7 +105,7 @@ private:
 								 // fixed
 		double speed, fuelcons, length, KW, tankcapacity, carrycapacity, nbfpingspertrip, resttime_par1, resttime_par2, av_trip_duration;
 								 // dynamic
-		double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, cumcatches, reason_to_go_back;
+        double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip, areasweptthistrip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 
         int length_class;
@@ -225,7 +225,8 @@ public:
 		double get_distprevpos() const;
 		double get_timeatsea() const;
 		double get_traveled_dist_this_trip() const;
-		double get_tankcapacity() const;
+        double get_sweptareathistrip() const;
+        double get_tankcapacity() const;
 		double get_carrycapacity() const;
 		int get_nbfpingspertrip() const;
 		double get_resttime_par1() const;
@@ -311,7 +312,8 @@ public:
 		void set_consotogetthere (double _consotogetthere);
 		void set_timeatsea (double _timeatsea);
 		void set_traveled_dist_this_trip (double _traveled_dist_this_trip);
-		void set_cumcatches (double _cumcatches);
+        void set_sweptareathistrip (double _sweptareathistrip);
+        void set_cumcatches (double _cumcatches);
 		void set_nbfpingspertrip (int _nbfpingspertrip);
 		void set_xy (double _x, double _y);
 		void set_next_xy (double nx, double ny);

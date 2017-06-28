@@ -96,6 +96,15 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
     length_class =v->get_length_class();
     logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
     logbook.gav2=logbook.revenue_from_av_prices-logbook.fuelcost;
+    logbook.sweptarea=v->get_sweptareathistrip();
+    if(logbook.sweptarea>0)
+    {
+        logbook.revenuepersweptarea=logbook.revenue_from_av_prices /logbook.sweptarea;
+    } else
+    {
+    logbook.revenuepersweptarea=0;
+    }
+
 }
 
 bool VesselLogbookOutputMessage::process()

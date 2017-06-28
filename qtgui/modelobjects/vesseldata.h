@@ -55,11 +55,20 @@ public:
     void setCumFuelCons(double value);
     void addCumFuelCons(double value);
 
+    double getSweptArea() const;
+    void setSweptArea(double value);
+    void addSweptArea(double value);
+    double getRevenuePerSweptArea() const;
+    void setRevenuePerSweptArea(double value);
+    void addRevenuePerSweptArea(double value);
+
+
     double getFuelCost() const;
     void setFuelCost(double value);
 
     double getGav() const;
     void setGav(double value);
+
 
 private:
     int mNationality;
@@ -69,6 +78,8 @@ private:
     double cumFuelCons;
     double fuelCost;
     double gav;
+    double sweptArea;
+    double revenuePerSweptArea;
 
     QList<double> mCatches;
 };
@@ -90,6 +101,8 @@ public:
     double cumFuelCons = 0;
     double fuelCost = 0;
     double gav = 0;
+    double sweptArea = 0;
+    double revenuePerSweptArea = 0;
 
     QList<double> mCatches;
 

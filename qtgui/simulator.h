@@ -50,7 +50,6 @@
 
 class DisplaceModel;
 class OutputFileParser;
-class UpdateDispatcher;
 
 /** \brief An ongoing simulation process
  *
@@ -106,7 +105,6 @@ private:
     SimulatorIpcManager *mIpcQueue;
     std::shared_ptr<DisplaceModel> mModel;
     std::shared_ptr<OutputFileParser> mOutFileParser;
-    UpdateDispatcher *mUpdateDispatcher = nullptr;
     int mSimSteps;
     int useStaticPaths;
     int preexistingPathsShop;

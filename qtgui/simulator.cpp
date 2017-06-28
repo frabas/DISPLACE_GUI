@@ -23,7 +23,6 @@
 #include <displacemodel.h>
 #include <modelobjects/vesseldata.h>
 #include <outputfileparser.h>
-#include <internals/updatedispatcher.h>
 
 #include <QApplication>
 #include <QSettings>
@@ -141,13 +140,6 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 #ifdef DEBUG
     arguments.push_back("--debug");
 #endif
-
-    if (mUpdateDispatcher == nullptr) {
-        mUpdateDispatcher = new UpdateDispatcher;
-        connect(mUpdateDispatcher, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
-                SIGNAL(vesselMoved(int,int,float,float,float,float,int)));
-        mUpdateDispatcher->start();
-    }
 
     connect(mSimulation, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(mSimulation, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
@@ -350,7 +342,7 @@ void Simulator::parseUpdateVessel(QStringList fields)
     float fuel = fields[6].toFloat();
     int state = fields[7].toInt();
 
-    mUpdateDispatcher->postUpdate(mLastStep, id, x, y, course, fuel, state);
+    emit vesselMoved(mLastStep, id, x, y, course, fuel, state);
 }
 
 void Simulator::parseUpdateVesselStats(QStringList fields)

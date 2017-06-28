@@ -187,11 +187,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
 
     connect (mSimulation, SIGNAL(vesselMoved(int,int,float,float,float,float,int)),
-             this, SLOT(vesselMoved(int,int,float,float,float,float,int)), Qt::QueuedConnection);
+             this, SLOT(vesselMoved(int,int,float,float,float,float,int)));
     connect (mSimulation, SIGNAL(shipMoved(int,int,float,float,float)),
-             this, SLOT(shipMoved(int,int,float,float,float)), Qt::QueuedConnection);
-    connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)), Qt::QueuedConnection);
-    connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)), Qt::QueuedConnection);
+             this, SLOT(shipMoved(int,int,float,float,float)));
+    connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
+    connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
     connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 

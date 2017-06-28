@@ -2866,11 +2866,15 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/nations_timeatsea.%1").arg(r.format), StatsController::Nations, StatsController::TimeAtSea, r);
         exportPlot (out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations, StatsController::Gav, r);
         exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, StatsController::Vpuf, r);
+        exportPlot (out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations, StatsController::SweptArea, r);
+        exportPlot (out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations, StatsController::RevenuePerSweptArea, r);
 
         exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, StatsController::H_Catches, r);
         exportPlot (out + QString("/harbours_earnings.%1").arg(r.format), StatsController::Harbours, StatsController::H_Earnings, r);
         exportPlot (out + QString("/harbours_gav.%1").arg(r.format), StatsController::Harbours, StatsController::H_Gav, r);
         exportPlot (out + QString("/harbours_vpuf.%1").arg(r.format), StatsController::Harbours, StatsController::H_Vpuf, r);
+        exportPlot (out + QString("/harbours_sweptarea.%1").arg(r.format), StatsController::Harbours, StatsController::H_SweptArea, r);
+        exportPlot (out + QString("/harbours_revenuepersweptarea.%1").arg(r.format), StatsController::Harbours, StatsController::H_RevenuePerSweptArea, r);
 
         exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, StatsController::M_Catches, r);
         exportPlot (out + QString("/metiers_revenues.%1").arg(r.format), StatsController::Metiers, StatsController::M_Revenues, r);

@@ -340,7 +340,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tabStatsHarbours">
            <attribute name="icon">
@@ -394,6 +394,16 @@
                 <item>
                  <property name="text">
                   <string>VPUF</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
                  </property>
                 </item>
                </widget>
@@ -553,6 +563,16 @@
                   <string>VPUF</string>
                  </property>
                 </item>
+                <item>
+                 <property name="text">
+                  <string>Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -627,6 +647,16 @@
                 <item>
                  <property name="text">
                   <string>VPUF</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
                  </property>
                 </item>
                </widget>

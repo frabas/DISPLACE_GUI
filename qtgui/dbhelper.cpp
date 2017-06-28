@@ -828,6 +828,8 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             int hidx = nodes.at(hid)->getHarbourId();
             double gav = q2.value(5).toDouble();
             double vpuf = q2.value(6).toDouble();
+            double sweptarea = q2.value(7).toDouble();
+            double revenuepersweptarea = q2.value(8).toDouble();
 
             while (curnationsdata.size() <= nid)
                 curnationsdata.push_back(NationStats());
@@ -839,10 +841,15 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
             curnationsdata[nid].mTimeAtSea += timeatsea;
             curnationsdata[nid].mGav += gav;
             curnationsdata[nid].mVpuf = vpuf;
+            curnationsdata[nid].mSweptArea = sweptarea;
+            curnationsdata[nid].mRevenuePerSweptArea = revenuepersweptarea;
             //curHarbourData[hidx].mCumCatches += catches;
             curHarbourData[hidx].mCumProfit += rev;
             curHarbourData[hidx].mGav += gav;
             curHarbourData[hidx].mVpuf = vpuf;
+            curHarbourData[hidx].mSweptArea = sweptarea;
+            curHarbourData[hidx].mRevenuePerSweptArea = revenuepersweptarea;
+            
         }
 
         nations.push_back(curnationsdata);
@@ -893,6 +900,8 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
         curHarbourData.mCumProfit += rev;
         curHarbourData.mVpuf += q2.value(2).toDouble();
         curHarbourData.mGav += q2.value(3).toDouble();
+        curHarbourData.mSweptArea += q2.value(4).toDouble();
+        curHarbourData.mRevenuePerSweptArea += q2.value(5).toDouble();
     }
 
     return curHarbourData;

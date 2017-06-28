@@ -40,7 +40,7 @@ public:
         : mTotCatches(0.0),
           mRevenues(0.0),
           mExRevenues(0.0),
-          mTimeAtSea(0), mGav(0), mVpuf(0),
+          mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
           szGroups()
     {
     }
@@ -51,6 +51,8 @@ public:
     double mTimeAtSea = 0.0;
     double mGav = 0.0;
     double mVpuf = 0.0;
+    double mSweptArea = 0.0;
+    double mRevenuePerSweptArea = 0.0;
 
     QVector<double> szGroups;
 };

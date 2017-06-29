@@ -115,12 +115,4 @@ namespace qmapcontrol
         // Set whether to enable mouse events.
         m_mouse_events_enabled = enable;
     }
-
-    void Layer::lockDraws() const {
-        //mDrawLock.lock();
-    }
-
-    void Layer::unlockDraws() const {
-        //mDrawLock.unlock();
-    }
 }

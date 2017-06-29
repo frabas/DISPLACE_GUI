@@ -338,7 +338,6 @@ namespace qmapcontrol
         // Check the layer is visible.
         if(isVisible(controller_zoom))
         {
-            lockDraws();
             // Calculate the world coordinates.
             const RectWorldCoord backbuffer_rect_coord(projection::get().toPointWorldCoord(backbuffer_rect_px.topLeftPx(), controller_zoom), projection::get().toPointWorldCoord(backbuffer_rect_px.bottomRightPx(), controller_zoom));
 
@@ -348,16 +347,12 @@ namespace qmapcontrol
             // Loop through each geometry and draw it.
             for(const auto& geometry : getGeometries(backbuffer_rect_coord))
             {
-                if (geometry) {
-                    // Draw the geometry (this will not move widgets).
-                    geometry->draw(painter, backbuffer_rect_coord, controller_zoom);
-                }
+                // Draw the geometry (this will not move widgets).
+                geometry->draw(painter, backbuffer_rect_coord, controller_zoom);
             }
 
             // Restore the painter's state.
             painter.restore();
-
-            unlockDraws();
         }
     }
 

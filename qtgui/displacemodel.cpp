@@ -912,7 +912,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsNationsCollected[nat].mTotDiscards += stats.mDiscards[i];
 
         if (midx != -1) {
-            while (mStatsMetiersCollected[midx].mDiscardsPerPop.size() < n)
+            while (mStatsMetiersCollected[midx].mDiscardsPerPop.size() < n2)
                 mStatsMetiersCollected[midx].mDiscardsPerPop.push_back(0.0);
             mStatsMetiersCollected[midx].mDiscardsPerPop[i] += stats.mDiscards[i];
             mStatsMetiersCollected[midx].mTotDiscards += stats.mDiscards[i];

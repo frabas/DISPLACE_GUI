@@ -604,7 +604,7 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
 
         int expop = mModel->getInterestingPops().size(); // discards recorded for explicit pop only
         for (int i = 0; i < expop; ++i) {
-            double value = toDouble(fields[10+pop+8+i]);
+            double value = toDouble(fields[10+pop+9+i]);
             v.mDiscards.push_back(value);
         }
 

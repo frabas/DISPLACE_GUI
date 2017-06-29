@@ -35,8 +35,7 @@ namespace qmapcontrol
 {
     LayerGeometry::LayerGeometry(const std::string& name, const int& zoom_minimum, const int& zoom_maximum, QObject* parent)
         : Layer(LayerType::LayerGeometry, name, zoom_minimum, zoom_maximum, parent),
-          m_geometries(),
-          //m_geometries(50, RectWorldCoord(PointWorldCoord(-180.0, 90.0), PointWorldCoord(180.0, -90.0))),
+          m_geometries(50, RectWorldCoord(PointWorldCoord(-180.0, 90.0), PointWorldCoord(180.0, -90.0))),
           mFuzzyFactorPx(5.0)
     {
 

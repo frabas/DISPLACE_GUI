@@ -88,9 +88,12 @@ void ShipMapObject::updateProperties()
 
 void ShipMapObject::shipUpdated()
 {
+    mGeometry->layer()->lockDraws();
     mGeometry->layer()->removeGeometry(mGeometry, true);
     mGeometry->setCoord(qmapcontrol::PointWorldCoord(mShip->mShip->get_x(), mShip->mShip->get_y()));
-    mGeometry->layer()->addGeometry(mGeometry);
+    mGeometry->layer()->addGeometry(mGeometry, true);
+    mGeometry->layer()->unlockDraws();
+    mGeometry->layer()->requestRedraw();
 }
 
 void ShipMapObject::widgetClosed()

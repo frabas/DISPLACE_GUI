@@ -7,6 +7,7 @@
 #include <set>
 
 #include <QRectF>
+#include <QDebug>
 
 using namespace qmapcontrol;
 
@@ -71,8 +72,9 @@ public:
             mEmptyObjects.pop_back();
         }
 
-        OGRPoint pt(point.latitude(),point.longitude());
+        OGRPoint pt(point.longitude(),point.latitude());
         auto f = OGRFeature::CreateFeature(layer->GetLayerDefn());
+        f->SetGeometry(&pt);
         f->SetField(nIdField, pos);
 
         layer->CreateFeature(f);
@@ -84,7 +86,7 @@ public:
     void move(const PointWorldCoord& point, const GeometryDB::GeometryPtr& object, const PointWorldCoord& newpoint) {
         std::unique_lock<std::mutex> lock(mutex);
 
-        QRect r(point.longitude() - 0.1, point.latitude() - 0.1, point.longitude() + 0.1, point.latitude() + 0.1);
+        QRect r(point.longitude() - 0.1, point.latitude() - 0.1, 0.2, 0.2);
         layer->ResetReading();
         layer->SetSpatialFilterRect(r.left(), r.top(), r.right(), r.bottom());
 
@@ -107,7 +109,7 @@ public:
     void erase(const PointWorldCoord& point, const GeometryDB::GeometryPtr& object) {
         std::unique_lock<std::mutex> lock(mutex);
 
-        QRect r(point.longitude() - 0.1, point.latitude() - 0.1, point.longitude() + 0.1, point.latitude() + 0.1);
+        QRectF r(point.longitude() - 0.01, point.latitude() - 0.01, 0.02, 0.02);
         layer->ResetReading();
         layer->SetSpatialFilterRect(r.left(), r.top(), r.right(), r.bottom());
 
@@ -117,7 +119,8 @@ public:
             if (mObjects.at(id) == object) {
                 mEmptyObjects.push_back(id);
                 mObjects.at(id) = nullptr;
-                layer->DeleteFeature(feature->GetFID());
+                auto r = layer->DeleteFeature(feature->GetFID());
+                Q_ASSERT(r == OGRERR_NONE);
             }
         }
 

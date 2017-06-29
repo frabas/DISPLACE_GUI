@@ -31,6 +31,8 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 
+#include <QMutex>
+
 // STL includes.
 #include <map>
 #include <string>
@@ -160,6 +162,9 @@ namespace qmapcontrol
          */
         virtual void draw(QPainter& painter, const RectWorldPx& backbuffer_rect_px, const int& controller_zoom) const = 0;
 
+        void lockDraws() const;
+        void unlockDraws() const;
+
     signals:
         /*!
          * Signal emitted when a change has occurred that requires the layer to be redrawn.
@@ -174,6 +179,8 @@ namespace qmapcontrol
         Layer& operator=(const Layer&); /// @todo remove once MSVC supports default/delete syntax.
 
     private:
+        mutable QMutex mDrawLock;
+
         /// The layer type.
         LayerType m_layer_type;
 

@@ -1983,7 +1983,7 @@ bool DisplaceModel::loadNodes()
 
 
         // init
-       for(size_t a_idx=0; a_idx<mNodes.size(); a_idx++)
+       for(int a_idx=0; a_idx<mNodes.size(); a_idx++)
        {
         auto idx_node=mNodes.at(a_idx)->get_idx_node();
 

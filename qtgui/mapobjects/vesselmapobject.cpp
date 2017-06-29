@@ -105,9 +105,12 @@ void VesselMapObject::updateProperties()
 
 void VesselMapObject::vesselUpdated()
 {
-    mGeometry->layer()->removeGeometry(mGeometry, false);
+    mGeometry->layer()->lockDraws();
+    mGeometry->layer()->removeGeometry(mGeometry, true);
     mGeometry->setCoord(qmapcontrol::PointWorldCoord(mVessel->mVessel->get_x(), mVessel->mVessel->get_y()));
-    mGeometry->layer()->addGeometry(mGeometry);
+    mGeometry->layer()->addGeometry(mGeometry, true);
+    mGeometry->layer()->unlockDraws();
+    mGeometry->layer()->requestRedraw();
 }
 
 void VesselMapObject::widgetClosed()

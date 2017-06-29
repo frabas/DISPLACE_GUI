@@ -51,6 +51,11 @@ public:
     void setCatch(int idx, double val);
     void addCatch(int idx, double val);
 
+    int getDiscardsListSize() const { return mDiscards.size(); }
+    double getDiscard(int idx) const { return mDiscards.at(idx); }
+    void setDiscard(int idx, double val);
+    void addDiscard(int idx, double val);
+
     double getCumFuelCons() const;
     void setCumFuelCons(double value);
     void addCumFuelCons(double value);
@@ -82,6 +87,7 @@ private:
     double revenuePerSweptArea;
 
     QList<double> mCatches;
+    QList<double> mDiscards;
 };
 
 class VesselStats {
@@ -105,6 +111,7 @@ public:
     double revenuePerSweptArea = 0;
 
     QList<double> mCatches;
+    QList<double> mDiscards;
 
 };
 

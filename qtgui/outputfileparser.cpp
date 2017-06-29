@@ -602,6 +602,12 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.sweptArea = toDouble(fields[10 + pop + 7]);
         v.revenuePerSweptArea = toDouble(fields[10 + pop + 8]);
 
+        int expop = mModel->getInterestingPops().size(); // discards recorded for explicit pop only
+        for (int i = 0; i < expop; ++i) {
+            double value = toDouble(fields[10+pop+9+i]);
+            v.mDiscards.push_back(value);
+        }
+
     } catch (std::exception &x) {
         qWarning() << "Error parsing Vessel Stat Line: " << x.what();
         return VesselStats();

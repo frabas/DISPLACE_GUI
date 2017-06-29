@@ -467,6 +467,11 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
+                case Discards:
+                    valueData << it.value().at(ip).mTotDiscards;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Discards (kg)"));
+                    break;
                 case Earnings:
                     valueData << it.value().at(ip).mRevenues;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -491,6 +496,16 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                     valueData << it.value().at(ip).mVpuf;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     plotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
+                    break;
+                case SweptArea:
+                    valueData << it.value().at(ip).mSweptArea;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+                    break;
+                case RevenuePerSweptArea:
+                    valueData << it.value().at(ip).mRevenuePerSweptArea;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/km^2)"));
                     break;
                 }
             }
@@ -552,6 +567,11 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
+                case H_Discards:
+                    valueData << it.value().at(ip.toIndex()).mCumDiscards;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("Discards (kg)"));
+                    break;
                 case H_Earnings:
                     valueData << it.value().at(ip.toIndex()).mCumProfit;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -566,6 +586,16 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                     valueData << it.value().at(ip.toIndex()).mVpuf;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
+                    break;
+                case H_SweptArea:
+                    valueData << it.value().at(ip.toIndex()).mSweptArea;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+                    break;
+                case H_RevenuePerSweptArea:
+                    valueData << it.value().at(ip.toIndex()).mRevenuePerSweptArea;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("Revenue per Swept Area (Euro/km^2)"));
                     break;
                 }
             }
@@ -602,6 +632,10 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
         break;
+    case M_Discards:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Discards (kg)"));
+        break;
     case M_Revenues:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
@@ -613,6 +647,14 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
     case M_Vpuf:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("VPUF (Euro per Litre)"));
+        break;
+    case M_SweptArea:
+       plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        break;
+    case M_RevenuesPerSweptArea:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/km^2)"));
         break;
     }
 
@@ -657,6 +699,16 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                             valueData << 0;
                     }
                     break;
+                case M_Discards:
+                    if (d->populationId == -1)
+                        valueData << it.value().at(ip).mTotDiscards;
+                    else {
+                        if (it.value().at(ip).mDiscardsPerPop.size() > d->populationId)
+                            valueData << it.value().at(ip).mDiscardsPerPop[d->populationId];
+                        else
+                            valueData << 0;
+                    }
+                    break;
                 case M_Revenues:
                     valueData << it.value().at(ip).revenueAV;
                     break;
@@ -665,6 +717,12 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                     break;
                 case M_Vpuf:
                     valueData << it.value().at(ip).vpuf;
+                    break;
+                case M_SweptArea:
+                    valueData << it.value().at(ip).mSweptArea;
+                    break;
+                case M_RevenuesPerSweptArea:
+                    valueData << it.value().at(ip).mRevenuePerSweptArea;
                     break;
                 }
             }

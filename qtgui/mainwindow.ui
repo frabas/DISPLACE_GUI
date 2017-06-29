@@ -383,6 +383,11 @@
                 </item>
                 <item>
                  <property name="text">
+                  <string>Cum Discards</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
                   <string>Revenues</string>
                  </property>
                 </item>
@@ -394,6 +399,16 @@
                 <item>
                  <property name="text">
                   <string>VPUF</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
                  </property>
                 </item>
                </widget>
@@ -530,6 +545,11 @@
                 </item>
                 <item>
                  <property name="text">
+                  <string>Discards</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
                   <string>Revenues</string>
                  </property>
                 </item>
@@ -551,6 +571,16 @@
                 <item>
                  <property name="text">
                   <string>VPUF</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
                  </property>
                 </item>
                </widget>
@@ -616,6 +646,11 @@
                 </item>
                 <item>
                  <property name="text">
+                  <string>Cum Discards</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
                   <string>Revenues</string>
                  </property>
                 </item>
@@ -627,6 +662,16 @@
                 <item>
                  <property name="text">
                   <string>VPUF</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
                  </property>
                 </item>
                </widget>

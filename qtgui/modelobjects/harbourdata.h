@@ -49,9 +49,12 @@ public:
     HarbourStats();
 
     double mCumCatches;
+    double mCumDiscards;
     double mCumProfit;
     double mGav;
     double mVpuf;
+    double mSweptArea;
+    double mRevenuePerSweptArea;
 
     QVector<double> szCatches;
 };

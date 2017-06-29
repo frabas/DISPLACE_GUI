@@ -79,6 +79,21 @@ void VesselData::addCatch(int idx, double val)
     mCatches[idx] += val;
 }
 
+void VesselData::setDiscard(int idx, double val)
+{
+    while (mDiscards.size() < idx)
+        mDiscards.push_back(0);
+    mDiscards.push_back(val);
+}
+
+
+void VesselData::addDiscard(int idx, double val)
+{
+    while (mDiscards.size() <= idx)
+        mDiscards.push_back(0);
+    mDiscards[idx] += val;
+}
+
 double VesselData::getCumFuelCons() const
 {
     return cumFuelCons;

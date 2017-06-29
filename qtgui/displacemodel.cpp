@@ -850,6 +850,8 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
     mStatsNationsCollected[nat].mVpuf = stats.vpuf();
+    mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
+    mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
     // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
     int hidx = -1;
@@ -861,6 +863,8 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
         mStatsHarboursCollected[hidx].mGav += stats.gav;
         mStatsHarboursCollected[hidx].mVpuf = stats.vpuf();
+        mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
+        mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
     }
 
     int midx = stats.metierId;
@@ -873,6 +877,8 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
         mStatsMetiersCollected[midx].gav += stats.gav;
         mStatsMetiersCollected[midx].vpuf =  stats.vpuf();
+        mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
+        mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
     }
 
     int n = stats.mCatches.size();
@@ -893,6 +899,26 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
             mStatsMetiersCollected[midx].mTotCatches += stats.mCatches[i];
         }
     }
+
+    int n2 = stats.mDiscards.size();
+    for (int i = 0; i < n2; ++i) {
+        if (vessel)
+            vessel->addDiscard(i, stats.mDiscards[i]);
+
+        // TODO check this!
+        if (hidx != -1)
+            mStatsHarboursCollected[hidx].mCumDiscards += stats.mDiscards[i];
+
+        mStatsNationsCollected[nat].mTotDiscards += stats.mDiscards[i];
+
+        if (midx != -1) {
+            while (mStatsMetiersCollected[midx].mDiscardsPerPop.size() < n2)
+                mStatsMetiersCollected[midx].mDiscardsPerPop.push_back(0.0);
+            mStatsMetiersCollected[midx].mDiscardsPerPop[i] += stats.mDiscards[i];
+            mStatsMetiersCollected[midx].mTotDiscards += stats.mDiscards[i];
+        }
+    }
+
 
     if (mDb) {
         // TODO Not sure

@@ -24,7 +24,6 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
     QList<int>  interFishfarmsIDsList= model->getInterestingFishfarms();
 
-
     auto farmsTypeGroups = model->getFishfarmsTypesList();
     QList<int> interFishfarmsTypesList = farmsTypeGroups->list();
 
@@ -111,14 +110,13 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
     auto it = model->getFishfarmsStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterFishfarmsTypes = interFishfarmsIDsList.size();
+        int nInterFishfarmsTypes = interFishfarmsTypesList.size();
         for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsTypes; ++iInterFishfarmsIDs) {
 
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
             for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
                 val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
-
                 if (iInterFishfarmTypes == 0) {
                     mMin = val;
                     mMax = val;

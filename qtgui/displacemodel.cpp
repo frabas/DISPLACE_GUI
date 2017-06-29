@@ -900,6 +900,26 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         }
     }
 
+    int n2 = stats.mDiscards.size();
+    for (int i = 0; i < n2; ++i) {
+        if (vessel)
+            vessel->addDiscard(i, stats.mDiscards[i]);
+
+        // TODO check this!
+        if (hidx != -1)
+            mStatsHarboursCollected[hidx].mCumDiscards += stats.mDiscards[i];
+
+        mStatsNationsCollected[nat].mTotDiscards += stats.mDiscards[i];
+
+        if (midx != -1) {
+            while (mStatsMetiersCollected[midx].mDiscardsPerPop.size() < n)
+                mStatsMetiersCollected[midx].mDiscardsPerPop.push_back(0.0);
+            mStatsMetiersCollected[midx].mDiscardsPerPop[i] += stats.mDiscards[i];
+            mStatsMetiersCollected[midx].mTotDiscards += stats.mDiscards[i];
+        }
+    }
+
+
     if (mDb) {
         // TODO Not sure
         if (vessel)

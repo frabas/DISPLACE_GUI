@@ -38,6 +38,7 @@ class NationStats {
 public:
     NationStats()
         : mTotCatches(0.0),
+          mTotDiscards(0.0),
           mRevenues(0.0),
           mExRevenues(0.0),
           mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
@@ -46,6 +47,7 @@ public:
     }
 
     double mTotCatches = 0.0;
+    double mTotDiscards = 0.0;
     double mRevenues = 0.0;
     double mExRevenues = 0.0;
     double mTimeAtSea = 0.0;

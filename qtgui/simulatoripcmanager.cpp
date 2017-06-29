@@ -91,6 +91,11 @@ void SimulatorIpcManager::threadStarted()
                     stats.sweptArea = data->sweptarea;
                     stats.revenuePerSweptArea = data->revenuepersweptarea;
 
+                    int pop2 = data->popnum;
+                    for (int i = 0; i < pop2; ++i) {
+                        stats.mDiscards.push_back(data->pop[i]);
+                    }
+
                     emit vesselLogbookReceived(stats);
                 }
                 break;

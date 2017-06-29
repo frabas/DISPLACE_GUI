@@ -49,6 +49,7 @@ public:
     HarbourStats();
 
     double mCumCatches;
+    double mCumDiscards;
     double mCumProfit;
     double mGav;
     double mVpuf;

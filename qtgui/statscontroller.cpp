@@ -467,6 +467,11 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
+                case Discards:
+                    valueData << it.value().at(ip).mTotDiscards;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Discards (kg)"));
+                    break;
                 case Earnings:
                     valueData << it.value().at(ip).mRevenues;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -562,6 +567,11 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Landings (kg)"));
                     break;
+                case H_Discards:
+                    valueData << it.value().at(ip.toIndex()).mCumDiscards;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("Discards (kg)"));
+                    break;
                 case H_Earnings:
                     valueData << it.value().at(ip.toIndex()).mCumProfit;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -622,6 +632,10 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
         break;
+    case M_Discards:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Discards (kg)"));
+        break;
     case M_Revenues:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
@@ -681,6 +695,16 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                     else {
                         if (it.value().at(ip).mCatchesPerPop.size() > d->populationId)
                             valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
+                        else
+                            valueData << 0;
+                    }
+                    break;
+                case M_Discards:
+                    if (d->populationId == -1)
+                        valueData << it.value().at(ip).mTotDiscards;
+                    else {
+                        if (it.value().at(ip).mDiscardsPerPop.size() > d->populationId)
+                            valueData << it.value().at(ip).mDiscardsPerPop[d->populationId];
                         else
                             valueData << 0;
                     }

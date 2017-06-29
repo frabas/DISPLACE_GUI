@@ -447,7 +447,9 @@ static void manage_vessel(int idx_v)
         }
     }
 
-    if (use_gui && gui_move_vessels) {
+    int a_number_between_1_and_10= (rand() % 10 +1);
+    int nb_displayed_moves_out_of_ten = 1;
+    if (use_gui && gui_move_vessels  && (a_number_between_1_and_10<nb_displayed_moves_out_of_ten+1)) {
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
     }
 

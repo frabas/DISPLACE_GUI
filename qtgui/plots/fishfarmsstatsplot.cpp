@@ -71,7 +71,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         mTimeline->end->setCoords(t, timelineMax);
     }
 
-    foreach (int farmtype, interFishfarmsIDsList) {
+    foreach (int farmtype, interFishfarmsTypesList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlot->addGraph();

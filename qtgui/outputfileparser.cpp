@@ -391,7 +391,7 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
                 }
             }
             int farmid = fields[5].toInt();
-            int farmtype = fields[4].toInt();
+            int farmtype = 0;
             int nodeid = fields[1].toInt();
 
             // tstep(0) / node(1) / long(2) / lat(3) / farmtype(4) / farmid(5) / meanw_kg(6) / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP

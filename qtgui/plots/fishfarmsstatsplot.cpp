@@ -49,6 +49,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
                 graphList.push_front(1000 + i);
         }
     } else {
+        interFishfarmsTypesList.push_back(999);
         if (showmax)
             graphList.push_front(4999);
         if (showmin)
@@ -66,7 +67,6 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         }
     }
 
-    int szNum = interFishfarmsTypesList.size();
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -120,20 +120,23 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
     int nsteps = model->getFishfarmsStatistics().getUniqueValuesCount();
 
+    //qDebug() << "**** Plotting " << nsteps << interFishfarmsTypesList.size();
     auto it = model->getFishfarmsStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
         int nInterFishfarmsIDs = interFishfarmsIDsList.size();
 
+        //qDebug() << "Step: " <<istep << it.key();
         for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
             //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
             int gidx = iGraph;
 
             auto group = graphList[iGraph] % 1000;
 
-            // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
-                for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
+            //qDebug() << "Graph:" << iGraph << group;
+             // calculate transversal values...
+            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
+            for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
+                for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
 
                     auto fmtype = model->getFishfarmList()[iInterFishfarmsIDs]->mFishfarm->get_farmtype();
                     if (group != 999 && iInterFishfarmTypes != fmtype)
@@ -141,21 +144,26 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
                     val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
 
+                    //qDebug() << iInterFishfarmsIDs << iInterFishfarmTypes << val;
+
                     if (iInterFishfarmTypes == 0) {
                         mMin = val;
                         mMax = val;
                     } else {
-                        if (mMin > val)
+                        if (mMin < val)
                             mMin = val;
-                        if (mMax < val)
+                        if (mMax > val)
                             mMax = val;
                     }
                     mAvg += val;
                     mTot += val;
+                    ++nsam;
                 }
             }
-            if (szNum > 0)
-                mAvg /= szNum;
+            if (nsam > 0)
+                mAvg /= nsam;
+
+            //qDebug() << "Res: " << mMin << mMax << mAvg << mTot;
 
             keyData[gidx] << it.key();
             switch (graphList[iGraph] / 1000) {
@@ -215,19 +223,20 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
 double FishfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::FishfarmsStat stattype)
 {
+    Q_UNUSED(farmtype);
     switch (stattype) {
     case FishfarmsStat::FF_FishMeanWeight:
-        return model->getFishfarmsStatistics().getValue(tstep).meanwForFishfarmAndFarmGroup(farmid, farmtype);
+        return model->getFishfarmsStatistics().getValue(tstep).meanwForFishfarmAndFarmGroup(farmid, 0);
     case FishfarmsStat::FF_FishHarvestedKg:
-        return model->getFishfarmsStatistics().getValue(tstep).fishharvestedkgForFishfarmAndFarmGroup(farmid, farmtype);
+        return model->getFishfarmsStatistics().getValue(tstep).fishharvestedkgForFishfarmAndFarmGroup(farmid, 0);
     case FishfarmsStat::FF_EggsHarvestedKg:
-        return model->getFishfarmsStatistics().getValue(tstep).eggsharvestedkgForFishfarmAndFarmGroup(farmid, farmtype);
+        return model->getFishfarmsStatistics().getValue(tstep).eggsharvestedkgForFishfarmAndFarmGroup(farmid, 0);
     case FishfarmsStat::FF_AnnualProfit:
-        return model->getFishfarmsStatistics().getValue(tstep).annualprofitForFishfarmAndFarmGroup(farmid, farmtype);
+        return model->getFishfarmsStatistics().getValue(tstep).annualprofitForFishfarmAndFarmGroup(farmid, 0);
     case FishfarmsStat::FF_NetDischargeN:
-        return model->getFishfarmsStatistics().getValue(tstep).netdischargeNForFishfarmAndFarmGroup(farmid, farmtype);
+        return model->getFishfarmsStatistics().getValue(tstep).netdischargeNForFishfarmAndFarmGroup(farmid, 0);
     case FishfarmsStat::FF_NetDischargeP:
-        return model->getFishfarmsStatistics().getValue(tstep).netdischargePForFishfarmAndFarmGroup(farmid, farmtype);
+        return model->getFishfarmsStatistics().getValue(tstep).netdischargePForFishfarmAndFarmGroup(farmid, 0);
     }
 
     return 0;

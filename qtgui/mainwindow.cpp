@@ -1222,7 +1222,7 @@ QProcess *MainWindow::prepareAppExecutableStart(QString exename)
     QProcess *ed = new QProcess;
     QString app = qApp->applicationDirPath() + "/" + exename;
 
-#ifdef __WINNT
+#if defined(_WIN32)
     app += ".exe";
 #endif
 

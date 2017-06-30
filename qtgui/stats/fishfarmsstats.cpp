@@ -1,5 +1,6 @@
 #include "fishfarmsstats.h"
 
+#include <QDebug>
 
 const FishfarmsStats::StatData FishfarmsStats::NoData;
 
@@ -93,7 +94,7 @@ void FishfarmsStats::collectMeanWeightKg(int step, int farmid, int farmtypeid, d
 {
     Q_UNUSED(step);
 
-    get(farmtypeid, farmid).meanw == meanw_kg;
+    get(farmid, farmtypeid).meanw += meanw_kg;
     setDirty();
 }
 
@@ -101,7 +102,7 @@ void FishfarmsStats::collectFishHarvestedKg(int step, int farmid, int farmtypeid
 {
     Q_UNUSED(step);
 
-    get(farmtypeid, farmid).fishharvestkg += fish_harvested_kg;
+    get(farmid, farmtypeid).fishharvestkg += fish_harvested_kg;
     setDirty();
 }
 
@@ -109,7 +110,7 @@ void FishfarmsStats::collectEggsHarvestedKg(int step, int farmid, int farmtypeid
 {
     Q_UNUSED(step);
 
-    get(farmtypeid, farmid).eggsharvestkg += eggs_harvested_kg;
+    get(farmid, farmtypeid).eggsharvestkg += eggs_harvested_kg;
     setDirty();
 }
 
@@ -117,7 +118,7 @@ void FishfarmsStats::collectFishfarmAnnualProfit(int step, int farmid, int farmt
 {
     Q_UNUSED(step);
 
-    get(farmtypeid, farmid).annualprofit += fishfarm_annual_profit;
+    get(farmid, farmtypeid).annualprofit += fishfarm_annual_profit;
     setDirty();
 }
 
@@ -125,7 +126,7 @@ void FishfarmsStats::collectNetDischargeN(int step, int farmid, int farmtypeid, 
 {
     Q_UNUSED(step);
 
-    get(farmtypeid, farmid).netdischargeN += net_discharge_N;
+    get(farmid, farmtypeid).netdischargeN += net_discharge_N;
     setDirty();
 }
 
@@ -133,37 +134,37 @@ void FishfarmsStats::collectNetDischargeP(int step, int farmid, int farmtypeid, 
 {
     Q_UNUSED(step);
 
-    get(farmid,farmtypeid).netdischargeP += net_discharge_P;
+    get(farmid, farmtypeid).netdischargeP += net_discharge_P;
     setDirty();
 }
 
 
 double FishfarmsStats::meanwForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
-    return get(farmtypeid, farmid).meanw;
+    return get(farmid, farmtypeid).meanw;
 }
 
 double FishfarmsStats::fishharvestedkgForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
-    return get(farmtypeid, farmid).fishharvestkg;
+    return get(farmid, farmtypeid).fishharvestkg;
 }
 
 double FishfarmsStats::eggsharvestedkgForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
-    return get(farmtypeid, farmid).eggsharvestkg;
+    return get(farmid, farmtypeid).eggsharvestkg;
 }
 
 double FishfarmsStats::annualprofitForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
-    return get(farmtypeid, farmid).annualprofit;
+    return get(farmid, farmtypeid).annualprofit;
 }
 
 double FishfarmsStats::netdischargeNForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
-    return get(farmtypeid, farmid).netdischargeN;
+    return get(farmid, farmtypeid).netdischargeN;
 }
 
 double FishfarmsStats::netdischargePForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
-    return get(farmtypeid, farmid).netdischargeP;
+    return get(farmid, farmtypeid).netdischargeP;
 }

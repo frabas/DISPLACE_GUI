@@ -505,7 +505,6 @@ private:
     bool mVesselsStatsDirty;
     bool mFirmsStatsDirty;
     bool mShipsStatsDirty;
-    bool mFishfarmStatsDirty;
     bool mWindmillStatsDirty;
 
     Scenario mScenario;

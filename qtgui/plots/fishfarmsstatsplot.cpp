@@ -33,22 +33,30 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
     bool showmin =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Min);
     bool showmax =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
 
-    if (showmax)
-        graphList.push_front(-4);
-    if (showmin)
-        graphList.push_front(-3);
-    if (showavg)
-        graphList.push_front(-2);
-    if (showtotal)
-        graphList.push_front(-1);
-
-    if (graphList.size() == 0)
-        graphList.append(interFishfarmsTypesList);
-
     /* If no farm type is selected, but aggregate is selected, select all farms */
-    if (interFishfarmsTypesList.size() == 0 && graphList.size() != 0) {
-        for(int i = 0; i < model->getNumFishfarmsTypes(); ++i)
-            interFishfarmsTypesList.push_back(i);
+    if (interFishfarmsTypesList.size() != 0) {
+        for(int i = 0; i < model->getNumFishfarmsTypes(); ++i) {
+            if (!farmsTypeGroups->has(i))
+                continue;
+
+            if (showmax)
+                graphList.push_front(4000 + i);
+            if (showmin)
+                graphList.push_front(3000 + i);
+            if (showavg)
+                graphList.push_front(2000 + i);
+            if (showtotal)
+                graphList.push_front(1000 + i);
+        }
+    } else {
+        if (showmax)
+            graphList.push_front(4999);
+        if (showmin)
+            graphList.push_front(3999);
+        if (showavg)
+            graphList.push_front(2999);
+        if (showtotal)
+            graphList.push_front(1999);
     }
 
     /* If no fishfarms is selected, select all fishfarms type */
@@ -82,21 +90,27 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
 
-        switch (graphList[igraph]) {
-        case -4:
-            graph->setName(QString(QObject::tr("farm id ... Max")));
+        QString group;
+        auto grp = graphList[igraph] % 1000;
+        if (grp == 999) {
+            group = "[all]";
+        } else {
+            group = QString("Type %1").arg(grp);
+        }
+
+        switch (graphList[igraph] / 1000) {
+        case 4:
+            graph->setName(QString(QObject::tr("farm id %1 Max")).arg(group));
             break;
-        case -3:
-            graph->setName(QString(QObject::tr("farm id ... Min")));
+        case 3:
+            graph->setName(QString(QObject::tr("farm id %1 Min")).arg(group));
             break;
-        case -2:
-            graph->setName(QString(QObject::tr("farm id ... Avg")));
+        case 2:
+            graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(group));
             break;
-        case -1:
-            graph->setName(QString(QObject::tr("farm id ... Total")));
+        case 1:
+            graph->setName(QString(QObject::tr("farm id %1 Total")).arg(group));
             break;
-        default:
-            graph->setName(QString(QObject::tr("farm id ... type %2")));
         }
 
         graphs.push_back(graph);
@@ -109,48 +123,53 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
     auto it = model->getFishfarmsStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
         int nInterFishfarmsIDs = interFishfarmsIDsList.size();
-        // calculate transversal values...
-        double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-        for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
-            for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
-                val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
-
-                if (iInterFishfarmTypes == 0) {
-                    mMin = val;
-                    mMax = val;
-                } else {
-                    if (mMin > val)
-                        mMin = val;
-                    if (mMax < val)
-                        mMax = val;
-                }
-                mAvg += val;
-                mTot += val;
-            }
-        }
-        if (szNum > 0)
-            mAvg /= szNum;
 
         for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
             //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
             int gidx = iGraph;
 
+            auto group = graphList[iGraph] % 1000;
+
+            // calculate transversal values...
+            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
+            for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
+                for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
+
+                    auto fmtype = model->getFishfarmList()[iInterFishfarmsIDs]->mFishfarm->get_farmtype();
+                    if (group != 999 && iInterFishfarmTypes != fmtype)
+                        continue;
+
+                    val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
+
+                    if (iInterFishfarmTypes == 0) {
+                        mMin = val;
+                        mMax = val;
+                    } else {
+                        if (mMin > val)
+                            mMin = val;
+                        if (mMax < val)
+                            mMax = val;
+                    }
+                    mAvg += val;
+                    mTot += val;
+                }
+            }
+            if (szNum > 0)
+                mAvg /= szNum;
+
             keyData[gidx] << it.key();
-            switch (graphList[iGraph]) {
-            case -4:
+            switch (graphList[iGraph] / 1000) {
+            case 4:
                 val = mMax;
                 break;
-            case -3:
+            case 3:
                 val = mMin;
                 break;
-            case -2:
+            case 2:
                 val = mAvg;
                 break;
-            case -1:
+            case 1:
                 val = mTot;
-                break;
-            default:
-//                val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], graphList[iGraph], stat);
                 break;
             }
 

@@ -1620,7 +1620,7 @@ int DisplaceModel::getNumFuncGroups() const
 int DisplaceModel::getNumFishfarmsTypes() const
 {
     // return config().getNumFishfarmsTypes();
-    return 1; // TO DO: detect nb of farms type
+    return 3; // TO DO: detect nb of farms type
 }
 
 

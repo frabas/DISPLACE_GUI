@@ -71,11 +71,11 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         mTimeline->end->setCoords(t, timelineMax);
     }
 
-    foreach (int farmtype, interFishfarmsTypesList) {
+    foreach (int farmid, interFishfarmsIDsList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
             QCPGraph *graph = mPlot->addGraph();
-            QColor col = mPalette.colorByIndex(farmtype);
+            QColor col = mPalette.colorByIndex(farmid);
 
             graph->setLineStyle(QCPGraph::lsLine);
             graph->setPen(QPen(QBrush(col),2));
@@ -85,19 +85,19 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
             switch (graphList[igraph]) {
             case -4:
-                graph->setName(QString(QObject::tr("farm type %1 Max")).arg(farmtype));
+                graph->setName(QString(QObject::tr("farm id %1 Max")).arg(farmid+1));
                 break;
             case -3:
-                graph->setName(QString(QObject::tr("farm type %1 Min")).arg(farmtype));
+                graph->setName(QString(QObject::tr("farm id %1 Min")).arg(farmid+1));
                 break;
             case -2:
-                graph->setName(QString(QObject::tr("farm type %1 Avg")).arg(farmtype));
+                graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(farmid+1));
                 break;
             case -1:
-                graph->setName(QString(QObject::tr("farm type %1 Total")).arg(farmtype));
+                graph->setName(QString(QObject::tr("farm id %1 Total")).arg(farmid+1));
                 break;
             default:
-                graph->setName(QString(QObject::tr("farm type %1 farmid %2")).arg(farmtype).arg(graphList[igraph]+1));
+                graph->setName(QString(QObject::tr("farm id %1 type %2")).arg(farmid+1).arg(graphList[igraph]));
             }
 
             graphs.push_back(graph);

@@ -394,7 +394,7 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
             int farmtype = fields[4].toInt();
             int nodeid = fields[1].toInt();
 
-            // tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
+            // tstep(0) / node(1) / long(2) / lat(3) / farmtype(4) / farmid(5) / meanw_kg(6) / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
 
             double meanw_kg = fields[6].toDouble(&ok);
             if (!ok) throw std::runtime_error(QString("wrong meanw_kg %1").arg(fields[6]).toStdString());

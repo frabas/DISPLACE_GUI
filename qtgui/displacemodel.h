@@ -339,7 +339,7 @@ public:
     int getNumFuncGroups() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFunctionalGroupsList() const { return mFuncGroups; }
 
-    int getNumFishfarmTypes() const;
+    int getNumFishfarmsTypes() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsTypesList() const { return mFishfarmsTypes; }
 
     /** \brief insert the pop into the list of interest for pops */

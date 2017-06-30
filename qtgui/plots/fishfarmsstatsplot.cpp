@@ -45,13 +45,13 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
     if (graphList.size() == 0)
         graphList.append(interFishfarmsTypesList);
 
-    /* If no farm is selected, but aggregate is selected, select all farms */
+    /* If no farm type is selected, but aggregate is selected, select all farms */
     if (interFishfarmsTypesList.size() == 0 && graphList.size() != 0) {
-        for(int i = 0; i < model->getNumFishfarmTypes(); ++i)
+        for(int i = 0; i < model->getNumFishfarmsTypes(); ++i)
             interFishfarmsTypesList.push_back(i);
     }
 
-    /* If no fishfarms type is selected, select all fishfarms type */
+    /* If no fishfarms is selected, select all fishfarms type */
     if (interFishfarmsIDsList.size() == 0) {
         for (int i = 0; i < model->getFishfarmsCount(); ++i) {
             interFishfarmsIDsList.push_back(i);
@@ -110,8 +110,8 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
     auto it = model->getFishfarmsStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterFishfarmsTypes = interFishfarmsTypesList.size();
-        for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsTypes; ++iInterFishfarmsIDs) {
+        int nInterFishfarmsIDs = interFishfarmsIDsList.size();
+        for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
 
             // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;

@@ -93,7 +93,7 @@ void SimulatorIpcManager::threadStarted()
 
                     int pop2 = data->popnum;
                     for (int i = 0; i < pop2; ++i) {
-                        stats.mDiscards.push_back(data->pop[i]);
+                        stats.mDiscards.push_back(data->pop[i + pop]);
                     }
 
                     emit vesselLogbookReceived(stats);

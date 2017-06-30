@@ -151,6 +151,9 @@ size_t VesselLogbookOutputMessage::sendBinary(void *buffer, size_t maxlen)
     for (size_t n = 0; n < logbook.popnum; ++n) {
         i = put(buffer, i, cumul[n]);
     }
+    for (size_t n = 0; n < cumul_discards.size(); ++n) {
+        i = put(buffer, i, cumul_discards[n]);
+    }
 
     return i;
 }

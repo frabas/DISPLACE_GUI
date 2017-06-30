@@ -57,7 +57,6 @@ DisplaceModel::DisplaceModel()
       mVesselsStatsDirty(false),
       mFirmsStatsDirty(false),
       mShipsStatsDirty(false),
-      mFishfarmStatsDirty(false),
       mWindmillStatsDirty(false),
       mScenario(),
       mConfig(),
@@ -541,13 +540,13 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         mShipsStatsDirty = false;
     }
 
-    if (mFishfarmStatsDirty || force) {
+    if (mStatsFishfarmsCollected.dirty() || force) {
         //if (mDb)
         //    mDb->addFishfarmStats (mLastStats, mStatsFishfarmCollected);
 
         // Fishfarm stats are not saved on db, but loaded on the fly
         mStatsFishfarms.insertValue(tstep, mStatsFishfarmsCollected);
-        mFishfarmStatsDirty = false;
+        mStatsFishfarmsCollected.clear();
     }
 
     if (mWindmillStatsDirty || force) {
@@ -715,7 +714,6 @@ void DisplaceModel::collectFishfarmFishMeanWeight(int step, int node_idx, int fa
                                                  farmid, // mNodes.at(node_idx)->get_ff_names_on_node().at(0) does not work
                                                  farmtype,
                                                  meanw_kg);
-    mFishfarmStatsDirty = true;
 }
 
 void DisplaceModel::collectFishfarmFishHarvestedKg(int step, int node_idx, int farmid, int farmtype, double fish_harvested_kg)
@@ -728,7 +726,6 @@ void DisplaceModel::collectFishfarmFishHarvestedKg(int step, int node_idx, int f
                                                     farmid,
                                                     farmtype,
                                                     fish_harvested_kg);
-    mFishfarmStatsDirty = true;
 }
 
 void DisplaceModel::collectFishfarmEggsHarvestedKg(int step, int node_idx, int farmid, int farmtype, double eggs_harvested_kg)
@@ -741,7 +738,6 @@ void DisplaceModel::collectFishfarmEggsHarvestedKg(int step, int node_idx, int f
                                                     farmid,
                                                     farmtype,
                                                     eggs_harvested_kg);
-    mFishfarmStatsDirty = true;
 }
 
 
@@ -755,7 +751,6 @@ void DisplaceModel::collectFishfarmAnnualProfit(int step, int node_idx, int farm
                                                          farmid,
                                                          farmtype,
                                                          fishfarm_annualprofit);
-    mFishfarmStatsDirty = true;
 }
 
 void DisplaceModel::collectFishfarmNetDischargeN(int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeN)
@@ -768,7 +763,6 @@ void DisplaceModel::collectFishfarmNetDischargeN(int step, int node_idx, int far
                                                   farmid,
                                                   farmtype,
                                                   fishfarm_netdischargeN);
-    mFishfarmStatsDirty = true;
 }
 
 
@@ -782,7 +776,6 @@ void DisplaceModel::collectFishfarmNetDischargeP(int step, int node_idx, int far
                                                   farmid,
                                                   farmtype,
                                                   fishfarm_netdischargeP);
-    mFishfarmStatsDirty = true;
 }
 
 

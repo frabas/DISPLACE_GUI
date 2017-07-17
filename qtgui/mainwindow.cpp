@@ -204,6 +204,9 @@ MainWindow::MainWindow(QWidget *parent) :
     new GraphInteractionController(ui->plotHarbours, this);
     new GraphInteractionController(ui->plotPopulations, this);
     new GraphInteractionController(ui->plotNations, this);
+    new GraphInteractionController(ui->plotBenthos, this);
+    new GraphInteractionController(ui->plotFishfarms, this);
+    new GraphInteractionController(ui->plotMetiers, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
 

@@ -39,6 +39,11 @@ GraphInteractionController::GraphInteractionController(QCustomPlot *plot, QObjec
     connect(mPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint)));
 }
 
+void GraphInteractionController::setOnPopupMenuBuiltCallback(GraphInteractionController::OnPopupMenuBuilt callback)
+{
+    mOnPopupMenuBuilt = callback;
+}
+
 void GraphInteractionController::selectionChanged()
 {
 
@@ -83,6 +88,12 @@ void GraphInteractionController::contextMenuRequest(QPoint pos)
         menu->addAction(tr("Move to top right"), this, SLOT(moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignRight));
         menu->addAction(tr("Move to bottom right"), this, SLOT(moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignRight));
         menu->addAction(tr("Move to bottom left"), this, SLOT(moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignLeft));
+
+        if (mOnPopupMenuBuilt)
+            mOnPopupMenuBuilt(PopupMenuLocation::Legend, menu);
+    } else {
+        if (mOnPopupMenuBuilt)
+            mOnPopupMenuBuilt(PopupMenuLocation::Plot, menu);
     }
 
     menu->popup(mPlot->mapToGlobal(pos));

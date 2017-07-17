@@ -26,6 +26,8 @@
 #include <plots/benthosstatsplot.h>
 #include <plots/fishfarmsstatsplot.h>
 
+#include <functional>
+
 double StatsController::timelineMax = 1e20;
 double StatsController::timelineMin = -1e20;
 
@@ -115,7 +117,7 @@ void StatsController::setBenthosPlot(QCustomPlot *plot)
     mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
 }
 
-void StatsController::setFishfarmsPlot(QCustomPlot *plot)
+void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)
 {
    cout << "Set fishfarm plot" << endl;
 
@@ -135,6 +137,7 @@ void StatsController::setFishfarmsPlot(QCustomPlot *plot)
 
     cout << "Set fishfarm plot...ok" << endl;
 
+    controller->setOnPopupMenuBuiltCallback(std::bind(&FishfarmsStatsPlot::createPopup, mFishfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
 

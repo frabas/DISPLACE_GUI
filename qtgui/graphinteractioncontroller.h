@@ -43,6 +43,7 @@
 
 #include <QObject>
 #include <qcustomplot.h>
+#include <functional>
 
 class GraphInteractionController : public QObject
 {
@@ -52,6 +53,10 @@ class GraphInteractionController : public QObject
 public:
     explicit GraphInteractionController(QCustomPlot *plot, QObject *parent = 0);
 
+    enum class PopupMenuLocation { Plot, Legend };
+    using OnPopupMenuBuilt = std::function<void(PopupMenuLocation location, QMenu *menu)>;
+
+    void setOnPopupMenuBuiltCallback (OnPopupMenuBuilt callback);
 signals:
 
 public slots:
@@ -60,6 +65,9 @@ public slots:
     void mouseWheel();
     void contextMenuRequest(QPoint pos);
     void moveLegend();
+
+private:
+    OnPopupMenuBuilt mOnPopupMenuBuilt = nullptr;
 };
 
 #endif // GRAPHINTERACTIONCONTROLLER_H

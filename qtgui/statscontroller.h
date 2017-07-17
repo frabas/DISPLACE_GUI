@@ -27,6 +27,7 @@
 #include <palettemanager.h>
 
 #include <plots/plottypes.h>
+#include <graphinteractioncontroller.h>
 
 class DisplaceModel;
 class BenthosStatsPlot;
@@ -43,7 +44,7 @@ public:
     void setNationsPlot(QCustomPlot *plot);
     void setMetiersPlot(QCustomPlot *plot);
     void setBenthosPlot(QCustomPlot *plot);
-    void setFishfarmsPlot(QCustomPlot *plot);
+    void setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
 
     void updateStats(DisplaceModel *model);
 

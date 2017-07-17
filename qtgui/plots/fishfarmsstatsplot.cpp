@@ -186,6 +186,28 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         ++it;
     }
 
+    if (!mSaveFilename.isEmpty()) {
+        QFile f(mSaveFilename);
+        if (f.open(QIODevice::WriteOnly)) {
+            QTextStream strm(&f);
+
+            for (int i = 0; i < graphs.size(); ++i) {
+                strm << "Dt " << i;
+
+                auto const& k = keyData.at(i);
+                auto const& v = valueData.at(i);
+                for (int j = 0; j < k.size(); ++j) {
+                    strm << "," << k.at(j) << "," << v.at(j);
+                }
+                strm << "\n";
+            }
+
+            f.close();
+        }
+
+        mSaveFilename.clear();
+    }
+
     for (int i = 0; i < graphs.size(); ++i) {
         graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
@@ -219,6 +241,18 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
     mPlot->rescaleAxes();
     mPlot->replot();
+}
+
+void FishfarmsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
+{
+    if (location == GraphInteractionController::PopupMenuLocation::Plot) {
+        menu->addAction(QObject::tr("Save Data"), std::bind(&FishfarmsStatsPlot::saveTo, this));
+    }
+}
+
+void FishfarmsStatsPlot::saveTo()
+{
+    mSaveFilename = "fishfarms.txt";
 }
 
 double FishfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::FishfarmsStat stattype)

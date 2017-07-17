@@ -63,7 +63,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
     /* If no fishfarms is selected, select all fishfarms type */
     if (interFishfarmsIDsList.size() == 0) {
         for (int i = 0; i < model->getFishfarmsCount(); ++i) {
-            interFishfarmsIDsList.push_back(i);
+            interFishfarmsIDsList.push_back(i+1);
         }
     }
 
@@ -146,7 +146,7 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
 
                     //qDebug() << iInterFishfarmsIDs << iInterFishfarmTypes << val;
 
-                    if (iInterFishfarmTypes == 0) {
+                    if (nsam == 0) {
                         mMin = val;
                         mMax = val;
                         mAvg = val;
@@ -191,8 +191,14 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         if (f.open(QIODevice::WriteOnly)) {
             QTextStream strm(&f);
 
+
+            strm << "interFishfarmsIDsList: ";
+            for (auto x : interFishfarmsIDsList)
+                strm << x << " ";
+            strm << "\n\n";
+
             for (int i = 0; i < graphs.size(); ++i) {
-                strm << "Dt " << i;
+                strm << "Dt " << i << " (" <<graphs.at(i)->name() << ") ";
 
                 auto const& k = keyData.at(i);
                 auto const& v = valueData.at(i);
@@ -202,6 +208,38 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
                 strm << "\n";
             }
 
+            strm << "\n------\n\n";
+
+            it = model->getFishfarmsStatistics().getFirst();
+            for (int istep = 0; istep <nsteps; ++istep) {
+                int nInterFishfarmsIDs = interFishfarmsIDsList.size();
+
+                //qDebug() << "Step: " <<istep << it.key();
+                for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
+                    //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
+                    int gidx = iGraph;
+
+                    auto group = graphList[iGraph] % 1000;
+
+                    //qDebug() << "Graph:" << iGraph << group;
+                     // calculate transversal values...
+                    double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
+                    for (int iInterFishfarmTypes = 0; iInterFishfarmTypes < interFishfarmsTypesList.size(); ++iInterFishfarmTypes) {
+                        for (int iInterFishfarmsIDs = 0; iInterFishfarmsIDs < nInterFishfarmsIDs; ++iInterFishfarmsIDs) {
+
+                            auto fmtype = model->getFishfarmList()[iInterFishfarmsIDs]->mFishfarm->get_farmtype();
+                            if (group != 999 && iInterFishfarmTypes != fmtype)
+                                continue;
+
+                            val = getStatValue(model, it.key(), interFishfarmsIDsList[iInterFishfarmsIDs], interFishfarmsTypesList[iInterFishfarmTypes], stat);
+
+                            strm << it.key() << ", " << iInterFishfarmsIDs << ", " << iInterFishfarmTypes << ", " << group
+                                 << ", " << static_cast<int>(stat) << " ==> " << val << "\n";
+                        }
+                    }
+                }
+                ++it;
+            }
             f.close();
         }
 

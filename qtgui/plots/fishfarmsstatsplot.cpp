@@ -149,14 +149,14 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
                     if (iInterFishfarmTypes == 0) {
                         mMin = val;
                         mMax = val;
+                        mAvg = val;
+                        mTot = val;
                     } else {
-                        if (mMin < val)
-                            mMin = val;
-                        if (mMax > val)
-                            mMax = val;
+                        mMin = std::min (mMin, val);
+                        mMax = std::max (mMax, val);
+                        mAvg += val;
+                        mTot += val;
                     }
-                    mAvg += val;
-                    mTot += val;
                     ++nsam;
                 }
             }

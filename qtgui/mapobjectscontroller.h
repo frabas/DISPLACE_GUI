@@ -94,6 +94,8 @@ class MapObjectsController : public QObject, public EditorLayerInterface
 public:
     class LayerList {
     public:
+        virtual ~LayerList() noexcept = default;
+
         virtual int getCount() const = 0;
         virtual QString getName(int idx) const = 0;
     };
@@ -237,6 +239,8 @@ public:
     };
 
     MapObjectsController(qmapcontrol::QMapControl *map);
+    virtual ~MapObjectsController() noexcept = default;
+
     qmapcontrol::QMapControl *mapWidget() const { return mMap; }
 
     void setModel(int model_n, std::shared_ptr<DisplaceModel> model);

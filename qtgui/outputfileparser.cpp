@@ -373,57 +373,56 @@ void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceMode
 
 void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceModel *model, int period)
 {
+    Q_UNUSED(period);
+    Q_UNUSED(tstep);
+
     QTextStream strm (file);
     bool ok;
 
-    int step, last_period = -1;
+    int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         step = fields[0].toInt();
 
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-            int farmid = fields[5].toInt();
-            int farmtype = 0;
-            int nodeid = fields[1].toInt();
-
-            // tstep(0) / node(1) / long(2) / lat(3) / farmtype(4) / farmid(5) / meanw_kg(6) / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
-
-            double meanw_kg = fields[6].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong meanw_kg %1").arg(fields[6]).toStdString());
-            model->collectFishfarmFishMeanWeight (step, nodeid, farmid, farmtype, meanw_kg);
-
-            double fish_harvested_kg = fields[7].toDouble(&ok);  // deduced from N*meanw
-            if (!ok) throw std::runtime_error(QString("wrong fish_harvested_kg %1").arg(fields[7]).toStdString());
-            model->collectFishfarmFishHarvestedKg (step, nodeid, farmid,  farmtype, fish_harvested_kg);
-
-            double eggs_harvested_kg = fields[8].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong eggs_harvested_kg %1").arg(fields[8]).toStdString());
-            model->collectFishfarmEggsHarvestedKg(step, nodeid, farmid, farmtype, eggs_harvested_kg);
-
-            double fishfarm_annualprofit = fields[9].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong fishfarm_annualprofit %1").arg(fields[9]).toStdString());
-            model->collectFishfarmAnnualProfit(step, nodeid,farmid, farmtype, fishfarm_annualprofit);
-
-            double fishfarm_netdischargeN = fields[10].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeN %1").arg(fields[10]).toStdString());
-            model->collectFishfarmNetDischargeN(step, nodeid, farmid, farmtype, fishfarm_netdischargeN);
-
-            double fishfarm_netdischargeP = fields[11].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeP %1").arg(fields[11]).toStdString());
-            model->collectFishfarmNetDischargeP(step, nodeid, farmid, farmtype, fishfarm_netdischargeP);
+        if (last_step != -1 && last_step != step) {
+            model->commitFishfarmsStats(last_step);
         }
+
+        int farmid = fields[5].toInt();
+        int farmtype = 0;
+        int nodeid = fields[1].toInt();
+
+        // tstep(0) / node(1) / long(2) / lat(3) / farmtype(4) / farmid(5) / meanw_kg(6) / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
+
+        double meanw_kg = fields[6].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong meanw_kg %1").arg(fields[6]).toStdString());
+        model->collectFishfarmFishMeanWeight (step, nodeid, farmid, farmtype, meanw_kg);
+
+        double fish_harvested_kg = fields[7].toDouble(&ok);  // deduced from N*meanw
+        if (!ok) throw std::runtime_error(QString("wrong fish_harvested_kg %1").arg(fields[7]).toStdString());
+        model->collectFishfarmFishHarvestedKg (step, nodeid, farmid,  farmtype, fish_harvested_kg);
+
+        double eggs_harvested_kg = fields[8].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong eggs_harvested_kg %1").arg(fields[8]).toStdString());
+        model->collectFishfarmEggsHarvestedKg(step, nodeid, farmid, farmtype, eggs_harvested_kg);
+
+        double fishfarm_annualprofit = fields[9].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fishfarm_annualprofit %1").arg(fields[9]).toStdString());
+        model->collectFishfarmAnnualProfit(step, nodeid,farmid, farmtype, fishfarm_annualprofit);
+
+        double fishfarm_netdischargeN = fields[10].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeN %1").arg(fields[10]).toStdString());
+        model->collectFishfarmNetDischargeN(step, nodeid, farmid, farmtype, fishfarm_netdischargeN);
+
+        double fishfarm_netdischargeP = fields[11].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeP %1").arg(fields[11]).toStdString());
+        model->collectFishfarmNetDischargeP(step, nodeid, farmid, farmtype, fishfarm_netdischargeP);
+
+        last_step = step;
     }
 
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
+    model->commitFishfarmsStats(last_step);
 }
 
 

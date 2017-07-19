@@ -506,6 +506,15 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
 
 }
 
+void DisplaceModel::commitFishfarmsStats(int tstep)
+{
+    if (mStatsFishfarmsCollected.dirty()) {
+        // Fishfarm stats are not saved on db, but loaded on the fly
+        mStatsFishfarms.insertValue(tstep, mStatsFishfarmsCollected);
+        mStatsFishfarmsCollected.clear();
+    }
+}
+
 void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 {
     if (mDb)
@@ -538,15 +547,6 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
     if (mShipsStatsDirty || force) {
 
         mShipsStatsDirty = false;
-    }
-
-    if (mStatsFishfarmsCollected.dirty() || force) {
-        //if (mDb)
-        //    mDb->addFishfarmStats (mLastStats, mStatsFishfarmCollected);
-
-        // Fishfarm stats are not saved on db, but loaded on the fly
-        mStatsFishfarms.insertValue(tstep, mStatsFishfarmsCollected);
-        mStatsFishfarmsCollected.clear();
     }
 
     if (mWindmillStatsDirty || force) {

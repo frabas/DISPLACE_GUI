@@ -384,6 +384,7 @@ public:
     void parseOutputStatsFile (QString file, int tstep);
 
     void commitNodesStatsFromSimu(int tstep, bool force = false);
+    void commitFishfarmsStats(int tstep);
 
     // Stats collecting. Must store data to db
     void startCollectingStats();

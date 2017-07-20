@@ -997,7 +997,8 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 
 	if(tot!=0)
 	{
-								 // init
+
+        // init
 		vector <double> new_avai_pops_at_selected_szgroup = this->get_avai_pops_at_selected_szgroup(name_pop);
 
 		for(unsigned int szgroup=0; szgroup <avail_biomass.size(); szgroup++)
@@ -1036,16 +1037,14 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 					new_Ns_at_szgroup_pop[szgroup]=0;
 								 // just right after the calculation of removals, reverse back to get the landings only
 					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
-
 				}
 				else
 				{
-					// finally, impact the N
+                    // finally, impact the N
 					new_Ns_at_szgroup_pop[szgroup]=Ns_at_szgroup_pop[szgroup]-removals_per_szgroup[szgroup];
 								 // reverse back to get the landings only
 					catch_per_szgroup[szgroup]=catch_per_szgroup[szgroup] *(1-dis_ogive[szgroup]);
                     //if(idx_node==430&& name_pop==3) dout(cout << " new_Ns_at_szgroup_pop[szgroup] " << new_Ns_at_szgroup_pop[szgroup] << endl);
-
 					// update the availability to impact the future vessel cpue
 					double val=0;// init
 					if(szgroup==0 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
@@ -1053,26 +1052,27 @@ void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,
 						val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
 						new_avai_pops_at_selected_szgroup.at(0)=val;
 					}
-					if(szgroup==2 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                    if(szgroup==2 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]) && new_avai_pops_at_selected_szgroup.size()>1)
 					{
 						val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
 						new_avai_pops_at_selected_szgroup.at(1)=val;
 					}
-					if(szgroup==3 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                    if(szgroup==3 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]) && new_avai_pops_at_selected_szgroup.size()>2)
 					{
 						val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
 						new_avai_pops_at_selected_szgroup.at(2)=val;
 					}
-					if(szgroup==5 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                    if(szgroup==5 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]) && new_avai_pops_at_selected_szgroup.size()>3)
 					{
 						val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
 						new_avai_pops_at_selected_szgroup.at(3)=val;
 					}
-					if(szgroup==7 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]))
+                    if(szgroup==7 && totN[szgroup]!=0 && (removals_per_szgroup[szgroup]<Ns_at_szgroup_pop[szgroup]) && new_avai_pops_at_selected_szgroup.size()>4)
 					{
-						val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
+                        val= (new_Ns_at_szgroup_pop[szgroup])/(totN[szgroup]) ;
 						new_avai_pops_at_selected_szgroup.at(4)=val;
 					}
+
 					this->set_avai_pops_at_selected_szgroup(name_pop, new_avai_pops_at_selected_szgroup);
 
 				}

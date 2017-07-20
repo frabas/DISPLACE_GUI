@@ -300,6 +300,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                 dout(cout << a_list_nodes.at(n)->get_idx_node().toIndex() << " ");
 
+
                 // a check
                 /*
                  vector <double> N_at_szgroup= a_list_nodes.at(n)->get_Ns_pops_at_szgroup(9);
@@ -327,8 +328,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                 // apply "other" landings
                 // (also accounting for a potential multiplier (default at 1.0))
                 double oth_land_this_pop_this_node=
-                    map_oth[ a_list_nodes.at(n)->get_idx_node() ]*
-                    populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
+                map_oth[a_list_nodes.at(n)->get_idx_node()]*
+                populations.at(name_pop)->get_oth_land_multiplier() * calib_oth_landings.at(sp);
 
                 // magic number for a the below scenario: add a stochastic variation
                 // area-based sce
@@ -342,7 +343,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                 dout (cout << "pop " << sp << " tentative catch in kg from others on this node " << a_list_nodes.at(n)->get_idx_node().toIndex()
                     << ": " << oth_land_this_pop_this_node << endl);
-
                 if(oth_land_this_pop_this_node!=0)
                 {
                     // apply oth_land UNLESS this is a closed node!
@@ -417,6 +417,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                     }
                 }
+
                 // update landings in pop from oth landings
                 double so_far = (populations.at(name_pop)->get_landings_so_far()) +
                     oth_land_this_pop_this_node;

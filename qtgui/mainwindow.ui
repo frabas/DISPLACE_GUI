@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -340,99 +340,8 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>5</number>
+           <number>1</number>
           </property>
-          <widget class="QWidget" name="tabStatsHarbours">
-           <attribute name="icon">
-            <iconset resource="../qtcommons/qtcommons.qrc">
-             <normaloff>:/icons/harbour.png</normaloff>:/icons/harbour.png</iconset>
-           </attribute>
-           <attribute name="title">
-            <string>Harbours</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <widget class="QComboBox" name="harbStatSelector">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Cum Catches</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Cum Discards</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Revenues</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Gross Added Value</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>VPUF</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Swept Area</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Revenues Per Swept Area</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_6">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QCustomPlot" name="plotHarbours" native="true"/>
-            </item>
-           </layout>
-          </widget>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
             <iconset resource="qtgui.qrc">
@@ -540,42 +449,42 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string>Catches</string>
+                  <string>Cum. Catches</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Discards</string>
+                  <string>Cum. Discards</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Revenues</string>
+                  <string>Cum. Revenues - All</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Revenues - Ex</string>
+                  <string>Cum. Revenues - Explicit pops</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Time At Sea</string>
+                  <string>Cum. Time At Sea</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Gross Value Added</string>
+                  <string>Cum. Gross Value Added</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>VPUF</string>
+                  <string>Trip Value Per Unit Fuel</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Swept Area</string>
+                  <string>Cum. Seabed Swept Area</string>
                  </property>
                 </item>
                 <item>
@@ -602,6 +511,97 @@
             </item>
             <item>
              <widget class="QCustomPlot" name="plotNations" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabStatsHarbours">
+           <attribute name="icon">
+            <iconset resource="../qtcommons/qtcommons.qrc">
+             <normaloff>:/icons/harbour.png</normaloff>:/icons/harbour.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Harbours</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QComboBox" name="harbStatSelector">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Cum. Catches</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Cum. Discards</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Cum. Revenues</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Cum. Gross Added Value</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Cum. Trip Value Per Unit Fuel</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Cum. Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Revenues Per Swept Area</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QCustomPlot" name="plotHarbours" native="true"/>
             </item>
            </layout>
           </widget>
@@ -641,32 +641,32 @@
                 </property>
                 <item>
                  <property name="text">
-                  <string>Cum Catches</string>
+                  <string>Cum. Catches</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Cum Discards</string>
+                  <string>Cum. Discards</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Revenues</string>
+                  <string>Cum. Revenues</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Gross Added Value</string>
+                  <string>Cum. Gross Added Value</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>VPUF</string>
+                  <string>Fishing Trip Value Per Unit Fuel</string>
                  </property>
                 </item>
                 <item>
                  <property name="text">
-                  <string>Swept Area</string>
+                  <string>Cum. Seabed Swept Area</string>
                  </property>
                 </item>
                 <item>

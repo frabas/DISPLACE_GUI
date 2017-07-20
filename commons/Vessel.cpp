@@ -34,6 +34,7 @@
 #include <assert.h>
 
 #include <Node.h>
+#include <Benthos.h>
 #include <Metier.h>
 #include <Population.h>
 #include <comstructs.h>
@@ -1626,7 +1627,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes,
+void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& populations, vector<Node* >& nodes, vector<Benthos* >& benthoshabs,
                       vector<int>& implicit_pops, int& tstep, double& graph_res,bool& is_tacs, bool& is_individual_vessel_quotas,
                       bool& check_all_stocks_before_going_fishing, bool& is_discard_ban, bool& is_fishing_credits,  bool& is_impact_benthos_N)
 {
@@ -1660,6 +1661,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     double gear_width_a             = this->get_metier()->get_gear_width_a();
     double gear_width_b             = this->get_metier()->get_gear_width_b();
     string gear_width_model         = this->get_metier()->get_gear_width_model();
+
+    // HABITAT EFFECT
+    vector<double> h_betas_per_pop  = benthoshabs.at( this->get_loc()->get_benthos_id() )->get_h_betas_per_pop();
+
 
 
     // SWEPT AREA
@@ -1935,7 +1940,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                                      v_betas_per_pop[pop]*1 +
                                                    // metier effect
                                                       m_betas_per_pop[pop]*1 +
-                                                   // avai*sel effect
+                                                   // habitat (benthos) effect
+                                                      h_betas_per_pop[pop]*1 +
+                                                   // fish avai*sel effect
                                                           avai_betas  // poisson regression, see the R code
                                                 )*populations[pop]->get_cpue_multiplier() );
                                         // 'min' is there for not allowing catching more than available!

@@ -26,7 +26,8 @@
 
 using namespace std;
 
-Benthos::Benthos(int _marine_landscape,
+Benthos::Benthos(int _id,
+                 int _marine_landscape,
                     const vector<Node *> &_nodes,
                     const vector<double> &_prop_funcgr_biomass_per_node,
                     const vector<double> &_prop_funcgr_number_per_node,
@@ -34,12 +35,13 @@ Benthos::Benthos(int _marine_landscape,
                     const vector<double> &_recovery_rates_per_funcgr,
                     const vector<double> &_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                     const vector<double> &_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                    bool is_impact_benthos_N
+                    bool is_impact_benthos_N,
+                    const vector<double> &_h_betas_per_pop
                     )
 {
 
     cout << "creating benthos for " << _marine_landscape << endl;
-
+    id                                = _id;
     marine_landscape                  = _marine_landscape;
     prop_funcgr_biomass_per_node      = _prop_funcgr_biomass_per_node;
     prop_funcgr_number_per_node       = _prop_funcgr_number_per_node;
@@ -47,6 +49,7 @@ Benthos::Benthos(int _marine_landscape,
     recovery_rates_per_funcgr         = _recovery_rates_per_funcgr;
     benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr=_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
     benthos_number_carrying_capacity_K_per_landscape_per_funcgr=_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
+    h_betas_per_pop                   =_h_betas_per_pop;
 
     dout(cout << "for this landscape "<< marine_landscape <<", assigned nodes are: ");
 	vector<Node* > p_spe_nodes;
@@ -56,6 +59,8 @@ Benthos::Benthos(int _marine_landscape,
 		{
 			p_spe_nodes.push_back (_nodes[  n  ]);
             dout(cout << _nodes[  n  ]->get_idx_node().toIndex() << " ");
+
+            _nodes[n]->set_benthos_id(id);
 		}
 	}
     dout(cout << endl);
@@ -106,10 +111,20 @@ Benthos::~Benthos()
 	//dtor
 }
 
+int Benthos::get_id() const
+{
+    return(id);
+}
 
 int Benthos::get_marine_landscape() const
 {
 	return(marine_landscape);
+}
+
+
+const vector<double> &Benthos::get_h_betas_per_pop() const
+{
+    return(h_betas_per_pop);
 }
 
 

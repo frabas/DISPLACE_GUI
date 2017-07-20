@@ -32,6 +32,7 @@
 #include <Vessel.h>
 #include <Ship.h>
 #include <Node.h>
+#include <Benthos.h>
 #include <Metier.h>
 
 #ifndef NO_IPC
@@ -87,6 +88,7 @@ extern vector<int> ve;
 extern vector <Vessel*> vessels;
 extern vector <Ship*> ships;
 extern vector <Population* > populations;
+extern vector <Benthos* > benthoss;
 extern int tstep;
 extern int nbpops;
 extern int export_vmslike;
@@ -333,8 +335,8 @@ static void manage_vessel(int idx_v)
                         outc(cout  << "hey, I am fishing on " << vessels[ index_v ]->get_loc()->get_idx_node().toIndex() << endl);
                         //#pragma omp critical(docatch)
                         {
-                            dout(cout  << "please, check you mail! :" << vessels[ index_v ]->read_message() << endl);
-                            vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, implicit_pops, tstep, graph_res,
+                            dout(cout  << "please, check your mail! :" << vessels[ index_v ]->read_message() << endl);
+                            vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, benthoss, implicit_pops, tstep, graph_res,
                                                          is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing,
                                                          is_discard_ban, is_fishing_credits, is_impact_benthos_N);
 

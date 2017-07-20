@@ -137,7 +137,8 @@ class COMMONSSHARED_EXPORT Node
         vector<double> get_removals_pops_at_szgroup(int name_pop) const;
         vector<double> get_pressure_pops_at_szgroup(int name_pop) const;
         vector<double> get_avai_pops_at_selected_szgroup(int name_pop) const;
-		double get_benthos_tot_biomass(int funcgr) const;
+        int get_benthos_id() const;
+        double get_benthos_tot_biomass(int funcgr) const;
         const vector<double>& get_benthos_tot_biomass() const;
         double get_benthos_tot_number(int funcgr) const;
         const vector<double>& get_benthos_tot_number() const;
@@ -147,6 +148,7 @@ class COMMONSSHARED_EXPORT Node
         const vector<double>& get_benthos_tot_number_K() const;
         double get_benthos_tot_biomass_K(int funcgr) const;
         const vector<double>& get_benthos_tot_biomass_K() const;
+        const vector<double>& get_h_betas_per_pop() const;
         double get_tariffs(int type) const;
         const vector<double>& get_tariffs() const;
         vector< vector<double> >  get_Ns_pops_at_szgroup() const;
@@ -179,6 +181,7 @@ class COMMONSSHARED_EXPORT Node
         void add_to_cumcatches_per_pop(double catches, int pop);
         void set_pop_names_on_node(int name_pop);
         void set_ff_names_on_node(int name_ff);
+        void set_benthos_id(int id);
         void set_benthos_tot_biomass(int funcgr, double value);
         void set_benthos_tot_number(int funcgr, double value);
         void set_benthos_tot_meanweight(int funcgr, double value);
@@ -258,6 +261,7 @@ private:
         double wind;
         double sst;
         double salinity;
+        int benthos_id;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file
         double benthos_meanweight;  // total bio on node from the GIS graph file

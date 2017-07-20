@@ -190,9 +190,19 @@ int Node::get_code_area() const
 }
 
 
+int Node::get_benthos_id() const
+{
+    return(benthos_id);
+}
+
+void Node::set_benthos_id(int _benthos_id)
+{
+    benthos_id=_benthos_id;
+}
+
 int Node::get_marine_landscape() const
 {
-	return(marine_landscape);
+    return(marine_landscape);
 }
 
 double Node::get_wind() const

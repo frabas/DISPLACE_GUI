@@ -32,16 +32,20 @@
 class COMMONSSHARED_EXPORT Benthos
 {
 	public:
-        Benthos(int marine_landscape,
+        Benthos(int id,
+                int marine_landscape,
             const vector<Node* > &nodes,
             const vector<double> &prop_funcgr_biomass_per_node,
             const vector<double> &prop_funcgr_number_per_node,
             const vector<double> &meanw_funcgr_number_per_node,
             const vector<double> &recovery_rates_per_funcgr,
             const vector<double> &benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
-            const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr, bool is_impact_benthos_N);
+            const vector<double> &benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
+            bool is_impact_benthos_N,
+            const vector<double> &h_betas_per_pop);
         virtual ~Benthos();
-		int get_marine_landscape() const;
+        int get_id() const;
+        int get_marine_landscape() const;
         const vector<Node* > &get_list_nodes() const;
         const vector<double> &get_prop_funcgr_biomass_per_node() const;
         const vector<double> &get_prop_funcgr_number_per_node() const;
@@ -52,9 +56,12 @@ class COMMONSSHARED_EXPORT Benthos
         void recover_benthos_tot_biomass_per_funcgroup();
         void recover_benthos_tot_number_per_funcgroup();
 
+        const vector<double> &get_h_betas_per_pop() const; // link to Vessel::do_catch() harvest function
+
     protected:
 	private:
-		int marine_landscape;
+        int id;
+        int marine_landscape;
 								 // area distribution
 		vector<Node* > list_nodes;
 								 // total biomass per functional group
@@ -64,5 +71,7 @@ class COMMONSSHARED_EXPORT Benthos
         vector<double> recovery_rates_per_funcgr;
         vector<double> benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
         vector<double> benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
+
+        vector<double> h_betas_per_pop;
 };
 #endif							 // BENTHOS_H

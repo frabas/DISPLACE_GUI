@@ -154,6 +154,7 @@ std::mutex glob_mutex;
 vector<int> ve;
 vector <Vessel*> vessels;
 vector <Ship*> ships;
+vector <Benthos* > benthoss;
 vector <Population* > populations;
 vector <Fishfarm* > fishfarms;
 vector <Windmill* > windmills;
@@ -1430,7 +1431,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     int nbland = graph_point_code_landscape.size();
 
     // creation of a vector of benthos shared (one benthos shared per landscape)
-    vector <Benthos* > benthoss(nbland);
+    benthoss = vector <Benthos* > (nbland);
 
     outc(cout << "nb of marine landscapes " << nbland << endl);
 
@@ -1524,13 +1525,21 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 
 
+        vector<double> h_betas_per_pop;
+        for (int a_pop=0; a_pop<nbpops; ++a_pop)
+        {
+            h_betas_per_pop.push_back(0);
+        }
+        //TO DO: READ FROM INPUT FILE
+
 
         // add e.g. 2 functional groups per shared
         // and init with an arbitrary biomass.
         // init_biomass will be distributed evenly among nodes
         // belonging to this particular landscape
 
-        benthoss[landscape] =   new Benthos(a_marine_landscape,
+        benthoss[landscape] =   new Benthos(landscape,
+                                            a_marine_landscape,
                                             nodes,
                                             init_prop_funcgr_biomass_per_node,
                                             init_prop_funcgr_number_per_node,
@@ -1538,7 +1547,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                             init_recovery_rates_per_funcgr,
                                             init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                             init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
-                                            is_impact_benthos_N);
+                                            is_impact_benthos_N,
+                                            h_betas_per_pop);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 

@@ -384,7 +384,6 @@ public:
     void parseOutputStatsFile (QString file, int tstep);
 
     void commitNodesStatsFromSimu(int tstep, bool force = false);
-    void commitFishfarmsStats(int tstep);
 
     // Stats collecting. Must store data to db
     void startCollectingStats();
@@ -396,11 +395,13 @@ public:
     void collectPopTariffs(int step, int node_idx, vector<double> tariffs);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
+
     void collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass);
     void collectPopBenthosNumber(int step, int node_idx, int funcid, double benthosnumber);
     void collectPopBenthosMeanWeight (int step, int node_idx, int funcid, double meanweight);
     void collectPopBenthosBiomassOverK(int step, int node_idx, int funcid, double benthosbiomassoverK);
     void collectPopBenthosNumberOverK(int step, int node_idx, int funcid, double benthosnumberoverK);
+    void commitPopBenthosStats(int tstep);
 
     void collectFishfarmFishMeanWeight (int step, int node_idx, int farmid, int farmtype, double meanw_kg);
     void collectFishfarmFishHarvestedKg (int step, int node_idx,  int farmid, int farmtype, double fish_harvested_kg);
@@ -408,6 +409,7 @@ public:
     void collectFishfarmAnnualProfit (int step, int node_idx, int farmid, int farmtype, double fishfarm_annualprofit);
     void collectFishfarmNetDischargeN (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeN);
     void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeP);
+    void commitFishfarmsStats(int tstep);
 
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);

@@ -323,51 +323,49 @@ void OutputFileParser::parsePopCumcatchesPerPop(QFile *file, int tstep, Displace
 
 void OutputFileParser::parsePopBenthosStats(QFile *file, int tstep, DisplaceModel *model, int period)
 {
+    Q_UNUSED(period);
+    Q_UNUSED(tstep);
+
     QTextStream strm (file);
     bool ok;
 
-    int step, last_period = -1;
+    int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         step = fields[1].toInt();
 
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-            int funcid = fields[0].toInt();
-            int nodeid = fields[2].toInt();
-
-            double benthosnumber = fields[5].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong benthosnumber %1").arg(fields[5]).toStdString());
-            model->collectPopBenthosNumber (step, nodeid, funcid, benthosnumber);
-
-            double benthosbiomass = fields[6].toDouble(&ok);  // deduced from N*meanw
-            if (!ok) throw std::runtime_error(QString("wrong benthosbiomass %1").arg(fields[6]).toStdString());
-            model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
-
-            double meanweight = fields[7].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong meanweight %1").arg(fields[7]).toStdString());
-            model->collectPopBenthosMeanWeight(step, nodeid, funcid, meanweight);
-
-            double benthosbiomassOverK = fields[8].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong benthosbiomassOverK %1").arg(fields[8]).toStdString());
-            model->collectPopBenthosBiomassOverK(step, nodeid, funcid, benthosbiomassOverK);
-
-            double benthosnumberOverK = fields[9].toDouble(&ok);
-            if (!ok) throw std::runtime_error(QString("wrong benthosnumberOverK %1").arg(fields[9]).toStdString());
-            model->collectPopBenthosNumberOverK(step, nodeid, funcid, benthosnumberOverK);
-
+        if (last_step != -1 && last_step != step) {
+            model->commitPopBenthosStats(last_step);
         }
+
+        int funcid = fields[0].toInt();
+        int nodeid = fields[2].toInt();
+
+        double benthosnumber = fields[5].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong benthosnumber %1").arg(fields[5]).toStdString());
+        model->collectPopBenthosNumber (step, nodeid, funcid, benthosnumber);
+
+        double benthosbiomass = fields[6].toDouble(&ok);  // deduced from N*meanw
+        if (!ok) throw std::runtime_error(QString("wrong benthosbiomass %1").arg(fields[6]).toStdString());
+        model->collectPopBenthosBiomass (step, nodeid, funcid, benthosbiomass);
+
+        double meanweight = fields[7].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong meanweight %1").arg(fields[7]).toStdString());
+        model->collectPopBenthosMeanWeight(step, nodeid, funcid, meanweight);
+
+        double benthosbiomassOverK = fields[8].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong benthosbiomassOverK %1").arg(fields[8]).toStdString());
+        model->collectPopBenthosBiomassOverK(step, nodeid, funcid, benthosbiomassOverK);
+
+        double benthosnumberOverK = fields[9].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong benthosnumberOverK %1").arg(fields[9]).toStdString());
+        model->collectPopBenthosNumberOverK(step, nodeid, funcid, benthosnumberOverK);
+
+        last_step = step;
     }
 
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
+    model->commitPopBenthosStats(last_step);
 }
 
 

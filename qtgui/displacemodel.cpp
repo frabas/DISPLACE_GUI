@@ -558,16 +558,10 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
        // mWindmillStatsDirty = false;
     }
 
-    if (mStatsBenthosCollected.dirty() || force) {
-        mStatsBenthos.insertValue(tstep, mStatsBenthosCollected);
-        mStatsBenthosCollected.setDirty(false);
-    }
-
     if (mCalendar && mCalendar->isYear(tstep)) {
         mStatsNationsCollected.clear();
         mStatsHarboursCollected.clear();
         mStatsMetiersCollected.clear();
-        mStatsBenthosCollected.clear();
 
 #if 0       // Not sure if this is needed. Disabling it for now.
         for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
@@ -701,6 +695,20 @@ void DisplaceModel::collectPopBenthosNumberOverK(int step, int node_idx, int fun
                                           benthosnumberoverK);
 }
 
+void DisplaceModel::commitPopBenthosStats(int tstep)
+{
+    if (mStatsBenthosCollected.dirty()) {
+        mStatsBenthos.insertValue(tstep, mStatsBenthosCollected);
+        mStatsBenthosCollected.setDirty(false);
+    }
+
+    // Clear the statistics at end.
+#if 0
+    if (mCalendar && mCalendar->isYear(tstep)) {
+        mStatsBenthosCollected.clear();
+    }
+#endif
+}
 
 void DisplaceModel::collectFishfarmFishMeanWeight(int step, int node_idx, int farmid, int farmtype, double meanw_kg)
 {

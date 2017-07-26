@@ -538,6 +538,7 @@ void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model
     // to be completed.
     QTextStream strm (file);
 
+    // TODO: last_step isn't used anymore. Demand the management of this to the inner collector.
     int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();

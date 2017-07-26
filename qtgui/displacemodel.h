@@ -507,6 +507,7 @@ private:
     bool mNodesStatsDirty;
     bool mPopStatsDirty;
     bool mVesselsStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
+    int m_vessel_last_step;     // TODO: Same as above
     bool mFirmsStatsDirty;
     bool mShipsStatsDirty;
     bool mWindmillStatsDirty;

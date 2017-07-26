@@ -307,6 +307,8 @@ bool DisplaceModel::clearStats()
 
     mStatsNations.clear();
     mStatsNationsCollected.clear();
+    m_vessel_last_step = -1;
+    mVesselsStatsDirty = false;
 
     mStatsHarbours.clear();
     mStatsHarboursCollected.clear();
@@ -801,6 +803,10 @@ void DisplaceModel::collectPopdynSSB(int step, int popid, const QVector<double> 
 
 void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 {
+    if (m_vessel_last_step != -1 && tstep != m_vessel_last_step) {
+        commitVesselsStats(m_vessel_last_step);
+    }
+
     std::shared_ptr<VesselData> vessel;
     if (stats.vesselId != -1 && stats.vesselId < mVessels.size())
         vessel = mVessels.at(stats.vesselId);
@@ -922,10 +928,12 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     }
 
     mVesselsStatsDirty = true;
+    m_vessel_last_step = tstep;
 }
 
 void DisplaceModel::commitVesselsStats(int tstep)
 {
+    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
     if (mVesselsStatsDirty) {
         mStatsNations.insertValue(tstep, mStatsNationsCollected);
         if (mDb)

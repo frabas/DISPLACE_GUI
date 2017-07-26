@@ -533,35 +533,31 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model,
 
 void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model, int period)
 {
+    Q_UNUSED(period);
+
     // to be completed.
     QTextStream strm (file);
 
-    int step, last_period = -1;
+    int step, last_step = -1;
     while (!strm.atEnd()) {
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         step = fields[1].toInt();
 
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-
-            VesselStats vs = parseVesselStatLine(fields);
-            if (vs.vesselId == -1) {
-                qWarning() << "Line: " << line;
-            } else {
-                model->collectVesselStats(step, vs);
-            }
+        if (last_step != -1 && last_step != step) {
+            model->commitVesselsStats(last_step);
         }
+
+        VesselStats vs = parseVesselStatLine(fields);
+        if (vs.vesselId == -1) {
+            qWarning() << "Line: " << line;
+        } else {
+            model->collectVesselStats(step, vs);
+        }
+        last_step = step;
     }
 
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
+    model->commitVesselsStats(tstep);
 }
 
 VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)

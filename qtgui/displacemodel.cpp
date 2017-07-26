@@ -533,19 +533,7 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         mPopStatsDirty = false;
     }
 
-    if (mVesselsStatsDirty || force) {
-        mStatsNations.insertValue(tstep, mStatsNationsCollected);
-        if (mDb)
-            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
-
-        // Harbours stats are not saved on db, but loaded on the fly
-        mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
-        mStatsMetiers.insertValue(tstep, mStatsMetiersCollected);
-        mVesselsStatsDirty = false;
-    }
-
     if (mShipsStatsDirty || force) {
-
         mShipsStatsDirty = false;
     }
 
@@ -934,6 +922,20 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     }
 
     mVesselsStatsDirty = true;
+}
+
+void DisplaceModel::commitVesselsStats(int tstep)
+{
+    if (mVesselsStatsDirty) {
+        mStatsNations.insertValue(tstep, mStatsNationsCollected);
+        if (mDb)
+            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
+
+        // Harbours stats are not saved on db, but loaded on the fly
+        mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
+        mStatsMetiers.insertValue(tstep, mStatsMetiersCollected);
+        mVesselsStatsDirty = false;
+    }
 }
 
 void DisplaceModel::clearAllNodes()

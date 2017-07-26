@@ -417,6 +417,7 @@ public:
     void collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value);
 
     void collectVesselStats (int step, const VesselStats &stats);
+    void commitVesselsStats(int tstep);
 
     /* Editor stuff */
 
@@ -505,7 +506,7 @@ private:
     int mLastStats;
     bool mNodesStatsDirty;
     bool mPopStatsDirty;
-    bool mVesselsStatsDirty;
+    bool mVesselsStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
     bool mFirmsStatsDirty;
     bool mShipsStatsDirty;
     bool mWindmillStatsDirty;

@@ -78,6 +78,7 @@ void SimulatorIpcManager::threadStarted()
                     stats.vesselId = data->idx;
                     stats.timeAtSea = data->timeatsea;
                     stats.cumFuelCons = data->cumfcons;
+                    stats.vpuf = data->vpuf;
                     stats.metierId = data->metier;
 
                     int pop = data->popnum;

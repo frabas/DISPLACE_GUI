@@ -71,6 +71,8 @@ public:
     double getFuelCost() const;
     void setFuelCost(double value);
 
+    void addVpuf(double value);
+
     double getGav() const;
     void setGav(double value);
 
@@ -82,6 +84,7 @@ private:
     double mRevenueExAV;
     double cumFuelCons;
     double fuelCost;
+    double vpuf;
     double gav;
     double sweptArea;
     double revenuePerSweptArea;
@@ -92,7 +95,7 @@ private:
 
 class VesselStats {
 public:
-    double vpuf() const { return revenueAV / cumFuelCons; }
+    //deprecated: double vpuf() const { return revenueAV / cumFuelCons; }
 
     int tstep = 0;
 
@@ -105,6 +108,7 @@ public:
     double timeAtSea = 0;
     int reasonToGoBack = 0;
     double cumFuelCons = 0;
+    double vpuf = 0;
     double fuelCost = 0;
     double gav = 0;
     double sweptArea = 0;

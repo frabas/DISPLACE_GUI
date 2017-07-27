@@ -157,7 +157,11 @@ void VesselData::setRevenuePerSweptArea(double value)
 
 void VesselData::addRevenuePerSweptArea(double value)
 {
-    revenuePerSweptArea += value;
+    revenuePerSweptArea = value;
 }
 
+void VesselData::addVpuf(double value)
+{
+    vpuf = value;
+}
 

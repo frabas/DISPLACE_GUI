@@ -835,6 +835,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->addCumFuelCons(stats.cumFuelCons);
         vessel->addSweptArea(stats.sweptArea);
         vessel->addRevenuePerSweptArea(stats.revenuePerSweptArea);
+        vessel->addVpuf(stats.vpuf);
         nat = vessel->getNationality();
     } else {
         // retrieve nationality from vessel name
@@ -864,7 +865,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf = stats.vpuf();
+    mStatsNationsCollected[nat].mVpuf = stats.vpuf;
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
@@ -877,7 +878,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
         mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
         mStatsHarboursCollected[hidx].mGav += stats.gav;
-        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf();
+        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf;
         mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
         mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
     }
@@ -891,7 +892,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
         mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
         mStatsMetiersCollected[midx].gav += stats.gav;
-        mStatsMetiersCollected[midx].vpuf =  stats.vpuf();
+        mStatsMetiersCollected[midx].vpuf =  stats.vpuf;
         mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
         mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
     }

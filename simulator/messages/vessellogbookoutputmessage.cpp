@@ -34,6 +34,12 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
     logbook.revenue_from_av_prices=v->getLastTripRevenues();
     logbook.revenue_explicit_from_av_prices=v->getLastTripExplicitRevenues();
 
+    logbook.vpuf=0.0;
+    if(logbook.cumfcons>1)
+    {
+        logbook.vpuf = logbook.revenue_from_av_prices/logbook.cumfcons;
+    }
+
     // fill in for catches
     int NBSZGROUP=14;
     vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
@@ -97,12 +103,10 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
     logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
     logbook.gav2=logbook.revenue_from_av_prices-logbook.fuelcost;
     logbook.sweptarea=v->get_sweptareathistrip();
-    if(logbook.sweptarea>0)
+    logbook.revenuepersweptarea=0.0;
+    if(logbook.sweptarea>1e-3)
     {
         logbook.revenuepersweptarea=logbook.revenue_from_av_prices /logbook.sweptarea;
-    } else
-    {
-    logbook.revenuepersweptarea=0;
     }
 
 }
@@ -133,6 +137,7 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
     ss  << freq_metiers << " " << 0 << " " ;
     ss  << logbook.revenue_from_av_prices << " " ;
     ss  << logbook.fuelcost << " " ;
+    ss  << logbook.vpuf << " " ;
     ss  << 0 << " " ;
     ss  << logbook.gav2 << " " ;
     ss  << " " << std::endl;

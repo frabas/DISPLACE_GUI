@@ -623,13 +623,20 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.revenueAV = toDouble(fields[10 + pop + 2]);
         v.revenueExAV = toDouble(fields[10 + pop + 3]);
         v.fuelCost = toDouble(fields[10 + pop + 4]);
-        v.gav = toDouble(fields[10 + pop + 6]);
-        v.sweptArea = toDouble(fields[10 + pop + 7]);
-        v.revenuePerSweptArea = toDouble(fields[10 + pop + 8]);
+        v.vpuf =0.0;
+        if(v.fuelCost>1) {
+            v.vpuf = toDouble(fields[10 + pop + 5]);
+        }
+        v.gav = toDouble(fields[10 + pop + 7]);
+        v.sweptArea = toDouble(fields[10 + pop + 8]);
+        v.revenuePerSweptArea =0.0;
+        if(v.sweptArea>1e-4) {
+            v.revenuePerSweptArea = toDouble(fields[10 + pop + 9]);
+        }
 
         int expop = mModel->getInterestingPops().size(); // discards recorded for explicit pop only
         for (int i = 0; i < expop; ++i) {
-            double value = toDouble(fields[10+pop+9+i]);
+            double value = toDouble(fields[10+pop+10+i]);
             v.mDiscards.push_back(value);
         }
 

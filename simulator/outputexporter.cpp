@@ -47,7 +47,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     struct VesselLogbookMessage {
         unsigned int tstep, tstepdep;
         int rtbb, node, idx;
-        double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, gav2, sweptarea, revenuepersweptarea;
+        double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, vpuf, gav2, sweptarea, revenuepersweptarea;
         size_t popnum;
         double pop[];
     } logbook;
@@ -65,6 +65,12 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 
     logbook.revenue_from_av_prices=v->getLastTripRevenues();
     logbook.revenue_explicit_from_av_prices=v->getLastTripExplicitRevenues();
+
+    logbook.vpuf=0.0;
+    if(logbook.cumfcons>1)
+    {
+        logbook.vpuf = logbook.revenue_from_av_prices/logbook.cumfcons;
+    }
 
     // fill in for catches
     int NBSZGROUP=14;
@@ -133,15 +139,13 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     logbook.gav2=logbook.revenue_from_av_prices-logbook.fuelcost;
     
     logbook.sweptarea=v->get_sweptareathistrip();
-    if(logbook.sweptarea>0)
+
+    logbook.revenuepersweptarea=0.0;
+    if(logbook.sweptarea>1e-3)
     {
           logbook.revenuepersweptarea=logbook.revenue_from_av_prices/logbook.sweptarea;
     } 
-    else
-    {
-     logbook.revenuepersweptarea=0;   
-    }   
-    
+
     std::ostringstream ss;
 
     ss << setprecision(0) << fixed;
@@ -162,6 +166,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     ss  << logbook.revenue_from_av_prices << " " ;
     ss  << logbook.revenue_explicit_from_av_prices << " " ;
     ss  << logbook.fuelcost << " " ;
+    ss  << logbook.vpuf << " " ;
     ss  << 0 << " " ;
     ss  << logbook.gav2 << " " ;
     ss  << logbook.sweptarea << " " ;

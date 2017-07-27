@@ -147,7 +147,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
     mStatsLayerCumcatchesWithThreshold[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches With 70\% Threshold")).arg(model_n).toStdString()));
-    addOutputLayer(model_n, OutLayerCumCatchesWithThreshold, mStatsLayerCumcatchesWithThreshold[model_n],type != DisplaceModel::LiveModelType ? false : true);
+    addOutputLayer(model_n, OutLayerCumCatchesWithThreshold, mStatsLayerCumcatchesWithThreshold[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerWind[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Wind")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerWind, mStatsLayerWind[model_n], type != DisplaceModel::LiveModelType ? false : false);

@@ -245,8 +245,8 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselS
     QSqlQuery q(mDb),qn(mDb);
 
     bool r = q.prepare("INSERT INTO " + TBL_VESSELS_STATS_TM
-                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,explicit_revenue_av,cumfuel,fuelcost,gav,sweptarea, revenuepersweptarea)"
-                       + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+                       + "(tstep,vid,timeatsea,harbour,reason,revenue_av,explicit_revenue_av,cumfuel,fuelcost, vpuf, gav,sweptarea, revenuepersweptarea)"
+                       + " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
     DB_ASSERT(r,q);
 
     r = qn.prepare("INSERT INTO " + TBL_VESSELS_STATS_TMSZ
@@ -263,6 +263,7 @@ void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselS
     q.addBindValue(stats.revenueExAV);
     q.addBindValue(stats.cumFuelCons);
     q.addBindValue(stats.fuelCost);
+    q.addBindValue(stats.vpuf);
     q.addBindValue(stats.gav);
     q.addBindValue(stats.sweptArea);
     q.addBindValue(stats.revenuePerSweptArea);
@@ -780,7 +781,7 @@ bool DbHelper::loadHistoricalStatsForVessels(const QList<int> &steps, const QLis
     DB_ASSERT(res,q);
 
     QSqlQuery q2(mDb);
-    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),SUM(explicit_revenue_av),harbour,SUM(gav),SUM(revenue_av)/SUM(cumfuel) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
+    res = q2.prepare("SELECT vid,SUM(timeatsea),SUM(revenue_av),SUM(explicit_revenue_av),harbour,SUM(gav),SUM(vpuf) FROM " + TBL_VESSELS_STATS_TM + " WHERE tstep<=? GROUP BY vid");
     DB_ASSERT(res,q2);
 
     foreach(int tstep, steps) {

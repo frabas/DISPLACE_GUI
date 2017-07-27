@@ -73,7 +73,7 @@ struct COMMONSSHARED_EXPORT VesselLogbookMessage {
     unsigned int tstep = 0, tstepdep = 0;
     int rtbb = 0, node = -1, idx = -1;
     double cumstm = 0, timeatsea = 0,cumfcons = 0,travdist = 0;
-    double revenue_from_av_prices = 0, revenue_explicit_from_av_prices = 0, fuelcost = 0, gav2 = 0, sweptarea=0, revenuepersweptarea=0;
+    double revenue_from_av_prices = 0, revenue_explicit_from_av_prices = 0, fuelcost = 0, vpuf = 0, gav2 = 0, sweptarea=0, revenuepersweptarea=0;
     size_t popnum = 0;
     int metier = 0;
     double pop[];

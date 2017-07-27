@@ -101,6 +101,16 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
+class NodeWithCumCatchesWithThresholdGraphics : public NodeGraphics {
+public:
+    NodeWithCumCatchesWithThresholdGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
 class NodeWithTariffsGraphics : public NodeGraphics {
 public:
     NodeWithTariffsGraphics(NodeData *node, MapObjectsController *controller, int indx)

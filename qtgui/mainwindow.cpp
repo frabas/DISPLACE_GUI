@@ -1096,7 +1096,7 @@ void MainWindow::on_actionImport_results_triggered()
         QStringList filesToLoad {
             "popnodes_start_%1.dat",
             "popnodes_cumftime_%1.dat", "popnodes_cumsweptarea_%1.dat",
-            "popnodes_cumcatches_%1.dat", "popnodes_tariffs_%1.dat",
+            "popnodes_cumcatches_%1.dat", "popnodes_cumcatches_with_threshold_%1.dat", "popnodes_tariffs_%1.dat",
             "popnodes_impact_%1.dat", "popnodes_cumulcatches_per_pop_%1.dat",
             "benthosnodes_tot_biomasses_%1.dat",
             "benthosnodes_tot_numbers_%1.dat",

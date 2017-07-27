@@ -212,6 +212,7 @@ public:
         OutLayerCumFTime,
         OutLayerCumSweptArea,
         OutLayerCumCatches,
+        OutLayerCumCatchesWithThreshold,
 
         OutLayerMax
 
@@ -380,6 +381,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumftime[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumsweptarea[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatches[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerCumcatchesWithThreshold[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffAll[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffPop[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerTariffBenthos[MainWindow::MAX_MODELS];

@@ -101,6 +101,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithCumCatchesGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithCumCatchesWithThresholdRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithCumCatchesWithThresholdGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -218,6 +223,11 @@ void NodeMapObject::updateProperties()
         break;
 
     case GraphNodeWithCumCatchesRole:
+        text += QString("<br/><b>Accum.catches(kg land.+disc.):</b> %1<br/>")
+                .arg(mNode->get_cumcatches());
+        break;
+
+    case GraphNodeWithCumCatchesWithThresholdRole:
         text += QString("<br/><b>Accum.catches(kg land.+disc.):</b> %1<br/>")
                 .arg(mNode->get_cumcatches());
         break;

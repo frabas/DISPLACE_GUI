@@ -92,7 +92,9 @@ public:
     double get_cumsweptarea() const { return mNode->get_cumsweptarea(); }
     void set_cumsweptarea(int i) { mNode->set_cumsweptarea(i); }
     double get_cumcatches() const { return mNode->get_cumcatches(); }
+    double get_cumcatches_with_threshold() const { return mNode->get_cumcatches_with_threshold(); }
     void set_cumcatches(int i) { mNode->set_cumcatches(i); }
+    void set_cumcatches_with_threshold(int i) { mNode->set_cumcatches_with_threshold(i); }
     vector<double> get_tariffs() const { return mNode->get_tariffs(); }
     void set_tariffs(vector<double> tariffs) { mNode->set_tariffs(tariffs); }
     const vector<types::NodeId> &get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }

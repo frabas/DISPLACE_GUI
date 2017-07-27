@@ -146,6 +146,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
+    mStatsLayerCumcatchesWithThreshold[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches With 70\% Threshold")).arg(model_n).toStdString()));
+    addOutputLayer(model_n, OutLayerCumCatchesWithThreshold, mStatsLayerCumcatchesWithThreshold[model_n],type != DisplaceModel::LiveModelType ? false : true);
+
     mStatsLayerWind[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Wind")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerWind, mStatsLayerWind[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
@@ -461,6 +464,7 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerCumftime[model_n]->clearGeometries();
     mStatsLayerCumsweptarea[model_n]->clearGeometries();
     mStatsLayerCumcatches[model_n]->clearGeometries();
+    mStatsLayerCumcatchesWithThreshold[model_n]->clearGeometries();
     mStatsLayerImpact[model_n]->clearGeometries();
     mStatsLayerCumcatchesPerPop[model_n]->clearGeometries();
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
@@ -540,6 +544,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerCumcatches[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesWithThresholdRole, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerCumcatchesWithThreshold[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPopImpact, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

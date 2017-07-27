@@ -160,6 +160,7 @@ class COMMONSSHARED_EXPORT Node
         int get_cumftime() const;
         double get_cumsweptarea() const;
         double get_cumcatches() const;
+        double get_cumcatches_with_threshold() const;
         void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
@@ -174,6 +175,7 @@ class COMMONSSHARED_EXPORT Node
         void set_cumftime(int tot);
         void set_cumsweptarea(double tot);
         void set_cumcatches(double tot);
+        void set_cumcatches_with_threshold(double tot);
         void add_to_cumftime(int delta_time);
         void add_to_cumsweptarea(double sweptarea);
         void add_to_sweptarea(int sweptarea);
@@ -272,6 +274,7 @@ private:
 		int cumftime;
         double cumsweptarea;
         double cumcatches;
+        double cumcatches_with_threshold;
         vector< vector<double> > Ns_pops_at_szgroup;
 		vector< vector<double> > Ns_pops_at_szgroup_at_month_start;
 		vector< vector<double> > removals_pops_at_szgroup;

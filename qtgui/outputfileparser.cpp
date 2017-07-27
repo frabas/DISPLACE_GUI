@@ -61,9 +61,11 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopCumftime(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumsweptarea_")) {
         parsePopCumsweptarea(&file, tstep, mModel, period);
+    } else if (name.startsWith("popnodes_cumcatches_with_threshold_")) {
+        parsePopCumcatchesWithThreshold(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_cumcatches_")) {
         parsePopCumcatches(&file, tstep, mModel, period);
-    } else if (name.startsWith("popnodes_tariffs_")) {
+   } else if (name.startsWith("popnodes_tariffs_")) {
         parsePopTariffs(&file, tstep, mModel, period);
     } else if (name.startsWith("popnodes_impact_")) {
         parsePopImpact(&file, tstep, mModel, period);
@@ -230,6 +232,35 @@ void OutputFileParser::parsePopCumcatches(QFile *file, int tstep, DisplaceModel 
     if (tstep == -1)
         model->commitNodesStatsFromSimu(step);
 }
+
+void OutputFileParser::parsePopCumcatchesWithThreshold(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    int step, last_period = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (step == tstep || tstep == -1) {
+            if (period != -1) {
+                int p = (step / period);
+                if (last_period < p) {
+                    model->commitNodesStatsFromSimu(step, true);
+                    last_period = p;
+                }
+            }
+            int id = fields[1].toInt();
+            double cumcatches = fields[4].toDouble();
+            model->collectPopCumcatchesWithThreshold (step, id, cumcatches);
+        }
+    }
+
+    if (tstep == -1)
+        model->commitNodesStatsFromSimu(step);
+}
+
 
 void OutputFileParser::parsePopTariffs(QFile *file, int tstep, DisplaceModel *model, int period)
 {

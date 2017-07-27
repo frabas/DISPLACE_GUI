@@ -1087,7 +1087,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     }
 
     // to get the list of nodes making xx% of the total...
-    int athreshold =80; // TO DO: put as arg...
+    int athreshold =70; // TO DO: put as arg...
     vector <double> allcumcatches;
     double sumallcumcatches;
     for (unsigned int n=0; n<nodes.size(); n++)
@@ -1161,7 +1161,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
         guiSendUpdateCommand(popnodes_cumsweptarea_filename, tstep);
         guiSendUpdateCommand(popnodes_cumcatches_filename, tstep);
-        // guiSendUpdateCommand(popnodes_cumcatches_with_threshold_filename, tstep);
+        guiSendUpdateCommand(popnodes_cumcatches_with_threshold_filename, tstep);
         guiSendUpdateCommand(popnodes_tariffs_filename, tstep);
 
         popnodes_impact.flush();

@@ -216,6 +216,15 @@ void NodeWithCumCatchesGraphics::drawShape(QPainter &painter, const qmapcontrol:
     painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
 }
 
+void NodeWithCumCatchesWithThresholdGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumcatches_with_threshold()));
+    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+}
+
+
 void NodeWithTariffsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);

@@ -50,6 +50,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
 	cumftime=0;
     cumsweptarea=0;
     cumcatches=0;
+    cumcatches_with_threshold=0;
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
@@ -561,6 +562,12 @@ double Node::get_cumcatches() const
     return(cumcatches);
 }
 
+double Node::get_cumcatches_with_threshold() const
+{
+    return(cumcatches_with_threshold);
+}
+
+
 vector<int> Node::get_pop_names_on_node ()
 {
 	return(pop_names_on_node);
@@ -603,6 +610,10 @@ void Node::set_cumcatches(double tot)
     cumcatches = tot;
 }
 
+void Node::set_cumcatches_with_threshold(double tot)
+{
+    cumcatches_with_threshold = tot;
+}
 
 void Node::set_xy(double xval, double yval)
 {

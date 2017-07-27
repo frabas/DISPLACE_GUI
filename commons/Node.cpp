@@ -1176,7 +1176,7 @@ void Node::export_popnodes_impact(ofstream& popnodes, int tstep, int pop)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(impact_on_pops.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		impact_on_pops.at(pop) << " " <<  endl;
 
@@ -1190,7 +1190,7 @@ void Node::export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, i
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot cumcatches pop
-    popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(cumcatches_per_pop.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches_per_pop.at(pop) << " " <<  endl;
 
@@ -1227,7 +1227,7 @@ void Node::export_popnodes_cumftime(ofstream& popnodes, int tstep)
 
 	popnodes << setprecision(8) << fixed;
 	// tstep / node / long / lat /  tot impact pop
-    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(cumftime>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
 		" " << this->get_x() << " " << this->get_y() << " " <<
 		cumftime << " " <<  endl;
 
@@ -1241,7 +1241,7 @@ void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  swept area
-    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(cumsweptarea>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumsweptarea << " " <<  endl;
 
@@ -1255,7 +1255,7 @@ void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
-    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+   if(cumcatches>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches << " " <<  endl;
 
@@ -1269,7 +1269,7 @@ void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tariffs
-    popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(tariffs.at(0)>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         tariffs.at(0) << " " <<  endl;
 

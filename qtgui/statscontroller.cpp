@@ -508,7 +508,7 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case RevenuePerSweptArea:
                     valueData << it.value().at(ip).mRevenuePerSweptArea;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/km^2)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
                     break;
                 }
             }
@@ -657,7 +657,7 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         break;
     case M_RevenuesPerSweptArea:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/km^2)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
         break;
     }
 

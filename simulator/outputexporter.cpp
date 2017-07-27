@@ -138,12 +138,12 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     logbook.fuelcost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
     logbook.gav2=logbook.revenue_from_av_prices-logbook.fuelcost;
     
-    logbook.sweptarea=v->get_sweptareathistrip();
+    logbook.sweptarea=v->get_sweptareathistrip()*1e6; // CAUTION: converted in m^2 for output file
 
     logbook.revenuepersweptarea=0.0;
-    if(logbook.sweptarea>1e-3)
+    if(logbook.sweptarea>10) // i.e. at least 10 sqr meters
     {
-          logbook.revenuepersweptarea=logbook.revenue_from_av_prices/logbook.sweptarea;
+          logbook.revenuepersweptarea=logbook.revenue_from_av_prices/(logbook.sweptarea); // euro per m^2
     } 
 
     std::ostringstream ss;

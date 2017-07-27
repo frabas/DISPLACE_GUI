@@ -628,10 +628,10 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
             v.vpuf = toDouble(fields[10 + pop + 5]);
         }
         v.gav = toDouble(fields[10 + pop + 7]);
-        v.sweptArea = toDouble(fields[10 + pop + 8]);
+        v.sweptArea = toDouble(fields[10 + pop + 8]); // in m^2 in the input file
         v.revenuePerSweptArea =0.0;
-        if(v.sweptArea>1e-4) {
-            v.revenuePerSweptArea = toDouble(fields[10 + pop + 9]);
+        if(v.sweptArea>10) { // at least 10 sqr meters
+            v.revenuePerSweptArea = toDouble(fields[10 + pop + 9]); // in euro per m^2 in the input file
         }
 
         int expop = mModel->getInterestingPops().size(); // discards recorded for explicit pop only

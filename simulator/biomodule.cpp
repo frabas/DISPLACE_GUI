@@ -28,6 +28,7 @@
 #include <readdata.h>
 #include <helpers.h>
 
+
 #ifndef NO_IPC
 #include <ipc.h>
 #else
@@ -84,6 +85,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           ofstream &popnodes_cumftime,
                           ofstream &popnodes_cumsweptarea,
                           ofstream &popnodes_cumcatches,
+                          ofstream &popnodes_cumcatches_with_threshold,
                           ofstream &popnodes_tariffs,
                           ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
@@ -103,6 +105,7 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           const string & popnodes_cumftime_filename,
                           const string & popnodes_cumsweptarea_filename,
                           const string & popnodes_cumcatches_filename,
+                          const string & popnodes_cumcatches_with_threshold_filename,
                           const string & popnodes_tariffs_filename,
                           const string & popnodes_benthos_biomass_filename,
                           const string & popnodes_benthos_number_filename,
@@ -1083,6 +1086,34 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
     }
 
+    // to get the list of nodes making xx% of the total...
+    int athreshold =80; // TO DO: put as arg...
+    vector <double> allcumcatches;
+    double sumallcumcatches;
+    for (unsigned int n=0; n<nodes.size(); n++)
+    {
+       double acum= nodes.at(n)->get_cumcatches();
+       allcumcatches.push_back (acum);
+       sumallcumcatches+=acum;
+    }
+    // a check
+    //for (auto i: sort_indexes_descending(allcumcatches))
+    //{
+    //  cout << allcumcatches[i] << endl;
+    //}
+    //...hereafter:
+    int it=0;
+    vector<size_t> sorted_ids = sort_indexes_descending(allcumcatches);
+    double runningsum=0;
+     double amount_at_threshold (static_cast<double>(athreshold)/100*sumallcumcatches);
+     do
+     {
+        runningsum+=allcumcatches.at(static_cast<int>(sorted_ids.at(it)));
+        nodes.at(static_cast<int>((sorted_ids.at(it))))->export_popnodes_cumcatches_with_threshold(popnodes_cumcatches_with_threshold, tstep, athreshold);
+        it+=1;
+     } while(runningsum < amount_at_threshold);
+
+
 
 
     if(dyn_pop_sce.option(Options::impact_benthos_N))
@@ -1130,6 +1161,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         guiSendUpdateCommand(popnodes_cumftime_filename, tstep);
         guiSendUpdateCommand(popnodes_cumsweptarea_filename, tstep);
         guiSendUpdateCommand(popnodes_cumcatches_filename, tstep);
+        // guiSendUpdateCommand(popnodes_cumcatches_with_threshold_filename, tstep);
         guiSendUpdateCommand(popnodes_tariffs_filename, tstep);
 
         popnodes_impact.flush();

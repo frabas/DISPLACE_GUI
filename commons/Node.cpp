@@ -1261,6 +1261,20 @@ void Node::export_popnodes_cumcatches(ofstream& popnodes, int tstep)
 
 }
 
+void Node::export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold)
+{
+
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot impact pop
+   if(cumcatches>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        cumcatches << " " << threshold << " " << endl;
+
+}
+
 void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 {
 

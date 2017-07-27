@@ -45,7 +45,6 @@ double trapezoidal(double a, double b, vector <double> sel){
 }
 
 
-
 template <typename T, size_t N>
 T* end(T (&pArray)[N])
 {

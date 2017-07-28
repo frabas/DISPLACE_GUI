@@ -1683,10 +1683,12 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
         }
     }
     // converted to the right unit i.e. km2 and assuming fishing at fspeed knots
+    //  gear_width_a an gear_width_b assumed to be taken from Eigaard et al 2016 ICESJMS Table 4.
+    // i.e. for relationships returning door spread or seine rope in metres.
     if(this->get_metier()->get_metier_type()==1){
-        swept_area = gear_width/1e6 * PING_RATE * fspeed*NAUTIC; // for trawlers
+        swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC; // for trawlers
     } else{
-        swept_area =  PI*pow(((gear_width)/(2*PI)),2);  // seiners and gillnetters
+        swept_area =  PI*pow(((gear_width/1000)/(2*PI)),2);  // seiners and gillnetters
     } //=> at this stage, swept area is km^2, but will be exported in m^2 in the logbook file to avoid any artificial raising when using in a ratio e.g. revenue per swept area
 
     dout(cout << " for this model " << gear_width_model << " the gear width is " << gear_width

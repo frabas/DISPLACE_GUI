@@ -21,43 +21,51 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
     mPlot->clearGraphs();
     double val;
 
-    QList<int> interBenthosList = model->getInterestingBenthos();
+    QList<int>  interBenthosIDsList= model->getInterestingBenthos();
 
-    auto funcGroups = model->getFunctionalGroupsList();
-    QList<int> interFuncGroupsList = funcGroups->list();
+    auto benthosTypeGroups = model->getFunctionalGroupsList();
+    QList<int> interBenthosTypesList = benthosTypeGroups->list();
 
     QList<int> graphList;
-    bool showtotal = funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
-    bool showavg =  funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Average);
-    bool showmin =  funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Min);
-    bool showmax =  funcGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
+    bool showtotal = benthosTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
+    bool showavg =  benthosTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Average);
+    bool showmin =  benthosTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Min);
+    bool showmax =  benthosTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
 
-    if (showmax)
-        graphList.push_front(-4);
-    if (showmin)
-        graphList.push_front(-3);
-    if (showavg)
-        graphList.push_front(-2);
-    if (showtotal)
-        graphList.push_front(-1);
+    /* If no farm type is selected, but aggregate is selected, select all farms */
+    if (interBenthosTypesList.size() != 0) {
+        for(int i = 0; i < model->getBenthosCount(); ++i) {
+            if (!benthosTypeGroups->has(i))
+                continue;
 
-    if (graphList.size() == 0)
-        graphList.append(interFuncGroupsList);
-
-    /* If no size is selected, but aggregate is selected, select all sizes */
-    if (interFuncGroupsList.size() == 0 && graphList.size() != 0) {
-        for(int i = 0; i < model->getNumFuncGroups(); ++i)
-            interFuncGroupsList.push_back(i);
+            if (showmax)
+                graphList.push_front(4000 + i);
+            if (showmin)
+                graphList.push_front(3000 + i);
+            if (showavg)
+                graphList.push_front(2000 + i);
+            if (showtotal)
+                graphList.push_front(1000 + i);
+        }
+    } else {
+        interBenthosTypesList.push_back(999);
+        if (showmax)
+            graphList.push_front(4999);
+        if (showmin)
+            graphList.push_front(3999);
+        if (showavg)
+            graphList.push_front(2999);
+        if (showtotal)
+            graphList.push_front(1999);
     }
 
-    /* If no benthos is selected, select all benthos */
-    if (interBenthosList.size() == 0) {
+    /* If no fishfarms is selected, select all fishfarms type */
+    if (interBenthosIDsList.size() == 0) {
         for (int i = 0; i < model->getBenthosCount(); ++i) {
-            interBenthosList.push_back(i);
+            interBenthosIDsList.push_back(i+1);
         }
     }
 
-    int szNum = interFuncGroupsList.size();
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -70,99 +78,183 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         mTimeline->end->setCoords(t, timelineMax);
     }
 
-    foreach (int funcgrp, interBenthosList) {
-        for (int igraph = 0; igraph < graphNum; ++igraph) {
-            // Creates graph. Index in list are: ip * nsz + isz
-            QCPGraph *graph = mPlot->addGraph();
-            QColor col = mPalette.colorByIndex(funcgrp);
+    for (int igraph = 0; igraph < graphNum; ++igraph) {
+        // Creates graph. Index in list are: ip * nsz + isz
+        QCPGraph *graph = mPlot->addGraph();
+        QColor col = mPalette.colorByIndex(igraph);
 
-            graph->setLineStyle(QCPGraph::lsLine);
-            graph->setPen(QPen(QBrush(col),2));
+        graph->setLineStyle(QCPGraph::lsLine);
+        graph->setPen(QPen(QBrush(col),2));
 
-            col.setAlpha(128);
-            graph->setBrush(QBrush(col));
+        col.setAlpha(128);
+        graph->setBrush(QBrush(col));
 
-            switch (graphList[igraph]) {
-            case -4:
-                graph->setName(QString(QObject::tr("FuncGrp %1 Max")).arg(funcgrp));
-                break;
-            case -3:
-                graph->setName(QString(QObject::tr("FuncGrp %1 Min")).arg(funcgrp));
-                break;
-            case -2:
-                graph->setName(QString(QObject::tr("FuncGrp %1 Avg")).arg(funcgrp));
-                break;
-            case -1:
-                graph->setName(QString(QObject::tr("FuncGrp %1 Total")).arg(funcgrp));
-                break;
-            default:
-                graph->setName(QString(QObject::tr("Benthos %1 FuncGrp %2")).arg(funcgrp).arg(graphList[igraph]+1));
-            }
-
-            graphs.push_back(graph);
-            keyData.push_back(QVector<double>());
-            valueData.push_back(QVector<double>());
+        QString group;
+        auto grp = graphList[igraph] % 1000;
+        if (grp == 999) {
+            group = "[all]";
+        } else {
+            group = QString("Type %1").arg(grp);
         }
+
+        switch (graphList[igraph] / 1000) {
+        case 4:
+            graph->setName(QString(QObject::tr("farm id %1 Max")).arg(group));
+            break;
+        case 3:
+            graph->setName(QString(QObject::tr("farm id %1 Min")).arg(group));
+            break;
+        case 2:
+            graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(group));
+            break;
+        case 1:
+            graph->setName(QString(QObject::tr("farm id %1 Total")).arg(group));
+            break;
+        }
+
+        graphs.push_back(graph);
+        keyData.push_back(QVector<double>());
+        valueData.push_back(QVector<double>());
     }
 
     int nsteps = model->getBenthosStatistics().getUniqueValuesCount();
 
+    //qDebug() << "**** Plotting " << nsteps << interFishfarmsTypesList.size();
     auto it = model->getBenthosStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterBenthos = interBenthosList.size();
-        for (int iInterBenthos = 0; iInterBenthos < nInterBenthos; ++iInterBenthos) {
+        int nInterBenthosIDs = interBenthosIDsList.size();
 
-            // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int iInterFuncGroup = 0; iInterFuncGroup < interFuncGroupsList.size(); ++iInterFuncGroup) {
-                val = getStatValue(model, it.key(), interBenthosList[iInterBenthos], interFuncGroupsList[iInterFuncGroup], stat);
-                if (iInterFuncGroup == 0) {
-                    mMin = val;
-                    mMax = val;
-                } else {
-                    if (mMin > val)
+        //qDebug() << "Step: " <<istep << it.key();
+        for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
+            //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
+            int gidx = iGraph;
+
+            auto group = graphList[iGraph] % 1000;
+
+            //qDebug() << "Graph:" << iGraph << group;
+             // calculate transversal values...
+            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
+            for (int iInterBenthosTypes = 0; iInterBenthosTypes < interBenthosTypesList.size(); ++iInterBenthosTypes) {
+                for (int iInterBenthosIDs = 0; iInterBenthosIDs < nInterBenthosIDs; ++iInterBenthosIDs) {
+
+                    /* TODO: filter on functional groups
+                    auto fmtype = model->getBenthosList()[iInterBenthosIDs];
+                    if (group != 999 && iInterBenthosTypes != fmtype)
+                        continue;
+                        */
+
+                    val = getStatValue(model, it.key(), interBenthosIDsList[iInterBenthosIDs], interBenthosTypesList[iInterBenthosTypes], stat);
+
+                    //qDebug() << iInterFishfarmsIDs << iInterFishfarmTypes << val;
+
+                    if (nsam == 0) {
                         mMin = val;
-                    if (mMax < val)
                         mMax = val;
+                        mAvg = val;
+                        mTot = val;
+                    } else {
+                        mMin = std::min (mMin, val);
+                        mMax = std::max (mMax, val);
+                        mAvg += val;
+                        mTot += val;
+                    }
+                    ++nsam;
                 }
-                mAvg += val;
-                mTot += val;
             }
-            if (szNum > 0)
-                mAvg /= szNum;
+            if (nsam > 0)
+                mAvg /= nsam;
 
-            for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-                int gidx = iInterBenthos * graphNum + iGraph;
+            //qDebug() << "Res: " << mMin << mMax << mAvg << mTot;
 
-                keyData[gidx] << it.key();
-                switch (graphList[iGraph]) {
-                case -4:
-                    val = mMax;
-                    break;
-                case -3:
-                    val = mMin;
-                    break;
-                case -2:
-                    val = mAvg;
-                    break;
-                case -1:
-                    val = mTot;
-                    break;
-                default:
-                    val = getStatValue(model, it.key(), interBenthosList[iInterBenthos], graphList[iGraph], stat);
-                    break;
-                }
-
-                valueData[gidx] << val;
+            keyData[gidx] << it.key();
+            switch (graphList[iGraph] / 1000) {
+            case 4:
+                val = mMax;
+                break;
+            case 3:
+                val = mMin;
+                break;
+            case 2:
+                val = mAvg;
+                break;
+            case 1:
+                val = mTot;
+                break;
             }
+
+            valueData[gidx] << val;
         }
         ++it;
     }
 
+#if 0
+    if (!mSaveFilename.isEmpty()) {
+        QFile f(mSaveFilename);
+        if (f.open(QIODevice::WriteOnly)) {
+            QTextStream strm(&f);
+
+
+            strm << "interFishfarmsIDsList: ";
+            for (auto x : interBenthosIDsList)
+                strm << x << " ";
+            strm << "\n\n";
+
+            for (int i = 0; i < graphs.size(); ++i) {
+                strm << "Dt " << i << " (" <<graphs.at(i)->name() << ") ";
+
+                auto const& k = keyData.at(i);
+                auto const& v = valueData.at(i);
+                for (int j = 0; j < k.size(); ++j) {
+                    strm << "," << k.at(j) << "," << v.at(j);
+                }
+                strm << "\n";
+            }
+
+            strm << "\n------\n\n";
+
+            it = model->getBenthosStatistics().getFirst();
+            for (int istep = 0; istep <nsteps; ++istep) {
+                int nInterBenthosIDs = interBenthosIDsList.size();
+
+                //qDebug() << "Step: " <<istep << it.key();
+                for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
+                    //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
+                    int gidx = iGraph;
+
+                    auto group = graphList[iGraph] % 1000;
+
+                    //qDebug() << "Graph:" << iGraph << group;
+                     // calculate transversal values...
+                    double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
+                    for (int iInterBenthosTypes = 0; iInterBenthosTypes < interBenthosTypesList.size(); ++iInterBenthosTypes) {
+                        for (int iInterBenthosIDs = 0; iInterBenthosIDs < nInterBenthosIDs; ++iInterBenthosIDs) {
+
+                            // TODO Filter out.. as in main code.
+                            /*
+                            auto fmtype = model->getFishfarmList()[iInterBenthosIDs]->mFishfarm->get_farmtype();
+                            if (group != 999 && iInterBenthosTypes != fmtype)
+                                continue;
+                                */
+
+                            val = getStatValue(model, it.key(), interBenthosIDsList[iInterBenthosIDs], interBenthosTypesList[iInterBenthosTypes], stat);
+
+                            strm << it.key() << ", " << iInterBenthosIDs << ", " << iInterBenthosTypes << ", " << group
+                                 << ", " << static_cast<int>(stat) << " ==> " << val << "\n";
+                        }
+                    }
+                }
+                ++it;
+            }
+            f.close();
+        }
+
+        mSaveFilename.clear();
+    }
+#endif
+
     for (int i = 0; i < graphs.size(); ++i) {
         graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
-
 
     switch (stat) { // stat is the index in the selecting combo box
     case BenthosStat::B_TotBiomass:

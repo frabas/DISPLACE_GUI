@@ -59,5 +59,7 @@
         <file>icons/benthos.png</file>
         <file>palettes/fishfarms_colors.p2c</file>
         <file>icons/fishfarm.png</file>
+        <file>icons/Windmill.png</file>
+        <file>icons/container-ship.png</file>
     </qresource>
 </RCC>

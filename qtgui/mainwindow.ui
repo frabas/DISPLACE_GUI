@@ -340,7 +340,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>4</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -858,6 +858,24 @@
              <widget class="QCustomPlot" name="plotFishfarms" native="true"/>
             </item>
            </layout>
+          </widget>
+          <widget class="QWidget" name="tab">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/container-ship.png</normaloff>:/icons/container-ship.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Shipping</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/Windmill.png</normaloff>:/icons/Windmill.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Windfarms</string>
+           </attribute>
           </widget>
          </widget>
         </item>

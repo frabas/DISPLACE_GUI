@@ -302,13 +302,8 @@ double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int benth
         return model->getBenthosStatistics().getValue(tstep).biomassForBenthosAndFuncGroup(funcgroup, benthos);
     case BenthosStat::B_Number:
         return model->getBenthosStatistics().getValue(tstep).numberForBenthosAndFuncGroup(funcgroup, benthos);
-    case BenthosStat::B_MeanWeight: {
-        /*
-        auto &x = model->getPopulationsAtStep(tstep, popid).getSSB();
-        if (szid < x.size())
-            return x.at(szid);*/
-        return 0;
-        }
+    case BenthosStat::B_MeanWeight:
+        return model->getBenthosStatistics().getValue(tstep).meanweightForBenthosAndFuncGroup(funcgroup, benthos);
     case BenthosStat::B_TotBiomassOverK:
         return model->getBenthosStatistics().getValue(tstep).biomassOverKForBenthosAndFuncGroup(funcgroup, benthos);
     case BenthosStat::B_NumberOverK:

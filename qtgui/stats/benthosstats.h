@@ -54,6 +54,7 @@ public:
 
     double biomassForBenthosAndFuncGroup(int funcgroup, int benthos) const;
     double numberForBenthosAndFuncGroup(int funcgroup, int benthos) const;
+    double meanweightForBenthosAndFuncGroup(int funcgroup, int benthos) const;
     double biomassOverKForBenthosAndFuncGroup(int funcgroup, int benthos) const;
     double numberOverKForBenthosAndFuncGroup(int funcgroup, int benthos) const;
 

@@ -188,7 +188,9 @@ SOURCES += \
     stats/benthosstats.cpp \
     stats/fishfarmsstats.cpp \
     plots/fishfarmsstatsplot.cpp \
-    objects/ffarmtypesentity.cpp
+    objects/ffarmtypesentity.cpp \
+    stats/shipsstats.cpp \
+    stats/windfarmsstats.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -322,7 +324,9 @@ HEADERS += \
     stats/benthosstats.h \
     stats/fishfarmsstats.h \
     plots/fishfarmsstatsplot.h \
-    objects/ffarmtypesentity.h
+    objects/ffarmtypesentity.h \
+    stats/shipsstats.h \
+    stats/windfarmsstats.h
 
 RESOURCES += \
     qtgui.qrc

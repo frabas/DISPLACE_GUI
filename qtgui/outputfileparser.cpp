@@ -85,6 +85,10 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parseVessels(&file, tstep, mModel, period);
     } else if (name.startsWith("fishfarmslogs_")) {
         parseFishfarmslogsStats(&file, tstep, mModel, period);
+    } else if (name.startsWith("ships_")) {
+        parseShipsStats(&file, tstep, mModel, period);
+    } else if (name.startsWith("windfarms_")) {
+        parseWindfarmsStats(&file, tstep, mModel, period);
     } else { /* Don't know how to handle... */
         qDebug() << "File isn't recognized: " << path;
     }
@@ -419,7 +423,7 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
         }
 
         int farmid = fields[5].toInt();
-        int farmtype = 0;
+        int farmtype = fields[4].toInt();
         int nodeid = fields[1].toInt();
 
         // tstep(0) / node(1) / long(2) / lat(3) / farmtype(4) / farmid(5) / meanw_kg(6) / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
@@ -647,3 +651,123 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
 
     return v;
 }
+
+
+
+void OutputFileParser::parseShipsStats(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    Q_UNUSED(period);
+    Q_UNUSED(tstep);
+
+    QTextStream strm (file);
+    bool ok;
+
+    int step, last_step = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (last_step != -1 && last_step != step) {
+            model->commitShipsStats(last_step);
+        }
+
+        int shipid = fields[5].toInt();
+        int shiptype = fields[4].toInt();
+        int nodeid = fields[1].toInt();
+
+        // tstep(0) / node(1) / long(2) / lat(3) /shiptype(4) / shipid(5) / nb_units / fuel_use_h /
+        // NOx_emission_gperkW / SOx_emission_percentpertotalfuelmass / GHG_emission_gperkW / PME_emission_gperkW /
+        // fuel_use_litre / NOx_emission / SOx_emission / GHG_emissions / PME_emission
+
+
+        double nb_transported_units = fields[6].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong nb_transported_units %1").arg(fields[6]).toStdString());
+        model->collectShipNbTransportedUnits (step, nodeid, shipid, shiptype, nb_transported_units);
+
+        double fuel_use_h = fields[7].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fuel_use_h %1").arg(fields[7]).toStdString());
+        model->collectShipFuelUseHour (step, nodeid, shipid,  shiptype, fuel_use_h);
+
+        double NOx_emission_gperkW = fields[8].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong NOx_emission_gperkW %1").arg(fields[8]).toStdString());
+        model->collectShipNOxEmissiongPerkW (step, nodeid, shipid,  shiptype, NOx_emission_gperkW);
+
+        double SOx_emission_percentpertotalfuelmass = fields[9].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong SOx_emission_percentpertotalfuelmass %1").arg(fields[9]).toStdString());
+        model->collectShipSOxEmissionPercentPerTotalFuelmass (step, nodeid, shipid,  shiptype, SOx_emission_percentpertotalfuelmass);
+
+        double GHG_emission_gperkW = fields[10].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong GHG_emission_gperkW %1").arg(fields[10]).toStdString());
+        model->collectShipGHGemission (step, nodeid, shipid,  shiptype, GHG_emission_gperkW);
+
+        double PME_emission_gperkW = fields[11].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong PME_emission %1").arg(fields[11]).toStdString());
+        model->collectShipPMEemission (step, nodeid, shipid,  shiptype, PME_emission_gperkW);
+
+        double fuel_use_litre = fields[12].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fuel_use_litre %1").arg(fields[12]).toStdString());
+        model->collectShipfuelUseLitre (step, nodeid, shipid,  shiptype, fuel_use_litre);
+
+        double NOx_emission = fields[13].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong NOx_emission %1").arg(fields[13]).toStdString());
+        model->collectShipNOxEmission (step, nodeid, shipid,  shiptype, NOx_emission);
+
+        double SOx_emission = fields[14].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong SOx_emission %1").arg(fields[14]).toStdString());
+        model->collectShipSOxEmission (step, nodeid, shipid,  shiptype, SOx_emission);
+
+        double GHG_emission = fields[15].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong GHG_emission %1").arg(fields[15]).toStdString());
+        model->collectShipGHGemission (step, nodeid, shipid,  shiptype, GHG_emission);
+
+        double PME_emission = fields[16].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong PME_emission %1").arg(fields[16]).toStdString());
+        model->collectShipPMEemission (step, nodeid, shipid,  shiptype, PME_emission);
+
+        last_step = step;
+    }
+
+    model->commitShipsStats(last_step);
+}
+
+
+
+void OutputFileParser::parseWindfarmsStats(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    Q_UNUSED(period);
+    Q_UNUSED(tstep);
+
+    QTextStream strm (file);
+    bool ok;
+
+    int step, last_step = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (last_step != -1 && last_step != step) {
+            model->commitWindfarmsStats(last_step);
+        }
+
+        int windfarmid = fields[5].toInt();
+        int windfarmtype = fields[4].toInt();
+        int nodeid = fields[1].toInt();
+
+        // tstep(0) / node(1) / long(2) / lat(3) / windfarmtype(4) / windfarmid(5) / kWh(6) / kW_production(7)
+
+        double kWh = fields[6].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong kWh %1").arg(fields[6]).toStdString());
+        model->collectWindfarmkWh (step, nodeid, windfarmid, windfarmtype, kWh);
+
+        double kWproduction = fields[7].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong kWproduction %1").arg(fields[7]).toStdString());
+        model->collectWindfarmkWproduction (step, nodeid, windfarmid,  windfarmtype, kWproduction);
+
+        last_step = step;
+    }
+
+    model->commitWindfarmsStats(last_step);
+}
+

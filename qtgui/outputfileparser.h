@@ -81,6 +81,9 @@ protected:
     void parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parseVessels(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parseShipsStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parseWindfarmsStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+
 
     static int toInt(const QString x) {
         bool b;

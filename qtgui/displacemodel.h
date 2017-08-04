@@ -44,6 +44,8 @@
 #include <utils/interestinglistwithspecialvalues.h>
 #include <stats/benthosstats.h>
 #include <stats/fishfarmsstats.h>
+#include <stats/shipsstats.h>
+#include <stats/windfarmsstats.h>
 
 #include <QObject>
 #include <QString>
@@ -78,6 +80,8 @@ public:
     typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
     typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
+    typedef HistoricalDataCollector<ShipsStats> ShipsStatsContainer;
+    typedef HistoricalDataCollector<WindfarmsStats> WindfarmsStatsContainer;
 
 
 
@@ -275,6 +279,11 @@ public:
     /* Fishfarms Statistics */
     const FishfarmsStatsContainer &getFishfarmsStatistics() { return mStatsFishfarms; }
 
+    /* Ships Statistics */
+    const ShipsStatsContainer &getShipsStatistics() { return mStatsShips; }
+
+    /* Windfarms Statistics */
+    const WindfarmsStatsContainer &getWindfarmsStatistics() { return mStatsWindfarms; }
 
     /* Scenario and configuration */
 
@@ -412,6 +421,22 @@ public:
     void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeP);
     void commitFishfarmsStats(int tstep);
 
+    void collectShipNbTransportedUnits (int step, int node_idx, int shipid, int shiptype,  double nb_transported_units);
+    void collectShipFuelUseHour (int step, int node_idx, int shipid,  int shiptype,  double fuel_use_h);
+    void collectShipNOxEmissiongPerkW (int step, int node_idx, int shipid, int shiptype,  double NOx_emission_gperkW);
+    void collectShipSOxEmissionPercentPerTotalFuelmass (int step, int node_idx, int shipid,  int shiptype,  double SOx_emission_percentpertotalfuelmass);
+    void collectShipGHGemission (int step, int node_idx, int shipid,  int shiptype,  double GHG_emission_gperkW);
+    void collectShipPMEemission (int step, int node_idx, int shipid,  int shiptype,  double PME_emission_gperkW);
+    void collectShipfuelUseLitre (int step, int node_idx, int shipid,  int shiptype,  double fuel_use_litre);
+    void collectShipNOxEmission (int step, int node_idx, int shipid,  int shiptype,  double NOx_emission);
+    void collectShipSOxEmission (int step, int node_idx, int shipid,  int shiptype,  double SOx_emission);
+    void collectShipGHGemissiongPerkW (int step, int node_idx, int shipid,  int shiptype,  double GHG_emission);
+    void collectShipPMEemissiongPerkW (int step, int node_idx, int shipid,  int shiptype,  double PME_emission);
+    void commitShipsStats(int tstep);
+
+    void collectWindfarmkWh (int step, int node_idx, int windfarmid, int windfarmtype, double kWh);
+    void collectWindfarmkWproduction (int step, int node_idx, int windfarmid,  int windfarmtype, double kWproduction);
+    void commitWindfarmsStats(int tstep);
 
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
@@ -552,6 +577,10 @@ private:
     BenthosStats mStatsBenthosCollected;
     FishfarmsStatsContainer mStatsFishfarms;
     FishfarmsStats mStatsFishfarmsCollected;
+    ShipsStatsContainer mStatsShips;
+    ShipsStats mStatsShipsCollected;
+    WindfarmsStatsContainer mStatsWindfarms;
+    WindfarmsStats mStatsWindfarmsCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<int, std::shared_ptr<Fishfarm> > mFishfarmInfo;

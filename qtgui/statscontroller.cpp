@@ -98,9 +98,12 @@ void StatsController::setMetiersPlot(QCustomPlot *plot)
 
     mMetTimeLine = new QCPItemLine(mPlotMetiers);
     mPlotMetiers->addItem(mMetTimeLine);
+
+
 }
 
-void StatsController::setBenthosPlot(QCustomPlot *plot)
+
+void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller)
 {
     mBenthosFuncGroupsPlot = plot;
     mBenthosFuncGroupsPlot->legend->setVisible(true);
@@ -115,6 +118,9 @@ void StatsController::setBenthosPlot(QCustomPlot *plot)
     mBenthosPlotController = new BenthosStatsPlot(plot, mBenthosTimeLine);
 
     mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
+
+    controller->setOnPopupMenuBuiltCallback(std::bind(&BenthosStatsPlot::createPopup, mBenthosPlotController, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)

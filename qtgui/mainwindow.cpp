@@ -206,6 +206,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new GraphInteractionController(ui->plotNations, this);
     new GraphInteractionController(ui->plotBenthos, this);
     auto fishfarmPlotController = new GraphInteractionController(ui->plotFishfarms, this);
+    auto benthosPlotController = new GraphInteractionController(ui->plotBenthos, this);
     new GraphInteractionController(ui->plotMetiers, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
@@ -246,7 +247,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mStatsController->setMetiersPlot(ui->plotMetiers);
     cout << "for Metiers...ok " << endl;
     cout << "for Benthos " << endl;
-    mStatsController->setBenthosPlot(ui->plotBenthos);
+    mStatsController->setBenthosPlot(ui->plotBenthos, benthosPlotController);
     cout << "for Benthos...ok " << endl;
     cout << "for Fishfarms " << endl;
     mStatsController->setFishfarmsPlot(ui->plotFishfarms, fishfarmPlotController);

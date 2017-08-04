@@ -59,7 +59,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
             graphList.push_front(1999);
     }
 
-    /* If no fishfarms is selected, select all fishfarms type */
+    /* If no benthos is selected, select all benthos type */
     if (interBenthosIDsList.size() == 0) {
         for (int i = 0; i < model->getBenthosCount(); ++i) {
             interBenthosIDsList.push_back(i+1);
@@ -99,16 +99,16 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
         switch (graphList[igraph] / 1000) {
         case 4:
-            graph->setName(QString(QObject::tr("farm id %1 Max")).arg(group));
+            graph->setName(QString(QObject::tr("benthos id %1 Max")).arg(group));
             break;
         case 3:
-            graph->setName(QString(QObject::tr("farm id %1 Min")).arg(group));
+            graph->setName(QString(QObject::tr("benthos id %1 Min")).arg(group));
             break;
         case 2:
-            graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(group));
+            graph->setName(QString(QObject::tr("benthos id %1 Avg")).arg(group));
             break;
         case 1:
-            graph->setName(QString(QObject::tr("farm id %1 Total")).arg(group));
+            graph->setName(QString(QObject::tr("benthos id %1 Total")).arg(group));
             break;
         }
 
@@ -187,14 +187,14 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         ++it;
     }
 
-#if 0
+//#if 0
     if (!mSaveFilename.isEmpty()) {
         QFile f(mSaveFilename);
         if (f.open(QIODevice::WriteOnly)) {
             QTextStream strm(&f);
 
 
-            strm << "interFishfarmsIDsList: ";
+            strm << "interBenthosIDsList: ";
             for (auto x : interBenthosIDsList)
                 strm << x << " ";
             strm << "\n\n";
@@ -250,7 +250,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
         mSaveFilename.clear();
     }
-#endif
+//#endif
 
     for (int i = 0; i < graphs.size(); ++i) {
         graphs[i]->setData(keyData.at(i), valueData.at(i));
@@ -281,6 +281,18 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
     mPlot->rescaleAxes();
     mPlot->replot();
+}
+
+void BenthosStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
+{
+    if (location == GraphInteractionController::PopupMenuLocation::Plot) {
+        menu->addAction(QObject::tr("Save Data"), std::bind(&BenthosStatsPlot::saveTo, this));
+    }
+}
+
+void BenthosStatsPlot::saveTo()
+{
+    mSaveFilename = "benthos.txt";
 }
 
 double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::BenthosStat stattype)

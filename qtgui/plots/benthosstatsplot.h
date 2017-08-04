@@ -7,6 +7,8 @@
 #include <QPen>
 #include <QColor>
 
+#include <graphinteractioncontroller.h>
+
 class DisplaceModel;
 class QCustomPlot;
 class QCPItemLine;
@@ -20,6 +22,8 @@ class BenthosStatsPlot
     double timelineMin = -1e20;
     Palette mPalette;
 
+    QString mSaveFilename;
+
 public:
     BenthosStatsPlot(QCustomPlot *plot, QCPItemLine *timeLine);
 
@@ -29,9 +33,12 @@ public:
     }
 
     void update(DisplaceModel *model, displace::plot::BenthosStat stat);
+    void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 
 private:
     double getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::BenthosStat stattype);
+    void saveTo();
+
 };
 
 #endif // BENTHOSSTATSPLOT_H

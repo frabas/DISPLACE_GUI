@@ -43,26 +43,27 @@
 #include <QMapControl/QMapControl.h>
 
 QList<objecttree::ObjectTreeEntity *> ObjectTreeModel::entityTemplates;
+
 QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Layers"),
-    QT_TR_NOOP_UTF8("Shapefile Layers"),
-    QT_TR_NOOP_UTF8("Environmental forcing"),
+    QT_TR_NOOP_UTF8("GIS Shapefile Layers"),
+    QT_TR_NOOP_UTF8("Environmental Forcing"),
     QT_TR_NOOP_UTF8("Monthly Output Layers"),
-    QT_TR_NOOP_UTF8("Monthly Tariffs"),
+    QT_TR_NOOP_UTF8("Monthly Fishing Tariffs"),
     QT_TR_NOOP_UTF8("Nodes"),
-    QT_TR_NOOP_UTF8("Harbours"),
-    QT_TR_NOOP_UTF8("Fishing Vessels"),
-    QT_TR_NOOP_UTF8("Firms"),
-    QT_TR_NOOP_UTF8("Shipping"),
-    QT_TR_NOOP_UTF8("Fishfarms"),
-    QT_TR_NOOP_UTF8("Windmills"),
     QT_TR_NOOP_UTF8("Fish Populations"),
+    QT_TR_NOOP_UTF8("Fish Size Groups or Age"),
     QT_TR_NOOP_UTF8("Benthos"),
-    QT_TR_NOOP_UTF8("Metiers"),
-    QT_TR_NOOP_UTF8("Nations"),
-    QT_TR_NOOP_UTF8("Size Groups or Age"),
-    QT_TR_NOOP_UTF8("Functional Groups"),
-    QT_TR_NOOP_UTF8("Fishfarm Types"),
+    QT_TR_NOOP_UTF8("Benthos Functional Groups"),
+    QT_TR_NOOP_UTF8("Fishing Nations"),
+    QT_TR_NOOP_UTF8("Fishing Firms"),
+    QT_TR_NOOP_UTF8("Fishing Metiers"),
+    QT_TR_NOOP_UTF8("Fishing Harbours"),
+    QT_TR_NOOP_UTF8("Fishing Vessels"),
+    QT_TR_NOOP_UTF8("Commercial Shipping"),
+    QT_TR_NOOP_UTF8("Fish Farms"),
+    QT_TR_NOOP_UTF8("Fish Farm Types"),
+    QT_TR_NOOP_UTF8("Wind Mills"),
 };
 
 ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent) :

@@ -55,6 +55,9 @@ DisplaceModel::DisplaceModel()
       mNodesStatsDirty(false),
       mPopStatsDirty(false),
       mVesselsStatsDirty(false),
+      mPopNStatsDirty(false),
+      mPopFStatsDirty(false),
+      mPopSSBStatsDirty(false),
       mFirmsStatsDirty(false),
       mShipsStatsDirty(false),
       mWindmillStatsDirty(false),
@@ -304,6 +307,12 @@ bool DisplaceModel::clearStats()
     for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
         mStatsPopulationsCollected[i].clear();
     }
+    m_popF_last_step = -1;
+    mPopFStatsDirty = false;
+    m_popSSB_last_step = -1;
+    mPopSSBStatsDirty = false;
+    m_popN_last_step = -1;
+    mPopNStatsDirty = false;
 
     mStatsNations.clear();
     mStatsNationsCollected.clear();
@@ -547,6 +556,54 @@ void DisplaceModel::commitWindfarmsStats(int tstep)
     }
 }
 
+void DisplaceModel::commitPopdynFStats(int tstep, bool force, int comment)
+{
+      if (mPopFStatsDirty || force) {
+            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+
+qDebug() <<  comment << " and then mStatsPopulations pop1 at sz  2: " << tstep << mStatsPopulations.getValue(tstep).at(1).getMortalityAt(2);
+qDebug() <<  comment << " at 745  mStatsPopulations pop1 at sz  2: "  << mStatsPopulations.getValue(745).at(1).getMortalityAt(2);
+qDebug() <<"getFirst is "<<  mStatsPopulations.getFirst().key();
+qDebug() <<" then the val at 745 should be " << getPopulationsAtStep( 745, 1).getMortalityAt(2);
+qDebug() <<" or the val at tstep should be " << getPopulationsAtStep( tstep, 1).getMortalityAt(2);
+qDebug() <<" mStatsPopulationsCollected this step " << mStatsPopulationsCollected.at(1).getMortalityAt(2);
+
+     if (mDb)
+                mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+            mPopFStatsDirty = false;
+        }
+
+
+}
+
+
+void DisplaceModel::commitPopdynSSBStats(int tstep, bool force)
+{
+      if (mPopSSBStatsDirty || force) {
+            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+
+
+     if (mDb)
+                mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+            mPopSSBStatsDirty = false;
+        }
+
+
+}
+
+void DisplaceModel::commitPopdynNStats(int tstep, bool force)
+{
+      if (mPopNStatsDirty || force) {
+            mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
+
+
+     if (mDb)
+                mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
+            mPopNStatsDirty = false;
+        }
+
+
+}
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 {
@@ -559,12 +616,16 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         mNodesStatsDirty = false;
     }
 
-    if (mPopStatsDirty || force) {
+   if (mPopStatsDirty || force) {
         mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
-        if (mDb)
+ qDebug() <<  "and then mStatsPopulations pop1 at sz  2: " << tstep << mStatsPopulations.getValue(tstep).at(1).getMortalityAt(2);
+
+
+ if (mDb)
             mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
         mPopStatsDirty = false;
     }
+
 
     if (mShipsStatsDirty || force) {
         mShipsStatsDirty = false;
@@ -1005,26 +1066,42 @@ void DisplaceModel::collectWindfarmkWproduction(int step, int node_idx, int wind
 
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setAggregate(pops);
-    mStatsPopulationsCollected[popid].setAggregateTot(value);
-    mPopStatsDirty = true;
+    if (m_popN_last_step != -1 && step != m_popN_last_step) {
+         commitPopdynNStats(m_popN_last_step);
+    }
+    //  checkStatsCollection(step);
+      mStatsPopulationsCollected[popid].setAggregate(pops);
+      mStatsPopulationsCollected[popid].setAggregateTot(value);
+    mPopNStatsDirty = true;
+    m_popN_last_step = step;
 }
 
 void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
 {
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setMortality(pops);
-    mStatsPopulationsCollected[popid].setMortalityTot(value);
-    mPopStatsDirty = true;
+       if (m_popF_last_step != -1 && step != m_popF_last_step) {
+         commitPopdynFStats(m_popF_last_step, false, 2);
+    }
+       //   checkStatsCollection(step);
+          mStatsPopulationsCollected[popid].setMortality(pops);
+          mStatsPopulationsCollected[popid].setMortalityTot(value);
+
+  qDebug() << "pops is" << pops;
+ qDebug() << "value is" << value;
+
+     mPopFStatsDirty = true;
+    m_popF_last_step = step;
 }
 
 void DisplaceModel::collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value)
 {
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setSSB(pops);
-    mStatsPopulationsCollected[popid].setSSBTot(value);
-    mPopStatsDirty = true;
+    if (m_popSSB_last_step != -1 && step != m_popSSB_last_step) {
+         commitPopdynSSBStats(m_popSSB_last_step);
+    }
+    //  checkStatsCollection(step);
+      mStatsPopulationsCollected[popid].setSSB(pops);
+      mStatsPopulationsCollected[popid].setSSBTot(value);
+    mPopSSBStatsDirty = true;
+    m_popSSB_last_step = step;
 }
 
 void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)

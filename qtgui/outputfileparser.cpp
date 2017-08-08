@@ -463,38 +463,79 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
 {
     QTextStream strm (file);
 
-    int step, last_period = -1;
+    // TODO: last_step isn't used anymore. Demand the management of this to the inner collector.
+    int step, last_step = -1;
     while (!strm.atEnd()) {
+
         QString line = strm.readLine();
         QStringList fields = line.split(" ", QString::SkipEmptyParts);
         step = fields[0].toInt();
 
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-            QVector<double> pop(model->getSzGrupsCount());
-            int id = fields[1].toInt();
 
-            double tot = 0;
-            for (int i = 2; i < fields.size(); ++i) {
-                double v = fields[i].toDouble();
-                tot += v;
-                pop[i-2] = v;
-            }
-            model->collectPopdynF(step, id, pop, tot);
+        if (last_step != -1 && last_step != step) {
+            model->commitPopdynFStats(last_step, true, 1);
         }
+
+        QVector<double> szs(model->getSzGrupsCount());
+        int popid = fields[1].toInt();
+
+        double tot_over_szs = 0;
+        for (int i = 2; i < fields.size(); ++i) {
+                double v = fields[i].toDouble();
+                tot_over_szs += v;
+                szs[i-2] = v;
+        }
+        model->collectPopdynF(step, popid, szs, tot_over_szs);
+
+
+    last_step = step;
     }
 
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
+
+
+  model->commitPopdynFStats(tstep, false, 3);
+
 }
 
+
 void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    // TODO: last_step isn't used anymore. Demand the management of this to the inner collector.
+    int step, last_step = -1;
+    while (!strm.atEnd()) {
+
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+
+        if (last_step != -1 && last_step != tstep) {
+            model->commitPopdynSSBStats(last_step, true);
+        }
+
+        QVector<double> szs(model->getSzGrupsCount());
+        int popid = fields[1].toInt();
+
+        double tot_over_szs = 0;
+        for (int i = 2; i < fields.size(); ++i) {
+                double v = fields[i].toDouble();
+                tot_over_szs += v;
+                szs[i-2] = v;
+        }
+        model->collectPopdynSSB(step, popid, szs, tot_over_szs);
+
+
+    last_step = step;
+    }
+
+    model->commitPopdynSSBStats(tstep);
+
+}
+
+
+/*void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
@@ -528,9 +569,9 @@ void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *mod
     if (tstep == -1)
         model->commitNodesStatsFromSimu(step);
 }
+*/
 
-
-void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period)
+/*void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
 
@@ -565,6 +606,45 @@ void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model,
     if (tstep == -1)
         model->commitNodesStatsFromSimu(step, true);
 }
+*/
+
+
+void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    // TODO: last_step isn't used anymore. Demand the management of this to the inner collector.
+    int step, last_step = -1;
+    while (!strm.atEnd()) {
+
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+
+        if (last_step != -1 && last_step != tstep) {
+            model->commitPopdynNStats(last_step, true);
+        }
+
+        QVector<double> szs(model->getSzGrupsCount());
+        int popid = fields[1].toInt();
+
+        double tot_over_szs = 0;
+        for (int i = 2; i < fields.size(); ++i) {
+                double v = fields[i].toDouble();
+                tot_over_szs += v;
+                szs[i-2] = v;
+        }
+        model->collectPopdynN(step, popid, szs, tot_over_szs);
+
+
+    last_step = step;
+    }
+
+    model->commitPopdynNStats(tstep);
+
+}
+
 
 void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model, int period)
 {

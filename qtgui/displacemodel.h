@@ -207,6 +207,8 @@ public:
             qDebug() << step << idx << mStatsPopulations.getValue(step).size();
             Q_ASSERT(false);
         }
+        qDebug() << "hello here" << step << idx << mStatsPopulations.getValue(step).size();
+
         return mStatsPopulations.getValue(step).at(idx);
     }
     int getPopulationsValuesCount() const {
@@ -394,6 +396,10 @@ public:
 
     void commitNodesStatsFromSimu(int tstep, bool force = false);
 
+    void commitPopdynFStats(int tstep, bool force = false, int comment=0);
+    void commitPopdynSSBStats(int tstep, bool force = false);
+    void commitPopdynNStats(int tstep, bool force = false);
+
     // Stats collecting. Must store data to db
     void startCollectingStats();
     void endCollectingStats();
@@ -533,7 +539,13 @@ private:
     bool mNodesStatsDirty;
     bool mPopStatsDirty;
     bool mVesselsStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
+    bool mPopNStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
+    bool mPopFStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
+    bool mPopSSBStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
     int m_vessel_last_step;     // TODO: Same as above
+    int m_popF_last_step;     // TODO: Same as above
+    int m_popSSB_last_step;     // TODO: Same as above
+    int m_popN_last_step;     // TODO: Same as above
     bool mFirmsStatsDirty;
     bool mShipsStatsDirty;
     bool mWindmillStatsDirty;

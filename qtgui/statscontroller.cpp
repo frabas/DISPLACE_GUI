@@ -340,8 +340,7 @@ void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat
     for (int istep = 0; istep <nsteps; ++istep) {
         int ninterPop = interPopList.size();
         for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
-
-            // calculate transversal values...
+           // calculate transversal values...
             double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
             for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
                 val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], popStat);
@@ -383,8 +382,10 @@ void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat
                 }
 
                 valueData[gidx] << val;
+                qDebug() << "it.key() is " << it.key() << " corresponding to val " << val << " given " << "interPopList[iinterpPop] "<< interPopList[iinterpPop];
             }
         }
+
         ++it;
     }
 

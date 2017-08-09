@@ -174,6 +174,7 @@ public:
     QString getFishfarmId(int idx) const;
     void updateFishfarm (int idx, float x, float y);
 
+
     const QList<std::shared_ptr<FirmData> > &getFirmList() const { return mFirms; }
     int getFirmCount() const;
     QString getFirmId(int idx) const;
@@ -186,7 +187,7 @@ public:
     void updateWindmill (int idx, float x, float y);
 
     const QList<std::shared_ptr<ShipData> > &getShipList() const { return mShips; }
-    int getShipCount() const;
+    int getShipsCount() const;
     QString getShipId(int idx) const;
     void updateShip (int tstep, int idx, float x, float y, float course);
 
@@ -333,6 +334,18 @@ public:
     bool isInterestingFishfarms(int n) const { return mInterestingFishfarms.has(n); }
     void clrInterestingFishfarms() { mInterestingFishfarms.clear(); }
 
+    QList<int> getInterestingWindfarms() const { return mInterestingWindfarms.list(); }
+    void setInterestingWindfarms(int n) { mInterestingWindfarms.set(n); }
+    void remInterestingWindfarms(int n) { mInterestingWindfarms.rem(n); }
+    bool isInterestingWindfarms(int n) const { return mInterestingWindfarms.has(n); }
+    void clrInterestingWindfarms() { mInterestingWindfarms.clear(); }
+
+    QList<int> getInterestingShips() const { return mInterestingShips.list(); }
+    void setInterestingShips(int n) { mInterestingShips.set(n); }
+    void remInterestingShips(int n) { mInterestingShips.rem(n); }
+    bool isInterestingShips(int n) const { return mInterestingShips.has(n); }
+    void clrInterestingShips() { mInterestingShips.clear(); }
+
     /* Interesting pop access functions */
     bool isInterestingSizeTotal() const { return mInterestingSizeTotal; }
     void setInterestingSizeTotal(bool b) { mInterestingSizeTotal = b; }
@@ -350,6 +363,12 @@ public:
 
     int getNumFishfarmsTypes() const;
     std::shared_ptr<InterestingListWithSpecialValues<int>>  getFishfarmsTypesList() const { return mFishfarmsTypes; }
+
+    int getNumWindfarmsTypes() const;
+    std::shared_ptr<InterestingListWithSpecialValues<int>>  getWindfarmsTypesList() const { return mWindfarmsTypes; }
+
+    int getNumShipsTypes() const;
+    std::shared_ptr<InterestingListWithSpecialValues<int>>  getShipsTypesList() const { return mShipsTypes; }
 
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingSize(int n);
@@ -549,18 +568,22 @@ private:
     QList<int> mInterestingNations;
     InterestingList<int> mInterestingBenthos;  
     InterestingList<int> mInterestingFishfarms;
+    InterestingList<int> mInterestingWindfarms;
+    InterestingList<int> mInterestingShips;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFishfarmsTypes;
+    std::shared_ptr<InterestingListWithSpecialValues<int>> mWindfarmsTypes;
+    std::shared_ptr<InterestingListWithSpecialValues<int>> mShipsTypes;
 
     QList<displace::NodePenalty> mPenaltyNodes;
 
     QList<std::shared_ptr<HarbourData>> mHarbours;
     QList<std::shared_ptr<NodeData> > mNodes;
     QList<std::shared_ptr<VesselData> > mVessels;
-    QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<FishfarmData> > mFishfarms;
     QList<std::shared_ptr<FirmData> > mFirms;
     QList<std::shared_ptr<WindmillData> > mWindmills;
+    QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<Benthos> > mBenthos;
     QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
     QList<std::shared_ptr<NationData> > mNations;

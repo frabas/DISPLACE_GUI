@@ -25,6 +25,8 @@
 
 #include <plots/benthosstatsplot.h>
 #include <plots/fishfarmsstatsplot.h>
+#include <plots/windfarmsstatsplot.h>
+#include <plots/shipsstatsplot.h>
 
 #include <functional>
 
@@ -171,6 +173,12 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mfarmTypeGroupsPlot) {
         updateFishfarmsStats(model, mSelectedFishfarmsStat);
     }
+    if (mShipTypeGroupsPlot) {
+        updateShipsStats(model, mSelectedShipsStat);
+    }
+    if (mWindfarmTypeGroupsPlot) {
+        updateWindfarmsStats(model, mSelectedWindfarmsStat);
+    }
 
 
     mLastModel = model;
@@ -212,6 +220,17 @@ void StatsController::setFishfarmsStat(displace::plot::FishfarmsStat stat)
     updateStats(mLastModel);
 }
 
+void StatsController::setWindfarmsStat(displace::plot::WindfarmsStat stat)
+{
+    mSelectedWindfarmsStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setShipsStat(displace::plot::ShipsStat stat)
+{
+    mSelectedShipsStat = stat;
+    updateStats(mLastModel);
+}
 
 void StatsController::initPlots()
 {
@@ -756,3 +775,14 @@ void StatsController::updateFishfarmsStats(DisplaceModel *model, displace::plot:
 {
     mFishfarmsPlotController->update(model, stat);
 }
+
+void StatsController::updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat)
+{
+    mWindfarmsPlotController->update(model, stat);
+}
+
+void StatsController::updateShipsStats(DisplaceModel *model, displace::plot::ShipsStat stat)
+{
+    mShipsPlotController->update(model, stat);
+}
+

@@ -177,3 +177,64 @@ void ShipsStats::collectPMEemissiongPerkW(int step, int shipid, int shiptypeid, 
     get(shipid, shiptypeid).PME_emission += PME_emission;
     setDirty();
 }
+
+
+double ShipsStats::NbTransportedUnitsForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).nb_transported_units;
+}
+
+
+double ShipsStats::FuelPerHourForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).nb_transported_units;
+}
+
+double ShipsStats::NOxEmissionFactorForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).NOx_emission_gperkW;
+}
+
+double ShipsStats::SOxEmissionFactorForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).SOx_emission_percentpertotalfuelmass;
+}
+
+double ShipsStats::GHGEmissionFactorForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).GHG_emission_gperkW;
+}
+
+double ShipsStats::PMEEmissionFactorForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).PME_emission_gperkW;
+}
+
+double ShipsStats::FuelUseLitreForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).fuel_use_litre;
+}
+
+double ShipsStats::NOxEmissionForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).NOx_emission;
+}
+
+double ShipsStats::SOxEmissionForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).SOx_emission;
+}
+
+double ShipsStats::GHGEmissionForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).GHG_emission;
+}
+
+double ShipsStats::PMEEmissionForShipAndShipGroup(int shipid, int shiptypeid) const
+{
+    return get(shipid, shiptypeid).PME_emission;
+}
+
+
+
+

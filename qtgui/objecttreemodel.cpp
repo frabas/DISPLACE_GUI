@@ -38,6 +38,8 @@
 #include <objects/szgroupentity.h>
 #include <objects/bfunctionalgroupsentity.h>
 #include <objects/ffarmtypesentity.h>
+#include <objects/wfarmtypesentity.h>
+#include <objects/shiptypesentity.h>
 
 #include <displacemodel.h>
 #include <QMapControl/QMapControl.h>
@@ -61,9 +63,11 @@ QString ObjectTreeModel::entityNames[] = {
     QT_TR_NOOP_UTF8("Fishing Harbours"),
     QT_TR_NOOP_UTF8("Fishing Vessels"),
     QT_TR_NOOP_UTF8("Commercial Shipping"),
+    QT_TR_NOOP_UTF8("Commercial Shipping Types"),
     QT_TR_NOOP_UTF8("Fish Farms"),
     QT_TR_NOOP_UTF8("Fish Farm Types"),
-    QT_TR_NOOP_UTF8("Wind Mills"),
+    QT_TR_NOOP_UTF8("Wind Farms"),
+    QT_TR_NOOP_UTF8("Wind Farms Types"),
 };
 
 ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *stats, QObject *parent) :
@@ -103,6 +107,13 @@ ObjectTreeModel::ObjectTreeModel(MapObjectsController *map, StatsController *sta
 
         farmtypes = new objecttree::FFarmTypesEntity(this, nullptr);
         entityTemplates[FishfarmsTypes] = farmtypes;
+
+        windfarmtypes = new objecttree::WFarmTypesEntity(this, nullptr);
+        entityTemplates[WindfarmsTypes] = windfarmtypes;
+
+        shiptypes = new objecttree::ShipTypesEntity(this, nullptr);
+        entityTemplates[ShipsTypes] = shiptypes;
+
     }
 }
 
@@ -189,6 +200,8 @@ void ObjectTreeModel::setCurrentModel(int idx, DisplaceModel *model)
     mModelIdx = idx;
 
     if (mModel) {
+        windfarmtypes->setInterestingList(mModel->getWindfarmsTypesList());
+        shiptypes->setInterestingList(mModel->getShipsTypesList());
         farmtypes->setInterestingList(mModel->getFishfarmsTypesList());
         funcgroups->setInterestingList(mModel->getFunctionalGroupsList());
     }

@@ -1651,7 +1651,7 @@ void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float cou
 
 
 
-int DisplaceModel::getShipCount() const
+int DisplaceModel::getShipsCount() const
 {
     return mShips.size();
 }
@@ -1868,6 +1868,17 @@ int DisplaceModel::getNumFishfarmsTypes() const
     return 3; // TO DO: detect nb of farms type
 }
 
+int DisplaceModel::getNumWindfarmsTypes() const
+{
+    // return config().getNumWindfarmsTypes();
+    return 3; // TO DO: detect nb of farms type
+}
+
+int DisplaceModel::getNumShipsTypes() const
+{
+    // return config().getNumShipsTypes();
+    return 5; // TO DO: detect nb of ship type
+}
 
 void DisplaceModel::setInterestingSize(int n)
 {

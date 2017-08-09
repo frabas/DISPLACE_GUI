@@ -90,7 +90,6 @@ void WindfarmsStats::clear()
 }
 
 
-
 void WindfarmsStats::collectkWh(int step, int windfarmid, int windfarmtypeid, double kWh)
 {
     Q_UNUSED(step);
@@ -105,4 +104,14 @@ void WindfarmsStats::collectkWproduction(int step, int windfarmid, int windfarmt
 
     get(windfarmid, windfarmtypeid).kWproduction += kWproduction;
     setDirty();
+}
+
+double WindfarmsStats::kWhForWindfarmAndWindfarmGroup(int farmid, int farmtypeid) const
+{
+    return get(farmid, farmtypeid).kWh;
+}
+
+double WindfarmsStats::kWProductionForWindfarmAndWindfarmGroup(int farmid, int farmtypeid) const
+{
+    return get(farmid, farmtypeid).kWproduction;
 }

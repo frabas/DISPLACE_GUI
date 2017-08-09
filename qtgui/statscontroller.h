@@ -32,6 +32,8 @@
 class DisplaceModel;
 class BenthosStatsPlot;
 class FishfarmsStatsPlot;
+class WindfarmsStatsPlot;
+class ShipsStatsPlot;
 
 class StatsController : public QObject
 {
@@ -74,6 +76,12 @@ public:
     void setFishfarmsStat(displace::plot::FishfarmsStat stat);
     displace::plot::FishfarmsStat getFishfarmsStat() const { return mSelectedFishfarmsStat; }
 
+    void setWindfarmsStat(displace::plot::WindfarmsStat stat);
+    displace::plot::WindfarmsStat getWindfarmsStat() const { return mSelectedWindfarmsStat; }
+
+    void setShipsStat(displace::plot::ShipsStat stat);
+    displace::plot::ShipsStat getShipsStat() const { return mSelectedShipsStat; }
+
     /* == */
 
     void initPlots();
@@ -91,6 +99,8 @@ protected:
     void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
     void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
+    void updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat);
+    void updateShipsStats(DisplaceModel *model, displace::plot::ShipsStat stat);
 
 private:
     Palette mPalette;
@@ -126,6 +136,19 @@ private:
     displace::plot::FishfarmsStat mSelectedFishfarmsStat = displace::plot::FishfarmsStat::FF_FishMeanWeight;
     QCPItemLine *mFishfarmsTimeLine = nullptr;
     FishfarmsStatsPlot *mFishfarmsPlotController = nullptr;
+
+    /* Windfarm farmtype Groups */
+    QCustomPlot *mWindfarmTypeGroupsPlot = nullptr;
+    displace::plot::WindfarmsStat mSelectedWindfarmsStat = displace::plot::WindfarmsStat::WF_kWh;
+    QCPItemLine *mWindfarmsTimeLine = nullptr;
+    WindfarmsStatsPlot *mWindfarmsPlotController = nullptr;
+
+    /* Ship farmtype Groups */
+    QCustomPlot *mShipTypeGroupsPlot = nullptr;
+    displace::plot::ShipsStat mSelectedShipsStat = displace::plot::ShipsStat::SH_NOxEmission;
+    QCPItemLine *mShipsTimeLine = nullptr;
+    ShipsStatsPlot *mShipsPlotController = nullptr;
+
 
     DisplaceModel *mLastModel;
 

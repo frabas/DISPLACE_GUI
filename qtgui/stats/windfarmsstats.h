@@ -15,7 +15,7 @@ public:
         StatData() {}
         void clear() {
             double kWh = 0.0;
-            double kWhproduction = 0.0;
+            double kWproduction = 0.0;
         }
     };
 
@@ -44,8 +44,8 @@ public:
     void collectkWh(int step, int windfarmid, int windfarmtypeid, double kWh);
     void collectkWproduction(int step, int windfarmid, int windfarmtypeid, double kWproduction);
 
-    double kWhForShipAndShipGroup(int windfarmtypeid, int windfarmid) const;
-    double kWproductionForShipAndShipGroup(int windfarmtypeid, int windfarmid) const;
+    double kWhForWindfarmAndWindfarmGroup(int windfarmtypeid, int windfarmid) const;
+    double kWProductionForWindfarmAndWindfarmGroup(int windfarmtypeid, int windfarmid) const;
 
     static const WindfarmsStats::StatData NoData;
 };

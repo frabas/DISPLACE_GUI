@@ -49,7 +49,7 @@ QModelIndex ShipEntity::index(int row, int column, const QModelIndex &parent) co
 int ShipEntity::rowCount() const
 {
     if (mShipId == -1 && model->getModel() != 0)
-        return model->getModel()->getShipCount();
+        return model->getModel()->getShipsCount();
 
     return 0;
 }

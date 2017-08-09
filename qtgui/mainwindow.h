@@ -216,6 +216,10 @@ private slots:
 
     void on_fishfarmsStatSelector_currentIndexChanged(int index);
 
+    void on_windfarmsStatSelector_currentIndexChanged(int index);
+
+    void on_shipsStatSelector_currentIndexChanged(int index);
+
 public slots:
     void end_ShortestPathCreated(bool);
 

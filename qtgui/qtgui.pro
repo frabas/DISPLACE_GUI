@@ -190,7 +190,11 @@ SOURCES += \
     plots/fishfarmsstatsplot.cpp \
     objects/ffarmtypesentity.cpp \
     stats/shipsstats.cpp \
-    stats/windfarmsstats.cpp
+    stats/windfarmsstats.cpp \
+    plots/windfarmsstatsplot.cpp \
+    plots/shipsstatsplot.cpp \
+    objects/wfarmtypesentity.cpp \
+    objects/shiptypesentity.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -326,7 +330,11 @@ HEADERS += \
     plots/fishfarmsstatsplot.h \
     objects/ffarmtypesentity.h \
     stats/shipsstats.h \
-    stats/windfarmsstats.h
+    stats/windfarmsstats.h \
+    plots/windfarmsstatsplot.h \
+    plots/shipsstatsplot.h \
+    objects/wfarmtypesentity.h \
+    objects/shiptypesentity.h
 
 RESOURCES += \
     qtgui.qrc

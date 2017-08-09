@@ -3016,3 +3016,12 @@ void MainWindow::on_fishfarmsStatSelector_currentIndexChanged(int index)
     mStatsController->setFishfarmsStat(static_cast<displace::plot::FishfarmsStat>(index));
 }
 
+void MainWindow::on_windfarmsStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setWindfarmsStat(static_cast<displace::plot::WindfarmsStat>(index));
+}
+
+void MainWindow::on_shipsStatSelector_currentIndexChanged(int index)
+{
+    mStatsController->setShipsStat(static_cast<displace::plot::ShipsStat>(index));
+}

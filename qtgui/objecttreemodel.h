@@ -32,6 +32,8 @@ namespace objecttree {
 class ObjectTreeEntity;
 class FFarmTypesEntity;
 class BFunctionalGroupsEntity;
+class WFarmTypesEntity;
+class ShipTypesEntity;
 }
 
 class ObjectTreeModel : public QAbstractItemModel
@@ -47,7 +49,7 @@ public:
         TariffsLayers,
         Nodes, Populations, SizeGroups,  Benthos, BenthosFunctionalGroups,
         Nations, Firms, Metiers, Harbours,  Vessels,
-        Ships, Fishfarms, FishfarmsTypes, Windmills,
+        Ships, ShipsTypes, Fishfarms, FishfarmsTypes, Windmills, WindfarmsTypes,
         LastCategory
      };
 
@@ -89,6 +91,9 @@ private:
 
     objecttree::FFarmTypesEntity *farmtypes;
     objecttree::BFunctionalGroupsEntity *funcgroups;
+    objecttree::WFarmTypesEntity *windfarmtypes;
+    objecttree::ShipTypesEntity *shiptypes;
+
 protected:
     // helper functions
 

@@ -71,17 +71,18 @@ public:
     void collectGHGemission (int step,  int shipid,  int shiptypeid,  double GHG_emission);
     void collectPMEemission (int step,  int shipid,  int shiptypeid,  double PME_emission);
 
-    double nbTransportedUnitsForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double fuelUseHourForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double NOxEmissiongPerkWForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double SOxEmissionPercentPerTotalFuelmassForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double GHGemissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double PMEemissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double fuelUseLitreForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double NOxEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double SOxEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double GHGemissiongPerkWForShipAndShipGroup(int shiptypeid, int shipid) const;
-    double PMEemissiongPerkWForShipAndShipGroup(int shiptypeid, int shipid) const;
+
+   double NbTransportedUnitsForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double FuelPerHourForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double NOxEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double SOxEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double GHGEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double PMEEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double FuelUseLitreForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double NOxEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double SOxEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double GHGEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double PMEEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
 
 
     static const ShipsStats::StatData NoData;

@@ -41,7 +41,7 @@ class COMMONSSHARED_EXPORT Ship
         string type;
 		int idx_ship;
 		int count;
-        int is_active;
+        int is_active=1;
 		vector<double> lats;
 		vector<double> longs;
 		double origin_x, origin_y, end_point_x, end_point_y;
@@ -127,6 +127,11 @@ class COMMONSSHARED_EXPORT Ship
 		void set_lane (vector<double> _longs, vector<double> _lats);
 
         void set_fuel_use_litre (double _cumul);
+        void set_nb_transported_units (double _cumul);
+        void set_NOxEmission (double _cumul);
+        void set_SOxEmission (double _cumul);
+        void set_GHGEmission (double _cumul);
+        void set_PMEEmission (double _cumul);
 
         void move ();
 

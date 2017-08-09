@@ -1770,7 +1770,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     for(map<int, double>::iterator iter=init_size_per_windmill.begin(); iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound( iter->first ) ) {
-        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 500, 1); // Caution: is_active at 1
+        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 1, 500, 1); // Caution: type is 1, kW is 500, is_active at 1
         windmills.push_back(wm);
     }
 
@@ -4784,13 +4784,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         dout(cout  << "THE SHIP LOOP----------" << endl);
         for(unsigned int i=0; i<ships.size();i++)
         {
-
             if(ships.at(i)->get_is_active()==1)
             {
                   ships.at(i)->compute_emissions_in_ship(); // discrete event
-                  //cout << "Emission in ships " << i << " is " << windmills.at(i)->get_emission_in_ship() << endl;
+                  //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
                   ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
-             }
+
+            }
 
         }
 

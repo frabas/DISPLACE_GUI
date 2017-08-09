@@ -28,9 +28,9 @@
 #include <iterator>
 
 
-Windmill::Windmill(int _idx, string _name, Node *_node, double _size, int _kWh, int _is_active)
+Windmill::Windmill(int _idx, string _name, Node *_node, double _size, int _type, int _kWh, int _is_active)
     : idx(_idx), name(_name), x(_node->get_x()), y(_node->get_y()),
-      size(_size), kWh(_kWh), is_active(_is_active)
+      size(_size), type(_type), kWh(_kWh), is_active(_is_active)
 {
 }
 
@@ -48,6 +48,12 @@ int Windmill::get_idx() const
 {
     return(idx);
 }
+
+int Windmill::get_type() const
+{
+    return(type);
+}
+
 
 int Windmill::get_is_active() const
 {
@@ -86,6 +92,11 @@ void Windmill::set_y(double _y)
     y= _y;
 }
 
+void Windmill::set_kW_production(double _cumul)
+{
+    kWProduction= _cumul;
+}
+
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -96,7 +107,9 @@ void Windmill::set_y(double _y)
 
 void Windmill::compute_kWproduction_in_farm()
 {
-// TODO
+
+    // TO DO
+    this->set_kW_production(0);
 
 }
 
@@ -108,13 +121,13 @@ void Windmill::export_windmills_indicators(ofstream& windmillslogs, int tstep)
     // note that this file will also be used by the ui for displaying the statistics in stat windows
 
 
-    windmillslogs << setprecision(5) << fixed;
+    windmillslogs << setprecision(3) << fixed;
 
     // see parseWindfarmsStats():
     // tstep(0) / node(1) / long(2) / lat(3) / windfarmtype(4) / windfarmid(5) / kWh(6) / kW_production(7)
 
-   // windmillslogs <<  tstep << " " << 0 << " "<<  this->get_x() << " "<< this->get_y() << " "<<
-   //     this->get_type() << " " << this->get_idx() << this->get_kWh() << " " << this->get_kW_production() << " " << endl;
+    windmillslogs <<  tstep << " " << 0 << " "<<  this->get_x() << " "<< this->get_y() << " "<<
+        this->get_type() << " " << this->get_idx() << " " << this->get_kWh() << " " << this->get_kW_production() << " " << endl;
 
 
 }

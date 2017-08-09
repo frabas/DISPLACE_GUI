@@ -382,6 +382,31 @@ void Ship::set_fuel_use_litre(double _cumul)
     fuel_use_litre=_cumul;
 }
 
+void Ship::set_nb_transported_units(double _cumul)
+{
+    nb_transported_units=_cumul;
+}
+
+void Ship::set_NOxEmission(double _cumul)
+{
+    NOxEmission=_cumul;
+}
+
+void Ship::set_SOxEmission(double _cumul)
+{
+    SOxEmission=_cumul;
+}
+
+void Ship::set_GHGEmission(double _cumul)
+{
+    GHGEmission=_cumul;
+}
+
+void Ship::set_PMEEmission(double _cumul)
+{
+    PMEEmission=_cumul;
+}
+
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -461,6 +486,12 @@ void Ship::move()
 void Ship::compute_emissions_in_ship()
 {
 // TODO
+    this->set_fuel_use_litre(0);
+    this->set_nb_transported_units(0);
+    this->set_NOxEmission(0);
+    this->set_SOxEmission(0);
+    this->set_GHGEmission(0);
+    this->set_PMEEmission(0);
 
 }
 
@@ -471,7 +502,7 @@ void Ship::export_ships_indicators(ofstream& shiplogs, int tstep)
     // note that this file will also be used by the ui for displaying the statistics in stat windows
 
 
-    shiplogs << setprecision(5) << fixed;
+    shiplogs << setprecision(3) << fixed;
 
     // see parseShipsStats():
     // tstep(0) / node(1) / long(2) / lat(3) /shiptype(4) / shipid(5) / nb_units / fuel_use_h /
@@ -479,11 +510,11 @@ void Ship::export_ships_indicators(ofstream& shiplogs, int tstep)
     // fuel_use_litre / NOx_emission / SOx_emission / GHG_emissions / PME_emission
 
     shiplogs <<  tstep << " " << 0 << " "<<  this->get_x() << " "<< this->get_y() << " "<<
-        this->get_typecode() << " " << this->get_idx() << this->get_nbunits() << " " << this->get_fueluse() << " " <<
+        this->get_typecode() << " " << this->get_idx() << " "<< this->get_nbunits() << " " << this->get_fueluse() << " " <<
         this->get_NOxEmission_gperKWh() << " " << this->get_SOxEmission_percentpertotalfuelmass() << " " <<
         this->get_GHGEmission_gperKWh() << " " << this->get_PMEEmission_gperKWh() << " " <<
         this->get_fuel_use_litre() << " " <<
-        this->get_NOxEmission() << this->get_SOxEmission() << this->get_GHGEmission() <<  this->get_PMEEmission() << endl;
+        this->get_NOxEmission() << " " << this->get_SOxEmission() << " " << this->get_GHGEmission() << " " <<  this->get_PMEEmission() << endl;
 
 
 }

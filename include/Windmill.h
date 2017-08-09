@@ -31,7 +31,7 @@
 class COMMONSSHARED_EXPORT Windmill
 {
     public:
-        Windmill(int _idx, string _name, Node *_node, double _size, int _kWh, int _is_active);
+        Windmill(int _idx, string _name, Node *_node, double _size, int _type, int _kWh, int _is_active);
 
         Windmill();
         virtual ~Windmill();
@@ -51,6 +51,8 @@ class COMMONSSHARED_EXPORT Windmill
         double get_kWh() const;
         double get_kW_production() const;
 
+        void set_kW_production (double _cumul);
+
         void compute_kWproduction_in_farm();
         void export_windmills_indicators(ofstream& windmillslogs, int tstep);
 
@@ -62,7 +64,7 @@ class COMMONSSHARED_EXPORT Windmill
         double x, y;
         double size;
         double kWh;
-        int is_active;
+        int is_active=1;
 
         //output stats
         double kWProduction;

@@ -3048,7 +3048,7 @@ bool DisplaceModel::initWindmill()
        cout<<"create windmill " << iter.first << endl;
 
        auto node = mNodes.at(iter.first);
-       auto wm = std::make_shared<Windmill>(iter.first, "a_windfarm_name", node->mNode.get(), iter.second, 500, 1);
+       auto wm = std::make_shared<Windmill>(iter.first, "a_windfarm_name", node->mNode.get(), iter.second, 1, 500, 1);
 
        auto wmd = std::make_shared<WindmillData>(wm);
        mWindmills.push_back(wmd);

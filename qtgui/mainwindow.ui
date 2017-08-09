@@ -867,6 +867,90 @@
            <attribute name="title">
             <string>Shipping</string>
            </attribute>
+           <widget class="QComboBox" name="shipsStatSelector">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>264</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="currentText">
+             <string>Nb. Transported Units</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Nb. Transported Units</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fuel Use per Hour</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>NOx Emission Factor (g.kW-1)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SOx Emission Factor (% fuel consump.)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>GHG Emission Factor (g.kW-1) </string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>PME Emission Factor (g.kW-1)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Fuel Use</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>NOx Emission</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SOx Emission</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>GHG Emission</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>PME Emission</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QCustomPlot" name="plotShips" native="true">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>20</y>
+              <width>531</width>
+              <height>211</height>
+             </rect>
+            </property>
+           </widget>
           </widget>
           <widget class="QWidget" name="tab_2">
            <attribute name="icon">
@@ -876,6 +960,45 @@
            <attribute name="title">
             <string>Windfarms</string>
            </attribute>
+           <widget class="QComboBox" name="windfarmsStatSelector">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>264</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="currentText">
+             <string>kWh</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>kWh</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>kW Production</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QCustomPlot" name="plotWindfarms" native="true">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>30</y>
+              <width>521</width>
+              <height>201</height>
+             </rect>
+            </property>
+           </widget>
           </widget>
          </widget>
         </item>

@@ -47,6 +47,8 @@ public:
     void setMetiersPlot(QCustomPlot *plot);
     void setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller);
     void setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
+    void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
+    void setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
 
     void updateStats(DisplaceModel *model);
 

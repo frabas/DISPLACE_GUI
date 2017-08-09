@@ -44,6 +44,10 @@ public:
 
     // Specific access functions
     int getWindmillId() const { return mWindmillId; }
+
+    Qt::ItemFlags flags(Qt::ItemFlags defFlags, const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+
 };
 
 }

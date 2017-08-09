@@ -149,6 +149,53 @@ void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionContro
 }
 
 
+void StatsController::setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+{
+   cout << "Set windfarm plot" << endl;
+
+    mWindfarmTypeGroupsPlot = plot;
+    mWindfarmTypeGroupsPlot->legend->setVisible(true);
+
+    if (mWindfarmsTimeLine != 0)
+        delete mWindfarmsTimeLine;
+
+    if (mWindfarmsPlotController != nullptr)
+        delete mWindfarmsPlotController;
+
+    mWindfarmsTimeLine = new QCPItemLine(mWindfarmTypeGroupsPlot);
+    mWindfarmsPlotController = new WindfarmsStatsPlot(plot, mWindfarmsTimeLine);
+
+    mWindfarmTypeGroupsPlot->addItem(mWindfarmsTimeLine);
+
+    cout << "Set windfarm plot...ok" << endl;
+
+    controller->setOnPopupMenuBuiltCallback(std::bind(&WindfarmsStatsPlot::createPopup, mWindfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
+}
+
+
+void StatsController::setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+{
+   cout << "Set ships plot" << endl;
+
+    mShipTypeGroupsPlot = plot;
+    mShipTypeGroupsPlot->legend->setVisible(true);
+
+    if (mShipsTimeLine != 0)
+        delete mShipsTimeLine;
+
+    if (mShipsPlotController != nullptr)
+        delete mShipsPlotController;
+
+    mShipsTimeLine = new QCPItemLine(mShipTypeGroupsPlot);
+    mShipsPlotController = new ShipsStatsPlot(plot, mShipsTimeLine);
+
+    mShipTypeGroupsPlot->addItem(mShipsTimeLine);
+
+    cout << "Set windfarm plot...ok" << endl;
+
+    controller->setOnPopupMenuBuiltCallback(std::bind(&ShipsStatsPlot::createPopup, mShipsPlotController, std::placeholders::_1, std::placeholders::_2));
+}
+
 
 void StatsController::updateStats(DisplaceModel *model)
 {

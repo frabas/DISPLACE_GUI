@@ -74,3 +74,27 @@ QVariant WindmillEntity::data(const QModelIndex &index, int role) const
 }
 
 }
+
+
+
+Qt::ItemFlags objecttree::WindmillEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defFlags | Qt::ItemIsUserCheckable;
+}
+
+// Note WindFarm ids are 1-based
+bool objecttree::WindmillEntity::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(index.column() == 0 && role == Qt::CheckStateRole) {
+        if (value.toInt() == 0) {
+            model->getModel()->remInterestingWindfarms(index.row()+1);
+        } else {
+            model->getModel()->setInterestingWindfarms(index.row()+1);
+        }
+        model->getStatsController()->updateStats(model->getModel());
+        //model->getMapControl()->updateNodes(model->getModelIdx());
+        return true;
+    }
+    return false;
+}

@@ -73,4 +73,28 @@ QVariant ShipEntity::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+
+Qt::ItemFlags objecttree::ShipEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    return defFlags | Qt::ItemIsUserCheckable;
+}
+
+// Note WindFarm ids are 1-based
+bool objecttree::ShipEntity::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if(index.column() == 0 && role == Qt::CheckStateRole) {
+        if (value.toInt() == 0) {
+            model->getModel()->remInterestingShips(index.row()+1);
+        } else {
+            model->getModel()->setInterestingShips(index.row()+1);
+        }
+        model->getStatsController()->updateStats(model->getModel());
+        //model->getMapControl()->updateNodes(model->getModelIdx());
+        return true;
+    }
+    return false;
+}
+
+
 }

@@ -46,17 +46,18 @@ Ship::~Ship()
 }
 
 
-Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_flag,
+Ship::Ship(int idx, string a_name, int is_active, double a_imo, double a_yearbuild, string a_flag,
            string a_type, double a_typecode, double a_loa, double a_KW, double a_breadth,
            double a_grosstonnage, double a_nbunits,
            double a_fueluse, double a_NOxEmission_gperKWh,
            double a_SOxEmission_percentpertotalfuelmass,
-           double a_GHGEmission, double a_PMEmission,
+           double a_GHGEmission_gperKWh, double a_PMEEmission_gperKWh,
            double a_vmax, double a_vcruise,
            vector<double> a_longs, vector<double> a_lats)
 {
     count=0;
     idx_ship = idx;
+    is_active=is_active; // active by default
 	origin_x =a_longs[0];
 	origin_y =a_lats[0];
 	longs=a_longs;
@@ -80,11 +81,19 @@ Ship::Ship(int idx, string a_name, double a_imo, double a_yearbuild, string a_fl
     grosstonnage=a_grosstonnage;
     nbunits=a_nbunits;
     fueluse=a_fueluse;
+
     NOxEmission_gperKWh=a_NOxEmission_gperKWh;  // 9 for Tier III 1st jan 2016
     SOxEmission_percentpertotalfuelmass=a_SOxEmission_percentpertotalfuelmass;// limit is 0.10% y 1 January 2015
-    GHGEmission=a_GHGEmission;
-    PMEmission=a_PMEmission;
-    cumul_fueluse=0.0;
+    GHGEmission_gperKWh=a_GHGEmission_gperKWh;
+    PMEEmission_gperKWh=a_PMEEmission_gperKWh;
+
+    // output stat variables
+    nb_transported_units=0;
+    fuel_use_litre=0.0;
+    SOxEmission=0;
+    GHGEmission=0;
+    PMEEmission=0;
+
 }
 
 
@@ -104,6 +113,12 @@ int Ship::get_count () const
 {
 	return(count);
 }
+
+int Ship::get_is_active () const
+{
+    return(is_active);
+}
+
 
 
 string Ship::get_name () const
@@ -171,14 +186,14 @@ double Ship::get_SOxEmission_percentpertotalfuelmass () const
     return(SOxEmission_percentpertotalfuelmass);
 }
 
-double Ship::get_GHGEmission () const
+double Ship::get_GHGEmission_gperKWh () const
 {
-    return(GHGEmission);
+    return(GHGEmission_gperKWh);
 }
 
-double Ship::get_PMEmission () const
+double Ship::get_PMEEmission_gperKWh () const
 {
-    return(PMEmission);
+    return(PMEEmission_gperKWh);
 }
 
 double Ship::get_yearbuild () const
@@ -252,11 +267,36 @@ double Ship::get_course () const
 	return(course);
 }
 
-double Ship::get_cumul_fueluse () const
+
+double Ship::get_nb_transported_units () const
 {
-    return(cumul_fueluse);
+    return(nb_transported_units);
 }
 
+double Ship::get_fuel_use_litre () const
+{
+    return(fuel_use_litre);
+}
+
+double Ship::get_NOxEmission () const
+{
+    return(NOxEmission);
+}
+
+double Ship::get_SOxEmission () const
+{
+    return(SOxEmission);
+}
+
+double Ship::get_GHGEmission () const
+{
+    return(GHGEmission);
+}
+
+double Ship::get_PMEEmission () const
+{
+    return(PMEEmission);
+}
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
@@ -337,9 +377,9 @@ void Ship::set_lane (vector<double> _longs, vector<double> _lats)
 }
 
 
-void Ship::set_cumul_fueluse(double _cumul)
+void Ship::set_fuel_use_litre(double _cumul)
 {
-    cumul_fueluse=_cumul;
+    fuel_use_litre=_cumul;
 }
 
 
@@ -353,8 +393,8 @@ void Ship::move()
 {
 
     // update tracking
-    this->set_cumul_fueluse(get_cumul_fueluse() + get_fueluse()); // assuming no shut down of the engine so far
-    //cout <<  "accumulated fuel use for this ship "<< this->get_name() << " is " << this->get_cumul_fueluse() << endl;
+    this->set_fuel_use_litre(get_fuel_use_litre() + get_fueluse()); // assuming no shut down of the engine so far
+    //cout <<  "accumulated fuel use for this ship "<< this->get_name() << " is " << this->get_fuel_use_litre() << endl;
 
 	// movement for a ship
 	set_course( bearing(get_x(), get_y(), get_end_point_x(), get_end_point_y()) );
@@ -414,3 +454,39 @@ void Ship::move()
 	}
 
 }
+
+
+
+
+void Ship::compute_emissions_in_ship()
+{
+// TODO
+
+}
+
+void Ship::export_ships_indicators(ofstream& shiplogs, int tstep)
+{
+
+    dout(cout  << "export ships indicators...." << endl);
+    // note that this file will also be used by the ui for displaying the statistics in stat windows
+
+
+    shiplogs << setprecision(5) << fixed;
+
+    // see parseShipsStats():
+    // tstep(0) / node(1) / long(2) / lat(3) /shiptype(4) / shipid(5) / nb_units / fuel_use_h /
+    // NOx_emission_gperkW / SOx_emission_percentpertotalfuelmass / GHG_emission_gperkW / PME_emission_gperkW /
+    // fuel_use_litre / NOx_emission / SOx_emission / GHG_emissions / PME_emission
+
+    shiplogs <<  tstep << " " << 0 << " "<<  this->get_x() << " "<< this->get_y() << " "<<
+        this->get_typecode() << " " << this->get_idx() << this->get_nbunits() << " " << this->get_fueluse() << " " <<
+        this->get_NOxEmission_gperKWh() << " " << this->get_SOxEmission_percentpertotalfuelmass() << " " <<
+        this->get_GHGEmission_gperKWh() << " " << this->get_PMEEmission_gperKWh() << " " <<
+        this->get_fuel_use_litre() << " " <<
+        this->get_NOxEmission() << this->get_SOxEmission() << this->get_GHGEmission() <<  this->get_PMEEmission() << endl;
+
+
+}
+
+
+

@@ -80,7 +80,7 @@ void ShipMapObject::updateProperties()
     text += QString("<b>NOx emission (g/KWh):</b> %1<br/>").arg(mShip->mShip->get_NOxEmission_gperKWh());
     text += QString("<b>SOx emission (%m/m):</b> %1<br/>").arg(mShip->mShip->get_SOxEmission_percentpertotalfuelmass());
     text += QString("<b>GHG emission (ton/h):</b> %1<br/>").arg(mShip->mShip->get_GHGEmission());
-    text += QString("<b>PM emission(ton/h; PM2.5):</b> %1<br/>").arg(mShip->mShip->get_PMEmission());
+    text += QString("<b>PM emission(ton/h; PM2.5):</b> %1<br/>").arg(mShip->mShip->get_PMEEmission());
     text += QString("<b>Max Speed:</b> %1<br/>").arg(mShip->mShip->get_vmax());
 
     mWidget->setText(text);

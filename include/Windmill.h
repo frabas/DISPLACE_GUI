@@ -31,21 +31,41 @@
 class COMMONSSHARED_EXPORT Windmill
 {
     public:
-        Windmill(int _name, Node *_node, double size);
+        Windmill(int _idx, string _name, Node *_node, double _size, int _kWh, int _is_active);
 
         Windmill();
         virtual ~Windmill();
                                  // Copy constructor
-        int get_name() const;
+        string get_name() const;
+        int get_idx() const;
+        int get_type() const;
+
+        int get_is_active() const;
+
         double get_x() const;
         double get_y() const;
+
         void set_x(double value);
         void set_y(double value);
 
+        double get_kWh() const;
+        double get_kW_production() const;
+
+        void compute_kWproduction_in_farm();
+        void export_windmills_indicators(ofstream& windmillslogs, int tstep);
+
     protected:
     private:
-        int name;
+        string name;
+        int idx;
+        int type;
         double x, y;
         double size;
+        double kWh;
+        int is_active;
+
+        //output stats
+        double kWProduction;
+
 };
 #endif							 // WINDMILL_H

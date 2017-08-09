@@ -28,9 +28,9 @@
 #include <iterator>
 
 
-Windmill::Windmill(int _name, Node *_node, double _size)
-    : name(_name), x(_node->get_x()), y(_node->get_y()),
-      size(_size)
+Windmill::Windmill(int _idx, string _name, Node *_node, double _size, int _kWh, int _is_active)
+    : idx(_idx), name(_name), x(_node->get_x()), y(_node->get_y()),
+      size(_size), kWh(_kWh), is_active(_is_active)
 {
 }
 
@@ -39,9 +39,19 @@ Windmill::~Windmill()
     //dtor
 }
 
-int Windmill::get_name() const
+string Windmill::get_name() const
 {
     return(name);
+}
+
+int Windmill::get_idx() const
+{
+    return(idx);
+}
+
+int Windmill::get_is_active() const
+{
+    return(is_active);
 }
 
 double Windmill::get_x() const
@@ -54,6 +64,18 @@ double Windmill::get_y() const
     return(y);
 }
 
+double Windmill::get_kWh() const
+{
+    return(kWh);
+}
+
+double Windmill::get_kW_production() const
+{
+    return(kWProduction);
+}
+
+
+
 void Windmill::set_x(double _x)
 {
     x= _x;
@@ -63,3 +85,38 @@ void Windmill::set_y(double _y)
 {
     y= _y;
 }
+
+
+//------------------------------------------------------------//
+//------------------------------------------------------------//
+// methods
+//------------------------------------------------------------//
+//------------------------------------------------------------//
+
+
+void Windmill::compute_kWproduction_in_farm()
+{
+// TODO
+
+}
+
+
+void Windmill::export_windmills_indicators(ofstream& windmillslogs, int tstep)
+{
+
+    dout(cout  << "export windmills indicators...." << endl);
+    // note that this file will also be used by the ui for displaying the statistics in stat windows
+
+
+    windmillslogs << setprecision(5) << fixed;
+
+    // see parseWindfarmsStats():
+    // tstep(0) / node(1) / long(2) / lat(3) / windfarmtype(4) / windfarmid(5) / kWh(6) / kW_production(7)
+
+   // windmillslogs <<  tstep << " " << 0 << " "<<  this->get_x() << " "<< this->get_y() << " "<<
+   //     this->get_type() << " " << this->get_idx() << this->get_kWh() << " " << this->get_kW_production() << " " << endl;
+
+
+}
+
+

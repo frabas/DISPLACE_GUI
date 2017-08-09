@@ -1704,7 +1704,7 @@ QString DisplaceModel::getFirmId(int idx) const
 
 QString DisplaceModel::getWindmillId(int idx) const
 {
-    return QString::number(mWindmills.at(idx)->mWindmill->get_name());
+    return QString::number(mWindmills.at(idx)->mWindmill->get_idx());
 }
 
 void DisplaceModel::updateFishfarm(int idx, float x, float y)
@@ -2866,7 +2866,7 @@ bool DisplaceModel::initShips()
             lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
             longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
 
-            std::shared_ptr<Ship> sh (new Ship(i,shipids[i], imos[i], yearbuilds[i], flags[i],
+            std::shared_ptr<Ship> sh (new Ship(i,shipids[i], 1, imos[i], yearbuilds[i], flags[i],
                                                types[i], typecodes[i], loas[i], KWs[i], breadths[i],
                                                grosstonnages[i], nbunits[i],
                                                fueluses[i], NOxEmission_gperKWhs[i],
@@ -3048,7 +3048,7 @@ bool DisplaceModel::initWindmill()
        cout<<"create windmill " << iter.first << endl;
 
        auto node = mNodes.at(iter.first);
-       auto wm = std::make_shared<Windmill>(iter.first, node->mNode.get(), iter.second);
+       auto wm = std::make_shared<Windmill>(iter.first, "a_windfarm_name", node->mNode.get(), iter.second, 500, 1);
 
        auto wmd = std::make_shared<WindmillData>(wm);
        mWindmills.push_back(wmd);

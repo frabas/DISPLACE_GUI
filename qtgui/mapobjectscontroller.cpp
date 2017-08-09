@@ -207,7 +207,7 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     const QList<std::shared_ptr<WindmillData> > &windmills = model->getWindmillList();
     foreach (std::shared_ptr<WindmillData> ff, windmills) {
         WindmillMapObject *obj = new WindmillMapObject(this,ff.get());
-        mWindmillObjects[model_n].add(ff->mWindmill->get_name(),obj, 0);
+        mWindmillObjects[model_n].add(ff->mWindmill->get_idx(),obj, 0);
 
         mEntityLayer[model_n]->addGeometry(obj->getGeometryEntity());
     }

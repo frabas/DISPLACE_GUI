@@ -142,6 +142,8 @@ extern vector <Metier*> metiers;
 extern ofstream export_individual_tacs;
 extern vector<PathShop> pathshops;
 extern ofstream fishfarmslogs;
+extern ofstream windfarmslogs;
+extern ofstream shipslogs;
 
 extern void guiSendVesselLogbook(const std::string &line);
 

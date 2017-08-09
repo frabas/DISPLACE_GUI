@@ -62,7 +62,7 @@ void WindmillMapObject::updateProperties()
 
     QString text = QString("<b>Name</b>: %1<br/>"
                            "<b>Coords: </b>%2 %3<br/>")
-            .arg(QString::number(mWindmill->mWindmill->get_name()))
+            .arg(QString::number(mWindmill->mWindmill->get_idx()))
             .arg(mWindmill->mWindmill->get_y())
             .arg(mWindmill->mWindmill->get_x());
 

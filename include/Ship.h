@@ -41,25 +41,26 @@ class COMMONSSHARED_EXPORT Ship
         string type;
 		int idx_ship;
 		int count;
+        int is_active;
 		vector<double> lats;
 		vector<double> longs;
 		double origin_x, origin_y, end_point_x, end_point_y;
 		double x, y, course;
         double imo, yearbuild, typecode, loa, KW, breadth, grosstonnage, nbunits;
         double fueluse, NOxEmission_gperKWh, SOxEmission_percentpertotalfuelmass;
-        double GHGEmission, PMEmission;
+        double GHGEmission_gperKWh, PMEEmission_gperKWh;
         double vmax, vcruise;
 
-        double cumul_fueluse;
+        double nb_transported_units, fuel_use_litre, NOxEmission, SOxEmission, GHGEmission, PMEEmission; // overall stats
 
         std::mutex mutex;
 
     public:
-        Ship(int idx, string name,  double imo, double yearbuild, string flag,
+        Ship(int idx, string name, int is_active,  double imo, double yearbuild, string flag,
              string type, double typecode, double loa, double KW, double breadth,
              double grosstonnage, double nbunits,
              double fueluse, double NOxEmission_gperKWh, double SOxEmission_percentpertotalfuelmass,
-             double GHGEmission, double PMEmission,
+             double a_GHGEmission_gperKWh, double a_PMEEmission_gperKWh,
              double vmax, double vcruise,
              vector<double> lats, vector<double> longs);
 		Ship();
@@ -72,7 +73,8 @@ class COMMONSSHARED_EXPORT Ship
 		// getters
 		string get_name () const;
 		int get_idx () const;
-		int get_count () const;
+        int get_is_active () const;
+        int get_count () const;
 		vector<double> get_lats () const;
 		vector<double> get_longs () const;
 								 // in the continuous space
@@ -97,14 +99,19 @@ class COMMONSSHARED_EXPORT Ship
         double get_fueluse() const;
         double get_NOxEmission_gperKWh()const;
         double get_SOxEmission_percentpertotalfuelmass()const;
-        double get_GHGEmission()const;
-        double get_PMEmission()const;
+        double get_GHGEmission_gperKWh()const;
+        double get_PMEEmission_gperKWh()const;
         double get_yearbuild() const;
         double get_vmax() const;
 		double get_vcruise() const;
 		double get_course() const;
 
-        double get_cumul_fueluse () const;
+        double get_fuel_use_litre () const;
+        double get_nb_transported_units() const;
+        double get_NOxEmission()const;
+        double get_SOxEmission()const;
+        double get_GHGEmission()const;
+        double get_PMEEmission()const;
 
         // setters
         void set_idx_ship (int val);
@@ -119,9 +126,14 @@ class COMMONSSHARED_EXPORT Ship
 		void set_end_point_xy (double _x, double _y);
 		void set_lane (vector<double> _longs, vector<double> _lats);
 
-        void set_cumul_fueluse (double _cumul);
+        void set_fuel_use_litre (double _cumul);
 
         void move ();
+
+        void compute_emissions_in_ship();
+        void export_ships_indicators(ofstream& shiplogs, int tstep);
+
+
 
 };
 #endif							 // SHIP_H

@@ -85,9 +85,9 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parseVessels(&file, tstep, mModel, period);
     } else if (name.startsWith("fishfarmslogs_")) {
         parseFishfarmslogsStats(&file, tstep, mModel, period);
-    } else if (name.startsWith("ships_")) {
+    } else if (name.startsWith("shipslogs_")) {
         parseShipsStats(&file, tstep, mModel, period);
-    } else if (name.startsWith("windfarms_")) {
+    } else if (name.startsWith("windmillslogs_")) {
         parseWindfarmsStats(&file, tstep, mModel, period);
     } else { /* Don't know how to handle... */
         qDebug() << "File isn't recognized: " << path;

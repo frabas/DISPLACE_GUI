@@ -225,6 +225,8 @@ vector <Metier*> metiers;
 ofstream export_individual_tacs;
 vector <PathShop> pathshops;
 ofstream fishfarmslogs;
+ofstream windmillslogs;
+ofstream shipslogs;
 
 #ifdef NO_IPC
 #include <messages/noipc.h>
@@ -1764,10 +1766,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     map<int, double> init_size_per_windmill = read_size_per_windmill(folder_name_parameterization, inputfolder);
     cout << "Does the size_per_windmill need a check?" << endl;
 
+    //TODO: extend variables in read_size_per_windmill() e.g. read kWh from files etc.
 
 
     for(map<int, double>::iterator iter=init_size_per_windmill.begin(); iter != init_size_per_windmill.end(); iter = init_size_per_windmill.upper_bound( iter->first ) ) {
-        Windmill *wm = new Windmill(iter->first, nodes.at(iter->first), iter->second);
+        Windmill *wm = new Windmill(iter->first, "here_a_windfarm_name", nodes.at(iter->first), iter->second, 500, 1); // Caution: is_active at 1
         windmills.push_back(wm);
     }
 
@@ -2428,7 +2431,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         lats= find_entries_i_d (shiplanes_lat, lane_ids[i]);
         longs= find_entries_i_d (shiplanes_lon, lane_ids[i]);
-        ships[i]= new Ship(i,shipids[i], imos[i], yearbuilds[i], flags[i],
+        ships[i]= new Ship(i,shipids[i], 1, imos[i], yearbuilds[i], flags[i],
                            types[i], typecodes[i], KWs[i], loas[i], breadths[i],
                            grosstonnages[i], nbunits[i],
                            fueluses[i], NOxEmission_gperKWhs[i],
@@ -3415,6 +3418,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     fishfarmslogs.open(filename.c_str());
     std::string fishfarmslogs_filename = filename;
 
+    ofstream windmillslogs;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/windmillslogs_"+namesimu+".dat";
+    windmillslogs.open(filename.c_str());
+    std::string windmillslogs_filename = filename;
+
+    ofstream shipslogs;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/shipslogs_"+namesimu+".dat";
+    shipslogs.open(filename.c_str());
+    std::string shipslogs_filename = filename;
 
     // read list of tsteps with discrete events
     vector <int> tsteps_quarters  = read_tsteps_quarters( folder_name_parameterization, inputfolder);
@@ -4742,6 +4754,62 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
+        dout(cout  << "THE WINDFARM LOOP----------" << endl);
+        for(unsigned int i=0; i<windmills.size();i++)
+        {
+
+            if(windmills.at(i)->get_is_active()==1)
+            {
+                  windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
+                  //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
+                  windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+             }
+
+        }
+
+        // Flush and updates all statistics for fsihfarms
+        if (use_gui)
+        {
+
+            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+            {
+            windmillslogs.flush();
+            guiSendUpdateCommand(windmillslogs_filename, tstep);
+            }
+        }
+
+
+
+
+        dout(cout  << "THE SHIP LOOP----------" << endl);
+        for(unsigned int i=0; i<ships.size();i++)
+        {
+
+            if(ships.at(i)->get_is_active()==1)
+            {
+                  ships.at(i)->compute_emissions_in_ship(); // discrete event
+                  //cout << "Emission in ships " << i << " is " << windmills.at(i)->get_emission_in_ship() << endl;
+                  ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
+             }
+
+        }
+
+        // Flush and updates all statistics for ships
+        if (use_gui)
+        {
+
+            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+            {
+            shipslogs.flush();
+            guiSendUpdateCommand(shipslogs_filename, tstep);
+            }
+        }
+
+
+
+
+
+
         dout(cout  << "THE FISHFARM LOOP----------" << endl);
         for(unsigned int i=0; i<fishfarms.size();i++)
         {
@@ -4788,7 +4856,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         }
 
-        // Flush and updates all statistics for fsihfarms
+        // Flush and updates all statistics for fishfarms
         if (use_gui)
         {
 
@@ -4798,7 +4866,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             guiSendUpdateCommand(fishfarmslogs_filename, tstep);
             }
         }
-
 
 
 

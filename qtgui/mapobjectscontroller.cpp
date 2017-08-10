@@ -143,6 +143,9 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumsweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Swept Area")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumSweptArea, mStatsLayerCumsweptarea[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerCumsubsurfacesweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Subsurface Swept Area")).arg(model_n).toStdString()));
+    addOutputLayer(model_n,OutLayerCumSubsurfaceSweptArea, mStatsLayerCumsubsurfacesweptarea[model_n],type != DisplaceModel::LiveModelType ? false : false);
+
     mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
@@ -540,6 +543,10 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSweptAreaRole, nd);
     mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
     mStatsLayerCumsweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumSubsurfaceSweptAreaRole, nd);
+    mNodeObjects[model_n].add(idxnode, obj, obj->getRole());
+    mStatsLayerCumsubsurfacesweptarea[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithCumCatchesRole, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());

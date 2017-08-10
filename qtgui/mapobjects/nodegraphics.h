@@ -92,6 +92,16 @@ protected:
 };
 
 
+class NodeWithCumSubsurfaceSweptAreaGraphics : public NodeGraphics {
+public:
+    NodeWithCumSubsurfaceSweptAreaGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
 class NodeWithCumCatchesGraphics : public NodeGraphics {
 public:
     NodeWithCumCatchesGraphics(NodeData *node, MapObjectsController *controller, int indx)

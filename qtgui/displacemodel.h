@@ -419,6 +419,7 @@ public:
     void collectNodePopStats (int tstep, int node_idx, const QList<double> &stats, const QList<double> &stats_w, double tot, double wtot);
     void collectPopCumftime(int step, int node_idx, double cumftime);
     void collectPopCumsweptarea(int step, int node_idx, double cumsweptarea);
+    void collectPopCumsubsurfacesweptarea(int step, int node_idx, double cumsubsurfacesweptarea);
     void collectPopCumcatches(int step, int node_idx, double cumcatches);
     void collectPopCumcatchesWithThreshold(int step, int node_idx, double cumcatches_with_threshold);
     void collectPopTariffs(int step, int node_idx, vector<double> tariffs);

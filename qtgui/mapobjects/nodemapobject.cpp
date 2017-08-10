@@ -96,6 +96,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithCumSweptAreaGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithCumSubsurfaceSweptAreaRole:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithCumSubsurfaceSweptAreaGraphics(mNode.get(), mController, indx));
+        break;
+
     case GraphNodeWithCumCatchesRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumCatchesGraphics(mNode.get(), mController, indx));
@@ -218,8 +223,13 @@ void NodeMapObject::updateProperties()
         break;
 
     case GraphNodeWithCumSweptAreaRole:
-        text += QString("<br/><b>Swept area (km2):</b> %1<br/>")
+        text += QString("<br/><b>Swept Area (km2):</b> %1<br/>")
                 .arg(mNode->get_cumsweptarea());
+        break;
+
+    case GraphNodeWithCumSubsurfaceSweptAreaRole:
+        text += QString("<br/><b>Subsurface Swept Area (km2):</b> %1<br/>")
+                .arg(mNode->get_cumsubsurfacesweptarea());
         break;
 
     case GraphNodeWithCumCatchesRole:

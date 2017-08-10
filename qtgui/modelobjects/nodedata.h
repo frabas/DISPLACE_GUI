@@ -91,6 +91,8 @@ public:
     void set_cumftime(int i) { mNode->set_cumftime(i); }
     double get_cumsweptarea() const { return mNode->get_cumsweptarea(); }
     void set_cumsweptarea(int i) { mNode->set_cumsweptarea(i); }
+    double get_cumsubsurfacesweptarea() const { return mNode->get_cumsubsurfacesweptarea(); }
+    void set_cumsubsurfacesweptarea(int i) { mNode->set_cumsubsurfacesweptarea(i); }
     double get_cumcatches() const { return mNode->get_cumcatches(); }
     double get_cumcatches_with_threshold() const { return mNode->get_cumcatches_with_threshold(); }
     void set_cumcatches(int i) { mNode->set_cumcatches(i); }

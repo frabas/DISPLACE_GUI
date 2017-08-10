@@ -69,6 +69,8 @@ DisplaceModel::DisplaceModel()
       mInterestingSizes(),
       mFuncGroups(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mFishfarmsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
+      mWindfarmsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
+      mShipsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mOutputFileParser(new OutputFileParser(this)),
       mParserThread(new QThread(this)),
       mShortestPathFolder()
@@ -105,6 +107,18 @@ DisplaceModel::DisplaceModel()
     mFishfarmsTypes->addSpecialValue(tr("Average"), true);
     mFishfarmsTypes->addSpecialValue(tr("Min"));
     mFishfarmsTypes->addSpecialValue(tr("Max"));
+
+    mWindfarmsTypes->setValuesFormatString(tr("Windfarm Type #%1"));
+    mWindfarmsTypes->addSpecialValue(tr("Total"));
+    mWindfarmsTypes->addSpecialValue(tr("Average"), true);
+    mWindfarmsTypes->addSpecialValue(tr("Min"));
+    mWindfarmsTypes->addSpecialValue(tr("Max"));
+
+    mShipsTypes->setValuesFormatString(tr("Ship Type #%1"));
+    mShipsTypes->addSpecialValue(tr("Total"));
+    mShipsTypes->addSpecialValue(tr("Average"), true);
+    mShipsTypes->addSpecialValue(tr("Min"));
+    mShipsTypes->addSpecialValue(tr("Max"));
 }
 
 void DisplaceModel::createFeaturesLayer()

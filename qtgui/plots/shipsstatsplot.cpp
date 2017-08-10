@@ -24,19 +24,19 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
 
     QList<int>  interShipsIDsList= model->getInterestingShips();
 
-    auto farmsTypeGroups = model->getShipsTypesList();
-    QList<int> interShipsTypesList = farmsTypeGroups->list();
+    auto shipsTypeGroups = model->getShipsTypesList();
+    QList<int> interShipsTypesList = shipsTypeGroups->list();
 
     QList<int> graphList;
-    bool showtotal = farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
-    bool showavg =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Average);
-    bool showmin =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Min);
-    bool showmax =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
+    bool showtotal = shipsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
+    bool showavg =  shipsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Average);
+    bool showmin =  shipsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Min);
+    bool showmax =  shipsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
 
     /* If no farm type is selected, but aggregate is selected, select all farms */
     if (interShipsTypesList.size() != 0) {
         for(int i = 0; i < model->getNumShipsTypes(); ++i) {
-            if (!farmsTypeGroups->has(i))
+            if (!shipsTypeGroups->has(i))
                 continue;
 
             if (showmax)
@@ -138,8 +138,8 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
             for (int iInterShipTypes = 0; iInterShipTypes < interShipsTypesList.size(); ++iInterShipTypes) {
                 for (int iInterShipsIDs = 0; iInterShipsIDs < nInterShipsIDs; ++iInterShipsIDs) {
 
-                    auto fmtype = model->getShipList()[iInterShipsIDs]->mShip->get_typecode();
-                    if (group != 999 && iInterShipTypes != fmtype)
+                    auto shtype = model->getShipList()[iInterShipsIDs]->mShip->get_typecode();
+                    if (group != 999 && iInterShipTypes != shtype)
                         continue;
 
                     val = getStatValue(model, it.key(), interShipsIDsList[iInterShipsIDs], interShipsTypesList[iInterShipTypes], stat);

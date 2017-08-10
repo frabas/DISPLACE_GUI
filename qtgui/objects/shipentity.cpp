@@ -22,6 +22,7 @@
 
 #include <objecttreemodel.h>
 #include <displacemodel.h>
+#include <mapobjectscontroller.h>
 
 namespace objecttree {
 

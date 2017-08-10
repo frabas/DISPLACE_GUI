@@ -204,7 +204,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new GraphInteractionController(ui->plotHarbours, this);
     new GraphInteractionController(ui->plotPopulations, this);
     new GraphInteractionController(ui->plotNations, this);
-    new GraphInteractionController(ui->plotBenthos, this);
+    //new GraphInteractionController(ui->plotBenthos, this);
     auto fishfarmPlotController = new GraphInteractionController(ui->plotFishfarms, this);
     auto benthosPlotController = new GraphInteractionController(ui->plotBenthos, this);
     auto windfarmPlotController = new GraphInteractionController(ui->plotWindfarms, this);

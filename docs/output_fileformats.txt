@@ -71,7 +71,7 @@ Written by: Node::export_popnodes()
 See: commons/Node.cpp
 Content:
 Format:
-tstep   node   long    lat    cumsweptarea
+tstep   node   long    lat    cumsweptarea subsurfacecumsweptarea
 
 * loglike_*.dat
 ---------------

@@ -159,6 +159,7 @@ class COMMONSSHARED_EXPORT Node
         const vector<double>& get_cumcatches_per_pop ();
         int get_cumftime() const;
         double get_cumsweptarea() const;
+        double get_cumsubsurfacesweptarea() const;
         double get_cumcatches() const;
         double get_cumcatches_with_threshold() const;
         void set_xy(double xval, double yval);
@@ -174,10 +175,12 @@ class COMMONSSHARED_EXPORT Node
         void set_vid(int val);
         void set_cumftime(int tot);
         void set_cumsweptarea(double tot);
+        void set_cumsubsurfacesweptarea(double tot);
         void set_cumcatches(double tot);
         void set_cumcatches_with_threshold(double tot);
         void add_to_cumftime(int delta_time);
         void add_to_cumsweptarea(double sweptarea);
+        void add_to_cumsubsurfacesweptarea(double subsurfacesweptarea);
         void add_to_sweptarea(int sweptarea);
         void add_to_cumcatches(double catches);
         void add_to_cumcatches_per_pop(double catches, int pop);
@@ -273,6 +276,7 @@ private:
         bool is_harbour;
 		int cumftime;
         double cumsweptarea;
+        double cumsubsurfacesweptarea;
         double cumcatches;
         double cumcatches_with_threshold;
         vector< vector<double> > Ns_pops_at_szgroup;

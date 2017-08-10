@@ -49,6 +49,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
 	y=yval;
 	cumftime=0;
     cumsweptarea=0;
+    cumsubsurfacesweptarea=0;
     cumcatches=0;
     cumcatches_with_threshold=0;
     harbour=_harbour;
@@ -146,6 +147,7 @@ Node::Node()
       is_harbour(false),
       cumftime(0),
       cumsweptarea(0),
+      cumsubsurfacesweptarea(0),
       cumcatches(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
@@ -557,6 +559,11 @@ double Node::get_cumsweptarea() const
     return(cumsweptarea);
 }
 
+double Node::get_cumsubsurfacesweptarea() const
+{
+    return(cumsubsurfacesweptarea);
+}
+
 double Node::get_cumcatches() const
 {
     return(cumcatches);
@@ -605,6 +612,12 @@ void Node::set_cumsweptarea(double tot)
     cumsweptarea = tot;
 }
 
+void Node::set_cumsubsurfacesweptarea(double tot)
+{
+    cumsubsurfacesweptarea = tot;
+}
+
+
 void Node::set_cumcatches(double tot)
 {
     cumcatches = tot;
@@ -633,6 +646,13 @@ void Node::add_to_cumsweptarea(double sweptarea)
 {
     lock();
     cumsweptarea+=sweptarea;
+    unlock();
+}
+
+void Node::add_to_cumsubsurfacesweptarea(double subsurfacesweptarea)
+{
+    lock();
+    cumsubsurfacesweptarea+=subsurfacesweptarea;
     unlock();
 }
 
@@ -1254,7 +1274,7 @@ void Node::export_popnodes_cumsweptarea(ofstream& popnodes, int tstep)
     // tstep / node / long / lat /  swept area
     if(cumsweptarea>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
-        cumsweptarea << " " <<  endl;
+        cumsweptarea << " " <<  cumsubsurfacesweptarea << endl;
 
 }
 

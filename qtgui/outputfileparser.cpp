@@ -202,6 +202,10 @@ void OutputFileParser::parsePopCumsweptarea(QFile *file, int tstep, DisplaceMode
             int id = fields[1].toInt();
             double cumsweptarea = fields[4].toDouble();
             model->collectPopCumsweptarea (step, id, cumsweptarea);
+
+            //double subsurfacecumsweptarea = fields[4].toDouble();
+            //model->collectPopCumsubsurfacesweptarea (step, id, subsurfacecumsweptarea);
+
         }
     }
 

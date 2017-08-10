@@ -567,6 +567,10 @@ double Vessel::get_sweptareathistrip () const
     return(areasweptthistrip);
 }
 
+double Vessel::get_subsurfacesweptareathistrip () const
+{
+    return(subsurfaceareasweptthistrip);
+}
 
 double Vessel::get_consotogetthere () const
 {
@@ -1099,6 +1103,12 @@ void Vessel::set_sweptareathistrip(double _sweptareathistrip)
 {
     areasweptthistrip=_sweptareathistrip;
 }
+
+void Vessel::set_subsurfacesweptareathistrip(double _subsurfacesweptareathistrip)
+{
+    subsurfaceareasweptthistrip=_subsurfacesweptareathistrip;
+}
+
 
 
 void Vessel::set_cumsteaming(double _cumsteaming)
@@ -1670,6 +1680,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     // SWEPT AREA
     double gear_width=0.0;
     double swept_area=0.0;
+    double surface_and_subsurface_swept_area=0.0;
     if(gear_width_model=="a*(LOA^b)")  gear_width=gear_width_a* pow(v_vsize,gear_width_b);
     if(gear_width_model=="a*(kW^b)")   gear_width=gear_width_a* pow(v_kw,gear_width_b);
     if(gear_width_model=="(a*LOA)+b")  gear_width=(gear_width_a*v_vsize) +gear_width_b;
@@ -1687,8 +1698,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     // i.e. for relationships returning door spread or seine rope in metres.
     if(this->get_metier()->get_metier_type()==1){
         swept_area = gear_width/1000 * PING_RATE * fspeed*NAUTIC; // for trawlers
+        surface_and_subsurface_swept_area = swept_area*0.329; // penetrating for trawlers (Eigaard et al 2016; TODO input from input files instead)
     } else{
         swept_area =  PI*pow(((gear_width/1000)/(2*PI)),2);  // seiners and gillnetters
+        surface_and_subsurface_swept_area = swept_area*0.01; // no penetration for seiners and gillnetters (Eigaard et al 2016; TODO input from input files instead)
     } //=> at this stage, swept area is km^2, but will be exported in m^2 in the logbook file to avoid any artificial raising when using in a ratio e.g. revenue per swept area
 
     dout(cout << " for this model " << gear_width_model << " the gear width is " << gear_width
@@ -1696,7 +1709,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
          << ", swept area this fishing event is then:" << swept_area
          << " compared to the cell area which is " << graph_res*graph_res << endl ;);
     this->get_loc()->add_to_cumsweptarea(swept_area);
+    this->get_loc()->add_to_cumsubsurfacesweptarea(surface_and_subsurface_swept_area);
     this->set_sweptareathistrip(this->get_sweptareathistrip() + swept_area);
+    this->set_subsurfacesweptareathistrip(this->get_subsurfacesweptareathistrip() + surface_and_subsurface_swept_area);
 
     // FIND OUT THE DECREASE FACTOR AFTER THE PASSAGE
     int a_landscape                  =           this->get_loc()->get_marine_landscape();
@@ -4087,6 +4102,7 @@ void Vessel::reinit_after_a_trip()
     // re-init some other stuffs after the trip
     this-> set_cumfuelcons(0);
     this-> set_sweptareathistrip(0);
+    this-> set_subsurfacesweptareathistrip(0);
     this-> set_consotogetthere(0);
     this-> set_cumsteaming(0);
     this-> set_cumcatches(0);

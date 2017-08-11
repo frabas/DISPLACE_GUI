@@ -563,13 +563,13 @@ void Fishfarm::compute_discharge_on_farm(int tstep)
     if(previous_fish_kg>0){
 
         // discharge_N
-        N_in_fish  = (current_fish_kg-previous_fish_kg)*this->get_N_in_fish_kg_3per();
+        N_in_fish  = (current_fish_kg-previous_fish_kg)*0.03; // compare with totalbiomass produced*0.03 vs. this->get_N_in_fish_kg_3per()
         N_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_N_in_feed() +
                              this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
         N_discharge = N_input-N_in_fish;
 
         // discharge_P
-        P_in_fish              = (current_fish_kg-previous_fish_kg)*this->get_P_in_fish_kg_0_5per();
+        P_in_fish              = (current_fish_kg-previous_fish_kg)*0.005; //  compare with totalbiomass produced*0.005 vs. this->get_P_in_fish_kg_0_5per();
         P_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_P_in_feed() +
                                  this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
         P_discharge =P_input-P_in_fish;
@@ -580,6 +580,10 @@ void Fishfarm::compute_discharge_on_farm(int tstep)
    // this->node->add_to_Nitrogen(N_discharge); // TO DO
     this->set_sim_net_discharge_P(P_discharge);
     // this->node->add_to_Phosporous(P_discharge); // TO DO
+
+// TO DO: add accumulated discharge over time, export in file, and plot in stat window....
+
+
 
 
 }

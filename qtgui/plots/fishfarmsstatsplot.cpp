@@ -275,6 +275,14 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Net discharge P (kg)"));
         break;
+    case FishfarmsStat::FF_CumulNetDischargeN:
+        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge N (kg)"));
+        break;
+    case FishfarmsStat::FF_CumulNetDischargeP:
+        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
+        mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge P (kg)"));
+        break;
     }
 
     mPlot->rescaleAxes();
@@ -309,6 +317,10 @@ double FishfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int far
         return model->getFishfarmsStatistics().getValue(tstep).netdischargeNForFishfarmAndFarmGroup(farmid, 0);
     case FishfarmsStat::FF_NetDischargeP:
         return model->getFishfarmsStatistics().getValue(tstep).netdischargePForFishfarmAndFarmGroup(farmid, 0);
+    case FishfarmsStat::FF_CumulNetDischargeN:
+        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargeNForFishfarmAndFarmGroup(farmid, 0);
+    case FishfarmsStat::FF_CumulNetDischargeP:
+        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargePForFishfarmAndFarmGroup(farmid, 0);
     }
 
     return 0;

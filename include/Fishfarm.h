@@ -85,6 +85,10 @@ class COMMONSSHARED_EXPORT Fishfarm
         double get_sim_net_discharge_P() const;
         double get_sim_net_discharge_C() const;
         double get_sim_net_discharge_medecine() const;
+        double get_sim_cumul_net_discharge_N() const;
+        double get_sim_cumul_net_discharge_P() const;
+        double get_sim_cumul_net_discharge_C() const;
+        double get_sim_cumul_net_discharge_medecine() const;
 
         double get_start_day_growing() const; // for main-loop
         double get_end_day_harvest() const;
@@ -129,6 +133,10 @@ class COMMONSSHARED_EXPORT Fishfarm
         void set_sim_net_discharge_P(double value);
         void set_sim_net_discharge_C(double value);
         void set_sim_net_discharge_medecine(double value);
+        void set_sim_cumul_net_discharge_N(double value);
+        void set_sim_cumul_net_discharge_P(double value);
+        void set_sim_cumul_net_discharge_C(double value);
+        void set_sim_cumul_net_discharge_medecine(double value);
 
 
         void compute_current_sim_individual_mean_kg_in_farm(int tstep, double a_year);  // methods for growth modelling
@@ -176,6 +184,7 @@ class COMMONSSHARED_EXPORT Fishfarm
         double sim_kg_eggs_harvested;
         double sim_annual_profit;
         double sim_net_discharge_N, sim_net_discharge_P, sim_net_discharge_C, sim_net_discharge_medecine;
+        double sim_cumul_net_discharge_N, sim_cumul_net_discharge_P, sim_cumul_net_discharge_C, sim_cumul_net_discharge_medecine;
 
 
 

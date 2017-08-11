@@ -138,6 +138,22 @@ void FishfarmsStats::collectNetDischargeP(int step, int farmid, int farmtypeid, 
     setDirty();
 }
 
+void FishfarmsStats::collectCumulNetDischargeN(int step, int farmid, int farmtypeid, double cumul_net_discharge_N)
+{
+    Q_UNUSED(step);
+
+    get(farmid, farmtypeid).cumulnetdischargeN += cumul_net_discharge_N;
+    setDirty();
+}
+
+void FishfarmsStats::collectCumulNetDischargeP(int step, int farmid, int farmtypeid, double cumul_net_discharge_P)
+{
+    Q_UNUSED(step);
+
+    get(farmid, farmtypeid).cumulnetdischargeP += cumul_net_discharge_P;
+    setDirty();
+}
+
 
 double FishfarmsStats::meanwForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
@@ -167,4 +183,14 @@ double FishfarmsStats::netdischargeNForFishfarmAndFarmGroup(int farmid, int farm
 double FishfarmsStats::netdischargePForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
 {
     return get(farmid, farmtypeid).netdischargeP;
+}
+
+double FishfarmsStats::cumulnetdischargeNForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
+{
+    return get(farmid, farmtypeid).cumulnetdischargeN;
+}
+
+double FishfarmsStats::cumulnetdischargePForFishfarmAndFarmGroup(int farmid, int farmtypeid) const
+{
+    return get(farmid, farmtypeid).cumulnetdischargeP;
 }

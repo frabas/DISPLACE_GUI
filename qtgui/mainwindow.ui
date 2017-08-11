@@ -340,7 +340,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>1</number>
+           <number>5</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -831,12 +831,22 @@
               </item>
               <item>
                <property name="text">
-                <string>Net Discharge N</string>
+                <string>Net Discharge N per Hour</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Net Discharge P</string>
+                <string>Net Discharge P per Hour</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Accumulated Net Discharge N</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Accumulated Net Discharge P</string>
                </property>
               </item>
              </widget>

@@ -439,6 +439,8 @@ public:
     void collectFishfarmAnnualProfit (int step, int node_idx, int farmid, int farmtype, double fishfarm_annualprofit);
     void collectFishfarmNetDischargeN (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeN);
     void collectFishfarmNetDischargeP (int step, int node_idx, int farmid, int farmtype, double fishfarm_netdischargeP);
+    void collectFishfarmCumulNetDischargeN (int step, int node_idx, int farmid, int farmtype, double fishfarm_cumulnetdischargeN);
+    void collectFishfarmCumulNetDischargeP (int step, int node_idx, int farmid, int farmtype, double fishfarm_cumulnetdischargeP);
     void commitFishfarmsStats(int tstep);
 
     void collectShipNbTransportedUnits (int step, int node_idx, int shipid, int shiptype,  double nb_transported_units);

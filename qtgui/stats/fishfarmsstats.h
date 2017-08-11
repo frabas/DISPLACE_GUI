@@ -15,6 +15,8 @@ public:
         double annualprofit = 0.0;
         double netdischargeN = 0.0;
         double netdischargeP = 0.0;
+        double cumulnetdischargeN = 0.0;
+        double cumulnetdischargeP = 0.0;
 
         StatData() {}
         void clear() {
@@ -23,7 +25,9 @@ public:
             eggsharvestkg = 0.0;
             annualprofit = 0.0;
             netdischargeN = 0.0;
-            netdischargeP = 0.0;
+            netdischargeN = 0.0;
+            cumulnetdischargeP = 0.0;
+            cumulnetdischargeP = 0.0;
         }
     };
 
@@ -55,6 +59,8 @@ public:
     void collectFishfarmAnnualProfit(int step, int farmid, int farmtypeid, double fishfarm_annual_profit);
     void collectNetDischargeN(int step, int farmid, int farmtypeid, double net_discharge_N);
     void collectNetDischargeP(int step, int farmid, int farmtypeid, double net_discharge_P);
+    void collectCumulNetDischargeN(int step, int farmid, int farmtypeid, double cumul_net_discharge_N);
+    void collectCumulNetDischargeP(int step, int farmid, int farmtypeid, double cumul_net_discharge_P);
 
     double meanwForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
     double fishharvestedkgForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
@@ -62,6 +68,8 @@ public:
     double annualprofitForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
     double netdischargeNForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
     double netdischargePForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double cumulnetdischargeNForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double cumulnetdischargePForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
 
     static const FishfarmsStats::StatData NoData;
 };

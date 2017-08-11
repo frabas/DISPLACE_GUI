@@ -84,6 +84,10 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _farmtype, in
  sim_net_discharge_P=0;
  sim_net_discharge_C=0;
  sim_net_discharge_medecine=0;
+ sim_cumul_net_discharge_N=0;
+ sim_cumul_net_discharge_P=0;
+ sim_cumul_net_discharge_C=0;
+ sim_cumul_net_discharge_medecine=0;
 
 }
 
@@ -232,6 +236,26 @@ double Fishfarm::get_sim_net_discharge_medecine() const
     return(sim_net_discharge_medecine);
 }
 
+
+double Fishfarm::get_sim_cumul_net_discharge_N() const
+{
+    return(sim_cumul_net_discharge_N);
+}
+
+double Fishfarm::get_sim_cumul_net_discharge_P() const
+{
+    return(sim_cumul_net_discharge_P);
+}
+
+double Fishfarm::get_sim_cumul_net_discharge_C() const
+{
+    return(sim_cumul_net_discharge_C);
+}
+
+double Fishfarm::get_sim_cumul_net_discharge_medecine() const
+{
+    return(sim_cumul_net_discharge_medecine);
+}
 
 double Fishfarm::get_start_day_growing() const
 {
@@ -427,6 +451,26 @@ void Fishfarm::set_sim_net_discharge_medecine(double _value)
     sim_net_discharge_medecine= _value;
 }
 
+void Fishfarm::set_sim_cumul_net_discharge_N(double _value)
+{
+    sim_cumul_net_discharge_N= _value;
+}
+
+void Fishfarm::set_sim_cumul_net_discharge_P(double _value)
+{
+    sim_cumul_net_discharge_P= _value;
+}
+
+void Fishfarm::set_sim_cumul_net_discharge_C(double _value)
+{
+    sim_cumul_net_discharge_C= _value;
+}
+
+void Fishfarm::set_sim_cumul_net_discharge_medecine(double _value)
+{
+    sim_cumul_net_discharge_medecine= _value;
+}
+
 
 void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep, double a_year)
 {
@@ -549,6 +593,7 @@ void Fishfarm::compute_profit_in_farm()
 void Fishfarm::compute_discharge_on_farm(int tstep)
 {
 
+
     double current_fish_kg        = this->get_sim_individual_mean_kg();
     double previous_fish_kg       = this->get_sim_previous_individual_mean_kg();
     double nb_days_growing_period = this->get_end_day_harvest() - this->get_start_day_growing();
@@ -564,21 +609,23 @@ void Fishfarm::compute_discharge_on_farm(int tstep)
 
         // discharge_N
         N_in_fish  = (current_fish_kg-previous_fish_kg)*0.03; // compare with totalbiomass produced*0.03 vs. this->get_N_in_fish_kg_3per()
-        N_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_N_in_feed() +
-                             this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
+        N_input                = this->get_total_feed_kg()/nb_days_growing_period/24 * this->get_prop_N_in_feed() +
+                             this->get_total_feed_vet_kg()/nb_days_growing_period/24 * this->get_prop_N_in_feed_vet();
         N_discharge = N_input-N_in_fish;
 
         // discharge_P
         P_in_fish              = (current_fish_kg-previous_fish_kg)*0.005; //  compare with totalbiomass produced*0.005 vs. this->get_P_in_fish_kg_0_5per();
-        P_input                = this->get_total_feed_kg()/nb_days_growing_period * this->get_prop_P_in_feed() +
-                                 this->get_total_feed_vet_kg()/nb_days_growing_period * this->get_prop_N_in_feed_vet();
+        P_input                = this->get_total_feed_kg()/nb_days_growing_period/24 * this->get_prop_P_in_feed() +
+                                 this->get_total_feed_vet_kg()/nb_days_growing_period/24 * this->get_prop_N_in_feed_vet();
         P_discharge =P_input-P_in_fish;
     }
 
     // write away
     this->set_sim_net_discharge_N(N_discharge);
+    this->set_sim_cumul_net_discharge_N(N_discharge + this->get_sim_cumul_net_discharge_N());
    // this->node->add_to_Nitrogen(N_discharge); // TO DO
     this->set_sim_net_discharge_P(P_discharge);
+    this->set_sim_cumul_net_discharge_P(P_discharge + this->get_sim_cumul_net_discharge_P());
     // this->node->add_to_Phosporous(P_discharge); // TO DO
 
 // TO DO: add accumulated discharge over time, export in file, and plot in stat window....
@@ -597,12 +644,14 @@ void Fishfarm::export_fishfarms_indicators(ofstream& fishfarmlogs, int tstep)
 
 
     fishfarmlogs << setprecision(5) << fixed;
-    // tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit / fishfarm_netdischargeN  / fishfarm_netdischargeP
+    // tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit /
+    // fishfarm_netdischargeN  / fishfarm_netdischargeP / fishfarm_cumulnetdischargeN  / fishfarm_cumulnetdischargeP
     fishfarmlogs <<  tstep << " " << this->p_location_ff->get_idx_node().toIndex() << " "<<
         this->get_farm_original_long() << " " << this->get_farm_original_lat() << " " << this->get_farmtype() << " " << this->get_name() << " " <<
         this->get_sim_individual_mean_kg() << " "    << this->get_sim_kg_harvested() << " " <<
         this->get_sim_kg_eggs_harvested() << " " << this->get_sim_annual_profit() << " " <<
-        this->get_sim_net_discharge_N() << " " << this->get_sim_net_discharge_P() << " " <<  endl;
+        this->get_sim_net_discharge_N() << " " << this->get_sim_net_discharge_P() << " " <<
+        this->get_sim_cumul_net_discharge_N() << " " << this->get_sim_cumul_net_discharge_P() << " " <<  endl;
 
 }
 

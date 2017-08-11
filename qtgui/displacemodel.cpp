@@ -842,6 +842,31 @@ void DisplaceModel::collectFishfarmNetDischargeP(int step, int node_idx, int far
                                                   fishfarm_netdischargeP);
 }
 
+void DisplaceModel::collectFishfarmCumulNetDischargeN(int step, int node_idx, int farmid, int farmtype, double fishfarm_cumulnetdischargeN)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmCumulNetDischargeN(farmtype, fishfarm_cumulnetdischargeN);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectCumulNetDischargeN(step,
+                                                  farmid,
+                                                  farmtype,
+                                                  fishfarm_cumulnetdischargeN);
+}
+
+
+void DisplaceModel::collectFishfarmCumulNetDischargeP(int step, int node_idx, int farmid, int farmtype, double fishfarm_cumulnetdischargeP)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setFishfarmCumulNetDischargeP(farmtype, fishfarm_cumulnetdischargeP);
+    mNodesStatsDirty = true;
+
+    mStatsFishfarmsCollected.collectCumulNetDischargeP(step,
+                                                  farmid,
+                                                  farmtype,
+                                                  fishfarm_cumulnetdischargeP);
+}
+
 
 void DisplaceModel::collectShipNbTransportedUnits(int step, int node_idx, int shipid, int shiptype, double nb_transported_units)
 {

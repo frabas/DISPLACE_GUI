@@ -189,6 +189,15 @@ public:
         return mFishfarmNetDischargeP[farm];
     }
 
+    void setFishfarmCumulNetDischargeN(int farmid, double fishfarm_cumulnetdischargeN);
+    double getFishfarmCumulNetDischargeN(int farm) const {
+        return mFishfarmCumulNetDischargeN[farm];
+    }
+
+    void setFishfarmCumulNetDischargeP(int farmid, double fishfarm_cumulnetdischargeP);
+    double getFishfarmCumulNetDischargeP(int farm) const {
+        return mFishfarmCumulNetDischargeP[farm];
+    }
 
 
 
@@ -233,6 +242,8 @@ private:
     double *mFishfarmAnnualProfit;
     double *mFishfarmNetDischargeN;
     double *mFishfarmNetDischargeP;
+    double *mFishfarmCumulNetDischargeN;
+    double *mFishfarmCumulNetDischargeP;
 
 
     int areaType;

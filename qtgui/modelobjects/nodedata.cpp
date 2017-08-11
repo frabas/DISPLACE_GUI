@@ -51,6 +51,8 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         mFishfarmAnnualProfit = new double[N3];
         mFishfarmNetDischargeN = new double[N3];
         mFishfarmNetDischargeP = new double[N3];
+        mFishfarmCumulNetDischargeN = new double[N3];
+        mFishfarmCumulNetDischargeP = new double[N3];
 
         for (int i = 0; i < N; ++i) {
             mPop[i] = 0.0;
@@ -92,6 +94,12 @@ NodeData::NodeData(std::shared_ptr<Node> nd, DisplaceModel *model)
         }
         for (int j = 0; j < N3; ++j) {
             mFishfarmNetDischargeP[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmCumulNetDischargeN[j] = 0.0;
+        }
+        for (int j = 0; j < N3; ++j) {
+            mFishfarmCumulNetDischargeP[j] = 0.0;
         }
 
 
@@ -240,6 +248,15 @@ void NodeData::setFishfarmNetDischargeP(int farm, double fishfarmnetdischargeP)
     mFishfarmNetDischargeP[farm] = fishfarmnetdischargeP;
 }
 
+void NodeData::setFishfarmCumulNetDischargeN(int farm, double fishfarmcumulnetdischargeN)
+{
+    mFishfarmCumulNetDischargeN[farm] = fishfarmcumulnetdischargeN;
+}
+
+void NodeData::setFishfarmCumulNetDischargeP(int farm, double fishfarmcumulnetdischargeP)
+{
+    mFishfarmCumulNetDischargeP[farm] = fishfarmcumulnetdischargeP;
+}
 
 int NodeData::getHarbourId() const
 {

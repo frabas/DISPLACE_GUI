@@ -456,6 +456,14 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
         if (!ok) throw std::runtime_error(QString("wrong fishfarm_netdischargeP %1").arg(fields[11]).toStdString());
         model->collectFishfarmNetDischargeP(step, nodeid, farmid, farmtype, fishfarm_netdischargeP);
 
+        double fishfarm_cumulnetdischargeN = fields[12].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fishfarm_cumulnetdischargeN %1").arg(fields[12]).toStdString());
+        model->collectFishfarmCumulNetDischargeN(step, nodeid, farmid, farmtype, fishfarm_cumulnetdischargeN);
+
+        double fishfarm_cumulnetdischargeP = fields[13].toDouble(&ok);
+        if (!ok) throw std::runtime_error(QString("wrong fishfarm_cumulnetdischargeP %1").arg(fields[13]).toStdString());
+        model->collectFishfarmCumulNetDischargeP(step, nodeid, farmid, farmtype, fishfarm_cumulnetdischargeP);
+
         last_step = step;
     }
 

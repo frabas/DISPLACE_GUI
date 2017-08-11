@@ -871,8 +871,6 @@ void DisplaceModel::collectFishfarmCumulNetDischargeP(int step, int node_idx, in
 void DisplaceModel::collectShipNbTransportedUnits(int step, int node_idx, int shipid, int shiptype, double nb_transported_units)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -886,8 +884,6 @@ void DisplaceModel::collectShipNbTransportedUnits(int step, int node_idx, int sh
 void DisplaceModel::collectShipFuelUseHour(int step, int node_idx, int shipid, int shiptype, double fuel_use_h)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -900,8 +896,6 @@ void DisplaceModel::collectShipFuelUseHour(int step, int node_idx, int shipid, i
 void DisplaceModel::collectShipNOxEmissiongPerkW(int step, int node_idx, int shipid, int shiptype, double NOx_emission_gperkW)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -914,8 +908,6 @@ void DisplaceModel::collectShipNOxEmissiongPerkW(int step, int node_idx, int shi
 void DisplaceModel::collectShipSOxEmissionPercentPerTotalFuelmass(int step, int node_idx, int shipid, int shiptype, double SOx_emission_percentpertotalfuelmass)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -929,8 +921,6 @@ void DisplaceModel::collectShipSOxEmissionPercentPerTotalFuelmass(int step, int 
 void DisplaceModel::collectShipGHGemissiongPerkW(int step, int node_idx, int shipid, int shiptype, double GHG_emission_gperkW)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -943,8 +933,6 @@ void DisplaceModel::collectShipGHGemissiongPerkW(int step, int node_idx, int shi
 void DisplaceModel::collectShipPMEemissiongPerkW(int step, int node_idx, int shipid, int shiptype, double PME_emission_gperkW)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -958,8 +946,6 @@ void DisplaceModel::collectShipPMEemissiongPerkW(int step, int node_idx, int shi
 void DisplaceModel::collectShipfuelUseLitre(int step, int node_idx, int shipid, int shiptype, double fuel_use_litre)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -972,8 +958,6 @@ void DisplaceModel::collectShipfuelUseLitre(int step, int node_idx, int shipid, 
 void DisplaceModel::collectShipNOxEmission(int step, int node_idx, int shipid, int shiptype, double NOx_emission)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -986,8 +970,6 @@ void DisplaceModel::collectShipNOxEmission(int step, int node_idx, int shipid, i
 void DisplaceModel::collectShipSOxEmission(int step, int node_idx, int shipid, int shiptype, double SOx_emission)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -1000,8 +982,6 @@ void DisplaceModel::collectShipSOxEmission(int step, int node_idx, int shipid, i
 void DisplaceModel::collectShipGHGemission(int step, int node_idx, int shipid, int shiptype, double GHG_emission)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -1014,8 +994,6 @@ void DisplaceModel::collectShipGHGemission(int step, int node_idx, int shipid, i
 void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, int shiptype, double PME_emission)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -1028,8 +1006,6 @@ void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, i
 void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, int windfarmtype, double kWh)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 
@@ -1042,8 +1018,6 @@ void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, i
 void DisplaceModel::collectWindfarmkWproduction(int step, int node_idx, int windfarmid, int windfarmtype, double kWproduction)
 {
     checkStatsCollection(step);
-    //mNodes.at(node_idx)->setFishfarmFishMeanWeight(farmtype, meanw_kg);
-    //mNodesStatsDirty = true;
 
 
 

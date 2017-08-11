@@ -32,6 +32,7 @@ Windmill::Windmill(int _idx, string _name, Node *_node, double _size, int _type,
     : idx(_idx), name(_name), x(_node->get_x()), y(_node->get_y()),
       size(_size), type(_type), kWh(_kWh), is_active(_is_active)
 {
+    kWProduction=0;
 }
 
 Windmill::~Windmill()
@@ -108,8 +109,8 @@ void Windmill::set_kW_production(double _cumul)
 void Windmill::compute_kWproduction_in_farm()
 {
 
-    // TO DO
-    this->set_kW_production(0);
+    // just a cumul
+    this->set_kW_production(this->get_kW_production() + this->get_kWh());
 
 }
 

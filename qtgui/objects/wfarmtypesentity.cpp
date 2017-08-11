@@ -20,7 +20,7 @@ void WFarmTypesEntity::setInterestingList(std::shared_ptr<InterestingListWithSpe
 QModelIndex WFarmTypesEntity::parent(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return model->createCategoryEntityFromChild(ObjectTreeModel::FishfarmsTypes);
+    return model->createCategoryEntityFromChild(ObjectTreeModel::WindfarmsTypes);
 }
 
 QModelIndex WFarmTypesEntity::index(int row, int column, const QModelIndex &parent) const

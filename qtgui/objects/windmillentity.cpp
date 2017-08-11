@@ -60,11 +60,15 @@ int WindmillEntity::columnCount() const
     return 1;
 }
 
+
+
 QVariant WindmillEntity::data(const QModelIndex &index, int role) const
 {
     if (mWindmillId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
             return model->getModel()->getWindmillId(mWindmillId);
+        if (role == Qt::CheckStateRole)
+            return QVariant(model->getModel()->isInterestingWindfarms(index.row()+1) ? Qt::Checked : Qt::Unchecked);
         if (role == Qt::ToolTipRole) {
             std::shared_ptr<WindmillData> ff = model->getModel()->getWindmillList()[mWindmillId];
             return QString("%1 %2").arg(ff->mWindmill->get_y()).arg(ff->mWindmill->get_x());

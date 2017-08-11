@@ -257,7 +257,7 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
         break;
     case ShipsStat::SH_FuelPerHour:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("Nb. Transported Units"));
+        mPlot->yAxis->setLabel(QObject::tr("Fuel Per Hour"));
         break;
     case ShipsStat::SH_NOxEmission_gperkW:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -313,32 +313,31 @@ void ShipsStatsPlot::saveTo()
     mSaveFilename = "Ships.txt";
 }
 
-double ShipsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::ShipsStat stattype)
+double ShipsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int shipid, int shiptypeid, displace::plot::ShipsStat stattype)
 {
-    Q_UNUSED(farmtype);
     switch (stattype) {
     case ShipsStat::SH_NbTransportedUnits:
-        return model->getShipsStatistics().getValue(tstep).NbTransportedUnitsForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).NbTransportedUnitsForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_FuelPerHour:
-        return model->getShipsStatistics().getValue(tstep).FuelPerHourForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).FuelPerHourForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_NOxEmission_gperkW:
-        return model->getShipsStatistics().getValue(tstep).NOxEmissionFactorForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).NOxEmissionFactorForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_SOxEmission_PercentPerFuelMass:
-        return model->getShipsStatistics().getValue(tstep).SOxEmissionFactorForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).SOxEmissionFactorForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_GHGEmission_gperkW:
-        return model->getShipsStatistics().getValue(tstep).GHGEmissionFactorForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).GHGEmissionFactorForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_PMEEmission_gperkW:
-        return model->getShipsStatistics().getValue(tstep).PMEEmissionFactorForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).PMEEmissionFactorForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_FuelUseLitre:
-        return model->getShipsStatistics().getValue(tstep).FuelUseLitreForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).FuelUseLitreForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_NOxEmission:
-        return model->getShipsStatistics().getValue(tstep).NOxEmissionForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).NOxEmissionForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_SOxEmission:
-        return model->getShipsStatistics().getValue(tstep).SOxEmissionForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).SOxEmissionForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_GHGEmission:
-        return model->getShipsStatistics().getValue(tstep).GHGEmissionForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).GHGEmissionForShipAndShipGroup(shipid, shiptypeid);
     case ShipsStat::SH_PMEEmission:
-        return model->getShipsStatistics().getValue(tstep).PMEEmissionForShipAndShipGroup(farmid, 0);
+        return model->getShipsStatistics().getValue(tstep).PMEEmissionForShipAndShipGroup(shipid, shiptypeid);
     }
 
     return 0;

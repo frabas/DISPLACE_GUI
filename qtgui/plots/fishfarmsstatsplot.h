@@ -34,7 +34,7 @@ public:
     void update(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
-    double getStatValue(DisplaceModel *model, int tstep, int farmtype, int farmid, displace::plot::FishfarmsStat stattype);
+    double getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::FishfarmsStat stattype);
     void saveTo();
 };
 

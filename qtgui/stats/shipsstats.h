@@ -72,17 +72,17 @@ public:
     void collectPMEemission (int step,  int shipid,  int shiptypeid,  double PME_emission);
 
 
-   double NbTransportedUnitsForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double FuelPerHourForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double NOxEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double SOxEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double GHGEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double PMEEmissionFactorForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double FuelUseLitreForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double NOxEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double SOxEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double GHGEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
-   double PMEEmissionForShipAndShipGroup(int shiptypeid, int shipid) const;
+   double NbTransportedUnitsForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double FuelPerHourForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double NOxEmissionFactorForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double SOxEmissionFactorForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double GHGEmissionFactorForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double PMEEmissionFactorForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double FuelUseLitreForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double NOxEmissionForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double SOxEmissionForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double GHGEmissionForShipAndShipGroup(int shipid,  int shiptypeid) const;
+   double PMEEmissionForShipAndShipGroup(int shipid,  int shiptypeid) const;
 
 
     static const ShipsStats::StatData NoData;

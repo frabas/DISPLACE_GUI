@@ -303,24 +303,23 @@ void FishfarmsStatsPlot::saveTo()
 
 double FishfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int farmid, int farmtype, displace::plot::FishfarmsStat stattype)
 {
-    Q_UNUSED(farmtype);
     switch (stattype) {
     case FishfarmsStat::FF_FishMeanWeight:
-        return model->getFishfarmsStatistics().getValue(tstep).meanwForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).meanwForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_FishHarvestedKg:
-        return model->getFishfarmsStatistics().getValue(tstep).fishharvestedkgForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).fishharvestedkgForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_EggsHarvestedKg:
-        return model->getFishfarmsStatistics().getValue(tstep).eggsharvestedkgForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).eggsharvestedkgForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_AnnualProfit:
-        return model->getFishfarmsStatistics().getValue(tstep).annualprofitForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).annualprofitForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_NetDischargeN:
-        return model->getFishfarmsStatistics().getValue(tstep).netdischargeNForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).netdischargeNForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_NetDischargeP:
-        return model->getFishfarmsStatistics().getValue(tstep).netdischargePForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).netdischargePForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_CumulNetDischargeN:
-        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargeNForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargeNForFishfarmAndFarmGroup(farmid, farmtype);
     case FishfarmsStat::FF_CumulNetDischargeP:
-        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargePForFishfarmAndFarmGroup(farmid, 0);
+        return model->getFishfarmsStatistics().getValue(tstep).cumulnetdischargePForFishfarmAndFarmGroup(farmid, farmtype);
     }
 
     return 0;

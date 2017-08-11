@@ -62,14 +62,14 @@ public:
     void collectCumulNetDischargeN(int step, int farmid, int farmtypeid, double cumul_net_discharge_N);
     void collectCumulNetDischargeP(int step, int farmid, int farmtypeid, double cumul_net_discharge_P);
 
-    double meanwForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double fishharvestedkgForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double eggsharvestedkgForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double annualprofitForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double netdischargeNForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double netdischargePForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double cumulnetdischargeNForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
-    double cumulnetdischargePForFishfarmAndFarmGroup(int farmtypeid, int farmid) const;
+    double meanwForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double fishharvestedkgForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double eggsharvestedkgForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double annualprofitForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double netdischargeNForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double netdischargePForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double cumulnetdischargeNForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
+    double cumulnetdischargePForFishfarmAndFarmGroup(int farmid, int farmtypeid) const;
 
     static const FishfarmsStats::StatData NoData;
 };

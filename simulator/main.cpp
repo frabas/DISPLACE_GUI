@@ -63,6 +63,7 @@
 #endif
 
 #include <biomodule.h>
+#include <biomodule2.h>
 
 #include <iomanip>
 #include <iostream>
@@ -3589,8 +3590,63 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              dyn_pop_sce,
                                              dyn_alloc_sce);
 
+/*
+        int biocheck = applyBiologicalModule2(tstep,
+                                             namesimu,
+                                             namefolderinput,
+                                             namefolderoutput,
+                                             pathoutput,
+                                             popdyn_N,
+                                             popdyn_F,
+                                             popdyn_SSB,
+                                             popdyn_annual_indic,
+                                             popnodes_inc,
+                                             popnodes_impact,
+                                             popnodes_cumulcatches_per_pop,
+                                             popnodes_cumftime,
+                                             popnodes_cumsweptarea,
+                                             popnodes_cumcatches,
+                                             popnodes_cumcatches_with_threshold,
+                                             popnodes_tariffs,
+                                             export_individual_tacs,
+                                             popnodes_end,
+                                             benthosbiomassnodes,
+                                             benthosnumbernodes,
+                                             nbbenthospops,
+                                             use_gui,
+                                             popdyn_N_filename,
+                                             popdyn_F_filename,
+                                             popdyn_SSB_filename,
+                                             popnodes_inc_filename,
+                                             popnodes_end_filename,
+                                             popnodes_impact_filename,
+                                             popnodes_cumulcatches_per_pop_filename,
+                                             popnodes_cumftime_filename,
+                                             popnodes_cumsweptarea_filename,
+                                             popnodes_cumcatches_filename,
+                                             popnodes_cumcatches_with_threshold_filename,
+                                             popnodes_tariffs_filename,
+                                             popnodes_benthos_biomass_filename,
+                                             popnodes_benthos_number_filename,
+                                             tsteps_quarters,
+                                             tsteps_semesters,
+                                             tsteps_years,
+                                             tsteps_months,
+                                             implicit_pops,
+                                             calib_oth_landings,
+                                             is_tacs,
+                                             export_vmslike,
+                                             freq_do_growth,
+                                             init_weight_per_szgroup,
+                                             species_interactions_mortality_proportion_matrix,
+                                             populations,
+                                             nodes,
+                                             vessels,
+                                             benthoss,
+                                             dyn_pop_sce,
+                                             dyn_alloc_sce);
 
-
+*/
 
         if(dyn_pop_sce.option(Options::diffuseN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {

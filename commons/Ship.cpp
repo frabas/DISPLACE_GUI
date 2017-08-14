@@ -37,6 +37,16 @@
 Ship::Ship()
 {
     idx_ship = 0;
+
+    // output stat variables
+    nb_transported_units=0;
+    fuel_use_litre=0.0;
+    NOxEmission=0.0;
+    SOxEmission=0;
+    GHGEmission=0;
+    PMEEmission=0;
+
+
 }
 
 
@@ -90,6 +100,7 @@ Ship::Ship(int idx, string a_name, int is_active, double a_imo, double a_yearbui
     // output stat variables
     nb_transported_units=0;
     fuel_use_litre=0.0;
+    NOxEmission=0.0;
     SOxEmission=0;
     GHGEmission=0;
     PMEEmission=0;
@@ -486,13 +497,14 @@ void Ship::move()
 void Ship::compute_emissions_in_ship()
 {
 // TODO
-    this->set_fuel_use_litre(0);
-    this->set_nb_transported_units(0);
-    this->set_NOxEmission(0);
-    this->set_SOxEmission(0);
-    this->set_GHGEmission(0);
-    this->set_PMEEmission(0);
+    this->set_nb_transported_units(this->get_nb_transported_units()); // TODO delivery and clearing at ports
 
+    // for other indicators, apply just a cumul
+    this->set_fuel_use_litre(this->get_fuel_use_litre() + this->get_fueluse());
+    this->set_NOxEmission(this->get_NOxEmission() + (this->get_NOxEmission_gperKWh()*this->get_KW()));
+    this->set_SOxEmission(this->get_SOxEmission() + (this->get_SOxEmission_percentpertotalfuelmass()*this->get_fueluse()));
+    this->set_GHGEmission(this->get_GHGEmission() + (this->get_GHGEmission_gperKWh()*this->get_KW()));
+    this->set_PMEEmission(this->get_PMEEmission() + (this->get_PMEEmission_gperKWh()*this->get_KW()));
 }
 
 void Ship::export_ships_indicators(ofstream& shiplogs, int tstep)

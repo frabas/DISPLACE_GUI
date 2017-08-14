@@ -25,7 +25,7 @@
 
 PopulationData::PopulationData(int _id)
     : id(_id),
-      aggregate(), mortality(), SSB(),
+      aggregate(0), mortality(0), SSB(),
       totAggregate(0.0),
       totMortality(0.0),
       totSSB(0.0)
@@ -91,8 +91,10 @@ void PopulationData::setSSB(const QVector<double> &value)
 {
     SSB = value;
     // force aggregate and mortality to have the same size!
-    while (aggregate.size() < SSB.size())
+    while (aggregate.size() < SSB.size()){
         aggregate.push_back(0);
+        mortality.push_back(0);
+     }
 }
 
 

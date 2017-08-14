@@ -65,6 +65,8 @@ QVariant ShipEntity::data(const QModelIndex &index, int role) const
     if (mShipId != -1 && model->getModel() != 0 && index.column() == 0) {
         if (role == Qt::DisplayRole)
             return model->getModel()->getShipId(mShipId);
+        if (role == Qt::CheckStateRole)
+            return QVariant(model->getModel()->isInterestingShips(index.row()+1) ? Qt::Checked : Qt::Unchecked);
         if (role == Qt::ToolTipRole) {
             std::shared_ptr<ShipData> sh = model->getModel()->getShipList()[mShipId];
             return QString("%1 %2").arg(sh->mShip->get_y()).arg(sh->mShip->get_x());

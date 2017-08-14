@@ -485,7 +485,7 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
             if (period != -1) {
                 int p = (step / period);
                 if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
+         //           model->commitNodesStatsFromSimu(step, true);
                     last_period = p;
                 }
             }
@@ -502,8 +502,8 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
         }
     }
 
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
+    //if (tstep == -1)
+    //    model->commitNodesStatsFromSimu(step);
 }
 
 void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period)

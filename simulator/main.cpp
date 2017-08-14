@@ -508,10 +508,13 @@ int main(int argc, char* argv[])
     // scenarios for dynamic allocation of effort and biol sce
 
     //for initial input data
-    string a_month= "month1";// start quarter
-    string a_quarter= "quarter1";// start quarter
-    // start semester
-    string a_semester= "semester1";
+    // init
+    string a_month   ="month1";
+    string a_semester="semester1";
+    string a_quarter ="quarter1";
+    int a_month_i    =1;
+    int a_quarter_i  =1;
+    int a_semester_i =1;
 
     // create a specific output directory for the ibm outcomes
     string pathoutput;
@@ -3694,16 +3697,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout  << "RE-READ DATA----------" << endl);
-        string a_semester;
+
 
         // RE-READ DATA FOR EVENT => change of month
-        if(tstep>700 && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
-            int a_quarter_i=1;
-            int a_semester_i=1;
 
             count_months+=1;
-            int a_month_i = count_months % 12;
+            a_month_i = count_months % 12;
             if(a_month_i==0) a_month_i=12;
             if(a_month_i==1 || a_month_i==2 || a_month_i==3) a_quarter_i=1;
             if(a_month_i==4 || a_month_i==5 || a_month_i==6) a_quarter_i=2;
@@ -3872,43 +3873,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_resttime_par2(resttime_par2s.at(v));
                 vessels.at(v)->set_av_trip_duration(av_trip_duration.at(v));
 
-#if 0
-                // re-read nodes in polygons for area-based management
-                nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
-
-
-                // check for area_closure
-                for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-                {
-                    // get all values across the keys
-                    polygons.push_back(pos->first);
-                    polygon_nodes.push_back(pos->second);
-                    dout(cout  << " a polygon node is " << pos->second << endl);
-                }
-                sort (polygon_nodes.begin(), polygon_nodes.end());
-
-
-                // TO DO: improve this bottleneck.....because too costly when polygon_nodes is large
-                /*for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-                    {
-                    if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node().toIndex()))
-                       {
-                        nodes.at(a_idx)->setAreaType(1);
-                       } else{
-                        nodes.at(a_idx)->setAreaType(0);
-                       }
-                    }
-                 */
-                // e.g.:
-                for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-                {
-                    nodes.at(a_idx)->setAreaType(0);
-                }
-                for(unsigned int a_idx=0; a_idx<polygon_nodes.size(); a_idx++)
-                {
-                    nodes.at(polygon_nodes.at(a_idx))->setAreaType(1);
-                }
-#endif
                 if(dyn_alloc_sce.option(Options::area_closure)) if (!read_metier_quarterly_closures(nodes, a_quarter, a_graph_name, folder_name_parameterization, inputfolder)) {
                     exit(1);
                 }
@@ -4169,25 +4133,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         {
             cout << "redispatch the population over the its spatial extent...." << endl;
 
-            // CHECK...CHECK...CHECK...
-            // write done  pop number in popdyn_test
             for (unsigned int sp=0; sp<populations.size(); sp++)
             {
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
-                    dout(cout  << "write down (BEFORE re-read pop) in the popdyn_test file for checking...");
                     // get total N from summing up N over nodes
                     populations.at(sp)->aggregate_N();
-                    popdyn_test << setprecision(0) << fixed;
-                    // tstep / pop / tot N at szgroup
-                    popdyn_test << tstep << " " << sp << " ";
-                    vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
-                    for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
-                    {
-                        // output in thousands of individuals
-                        popdyn_test  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
-                    }
-                    popdyn_test << " " <<  endl;
+
                 }
             }
 

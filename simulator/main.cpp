@@ -922,7 +922,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
     // special case for ramdom stochastic spatial pop distribution
-    if(dyn_pop_sce.option(Options::white_noise_on_avai))
+    if(dyn_pop_sce.option(Options::white_noise_on_avai_deprecated))
     {
         // pick up a file name randomly later on
         int rand_avai_file= (rand() % 50)+1;
@@ -4133,8 +4133,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         {
             cout << "redispatch the population over the its spatial extent...." << endl;
 
+            // aggregate from nodes to set the tot_N_at_szgroup per pop
             for (unsigned int sp=0; sp<populations.size(); sp++)
             {
+                // aggregate from nodes (caution: do it before changing of list_nodes)
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
                     // get total N from summing up N over nodes
@@ -4143,15 +4145,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
             }
 
-            // aggregate from nodes to set the tot_N_at_szgroup per pop
-            for (unsigned int p=0; p<populations.size(); p++)
-            {
-                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  p  ) )
-                {
-                    // aggregate from nodes (caution: do it before changing of list_nodes)
-                    populations.at(p)->aggregate_N();
-                }
+
+
+            if(dyn_pop_sce.option(Options::white_noise_on_avai)){
+               // alter the availability field, if required
+               for (unsigned int p=0; p<populations.size(); p++)
+               {
+                   if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  p  ) )
+                   {
+
+                    // the system command line
+                    #if defined(_WIN32)
+                    system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\avaifieldshuffler -f myfish -s semester1 -p 0");
+                    cout << "avaifieldshuffler...done" << endl;
+                    #else
+                    string a_command = "~/ibm_vessels/displace_hpc_sh/avaifieldshuffler -f myfish -s semester1 -p 0";
+                    system(a_command.c_str());
+                    cout << "avaifieldshuffler...done" << endl;
+                    #endif
+
+                   }
+               }
             }
+
 
             // then, clean up all nodes before changing of spatial avai
             // (necessary to remove any fish in now wrong locations)

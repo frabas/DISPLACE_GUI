@@ -112,6 +112,7 @@ enum Pop_Sce {
     use_SMS_single,
     diffuseN,
     white_noise_on_avai,
+    white_noise_on_avai_deprecated,
     with_stochast_oth_land,
     stop_mig_35065,
     impact_benthos_N,

@@ -1,7 +1,8 @@
 TEMPLATE=subdirs
 CONFIG+=ordered
 SUBDIRS+=formats commons QMapControl qtcommons qtgui simulator dteditor tseditor objeditor \
-    scheduler
+    scheduler \
+    avaifieldshuffler
 
 CONFIG += unit-test
 SUBDIRS += tests \

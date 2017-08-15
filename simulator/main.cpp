@@ -354,6 +354,8 @@ bool test_not_belong_to_firm(const Vessel *v, int id)
 }
 
 
+string type_of_avai_field_to_read=""; // by default, use the initial input
+
 
 
 /**---------------------------------------------------------------**/
@@ -1985,8 +1987,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             init_proprecru_per_szgroup.push_back(pos->second);
 
         // input data, avai per szgroup on nodes and presence of the pop
-        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
-        multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file);
+        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, "");
+        multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, type_of_avai_field_to_read);
 
         // input data
         multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
@@ -4148,21 +4150,27 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             if(dyn_pop_sce.option(Options::white_noise_on_avai)){
+               type_of_avai_field_to_read="_shuffled";
                // alter the availability field, if required
                for (unsigned int p=0; p<populations.size(); p++)
                {
                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  p  ) )
                    {
+                       stringstream out;
+                       out << p;
+                       string a_pop = out.str();
 
-                    // the system command line
-                    #if defined(_WIN32)
-                    system("\"C:\\Users\\fbas\\Documents\\GitHub\\displace_hpc_sh\\avaifieldshuffler -f myfish -s semester1 -p 0");
-                    cout << "avaifieldshuffler...done" << endl;
-                    #else
-                    string a_command = "~/ibm_vessels/displace_hpc_sh/avaifieldshuffler -f myfish -s semester1 -p 0";
-                    system(a_command.c_str());
-                    cout << "avaifieldshuffler...done" << endl;
-                    #endif
+                       // the system command line
+                       #if defined(_WIN32)
+                       string a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
+                       cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
+                       system(a_command.c_str());
+                       cout << "avaifieldshuffler...done" << endl;
+                       #else
+                       string a_command = inputfolder+"/avaifieldshuffler -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
+                       system(a_command.c_str());
+                       cout << "avaifieldshuffler...done" << endl;
+                       #endif
 
                    }
                }
@@ -4187,8 +4195,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     out << i;
 
                     // read a new spatial_availability
-                    auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
-                    auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file);
+                    auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, "");
+                    auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, type_of_avai_field_to_read);
                     populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 
                     // read a other landings per node for this species

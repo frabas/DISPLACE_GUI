@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
 
-    cout << "AvaiFieldShuffle..." << endl;
+    cout << "Calling avai field shuffler..." << endl;
 
 
     // casting a_pop into a string
@@ -55,6 +55,20 @@ int main(int argc, char* argv[])
     out << a_pop;
     string a_pop_s = out.str();
 
+    // full
+    string filename_full_avai_file;
+    filename_full_avai_file = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+".dat";
+
+    ifstream file_full_avai_szgroup_nodes_with_pop;
+    file_full_avai_szgroup_nodes_with_pop.open(filename_full_avai_file.c_str());
+    if(file_full_avai_szgroup_nodes_with_pop.fail())
+    {
+        open_file_error(filename_full_avai_file);
+        //return 1;
+    }
+
+    /*
+    // selected
     string filename_avai_file;
     filename_avai_file = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+".dat";
 
@@ -65,8 +79,25 @@ int main(int argc, char* argv[])
         open_file_error(filename_avai_file);
         //return 1;
     }
+    */
 
-    // read in and populate
+    // read in and populate (full)
+    multimap<int, double> full_avai_szgroup_nodes_with_pop;
+    string line;
+    while(!getline(file_full_avai_szgroup_nodes_with_pop, line).eof())
+    {
+        int key;
+        file_full_avai_szgroup_nodes_with_pop >> key;
+        double val;
+        file_full_avai_szgroup_nodes_with_pop >> val;
+        full_avai_szgroup_nodes_with_pop.insert(make_pair(key,val));
+    }
+    cout  << "read the availability at szgroup...ok " << endl;
+    file_full_avai_szgroup_nodes_with_pop.close();
+
+    /*
+     *
+    // read in and populate (selected)
     multimap<int, double> avai_szgroup_nodes_with_pop;
     string line;
     while(!getline(file_avai_szgroup_nodes_with_pop, line).eof())
@@ -79,6 +110,7 @@ int main(int argc, char* argv[])
     }
     cout  << "read the availability at szgroup...ok " << endl;
     file_avai_szgroup_nodes_with_pop.close();
+    */
 
 
 
@@ -90,17 +122,38 @@ int main(int argc, char* argv[])
 
     // export back
     ofstream avaiField;
-    string filename_avai_file_out = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+"_avaiField.dat";
-    avaiField.open(filename_avai_file_out.c_str());
+    string filename_full_avai_file_out = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s +
+            "spe_full_avai_szgroup_nodes_"+a_semester+"_shuffled.dat";
+    avaiField.open(filename_full_avai_file_out.c_str());
 
     avaiField << "idx_node" << " " << "avai" << endl;
-    for (multimap<int, double>::iterator pos=avai_szgroup_nodes_with_pop.begin(); pos != avai_szgroup_nodes_with_pop.end(); pos++)
+    for (multimap<int, double>::iterator pos=full_avai_szgroup_nodes_with_pop.begin(); pos != full_avai_szgroup_nodes_with_pop.end(); pos++)
     {
         avaiField << setprecision(6) << fixed;
             avaiField << pos->first << " " << pos->second << " ";
             avaiField << " " <<  endl;
     }
-    cout  << "export back the availability at szgroup...ok " << endl;
+    avaiField.close();
+
+    /*
+     * ofstream avaiFieldSelected;
+    string filename_avai_file_out = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s +
+            "spe_avai_szgroup_nodes_"+a_semester+"_shuffled.dat";
+    avaiFieldSelected.open(filename_avai_file_out.c_str());
+
+    avaiFieldSelected << "idx_node" << " " << "avai" << endl;
+    for (multimap<int, double>::iterator pos=avai_szgroup_nodes_with_pop.begin(); pos != avai_szgroup_nodes_with_pop.end(); pos++)
+    {
+        avaiFieldSelected << setprecision(6) << fixed;
+            avaiFieldSelected << pos->first << " " << pos->second << " ";
+            avaiFieldSelected << " " <<  endl;
+    }
+    */
+    // avaiFieldSelected.close();
+
+
+
+    cout  << "export back the availability at szgroup field...ok " << endl;
 
     return 0;
 }

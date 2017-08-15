@@ -2375,12 +2375,14 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
     string filename;
     if(folder_name_parameterization=="final")
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" +
+                a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
     }
     else
     {
         //=> NEW_VERSION: replaced by:
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" +
+                a_pop_s + "ctrysspe_relative_stability_"+a_semester+".dat";
     }
 
     ifstream file_relative_stability;
@@ -2411,7 +2413,8 @@ map<string, double> read_relative_stability_keys(string a_semester, int a_pop, s
 
 multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semester,
                                                                  int a_pop, string folder_name_parameterization, string inputfolder,
-                                                                 string str_rand_avai_file)
+                                                                 string str_rand_avai_file,
+                                                                 string type_of_avai_field_to_read)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2421,11 +2424,13 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     string filename;
     if(str_rand_avai_file=="baseline")
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" +
+                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+type_of_avai_field_to_read+".dat";
     }
     else
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" + a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" +
+                       a_pop_s + "spe_avai_szgroup_nodes_"+a_semester+type_of_avai_field_to_read+".dat";
     }
 
     ifstream file_avai_szgroup_nodes_with_pop;
@@ -2460,7 +2465,8 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
 
 multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_semester, int a_pop,
                                                                       string folder_name_parameterization, string inputfolder,
-                                                                      string str_rand_avai_file)
+                                                                      string str_rand_avai_file,
+                                                                      string type_of_avai_field_to_read)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2470,11 +2476,13 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
     string filename;
     if(str_rand_avai_file=="baseline")
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" +
+                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+type_of_avai_field_to_read+".dat";
     }
     else
     {
-        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" + a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+".dat";
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/stochast_avai/" +
+                a_pop_s + "spe_full_avai_szgroup_nodes_"+a_semester+"_"+str_rand_avai_file+type_of_avai_field_to_read+".dat";
     }
 
     ifstream file_avai_szgroup_nodes_with_pop;

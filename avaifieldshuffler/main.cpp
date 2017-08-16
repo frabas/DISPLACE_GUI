@@ -3,6 +3,9 @@
 #include <sstream>
 #include <iomanip>
 #include <map>
+#include <string>
+
+//#include <myRutils.h>
 
 using namespace std;
 
@@ -81,18 +84,34 @@ int main(int argc, char* argv[])
     }
     */
 
-    // read in and populate (full)
+    // read in and populate (full) adding an error on the fly
     multimap<int, double> full_avai_szgroup_nodes_with_pop;
     string line;
+    double normalisation_sum_before=0;
+    double normalisation_sum_after=0;
     while(!getline(file_full_avai_szgroup_nodes_with_pop, line).eof())
     {
         int key;
         file_full_avai_szgroup_nodes_with_pop >> key;
+
         double val;
         file_full_avai_szgroup_nodes_with_pop >> val;
+
+        // add a lognormal error on the fly
+        double sd=0.2;
+        double logn_error=0;
+        //logn_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);;
+        logn_error= 1;
+
+        normalisation_sum_before+=val;
+
+        val*=logn_error;
+
+        normalisation_sum_after+=val;
+
         full_avai_szgroup_nodes_with_pop.insert(make_pair(key,val));
     }
-    cout  << "read the availability at szgroup...ok " << endl;
+    //cout  << "read the availability at szgroup...ok " << endl;
     file_full_avai_szgroup_nodes_with_pop.close();
 
     /*
@@ -113,10 +132,15 @@ int main(int argc, char* argv[])
     */
 
 
+    //cout << "normalisation_sum " << normalisation_sum_before/11 << endl;
+    // here, normalize after the altered reading.
+    for (multimap<int, double>::iterator pos=full_avai_szgroup_nodes_with_pop.begin(); pos != full_avai_szgroup_nodes_with_pop.end(); pos++)
+    {
 
-    // here, alter.
-    // TODO
-
+        //cout <<  " pos->second "  <<  pos->second << endl;
+        (pos->second) = (pos->second) /(normalisation_sum_after/normalisation_sum_before);
+        //cout <<  " pos->second after"  <<  pos->second << endl;
+    }
 
 
 

@@ -1,6 +1,23 @@
+include ("$$top_srcdir/localconfig.pri")
+
 TEMPLATE = app
+QT+= core
+TARGET=avaifieldshuffler
 CONFIG += console c++11
-CONFIG -= app_bundle
-CONFIG -= qt
+
+DESTDIR = ../
+
+DEFINES=
+INCLUDEPATH=../include ../commons
+
+macx {
+    DESTDIR=$$EXEDESTDIR
+    CONFIG -= app_bundle
+
+    INCLUDEPATH += /usr/local/include
+    LIBS += -L$$LIBDESTDIR
+}
+
+LIBS+=-L.. -lformats -ldisplacecommons
 
 SOURCES += main.cpp

@@ -27,6 +27,7 @@ scheduler.depends = qtcommons
 dteditor.depends = commons qtcommons
 tseditor.depends = commons qtcommons
 objeditor.depends = commons qtcommons QMapControl
+avaifieldshuffler.depends=commons
 
 !unit-test {
     message("Unit-test disabled")

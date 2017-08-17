@@ -47,6 +47,8 @@ int main(int argc, char* argv[])
             }
             optind++;
         }
+
+    // TODO make it platform independent....
     string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
 
@@ -114,7 +116,8 @@ int main(int argc, char* argv[])
     //cout  << "read the availability at szgroup...ok " << endl;
     file_full_avai_szgroup_nodes_with_pop.close();
 
-    /*
+    /*do
+     *
      *
     // read in and populate (selected)
     multimap<int, double> avai_szgroup_nodes_with_pop;

@@ -694,6 +694,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
      double amount_at_threshold (static_cast<double>(athreshold)/100*sumallcumcatches);
      do
      {
+        if(it>=sorted_ids.size()) break;
         runningsum+=allcumcatches.at(static_cast<int>(sorted_ids.at(it)));
         nodes.at(static_cast<int>((sorted_ids.at(it))))->export_popnodes_cumcatches_with_threshold(popnodes_cumcatches_with_threshold, tstep, athreshold);
         it+=1;

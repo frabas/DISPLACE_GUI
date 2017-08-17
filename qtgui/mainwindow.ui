@@ -1734,7 +1734,7 @@ L3</string>
   <customwidget>
    <class>qmapcontrol::QMapControl</class>
    <extends>QWidget</extends>
-   <header>QMapControl\QMapControl.h</header>
+   <header>QMapControl/QMapControl.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

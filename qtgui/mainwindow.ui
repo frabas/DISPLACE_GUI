@@ -76,7 +76,7 @@
    </widget>
    <widget class="QMenu" name="menu_Editor">
     <property name="title">
-     <string>&amp;Editor</string>
+     <string>&amp;Graph Editor</string>
     </property>
     <addaction name="actionGraph"/>
     <addaction name="actionNode_Editor"/>
@@ -168,9 +168,9 @@
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuGraph"/>
+   <addaction name="menu_Editor"/>
    <addaction name="menu_Parameters"/>
    <addaction name="menu_Model"/>
-   <addaction name="menu_Editor"/>
    <addaction name="menuUtilities"/>
    <addaction name="menuWindows"/>
   </widget>

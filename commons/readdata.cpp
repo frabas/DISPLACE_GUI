@@ -2649,7 +2649,7 @@ vector< vector<double> > read_species_interactions_mortality_proportion_matrix(i
 
 
 
-vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder)
+vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string fleetsce)
 {
 
     // casting a_pop into a string
@@ -2657,7 +2657,7 @@ vector< vector<double> > read_selectivity_per_stock_ogives(int a_met, int nbpops
     out << a_met;
     string a_met_s = out.str();
 
-    string filename = inputfolder+"/metiersspe_"+folder_name_parameterization+"/" + a_met_s + "metier_selectivity_per_stock_ogives.dat";
+    string filename = inputfolder+"/metiersspe_"+folder_name_parameterization+"/" + a_met_s + "metier_selectivity_per_stock_ogives_fleetsce"+fleetsce+".dat";
 
     ifstream file_selectivity_per_stock_ogives;
     file_selectivity_per_stock_ogives.open(filename.c_str());

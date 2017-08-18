@@ -1994,7 +1994,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         multimap<types::NodeId, double> field_of_coeff_diffusion_this_pop;
         if(dyn_pop_sce.option(Options::diffuseN))
         {
-            field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder);
+            field_of_coeff_diffusion_this_pop =read_field_of_coeff_diffusion_this_pop(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
         }
 
         // input data, read a other landings per node for this species

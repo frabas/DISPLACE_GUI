@@ -2515,8 +2515,8 @@ multimap<types::NodeId, double> read_full_avai_szgroup_nodes_with_pop(string a_s
 
 
 multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_semester, int a_pop,
-                                                                       string folder_name_parameterization, string inputfolder
-                                                                       )
+                                                                       string folder_name_parameterization, string inputfolder,
+                                                                       string biolsce)
 {
     // casting a_pop into a string
     stringstream out;
@@ -2524,7 +2524,7 @@ multimap<types::NodeId, double> read_field_of_coeff_diffusion_this_pop(string a_
     string a_pop_s = out.str();
 
     string filename;
-    filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_field_of_coeff_diffusion_this_pop_nodes_"+a_semester+".dat";
+    filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s + "spe_field_of_coeff_diffusion_this_pop_nodes_"+a_semester+"_biolsce"+biolsce+".dat";
 
     ifstream file_field_of_coeff_diffusion_this_pop;
     file_field_of_coeff_diffusion_this_pop.open(filename.c_str());

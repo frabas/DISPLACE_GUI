@@ -28,6 +28,7 @@ public:
 
     static const QString VesselsSpecFilename;
     static const QString VesselsSpec2Filename;
+    static const QString VesselsSpec3Filename;
     static const QString Pop1SpecFilename;
     static const QString Pop2SpecFilename;
     static const QString Pop3SpecFilename;

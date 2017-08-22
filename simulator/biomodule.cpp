@@ -1000,16 +1000,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
 
-
-
             // EXPORT POPSTATS FILE
             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
-                for (unsigned int sp=0; sp<populations.size(); sp++)
-                {
-                    outc(cout << "...pop " << sp << endl;)
-                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
-                    {
 
                      popstats << setprecision(6) << fixed;
 
@@ -1055,8 +1048,6 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                      popstats << " " <<  endl;
-                    }
-                }
             }
 
 

@@ -152,7 +152,7 @@
         <item>
          <widget class="QTabWidget" name="popSpecsTab">
           <property name="currentIndex">
-           <number>3</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabPopSpecs1">
            <attribute name="title">
@@ -245,7 +245,7 @@
         <item>
          <widget class="QTabWidget" name="tabVesselsSpecsTabWidget">
           <property name="currentIndex">
-           <number>2</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tabVesselsSpecs">
            <attribute name="title">
@@ -267,20 +267,25 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab">
+          <widget class="QWidget" name="tabVesselsSpecs3">
            <attribute name="title">
             <string>Specs 3</string>
            </attribute>
-           <widget class="CsvSpecsPage" name="vesselsCsvPage_3" native="true">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>10</y>
-              <width>786</width>
-              <height>490</height>
-             </rect>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_29">
+            <item>
+             <widget class="CsvSpecsPage" name="vesselsCsvPage_3" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabVesselsSpecs4">
+           <attribute name="title">
+            <string>Specs 4</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_30">
+            <item>
+             <widget class="CsvSpecsPage" name="vesselsCsvPage_4" native="true"/>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabVesselsShapefiles">
            <attribute name="title">

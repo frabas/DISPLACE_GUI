@@ -3317,6 +3317,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
     loglike_prop_met.open(filename.c_str());
 
+    ofstream popstats;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popstats_"+namesimu+".dat";
+    popstats.open(filename.c_str());
+    std::string popstats_filename = filename;
+
     ofstream popdyn_N;
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
     popdyn_N.open(filename.c_str());
@@ -3460,6 +3465,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // write down initial pop number in popdyn
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
+
         dout(cout  << "write down the popdyn...");
         // get total N from summing up N over nodes
         populations.at(sp)->aggregate_N();
@@ -3477,6 +3483,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     popdyn_N.flush();
     guiSendUpdateCommand(popdyn_N_filename, 0);
+
+
 
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
@@ -3541,6 +3549,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              namefolderinput,
                                              namefolderoutput,
                                              pathoutput,
+                                             popstats,
                                              popdyn_N,
                                              popdyn_F,
                                              popdyn_SSB,
@@ -3562,6 +3571,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              path,
                                              use_gnuplot,
                                              use_gui,
+                                             popstats_filename,
                                              popdyn_N_filename,
                                              popdyn_F_filename,
                                              popdyn_SSB_filename,

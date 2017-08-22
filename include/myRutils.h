@@ -20,6 +20,7 @@
 
 #include <string>
 #include <m_constants.h>
+#include <vector>
 
 #include <cmath>
 

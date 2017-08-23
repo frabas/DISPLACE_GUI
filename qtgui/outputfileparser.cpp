@@ -538,7 +538,7 @@ void OutputFileParser::parsePopStats(QFile *file, int tstep, DisplaceModel *mode
         model->collectPopdynN(step, id, popN, totN);
 
         // F
-        const auto npopF = 10; // model->getSzGrupsCount();
+        const auto npopF = 11; // model->getSzGrupsCount();
         QVector<double> popF(npopF);
         double totF = 0;
         for (int i = 0; i < npopF; ++i) {

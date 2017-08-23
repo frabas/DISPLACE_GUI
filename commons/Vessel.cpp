@@ -1254,7 +1254,7 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
-void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops)
+void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep)
 {
 
     outc(cout  << "...updateTripsStatistics()" << endl);
@@ -1307,6 +1307,40 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     lastTrip_profit = lastTrip_revenues - fuelcost;
 
     ++numTrips;
+
+
+    // AER economic indicators, updated along the trip level;
+    TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent);
+    TotHoursAtSea    += get_cumsteaming();            // cumul from the simu start
+    TotFuelCosts     += fuelcost;
+    TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
+    GVA               = (TotLandingIncome) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
+                                               // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
+    if(TotLandingIncome>0) {
+        GVAPerRevenue =   GVA/TotLandingIncome;
+    }                                          // AER indicator
+    GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)) ;
+                                               // AER indicator - gross cash flow
+
+    double nb_crew_this_vessel =1; // TODO import from economic_features.dat
+    NetProfit         =  GrossProfit - ( standard_labour_hour_opportunity_costs * nb_crew_this_vessel *  TotHoursAtSea ) - (vessel_value* annual_depreciation_rate*tstep/8761);
+
+    //should be updated at each start of y: vessel_value      =  vessel_value* (100-annual_depreciation_rate); // capital depreciation
+
+    if(TotLandingIncome>0) {
+         NetProfitMargin=NetProfit/TotLandingIncome;
+    }                                          // AER indicator
+
+    GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
+                                               // a proxy of Labour Productivity
+
+    // RoFTA=;
+                                               // Capital Productivity i.e. Return on Fixed Tangible Assets
+
+    // not used yet: opportunity_interest_rate,
+    // not used yet:  annual_discount_rate for NPS
+
+
 
     outc(cout  << "...updateTripsStatistics()...OK" << endl);
 

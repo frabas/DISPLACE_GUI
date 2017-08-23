@@ -127,6 +127,20 @@ private:
         double avgRevenues;
         double avgProfit;
         int numTrips;
+
+        // AER Economic Indicators (updated after each new trip)
+        double TotLandingIncome=0; //cumul
+        double TotHoursAtSea=0; //cumul
+        double TotFuelCosts=0; //cumul
+        double TotVarCosts=0;  //cumul
+        double GVA=0; //updated
+        double GVAPerRevenue=0; //updated
+        double GrossProfit=0; //updated
+        double NetProfit=0; //updated
+        double NetProfitMargin=0; //updated
+        double GVAPerFTE=0; //updated
+
+
 								 // dynamic
 		bool inharbour, inactive, natio;
         std::vector < std::vector<double> > catch_pop_at_szgroup;
@@ -450,7 +464,7 @@ public:
             return numTrips;
         }
 
-        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops, int tstep);
 
         double traverseDtree (int tstep, dtree::DecisionTree *tree);
 

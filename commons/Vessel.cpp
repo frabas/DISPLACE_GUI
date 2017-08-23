@@ -101,7 +101,18 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
                double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
                double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
                double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
-               double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, int _firm_id, VesselCalendar cd)
+               double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, int _firm_id, VesselCalendar cd,
+               double _landing_costs_percent,
+               double _crewshare_and_unpaid_labour_costs_percent,
+               double _other_variable_costs_per_unit_effort,
+               double _annual_insurance_costs_per_crew,
+               double _standard_labour_hour_opportunity_costs,
+               double _standard_annual_full_time_employement_hours,
+               double _other_annual_fixed_costs,
+               double _vessel_value,
+               double _annual_depreciation_rate,
+               double _opportunity_interest_rate,
+               double _annual_discount_rate)
     : calendar(cd)
 {
     m_location = p_location;
@@ -215,6 +226,19 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
         length_class = 4; // "o40m";
         mLengthClassId = Over40;
     }
+
+
+    landing_costs_percent= _landing_costs_percent;
+    crewshare_and_unpaid_labour_costs_percent= _crewshare_and_unpaid_labour_costs_percent;
+    other_variable_costs_per_unit_effort= _other_variable_costs_per_unit_effort;
+    annual_insurance_costs_per_crew= _annual_insurance_costs_per_crew;
+    standard_labour_hour_opportunity_costs= _standard_labour_hour_opportunity_costs;
+    standard_annual_full_time_employement_hours= _standard_annual_full_time_employement_hours;
+    other_annual_fixed_costs= _other_annual_fixed_costs;
+    vessel_value= _vessel_value;
+    annual_depreciation_rate= _annual_depreciation_rate;
+    opportunity_interest_rate= _opportunity_interest_rate;
+    annual_discount_rate= _annual_discount_rate;
 
 
     dout(cout <<"vessel creator...OK" << endl);

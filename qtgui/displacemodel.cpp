@@ -2564,7 +2564,18 @@ bool DisplaceModel::loadVessels()
             mult_fuelcons_when_returning[i],
             mult_fuelcons_when_inactive[i],
             firm_ids[i],
-            calendar[i]
+            calendar[i],
+            landing_costs_percents[i],
+            crewshare_and_unpaid_labour_costs_percents[i],
+            other_variable_costs_per_unit_efforts[i],
+            annual_insurance_costs_per_crews[i],
+            standard_labour_hour_opportunity_costss[i],
+            standard_annual_full_time_employement_hourss[i],
+            other_annual_fixed_costss[i],
+            vessel_values[i],
+            annual_depreciation_rates[i],
+            opportunity_interest_rates[i],
+            annual_discount_rates[i]
             ));
 
         std::shared_ptr<VesselData> vd (new VesselData(v));

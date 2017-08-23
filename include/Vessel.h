@@ -172,7 +172,18 @@ public:
                double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
                double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive,
                int _firm_id,
-               VesselCalendar cd
+               VesselCalendar cd,
+               double landing_costs_percent,
+               double crewshare_and_unpaid_labour_costs_percent,
+               double other_variable_costs_per_unit_effort,
+               double annual_insurance_costs_per_crew,
+               double standard_labour_hour_opportunity_costs,
+               double standard_annual_full_time_employement_hours,
+               double other_annual_fixed_costs,
+               double vessel_value,
+               double annual_depreciation_rate,
+               double opportunity_interest_rate,
+               double annual_discount_rate
             );
 		Vessel();
 		~Vessel();

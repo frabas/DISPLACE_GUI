@@ -2741,7 +2741,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 mult_fuelcons_when_returning[i],
                 mult_fuelcons_when_inactive[i],
                 firm_ids[i],
-                calendars[i]
+                calendars[i],
+                i<vessels.size()? landing_costs_percents[i]: 0,
+                i<vessels.size()? crewshare_and_unpaid_labour_costs_percents[i]: 0,
+                i<vessels.size()? other_variable_costs_per_unit_efforts[i]: 0,
+                i<vessels.size()? annual_insurance_costs_per_crews[i]: 0,
+                i<vessels.size()? standard_labour_hour_opportunity_costss[i]: 0,
+                i<vessels.size()? standard_annual_full_time_employement_hourss[i]: 0,
+                i<vessels.size()? other_annual_fixed_costss[i]: 0,
+                i<vessels.size()? vessel_values[i]: 0,
+                i<vessels.size()? annual_depreciation_rates[i]: 0,
+                i<vessels.size()? opportunity_interest_rates[i]: 0,
+                i<vessels.size()? annual_discount_rates[i]: 0
                 );
 
         // some useful setters...

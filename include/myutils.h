@@ -292,6 +292,20 @@ bool COMMONSSHARED_EXPORT fill_from_vessels_specifications(istream& in, vector<s
                                       vector<double>& mult_fuelcons_when_inactive,
                                       vector<int>& firm_ids,
                                       vector<VesselCalendar> &calendars);
+
+bool COMMONSSHARED_EXPORT fill_from_vessels_economic_specifications(istream& in,
+                                      vector<double>& landing_costs_percents,
+                                      vector<double>& crewshare_and_unpaid_labour_costs_percents,
+                                      vector<double>& other_variable_costs_per_unit_efforts,
+                                      vector<double>& annual_insurance_costs_per_crews,
+                                      vector<double>& standard_labour_hour_opportunity_costss,
+                                      vector<double>& standard_annual_full_time_employement_hourss,
+                                      vector<double>& other_annual_fixed_costss,
+                                      vector<double>& vessel_values,
+                                      vector<double>& annual_depreciation_rates,
+                                      vector<double>& opportunity_interest_rates,
+                                      vector<double>& annual_discount_rates);
+
 bool COMMONSSHARED_EXPORT fill_from_ships_specifications (istream& in, vector<string>& names, vector<double> &imos,
                                      vector<double> &yearbuilds, vector<string> &flags,
                                      vector<string> &types, vector<double> &typecodes,

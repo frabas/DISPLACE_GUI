@@ -109,6 +109,10 @@ private:
         double areasweptthistrip, subsurfaceareasweptthistrip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 
+        double landing_costs_percent, crewshare_and_unpaid_labour_costs_percent, other_variable_costs_per_unit_effort, annual_insurance_costs_per_crew;
+        double standard_labour_hour_opportunity_costs, standard_annual_full_time_employement_hours, other_annual_fixed_costs;
+        double vessel_value, annual_depreciation_rate, opportunity_interest_rate, annual_discount_rate;
+
         int length_class;
         std::string nationality;
         LengthClass mLengthClassId;

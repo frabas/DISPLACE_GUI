@@ -957,6 +957,66 @@ bool fill_from_vessels_specifications (istream& in,
 }
 
 
+
+/**
+fill in the vessel attributes
+@param the vessel specification file, ...
+*/
+bool fill_from_vessels_economic_specifications (istream& in,
+                                                vector<double>& landing_costs_percents,
+                                                vector<double>& crewshare_and_unpaid_labour_costs_percents,
+                                                vector<double>& other_variable_costs_per_unit_efforts,
+                                                vector<double>& annual_insurance_costs_per_crews,
+                                                vector<double>& standard_labour_hour_opportunity_costss,
+                                                vector<double>& standard_annual_full_time_employement_hourss,
+                                                vector<double>& other_annual_fixed_costss,
+                                                vector<double>& vessel_values,
+                                                vector<double>& annual_depreciation_rates,
+                                                vector<double>& opportunity_interest_rates,
+                                                vector<double>& annual_discount_rates)
+{
+
+    std::string line;
+    try {
+        while(!in.eof())
+        {
+            getline(in, line);
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            vector<string> fields;
+
+            boost::split(fields, line, boost::is_any_of("|"));
+
+            if (fields.size() < 12) {
+                return false;   // all fields are MANDATORY.
+            }
+
+            landing_costs_percents.push_back(boost::lexical_cast<double>(fields[1].c_str()));
+            crewshare_and_unpaid_labour_costs_percents.push_back(boost::lexical_cast<double>(fields[2].c_str()));
+            other_variable_costs_per_unit_efforts.push_back(boost::lexical_cast<double>(fields[3].c_str()));
+            annual_insurance_costs_per_crews.push_back(boost::lexical_cast<double>(fields[4].c_str()));
+            standard_labour_hour_opportunity_costss.push_back(boost::lexical_cast<double>(fields[5].c_str()));
+            standard_annual_full_time_employement_hourss.push_back(boost::lexical_cast<double>(fields[6].c_str()));
+            other_annual_fixed_costss.push_back(boost::lexical_cast<double>(fields[7].c_str()));
+            vessel_values.push_back(boost::lexical_cast<double>(fields[8].c_str()));
+            annual_depreciation_rates.push_back(boost::lexical_cast<double>(fields[9].c_str()));
+            opportunity_interest_rates.push_back(boost::lexical_cast<double>(fields[11].c_str()));
+            annual_discount_rates.push_back(boost::lexical_cast<double>(fields[11].c_str()));
+
+        }
+    } catch (boost::bad_lexical_cast &x) {
+        return false;
+    }
+
+    dout(cout  << "read and set up the general features of each vessel...OK" << endl);
+
+    return true;
+}
+
+
+
 /**
 fill in the vessel attributes
 @param the vessel specification file, ...

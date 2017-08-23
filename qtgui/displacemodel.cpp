@@ -2361,6 +2361,40 @@ bool DisplaceModel::loadVessels()
                           mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only, calendar))
         return false;
 
+    // read general vessel features
+    // (quarter specific, mainly because of the gamma parameters)
+    vector<double> landing_costs_percents;
+    vector<double> crewshare_and_unpaid_labour_costs_percents;
+    vector<double> other_variable_costs_per_unit_efforts;
+    vector<double> annual_insurance_costs_per_crews;
+    vector<double> standard_labour_hour_opportunity_costss;
+    vector<double> standard_annual_full_time_employement_hourss;
+    vector<double> other_annual_fixed_costss;
+    vector<double> vessel_values;
+    vector<double> annual_depreciation_rates;
+    vector<double> opportunity_interest_rates;
+    vector<double> annual_discount_rates;
+
+    cout << "read_vessels_economic_features() in loadVessels()" << endl;
+    if (!read_vessels_economics_features(
+                               vesselids,
+                               landing_costs_percents,
+                               crewshare_and_unpaid_labour_costs_percents,
+                               other_variable_costs_per_unit_efforts,
+                               annual_insurance_costs_per_crews,
+                               standard_labour_hour_opportunity_costss,
+                               standard_annual_full_time_employement_hourss,
+                               other_annual_fixed_costss,
+                               vessel_values,
+                               annual_depreciation_rates,
+                               opportunity_interest_rates,
+                               annual_discount_rates,
+                               mInputName.toStdString(), mBasePath.toStdString()
+                               ))
+         return false;
+
+
+
 
     cout << "fill in multimaps in loadVessels()" << endl;
 

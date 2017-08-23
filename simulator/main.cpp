@@ -4172,12 +4172,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                        // the system command line
                        #if defined(_WIN32)
-                       string a_command = "anavaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
+                       string a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
                        cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #else
-                       string a_command = inputfolder+"/anavaifieldshuffler -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
+                       string a_command = inputfolder+"/avaifieldshuffler -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #endif

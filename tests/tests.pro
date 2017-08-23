@@ -33,7 +33,8 @@ win32 {
 SOURCES= main.cpp \
     dtrees.cpp \
     timeseries.cpp \
-    rutils.cpp
+    rutils.cpp \
+    datacollector.cpp
 
 HEADERS=
 

@@ -68,7 +68,8 @@ QVariant WindmillEntity::data(const QModelIndex &index, int role) const
         if (role == Qt::DisplayRole)
             return model->getModel()->getWindmillId(mWindmillId);
         if (role == Qt::CheckStateRole)
-            return QVariant(model->getModel()->isInterestingWindfarms(index.row()+1) ? Qt::Checked : Qt::Unchecked);
+            return QVariant(model->getModel()->isInterestingWindfarms(model->getModel()->getWindmillId(index.row()).toInt())
+                            ? Qt::Checked : Qt::Unchecked);
         if (role == Qt::ToolTipRole) {
             std::shared_ptr<WindmillData> ff = model->getModel()->getWindmillList()[mWindmillId];
             return QString("%1 %2").arg(ff->mWindmill->get_y()).arg(ff->mWindmill->get_x());
@@ -93,9 +94,11 @@ bool objecttree::WindmillEntity::setData(const QModelIndex &index, const QVarian
 {
     if(index.column() == 0 && role == Qt::CheckStateRole) {
         if (value.toInt() == 0) {
-            model->getModel()->remInterestingWindfarms(index.row()+1);
+            model->getModel()->remInterestingWindfarms(
+                        model->getModel()->getWindmillId(index.row()).toInt());
         } else {
-            model->getModel()->setInterestingWindfarms(index.row()+1);
+            model->getModel()->setInterestingWindfarms(
+                        model->getModel()->getWindmillId(index.row()).toInt());
         }
         model->getStatsController()->updateStats(model->getModel());
         //model->getMapControl()->updateNodes(model->getModelIdx());

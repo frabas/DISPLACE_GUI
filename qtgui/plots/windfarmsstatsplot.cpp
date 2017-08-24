@@ -63,7 +63,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
     /* If no Windfarms is selected, select all Windfarms type */
     if (interWindfarmsIDsList.size() == 0) {
         for (int i = 0; i < model->getWindmillCount(); ++i) {
-            interWindfarmsIDsList.push_back(i+1);
+            interWindfarmsIDsList.push_back(model->getWindmillId(i).toInt());
         }
     }
 
@@ -120,7 +120,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
     int nsteps = model->getWindfarmsStatistics().getUniqueValuesCount();
 
-    //qDebug() << "**** Plotting " << nsteps << interWindfarmsTypesList.size();
+    qDebug() << "**** Plotting Windmill " << nsteps << interWindfarmsTypesList << interWindfarmsIDsList;
     auto it = model->getWindfarmsStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
         int nInterWindfarmsIDs = interWindfarmsIDsList.size();
@@ -163,7 +163,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
             if (nsam > 0)
                 mAvg /= nsam;
 
-            //qDebug() << "Res: " << mMin << mMax << mAvg << mTot;
+            //qDebug() << "Res: "<< it.key() << val << mMin << mMax << mAvg << mTot;
 
             keyData[gidx] << it.key();
             switch (graphList[iGraph] / 1000) {
@@ -184,66 +184,6 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
             valueData[gidx] << val;
         }
         ++it;
-    }
-
-    if (!mSaveFilename.isEmpty()) {
-        QFile f(mSaveFilename);
-        if (f.open(QIODevice::WriteOnly)) {
-            QTextStream strm(&f);
-
-
-            strm << "interWindfarmsIDsList: ";
-            for (auto x : interWindfarmsIDsList)
-                strm << x << " ";
-            strm << "\n\n";
-
-            for (int i = 0; i < graphs.size(); ++i) {
-                strm << "Dt " << i << " (" <<graphs.at(i)->name() << ") ";
-
-                auto const& k = keyData.at(i);
-                auto const& v = valueData.at(i);
-                for (int j = 0; j < k.size(); ++j) {
-                    strm << "," << k.at(j) << "," << v.at(j);
-                }
-                strm << "\n";
-            }
-
-            strm << "\n------\n\n";
-
-            it = model->getWindfarmsStatistics().getFirst();
-            for (int istep = 0; istep <nsteps; ++istep) {
-                int nInterWindfarmsIDs = interWindfarmsIDsList.size();
-
-                //qDebug() << "Step: " <<istep << it.key();
-                for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-                    //int gidx = iInterWindfarmsIDs * graphNum + iGraph;
-                    int gidx = iGraph;
-
-                    auto group = graphList[iGraph] % 1000;
-
-                    //qDebug() << "Graph:" << iGraph << group;
-                     // calculate transversal values...
-                    double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-                    for (int iInterWindfarmTypes = 0; iInterWindfarmTypes < interWindfarmsTypesList.size(); ++iInterWindfarmTypes) {
-                        for (int iInterWindfarmsIDs = 0; iInterWindfarmsIDs < nInterWindfarmsIDs; ++iInterWindfarmsIDs) {
-
-                            auto fmtype = model->getWindmillList()[iInterWindfarmsIDs]->mWindmill->get_type();
-                            if (group != 999 && iInterWindfarmTypes != fmtype)
-                                continue;
-
-                            val = getStatValue(model, it.key(), interWindfarmsIDsList[iInterWindfarmsIDs], interWindfarmsTypesList[iInterWindfarmTypes], stat);
-
-                            strm << it.key() << ", " << iInterWindfarmsIDs << ", " << iInterWindfarmTypes << ", " << group
-                                 << ", " << static_cast<int>(stat) << " ==> " << val << "\n";
-                        }
-                    }
-                }
-                ++it;
-            }
-            f.close();
-        }
-
-        mSaveFilename.clear();
     }
 
     for (int i = 0; i < graphs.size(); ++i) {

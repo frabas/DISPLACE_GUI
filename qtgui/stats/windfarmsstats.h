@@ -1,7 +1,6 @@
 #ifndef WINDFARMSSTATS_H
 #define WINDFARMSSTATS_H
 
-
 #include <QVector>
 #include <mutex>
 
@@ -14,8 +13,8 @@ public:
 
         StatData() {}
         void clear() {
-            double kWh = 0.0;
-            double kWproduction = 0.0;
+            kWh = 0.0;
+            kWproduction = 0.0;
         }
     };
 
@@ -47,13 +46,9 @@ public:
     double kWhForWindfarmAndWindfarmGroup(int windfarmid, int windfarmtypeid) const;
     double kWProductionForWindfarmAndWindfarmGroup(int windfarmid, int windfarmtypeid) const;
 
+    const QVector<QVector<StatData>> data() const { return mDataPerWindFarmTypeAndWindFarmId; }
+
     static const WindfarmsStats::StatData NoData;
 };
-
-
-
-
-
-
 
 #endif // WINDFARMSSTATS_H

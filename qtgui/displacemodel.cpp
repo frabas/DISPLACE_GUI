@@ -1005,10 +1005,6 @@ void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, i
 
 void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, int windfarmtype, double kWh)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsWindfarmsCollected.collectkWh(step,
                                                  windfarmid,
                                                  windfarmtype,
@@ -1017,10 +1013,6 @@ void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, i
 
 void DisplaceModel::collectWindfarmkWproduction(int step, int node_idx, int windfarmid, int windfarmtype, double kWproduction)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsWindfarmsCollected.collectkWproduction(step,
                                                  windfarmid,
                                                  windfarmtype,
@@ -1186,7 +1178,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
 void DisplaceModel::commitVesselsStats(int tstep)
 {
-    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
+//    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
     if (mVesselsStatsDirty) {
         mStatsNations.insertValue(tstep, mStatsNationsCollected);
         if (mDb)

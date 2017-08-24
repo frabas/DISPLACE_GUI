@@ -71,6 +71,9 @@ public:
     typename Container::const_iterator getFirst() const {
         return mData.begin();
     }
+    bool atEnd(typename Container::const_iterator it) const {
+        return it == mData.end();
+    }
 
     void clear() { mData.clear(); }
 

@@ -1310,37 +1310,52 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
 
     // AER economic indicators, updated along the trip level;
+    double nb_crew_this_vessel =1; // TODO import from economic_features.dat
+    double other_income =0; // TODO import from economic_features.dat
+
     TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent);
     TotHoursAtSea    += get_cumsteaming();            // cumul from the simu start
     TotFuelCosts     += fuelcost;
     TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
-    GVA               = (TotLandingIncome) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
+    GVA               = (TotLandingIncome+other_income) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
     if(TotLandingIncome>0) {
-        GVAPerRevenue =   GVA/TotLandingIncome;
+        GVAPerRevenue =   GVA/(TotLandingIncome+other_income);
     }                                          // AER indicator
     GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)) ;
                                                // AER indicator - gross cash flow
 
-    double nb_crew_this_vessel =1; // TODO import from economic_features.dat
-    NetProfit         =  GrossProfit - ( standard_labour_hour_opportunity_costs * nb_crew_this_vessel *  TotHoursAtSea ) - (vessel_value* annual_depreciation_rate*tstep/8761);
+
+
+    double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * nb_crew_this_vessel *  TotHoursAtSea;
+    LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent) -
+                                      (annual_insurance_costs_per_crew*nb_crew_this_vessel) -
+                                       LabourOpportunityCosts;
+
+    double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate;
+
+    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* annual_depreciation_rate*tstep/8761);
 
     //should be updated at each start of y: vessel_value      =  vessel_value* (100-annual_depreciation_rate); // capital depreciation
 
     if(TotLandingIncome>0) {
-         NetProfitMargin=NetProfit/TotLandingIncome;
+         NetProfitMargin=NetProfit/(TotLandingIncome+other_income);
     }                                          // AER indicator
 
     GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
                                                // a proxy of Labour Productivity
 
-    // RoFTA=;
+    RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* annual_depreciation_rate*tstep/8761);
                                                // Capital Productivity i.e. Return on Fixed Tangible Assets
 
-    // not used yet: opportunity_interest_rate,
-    // not used yet:  annual_discount_rate for NPS
+    BER               = (other_annual_fixed_costs*tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* annual_depreciation_rate*tstep/8761)) /
+                           (1-(  (GVA*crewshare_and_unpaid_labour_costs_percent) + TotFuelCosts + TotVarCosts  ) /TotLandingIncome );
+                                               // Break-Even Revenue
 
+    CRBER             = (TotLandingIncome + other_income) / BER;
+                                               // Revenue to Break-even revenue Ratio
 
+    NetPresentValue = GVA* (1/pow((1+annual_discount_rate),(ceil(tstep / 8761))));
 
     outc(cout  << "...updateTripsStatistics()...OK" << endl);
 

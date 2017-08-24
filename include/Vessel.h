@@ -135,13 +135,17 @@ private:
         double TotVarCosts=0;  //cumul
         double GVA=0; //updated
         double GVAPerRevenue=0; //updated
+        double LabourSurplus=0;
         double GrossProfit=0; //updated
         double NetProfit=0; //updated
         double NetProfitMargin=0; //updated
         double GVAPerFTE=0; //updated
+        double RoFTA=0;
+        double BER=0;
+        double CRBER=0;
+        double NetPresentValue=0;
 
-
-								 // dynamic
+                                         // dynamic
 		bool inharbour, inactive, natio;
         std::vector < std::vector<double> > catch_pop_at_szgroup;
         std::vector < std::vector<double> > discards_pop_at_szgroup;

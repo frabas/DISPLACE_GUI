@@ -2363,6 +2363,9 @@ bool DisplaceModel::loadVessels()
 
     // read general vessel features
     // (quarter specific, mainly because of the gamma parameters)
+
+    vector<double> this_vessel_nb_crews;
+    vector<double> annual_other_incomes;
     vector<double> landing_costs_percents;
     vector<double> crewshare_and_unpaid_labour_costs_percents;
     vector<double> other_variable_costs_per_unit_efforts;
@@ -2378,6 +2381,8 @@ bool DisplaceModel::loadVessels()
     cout << "read_vessels_economic_features() in loadVessels()" << endl;
     if (!read_vessels_economics_features(
                                vesselids,
+                               this_vessel_nb_crews,
+                               annual_other_incomes,
                                landing_costs_percents,
                                crewshare_and_unpaid_labour_costs_percents,
                                other_variable_costs_per_unit_efforts,
@@ -2565,6 +2570,8 @@ bool DisplaceModel::loadVessels()
             mult_fuelcons_when_inactive[i],
             firm_ids[i],
             calendar[i],
+            this_vessel_nb_crews[i],
+            annual_other_incomes[i],
             landing_costs_percents[i],
             crewshare_and_unpaid_labour_costs_percents[i],
             other_variable_costs_per_unit_efforts[i],

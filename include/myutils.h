@@ -294,6 +294,8 @@ bool COMMONSSHARED_EXPORT fill_from_vessels_specifications(istream& in, vector<s
                                       vector<VesselCalendar> &calendars);
 
 bool COMMONSSHARED_EXPORT fill_from_vessels_economic_specifications(istream& in,
+                                      vector<double>& this_vessel_nb_crews,
+                                      vector<double>& annual_other_incomes,
                                       vector<double>& landing_costs_percents,
                                       vector<double>& crewshare_and_unpaid_labour_costs_percents,
                                       vector<double>& other_variable_costs_per_unit_efforts,

@@ -498,6 +498,8 @@ bool read_vessels_features(string a_quarter,
 //----------------
 bool read_vessels_economics_features(
                            vector<string>& vesselids,
+                           vector<double>& this_vessel_nb_crews,
+                           vector<double>& annual_other_incomes,
                            vector<double>& landing_costs_percents,
                            vector<double>& crewshare_and_unpaid_labour_costs_percents,
                            vector<double>& other_variable_costs_per_unit_efforts,
@@ -525,11 +527,20 @@ bool read_vessels_economics_features(
         return false;
     }
 
-    if (!fill_from_vessels_economic_specifications(vessels_economic_features, landing_costs_percents, crewshare_and_unpaid_labour_costs_percents,
-                                          other_variable_costs_per_unit_efforts, annual_insurance_costs_per_crews,
-                                          standard_labour_hour_opportunity_costss, standard_annual_full_time_employement_hourss, other_annual_fixed_costss,
-                                          vessel_values, annual_depreciation_rates, opportunity_interest_rates,
-                                          annual_discount_rates)) {
+    if (!fill_from_vessels_economic_specifications(vessels_economic_features,
+                                                   this_vessel_nb_crews,
+                                                   annual_other_incomes,
+                                                   landing_costs_percents,
+                                                   crewshare_and_unpaid_labour_costs_percents,
+                                                   other_variable_costs_per_unit_efforts,
+                                                   annual_insurance_costs_per_crews,
+                                                   standard_labour_hour_opportunity_costss,
+                                                   standard_annual_full_time_employement_hourss,
+                                                   other_annual_fixed_costss,
+                                                   vessel_values,
+                                                   annual_depreciation_rates,
+                                                   opportunity_interest_rates,
+                                                   annual_discount_rates)) {
         vessels_economic_features.close();
         return false;
     }

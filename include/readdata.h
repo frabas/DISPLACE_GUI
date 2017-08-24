@@ -86,6 +86,8 @@ bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
                            int selected_vessels_only, vector<VesselCalendar> &calendars);
 
 bool COMMONSSHARED_EXPORT read_vessels_economics_features(vector<string>& vesselids,
+                           vector<double>& this_vessel_nb_crews,
+                           vector<double>& annual_other_incomes,
                            vector<double>& landing_costs_percents,
                            vector<double>& crewshare_and_unpaid_labour_costs_percents,
                            vector<double>& other_variable_costs_per_unit_efforts,

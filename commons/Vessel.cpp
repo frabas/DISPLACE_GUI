@@ -102,6 +102,8 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
                double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
                double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
                double _mult_fuelcons_when_returning, double _mult_fuelcons_when_inactive, int _firm_id, VesselCalendar cd,
+               double _this_vessel_nb_crew,
+               double _annual_other_income,
                double _landing_costs_percent,
                double _crewshare_and_unpaid_labour_costs_percent,
                double _other_variable_costs_per_unit_effort,
@@ -227,7 +229,8 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
         mLengthClassId = Over40;
     }
 
-
+    this_vessel_nb_crew=_this_vessel_nb_crew;
+    annual_other_income=_annual_other_income;
     landing_costs_percent= _landing_costs_percent;
     crewshare_and_unpaid_labour_costs_percent= _crewshare_and_unpaid_labour_costs_percent;
     other_variable_costs_per_unit_effort= _other_variable_costs_per_unit_effort;
@@ -1310,26 +1313,23 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
 
     // AER economic indicators, updated along the trip level;
-    double nb_crew_this_vessel =1; // TODO import from economic_features.dat
-    double other_income =0; // TODO import from economic_features.dat
-
     TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent);
     TotHoursAtSea    += get_cumsteaming();            // cumul from the simu start
     TotFuelCosts     += fuelcost;
     TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
-    GVA               = (TotLandingIncome+other_income) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
+    GVA               = (TotLandingIncome+(annual_other_income*tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
     if(TotLandingIncome>0) {
-        GVAPerRevenue =   GVA/(TotLandingIncome+other_income);
+        GVAPerRevenue =   GVA/(TotLandingIncome+(annual_other_income*tstep/8761));
     }                                          // AER indicator
     GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)) ;
                                                // AER indicator - gross cash flow
 
 
 
-    double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * nb_crew_this_vessel *  TotHoursAtSea;
+    double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * this_vessel_nb_crew *  TotHoursAtSea;
     LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent) -
-                                      (annual_insurance_costs_per_crew*nb_crew_this_vessel) -
+                                      (annual_insurance_costs_per_crew * this_vessel_nb_crew) -
                                        LabourOpportunityCosts;
 
     double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate;
@@ -1339,7 +1339,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     //should be updated at each start of y: vessel_value      =  vessel_value* (100-annual_depreciation_rate); // capital depreciation
 
     if(TotLandingIncome>0) {
-         NetProfitMargin=NetProfit/(TotLandingIncome+other_income);
+         NetProfitMargin=NetProfit/(TotLandingIncome+(annual_other_income*tstep/8761));
     }                                          // AER indicator
 
     GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
@@ -1352,7 +1352,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
                            (1-(  (GVA*crewshare_and_unpaid_labour_costs_percent) + TotFuelCosts + TotVarCosts  ) /TotLandingIncome );
                                                // Break-Even Revenue
 
-    CRBER             = (TotLandingIncome + other_income) / BER;
+    CRBER             = (TotLandingIncome + (annual_other_income*tstep/8761)) / BER;
                                                // Revenue to Break-even revenue Ratio
 
     NetPresentValue = GVA* (1/pow((1+annual_discount_rate),(ceil(tstep / 8761))));

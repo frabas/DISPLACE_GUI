@@ -2496,6 +2496,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
+    vector<double> this_vessel_nb_crews;
+    vector<double> annual_other_incomes;
     vector<double> landing_costs_percents;
     vector<double> crewshare_and_unpaid_labour_costs_percents;
     vector<double> other_variable_costs_per_unit_efforts;
@@ -2511,6 +2513,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "read_vessels_economic_features() in loadVessels()" << endl;
     if (!read_vessels_economics_features(
                                vesselids,
+                               this_vessel_nb_crews,
+                               annual_other_incomes,
                                landing_costs_percents,
                                crewshare_and_unpaid_labour_costs_percents,
                                other_variable_costs_per_unit_efforts,
@@ -2742,6 +2746,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 mult_fuelcons_when_inactive[i],
                 firm_ids[i],
                 calendars[i],
+                i<vessels.size()? this_vessel_nb_crews[i]: 0,
+                i<vessels.size()?  annual_other_incomes[i]: 0,
                 i<vessels.size()? landing_costs_percents[i]: 0,
                 i<vessels.size()? crewshare_and_unpaid_labour_costs_percents[i]: 0,
                 i<vessels.size()? other_variable_costs_per_unit_efforts[i]: 0,

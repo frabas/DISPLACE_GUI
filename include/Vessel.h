@@ -109,6 +109,7 @@ private:
         double areasweptthistrip, subsurfaceareasweptthistrip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 
+        double this_vessel_nb_crew, annual_other_income;
         double landing_costs_percent, crewshare_and_unpaid_labour_costs_percent, other_variable_costs_per_unit_effort, annual_insurance_costs_per_crew;
         double standard_labour_hour_opportunity_costs, standard_annual_full_time_employement_hours, other_annual_fixed_costs;
         double vessel_value, annual_depreciation_rate, opportunity_interest_rate, annual_discount_rate;
@@ -135,15 +136,15 @@ private:
         double TotVarCosts=0;  //cumul
         double GVA=0; //updated
         double GVAPerRevenue=0; //updated
-        double LabourSurplus=0;
+        double LabourSurplus=0; //updated
         double GrossProfit=0; //updated
         double NetProfit=0; //updated
         double NetProfitMargin=0; //updated
         double GVAPerFTE=0; //updated
-        double RoFTA=0;
-        double BER=0;
-        double CRBER=0;
-        double NetPresentValue=0;
+        double RoFTA=0; //updated
+        double BER=0; //updated
+        double CRBER=0; //updated
+        double NetPresentValue=0; //updated
 
                                          // dynamic
 		bool inharbour, inactive, natio;
@@ -191,6 +192,8 @@ public:
                double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive,
                int _firm_id,
                VesselCalendar cd,
+               double this_vessel_nb_crew,
+               double annual_other_income,
                double landing_costs_percent,
                double crewshare_and_unpaid_labour_costs_percent,
                double other_variable_costs_per_unit_effort,

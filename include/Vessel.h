@@ -219,6 +219,8 @@ public:
         Node* get_loc() const;
 		Metier* get_metier() const;
 		double get_speed () const;
+        double get_vessel_value() const;
+        double get_annual_depreciation_rate() const; // in percent
 		double get_length () const;
 		double get_KW () const;
         int get_length_class() const;
@@ -287,9 +289,21 @@ public:
         types::NodeId get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
+        double get_GVA() const;
+        double get_GVAPerRevenue() const;
+        double get_LabourSurplus() const;
+        double get_GrossProfit() const;
+        double get_NetProfit() const;
+        double get_NetProfitMargin() const;
+        double get_GVAPerFTE() const;
+        double get_RoFTA() const;
+        double get_BER() const;
+        double get_CRBER() const;
+        double get_NetPresentValue() const;
         void set_firm_id (int val);
         void set_vid_is_active (int val);
         void set_speed (double val);
+        void set_vessel_value (double val);
 		void set_resttime_par1 (double val);
 		void set_resttime_par2 (double val);
 		void set_av_trip_duration (double val);

@@ -44,10 +44,13 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     std::vector<double> cumul;
     std::vector<double> cumul_discards;
 
+
     struct VesselLogbookMessage {
         unsigned int tstep, tstepdep;
         int rtbb, node, idx;
-        double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices, fuelcost, vpuf, gav2, sweptarea, revenuepersweptarea;
+        double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices,
+                fuelcost, vpuf, gav2, sweptarea, revenuepersweptarea,
+                GVA, GVAPerRevenue, LabourSurplus, GrossProfit, NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue;
         size_t popnum;
         double pop[];
     } logbook;
@@ -146,6 +149,21 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
           logbook.revenuepersweptarea=logbook.revenue_from_av_prices/(logbook.sweptarea); // euro per m^2
     } 
 
+
+
+    logbook.GVA = v->get_GVA();
+    logbook.GVAPerRevenue= v->get_GVAPerRevenue();
+    logbook.LabourSurplus= v->get_LabourSurplus();
+    logbook.GrossProfit= v->get_GrossProfit();
+    logbook.NetProfit= v->get_NetProfit();
+    logbook.NetProfitMargin= v->get_NetProfitMargin();
+    logbook.GVAPerFTE= v->get_GVAPerFTE();
+    logbook.RoFTA= v->get_RoFTA();
+    logbook.BER= v->get_BER();
+    logbook.CRBER= v->get_CRBER();
+    logbook.NetPresentValue= v->get_NetPresentValue();
+
+
     std::ostringstream ss;
 
     ss << setprecision(0) << fixed;
@@ -173,6 +191,18 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     ss  << logbook.revenuepersweptarea << " " ;
     for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
         ss  << *it2 << " " ;
+    ss << logbook.GVA << " " ;
+    ss << logbook.GVAPerRevenue << " " ;
+    ss << logbook.LabourSurplus << " " ;
+    ss << logbook.GrossProfit << " " ;
+    ss << logbook.NetProfit << " " ;
+    ss << logbook.NetProfitMargin << " " ;
+    ss << logbook.GVAPerFTE << " " ;
+    ss << logbook.RoFTA << " " ;
+    ss << logbook.BER << " " ;
+    ss << logbook.CRBER << " " ;
+    ss << logbook.NetPresentValue << " " ;
+
     ss  << " " << std::endl;
 
     std::unique_lock<std::mutex> l(glob_mutex);

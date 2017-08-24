@@ -3910,8 +3910,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // LOOP OVER VESSELS
             for (unsigned int v=0; v<vessels.size(); v++)
-            {
+            {   
                 dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
+
+                if(a_quarter=="quarter1")
+                {
+                    double new_vessel_value = vessels.at(v)->get_vessel_value() * (100- vessels.at(v)->get_annual_depreciation_rate())/100;
+                    vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
+                }
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);

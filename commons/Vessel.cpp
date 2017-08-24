@@ -371,6 +371,15 @@ double Vessel::get_speed () const
     return(speed);
 }
 
+double Vessel::get_vessel_value() const
+{
+    return(vessel_value);
+}
+
+double Vessel::get_annual_depreciation_rate() const
+{
+    return(annual_depreciation_rate);
+}
 
 double Vessel::get_length () const
 {
@@ -757,6 +766,62 @@ types::NodeId  Vessel::get_mosthistoricallyused () const
     return(mosthistoricallyused);
 }
 
+double Vessel::get_GVA() const
+{
+    return(GVA);
+}
+
+double Vessel::get_GVAPerRevenue() const
+{
+    return(GVAPerRevenue);
+}
+
+double Vessel::get_LabourSurplus() const
+{
+    return(LabourSurplus);
+}
+
+double Vessel::get_GrossProfit() const
+{
+    return(GrossProfit);
+}
+
+double Vessel::get_NetProfit() const
+{
+    return(NetProfit);
+}
+
+double Vessel::get_NetProfitMargin() const
+{
+    return(NetProfitMargin);
+}
+
+double Vessel::get_GVAPerFTE() const
+{
+    return(GVAPerFTE);
+}
+
+double Vessel::get_RoFTA() const
+{
+    return(RoFTA);
+}
+
+double Vessel::get_BER() const
+{
+    return(BER);
+}
+
+double Vessel::get_CRBER() const
+{
+    return(CRBER);
+}
+
+double Vessel::get_NetPresentValue() const
+{
+    return(NetPresentValue);
+}
+
+
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 // setters...
@@ -782,6 +847,11 @@ void Vessel::set_vid_is_active(int _vid_is_active)
 void Vessel::set_speed(double _speed)
 {
     speed= _speed;
+}
+
+void Vessel::set_vessel_value(double _vessel_value)
+{
+    vessel_value= _vessel_value;
 }
 
 
@@ -1313,30 +1383,34 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
 
     // AER economic indicators, updated along the trip level;
-    TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent);
+    TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent)/100;
     TotHoursAtSea    += get_cumsteaming();            // cumul from the simu start
     TotFuelCosts     += fuelcost;
     TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
     GVA               = (TotLandingIncome+(annual_other_income*tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
+
+    if(annual_other_income==0) {
+    annual_other_income=1;
+    }
+
     if(TotLandingIncome>0) {
         GVAPerRevenue =   GVA/(TotLandingIncome+(annual_other_income*tstep/8761));
     }                                          // AER indicator
-    GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)) ;
+    GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)/100) ;
                                                // AER indicator - gross cash flow
 
 
 
     double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * this_vessel_nb_crew *  TotHoursAtSea;
-    LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent) -
+    LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent/100) -
                                       (annual_insurance_costs_per_crew * this_vessel_nb_crew) -
                                        LabourOpportunityCosts;
 
     double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate;
 
-    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* annual_depreciation_rate*tstep/8761);
+    NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
 
-    //should be updated at each start of y: vessel_value      =  vessel_value* (100-annual_depreciation_rate); // capital depreciation
 
     if(TotLandingIncome>0) {
          NetProfitMargin=NetProfit/(TotLandingIncome+(annual_other_income*tstep/8761));
@@ -1345,16 +1419,23 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
                                                // a proxy of Labour Productivity
 
-    RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* annual_depreciation_rate*tstep/8761);
+    if((vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)>0){
+    RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
                                                // Capital Productivity i.e. Return on Fixed Tangible Assets
+    } else{
+    RoFTA             =0;
+    }
 
-    BER               = (other_annual_fixed_costs*tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* annual_depreciation_rate*tstep/8761)) /
-                           (1-(  (GVA*crewshare_and_unpaid_labour_costs_percent) + TotFuelCosts + TotVarCosts  ) /TotLandingIncome );
+    BER               = (other_annual_fixed_costs*tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)) /
+                           (1-(  (GVA*crewshare_and_unpaid_labour_costs_percent/100) + TotFuelCosts + TotVarCosts  ) /TotLandingIncome );
                                                // Break-Even Revenue
 
+    if(BER>0){
     CRBER             = (TotLandingIncome + (annual_other_income*tstep/8761)) / BER;
                                                // Revenue to Break-even revenue Ratio
-
+    } else{
+    CRBER             =0;
+    }
     NetPresentValue = GVA* (1/pow((1+annual_discount_rate),(ceil(tstep / 8761))));
 
     outc(cout  << "...updateTripsStatistics()...OK" << endl);

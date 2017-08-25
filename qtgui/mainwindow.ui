@@ -542,11 +542,6 @@
                   <string>Revenue to Break Even Revenue Ratio (CR/BER)</string>
                  </property>
                 </item>
-                <item>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </item>
                </widget>
               </item>
               <item>
@@ -620,7 +615,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Cum. Gross Added Value</string>
+                  <string>Cum. Gross Added Value - Energy costs only</string>
                  </property>
                 </item>
                 <item>
@@ -636,6 +631,61 @@
                 <item>
                  <property name="text">
                   <string>Revenues Per Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Value Added (GVA)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>GVA to Revenue Ratio</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Labour Surplus</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Profit</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Profit (or Loss)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Profit Margin</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>GVA per FTE</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>RoFTA</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>BER</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>CR/BER</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Present Value</string>
                  </property>
                 </item>
                </widget>
@@ -711,7 +761,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Cum. Gross Added Value</string>
+                  <string>Cum. Gross Added Value - Energy Costs only</string>
                  </property>
                 </item>
                 <item>
@@ -727,6 +777,61 @@
                 <item>
                  <property name="text">
                   <string>Revenues Per Swept Area</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Value Added (GVA)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>GVA to Revenue Ratio</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Labour Surplus</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Gross Profit</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Profit (or Loss)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Profit Margin</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>GVA per FTE</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>RoFTA</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>BER</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>CR/BER</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Present Value</string>
                  </property>
                 </item>
                </widget>

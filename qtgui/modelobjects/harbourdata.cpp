@@ -30,6 +30,18 @@ HarbourStats::HarbourStats()
     : mCumCatches(0.0), mCumDiscards(0.0),
       mCumProfit(0.0),
       mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
+      GVA(0),
+      GVAPerRevenue(0),
+      LabourSurplus(0),
+      GrossProfit(0),
+      NetProfit(0),
+      NetProfitMargin(0),
+      RoFTA(0),
+      GVAPerFTE(0),
+      BER(0),
+      CRBER(0),
+      NetPresentValue (0),
+
       szCatches()
 {
 }

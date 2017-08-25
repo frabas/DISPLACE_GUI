@@ -55,6 +55,18 @@ public:
     double mVpuf;
     double mSweptArea;
     double mRevenuePerSweptArea;
+    double GVA;
+    double GVAPerRevenue;
+    double LabourSurplus;
+    double GrossProfit;
+    double NetProfit;
+    double NetProfitMargin;
+    double RoFTA;
+    double GVAPerFTE;
+    double BER;
+    double CRBER;
+    double NetPresentValue;
+
 
     QVector<double> szCatches;
 };

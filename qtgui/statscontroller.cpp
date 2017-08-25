@@ -729,6 +729,61 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Revenue per Swept Area (Euro/km^2)"));
                     break;
+                case H_GVA:
+                    valueData << it.value().at(ip.toIndex()).GVA;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_GVAPerRevenue:
+                    valueData << it.value().at(ip.toIndex()).GVAPerRevenue;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
+                    break;
+                case H_LabourSurplus:
+                    valueData << it.value().at(ip.toIndex()).LabourSurplus;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_GrossProfit:
+                    valueData << it.value().at(ip.toIndex()).GrossProfit;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_NetProfit:
+                    valueData << it.value().at(ip.toIndex()).NetProfit;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_NetProfitMargin:
+                    valueData << it.value().at(ip.toIndex()).NetProfitMargin;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_GVAPerFTE:
+                    valueData << it.value().at(ip.toIndex()).GVAPerFTE;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_RoFTA:
+                    valueData << it.value().at(ip.toIndex()).RoFTA;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_BER:
+                    valueData << it.value().at(ip.toIndex()).BER;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_CRBER:
+                    valueData << it.value().at(ip.toIndex()).CRBER;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case H_NetPresentValue:
+                    valueData << it.value().at(ip.toIndex()).NetPresentValue;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    break;
 
 
                 }
@@ -790,6 +845,51 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
         break;
+    case M_GVA:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_GVAPerRevenue:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
+        break;
+    case M_LabourSurplus:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_GrossProfit:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_NetProfit:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_NetProfitMargin:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_GVAPerFTE:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_RoFTA:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_BER:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_CRBER:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+    case M_NetPresentValue:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        break;
+
     }
 
     foreach (auto  d, dl) {
@@ -857,7 +957,43 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                     break;
                 case M_RevenuesPerSweptArea:
                     valueData << it.value().at(ip).mRevenuePerSweptArea;
+                    break;                   
+                case M_GVA:
+                    valueData << it.value().at(ip).GVA;
                     break;
+                case M_GVAPerRevenue:
+                    valueData << it.value().at(ip).GVAPerRevenue;
+                    break;
+                case M_LabourSurplus:
+                    valueData << it.value().at(ip).LabourSurplus;
+                    break;
+                case M_GrossProfit:
+                    valueData << it.value().at(ip).GrossProfit;
+                    break;
+                case M_NetProfit:
+                    valueData << it.value().at(ip).NetProfit;
+                    break;
+                case M_NetProfitMargin:
+                    valueData << it.value().at(ip).NetProfitMargin;
+                    break;
+                case M_GVAPerFTE:
+                    valueData << it.value().at(ip).GVAPerFTE;
+                    break;
+                case M_RoFTA:
+                    valueData << it.value().at(ip).RoFTA;
+                    break;
+                case M_BER:
+                    valueData << it.value().at(ip).BER;
+                    break;
+                case M_CRBER:
+                    valueData << it.value().at(ip).CRBER;
+                    break;
+                case M_NetPresentValue:
+                    valueData << it.value().at(ip).NetPresentValue;
+                    break;
+
+
+
                 }
             }
             ++it;

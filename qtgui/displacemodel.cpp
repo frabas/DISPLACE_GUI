@@ -1108,21 +1108,21 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf = stats.vpuf;
+    mStatsNationsCollected[nat].mVpuf = (stats.vpuf + mStatsNationsCollected[nat].mVpuf)/2;  // running average
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
-    mStatsNationsCollected[nat].GVA = stats.GVA;
-    mStatsNationsCollected[nat].GVAPerRevenue = stats.GVAPerRevenue;
-    mStatsNationsCollected[nat].LabourSurplus = stats.LabourSurplus;
-    mStatsNationsCollected[nat].GrossProfit = stats.GrossProfit;
-    mStatsNationsCollected[nat].NetProfit = stats.NetProfit;
-    mStatsNationsCollected[nat].NetProfitMargin = stats.NetProfitMargin;
-    mStatsNationsCollected[nat].GVAPerFTE = stats.GVAPerFTE;
-    mStatsNationsCollected[nat].RoFTA = stats.RoFTA;
-    mStatsNationsCollected[nat].BER = stats.BER;
-    mStatsNationsCollected[nat].CRBER = stats.CRBER;
-    mStatsNationsCollected[nat].NetPresentValue = stats.NetPresentValue;
+    mStatsNationsCollected[nat].GVA += stats.GVA; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+    mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+    mStatsNationsCollected[nat].RoFTA += stats.RoFTA; // accumulate on stat window plot
+    mStatsNationsCollected[nat].BER = +stats.BER; // accumulate on stat window plot
+    mStatsNationsCollected[nat].CRBER += stats.CRBER; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
 
 
 
@@ -1138,6 +1138,18 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsHarboursCollected[hidx].mVpuf = stats.vpuf;
         mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
         mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
+
+        mStatsHarboursCollected[hidx].GVA += stats.GVA; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+        mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+        mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].BER = +stats.BER; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].CRBER += stats.CRBER; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
     }
 
     int midx = stats.metierId;
@@ -1152,6 +1164,18 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsMetiersCollected[midx].vpuf =  stats.vpuf;
         mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
         mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
+
+        mStatsMetiersCollected[midx].GVA += stats.GVA; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+        mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+        mStatsMetiersCollected[midx].RoFTA += stats.RoFTA; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].BER = +stats.BER; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].CRBER += stats.CRBER; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
     }
 
     int n = stats.mCatches.size();

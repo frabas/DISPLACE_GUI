@@ -1099,6 +1099,19 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
+    mStatsNationsCollected[nat].GVAPerRevenue = stats.GVAPerRevenue;
+    mStatsNationsCollected[nat].LabourSurplus = stats.LabourSurplus;
+    mStatsNationsCollected[nat].GrossProfit = stats.GrossProfit;
+    mStatsNationsCollected[nat].NetProfit = stats.NetProfit;
+    mStatsNationsCollected[nat].NetProfitMargin = stats.NetProfitMargin;
+    mStatsNationsCollected[nat].GVAPerFTE = stats.GVAPerFTE;
+    mStatsNationsCollected[nat].RoFTA = stats.RoFTA;
+    mStatsNationsCollected[nat].BER = stats.BER;
+    mStatsNationsCollected[nat].CRBER = stats.CRBER;
+    mStatsNationsCollected[nat].NetPresentValue = stats.NetPresentValue;
+
+
+
     // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
     int hidx = -1;
     if (stats.lastHarbour != -1) {

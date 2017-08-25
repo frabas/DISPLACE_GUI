@@ -97,6 +97,19 @@ void SimulatorIpcManager::threadStarted()
                         stats.mDiscards.push_back(data->pop[i + pop]);
                     }
 
+                     stats.GVA = data->GVA;
+                     stats.GVAPerRevenue = data->GVAPerRevenue;
+                     stats.LabourSurplus  = data->LabourSurplus;
+                     stats.GrossProfit  = data->GrossProfit;
+                     stats.NetProfit  = data->NetProfit;
+                     stats.NetProfitMargin  = data->NetProfitMargin;
+                     stats.GVAPerFTE  = data->GVAPerFTE;
+                     stats.RoFTA  = data->RoFTA;
+                     stats.BER  = data->BER;
+                     stats.CRBER  = data->CRBER;
+                     stats.NetPresentValue  = data->NetPresentValue;
+
+
                     emit vesselLogbookReceived(stats);
                 }
                 break;

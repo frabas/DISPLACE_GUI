@@ -60,7 +60,10 @@ public:
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
-    enum NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf, SweptArea, RevenuePerSweptArea  };
+    enum NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf, SweptArea, RevenuePerSweptArea,  GVA, GVAPerRevenue,
+                       LabourSurplus, GrossProfit,NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue
+
+  };
     void setNationsStat(NationsStat stat);
     NationsStat getNationsStat() const { return mSelectedNationsStat; }
 

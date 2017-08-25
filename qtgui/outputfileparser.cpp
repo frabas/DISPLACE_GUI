@@ -713,6 +713,18 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
             v.mDiscards.push_back(value);
         }
 
+        v.GVA = toDouble(fields[10+pop+10+expop+1]);
+        v.GVAPerRevenue = toDouble(fields[10+pop+10+expop+2]);
+        v.LabourSurplus = toDouble(fields[10+pop+10+expop+3]);
+        v.GrossProfit = toDouble(fields[10+pop+10+expop+4]);
+        v.NetProfit = toDouble(fields[10+pop+10+expop+5]);
+        v.NetProfitMargin = toDouble(fields[10+pop+10+expop+6]);
+        v.GVAPerFTE = toDouble(fields[10+pop+10+expop+7]);
+        v.RoFTA = toDouble(fields[10+pop+10+expop+8]);
+        v.BER = toDouble(fields[10+pop+10+expop+9]);
+        v.CRBER = toDouble(fields[10+pop+10+expop+10]);
+        v.NetPresentValue = toDouble(fields[10+pop+10+expop+11]);
+
     } catch (std::exception &x) {
         qWarning() << "Error parsing Vessel Stat Line: " << x.what();
         return VesselStats();

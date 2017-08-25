@@ -582,6 +582,63 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
                     break;
+                case GVA:
+                    valueData << it.value().at(ip).GVA;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case GVAPerRevenue:
+                    valueData << it.value().at(ip).GVA;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
+                    break;
+                case LabourSurplus:
+                    valueData << it.value().at(ip).LabourSurplus;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case GrossProfit:
+                    valueData << it.value().at(ip).GrossProfit;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case NetProfit:
+                    valueData << it.value().at(ip).NetProfit;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case NetProfitMargin:
+                    valueData << it.value().at(ip).NetProfitMargin;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case GVAPerFTE:
+                    valueData << it.value().at(ip).GVAPerFTE;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case RoFTA:
+                    valueData << it.value().at(ip).RoFTA;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case BER:
+                    valueData << it.value().at(ip).BER;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case CRBER:
+                    valueData << it.value().at(ip).CRBER;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+                case NetPresentValue:
+                    valueData << it.value().at(ip).NetPresentValue;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    break;
+
+
                 }
             }
             ++it;
@@ -672,6 +729,8 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("Revenue per Swept Area (Euro/km^2)"));
                     break;
+
+
                 }
             }
             ++it;

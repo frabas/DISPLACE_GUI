@@ -42,6 +42,17 @@ public:
           mRevenues(0.0),
           mExRevenues(0.0),
           mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
+          GVA(0),
+          GVAPerRevenue(0),
+          LabourSurplus(0),
+          GrossProfit(0),
+          NetProfit (0),
+          NetProfitMargin(0),
+          GVAPerFTE(0),
+          RoFTA(0),
+          BER(0),
+          CRBER(0),
+          NetPresentValue(0),
           szGroups()
     {
     }
@@ -55,6 +66,19 @@ public:
     double mVpuf = 0.0;
     double mSweptArea = 0.0;
     double mRevenuePerSweptArea = 0.0;
+
+    double GVA=0.0;
+    double GVAPerRevenue = 0.0;
+    double LabourSurplus = 0.0;
+    double GrossProfit = 0.0;
+    double NetProfit  = 0.0;
+    double NetProfitMargin = 0.0;
+    double RoFTA = 0.0;
+    double GVAPerFTE = 0.0;
+    double BER = 0.0;
+    double CRBER = 0.0;
+    double NetPresentValue = 0.0;
+
 
     QVector<double> szGroups;
 };

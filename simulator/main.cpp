@@ -2495,6 +2495,45 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return -1;
     }
 
+
+    vector<double> this_vessel_nb_crews;
+    vector<double> annual_other_incomes;
+    vector<double> landing_costs_percents;
+    vector<double> crewshare_and_unpaid_labour_costs_percents;
+    vector<double> other_variable_costs_per_unit_efforts;
+    vector<double> annual_insurance_costs_per_crews;
+    vector<double> standard_labour_hour_opportunity_costss;
+    vector<double> standard_annual_full_time_employement_hourss;
+    vector<double> other_annual_fixed_costss;
+    vector<double> vessel_values;
+    vector<double> annual_depreciation_rates;
+    vector<double> opportunity_interest_rates;
+    vector<double> annual_discount_rates;
+
+    cout << "read_vessels_economic_features() in loadVessels()" << endl;
+    if (!read_vessels_economics_features(
+                               vesselids,
+                               this_vessel_nb_crews,
+                               annual_other_incomes,
+                               landing_costs_percents,
+                               crewshare_and_unpaid_labour_costs_percents,
+                               other_variable_costs_per_unit_efforts,
+                               annual_insurance_costs_per_crews,
+                               standard_labour_hour_opportunity_costss,
+                               standard_annual_full_time_employement_hourss,
+                               other_annual_fixed_costss,
+                               vessel_values,
+                               annual_depreciation_rates,
+                               opportunity_interest_rates,
+                               annual_discount_rates,
+                               folder_name_parameterization, inputfolder
+                               )) {
+           std::cerr << "Cannot read vessel economic features.\n";
+           return -1;
+       }
+
+
+
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
     auto fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
@@ -2706,7 +2745,20 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 mult_fuelcons_when_returning[i],
                 mult_fuelcons_when_inactive[i],
                 firm_ids[i],
-                calendars[i]
+                calendars[i],
+                i<this_vessel_nb_crews.size()? this_vessel_nb_crews[i]: 0,
+                i<annual_other_incomes.size()?  annual_other_incomes[i]: 0,
+                i<landing_costs_percents.size()? landing_costs_percents[i]: 0,
+                i<crewshare_and_unpaid_labour_costs_percents.size()? crewshare_and_unpaid_labour_costs_percents[i]: 0,
+                i<other_variable_costs_per_unit_efforts.size()? other_variable_costs_per_unit_efforts[i]: 0,
+                i<annual_insurance_costs_per_crews.size()? annual_insurance_costs_per_crews[i]: 0,
+                i<standard_labour_hour_opportunity_costss.size()? standard_labour_hour_opportunity_costss[i]: 0,
+                i<standard_annual_full_time_employement_hourss.size()? standard_annual_full_time_employement_hourss[i]: 0,
+                i<other_annual_fixed_costss.size()? other_annual_fixed_costss[i]: 0,
+                i<vessel_values.size()? vessel_values[i]: 0,
+                i<annual_depreciation_rates.size()? annual_depreciation_rates[i]: 0,
+                i<opportunity_interest_rates.size()? opportunity_interest_rates[i]: 0,
+                i<annual_discount_rates.size()? annual_discount_rates[i]: 0
                 );
 
         // some useful setters...
@@ -3317,6 +3369,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
     loglike_prop_met.open(filename.c_str());
 
+    ofstream popstats;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popstats_"+namesimu+".dat";
+    popstats.open(filename.c_str());
+    std::string popstats_filename = filename;
+
     ofstream popdyn_N;
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
     popdyn_N.open(filename.c_str());
@@ -3460,6 +3517,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // write down initial pop number in popdyn
     for (unsigned int sp=0; sp<populations.size(); sp++)
     {
+
         dout(cout  << "write down the popdyn...");
         // get total N from summing up N over nodes
         populations.at(sp)->aggregate_N();
@@ -3477,6 +3535,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     popdyn_N.flush();
     guiSendUpdateCommand(popdyn_N_filename, 0);
+
+
 
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
@@ -3541,6 +3601,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              namefolderinput,
                                              namefolderoutput,
                                              pathoutput,
+                                             popstats,
                                              popdyn_N,
                                              popdyn_F,
                                              popdyn_SSB,
@@ -3562,6 +3623,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              path,
                                              use_gnuplot,
                                              use_gui,
+                                             popstats_filename,
                                              popdyn_N_filename,
                                              popdyn_F_filename,
                                              popdyn_SSB_filename,
@@ -3828,6 +3890,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 return -1;
             }
 
+
+            // NOTE read_vessels_economic_features()  not read again because annual parameters...
+
+
+
+
             // RE-read the more complex objects (i.e. when several info for a same vessel)...
             // also quarter specific but semester specific for the betas because of the survey design they are comning from...
             fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
@@ -3842,8 +3910,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             // LOOP OVER VESSELS
             for (unsigned int v=0; v<vessels.size(); v++)
-            {
+            {   
                 dout(cout << "re-read data for vessel " << vessels.at(v)->get_name() << endl);
+
+                if(a_quarter=="quarter1")
+                {
+                    double new_vessel_value = vessels.at(v)->get_vessel_value() * (100- vessels.at(v)->get_annual_depreciation_rate())/100;
+                    vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
+                }
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
@@ -4162,12 +4236,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                        // the system command line
                        #if defined(_WIN32)
-                       string a_command = "anavaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
+                       string a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
                        cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #else
-                       string a_command = inputfolder+"/anavaifieldshuffler -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
+                       string a_command = inputfolder+"/avaifieldshuffler -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #endif

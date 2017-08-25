@@ -203,7 +203,7 @@ static void manage_vessel(int idx_v)
                 if(!inactive)
                 {
                     outc(cout  << "...just arrived!" << endl);
-                    vessels[index_v]->updateTripsStatistics(populations, implicit_pops);
+                    vessels[index_v]->updateTripsStatistics(populations, implicit_pops, tstep);
                     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(tstep, vessels[index_v], populations, implicit_pops)));
                     OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
 #if 0

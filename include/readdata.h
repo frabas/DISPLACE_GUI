@@ -84,6 +84,26 @@ bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
                            string folder_name_parameterization,
                            string inputfolder,
                            int selected_vessels_only, vector<VesselCalendar> &calendars);
+
+bool COMMONSSHARED_EXPORT read_vessels_economics_features(vector<string>& vesselids,
+                           vector<double>& this_vessel_nb_crews,
+                           vector<double>& annual_other_incomes,
+                           vector<double>& landing_costs_percents,
+                           vector<double>& crewshare_and_unpaid_labour_costs_percents,
+                           vector<double>& other_variable_costs_per_unit_efforts,
+                           vector<double>& annual_insurance_costs_per_crews,
+                           vector<double>& standard_labour_hour_opportunity_costss,
+                           vector<double>& standard_annual_full_time_employement_hourss,
+                           vector<double>& other_annual_fixed_costss,
+                           vector<double>& vessel_values,
+                           vector<double>& annual_depreciation_rates,
+                           vector<double>& opportunity_interest_rates,
+                           vector<double>& annual_discount_rates,
+                           string folder_name_parameterization,
+                           string inputfolder
+                           );
+
+
 bool COMMONSSHARED_EXPORT read_ships_features(vector<string>& shipids, vector<double> &imos,
                          vector<double> &yearbuilds, vector<string> &flags,
                          vector<string> &types, vector<double> &typecodes,

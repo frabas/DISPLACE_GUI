@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-//#include <myRutils.h>
+#include <myRutils.h>
 
 using namespace std;
 
@@ -102,8 +102,7 @@ int main(int argc, char* argv[])
         // add a lognormal error on the fly
         double sd=0.2;
         double logn_error=0;
-        //logn_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);;
-        logn_error= 1;
+        logn_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);;
 
         normalisation_sum_before+=val;
 

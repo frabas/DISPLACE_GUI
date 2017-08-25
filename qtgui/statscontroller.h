@@ -60,15 +60,21 @@ public:
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
-    enum NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf, SweptArea, RevenuePerSweptArea  };
+    enum NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf, SweptArea, RevenuePerSweptArea,  GVA, GVAPerRevenue,
+                       LabourSurplus, GrossProfit,NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue
+
+  };
     void setNationsStat(NationsStat stat);
     NationsStat getNationsStat() const { return mSelectedNationsStat; }
 
-    enum HarboursStat { H_Catches, H_Discards, H_Earnings, H_Gav, H_Vpuf, H_SweptArea, H_RevenuePerSweptArea };
+    enum HarboursStat { H_Catches, H_Discards, H_Earnings, H_Gav, H_Vpuf, H_SweptArea, H_RevenuePerSweptArea,
+                        H_GVA, H_GVAPerRevenue, H_LabourSurplus, H_GrossProfit, H_NetProfit, H_NetProfitMargin, H_GVAPerFTE, H_RoFTA, H_BER, H_CRBER, H_NetPresentValue};
+
     void setHarbourStat(HarboursStat stat);
     HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
 
-    enum MetiersStat { M_Catches, M_Discards, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea };
+    enum MetiersStat { M_Catches, M_Discards, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea,
+                       M_GVA, M_GVAPerRevenue, M_LabourSurplus, M_GrossProfit, M_NetProfit, M_NetProfitMargin, M_GVAPerFTE, M_RoFTA, M_BER, M_CRBER, M_NetPresentValue};
     void setMetiersStat(MetiersStat stat);
     MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
 

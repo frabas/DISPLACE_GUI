@@ -109,6 +109,11 @@ private:
         double areasweptthistrip, subsurfaceareasweptthistrip, cumcatches, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 
+        double this_vessel_nb_crew, annual_other_income;
+        double landing_costs_percent, crewshare_and_unpaid_labour_costs_percent, other_variable_costs_per_unit_effort, annual_insurance_costs_per_crew;
+        double standard_labour_hour_opportunity_costs, standard_annual_full_time_employement_hours, other_annual_fixed_costs;
+        double vessel_value, annual_depreciation_rate, opportunity_interest_rate, annual_discount_rate;
+
         int length_class;
         std::string nationality;
         LengthClass mLengthClassId;
@@ -123,7 +128,25 @@ private:
         double avgRevenues;
         double avgProfit;
         int numTrips;
-								 // dynamic
+
+        // AER Economic Indicators (updated after each new trip)
+        double TotLandingIncome=0; //cumul
+        double TotHoursAtSea=0; //cumul
+        double TotFuelCosts=0; //cumul
+        double TotVarCosts=0;  //cumul
+        double GVA=0; //updated
+        double GVAPerRevenue=0; //updated
+        double LabourSurplus=0; //updated
+        double GrossProfit=0; //updated
+        double NetProfit=0; //updated
+        double NetProfitMargin=0; //updated
+        double GVAPerFTE=0; //updated
+        double RoFTA=0; //updated
+        double BER=0; //updated
+        double CRBER=0; //updated
+        double NetPresentValue=0; //updated
+
+                                         // dynamic
 		bool inharbour, inactive, natio;
         std::vector < std::vector<double> > catch_pop_at_szgroup;
         std::vector < std::vector<double> > discards_pop_at_szgroup;
@@ -168,7 +191,20 @@ public:
                double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
                double mult_fuelcons_when_returning, double mult_fuelcons_when_inactive,
                int _firm_id,
-               VesselCalendar cd
+               VesselCalendar cd,
+               double this_vessel_nb_crew,
+               double annual_other_income,
+               double landing_costs_percent,
+               double crewshare_and_unpaid_labour_costs_percent,
+               double other_variable_costs_per_unit_effort,
+               double annual_insurance_costs_per_crew,
+               double standard_labour_hour_opportunity_costs,
+               double standard_annual_full_time_employement_hours,
+               double other_annual_fixed_costs,
+               double vessel_value,
+               double annual_depreciation_rate,
+               double opportunity_interest_rate,
+               double annual_discount_rate
             );
 		Vessel();
 		~Vessel();
@@ -183,6 +219,8 @@ public:
         Node* get_loc() const;
 		Metier* get_metier() const;
 		double get_speed () const;
+        double get_vessel_value() const;
+        double get_annual_depreciation_rate() const; // in percent
 		double get_length () const;
 		double get_KW () const;
         int get_length_class() const;
@@ -251,9 +289,21 @@ public:
         types::NodeId get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
 		int get_targeting_non_tac_pop_only() const;
+        double get_GVA() const;
+        double get_GVAPerRevenue() const;
+        double get_LabourSurplus() const;
+        double get_GrossProfit() const;
+        double get_NetProfit() const;
+        double get_NetProfitMargin() const;
+        double get_GVAPerFTE() const;
+        double get_RoFTA() const;
+        double get_BER() const;
+        double get_CRBER() const;
+        double get_NetPresentValue() const;
         void set_firm_id (int val);
         void set_vid_is_active (int val);
         void set_speed (double val);
+        void set_vessel_value (double val);
 		void set_resttime_par1 (double val);
 		void set_resttime_par2 (double val);
 		void set_av_trip_duration (double val);
@@ -435,7 +485,7 @@ public:
             return numTrips;
         }
 
-        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+        void updateTripsStatistics(const std::vector<Population *> &populations, std::vector<int> &implicit_pops, int tstep);
 
         double traverseDtree (int tstep, dtree::DecisionTree *tree);
 

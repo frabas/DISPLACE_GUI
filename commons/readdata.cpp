@@ -496,6 +496,64 @@ bool read_vessels_features(string a_quarter,
 
 
 //----------------
+bool read_vessels_economics_features(
+                           vector<string>& vesselids,
+                           vector<double>& this_vessel_nb_crews,
+                           vector<double>& annual_other_incomes,
+                           vector<double>& landing_costs_percents,
+                           vector<double>& crewshare_and_unpaid_labour_costs_percents,
+                           vector<double>& other_variable_costs_per_unit_efforts,
+                           vector<double>& annual_insurance_costs_per_crews,
+                           vector<double>& standard_labour_hour_opportunity_costss,
+                           vector<double>& standard_annual_full_time_employement_hourss,
+                           vector<double>& other_annual_fixed_costss,
+                           vector<double>& vessel_values,
+                           vector<double>& annual_depreciation_rates,
+                           vector<double>& opportunity_interest_rates,
+                           vector<double>& annual_discount_rates,
+                           string folder_name_parameterization,
+                           string inputfolder
+                           )
+{
+
+    string filename;
+    filename=  inputfolder+"/vesselsspe_"+folder_name_parameterization+"/vesselsspe_economic_features.dat";
+
+    ifstream vessels_economic_features;
+    vessels_economic_features.open(filename.c_str());
+    if(vessels_economic_features.fail())
+    {
+        open_file_error(filename.c_str());
+        return false;
+    }
+
+    if (!fill_from_vessels_economic_specifications(vessels_economic_features,
+                                                   this_vessel_nb_crews,
+                                                   annual_other_incomes,
+                                                   landing_costs_percents,
+                                                   crewshare_and_unpaid_labour_costs_percents,
+                                                   other_variable_costs_per_unit_efforts,
+                                                   annual_insurance_costs_per_crews,
+                                                   standard_labour_hour_opportunity_costss,
+                                                   standard_annual_full_time_employement_hourss,
+                                                   other_annual_fixed_costss,
+                                                   vessel_values,
+                                                   annual_depreciation_rates,
+                                                   opportunity_interest_rates,
+                                                   annual_discount_rates)) {
+        vessels_economic_features.close();
+        return false;
+    }
+
+    vessels_economic_features.close();
+
+
+    return true;
+}
+
+
+
+//----------------
 bool read_firms_features(vector<int>& firm_ids,
                          vector<string>& firm_names,
                          vector<int>& nb_vessels,

@@ -1005,10 +1005,6 @@ void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, i
 
 void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, int windfarmtype, double kWh)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsWindfarmsCollected.collectkWh(step,
                                                  windfarmid,
                                                  windfarmtype,
@@ -1017,10 +1013,6 @@ void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, i
 
 void DisplaceModel::collectWindfarmkWproduction(int step, int node_idx, int windfarmid, int windfarmtype, double kWproduction)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsWindfarmsCollected.collectkWproduction(step,
                                                  windfarmid,
                                                  windfarmtype,
@@ -1074,6 +1066,19 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->addSweptArea(stats.sweptArea);
         vessel->addRevenuePerSweptArea(stats.revenuePerSweptArea);
         vessel->addVpuf(stats.vpuf);
+        vessel->setGVA (stats.GVA);
+        vessel->setGVAPerRevenue(stats.GVAPerRevenue);
+        vessel->setLabourSurplus(stats.LabourSurplus);
+        vessel->setGrossProfit (stats.GrossProfit);
+        vessel->setNetProfit (stats.NetProfit);
+        vessel->setNetProfitMargin (stats.NetProfitMargin);
+        vessel->setGVAPerFTE(stats.GVAPerFTE);
+        vessel->setRoFTA(stats.RoFTA);
+        vessel->setBER(stats.BER);
+        vessel->setCRBER(stats.CRBER);
+        vessel->setNetPresentValue(stats.NetPresentValue);
+
+
         nat = vessel->getNationality();
     } else {
         // retrieve nationality from vessel name
@@ -1103,9 +1108,23 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf = stats.vpuf;
+    mStatsNationsCollected[nat].mVpuf = (stats.vpuf + mStatsNationsCollected[nat].mVpuf)/2;  // running average
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
+
+    mStatsNationsCollected[nat].GVA += stats.GVA; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+    mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+    mStatsNationsCollected[nat].RoFTA += stats.RoFTA; // accumulate on stat window plot
+    mStatsNationsCollected[nat].BER = +stats.BER; // accumulate on stat window plot
+    mStatsNationsCollected[nat].CRBER += stats.CRBER; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
+
+
 
     // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
     int hidx = -1;
@@ -1119,6 +1138,18 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsHarboursCollected[hidx].mVpuf = stats.vpuf;
         mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
         mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
+
+        mStatsHarboursCollected[hidx].GVA += stats.GVA; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+        mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+        mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].BER = +stats.BER; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].CRBER += stats.CRBER; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
     }
 
     int midx = stats.metierId;
@@ -1133,6 +1164,18 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsMetiersCollected[midx].vpuf =  stats.vpuf;
         mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
         mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
+
+        mStatsMetiersCollected[midx].GVA += stats.GVA; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+        mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+        mStatsMetiersCollected[midx].RoFTA += stats.RoFTA; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].BER = +stats.BER; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].CRBER += stats.CRBER; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
     }
 
     int n = stats.mCatches.size();
@@ -1186,7 +1229,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 
 void DisplaceModel::commitVesselsStats(int tstep)
 {
-    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
+//    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
     if (mVesselsStatsDirty) {
         mStatsNations.insertValue(tstep, mStatsNationsCollected);
         if (mDb)
@@ -2361,6 +2404,45 @@ bool DisplaceModel::loadVessels()
                           mInputName.toStdString(), mBasePath.toStdString(), selected_vessels_only, calendar))
         return false;
 
+    // read general vessel features
+    // (quarter specific, mainly because of the gamma parameters)
+
+    vector<double> this_vessel_nb_crews;
+    vector<double> annual_other_incomes;
+    vector<double> landing_costs_percents;
+    vector<double> crewshare_and_unpaid_labour_costs_percents;
+    vector<double> other_variable_costs_per_unit_efforts;
+    vector<double> annual_insurance_costs_per_crews;
+    vector<double> standard_labour_hour_opportunity_costss;
+    vector<double> standard_annual_full_time_employement_hourss;
+    vector<double> other_annual_fixed_costss;
+    vector<double> vessel_values;
+    vector<double> annual_depreciation_rates;
+    vector<double> opportunity_interest_rates;
+    vector<double> annual_discount_rates;
+
+    cout << "read_vessels_economic_features() in loadVessels()" << endl;
+    if (!read_vessels_economics_features(
+                               vesselids,
+                               this_vessel_nb_crews,
+                               annual_other_incomes,
+                               landing_costs_percents,
+                               crewshare_and_unpaid_labour_costs_percents,
+                               other_variable_costs_per_unit_efforts,
+                               annual_insurance_costs_per_crews,
+                               standard_labour_hour_opportunity_costss,
+                               standard_annual_full_time_employement_hourss,
+                               other_annual_fixed_costss,
+                               vessel_values,
+                               annual_depreciation_rates,
+                               opportunity_interest_rates,
+                               annual_discount_rates,
+                               mInputName.toStdString(), mBasePath.toStdString()
+                               ))
+         return false;
+
+
+
 
     cout << "fill in multimaps in loadVessels()" << endl;
 
@@ -2530,7 +2612,20 @@ bool DisplaceModel::loadVessels()
             mult_fuelcons_when_returning[i],
             mult_fuelcons_when_inactive[i],
             firm_ids[i],
-            calendar[i]
+            calendar[i],
+            i<this_vessel_nb_crews.size()? this_vessel_nb_crews[i]: 0,
+            i<annual_other_incomes.size()? annual_other_incomes[i]: 0,
+            i<landing_costs_percents.size()? landing_costs_percents[i]: 0,
+            i<crewshare_and_unpaid_labour_costs_percents.size()? crewshare_and_unpaid_labour_costs_percents[i]: 0,
+            i<other_variable_costs_per_unit_efforts.size()? other_variable_costs_per_unit_efforts[i]: 0,
+            i<annual_insurance_costs_per_crews.size()? annual_insurance_costs_per_crews[i]: 0,
+            i<standard_labour_hour_opportunity_costss.size()? standard_labour_hour_opportunity_costss[i]: 0,
+            i<standard_annual_full_time_employement_hourss.size()? standard_annual_full_time_employement_hourss[i]: 0,
+            i<other_annual_fixed_costss.size()? other_annual_fixed_costss[i]: 0,
+            i<vessel_values.size()? vessel_values[i]: 0,
+            i<annual_depreciation_rates.size()? annual_depreciation_rates[i]: 0,
+            i<opportunity_interest_rates.size()? opportunity_interest_rates[i]: 0,
+            i<annual_discount_rates.size()? annual_discount_rates[i]: 0
             ));
 
         std::shared_ptr<VesselData> vd (new VesselData(v));

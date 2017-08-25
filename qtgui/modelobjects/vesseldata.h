@@ -67,6 +67,41 @@ public:
     void setRevenuePerSweptArea(double value);
     void addRevenuePerSweptArea(double value);
 
+    double getGVA() const;
+    void setGVA(double value);
+    void addGVA(double value);
+    double getGVAPerRevenue() const;
+    void setGVAPerRevenue(double value);
+    void addGVAPerRevenue(double value);
+    double getLabourSurplus() const;
+    void setLabourSurplus(double value);
+    void addLabourSurplus(double value);
+    double getGrossProfit() const;
+    void setGrossProfit(double value);
+    void addGrossProfit(double value);
+    double getNetProfit() const;
+    void setNetProfit(double value);
+    void addNetProfit(double value);
+    double getNetProfitMargin() const;
+    void setNetProfitMargin(double value);
+    void addNetProfitMargin(double value);
+    double getGVAPerFTE() const;
+    void setGVAPerFTE(double value);
+    void addGVAPerFTE(double value);
+    double getRoFTA() const;
+    void setRoFTA(double value);
+    void addRoFTA(double value);
+    double getBER() const;
+    void setBER(double value);
+    void addBER(double value);
+    double getCRBER() const;
+    void setCRBER(double value);
+    void addCRBER(double value);
+    double getNetPresentValue() const;
+    void setNetPresentValue(double value);
+    void addNetPresentValue(double value);
+
+
 
     double getFuelCost() const;
     void setFuelCost(double value);
@@ -88,6 +123,19 @@ private:
     double gav;
     double sweptArea;
     double revenuePerSweptArea;
+
+    double GVA;
+    double GVAPerRevenue;
+    double LabourSurplus;
+    double GrossProfit;
+    double NetProfit;
+    double NetProfitMargin;
+    double GVAPerFTE;
+    double RoFTA;
+    double BER;
+    double CRBER;
+    double NetPresentValue;
+
 
     QList<double> mCatches;
     QList<double> mDiscards;
@@ -113,6 +161,19 @@ public:
     double gav = 0;
     double sweptArea = 0;
     double revenuePerSweptArea = 0;
+
+    double GVA = 0;
+    double GVAPerRevenue = 0;
+    double LabourSurplus = 0;
+    double GrossProfit = 0;
+    double NetProfit = 0;
+    double NetProfitMargin = 0;
+    double RoFTA = 0;
+    double GVAPerFTE = 0;
+    double BER = 0;
+    double CRBER = 0;
+    double NetPresentValue = 0;
+
 
     QList<double> mCatches;
     QList<double> mDiscards;

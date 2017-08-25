@@ -75,12 +75,16 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_numbers_")) {
         parsePopBenthosStats(&file, tstep, mModel, period);
+#if 0
     } else if (name.startsWith("popdyn_F_")) {
         parsePopdynF(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_SSB_")) {
         parsePopdynSSB(&file, tstep, mModel, period);
     } else if (name.startsWith("popdyn_")) {
         parsePopdyn(&file, tstep, mModel, period);
+#endif
+    } else if (name.startsWith("popstats_")) {
+        parsePopStats(&file, tstep, mModel, period);
     } else if (name.startsWith("loglike_")) {
         parseVessels(&file, tstep, mModel, period);
     } else if (name.startsWith("fishfarmslogs_")) {
@@ -506,6 +510,59 @@ void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model
     //    model->commitNodesStatsFromSimu(step);
 }
 
+void OutputFileParser::parsePopStats(QFile *file, int tstep, DisplaceModel *model, int period)
+{
+    QTextStream strm (file);
+
+    int step, laststep = -1;
+    while (!strm.atEnd()) {
+        QString line = strm.readLine();
+        QStringList fields = line.split(" ", QString::SkipEmptyParts);
+        step = fields[0].toInt();
+
+        if (laststep != -1 && step != laststep)
+            model->commitNodesStatsFromSimu(laststep);
+        laststep = tstep;
+
+        int id = fields[1].toInt();
+
+        // N
+        const auto npopN = 14; // model->getSzGrupsCount();
+        QVector<double> popN(npopN);
+        double totN = 0;
+        for (int i = 0; i < npopN; ++i) {
+            double v = fields[2 + i].toDouble();
+            totN += v;
+            popN[i] = v;
+        }
+        model->collectPopdynN(step, id, popN, totN);
+
+        // F
+        const auto npopF = 11; // model->getSzGrupsCount();
+        QVector<double> popF(npopF);
+        double totF = 0;
+        for (int i = 0; i < npopF; ++i) {
+            double v = fields[2 + npopN + i].toDouble();
+            totF += v;
+            popF[i] = v;
+        }
+        model->collectPopdynF(step, id, popF, totF);
+
+        // SSB
+        const auto npopS = 14; // model->getSzGrupsCount();
+        QVector<double> popS(npopS);
+        double totS = 0;
+        for (int i = 0; i < npopS; ++i) {
+            double v = fields[2 + npopN + npopF + i].toDouble();
+            totS += v;
+            popS[i] = v;
+        }
+        model->collectPopdynSSB(step, id, popS, totS);
+    }
+
+    model->commitNodesStatsFromSimu(laststep);
+}
+
 void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
@@ -655,6 +712,18 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
             double value = toDouble(fields[10+pop+10+i]);
             v.mDiscards.push_back(value);
         }
+
+        v.GVA = toDouble(fields[10+pop+10+expop+1]);
+        v.GVAPerRevenue = toDouble(fields[10+pop+10+expop+2]);
+        v.LabourSurplus = toDouble(fields[10+pop+10+expop+3]);
+        v.GrossProfit = toDouble(fields[10+pop+10+expop+4]);
+        v.NetProfit = toDouble(fields[10+pop+10+expop+5]);
+        v.NetProfitMargin = toDouble(fields[10+pop+10+expop+6]);
+        v.GVAPerFTE = toDouble(fields[10+pop+10+expop+7]);
+        v.RoFTA = toDouble(fields[10+pop+10+expop+8]);
+        v.BER = toDouble(fields[10+pop+10+expop+9]);
+        v.CRBER = toDouble(fields[10+pop+10+expop+10]);
+        v.NetPresentValue = toDouble(fields[10+pop+10+expop+11]);
 
     } catch (std::exception &x) {
         qWarning() << "Error parsing Vessel Stat Line: " << x.what();

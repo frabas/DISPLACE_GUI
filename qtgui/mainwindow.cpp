@@ -2879,6 +2879,17 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, StatsController::Vpuf, r);
         exportPlot (out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations, StatsController::SweptArea, r);
         exportPlot (out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations, StatsController::RevenuePerSweptArea, r);
+        exportPlot (out + QString("/nations_GVA.%1").arg(r.format), StatsController::Nations, StatsController::GVA, r);
+        exportPlot (out + QString("/nations_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, StatsController::GVAPerRevenue, r);
+        exportPlot (out + QString("/nations_LabourSurplus.%1").arg(r.format), StatsController::Nations, StatsController::LabourSurplus, r);
+        exportPlot (out + QString("/nations_GrossProfit.%1").arg(r.format), StatsController::Nations, StatsController::GrossProfit, r);
+        exportPlot (out + QString("/nations_NetProfit.%1").arg(r.format), StatsController::Nations, StatsController::NetProfit, r);
+        exportPlot (out + QString("/nations_NetProfitMargin.%1").arg(r.format), StatsController::Nations, StatsController::NetProfitMargin, r);
+        exportPlot (out + QString("/nations_GVAPerFTE.%1").arg(r.format), StatsController::Nations, StatsController::GVAPerFTE, r);
+        exportPlot (out + QString("/nations_RoFTA.%1").arg(r.format), StatsController::Nations, StatsController::RoFTA, r);
+        exportPlot (out + QString("/nations_BER.%1").arg(r.format), StatsController::Nations, StatsController::BER, r);
+        exportPlot (out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::CRBER, r);
+        exportPlot (out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::NetPresentValue, r);
 
         exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, StatsController::H_Catches, r);
         exportPlot (out + QString("/harbours_discards.%1").arg(r.format), StatsController::Harbours, StatsController::H_Discards, r);
@@ -2887,12 +2898,34 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/harbours_vpuf.%1").arg(r.format), StatsController::Harbours, StatsController::H_Vpuf, r);
         exportPlot (out + QString("/harbours_sweptarea.%1").arg(r.format), StatsController::Harbours, StatsController::H_SweptArea, r);
         exportPlot (out + QString("/harbours_revenuepersweptarea.%1").arg(r.format), StatsController::Harbours, StatsController::H_RevenuePerSweptArea, r);
+        exportPlot (out + QString("/harbours_GVA.%1").arg(r.format), StatsController::Nations, StatsController::H_GVA, r);
+        exportPlot (out + QString("/harbours_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, StatsController::H_GVAPerRevenue, r);
+        exportPlot (out + QString("/harbours_LabourSurplus.%1").arg(r.format), StatsController::Nations, StatsController::H_LabourSurplus, r);
+        exportPlot (out + QString("/harbours_GrossProfit.%1").arg(r.format), StatsController::Nations, StatsController::H_GrossProfit, r);
+        exportPlot (out + QString("/harbours_NetProfit.%1").arg(r.format), StatsController::Nations, StatsController::H_NetProfit, r);
+        exportPlot (out + QString("/harbours_NetProfitMargin.%1").arg(r.format), StatsController::Nations, StatsController::H_NetProfitMargin, r);
+        exportPlot (out + QString("/harbours_GVAPerFTE.%1").arg(r.format), StatsController::Nations, StatsController::H_GVAPerFTE, r);
+        exportPlot (out + QString("/harbours_RoFTA.%1").arg(r.format), StatsController::Nations, StatsController::H_RoFTA, r);
+        exportPlot (out + QString("/harbours_BER.%1").arg(r.format), StatsController::Nations, StatsController::H_BER, r);
+        exportPlot (out + QString("/harbours_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::H_CRBER, r);
+        exportPlot (out + QString("/harbours_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::H_NetPresentValue, r);
 
         exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, StatsController::M_Catches, r);
         exportPlot (out + QString("/metiers_discards.%1").arg(r.format), StatsController::Metiers, StatsController::M_Discards, r);
         exportPlot (out + QString("/metiers_revenues.%1").arg(r.format), StatsController::Metiers, StatsController::M_Revenues, r);
         exportPlot (out + QString("/metiers_gav.%1").arg(r.format), StatsController::Metiers, StatsController::M_Gav, r);
         exportPlot (out + QString("/metiers_vpuf.%1").arg(r.format), StatsController::Metiers, StatsController::M_Vpuf, r);
+        exportPlot (out + QString("/metiers_GVA.%1").arg(r.format), StatsController::Nations, StatsController::M_GVA, r);
+        exportPlot (out + QString("/metiers_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, StatsController::M_GVAPerRevenue, r);
+        exportPlot (out + QString("/metiers_LabourSurplus.%1").arg(r.format), StatsController::Nations, StatsController::M_LabourSurplus, r);
+        exportPlot (out + QString("/metiers_GrossProfit.%1").arg(r.format), StatsController::Nations, StatsController::M_GrossProfit, r);
+        exportPlot (out + QString("/metiers_NetProfit.%1").arg(r.format), StatsController::Nations, StatsController::M_NetProfit, r);
+        exportPlot (out + QString("/metiers_NetProfitMargin.%1").arg(r.format), StatsController::Nations, StatsController::M_NetProfitMargin, r);
+        exportPlot (out + QString("/metiers_GVAPerFTE.%1").arg(r.format), StatsController::Nations, StatsController::M_GVAPerFTE, r);
+        exportPlot (out + QString("/metiers_RoFTA.%1").arg(r.format), StatsController::Nations, StatsController::M_RoFTA, r);
+        exportPlot (out + QString("/metiers_BER.%1").arg(r.format), StatsController::Nations, StatsController::M_BER, r);
+        exportPlot (out + QString("/metiers_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::M_CRBER, r);
+        exportPlot (out + QString("/metiers_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::M_NetPresentValue, r);
 
         s.setValue("allplots_out", out);
     }

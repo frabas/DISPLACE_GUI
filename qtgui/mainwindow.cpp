@@ -2879,6 +2879,17 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, StatsController::Vpuf, r);
         exportPlot (out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations, StatsController::SweptArea, r);
         exportPlot (out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations, StatsController::RevenuePerSweptArea, r);
+        exportPlot (out + QString("/nations_GVA.%1").arg(r.format), StatsController::Nations, StatsController::GVA, r);
+        exportPlot (out + QString("/nations_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, StatsController::GVAPerRevenue, r);
+        exportPlot (out + QString("/nations_LabourSurplus.%1").arg(r.format), StatsController::Nations, StatsController::LabourSurplus, r);
+        exportPlot (out + QString("/nations_GrossProfit.%1").arg(r.format), StatsController::Nations, StatsController::GrossProfit, r);
+        exportPlot (out + QString("/nations_NetProfit.%1").arg(r.format), StatsController::Nations, StatsController::NetProfit, r);
+        exportPlot (out + QString("/nations_NetProfitMargin.%1").arg(r.format), StatsController::Nations, StatsController::NetProfitMargin, r);
+        exportPlot (out + QString("/nations_GVAPerFTE.%1").arg(r.format), StatsController::Nations, StatsController::GVAPerFTE, r);
+        exportPlot (out + QString("/nations_RoFTA.%1").arg(r.format), StatsController::Nations, StatsController::RoFTA, r);
+        exportPlot (out + QString("/nations_BER.%1").arg(r.format), StatsController::Nations, StatsController::BER, r);
+        exportPlot (out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::CRBER, r);
+        exportPlot (out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::NetPresentValue, r);
 
         exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, StatsController::H_Catches, r);
         exportPlot (out + QString("/harbours_discards.%1").arg(r.format), StatsController::Harbours, StatsController::H_Discards, r);

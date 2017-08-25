@@ -1066,6 +1066,19 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->addSweptArea(stats.sweptArea);
         vessel->addRevenuePerSweptArea(stats.revenuePerSweptArea);
         vessel->addVpuf(stats.vpuf);
+        vessel->setGVA (stats.GVA);
+        vessel->setGVAPerRevenue(stats.GVAPerRevenue);
+        vessel->setLabourSurplus(stats.LabourSurplus);
+        vessel->setGrossProfit (stats.GrossProfit);
+        vessel->setNetProfit (stats.NetProfit);
+        vessel->setNetProfitMargin (stats.NetProfitMargin);
+        vessel->setGVAPerFTE(stats.GVAPerFTE);
+        vessel->setRoFTA(stats.RoFTA);
+        vessel->setBER(stats.BER);
+        vessel->setCRBER(stats.CRBER);
+        vessel->setNetPresentValue(stats.NetPresentValue);
+
+
         nat = vessel->getNationality();
     } else {
         // retrieve nationality from vessel name
@@ -1099,6 +1112,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
+    mStatsNationsCollected[nat].GVA = stats.GVA;
     mStatsNationsCollected[nat].GVAPerRevenue = stats.GVAPerRevenue;
     mStatsNationsCollected[nat].LabourSurplus = stats.LabourSurplus;
     mStatsNationsCollected[nat].GrossProfit = stats.GrossProfit;

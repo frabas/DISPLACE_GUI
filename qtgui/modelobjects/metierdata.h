@@ -27,6 +27,7 @@ public:
     QList<double> mCatchesPerPop;
     QList<double> mDiscardsPerPop;
 
+    double GVA = 0.0;
     double GVAPerRevenue = 0.0;
     double LabourSurplus = 0.0;
     double GrossProfit = 0.0;

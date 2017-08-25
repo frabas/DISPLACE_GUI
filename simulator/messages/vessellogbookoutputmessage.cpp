@@ -109,6 +109,22 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
         logbook.revenuepersweptarea=logbook.revenue_from_av_prices /(logbook.sweptarea); // euro per m^2
     }
 
+
+
+    logbook.GVA = v->get_GVA();
+    logbook.GVAPerRevenue= v->get_GVAPerRevenue();
+    logbook.LabourSurplus= v->get_LabourSurplus();
+    logbook.GrossProfit= v->get_GrossProfit();
+    logbook.NetProfit= v->get_NetProfit();
+    logbook.NetProfitMargin= v->get_NetProfitMargin();
+    logbook.GVAPerFTE= v->get_GVAPerFTE();
+    logbook.RoFTA= v->get_RoFTA();
+    logbook.BER= v->get_BER();
+    logbook.CRBER= v->get_CRBER();
+    logbook.NetPresentValue= v->get_NetPresentValue();
+
+
+
 }
 
 bool VesselLogbookOutputMessage::process()
@@ -140,6 +156,18 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
     ss  << logbook.vpuf << " " ;
     ss  << 0 << " " ;
     ss  << logbook.gav2 << " " ;
+    ss  << logbook.GVA << " " ;
+    ss  << logbook.GVAPerRevenue << " " ;
+    ss  << logbook.LabourSurplus << " " ;
+    ss  << logbook.GrossProfit << " " ;
+    ss  << logbook.NetProfit << " " ;
+    ss  << logbook.NetProfitMargin << " " ;
+    ss  << logbook.GVAPerFTE << " " ;
+    ss  << logbook.RoFTA << " " ;
+    ss  << logbook.BER << " " ;
+    ss  << logbook.CRBER << " " ;
+    ss  << logbook.NetPresentValue << " " ;
+
     ss  << " " << std::endl;
 
     std::cout << "=v" << ss.str();

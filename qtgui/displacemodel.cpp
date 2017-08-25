@@ -1117,7 +1117,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
     mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
     mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // accumulate on stat window plot
-    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+    mStatsNationsCollected[nat].NetProfitMargin = (stats.NetProfitMargin + mStatsNationsCollected[nat].NetProfitMargin)/2; // running average
     mStatsNationsCollected[nat].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
     mStatsNationsCollected[nat].RoFTA += stats.RoFTA; // accumulate on stat window plot
     mStatsNationsCollected[nat].BER = +stats.BER; // accumulate on stat window plot
@@ -1144,7 +1144,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
         mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
         mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].NetProfitMargin = (stats.NetProfitMargin + mStatsNationsCollected[nat].NetProfitMargin)/2; // running average
         mStatsHarboursCollected[hidx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
         mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA; // accumulate on stat window plot
         mStatsHarboursCollected[hidx].BER = +stats.BER; // accumulate on stat window plot
@@ -1170,7 +1170,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
         mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
         mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+        mStatsMetiersCollected[midx].NetProfitMargin = (stats.NetProfitMargin + mStatsNationsCollected[nat].NetProfitMargin)/2; // running average
         mStatsMetiersCollected[midx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
         mStatsMetiersCollected[midx].RoFTA += stats.RoFTA; // accumulate on stat window plot
         mStatsMetiersCollected[midx].BER = +stats.BER; // accumulate on stat window plot

@@ -1426,8 +1426,8 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
 
     if(TotLandingIncome>0 && NetProfit>0) {
-         NetProfitMargin=NetProfit/(TotLandingIncome+(annual_other_income*tstep/8761));
-    }                                          // AER indicator
+         NetProfitMargin=(NetProfit*100)/(TotLandingIncome+(annual_other_income*tstep/8761));
+    }                                          // AER indicator (in %)
 // cout << "NetProfitMargin is "<< NetProfitMargin << endl;
 
 

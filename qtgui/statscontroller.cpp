@@ -610,7 +610,7 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case NetProfitMargin:
                     valueData << it.value().at(ip).NetProfitMargin;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("%"));
                     break;
                 case GVAPerFTE:
                     valueData << it.value().at(ip).GVAPerFTE;
@@ -757,7 +757,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                 case H_NetProfitMargin:
                     valueData << it.value().at(ip.toIndex()).NetProfitMargin;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    plot->yAxis->setLabel(QObject::tr("%"));
                     break;
                 case H_GVAPerFTE:
                     valueData << it.value().at(ip.toIndex()).GVAPerFTE;
@@ -867,7 +867,7 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         break;
     case M_NetProfitMargin:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("%"));
         break;
     case M_GVAPerFTE:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));

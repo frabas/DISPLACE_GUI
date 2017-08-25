@@ -588,7 +588,7 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                     plotNations->yAxis->setLabel(QObject::tr("euro"));
                     break;
                 case GVAPerRevenue:
-                    valueData << it.value().at(ip).GVA;
+                    valueData << it.value().at(ip).GVAPerRevenue;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     plotNations->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
                     break;

@@ -1384,11 +1384,16 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
     // AER economic indicators, updated along the trip level;
     TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent)/100;
+    //cout << "TotLandingIncome is "<< TotLandingIncome << endl;
     TotHoursAtSea    += get_cumsteaming();            // cumul from the simu start
+    //cout << "TotHoursAtSea is "<< TotHoursAtSea << endl;
     TotFuelCosts     += fuelcost;
+    //cout << "TotFuelCosts is "<< TotFuelCosts << endl;
     TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
+    //cout << "TotVarCosts is "<< TotVarCosts << endl;
     GVA               = (TotLandingIncome+(annual_other_income*tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
+    //cout << "GVA is "<< GVA << endl;
 
     if(annual_other_income==0) {
     annual_other_income=1;
@@ -1397,8 +1402,10 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     if(TotLandingIncome>0) {
         GVAPerRevenue =   GVA/(TotLandingIncome+(annual_other_income*tstep/8761));
     }                                          // AER indicator
+    //cout << "GVAPerRevenue is "<< GVAPerRevenue << endl;
     GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)/100) ;
                                                // AER indicator - gross cash flow
+    //cout << "GrossProfit is "<< GrossProfit << endl;
 
 
 
@@ -1407,7 +1414,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
                                       (annual_insurance_costs_per_crew * this_vessel_nb_crew) -
                                        LabourOpportunityCosts;
 
-    double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate;
+    double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate/100;
 
     NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
 
@@ -1419,7 +1426,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
                                                // a proxy of Labour Productivity
 
-    if((vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)>0){
+    if((vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)>1){
     RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
                                                // Capital Productivity i.e. Return on Fixed Tangible Assets
     } else{
@@ -1436,7 +1443,8 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     } else{
     CRBER             =0;
     }
-    NetPresentValue = GVA* (1/pow((1+annual_discount_rate),(ceil(tstep / 8761))));
+    NetPresentValue = GVA* (1/pow((1+annual_discount_rate/100),(ceil(tstep / 8761))));
+                                               // annual_discount_rate is in percent
 
     outc(cout  << "...updateTripsStatistics()...OK" << endl);
 

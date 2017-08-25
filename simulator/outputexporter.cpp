@@ -166,42 +166,42 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 
     std::ostringstream ss;
 
-    ss << setprecision(0) << fixed;
     // vessel / date dep / date arr / reason to return to port / cum steaming in hours/
     //    idx node harbour / idx vessel / name vessel / fuelcons /tot catch per pop
-    ss << logbook.tstepdep << " " << logbook.tstep << " "
-       << logbook.rtbb << " "
-       << logbook.cumstm << " "
-       << logbook.node << " "
-       << logbook.idx << " "
-       << name << " "
-       << logbook.timeatsea << " "
-       << logbook.cumfcons << " "
-       << logbook.travdist << " ";
+    ss << fixed << setprecision(0) << logbook.tstepdep << " "
+       << setprecision(0) << logbook.tstep << " "
+       << setprecision(0) << logbook.rtbb << " "
+       << setprecision(0) << logbook.cumstm << " "
+       << setprecision(0) << logbook.node << " "
+       << setprecision(0) << logbook.idx << " "
+       << setprecision(0) << name << " "
+       << setprecision(0) << logbook.timeatsea << " "
+       << setprecision(0) << logbook.cumfcons << " "
+       << setprecision(0) << logbook.travdist << " ";
     for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
-        ss  << *it << " " ;
-    ss  << freq_metiers << " " << 0 << " " ;
-    ss  << logbook.revenue_from_av_prices << " " ;
-    ss  << logbook.revenue_explicit_from_av_prices << " " ;
-    ss  << logbook.fuelcost << " " ;
-    ss  << logbook.vpuf << " " ;
+        ss  << setprecision(0) << *it << " " ;
+    ss << setprecision(0)   << freq_metiers << " " << 0 << " " ;
+    ss  << setprecision(0) << logbook.revenue_from_av_prices << " " ;
+    ss  << setprecision(0) << logbook.revenue_explicit_from_av_prices << " " ;
+    ss  << setprecision(0) << logbook.fuelcost << " " ;
+    ss  << setprecision(0) << logbook.vpuf << " " ;
     ss  << 0 << " " ;
-    ss  << logbook.gav2 << " " ;
-    ss  << logbook.sweptarea << " " ;
-    ss  << logbook.revenuepersweptarea << " " ;
+    ss  << setprecision(0) << logbook.gav2 << " " ;
+    ss  << setprecision(0) << logbook.sweptarea << " " ;
+    ss  << setprecision(0) << logbook.revenuepersweptarea << " " ;
     for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
-        ss  << *it2 << " " ;
-    ss << logbook.GVA << " " ;
-    ss << logbook.GVAPerRevenue << " " ;
-    ss << logbook.LabourSurplus << " " ;
-    ss << logbook.GrossProfit << " " ;
-    ss << logbook.NetProfit << " " ;
-    ss << logbook.NetProfitMargin << " " ;
-    ss << logbook.GVAPerFTE << " " ;
-    ss << logbook.RoFTA << " " ;
-    ss << logbook.BER << " " ;
-    ss << logbook.CRBER << " " ;
-    ss << logbook.NetPresentValue << " " ;
+        ss  << setprecision(0) << *it2 << " " ;
+    ss << setprecision(0) << logbook.GVA << " " ;
+    ss << setprecision(3) << logbook.GVAPerRevenue << " " ;
+    ss << setprecision(0) << logbook.LabourSurplus << " " ;
+    ss << setprecision(0) << logbook.GrossProfit << " " ;
+    ss << setprecision(0) << logbook.NetProfit << " " ;
+    ss << setprecision(3) << logbook.NetProfitMargin << " " ;
+    ss << setprecision(3) << logbook.GVAPerFTE << " " ;
+    ss << setprecision(0) << logbook.RoFTA << " " ;
+    ss << setprecision(0) << logbook.BER << " " ;
+    ss << setprecision(3) << logbook.CRBER << " " ;
+    ss << setprecision(0) << logbook.NetPresentValue << " " ;
 
     ss  << " " << std::endl;
 

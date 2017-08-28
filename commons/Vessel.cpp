@@ -1421,6 +1421,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate/100 *tstep/8761;
 // cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
 
+    if(!vessel_value>0) vessel_value=0;
     NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
 // cout << "NetProfit is "<< NetProfit << endl;
 
@@ -2617,14 +2618,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 if(a_shape<0 || a_scale <0)
                 {
 
-                    cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
                     //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                     //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                     //}
                     a_shape=1;
-                    a_scale=1;
+                    a_scale=0;
                 }
                 cpue = rgamma(a_shape, a_scale);
             }
@@ -2641,14 +2642,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 if(a_shape<0 || a_scale <0)
                 {
 
-                    cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
+                    //cout <<  " this vessel is is: " << this->get_name() << endl;
                     //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                     //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                     //}
                     a_shape=1;
-                    a_scale=1;
+                    a_scale=0;
                 }
                 cpue = rgamma(a_shape, a_scale);
 

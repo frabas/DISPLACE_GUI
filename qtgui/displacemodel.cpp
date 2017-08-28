@@ -1104,25 +1104,27 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsNationsCollected.push_back(NationStats());
     }
 
+    mStatsNationsCollected[nat].count+=1;
+
     mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf = (stats.vpuf + mStatsNationsCollected[nat].mVpuf)/2;  // running average
+    mStatsNationsCollected[nat].mVpuf = stats.vpuf /mStatsNationsCollected[nat].count;  // running average
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
-    mStatsNationsCollected[nat].GVA += stats.GVA; // accumulate on stat window plot
-    mStatsNationsCollected[nat].GVAPerRevenue += stats.GVAPerRevenue; // accumulate on stat window plot
-    mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
-    mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
-    mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // accumulate on stat window plot
-    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
-    mStatsNationsCollected[nat].GVAPerFTE += stats.GVAPerFTE; // accumulate on stat window plot
-    mStatsNationsCollected[nat].RoFTA += stats.RoFTA; // accumulate on stat window plot
-    mStatsNationsCollected[nat].BER = +stats.BER; // accumulate on stat window plot
-    mStatsNationsCollected[nat].CRBER += stats.CRBER; // accumulate on stat window plot
-    mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
+    mStatsNationsCollected[nat].GVAPerRevenue += stats.GVAPerRevenue  /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
+    mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
+    mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
+    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin  /mStatsNationsCollected[nat].count;  // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].GVAPerFTE += stats.GVAPerFTE  /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+    mStatsNationsCollected[nat].RoFTA += stats.RoFTA  /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].BER += stats.BER /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].CRBER += stats.CRBER /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+    mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
 
 
 
@@ -1133,23 +1135,25 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         while (mStatsHarboursCollected.size() <= hidx)
             mStatsHarboursCollected.push_back(HarbourStats());
 
+        mStatsHarboursCollected[hidx].count+=1;
+
         mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
         mStatsHarboursCollected[hidx].mGav += stats.gav;
-        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf;
+        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf / mStatsHarboursCollected[hidx].count;  // running average
         mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
         mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
-        mStatsHarboursCollected[hidx].GVA += stats.GVA; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
-        mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].NetProfitMargin = (stats.NetProfitMargin + mStatsNationsCollected[nat].NetProfitMargin)/2; // running average
-        mStatsHarboursCollected[hidx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
-        mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].BER = +stats.BER; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].CRBER += stats.CRBER; // accumulate on stat window plot
-        mStatsHarboursCollected[hidx].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
+        mStatsHarboursCollected[hidx].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
+        mStatsHarboursCollected[hidx].GVAPerRevenue += stats.GVAPerRevenue / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips that equires running average over vessels
+        mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
+        mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
+        mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
+        mStatsHarboursCollected[hidx].NetProfitMargin += stats.NetProfitMargin  / mStatsHarboursCollected[hidx].count;  // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsHarboursCollected[hidx].GVAPerFTE += stats.GVAPerFTE  / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA  / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsHarboursCollected[hidx].BER += stats.BER / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsHarboursCollected[hidx].CRBER += stats.CRBER / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsHarboursCollected[hidx].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
     }
 
     int midx = stats.metierId;
@@ -1159,24 +1163,26 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
             mStatsMetiersCollected.push_back(m);
         }
 
+        mStatsMetiersCollected[midx].count+=1;
+
         mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
         mStatsMetiersCollected[midx].gav += stats.gav;
-        mStatsMetiersCollected[midx].vpuf =  stats.vpuf;
+        mStatsMetiersCollected[midx].vpuf = stats.vpuf / mStatsMetiersCollected[midx].count;  // running average
         mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
         mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
-        mStatsMetiersCollected[midx].GVA += stats.GVA; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
-        mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].NetProfitMargin = (stats.NetProfitMargin + mStatsNationsCollected[nat].NetProfitMargin)/2; // running average
-        mStatsMetiersCollected[midx].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
-        mStatsMetiersCollected[midx].RoFTA += stats.RoFTA; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].BER = +stats.BER; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].CRBER += stats.CRBER; // accumulate on stat window plot
-        mStatsMetiersCollected[midx].NetPresentValue += stats.NetPresentValue; // accumulate on stat window plot
-    }
+        mStatsMetiersCollected[midx].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
+        mStatsMetiersCollected[midx].GVAPerRevenue += stats.GVAPerRevenue / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips that equires running average over vessels
+        mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
+        mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
+        mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
+        mStatsMetiersCollected[midx].NetProfitMargin += stats.NetProfitMargin  / mStatsMetiersCollected[midx].count;  // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsMetiersCollected[midx].GVAPerFTE += stats.GVAPerFTE  / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsMetiersCollected[midx].RoFTA += stats.RoFTA  / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsMetiersCollected[midx].BER += stats.BER / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsMetiersCollected[midx].CRBER += stats.CRBER / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsMetiersCollected[midx].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
+        }
 
     int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {
@@ -2777,14 +2783,15 @@ bool DisplaceModel::loadVessels()
             if(a_shape<0 || a_scale <0)
             {
 
-              cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
-              //for(size_t f = 0; f < fgrounds.size(); ++f)
-              //{
-              //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
-              //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
-              //}
+              cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+              for(size_t f = 0; f < fgrounds.size(); ++f)
+              {
+              cout <<  " this vessel is is: " << mVessels.at(i)->mVessel->get_name() << endl;
+              cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
+              cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
+              }
               a_shape=1;
-              a_scale=1;
+              a_scale=0;
             }
 
 

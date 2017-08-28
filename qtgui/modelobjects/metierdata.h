@@ -15,6 +15,8 @@ class MetierStats {
 public:
     MetierStats() {}
 
+    double count = 1.0;
+
     double revenueAV = 0.0;
     double gav = 0.0;
     double mTotCatches = 0.0;

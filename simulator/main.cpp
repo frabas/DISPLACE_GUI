@@ -2914,14 +2914,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 if(a_shape<0 || a_scale <0)
                 {
 
-                    cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
+                    //cout <<  " this vessel is is: " << vessels.at(i)->get_name() << endl;
                     //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                     //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                     //}
                     a_shape=1;
-                    a_scale=1;
+                    a_scale=0;
                 }
 
                 cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
@@ -4052,14 +4053,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         if(a_shape<0 || a_scale <0)
                         {
 
-                            cout << "Something wrong with the Gamma parameters: some negative values loaded...." << endl;
+                            cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                             //for(size_t f = 0; f < fgrounds.size(); ++f)
                             //{
                             //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                             //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                             //}
                             a_shape=1;
-                            a_scale=1;
+                            a_scale=0;
                         }
 
                         cpue_per_fground.at(g) = rgamma(a_shape, a_scale);

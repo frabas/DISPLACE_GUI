@@ -565,7 +565,7 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case Gav:
                     valueData << it.value().at(ip).mGav;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("GAV (Euro)"));
+                    plotNations->yAxis->setLabel(QObject::tr("GVA (Euro)"));
                     break;
                 case Vpuf:
                     valueData << it.value().at(ip).mVpuf;
@@ -580,12 +580,12 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case RevenuePerSweptArea:
                     valueData << it.value().at(ip).mRevenuePerSweptArea;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
+                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
                     break;
                 case GVA:
                     valueData << it.value().at(ip).GVA;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case GVAPerRevenue:
                     valueData << it.value().at(ip).GVAPerRevenue;
@@ -595,17 +595,17 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case LabourSurplus:
                     valueData << it.value().at(ip).LabourSurplus;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case GrossProfit:
                     valueData << it.value().at(ip).GrossProfit;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case NetProfit:
                     valueData << it.value().at(ip).NetProfit;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case NetProfitMargin:
                     valueData << it.value().at(ip).NetProfitMargin;
@@ -615,27 +615,27 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case GVAPerFTE:
                     valueData << it.value().at(ip).GVAPerFTE;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case RoFTA:
                     valueData << it.value().at(ip).RoFTA;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case BER:
                     valueData << it.value().at(ip).BER;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case CRBER:
                     valueData << it.value().at(ip).CRBER;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
                 case NetPresentValue:
                     valueData << it.value().at(ip).NetPresentValue;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
 
 

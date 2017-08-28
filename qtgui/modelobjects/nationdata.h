@@ -37,7 +37,8 @@ public:
 class NationStats {
 public:
     NationStats()
-        : mTotCatches(0.0),
+        : count(1),
+          mTotCatches(0.0),
           mTotDiscards(0.0),
           mRevenues(0.0),
           mExRevenues(0.0),
@@ -57,6 +58,7 @@ public:
     {
     }
 
+    double count =1;
     double mTotCatches = 0.0;
     double mTotDiscards = 0.0;
     double mRevenues = 0.0;

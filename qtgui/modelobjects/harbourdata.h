@@ -48,6 +48,7 @@ class HarbourStats
 public:
     HarbourStats();
 
+    double count;
     double mCumCatches;
     double mCumDiscards;
     double mCumProfit;

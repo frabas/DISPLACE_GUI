@@ -151,6 +151,7 @@ public:
     std::string name;
     int metierId = -1;
     int lastHarbour = -1;
+    double count = 1;
     double revenueAV = 0;
     double revenueExAV = 0;
     double timeAtSea = 0;

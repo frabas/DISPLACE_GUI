@@ -27,7 +27,7 @@ HarbourData::HarbourData(std::shared_ptr<Harbour> harbour)
 
 
 HarbourStats::HarbourStats()
-    : mCumCatches(0.0), mCumDiscards(0.0),
+    : count(1), mCumCatches(0.0), mCumDiscards(0.0),
       mCumProfit(0.0),
       mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
       GVA(0),

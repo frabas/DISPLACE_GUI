@@ -74,6 +74,7 @@ static void unlock()
 
 int applyBiologicalModule2(int tstep, const string & namesimu,
                           const string & namefolderinput, const string & namefolderoutput,	const string & pathoutput,
+                          ofstream & popstats,
                           ofstream &popdyn_N,
                           ofstream &popdyn_F,
                           ofstream &popdyn_SSB,
@@ -92,6 +93,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           ofstream &benthosnumbernodes,
                           int nbbenthospops,
                           bool use_gui,
+                          const string & popstats_filename,
                           const string & popdyn_N_filename,
                           const string & popdyn_F_filename,
                           const string & popdyn_SSB_filename,
@@ -131,6 +133,68 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 // POP DYNAMICS --------------------------//
 //----------------------------------------//
 //----------------------------------------//
+
+    // export initial POPSTATS
+    if(tstep==0)
+    {
+
+        // EXPORT POPSTATS FILE
+            for (unsigned int sp=0; sp<populations.size(); sp++)
+            {
+                outc(cout << "...pop " << sp << endl;)
+                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
+                {
+
+                 popstats << setprecision(6) << fixed;
+
+                    dout(cout  << "write down the N...");
+                    // get total N from summing up N over nodes
+                    populations.at(sp)->aggregate_N();
+                    // tstep / pop / tot N at szgroup
+                    popstats << tstep << " " << sp << " ";
+                    vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
+                    for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
+                    {
+                        // output in thousands of individuals
+                        popstats  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
+                    }
+
+                    // ... / tot_F_at_age
+                    vector <double>tot_F_at_age=populations.at(sp)->get_tot_F_at_age();
+                    for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
+                    {
+                                                 // output F in CUMUL over months, caution!
+                        popstats  << tot_F_at_age.at(a)  << " " ;
+                    }
+
+
+                    // ... / SSB_per_szgroup
+                    dout(cout  << "write down the SSB...");
+                    vector <double> SSB_per_szgroup ( populations.at(sp)->get_tot_N_at_szgroup().size());
+                    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
+                    {
+
+                    // reminder: tot_N_at_szgroup are in thousand in input file
+                    //  but in absolute numbers here because have been multiplied by 1000 when importing
+                    SSB_per_szgroup.at(i) =  populations.at(sp)->get_weight_at_szgroup().at(i) *
+                                     populations.at(sp)->get_tot_N_at_szgroup().at(i) *
+                                     populations.at(sp)->get_maturity_at_szgroup().at(i);
+                    cout << "szgroup is " << i  << " " << endl ;
+                    cout << "tot_N_at_szgroup is " << populations.at(sp)->get_tot_N_at_szgroup().at(i)  << " " << endl ;
+                    cout << "maturity_at_szgroup is " << populations.at(sp)->get_maturity_at_szgroup().at(i)  << " " << endl ;
+                    cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
+
+                    popstats  << SSB_per_szgroup.at(i)  << " " ;
+                    }
+
+
+                 popstats << " " <<  endl;
+                }
+            }
+
+    }
+
+
 
 
 dout(cout  << "BEGIN: POP MODEL TASKS----------" << endl);
@@ -536,6 +600,55 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             populations.at(sp)->export_popdyn_SSB (popdyn_SSB, tstep);
 
 
+            // EXPORT POPSTATS FILE
+            if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+            {
+
+                     popstats << setprecision(6) << fixed;
+
+                        dout(cout  << "write down the N...");
+                        // get total N from summing up N over nodes
+                        populations.at(sp)->aggregate_N();
+                        // tstep / pop / tot N at szgroup
+                        popstats << tstep << " " << sp << " ";
+                        vector <double>tot_N_at_szgroup=populations.at(sp)->get_tot_N_at_szgroup();
+                        for(unsigned int sz = 0; sz < tot_N_at_szgroup.size(); sz++)
+                        {
+                            // output in thousands of individuals
+                            popstats  << tot_N_at_szgroup.at(sz) / 1000 << " " ;
+                        }
+
+                        // ... / tot_F_at_age
+                        vector <double>tot_F_at_age=populations.at(sp)->get_tot_F_at_age();
+                        for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
+                        {
+                                                     // output F in CUMUL over months, caution!
+                            popstats  << tot_F_at_age.at(a)  << " " ;
+                        }
+
+
+                        // ... / SSB_per_szgroup
+                        dout(cout  << "write down the SSB...");
+                        vector <double> SSB_per_szgroup ( populations.at(sp)->get_tot_N_at_szgroup().size());
+                        for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
+                        {
+
+                        // reminder: tot_N_at_szgroup are in thousand in input file
+                        //  but in absolute numbers here because have been multiplied by 1000 when importing
+                        SSB_per_szgroup.at(i) =  populations.at(sp)->get_weight_at_szgroup().at(i) *
+                                         populations.at(sp)->get_tot_N_at_szgroup().at(i) *
+                                         populations.at(sp)->get_maturity_at_szgroup().at(i);
+                        cout << "szgroup is " << i  << " " << endl ;
+                        cout << "tot_N_at_szgroup is " << populations.at(sp)->get_tot_N_at_szgroup().at(i)  << " " << endl ;
+                        cout << "maturity_at_szgroup is " << populations.at(sp)->get_maturity_at_szgroup().at(i)  << " " << endl ;
+                        cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
+
+                        popstats  << SSB_per_szgroup.at(i) << " " ;
+                        }
+
+
+                     popstats << " " <<  endl;
+            }
 
             //----------------------------------------//
             //----------------------------------------//
@@ -767,6 +880,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             popnodes_inc.flush();
             guiSendUpdateCommand(popnodes_inc_filename, tstep);
         }
+
+        popstats.flush();
+        guiSendUpdateCommand(popstats_filename, tstep);
 
         popdyn_F.flush();
         guiSendUpdateCommand(popdyn_F_filename, tstep);

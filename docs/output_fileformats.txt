@@ -12,6 +12,18 @@ Content: Position of each vessel, if state != 3
 Format:
 tstep name tstep_dep x y course cum_fuel state
 
+* popstats_*.dat
+----------------------
+Written by: biomodule.cpp
+See:
+Content:
+Format:
+tstep / pop / N sz0 / N sz1 /.../ F age0/ F age1 /.../ SSB sz0/ SSB sz1/...
+Collected Fields:
+
+
+
+
 * popnodes_start_*.dat
 ----------------------
 Written by: Node::export_popnodes()
@@ -96,7 +108,21 @@ revenue_from_av_prices
 revenue_explicit_from_av_prices
 fuelcost
 gav
-gav2
+gav2 // gav handling energy cost only
+sweptarea // from BENTHIS parameterisation
+revenuepersweptarea
+GVA // gva handling all costs (but need a deeper parameterisation)
+GVAPerRevenue
+LabourSurplus
+GrossProfit
+NetProfit
+NetProfitMargin
+GVAPerFTE
+RoFTA
+BER
+CRBER
+NetPresentValue
+
 
 N: can be calculated with NUMFIELDS - 16.
 

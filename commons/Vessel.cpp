@@ -1418,7 +1418,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
                                        LabourOpportunityCosts;
 // cout << "LabourSurplus is "<< LabourSurplus << endl;
 
-    double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate/100;
+    double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate/100 *tstep/8761;
 // cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
 
     NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);

@@ -479,7 +479,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Trip Value Per Unit Fuel</string>
+                  <string>Fuel Efficiency (Trip Value Per Unit Fuel)</string>
                  </property>
                 </item>
                 <item>
@@ -540,6 +540,11 @@
                 <item>
                  <property name="text">
                   <string>Revenue to Break Even Revenue Ratio (CR/BER)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Net Present Value</string>
                  </property>
                 </item>
                </widget>

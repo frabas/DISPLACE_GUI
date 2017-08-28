@@ -1113,12 +1113,12 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
     mStatsNationsCollected[nat].GVA += stats.GVA; // accumulate on stat window plot
-    mStatsNationsCollected[nat].GVAPerRevenue = (stats.GVAPerRevenue +  mStatsNationsCollected[nat].GVAPerRevenue)/2; // running average
+    mStatsNationsCollected[nat].GVAPerRevenue += stats.GVAPerRevenue; // accumulate on stat window plot
     mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // accumulate on stat window plot
     mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // accumulate on stat window plot
     mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // accumulate on stat window plot
-    mStatsNationsCollected[nat].NetProfitMargin = (stats.NetProfitMargin + mStatsNationsCollected[nat].NetProfitMargin)/2; // running average
-    mStatsNationsCollected[nat].GVAPerFTE = (stats.GVAPerFTE + mStatsNationsCollected[nat].GVAPerFTE)/2; // running average
+    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin; // accumulate on stat window plot
+    mStatsNationsCollected[nat].GVAPerFTE += stats.GVAPerFTE; // accumulate on stat window plot
     mStatsNationsCollected[nat].RoFTA += stats.RoFTA; // accumulate on stat window plot
     mStatsNationsCollected[nat].BER = +stats.BER; // accumulate on stat window plot
     mStatsNationsCollected[nat].CRBER += stats.CRBER; // accumulate on stat window plot

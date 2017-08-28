@@ -1445,7 +1445,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 // cout << "RoFTA is "<< RoFTA << endl;
 
    if(GVA>0) BER               = (other_annual_fixed_costs*tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)) /
-                           (1-(  (GVA*crewshare_and_unpaid_labour_costs_percent/100) + TotFuelCosts + TotVarCosts  ) /TotLandingIncome );
+                           (1-(  ((GVA*crewshare_and_unpaid_labour_costs_percent/100) + TotFuelCosts + TotVarCosts)   /TotLandingIncome) );
                                                // Break-Even Revenue
 // cout << "BER is "<< BER << endl;
 

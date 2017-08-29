@@ -2761,6 +2761,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 i<annual_discount_rates.size()? annual_discount_rates[i]: 0
                 );
 
+        /*
+         * if(vessels[i]->get_other_variable_costs_per_unit_effort()==0 ) {
+           cout << "debug here" << endl;
+           cout << "i is " << i << endl;
+           cout << "other_variable_costs_per_unit_efforts[i] is " << other_variable_costs_per_unit_efforts[i];
+           cout << "other_variable_costs_per_unit_efforts.size() is " << other_variable_costs_per_unit_efforts.size();
+
+            int aa; cin >> aa;
+        }
+        */
+
+
         // some useful setters...
         // will also be useful when change of YEAR-QUARTER
         vessels[i]->set_spe_fgrounds(spe_fgrounds);

@@ -50,7 +50,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
         int rtbb, node, idx;
         double cumstm, timeatsea,cumfcons,travdist, revenue_from_av_prices, revenue_explicit_from_av_prices,
                 fuelcost, vpuf, gav2, sweptarea, revenuepersweptarea,
-                GVA, GVAPerRevenue, LabourSurplus, GrossProfit, NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue;
+                GVA, GVAPerRevenue, LabourSurplus, GrossProfit, NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue, numTrips;
         size_t popnum;
         double pop[];
     } logbook;
@@ -162,6 +162,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     logbook.BER= v->get_BER();
     logbook.CRBER= v->get_CRBER();
     logbook.NetPresentValue= v->get_NetPresentValue();
+    logbook.numTrips= v->get_numTrips();
 
 
     std::ostringstream ss;
@@ -202,6 +203,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     ss << setprecision(0) << logbook.BER << " " ;
     ss << setprecision(3) << logbook.CRBER << " " ;
     ss << setprecision(0) << logbook.NetPresentValue << " " ;
+    ss << setprecision(0) << logbook.numTrips << " " ;
 
     ss  << " " << std::endl;
 

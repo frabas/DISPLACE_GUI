@@ -48,7 +48,7 @@ class HarbourStats
 public:
     HarbourStats();
 
-    double count;
+    double numTrips;
     double mCumCatches;
     double mCumDiscards;
     double mCumProfit;
@@ -57,6 +57,7 @@ public:
     double mSweptArea;
     double mRevenuePerSweptArea;
     double GVA;
+    double cumGVAPerRevenue;
     double GVAPerRevenue;
     double LabourSurplus;
     double GrossProfit;

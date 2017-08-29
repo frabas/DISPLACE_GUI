@@ -15,7 +15,7 @@ class MetierStats {
 public:
     MetierStats() {}
 
-    double count = 1.0;
+    int numTrips = 0;
 
     double revenueAV = 0.0;
     double gav = 0.0;
@@ -30,6 +30,7 @@ public:
     QList<double> mDiscardsPerPop;
 
     double GVA = 0.0;
+    double cumGVAPerRevenue = 0.0;
     double GVAPerRevenue = 0.0;
     double LabourSurplus = 0.0;
     double GrossProfit = 0.0;

@@ -127,7 +127,7 @@ private:
         double lastTrip_profit;
         double avgRevenues;
         double avgProfit;
-        int numTrips;
+        int numTrips=0;
 
         // AER Economic Indicators (updated after each new trip)
         double TotLandingIncome=0; //cumul
@@ -219,9 +219,7 @@ public:
         Node* get_loc() const;
 		Metier* get_metier() const;
 		double get_speed () const;
-        double get_vessel_value() const;
-        double get_annual_depreciation_rate() const; // in percent
-		double get_length () const;
+        double get_length () const;
 		double get_KW () const;
         int get_length_class() const;
         std::string get_nationality () const;
@@ -277,6 +275,19 @@ public:
 	    double get_mult_fuelcons_when_returning() const;
 	    double get_mult_fuelcons_when_inactive() const;		
 		double get_cumcatches() const;
+        double get_this_vessel_nb_crew() const;
+        double get_annual_other_income() const;
+        double get_landing_costs_percent() const;
+        double get_crewshare_and_unpaid_labour_costs_percent() const;
+        double get_other_variable_costs_per_unit_effort() const;
+        double get_annual_insurance_costs_per_crew() const;
+        double get_standard_labour_hour_opportunity_costs() const;
+        double get_standard_annual_full_time_employement_hours() const;
+        double get_other_annual_fixed_costs() const;
+        double get_vessel_value() const;
+        double get_annual_depreciation_rate() const;
+        double get_opportunity_interest_rate() const;
+        double get_annual_discount_rate() const;
         types::NodeId get_smartcatch() const;
         types::NodeId get_highpotentialcatch() const;
         types::NodeId get_notthatfar() const;
@@ -300,6 +311,7 @@ public:
         double get_BER() const;
         double get_CRBER() const;
         double get_NetPresentValue() const;
+        int get_numTrips()const;
         void set_firm_id (int val);
         void set_vid_is_active (int val);
         void set_speed (double val);

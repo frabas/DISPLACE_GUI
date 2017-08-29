@@ -724,7 +724,8 @@ VesselStats OutputFileParser::parseVesselStatLine(const QStringList &fields)
         v.BER = toDouble(fields[10+pop+10+expop+9]);
         v.CRBER = toDouble(fields[10+pop+10+expop+10]);
         v.NetPresentValue = toDouble(fields[10+pop+10+expop+11]);
-
+        v.numTrips=toInt(fields[10+pop+10+expop+12]); // not used in stat plots
+    
     } catch (std::exception &x) {
         qWarning() << "Error parsing Vessel Stat Line: " << x.what();
         return VesselStats();

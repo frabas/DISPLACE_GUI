@@ -122,6 +122,7 @@ RoFTA
 BER
 CRBER
 NetPresentValue
+numTrips
 
 
 N: can be calculated with NUMFIELDS - 16.

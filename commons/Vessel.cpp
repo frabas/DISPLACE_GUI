@@ -371,15 +371,6 @@ double Vessel::get_speed () const
     return(speed);
 }
 
-double Vessel::get_vessel_value() const
-{
-    return(vessel_value);
-}
-
-double Vessel::get_annual_depreciation_rate() const
-{
-    return(annual_depreciation_rate);
-}
 
 double Vessel::get_length () const
 {
@@ -819,6 +810,76 @@ double Vessel::get_CRBER() const
 double Vessel::get_NetPresentValue() const
 {
     return(NetPresentValue);
+}
+
+int Vessel::get_numTrips() const
+{
+    return(numTrips);
+}
+
+double Vessel::get_this_vessel_nb_crew() const
+{
+    return(this_vessel_nb_crew);
+}
+
+double Vessel::get_annual_other_income() const
+{
+    return(annual_other_income);
+}
+
+double Vessel::get_landing_costs_percent() const
+{
+    return(landing_costs_percent);
+}
+
+double Vessel::get_crewshare_and_unpaid_labour_costs_percent() const
+{
+    return(crewshare_and_unpaid_labour_costs_percent);
+}
+
+double Vessel::get_other_variable_costs_per_unit_effort() const
+{
+    return(other_variable_costs_per_unit_effort);
+}
+
+double Vessel::get_annual_insurance_costs_per_crew() const
+{
+    return(annual_insurance_costs_per_crew);
+}
+
+double Vessel::get_standard_labour_hour_opportunity_costs() const
+{
+    return(standard_labour_hour_opportunity_costs);
+}
+
+double Vessel::get_standard_annual_full_time_employement_hours() const
+{
+    return(standard_annual_full_time_employement_hours);
+}
+
+double Vessel::get_other_annual_fixed_costs() const
+{
+    return(other_annual_fixed_costs);
+}
+
+double Vessel::get_vessel_value() const
+{
+    return(vessel_value);
+}
+
+double Vessel::get_annual_depreciation_rate() const
+{
+    return(annual_depreciation_rate);
+}
+
+double Vessel::get_opportunity_interest_rate() const
+{
+    return(opportunity_interest_rate);
+}
+
+double Vessel::get_annual_discount_rate() const
+{
+    return(annual_discount_rate);
 }
 
 
@@ -1384,58 +1445,68 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
 
     // AER economic indicators, updated along the trip level;
     TotLandingIncome += (lastTrip_revenues)* (100 - this->landing_costs_percent)/100;
-//  cout << "TotLandingIncome is "<< TotLandingIncome << endl;
+  cout << "TotLandingIncome is "<< TotLandingIncome << endl;
     TotHoursAtSea    += get_cumsteaming();            // cumul from the simu start
-//  cout << "TotHoursAtSea is "<< TotHoursAtSea << endl;
+  cout << "TotHoursAtSea is "<< TotHoursAtSea << endl;
     TotFuelCosts     += fuelcost;
-//  cout << "TotFuelCosts is "<< TotFuelCosts << endl;
+  cout << "TotFuelCosts is "<< TotFuelCosts << endl;
     TotVarCosts      += (this->other_variable_costs_per_unit_effort * get_cumsteaming());
-//  cout << "TotVarCosts is "<< TotVarCosts << endl;
+    cout << "this->other_variable_costs_per_unit_effort is "<< this->other_variable_costs_per_unit_effort << " this vessel " << this->get_name() <<  endl;
+    cout << "get_cumsteaming() "<< get_cumsteaming() << endl;
+   cout << "TotVarCosts is "<< TotVarCosts << endl;
     GVA               = (TotLandingIncome+(annual_other_income*tstep/8761)) - TotFuelCosts - TotVarCosts - (other_annual_fixed_costs*tstep/8761);
                                                // other_variable_costs_per_unit_effort includes Repair costs, Ice costs, etc.
-//   cout << "GVA is "<< GVA << endl;
+   cout << "GVA is "<< GVA << endl;
 
     if(annual_other_income==0) {
     annual_other_income=1;
     }
 
+
+
     if(TotLandingIncome>0) {
-        if(GVA>0){
            GVAPerRevenue =   GVA/(TotLandingIncome+(annual_other_income*tstep/8761));
-          }
-     }                                          // AER indicator
-//  cout << "GVAPerRevenue is "<< GVAPerRevenue << endl;
+     }                                                 // AER indicator
+    if (GVAPerRevenue<0) GVAPerRevenue=0; // do not allow negative values because should be between 0 and 1
+
+
+
+    cout << "GVAPerRevenue is "<< GVAPerRevenue << endl;
     GrossProfit       =  (GVA*(100-crewshare_and_unpaid_labour_costs_percent)/100) ;
                                                // AER indicator - gross cash flow
-//  cout << "GrossProfit is "<< GrossProfit << endl;
+  cout << "GrossProfit is "<< GrossProfit << endl;
 
 
 
     double LabourOpportunityCosts  = standard_labour_hour_opportunity_costs * this_vessel_nb_crew *  TotHoursAtSea;
-// cout << "LabourOpportunityCosts is "<< LabourOpportunityCosts << endl;
+ cout << "LabourOpportunityCosts is "<< LabourOpportunityCosts << endl;
     LabourSurplus                  = (GVA * crewshare_and_unpaid_labour_costs_percent/100) -
                                       (annual_insurance_costs_per_crew * this_vessel_nb_crew) -
                                        LabourOpportunityCosts;
-// cout << "LabourSurplus is "<< LabourSurplus << endl;
+ cout << "LabourSurplus is "<< LabourSurplus << endl;
 
     double CapitalOpportunityCosts = vessel_value * opportunity_interest_rate/100 *tstep/8761;
-// cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
+ cout << "CapitalOpportunityCosts is "<< CapitalOpportunityCosts << endl;
 
-    if(!vessel_value>0) vessel_value=0;
+    if(vessel_value<0) vessel_value=0;
     NetProfit         =  GrossProfit - CapitalOpportunityCosts - (vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
-// cout << "NetProfit is "<< NetProfit << endl;
+ cout << "NetProfit is "<< NetProfit << endl;
 
 
-    if(TotLandingIncome>0 && NetProfit>0) {
-         NetProfitMargin=(NetProfit*100)/(TotLandingIncome+(annual_other_income*tstep/8761));
-    }                                          // AER indicator (in %)
-// cout << "NetProfitMargin is "<< NetProfitMargin << endl;
+   double divider=(TotLandingIncome+(annual_other_income*tstep/8761));
+   if(divider>0) {
+         NetProfitMargin=(NetProfit*100)/divider;
+    } else {
+       NetProfitMargin=0;
+   }
+    // AER indicator (in %)
+ cout << "NetProfitMargin is "<< NetProfitMargin << endl;
 
 
     if(GVA>0 && standard_annual_full_time_employement_hours>0)
         GVAPerFTE         =  GVA/ (TotHoursAtSea/standard_annual_full_time_employement_hours);
                                                // a proxy of Labour Productivity
-// cout << "GVAPerFTE is "<< GVAPerFTE << endl;
+ cout << "GVAPerFTE is "<< GVAPerFTE << endl;
 
     if((vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)>1){
     RoFTA             = (NetProfit+CapitalOpportunityCosts)/(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761);
@@ -1443,12 +1514,12 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     } else{
     RoFTA             =0;
     }
-// cout << "RoFTA is "<< RoFTA << endl;
+ cout << "RoFTA is "<< RoFTA << endl;
 
    if(GVA>0) BER               = (other_annual_fixed_costs*tstep/8761)+CapitalOpportunityCosts+(1-(vessel_value* (100-annual_depreciation_rate)/100*tstep/8761)) /
                            (1-(  ((GVA*crewshare_and_unpaid_labour_costs_percent/100) + TotFuelCosts + TotVarCosts)   /TotLandingIncome) );
                                                // Break-Even Revenue
-// cout << "BER is "<< BER << endl;
+ cout << "BER is "<< BER << endl;
 
     if(BER>0){
     CRBER             = (TotLandingIncome + (annual_other_income*tstep/8761)) / BER;
@@ -1457,11 +1528,11 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
     CRBER             =0;
     }
 
-// cout << "CRBER is "<< CRBER << endl;
+ cout << "CRBER is "<< CRBER << endl;
 
     if(GVA>0)   NetPresentValue = GVA* (1/pow((1+annual_discount_rate/100),(ceil(tstep / 8761))));
                                                // annual_discount_rate is in percent
-// cout << "NetPresentValue is "<< NetPresentValue << endl;
+ cout << "NetPresentValue is "<< NetPresentValue << endl;
 
     outc(cout  << "...updateTripsStatistics()...OK" << endl);
 

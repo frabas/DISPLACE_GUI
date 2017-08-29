@@ -100,6 +100,9 @@ public:
     double getNetPresentValue() const;
     void setNetPresentValue(double value);
     void addNetPresentValue(double value);
+    int getNumTrips() const;
+    void setNumTrips(int value);
+    void addNumTrips(int value);
 
 
 
@@ -135,6 +138,7 @@ private:
     double BER;
     double CRBER;
     double NetPresentValue;
+    int numTrips;
 
 
     QList<double> mCatches;
@@ -151,7 +155,6 @@ public:
     std::string name;
     int metierId = -1;
     int lastHarbour = -1;
-    double count = 1;
     double revenueAV = 0;
     double revenueExAV = 0;
     double timeAtSea = 0;
@@ -174,6 +177,7 @@ public:
     double BER = 0;
     double CRBER = 0;
     double NetPresentValue = 0;
+    int numTrips=1;
 
 
     QList<double> mCatches;

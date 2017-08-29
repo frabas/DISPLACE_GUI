@@ -547,6 +547,11 @@
                   <string>Net Present Value</string>
                  </property>
                 </item>
+                <item>
+                 <property name="text">
+                  <string>Number of Trips</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -693,6 +698,11 @@
                   <string>Net Present Value</string>
                  </property>
                 </item>
+                <item>
+                 <property name="text">
+                  <string>Number of Trips</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item>
@@ -837,6 +847,11 @@
                 <item>
                  <property name="text">
                   <string>Net Present Value</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Number of Trips</string>
                  </property>
                 </item>
                </widget>

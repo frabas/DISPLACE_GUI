@@ -108,6 +108,7 @@ void SimulatorIpcManager::threadStarted()
                      stats.BER  = data->BER;
                      stats.CRBER  = data->CRBER;
                      stats.NetPresentValue  = data->NetPresentValue;
+                     stats.numTrips  = data->numTrips;
 
 
                     emit vesselLogbookReceived(stats);

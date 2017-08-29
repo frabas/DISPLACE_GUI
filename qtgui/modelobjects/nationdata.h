@@ -37,13 +37,14 @@ public:
 class NationStats {
 public:
     NationStats()
-        : count(1),
+        : numTrips(0),
           mTotCatches(0.0),
           mTotDiscards(0.0),
           mRevenues(0.0),
           mExRevenues(0.0),
           mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
           GVA(0),
+          cumGVAPerRevenue(0),
           GVAPerRevenue(0),
           LabourSurplus(0),
           GrossProfit(0),
@@ -58,7 +59,7 @@ public:
     {
     }
 
-    double count =1;
+    int numTrips =1;
     double mTotCatches = 0.0;
     double mTotDiscards = 0.0;
     double mRevenues = 0.0;
@@ -70,6 +71,7 @@ public:
     double mRevenuePerSweptArea = 0.0;
 
     double GVA=0.0;
+    double cumGVAPerRevenue = 0.0;
     double GVAPerRevenue = 0.0;
     double LabourSurplus = 0.0;
     double GrossProfit = 0.0;

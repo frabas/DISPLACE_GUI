@@ -637,6 +637,11 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
                     plotNations->yAxis->setLabel(QObject::tr("Euro"));
                     break;
+                case numTrips:
+                    valueData << it.value().at(ip).numTrips;
+                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plotNations->yAxis->setLabel(QObject::tr("#"));
+                    break;
 
 
                 }
@@ -784,6 +789,11 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
                     plot->yAxis->setLabel(QObject::tr("euro"));
                     break;
+                case H_numTrips:
+                    valueData << it.value().at(ip.toIndex()).numTrips;
+                    plot->xAxis->setLabel(QObject::tr("Time (h)"));
+                    plot->yAxis->setLabel(QObject::tr("#"));
+                    break;
 
 
                 }
@@ -889,6 +899,10 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
         plotMetiers->yAxis->setLabel(QObject::tr("euro"));
         break;
+    case M_numTrips:
+        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotMetiers->yAxis->setLabel(QObject::tr("#"));
+        break;
 
     }
 
@@ -990,6 +1004,9 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
                     break;
                 case M_NetPresentValue:
                     valueData << it.value().at(ip).NetPresentValue;
+                    break;
+                case M_numTrips:
+                    valueData << it.value().at(ip).numTrips;
                     break;
 
 

@@ -1077,6 +1077,7 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         vessel->setBER(stats.BER);
         vessel->setCRBER(stats.CRBER);
         vessel->setNetPresentValue(stats.NetPresentValue);
+        vessel->setNumTrips(stats.numTrips);
 
 
         nat = vessel->getNationality();
@@ -1104,26 +1105,37 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         mStatsNationsCollected.push_back(NationStats());
     }
 
-    mStatsNationsCollected[nat].count+=1;
+    mStatsNationsCollected[nat].numTrips += 1;
 
     mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf = stats.vpuf /mStatsNationsCollected[nat].count;  // running average
+    mStatsNationsCollected[nat].mVpuf = stats.vpuf /mStatsNationsCollected[nat].numTrips;  // running average
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
     mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
     mStatsNationsCollected[nat].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].GVAPerRevenue += stats.GVAPerRevenue  /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips that requires running average over vessels
+    cout << "mStatsNationsCollected[nat].GVAPerRevenue before is"  << mStatsNationsCollected[nat].GVAPerRevenue  << endl;
+    cout << "mStatsNationsCollected[nat].count is"  << mStatsNationsCollected[nat].numTrips  << endl;
+    cout << "stats.GVAPerRevenue  is"  << stats.GVAPerRevenue << endl;
+    mStatsNationsCollected[nat].cumGVAPerRevenue += stats.GVAPerRevenue;
+    mStatsNationsCollected[nat].GVAPerRevenue =  mStatsNationsCollected[nat].cumGVAPerRevenue /mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+    cout << "mStatsNationsCollected[nat].GVAPerRevenue after is"  << mStatsNationsCollected[nat].GVAPerRevenue  << endl;
     mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
     mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
     mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin  /mStatsNationsCollected[nat].count;  // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].GVAPerFTE += stats.GVAPerFTE  /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].RoFTA += stats.RoFTA  /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].BER += stats.BER /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].CRBER += stats.CRBER /mStatsNationsCollected[nat].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+    mStatsNationsCollected[nat].NetProfitMargin += stats.NetProfitMargin  ;  // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].NetProfitMargin /= mStatsNationsCollected[nat].numTrips;
+
+    mStatsNationsCollected[nat].GVAPerFTE += stats.GVAPerFTE; // a ratio of an accumulation over trips tthat requires running average over vessels
+    mStatsNationsCollected[nat].GVAPerFTE /= mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
+    mStatsNationsCollected[nat].RoFTA += stats.RoFTA; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].RoFTA /= mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].BER += stats.BER ; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].BER /= mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+    mStatsNationsCollected[nat].CRBER += stats.CRBER; // a ratio of an accumulation over trips tthat requires running average over vessels
+    mStatsNationsCollected[nat].CRBER /= mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
     mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
 
 
@@ -1135,24 +1147,24 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         while (mStatsHarboursCollected.size() <= hidx)
             mStatsHarboursCollected.push_back(HarbourStats());
 
-        mStatsHarboursCollected[hidx].count+=1;
+        mStatsHarboursCollected[hidx].numTrips += 1;
 
         mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
         mStatsHarboursCollected[hidx].mGav += stats.gav;
-        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf / mStatsHarboursCollected[hidx].count;  // running average
+        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf / mStatsHarboursCollected[hidx].numTrips;  // running average
         mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
         mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
         mStatsHarboursCollected[hidx].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-        mStatsHarboursCollected[hidx].GVAPerRevenue += stats.GVAPerRevenue / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips that equires running average over vessels
+        mStatsHarboursCollected[hidx].GVAPerRevenue += stats.GVAPerRevenue / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips that equires running average over vessels
         mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
         mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
         mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-        mStatsHarboursCollected[hidx].NetProfitMargin += stats.NetProfitMargin  / mStatsHarboursCollected[hidx].count;  // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].GVAPerFTE += stats.GVAPerFTE  / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA  / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].BER += stats.BER / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].CRBER += stats.CRBER / mStatsHarboursCollected[hidx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsHarboursCollected[hidx].NetProfitMargin += stats.NetProfitMargin  / mStatsHarboursCollected[hidx].numTrips;  // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsHarboursCollected[hidx].GVAPerFTE += stats.GVAPerFTE  / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsHarboursCollected[hidx].RoFTA += stats.RoFTA  / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsHarboursCollected[hidx].BER += stats.BER / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsHarboursCollected[hidx].CRBER += stats.CRBER / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
         mStatsHarboursCollected[hidx].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
     }
 
@@ -1163,24 +1175,24 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
             mStatsMetiersCollected.push_back(m);
         }
 
-        mStatsMetiersCollected[midx].count+=1;
+        mStatsMetiersCollected[midx].numTrips += 1;
 
         mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
         mStatsMetiersCollected[midx].gav += stats.gav;
-        mStatsMetiersCollected[midx].vpuf = stats.vpuf / mStatsMetiersCollected[midx].count;  // running average
+        mStatsMetiersCollected[midx].vpuf = stats.vpuf / mStatsMetiersCollected[midx].numTrips;  // running average
         mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
         mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
 
         mStatsMetiersCollected[midx].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-        mStatsMetiersCollected[midx].GVAPerRevenue += stats.GVAPerRevenue / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips that equires running average over vessels
+        mStatsMetiersCollected[midx].GVAPerRevenue += stats.GVAPerRevenue / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips that equires running average over vessels
         mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
         mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
         mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-        mStatsMetiersCollected[midx].NetProfitMargin += stats.NetProfitMargin  / mStatsMetiersCollected[midx].count;  // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].GVAPerFTE += stats.GVAPerFTE  / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsMetiersCollected[midx].RoFTA += stats.RoFTA  / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].BER += stats.BER / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].CRBER += stats.CRBER / mStatsMetiersCollected[midx].count; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsMetiersCollected[midx].NetProfitMargin += stats.NetProfitMargin  / mStatsMetiersCollected[midx].numTrips;  // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsMetiersCollected[midx].GVAPerFTE += stats.GVAPerFTE  / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
+        mStatsMetiersCollected[midx].RoFTA += stats.RoFTA  / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsMetiersCollected[midx].BER += stats.BER / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
+        mStatsMetiersCollected[midx].CRBER += stats.CRBER / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
         mStatsMetiersCollected[midx].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
         }
 

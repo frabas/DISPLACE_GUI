@@ -86,6 +86,7 @@ struct COMMONSSHARED_EXPORT VesselLogbookMessage {
     double BER= 0;
     double CRBER= 0;
     double NetPresentValue= 0;
+    int numTrips=0;
     size_t popnum = 0;
     int metier = 0;
     double pop[];

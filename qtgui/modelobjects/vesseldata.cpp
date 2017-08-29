@@ -45,6 +45,7 @@ void VesselData::setLastHarbour(int value)
     mLastHarbour = value;
 }
 
+
 double VesselData::getRevenueAV() const
 {
     return mRevenueAV;
@@ -328,4 +329,19 @@ void VesselData::setNetPresentValue(double value)
 void VesselData::addNetPresentValue(double value)
 {
     NetPresentValue = value;
+}
+
+int VesselData::getNumTrips() const
+{
+    return numTrips;
+}
+
+void VesselData::setNumTrips(int value)
+{
+    numTrips = value;
+}
+
+void VesselData::addNumTrips(int value)
+{
+    numTrips = value;
 }

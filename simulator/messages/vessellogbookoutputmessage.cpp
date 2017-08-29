@@ -122,6 +122,7 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
     logbook.BER= v->get_BER();
     logbook.CRBER= v->get_CRBER();
     logbook.NetPresentValue= v->get_NetPresentValue();
+    logbook.numTrips= v->get_numTrips();
 
 
 
@@ -167,6 +168,7 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
     ss  << logbook.BER << " " ;
     ss  << logbook.CRBER << " " ;
     ss  << logbook.NetPresentValue << " " ;
+    ss  << logbook.numTrips << " " ;
 
     ss  << " " << std::endl;
 

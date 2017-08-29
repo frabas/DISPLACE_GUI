@@ -48,13 +48,19 @@ public:
           GVAPerRevenue(0),
           LabourSurplus(0),
           GrossProfit(0),
+          cumNetProfitMargin(0),
           NetProfit (0),
           NetProfitMargin(0),
+          cumGVAPerFTE(0),
           GVAPerFTE(0),
+          cumRoFTA(0),
           RoFTA(0),
+          cumBER(0),
           BER(0),
+          cumCRBER(0),
           CRBER(0),
           NetPresentValue(0),
+
           szGroups()
     {
     }
@@ -82,6 +88,12 @@ public:
     double BER = 0.0;
     double CRBER = 0.0;
     double NetPresentValue = 0.0;
+
+    double cumNetProfitMargin= 0.0;
+    double cumGVAPerFTE= 0.0;
+    double cumRoFTA= 0.0;
+    double cumBER= 0.0;
+    double cumCRBER= 0.0;
 
 
     QVector<double> szGroups;

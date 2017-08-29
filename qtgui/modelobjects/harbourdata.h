@@ -68,6 +68,11 @@ public:
     double BER;
     double CRBER;
     double NetPresentValue;
+    double cumNetProfitMargin;
+    double cumGVAPerFTE;
+    double cumRoFTA;
+    double cumBER;
+    double cumCRBER;
 
 
     QVector<double> szCatches;

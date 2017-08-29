@@ -42,6 +42,13 @@ public:
     double CRBER = 0.0;
     double NetPresentValue = 0.0;
 
+    double cumNetProfitMargin=0.0;
+    double cumGVAPerFTE=0.0;
+    double cumRoFTA=0.0;
+    double cumBER=0.0;
+    double cumCRBER=0.0;
+
+
 };
 
 #endif // METIERDATA_H

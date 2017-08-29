@@ -620,7 +620,7 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case RoFTA:
                     valueData << it.value().at(ip).RoFTA;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("%"));
                     break;
                 case BER:
                     valueData << it.value().at(ip).BER;
@@ -630,7 +630,7 @@ void StatsController::updateNationStats(DisplaceModel *model, NationsStat nation
                 case CRBER:
                     valueData << it.value().at(ip).CRBER;
                     plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
+                    plotNations->yAxis->setLabel(QObject::tr("Ratio"));
                     break;
                 case NetPresentValue:
                     valueData << it.value().at(ip).NetPresentValue;
@@ -772,7 +772,7 @@ void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat sta
                 case H_RoFTA:
                     valueData << it.value().at(ip.toIndex()).RoFTA;
                     plot->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plot->yAxis->setLabel(QObject::tr("euro"));
+                    plot->yAxis->setLabel(QObject::tr("%"));
                     break;
                 case H_BER:
                     valueData << it.value().at(ip.toIndex()).BER;
@@ -865,15 +865,15 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         break;
     case M_LabourSurplus:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_GrossProfit:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_NetProfit:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_NetProfitMargin:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
@@ -881,23 +881,23 @@ void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metSt
         break;
     case M_GVAPerFTE:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_RoFTA:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_BER:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_CRBER:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Ratio"));
         break;
     case M_NetPresentValue:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
+        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case M_numTrips:
         plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));

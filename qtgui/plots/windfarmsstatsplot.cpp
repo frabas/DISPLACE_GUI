@@ -40,24 +40,24 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
                 continue;
 
             if (showmax)
-                graphList.push_front(4000 + i);
+                graphList.push_back(4000 + i);
             if (showmin)
-                graphList.push_front(3000 + i);
+                graphList.push_back(3000 + i);
             if (showavg)
-                graphList.push_front(2000 + i);
+                graphList.push_back(2000 + i);
             if (showtotal)
-                graphList.push_front(1000 + i);
+                graphList.push_back(1000 + i);
         }
     } else {
         interWindfarmsTypesList.push_back(999);
         if (showmax)
-            graphList.push_front(4999);
+            graphList.push_back(4999);
         if (showmin)
-            graphList.push_front(3999);
+            graphList.push_back(3999);
         if (showavg)
-            graphList.push_front(2999);
+            graphList.push_back(2999);
         if (showtotal)
-            graphList.push_front(1999);
+            graphList.push_back(1999);
     }
 
     /* If no Windfarms is selected, select all Windfarms type */
@@ -120,7 +120,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
     int nsteps = model->getWindfarmsStatistics().getUniqueValuesCount();
 
-    qDebug() << "**** Plotting Windmill " << nsteps << interWindfarmsTypesList << interWindfarmsIDsList;
+   //qDebug() << "**** Plotting Windmill " << nsteps << interWindfarmsTypesList << interWindfarmsIDsList;
     auto it = model->getWindfarmsStatistics().getFirst();
     for (int istep = 0; istep <nsteps; ++istep) {
         int nInterWindfarmsIDs = interWindfarmsIDsList.size();
@@ -139,10 +139,10 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
                 for (int iInterWindfarmsIDs = 0; iInterWindfarmsIDs < nInterWindfarmsIDs; ++iInterWindfarmsIDs) {
 
                     auto fmtype = model->getWindmillList()[iInterWindfarmsIDs]->mWindmill->get_type();
-                    if (group != 999 && iInterWindfarmTypes != fmtype)
+                    if (group != 999 && group != fmtype)
                         continue;
 
-                    val = getStatValue(model, it.key(), interWindfarmsIDsList[iInterWindfarmsIDs], interWindfarmsTypesList[iInterWindfarmTypes], stat);
+                    val = getStatValue(model, it.key(), interWindfarmsIDsList[iInterWindfarmsIDs], fmtype, stat);
 
                     //qDebug() << iInterWindfarmsIDs << iInterWindfarmTypes << val;
 

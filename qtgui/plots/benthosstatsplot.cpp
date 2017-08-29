@@ -39,24 +39,24 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
                 continue;
 
             if (showmax)
-                graphList.push_front(4000 + i);
+                graphList.push_back(4000 + i);
             if (showmin)
-                graphList.push_front(3000 + i);
+                graphList.push_back(3000 + i);
             if (showavg)
-                graphList.push_front(2000 + i);
+                graphList.push_back(2000 + i);
             if (showtotal)
-                graphList.push_front(1000 + i);
+                graphList.push_back(1000 + i);
         }
     } else {
         interBenthosTypesList.push_back(999);
         if (showmax)
-            graphList.push_front(4999);
+            graphList.push_back(4999);
         if (showmin)
-            graphList.push_front(3999);
+            graphList.push_back(3999);
         if (showavg)
-            graphList.push_front(2999);
+            graphList.push_back(2999);
         if (showtotal)
-            graphList.push_front(1999);
+            graphList.push_back(1999);
     }
 
     /* If no benthos is selected, select all benthos type */
@@ -139,7 +139,7 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
                     /* TODO: filter on functional groups
                     auto fmtype = model->getBenthosList()[iInterBenthosIDs];
-                    if (group != 999 && iInterBenthosTypes != fmtype)
+                    if (group != 999 && group != fmtype)
                         continue;
                         */
 

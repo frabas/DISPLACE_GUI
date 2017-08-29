@@ -40,24 +40,24 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
                 continue;
 
             if (showmax)
-                graphList.push_front(4000 + i);
+                graphList.push_back(4000 + i);
             if (showmin)
-                graphList.push_front(3000 + i);
+                graphList.push_back(3000 + i);
             if (showavg)
-                graphList.push_front(2000 + i);
+                graphList.push_back(2000 + i);
             if (showtotal)
-                graphList.push_front(1000 + i);
+                graphList.push_back(1000 + i);
         }
     } else {
         interShipsTypesList.push_back(999);
         if (showmax)
-            graphList.push_front(4999);
+            graphList.push_back(4999);
         if (showmin)
-            graphList.push_front(3999);
+            graphList.push_back(3999);
         if (showavg)
-            graphList.push_front(2999);
+            graphList.push_back(2999);
         if (showtotal)
-            graphList.push_front(1999);
+            graphList.push_back(1999);
     }
 
     /* If no Ships is selected, select all Ships type */
@@ -139,10 +139,10 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
                 for (int iInterShipsIDs = 0; iInterShipsIDs < nInterShipsIDs; ++iInterShipsIDs) {
 
                     auto shtype = model->getShipList()[iInterShipsIDs]->mShip->get_typecode();
-                    if (group != 999 && iInterShipTypes != shtype)
+                    if (group != 999 && group != shtype)
                         continue;
 
-                    val = getStatValue(model, it.key(), interShipsIDsList[iInterShipsIDs], interShipsTypesList[iInterShipTypes], stat);
+                    val = getStatValue(model, it.key(), interShipsIDsList[iInterShipsIDs], shtype, stat);
 
                     //qDebug() << iInterShipsIDs << iInterShipTypes << val;
 

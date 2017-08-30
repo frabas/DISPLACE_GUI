@@ -23,17 +23,17 @@ public:
 
         StatData() {}
         void clear() {
-            double nb_transported_units = 0.0;
-            double fuel_use_h = 0.0;
-            double NOx_emission_gperkW = 0.0;
-            double SOx_emission_percentpertotalfuelmass = 0.0;
-            double GHG_emission_gperkW = 0.0;
-            double PME_emission_gperkW = 0.0;
-            double fuel_use_litre = 0.0;
-            double NOx_emission = 0.0;
-            double SOx_emission = 0.0;
-            double GHG_emission = 0.0;
-            double PME_emission = 0.0;
+            nb_transported_units = 0.0;
+            fuel_use_h = 0.0;
+            NOx_emission_gperkW = 0.0;
+            SOx_emission_percentpertotalfuelmass = 0.0;
+            GHG_emission_gperkW = 0.0;
+            PME_emission_gperkW = 0.0;
+            fuel_use_litre = 0.0;
+            NOx_emission = 0.0;
+            SOx_emission = 0.0;
+            GHG_emission = 0.0;
+            PME_emission = 0.0;
         }
     };
 

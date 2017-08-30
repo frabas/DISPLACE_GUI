@@ -870,10 +870,6 @@ void DisplaceModel::collectFishfarmCumulNetDischargeP(int step, int node_idx, in
 
 void DisplaceModel::collectShipNbTransportedUnits(int step, int node_idx, int shipid, int shiptype, double nb_transported_units)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectNbTransportedUnits(step,
                                                  shipid,
                                                  shiptype,
@@ -883,10 +879,6 @@ void DisplaceModel::collectShipNbTransportedUnits(int step, int node_idx, int sh
 
 void DisplaceModel::collectShipFuelUseHour(int step, int node_idx, int shipid, int shiptype, double fuel_use_h)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectFuelUseHour(step,
                                                  shipid,
                                                  shiptype,
@@ -895,10 +887,6 @@ void DisplaceModel::collectShipFuelUseHour(int step, int node_idx, int shipid, i
 
 void DisplaceModel::collectShipNOxEmissiongPerkW(int step, int node_idx, int shipid, int shiptype, double NOx_emission_gperkW)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectNOxEmissiongPerkW(step,
                                                  shipid,
                                                  shiptype,
@@ -907,10 +895,6 @@ void DisplaceModel::collectShipNOxEmissiongPerkW(int step, int node_idx, int shi
 
 void DisplaceModel::collectShipSOxEmissionPercentPerTotalFuelmass(int step, int node_idx, int shipid, int shiptype, double SOx_emission_percentpertotalfuelmass)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectSOxEmissionPercentPerTotalFuelmass(step,
                                                  shipid,
                                                  shiptype,
@@ -920,10 +904,6 @@ void DisplaceModel::collectShipSOxEmissionPercentPerTotalFuelmass(int step, int 
 
 void DisplaceModel::collectShipGHGemissiongPerkW(int step, int node_idx, int shipid, int shiptype, double GHG_emission_gperkW)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectGHGemissiongPerkW(step,
                                                  shipid,
                                                  shiptype,
@@ -932,10 +912,6 @@ void DisplaceModel::collectShipGHGemissiongPerkW(int step, int node_idx, int shi
 
 void DisplaceModel::collectShipPMEemissiongPerkW(int step, int node_idx, int shipid, int shiptype, double PME_emission_gperkW)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectPMEemissiongPerkW(step,
                                                  shipid,
                                                  shiptype,
@@ -945,10 +921,6 @@ void DisplaceModel::collectShipPMEemissiongPerkW(int step, int node_idx, int shi
 
 void DisplaceModel::collectShipfuelUseLitre(int step, int node_idx, int shipid, int shiptype, double fuel_use_litre)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectfuelUseLitre(step,
                                                  shipid,
                                                  shiptype,
@@ -957,10 +929,6 @@ void DisplaceModel::collectShipfuelUseLitre(int step, int node_idx, int shipid, 
 
 void DisplaceModel::collectShipNOxEmission(int step, int node_idx, int shipid, int shiptype, double NOx_emission)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectSOxEmission(step,
                                                  shipid,
                                                  shiptype,
@@ -969,10 +937,6 @@ void DisplaceModel::collectShipNOxEmission(int step, int node_idx, int shipid, i
 
 void DisplaceModel::collectShipSOxEmission(int step, int node_idx, int shipid, int shiptype, double SOx_emission)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectSOxEmission(step,
                                                  shipid,
                                                  shiptype,
@@ -981,10 +945,6 @@ void DisplaceModel::collectShipSOxEmission(int step, int node_idx, int shipid, i
 
 void DisplaceModel::collectShipGHGemission(int step, int node_idx, int shipid, int shiptype, double GHG_emission)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectGHGemission(step,
                                                  shipid,
                                                  shiptype,
@@ -993,10 +953,6 @@ void DisplaceModel::collectShipGHGemission(int step, int node_idx, int shipid, i
 
 void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, int shiptype, double PME_emission)
 {
-    checkStatsCollection(step);
-
-
-
     mStatsShipsCollected.collectPMEemission(step,
                                                  shipid,
                                                  shiptype,

@@ -135,7 +135,7 @@ bool use_gui = false;
 bool gui_move_vessels = true;
 bool use_gnuplot;
 int num_threads = 4;
-int nb_displayed_moves_out_of_twenty=5;
+int nb_displayed_moves_out_of_twenty=1;
 
 #ifdef PROFILE
 AverageProfiler mLoopProfile;

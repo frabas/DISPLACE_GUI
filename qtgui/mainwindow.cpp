@@ -994,7 +994,8 @@ void MainWindow::on_cmdSetup_clicked()
     dlg.setPreexistingPathsShop(models[0]->getPreexistingPathsShop());
     dlg.setSimulationName(models[0]->simulationName());
     dlg.setSimulationOutputName(models[0]->outputName());
-    dlg.setMoveVesselsOption(mSimulation->getVesselMoveDisplayUpdateRate());
+    dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
+    dlg.setVesselMoveDisplayUpdateRate(mSimulation->getVesselMoveDisplayUpdateRate());
     dlg.setNumThreads(set.value(Simulator::SET_NUMTHREADS, 4).toInt());
     dlg.setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
    

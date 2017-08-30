@@ -52,7 +52,7 @@ Simulator::Simulator()
       mOutputName("baseline"),
       mSimuName("simu2"),
       mMoveVesselOption(true),
-      mVesselMoveDisplayUpdateRate(10),
+      mVesselMoveDisplayUpdateRate(1),
       mProcessState(QProcess::NotRunning),
       mCapture(false),
       mVerbosity(0)

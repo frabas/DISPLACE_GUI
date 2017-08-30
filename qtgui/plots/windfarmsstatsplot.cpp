@@ -138,6 +138,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
             for (int iInterWindfarmTypes = 0; iInterWindfarmTypes < interWindfarmsTypesList.size(); ++iInterWindfarmTypes) {
                 for (int iInterWindfarmsIDs = 0; iInterWindfarmsIDs < nInterWindfarmsIDs; ++iInterWindfarmsIDs) {
 
+                   // auto fmtype = model->getWindmillList()[interWindfarmsIDsList[iInterWindfarmsIDs] -1]->mWindmill->get_type(); // pbl if # of type>1 in ticking ids boxes
                     auto fmtype = model->getWindmillList()[iInterWindfarmsIDs]->mWindmill->get_type();
                     if (group != 999 && group != fmtype)
                         continue;

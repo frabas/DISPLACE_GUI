@@ -447,13 +447,13 @@ public:
     void collectShipFuelUseHour (int step, int node_idx, int shipid,  int shiptype,  double fuel_use_h);
     void collectShipNOxEmissiongPerkW (int step, int node_idx, int shipid, int shiptype,  double NOx_emission_gperkW);
     void collectShipSOxEmissionPercentPerTotalFuelmass (int step, int node_idx, int shipid,  int shiptype,  double SOx_emission_percentpertotalfuelmass);
-    void collectShipGHGemission (int step, int node_idx, int shipid,  int shiptype,  double GHG_emission_gperkW);
-    void collectShipPMEemission (int step, int node_idx, int shipid,  int shiptype,  double PME_emission_gperkW);
-    void collectShipfuelUseLitre (int step, int node_idx, int shipid,  int shiptype,  double fuel_use_litre);
+    void collectShipGHGemissiongPerkW (int step, int node_idx, int shipid,  int shiptype,  double GHG_emission_gperkW);
+    void collectShipPMEemissiongPerkW (int step, int node_idx, int shipid,  int shiptype,  double PME_emission_gperkW);
+    void collectShipfuelUseLitre(int step, int node_idx, int shipid,  int shiptype,  double fuel_use_litre);
     void collectShipNOxEmission (int step, int node_idx, int shipid,  int shiptype,  double NOx_emission);
     void collectShipSOxEmission (int step, int node_idx, int shipid,  int shiptype,  double SOx_emission);
-    void collectShipGHGemissiongPerkW (int step, int node_idx, int shipid,  int shiptype,  double GHG_emission);
-    void collectShipPMEemissiongPerkW (int step, int node_idx, int shipid,  int shiptype,  double PME_emission);
+    void collectShipGHGemission (int step, int node_idx, int shipid,  int shiptype,  double GHG_emission);
+    void collectShipPMEemission (int step, int node_idx, int shipid,  int shiptype,  double PME_emission);
     void commitShipsStats(int tstep);
 
     void collectWindfarmkWh (int step, int node_idx, int windfarmid, int windfarmtype, double kWh);

@@ -254,51 +254,74 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
     case ShipsStat::SH_NbTransportedUnits:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Nb. Transported Units"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     case ShipsStat::SH_FuelPerHour:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Fuel Per Hour"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     case ShipsStat::SH_NOxEmission_gperkW:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("NOx Emission Factor (g per kW)"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     case ShipsStat::SH_SOxEmission_PercentPerFuelMass:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("SOx Emission Factor (g per kW)"));
+        mPlot->rescaleAxes();   // funny enough it does not rescale right so that values are visible, unless a plot with setRange is selected before....
+        mPlot->replot();
         break;
     case ShipsStat::SH_GHGEmission_gperkW:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("GHG Emission Factor (g per kW)"));
+        mPlot->rescaleAxes();
+        mPlot->yAxis->setRange(0, 1);
+        mPlot->replot();
         break;
     case ShipsStat::SH_PMEEmission_gperkW:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("PME Emission Factor (g per kW)"));
+        mPlot->rescaleAxes();
+        mPlot->yAxis->setRange(0, 1);
+        mPlot->replot();
         break;
     case ShipsStat::SH_FuelUseLitre:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("Fule Use (litre)"));
+        mPlot->rescaleAxes();
+         mPlot->replot();
         break;
     case ShipsStat::SH_NOxEmission:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("NOx Emission (g)"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     case ShipsStat::SH_SOxEmission:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("SOx Emission (g)"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     case ShipsStat::SH_GHGEmission:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("GHG Emission (g)"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     case ShipsStat::SH_PMEEmission:
         mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
         mPlot->yAxis->setLabel(QObject::tr("PME Emission (g)"));
+        mPlot->rescaleAxes();
+        mPlot->replot();
         break;
     }
 
-    mPlot->rescaleAxes();
-    mPlot->replot();
+
 }
 
 void ShipsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)

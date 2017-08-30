@@ -929,7 +929,7 @@ void DisplaceModel::collectShipfuelUseLitre(int step, int node_idx, int shipid, 
 
 void DisplaceModel::collectShipNOxEmission(int step, int node_idx, int shipid, int shiptype, double NOx_emission)
 {
-    mStatsShipsCollected.collectSOxEmission(step,
+    mStatsShipsCollected.collectNOxEmission(step,
                                                  shipid,
                                                  shiptype,
                                                  NOx_emission);

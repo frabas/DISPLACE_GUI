@@ -122,7 +122,7 @@ void ShipsStats::collectSOxEmissionPercentPerTotalFuelmass(int step, int shipid,
     setDirty();
 }
 
-void ShipsStats::collectGHGemission(int step, int shipid, int shiptypeid, double GHG_emission_gperkW)
+void ShipsStats::collectGHGemissiongPerkW(int step, int shipid, int shiptypeid, double GHG_emission_gperkW)
 {
     Q_UNUSED(step);
 
@@ -130,7 +130,7 @@ void ShipsStats::collectGHGemission(int step, int shipid, int shiptypeid, double
     setDirty();
 }
 
-void ShipsStats::collectPMEemission(int step, int shipid, int shiptypeid, double PME_emission_gperkW)
+void ShipsStats::collectPMEemissiongPerkW(int step, int shipid, int shiptypeid, double PME_emission_gperkW)
 {
     Q_UNUSED(step);
 
@@ -162,7 +162,7 @@ void ShipsStats::collectSOxEmission(int step, int shipid, int shiptypeid, double
     setDirty();
 }
 
-void ShipsStats::collectGHGemissiongPerkW(int step, int shipid, int shiptypeid, double GHG_emission)
+void ShipsStats::collectGHGemission(int step, int shipid, int shiptypeid, double GHG_emission)
 {
     Q_UNUSED(step);
 
@@ -170,7 +170,7 @@ void ShipsStats::collectGHGemissiongPerkW(int step, int shipid, int shiptypeid, 
     setDirty();
 }
 
-void ShipsStats::collectPMEemissiongPerkW(int step, int shipid, int shiptypeid, double PME_emission)
+void ShipsStats::collectPMEemission(int step, int shipid, int shiptypeid, double PME_emission)
 {
     Q_UNUSED(step);
 
@@ -187,7 +187,7 @@ double ShipsStats::NbTransportedUnitsForShipAndShipGroup(int shipid, int shiptyp
 
 double ShipsStats::FuelPerHourForShipAndShipGroup(int shipid, int shiptypeid) const
 {
-    return get(shipid, shiptypeid).nb_transported_units;
+    return get(shipid, shiptypeid).fuel_use_h;
 }
 
 double ShipsStats::NOxEmissionFactorForShipAndShipGroup(int shipid, int shiptypeid) const

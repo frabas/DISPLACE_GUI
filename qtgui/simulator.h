@@ -70,9 +70,12 @@ public:
     void setUseStaticPaths(int value);
     void setPreexistingPathsShop(int value);
     void setVerbosityLevel(int value) { mVerbosity = value; }
-
+   
     bool getMoveVesselOption() const;
     void setMoveVesselOption(bool value);
+
+    int getVesselMoveDisplayUpdateRate() const;
+    void setVesselMoveDisplayUpdateRate(int value);
 
     void setOutputName(const QString &value);
 
@@ -112,10 +115,11 @@ private:
     QString mOutputName;
     QString mSimuName;
     bool mMoveVesselOption;
+    int mVesselMoveDisplayUpdateRate;
     QProcess::ProcessState mProcessState;
     bool mCapture;
     int mVerbosity;
-
+   
     void parseUpdateVessel(QStringList fields);
     void parseUpdateShip(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);

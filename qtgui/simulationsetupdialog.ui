@@ -6,22 +6,86 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>564</height>
+    <width>492</width>
+    <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Simulation Setup</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="6" column="0" colspan="2">
+    <widget class="QCheckBox" name="optMoveVessels">
+     <property name="text">
+      <string>Record Vessels position</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Vessel moves display update rate (1: 1 out of 20 moves, to 20: all moves, but less responsive GUI)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLineEdit" name="simName"/>
+   </item>
+   <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Simulation Length</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Verbosity Level</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLineEdit" name="outName"/>
+   </item>
+   <item row="14" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QSpinBox" name="vesselMoveDisplayUpdateRate">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="value">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Simulation Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Output folder name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <widget class="QSpinBox" name="simSteps">
      <property name="suffix">
       <string> steps</string>
@@ -37,44 +101,62 @@
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Output folder name</string>
+   <item row="13" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Multithreading</string>
      </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Number of threads:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="threads">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="value">
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QLabel" name="labelVerbosityWarning">
+        <property name="text">
+         <string>Warning: debug messages can become messy if multiple threads are running</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="labelThreadHint">
+        <property name="text">
+         <string>The Ideal number of thread for this processor is %d</string>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+        <property name="indent">
+         <number>-1</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QLineEdit" name="outName"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Simulation Name</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="simName"/>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="optMoveVessels">
-     <property name="text">
-      <string>Record Vessels position</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Verbosity Level</string>
-     </property>
-    </widget>
-   </item>
-   <item>
+   <item row="10" column="0">
     <widget class="QSpinBox" name="verbosity"/>
    </item>
-   <item>
+   <item row="12" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Shortest paths</string>
@@ -127,68 +209,6 @@
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Multithreading</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Number of threads:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QSpinBox" name="threads">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>255</number>
-        </property>
-        <property name="value">
-         <number>4</number>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
-       <widget class="QLabel" name="labelVerbosityWarning">
-        <property name="text">
-         <string>Warning: debug messages can become messy if multiple threads are running</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="labelThreadHint">
-        <property name="text">
-         <string>The Ideal number of thread for this processor is %d</string>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="indent">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
     </widget>
    </item>
   </layout>

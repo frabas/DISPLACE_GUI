@@ -135,6 +135,7 @@ bool use_gui = false;
 bool gui_move_vessels = true;
 bool use_gnuplot;
 int num_threads = 4;
+int nb_displayed_moves_out_of_twenty=5;
 
 #ifdef PROFILE
 AverageProfiler mLoopProfile;
@@ -267,6 +268,7 @@ ofstream shipslogs;
  *
  * --use-gui                Enables the GUI protocol through stdout
  * --no-gui-move-vessels    Disables sending the Vessel position update command (=V) when using GUI
+ * --rate                   Vessel Move Display Updating Rate
  * --num_threads x          Parallelize jobs by spawning x threads
  *
  * */
@@ -426,6 +428,10 @@ int main(int argc, char* argv[])
         }
         else if (sw == "--no-gui-move-vessels") {
             gui_move_vessels = false;
+        }
+        else if (sw == "-rate") {
+            optind++;
+            nb_displayed_moves_out_of_twenty = atoi(argv[optind]);
         }
         else if (sw=="-i")
         {

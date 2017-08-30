@@ -84,6 +84,8 @@ extern bool use_gui;
 extern bool use_dtrees;
 extern bool use_gnuplot;
 extern bool gui_move_vessels;
+extern int nb_displayed_moves_out_of_twenty;
+
 extern vector<int> ve;
 extern vector <Vessel*> vessels;
 extern vector <Ship*> ships;
@@ -451,8 +453,9 @@ static void manage_vessel(int idx_v)
         }
     }
 
+    // roundabout to solve the hang out or low responsivness of the gui from
+    // the differential speed between the gui and the simulator, this latter being faster...TODO: we could imagine doing better at some point
     int a_number_between_1_and_twenty= (rand() % 20 +1);
-    int nb_displayed_moves_out_of_twenty = 1;
     if (use_gui && gui_move_vessels  && (a_number_between_1_and_twenty<nb_displayed_moves_out_of_twenty+1)) {
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new MoveVesselOutputMessage(tstep, vessels[index_v])));
     }

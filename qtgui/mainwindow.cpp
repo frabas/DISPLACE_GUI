@@ -994,9 +994,10 @@ void MainWindow::on_cmdSetup_clicked()
     dlg.setPreexistingPathsShop(models[0]->getPreexistingPathsShop());
     dlg.setSimulationName(models[0]->simulationName());
     dlg.setSimulationOutputName(models[0]->outputName());
-    dlg.setMoveVesselsOption(mSimulation->getMoveVesselOption());
+    dlg.setMoveVesselsOption(mSimulation->getVesselMoveDisplayUpdateRate());
     dlg.setNumThreads(set.value(Simulator::SET_NUMTHREADS, 4).toInt());
     dlg.setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
+   
 
     if (dlg.exec() == QDialog::Accepted) {
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
@@ -1005,12 +1006,14 @@ void MainWindow::on_cmdSetup_clicked()
         models[0]->setSimulationName(dlg.getSimulationName());
 //        models[0]->setOutputName(dlg.getSimulationOutputName());
         mSimulation->setMoveVesselOption(dlg.getMoveVesselsOption());
+        mSimulation->setVesselMoveDisplayUpdateRate(dlg.getVesselMoveDisplayUpdateRate());
 
         set.setValue(Simulator::SET_NUMTHREADS, dlg.getNumThreads());
         set.setValue(Simulator::SET_VERBOSITY, dlg.getVerbosityLevel());
-        if (mSimulation)
+     
+        if (mSimulation){
             mSimulation->setVerbosityLevel(dlg.getVerbosityLevel());
-
+        }
         updateModelList();
     }
 }

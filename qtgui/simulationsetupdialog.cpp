@@ -112,6 +112,17 @@ void SimulationSetupDialog::setNumThreads(int n)
     ui->threads->setValue(n);
 }
 
+
+int SimulationSetupDialog::getVesselMoveDisplayUpdateRate()
+{
+    return ui->vesselMoveDisplayUpdateRate->value();
+}
+
+void SimulationSetupDialog::setVesselMoveDisplayUpdateRate(int value)
+{
+    ui->vesselMoveDisplayUpdateRate->setValue(value);
+}
+
 int SimulationSetupDialog::getVerbosityLevel()
 {
     return ui->verbosity->value();

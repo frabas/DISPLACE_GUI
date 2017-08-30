@@ -52,10 +52,11 @@ Simulator::Simulator()
       mOutputName("baseline"),
       mSimuName("simu2"),
       mMoveVesselOption(true),
+      mVesselMoveDisplayUpdateRate(10),
       mProcessState(QProcess::NotRunning),
       mCapture(false),
       mVerbosity(0)
-{
+ {
 }
 
 void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
@@ -133,6 +134,9 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 
     if (!mMoveVesselOption)
         arguments.push_back("--no-gui-move-vessels");
+
+    arguments.push_back("-rate");
+    arguments.push_back(QString::number(mVesselMoveDisplayUpdateRate));
 
     arguments.push_back("--num_threads");
     arguments.push_back(QString::number(set.value(SET_NUMTHREADS, 4).toInt()));
@@ -235,6 +239,16 @@ bool Simulator::wasSimulationStarted() const
 void Simulator::setOutputName(const QString &value)
 {
     mOutputName = value;
+}
+
+int Simulator::getVesselMoveDisplayUpdateRate() const
+{
+    return mVesselMoveDisplayUpdateRate;
+}
+
+void Simulator::setVesselMoveDisplayUpdateRate(int value)
+{
+    mVesselMoveDisplayUpdateRate = value;
 }
 
 bool Simulator::getMoveVesselOption() const

@@ -77,9 +77,14 @@ public:
     int getVerbosityLevel();
     void setVerbosityLevel(int value);
 
+    int getVesselMoveDisplayUpdateRate();
+    void setVesselMoveDisplayUpdateRate(int value);
+
+
 
 private slots:
     void on_verbosity_valueChanged(int arg1);
+
 
     void on_threads_valueChanged(int arg1);
 

@@ -138,7 +138,7 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
             for (int iInterShipTypes = 0; iInterShipTypes < interShipsTypesList.size(); ++iInterShipTypes) {
                 for (int iInterShipsIDs = 0; iInterShipsIDs < nInterShipsIDs; ++iInterShipsIDs) {
 
-                    auto shtype = model->getShipList()[iInterShipsIDs]->mShip->get_typecode();
+                    auto shtype = model->getShipList()[interShipsIDsList[iInterShipsIDs] -1]->mShip->get_typecode();
                     if (group != 999 && group != shtype)
                         continue;
 

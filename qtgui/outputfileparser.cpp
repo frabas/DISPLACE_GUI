@@ -755,7 +755,7 @@ void OutputFileParser::parseShipsStats(QFile *file, int tstep, DisplaceModel *mo
         }
 
         int shipid = fields[5].toInt();
-        int shiptype = fields[4].toInt();
+        int shiptype = static_cast<int>(fields[4].toFloat());
         int nodeid = fields[1].toInt();
 
         // tstep(0) / node(1) / long(2) / lat(3) /shiptype(4) / shipid(5) / nb_units / fuel_use_h /

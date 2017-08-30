@@ -52,6 +52,8 @@ $ dpkg-buildpackage -uc -B -j8
 Please ensure that the system is properly setup, as described in the Debian's New Maintainer's guide
 ( https://www.debian.org/doc/manuals/maint-guide/ )
 
+Note: During debug/development, use -nc to skip the cleaning phase of dpkg-buildpackage
+
 * Releasing sources for Debian
 
 It worth spending a few words about how to prepare the sources for deb package building.

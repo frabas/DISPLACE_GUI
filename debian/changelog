@@ -1,3 +1,12 @@
+displace (0.9.9) xenial; urgency=medium
+
+  * Aquaculture module
+  * Moved to Windows MSVC libraries (64bit)
+  * Fishfarms, Windfarms, commercial ships implementation
+  * Bug Fixing
+
+ -- Federico Fuga <fuga@studiofuga.com>  Wed, 30 Aug 2017 18:30:40 +0200
+
 displace (0.9.8) xenial; urgency=medium
 
   * Optimized memory footprint

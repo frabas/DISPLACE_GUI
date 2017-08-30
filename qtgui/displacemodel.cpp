@@ -1111,9 +1111,11 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
     mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
     mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
     mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].mVpuf = stats.vpuf /mStatsNationsCollected[nat].numTrips;  // running average
+    mStatsNationsCollected[nat].cumVpuf += stats.vpuf;
+    mStatsNationsCollected[nat].mVpuf = mStatsNationsCollected[nat].cumVpuf /mStatsNationsCollected[nat].numTrips;  // running average
     mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
-    mStatsNationsCollected[nat].mRevenuePerSweptArea = stats.revenuePerSweptArea;
+    mStatsNationsCollected[nat].cumRevenuePerSweptArea += stats.revenuePerSweptArea;
+    mStatsNationsCollected[nat].mRevenuePerSweptArea = mStatsNationsCollected[nat].cumRevenuePerSweptArea /mStatsNationsCollected[nat].numTrips;  // running average;
 
     mStatsNationsCollected[nat].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
     mStatsNationsCollected[nat].cumGVAPerRevenue += stats.GVAPerRevenue;

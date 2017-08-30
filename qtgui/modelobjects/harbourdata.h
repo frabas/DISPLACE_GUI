@@ -56,6 +56,8 @@ public:
     double mVpuf;
     double mSweptArea;
     double mRevenuePerSweptArea;
+    double cumVpuf;
+    double cumRevenuePerSweptArea;
     double GVA;
     double cumGVAPerRevenue;
     double GVAPerRevenue;

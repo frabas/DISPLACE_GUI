@@ -24,6 +24,8 @@ public:
     double vpuf = 0.0;
     double mSweptArea = 0.0;
     double mRevenuePerSweptArea = 0.0;
+    double cumVpuf=0.0;
+    double cumRevenuePerSweptArea=0.0;
 
 
     QList<double> mCatchesPerPop;

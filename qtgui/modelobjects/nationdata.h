@@ -42,7 +42,7 @@ public:
           mTotDiscards(0.0),
           mRevenues(0.0),
           mExRevenues(0.0),
-          mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0),
+          mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0), cumVpuf(0), cumRevenuePerSweptArea(0),
           GVA(0),
           cumGVAPerRevenue(0),
           GVAPerRevenue(0),
@@ -75,6 +75,8 @@ public:
     double mVpuf = 0.0;
     double mSweptArea = 0.0;
     double mRevenuePerSweptArea = 0.0;
+    double cumVpuf=0.0;
+    double cumRevenuePerSweptArea=0.0;
 
     double GVA=0.0;
     double cumGVAPerRevenue = 0.0;

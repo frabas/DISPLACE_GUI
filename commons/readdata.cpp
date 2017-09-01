@@ -1502,6 +1502,28 @@ multimap<int, double> read_logistic_recovery_rates_per_month_per_funcgr(string f
     return(rates_per_month_per_funcgr);
 }
 
+
+multimap<int, double> read_habitat_deltas_per_pop(string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/benthosspe_"+folder_name_parameterization+"/habitat_deltas_per_pop.dat";
+
+    ifstream habitat_deltas_per_pop_file;
+    habitat_deltas_per_pop_file.open(filename.c_str());
+    if(habitat_deltas_per_pop_file.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, double> habitat_deltas_per_pop;
+    fill_multimap_from_specifications_i_d(habitat_deltas_per_pop_file,  habitat_deltas_per_pop);
+    habitat_deltas_per_pop_file.close();
+
+    return(habitat_deltas_per_pop);
+}
+
+
+
 multimap<int, double> read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder)
 {
 

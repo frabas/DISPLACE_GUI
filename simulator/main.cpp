@@ -1436,6 +1436,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
     multimap<int, double> recovery_rates_per_funcgr       = read_logistic_recovery_rates_per_month_per_funcgr(folder_name_parameterization, inputfolder);
 
+    multimap<int, double> habitat_deltas_per_pop          = read_habitat_deltas_per_pop(folder_name_parameterization, inputfolder);
+
+
 
     // 2. sort and unique
     sort(graph_point_code_landscape.begin(), graph_point_code_landscape.end());
@@ -1458,6 +1461,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double> init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr;
         vector<double> init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr;
         vector<double> init_recovery_rates_per_funcgr;
+        vector<double> init_h_betas_per_pop;
+
         int a_marine_landscape  =   graph_point_code_landscape.at(landscape);
 
         outc(cout << "a marine landscape " << a_marine_landscape << endl);
@@ -1538,13 +1543,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             init_recovery_rates_per_funcgr.push_back(pos->second);
         }
 
-
-        vector<double> h_betas_per_pop;
-        for (int a_pop=0; a_pop<nbpops; ++a_pop)
+        multimap<int,double>::iterator lower_land2 = habitat_deltas_per_pop.lower_bound(a_marine_landscape);
+        multimap<int,double>::iterator upper_land2 = habitat_deltas_per_pop.upper_bound(a_marine_landscape);
+        for (multimap<int, double>::iterator pos=lower_land2; pos != upper_land2; pos++)
         {
-            h_betas_per_pop.push_back(0);
+            outc(cout << pos->second << endl);
+            // habitat_deltas_per_pop specific to this landscape
+            init_h_betas_per_pop.push_back(pos->second);
         }
-        //TO DO: READ FROM INPUT FILE
 
 
         // add e.g. 2 functional groups per shared
@@ -1562,7 +1568,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                             init_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr,
                                             init_benthos_number_carrying_capacity_K_per_landscape_per_funcgr,
                                             is_impact_benthos_N,
-                                            h_betas_per_pop);
+                                            init_h_betas_per_pop);
         //out(cout << "marine landscape for this benthos shared is " << benthoss.at(landscape)->get_marine_landscape() << endl);
         //out(cout <<"...and the biomass this node this func. grp is "  << benthoss.at(landscape)-> get_list_nodes().at(0)-> get_benthos_tot_biomass(0) << endl);
 

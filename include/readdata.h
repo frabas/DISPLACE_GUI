@@ -227,6 +227,7 @@ map<int, double> COMMONSSHARED_EXPORT read_gear_widths_param_b(string folder_nam
 map<int, string> COMMONSSHARED_EXPORT read_gear_widths_model_type(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_loss_after_1_passage_per_landscape_per_func_group(int a_met, string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_logistic_recovery_rates_per_month_per_funcgr(string folder_name_parameterization, string inputfolder);
+multimap<int, double> COMMONSSHARED_EXPORT read_habitat_deltas_per_pop(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_benthos_biomass_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_benthos_number_carrying_capacity_K_per_landscape_per_funcgr(string folder_name_parameterization, string inputfolder);
 multimap<int, int> COMMONSSHARED_EXPORT read_metier_target_stocks(int a_met, string folder_name_parameterization, string inputfolder);

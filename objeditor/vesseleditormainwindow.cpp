@@ -335,6 +335,8 @@ void VesselEditorMainWindow::on_tabWidget_currentChanged(int index)
         ui->benthosCsvPage4->load();
         ui->benthosCsvPage5->setFilename(ui->gisPath->text() + "/HABITATS/logistic_recovery_rates_per_month_per_funcgr.csv");
         ui->benthosCsvPage5->load();
+        ui->benthosCsvPage6->setFilename(ui->gisPath->text() + "/HABITATS/habitat_deltas_per_pop.csv");
+        ui->benthosCsvPage6->load();
         mBenthosMapListAdapter->clearPaths();
         mBenthosMapListAdapter->addPath(ui->gisPath->text() + "/HABITATS/");
         mBenthosMapListAdapter->refresh();

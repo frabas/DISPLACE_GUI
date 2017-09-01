@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>15</number>
       </property>
       <widget class="QWidget" name="tabPaths">
        <attribute name="title">
@@ -516,7 +516,7 @@
         <item>
          <widget class="QTabWidget" name="tabBenthosSubpages">
           <property name="currentIndex">
-           <number>4</number>
+           <number>5</number>
           </property>
           <widget class="QWidget" name="tabBenthosSpecsSubpage">
            <attribute name="title">
@@ -577,6 +577,24 @@
              <rect>
               <x>0</x>
               <y>0</y>
+              <width>786</width>
+              <height>490</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabBenthosSpecsSubpage6">
+           <property name="accessibleName">
+            <string>Specs 6</string>
+           </property>
+           <attribute name="title">
+            <string>Specs 6</string>
+           </attribute>
+           <widget class="CsvSpecsPage" name="benthosCsvPage6" native="true">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>10</y>
               <width>786</width>
               <height>490</height>
              </rect>
@@ -678,7 +696,7 @@
   <customwidget>
    <class>CsvSpecsPage</class>
    <extends>QWidget</extends>
-   <header>csvspecspage.h</header>
+   <header location="global">csvspecspage.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

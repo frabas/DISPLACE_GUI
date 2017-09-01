@@ -21,6 +21,7 @@
 #include <string>
 #include <m_constants.h>
 #include <vector>
+#include <algorithm>
 
 #include <cmath>
 

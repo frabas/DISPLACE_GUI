@@ -2037,6 +2037,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         double a_calib_cpue_multiplier=calib_cpue_multiplier.at(sp);
         double a_calib_weight_at_szgroup=calib_weight_at_szgroup.at(sp);
 
+
+        vector< vector<double> > preferences_for_species_matrix;
+        if (dyn_pop_sce.option(Options::sizeSpectra))
+        {
+            preferences_for_species_matrix= read_preferences_for_species_matrix(sp, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
+        }
+
         cout << " create pop... "  << endl;
         populations[sp] =   ( new Population(sp,
                                              avai0_beta,

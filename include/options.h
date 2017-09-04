@@ -116,6 +116,7 @@ enum Pop_Sce {
     with_stochast_oth_land,
     stop_mig_35065,
     impact_benthos_N,
+    sizeSpectra,
 
     Pop_Sce_last
 };

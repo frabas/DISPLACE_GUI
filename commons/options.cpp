@@ -60,6 +60,7 @@ PopSceOptions::PopSceOptions()
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);
     O(mMap,impact_benthos_N);
+    O(mMap,sizeSpectra);
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

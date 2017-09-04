@@ -52,6 +52,7 @@ static const char *dyn_pop_options[] = {
     "use_SMS",
     "impact_benthos_N",
     "diffuseN",
+    "sizeSpectra",
 };
 
 ScenarioDialog::ScenarioDialog(const Scenario & scenario, QWidget *parent) :

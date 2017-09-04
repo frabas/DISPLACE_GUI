@@ -2704,6 +2704,31 @@ vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup,
 }
 
 
+vector< vector<double> > read_preferences_for_species_matrix(int a_pop, int nbpops, int nbszgroup, string folder_name_parameterization, string inputfolder, string biolsce)
+{
+    // casting a_pop into a string
+    stringstream out;
+    out << a_pop;
+    string a_pop_s = out.str();
+
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "preferences_for_species_matrix_biolsce"+biolsce+".dat";
+
+    ifstream file_preferences_for_species;
+    file_preferences_for_species.open(filename.c_str());
+    if(file_preferences_for_species.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    vector< vector<double> > preferences_for_species_matrix(nbpops, vector<double>(nbszgroup));
+    if (!fill_in_preferences_for_species_matrix(file_preferences_for_species, preferences_for_species_matrix))
+        throw std::runtime_error("Error while executing: fill_in_preferences_for_species_matrix");
+
+    file_preferences_for_species.close();
+
+    return(preferences_for_species_matrix);
+}
+
 
 
 vector< vector<double> > read_species_interactions_mortality_proportion_matrix(int nbpops, string folder_name_parameterization, string inputfolder, string biolsce)

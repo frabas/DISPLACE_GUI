@@ -267,6 +267,7 @@ bool COMMONSSHARED_EXPORT fill_from_benthos_number (istream& in, vector<double>&
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_in_growth_transition (istream& in, vector< vector<double> >& growth_transition);
 bool COMMONSSHARED_EXPORT fill_in_species_interactions_mortality_proportion_matrix (istream& in, vector< vector<double> >& species_interactions_mortality_proportion_matrix);
+bool COMMONSSHARED_EXPORT fill_in_preferences_for_species_matrix (istream& in, vector< vector<double> >& preferences_for_species_matrix);
 bool COMMONSSHARED_EXPORT fill_in_selectivity_per_stock(istream& in, vector< vector<double> >& growth_transition);
 bool COMMONSSHARED_EXPORT fill_in_percent_szgroup_per_age_matrix (istream& in, vector< vector<double> >& percent_szgroup_per_age_matrix);
 bool COMMONSSHARED_EXPORT fill_in_percent_age_per_szgroup_matrix (istream& in, vector< vector<double> >& percent_age_per_szgroup_matrix);

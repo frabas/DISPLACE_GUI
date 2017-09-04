@@ -709,6 +709,41 @@ bool fill_in_growth_transition(istream& in, vector< vector<double> >& growth_tra
 }
 
 
+
+
+/**
+fill in the preferences_for_species_matrix
+@param the vector file, ...
+*/
+bool fill_in_preferences_for_species_matrix (istream& in, vector< vector<double> >& preferences_for_species_matrix)
+{
+    double val;
+    for(unsigned int i = 0; i < preferences_for_species_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < preferences_for_species_matrix[i].size(); j++)
+        {
+            in>> val;
+            preferences_for_species_matrix[i][j] = val;
+        }
+    }
+
+
+    dout(cout  << "read preferences_for_species_matrix"  << endl << flush);
+    for(unsigned int i = 0; i < preferences_for_species_matrix.size(); i++)
+    {
+        for(unsigned int j = 0; j < preferences_for_species_matrix[i].size(); j++)
+        {
+            dout(cout  << preferences_for_species_matrix[i][j] << " ");
+        }
+        dout(cout  << endl);
+    }
+    dout(cout  << endl);
+
+    return true;
+}
+
+
+
 /**
 fill in the species_interactions_mortality_proportion_matrix
 @param the vector file, ...

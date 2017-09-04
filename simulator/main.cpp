@@ -4266,7 +4266,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #else
-                       string a_command = inputfolder+"/avaifieldshuffler -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
+                       string a_command = inputfolder+"/avaifieldshufflertool -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #endif

@@ -4255,9 +4255,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-            if(dyn_pop_sce.option(Options::white_noise_on_avai)){
-               type_of_avai_field_to_read="_shuffled";
-               // alter the availability field, if required
+            if(dyn_pop_sce.option(Options::avai_shuffler_on) || dyn_pop_sce.option(Options::avai_updater_on)){
+                if(dyn_pop_sce.option(Options::avai_shuffler_on))
+                {
+                    type_of_avai_field_to_read="_shuffled";
+                }
+                if(dyn_pop_sce.option(Options::avai_updater_on))
+                {
+                    type_of_avai_field_to_read="_updated";
+                }
+                    // alter the availability field, if required
                for (unsigned int p=0; p<populations.size(); p++)
                {
                    if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  p  ) )
@@ -4266,17 +4273,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        out << p;
                        string a_pop = out.str();
 
+                       string a_command;
+
                        // the system command line
                        #if defined(_WIN32)
-                       string a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
+                       if(dyn_pop_sce.option(Options::avai_updater_on))
+                            a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -s " +a_semester;
+                       if(dyn_pop_sce.option(Options::avai_shuffler_on))
+                            a_command = "avaifieldshuffler.exe -f " +namefolderinput+ " -s " +a_semester+ " -p " +a_pop;
                        cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                        system(a_command.c_str());
-                       cout << "avaifieldshuffler...done" << endl;
                        #else
-                       string a_command = inputfolder+"/avaifieldshufflertool -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
+                       if(dyn_pop_sce.option(Options::avai_updater_on))
+                           a_command = inputfolder+"/avaifieldupdatertool -f "+namefolderinput+" -s "+a_semester;
+                       if(dyn_pop_sce.option(Options::avai_shuffler_on))
+                           a_command = inputfolder+"/avaifieldshufflertool -f "+namefolderinput+" -s "+a_semester+" -p "+a_pop;
                        system(a_command.c_str());
                        cout << "avaifieldshuffler...done" << endl;
                        #endif
+                       cout << "avaifieldupdater and/or shuffler...done" << endl;
 
                    }
                }

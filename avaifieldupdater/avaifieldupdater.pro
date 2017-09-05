@@ -2,7 +2,7 @@ include ("$$top_srcdir/localconfig.pri")
 
 TEMPLATE = app
 QT+= core
-TARGET=avaifieldshuffler
+TARGET=avaifieldupdater
 CONFIG += console c++11
 
 DESTDIR = ../

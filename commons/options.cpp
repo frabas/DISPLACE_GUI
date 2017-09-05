@@ -56,7 +56,8 @@ PopSceOptions::PopSceOptions()
     O(mMap,use_SMS);
     O(mMap,use_SMS_single);
     O(mMap,diffuseN);
-    O(mMap,white_noise_on_avai);
+    O(mMap,avai_shuffler_on);
+    O(mMap,avai_updater_on);
     O(mMap,with_stochast_oth_land);
     O(mMap,stop_mig_35065);
     O(mMap,impact_benthos_N);

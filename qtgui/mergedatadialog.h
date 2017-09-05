@@ -42,6 +42,8 @@ public:
 
     QString getInputFile() const;
     QString getOutputFile() const;
+    void setInputFile (QString setInputFile);
+    void setOutputFile (QString setOutputFile);
     void setDefaultOutputToInput(bool yes) {
         mDefaultOutToIn = yes;
     }

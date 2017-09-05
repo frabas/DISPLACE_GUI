@@ -68,6 +68,16 @@ QChar MergeDataDialog::separator() const
     return QChar(';');  // default
 }
 
+void MergeDataDialog::setInputFile(QString _fileIn)
+{
+    ui->fileIn->setText(_fileIn);
+}
+
+void MergeDataDialog::setOutputFile(QString _fileOut)
+{
+    ui->fileOut->setText(_fileOut);
+}
+
 void MergeDataDialog::on_ok_clicked()
 {
     if (ui->fileIn->text().isEmpty() || ui->fileOut->text().isEmpty())
@@ -124,6 +134,8 @@ void MergeDataDialog::on_browseOut_clicked()
     dlg.setFileMode(QFileDialog::AnyFile);
     dlg.setAcceptMode(QFileDialog::AcceptSave);
     dlg.setDefaultSuffix("txt");
+    dlg.selectFile("%1spe_full_avai_szgroup_nodes_semester%2");
+
 
     if (dlg.exec() == QDialog::Accepted) {
         QString file = dlg.selectedFiles().at(0);

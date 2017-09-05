@@ -2678,6 +2678,9 @@ void MainWindow::on_actionCalcPopDistribution_triggered()
     dlg.setDefaultOutputToInput(false);
     dlg.setSizeGroupCount(currentModel->getSzGrupsCount());
     dlg.setWindowTitle(tr("Calculate population distribution on at-sea graph nodes"));
+    dlg.setInputFile("input_file_for_displace_merger.csv");
+    dlg.setOutputFile("%1spe_full_avai_szgroup_nodes_semester%2");
+
     if (dlg.exec()) {
         displace::workers::PopulationDistributionDataMergerStrategy *strategy = new displace::workers::PopulationDistributionDataMergerStrategy(currentModel.get());
 

@@ -16,7 +16,7 @@
 //    You should have received a copy of the GNU General Public License along
 //    with this program; if not, write to the Free Software Foundation, Inc.,
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-// --------------------------------------------------------------------------
+// --------------------h------------------------------------------------------
 
 #include "mergepopulationplugincomponent.h"
 #include "ui_mergepopulationplugincomponent.h"
@@ -81,7 +81,6 @@ void MergePopulationPluginComponent::loadStocksAndSizes(QString filename, QChar 
     for (int i = 0; i < fields.size(); ++i) {
         if (fields.at(i) == displace::workers::PopulationDistributionDataMergerStrategy::StockField) {
             stock_fld = i;
-            break;
         } else if (fields.at(i).startsWith(displace::workers::PopulationDistributionDataMergerStrategy::IndivFieldPattern)) {
             sizelist << fields.at(i);
             sizesel << true;

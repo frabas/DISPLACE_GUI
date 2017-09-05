@@ -10,7 +10,7 @@ const char *const PopulationDistributionDataMergerStrategy::YearField = "Year";
 const char *const PopulationDistributionDataMergerStrategy::SemesterField = "Semester";
 const char *const PopulationDistributionDataMergerStrategy::LatField = "ShootLat";
 const char *const PopulationDistributionDataMergerStrategy::LongField = "ShootLon";
-const char *const PopulationDistributionDataMergerStrategy::StockField = "Stock";
+const char *const PopulationDistributionDataMergerStrategy::StockField = "StockId";
 const char *const PopulationDistributionDataMergerStrategy::IndivFieldPattern = "nb_indiv.";
 
 PopulationDistributionDataMergerStrategy::PopulationDistributionDataMergerStrategy (DisplaceModel *model)

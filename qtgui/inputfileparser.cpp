@@ -312,11 +312,13 @@ bool InputFileParser::parseStockNamesFile(const QString &path, QMap<QString, int
     int linenum = 1;
     while (!(line = stream.readLine()).isNull()) {
         QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
-        int nd = fields[1].toInt(&ok);
+       // int nd = fields[1].toInt(&ok);
+        int nd = fields[0].toInt(&ok);
         if (!ok) {
             (new displace::DisplaceException(QObject::tr("Failed to parse field #2"), path, linenum))->raise();
         } else {
-            names.insert(fields[0], nd);
+           // names.insert(fields[0], nd);
+             names.insert(fields[1], nd);
         }
         ++linenum;
     }

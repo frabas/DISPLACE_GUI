@@ -282,7 +282,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->actionMergeWeights->setVisible(false);
     ui->actionMergePings->setVisible(false);
-    ui->actionCalcPopDistribution->setVisible(false);
+    ui->actionCalcPopDistribution->setVisible(true);
 
 #ifndef DEBUG
     ui->actionR_Console->setVisible(false);

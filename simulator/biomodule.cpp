@@ -1207,6 +1207,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+       // popnodes_inc exports population numbers on nodes every start of month...
+        // ...think about increasing the rate of updating when e.g. avaishuffler on less than  month is on?
+        // this would be useful to track the changes in abundance on the displace widget map but will be both time and memory consuming...
+
     }
 
     // to get the list of nodes making xx% of the total...
@@ -1320,7 +1324,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 #ifdef PROFILE
     mPopExportProfile.elapsed_ms();
 #endif
-}
+} // end month detection
 dout(cout  << "END: POP MODEL TASKS----------" << endl);
 
 

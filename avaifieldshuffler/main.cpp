@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
         file_full_avai_szgroup_nodes_with_pop >> val;
 
         // add a lognormal error on the fly
-        double sd=0.2;
+        double sd=0.6;
         double logn_error=0;
         logn_error= exp( 0 + sd*norm_rand() ) / exp((sd*sd)/2.0);;
 

@@ -67,11 +67,9 @@ int main(int argc, char* argv[])
     {
     string folder_name_parameterization="myfish";
     string a_semester="semester1";
-    int nrow=1000;
+    int nrow=10140;
     int dist_km = 50;
     int graph=56;
-
-    // e.g.  -f "myfish" -s "semester1" -p 0
 
     int optind=1;
     // decode arguments
@@ -157,8 +155,8 @@ int main(int argc, char* argv[])
 
     vector <string> Surveys;
     vector <int> Years;
-    vector <int> ShootLons;
-    vector <int> ShootLats;
+    vector <double> ShootLons;
+    vector <double> ShootLats;
     vector <string> Stocks;
     vector <int> StockIds;
     vector <double> nb_indiv0s;
@@ -178,21 +176,23 @@ int main(int argc, char* argv[])
 
     string Survey="";
     string Stock="";
-    double Year=0, ShootLon=0, ShootLat=0, StockId=0;
+    double ShootLon=0, ShootLat=0;
+    int Year=0, StockId=0;
     double nb_indiv0=0, nb_indiv1=0, nb_indiv2=0, nb_indiv3=0, nb_indiv4=0, nb_indiv5=0,
             nb_indiv6=0, nb_indiv7=0, nb_indiv8=0, nb_indiv9=0, nb_indiv10=0, nb_indiv11=0, nb_indiv12=0, nb_indiv13=0;
 
     std::string dummystring;
     getline (in, dummystring); // eat the heading
 
-    while (!in.eof()) {
+     int linenum = 0;
+     while (!in.eof()) {
 
 
             std::string line;
             std::getline(in, line);
-            if (in.eof())
-                break;
-
+           // if (in.eof())
+           //     break;
+//cout << "new line read..." << endl;
             //  Survey / Year/ ShootLon / ShootLat / Stock / StockId / nb_indiv0 / nb_indiv1 /...
             in >> Survey;
             Surveys.push_back(Survey);
@@ -234,8 +234,10 @@ int main(int argc, char* argv[])
             nb_indiv12s.push_back(nb_indiv12);
             in >> nb_indiv13;
             nb_indiv13s.push_back(nb_indiv13);
+ //cout <<  Survey << " " << Year << " " << ShootLon  << " " <<   ShootLat << " " <<   Stock << " " <<   StockId << " " <<   nb_indiv0  << " " <<   nb_indiv1 << " " <<   nb_indiv13 << endl;
+    ++linenum;
     }
-    //cout  << "read the input file...ok " << endl;
+    cout  << "read the input file...ok " << endl;
     in.close();
 
 
@@ -260,8 +262,8 @@ int main(int argc, char* argv[])
 
     double a_dist;
     vector<int> idx_n_in_range;
-    vector <vector <double> > weights;
-    vector<double> sum_weights;
+    vector< vector<double> > weights(graph_coord_x.size(), vector<double>(ShootLons.size()));
+    vector <double> sum_weights (graph_coord_x.size());
     for (int n=0; n<graph_coord_x.size(); n++) {
        for (int pt=0; pt<ShootLons.size(); pt++) {
             sum_weights.at(n)=0;
@@ -282,12 +284,15 @@ int main(int argc, char* argv[])
             idw13.at(n)=0;
 
     }}
+    cout  << "init for idw...ok " << endl;
+
     for (int pt=0; pt<ShootLons.size(); pt++) {
         // process line by line
        for (int n=0; n<graph_coord_x.size(); n++) {
         // search for each graph node
 
-           a_dist = greatcircledistance(graph_coord_y.at(n), graph_coord_y.at(n), ShootLats.at(pt), ShootLons.at(pt));
+           a_dist = greatcircledistance(graph_coord_x.at(n), graph_coord_y.at(n), ShootLons.at(pt), ShootLats.at(pt));
+           //cout  << "a_dist... " << a_dist << endl;
 
 
         if (a_dist < dist_km && a_dist > 1e-5) {
@@ -300,50 +305,68 @@ int main(int argc, char* argv[])
 
        }
      }
+ cout  << "weights in idw computed...ok " << endl;
 
+ // remove dups indx
+ sort( idx_n_in_range.begin(), idx_n_in_range.end() ) ;
+ idx_n_in_range.erase( unique( idx_n_in_range.begin(), idx_n_in_range.end() ), idx_n_in_range.end() ) ;
+
+
+ cout  << "nb nodes within the km range is... " <<  idx_n_in_range.size() << endl;
+
+     double totidw0=0, totidw1=0, totidw2=0, totidw3=0, totidw4=0, totidw5=0, totidw6=0, totidw7=0,
+             totidw8=0, totidw9=0, totidw10=0, totidw11=0, totidw12=0, totidw13=0;
      for (int n=0; n<idx_n_in_range.size(); n++) {
            for (int pt=0; pt<ShootLons.size(); pt++) {
                int n2=idx_n_in_range.at(n);
                   if(sum_weights.at(n2)>1e-5){
                       idw0.at(n2) += nb_indiv0s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw0 += idw0.at(n2);
                       idw1.at(n2) += nb_indiv1s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw1 += idw1.at(n2);
                       idw2.at(n2) += nb_indiv2s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw2 += idw2.at(n2);
                       idw3.at(n2) += nb_indiv3s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw3 += idw3.at(n2);
                       idw4.at(n2) += nb_indiv4s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw4 += idw4.at(n2);
                       idw5.at(n2) += nb_indiv5s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw5 += idw5.at(n2);
                       idw6.at(n2) += nb_indiv6s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw6 += idw6.at(n2);
                       idw7.at(n2) += nb_indiv7s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw7 += idw7.at(n2);
                       idw8.at(n2) += nb_indiv8s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw8 += idw8.at(n2);
                       idw9.at(n2) += nb_indiv9s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw9 += idw9.at(n2);
                       idw10.at(n2) += nb_indiv10s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw10 += idw10.at(n2);
                       idw11.at(n2) += nb_indiv11s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw11 += idw11.at(n2);
                       idw12.at(n2) += nb_indiv12s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw12 += idw12.at(n2);
                       idw13.at(n2) += nb_indiv13s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
+                      totidw13 += idw13.at(n2);
            }
          }
        }
 
 
+     cout  << "idw computed...ok " << endl;
 
 
 
 
-
-    // TODO: compute the avai
-
-
-
-
-
-
-
-
-
+     //remove dups in StockIds
+     sort( StockIds.begin(), StockIds.end() ) ;
+     StockIds.erase( unique( StockIds.begin(), StockIds.end() ), StockIds.end() ) ;
 
     // export back
      for (int pop=0; pop<StockIds.size(); pop++)
      {
      int a_pop = StockIds.at(pop);
+     cout  << "export for a_pop... " << a_pop << endl;
 
      stringstream out;
      out << a_pop;
@@ -355,10 +378,36 @@ int main(int argc, char* argv[])
     avaiField.open(filename_full_avai_file_out.c_str());
 
     avaiField << "idx_node" << " " << "avai" << endl;
-    for (multimap<int, double>::iterator pos=full_avai_szgroup_nodes_with_pop.begin(); pos != full_avai_szgroup_nodes_with_pop.end(); pos++)
-    {
-        avaiField << setprecision(6) << fixed;
-            avaiField << pos->first << " " << pos->second << " ";
+    for (int n=0; n<idx_n_in_range.size(); n++)
+     {
+         int n2=idx_n_in_range.at(n);
+
+         avaiField << setprecision(6) << fixed;
+            avaiField << n2 << " " << idw0.at(n)/totidw0;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw1.at(n)/totidw1;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw2.at(n)/totidw2;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw3.at(n)/totidw3;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw4.at(n)/totidw4;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw5.at(n)/totidw5;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw6.at(n)/totidw6;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw7.at(n)/totidw7;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw8.at(n)/totidw8;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw9.at(n)/totidw9;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw11.at(n)/totidw11;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw12.at(n)/totidw12;
+            avaiField << " " <<  endl;
+            avaiField << n2 << " " << idw13.at(n)/totidw13;
             avaiField << " " <<  endl;
     }
     avaiField.close();
@@ -382,6 +431,9 @@ int main(int argc, char* argv[])
     } // end pop
 
     cout  << "export back the availability at szgroup field...ok " << endl;
+
+    int aa;
+    cin>>aa;
 
     return 0;
 }

@@ -4273,6 +4273,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        out << p;
                        string a_pop = out.str();
 
+                       stringstream out2;
+                       out2 << nrow_coord;
+                       string a_nrow_coord = out2.str();
+
                        string a_command;
                        string a_command_for_R;
 
@@ -4281,7 +4285,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
                            a_command_for_R = "R CMD BATCH .\\interactiveRscripts\\input2AvaiUpdater.R";
                            system(a_command_for_R.c_str());
-                            a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -s " +a_semester;
+                            a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 50 ";
                             system(a_command.c_str());
                        }
                        if(dyn_pop_sce.option(Options::avai_shuffler_on)){
@@ -4293,9 +4297,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                        #else
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
-                           a_command_for_R = "R CMD BATCH"+inputfolder+"/interactiveRscripts/input2AvaiUpdater.R";
+                           a_command_for_R = "R CMD BATCH "+inputfolder+"/interactiveRscripts/input2AvaiUpdater.R";
                            system(a_command_for_R.c_str());
-                           a_command = inputfolder+"/avaifieldupdatertool -f "+namefolderinput+" -s "+a_semester;
+                           a_command = inputfolder+"/avaifieldupdatertool -f "+namefolderinput+" -s "+a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 50 ";
                            system(a_command.c_str());
                        }
                        if(dyn_pop_sce.option(Options::avai_shuffler_on)){

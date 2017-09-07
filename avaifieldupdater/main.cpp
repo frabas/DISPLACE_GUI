@@ -65,11 +65,11 @@ return (dist);
 
 int main(int argc, char* argv[])
     {
-    string folder_name_parameterization="myfish";
+    string folder_name_parameterization="DanishFleet";
     string a_semester="semester1";
-    int nrow=10140;
+    int nrow=35309; // 10140 for myfish
     int dist_km = 50;
-    int graph=56;
+    int graph=40; // 56 for myfish
 
     int optind=1;
     // decode arguments
@@ -119,6 +119,7 @@ int main(int argc, char* argv[])
     if(coord_graph.fail())
     {
         open_file_error(filename_graph.c_str());
+        cout << "failing opening the graph file" << endl;
         return 1;
     }
     vector<double> graph_coord_x;
@@ -131,7 +132,6 @@ int main(int argc, char* argv[])
     coord_graph.close();
 
 
-
     // full
     string filename_displace_input_for_data_merger;
     filename_displace_input_for_data_merger = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/displace_input_for_data_merger.dat";
@@ -142,6 +142,8 @@ int main(int argc, char* argv[])
     {
         open_file_error(filename_displace_input_for_data_merger.c_str());
         //return 1;
+    int aa;
+    cin >> aa;
     }
 
 
@@ -343,15 +345,29 @@ for(int i=0; i<listStockIds.size(); i++){
      vector<double> totidw11 (max_idx_stock, 0);
      vector<double> totidw12 (max_idx_stock, 0);
      vector<double> totidw13 (max_idx_stock, 0);
-     for (int n=0; n<idx_n_in_range.size(); n++) {
-           for (int pt=0; pt<ShootLons.size(); pt++) {
-               int st=StockIds.at(pt);
+       for (int pt=0; pt<ShootLons.size(); pt++) {
+         //cout <<" process line "<< pt << endl;
+           int st=StockIds.at(pt);
+          for (int n=0; n<idx_n_in_range.at(st).size(); n++) {
                int n2=idx_n_in_range.at(st).at(n);
                //cout  << "for line " << pt << "sum_weights  this node " << n2 << " is... " <<  sum_weights.at(n2) << endl;
                   if(sum_weights.at(n2)>1e-5){
                       //cout  << "st is " << st << "given size of idw0.at(n2) " << idw0.at(n2).size() << endl;
                       idw0.at(n2).at(st) += nb_indiv0s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
                       totidw0.at(st) += idw0.at(n2).at(st);
+
+ /*
+if(st==11){
+         cout << " for pop11 totidw0.at(st) is " <<  totidw0.at(st)  << " given " << idw0.at(n2).at(st) << endl;
+         cout << " because  nb_indiv0s.at(pt) is "  << nb_indiv0s.at(pt) << endl;
+
+       if(n>5){
+          int aa;
+         cin >> aa;
+        }
+  }
+*/
+
                       idw1.at(n2).at(st) += nb_indiv1s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
                       totidw1.at(st) += idw1.at(n2).at(st);
                       idw2.at(n2).at(st) += nb_indiv2s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
@@ -387,8 +403,6 @@ for(int i=0; i<listStockIds.size(); i++){
 
 
 
-
-
     // export back
      for (int i=0; i<listStockIds.size(); i++)
      {
@@ -410,42 +424,126 @@ for(int i=0; i<listStockIds.size(); i++){
          int n2=idx_n_in_range.at(a_pop).at(n);
 
 
-/*if(n2==50 && a_pop==11){
-      cout << n2 << " 0: " << idw0.at(n).at(a_pop)/totidw0.at(a_pop) << endl;
-      cout << "because " << idw0.at(n).at(a_pop) << "   "<< totidw0.at(a_pop) << endl;
+/*
+ * if(n2==50 && a_pop==11){
+      cout << n2 << " 0: " << idw0.at(n2).at(a_pop)/totidw0.at(a_pop) << endl;
+      cout << "because " << idw0.at(n2).at(a_pop) << "   "<< totidw0.at(a_pop) << endl;
+      cout << n2 << " 1: " << idw1.at(n2).at(a_pop)/totidw1.at(a_pop) << endl;
+      cout << "because " << idw1.at(n2).at(a_pop) << "   "<< totidw1.at(a_pop) << endl;
+      cout << n2 << " 2: " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop) << endl;
+      cout << "because " << idw2.at(n2).at(a_pop) << "   "<< totidw2.at(a_pop) << endl;
+      cout << n2 << " 3: " << idw3.at(n2).at(a_pop)/totidw3.at(a_pop) << endl;
+      cout << "because " << idw3.at(n2).at(a_pop) << "   "<< totidw3.at(a_pop) << endl;
+      cout << n2 << " 4: " << idw4.at(n2).at(a_pop)/totidw4.at(a_pop) << endl;
+      cout << "because " << idw4.at(n2).at(a_pop) << "   "<< totidw4.at(a_pop) << endl;
+      cout << n2 << " 5: " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop) << endl;
+      cout << "because " << idw5.at(n2).at(a_pop) << "   "<< totidw5.at(a_pop) << endl;
+      cout << n2 << " 6: " << idw6.at(n2).at(a_pop)/totidw6.at(a_pop) << endl;
+      cout << "because " << idw6.at(n2).at(a_pop) << "   "<< totidw6.at(a_pop) << endl;
       int aa;
       cin>>aa;
 
 }
 */
+
          avaiField << setprecision(9) << fixed;
-            avaiField << n2 << " " << idw0.at(n2).at(a_pop)/totidw0.at(a_pop);
+
+         if(totidw0.at(a_pop)>1e-5){
+            avaiField << setprecision(9) << fixed << n2  << " " << idw0.at(n2).at(a_pop)/totidw0.at(a_pop);
+         } else {
+            avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+         }
+         avaiField << " " <<  endl;
+
+         if(totidw1.at(a_pop)>1e-5){
+               avaiField << setprecision(9) << fixed << n2  << " " << idw1.at(n2).at(a_pop)/totidw1.at(a_pop);
+         } else {
+               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+         }
+         avaiField << " " <<  endl;
+
+         if(totidw2.at(a_pop)>1e-5){
+               avaiField << setprecision(9) << fixed << n2  << " " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop);
+            } else {
+            avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw1.at(n2).at(a_pop)/totidw1.at(a_pop);
+
+            if(totidw3.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw3.at(n2).at(a_pop)/totidw3.at(a_pop);
+            } else {
+              avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop);
+
+            if(totidw4.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw4.at(n2).at(a_pop)/totidw4.at(a_pop);
+            } else {
+              avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw3.at(n2).at(a_pop)/totidw3.at(a_pop);
+
+            if(totidw5.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop);
+            } else {
+              avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw4.at(n2).at(a_pop)/totidw4.at(a_pop);
+
+            if(totidw6.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw6.at(n2).at(a_pop)/totidw6.at(a_pop);
+            } else {
+              avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop);
+
+            if(totidw7.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw7.at(n2).at(a_pop)/totidw7.at(a_pop);
+            } else {
+               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw6.at(n2).at(a_pop)/totidw6.at(a_pop);
+
+            if(totidw8.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw8.at(n2).at(a_pop)/totidw8.at(a_pop);
+            } else {
+               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw7.at(n2).at(a_pop)/totidw7.at(a_pop);
+
+            if(totidw9.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw9.at(n2).at(a_pop)/totidw9.at(a_pop);
+            } else {
+            avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw8.at(n2).at(a_pop)/totidw8.at(a_pop);
+
+            if(totidw10.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw10.at(n2).at(a_pop)/totidw10.at(a_pop);
+            } else {
+              avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw9.at(n2).at(a_pop)/totidw9.at(a_pop);
+
+            if(totidw11.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw11.at(n2).at(a_pop)/totidw11.at(a_pop);
+            } else {
+              avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw10.at(n2).at(a_pop)/totidw10.at(a_pop);
+
+            if(totidw12.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw12.at(n2).at(a_pop)/totidw12.at(a_pop);
+            } else {
+               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw11.at(n2).at(a_pop)/totidw11.at(a_pop);
-            avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw12.at(n2).at(a_pop)/totidw12.at(a_pop);
-            avaiField << " " <<  endl;
-            avaiField << n2 << " " << idw13.at(n2).at(a_pop)/totidw13.at(a_pop);
+
+            if(totidw13.at(a_pop)>1e-5){
+                  avaiField << setprecision(9) << fixed << n2  << " " << idw13.at(n2).at(a_pop)/totidw13.at(a_pop);
+            } else {
+                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
+            }
             avaiField << " " <<  endl;
     }
     avaiField.close();

@@ -4283,7 +4283,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        // the system command line
                        #if defined(_WIN32)
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
-                           a_command_for_R = "R CMD BATCH .\\interactiveRscripts\\input2AvaiUpdater.R";
+                           a_command_for_R = "Rscript .\\interactiveRscripts\\input2AvaiUpdater.R "+a_pop;
+                           cout << "look after " << a_command_for_R << endl;
+                           cout << "This suppose StockId " << a_pop << " is informed in displace_input_for_data_merger.csv input file" << endl;
                            system(a_command_for_R.c_str());
                             a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
                             system(a_command.c_str());
@@ -4295,7 +4297,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                        #else
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
-                           a_command_for_R = "R CMD BATCH "+inputfolder+"/interactiveRscripts/input2AvaiUpdater.R";
+                           a_command_for_R = "Rscript "+inputfolder+"/interactiveRscripts/input2AvaiUpdater.R "+a_pop;
                            system(a_command_for_R.c_str());
                            a_command = inputfolder+"/avaifieldupdatertool -f "+namefolderinput+ " -a " +inputfolder+ " -s "+a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
                            system(a_command.c_str());

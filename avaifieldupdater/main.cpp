@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
     string folder_name_parameterization="DanishFleet";
     string a_semester="semester1";
     int nrow=35309; // 10140 for myfish
-    int dist_km = 50;
+    int dist_km = 30;
     int graph=40; // 56 for myfish
 
     int optind=1;
@@ -132,6 +132,10 @@ int main(int argc, char* argv[])
     coord_graph.close();
 
 
+
+    // TODO: filterout the harbours to avoid distributing stocks in them!!
+
+
     // full
     string filename_displace_input_for_data_merger;
     filename_displace_input_for_data_merger = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/displace_input_for_data_merger.dat";
@@ -142,6 +146,7 @@ int main(int argc, char* argv[])
     {
         open_file_error(filename_displace_input_for_data_merger.c_str());
         //return 1;
+        cout << "error when opening the displace_input_for_data_merger file..." << endl;
     int aa;
     cin >> aa;
     }
@@ -153,8 +158,6 @@ int main(int argc, char* argv[])
 
 
     // read in
-    multimap<int, double> full_avai_szgroup_nodes_with_pop;
-
     vector <string> Surveys;
     vector <int> Years;
     vector <double> ShootLons;
@@ -192,8 +195,6 @@ int main(int argc, char* argv[])
 
             std::string line;
             std::getline(in, line);
-           // if (in.eof())
-           //     break;
 //cout << "new line read..." << endl;
             //  Survey / Year/ ShootLon / ShootLat / Stock / StockId / nb_indiv0 / nb_indiv1 /...
             in >> Survey;
@@ -266,17 +267,24 @@ int main(int argc, char* argv[])
     vector <vector<double> > idw13 (graph_coord_x.size(), vector<double>(max_idx_stock));
 
 
+    cout  << "populate all with 0s... " << endl;
 
     double a_dist;
     vector<vector<int> > idx_n_in_range(max_idx_stock);
     vector< vector<double> > weights(graph_coord_x.size(), vector<double>(ShootLons.size()));
-    vector <double> sum_weights (graph_coord_x.size());
+    vector< vector<double> > sum_weights (ShootLons.size(), vector<double>(max_idx_stock));
+
+
     for (int n=0; n<graph_coord_x.size(); n++) {
        for (int pt=0; pt<ShootLons.size(); pt++) {
-            sum_weights.at(n)=0;
             weights.at(n).at(pt)=0.0;
+
+            for (int st=0; st<max_idx_stock; st++) {
+               sum_weights.at(pt).at(st)=0;
+            }
        }
        for (int st=0; st<max_idx_stock; st++) {
+
                idw0.at(n).at(st)=0;
                idw1.at(n).at(st)=0;
                idw2.at(n).at(st)=0;
@@ -293,27 +301,36 @@ int main(int argc, char* argv[])
                idw13.at(n).at(st)=0;
       }
     }
+
     cout  << "init for idw...ok " << endl;
 
 
+    double coord_x =0, coord_y =0, shoot_x =0, shoot_y =0;
     for (int pt=0; pt<ShootLons.size(); pt++) {
         // process line by line
        for (int n=0; n<graph_coord_x.size(); n++) {
         // search for each graph node
+        coord_x = graph_coord_x.at(n);
+        shoot_x = ShootLons.at(pt);
+        coord_y = graph_coord_y.at(n);
+        shoot_y = ShootLats.at(pt);
+           if(abs(coord_x-shoot_x)<1 && abs(coord_y-shoot_y)<1){ // filtering to save time...
 
-           a_dist = greatcircledistance(graph_coord_x.at(n), graph_coord_y.at(n), ShootLons.at(pt), ShootLats.at(pt));
-           //cout  << "a_dist... " << a_dist << endl;
+              a_dist = greatcircledistance(coord_x, coord_y, shoot_x, shoot_y);
+              //cout  << "a_dist... " << a_dist << endl;
 
 
-        if (a_dist < dist_km && a_dist > 1e-5) {
-            sum_weights.at(n)    += (1.0/a_dist);
-            weights.at(n).at(pt)  = (1.0/a_dist);
-            int st=StockIds.at(pt);
-            idx_n_in_range.at(st).push_back(n);
-        } else{
-            weights.at(n).at(pt)= 0;
-        }
-
+            if (a_dist < dist_km && a_dist > 1e-5) {
+               int st=StockIds.at(pt);
+               sum_weights.at(pt).at(st) += (1.0/a_dist);
+               weights.at(n).at(pt)  = (1.0/a_dist);
+               idx_n_in_range.at(st).push_back(n);
+             } else{
+               weights.at(n).at(pt)= 0;
+             }
+          } else{
+          weights.at(n).at(pt)= 0;
+          }
        }
      }
  cout  << "weights in idw computed...ok " << endl;
@@ -351,56 +368,56 @@ for(int i=0; i<listStockIds.size(); i++){
           for (int n=0; n<idx_n_in_range.at(st).size(); n++) {
                int n2=idx_n_in_range.at(st).at(n);
                //cout  << "for line " << pt << "sum_weights  this node " << n2 << " is... " <<  sum_weights.at(n2) << endl;
-                  if(sum_weights.at(n2)>1e-5){
+                  if(sum_weights.at(pt).at(st)>1e-5){
                       //cout  << "st is " << st << "given size of idw0.at(n2) " << idw0.at(n2).size() << endl;
-                      idw0.at(n2).at(st) += nb_indiv0s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw0.at(st) += idw0.at(n2).at(st);
-
- /*
-if(st==11){
-         cout << " for pop11 totidw0.at(st) is " <<  totidw0.at(st)  << " given " << idw0.at(n2).at(st) << endl;
-         cout << " because  nb_indiv0s.at(pt) is "  << nb_indiv0s.at(pt) << endl;
-
-       if(n>5){
-          int aa;
-         cin >> aa;
-        }
-  }
-*/
-
-                      idw1.at(n2).at(st) += nb_indiv1s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw1.at(st) += idw1.at(n2).at(st);
-                      idw2.at(n2).at(st) += nb_indiv2s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw2.at(st) += idw2.at(n2).at(st);
-                      idw3.at(n2).at(st) += nb_indiv3s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw3.at(st) += idw3.at(n2).at(st);
-                      idw4.at(n2).at(st) += nb_indiv4s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw4.at(st) += idw4.at(n2).at(st);
-                      idw5.at(n2).at(st) += nb_indiv5s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw5.at(st) += idw5.at(n2).at(st);
-                      idw6.at(n2).at(st) += nb_indiv6s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw6.at(st) += idw6.at(n2).at(st);
-                      idw7.at(n2).at(st) += nb_indiv7s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw7.at(st) += idw7.at(n2).at(st);
-                      idw8.at(n2).at(st) += nb_indiv8s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw8.at(st) += idw8.at(n2).at(st);
-                      idw9.at(n2).at(st) += nb_indiv9s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw9.at(st) += idw9.at(n2).at(st);
-                      idw10.at(n2).at(st) += nb_indiv10s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw10.at(st) += idw10.at(n2).at(st);
-                      idw11.at(n2).at(st) += nb_indiv11s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw11.at(st) += idw11.at(n2).at(st);
-                      idw12.at(n2).at(st) += nb_indiv12s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw12.at(st) += idw12.at(n2).at(st);
-                      idw13.at(n2).at(st) += nb_indiv13s.at(pt) * ( weights.at(n2).at(pt) / sum_weights.at(n2) ); // inverse-distance weighting average
-                      totidw13.at(st) += idw13.at(n2).at(st);
-           }
+                      idw0.at(n2).at(st) += (nb_indiv0s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw1.at(n2).at(st) += (nb_indiv1s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw2.at(n2).at(st) += (nb_indiv2s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw3.at(n2).at(st) += (nb_indiv3s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw4.at(n2).at(st) += (nb_indiv4s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw5.at(n2).at(st) += (nb_indiv5s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw6.at(n2).at(st) += (nb_indiv6s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw7.at(n2).at(st) += (nb_indiv7s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw8.at(n2).at(st) += (nb_indiv8s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw9.at(n2).at(st) += (nb_indiv9s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw10.at(n2).at(st) +=( nb_indiv10s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw11.at(n2).at(st) += (nb_indiv11s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw12.at(n2).at(st) += (nb_indiv12s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                      idw13.at(n2).at(st) += (nb_indiv13s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
+                 }
          }
+
        }
 
 
      cout  << "idw computed...ok " << endl;
 
+
+     // get the sum for normalisation to 1
+     for (int i=0; i<listStockIds.size(); i++)
+     {
+         int st = listStockIds.at(i);
+         for (int n=0; n<idx_n_in_range.at(st).size(); n++)
+          {
+           int n2=idx_n_in_range.at(st).at(n);
+
+           totidw0.at(st) += idw0.at(n2).at(st);
+           totidw1.at(st) += idw1.at(n2).at(st);
+           totidw2.at(st) += idw2.at(n2).at(st);
+           totidw3.at(st) += idw3.at(n2).at(st);
+           totidw4.at(st) += idw4.at(n2).at(st);
+           totidw5.at(st) += idw5.at(n2).at(st);
+           totidw6.at(st) += idw6.at(n2).at(st);
+           totidw7.at(st) += idw7.at(n2).at(st);
+           totidw8.at(st) += idw8.at(n2).at(st);
+           totidw9.at(st) += idw9.at(n2).at(st);
+           totidw10.at(st) += idw10.at(n2).at(st);
+           totidw11.at(st) += idw11.at(n2).at(st);
+           totidw12.at(st) += idw12.at(n2).at(st);
+           totidw13.at(st) += idw13.at(n2).at(st);
+       }
+     }
+ cout  << "sum for normalisation completed...ok " << endl;
 
 
     // export back
@@ -422,29 +439,6 @@ if(st==11){
     for (int n=0; n<idx_n_in_range.at(a_pop).size(); n++)
      {
          int n2=idx_n_in_range.at(a_pop).at(n);
-
-
-/*
- * if(n2==50 && a_pop==11){
-      cout << n2 << " 0: " << idw0.at(n2).at(a_pop)/totidw0.at(a_pop) << endl;
-      cout << "because " << idw0.at(n2).at(a_pop) << "   "<< totidw0.at(a_pop) << endl;
-      cout << n2 << " 1: " << idw1.at(n2).at(a_pop)/totidw1.at(a_pop) << endl;
-      cout << "because " << idw1.at(n2).at(a_pop) << "   "<< totidw1.at(a_pop) << endl;
-      cout << n2 << " 2: " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop) << endl;
-      cout << "because " << idw2.at(n2).at(a_pop) << "   "<< totidw2.at(a_pop) << endl;
-      cout << n2 << " 3: " << idw3.at(n2).at(a_pop)/totidw3.at(a_pop) << endl;
-      cout << "because " << idw3.at(n2).at(a_pop) << "   "<< totidw3.at(a_pop) << endl;
-      cout << n2 << " 4: " << idw4.at(n2).at(a_pop)/totidw4.at(a_pop) << endl;
-      cout << "because " << idw4.at(n2).at(a_pop) << "   "<< totidw4.at(a_pop) << endl;
-      cout << n2 << " 5: " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop) << endl;
-      cout << "because " << idw5.at(n2).at(a_pop) << "   "<< totidw5.at(a_pop) << endl;
-      cout << n2 << " 6: " << idw6.at(n2).at(a_pop)/totidw6.at(a_pop) << endl;
-      cout << "because " << idw6.at(n2).at(a_pop) << "   "<< totidw6.at(a_pop) << endl;
-      int aa;
-      cin>>aa;
-
-}
-*/
 
          avaiField << setprecision(9) << fixed;
 

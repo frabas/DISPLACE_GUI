@@ -71,10 +71,11 @@ int main(int argc, char* argv[])
     int dist_km = 30;
     int graph=40; // 56 for myfish
     double shepard_p=0.5;
+    int tstep=0;
     string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
     //typical usage:
-    //    a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
+    //    a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5 -t 0";
 
 
     int optind=1;
@@ -115,6 +116,11 @@ int main(int argc, char* argv[])
                 optind++;
                 shepard_p = atof(argv[optind]);
             }
+            else if (sw=="-t")
+            {
+                optind++;
+                tstep = atoi(argv[optind]);
+            }
             optind++;
         }
 
@@ -146,9 +152,12 @@ int main(int argc, char* argv[])
     // TODO: filterout the harbours to avoid distributing stocks in them!!
 
 
-    // full
+    // observations on locations input file
     string filename_displace_input_for_data_merger;
-    filename_displace_input_for_data_merger = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/displace_input_for_data_merger.dat";
+    stringstream outtstep;
+    outtstep << tstep;
+    string atstep = outtstep.str();
+    filename_displace_input_for_data_merger = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/displace_input_for_data_merger_"+atstep+".dat";
 
     ifstream in;
     in.open(filename_displace_input_for_data_merger.c_str());

@@ -73,6 +73,10 @@ int main(int argc, char* argv[])
     double shepard_p=0.5;
     string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
+    //typical usage:
+    //    a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
+
+
     int optind=1;
     // decode arguments
     while ((optind < argc) && (argv[optind][0]=='-'))
@@ -436,13 +440,19 @@ for(int i=0; i<listStockIds.size(); i++){
      out << a_pop;
      string a_pop_s = out.str();
 
-     ofstream avaiField;
-    string filename_full_avai_file_out = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s +
+     ofstream avaiField; // full avai
+     string filename_full_avai_file_out = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s +
             "spe_full_avai_szgroup_nodes_"+a_semester+"_updated.dat";
-    avaiField.open(filename_full_avai_file_out.c_str());
+     avaiField.open(filename_full_avai_file_out.c_str());
 
-    avaiField << "idx_node" << " " << "avai" << endl;
-    for (int n=0; n<idx_n_in_range.at(a_pop).size(); n++)
+     ofstream avaiField2;  // selected avai (for Vessel::do_catch())
+     string filename_avai_file_out = inputfolder+"/popsspe_"+folder_name_parameterization+"/static_avai/" + a_pop_s +
+            "spe_avai_szgroup_nodes_"+a_semester+"_updated.dat";
+     avaiField2.open(filename_avai_file_out.c_str());
+
+     avaiField << "idx_node" << " " << "avai" << endl;
+     avaiField2 << "idx_node" << " " << "avai" << endl;
+     for (int n=0; n<idx_n_in_range.at(a_pop).size(); n++)
      {
          int n2=idx_n_in_range.at(a_pop).at(n);
 
@@ -455,6 +465,13 @@ for(int i=0; i<listStockIds.size(); i++){
          }
          avaiField << " " <<  endl;
 
+         if(totidw0.at(a_pop)>1e-5){
+            avaiField2 << setprecision(9) << fixed << n2  << " " << idw0.at(n2).at(a_pop)/totidw0.at(a_pop);
+         } else {
+            avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
+         }
+         avaiField2 << " " <<  endl;
+
          if(totidw1.at(a_pop)>1e-5){
                avaiField << setprecision(9) << fixed << n2  << " " << idw1.at(n2).at(a_pop)/totidw1.at(a_pop);
          } else {
@@ -464,89 +481,111 @@ for(int i=0; i<listStockIds.size(); i++){
 
          if(totidw2.at(a_pop)>1e-5){
                avaiField << setprecision(9) << fixed << n2  << " " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop);
-            } else {
+         } else {
             avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw3.at(a_pop)>1e-5){
+         if(totidw2.at(a_pop)>1e-5){
+                  avaiField2 << setprecision(9) << fixed << n2  << " " << idw2.at(n2).at(a_pop)/totidw2.at(a_pop);
+         } else {
+               avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
+         }
+         avaiField2 << " " <<  endl;
+
+         if(totidw3.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw3.at(n2).at(a_pop)/totidw3.at(a_pop);
-            } else {
+         } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw4.at(a_pop)>1e-5){
+         if(totidw4.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw4.at(n2).at(a_pop)/totidw4.at(a_pop);
-            } else {
+         } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw5.at(a_pop)>1e-5){
+         if(totidw5.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop);
-            } else {
+         } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw6.at(a_pop)>1e-5){
+         if(totidw5.at(a_pop)>1e-5){
+                  avaiField2 << setprecision(9) << fixed << n2  << " " << idw5.at(n2).at(a_pop)/totidw5.at(a_pop);
+         } else {
+              avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
+         }
+         avaiField2 << " " <<  endl;
+
+         if(totidw6.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw6.at(n2).at(a_pop)/totidw6.at(a_pop);
-            } else {
+         } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw7.at(a_pop)>1e-5){
+         if(totidw7.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw7.at(n2).at(a_pop)/totidw7.at(a_pop);
-            } else {
+         } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw8.at(a_pop)>1e-5){
+         if(totidw7.at(a_pop)>1e-5){
+                  avaiField2 << setprecision(9) << fixed << n2  << " " << idw7.at(n2).at(a_pop)/totidw7.at(a_pop);
+         } else {
+               avaiField2 << setprecision(0) << fixed <<  n2 << " " << 0;
+         }
+         avaiField2 << " " <<  endl;
+
+         if(totidw8.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw8.at(n2).at(a_pop)/totidw8.at(a_pop);
-            } else {
+         } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw9.at(a_pop)>1e-5){
+         if(totidw9.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw9.at(n2).at(a_pop)/totidw9.at(a_pop);
-            } else {
+         } else {
             avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw10.at(a_pop)>1e-5){
+         if(totidw10.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw10.at(n2).at(a_pop)/totidw10.at(a_pop);
-            } else {
+         } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw11.at(a_pop)>1e-5){
+         if(totidw11.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw11.at(n2).at(a_pop)/totidw11.at(a_pop);
-            } else {
+         } else {
               avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw12.at(a_pop)>1e-5){
+         if(totidw12.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw12.at(n2).at(a_pop)/totidw12.at(a_pop);
-            } else {
+         } else {
                avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
 
-            if(totidw13.at(a_pop)>1e-5){
+         if(totidw13.at(a_pop)>1e-5){
                   avaiField << setprecision(9) << fixed << n2  << " " << idw13.at(n2).at(a_pop)/totidw13.at(a_pop);
-            } else {
+         } else {
                 avaiField << setprecision(0) << fixed <<  n2 << " " << 0;
-            }
-            avaiField << " " <<  endl;
+         }
+         avaiField << " " <<  endl;
     }
     avaiField.close();
+    avaiField2.close();
 
     /*
      * ofstream avaiFieldSelected;

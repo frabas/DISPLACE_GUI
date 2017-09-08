@@ -1999,7 +1999,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             init_proprecru_per_szgroup.push_back(pos->second);
 
         // input data, avai per szgroup on nodes and presence of the pop
-        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, "");
+        multimap<types::NodeId, double> avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, type_of_avai_field_to_read);
         multimap<types::NodeId, double> full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, sp, folder_name_parameterization, inputfolder, str_rand_avai_file, type_of_avai_field_to_read);
 
         // input data
@@ -4333,7 +4333,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     out << i;
 
                     // read a new spatial_availability
-                    auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, "");
+                    auto avai_szgroup_nodes_with_pop =read_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file,  type_of_avai_field_to_read);
                     auto full_avai_szgroup_nodes_with_pop =read_full_avai_szgroup_nodes_with_pop(a_semester, i, folder_name_parameterization, inputfolder,  str_rand_avai_file, type_of_avai_field_to_read);
                     populations.at(i)->set_full_spatial_availability(full_avai_szgroup_nodes_with_pop);
 

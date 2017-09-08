@@ -70,12 +70,13 @@ int main(int argc, char* argv[])
     int nrow=35309; // 10140 for myfish
     int dist_km = 30;
     int graph=40; // 56 for myfish
-    double shepard_p=0.5;
-    int tstep=0;
+    double shepard_p=1;
+    int tstep=-1;
+    int div =0;
     string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
     //typical usage:
-    //    a_command = "avaifieldupdater.exe -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5 -t 0";
+    //    a_command = "avaifieldupdater.exe -tstep "+tstep+" -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
 
 
     int optind=1;
@@ -111,19 +112,24 @@ int main(int argc, char* argv[])
                 optind++;
                 dist_km = atoi(argv[optind]);
             }
-            else if (sw=="-shepardp")
+            else if (sw=="-shepard_p")
             {
                 optind++;
                 shepard_p = atof(argv[optind]);
             }
-            else if (sw=="-t")
+            else if (sw=="-tstep")
             {
                 optind++;
                 tstep = atoi(argv[optind]);
             }
+            else if (sw=="-div")
+            {
+                optind++;
+                div = atoi(argv[optind]);
+            }
             optind++;
         }
-
+    //cout << "option -tstep in avaifieldupdater is " << tstep << " and shepard_p is " << shepard_p<< endl;
 
     stringstream out;
     out << graph;
@@ -150,7 +156,6 @@ int main(int argc, char* argv[])
 
 
     // TODO: filterout the harbours to avoid distributing stocks in them!!
-
 
     // observations on locations input file
     string filename_displace_input_for_data_merger;

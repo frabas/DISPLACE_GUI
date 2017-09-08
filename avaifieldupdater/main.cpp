@@ -70,6 +70,8 @@ int main(int argc, char* argv[])
     int nrow=35309; // 10140 for myfish
     int dist_km = 30;
     int graph=40; // 56 for myfish
+    double shepard_p=0.5;
+    string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
 
     int optind=1;
     // decode arguments
@@ -86,10 +88,13 @@ int main(int argc, char* argv[])
                 optind++;
                 a_semester = argv[optind];
             }
+            else if (sw == "-a") {
+                inputfolder = argv[++optind];
+            }
             else if (sw=="-graph")
             {
                 optind++;
-                a_semester = argv[optind];
+                graph =  atoi(argv[optind]);
             }
             else if (sw=="-nr")
             {
@@ -101,12 +106,13 @@ int main(int argc, char* argv[])
                 optind++;
                 dist_km = atoi(argv[optind]);
             }
+            else if (sw=="-shepardp")
+            {
+                optind++;
+                shepard_p = atof(argv[optind]);
+            }
             optind++;
         }
-
-    // TODO make it platform independent....
-    string inputfolder="C:/Users/fbas/Documents/GitHub/DISPLACE_input_" +folder_name_parameterization;
-
 
 
     stringstream out;
@@ -322,8 +328,8 @@ int main(int argc, char* argv[])
 
             if (a_dist < dist_km && a_dist > 1e-5) {
                int st=StockIds.at(pt);
-               sum_weights.at(pt).at(st) += (1.0/a_dist);
-               weights.at(n).at(pt)  = (1.0/a_dist);
+               sum_weights.at(pt).at(st) += (1.0/ pow(a_dist, shepard_p));
+               weights.at(n).at(pt)  = (1.0/pow(a_dist, shepard_p));
                idx_n_in_range.at(st).push_back(n);
              } else{
                weights.at(n).at(pt)= 0;

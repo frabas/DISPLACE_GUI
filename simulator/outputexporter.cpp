@@ -236,7 +236,7 @@ void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v,
                 //<< v[ index_v ]->get_idx() << " "
              << v->get_name() << " "
                 // can be used as a trip identifier
-             << v->get_tstep_dep() << " ";
+             << v->get_tstep_dep() << " "
 
              << pop << " ";
 
@@ -244,12 +244,12 @@ void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v,
                 a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
                 for(int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
                         {
-                            mTripCatchesPerSzgroup << setprecision(3) << fixed << a_catch_pop_at_szgroup[pop][sz];
+                            mTripCatchesPerSzgroup << setprecision(0) << fixed << a_catch_pop_at_szgroup[pop][sz] << " ";
                         }
+          mTripCatchesPerSzgroup  << " " << std::endl;
           }
 
 
-       mTripCatchesPerSzgroup  << " " << std::endl;
        }
 
 

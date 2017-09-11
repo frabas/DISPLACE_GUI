@@ -4286,7 +4286,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        // the system command line
                        #if defined(_WIN32)
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
-                           a_command_for_R = "Rscript .\\interactiveRscripts\\input2AvaiUpdater.R "+a_pop+" "+atstep;
+                           // caution with HPC, annoying lower cases in file names and paths required!
+                           a_command_for_R = "Rscript .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
                            cout << "look after " << a_command_for_R << endl;
                            cout << "This supposes StockId " << a_pop << " is informed in displace_input_for_data_merger.csv input file" << endl;
                            system(a_command_for_R.c_str());
@@ -4301,7 +4302,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        }
                        #else
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
-                           a_command_for_R = "Rscript "+inputfolder+"/interactiveRscripts/input2AvaiUpdater.R "+a_pop+" "+atstep;
+                           // caution with HPC, annoying lower cases in file names and paths required!
+                           a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/input2avaiupdater.r "+a_pop+" "+atstep;
                            system(a_command_for_R.c_str());
                            a_command = inputfolder+"/avaifieldupdatertool -tstep " +atstep+" -f "+namefolderinput+ " -a " +inputfolder+ " -s "+a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
                            system(a_command.c_str());

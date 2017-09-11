@@ -2359,6 +2359,7 @@ bool DisplaceModel::loadVessels()
     // (quarter specific, mainly because of the gamma parameters)
     vector<string> vesselids;
     vector<int> vid_is_actives;
+    vector<int> vid_is_part_of_ref_fleets;
     vector<double> speeds;
     vector<double> fuelcons;
     vector<double> lengths;
@@ -2378,7 +2379,7 @@ bool DisplaceModel::loadVessels()
 
     cout << "read_vessels_features() in loadVessels()" << endl;
 
-    if (!read_vessels_features(a_quarter, vesselids, vid_is_actives,
+    if (!read_vessels_features(a_quarter, vesselids, vid_is_actives, vid_is_part_of_ref_fleets,
                                speeds, fuelcons, lengths, vKWs,
                           carrycapacities, tankcapacities, nbfpingspertrips,
                           resttime_par1s, resttime_par2s, av_trip_duration,
@@ -2580,6 +2581,7 @@ bool DisplaceModel::loadVessels()
             possible_metiers,
             freq_possible_metiers,
             vid_is_actives[i],
+            vid_is_part_of_ref_fleets[i],
             speeds[i],
             fuelcons[i],
             lengths[i],

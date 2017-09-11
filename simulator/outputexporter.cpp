@@ -17,6 +17,10 @@ OutputExporter::OutputExporter(const string &basepath, const string &namesimu)
 
     filename=basepath + "/loglike_" + namesimu + ".dat";
     mLogLike.open(filename.c_str());
+
+    filename=basepath + "/tripcatchesperszgroup_" + namesimu + ".dat";
+    mTripCatchesPerSzgroup.open(filename.c_str());
+
 }
 
 void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
@@ -211,6 +215,50 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 
     mLogLike << ss.str();
 }
+
+
+
+void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+
+    // tstep / vessel name / start trip tstep / pop / catches (i.e. include discards) szgroup 0 /  szgroup 1 /... / 13
+
+    int NBSZGROUP=14;
+    vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
+
+    for(int pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    {
+
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
+        {
+
+         mTripCatchesPerSzgroup << tstep << " "
+                //<< v[ index_v ]->get_idx() << " "
+             << v->get_name() << " "
+                // can be used as a trip identifier
+             << v->get_tstep_dep() << " ";
+
+             << pop << " ";
+
+
+                a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
+                for(int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+                        {
+                            mTripCatchesPerSzgroup << setprecision(3) << fixed << a_catch_pop_at_szgroup[pop][sz];
+                        }
+          }
+
+
+       mTripCatchesPerSzgroup  << " " << std::endl;
+       }
+
+
+
+
+
+}
+
+
 
 void OutputExporter::close()
 {

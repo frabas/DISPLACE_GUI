@@ -56,6 +56,7 @@ public:
 private:
         std::string name;
         int vid_is_active;
+        int vid_is_part_of_ref_fleet;
         int idx_vessel;
         int firm_id;
 		//std::shared_ptr<Node> m_location;
@@ -185,7 +186,8 @@ public:
                const std::vector<double> &percent_tac_per_pop,
                const multimap<types::NodeId, int> &possible_metiers,
                const multimap<types::NodeId, double> &freq_possible_metiers,
-               int vid_is_active, double speed, double fuelcons, double length, double KW,
+               int vid_is_active, int vid_is_part_of_ref_fleet,
+               double speed, double fuelcons, double length, double KW,
                double  carrycapacity, double tankcapacity, double nbfpingspertrip,
                double resttime_par1, double resttime_par2, double av_trip_duration,
                double mult_fuelcons_when_steaming, double mult_fuelcons_when_fishing,
@@ -215,6 +217,7 @@ public:
 		int get_idx () const;
         std::string get_name () const;
         int get_vid_is_active () const;
+        int get_vid_is_part_of_ref_fleet() const;
         int get_firm_id () const;
         Node* get_loc() const;
 		Metier* get_metier() const;
@@ -314,6 +317,7 @@ public:
         int get_numTrips()const;
         void set_firm_id (int val);
         void set_vid_is_active (int val);
+        void set_vid_is_part_of_ref_fleet(int val);
         void set_speed (double val);
         void set_vessel_value (double val);
 		void set_resttime_par1 (double val);

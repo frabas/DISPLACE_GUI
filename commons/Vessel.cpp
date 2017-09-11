@@ -76,6 +76,7 @@ Vessel::Vessel(Node* p_location, int idx, string a_name)
     course=0;
     name = a_name;
     vid_is_active=1;
+    vid_is_part_of_ref_fleet=0;
     inharbour = true;
     timeforrest = 0.0;
     state = 3;
@@ -97,7 +98,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
                const vector<double> &_vessel_betas_per_pop,
                const vector<double> &_percent_tac_per_pop,
                const multimap<types::NodeId, int> &_possible_metiers, const multimap<types::NodeId, double> &_freq_possible_metiers,
-               int a_vid_is_active, double a_speed, double a_fuelcons,  double a_length, double a_KW,
+               int a_vid_is_active, int a_vid_is_part_of_ref_fleet, double a_speed, double a_fuelcons,  double a_length, double a_KW,
                double  a_carrycapacity, double a_tankcapacity, double a_nbfpingspertrip,
                double a_resttime_par1, double a_resttime_par2, double a_av_trip_duration,
                double _mult_fuelcons_when_steaming, double _mult_fuelcons_when_fishing,
@@ -144,6 +145,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     // overwrite by the setter() in main...
     freq_possible_metiers = _freq_possible_metiers;
     vid_is_active=a_vid_is_active;
+    vid_is_part_of_ref_fleet=a_vid_is_part_of_ref_fleet;
     speed = a_speed;			 //  *0.8; // CAUTION try to calib
     fuelcons = a_fuelcons;
     length = a_length;
@@ -352,6 +354,11 @@ string Vessel::get_name () const
 int Vessel::get_vid_is_active () const
 {
     return(vid_is_active);
+}
+
+int Vessel::get_vid_is_part_of_ref_fleet() const
+{
+    return(vid_is_part_of_ref_fleet);
 }
 
 Node* Vessel::get_loc() const
@@ -904,6 +911,12 @@ void Vessel::set_vid_is_active(int _vid_is_active)
 {
     vid_is_active= _vid_is_active;
 }
+
+void Vessel::set_vid_is_part_of_ref_fleet(int _vid_is_part_of_ref_fleet)
+{
+    vid_is_part_of_ref_fleet= _vid_is_part_of_ref_fleet;
+}
+
 
 void Vessel::set_speed(double _speed)
 {

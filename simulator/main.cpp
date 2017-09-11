@@ -2486,6 +2486,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // (quarter specific, mainly because of the gamma parameters)
     vector<string> vesselids;
     vector<int> vid_is_actives;
+    vector<int> vid_is_part_of_ref_fleets;
     vector<double> speeds;
     vector<double> fuelcons;
     vector<double> lengths;
@@ -2503,7 +2504,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<int> firm_ids;
     vector<VesselCalendar> calendars;
 
-    if (!read_vessels_features(a_quarter, vesselids,  vid_is_actives,
+    if (!read_vessels_features(a_quarter, vesselids,  vid_is_actives, vid_is_part_of_ref_fleets,
                                speeds, fuelcons, lengths, vKWs,
                                carrycapacities, tankcapacities, nbfpingspertrips,
                                resttime_par1s, resttime_par2s, av_trip_duration,
@@ -2749,6 +2750,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 possible_metiers,
                 freq_possible_metiers,
                 vid_is_actives[i],
+                vid_is_part_of_ref_fleets[i],
                 speeds[i],
                 fuelcons[i],
                 lengths[i],
@@ -3891,6 +3893,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
             vesselids.clear();
             vid_is_actives.clear();
+            vid_is_part_of_ref_fleets.clear();
             speeds.clear();
             fuelcons.clear();
             lengths.clear();
@@ -3908,7 +3911,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             calendars.clear();
 
             // then, re-read...
-            if (!read_vessels_features(a_quarter, vesselids,  vid_is_actives,
+            if (!read_vessels_features(a_quarter, vesselids,  vid_is_actives, vid_is_part_of_ref_fleets,
                                        speeds, fuelcons, lengths, vKWs,
                                        carrycapacities, tankcapacities, nbfpingspertrips,
                                        resttime_par1s, resttime_par2s, av_trip_duration,

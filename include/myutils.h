@@ -277,6 +277,7 @@ bool COMMONSSHARED_EXPORT fill_in_fbar_ages_min_max (istream& in, vector<double>
 bool COMMONSSHARED_EXPORT fill_from_metier_specifications (istream& in, multimap<string, double>& infos);
 bool COMMONSSHARED_EXPORT fill_from_vessels_specifications(istream& in, vector<string>& names,
                                       vector<int>& vid_is_actives,
+                                      vector<int>& vid_is_part_of_ref_fleets,
                                       vector<double>& speeds,
                                       vector<double>& fuelcons,
                                       vector<double>& lengths,

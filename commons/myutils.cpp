@@ -920,6 +920,7 @@ fill in the vessel attributes
 bool fill_from_vessels_specifications (istream& in,
                                        vector<string>& names,
                                        vector<int>& vid_is_actives,
+                                       vector<int>& vid_is_part_of_ref_fleets,
                                        vector<double>& speeds,
                                        vector<double>& fuelcons,
                                        vector<double>& lengths,
@@ -953,7 +954,7 @@ bool fill_from_vessels_specifications (istream& in,
 
             boost::split(fields, line, boost::is_any_of("|"));
 
-            if (fields.size() < 21) {
+            if (fields.size() < 22) {
                 return false;   // all fields are MANDATORY.
             }
 
@@ -979,6 +980,7 @@ bool fill_from_vessels_specifications (istream& in,
             mult_fuelcons_when_returning.push_back(boost::lexical_cast<double>(fields[14].c_str()));
             mult_fuelcons_when_inactive.push_back(boost::lexical_cast<double>(fields[15].c_str()));
             firm_ids.push_back(boost::lexical_cast<int>(fields[20].c_str()));
+            vid_is_part_of_ref_fleets.push_back(boost::lexical_cast<int>(fields[21].c_str()));
 
             calendars.push_back(calendar);
         }

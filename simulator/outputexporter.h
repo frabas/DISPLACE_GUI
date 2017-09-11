@@ -15,11 +15,14 @@ class OutputExporter
     std::string mBasePath;
     std::ofstream mVmsLike;
     std::ofstream mLogLike;
+    std::ofstream mTripCatchesPerSzgroup;
+
 public:
     OutputExporter(const std::string &basepath, const std::string &namesimu);
 
     void exportVmsLike(unsigned int tstep, Vessel *vessel);
     void exportLogLike(unsigned int tstep, Vessel *vessel, const std::vector<Population* >& populations, std::vector<int> &implicit_pops);
+    void exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *vessel, const std::vector<Population* >& populations, std::vector<int> &implicit_pops);
 
     void close();
 

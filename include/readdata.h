@@ -66,6 +66,7 @@ bool COMMONSSHARED_EXPORT read_scenario_config_file(std::istream &stream, displa
 bool COMMONSSHARED_EXPORT read_vessels_features(string a_quarter,
                            vector<string>& vesselids,
                            vector<int>& vid_is_actives,
+                           vector<int>& vid_is_part_of_ref_fleets,
                            vector<double>& speeds,
                            vector<double>& fuelcons,
                            vector<double>& lengths,

@@ -208,6 +208,12 @@ static void manage_vessel(int idx_v)
                     vessels[index_v]->updateTripsStatistics(populations, implicit_pops, tstep);
                     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(tstep, vessels[index_v], populations, implicit_pops)));
                     OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
+
+
+                    if(vessels[index_v]->get_vid_is_part_of_ref_fleet()){
+                        OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[index_v], populations, implicit_pops);
+                    }
+
 #if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);

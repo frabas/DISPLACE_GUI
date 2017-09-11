@@ -2,15 +2,21 @@ all:
 	(cd formats && make -f Makefile.hpc)
 	(cd commons && make -f Makefile.hpc)
 	(cd simulator && make -f Makefile.hpc)
+	(cd avaifieldshuffler && make -f Makefile.hpc)
+	(cd avaifieldupdater && make -f Makefile.hpc)
 
 install:
 	(cd formats && make -f Makefile.hpc install)
 	(cd commons && make -f Makefile.hpc install)
 	(cd simulator && make -f Makefile.hpc install)
+	(cd avaifieldshuffler && make -f Makefile.hpc install)
+	(cd avaifieldupdater && make -f Makefile.hpc install)
 
 clean:
 	(cd formats && make -f Makefile.hpc clean)
 	(cd commons && make -f Makefile.hpc clean)
 	(cd simulator && make -f Makefile.hpc clean)
+	(cd avaifieldshuffler && make -f Makefile.hpc clean)
+	(cd avaifieldupdater && make -f Makefile.hpc clean)
 
 

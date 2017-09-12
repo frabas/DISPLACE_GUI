@@ -232,7 +232,8 @@ void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v,
         if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
         {
 
-         mTripCatchesPerSzgroup << tstep << " "
+         std::ostringstream ss;
+         ss << tstep << " "
                 //<< v[ index_v ]->get_idx() << " "
              << v->get_name() << " "
                 // can be used as a trip identifier
@@ -244,9 +245,12 @@ void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v,
                 a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
                 for(int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
                         {
-                            mTripCatchesPerSzgroup << setprecision(0) << fixed << a_catch_pop_at_szgroup[pop][sz] << " ";
+                            ss << setprecision(0) << fixed << a_catch_pop_at_szgroup[pop][sz] << " ";
                         }
-          mTripCatchesPerSzgroup  << " " << std::endl;
+
+          ss  << " " << std::endl;
+
+          mTripCatchesPerSzgroup << ss.str();
           }
 
 
@@ -263,6 +267,7 @@ void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v,
 void OutputExporter::close()
 {
     mVmsLike.close();
+    mTripCatchesPerSzgroup.close();
 }
 
 bool OutputExporter::instantiate(const string &basepath, const string &namesimu)

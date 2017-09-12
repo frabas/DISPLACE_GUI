@@ -137,8 +137,8 @@ int main(int argc, char* argv[])
     double catch_szgroup7=0, catch_szgroup8=0, catch_szgroup9=0, catch_szgroup10=0, catch_szgroup11=0, catch_szgroup12=0, catch_szgroup13=0;
 
     std::string dummystring;
-    getline (in_vms, dummystring); // eat the heading
-    getline (in_catches, dummystring); // eat the heading
+   // getline (in_vms, dummystring); // eat the heading
+   // getline (in_catches, dummystring); // eat the heading
     mergedvms << "tstep" << " " << "vname" << " " << "tstep_dep" << " " <<
                   "lon" << " " << "lat" << " " << "course" << " " << "cumfuelcons" <<  " " << "state" << " " << "popid" << " "
                     "catch_szgroup.0" << " " << "catch_szgroup.1" << " " << "catch_szgroup.2" << " " <<
@@ -217,7 +217,7 @@ int main(int argc, char* argv[])
             int found=0;
 
             std::string line_in_catches;
-            if(state==1) while (std::getline(in_catches, line_in_catches) && found<nbpops) { // search for merging only if VMS point corresponds to a fishing position
+            if(state==1) while (std::getline(in_catches, line_in_catches) && found<nbpops) { // search for merging only if VMS point corresponds to a fishing position (i.e. state =1)
 
                //cout << "Processing catch file line " << linenum2 << " ...found so far: " << found << endl;
 

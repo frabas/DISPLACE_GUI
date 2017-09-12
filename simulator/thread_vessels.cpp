@@ -214,6 +214,7 @@ static void manage_vessel(int idx_v)
                         OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[index_v], populations, implicit_pops);
                     }
 
+
 #if 0
                     std::ostringstream ss;
                     vessels[ index_v ]->export_loglike (ss, populations, tstep, nbpops);

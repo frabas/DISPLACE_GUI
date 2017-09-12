@@ -3,7 +3,8 @@ CONFIG+=ordered
 SUBDIRS+=formats commons QMapControl qtcommons qtgui simulator dteditor tseditor objeditor \
     scheduler \
     avaifieldshuffler \
-    avaifieldupdater
+    avaifieldupdater \
+    vmsmerger
 
 CONFIG += unit-test
 SUBDIRS += tests \

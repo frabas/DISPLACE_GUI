@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 
     // open vmslike file
     string filename_vmslike;
-    filename_vmslike = outputfolder+"/"+namefolderoutput+"/vmslike_"+a_simu+".dat";
+    filename_vmslike = outputfolder+"/"+namefolderoutput+"/vmslikefpingsonly_"+a_simu+".dat";
 
     ifstream in_vms;
     in_vms.open(filename_vmslike.c_str());
@@ -193,6 +193,8 @@ int main(int argc, char* argv[])
 
      //...then a second screening
      linenum = 0;
+    //int not_found[400000] = {0};
+    //not_found[0]=1;
      cout << "Processing VMS line..." << endl;
      while (std::getline(in_vms, line_in_vms)) { // process line
 
@@ -214,12 +216,14 @@ int main(int argc, char* argv[])
             if(linenum!=0) last_key_file1= key_file1;
             key_file1=vname_file1+"_"+tstep_dep_file1_s;
 
-            int found=0;
 
+            int found=0;
+            linenum2=0;
             std::string line_in_catches;
             if(state==1) while (std::getline(in_catches, line_in_catches) && found<nbpops) { // search for merging only if VMS point corresponds to a fishing position (i.e. state =1)
 
                //cout << "Processing catch file line " << linenum2 << " ...found so far: " << found << endl;
+               //if(not_found[linenum2]!=-1){
 
                std::istringstream iss(line_in_catches);
                if (!(iss   >> tstep_file2 >> vname_file2 >> tstep_dep_file2 >> popid >> catch_szgroup0 >> catch_szgroup1 >> catch_szgroup2 >>
@@ -242,6 +246,7 @@ int main(int argc, char* argv[])
                 // populate the merged file hereafter:
                if(key_file1==key_file2){
                    ++found;
+                   //not_found[linenum2]=-1;
 
                    a_countpings = count_pings[key_file1];
                    mergedvms << tstep_file1 << " " << vname_file1 << " " << key_file1 << " " <<
@@ -251,8 +256,9 @@ int main(int argc, char* argv[])
                             catch_szgroup6/a_countpings << " " << catch_szgroup7/a_countpings << " " << catch_szgroup8/a_countpings << " " <<
                             catch_szgroup9/a_countpings << " " << catch_szgroup10/a_countpings << " " << catch_szgroup11/a_countpings << " " <<
                             catch_szgroup12/a_countpings << " " << catch_szgroup13/a_countpings  << endl;
-                   }
-            ++linenum2;
+              }
+              ++linenum2;
+             //}
             }
             in_catches.clear();
             in_catches.seekg(0, ios::beg);
@@ -266,9 +272,6 @@ int main(int argc, char* argv[])
 
 
 
-
-
-    cout  << "export back the availability at szgroup field...ok " << endl;
 
 
     return 0;

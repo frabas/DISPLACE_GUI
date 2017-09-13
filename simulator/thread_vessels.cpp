@@ -458,7 +458,7 @@ static void manage_vessel(int idx_v)
        if(export_vmslike && tstep<8641) {
             OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
         }
-       if( vessels[ index_v ]->get_state()==1) { // fishing state
+       if( vessels[ index_v ]->get_state()==1 && vessels[ index_v ]->get_vid_is_part_of_ref_fleet()) { // fishing state
             OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[index_v],  populations, implicit_pops);
         }
     }

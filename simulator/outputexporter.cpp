@@ -276,7 +276,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
 
-    // tstep / vessel name / start trip tstep / pop / catches (i.e. landings only!) szgroup 0 /  szgroup 1 /... / 13
+    // tstep / vessel name / start trip tstep / pop / TRIP catches (i.e. landings only!, in weight) szgroup 0 /  szgroup 1 /... / 13
 
     int NBSZGROUP=14;
     vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));

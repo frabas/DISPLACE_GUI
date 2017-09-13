@@ -3546,6 +3546,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     // init
     vector< vector<double> > a_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
+    vector< vector<double> > a_ping_catch_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
     vector< vector<double> > a_discards_pop_at_szgroup(nbpops, vector<double>(NBSZGROUP));
 
     // write down initial pop number in popdyn

@@ -4,6 +4,9 @@
 #include <iomanip>
 #include <map>
 #include <string>
+#include <vector>
+
+#include <filesystem>
 
 using namespace std;
 
@@ -36,7 +39,7 @@ int main(int argc, char* argv[])
     int foo=0;
 
     //typical usage:
-    //    a_command = "vmsmerger.exe -f " +namefolderinput+ " -o " +outputfolder+ " -simu " +a_simu+ " -start " + tstart + " -tend " endt + " nbpops " + nbpops;
+    //    a_command = "vmsmerger.exe -f " +namefolderinput+ " -o " +outputfolder+ " -simu " +a_simu+ " -start " + tstart + " -tend " endt + " -nbpops " + nbpops;
 
 
     int optind=1;
@@ -104,16 +107,28 @@ int main(int argc, char* argv[])
     string filename_catches;
     filename_catches = outputfolder+"/"+namefolderoutput+"/tripcatchesperszgroup_"+a_simu+".dat";
 
-    ifstream in_catches;
+    fstream in_catches;
     in_catches.open(filename_catches.c_str());
     if(in_catches.fail())
     {
         open_file_error(filename_catches.c_str());
         //return 1;
-        cout << "error when opening the vmslike file..." << endl;
+        cout << "error when opening the in_catch file..." << endl;
     int aa;
     cin >> aa;
     }
+
+    string filename_catches_temp1;
+    filename_catches_temp1 = outputfolder+"/"+namefolderoutput+"/tripcatchesperszgroup_"+a_simu+"_temp1.dat";
+    std::fstream in_catches_temp1( filename_catches_temp1, std::ios::binary ) ;
+    in_catches_temp1 << in_catches.rdbuf() ;
+    in_catches_temp1.close();
+
+    string filename_catches_temp2;
+    filename_catches_temp2 = outputfolder+"/"+namefolderoutput+"/tripcatchesperszgroup_"+a_simu+"_temp2.dat";
+    std::fstream in_catches_temp2( filename_catches_temp2, std::ios::binary ) ;
+    in_catches_temp2 << in_catches.rdbuf() ;
+    in_catches_temp2.close();
 
 
 
@@ -136,7 +151,7 @@ int main(int argc, char* argv[])
     double catch_szgroup0=0, catch_szgroup1=0, catch_szgroup2=0, catch_szgroup3=0, catch_szgroup4=0, catch_szgroup5=0, catch_szgroup6=0;
     double catch_szgroup7=0, catch_szgroup8=0, catch_szgroup9=0, catch_szgroup10=0, catch_szgroup11=0, catch_szgroup12=0, catch_szgroup13=0;
 
-    std::string dummystring;
+   // std::string dummystring;
    // getline (in_vms, dummystring); // eat the heading
    // getline (in_catches, dummystring); // eat the heading
     mergedvms << "tstep" << " " << "vname" << " " << "tstep_dep" << " " <<
@@ -147,7 +162,7 @@ int main(int argc, char* argv[])
                      "catch_szgroup.9" << " " << "catch_szgroup.10" << " " << "catch_szgroup.11" << " " <<
                      "catch_szgroup.12" << " " << "catch_szgroup.13" << endl;
 
-     int linenum = 0, linenum2=0;
+     int linenum = 0;
      int a_countpings = 1;
      map <string, int> count_pings;
      string key_file1="";
@@ -159,8 +174,7 @@ int main(int argc, char* argv[])
      // a first screening to get count pings
      cout << "Getting nb of pings per trip between tstart "<< tstart << " and tend " << tend << "..." << endl;
      std::string line_in_vms;
-     while (std::getline(in_vms, line_in_vms)) { // process line
-
+     while (!std::getline(in_vms, line_in_vms).eof()) { // process line
        //  cout << "Processing VMS line " << linenum << endl;
 
             std::istringstream iss(line_in_vms);
@@ -186,17 +200,17 @@ int main(int argc, char* argv[])
      }
      in_vms.clear();
      in_vms.seekg(0, ios::beg);
+
+
      cout << "Getting nb of pings per trip...OK" << endl;
 
 
 
-
      //...then a second screening
-     linenum = 0;
-    //int not_found[400000] = {0};
-    //not_found[0]=1;
+    linenum=0;
+    std::vector<int> already_found (400000, 0);
      cout << "Processing VMS line..." << endl;
-     while (std::getline(in_vms, line_in_vms)) { // process line
+     while (!std::getline(in_vms, line_in_vms).eof()) { // process line
 
          cout << "Processing VMS line " << linenum << endl;
 
@@ -218,22 +232,31 @@ int main(int argc, char* argv[])
 
 
             int found=0;
-            linenum2=0;
+            int linenum2=0;
             std::string line_in_catches;
-            if(state==1) while (std::getline(in_catches, line_in_catches) && found<nbpops) { // search for merging only if VMS point corresponds to a fishing position (i.e. state =1)
 
-               //cout << "Processing catch file line " << linenum2 << " ...found so far: " << found << endl;
-               //if(not_found[linenum2]!=-1){
+           // in_catches_temp1.open(filename_catches_temp1.c_str());
+           // in_catches_temp2.open(filename_catches_temp2.c_str());
+           // in_catches_temp1 << in_catches_temp2.rdbuf();
+           // in_catches_temp2.close();
+           // in_catches_temp2.open(filename_catches_temp2.c_str(), std::ofstream::out | std::ofstream::trunc);
+
+
+            if(state==1) while (!std::getline(in_catches, line_in_catches).eof()  && found<nbpops) { // search for merging only if VMS point corresponds to a fishing position (i.e. state =1)
+
+           //    cout << "Processing catch file line " << linenum2 << " ...found so far: " << found << endl;
+            //   if(!already_found[linenum2]){ // do not skip
 
                std::istringstream iss(line_in_catches);
                if (!(iss   >> tstep_file2 >> vname_file2 >> tstep_dep_file2 >> popid >> catch_szgroup0 >> catch_szgroup1 >> catch_szgroup2 >>
                         catch_szgroup3 >> catch_szgroup4 >> catch_szgroup5 >> catch_szgroup6 >> catch_szgroup7 >> catch_szgroup8 >>
                           catch_szgroup9 >> catch_szgroup10 >> catch_szgroup11 >> catch_szgroup12 >> catch_szgroup13)) {
                                        cout << "error at line " << linenum2 << ": fix the input catch file for missing or mixed fields!!" << endl;
+                                       cout << "tstep_file2 is " << tstep_file2 << ", vname_file2 is " << vname_file2 << endl;
                                        in_catches.clear();
                                        in_catches.seekg(0, ios::beg);
-                                       break;
-                                       } // error
+                                         break;
+               } // error
 
 
                 stringstream out;
@@ -246,7 +269,7 @@ int main(int argc, char* argv[])
                 // populate the merged file hereafter:
                if(key_file1==key_file2){
                    ++found;
-                   //not_found[linenum2]=-1;
+                   already_found[linenum2]=1;
 
                    a_countpings = count_pings[key_file1];
                    mergedvms << tstep_file1 << " " << vname_file1 << " " << key_file1 << " " <<
@@ -256,15 +279,24 @@ int main(int argc, char* argv[])
                             catch_szgroup6/a_countpings << " " << catch_szgroup7/a_countpings << " " << catch_szgroup8/a_countpings << " " <<
                             catch_szgroup9/a_countpings << " " << catch_szgroup10/a_countpings << " " << catch_szgroup11/a_countpings << " " <<
                             catch_szgroup12/a_countpings << " " << catch_szgroup13/a_countpings  << endl;
-              }
-              ++linenum2;
-             //}
-            }
-            in_catches.clear();
-            in_catches.seekg(0, ios::beg);
+             /* } else{
+                    in_catches_temp2  << tstep_file2 << " " << vname_file2 << " " << tstep_dep_file2 << " " << popid << " " <<
+                                         catch_szgroup0 << " " << catch_szgroup1 << " " << catch_szgroup2 <<" " <<
+                                           catch_szgroup3 << " " << catch_szgroup4 << " " <<  catch_szgroup5 << " " << catch_szgroup6 << " " <<
+                                            catch_szgroup7 << " " << catch_szgroup8 << " " <<
+                                             catch_szgroup9 << " " << catch_szgroup10 << " " << catch_szgroup11 << " " << catch_szgroup12 << " " << catch_szgroup13  << endl;
+             */
+               }
+           // }
 
-       ++linenum;
-       }
+         ++linenum2;
+        }
+        in_catches.clear();
+        in_catches.seekg(0, ios::beg);
+        in_catches_temp2.close();
+
+      ++linenum;
+     }
     mergedvms.close();
     cout  << "Process VMS lines..ok " << endl;
 

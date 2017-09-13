@@ -195,9 +195,11 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
 
     // init at 0 the matrix of catches
     dout(cout  << "init matrix of catches" << endl);
-    vector< vector<double> > init_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
+    vector< vector<double> > init_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups));// trip based landings...
+    vector< vector<double> > init_ping_catch_pop_at_szgroup(nbpops, vector<double>(nbszgroups)); // ...instantaneous catches (land+disc)
     vector< vector<double> > init_discards_pop_at_szgroup(nbpops, vector<double>(nbszgroups));
     catch_pop_at_szgroup= init_catch_pop_at_szgroup;
+    ping_catch_pop_at_szgroup=init_ping_catch_pop_at_szgroup;
     discards_pop_at_szgroup= init_discards_pop_at_szgroup;
     for(int i = 0; i < nbpops; i++)
     {
@@ -206,6 +208,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
         {
 
             catch_pop_at_szgroup[i][j] = 0;
+            ping_catch_pop_at_szgroup[i][j] = 0;
             dout(cout  << catch_pop_at_szgroup[i][j] << " ");
             discards_pop_at_szgroup[i][j] = 0;
             dout(cout  << discards_pop_at_szgroup[i][j] << " ");
@@ -714,6 +717,12 @@ const vector<vector<double> > &Vessel::get_catch_pop_at_szgroup() const
 {
     return(catch_pop_at_szgroup);
 }
+
+const vector<vector<double> > &Vessel::get_ping_catch_pop_at_szgroup() const
+{
+    return(ping_catch_pop_at_szgroup);
+}
+
 
 const vector<vector<double> > &Vessel::get_discards_pop_at_szgroup() const
 {
@@ -2067,6 +2076,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     // declare with length nbpops
     vector<double> tot_catch_per_pop(  catch_pop_at_szgroup.size() );
 
+
     // for loop over pop
     for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
     {
@@ -2162,6 +2172,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 for(int szgroup=0; szgroup < (int)avail_biomass.size(); szgroup++)
                 {
                     catch_per_szgroup[szgroup]=0; // init
+                    ping_catch_pop_at_szgroup[pop][szgroup]=0; // (re)init
 
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
@@ -2428,8 +2439,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             //if(idx_node==186 && namepop==3) dout(cout << " cumulated removals_per_szgroup[szgroup] " << removals_per_szgroup[szgroup] << endl);
 
                             // caution: cumul landings at the trip level
-                            catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // in weight
+                            catch_pop_at_szgroup[pop][szgroup] += landings_per_szgroup[szgroup]; // (landings only) in weight
                             discards_pop_at_szgroup[pop][szgroup] += discards_per_szgroup[szgroup];// in weight
+                            ping_catch_pop_at_szgroup[pop][szgroup]=landings_per_szgroup[szgroup]+discards_per_szgroup[szgroup]; // ping catch in weight
                         }
                         else
                         {
@@ -2445,6 +2457,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                             catch_pop_at_szgroup[pop][szgroup] = 0; // in weight
                             discards_pop_at_szgroup[pop][szgroup] = 0;// in weight
+                            ping_catch_pop_at_szgroup[pop][szgroup]=0;
+
 
                         }
 
@@ -2531,6 +2545,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 {
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
+                                    ping_catch_pop_at_szgroup[pop][szgroup]=0;
+
                                 }
 
                             }
@@ -2577,6 +2593,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 {
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
+                                    ping_catch_pop_at_szgroup[pop][szgroup]=0;
+
                                 }
 
                             }
@@ -2772,6 +2790,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             {
                 // ON THIS NODE, cpue per hour, see the R code
                 catch_pop_at_szgroup[pop][0] += cpue*PING_RATE;
+                ping_catch_pop_at_szgroup[pop][0]=cpue*PING_RATE;
                 discards_pop_at_szgroup[pop][0] = 0;
                 // CUMUL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
@@ -2798,6 +2817,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             else
             {
                 catch_pop_at_szgroup[pop][0] +=0;
+                ping_catch_pop_at_szgroup[pop][0]+=0;
             }
         }
 
@@ -2862,6 +2882,19 @@ void Vessel::clear_catch_pop_at_szgroup()
         }
     }
 }
+
+void Vessel::clear_ping_catch_pop_at_szgroup()
+{
+    dout(cout  << "clear catches..." << endl);
+    for(unsigned int i = 0; i < ping_catch_pop_at_szgroup.size(); i++)
+    {
+        for(unsigned int j = 0; j < ping_catch_pop_at_szgroup[i].size(); j++)
+        {
+            ping_catch_pop_at_szgroup[i][j] = 0;
+        }
+    }
+}
+
 
 
 void Vessel::clear_discards_pop_at_szgroup()

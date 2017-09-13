@@ -22,7 +22,7 @@ public:
     OutputExporter(const std::string &basepath, const std::string &namesimu);
 
     void exportVmsLike(unsigned int tstep, Vessel *vessel);
-    void exportVmsLikeFPingsOnly (unsigned int tstep, Vessel *vessel);
+    void exportVmsLikeFPingsOnly (unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
     void exportLogLike(unsigned int tstep, Vessel *vessel, const std::vector<Population* >& populations, std::vector<int> &implicit_pops);
     void exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *vessel, const std::vector<Population* >& populations, std::vector<int> &implicit_pops);
 

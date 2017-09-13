@@ -150,6 +150,7 @@ private:
                                          // dynamic
 		bool inharbour, inactive, natio;
         std::vector < std::vector<double> > catch_pop_at_szgroup;
+        std::vector < std::vector<double> > ping_catch_pop_at_szgroup;
         std::vector < std::vector<double> > discards_pop_at_szgroup;
         std::vector<int> individual_tac_per_pop;
         std::vector<double> fishing_credits;
@@ -298,6 +299,7 @@ public:
         const std::vector<std::vector<double> > &get_gshape_cpue_nodes_species() const;
         const std::vector<std::vector<double> > &get_gscale_cpue_nodes_species() const;
         const std::vector < std::vector<double> > &get_catch_pop_at_szgroup() const;
+        const std::vector < std::vector<double> > &get_ping_catch_pop_at_szgroup() const;
         const std::vector < std::vector<double> > &get_discards_pop_at_szgroup() const;
         int read_message() const;
         types::NodeId get_previous_harbour_idx() const;
@@ -396,6 +398,7 @@ public:
                       bool &is_tacs, bool &is_individual_vessel_quotas, bool &check_all_stocks_before_going_fishing,
                       bool &is_discard_ban, bool &is_fishing_credits, bool &is_impact_benthos_N);
 		void clear_catch_pop_at_szgroup();
+        void clear_ping_catch_pop_at_szgroup();
         void clear_discards_pop_at_szgroup();
         void compute_experiencedcpue_fgrounds();
 		void compute_experiencedcpue_fgrounds_per_pop();

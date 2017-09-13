@@ -43,21 +43,56 @@ void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
              << vessel->get_state() << " " <<  endl;
 }
 
-void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel)
+void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,  const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
     std::unique_lock<std::mutex> locker(glob_mutex);
 
-    if(vessel->get_state()==1) mVmsLikeFPingsOnly << tstep << " "
-                //<< vessels[ index_v ]->get_idx() << " "
-             << vessel->get_name() << " "
-                // can be used as a trip identifier
-             << vessel->get_tstep_dep() << " "
-             << setprecision(3) << fixed << vessel->get_x() << " "
-             << setprecision(3) << fixed << vessel->get_y() << " "
-             << setprecision(0) << fixed << vessel->get_course() << " "
-                //<< vessels[ index_v ]->get_inharbour() << " "
-             << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
-             << vessel->get_state() << " " <<  endl;
+    // tstep / vessel name /  start trip tstep / lon / lat/ course / state / pop / catches (i.e. landings only!, in weight) szgroup 0 /  szgroup 1 /... / 13
+    // note that combining vessel_name and start_trip_tstep will give a trip id.
+
+    std::ostringstream ss;
+
+        int NBSZGROUP=14;
+        vector< vector<double> > a_ping_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
+
+        for(int pop = 0; pop < a_ping_catch_pop_at_szgroup.size(); pop++)
+            {
+
+            if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
+               {
+
+                ss << tstep << " "
+                            //<< vessels[ index_v ]->get_idx() << " "
+                         << vessel->get_name() << " "
+                            // can be used as a trip identifier
+                         << vessel->get_tstep_dep() << " "
+                         << setprecision(3) << fixed << vessel->get_x() << " "
+                         << setprecision(3) << fixed << vessel->get_y() << " "
+                         << setprecision(0) << fixed << vessel->get_course() << " "
+                            //<< vessels[ index_v ]->get_inharbour() << " "
+                         << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
+                         << vessel->get_state() << " " ;
+
+                ss << pop << " ";
+
+
+                a_ping_catch_pop_at_szgroup = vessel->get_ping_catch_pop_at_szgroup();
+                for(int sz = 0; sz < a_ping_catch_pop_at_szgroup[pop].size(); sz++)
+                        {
+                            ss << setprecision(0) << fixed << a_ping_catch_pop_at_szgroup[pop][sz] << " ";
+                        }
+
+                ss  << " " << std::endl;
+
+
+
+                }
+
+
+            }
+        mVmsLikeFPingsOnly << ss.str();
+
+
 }
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
@@ -241,7 +276,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 void OutputExporter::exportTripCatchPopPerSzgroup(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
 
-    // tstep / vessel name / start trip tstep / pop / catches (i.e. include discards) szgroup 0 /  szgroup 1 /... / 13
+    // tstep / vessel name / start trip tstep / pop / catches (i.e. landings only!) szgroup 0 /  szgroup 1 /... / 13
 
     int NBSZGROUP=14;
     vector< vector<double> > a_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));

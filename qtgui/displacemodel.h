@@ -422,6 +422,7 @@ public:
     void collectPopCumsubsurfacesweptarea(int step, int node_idx, double cumsubsurfacesweptarea);
     void collectPopCumcatches(int step, int node_idx, double cumcatches);
     void collectPopCumcatchesWithThreshold(int step, int node_idx, double cumcatches_with_threshold);
+    void collectPopCumdiscards(int step, int node_idx, double cumdiscards);
     void collectPopTariffs(int step, int node_idx, vector<double> tariffs);
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);

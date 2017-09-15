@@ -93,6 +93,7 @@ void VesselMapObject::updateProperties()
     text += QString("<b>Fuel:</b> %1<br/>").arg(mVessel->mVessel->get_cumfuelcons());
     text += QString("<b>State:</b> %2 (%1)<br/>").arg(mVessel->mVessel->get_state()).arg(vesselStateToString(mVessel->mVessel->get_state()));
     text += QString("<b>Cum Catches:</b> %1<br/>").arg(mVessel->mVessel->get_cumcatches());
+    text += QString("<b>Cum Discards:</b> %1<br/>").arg(mVessel->mVessel->get_cumdiscards());
     text += QString("<b>Time at sea:</b> %1<br/>").arg(mVessel->mVessel->get_timeatsea());
     text += QString("<b>Reason To go Back:</b> %1<br/>").arg(mVessel->mVessel->get_reason_to_go_back());
 

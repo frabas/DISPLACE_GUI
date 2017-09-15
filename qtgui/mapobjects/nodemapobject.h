@@ -54,6 +54,7 @@ public:
         GraphNodeWithCumSubsurfaceSweptAreaRole,
         GraphNodeWithCumCatchesRole,
         GraphNodeWithCumCatchesWithThresholdRole,
+        GraphNodeWithCumDiscardsRole,
         GraphNodeWithPopImpact,
         GraphNodeWithPopCumcatches,
         GraphNodeWithBenthosBiomass,

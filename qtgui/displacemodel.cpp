@@ -526,6 +526,12 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
         }
         mNodesStatsDirty = true;
     }
+    if (fields[0] == "cumdiscards") {
+        for (int i = 0; i < num; ++i) {
+            mNodes.at(start + i)->set_cumdiscards(fields[4+i].toDouble());
+        }
+        mNodesStatsDirty = true;
+    }
     if (fields[0] == "tariffs") {
         for (int i = 0; i < num; ++i) {
             vector<double> tariffs;
@@ -672,6 +678,12 @@ void DisplaceModel::collectPopCumcatchesWithThreshold(int step, int node_idx, do
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopCumdiscards(int step, int node_idx, double cumdiscards)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->set_cumdiscards(cumdiscards);
+    mNodesStatsDirty = true;
+}
 
 void DisplaceModel::collectPopTariffs(int step, int node_idx, vector<double> tariffs)
 {
@@ -2803,15 +2815,18 @@ bool DisplaceModel::loadVessels()
         vector<double > init_for_fgrounds(fgrounds.size());
         vector<double > cumeffort_fgrounds= init_for_fgrounds;
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
+        vector<double > cumdiscard_fgrounds= init_for_fgrounds;
         vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+        //vector<vector<double> > cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         for(size_t f = 0; f < fgrounds.size(); f++)
         {
             cumcatch_fgrounds[f] = 0;
+            cumdiscard_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] = 0;
             cumeffort_fgrounds[f] = 0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
@@ -2825,12 +2840,14 @@ bool DisplaceModel::loadVessels()
             {
                                  // init
                 cumcatch_fgrounds_per_pop[f][pop] = 0;
+                //cumdiscard_fgrounds_per_pop[f][pop] = 0;
                 experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
             }
         }
 
         // per total...
         mVessels.at(i)->mVessel->set_cumcatch_fgrounds(cumcatch_fgrounds);
+        mVessels.at(i)->mVessel->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
         mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
         mVessels.at(i)->mVessel->set_cumeffort_fgrounds(cumeffort_fgrounds);
         mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
@@ -2839,6 +2856,7 @@ bool DisplaceModel::loadVessels()
         mVessels.at(i)->mVessel->compute_experiencedcpue_fgrounds();
         // ...or per pop
         mVessels.at(i)->mVessel->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
+        //mVessels.at(i)->mVessel->set_cumdiscard_fgrounds_per_pop(cumdiscard_fgrounds_per_pop);
         mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
         mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
                                  // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...

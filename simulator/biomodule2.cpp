@@ -86,6 +86,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           ofstream &popnodes_cumsweptarea,
                           ofstream &popnodes_cumcatches,
                           ofstream &popnodes_cumcatches_with_threshold,
+                           ofstream &popnodes_cumdiscards,
                           ofstream &popnodes_tariffs,
                           ofstream &export_individual_tacs,
                           ofstream &popnodes_end,
@@ -105,6 +106,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           const string & popnodes_cumsweptarea_filename,
                           const string & popnodes_cumcatches_filename,
                           const string & popnodes_cumcatches_with_threshold_filename,
+                           const string & popnodes_cumdiscards_filename,
                           const string & popnodes_tariffs_filename,
                           const string & popnodes_benthos_biomass_filename,
                           const string & popnodes_benthos_number_filename,
@@ -786,6 +788,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
         if(export_vmslike) nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
+        nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
     }

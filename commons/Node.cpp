@@ -52,6 +52,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     cumsubsurfacesweptarea=0;
     cumcatches=0;
     cumcatches_with_threshold=0;
+    cumdiscards=0;
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
@@ -149,6 +150,7 @@ Node::Node()
       cumsweptarea(0),
       cumsubsurfacesweptarea(0),
       cumcatches(0),
+      cumdiscards(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
@@ -156,6 +158,7 @@ Node::Node()
       avai_pops_at_selected_szgroup(),
       impact_on_pops(),
       cumcatches_per_pop(),
+      cumdiscards_per_pop(),
       vid(),
       pop_names_on_node(),
       benthos_tot_biomass(),
@@ -574,6 +577,11 @@ double Node::get_cumcatches_with_threshold() const
     return(cumcatches_with_threshold);
 }
 
+double Node::get_cumdiscards() const
+{
+    return(cumdiscards);
+}
+
 
 vector<int> Node::get_pop_names_on_node ()
 {
@@ -594,6 +602,11 @@ const vector<double>& Node::get_impact_on_pops ()
 const vector<double>& Node::get_cumcatches_per_pop ()
 {
     return(cumcatches_per_pop);
+}
+
+const vector<double>& Node::get_cumdiscards_per_pop ()
+{
+    return(cumdiscards_per_pop);
 }
 
 void Node::set_vid (int val)
@@ -627,6 +640,12 @@ void Node::set_cumcatches_with_threshold(double tot)
 {
     cumcatches_with_threshold = tot;
 }
+
+void Node::set_cumdiscards(double tot)
+{
+   cumdiscards = tot;
+}
+
 
 void Node::set_xy(double xval, double yval)
 {
@@ -663,10 +682,24 @@ void Node::add_to_cumcatches(double catches)
     unlock();
 }
 
+void Node::add_to_cumdiscards(double discards)
+{
+    lock();
+    cumdiscards+=discards;
+    unlock();
+}
+
 void Node::add_to_cumcatches_per_pop(double catches, int pop)
 {
     lock();
     cumcatches_per_pop.at(pop)+=catches;
+    unlock();
+}
+
+void Node::add_to_cumdiscards_per_pop(double discards, int pop)
+{
+    lock();
+    cumdiscards_per_pop.at(pop)+=discards;
     unlock();
 }
 
@@ -1305,6 +1338,21 @@ void Node::export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tst
         cumcatches << " " << threshold << " " << endl;
 
 }
+
+void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot impact pop
+   if(cumdiscards>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        cumdiscards << " "  << endl;
+
+}
+
 
 void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 {

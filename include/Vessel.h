@@ -74,10 +74,12 @@ private:
         std::vector<double> freq_harbours;
 								 // cumulated catch per node for the last trip, reinit when new trip start
         std::vector<double> cumcatch_fgrounds;
+        std::vector<double> cumdiscard_fgrounds;
         std::vector<double> experienced_bycatch_prop_on_fgrounds;
 
         std::vector< std::vector<double> > cumcatch_fgrounds_per_pop;
-								 // cumulated effort per node for the last trip, reinit when new trip start
+        std::vector< std::vector<double> > cumdiscard_fgrounds_per_pop;
+                                 // cumulated effort per node for the last trip, reinit when new trip start
         std::vector<double> cumeffort_fgrounds;
 								 // from cumcatch/cumeffort for last trip
         std::vector<double> experiencedcpue_fgrounds;
@@ -107,7 +109,7 @@ private:
 		double speed, fuelcons, length, KW, tankcapacity, carrycapacity, nbfpingspertrip, resttime_par1, resttime_par2, av_trip_duration;
 								 // dynamic
         double timeforrest, cumfuelcons, consotogetthere, cumsteaming, distprevpos, timeatsea, traveled_dist_this_trip;
-        double areasweptthistrip, subsurfaceareasweptthistrip, cumcatches, reason_to_go_back;
+        double areasweptthistrip, subsurfaceareasweptthistrip, cumcatches, cumdiscards, reason_to_go_back;
 		double mult_fuelcons_when_steaming, mult_fuelcons_when_fishing, mult_fuelcons_when_returning, mult_fuelcons_when_inactive;
 
         double this_vessel_nb_crew, annual_other_income;
@@ -235,8 +237,10 @@ public:
         const std::vector<double> &get_freq_fgrounds () const;
         const std::vector<double> &get_freq_fgrounds_init () const;
         const std::vector<double> &get_cumcatch_fgrounds () const;
+        const std::vector<double> &get_cumdiscard_fgrounds () const;
         const std::vector<double> &get_experienced_bycatch_prop_on_fgrounds () const;
         const std::vector<std::vector<double> > &get_cumcatch_fgrounds_per_pop () const;
+        const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop () const;
         const std::vector<double> &get_cumeffort_fgrounds () const;
         const std::vector<double> &get_experiencedcpue_fgrounds () const;
         const std::vector<std::vector<double> > &get_experiencedcpue_fgrounds_per_pop () const;
@@ -279,6 +283,7 @@ public:
 	    double get_mult_fuelcons_when_returning() const;
 	    double get_mult_fuelcons_when_inactive() const;		
 		double get_cumcatches() const;
+        double get_cumdiscards() const;
         double get_this_vessel_nb_crew() const;
         double get_annual_other_income() const;
         double get_landing_costs_percent() const;
@@ -341,6 +346,7 @@ public:
         void set_spe_freq_fgrounds_init (const std::vector<double> &_fgrounds_init);
         void set_fishing_credits (const std::vector<double> &_fishing_credits);
         void set_spe_cumcatch_fgrounds (const std::vector<double> &_cumcatch);
+        void set_spe_cumdiscard_fgrounds (const std::vector<double> &_cumdiscard);
         void set_spe_experienced_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_bycatch_prop_on_fgrounds);
         void set_spe_cumeffort_fgrounds (const std::vector<double> &_cumeffort);
         void set_spe_experiencedcpue_fgrounds (const std::vector<double> &_experiencedcpue);
@@ -355,8 +361,10 @@ public:
 		void init_gscale_cpue_nodes_species(int nbnodes, int nbspecies);
         void set_gscale_cpue_nodes_species(int sp, const std::vector<double> &newval);
         void set_cumcatch_fgrounds(const std::vector<double> &newval);
+        void set_cumdiscard_fgrounds(const std::vector<double> &newval);
         void set_experienced_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
         void set_cumcatch_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
+        void set_cumdiscard_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumeffort_fgrounds(const std::vector<double> &newval);
         void set_experiencedcpue_fgrounds(const std::vector<double> &newval);
         void set_experiencedcpue_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
@@ -385,7 +393,8 @@ public:
         void set_sweptareathistrip (double _sweptareathistrip);
         void set_subsurfacesweptareathistrip(double _subsurfacesweptareathistrip);
         void set_cumcatches (double _cumcatches);
-		void set_nbfpingspertrip (int _nbfpingspertrip);
+        void set_cumdiscards (double _cumdiscards);
+        void set_nbfpingspertrip (int _nbfpingspertrip);
 		void set_xy (double _x, double _y);
 		void set_next_xy (double nx, double ny);
         void erode_roadmap ();

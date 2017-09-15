@@ -452,6 +452,11 @@ const vector<double> &Vessel::get_cumcatch_fgrounds() const
     return(cumcatch_fgrounds);
 }
 
+const vector<double> &Vessel::get_cumdiscard_fgrounds() const
+{
+    return(cumdiscard_fgrounds);
+}
+
 const vector<double> &Vessel::get_experienced_bycatch_prop_on_fgrounds () const
 {
     return(experienced_bycatch_prop_on_fgrounds);
@@ -469,6 +474,10 @@ const vector<vector<double> > &Vessel::get_cumcatch_fgrounds_per_pop() const
     return(cumcatch_fgrounds_per_pop);
 }
 
+const vector<vector<double> > &Vessel::get_cumdiscard_fgrounds_per_pop() const
+{
+    return(cumdiscard_fgrounds_per_pop);
+}
 
 const vector<double> &Vessel::get_cumeffort_fgrounds() const
 {
@@ -706,6 +715,10 @@ double Vessel::get_cumcatches () const
     return(cumcatches);
 }
 
+double Vessel::get_cumdiscards () const
+{
+    return(cumdiscards);
+}
 
 double Vessel::get_cumsteaming () const
 {
@@ -1031,6 +1044,12 @@ void Vessel::set_spe_cumcatch_fgrounds (const vector<double> &_cumcatch_fgrounds
     cumcatch_fgrounds=_cumcatch_fgrounds;
 }
 
+void Vessel::set_spe_cumdiscard_fgrounds (const vector<double> &_cumdiscard_fgrounds)
+{
+    cumdiscard_fgrounds=_cumdiscard_fgrounds;
+}
+
+
 void Vessel::set_spe_experienced_bycatch_prop_on_fgrounds (const vector<double> &_experienced_bycatch_prop_on_fgrounds)
 {
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
@@ -1182,6 +1201,12 @@ void Vessel::set_cumcatch_fgrounds (const vector<double>  &_cumcatch_fgrounds)
 }
 
 
+void Vessel::set_cumdiscard_fgrounds (const vector<double>  &_cumdiscard_fgrounds)
+{
+    cumdiscard_fgrounds=_cumdiscard_fgrounds;
+}
+
+
 void Vessel::set_experienced_bycatch_prop_on_fgrounds (const vector<double>  &_experienced_bycatch_prop_on_fgrounds)
 {
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
@@ -1193,6 +1218,11 @@ void Vessel::set_experienced_bycatch_prop_on_fgrounds (const vector<double>  &_e
 void Vessel::set_cumcatch_fgrounds_per_pop (const vector<vector<double> >  &_cumcatch_fgrounds_per_pop)
 {
     cumcatch_fgrounds_per_pop=_cumcatch_fgrounds_per_pop;
+}
+
+void Vessel::set_cumdiscard_fgrounds_per_pop (const vector<vector<double> >  &_cumdiscard_fgrounds_per_pop)
+{
+    cumdiscard_fgrounds_per_pop=_cumdiscard_fgrounds_per_pop;
 }
 
 
@@ -1326,6 +1356,10 @@ void Vessel::set_cumcatches(double _cumcatches)
     cumcatches=_cumcatches;
 }
 
+void Vessel::set_cumdiscards(double _cumdiscards)
+{
+    cumdiscards=_cumdiscards;
+}
 
 void Vessel::clear_idx_used_metiers_this_trip()
 {
@@ -2056,6 +2090,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
     // TARIFFS ON THE NODE
     vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
+    vector<double> cumuldiscards = this->get_loc()->get_cumdiscards_per_pop();
     if(is_fishing_credits)
     {
         vector<double> tariff_this_cell = this->get_loc()->get_tariffs(); // tariff per hour because visit (no more) one site per hour
@@ -2612,7 +2647,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     // update dynamic trip-based cumul for this node
                     // CUMUL FOR THE TRIP (all species confounded)
                     this->cumcatches+= a_cumul_weight_this_pop_this_vessel;
-                    //this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
+                    this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + a_cumul_weight_this_pop_this_vessel);
                     // catches
                     cumcatch_fgrounds.at(idx_node_r) += a_cumul_weight_this_pop_this_vessel;
                     // catches per pop
@@ -2626,6 +2661,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         totLandThisEvent += landings_per_szgroup[sz];
                         totDiscThisEvent += discards_per_szgroup[sz];
                     }
+                    this->cumdiscards+= totDiscThisEvent;
+                    //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
+                    cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
 
@@ -2794,7 +2832,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 discards_pop_at_szgroup[pop][0] = 0;
                 // CUMUL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
+                this->cumdiscards+= discards_pop_at_szgroup[pop][0];
                 this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + catch_pop_at_szgroup[pop][0]);
+                //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + 0);
                 /*
                 if(pop==21 && (this->get_name())=="DNK000012028"){
                     dout(cout << "cpue " <<cpue << endl);
@@ -2808,8 +2848,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // update dynamic trip-based cumul for this node
                 // catches
                 cumcatch_fgrounds.at(idx_node_r) += cpue*PING_RATE;
+                cumdiscard_fgrounds.at(idx_node_r) += 0;
                 // catches per pop
                 cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue*PING_RATE;
+                //cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop) += 0;
                 // effort
                 cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
@@ -2825,6 +2867,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
         // contribute to accumulated catches on this node
         this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
+        //this->get_loc()->add_to_cumdiscards_per_pop(cumdiscards_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
 
     } // end pop
 
@@ -2836,6 +2879,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
     // contribute to accumulated catches on this node
     this->get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
+    this->get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
 
 
     // check the matrix of catches
@@ -3008,9 +3052,11 @@ void Vessel::clear_cumcatch_and_cumeffort()
         {
             //clear
             cumcatch_fgrounds_per_pop.at(n).at(pop) =0;
+            //cumdiscard_fgrounds_per_pop.at(n).at(pop) =0;
         }
         //clear
         cumcatch_fgrounds.at(n) =0;
+        cumdiscard_fgrounds.at(n) =0;
         //clear
         cumeffort_fgrounds.at(n) =0;
     }
@@ -4403,6 +4449,7 @@ void Vessel::reinit_after_a_trip()
     this-> set_consotogetthere(0);
     this-> set_cumsteaming(0);
     this-> set_cumcatches(0);
+    this-> set_cumdiscards(0);
     this-> clear_idx_used_metiers_this_trip();
     this-> compute_experiencedcpue_fgrounds();
     this-> compute_experiencedcpue_fgrounds_per_pop();

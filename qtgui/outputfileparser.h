@@ -72,6 +72,7 @@ protected:
     void parsePopCumsweptarea(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopCumcatches(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopCumcatchesWithThreshold(QFile *file, int tstep, DisplaceModel *model, int period = -1);
+    void parsePopCumdiscards(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopTariffs(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopImpact(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model, int period = -1);

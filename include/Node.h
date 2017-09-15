@@ -157,11 +157,13 @@ class COMMONSSHARED_EXPORT Node
         vector<int> get_ff_names_on_node();
         const vector<double>& get_impact_on_pops ();
         const vector<double>& get_cumcatches_per_pop ();
+        const vector<double>& get_cumdiscards_per_pop ();
         int get_cumftime() const;
         double get_cumsweptarea() const;
         double get_cumsubsurfacesweptarea() const;
         double get_cumcatches() const;
         double get_cumcatches_with_threshold() const;
+        double get_cumdiscards() const;
         void set_xy(double xval, double yval);
 		void init_Ns_pops_at_szgroup(int nbpops, int nbszgroups);
         void set_Ns_pops_at_szgroup(int name_pop, const vector<double>& val);
@@ -178,12 +180,15 @@ class COMMONSSHARED_EXPORT Node
         void set_cumsubsurfacesweptarea(double tot);
         void set_cumcatches(double tot);
         void set_cumcatches_with_threshold(double tot);
+        void set_cumdiscards(double tot);
         void add_to_cumftime(int delta_time);
         void add_to_cumsweptarea(double sweptarea);
         void add_to_cumsubsurfacesweptarea(double subsurfacesweptarea);
         void add_to_sweptarea(int sweptarea);
         void add_to_cumcatches(double catches);
         void add_to_cumcatches_per_pop(double catches, int pop);
+        void add_to_cumdiscards(double discards);
+        void add_to_cumdiscards_per_pop(double discards, int pop);
         void set_pop_names_on_node(int name_pop);
         void set_ff_names_on_node(int name_ff);
         void set_benthos_id(int id);
@@ -212,6 +217,7 @@ class COMMONSSHARED_EXPORT Node
         void export_popnodes_cumsweptarea(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold);
+        void export_popnodes_cumdiscards(ofstream& popnodes, int tstep);
         void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);
         void add_benthos_tot_biomass_on_node(double tot_biomass_this_group);
@@ -279,6 +285,7 @@ private:
         double cumsubsurfacesweptarea;
         double cumcatches;
         double cumcatches_with_threshold;
+        double cumdiscards;
         vector< vector<double> > Ns_pops_at_szgroup;
 		vector< vector<double> > Ns_pops_at_szgroup_at_month_start;
 		vector< vector<double> > removals_pops_at_szgroup;
@@ -288,6 +295,7 @@ private:
 								 // a proportion i.e. ratio removals/available on node
 		vector<double> impact_on_pops;
         vector<double> cumcatches_per_pop;
+        vector<double> cumdiscards_per_pop;
         vector<int> vid;		 // list of index of vessels currently on the node
 		vector<int> pop_names_on_node;
         vector<int> ff_names_on_node;

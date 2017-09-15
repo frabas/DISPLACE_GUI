@@ -2983,15 +2983,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double > init_for_fgrounds(fgrounds.size());
         vector<double > cumeffort_fgrounds= init_for_fgrounds;
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
+        vector<double > cumdiscard_fgrounds= init_for_fgrounds;
         vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+        //vector<vector<double> > cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         for(unsigned int f = 0; f < fgrounds.size(); f++)
         {
             cumcatch_fgrounds[f] = 0;
+            cumdiscard_fgrounds[f] = 0;
             cumeffort_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] =0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
@@ -3008,11 +3011,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
                 // init
                 cumcatch_fgrounds_per_pop[f][pop] = 0;
+                //cumdiscard_fgrounds_per_pop[f][pop] = 0;
                 experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
             }
         }
         // per total...
         vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
+        vessels.at(i)->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
         vessels.at(i)->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
         vessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
         vessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
@@ -3021,6 +3026,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels.at(i)->compute_experiencedcpue_fgrounds();
         // ...or per pop
         vessels.at(i)->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
+        //vessels.at(i)->set_cumdiscard_fgrounds_per_pop(cumdiscard_fgrounds_per_pop);
         vessels.at(i)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
         vessels.at(i)->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
         // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
@@ -3486,6 +3492,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumcatches_with_threshold.open(filename.c_str());
     std::string popnodes_cumcatches_with_threshold_filename = filename;
 
+    ofstream popnodes_cumdiscards;
+    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscards_"+namesimu+".dat";
+    popnodes_cumdiscards.open(filename.c_str());
+    std::string popnodes_cumdiscards_filename = filename;
+
     ofstream popnodes_tariffs;
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
     popnodes_tariffs.open(filename.c_str());
@@ -3649,6 +3660,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
                                              popnodes_cumcatches_with_threshold,
+                                             popnodes_cumdiscards,
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
@@ -3670,6 +3682,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
                                              popnodes_cumcatches_with_threshold_filename,
+                                             popnodes_cumdiscards_filename,
                                              popnodes_tariffs_filename,
                                              popnodes_benthos_biomass_filename,
                                              popnodes_benthos_number_filename,
@@ -3709,6 +3722,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
                                              popnodes_cumcatches_with_threshold,
+                                             popnodes_cumdiscards,
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
@@ -3727,6 +3741,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
                                              popnodes_cumcatches_with_threshold_filename,
+                                             popnodes_cumdiscards_filename,
                                              popnodes_tariffs_filename,
                                              popnodes_benthos_biomass_filename,
                                              popnodes_benthos_number_filename,
@@ -4002,6 +4017,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     init_for_fgrounds[i] = 0;
                 }
                 vessels.at(v)->set_spe_cumcatch_fgrounds (init_for_fgrounds);
+                vessels.at(v)->set_spe_cumdiscard_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_experienced_bycatch_prop_on_fgrounds(init_for_fgrounds);
                 vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_experiencedcpue_fgrounds (init_for_fgrounds);
@@ -4127,16 +4143,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<double > a_init_for_fgrounds(fgrounds.size());
                 vector<double > a_cumeffort_fgrounds= a_init_for_fgrounds;
                 vector<double > a_cumcatch_fgrounds= a_init_for_fgrounds;
+                vector<double > a_cumdiscard_fgrounds= a_init_for_fgrounds;
                 vector<double > a_experienced_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
                 vector<double > a_experiencedcpue_fgrounds= a_init_for_fgrounds;
                 vector<double > a_freq_experiencedcpue_fgrounds= a_init_for_fgrounds;
                 vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+                vector<vector<double> > a_cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
                 vector<vector<double> > a_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
                 vector<vector<double> > a_freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
 
                 for(unsigned int g = 0; g < fgrounds.size(); g++)
                 {
                     a_cumcatch_fgrounds[g] = 0;
+                    a_cumdiscard_fgrounds[g] = 0;
                     a_experienced_bycatch_prop_on_fgrounds[g] = 0;
                     a_cumeffort_fgrounds[g] = 0;
                     a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
@@ -4150,12 +4169,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     {
                         // init
                         a_cumcatch_fgrounds_per_pop[g][pop] = 0;
+                        //a_cumdiscard_fgrounds_per_pop[g][pop] = 0;
                         a_experiencedcpue_fgrounds_per_pop[g][pop] = a_freq_fgrounds[g] * expected_cpue_this_pop.at(pop);
                     }
                 }
                 // per total...
                 dout(cout << "re-set vessels step5..."  << endl);
                 vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
+                vessels.at(v)->set_cumdiscard_fgrounds(a_cumdiscard_fgrounds);
                 vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(a_experienced_bycatch_prop_on_fgrounds);
                 vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
                 vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
@@ -4164,6 +4185,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->compute_experiencedcpue_fgrounds();
                 // ...or per pop
                 vessels.at(v)->set_cumcatch_fgrounds_per_pop(a_cumcatch_fgrounds_per_pop);
+                //vessels.at(v)->set_cumdiscard_fgrounds_per_pop(a_cumdiscard_fgrounds_per_pop);
                 vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(a_experiencedcpue_fgrounds_per_pop);
                 vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(a_freq_experiencedcpue_fgrounds_per_pop);
                 // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
@@ -4725,6 +4747,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                        vessels.at(v)->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
+                        //vessels.at(v)->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                         vessels.at(v)->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                         vessels.at(v)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds); // re-dimensioned
                         vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned

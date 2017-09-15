@@ -120,6 +120,15 @@ protected:
     virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
 };
 
+class NodeWithCumDiscardsGraphics : public NodeGraphics {
+public:
+    NodeWithCumDiscardsGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
 
 class NodeWithTariffsGraphics : public NodeGraphics {
 public:

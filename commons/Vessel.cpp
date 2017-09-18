@@ -3839,6 +3839,8 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                 // }
 
             }
+           //cout << " alloc accounting for monthly area closures.....ok" << endl;
+
         }
 
 
@@ -4648,6 +4650,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                                                   const DynAllocOptions& dyn_alloc_sce
                                                 )
 {
+    lock();
 
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
@@ -4769,7 +4772,9 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                 this->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                 this->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                this->set_cumdiscard_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                //this->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                 this->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
                 this->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
@@ -5043,6 +5048,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     auto grounds = do_sample(1, grds.size(), grds, freq_grds);
     ground=grounds[0];
 
+    unlock();
     return(ground);
 
 }

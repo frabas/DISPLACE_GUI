@@ -1062,7 +1062,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             //----------------------------------------//
 
                         // apply only at the beginning of the year (this is maybe not always relevant...)
-                        if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
+                       if(binary_search (tsteps_years.begin(), tsteps_years.end(), tstep))
                         {
                             int namepop = populations.at(sp)->get_name();
 
@@ -1086,6 +1086,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                if(dyn_alloc_sce.option(Options::LTMP)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
                                if(dyn_alloc_sce.option(Options::FMSY)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+
 
                                outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
                                    // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel

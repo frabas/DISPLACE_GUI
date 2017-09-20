@@ -47,7 +47,7 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
 {
     std::unique_lock<std::mutex> locker(glob_mutex);
 
-    // tstep / vessel name /  start trip tstep / lon / lat/ course / state / pop / catches (i.e. landings only!, in weight) szgroup 0 /  szgroup 1 /... / 13
+    // tstep / vessel name /  start trip tstep / lon / lat/ course / state / pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
     // note that combining vessel_name and start_trip_tstep will give a trip id.
 
     std::ostringstream ss;

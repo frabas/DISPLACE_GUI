@@ -2580,7 +2580,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 {
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
                                     catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
-                                    ping_catch_pop_at_szgroup[pop][szgroup]=0;
+                                    ping_catch_pop_at_szgroup[pop][szgroup]=discards_pop_at_szgroup[pop][szgroup]; // catches=discards
 
                                 }
 
@@ -2627,8 +2627,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                 for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[pop].size();++szgroup)
                                 {
                                     discards_pop_at_szgroup[pop][szgroup]+=catch_pop_at_szgroup[pop][szgroup];// discard all!
-                                    catch_pop_at_szgroup[pop][szgroup]=0; // discard all!
-                                    ping_catch_pop_at_szgroup[pop][szgroup]=0;
+                                    catch_pop_at_szgroup[pop][szgroup]=0; // discard all! => no landings
+                                    ping_catch_pop_at_szgroup[pop][szgroup]=discards_pop_at_szgroup[pop][szgroup]; // => catches=discards
 
                                 }
 

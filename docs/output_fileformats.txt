@@ -2,95 +2,97 @@ Formats of output files
 =======================
 
 
+
 Path: ~/ibm_vessels/DISPLACE_outputs/(basepath)/(basename)/
 
-* vmslike_simu2.dat
+* vmslike_*.dat
 -------------------
-Written by: main()
-See: simulator/main.cpp
-Content: Position of each vessel, if state != 3
-Format:
-tstep name tstep_dep x y course cum_fuel state
+tstep / name / tstep_dep / x / y / course / cum_fuel / state
+
+
+* vmslikefpingonly_*.dat
+-------------------
+tstep / name / tstep_dep / x / y / course / cum_fuel / state / popid/ catches (land+disc) sz0 / catches sz1 / ...
+
 
 * popstats_*.dat
 ----------------------
-Written by: biomodule.cpp
-See:
-Content:
-Format:
 tstep / pop / N sz0 / N sz1 /.../ F age0/ F age1 /.../ SSB sz0/ SSB sz1/...
-Collected Fields:
+N is in thousands of individuals and SSB is in kg
 
 
-
-
-* popnodes_start_*.dat
+* benthosnodes_tot_biomasses_*.dat or benthosnodes_tot_numbers_*.dat
 ----------------------
-Written by: Node::export_popnodes()
-See: commons/Node.cpp
-Content:
-Format:
+Func gr id/ tstep / node / long / lat / number this func group id /biomass this func group id/ mean weight this func group id / benthosbiomassoverK / benthosnumberoverK /benthos_tot_biomass_K this funcgr 
+
+
+ * popnodes_start_*.dat
+----------------------
 tstep / node / long / lat / tot N sp0 / tot W sp0/ tot N sp1 / tot W sp1...
-Collected Fields:
+ 
 
 * popnodes_inc_*.dat
---------------------
-See popnodes_start_*.dat
+----------------------
+tstep / node / long / lat / tot N sp0 / tot W sp0/ tot N sp1 / tot W sp1...
+
 
 * popnodes_impact_*.dat
 -----------------------
-Written by: Node::export_popnodes_impact()
-See: commons/Node.cpp
-Content:
-Format:
 pop / tstep / node_idx / long / lat / impact_on_pop
-Collected Fields: (0,1,2,)5
 
 
 * popnodes_cumulcatches_per_pop_*.dat
 -----------------------
-Written by: Node::export_popnodes_cumulcatches_per_pop()
-See: commons/Node.cpp
-Content:
-Format:
 pop / tstep / node_idx / long / lat / cumcatches (actually landings)
-Collected Fields: (0,1,2,)5
 
 
-* popdyn_*.dat
---------------
-Written by: Population::export_popdyn_N
-See: commons/Population.cpp
-Content: Aggregate number of populations. all for tstep=0, some selected for others. Number in thousands.
-Format:
-tstep name total_for_groups[0..n]
-
-* popdyn_F_*.dat
-----------------
-See popdyn_*.dat
-
-* popnodes_cumftime
+* popnodes_cumftime_*.dat
 --------------------
-Written by: Node::export_popnodes()
-See: commons/Node.cpp
-Content:
-Format:
-tstep   node   long    lat    cumftime
+tstep /  node /  long /   lat /   cumftime
 
-* popnodes_cumsweptarea
+
+* popnodes_cumsweptarea_*.dat
 --------------------
-Written by: Node::export_popnodes()
-See: commons/Node.cpp
-Content:
-Format:
-tstep   node   long    lat    cumsweptarea subsurfacecumsweptarea
+tstep /  node /  long  /  lat  /  cumsweptarea / subsurfacecumsweptarea
+
+
+* popnodes_cumcatches_*.dat
+--------------------
+tstep / node_idx / long / lat / cumcatches (landings only; unless discard ban)
+
+
+* popnodes_cumdiscards_*.dat
+--------------------
+tstep / node_idx / long / lat / cumdiscards
+
+
+* popnodes_cumcatches_with_threshold_*.dat
+--------------------
+tstep / node_idx / long / lat / cumcatches / threshold in percent
+
+
+* popdyn_annual_indic_*.dat
+--------------------
+tstep / pop / oth_mult / cpue_mult / fbar / landings / tac / W at age/ M at age
+
+
+* popnodes_tariffs_*.dat
+--------------------
+tstep / node / long / lat /  tariffs
+
+
+* tripcatchesperszgroup_*.dat
+--------------------
+tstep / vessel name / departure tstep / popid / catches (landings only; unless discard ban)
+
+
+* export_individual_tac_*.dat
+--------------------
+tstep / vesselid / pop / a remaining quota this pop / amount discarded if remaining is 0
+
 
 * loglike_*.dat
 ---------------
-Written by: Vessel::export_loglike()
-See commons/Vessel.cpp
-Content: Vessel status as a logbook
-Format:
 0 tstep_dep
 1 tstep         Current tstep
 2 reason_to_go_back
@@ -101,7 +103,7 @@ Format:
 7 timeatsea
 8 cumfulecons
 9 travel_dist_this_trip
-10xN    cumul sz per pop(1..N)
+10xN    cumul sz per pop(1..N) (i.e. landings only!)
 freq_metiers
 revenue
 revenue_from_av_prices
@@ -109,7 +111,7 @@ revenue_explicit_from_av_prices
 fuelcost
 gav
 gav2 // gav handling energy cost only
-sweptarea // from BENTHIS parameterisation
+sweptarea // from EU FP7 BENTHIS parameterisation
 revenuepersweptarea
 GVA // gva handling all costs (but need a deeper parameterisation)
 GVAPerRevenue
@@ -122,8 +124,22 @@ RoFTA
 BER
 CRBER
 NetPresentValue
-numTrips
 
 
-N: can be calculated with NUMFIELDS - 16.
+ * fishfarmlogs_*.dat
+----------------------
+
+tstep / node / long / lat / farmtype / farmid / meanw_kg / fish_harvested_kg / eggs_harvested_kg / fishfarm_annualprofit /
+
+* shipslogs_*.dat
+----------------------
+
+tstep / node / long / lat /shiptype / shipid / nb_units / fuel_use_h / NOx_emission_gperkW / SOx_emission_percentpertotalfuelmass / GHG_emission_gperkW / PME_emission_gperkW / fuel_use_litre / NOx_emission / SOx_emission / GHG_emissions / PME_emission
+
+* windmillslogs_*.dat
+----------------------
+
+ tstep / node / long / lat / windfarmtype / windfarmid / kWh / kW_production
+
+
 

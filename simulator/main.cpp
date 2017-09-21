@@ -2947,7 +2947,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 if(a_shape<0 || a_scale <0)
                 {
 
-                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                  //  cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
                     //cout <<  " this vessel is is: " << vessels.at(i)->get_name() << endl;
@@ -2960,7 +2960,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                 cpue_per_fground.at(f) = rgamma(a_shape, a_scale);
                 //if( vessels[i]->get_idx() ==2) dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
-                dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
+
+                //dout(cout  << "cpue_per_fground.at(f)" <<cpue_per_fground.at(f) << endl);
             }
             // compute the average cpue for this pop across all nodes
             for(unsigned int f = 0; f < fgrounds.size(); f++)
@@ -3002,9 +3003,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
             // second condition: to avoid starting from 0 cpue, init accounting for prior from frequency of visit from the data
             // third condition: to scale the start cpue, multiply by the expectancy of the cpue for this particular vessel
-            dout(cout  << "experienced_bycatch_prop_on_fgrounds[f]"  <<experienced_bycatch_prop_on_fgrounds[f] << endl);
-            dout(cout  << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << endl);
-            dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl);
+
+            //dout(cout  << "experienced_bycatch_prop_on_fgrounds[f]"  <<experienced_bycatch_prop_on_fgrounds[f] << endl);
+            //dout(cout  << "experiencedcpue_fgrounds[f]"  <<experiencedcpue_fgrounds[f] << endl);
+            //dout(cout  << "freq_fgrounds[f] " <<freq_fgrounds[f] << endl);
 
             // init the ones per pop
             for(int pop = 0; pop < nbpops; pop++)
@@ -3211,13 +3213,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     for(unsigned int i=0; i<graph_idx_dep.size(); i++)
     {
         adjacency_map[graph_idx_dep[i]].push_back(edge(graph_idx_arr[i],  graph_dist_km[i]));
-        dout(cout  << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << endl);
+        //dout(cout  << "dep " << graph_idx_dep[i] << " arr " << graph_idx_arr[i] << endl);
     }
     // col 2
     for(unsigned int i=0; i<graph_idx_dep.size(); i++)
     {
         adjacency_map[graph_idx_arr[i]].push_back(edge(graph_idx_dep[i],  graph_dist_km[i]));
-        dout(cout  << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << endl);
+        //dout(cout  << "arr " << graph_idx_arr[i] << " dep " << graph_idx_dep[i] << endl);
     }
 
     // then need to remove the duplicates if any.....
@@ -3280,13 +3282,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         for (unsigned int i=0; i<relevant_nodes.size(); i++)
         {
             outc(cout << ".");
-            dout(cout  << "i: "<< i << "max size: " << relevant_nodes.size() << endl);
+            //dout(cout  << "i: "<< i << "max size: " << relevant_nodes.size() << endl);
 
             // this is a programs argument option
             if(read_preexisting_paths)
             {
 
-                dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
+                //dout(cout  << "existing paths for the node: "<< relevant_nodes.at(i).toIndex() << endl);
+
                 // these maps come from SimplifyThePreviousMap()
                 //previous = read_maps_previous(relevant_nodes.at(i), namefolderinput, inputfolder, a_graph_name);
                 //dout(cout  << ":: "<<  endl);
@@ -4565,10 +4568,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
                         else
                         {
-                            freq_fgrounds.push_back(0.00001);
+                            for (unsigned int gr=0; gr <fgrounds.size() ; ++gr)
+                            {
+                                freq_fgrounds.push_back(1/fgrounds.size());
+                            }
                         }
 
-
+                        // remember to make sure size() of fgrounds == size() of freq_fgrounds
+                        ASSERT(fgrounds.size()==freq_fgrounds.size())
 
                         // cout << "assume equal probas "  << endl;
                         // vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());

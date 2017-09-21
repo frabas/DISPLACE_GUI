@@ -2864,7 +2864,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
 
 spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previous(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
-    dout(cout <<"BEGIN: read map previous" << endl);
+    //dout(cout <<"BEGIN: read map previous" << endl);
 
     stringstream out;
     out << source.toIndex();
@@ -2888,14 +2888,14 @@ spp::sparse_hash_map<types::NodeId::type, types::NodeId::type> read_maps_previou
         cerr << "Error loading graph file " << filename << " " << strerror(errno) << endl;
         throw std::runtime_error("Error loading graph file " + filename + " " + strerror(errno)) ;
     }
-    dout(cout <<"END: read map previous" << endl);
+    //dout(cout <<"END: read map previous" << endl);
 
     return previous;
 }
 
 spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId source, string namesimu, string inputfolder, string a_graph_name)
 {
-    dout(cout <<"BEGIN: read min_distance" << endl);
+    //dout(cout <<"BEGIN: read min_distance" << endl);
 
     stringstream out;
     out << source.toIndex();
@@ -2921,21 +2921,21 @@ spp::sparse_hash_map<types::NodeId::type, int> read_min_distance(types::NodeId s
     }
 
 
-    dout(cout <<"END: read min_distance" << endl);
+    //dout(cout <<"END: read min_distance" << endl);
 
     return min_distance;
 }
 
 PathShop read_graph_details(types::NodeId source, string namesimu,  string inputfolder, string a_graph_name)
 {
-    dout(cout <<"BEGIN: read map previous" << endl);
+    //dout(cout <<"BEGIN: read map previous" << endl);
 
     stringstream out1;
     out1 << source.toIndex();
     string source_s1 = out1.str();
     string filename_previous= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/previous_"+source_s1+".bin";
 
-    dout(cout <<"BEGIN: read min_distance" << endl);
+    //dout(cout <<"BEGIN: read min_distance" << endl);
 
     stringstream out2;
     out2 << source.toIndex();

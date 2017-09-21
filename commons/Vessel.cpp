@@ -209,11 +209,11 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
 
             catch_pop_at_szgroup[i][j] = 0;
             ping_catch_pop_at_szgroup[i][j] = 0;
-            dout(cout  << catch_pop_at_szgroup[i][j] << " ");
+            //dout(cout  << catch_pop_at_szgroup[i][j] << " ");
             discards_pop_at_szgroup[i][j] = 0;
-            dout(cout  << discards_pop_at_szgroup[i][j] << " ");
+            //dout(cout  << discards_pop_at_szgroup[i][j] << " ");
         }
-        dout(cout  << endl);
+        //dout(cout  << endl);
     }
 
     // length class
@@ -1113,9 +1113,9 @@ void Vessel::init_cpue_nodes_species(int nbnodes, int nbspecies)
         {
 
             cpue_nodes_species.at(i).at(j) = 0;
-            dout(cout  << cpue_nodes_species[i][j] << " ");
+            //dout(cout  << cpue_nodes_species[i][j] << " ");
         }
-        dout(cout  << endl);
+        //dout(cout  << endl);
     }
 
 }
@@ -1135,9 +1135,9 @@ void Vessel::init_gshape_cpue_nodes_species(int nbnodes, int nbspecies)
         {
 
             gshape_cpue_nodes_species.at(i).at(j) = 0;
-            dout(cout  << gshape_cpue_nodes_species[i][j] << " ");
+            //dout(cout  << gshape_cpue_nodes_species[i][j] << " ");
         }
-        dout(cout  << endl);
+        //dout(cout  << endl);
     }
 
 }
@@ -1157,9 +1157,9 @@ void Vessel::init_gscale_cpue_nodes_species(int nbnodes, int nbspecies)
         {
 
             gscale_cpue_nodes_species.at(i).at(j) = 0;
-            dout(cout  << gscale_cpue_nodes_species[i][j] << " ");
+            //dout(cout  << gscale_cpue_nodes_species[i][j] << " ");
         }
-        dout(cout  << endl);
+        //dout(cout  << endl);
     }
 
 }
@@ -1474,7 +1474,7 @@ void Vessel::updateTripsStatistics(const std::vector<Population* >& populations,
         for(unsigned int sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
         {
             int comcat_this_size =comcat_at_szgroup.at(sz);
-            outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << endl);
+           // outc(cout  << "...comcat_this_size " << comcat_this_size << " for sz " << sz  << endl);
             lastTrip_revenues += a_catch_pop_at_szgroup[pop][sz] * get_loc()->get_prices_per_cat(pop, comcat_this_size)
                     * (100 / this->get_metier()->get_percent_revenue_completeness()); // scale up!
         }
@@ -2858,8 +2858,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
             }
             else
             {
-                catch_pop_at_szgroup[pop][0] +=0;
-                ping_catch_pop_at_szgroup[pop][0]+=0;
+                catch_pop_at_szgroup.at(pop).at(0) +=0;
+                ping_catch_pop_at_szgroup.at(pop).at(0)+=0;
             }
         }
 
@@ -2972,10 +2972,10 @@ void Vessel::compute_experiencedcpue_fgrounds()
         // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
         if(cumeffort_fgrounds.at(a_node)!=0)
         {
-            outc(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds.at(a_node) << endl);
-            outc(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
+            //outc(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds.at(a_node) << endl);
+            //outc(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
             experiencedcpue_fgrounds.at(a_node)= cumcatch_fgrounds.at(a_node) / cumeffort_fgrounds.at(a_node);
-            outc(cout  << "on the grounds of this vessel experienced cpue is then " << experiencedcpue_fgrounds.at(a_node) << endl);
+            //outc(cout  << "on the grounds of this vessel experienced cpue is then " << experiencedcpue_fgrounds.at(a_node) << endl);
         }
         // cumul to scale to 1 (just below)
         cum_cpue +=experiencedcpue_fgrounds.at(a_node);
@@ -3017,10 +3017,10 @@ void Vessel::compute_experiencedcpue_fgrounds_per_pop()
             // change cpue only if the node have been visited...otherwise the initial guess for cpue is kept
             if(cumeffort_fgrounds.at(a_node)!=0)
             {
-                dout(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds_per_pop.at(a_node).at(pop) << endl);
-                dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
+                //dout(cout  << "on the grounds of this vessel cumcatch is " << cumcatch_fgrounds_per_pop.at(a_node).at(pop) << endl);
+                //dout(cout  << "on the grounds of this vessel cumeffort is " << cumeffort_fgrounds.at(a_node) << endl);
                 experiencedcpue_fgrounds_per_pop.at(a_node).at(pop)= cumcatch_fgrounds_per_pop.at(a_node).at(pop) / cumeffort_fgrounds.at(a_node);
-                dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
+                //dout(cout  << "on this ground, this vessel experienced a cpue of " << experiencedcpue_fgrounds_per_pop.at(a_node).at(pop) << endl);
             }
             // cumul to scale to 1 (just below)
             cum_cpue_over_pop.at(a_node) +=experiencedcpue_fgrounds_per_pop.at(a_node).at(pop);
@@ -4060,7 +4060,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
     {
 
         types::NodeId vx = types::NodeId(grds.at(i));// destination
-        dout(cout  << "test the other ground "<< vx.toIndex() << endl);
+        //dout(cout  << "test the other ground "<< vx.toIndex() << endl);
 
         // check for area_closure
         if (

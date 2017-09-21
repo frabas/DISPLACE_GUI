@@ -731,7 +731,7 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
 
 #if 0
 	// init at 0 the matrix of Ns
-    dout(cout  << "init matrix of Ns" << endl);
+    //dout(cout  << "init matrix of Ns" << endl);
 	vector< vector<double> > init_Ns_pops_at_szgroup(nbpops, vector<double>(nbszgroups));
 	Ns_pops_at_szgroup= init_Ns_pops_at_szgroup;
 	Ns_pops_at_szgroup_at_month_start= init_Ns_pops_at_szgroup;

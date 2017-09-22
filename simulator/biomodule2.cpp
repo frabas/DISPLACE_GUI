@@ -700,7 +700,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                      // i.e. a trick to check if nan
                                     populations.at(sp)->get_oth_land_multiplier())
                                       {
-                                      outc(cout << "stop: check the c++ code for oth_land_multiplier"<< endl);
+                                      cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
                                        int ff;
                                        cin >>ff;
 

@@ -1099,12 +1099,16 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                    vector<double> ts_tac  = populations.at(sp)->get_tac()->get_ts_tac();
                                    double TAC_y_plus_1    = ts_tac.at(ts_tac.size()-1);
                                    double TAC_y           = ts_tac.at(ts_tac.size()-2);
-                                   populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
+                                   if (TAC_y!=0){
+                                       populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
+                                   } else{
+                                       populations.at(sp)->set_oth_land_multiplier (0);
+                                   }
                                    if(populations.at(sp)->get_oth_land_multiplier()!=
                                      // i.e. a trick to check if nan
                                     populations.at(sp)->get_oth_land_multiplier())
                                       {
-                                      outc(cout << "stop: check the c++ code for oth_land_multiplier"<< endl);
+                                      cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
                                        int ff;
                                        cin >>ff;
 

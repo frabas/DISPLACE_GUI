@@ -1757,7 +1757,7 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
            // cout << "tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
            // cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
            // cout << "forecast_tot_N_at_age_start_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl;
-           if (tot_W_at_age_y_plus_1.at(i)) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+           if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
 
             tac_y_plus_1+=   (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
                 forecast_tot_N_at_age_start_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*

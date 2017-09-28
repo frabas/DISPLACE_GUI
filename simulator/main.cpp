@@ -4575,7 +4575,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         }
 
                         // remember to make sure size() of fgrounds == size() of freq_fgrounds
-                        ASSERT(fgrounds.size()==freq_fgrounds.size())
+                        //ASSERT(fgrounds.size()==freq_fgrounds.size())
 
                         // cout << "assume equal probas "  << endl;
                         // vector<double> equal_proba (fgrounds.size(), 1/fgrounds.size());

@@ -1210,7 +1210,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     for (unsigned int n=0; n<nodes.size(); n++)
     {
         nodes.at(n)->export_popnodes_cumftime(popnodes_cumftime, tstep);
-        if(export_vmslike) nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
+        nodes.at(n)->export_popnodes_cumsweptarea(popnodes_cumsweptarea, tstep);
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
         nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);

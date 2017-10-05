@@ -491,7 +491,7 @@ public:
             std::vector <double>& dist_to_ports);
         int should_i_choose_this_port(std::map<std::string,int>& external_states, bool use_the_tree);
 
-        void set_individual_tac_this_pop(std::ofstream& export_individual_tacs, int tstep, std::vector<Population* >& populations, int pop, int init, double a_tac);
+        void set_individual_tac_this_pop(std::ofstream& export_individual_tacs, int tstep, std::vector<Population* >& populations, std::vector<int> implicit_pops, int pop, int init, double a_tac);
 		void set_targeting_non_tac_pop_only(int targeting_non_tac_pop_only);
 
         double getLastTripRevenues() const {

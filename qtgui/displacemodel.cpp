@@ -2874,7 +2874,7 @@ bool DisplaceModel::loadVessels()
 #if 0
         for (unsigned int sp=0; sp<populations.size(); sp++)
         {
-            mVessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 1, 0.0);
+            mVessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, implicit_pops, sp, 1, 0.0);
         }
 #endif
 

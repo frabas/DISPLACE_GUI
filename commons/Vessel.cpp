@@ -1373,7 +1373,7 @@ void Vessel::set_nbfpingspertrip(int _nbfpingpertrip)
 }
 
 
-void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, int pop, int init, double a_tac)
+void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int tstep, vector<Population* >& populations, vector<int> implicit_pops, int pop, int init, double a_tac)
 {
 
     if(init)
@@ -1401,7 +1401,9 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
 
         // inform if this vessel is actually linked with the management under investigation...
         // (if not then the vessel will not be forced to stay on quayside when TACs exhausted)
-        if(individual_tac_per_pop.at(pop)!=0) this->set_targeting_non_tac_pop_only (0);
+        if(individual_tac_per_pop.at(pop)!=0 &&
+                !binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  )  // check explicit pops...
+                ) this->set_targeting_non_tac_pop_only (0);
 
         // export: caution, here export the individual quota
         int discard_all =0;
@@ -2572,7 +2574,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 // force a zero quota on this pop. (and export discards)
                                 a_cumul_weight_this_pop_this_vessel=0.0; // discard all!
-                                this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0, 0.0);
+                                this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0, 0.0);
                                 // => if all quotas at 0 then the vessel will stay on quayside in should_i_go_fishing()...
                                 // what a waste !!...
 
@@ -2588,7 +2590,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             else
                             {
                                 dout(cout  << "individual quota this pop still ok...but now decrease the amount by the last catches." << endl);
-                                this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
+                                this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
                                                                   remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
 
                             }
@@ -2754,18 +2756,21 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 // look into the vector of vector....
                 a_scale = gscale_cpue_nodes_species.at(idx_node_v).at(pop);
 
-                // a dangerous fix:
-                if(a_shape<0 || a_scale <0)
+                // a dangerous fix because potential for silently messing up the parameterisation
+                // messy espacially if a_scale should be stricly 0
+                // (when this vessel is actually not fishing this stock):
+                if(a_shape<=0 || a_scale <0)
                 {
 
-                    cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
+                    //cout << "Something weird with the Gamma parameters: some negative values loaded...." << endl;
                     //for(size_t f = 0; f < fgrounds.size(); ++f)
                     //{
                     //cout <<  " this gr  gscale is: " << gscale_cpue_nodes_species.at(f).at(pop) << endl;
                     //cout <<  " this gr  of gshape is: " << gshape_cpue_nodes_species.at(f).at(pop) << endl;
                     //}
                     a_shape=1;
-                    a_scale=0;
+                    a_scale=1; //  check with hist(rgamma(100, shape=1, scale=1))
+
                 }
                 cpue = rgamma(a_shape, a_scale);
             }
@@ -2813,7 +2818,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
                          " still ok...but now decrease the amount by the last catches. Note that it remains "<< remaining_individual_tac_this_pop << endl);
                     a_cumul_weight_this_pop_this_vessel=cpue*PING_RATE;
-                    this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, pop, 0,
+                    this->set_individual_tac_this_pop(export_individual_tacs, tstep, populations, implicit_pops, pop, 0,
                                                       remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel);
                     dout(cout  << this->get_name() <<  ": individual quota this IMPLICIT pop  "<< pop <<
                          " is now "<< remaining_individual_tac_this_pop- a_cumul_weight_this_pop_this_vessel << endl);

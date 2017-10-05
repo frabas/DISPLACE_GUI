@@ -3044,7 +3044,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         {
             for (unsigned int sp=0; sp<populations.size(); sp++)
             {
-                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, sp, 1, 0.0);
+                vessels.at(i)->set_individual_tac_this_pop(export_individual_tacs, 0, populations, implicit_pops, sp, 1, 0.0);
             }
         }
 

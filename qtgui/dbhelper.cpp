@@ -1218,9 +1218,13 @@ bool DbHelper::checkVesselsTable(int version)
                + "explicit_revenue_av REAL,"
                + "cumfuel REAL,"
                + "fuelcost REAL,"
-               + "gav REAL"
+               + "vpuf REAL,"
+               + "gav REAL,"
+               + "sweptarea REAL,"
+               + "revenuepersweptarea REAL"
                + ");"
                );
+
 
         Q_ASSERT_X(r, __FUNCTION__, q.lastError().text().toStdString().c_str());
     }

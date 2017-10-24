@@ -54,6 +54,7 @@ class Config
 
     QList <int> m_implicit_pops;
     QList <int> m_implicit_pops_level2;
+    QList <int> m_grouped_tacs;
     QList <double> m_calib_oth_landings;
     QList <double> m_calib_weight_at_szgroup;
     QList <double> m_calib_cpue_multiplier;
@@ -74,8 +75,10 @@ public:
     void setNbbenthospops(int value);
     const QList<int> &implicit_pops() const;
     const QList<int> &implicit_pops_level2() const;
+    const QList<int> &grouped_tacs() const;
     void setImplicit_pops(const QList<int> &implicit_pops);
     void setImplicit_pops_level2(const QList<int> &implicit_pops_level2);
+    void setGrouped_tacs(const QList<int> &grouped_tacs);
     const QList<double> &calib_oth_landings() const;
     void setCalib_oth_landings(const QList<double> &calib_oth_landings);
     const QList<double> &calib_weight_at_szgroup() const;

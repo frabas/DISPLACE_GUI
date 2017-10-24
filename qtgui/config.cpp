@@ -38,6 +38,7 @@ Config::Config()
       szGroups(0),
       m_implicit_pops(),
       m_implicit_pops_level2(),
+      m_grouped_tacs(),
       m_calib_oth_landings(),
       m_calib_weight_at_szgroup(),
       m_calib_cpue_multiplier()
@@ -62,6 +63,16 @@ const QList<int> &Config::implicit_pops_level2() const
 void Config::setImplicit_pops_level2(const QList<int> &implicit_pops_level2)
 {
     m_implicit_pops_level2 = implicit_pops_level2;
+}
+
+const QList<int> &Config::grouped_tacs() const
+{
+    return m_grouped_tacs;
+}
+
+void Config::setGrouped_tacs(const QList<int> &grouped_tacs)
+{
+    m_grouped_tacs = grouped_tacs;
 }
 
 const QList<double> &Config::calib_oth_landings() const
@@ -148,6 +159,16 @@ bool Config::save(QString path, QString modelname, QString outputname, QString *
         stream << a << " ";
     stream << endl;
 
+    stream <<"# implicit stocks_pops_level2"<< endl;
+    foreach (int a, m_implicit_pops_level2)
+        stream << a << " ";
+    stream << endl;
+
+    stream <<"# grouped tacs"<< endl;
+    foreach (int a, m_grouped_tacs)
+        stream << a << " ";
+    stream << endl;
+
     stream <<"# calib the other landings per stock"<< endl;
     foreach (double a, m_calib_oth_landings)
         stream << a << " ";
@@ -182,6 +203,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
 
     std::vector <int> implicit_pops;
     std::vector <int> implicit_pops_level2;
+    std::vector <int> grouped_tacs;
     std::vector <types::NodeId> implicit_harbours;
     std::vector <double> calib_oth_landings;
     std::vector <double> calib_weight_at_szgroup;
@@ -194,10 +216,11 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         config.nbbenthospops,
         implicit_pops,
         implicit_pops_level2,
+        grouped_tacs,
         calib_oth_landings,
         calib_weight_at_szgroup,
         calib_cpue_multiplier,
-                implicit_harbours
+        implicit_harbours
         ) <0 )
 
         throw DisplaceException(QString(QObject::tr("Cannot load configuration file: %1"))
@@ -208,6 +231,8 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         config.m_implicit_pops.push_back(*it);
     for (std::vector<int>::iterator it = implicit_pops_level2.begin(); it != implicit_pops_level2.end(); ++it)
         config.m_implicit_pops_level2.push_back(*it);
+    for (std::vector<int>::iterator it = grouped_tacs.begin(); it != grouped_tacs.end(); ++it)
+        config.m_grouped_tacs.push_back(*it);
     for (std::vector<double>::iterator it = calib_oth_landings.begin(); it != calib_oth_landings.end(); ++it)
         config.m_calib_oth_landings.push_back(*it);
     for (std::vector<double>::iterator it = calib_weight_at_szgroup.begin(); it != calib_weight_at_szgroup.end(); ++it)

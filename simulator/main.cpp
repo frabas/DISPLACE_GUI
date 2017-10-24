@@ -181,11 +181,13 @@ double tariff_annual_hcr_percent_change;
 bool is_tacs;
 bool is_fishing_credits;
 bool is_discard_ban;
+bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
 vector <int> implicit_pops_level2;
+vector <int> grouped_tacs;
 vector <int> explicit_pops;
 vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
@@ -606,6 +608,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 nbbenthospops,
                 implicit_pops,
                 implicit_pops_level2,
+                grouped_tacs,
                 calib_oth_landings,
                 calib_weight_at_szgroup,
                 calib_cpue_multiplier,
@@ -966,6 +969,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     } else{
         is_discard_ban=0;
     }
+
+    if(dyn_alloc_sce.option(Options::groupedTACs))
+    {
+        is_grouped_tacs=1;
+    } else{
+        is_grouped_tacs=0;
+    }
+
 
     if(dyn_pop_sce.option(Options::impact_benthos_N))
     {

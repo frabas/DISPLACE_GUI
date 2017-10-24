@@ -47,6 +47,15 @@ bool ConfigDialog::get(Config &config) const
             return false;
     }
 
+    bool ok2;
+    QList<int> impl2;
+    QStringList l2 = ui->m_grouped_tacs->text().split(" ", QString::SkipEmptyParts);
+    foreach(QString s, l2) {
+        impl2.push_back(s.toInt(&ok2));
+        if (!ok2)
+            return false;
+    }
+
     QList<double> cal1;
     l = ui->m_calib_oth_landings->text().split(" ", QString::SkipEmptyParts);
     foreach(QString s, l) {
@@ -97,12 +106,21 @@ void ConfigDialog::set(const Config &config)
     ui->nbbenthospops->setValue(config.getNbbenthospops());
     ui->szGroups->setValue(config.getSzGroups());
 
-    QList<int> l1 = config.implicit_pops();
+    QList<int> l = config.implicit_pops();
     QStringList il;
-    foreach (int i, l1)
+    foreach (int i, l)
         il << QString::number(i);
 
     ui->m_implicit_pops->setText(il.join(" "));
+
+    QList<int> l1 = config.grouped_tacs();
+    QStringList il1;
+    foreach (int i, l1)
+        il1 << QString::number(i);
+
+    ui->m_grouped_tacs->setText(il1.join(" "));
+
+
 
     QList<double> l2 = config.calib_cpue_multiplier();
     QStringList il2;

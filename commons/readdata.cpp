@@ -60,6 +60,7 @@ bool read_config_file(string folder_name_parameterization,
                       int& nbbenthospops,
                       vector<int>& implicit_pops,
                       vector<int>& implicit_pops_level2,
+                      vector<int>& grouped_tacs,
                       vector<double>& calib_oth_landings,
                       vector<double>& calib_w,
                       vector<double>& calib_cpue,
@@ -70,7 +71,7 @@ bool read_config_file(string folder_name_parameterization,
     std::cout << "Reading config file from " << filename << std::endl;
 
     std::ifstream fstream (filename.c_str(), std::ios_base::in);
-    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+    return read_config_file(fstream, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, calib_oth_landings,
                             calib_w, calib_cpue, interesting_harbours);
 }
 
@@ -79,6 +80,7 @@ bool read_config_file(std::istream &stream,
                       int& nbbenthospops,
                       vector<int>& implicit_pops,
                       vector<int>& implicit_pops_level2,
+                      vector<int>& grouped_tacs,
                       vector<double>& calib_oth_landings,
                       vector<double>& calib_w,
                       vector<double>& calib_cpue,
@@ -88,7 +90,7 @@ bool read_config_file(std::istream &stream,
     static const helpers::LineNumberReader::Specifications specs {
         {1,"nbpops"},{3,"nbbenthospops"},{5,"implicit_pops"},{7,"calib_oth_landings"},
         {9,"calib_weight_at_szgroup"},{11,"calib_cpue_multiplier"},{13,"int_harbours"},
-        {15,"implicit_pops_level2"},
+        {15,"implicit_pops_level2"}, {17,"grouped_tacs"},
     };
 
     if (!reader.importFromStream(stream, specs))
@@ -99,6 +101,7 @@ bool read_config_file(std::istream &stream,
         nbbenthospops= reader.getAs<int>("nbbenthospops");
         implicit_pops = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops"), " ");
         implicit_pops_level2 = displace::formats::utils::stringToVector<int>(reader.get("implicit_pops_level2"), " ");
+        grouped_tacs= displace::formats::utils::stringToVector<int>(reader.get("grouped_tacs"), " ");
         calib_oth_landings = displace::formats::utils::stringToVector<double>(reader.get("calib_oth_landings"), " ");
         calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
         calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");

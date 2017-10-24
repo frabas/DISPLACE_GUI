@@ -202,8 +202,9 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     int ex_nbbenthospops = 22;
     vector<int> ex_implicit_pops = { 1, 3 };
     vector<int> ex_implicit_pops_level2 = {};
+    vector<int> ex_grouped_tacs = { 0, 1, 2 };
     vector<double> ex_calib_oth_landings = { 2, 4 };
-    vector<double> ex_calib_w = { 16, 32.6};;
+    vector<double> ex_calib_w = { 16, 32.6};
     vector<double> ex_calib_cpue = {11, 11.11};
     vector<types::NodeId> ex_interesting_harbours = { types::NodeId(3), types::NodeId(6), types::NodeId(18), types::NodeId(29)};
 
@@ -222,18 +223,21 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
                           "# Interesting harbours\n"
                           "3 6 18 29\n"
                           "# Implicit Pop Levels #2\n"
+                          "\n"
+                          "# Grouped TACs groups\n"
                           "\n");
 
     int nbpops;
     int nbbenthospops;
     vector<int> implicit_pops;
     vector<int> implicit_pops_level2;
+    vector<int> grouped_tacs;
     vector<double> calib_oth_landings;
     vector<double> calib_w;
     vector<double> calib_cpue;
     vector<types::NodeId> interesting_harbours;
 
-    bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+    bool r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, calib_oth_landings,
                              calib_w, calib_cpue, interesting_harbours);
 
     BOOST_CHECK(r);
@@ -241,6 +245,7 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
     BOOST_CHECK_EQUAL(ex_nbbenthospops, nbbenthospops);
     BOOST_CHECK_EQUAL_COLLECTIONS(ex_implicit_pops.begin(), ex_implicit_pops.end(), implicit_pops.begin(), implicit_pops.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex_implicit_pops_level2.begin(), ex_implicit_pops_level2.end(), implicit_pops_level2.begin(), implicit_pops_level2.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(ex_grouped_tacs.begin(), ex_grouped_tacs.end(), grouped_tacs.begin(), grouped_tacs.end());
 
     BOOST_CHECK_EQUAL_COLLECTIONS(ex_calib_oth_landings.begin(), ex_calib_oth_landings.end(), calib_oth_landings.begin(), calib_oth_landings.end());
     BOOST_CHECK_EQUAL_COLLECTIONS(ex_calib_w.begin(), ex_calib_w.end(), calib_w.begin(), calib_w.end());
@@ -256,7 +261,7 @@ BOOST_AUTO_TEST_CASE( test_config_dat )
                   "# implicit stocks\n";
     is.str(test);
     is.clear();
-    r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, calib_oth_landings,
+    r = read_config_file(is, nbpops, nbbenthospops, implicit_pops, implicit_pops_level2, grouped_tacs, calib_oth_landings,
                                   calib_w, calib_cpue, interesting_harbours);
 
     BOOST_CHECK(!r);

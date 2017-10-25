@@ -1084,8 +1084,18 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                }
 
 
-                               if(dyn_alloc_sce.option(Options::LTMP)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
-                               if(dyn_alloc_sce.option(Options::FMSY)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+                               if(dyn_alloc_sce.option(Options::LTMP)){
+
+                                   populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
+                               } else{
+                                   if(dyn_alloc_sce.option(Options::FMSY)){
+
+                                       populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+                                    } else{
+                                          populations.at(sp)->compute_TAC(multiOnTACconstraint, 3); // statuquo is default
+                                    }
+                               }
+
 
 
                                outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
@@ -1108,7 +1118,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                      // i.e. a trick to check if nan
                                     populations.at(sp)->get_oth_land_multiplier())
                                       {
-                                      cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
+                                      cout << "stop: check the c++ code for oth_land_multiplier (currently at nan likely because of bad tac computation)"<< endl;
                                        int ff;
                                        cin >>ff;
 

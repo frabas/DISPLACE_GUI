@@ -1651,7 +1651,9 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 								 // the current tac is the avant-dernier
 
 
-   } else{  // F-MSY ICES approach (i.e. incl. a B-MSY trigger)
+   }
+
+   if(HCR==2){ //  F-MSY ICES approach (i.e. incl. a B-MSY trigger)
 
         // 1. check B trigger
         cout << "F-MSY approach applies with Btrigger at " << Btrigger << "  (when necessary)... " << endl;
@@ -1765,11 +1767,108 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
                 (1- (exp(-(tot_F_at_age_y_plus_1.at(i)+tot_M_at_age_y_plus_1.at(i)))))/ 1000;
 
         }
-        cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
-
-
-
    }
+
+     if(HCR==3){ //  statuquo TAC
+
+             cout << "Statuquo TAC definition for next year... " << endl;
+             double fmultiplier=1.0;
+
+             vector <double> tot_N_at_age_end_previous_y = this->get_perceived_tot_N_at_age(); // perceived
+             vector <double> tot_W_at_age_y_plus_1 = this->get_tot_W_at_age();
+
+            // 1. perform a short-term forecast on N with F * fmultipier * fmultiplier
+
+             //a. for year y from y-1
+             dout(cout << "the  N by age at the end of  y is " << endl);
+             for (unsigned int i=0; i < tot_N_at_age_end_previous_y.size(); i++)
+             {
+                 dout(cout << "age" << i+1 << ": " << tot_N_at_age_end_previous_y.at(i) << endl);
+             }
+
+             dout(cout << "the forecast N by age for y (from y-1) is " << endl);
+                                          // init
+             vector <double> forecast_tot_N_at_age_start_y(tot_N_at_age_end_previous_y.size());
+             for (unsigned int i=1; i < tot_N_at_age_end_previous_y.size(); i++)
+             {
+                                          // class change from 31th of Dec to 1st of Jan
+                 forecast_tot_N_at_age_start_y.at(i) = tot_N_at_age_end_previous_y.at(i-1);
+             }
+                                          // note: forecast_tot_N_at_age_y.at(0) keeps the same=> assuming fixed recruits...
+             forecast_tot_N_at_age_start_y.at(0) = tot_N_at_age_end_previous_y.at(0);
+             for (unsigned int i=0; i < forecast_tot_N_at_age_start_y.size(); i++)
+             {
+                 dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y.at(i) << endl);
+             }
+
+             //b. for year y+1 from y
+             dout(cout << "the forecast F by age for y+1 (from y) is " << endl);
+                                          //init
+             vector <double> forecast_tot_N_at_age_start_y_plus_1 (forecast_tot_N_at_age_start_y.size());
+             vector <double> tot_F_at_age_end_previous_y = this->get_tot_F_at_age();
+                                          //init
+             vector <double> tot_F_at_age_y_plus_1(tot_F_at_age_end_previous_y.size());
+             for (unsigned int i=0; i < tot_F_at_age_end_previous_y.size(); i++)
+             {
+                                          // target for y+1
+                 tot_F_at_age_y_plus_1.at(i) = tot_F_at_age_end_previous_y.at(i)*fmultiplier;
+             }
+             for (unsigned int i=0; i < tot_F_at_age_y_plus_1.size(); i++)
+             {
+                 dout(cout << "age" << i+1 << ": " << tot_F_at_age_y_plus_1.at(i) << endl);
+             }
+
+             dout(cout << "and the forecast M by age for y+1 (from y) is " << endl);
+             vector <double> tot_M_at_age_y_plus_1 = this->get_tot_M_at_age();
+             for (unsigned int i=0; i < tot_M_at_age_y_plus_1.size(); i++)
+             {
+                 dout(cout << "age" << i+1 << ": " << tot_M_at_age_y_plus_1.at(i) << endl);
+             }
+
+             dout(cout << "and the forecast W by age for y+1 (from y) is " << endl);
+             for (unsigned int i=0; i < tot_W_at_age_y_plus_1.size(); i++)
+             {
+                 dout(cout << "age" << i+1 << ": " << tot_W_at_age_y_plus_1.at(i) << endl);
+             }
+
+             dout(cout << "then, the forecast N by age for y+1 (from y) is " << endl);
+             for (unsigned int i=1; i < forecast_tot_N_at_age_start_y.size(); i++)
+             {
+                 forecast_tot_N_at_age_start_y_plus_1.at(i) =
+                     forecast_tot_N_at_age_start_y.at(i-1)*
+                     exp( -((tot_F_at_age_y_plus_1.at(i-1)) + tot_M_at_age_y_plus_1.at(i-1)) );
+                 ;						 // class change and apply mortality F+M
+             }							 // TO DO: add the plusgroup (if necessary)
+             forecast_tot_N_at_age_start_y_plus_1.at(0) = forecast_tot_N_at_age_start_y.at(0);
+             // note: forecast_tot_N_at_age_y_plus_1.at(0) keeps the same=> assuming fixed recruits...
+
+             for (unsigned int i=0; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+             {
+                 dout(cout << "age" << i+1 << ": " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl);
+             }
+
+             // 2. compute the TAC (in tons) according to the forecast N (Baronovs equation)
+             // TAC per age and then sum over ages....
+             for (unsigned int i=1; i < forecast_tot_N_at_age_start_y_plus_1.size(); i++)
+             {
+                // cout << "tot_F_at_age_y_plus_1 at age " << i << " is " << tot_F_at_age_y_plus_1.at(i) << endl;
+                // cout << "tot_M_at_age_y_plus_1 at age " << i << " is " << tot_M_at_age_y_plus_1.at(i) << endl;
+                // cout << "tot_W_at_age_y_plus_1 at age " << i << " is " << tot_W_at_age_y_plus_1.at(i) << endl;
+                // cout << "forecast_tot_N_at_age_start_y_plus_1 at age " << i << " is " << forecast_tot_N_at_age_start_y_plus_1.at(i) << endl;
+                if (tot_W_at_age_y_plus_1.at(i)<1e-6) cout << "something wrong in the TAC computation: e.g. check spe_percent_per_szgroup_biolsceXX matrix for leaks here..." << endl;
+
+                 tac_y_plus_1+=   (tot_F_at_age_y_plus_1.at(i)/((tot_F_at_age_y_plus_1.at(i))+tot_M_at_age_y_plus_1.at(i))) *
+                     forecast_tot_N_at_age_start_y_plus_1.at(i)* tot_W_at_age_y_plus_1.at(i)*
+                                          // convert in tons;
+                     (1- (exp(-(tot_F_at_age_y_plus_1.at(i)+tot_M_at_age_y_plus_1.at(i)))))/ 1000;
+
+      }
+
+
+     }
+     cout << "so, the TAC (in tons) for y+1 will be " << tac_y_plus_1 << endl;
+
+
 
     this->get_tac()->add_tac_y_plus_1(tac_y_plus_1);
 

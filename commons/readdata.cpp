@@ -106,7 +106,12 @@ bool read_config_file(std::istream &stream,
         calib_w = displace::formats::utils::stringToVector<double>(reader.get("calib_weight_at_szgroup"), " ");
         calib_cpue = displace::formats::utils::stringToVector<double>(reader.get("calib_cpue_multiplier"), " ");
         interesting_harbours = types::helpers::toIdVector<types::NodeId>(displace::formats::utils::stringToVector<int>(reader.get("int_harbours"), " "));
-    } catch (displace::formats::FormatException &x) {
+
+        if(grouped_tacs.empty()){
+            grouped_tacs.resize(nbpops);
+            iota (std::begin(grouped_tacs), std::end(grouped_tacs), 0); // Fill with 0, 1, ...,
+            }
+        } catch (displace::formats::FormatException &x) {
         cerr << x.what() << endl;
         return false;
     }

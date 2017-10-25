@@ -110,6 +110,7 @@ extern bool is_discard_ban;
 extern bool is_grouped_tacs;
 extern bool is_impact_benthos_N;
 extern vector <int> implicit_pops;
+extern vector <int> grouped_tacs;
 extern displace::commons::Scenario scenario;
 extern DynAllocOptions dyn_alloc_sce;
 extern PopSceOptions dyn_pop_sce;
@@ -348,7 +349,8 @@ static void manage_vessel(int idx_v)
                         //#pragma omp critical(docatch)
                         {
                             dout(cout  << "please, check your mail! :" << vessels[ index_v ]->read_message() << endl);
-                            vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, benthoss, implicit_pops, tstep, graph_res,
+                            vessels[ index_v ]->do_catch(export_individual_tacs, populations, nodes, benthoss, implicit_pops, grouped_tacs,
+                                                         tstep, graph_res,
                                                          is_tacs, is_individual_vessel_quotas, check_all_stocks_before_going_fishing,
                                                          is_discard_ban, is_grouped_tacs, is_fishing_credits, is_impact_benthos_N);
 

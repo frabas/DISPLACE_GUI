@@ -2109,6 +2109,54 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     }
 
 
+
+
+    // for loop over pop
+    vector <double> global_quotas(catch_pop_at_szgroup.size(), 0);
+    vector <int> individual_quotas(catch_pop_at_szgroup.size(), 0);
+    vector <double> grouped_quotas(*max_element(grouped_tacs.begin(),grouped_tacs.end())+1, 0);
+    if(is_tacs)
+    {
+        // IQs
+        if(tstep>1  && is_individual_vessel_quotas)
+        {
+            for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+            {
+               individual_quotas.at(pop) = this->get_individual_tac(pop); // default when IQ
+               if(is_grouped_tacs) grouped_quotas.at(grouped_tacs.at(pop)) +=individual_quotas.at(pop); // sum up if grouped quotas
+            }
+            if(is_grouped_tacs)
+            {
+               for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+                {
+                   individual_quotas.at(pop) = grouped_quotas.at(grouped_tacs.at(pop)); // feed back
+                }
+
+            }
+        }
+
+         // global TACs
+        if(tstep>8761  && !is_individual_vessel_quotas)
+        {
+            for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+            {
+             global_quotas.at(pop) = populations.at(pop)->get_tac()->get_current_tac(); // default when global TAC
+             if(is_grouped_tacs) grouped_quotas.at(grouped_tacs.at(pop)) +=global_quotas.at(pop); // sum up if grouped quotas
+            }
+            if(is_grouped_tacs)
+            {
+               for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
+                {
+                   global_quotas.at(pop) = grouped_quotas.at(grouped_tacs.at(pop)); // feed back
+                }
+
+            }
+        }
+
+     } // end is_tacs
+
+
+
     // OUTPUTS
     // declare with length nbpops
     vector<double> tot_catch_per_pop(  catch_pop_at_szgroup.size() );
@@ -2562,7 +2610,24 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // TAC MANAGEMENT MEASURE:
                             // THE TAC: check against first the individual quota, then the global tac...
                             // 1. get the individual vessel tac for this pop
-                            int remaining_individual_tac_this_pop = this->get_individual_tac(pop);
+                            int remaining_individual_tac_this_pop = individual_quotas.at(pop);
+
+                            // 1bis. caution
+                            if(is_grouped_tacs)
+                            {
+                                for (unsigned int apop=0; apop<catch_pop_at_szgroup.size(); apop++)
+                                {
+                                    if(apop!=pop && (grouped_tacs.at(apop)==grouped_tacs.at(pop)))
+                                     {
+                                        for(unsigned int szgroup=0; szgroup < catch_pop_at_szgroup[apop].size();++szgroup)
+                                        {
+                                        a_cumul_weight_this_pop_this_vessel += catch_pop_at_szgroup[apop][szgroup]; // add catches on other grouped pops
+                                        }
+                                      }
+                                 }
+                            }
+
+
                             // 2. compare (AT THE VESSEL SCALE)
                             if(a_cumul_weight_this_pop_this_vessel>remaining_individual_tac_this_pop)
                             {
@@ -2608,15 +2673,23 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         dout(cout  << "the new catch is  " << tot_catch_per_pop[pop] << endl);
                         dout(cout  << "landings so far for pop " << pop << ", AFTER: " << populations.at(pop)->get_landings_so_far());
 
+                        if(is_grouped_tacs)
+                        {
+                            for (unsigned int apop=0; apop<catch_pop_at_szgroup.size(); apop++)
+                            {
+                                if(apop!=pop && (grouped_tacs.at(apop)==grouped_tacs.at(pop))) so_far += (populations.at(apop)->get_landings_so_far()); // add catches on other grouped pops
+                            }
+                        }
+
                         // because the first year is the calibration year.
                         if(tstep>8761  && !is_individual_vessel_quotas)
                         {
                             // 4. compare in tons (AT THE GLOBAL SCALE)
-                            if( (so_far/1000) > (populations.at(pop)->get_tac()->get_current_tac()))
+                            if( (so_far/1000) > (global_quotas.at(pop)))
                             {
                                 dout (cout << "used " <<
-                                      (so_far/1000) / (populations.at(pop)->get_tac()->get_current_tac())*100  <<
-                                      " % global quota of " << populations.at(pop)->get_tac()->get_current_tac() << " this pop: overshoot..." << endl);
+                                      (so_far/1000) / (global_quotas.at(pop))*100  <<
+                                      " % global quota of " << global_quotas.at(pop) << " this pop: overshoot..." << endl);
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
@@ -2638,8 +2711,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             else
                             {
                                 dout (cout << "used " <<
-                                      (so_far/1000) / (populations.at(pop)->get_tac()->get_current_tac())*100  <<
-                                      " % global quota of " << populations.at(pop)->get_tac()->get_current_tac() << " this pop: ok." << endl);
+                                      (so_far/1000) / (global_quotas.at(pop))*100  <<
+                                      " % global quota of " << global_quotas.at(pop) << " this pop: ok." << endl);
                             }
 
                         }			 // end individual TAC management

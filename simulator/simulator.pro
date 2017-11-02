@@ -16,7 +16,7 @@ macx {
 QMAKE_CXXFLAGS += -fpermissive
 CONFIG += c++11
 
-LIBS+= -L.. -ldisplacecommons -lformats
+LIBS+= -L.. -ldisplacecommons -lformats -lsqlite3
 
 macx {
     LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
@@ -68,7 +68,6 @@ HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
-    ../include/biomodule.h \
     ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \

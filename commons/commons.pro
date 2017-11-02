@@ -9,7 +9,7 @@ macx:DESTDIR=$$LIBDESTDIR
 
 DEFINES += COMMONS_LIBRARY
 INCLUDEPATH +=../include/ ../formats . ../sparsepp
-LIBS += -L.. -lformats
+LIBS += -L.. -lformats -lsqlite3
 
 win32 {
     # No crash handler support for Windows
@@ -58,14 +58,14 @@ SOURCES= \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
-    pathshop.cpp
+    pathshop.cpp \
+    storage/sqliteresultsstorage.cpp
 
 
 HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
-    ../include/biomodule.h \
     ../include/Fishfarm.h \
     ../include/Windmill.h \
     ../include/Node.h \
@@ -104,7 +104,8 @@ HEADERS= \
     utils/CrashHandler.h \
     dtree/vesselsevaluators.h \
     commons_global.h \
-    pathshop.h
+    pathshop.h \
+    storage/sqliteresultsstorage.h
 
 
 ## Do not add this if you don't support IPC queues

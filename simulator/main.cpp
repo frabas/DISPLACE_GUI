@@ -20,6 +20,8 @@
 
 #include <idtypes.h>
 
+#include <storage/sqliteresultsstorage.h>
+
 #include <helpers.h>
 #include <assert.h>
 
@@ -183,6 +185,7 @@ bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
+bool enable_sqlite_out = true;
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
@@ -586,8 +589,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     char *path = 0;
 #endif
 
-
-
+    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
+    SQLiteResultsStorage outSqlite(sqliteOutputPath);
+    try {
+        if (enable_sqlite_out) {
+            outSqlite.open();
+        }
+    } catch (SQLiteResultsStorage::Exception &x) {
+        std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
+        exit(1);
+    }
 
     // get the name of the input directory for this simu
     string folder_name_parameterization= namefolderinput;
@@ -5283,6 +5294,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popdyn_test2.close();
     popnodes_start.close();
     popnodes_end.close();
+
+    if (enable_sqlite_out) {
+        try {
+            outSqlite.close();
+        } catch (SQLiteResultsStorage::Exception &x) {
+            std::cerr << "An error occurred closing the SQLite db: " << x.what() << "\n";
+        }
+    }
 
     // disable gnuplot
 #if 0

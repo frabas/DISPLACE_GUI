@@ -8,6 +8,8 @@
 
 class SQLiteTable;
 
+struct sqlite3;
+
 class SQLiteResultsStorage
 {
     class Impl;
@@ -20,6 +22,8 @@ public:
     bool close();
 
     bool addTable (std::shared_ptr<SQLiteTable>);
+
+    sqlite3 *handle();
 
     class Exception : public std::runtime_error { using std::runtime_error::runtime_error; };
 };

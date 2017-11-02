@@ -60,7 +60,8 @@ SOURCES= \
     utils/CrashHandler.cpp \
     pathshop.cpp \
     storage/sqliteresultsstorage.cpp \
-    storage/sqlitetable.cpp
+    storage/sqlitetable.cpp \
+    storage/tables/vesseldeftable.cpp
 
 
 HEADERS= \
@@ -107,7 +108,8 @@ HEADERS= \
     commons_global.h \
     pathshop.h \
     storage/sqliteresultsstorage.h \
-    storage/sqlitetable.h
+    storage/sqlitetable.h \
+    storage/tables/vesseldeftable.h
 
 
 ## Do not add this if you don't support IPC queues

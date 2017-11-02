@@ -42,7 +42,8 @@ SOURCES= main.cpp \
     inputfiles_fishfarmsspe.cpp \
     inputfiles_simusspe.cpp \
     inputfiles_windmillsspe.cpp \
-    test_pathshop.cpp
+    test_pathshop.cpp \
+    sqlitestorage.cpp
 
 HEADERS=
 

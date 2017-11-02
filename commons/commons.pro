@@ -59,7 +59,8 @@ SOURCES= \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
     pathshop.cpp \
-    storage/sqliteresultsstorage.cpp
+    storage/sqliteresultsstorage.cpp \
+    storage/sqlitetable.cpp
 
 
 HEADERS= \
@@ -105,7 +106,8 @@ HEADERS= \
     dtree/vesselsevaluators.h \
     commons_global.h \
     pathshop.h \
-    storage/sqliteresultsstorage.h
+    storage/sqliteresultsstorage.h \
+    storage/sqlitetable.h
 
 
 ## Do not add this if you don't support IPC queues

@@ -69,3 +69,8 @@ bool SQLiteResultsStorage::close()
     p->close();
     return true;
 }
+
+bool SQLiteResultsStorage::addTable(std::shared_ptr<SQLiteTable>)
+{
+
+}

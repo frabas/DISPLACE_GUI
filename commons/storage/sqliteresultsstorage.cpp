@@ -3,100 +3,58 @@
 
 #include "utils/make_unique.h"
 
-#include <sqlite3.h>
-
-#include <list>
-
-namespace {
-class SQLiteException : public SQLiteResultsStorage::Exception {
-    std::string mErrmsg;
-    int mCode;
-public:
-    explicit SQLiteException(sqlite3 *db) : Exception ("") {
-        mErrmsg = sqlite3_errmsg(db);
-        mCode = sqlite3_errcode(db);
-    }
-
-    const char *what() const noexcept override
-    {
-        return mErrmsg.c_str();
-    }
-
-    int code() const {
-        return mCode;
-    }
-};
-}
-
-class SQLiteResultsStorage::Impl {
-public:
-    std::string dbPath;
-    std::list<std::shared_ptr<SQLiteTable>> tables;
-
-    sqlite3 *mDb = nullptr;
-
-    ~Impl() {
-        if (mDb != nullptr) {
-            sqlite3_close(mDb);
-        }
-    }
-
-    void open() {
-        auto r = sqlite3_open(dbPath.c_str(), &mDb);
-        if (r != SQLITE_OK) {
-            throw SQLiteException(mDb);
-        }
-    }
-
-    void close() {
-        sqlite3_close(mDb);
-        mDb = nullptr;
-    }
-};
-
 SQLiteResultsStorage::SQLiteResultsStorage(std::string path)
-    : p(utils::make_unique<Impl>())
 {
-    p->dbPath = std::move(path);
+    dbPath = std::move(path);
 }
 
-SQLiteResultsStorage::~SQLiteResultsStorage() noexcept = default;
+SQLiteResultsStorage::~SQLiteResultsStorage() noexcept
+{
+    if (mDb != nullptr) {
+        sqlite3_close(mDb);
+    }
+}
+
 
 bool SQLiteResultsStorage::open()
 {
-    p->open();
+    auto r = sqlite3_open(dbPath.c_str(), &mDb);
+    if (r != SQLITE_OK) {
+        throw SQLiteException(mDb);
+    }
     return true;
 }
 
 bool SQLiteResultsStorage::close()
 {
-    p->close();
+    sqlite3_close(mDb);
+    mDb = nullptr;
     return true;
 }
 
 bool SQLiteResultsStorage::addTable(std::shared_ptr<SQLiteTable> table)
 {
-    std::string qry {"SELECT name FROM sqlite_master WHERE type='table' AND name='?';"};
+    std::string qry {"SELECT name FROM sqlite_master WHERE type='table' AND name=?1;"};
     sqlite3_stmt *stmt;
-    if (sqlite3_prepare(p->mDb, qry.c_str(), qry.size(), &stmt, nullptr) != SQLITE_OK)
-        throw SQLiteException(p->mDb);
+    if (sqlite3_prepare(mDb, qry.c_str(), qry.size(), &stmt, nullptr) != SQLITE_OK)
+        throw SQLiteException(mDb);
 
     auto name = table->name();
     if (sqlite3_bind_text(stmt, 1, name.c_str(), name.size(), 0) != SQLITE_OK)
-        throw SQLiteException(p->mDb);
+        throw SQLiteException(mDb);
 
-    if (sqlite3_step(stmt) == SQLITE_ERROR) {
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
         // table doesn't exist.
         if (!table->create()) {
             return false;
         }
     }
 
-    p->tables.push_back(std::move(table));
+    tables.push_back(std::move(table));
     return true;
 }
 
 sqlite3 *SQLiteResultsStorage::handle()
 {
-    return p->mDb;
+    return mDb;
 }

@@ -595,7 +595,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         if (enable_sqlite_out) {
             outSqlite.open();
         }
-    } catch (SQLiteResultsStorage::Exception &x) {
+    } catch (SQLiteException &x) {
         std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
         exit(1);
     }
@@ -5298,7 +5298,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     if (enable_sqlite_out) {
         try {
             outSqlite.close();
-        } catch (SQLiteResultsStorage::Exception &x) {
+        } catch (SQLiteException &x) {
             std::cerr << "An error occurred closing the SQLite db: " << x.what() << "\n";
         }
     }

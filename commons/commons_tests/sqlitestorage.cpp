@@ -7,11 +7,11 @@
 
 BOOST_AUTO_TEST_CASE (test_sqlite_table)
 {
-    SQLiteResultsStorage db("output.db");
-    BOOST_CHECK(db.open());
+    auto db = std::make_shared<SQLiteResultsStorage>("output.db");
+    BOOST_CHECK(db->open());
 
-    VesselDefTable table("VesselsDefs");
-    BOOST_CHECK(db.addTable(table));
+    auto table = std::make_shared<VesselDefTable>(db, "VesselsDefs");
+    BOOST_CHECK(db->addTable(table));
 
 
 }

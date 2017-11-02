@@ -6,7 +6,11 @@
 class VesselDefTable : public SQLiteTable
 {
 public:
-    VesselDefTable(std::string name);
+    VesselDefTable(std::shared_ptr<SQLiteResultsStorage> db, std::string name);
+
+    // SQLiteTable interface
+protected:
+    std::string getCreateDefinition() override;
 };
 
 #endif // VESSELDEFTABLE_H

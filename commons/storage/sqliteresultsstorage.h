@@ -1,19 +1,40 @@
 #ifndef SQLITERESULTSTORAGE_H
 #define SQLITERESULTSTORAGE_H
 
+#include <sqlite3.h>
+
 #include <string>
 #include <memory>
-
 #include <stdexcept>
+#include <list>
 
 class SQLiteTable;
 
-struct sqlite3;
+class SQLiteException : public std::runtime_error {
+    std::string mErrmsg;
+    int mCode;
+public:
+    explicit SQLiteException(sqlite3 *db) : std::runtime_error ("") {
+        mErrmsg = sqlite3_errmsg(db);
+        mCode = sqlite3_errcode(db);
+    }
+
+    const char *what() const noexcept override
+    {
+        return mErrmsg.c_str();
+    }
+
+    int code() const {
+        return mCode;
+    }
+};
 
 class SQLiteResultsStorage
 {
-    class Impl;
-    std::unique_ptr<Impl> p;
+    std::string dbPath;
+    std::list<std::shared_ptr<SQLiteTable>> tables;
+
+    sqlite3 *mDb = nullptr;
 public:
     SQLiteResultsStorage(std::string path);
     ~SQLiteResultsStorage() noexcept;
@@ -24,8 +45,6 @@ public:
     bool addTable (std::shared_ptr<SQLiteTable>);
 
     sqlite3 *handle();
-
-    class Exception : public std::runtime_error { using std::runtime_error::runtime_error; };
 };
 
 #endif // SQLITERESULTSTORAGE_H

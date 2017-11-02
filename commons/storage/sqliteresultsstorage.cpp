@@ -4,6 +4,8 @@
 
 #include <sqlite3.h>
 
+#include <list>
+
 namespace {
 class SQLiteException : public SQLiteResultsStorage::Exception {
     std::string mErrmsg;
@@ -28,6 +30,7 @@ public:
 class SQLiteResultsStorage::Impl {
 public:
     std::string dbPath;
+    std::list<std::shared_ptr<SQLiteTable>> tables;
 
     sqlite3 *mDb = nullptr;
 
@@ -70,7 +73,7 @@ bool SQLiteResultsStorage::close()
     return true;
 }
 
-bool SQLiteResultsStorage::addTable(std::shared_ptr<SQLiteTable>)
+bool SQLiteResultsStorage::addTable(std::shared_ptr<SQLiteTable> table)
 {
-
+    p->tables.push_back(std::move(table));
 }

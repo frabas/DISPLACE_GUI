@@ -68,15 +68,19 @@ macx {
     #LIBS += /Library/Frameworks/GDAL.framework/Versions/1.11/unix/lib
     DEFINES +=
 
-    APPDESTDIR=../bin
+    APPDESTDIR=$$join(top_builddir,,,"/bin")
     TARGETAPPBUNDLE=$$join(APPTARGET,,,".app")
     TARGETSODIR= $$APPDESTDIR $$TARGETAPPBUNDLE Contents Frameworks
     TARGETEXEDIR= $$APPDESTDIR $$TARGETAPPBUNDLE Contents MacOS
     LIBDESTDIR= $$join(TARGETSODIR,"/")
     EXEDESTDIR= $$join(TARGETEXEDIR,"/")
 
+    message("ExePath: $$EXEDESTDIR")
+    message("LibPath: $$LIBDESTDIR")
+
+
     ## hack
-    QMC_LIBDESTDIR=../../../$$LIBDESTDIR
+    QMC_LIBDESTDIR=$$LIBDESTDIR
 
     QMAKE_LFLAGS_SONAME=-Wl,-install_name,@executable_path/../Frameworks/
     LOCALEDIR=$$APPDESTDIR/$$TARGETAPPBUNDLE/Contents/Resources/Locales

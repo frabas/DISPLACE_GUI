@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include <filesystem>
-
 using namespace std;
 
 void open_file_error(string filename)

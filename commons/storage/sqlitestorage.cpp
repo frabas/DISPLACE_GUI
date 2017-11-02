@@ -1,14 +1,14 @@
-#include "sqliteresultsstorage.h"
+#include "sqlitestorage.h"
 #include "sqlitetable.h"
 
 #include "utils/make_unique.h"
 
-SQLiteResultsStorage::SQLiteResultsStorage(std::string path)
+SQLiteStorage::SQLiteStorage(std::string path)
 {
     dbPath = std::move(path);
 }
 
-SQLiteResultsStorage::~SQLiteResultsStorage() noexcept
+SQLiteStorage::~SQLiteStorage() noexcept
 {
     if (mDb != nullptr) {
         sqlite3_close(mDb);
@@ -16,7 +16,7 @@ SQLiteResultsStorage::~SQLiteResultsStorage() noexcept
 }
 
 
-bool SQLiteResultsStorage::open()
+bool SQLiteStorage::open()
 {
     auto r = sqlite3_open(dbPath.c_str(), &mDb);
     if (r != SQLITE_OK) {
@@ -25,14 +25,14 @@ bool SQLiteResultsStorage::open()
     return true;
 }
 
-bool SQLiteResultsStorage::close()
+bool SQLiteStorage::close()
 {
     sqlite3_close(mDb);
     mDb = nullptr;
     return true;
 }
 
-bool SQLiteResultsStorage::addTable(std::shared_ptr<SQLiteTable> table)
+bool SQLiteStorage::addTable(std::shared_ptr<SQLiteTable> table)
 {
     std::string qry {"SELECT name FROM sqlite_master WHERE type='table' AND name=?1;"};
     sqlite3_stmt *stmt;
@@ -54,7 +54,7 @@ bool SQLiteResultsStorage::addTable(std::shared_ptr<SQLiteTable> table)
     return true;
 }
 
-sqlite3 *SQLiteResultsStorage::handle()
+sqlite3 *SQLiteStorage::handle()
 {
     return mDb;
 }

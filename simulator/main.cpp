@@ -20,7 +20,7 @@
 
 #include <idtypes.h>
 
-#include <storage/sqliteresultsstorage.h>
+#include <storage/sqlitestorage.h>
 
 #include <helpers.h>
 #include <assert.h>
@@ -590,7 +590,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
-    SQLiteResultsStorage outSqlite(sqliteOutputPath);
+    SQLiteStorage outSqlite(sqliteOutputPath);
     try {
         if (enable_sqlite_out) {
             outSqlite.open();

@@ -29,15 +29,15 @@ public:
     }
 };
 
-class SQLiteResultsStorage
+class SQLiteStorage
 {
     std::string dbPath;
     std::list<std::shared_ptr<SQLiteTable>> tables;
 
     sqlite3 *mDb = nullptr;
 public:
-    SQLiteResultsStorage(std::string path);
-    ~SQLiteResultsStorage() noexcept;
+    SQLiteStorage(std::string path);
+    ~SQLiteStorage() noexcept;
 
     bool open();
     bool close();

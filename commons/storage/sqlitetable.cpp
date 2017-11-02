@@ -1,11 +1,11 @@
 #include "sqlitetable.h"
 
-#include "storage/sqliteresultsstorage.h"
+#include "storage/sqlitestorage.h"
 #include <sqlite3.h>
 
 #include <sstream>
 
-SQLiteTable::SQLiteTable(std::shared_ptr<SQLiteResultsStorage> db, std::string name)
+SQLiteTable::SQLiteTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : mdb(db), mName(name)
 {
 
@@ -30,7 +30,7 @@ bool SQLiteTable::create()
     return true;
 }
 
-std::shared_ptr<SQLiteResultsStorage> SQLiteTable::db()
+std::shared_ptr<SQLiteStorage> SQLiteTable::db()
 {
     auto db = mdb.lock();
 

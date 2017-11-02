@@ -4,14 +4,14 @@
 #include <string>
 #include <memory>
 
-class SQLiteResultsStorage;
+class SQLiteStorage;
 
 class SQLiteTable
 {
-    std::weak_ptr<SQLiteResultsStorage> mdb;
+    std::weak_ptr<SQLiteStorage> mdb;
     std::string mName;
 public:
-    SQLiteTable(std::shared_ptr<SQLiteResultsStorage> db, std::string name);
+    SQLiteTable(std::shared_ptr<SQLiteStorage> db, std::string name);
     virtual ~SQLiteTable() noexcept;
 
     virtual bool create();
@@ -20,7 +20,7 @@ public:
     std::string name() const { return mName; }
 
 protected:
-    std::shared_ptr<SQLiteResultsStorage> db();
+    std::shared_ptr<SQLiteStorage> db();
     // helper functions here
 
     virtual std::string getCreateDefinition() { return std::string(); }

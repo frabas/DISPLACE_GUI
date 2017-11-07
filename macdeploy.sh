@@ -30,65 +30,6 @@ Usage:
 EOF
 }
 
-T=release
-OPT_NOBUNDLE=
-OPT_NOFIX=
-
-while [ "$1" != "" ] ; do
-	case "$1" in
-		-t)
-			shift
-			T=$1
-			;;
-		-nb)
-			OPT_NOBUNDLE=y
-			;;
-		-nf)
-			OPT_NOFIX=y
-			;;
-		-h)
-			help
-			exit 0
-			;;
-		*)
-			echo "Options unknown, use -h to have help."
-			exit 1
-			;;
-	esac
-	shift
-done
-
-QMAKE=`which qmake`
-if [ "$QMAKE" == "" ] ; then
-	echo "qmake not in path."
-	QMAKE=~/Qt/5.5/clang_64/bin/qmake
-	if [ ! -r $QMAKE ] ; then
-		echo "Cannot use wired in qmake. please fix paths."
-		exit 1
-	fi
-fi
-
-$QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
-. /tmp/qtconf
-
-TOPDIR=$PWD
-DESTDIR=$PWD/build/$T/bin
-INSTALL=$PWD/build
-APPNAME=DisplaceProject
-APPBUNDLE=$DESTDIR/$APPNAME.app
-
-EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor objeditor"
-EXTRA_FRAMEWORKS=""
-# EXTRA_LIBS must be found as dependency in EXECUTABLES
-EXTRA_LIBS="libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
-QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
-
-# These INSTALL_EXTRA_LIBS will be installed regardless of the links
-INSTALL_EXTRA_LIBS=""
-
-
-TOOLDIR=`dirname $0`
-
 #copy_lib
 # copy a library in the application bundle Frameworks directory
 #
@@ -128,6 +69,7 @@ copy_lib()
 			if [ -r "$org_name" ] ; then
 				echo "COPYING: $org_name $dest_name"
 				cp -L $org_name $dest_name || exit 1
+                                chmod u+w $dest_name
 		
 				echo "Running: install_name_tool -id $new_name $dest_name"
 				install_name_tool -id $new_name $dest_name || echo "- ***Error Running: install_name_tool -id $new_name $dest_name"
@@ -160,6 +102,7 @@ copy_framework_qt()
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file
+                chmod -R u+w $BUNDLE/Contents/Frameworks/$dst_file
 	
 		#echo "Running: install_name_tool -id @executable_path/../Frameworks/$dst_file $BUNDLE/Contents/Frameworks/$dst_lib"
 		install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib \
@@ -179,7 +122,8 @@ copy_framework()
 	
 	if [ ! -d $BUNDLE/Contents/Frameworks/$dst_file ] ; then 
 		cp -Ra $src_file $BUNDLE/Contents/Frameworks/$dst_file || exit 1
-	
+                chmod -R u+w $BUNDLE/Contents/Frameworks/$dst_file
+
 		echo "Running: install_name_tool -id @executable_path/../Frameworks/$dst_file $BUNDLE/Contents/Frameworks/$dst_lib"
 		install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib \
 			|| echo "- ***Error Running: install_name_tool -id @executable_path/../Frameworks/$dst_lib $BUNDLE/Contents/Frameworks/$dst_lib"
@@ -212,6 +156,7 @@ copy_plugins()
 		
 			mkdir -p $APPBUNDLE/Contents/$dstdir
 			cp $src $APPBUNDLE/Contents/$dstdir
+                        chmod -R u+w $APPBUNDLE/Contents/$dstdir
 
 			new_name=@executable_path/../plugins/$dst
 			
@@ -273,48 +218,40 @@ fix_links() {
 	done
 }
 
-########## Main ##########
-
-if [ ! -e "$APPBUNDLE" ] ; then
-	echo "$APPBUNDLE not found."
-	exit
-fi
-
-echo "Deploying from: $T"
-
 fix_bundle() {
 
 # manually copy the libraries
 if [ "$INSTALL_EXTRA_LIBS" != "" ] ; then
-	echo "Installing extra libs"
-	cp $INSTALL_EXTRA_LIBS $APPBUNDLE/Contents/Frameworks/ 
+        echo "Installing extra libs"
+        cp $INSTALL_EXTRA_LIBS $APPBUNDLE/Contents/Frameworks/
+        chmod -R u+w $APPBUNDLE/Contents/Frameworks/
 fi
 
-for app in $EXECUTABLES; do 
-	echo "Deploying: $app"
-	if [ ! -r $APPBUNDLE/Contents/MacOS/$app ] ; then
-		echo "Exe Contents/MacOS/$app not readable."
-		exit 1
-	fi
-	
-	QTLIBS=`otool -L $APPBUNDLE/Contents/MacOS/$app | egrep 'Qt[^/]*\.framework' | egrep -v '@executable_path' | awk '{ print \$1 }' | sed -e's|@rpath/||g'`
-	for qtlib in $QTLIBS; do
-		copy_framework_qt $APPBUNDLE/Contents/MacOS/$app $QT_INSTALL_LIBS/$qtlib $APPBUNDLE
-	done
+for app in $EXECUTABLES; do
+        echo "Deploying: $app"
+        if [ ! -r $APPBUNDLE/Contents/MacOS/$app ] ; then
+                echo "Exe Contents/MacOS/$app not readable."
+                exit 1
+        fi
 
-	for fmw in $EXTRA_FRAMEWORKS ; do
-		copy_framework /Library/Frameworks/$fmw.framework $fmw.framework $fmw.framework/Versions/Current/$fmw $APPBUNDLE
-	done
-	
-	for lib in $EXTRA_LIBS; do
-		copy_lib $APPBUNDLE/Contents/MacOS/$app $lib $APPBUNDLE
-	done
+        QTLIBS=`otool -L $APPBUNDLE/Contents/MacOS/$app | egrep 'Qt[^/]*\.framework' | egrep -v '@executable_path' | awk '{ print \$1 }' | sed -e's|@rpath/||g'`
+        for qtlib in $QTLIBS; do
+                copy_framework_qt $APPBUNDLE/Contents/MacOS/$app $QT_INSTALL_LIBS/$qtlib $APPBUNDLE
+        done
+
+        for fmw in $EXTRA_FRAMEWORKS ; do
+                copy_framework /Library/Frameworks/$fmw.framework $fmw.framework $fmw.framework/Versions/Current/$fmw $APPBUNDLE
+        done
+
+        for lib in $EXTRA_LIBS; do
+                copy_lib $APPBUNDLE/Contents/MacOS/$app $lib $APPBUNDLE
+        done
 done
 
 for dlib in $APPBUNDLE/Contents/Frameworks/*.dylib ; do
-	for lib in $EXTRA_LIBS; do
-		copy_lib $dlib $lib $APPBUNDLE
-	done
+        for lib in $EXTRA_LIBS; do
+                copy_lib $dlib $lib $APPBUNDLE
+        done
 done
 
 # Remove the _debug libraries
@@ -329,52 +266,60 @@ QTLIBS=`basename $QTLIBS 2>/dev/null || exit 0`
 
 CEXE=""
 for app in $EXECUTABLES; do
-	CEXE="$CEXE $APPBUNDLE/Contents/MacOS/$app"
+        CEXE="$CEXE $APPBUNDLE/Contents/MacOS/$app"
 done
 
 PLUGINS="`find $APPBUNDLE/Contents/plugins -name \*.dylib`"
 
 echo "Updating QT dynamic library reference"
-for file in $QTLIBS; do 
-	filename=`echo $file | sed -e 's/\.framework//g'`
-	for lib in $QTLIBS; do
-		libname=`echo $lib | sed -e 's/\.framework//g'`
-		update_links $APPBUNDLE/Contents/Frameworks/$file/$filename $libname $APPBUNDLE yes
-	done
+for file in $QTLIBS; do
+        filename=`echo $file | sed -e 's/\.framework//g'`
+        for lib in $QTLIBS; do
+                libname=`echo $lib | sed -e 's/\.framework//g'`
+                update_links $APPBUNDLE/Contents/Frameworks/$file/$filename $libname $APPBUNDLE yes
+        done
 done
 
 echo "Updating dynamic library references"
 for file in $CEXE $APPBUNDLE/Contents/Frameworks/*.dylib $PLUGINS ; do
-	#echo $file | egrep '.*\.framework' > /dev/null
-	#if [ $? -ne 0 ] ; then
-	echo "Fixing: $file"
-	fix_links $file
-	#fi
+        #echo $file | egrep '.*\.framework' > /dev/null
+        #if [ $? -ne 0 ] ; then
+        echo "Fixing: $file"
+        fix_links $file
+        #fi
 done
 
 for file in $EXTRA_FRAMEWORKS; do
-	echo $file | egrep '.*\.framework' > /dev/null
-	if [ $? -ne 0 ] ; then
-		fix_links $APPBUNDLE/Contents/Frameworks/$file.framework/Versions/Current/$file
-	fi
+        echo $file | egrep '.*\.framework' > /dev/null
+        if [ $? -ne 0 ] ; then
+                fix_links $APPBUNDLE/Contents/Frameworks/$file.framework/Versions/Current/$file
+        fi
 done
 
 # Other, unrelated stuff
+
+# Fix CGAL links
+for i in chrono date_time atomic ; do
+    install_name_tool -change /usr/local/opt/boost/lib/libboost_$i-mt.dylib @executable_path/../Frameworks/libboost_$i-mt.dylib $APPBUNDLE/Contents/Frameworks/libCGAL.13.dylib
+done
+
 # Copy of R Scripts
 
 mkdir $APPBUNDLE/Contents/Resources/scripts
 cp $TOPDIR/scripts/*.R $APPBUNDLE/Contents/Resources/scripts
+chmod -R u+w $APPBUNDLE/Contents/Resources/scripts
 
 }
 
 create_dmg() {
 # Applying owner:group and access rights
 echo "Applying permissions"
+chmod -R -w $APPBUNDLE
 sudo chown -R root:staff $APPBUNDLE
 sudo find $APPBUNDLE -type f -exec chmod 644 \{\} \;
 sudo find $APPBUNDLE -type d -exec chmod 755 \{\} \;
 for app in $EXECUTABLES; do
-	sudo chmod +x $APPBUNDLE/Contents/MacOS/$app
+        sudo chmod +x $APPBUNDLE/Contents/MacOS/$app
 done
 
 rm -rf $INSTALL/install
@@ -388,6 +333,74 @@ $TOOLDIR/scripts/create-dmg.sh \
 
 
 }
+
+########## Main ##########
+
+T=release
+OPT_NOBUNDLE=
+OPT_NOFIX=
+
+while [ "$1" != "" ] ; do
+        case "$1" in
+                -t)
+                        shift
+                        T=$1
+                        ;;
+                -nb)
+                        OPT_NOBUNDLE=y
+                        ;;
+                -nf)
+                        OPT_NOFIX=y
+                        ;;
+                -h)
+                        help
+                        exit 0
+                        ;;
+                *)
+                        echo "Options unknown, use -h to have help."
+                        exit 1
+                        ;;
+        esac
+        shift
+done
+
+QMAKE=`which qmake`
+if [ "$QMAKE" == "" ] ; then
+        echo "qmake not in path."
+        QMAKE=~/Qt/5.5/clang_64/bin/qmake
+        if [ ! -r $QMAKE ] ; then
+                echo "Cannot use wired in qmake. please fix paths."
+                exit 1
+        fi
+fi
+
+$QMAKE -query | sed -e 's/:/=/g' > /tmp/qtconf
+. /tmp/qtconf
+
+TOPDIR=$PWD
+DESTDIR=$PWD/build/$T/bin
+INSTALL=$PWD/build
+APPNAME=DisplaceProject
+APPBUNDLE=$DESTDIR/$APPNAME.app
+
+EXECUTABLES="DisplaceProject displace dtreeeditor tsereditor objeditor"
+EXTRA_FRAMEWORKS=""
+# EXTRA_LIBS must be found as dependency in EXECUTABLES
+EXTRA_LIBS="libGeographic libCGAL libmpfr libgmp libboost_thread libboost_system"
+QT_PLUGINS="cocoa qsqlite qgif qjpeg qmng qtiff"
+
+# These INSTALL_EXTRA_LIBS will be installed regardless of the links
+INSTALL_EXTRA_LIBS="/usr/local/lib/libCGAL.13.dylib /usr/local/opt/boost/lib/libboost_date_time-mt.dylib /usr/local/opt/boost/lib/libboost_chrono-mt.dylib /usr/local/opt/boost/lib/libboost_atomic-mt.dylib"
+
+
+TOOLDIR=`dirname $0`
+
+if [ ! -e "$APPBUNDLE" ] ; then
+	echo "$APPBUNDLE not found."
+	exit
+fi
+
+echo "Deploying from: $T"
 
 if [ "$OPT_NOFIX" == "" ] ; then
 	fix_bundle

@@ -22,6 +22,8 @@
 
 #include <storage/sqlitestorage.h>
 
+using namespace sqlite;
+
 #include <helpers.h>
 #include <assert.h>
 

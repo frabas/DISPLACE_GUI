@@ -5,6 +5,8 @@
 
 #include <sstream>
 
+using namespace sqlite;
+
 SQLiteTable::SQLiteTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : mdb(db), mName(name)
 {

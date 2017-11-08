@@ -109,7 +109,8 @@ HEADERS= \
     pathshop.h \
     storage/sqlitetable.h \
     storage/tables/vesseldeftable.h \
-    storage/sqlitestorage.h
+    storage/sqlitestorage.h \
+    storage/sqlitefielddef.h
 
 
 ## Do not add this if you don't support IPC queues

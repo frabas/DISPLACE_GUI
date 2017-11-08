@@ -3,6 +3,8 @@
 
 #include "utils/make_unique.h"
 
+using namespace sqlite;
+
 SQLiteStorage::SQLiteStorage(std::string path)
 {
     dbPath = std::move(path);

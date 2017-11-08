@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <list>
 
+namespace sqlite {
 class SQLiteTable;
 
 class SQLiteException : public std::runtime_error {
@@ -46,5 +47,7 @@ public:
 
     sqlite3 *handle();
 };
+
+} // ns sqlite
 
 #endif // SQLITERESULTSTORAGE_H

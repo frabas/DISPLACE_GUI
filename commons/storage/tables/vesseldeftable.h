@@ -3,10 +3,10 @@
 
 #include "storage/sqlitetable.h"
 
-class VesselDefTable : public SQLiteTable
+class VesselDefTable : public sqlite::SQLiteTable
 {
 public:
-    VesselDefTable(std::shared_ptr<SQLiteStorage> db, std::string name);
+    VesselDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
 
     // SQLiteTable interface
 protected:

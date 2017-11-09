@@ -59,9 +59,9 @@ SOURCES= \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
     pathshop.cpp \
-    storage/sqlitetable.cpp \
+    storage/sqlite/sqlitetable.cpp \
     storage/tables/vesseldeftable.cpp \
-    storage/sqlitestorage.cpp
+    storage/sqlite/sqlitestorage.cpp
 
 
 HEADERS= \
@@ -107,10 +107,10 @@ HEADERS= \
     dtree/vesselsevaluators.h \
     commons_global.h \
     pathshop.h \
-    storage/sqlitetable.h \
-    storage/tables/vesseldeftable.h \
-    storage/sqlitestorage.h \
-    storage/sqlitefielddef.h
+    storage/sqlite/sqlitetable.h \
+    storage/sqlite/tables/vesseldeftable.h \
+    storage/sqlite/sqlitestorage.h \
+    storage/sqlite/sqlitefielddef.h
 
 
 ## Do not add this if you don't support IPC queues

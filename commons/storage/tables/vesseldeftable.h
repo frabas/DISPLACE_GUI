@@ -1,7 +1,7 @@
 #ifndef VESSELDEFTABLE_H
 #define VESSELDEFTABLE_H
 
-#include "storage/sqlitetable.h"
+#include "storage/sqlite/sqlitetable.h"
 
 class VesselDefTable : public sqlite::SQLiteTable
 {
@@ -10,7 +10,6 @@ public:
 
     // SQLiteTable interface
 protected:
-    std::string getCreateDefinition() override;
 };
 
 #endif // VESSELDEFTABLE_H

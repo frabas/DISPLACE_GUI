@@ -28,6 +28,11 @@ public:
     int code() const {
         return mCode;
     }
+
+    static void throwIfNotOk(int returnCode, sqlite3 *db) {
+        if (returnCode != SQLITE_OK)
+            throw SQLiteException(db);
+    }
 };
 
 class SQLiteStorage
@@ -45,6 +50,7 @@ public:
     sqlite3 *handle();
 
     bool dropTable(std::string table);
+    bool tableExists(std::string table);
 };
 
 } // ns sqlite

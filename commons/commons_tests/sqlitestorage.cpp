@@ -49,3 +49,12 @@ BOOST_AUTO_TEST_CASE (test_sqlite_table_creation)
     } catch (sqlite::SQLiteException &x) {
     }
 }
+
+BOOST_AUTO_TEST_CASE(test_tables)
+{
+    auto db = std::make_shared<SQLiteStorage>(":memory:");
+    db->open();
+
+    BOOST_CHECK(!db->tableExists("non-existent"));
+
+}

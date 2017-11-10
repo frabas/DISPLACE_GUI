@@ -47,3 +47,21 @@ bool SQLiteStorage::dropTable(std::string table)
 
     return true;
 }
+
+bool SQLiteStorage::tableExists(std::string table)
+{
+    sqlite3_stmt *stmt;
+    auto r = sqlite3_prepare_v2(mDb, "SELECT name FROM sqlite_master WHERE type='table' AND name=?;", -1, &stmt, nullptr);
+    SQLiteException::throwIfNotOk(r,mDb);
+
+    r = sqlite3_bind_text(stmt, 1, table.c_str(), table.length(), SQLITE_TRANSIENT);
+    SQLiteException::throwIfNotOk(r,mDb);
+
+    r = sqlite3_step(stmt);
+    if (r == SQLITE_DONE) {
+        return false;
+    } else if (r != SQLITE_ROW) {
+        SQLiteException::throwIfNotOk(r, mDb);
+    }
+    return true;
+}

@@ -59,9 +59,7 @@ SOURCES= \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
     pathshop.cpp \
-    storage/sqlite/sqlitetable.cpp \
-    storage/tables/vesseldeftable.cpp \
-    storage/sqlite/sqlitestorage.cpp
+    storage/tables/vesseldeftable.cpp
 
 
 HEADERS= \
@@ -107,11 +105,16 @@ HEADERS= \
     dtree/vesselsevaluators.h \
     commons_global.h \
     pathshop.h \
-    storage/sqlite/sqlitetable.h \
-    storage/sqlite/tables/vesseldeftable.h \
-    storage/sqlite/sqlitestorage.h \
-    storage/sqlite/sqlitefielddef.h
+    storage/table/vesseldeftable.h
 
+### mSQLiteCpp dependency
+
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+SOURCES += $$top_srcdir/mSqliteCpp/src/*
+HEADERS += $$top_srcdir/mSqliteCpp/include/*
+LIBS += -lsqlite3
+
+### End mSqliteCpp Depedency
 
 ## Do not add this if you don't support IPC queues
 

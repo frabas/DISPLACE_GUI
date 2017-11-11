@@ -20,7 +20,7 @@
 
 #include <idtypes.h>
 
-#include <storage/sqlite/sqlitestorage.h>
+#include <sqlitestorage.h>
 
 using namespace sqlite;
 

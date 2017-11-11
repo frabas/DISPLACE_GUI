@@ -2,9 +2,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
-#include "storage/sqlite/sqlitestorage.h"
-#include "storage/sqlite/sqlitetable.h"
-#include "storage/sqlite/sqlitefielddef.h"
+#include "sqlitestorage.h"
+#include "sqlitetable.h"
+#include "sqlitefielddef.h"
 
 using namespace sqlite;
 

@@ -47,4 +47,14 @@ SOURCES= main.cpp \
 
 HEADERS=
 
+
+### mSQLiteCpp dependency
+
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+#SOURCES += $$top_srcdir/mSqliteCpp/src/*
+HEADERS += $$top_srcdir/mSqliteCpp/include/*
+LIBS +=
+
+### End mSqliteCpp Depedency
+
 OTHER_FILES +=

@@ -1,7 +1,7 @@
 #ifndef VESSELDEFTABLE_H
 #define VESSELDEFTABLE_H
 
-#include "storage/sqlite/sqlitetable.h"
+#include "sqlitetable.h"
 
 class VesselDefTable : public sqlite::SQLiteTable
 {

@@ -1,5 +1,8 @@
 #include "outputexporter.h"
 
+#include "storage/sqliteoutputstorage.h"
+#include "storage/tables/vesselslogliketable.h"
+
 #include <mutex>
 #include <Vessel.h>
 #include <Metier.h>
@@ -96,6 +99,23 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
 }
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+    if (useSql)
+        exportLogLikeSQLite(tstep, v, populations, implicit_pops);
+    if (usePlainText)
+        exportLogLikePlaintext(tstep, v, populations, implicit_pops);
+}
+
+void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+    VesselsLoglikeTable::Log log;
+    log.id = v->get_idx();
+    log.tstep = tstep;
+    log.node_id = v->get_loc()->get_idx_node();
+    mSqlDb->getVesselLoglikeTable()->insertLog(log);
+}
+
+void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
     std::string name, freq_metiers= "M";
     int length_class;

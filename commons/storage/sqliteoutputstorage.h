@@ -4,6 +4,7 @@
 #include <memory>
 
 class VesselDefTable;
+class VesselsLoglikeTable;
 
 class SQLiteOutputStorage
 {
@@ -18,6 +19,7 @@ public:
 
     void createAllTables();
     std::shared_ptr<VesselDefTable> getVesselDefTable() const;
+    std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;
 };
 
 #endif // SQLITEOUTPUTSTORAGE_H

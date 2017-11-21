@@ -595,18 +595,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     char *path = 0;
 #endif
 
-    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
-    outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
-    try {
-        if (enable_sqlite_out) {
-            outSqlite->open();
-            outSqlite->createAllTables();
-        }
-    } catch (SQLiteException &x) {
-        std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
-        exit(1);
-    }
-
     // get the name of the input directory for this simu
     string folder_name_parameterization= namefolderinput;
 
@@ -1009,6 +997,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         std::cerr << "Cannot open output files." << std::endl;
         exit (1);
     }
+
+
+    OutputExporter::instance().setUseSqlite(enable_sqlite_out);
+
+    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
+    outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
+    try {
+        if (enable_sqlite_out) {
+            outSqlite->open();
+            outSqlite->createAllTables();
+
+            OutputExporter::instance().setSQLiteDb(outSqlite);
+        }
+    } catch (SQLiteException &x) {
+        std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
+        exit(1);
+    }
+
+
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
     export_individual_tacs.open(filename.c_str());

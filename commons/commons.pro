@@ -60,7 +60,8 @@ SOURCES= \
     utils/CrashHandler.cpp \
     pathshop.cpp \
     storage/tables/vesseldeftable.cpp \
-    storage/sqliteoutputstorage.cpp
+    storage/sqliteoutputstorage.cpp \
+    storage/tables/vesselslogliketable.cpp
 
 
 HEADERS= \
@@ -107,7 +108,8 @@ HEADERS= \
     commons_global.h \
     pathshop.h \
     storage/table/vesseldeftable.h \
-    storage/sqliteoutputstorage.h
+    storage/sqliteoutputstorage.h \
+    storage/tables/vesselslogliketable.h
 
 ### mSQLiteCpp dependency
 

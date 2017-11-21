@@ -20,8 +20,9 @@
 
 #include <idtypes.h>
 
-#include <sqlitestorage.h>
-
+#include "sqlitestorage.h"
+#include "storage/sqliteoutputstorage.h"
+#include "storage/tables/vesseldeftable.h"
 using namespace sqlite;
 
 #include <helpers.h>
@@ -188,6 +189,9 @@ bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
 bool enable_sqlite_out = true;
+
+std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
+
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
@@ -592,10 +596,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
-    SQLiteStorage outSqlite(sqliteOutputPath);
+    outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
     try {
         if (enable_sqlite_out) {
-            outSqlite.open();
+            outSqlite->open();
+            outSqlite->createAllTables();
         }
     } catch (SQLiteException &x) {
         std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
@@ -2576,6 +2581,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            return -1;
        }
 
+    if (enable_sqlite_out) {
+        outSqlite->getVesselDefTable()->feedVesselsDefTable(vesselids, speeds, lengths);  // TODO: insert all the rest!
+    }
 
 
     // read the more complex objects (i.e. when several info for a same vessel)...
@@ -5299,7 +5307,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if (enable_sqlite_out) {
         try {
-            outSqlite.close();
+            outSqlite->close();
         } catch (SQLiteException &x) {
             std::cerr << "An error occurred closing the SQLite db: " << x.what() << "\n";
         }

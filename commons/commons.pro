@@ -59,7 +59,8 @@ SOURCES= \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
     pathshop.cpp \
-    storage/tables/vesseldeftable.cpp
+    storage/tables/vesseldeftable.cpp \
+    storage/sqliteoutputstorage.cpp
 
 
 HEADERS= \
@@ -105,7 +106,8 @@ HEADERS= \
     dtree/vesselsevaluators.h \
     commons_global.h \
     pathshop.h \
-    storage/table/vesseldeftable.h
+    storage/table/vesseldeftable.h \
+    storage/sqliteoutputstorage.h
 
 ### mSQLiteCpp dependency
 

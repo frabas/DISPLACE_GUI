@@ -2,7 +2,7 @@ QT       += widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 
-CONFIG += c++11
+CONFIG += c++14
 
 TARGET = qtcommons
 TEMPLATE = lib

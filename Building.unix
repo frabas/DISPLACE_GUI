@@ -4,12 +4,12 @@ How to build under Linux
 At the time of writing, the following procedure is tested on Ubuntu 15.10 and, with minor adaptations, on Ubuntu 14.04 LTS.
 Any recent linux distribution that satisfies the prerequisites should be able to compile and run Displace without issues.
 
-Note: Since displace needs support for c++11, Qt 5.6 or later is required!
+Note: Since displace needs support for c++14, Qt 5.6 or later is required!
 
 Prerequisites
 -------------
 
-Displace must be compiled with a recent c++ compiler that supports c++11 and the relative standard library.
+Displace must be compiled with a recent c++ compiler that supports c++14 and the relative standard library.
 gcc 4.8 and clang are compiling correctly.
 The following libraries, with development files (libraries and headers), are required to compile under linux:
 

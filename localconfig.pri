@@ -1,6 +1,6 @@
 DEFINES += QMC_GDAL
 
-CONFIG += c++11
+CONFIG += c++14
 
 macx {
     APPTARGET=DisplaceProject

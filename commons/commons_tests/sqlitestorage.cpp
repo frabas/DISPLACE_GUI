@@ -10,7 +10,7 @@ using namespace sqlite;
 
 BOOST_AUTO_TEST_CASE (test_sqlite_table_creation)
 {
-    auto db = std::make_shared<SQLiteStorage>("output.db");
+    auto db = std::make_shared<SQLiteStorage>(":memory:");
     db->open();
 
     auto testTable = std::make_tuple(

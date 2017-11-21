@@ -1,7 +1,7 @@
 TEMPLATE= lib
 TARGET=displacecommons
 DESTDIR=../
-CONFIG += c++11 dll
+CONFIG += c++14 dll
 
 
 include ("$$top_srcdir/localconfig.pri")

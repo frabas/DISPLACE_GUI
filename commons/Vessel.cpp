@@ -4808,7 +4808,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
         // a check
 
-        // (c++11)
+        // (c++14)
         //if ( all_of(expected_profit_per_ground.begin(), expected_profit_per_ground.end(), [](int i){return i<0;} ) )
         //   {
 

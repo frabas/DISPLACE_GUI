@@ -5,6 +5,7 @@
 
 class VesselDefTable;
 class VesselsLoglikeTable;
+class PopNodesTable;
 
 class SQLiteOutputStorage
 {
@@ -20,6 +21,7 @@ public:
     void createAllTables();
     std::shared_ptr<VesselDefTable> getVesselDefTable() const;
     std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;
+    std::shared_ptr<PopNodesTable> getPopNodesTable() const;
 };
 
 #endif // SQLITEOUTPUTSTORAGE_H

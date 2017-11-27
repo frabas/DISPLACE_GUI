@@ -23,6 +23,7 @@
 #include "sqlitestorage.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
+#include "storage/tables/popnodestable.h"
 using namespace sqlite;
 
 #include <helpers.h>
@@ -3630,6 +3631,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     if (export_vmslike) {
         for (unsigned int n=0; n<nodes.size(); n++) {
             nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+            if (enable_sqlite_out) {
+                outSqlite->getPopNodesTable()->insert(0, nodes[n], init_weight_per_szgroup);
+            }
         }
         popnodes_start.flush();
         // signals the gui that the filename has been updated.

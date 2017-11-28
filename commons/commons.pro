@@ -65,7 +65,6 @@ SOURCES= \
     storage/tables/popnodestable.cpp \
     storage/tables/poptable.cpp
 
-
 HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \

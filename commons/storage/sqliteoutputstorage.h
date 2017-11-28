@@ -8,6 +8,10 @@ class VesselsLoglikeTable;
 class PopNodesTable;
 class PopTable;
 
+namespace sqlite {
+class SQLiteStorage;
+};
+
 class SQLiteOutputStorage
 {
     struct Impl;
@@ -24,6 +28,8 @@ public:
     std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;
     std::shared_ptr<PopNodesTable> getPopNodesTable() const;
     std::shared_ptr<PopTable> getPopTable() const;
+
+    std::shared_ptr<sqlite::SQLiteStorage> getDb() const;
 };
 
 #endif // SQLITEOUTPUTSTORAGE_H

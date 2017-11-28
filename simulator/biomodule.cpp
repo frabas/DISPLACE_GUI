@@ -30,6 +30,7 @@
 
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/poptable.h"
+#include "sqlitetransaction.h"
 
 #ifndef NO_IPC
 #include <ipc.h>
@@ -1204,6 +1205,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         // export spatial distribution of biomass pop on nodes for mapping e.g. in GIS
         // pay attention to compare a start of a year with another start of a year...(because avai key is quarter spe)
         if (export_vmslike) {
+            SQLiteTransaction transaction (outSqlite->getDb());
             for (unsigned int n=0; n<nodes.size(); n++)
             {
                 nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
@@ -1211,6 +1213,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
                 }
             }
+            transaction.commit();
             if (use_gui) {
                 popnodes_end.flush();
                 guiSendUpdateCommand(popnodes_end_filename, tstep);

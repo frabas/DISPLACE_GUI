@@ -35,6 +35,11 @@ void SQLiteOutputStorage::close()
     p->db->close();
 }
 
+std::shared_ptr<SQLiteStorage> SQLiteOutputStorage::getDb() const
+{
+    return p->db;
+}
+
 void SQLiteOutputStorage::createAllTables()
 {
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");

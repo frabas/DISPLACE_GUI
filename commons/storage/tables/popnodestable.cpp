@@ -1,5 +1,7 @@
 #include "popnodestable.h"
 
+#include "Node.h"
+
 PopNodesTable::PopNodesTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
 {
@@ -7,13 +9,15 @@ PopNodesTable::PopNodesTable(std::shared_ptr<SQLiteStorage> db, std::string name
         db->dropTable(name);
 
     create(std::make_tuple(fldNodeId,
-                           fldTStep,
                            fldLong, fldLat
                            ));
 
 }
 
-void PopNodesTable::insert(int tstep, Node *node, std::multimap<int, double> init_weight_per_szgroup)
+void PopNodesTable::insert(Node *node)
 {
-
+    SQLiteTable::insert(fldNodeId.assign(node->get_idx_node().toIndex()),
+                        fldLong.assign(node->get_x()),
+                        fldLat.assign(node->get_y())
+            );
 }

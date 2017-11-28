@@ -62,7 +62,8 @@ SOURCES= \
     storage/tables/vesseldeftable.cpp \
     storage/sqliteoutputstorage.cpp \
     storage/tables/vesselslogliketable.cpp \
-    storage/tables/popnodestable.cpp
+    storage/tables/popnodestable.cpp \
+    storage/tables/poptable.cpp
 
 
 HEADERS= \
@@ -111,7 +112,8 @@ HEADERS= \
     storage/table/vesseldeftable.h \
     storage/sqliteoutputstorage.h \
     storage/tables/vesselslogliketable.h \
-    storage/tables/popnodestable.h
+    storage/tables/popnodestable.h \
+    storage/tables/poptable.h
 
 ### mSQLiteCpp dependency
 

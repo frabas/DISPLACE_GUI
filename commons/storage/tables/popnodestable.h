@@ -15,7 +15,6 @@ class Node;
 
 class PopNodesTable : public SQLiteTable
 {
-    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
     FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> fldLat = makeFieldDef("Lat",FieldType::Real()).notNull();
@@ -23,7 +22,7 @@ class PopNodesTable : public SQLiteTable
 public:
     PopNodesTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
 
-    void insert(int tstep, Node* node, std::multimap<int, double> init_weight_per_szgroup);
+    void insert(Node* node);
 };
 
 #endif // POPNODESTABLE_H

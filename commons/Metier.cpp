@@ -28,6 +28,7 @@ double _percent_revenue_completeness,
 const vector< vector <double> > &_selectivity_per_stock,
 //vector<double> _discards,
 vector<double> _betas_per_pop,
+vector<double> _discardratio_limits,
 vector<int>    _mls_cat_per_pop,
 double _fspeed,
 double _gear_width_a,
@@ -39,10 +40,9 @@ vector<int> _metier_target_stocks)
 	name=_name;
 	type=_type;
     percent_revenue_completeness=_percent_revenue_completeness;
-    //selectivity=_selectivity;
     selectivity_per_stock=_selectivity_per_stock;
-    //discards=_discards;
 	betas_per_pop=_betas_per_pop;
+    discardratio_limits=_discardratio_limits;
     mls_cat_per_pop=_mls_cat_per_pop;
     fspeed= _fspeed;
     gear_width_a=_gear_width_a;
@@ -125,6 +125,13 @@ vector<double> Metier::get_betas_per_pop()
 	return(betas_per_pop);
 }
 
+vector<double> Metier::get_discardratio_limits()
+{
+
+    return(discardratio_limits);
+}
+
+
 vector<int> Metier::get_mls_cat_per_pop()
 {
 
@@ -178,6 +185,11 @@ void Metier::set_betas_per_pop(vector<double> metier_betas_per_pop)
 	betas_per_pop=metier_betas_per_pop;
 }
 
+void Metier::set_discardratio_limits(vector<double> metier_discardratio_limits)
+{
+
+    discardratio_limits=metier_discardratio_limits;
+}
 
 void Metier::set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop)
 {

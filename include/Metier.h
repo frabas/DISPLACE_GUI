@@ -37,10 +37,9 @@ class COMMONSSHARED_EXPORT Metier
         int type = -1;
         double percent_revenue_completeness; // for completing the revenue from other species....
 		double target_factor;	 //NOT IN USE...
-        //vector<double> selectivity;
         vector< vector <double> > selectivity_per_stock;
-        //vector<double> discards;
-		vector<double> betas_per_pop;
+        vector<double> betas_per_pop;
+        vector<double> discardratio_limits;
         vector<int> mls_cat_per_pop;
         double fspeed;
         double gear_width_a;
@@ -54,10 +53,9 @@ class COMMONSSHARED_EXPORT Metier
         Metier(int name,
             int type,
             double percent_revenue_completeness,
-            //vector<double> selectivity,
             const vector< vector <double> > &selectivity_per_stock_ogives,
-            //vector<double> discards,
             vector<double> metier_betas_per_pop,
+            vector<double> discardratio_limits,
             vector<int> metier_mls_cat_per_pop,
             double fspeed,
             double gear_width_a,
@@ -81,8 +79,10 @@ class COMMONSSHARED_EXPORT Metier
 		multimap<int, double>  get_loss_after_1_passage();
         vector<int> get_metier_target_stocks();
         vector<double> get_betas_per_pop();
+        vector<double> get_discardratio_limits();
         vector<int> get_mls_cat_per_pop();
         void set_betas_per_pop(vector<double> metier_betas_per_pop);
+        void set_discardratio_limits(vector<double> metier_discardratio_limits);
         void set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop);
 
 };

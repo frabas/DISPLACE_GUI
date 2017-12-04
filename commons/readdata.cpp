@@ -1756,6 +1756,7 @@ multimap<int, double> read_dis_ogives(string folder_name_parameterization, strin
 }
 
 
+
 multimap<int, double> read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 
@@ -1775,6 +1776,24 @@ multimap<int, double> read_metiers_betas(string a_semester, string folder_name_p
     return(metiers_betas);
 }
 
+multimap<int, double> read_discardratio_limits(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_discardratio_limits_"+a_semester+".dat";
+
+    ifstream discardratio_limits_file;
+    discardratio_limits_file.open(filename.c_str());
+    if(discardratio_limits_file.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, double> discardratio_limits;
+    fill_multimap_from_specifications_i_d(discardratio_limits_file,  discardratio_limits);
+    discardratio_limits_file.close();
+
+    return(discardratio_limits);
+}
 
 
 multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)

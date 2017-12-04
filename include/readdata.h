@@ -224,6 +224,7 @@ map<int, int> COMMONSSHARED_EXPORT read_metiers_types(string folder_name_paramet
 multimap<int, double> COMMONSSHARED_EXPORT read_sel_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_dis_ogives(string folder_name_parameterization, string inputfolder);
 multimap<int, double> COMMONSSHARED_EXPORT read_metiers_betas(string a_semester, string folder_name_parameterization, string inputfolder) ;
+multimap<int, double> COMMONSSHARED_EXPORT read_discardratio_limits(string a_semester, string folder_name_parameterization, string inputfolder) ;
 multimap<int, int> COMMONSSHARED_EXPORT read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder) ;
 map<int, double> COMMONSSHARED_EXPORT read_percent_revenue_completenesses(string folder_name_parameterization, string inputfolder);
 map<int, double> COMMONSSHARED_EXPORT read_metiers_fspeed(string folder_name_parameterization, string inputfolder);

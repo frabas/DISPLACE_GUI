@@ -6,13 +6,15 @@ Prerequisites
 
 Boost can be downloaded from boost.org.
 GDAL can be downloaded from http://www.kyngchaos.com/software:frameworks .
+Select the 1.x bundle!
 
 Fix GDAL installation by adding the following sym link:
 
 $ ln -s /Library/Frameworks/GDAL.framework/unix/include /usr/local/include/gdal
 
-CGAL can be downloaded from ...
-It must be installed in /usr/local. Unpack the sources, create a build directory, then run cmake and make:
+CGAL can be downloaded from the site (www.gical.org) or using brew (highly recommended).
+It must be installed in /usr/local.
+In case you install it from sources, unpack them, create a build directory, then run cmake and make:
 
 $ mkdir build
 $ cd build
@@ -20,7 +22,8 @@ $ cmake ..
 $ make
 $ sudo make install
 
-GreographicLib must be installed as well
+GreographicLib too can be installed either from sources, or using brew.
+To install from sources:
 
 $ configure --prefix=/usr/local
 $ make

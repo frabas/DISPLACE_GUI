@@ -58,12 +58,12 @@ unix {
 
 macx {
     INCLUDEPATH += /usr/local/include
-    INCLUDEPATH += /usr/local/Cellar/boost160/1.60.0/include
+    INCLUDEPATH += /usr/local/Cellar/boost/1.65.1/include
     #Note: make a soft link in /usr/local/include/gdal pointing to
     #INCLUDEPATH += /Library/Frameworks/GDAL.framework/Versions/1.11/unix/include
 
     LIBS += -L/usr/local/lib
-    LIBS += -L/usr/local/Cellar/boost160/1.60.0/lib
+    LIBS += -L/usr/local/Cellar/boost/1.65.1/lib
     #Note: make a soft link in /usr/local/lib pointing to libgdal.dylib in the following location:
     #LIBS += /Library/Frameworks/GDAL.framework/Versions/1.11/unix/lib
     DEFINES +=

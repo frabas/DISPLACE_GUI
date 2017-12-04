@@ -2334,7 +2334,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     //for(int i = 0; i < cumcatch_fgrounds.size(); i++){
                     //cout << "on the grounds of this vessel " << the_grds.at(i) << " cumcatch is " << cumcatch_fgrounds.at(i) << endl;
                     //}
-if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
+//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "tot_catch_per_pop[pop] is " << tot_catch_per_pop[pop] << endl;
 
 
                     // compute the landings vs. discard part
@@ -2343,7 +2343,7 @@ if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "tot_catch_per_pop[pop
                     for(int sizgroup=0; sizgroup<(int)Ns_at_szgroup_pop.size(); sizgroup++) {
                         Ns_at_szgroup_pop_scaled.at(sizgroup)=Ns_at_szgroup_pop_scaled.at(sizgroup)/
                                 *(max_element(Ns_at_szgroup_pop.begin(), Ns_at_szgroup_pop.end()));
- if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
+//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "this szgroup " <<  sizgroup << " Ns_at_szgroup_pop_scaled.at(sizgroup) is " << Ns_at_szgroup_pop_scaled.at(sizgroup) << endl;
                     }
                     int inter=0;
                     int a_szgroup=0;
@@ -2353,16 +2353,16 @@ if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "tot_catch_per_pop[pop
                     }
                     double left_to_MLS=0;
                     double right_to_MLS=0;
-  if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
+// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " inter is " <<  inter  << " and MLS_cat is "  << MLS_cat << endl;
                     if(selectivity_per_stock[pop].at(inter)>Ns_at_szgroup_pop_scaled.at(inter)){
                         left_to_MLS  = trapezoidal(0, inter, selectivity_per_stock[pop]) + trapezoidal(inter, MLS_cat, Ns_at_szgroup_pop_scaled); // discards
                         right_to_MLS = trapezoidal(MLS_cat, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
-if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " here" << endl;
+//if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " here" << endl;
 
                     } else{
                         left_to_MLS  = trapezoidal(0, MLS_cat, selectivity_per_stock[pop]); // discards
                         right_to_MLS = trapezoidal(MLS_cat, inter, selectivity_per_stock[pop])+trapezoidal(inter, NBSZGROUP-1, Ns_at_szgroup_pop_scaled); // landings
- if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " there" << endl;
+// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " there" << endl;
 
                     }
 
@@ -2374,9 +2374,9 @@ if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << " here" << endl;
                     double tot_discards_this_pop=tot_catch_per_pop[pop]*discardfactor ;
                     // then disagregate per szgroup....
 
- if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
- if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
- if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
+// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "discards from tot_catch_per_pop[pop]* left_to_MLS/right_to_MLS is " << tot_discards_this_pop << endl;
+// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "because left_to_MLS is " << left_to_MLS << " and right_to_MLS is " << right_to_MLS << endl;
+// if(this->get_name()=="GRK_LIXO64_1_9" &&  pop==2) cout << "....and discardfactor is " << discardfactor << endl;
 
                     // 3. DISAGREGATE TOTAL LANDINGS IN WEIGHT INTO SZGROUP
                     //  AND CONVERT INTO REMOVALS IN NUMBER

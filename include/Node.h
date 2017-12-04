@@ -151,7 +151,7 @@ class COMMONSSHARED_EXPORT Node
         const vector<double>& get_h_betas_per_pop() const;
         double get_tariffs(int type) const;
         const vector<double>& get_tariffs() const;
-        vector< vector<double> >  get_Ns_pops_at_szgroup() const;
+        const vector< vector<double> >  &get_Ns_pops_at_szgroup() const;
 		vector<int> get_vid();
 		vector<int> get_pop_names_on_node();
         vector<int> get_ff_names_on_node();

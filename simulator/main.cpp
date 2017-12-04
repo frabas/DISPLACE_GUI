@@ -20,6 +20,14 @@
 
 #include <idtypes.h>
 
+#include "sqlitestorage.h"
+#include "storage/sqliteoutputstorage.h"
+#include "storage/tables/vesseldeftable.h"
+#include "storage/tables/popnodestable.h"
+#include "storage/tables/poptable.h"
+#include "sqlitetransaction.h"
+using namespace sqlite;
+
 #include <helpers.h>
 #include <assert.h>
 
@@ -183,6 +191,10 @@ bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
+bool enable_sqlite_out = true;
+
+std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
+
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
@@ -586,9 +598,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     char *path = 0;
 #endif
 
-
-
-
     // get the name of the input directory for this simu
     string folder_name_parameterization= namefolderinput;
 
@@ -991,6 +1000,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         std::cerr << "Cannot open output files." << std::endl;
         exit (1);
     }
+
+
+    OutputExporter::instance().setUseSqlite(enable_sqlite_out);
+
+    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
+    outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
+    try {
+        if (enable_sqlite_out) {
+            outSqlite->open();
+            outSqlite->createAllTables();
+
+            OutputExporter::instance().setSQLiteDb(outSqlite);
+        }
+    } catch (SQLiteException &x) {
+        std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
+        exit(1);
+    }
+
+
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
     export_individual_tacs.open(filename.c_str());
@@ -2565,6 +2593,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            return -1;
        }
 
+    if (enable_sqlite_out) {
+        outSqlite->getVesselDefTable()->feedVesselsDefTable(vesselids, speeds, lengths);  // TODO: insert all the rest!
+    }
 
 
     // read the more complex objects (i.e. when several info for a same vessel)...
@@ -3602,9 +3633,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
+        SQLiteTransaction transaction (outSqlite->getDb());
         for (unsigned int n=0; n<nodes.size(); n++) {
             nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+            if (enable_sqlite_out) {
+                outSqlite->getPopNodesTable()->insert(nodes[n]);
+                outSqlite->getPopTable()->insert(0, nodes[n], init_weight_per_szgroup);
+            }
         }
+        transaction.commit();
         popnodes_start.flush();
         // signals the gui that the filename has been updated.
         guiSendUpdateCommand(popnodes_start_filename, 0);
@@ -5288,6 +5325,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popdyn_test2.close();
     popnodes_start.close();
     popnodes_end.close();
+
+    if (enable_sqlite_out) {
+        try {
+            outSqlite->close();
+        } catch (SQLiteException &x) {
+            std::cerr << "An error occurred closing the SQLite db: " << x.what() << "\n";
+        }
+    }
 
     // disable gnuplot
 #if 0

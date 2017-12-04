@@ -18,7 +18,7 @@ CONFIG(release, debug|release) {
 }
 
 
-macx:DESTDIR=../../../$$LIBDESTDIR
+macx:DESTDIR=$$LIBDESTDIR
 
 isEmpty(DESTDIR) {
     DESTDIR=../../../../

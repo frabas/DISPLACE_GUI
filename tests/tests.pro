@@ -2,7 +2,7 @@ include ("$$top_srcdir/localconfig.pri")
 
 QT=core
 TARGET=unittest
-CONFIG += c++11
+CONFIG += c++14
 
 DESTDIR = ../
 

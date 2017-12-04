@@ -2,7 +2,7 @@ include ("$$top_srcdir/localconfig.pri")
 
 QT=core
 TARGET=commons_tests
-CONFIG += c++11
+CONFIG += c++14
 
 DESTDIR = ../bin/test
 
@@ -42,8 +42,19 @@ SOURCES= main.cpp \
     inputfiles_fishfarmsspe.cpp \
     inputfiles_simusspe.cpp \
     inputfiles_windmillsspe.cpp \
-    test_pathshop.cpp
+    test_pathshop.cpp \
+    sqlitestorage.cpp
 
 HEADERS=
+
+
+### mSQLiteCpp dependency
+
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+#SOURCES += $$top_srcdir/mSqliteCpp/src/*
+HEADERS += $$top_srcdir/mSqliteCpp/include/*
+LIBS +=
+
+### End mSqliteCpp Depedency
 
 OTHER_FILES +=

@@ -112,10 +112,15 @@ bool read_config_file(std::istream &stream,
             iota (std::begin(grouped_tacs), std::end(grouped_tacs), 0); // Fill with 0, 1, ...,
             }
         } catch (displace::formats::FormatException &x) {
+#ifdef VERBOSE_ERRORS
         cerr << x.what() << endl;
+#endif
         return false;
     }
+
+#ifdef VERBOSE_ERRORS
     cout << "read config file...OK" << endl << flush;
+#endif
 
     return true;
 }
@@ -207,12 +212,16 @@ bool read_scenario_config_file(std::istream &stream, displace::commons::Scenario
         scenario.total_amount_credited = reader.getAs<int>("total_amount_credited", 0);
         scenario.tariff_annual_hcr_percent_change = reader.getAs<double>("tariff_annual_hcr_percent_change", 0);
     } catch (displace::formats::FormatException &x) {
+#ifdef VERBOSE_ERRORS
         cerr << x.what() << endl;
+#endif
         return false;
     }
+#ifdef VERBOSE_ERRORS
     cout << "read scenario config file...OK" <<  endl << flush;
     cout << "...e.g. graph is " << scenario.a_graph <<  endl << flush;
     cout << "...e.g. check_all_stocks_before_going_fishing is " << scenario.check_all_stocks_before_going_fishing <<  endl << flush;
+#endif
 
     // Update the internals when needed
     scenario.closure_opts.update();
@@ -3092,8 +3101,10 @@ bool read_metier_closures(istream &stream, const std::string &separator, vector<
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on read_closure file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -3159,8 +3170,10 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on read_vsize_closure file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 

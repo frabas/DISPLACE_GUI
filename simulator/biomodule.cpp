@@ -28,6 +28,9 @@
 #include <readdata.h>
 #include <helpers.h>
 
+#include "storage/sqliteoutputstorage.h"
+#include "storage/tables/poptable.h"
+#include "sqlitetransaction.h"
 
 #ifndef NO_IPC
 #include <ipc.h>
@@ -58,6 +61,9 @@ extern AverageProfiler mPopExportProfile;
 #endif
 
 extern std::mutex glob_mutex;
+
+extern bool enable_sqlite_out;
+extern std::shared_ptr<SQLiteOutputStorage> outSqlite;
 
 // todo: remove this, better use a unique_lock<> instead
 static void lock()
@@ -1199,10 +1205,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         // export spatial distribution of biomass pop on nodes for mapping e.g. in GIS
         // pay attention to compare a start of a year with another start of a year...(because avai key is quarter spe)
         if (export_vmslike) {
+            SQLiteTransaction transaction (outSqlite->getDb());
             for (unsigned int n=0; n<nodes.size(); n++)
             {
                 nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
+                if (enable_sqlite_out) {
+                    outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+                }
             }
+            transaction.commit();
             if (use_gui) {
                 popnodes_end.flush();
                 guiSendUpdateCommand(popnodes_end_filename, tstep);
@@ -1224,7 +1235,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumcatches(popnodes_cumcatches, tstep);
         nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
-        if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+        if(export_vmslike && tstep < 8761) {
+            nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+            if (enable_sqlite_out) {
+                outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+            }
+        }
        // popnodes_inc exports population numbers on nodes every start of month...
         // ...think about increasing the rate of updating when e.g. avaishuffler on less than  month is on?
         // this would be useful to track the changes in abundance on the displace widget map but will be both time and memory consuming...

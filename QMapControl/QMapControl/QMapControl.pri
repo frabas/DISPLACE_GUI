@@ -1,5 +1,5 @@
-# Add support for c++11.
-CONFIG += c++11
+# Add support for c++14.
+CONFIG += c++14
 
 # Hide debug output in release mode.
 CONFIG(release, debug|release) : DEFINES += QT_NO_DEBUG_OUTPUT

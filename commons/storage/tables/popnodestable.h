@@ -1,6 +1,7 @@
 #ifndef POPNODESTABLE_H
 #define POPNODESTABLE_H
 
+#include "commons_global.h"
 #include "idtypes.h"
 
 #include "sqlitefielddef.h"
@@ -13,7 +14,7 @@ using namespace sqlite;
 
 class Node;
 
-class PopNodesTable : public SQLiteTable
+class COMMONSSHARED_EXPORT PopNodesTable : public SQLiteTable
 {
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
     FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();

@@ -16,7 +16,10 @@ macx {
 QMAKE_CXXFLAGS += -fpermissive
 CONFIG += c++14
 
-LIBS+= -L.. -ldisplacecommons -lformats -lsqlite3
+LIBS+= -L.. -ldisplacecommons -lformats
+
+win32: -lsqlite3_static
+!win32: -lsqlite3
 
 macx {
     LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/

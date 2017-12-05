@@ -9,7 +9,7 @@ macx:DESTDIR=$$LIBDESTDIR
 
 DEFINES += COMMONS_LIBRARY
 INCLUDEPATH +=../include/ ../formats . ../sparsepp
-LIBS += -L.. -lformats -lsqlite3
+LIBS += -L.. -lformats
 
 win32 {
     # No crash handler support for Windows
@@ -112,14 +112,17 @@ HEADERS= \
     storage/sqliteoutputstorage.h \
     storage/tables/vesselslogliketable.h \
     storage/tables/popnodestable.h \
-    storage/tables/poptable.h
+    storage/tables/poptable.h \
+    ../mSqliteCpp/include/msqlitecpp.h
 
 ### mSQLiteCpp dependency
 
+DEFINES += BUILD_MSQLITECPP
 INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
 SOURCES += $$top_srcdir/mSqliteCpp/src/*
 HEADERS += $$top_srcdir/mSqliteCpp/include/*
-LIBS += -lsqlite3
+win32: LIBS += -lsqlite3_static
+!win32: LIBS += -lsqlite3
 
 ### End mSqliteCpp Depedency
 

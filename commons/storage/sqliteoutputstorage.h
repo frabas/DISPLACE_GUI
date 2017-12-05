@@ -1,7 +1,10 @@
 #ifndef SQLITEOUTPUTSTORAGE_H
 #define SQLITEOUTPUTSTORAGE_H
 
+#include "commons_global.h"
+
 #include <memory>
+#include <string>
 
 class VesselDefTable;
 class VesselsLoglikeTable;
@@ -12,7 +15,7 @@ namespace sqlite {
 class SQLiteStorage;
 };
 
-class SQLiteOutputStorage
+class COMMONSSHARED_EXPORT SQLiteOutputStorage
 {
     struct Impl;
     std::unique_ptr<Impl> p;

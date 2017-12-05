@@ -1,6 +1,8 @@
 #ifndef VESSELDEFTABLE_H
 #define VESSELDEFTABLE_H
 
+#include "commons_global.h"
+
 #include "sqlitefielddef.h"
 #include "sqlitetable.h"
 using namespace sqlite;
@@ -8,7 +10,7 @@ using namespace sqlite;
 #include <vector>
 #include <string>
 
-class VesselDefTable : public sqlite::SQLiteTable
+class COMMONSSHARED_EXPORT VesselDefTable : public sqlite::SQLiteTable
 {
 private:
     FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).primaryKey();

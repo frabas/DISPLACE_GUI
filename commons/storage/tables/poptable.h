@@ -1,6 +1,7 @@
 #ifndef POPTABLE_H
 #define POPTABLE_H
 
+#include "commons_global.h"
 #include "idtypes.h"
 
 #include "sqlitefielddef.h"
@@ -13,7 +14,7 @@ using namespace sqlite;
 
 class Node;
 
-class PopTable : public SQLiteTable
+class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
 {
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();

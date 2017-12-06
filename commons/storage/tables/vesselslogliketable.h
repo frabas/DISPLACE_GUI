@@ -1,6 +1,7 @@
 #ifndef VESSELSLOGLIKETABLE_H
 #define VESSELSLOGLIKETABLE_H
 
+#include "commons_global.h"
 #include "idtypes.h"
 
 #include "sqlitefielddef.h"
@@ -10,7 +11,7 @@ using namespace sqlite;
 #include <vector>
 #include <string>
 
-class VesselsLoglikeTable : public SQLiteTable
+class COMMONSSHARED_EXPORT VesselsLoglikeTable : public SQLiteTable
 {
     FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();

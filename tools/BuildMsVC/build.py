@@ -13,31 +13,23 @@ from recipes.geos import geos
 from recipes.gdal import gdal
 from recipes.geographiclib import geographiclib
 from recipes.helpers import helpers
-
+from recipes.sqlite import SQLite
+import pathlib
 
 class Dependency(object):
 
     def __init__(self, env):
         self.env = env
-        self.dependencies = [Zlib(env), 
-                             Boost(env),
-                             iconv(env),
-                             mpir(env),
-                             mpfr(env),
-                             cgal(env),
-                             proj4(env),
-                             geos(env),
-                             gdal(env),
-                             geographiclib(env)
+        self.dependencies = [ SQLite(env)
                              ]
 
     def prepare(self):
         if not os.path.exists(env.getBuildDir()):
-            os.mkdir(env.getBuildDir())
+            pathlib.Path(env.getBuildDir()).mkdir(parents=True, exist_ok=True)
         if not os.path.exists(env.getInstallDir()):
-            os.mkdir(env.getInstallDir())
+            pathlib.Path(env.getInstallDir()).mkdir(parents=True, exist_ok=True)
         if not os.path.exists(env.getStateDir()):
-            os.mkdir(env.getStateDir())
+            pathlib.Path(env.getStateDir()).mkdir(parents=True, exist_ok=True)
         helpers.mkdir(env.getInstallBinDir())
         helpers.mkdir(env.getInstallLibDir())
         helpers.mkdir(env.getInstallIncludeDir())

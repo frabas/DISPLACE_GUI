@@ -48,8 +48,8 @@ const char *const VariableNames::names[] = {
     "highPotentialCatch",          // ChooseGround
     "notThatFar",                  // ChooseGround
     "knowledgeOfThisGround",       // ChooseGround
-    "riskOfBycatchAvoidedStksIs",  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
-    "riskOfBycatchAllStksIs",     // ChooseGround related to experienced_bycatch_prop_on_fgrounds
+    "riskOfBycatchAvoidedStksThisGroundIs",  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
+    "riskOfBycatchAllStksThisGroundIs",     // ChooseGround related to experienced_bycatch_prop_on_fgrounds
     "quotaLeftOnAvoidedStksIs",    // ChooseGround
     "saveFuel",                    // ChooseGround
     "isInAreaClosure",             // ChooseGround
@@ -96,7 +96,7 @@ const char *const VariableNames::bins[][40] = {
     { "0", "1","2","3","4","5","6","7","8","9",
       "10", "11","12","13","14","15","16","17","18","19",
       "20", "21","22","23","24", "25","26", "27","28","29","30", "31","32", "33","34", "35","36", 0  },
-    { "<50% bycatch", ">50%",0 },
+    { "<20% bycatch", ">20%",0 },
     { ">10% quota left", "<10%",0 },
 
 
@@ -104,8 +104,8 @@ const char *const VariableNames::bins[][40] = {
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
-    { "<50% bycatch", ">50%",0 },
-    { "<50% bycatch", ">50%",0 },
+    { "<20% bycatch", ">20%",0 },
+    { "<20% bycatch", ">20%",0 },
     { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
@@ -113,7 +113,7 @@ const char *const VariableNames::bins[][40] = {
     { "false", "true",0 },
     { "false", "true",0 },
     { "false", "true",0 },
-    { "<50% bycatch", ">50%",0 },
+    { "<20% bycatch", ">20%",0 },
     { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
 

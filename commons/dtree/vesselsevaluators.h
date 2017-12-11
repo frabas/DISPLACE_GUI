@@ -191,7 +191,7 @@ public:
         //cout << "risk of bycatch on this ground being evaluated..." << endl;
         vector <double> prop_bycatch = v->get_experienced_bycatch_prop_on_fgrounds();
         //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
-        return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
+        return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
         }
 };
 
@@ -206,7 +206,7 @@ public:
         //cout << "risk of bycatch on this ground being evaluated..." << endl;
         vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
         //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
-        return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
+        return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
         }
 };
 

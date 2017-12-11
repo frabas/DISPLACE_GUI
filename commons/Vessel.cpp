@@ -309,9 +309,9 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
         mStateEvaluators[dtree::knowledgeOfThisGround] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
-        mStateEvaluators[dtree::riskOfBycatchAvoidedStksIs] =
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksThisGroundIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAllStksIsStateEvaluator);
-        mStateEvaluators[dtree::riskOfBycatchAllStksIs] =
+        mStateEvaluators[dtree::riskOfBycatchAllStksThisGroundIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
@@ -5099,6 +5099,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     // 3. traverseDTree for each possible ground (??: is this realistic??)
     types::NodeId ground= types::special::InvalidNodeId;
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
+    double last_value=0.0;
     for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
         ground=relevant_grounds_to_evaluate.at(it);
         outc(cout << "Evaluate for ground... "<< ground.toIndex() << endl);
@@ -5114,7 +5115,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"highPotentialCatch",          // ChooseGround     => find if that ground is where the highest experienced CPUE (all species) occurred
         //"notThatFar",          // ChooseGround             => find if that ground is the closest one
         //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds and pick up the most frequented ground
-        //"riskOfBycatchAvoidedStksIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
+        //"riskOfBycatchAvoidedStksThisGroundIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
         //=> TO DO: add the corresponding dtree evaluators...
@@ -5129,18 +5130,50 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
             return(ground);
         }
         //  else // CONTINUE SEARCHING AMONG RELEVANT GROUNDS
-
+    last_value =the_value;
     }
 
-    // if here, then no ground has actually been found
+    // if here, then no ground has actually been found within
+    // smartCatch or highPotentialCatch or knowledgeOfThisGround or notThatFar.....
+    // so we will rely on freq_grds to choose the ground.
+
     // (because of 1- a *non-complete* tree;
     // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
+    // or (e.g. 3- when all nodes are in closed areas)
     dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl);
-    if(relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)
-        return (types::special::InvalidNodeId); // do_nothing
 
-    // ultimately, use the freq_fgrounds...(e.g. when all nodes are in closed areas)
+    // for the last node....caution. Check if rand>last_value if yes then go to freq_fgrounds use...otherwise do nothing
+    //cout << "hello there!!" << "last_value  is "<< last_value << endl;
+    if(unif_rand()>last_value && relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId){
+       return (types::special::InvalidNodeId); // do_nothing
+    }
+
+
+    // so will will ultimately use the freq_fgrounds...
     vector <double> freq_grds = this->get_freq_fgrounds();
+
+    // but first we need to check for special cases:
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::riskOfBycatchAllStksThisGroundIs) == true)
+    {
+       freq_grds= this->get_experienced_bycatch_prop_on_fgrounds();
+       freq_grds= scale_a_vector_to_1(freq_grds);
+       for(unsigned int it = 0; it < freq_grds.size(); it++)
+       {
+           freq_grds.at(it)= 1 - freq_grds.at(it);
+       }
+
+    }
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::riskOfBycatchAvoidedStksThisGroundIs) == true)
+    {
+       freq_grds= this->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
+       freq_grds= scale_a_vector_to_1(freq_grds);
+       for(unsigned int it = 0; it < freq_grds.size(); it++)
+       {
+           freq_grds.at(it)= 1 - freq_grds.at(it);
+       }
+    }
+
+
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
     for(unsigned int n=0; n<grds.size(); n++)

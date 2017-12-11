@@ -26,8 +26,8 @@ enum Variable {
     highPotentialCatch,          // ChooseGround
     notThatFar,                  // ChooseGround
     knowledgeOfThisGround,       // ChooseGround
-    riskOfBycatchAvoidedStksIs,  // ChooseGround
-    riskOfBycatchAllStksIs,      // ChooseGround
+    riskOfBycatchAvoidedStksThisGroundIs,  // ChooseGround
+    riskOfBycatchAllStksThisGroundIs,      // ChooseGround
     quotaLeftOnAvoidedStksIs,    // ChooseGround
     saveFuel,                    // ChooseGround
     isInAreaClosure,             // ChooseGround

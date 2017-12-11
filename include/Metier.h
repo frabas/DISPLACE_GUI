@@ -40,6 +40,7 @@ class COMMONSSHARED_EXPORT Metier
         vector< vector <double> > selectivity_per_stock;
         vector<double> betas_per_pop;
         vector<double> discardratio_limits;
+        vector<int> is_avoided_stocks;  // 0 or 1 over stocks
         vector<int> mls_cat_per_pop;
         double fspeed;
         double gear_width_a;
@@ -56,6 +57,7 @@ class COMMONSSHARED_EXPORT Metier
             const vector< vector <double> > &selectivity_per_stock_ogives,
             vector<double> metier_betas_per_pop,
             vector<double> discardratio_limits,
+            vector<int> is_avoided_stocks,
             vector<int> metier_mls_cat_per_pop,
             double fspeed,
             double gear_width_a,
@@ -80,9 +82,11 @@ class COMMONSSHARED_EXPORT Metier
         vector<int> get_metier_target_stocks();
         vector<double> get_betas_per_pop();
         vector<double> get_discardratio_limits();
+        vector<int> get_is_avoided_stocks();
         vector<int> get_mls_cat_per_pop();
         void set_betas_per_pop(vector<double> metier_betas_per_pop);
         void set_discardratio_limits(vector<double> metier_discardratio_limits);
+        void set_is_avoided_stocks(vector<int> metier_is_avoided_stocks);
         void set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop);
 
 };

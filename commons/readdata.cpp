@@ -1796,6 +1796,27 @@ multimap<int, double> read_discardratio_limits(string a_semester, string folder_
 }
 
 
+multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_is_avoided_stocks_"+a_semester+".dat";
+
+    ifstream is_avoided_stocks_file;
+    is_avoided_stocks_file.open(filename.c_str());
+    if(is_avoided_stocks_file.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, int> is_avoided_stocks;
+    fill_multimap_from_specifications_i_i(is_avoided_stocks_file,  is_avoided_stocks);
+    is_avoided_stocks_file.close();
+
+    return(is_avoided_stocks);
+}
+
+
+
 multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)
 {
 

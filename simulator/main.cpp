@@ -2301,6 +2301,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "read mls cat parameters....ok? " << endl;
     multimap<int, double> discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
     cout << "read discardratio_limits parameters....ok? " << endl;
+    multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
+    cout << "read is_avoided_stocks parameters....ok? " << endl;
     multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
     cout << "read metiers types parameters....ok? " << endl;
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
@@ -2341,6 +2343,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name); // DEPRECATED
         vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
         vector<double> discardratio_limits         = find_entries_i_d(discards_rate_limits, metier_name);
+        vector<int> is_avoided_stocks              = find_entries_i_i(is_avoided_stockss, metier_name);
         vector<int> metier_mls_cat                 = find_entries_i_i(metiers_mls_cat, metier_name);
         int metier_type                            = metiers_types[ i ];
         double percent_revenue_completeness        = percent_revenue_completenesses[ i ];
@@ -2367,6 +2370,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  selectivity_per_stock_ogives,
                                  metier_betas,
                                  discardratio_limits,
+                                 is_avoided_stocks,
                                  metier_mls_cat,
                                  fspeed,
                                  gear_width_a,
@@ -4231,6 +4235,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             dout(cout << "re-read metiers..."  << endl);
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
             discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
+            is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
             metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
             for (unsigned int m=0; m<metiers.size(); m++)
             {
@@ -4240,9 +4245,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //string a_met = "met" + out.str();
                 vector<double> metier_betas = find_entries_i_d(metiers_betas, m);
                 vector<double> discardratio_limits = find_entries_i_d(discards_rate_limits, m);
+                vector<int> is_avoided_stocks = find_entries_i_i(is_avoided_stockss, m);
                 vector<int>    metier_mls_cat = find_entries_i_i(metiers_mls_cat, m);
                 metiers[m]->set_betas_per_pop(metier_betas);
                 metiers[m]->set_discardratio_limits(discardratio_limits);
+                metiers[m]->set_is_avoided_stocks(is_avoided_stocks);
 
             }					 // end a_met
             dout(cout << "re-read metiers...OK"  << endl);

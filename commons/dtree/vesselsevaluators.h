@@ -181,10 +181,10 @@ public:
         }
 };
 
-class VesselRiskOfBycatchIsStateEvaluator : public dtree::StateEvaluator {
+class VesselRiskOfBycatchAllStksIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
-    VesselRiskOfBycatchIsStateEvaluator() {}
+    VesselRiskOfBycatchAllStksIsStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
         auto the_grds = v->get_fgrounds();
         int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
@@ -194,6 +194,22 @@ public:
         return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
         }
 };
+
+
+class VesselRiskOfBycatchAvoidedStksIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselRiskOfBycatchAvoidedStksIsStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        auto the_grds = v->get_fgrounds();
+        int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
+        //cout << "risk of bycatch on this ground being evaluated..." << endl;
+        vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
+        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
+        return  prop_bycatch.at(idx_node_r) > 0.5 ? 1.0 : 0.0; // Is yes or no the vessel has experienced large bycatch (>50%) on this ground?
+        }
+};
+
 
 
 class VesselIsInAreaClosureEvaluator : public dtree::StateEvaluator {

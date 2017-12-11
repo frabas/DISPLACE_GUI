@@ -76,6 +76,7 @@ private:
         std::vector<double> cumcatch_fgrounds;
         std::vector<double> cumdiscard_fgrounds;
         std::vector<double> experienced_bycatch_prop_on_fgrounds;
+        std::vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds;
 
         std::vector< std::vector<double> > cumcatch_fgrounds_per_pop;
         std::vector< std::vector<double> > cumdiscard_fgrounds_per_pop;
@@ -239,6 +240,7 @@ public:
         const std::vector<double> &get_cumcatch_fgrounds () const;
         const std::vector<double> &get_cumdiscard_fgrounds () const;
         const std::vector<double> &get_experienced_bycatch_prop_on_fgrounds () const;
+        const std::vector<double> &get_experienced_avoided_stks_bycatch_prop_on_fgrounds () const;
         const std::vector<std::vector<double> > &get_cumcatch_fgrounds_per_pop () const;
         const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop () const;
         const std::vector<double> &get_cumeffort_fgrounds () const;
@@ -348,6 +350,7 @@ public:
         void set_spe_cumcatch_fgrounds (const std::vector<double> &_cumcatch);
         void set_spe_cumdiscard_fgrounds (const std::vector<double> &_cumdiscard);
         void set_spe_experienced_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_bycatch_prop_on_fgrounds);
+        void set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_avoided_stks_bycatch_prop_on_fgrounds);
         void set_spe_cumeffort_fgrounds (const std::vector<double> &_cumeffort);
         void set_spe_experiencedcpue_fgrounds (const std::vector<double> &_experiencedcpue);
         void set_spe_betas_per_pop (const std::vector<double> &_betas_per_pop);
@@ -363,6 +366,7 @@ public:
         void set_cumcatch_fgrounds(const std::vector<double> &newval);
         void set_cumdiscard_fgrounds(const std::vector<double> &newval);
         void set_experienced_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
+        void set_experienced_avoided_stks_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
         void set_cumcatch_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumdiscard_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumeffort_fgrounds(const std::vector<double> &newval);

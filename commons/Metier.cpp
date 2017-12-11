@@ -139,6 +139,13 @@ vector<int> Metier::get_is_avoided_stocks()
     return(is_avoided_stocks);
 }
 
+
+int Metier::get_is_avoided_stocks(int stk)
+{
+
+    return(is_avoided_stocks.at(stk));
+}
+
 vector<int> Metier::get_mls_cat_per_pop()
 {
 

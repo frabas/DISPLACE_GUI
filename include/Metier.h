@@ -83,6 +83,7 @@ class COMMONSSHARED_EXPORT Metier
         vector<double> get_betas_per_pop();
         vector<double> get_discardratio_limits();
         vector<int> get_is_avoided_stocks();
+        int get_is_avoided_stocks(int stk);
         vector<int> get_mls_cat_per_pop();
         void set_betas_per_pop(vector<double> metier_betas_per_pop);
         void set_discardratio_limits(vector<double> metier_discardratio_limits);

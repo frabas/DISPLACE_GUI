@@ -22,7 +22,7 @@
 
 using namespace dtree;
 
-const int VariableNames::VERSION = 6;
+const int VariableNames::VERSION = 7;
 
 /** \brief The names if the variables, as used in the decision tree files.
  * When changing this array, changes must account relative changes to VariableNames::bins and Variable .
@@ -39,20 +39,26 @@ const char *const VariableNames::names[] = {
     "todayIs",                      // goFishing
     "monthIs",                      // goFishing
     "stockTargetIs",                      // goFishing
+    "riskOfBycatchAvoidedStksNowIs", // goFishing
+    "quotaLeftOnAvoidedStksNowIs", // goFishing
+
+
 
     "smartCatch",                  // ChooseGround
     "highPotentialCatch",          // ChooseGround
     "notThatFar",                  // ChooseGround
     "knowledgeOfThisGround",       // ChooseGround
-    "riskOfBycatchIs",             // ChooseGround
+    "riskOfBycatchAvoidedStksIs",  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
+    "riskOfBycatchAllStksIs",     // ChooseGround related to experienced_bycatch_prop_on_fgrounds
+    "quotaLeftOnAvoidedStksIs",    // ChooseGround
     "saveFuel",                    // ChooseGround
-    "isInAreaClosure",          // ChooseGround
+    "isInAreaClosure",             // ChooseGround
 
 
     "arrivedOnGroundIs",    // StartFishing
     "detectedWithEchosounderIs",    // StartFishing
     "suitableBottomTypeIs",   // StartFishing
-    "riskOfBycatchHereIs",          // StartFishing
+    "riskOfBycatchAvoidedStksHereIs",          // StartFishing
     "otherVesselFishingHere",          // StartFishing
 
     "FeelingForCatchingElsewhere",  // ChangeGround
@@ -89,6 +95,8 @@ const char *const VariableNames::bins[][40] = {
     { "0", "1","2","3","4","5","6","7","8","9",
       "10", "11","12","13","14","15","16","17","18","19",
       "20", "21","22","23","24", "25","26", "27","28","29","30", "31","32", "33","34", "35","36", 0  },
+    { "<50% bycatch", ">50%",0 },
+    { ">10% quota left", "<10%",0 },
 
 
     { "no", "yes",0 },
@@ -96,6 +104,8 @@ const char *const VariableNames::bins[][40] = {
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "<50% bycatch", ">50%",0 },
+    { "<50% bycatch", ">50%",0 },
+    { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
 

@@ -3003,6 +3003,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
         vector<double > cumdiscard_fgrounds= init_for_fgrounds;
         vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
+        vector<double > experienced_avoided_stks_bycatch_prop_on_fgrounds= init_for_fgrounds;
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -3015,6 +3016,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cumdiscard_fgrounds[f] = 0;
             cumeffort_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] =0;
+            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] =0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
             // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
             // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
@@ -3038,6 +3040,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
         vessels.at(i)->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
         vessels.at(i)->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
+        vessels.at(i)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(experienced_avoided_stks_bycatch_prop_on_fgrounds);
         vessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
         vessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
         vessels.at(i)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
@@ -4039,6 +4042,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_spe_cumcatch_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_cumdiscard_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_experienced_bycatch_prop_on_fgrounds(init_for_fgrounds);
+                vessels.at(v)->set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds(init_for_fgrounds);
                 vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_experiencedcpue_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
@@ -4165,6 +4169,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<double > a_cumcatch_fgrounds= a_init_for_fgrounds;
                 vector<double > a_cumdiscard_fgrounds= a_init_for_fgrounds;
                 vector<double > a_experienced_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
+                vector<double > a_experienced_avoided_stks_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
                 vector<double > a_experiencedcpue_fgrounds= a_init_for_fgrounds;
                 vector<double > a_freq_experiencedcpue_fgrounds= a_init_for_fgrounds;
                 vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -4177,6 +4182,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     a_cumcatch_fgrounds[g] = 0;
                     a_cumdiscard_fgrounds[g] = 0;
                     a_experienced_bycatch_prop_on_fgrounds[g] = 0;
+                    a_experienced_avoided_stks_bycatch_prop_on_fgrounds[g] =0;
                     a_cumeffort_fgrounds[g] = 0;
                     a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
                     // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
@@ -4198,6 +4204,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
                 vessels.at(v)->set_cumdiscard_fgrounds(a_cumdiscard_fgrounds);
                 vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(a_experienced_bycatch_prop_on_fgrounds);
+                vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
                 vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
                 vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
                 vessels.at(v)->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
@@ -4775,6 +4782,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         vessels.at(v)->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                         vessels.at(v)->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                         vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                        vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                         vessels.at(v)->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned

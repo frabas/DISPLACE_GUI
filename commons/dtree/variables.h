@@ -19,21 +19,26 @@ enum Variable {
     todayIs,                      // goFishing
     monthIs,                      // goFishing
     stockTargetIs,                // goFishing
+    riskOfBycatchAvoidedStksNowIs, // goFishing
+    quotaLeftOnAvoidedStksNowIs, // goFishing
 
     smartCatch,                  // ChooseGround
     highPotentialCatch,          // ChooseGround
     notThatFar,                  // ChooseGround
     knowledgeOfThisGround,       // ChooseGround
-    riskOfBycatchIs,             // ChooseGround
+    riskOfBycatchAvoidedStksIs,  // ChooseGround
+    riskOfBycatchAllStksIs,      // ChooseGround
+    quotaLeftOnAvoidedStksIs,    // ChooseGround
     saveFuel,                    // ChooseGround
-    isInAreaClosure,          // ChooseGround
+    isInAreaClosure,             // ChooseGround
 
 
-    arrivedOnGroundIs,    // StartFishing
-    detectedWithEchosounderIs,    // StartFishing
-    suitableBottomTypeIs,   // StartFishing
-    riskOfBycatchHereIs,          //  StartFishing
-    otherVesselFishingHere,          // StartFishing
+    arrivedOnGroundIs,                // StartFishing
+    detectedWithEchosounderIs,        // StartFishing
+    suitableBottomTypeIs,             // StartFishing
+    riskOfBycatchAvoidedStksHereIs,   //  StartFishing
+    quotaLeftOnAvoidedStksHereIs,     // StartFishing
+    otherVesselFishingHere,           // StartFishing
 
     FeelingForCatchingElsewhere,  // ChangeGround
     otherVesselFishingElsewhere,  // ChangeGround

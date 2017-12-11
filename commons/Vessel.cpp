@@ -309,8 +309,10 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
         mStateEvaluators[dtree::knowledgeOfThisGround] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
-        mStateEvaluators[dtree::riskOfBycatchIs] =
-                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAllStksIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAllStksIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 
@@ -460,6 +462,11 @@ const vector<double> &Vessel::get_cumdiscard_fgrounds() const
 const vector<double> &Vessel::get_experienced_bycatch_prop_on_fgrounds () const
 {
     return(experienced_bycatch_prop_on_fgrounds);
+}
+
+const vector<double> &Vessel::get_experienced_avoided_stks_bycatch_prop_on_fgrounds () const
+{
+    return(experienced_avoided_stks_bycatch_prop_on_fgrounds);
 }
 
 
@@ -1055,6 +1062,10 @@ void Vessel::set_spe_experienced_bycatch_prop_on_fgrounds (const vector<double> 
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
 }
 
+void Vessel::set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds (const vector<double> &_experienced_avoided_stks_bycatch_prop_on_fgrounds)
+{
+    experienced_avoided_stks_bycatch_prop_on_fgrounds=_experienced_avoided_stks_bycatch_prop_on_fgrounds;
+}
 
 
 void Vessel::set_spe_cumeffort_fgrounds (const vector<double> &_cumeffort_fgrounds)
@@ -1212,6 +1223,10 @@ void Vessel::set_experienced_bycatch_prop_on_fgrounds (const vector<double>  &_e
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
 }
 
+void Vessel::set_experienced_avoided_stks_bycatch_prop_on_fgrounds (const vector<double>  &_experienced_avoided_stks_bycatch_prop_on_fgrounds)
+{
+    experienced_avoided_stks_bycatch_prop_on_fgrounds=_experienced_avoided_stks_bycatch_prop_on_fgrounds;
+}
 
 
 
@@ -2089,7 +2104,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
     // VARIABLES VALID FOR THIS FISHING EVENT ONLY
     double totLandThisEvent=1;
+    double totAvoiStksLandThisEvent=1;
     double totDiscThisEvent=0.0001;
+    double totAvoiStksDiscThisEvent=0.0001;
 
     // TARIFFS ON THE NODE
     vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
@@ -2754,7 +2771,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
-
+                    if(this->get_metier()->get_is_avoided_stocks(pop)==1)
+                    {
+                        totAvoiStksLandThisEvent+= totLandThisEvent;
+                        totAvoiStksDiscThisEvent+= totDiscThisEvent;
+                    }
 
 
                     // check
@@ -2964,8 +2985,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
     // compute the proportion of discard of this event on that ground
-    // (of all explicit species) to potentially influence future decision-making (see ChooseGround dtree)
+    // (of all explicit species AND on selected stocks i.e. the avoided ones) to potentially influence future decision-making (see ChooseGround dtree)
     experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDiscThisEvent/(totLandThisEvent+totDiscThisEvent);
+    experienced_avoided_stks_bycatch_prop_on_fgrounds.at(idx_node_r)= totAvoiStksDiscThisEvent/(totAvoiStksLandThisEvent+totAvoiStksDiscThisEvent);
 
 
     // contribute to accumulated catches on this node
@@ -5092,7 +5114,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"highPotentialCatch",          // ChooseGround     => find if that ground is where the highest experienced CPUE (all species) occurred
         //"notThatFar",          // ChooseGround             => find if that ground is the closest one
         //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds and pick up the most frequented ground
-        //"riskOfBycatchIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
+        //"riskOfBycatchAvoidedStksIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
         //=> TO DO: add the corresponding dtree evaluators...

@@ -2817,6 +2817,7 @@ bool DisplaceModel::loadVessels()
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
         vector<double > cumdiscard_fgrounds= init_for_fgrounds;
         vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
+        vector<double > experienced_avoided_stks_bycatch_prop_on_fgrounds= init_for_fgrounds;
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -2849,6 +2850,7 @@ bool DisplaceModel::loadVessels()
         mVessels.at(i)->mVessel->set_cumcatch_fgrounds(cumcatch_fgrounds);
         mVessels.at(i)->mVessel->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
         mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
+        mVessels.at(i)->mVessel->set_experienced_bycatch_prop_on_fgrounds(experienced_avoided_stks_bycatch_prop_on_fgrounds);
         mVessels.at(i)->mVessel->set_cumeffort_fgrounds(cumeffort_fgrounds);
         mVessels.at(i)->mVessel->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
         mVessels.at(i)->mVessel->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);

@@ -4884,6 +4884,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                 this->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                 this->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                 this->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumdiscard_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
@@ -5140,7 +5141,6 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
     // or (e.g. 3- when all nodes are in closed areas)
     dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl);
-    cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl;
 
     //for the last node....caution. Check if rand>last_value if yes then go to freq_fgrounds use...otherwise do nothing
 
@@ -5179,26 +5179,31 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
        }
     }
 
-
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
+    //cout << "grds.size() is" << grds.size() << endl;
+    //cout << "freq_grds.size() is" << freq_grds.size() << endl;
     for(unsigned int n=0; n<grds.size(); n++)
     {
         if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
         {
+            cout << " allo " << endl;
             freq_grds.at(n)=0.00000000000001; // to avoid removing if nb of grounds outside is 0
         }
         cumul += freq_grds.at(n);
     }
+
     // then re-scale to 1
     for(unsigned int n=0; n<grds.size(); n++)
     {
         freq_grds.at(n)= freq_grds.at(n)/cumul;
     }
+
     // then sample...
-    //cout << "do_sample 7" << endl;
     auto grounds = do_sample(1, grds.size(), grds, freq_grds);
-    ground=grounds[0];
+    ground= types::NodeId(grounds[0]);
+
+    //cout << "ground is " << ground.toIndex() << endl;
 
     unlock();
     return(ground);

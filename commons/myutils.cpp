@@ -1905,21 +1905,19 @@ vector<double> scale_a_vector_to_1(vector<double> a_vector)
     }
 
     // ...then, scale to 1
-    vector <double> freq_a_vector (a_vector.size());
+    vector <double> freq_a_vector (a_vector.size(), 0.000001);
     if(cum_a_vector!=0)
     {
         for(unsigned int a_node = 0; a_node < a_vector.size(); a_node++)
         {
-            if(a_vector.at(a_node)==0)  dout(cout << "a_vector.at(a_node) at 0 !! " << endl;)
+            //if(a_vector.at(a_node)==0)  cout << "a_vector.at(a_node) at 0 !! " << endl;
             freq_a_vector.at(a_node)= a_vector.at(a_node) / cum_a_vector;
             dout(cout  << "scaled a_vector is then " << freq_a_vector.at(a_node) << endl);
         }
     }
     else
     {
-
-        cout << "cum_a_vector = 0 !! " << endl;
-
+        //cout << "cum_a_vector = 0 !! " << endl;
     }
     return(freq_a_vector);
 }

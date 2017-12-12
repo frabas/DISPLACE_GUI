@@ -26,7 +26,7 @@
 #include <dtree/dtnode.h>
 #include <dtgraphicsscene.h>
 
-const int DtCsvWriter::VERSION = 6;
+const int DtCsvWriter::VERSION = 7;
 
 DtCsvWriter::DtCsvWriter()
 {

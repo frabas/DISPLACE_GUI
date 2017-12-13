@@ -28,7 +28,8 @@ enum Variable {
     knowledgeOfThisGround,       // ChooseGround
     riskOfBycatchAvoidedStksThisGroundIs,  // ChooseGround
     riskOfBycatchAllStksThisGroundIs,      // ChooseGround
-    quotaLeftOnAvoidedStksIs,    // ChooseGround
+    individualQuotaLeftOnAvoidedStksIs,    // ChooseGround
+    globalQuotaLeftOnAvoidedStksIs,    // ChooseGround
     saveFuel,                    // ChooseGround
     isInAreaClosure,             // ChooseGround
 

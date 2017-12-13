@@ -313,6 +313,10 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAllStksIsStateEvaluator);
         mStateEvaluators[dtree::riskOfBycatchAllStksThisGroundIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksIsStateEvaluator);
+        mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksIsStateEvaluator);
+        mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 

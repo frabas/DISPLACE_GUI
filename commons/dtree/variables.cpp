@@ -50,7 +50,8 @@ const char *const VariableNames::names[] = {
     "knowledgeOfThisGround",       // ChooseGround
     "riskOfBycatchAvoidedStksThisGroundIs",  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
     "riskOfBycatchAllStksThisGroundIs",     // ChooseGround related to experienced_bycatch_prop_on_fgrounds
-    "quotaLeftOnAvoidedStksIs",    // ChooseGround
+    "individualQuotaLeftOnAvoidedStksIs",    // ChooseGround
+    "globalQuotaLeftOnAvoidedStksIs",    // ChooseGround
     "saveFuel",                    // ChooseGround
     "isInAreaClosure",             // ChooseGround
 
@@ -114,6 +115,7 @@ const char *const VariableNames::bins[][40] = {
     { "false", "true",0 },
     { "false", "true",0 },
     { "<20% bycatch", ">20%",0 },
+    { ">10% quota left", "<10%",0 },
     { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
 

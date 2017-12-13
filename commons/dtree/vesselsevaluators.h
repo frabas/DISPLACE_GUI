@@ -215,8 +215,8 @@ private:
 public:
     VesselindividualQuotaLeftOnAvoidedStksIsStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-        double quota_left = 1.0;
-        return  quota_left < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the individual quotas (for avoided species) left is low
+        double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_individual_quotas();
+        return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the individual quotas (for avoided species) left is low
         }
 };
 

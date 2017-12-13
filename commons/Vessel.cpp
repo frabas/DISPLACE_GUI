@@ -192,7 +192,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     {
         individual_tac_per_pop.push_back(0);
         individual_tac_per_pop_at_year_start.push_back(0);
-        prop_remaining_individual_quotas.push_back(0);
+        prop_remaining_individual_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
     }
 
     // init at 0 the matrix of catches
@@ -783,6 +783,21 @@ double Vessel::get_prop_remaining_individual_quotas (int sp) const
     return(prop_remaining_individual_quotas.at(sp));
 }
 
+double Vessel::get_min_prop_remaining_individual_quotas ()
+{
+    vector<int> avoided_stocks=this->get_metier()->get_is_avoided_stocks();
+
+    // for looking for the min prop of quota left but only within the avoided_stocks subset...
+    vector<double> prop_remaining_individual_quotas_for_avoided_stks;
+    for (int stk=0; stk<prop_remaining_individual_quotas.size();++stk){
+          if(avoided_stocks.at(stk)) prop_remaining_individual_quotas_for_avoided_stks.push_back(prop_remaining_individual_quotas.at(stk));
+    }
+
+    if(prop_remaining_individual_quotas_for_avoided_stks.size()==0) return(1.0);
+
+    return( *min_element(prop_remaining_individual_quotas_for_avoided_stks.begin(),
+                         prop_remaining_individual_quotas_for_avoided_stks.end()) );
+}
 
 
 int Vessel::get_targeting_non_tac_pop_only () const

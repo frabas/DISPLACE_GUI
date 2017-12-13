@@ -315,6 +315,7 @@ public:
 		int get_individual_tac (int sp) const;
         int get_individual_tac_per_pop_at_year_start (int sp) const;
         double get_prop_remaining_individual_quotas (int sp) const;
+        double get_min_prop_remaining_individual_quotas ();
         int get_targeting_non_tac_pop_only() const;
         double get_GVA() const;
         double get_GVAPerRevenue() const;

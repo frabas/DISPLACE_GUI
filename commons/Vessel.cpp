@@ -191,6 +191,8 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     for(int i = 0; i < nbpops; i++)
     {
         individual_tac_per_pop.push_back(0);
+        individual_tac_per_pop_at_year_start.push_back(0);
+        prop_remaining_individual_quotas.push_back(0);
     }
 
     // init at 0 the matrix of catches
@@ -770,6 +772,17 @@ int Vessel::get_individual_tac (int sp) const
 {
     return(individual_tac_per_pop.at(sp));
 }
+
+int Vessel::get_individual_tac_per_pop_at_year_start (int sp) const
+{
+    return(individual_tac_per_pop_at_year_start.at(sp));
+}
+
+double Vessel::get_prop_remaining_individual_quotas (int sp) const
+{
+    return(prop_remaining_individual_quotas.at(sp));
+}
+
 
 
 int Vessel::get_targeting_non_tac_pop_only () const
@@ -1411,6 +1424,8 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
                 percent_simulated_tac_this_pop/100 *
                 percent_tac_per_pop.at(pop)/100 *
                 relative_key[this->get_nationality()]/100;
+        individual_tac_per_pop_at_year_start.at(pop)=individual_tac_per_pop.at(pop);
+
         dout(cout << "this vessel: individual TAC set to " << individual_tac_per_pop.at(pop) <<
              " for this pop " << pop <<
              " from global tac " << global_tac_this_pop <<
@@ -1439,6 +1454,7 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
         if(a_tac!=0.0)
         {
             individual_tac_per_pop.at(pop) =a_tac;
+            prop_remaining_individual_quotas.at(pop) =  a_tac/individual_tac_per_pop_at_year_start.at(pop);
             // the new tac is likely to be the initial tac decreased by the vessel catches so far.
         }
         else

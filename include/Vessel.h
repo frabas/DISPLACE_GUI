@@ -156,6 +156,8 @@ private:
         std::vector < std::vector<double> > ping_catch_pop_at_szgroup;
         std::vector < std::vector<double> > discards_pop_at_szgroup;
         std::vector<int> individual_tac_per_pop;
+        std::vector<int> individual_tac_per_pop_at_year_start;
+        std::vector<double> prop_remaining_individual_quotas;
         std::vector<double> fishing_credits;
 		int targeting_non_tac_pop_only;
 
@@ -311,7 +313,9 @@ public:
         int read_message() const;
         types::NodeId get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
-		int get_targeting_non_tac_pop_only() const;
+        int get_individual_tac_per_pop_at_year_start (int sp) const;
+        double get_prop_remaining_individual_quotas (int sp) const;
+        int get_targeting_non_tac_pop_only() const;
         double get_GVA() const;
         double get_GVAPerRevenue() const;
         double get_LabourSurplus() const;

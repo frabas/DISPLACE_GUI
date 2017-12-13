@@ -158,6 +158,7 @@ private:
         std::vector<int> individual_tac_per_pop;
         std::vector<int> individual_tac_per_pop_at_year_start;
         std::vector<double> prop_remaining_individual_quotas;
+        std::vector<double> prop_remaining_global_quotas;
         std::vector<double> fishing_credits;
 		int targeting_non_tac_pop_only;
 
@@ -315,7 +316,11 @@ public:
 		int get_individual_tac (int sp) const;
         int get_individual_tac_per_pop_at_year_start (int sp) const;
         double get_prop_remaining_individual_quotas (int sp) const;
+        double get_prop_remaining_global_quotas (int sp) const;
+        double get_min_prop_remaining_individual_quotas_on_avoided_stks ();
+        double get_min_prop_remaining_global_quotas_on_avoided_stks();
         double get_min_prop_remaining_individual_quotas ();
+        double get_min_prop_remaining_global_quotas();
         int get_targeting_non_tac_pop_only() const;
         double get_GVA() const;
         double get_GVAPerRevenue() const;

@@ -193,6 +193,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
         individual_tac_per_pop.push_back(0);
         individual_tac_per_pop_at_year_start.push_back(0);
         prop_remaining_individual_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
+        prop_remaining_global_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
     }
 
     // init at 0 the matrix of catches
@@ -783,7 +784,12 @@ double Vessel::get_prop_remaining_individual_quotas (int sp) const
     return(prop_remaining_individual_quotas.at(sp));
 }
 
-double Vessel::get_min_prop_remaining_individual_quotas ()
+double Vessel::get_prop_remaining_global_quotas (int sp) const
+{
+    return(prop_remaining_global_quotas.at(sp));
+}
+
+double Vessel::get_min_prop_remaining_individual_quotas_on_avoided_stks ()
 {
     vector<int> avoided_stocks=this->get_metier()->get_is_avoided_stocks();
 
@@ -797,6 +803,40 @@ double Vessel::get_min_prop_remaining_individual_quotas ()
 
     return( *min_element(prop_remaining_individual_quotas_for_avoided_stks.begin(),
                          prop_remaining_individual_quotas_for_avoided_stks.end()) );
+}
+
+double Vessel::get_min_prop_remaining_individual_quotas ()
+{
+
+    return( *min_element(prop_remaining_individual_quotas.begin(),
+                         prop_remaining_individual_quotas.end()) );
+}
+
+
+double Vessel::get_min_prop_remaining_global_quotas_on_avoided_stks ()
+{
+    vector<int> avoided_stocks=this->get_metier()->get_is_avoided_stocks();
+
+
+
+    // for looking for the min prop of quota left but only within the avoided_stocks subset...
+    vector<double> prop_remaining_global_quotas_for_avoided_stks;
+    for (int stk=0; stk<prop_remaining_global_quotas.size();++stk){
+cout << "prop_remaining_global_quotas.at(stk) is " << prop_remaining_global_quotas.at(stk) << " and avoided_stocks.at(stk) " << avoided_stocks.at(stk) << endl;
+          if(avoided_stocks.at(stk)) prop_remaining_global_quotas_for_avoided_stks.push_back(prop_remaining_global_quotas.at(stk));
+    }
+
+    if(prop_remaining_global_quotas_for_avoided_stks.size()==0) return(1.0);
+
+    return( *min_element(prop_remaining_global_quotas_for_avoided_stks.begin(),
+                         prop_remaining_global_quotas_for_avoided_stks.end()) );
+ }
+
+double Vessel::get_min_prop_remaining_global_quotas ()
+{
+
+    return( *min_element(prop_remaining_global_quotas.begin(),
+                         prop_remaining_global_quotas.end()) );
 }
 
 
@@ -2752,9 +2792,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // 4. compare in tons (AT THE GLOBAL SCALE)
                             if( (so_far/1000) > (global_quotas.at(pop)))
                             {
-                                dout (cout << "used " <<
-                                      (so_far/1000) / (global_quotas.at(pop))*100  <<
-                                      " % global quota of " << global_quotas.at(pop) << " this pop: overshoot..." << endl);
+                                prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
+
+                                dout (cout << "prop used " <<
+                                      prop_remaining_global_quotas.at(pop)  <<
+                                      "  global quota of " << global_quotas.at(pop) << " this pop: overshoot..." << endl);
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);

@@ -39,7 +39,8 @@ enum Variable {
     detectedWithEchosounderIs,        // StartFishing
     suitableBottomTypeIs,             // StartFishing
     riskOfBycatchAvoidedStksHereIs,   //  StartFishing
-    quotaLeftOnAvoidedStksHereIs,     // StartFishing
+    individualQuotaLeftOnAvoidedStksHereIs,     // StartFishing
+    globalQuotaLeftOnAvoidedStksHereIs,     // StartFishing
     otherVesselFishingHere,           // StartFishing
 
     FeelingForCatchingElsewhere,  // ChangeGround

@@ -172,6 +172,20 @@ public:
 };
 
 
+class VesselIsInAreaClosureEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselIsInAreaClosureEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+          auto lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
+          auto it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), types::NodeId(fground));
+          bool isIt= (it != lst_fgrounds_in_closed_areas.end()); // found
+          //cout << "isinareaclosure on this ground evaluated at "  << isIt << endl;
+          return  isIt ? 1.0 : 0.0; // Is yes or no in closed area?
+
+        }
+};
+
 
 class VesselSmartCatchStateEvaluator : public dtree::StateEvaluator {
 private:
@@ -269,21 +283,44 @@ public:
 };
 
 
-
-
-class VesselIsInAreaClosureEvaluator : public dtree::StateEvaluator {
+// StartFishing dtree
+class VesselRiskOfBycatchAvoidedStksHereIsStateEvaluator : public dtree::StateEvaluator {
 private:
 public:
-    VesselIsInAreaClosureEvaluator() {}
+    VesselRiskOfBycatchAvoidedStksHereIsStateEvaluator() {}
     double evaluate(int fground, Vessel *v) const {
-          auto lst_fgrounds_in_closed_areas=v->get_fgrounds_in_closed_areas();
-          auto it= find (lst_fgrounds_in_closed_areas.begin(), lst_fgrounds_in_closed_areas.end(), types::NodeId(fground));
-          bool isIt= (it != lst_fgrounds_in_closed_areas.end()); // found
-          //cout << "isinareaclosure on this ground evaluated at "  << isIt << endl;
-          return  isIt ? 1.0 : 0.0; // Is yes or no in closed area?
-
+        auto the_grds = v->get_fgrounds();
+        int idx_node_r= find(the_grds.begin(), the_grds.end(), types::NodeId(fground)) - the_grds.begin();    // relative node index to this vessel
+        //cout << "risk of bycatch on this ground being evaluated..." << endl;
+        vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
+        //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
+        return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
         }
 };
+
+class VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_individual_quotas_on_avoided_stks();
+        return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the individual quotas (for avoided species) left is low
+        }
+};
+
+class VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_global_quotas_on_avoided_stks();
+//        cout << "min_quota_left_among_avoided_stks is " << min_quota_left_among_avoided_stks;
+        return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
+        }
+};
+
+
+
 
 
 }

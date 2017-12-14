@@ -298,6 +298,13 @@ void Vessel::init()
         mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksNowIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksNowIsStateEvaluator);
 
+        // StartFishing (on this ground)
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksHereIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksHereIsStateEvaluator);
+        mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksHereIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator);
+        mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksHereIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator);
 
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
@@ -5320,9 +5327,32 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 {
     UNUSED(external_states);
 
-    if(use_the_tree)
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StartFishing))
     {
-        return -1;
+
+        lock();
+
+        std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::StartFishing);
+
+        auto from = this->get_loc()->get_idx_node();
+        dout(cout  << "current node: " << from.toIndex() << endl);
+
+        bool I_will_change_to_another_ground;
+        double the_value = traverseDtree(from.toIndex(), tree.get());
+
+       //SHALL I START FISHING FROM THE CURRENT GROUND?
+        if(unif_rand()<the_value) {
+            I_will_change_to_another_ground=false;
+        }
+        else
+        {
+            I_will_change_to_another_ground=true;
+
+        }
+
+        unlock();
+        return(I_will_change_to_another_ground);
+
     }
     else
     {

@@ -319,15 +319,16 @@ static void manage_vessel(int idx_v)
                     // ***************make a decision************************************
                     map<string,int> external_states_relevant_for_change_ground;
                     external_states_relevant_for_change_ground.insert(make_pair(" none ",0));
-                    int another_ground = vessels[ index_v ]->should_i_change_ground(
-                                external_states_relevant_for_change_ground, false);
+                    int I_will_change_to_another_ground = vessels[ index_v ]->should_i_change_ground(
+                                 external_states_relevant_for_change_ground,
+                                 use_dtrees);
 
                     // TO DO: do not change of ground if nodes are too far from each other e.g. nsea in myfish app
                     // so also need to test for current node code_area to see if vessel *allowed* to change grounds...
 
                     // ***************implement the decision************************************
                     // ...but not on this ground!
-                    if(another_ground || force_another_ground )
+                    if(I_will_change_to_another_ground || force_another_ground )
                     {
                         outc(cout  << "CHANGE OF GROUND, FISHERS! "  << endl);
                         vessels[ index_v ]->choose_another_ground_and_go_fishing(

@@ -306,6 +306,15 @@ void Vessel::init()
         mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksHereIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator);
 
+
+        // ChangeGround
+        mStateEvaluators[dtree::feelingForCatchingElsewhere] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFeelingForCatchingElsewhereStateEvaluator);
+        mStateEvaluators[dtree::seeingOtherVesselFishingElsewhere] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSeeingOtherVesselFishingElsewhereStateEvaluator);
+
+
+
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFuelTankStateEvaluator);
@@ -5310,6 +5319,10 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 {
     UNUSED(external_states);
 
+    bool shall_I_change_to_another_ground_because_of_StartFishing_dtree = false;
+    bool shall_I_change_to_another_ground_because_of_ChangeGround_dtree = false;
+    bool shall_I_change_to_another_ground = false;
+
     // StartFishing
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StartFishing))
     {
@@ -5321,16 +5334,15 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         auto from = this->get_loc()->get_idx_node();
         dout(cout  << "current node: " << from.toIndex() << endl);
 
-        bool shall_I_change_to_another_ground=false;
         double the_value = traverseDtree(from.toIndex(), tree.get());
 
        //SHALL I START FISHING FROM THE CURRENT GROUND?
         if(unif_rand()<the_value) {
-            shall_I_change_to_another_ground=false;
+            shall_I_change_to_another_ground_because_of_StartFishing_dtree=false;
         }
         else
         {
-            shall_I_change_to_another_ground=true &&
+            shall_I_change_to_another_ground_because_of_StartFishing_dtree=true &&
                     this->get_fgrounds().size()>2 &&
                     this->get_nbfpingspertrip() > 1 &&
                     this->get_loc()->get_code_area()!=10;
@@ -5338,7 +5350,6 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         }
 
         unlock();
-        return(shall_I_change_to_another_ground);
 
     }
 
@@ -5353,13 +5364,12 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         auto from = this->get_loc()->get_idx_node();
         dout(cout  << "current node: " << from.toIndex() << endl);
 
-        bool shall_I_change_to_another_ground=false;
         double the_value = traverseDtree(from.toIndex(), tree.get());
 
        //SHALL I CHANGE GROUND ?
         if(unif_rand()<the_value) {
 
-            shall_I_change_to_another_ground=true &&  // yes...
+            shall_I_change_to_another_ground_because_of_ChangeGround_dtree=true &&  // yes...
                     this->get_fgrounds().size()>2 &&  //...unless...
                     this->get_nbfpingspertrip() > 1 &&
                     this->get_loc()->get_code_area()!=10;
@@ -5367,16 +5377,18 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         }
         else
         {
-            shall_I_change_to_another_ground=false;
+            shall_I_change_to_another_ground_because_of_ChangeGround_dtree=false;
         }
 
         unlock();
-        return(shall_I_change_to_another_ground);
 
     }
 
 
     // DEFAULT-------------------------
+    if(!use_the_tree || (use_the_tree && ! (dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StartFishing)||
+                          (dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChangeGround)))))
+    {
     lock();
 
         vector <bool> a_vect;
@@ -5385,13 +5397,18 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         a_vect.push_back(false);
         a_vect.push_back(false);
         random_shuffle(a_vect.begin(),a_vect.end());
-        bool shall_I_change_to_another_ground = a_vect[0] &&
+        shall_I_change_to_another_ground = a_vect[0] &&
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&
                 this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
 
-        unlock();
-        return(shall_I_change_to_another_ground);
+     unlock();
+     }
+
+
+return(shall_I_change_to_another_ground_because_of_StartFishing_dtree ||
+           shall_I_change_to_another_ground_because_of_ChangeGround_dtree ||
+           shall_I_change_to_another_ground);
 
 }
 

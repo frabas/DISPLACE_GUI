@@ -323,7 +323,6 @@ static void manage_vessel(int idx_v)
                     if(!force_another_ground) shall_I_change_to_another_ground= vessels[ index_v ]->should_i_change_ground(
                                  external_states_relevant_for_change_ground,
                                  use_dtrees);
-
                     // note: this do not change of ground if nodes are too far from each other i.e. when code area coded "10"
                     // so current node is tested for the code_area to see if vessel is *allowed* to change grounds...
 

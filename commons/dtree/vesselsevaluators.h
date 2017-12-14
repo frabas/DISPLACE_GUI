@@ -320,6 +320,29 @@ public:
 };
 
 
+// ChangeGround
+class VesselFeelingForCatchingElsewhereStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselFeelingForCatchingElsewhereStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_global_quotas_on_avoided_stks();
+//        cout << "min_quota_left_among_avoided_stks is " << min_quota_left_among_avoided_stks;
+        return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
+        }
+};
+
+class VesselSeeingOtherVesselFishingElsewhereStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselSeeingOtherVesselFishingElsewhereStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_global_quotas_on_avoided_stks();
+//        cout << "min_quota_left_among_avoided_stks is " << min_quota_left_among_avoided_stks;
+        return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
+        }
+};
+
 
 
 

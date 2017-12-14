@@ -65,8 +65,8 @@ const char *const VariableNames::names[] = {
     "globalQuotaLeftOnAvoidedStksHereIs",   // StartFishing
     "otherVesselFishingHere",          // StartFishing
 
-    "FeelingForCatchingElsewhere",  // ChangeGround
-    "otherVesselFishingElsewhere",  // ChangeGround
+    "feelingForCatchingElsewhere",  // ChangeGround
+    "seeingOtherVesselFishingElsewhere",  // ChangeGround
 
     "catchVolumeIs", // StopFishing
     "fuelTankIs", // StopFishing

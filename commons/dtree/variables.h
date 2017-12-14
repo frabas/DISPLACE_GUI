@@ -43,8 +43,8 @@ enum Variable {
     globalQuotaLeftOnAvoidedStksHereIs,     // StartFishing
     otherVesselFishingHere,           // StartFishing
 
-    FeelingForCatchingElsewhere,  // ChangeGround
-    otherVesselFishingElsewhere,  // ChangeGround
+    feelingForCatchingElsewhere,  // ChangeGround
+    seeingOtherVesselFishingElsewhere,  // ChangeGround
 
     catchVolumeIs, // StopFishing
     fuelTankIs, // StopFishing

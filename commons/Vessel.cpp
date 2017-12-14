@@ -5337,21 +5337,24 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         auto from = this->get_loc()->get_idx_node();
         dout(cout  << "current node: " << from.toIndex() << endl);
 
-        bool I_will_change_to_another_ground;
+        bool shall_I_change_to_another_ground=false;
         double the_value = traverseDtree(from.toIndex(), tree.get());
 
        //SHALL I START FISHING FROM THE CURRENT GROUND?
         if(unif_rand()<the_value) {
-            I_will_change_to_another_ground=false;
+            shall_I_change_to_another_ground=false;
         }
         else
         {
-            I_will_change_to_another_ground=true;
+            shall_I_change_to_another_ground=true &&
+                    this->get_fgrounds().size()>2 &&
+                    this->get_nbfpingspertrip() > 1 &&
+                    this->get_loc()->get_code_area()!=10;
 
         }
 
         unlock();
-        return(I_will_change_to_another_ground);
+        return(shall_I_change_to_another_ground);
 
     }
     else
@@ -5365,13 +5368,13 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         a_vect.push_back(false);
         a_vect.push_back(false);
         random_shuffle(a_vect.begin(),a_vect.end());
-        bool another_ground = a_vect[0] &&
+        bool shall_I_change_to_another_ground = a_vect[0] &&
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&
                 this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
 
         unlock();
-        return(another_ground);
+        return(shall_I_change_to_another_ground);
     }
 }
 

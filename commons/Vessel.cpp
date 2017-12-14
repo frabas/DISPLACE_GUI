@@ -5305,23 +5305,6 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 }
 
 
-int Vessel::should_i_start_fishing(map<string,int>& external_states, bool use_the_tree)
-{
-    UNUSED(external_states);
-
-    if(use_the_tree)
-    {
-        // TO DO
-    }
-    else
-    {
-
-        // DEFAULT-------------------------
-    }
-
-    return 0;
-}
-
 
 int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_the_tree)
 {

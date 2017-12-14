@@ -485,7 +485,6 @@ public:
                                  //yes:1; no=0
         int should_i_go_fishing(int tstep, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
                                 std::vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
-        int should_i_start_fishing(std::map<std::string, int>& external_states, bool use_the_tree);
         types::NodeId should_i_choose_this_ground(int tstep,
                                         std::vector<Node*>& nodes,
                                         const std::vector <types::NodeId>& relevant_nodes,

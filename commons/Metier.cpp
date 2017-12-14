@@ -36,7 +36,8 @@ double _gear_width_a,
 double _gear_width_b,
 string _gear_width_model,
 multimap<int, double> _loss_after_1_passage,
-vector<int> _metier_target_stocks)
+vector<int> _metier_target_stocks,
+vector<int> _metier_suitable_seabottomtypes)
 {
 	name=_name;
 	type=_type;
@@ -52,6 +53,7 @@ vector<int> _metier_target_stocks)
 	gear_width_model=_gear_width_model;
 	loss_after_1_passage=_loss_after_1_passage;
     metier_target_stocks=_metier_target_stocks;
+    metier_suitable_seabottomtypes=_metier_suitable_seabottomtypes;
 }
 
 
@@ -192,6 +194,11 @@ vector<int> Metier::get_metier_target_stocks()
     return(metier_target_stocks);
 }
 
+vector<int> Metier::get_metier_suitable_seabottomtypes()
+{
+
+    return(metier_suitable_seabottomtypes);
+}
 
 void Metier::set_betas_per_pop(vector<double> metier_betas_per_pop)
 {

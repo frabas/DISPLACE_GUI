@@ -48,6 +48,7 @@ class COMMONSSHARED_EXPORT Metier
 		string gear_width_model;
 		multimap<int, double> loss_after_1_passage;
         vector<int> metier_target_stocks;
+        vector<int> metier_suitable_seabottomtypes;
 
 	public:
 		Metier();
@@ -64,7 +65,8 @@ class COMMONSSHARED_EXPORT Metier
             double gear_width_b,
             string gear_width_model,
             multimap<int, double> loss_after_1_passage,
-            vector<int> _metier_target_stocks);
+            vector<int> _metier_target_stocks,
+            vector<int> _metier_suitable_seabottomtypes);
 		~Metier();
 		int get_name();
         void set_name(int name);
@@ -80,6 +82,7 @@ class COMMONSSHARED_EXPORT Metier
 		string  get_gear_width_model();
 		multimap<int, double>  get_loss_after_1_passage();
         vector<int> get_metier_target_stocks();
+        vector<int> get_metier_suitable_seabottomtypes();
         vector<double> get_betas_per_pop();
         vector<double> get_discardratio_limits();
         vector<int> get_is_avoided_stocks();

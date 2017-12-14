@@ -1597,6 +1597,29 @@ multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_param
     return(metier_target_stocks);
 }
 
+multimap<int, int> read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_suitable_seabottomtypes.dat";
+
+    ifstream file_metier_suitable_seabottomtypes;
+    file_metier_suitable_seabottomtypes.open(filename.c_str());
+    if(file_metier_suitable_seabottomtypes.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, int> metier_suitable_seabottomtypes;
+    fill_multimap_from_specifications_i_i(file_metier_suitable_seabottomtypes,  metier_suitable_seabottomtypes);
+    file_metier_suitable_seabottomtypes.close();
+
+    return(metier_suitable_seabottomtypes);
+}
 
 
 // FOR METIER

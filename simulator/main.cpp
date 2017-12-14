@@ -2353,6 +2353,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         string gear_width_model                    = metiers_gear_widths_model_type[ i ];
         multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, inputfolder);
         multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, inputfolder);
+        multimap<int, int> metier_suitable_seabottomtypes    = read_metier_suitable_seabottomtypes(metier_name, folder_name_parameterization, inputfolder);
+
 
         vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
 
@@ -2362,6 +2364,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<int> the_metier_target_stocks;
         for (multimap<int, int>::iterator pos=lower_metier_target_stocks; pos != upper_metier_target_stocks; pos++)
             the_metier_target_stocks.push_back(pos->second);
+
+        // metier_suitable_seabottomtypes for this particular metier
+        multimap<int,int>::iterator lower_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.lower_bound(i);
+        multimap<int,int>::iterator upper_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.upper_bound(i);
+        vector<int> the_metier_suitable_seabottomtypes;
+        for (multimap<int, int>::iterator pos=lower_metier_suitable_seabottomtypes; pos != upper_metier_suitable_seabottomtypes; pos++)
+            the_metier_suitable_seabottomtypes.push_back(pos->second);
+
 
 
         metiers[i] =  new Metier(metier_name,
@@ -2377,7 +2387,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  gear_width_b,
                                  gear_width_model,
                                  loss_after_1_passage,
-                                 the_metier_target_stocks);
+                                 the_metier_target_stocks,
+                                 the_metier_suitable_seabottomtypes);
         cout << "done.... "  << endl;
     }
 

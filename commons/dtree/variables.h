@@ -20,7 +20,8 @@ enum Variable {
     monthIs,                      // goFishing
     stockTargetIs,                // goFishing
     riskOfBycatchAvoidedStksNowIs, // goFishing
-    quotaLeftOnAvoidedStksNowIs, // goFishing
+    individualQuotaLeftOnAvoidedStksNowIs, // goFishing
+    globalQuotaLeftOnAvoidedStksNowIs, // goFishing
 
     smartCatch,                  // ChooseGround
     highPotentialCatch,          // ChooseGround

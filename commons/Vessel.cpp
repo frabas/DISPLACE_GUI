@@ -291,6 +291,11 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
         mStateEvaluators[dtree::monthIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMonthIsStateEvaluator);
+        mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksNowIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksNowIsStateEvaluator);
+        mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksNowIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksNowIsStateEvaluator);
+
 
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
@@ -822,7 +827,7 @@ double Vessel::get_min_prop_remaining_global_quotas_on_avoided_stks ()
     // for looking for the min prop of quota left but only within the avoided_stocks subset...
     vector<double> prop_remaining_global_quotas_for_avoided_stks;
     for (int stk=0; stk<prop_remaining_global_quotas.size();++stk){
-cout << "prop_remaining_global_quotas.at(stk) is " << prop_remaining_global_quotas.at(stk) << " and avoided_stocks.at(stk) " << avoided_stocks.at(stk) << endl;
+//cout << "prop_remaining_global_quotas.at(stk) is " << prop_remaining_global_quotas.at(stk) << " and avoided_stocks.at(stk) " << avoided_stocks.at(stk) << endl;
           if(avoided_stocks.at(stk)) prop_remaining_global_quotas_for_avoided_stks.push_back(prop_remaining_global_quotas.at(stk));
     }
 

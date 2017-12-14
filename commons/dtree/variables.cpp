@@ -40,7 +40,8 @@ const char *const VariableNames::names[] = {
     "monthIs",                      // goFishing
     "stockTargetIs",                      // goFishing
     "riskOfBycatchAvoidedStksNowIs", // goFishing
-    "quotaLeftOnAvoidedStksNowIs", // goFishing
+    "individualQuotaLeftOnAvoidedStksNowIs", // goFishing
+    "globalQuotaLeftOnAvoidedStksNowIs", // goFishing
 
 
 
@@ -98,6 +99,7 @@ const char *const VariableNames::bins[][40] = {
       "10", "11","12","13","14","15","16","17","18","19",
       "20", "21","22","23","24", "25","26", "27","28","29","30", "31","32", "33","34", "35","36", 0  },
     { "<20% bycatch", ">20%",0 },
+    { ">10% quota left", "<10%",0 },
     { ">10% quota left", "<10%",0 },
 
 

@@ -5310,6 +5310,7 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 {
     UNUSED(external_states);
 
+    // StartFishing
     if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StartFishing))
     {
 
@@ -5340,11 +5341,44 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
         return(shall_I_change_to_another_ground);
 
     }
-    else
+
+    // ChangeGround
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChangeGround))
     {
+
         lock();
 
-        // DEFAULT-------------------------
+        std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChangeGround);
+
+        auto from = this->get_loc()->get_idx_node();
+        dout(cout  << "current node: " << from.toIndex() << endl);
+
+        bool shall_I_change_to_another_ground=false;
+        double the_value = traverseDtree(from.toIndex(), tree.get());
+
+       //SHALL I CHANGE GROUND ?
+        if(unif_rand()<the_value) {
+
+            shall_I_change_to_another_ground=true &&  // yes...
+                    this->get_fgrounds().size()>2 &&  //...unless...
+                    this->get_nbfpingspertrip() > 1 &&
+                    this->get_loc()->get_code_area()!=10;
+
+        }
+        else
+        {
+            shall_I_change_to_another_ground=false;
+        }
+
+        unlock();
+        return(shall_I_change_to_another_ground);
+
+    }
+
+
+    // DEFAULT-------------------------
+    lock();
+
         vector <bool> a_vect;
         a_vect.push_back(true);
         a_vect.push_back(false);
@@ -5358,7 +5392,7 @@ int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_th
 
         unlock();
         return(shall_I_change_to_another_ground);
-    }
+
 }
 
 

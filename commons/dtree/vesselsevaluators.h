@@ -3,6 +3,7 @@
 
 #include <Vessel.h>
 #include <helpers.h>
+#include <numeric> // std::accumulate()
 
 namespace dtree {
 namespace vessels {
@@ -95,7 +96,7 @@ class VesselindividualQuotaLeftOnAvoidedStksNowIsStateEvaluator : public dtree::
 private:
 public:
     VesselindividualQuotaLeftOnAvoidedStksNowIsStateEvaluator() {}
-    double evaluate(int fground, Vessel *v) const {
+    double evaluate(int, Vessel *v) const {
         double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_individual_quotas_on_avoided_stks();
         return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the individual quotas (for avoided species) left is low
         }
@@ -105,10 +106,23 @@ class VesselglobalQuotaLeftOnAvoidedStksNowIsStateEvaluator : public dtree::Stat
 private:
 public:
     VesselglobalQuotaLeftOnAvoidedStksNowIsStateEvaluator() {}
-    double evaluate(int fground, Vessel *v) const {
+    double evaluate(int, Vessel *v) const {
         double min_quota_left_among_avoided_stks = v->get_min_prop_remaining_global_quotas_on_avoided_stks();
 //        cout << "min_quota_left_among_avoided_stks is " << min_quota_left_among_avoided_stks;
         return  min_quota_left_among_avoided_stks < 0.1 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the global quotas (for avoided species) left is low
+        }
+};
+
+class VesselRiskOfBycatchAvoidedStksNowIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselRiskOfBycatchAvoidedStksNowIsStateEvaluator() {}
+    double evaluate(int, Vessel *v) const {
+        //cout << "vessel specific risk of bycatch being evaluated before trip start..." << endl;
+        vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
+        double average_prop_bycatch= std::accumulate( prop_bycatch.begin(), prop_bycatch.end(), 0.0)/prop_bycatch.size();
+        //cout << "...the average discard ratio for this vessel is: " << average_prop_bycatch << endl;
+        return  average_prop_bycatch > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
         }
 };
 

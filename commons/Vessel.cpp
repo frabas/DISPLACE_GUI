@@ -291,6 +291,8 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
         mStateEvaluators[dtree::monthIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMonthIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksNowIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksNowIsStateEvaluator);
         mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksNowIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksNowIsStateEvaluator);
         mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksNowIs] =
@@ -317,9 +319,9 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
         mStateEvaluators[dtree::knowledgeOfThisGround] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
-        mStateEvaluators[dtree::riskOfBycatchAvoidedStksThisGroundIs] =
-                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAllStksIsStateEvaluator);
         mStateEvaluators[dtree::riskOfBycatchAllStksThisGroundIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAllStksIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksThisGroundIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksIsStateEvaluator);
@@ -5197,7 +5199,10 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"highPotentialCatch",          // ChooseGround     => find if that ground is where the highest experienced CPUE (all species) occurred
         //"notThatFar",          // ChooseGround             => find if that ground is the closest one
         //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds and pick up the most frequented ground
-        //"riskOfBycatchAvoidedStksThisGroundIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
+        //"riskOfBycatchAvoidedStksThisGroundIs"  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
+        //"riskOfBycatchAllStksThisGroundIs"    // ChooseGround related to experienced_bycatch_prop_on_fgrounds
+        //"individualQuotaLeftOnAvoidedStksIs"    // ChooseGround
+        //"globalQuotaLeftOnAvoidedStksIs"    // ChooseGround
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
         //=> TO DO: add the corresponding dtree evaluators...

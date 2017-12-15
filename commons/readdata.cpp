@@ -3167,6 +3167,7 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
         for (auto &info : banning) {
             for (auto id : info.banned) {
                 nodes.at(info.nodeId.toIndex())->setBannedVsize(id);
+                nodes.at(info.nodeId.toIndex())->setAreaType(1);
             }
         }
     }

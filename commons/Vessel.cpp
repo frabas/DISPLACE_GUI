@@ -4887,6 +4887,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     auto grds= this->get_fgrounds();
     vector <double> freq_grds = this->get_freq_fgrounds();
 
+    vector<double>  freq_grds_in_closure(0);
     if(dyn_alloc_sce.option(Options::area_monthly_closure))
     {
         // fill in in list of closed fgrounds
@@ -4897,6 +4898,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                     nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class())
                     )
             {
+                freq_grds_in_closure.push_back(freq_grds.at(i));
                 grds_in_closure.push_back(grds.at(i));
             }
 
@@ -4929,7 +4931,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::isInAreaClosure) == true &&
             grds_in_closure.size()>0)
     {
-        auto theground = do_sample(1, grds.size(), grds_in_closure, freq_grds);
+        auto theground = do_sample(1, grds_in_closure.size(), grds_in_closure, freq_grds_in_closure);
         types::NodeId a_random_ground_inside_closed_area= types::NodeId(theground[0]);
         relevant_grounds_to_evaluate.push_back(a_random_ground_inside_closed_area); // the first tested ground
         // for the isInAreaClosure tree evaluation, knowing that isInAreaClosure should be the first tree node

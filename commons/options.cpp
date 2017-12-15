@@ -35,6 +35,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,FMSY);
     M(mMap,"area_closure", area_closure);
     M(mMap,"area_monthly_closure", area_monthly_closure);
+    M(mMap,"closed_to_others_as_well", closed_to_others_as_well);
     O(mMap,fuelprice_plus20percent);
     O(mMap,reduced_speed_10percent);
     O(mMap,reduced_speed_20percent);

@@ -64,6 +64,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     benthos_meanweight=_benthos_meanweight;
     benthos_biomass_K=_benthos_biomass_K;
     benthos_number_K=_benthos_number_K;
+    area_type=0;
 
     if(_harbour!=0)
 	{

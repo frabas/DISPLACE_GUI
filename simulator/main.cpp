@@ -2613,40 +2613,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cin >> tmp;				 // pause
     }*/
 
-    // read nodes in polygons for area-based management
-#if 0
-    nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
 
-    // check
-    //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-    //{
-    //    dout(cout << " a polygon node is " << pos->second << endl);
-    //}
-    //cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
-
-    // check for area_closure
-    vector<int> polygons;
-    vector<int> polygon_nodes;
-    for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-    {
-        // get all values across the keys
-        polygons.push_back(pos->first);
-        polygon_nodes.push_back(pos->second);
-        dout(cout  << " a polygon node is " << pos->second << endl);
-    }
-    sort (polygon_nodes.begin(), polygon_nodes.end());
-
-    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-    {
-        if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node().toIndex()))
-        {
-            nodes.at(a_idx)->setAreaType(1);
-        } else{
-            nodes.at(a_idx)->setAreaType(0);
-        }
-    }
-#endif
-
+    // read nodes in closed area this month for area-based management,
+    // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
     if(dyn_alloc_sce.option(Options::area_monthly_closure))
     {
 
@@ -2838,12 +2807,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // inform grounds in closed areas
         // TO DO: TO BE REMOVED BECAUSE DEPRECATED (replaced by area_monthly_closure)
-        const auto &grds = vessels[i]->get_fgrounds();
-        vector <types::NodeId> fgrounds_in_closed_areas;
-        for(unsigned int i=0; i<grds.size();++i){
-            if(nodes.at(grds.at(i).toIndex())->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
-        }
-        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+//        const auto &grds = vessels[i]->get_fgrounds();
+//        vector <types::NodeId> fgrounds_in_closed_areas;
+//        for(unsigned int i=0; i<grds.size();++i){
+//            if(nodes.at(grds.at(i).toIndex())->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
+//        }
+//        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
 
         /*
         if(vessels[i]->get_name()=="SWN21"){

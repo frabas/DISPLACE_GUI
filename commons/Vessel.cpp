@@ -4878,17 +4878,22 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     types::NodeId notThatFarGround = types::special::InvalidNodeId;
     types::NodeId knowledgeOfThisGround;
 
-
     // 1. grounds of that vessel
     auto grds= this->get_fgrounds();
+    vector <double> freq_grds = this->get_freq_fgrounds();
+    auto grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the isInAreaClosure tree evaluation
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::isInAreaClosure) == true &&
+            grds_in_closure.size()>0)
+    {
+        auto theground = do_sample(1, grds.size(), grds_in_closure, freq_grds);
+        types::NodeId a_random_ground_inside_closed_area= types::NodeId(theground[0]);
+        relevant_grounds_to_evaluate.push_back(a_random_ground_inside_closed_area); // the first tested ground
+        // for the isInAreaClosure tree evaluation, knowing that isInAreaClosure should be the first tree node
+    }
 
-    // 2. Pre-computing of the variable all grds together
-    // (if the variable in the tree, and if this variable need computing from all grounds altogether)
-    // e.g. for smartCatch or highPotentialCatch
 
-    // by default:
-    auto  grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the IsInAreaClosure tree evaluation
-
+    // 2. search in the tree for the other relevant grounds
+    // (the trick is to avoid screening the ChooseGround tree with all the grounds randomly)
     // check
     /*
            cout << this->get_name() << " has ground in closure ? " << endl;
@@ -4931,7 +4936,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
               */
 
         }
-        this->set_fgrounds_in_closed_areas(grds_in_closure); // for the IsInAreaClosure tree evaluation
+        this->set_fgrounds_in_closed_areas(grds_in_closure);
     }
 
 
@@ -5081,6 +5086,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out2;
         vector <double> past_freq_cpue_grds_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
         if(grds_in_closure.size()>0)
         {
             for (unsigned int i=0; i<grds.size();++i)
@@ -5121,6 +5127,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out4;
         vector <double> freq_grounds_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
         if(grds_in_closure.size()>0)
         {
             for (unsigned int i=0; i<grds.size();++i)
@@ -5165,6 +5172,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out3;
         vector <double> distance_to_grounds_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
         if(grds_in_closure.size()>0)
         {
             for (unsigned int i=0; i<grds.size();++i)
@@ -5199,7 +5207,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
 
 
-    // 3. traverseDTree for each possible ground (??: is this realistic??)
+    // 3. traverseDTree for each possible relevant grounds
     types::NodeId ground= types::special::InvalidNodeId;
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
     for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
@@ -5256,12 +5264,10 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     if(unif_rand()>last_value || (relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)){
          unlock();
-        return (types::special::InvalidNodeId); // do_nothing
+        return (types::special::InvalidNodeId); // do_nothing, likely because all grounds in closed areas and last leaf at 0
     }
 
 
-    // so will will ultimately use the freq_fgrounds...
-    vector <double> freq_grds = this->get_freq_fgrounds();
 
     // but first we need to check for special cases e.g. reaction to potential for bycatch:
     if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::riskOfBycatchAllStksThisGroundIs) == true)
@@ -5288,12 +5294,15 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     double cumul=0.0;
     //cout << "grds.size() is" << grds.size() << endl;
     //cout << "freq_grds.size() is" << freq_grds.size() << endl;
+    grds_in_closure = this->get_fgrounds_in_closed_areas();
     for(unsigned int n=0; n<grds.size(); n++)
     {
         if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
         {
-            cout << " allo " << endl;
-            freq_grds.at(n)=0.00000000000001; // to avoid removing if nb of grounds outside is 0
+            //cout << " allo " << endl;
+            freq_grds.at(n)=1e-8; // to avoid removing if nb of grounds outside is 0
+            // but potential non-compliance if all grounds are in the closed areas....
+            // therefore put 0.0 in the last leaf if this is not the wished behaviour...
         }
         cumul += freq_grds.at(n);
     }

@@ -2,6 +2,7 @@
 #define VESSELSEVALUATORS_H
 
 #include <Vessel.h>
+#include <Node.h>
 #include <helpers.h>
 #include <numeric> // std::accumulate()
 
@@ -295,6 +296,19 @@ public:
         vector <double> prop_bycatch = v->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
         //cout << "...the discard ratio for that ground is: " << prop_bycatch.at(idx_node_r) << endl;
         return  prop_bycatch.at(idx_node_r) > 0.2 ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf) the vessel has experienced large bycatch (>20%) on this ground?
+        }
+};
+
+
+
+class VesselsuitableBottomTypeIsStateEvaluator : public dtree::StateEvaluator {
+private:
+public:
+    VesselsuitableBottomTypeIsStateEvaluator() {}
+    double evaluate(int fground, Vessel *v) const {
+        int currentbottom = v->get_loc()->get_marine_landscape();
+        vector<int> suitablebottoms = v->get_metier()->get_metier_suitable_seabottomtypes();
+        return binary_search(suitablebottoms.begin(), suitablebottoms.end(), currentbottom) ? 1.0 : 0.0; // Is yes (right leaf) or no (left leaf)
         }
 };
 

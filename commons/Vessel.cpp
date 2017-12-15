@@ -299,6 +299,8 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksNowIsStateEvaluator);
 
         // StartFishing (on this ground)
+        mStateEvaluators[dtree::suitableBottomTypeIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselsuitableBottomTypeIsStateEvaluator);
         mStateEvaluators[dtree::riskOfBycatchAvoidedStksHereIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksHereIsStateEvaluator);
         mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksHereIs] =

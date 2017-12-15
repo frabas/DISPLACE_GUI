@@ -4869,6 +4869,11 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
+
+//  TO DO: MAKE THE ORDER OF RELEVANT NODES (smartCatch notThatFar etc.) FLEXIBLE!!!
+
+
+
     int idx=0; // idx of the relevant ground
 
     // keep tracks relevant nodes to evaluate
@@ -4881,28 +4886,6 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     // 1. grounds of that vessel
     auto grds= this->get_fgrounds();
     vector <double> freq_grds = this->get_freq_fgrounds();
-    auto grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the isInAreaClosure tree evaluation
-    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::isInAreaClosure) == true &&
-            grds_in_closure.size()>0)
-    {
-        auto theground = do_sample(1, grds.size(), grds_in_closure, freq_grds);
-        types::NodeId a_random_ground_inside_closed_area= types::NodeId(theground[0]);
-        relevant_grounds_to_evaluate.push_back(a_random_ground_inside_closed_area); // the first tested ground
-        // for the isInAreaClosure tree evaluation, knowing that isInAreaClosure should be the first tree node
-    }
-
-
-    // 2. search in the tree for the other relevant grounds
-    // (the trick is to avoid screening the ChooseGround tree with all the grounds randomly)
-    // check
-    /*
-           cout << this->get_name() << " has ground in closure ? " << endl;
-          for (unsigned int i=0; i<grds_in_closure.size();++i)
-             {
-             cout << grds_in_closure.at(i) << " ";
-             }
-          cout << endl;
-         */
 
     if(dyn_alloc_sce.option(Options::area_monthly_closure))
     {
@@ -4938,6 +4921,32 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         }
         this->set_fgrounds_in_closed_areas(grds_in_closure);
     }
+
+
+
+    // 1. test for closure and keep a node within if any
+    auto grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the isInAreaClosure tree evaluation
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::isInAreaClosure) == true &&
+            grds_in_closure.size()>0)
+    {
+        auto theground = do_sample(1, grds.size(), grds_in_closure, freq_grds);
+        types::NodeId a_random_ground_inside_closed_area= types::NodeId(theground[0]);
+        relevant_grounds_to_evaluate.push_back(a_random_ground_inside_closed_area); // the first tested ground
+        // for the isInAreaClosure tree evaluation, knowing that isInAreaClosure should be the first tree node
+    }
+
+
+    // 2. search in the tree for the other relevant grounds
+    // (the trick is to avoid screening the ChooseGround tree with all the grounds randomly)
+    // check
+    /*
+           cout << this->get_name() << " has ground in closure ? " << endl;
+          for (unsigned int i=0; i<grds_in_closure.size();++i)
+             {
+             cout << grds_in_closure.at(i) << " ";
+             }
+          cout << endl;
+         */
 
 
 

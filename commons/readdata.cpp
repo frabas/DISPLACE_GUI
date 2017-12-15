@@ -1606,6 +1606,29 @@ multimap<int, int> read_metier_target_stocks(int a_met, string folder_name_param
     return(metier_target_stocks);
 }
 
+multimap<int, int> read_metier_suitable_seabottomtypes(int a_met, string folder_name_parameterization, string inputfolder)
+{
+
+    // casting a_met into a string
+    stringstream out;
+    out << a_met;
+    string a_met_s = out.str();
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metier_suitable_seabottomtypes.dat";
+
+    ifstream file_metier_suitable_seabottomtypes;
+    file_metier_suitable_seabottomtypes.open(filename.c_str());
+    if(file_metier_suitable_seabottomtypes.fail())
+    {
+        open_file_error(filename.c_str());
+        //return 1;
+    }
+    multimap<int, int> metier_suitable_seabottomtypes;
+    fill_multimap_from_specifications_i_i(file_metier_suitable_seabottomtypes,  metier_suitable_seabottomtypes);
+    file_metier_suitable_seabottomtypes.close();
+
+    return(metier_suitable_seabottomtypes);
+}
 
 
 // FOR METIER
@@ -1803,6 +1826,27 @@ multimap<int, double> read_discardratio_limits(string a_semester, string folder_
 
     return(discardratio_limits);
 }
+
+
+multimap<int, int> read_is_avoided_stocks(string a_semester, string folder_name_parameterization, string inputfolder)
+{
+
+    string filename=  inputfolder+"/metiersspe_"+folder_name_parameterization+"/metierspe_is_avoided_stocks_"+a_semester+".dat";
+
+    ifstream is_avoided_stocks_file;
+    is_avoided_stocks_file.open(filename.c_str());
+    if(is_avoided_stocks_file.fail())
+    {
+        open_file_error(filename.c_str());
+        // return 1;
+    }
+    multimap<int, int> is_avoided_stocks;
+    fill_multimap_from_specifications_i_i(is_avoided_stocks_file,  is_avoided_stocks);
+    is_avoided_stocks_file.close();
+
+    return(is_avoided_stocks);
+}
+
 
 
 multimap<int, int> read_metiers_mls_cat(string a_semester, string folder_name_parameterization, string inputfolder)
@@ -3134,6 +3178,7 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
         for (auto &info : banning) {
             for (auto id : info.banned) {
                 nodes.at(info.nodeId.toIndex())->setBannedVsize(id);
+                nodes.at(info.nodeId.toIndex())->setAreaType(1);
             }
         }
     }

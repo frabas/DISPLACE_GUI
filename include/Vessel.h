@@ -76,6 +76,7 @@ private:
         std::vector<double> cumcatch_fgrounds;
         std::vector<double> cumdiscard_fgrounds;
         std::vector<double> experienced_bycatch_prop_on_fgrounds;
+        std::vector<double> experienced_avoided_stks_bycatch_prop_on_fgrounds;
 
         std::vector< std::vector<double> > cumcatch_fgrounds_per_pop;
         std::vector< std::vector<double> > cumdiscard_fgrounds_per_pop;
@@ -155,6 +156,9 @@ private:
         std::vector < std::vector<double> > ping_catch_pop_at_szgroup;
         std::vector < std::vector<double> > discards_pop_at_szgroup;
         std::vector<int> individual_tac_per_pop;
+        std::vector<int> individual_tac_per_pop_at_year_start;
+        std::vector<double> prop_remaining_individual_quotas;
+        std::vector<double> prop_remaining_global_quotas;
         std::vector<double> fishing_credits;
 		int targeting_non_tac_pop_only;
 
@@ -239,6 +243,7 @@ public:
         const std::vector<double> &get_cumcatch_fgrounds () const;
         const std::vector<double> &get_cumdiscard_fgrounds () const;
         const std::vector<double> &get_experienced_bycatch_prop_on_fgrounds () const;
+        const std::vector<double> &get_experienced_avoided_stks_bycatch_prop_on_fgrounds () const;
         const std::vector<std::vector<double> > &get_cumcatch_fgrounds_per_pop () const;
         const std::vector<std::vector<double> > &get_cumdiscard_fgrounds_per_pop () const;
         const std::vector<double> &get_cumeffort_fgrounds () const;
@@ -309,7 +314,14 @@ public:
         int read_message() const;
         types::NodeId get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
-		int get_targeting_non_tac_pop_only() const;
+        int get_individual_tac_per_pop_at_year_start (int sp) const;
+        double get_prop_remaining_individual_quotas (int sp) const;
+        double get_prop_remaining_global_quotas (int sp) const;
+        double get_min_prop_remaining_individual_quotas_on_avoided_stks ();
+        double get_min_prop_remaining_global_quotas_on_avoided_stks();
+        double get_min_prop_remaining_individual_quotas ();
+        double get_min_prop_remaining_global_quotas();
+        int get_targeting_non_tac_pop_only() const;
         double get_GVA() const;
         double get_GVAPerRevenue() const;
         double get_LabourSurplus() const;
@@ -348,6 +360,7 @@ public:
         void set_spe_cumcatch_fgrounds (const std::vector<double> &_cumcatch);
         void set_spe_cumdiscard_fgrounds (const std::vector<double> &_cumdiscard);
         void set_spe_experienced_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_bycatch_prop_on_fgrounds);
+        void set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds (const std::vector<double> &_experienced_avoided_stks_bycatch_prop_on_fgrounds);
         void set_spe_cumeffort_fgrounds (const std::vector<double> &_cumeffort);
         void set_spe_experiencedcpue_fgrounds (const std::vector<double> &_experiencedcpue);
         void set_spe_betas_per_pop (const std::vector<double> &_betas_per_pop);
@@ -363,6 +376,7 @@ public:
         void set_cumcatch_fgrounds(const std::vector<double> &newval);
         void set_cumdiscard_fgrounds(const std::vector<double> &newval);
         void set_experienced_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
+        void set_experienced_avoided_stks_bycatch_prop_on_fgrounds(const std::vector<double> &newval);
         void set_cumcatch_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumdiscard_fgrounds_per_pop(const std::vector<std::vector<double> > &newval);
         void set_cumeffort_fgrounds(const std::vector<double> &newval);
@@ -471,7 +485,6 @@ public:
                                  //yes:1; no=0
         int should_i_go_fishing(int tstep, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
                                 std::vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
-        int should_i_start_fishing(std::map<std::string, int>& external_states, bool use_the_tree);
         types::NodeId should_i_choose_this_ground(int tstep,
                                         std::vector<Node*>& nodes,
                                         const std::vector <types::NodeId>& relevant_nodes,

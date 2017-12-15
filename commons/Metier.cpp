@@ -29,13 +29,15 @@ const vector< vector <double> > &_selectivity_per_stock,
 //vector<double> _discards,
 vector<double> _betas_per_pop,
 vector<double> _discardratio_limits,
+vector<int>    _is_avoided_stocks,
 vector<int>    _mls_cat_per_pop,
 double _fspeed,
 double _gear_width_a,
 double _gear_width_b,
 string _gear_width_model,
 multimap<int, double> _loss_after_1_passage,
-vector<int> _metier_target_stocks)
+vector<int> _metier_target_stocks,
+vector<int> _metier_suitable_seabottomtypes)
 {
 	name=_name;
 	type=_type;
@@ -43,6 +45,7 @@ vector<int> _metier_target_stocks)
     selectivity_per_stock=_selectivity_per_stock;
 	betas_per_pop=_betas_per_pop;
     discardratio_limits=_discardratio_limits;
+    is_avoided_stocks=_is_avoided_stocks;
     mls_cat_per_pop=_mls_cat_per_pop;
     fspeed= _fspeed;
     gear_width_a=_gear_width_a;
@@ -50,6 +53,7 @@ vector<int> _metier_target_stocks)
 	gear_width_model=_gear_width_model;
 	loss_after_1_passage=_loss_after_1_passage;
     metier_target_stocks=_metier_target_stocks;
+    metier_suitable_seabottomtypes=_metier_suitable_seabottomtypes;
 }
 
 
@@ -131,6 +135,18 @@ vector<double> Metier::get_discardratio_limits()
     return(discardratio_limits);
 }
 
+vector<int> Metier::get_is_avoided_stocks()
+{
+
+    return(is_avoided_stocks);
+}
+
+
+int Metier::get_is_avoided_stocks(int stk)
+{
+
+    return(is_avoided_stocks.at(stk));
+}
 
 vector<int> Metier::get_mls_cat_per_pop()
 {
@@ -178,6 +194,11 @@ vector<int> Metier::get_metier_target_stocks()
     return(metier_target_stocks);
 }
 
+vector<int> Metier::get_metier_suitable_seabottomtypes()
+{
+
+    return(metier_suitable_seabottomtypes);
+}
 
 void Metier::set_betas_per_pop(vector<double> metier_betas_per_pop)
 {
@@ -189,6 +210,12 @@ void Metier::set_discardratio_limits(vector<double> metier_discardratio_limits)
 {
 
     discardratio_limits=metier_discardratio_limits;
+}
+
+void Metier::set_is_avoided_stocks(vector<int> metier_is_avoided_stocks)
+{
+
+    is_avoided_stocks=metier_is_avoided_stocks;
 }
 
 void Metier::set_mls_cat_per_pop(vector<int> metier_mls_cat_per_pop)

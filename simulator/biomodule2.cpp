@@ -257,13 +257,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                     // not farther than 200 km than a closed node.
                     // pseudocode: if a closed node then cumul otherwise apply oth_land + cumul if <200km otherwise apply oth_land only and continue the cumul
                     //
-                    int closed_for_others_as_well = 0;// TO  DO: create option closed_for_others_as_well
-                    if ((dyn_alloc_sce.option(Options::area_closure) || dyn_alloc_sce.option(Options::area_monthly_closure)) && closed_for_others_as_well) // TO  DO: create option closed_for_others_as_well
+                    if ((dyn_alloc_sce.option(Options::area_closure) ||
+                         dyn_alloc_sce.option(Options::area_monthly_closure)) && dyn_alloc_sce.option(Options::closed_to_others_as_well))
                     {
 
                         //if (binary_search (polygon_nodes.begin(), polygon_nodes.end(), a_list_nodes.at(n)->get_idx_node().toIndex()))
                         auto grd= a_list_nodes.at(n)->get_idx_node();
-                        if (nodes.at(grd.toIndex())->evaluateAreaType()==1 ) // TO DO: should be improved to allow other in the restricted area concerning explicit vessels only...
+                        if (nodes.at(grd.toIndex())->evaluateAreaType()==1 )
                         {
                             // then, this is a closed node!
                             cumul_oth_land_to_be_displaced+=oth_land_this_pop_this_node;

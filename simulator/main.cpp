@@ -2329,6 +2329,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "read mls cat parameters....ok? " << endl;
     multimap<int, double> discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
     cout << "read discardratio_limits parameters....ok? " << endl;
+    multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
+    cout << "read is_avoided_stocks parameters....ok? " << endl;
     multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
     cout << "read metiers types parameters....ok? " << endl;
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
@@ -2369,6 +2371,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //vector<double> discards                    = find_entries_i_d(dis_ogives, metier_name); // DEPRECATED
         vector<double> metier_betas                = find_entries_i_d(metiers_betas, metier_name);
         vector<double> discardratio_limits         = find_entries_i_d(discards_rate_limits, metier_name);
+        vector<int> is_avoided_stocks              = find_entries_i_i(is_avoided_stockss, metier_name);
         vector<int> metier_mls_cat                 = find_entries_i_i(metiers_mls_cat, metier_name);
         int metier_type                            = metiers_types[ i ];
         double percent_revenue_completeness        = percent_revenue_completenesses[ i ];
@@ -2378,6 +2381,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         string gear_width_model                    = metiers_gear_widths_model_type[ i ];
         multimap<int, double> loss_after_1_passage = read_loss_after_1_passage_per_landscape_per_func_group(metier_name, folder_name_parameterization, inputfolder);
         multimap<int, int> metier_target_stocks    = read_metier_target_stocks(metier_name, folder_name_parameterization, inputfolder);
+        multimap<int, int> metier_suitable_seabottomtypes    = read_metier_suitable_seabottomtypes(metier_name, folder_name_parameterization, inputfolder);
+
 
         vector< vector<double> > selectivity_per_stock_ogives= read_selectivity_per_stock_ogives(i, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder,  fleetsce);
 
@@ -2388,6 +2393,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         for (multimap<int, int>::iterator pos=lower_metier_target_stocks; pos != upper_metier_target_stocks; pos++)
             the_metier_target_stocks.push_back(pos->second);
 
+        // metier_suitable_seabottomtypes for this particular metier
+        multimap<int,int>::iterator lower_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.lower_bound(i);
+        multimap<int,int>::iterator upper_metier_suitable_seabottomtypes = metier_suitable_seabottomtypes.upper_bound(i);
+        vector<int> the_metier_suitable_seabottomtypes;
+        for (multimap<int, int>::iterator pos=lower_metier_suitable_seabottomtypes; pos != upper_metier_suitable_seabottomtypes; pos++)
+            the_metier_suitable_seabottomtypes.push_back(pos->second);
+
+
 
         metiers[i] =  new Metier(metier_name,
                                  metier_type,
@@ -2395,13 +2408,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                  selectivity_per_stock_ogives,
                                  metier_betas,
                                  discardratio_limits,
+                                 is_avoided_stocks,
                                  metier_mls_cat,
                                  fspeed,
                                  gear_width_a,
                                  gear_width_b,
                                  gear_width_model,
                                  loss_after_1_passage,
-                                 the_metier_target_stocks);
+                                 the_metier_target_stocks,
+                                 the_metier_suitable_seabottomtypes);
         cout << "done.... "  << endl;
     }
 
@@ -2629,40 +2644,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cin >> tmp;				 // pause
     }*/
 
-    // read nodes in polygons for area-based management
-#if 0
-    nodes_in_polygons= read_nodes_in_polygons(a_quarter, a_graph_name, folder_name_parameterization, inputfolder);
 
-    // check
-    //for (multimap<int, int>::iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-    //{
-    //    dout(cout << " a polygon node is " << pos->second << endl);
-    //}
-    //cout << " for " << a_graph_name << "in quarter " << a_quarter << endl;
-
-    // check for area_closure
-    vector<int> polygons;
-    vector<int> polygon_nodes;
-    for (multimap<int, int>::const_iterator pos=nodes_in_polygons.begin(); pos != nodes_in_polygons.end(); pos++)
-    {
-        // get all values across the keys
-        polygons.push_back(pos->first);
-        polygon_nodes.push_back(pos->second);
-        dout(cout  << " a polygon node is " << pos->second << endl);
-    }
-    sort (polygon_nodes.begin(), polygon_nodes.end());
-
-    for(unsigned int a_idx=0; a_idx<nodes.size(); a_idx++)
-    {
-        if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), nodes.at(a_idx)->get_idx_node().toIndex()))
-        {
-            nodes.at(a_idx)->setAreaType(1);
-        } else{
-            nodes.at(a_idx)->setAreaType(0);
-        }
-    }
-#endif
-
+    // read nodes in closed area this month for area-based management,
+    // (and setAreaType on the fly for displacing other_land if closed_to_other_as_well)
     if(dyn_alloc_sce.option(Options::area_monthly_closure))
     {
 
@@ -2854,12 +2838,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // inform grounds in closed areas
         // TO DO: TO BE REMOVED BECAUSE DEPRECATED (replaced by area_monthly_closure)
-        const auto &grds = vessels[i]->get_fgrounds();
-        vector <types::NodeId> fgrounds_in_closed_areas;
-        for(unsigned int i=0; i<grds.size();++i){
-            if(nodes.at(grds.at(i).toIndex())->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
-        }
-        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+//        const auto &grds = vessels[i]->get_fgrounds();
+//        vector <types::NodeId> fgrounds_in_closed_areas;
+//        for(unsigned int i=0; i<grds.size();++i){
+//            if(nodes.at(grds.at(i).toIndex())->evaluateAreaType()==1) fgrounds_in_closed_areas.push_back(grds.at(i));
+//        }
+//        vessels[i]->set_fgrounds_in_closed_areas(fgrounds_in_closed_areas);
+
 
         /*
         if(vessels[i]->get_name()=="SWN21"){
@@ -3030,6 +3015,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double > cumcatch_fgrounds= init_for_fgrounds;
         vector<double > cumdiscard_fgrounds= init_for_fgrounds;
         vector<double > experienced_bycatch_prop_on_fgrounds= init_for_fgrounds;
+        vector<double > experienced_avoided_stks_bycatch_prop_on_fgrounds= init_for_fgrounds;
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -3042,6 +3028,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             cumdiscard_fgrounds[f] = 0;
             cumeffort_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] =0;
+            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] =0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
             // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
             // first condition: init different to 0 to allow the ground to be chosen even if it has not been visited yet...
@@ -3065,6 +3052,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels.at(i)->set_cumcatch_fgrounds(cumcatch_fgrounds);
         vessels.at(i)->set_cumdiscard_fgrounds(cumdiscard_fgrounds);
         vessels.at(i)->set_experienced_bycatch_prop_on_fgrounds(experienced_bycatch_prop_on_fgrounds);
+        vessels.at(i)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(experienced_avoided_stks_bycatch_prop_on_fgrounds);
         vessels.at(i)->set_cumeffort_fgrounds(cumeffort_fgrounds);
         vessels.at(i)->set_experiencedcpue_fgrounds(experiencedcpue_fgrounds);
         vessels.at(i)->set_freq_experiencedcpue_fgrounds(freq_experiencedcpue_fgrounds);
@@ -4072,6 +4060,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_spe_cumcatch_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_cumdiscard_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_experienced_bycatch_prop_on_fgrounds(init_for_fgrounds);
+                vessels.at(v)->set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds(init_for_fgrounds);
                 vessels.at(v)->set_spe_cumeffort_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_experiencedcpue_fgrounds (init_for_fgrounds);
                 vessels.at(v)->set_spe_betas_per_pop(spe_vessel_betas_per_pop);
@@ -4198,6 +4187,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vector<double > a_cumcatch_fgrounds= a_init_for_fgrounds;
                 vector<double > a_cumdiscard_fgrounds= a_init_for_fgrounds;
                 vector<double > a_experienced_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
+                vector<double > a_experienced_avoided_stks_bycatch_prop_on_fgrounds= a_init_for_fgrounds;
                 vector<double > a_experiencedcpue_fgrounds= a_init_for_fgrounds;
                 vector<double > a_freq_experiencedcpue_fgrounds= a_init_for_fgrounds;
                 vector<vector<double> > a_cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
@@ -4210,6 +4200,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     a_cumcatch_fgrounds[g] = 0;
                     a_cumdiscard_fgrounds[g] = 0;
                     a_experienced_bycatch_prop_on_fgrounds[g] = 0;
+                    a_experienced_avoided_stks_bycatch_prop_on_fgrounds[g] =0;
                     a_cumeffort_fgrounds[g] = 0;
                     a_experiencedcpue_fgrounds[g] = a_freq_fgrounds[g] * expected_cpue;
                     // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...
@@ -4231,6 +4222,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->set_cumcatch_fgrounds(a_cumcatch_fgrounds);
                 vessels.at(v)->set_cumdiscard_fgrounds(a_cumdiscard_fgrounds);
                 vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(a_experienced_bycatch_prop_on_fgrounds);
+                vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(a_experienced_avoided_stks_bycatch_prop_on_fgrounds);
                 vessels.at(v)->set_cumeffort_fgrounds(a_cumeffort_fgrounds);
                 vessels.at(v)->set_experiencedcpue_fgrounds(a_experiencedcpue_fgrounds);
                 vessels.at(v)->set_freq_experiencedcpue_fgrounds(a_freq_experiencedcpue_fgrounds);
@@ -4268,6 +4260,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             dout(cout << "re-read metiers..."  << endl);
             metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
             discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
+            is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
             metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
             for (unsigned int m=0; m<metiers.size(); m++)
             {
@@ -4277,9 +4270,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 //string a_met = "met" + out.str();
                 vector<double> metier_betas = find_entries_i_d(metiers_betas, m);
                 vector<double> discardratio_limits = find_entries_i_d(discards_rate_limits, m);
+                vector<int> is_avoided_stocks = find_entries_i_i(is_avoided_stockss, m);
                 vector<int>    metier_mls_cat = find_entries_i_i(metiers_mls_cat, m);
                 metiers[m]->set_betas_per_pop(metier_betas);
                 metiers[m]->set_discardratio_limits(discardratio_limits);
+                metiers[m]->set_is_avoided_stocks(is_avoided_stocks);
 
             }					 // end a_met
             dout(cout << "re-read metiers...OK"  << endl);
@@ -4805,6 +4800,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                         vessels.at(v)->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                         vessels.at(v)->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                         vessels.at(v)->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                        vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds(experiencedcpue_fgrounds);// re-dimensioned
                         vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                         vessels.at(v)->set_cumdiscard_fgrounds(experiencedcpue_fgrounds);// re-dimensioned

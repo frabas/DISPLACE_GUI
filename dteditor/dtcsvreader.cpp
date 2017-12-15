@@ -29,7 +29,7 @@
 #include <QQueue>
 #include <QDebug>
 
-const int DtCsvReader::VERSION = 6;
+const int DtCsvReader::VERSION = 7;
 
 DtCsvReader::DtCsvReader()
 {

@@ -22,7 +22,7 @@
 
 using namespace dtree;
 
-const int VariableNames::VERSION = 6;
+const int VariableNames::VERSION = 7;
 
 /** \brief The names if the variables, as used in the decision tree files.
  * When changing this array, changes must account relative changes to VariableNames::bins and Variable .
@@ -39,24 +39,34 @@ const char *const VariableNames::names[] = {
     "todayIs",                      // goFishing
     "monthIs",                      // goFishing
     "stockTargetIs",                      // goFishing
+    "riskOfBycatchAvoidedStksNowIs", // goFishing
+    "individualQuotaLeftOnAvoidedStksNowIs", // goFishing
+    "globalQuotaLeftOnAvoidedStksNowIs", // goFishing
+
+
 
     "smartCatch",                  // ChooseGround
     "highPotentialCatch",          // ChooseGround
     "notThatFar",                  // ChooseGround
     "knowledgeOfThisGround",       // ChooseGround
-    "riskOfBycatchIs",             // ChooseGround
+    "riskOfBycatchAvoidedStksThisGroundIs",  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
+    "riskOfBycatchAllStksThisGroundIs",     // ChooseGround related to experienced_bycatch_prop_on_fgrounds
+    "individualQuotaLeftOnAvoidedStksIs",    // ChooseGround
+    "globalQuotaLeftOnAvoidedStksIs",    // ChooseGround
     "saveFuel",                    // ChooseGround
-    "isInAreaClosure",          // ChooseGround
+    "isInAreaClosure",             // ChooseGround
 
 
     "arrivedOnGroundIs",    // StartFishing
     "detectedWithEchosounderIs",    // StartFishing
     "suitableBottomTypeIs",   // StartFishing
-    "riskOfBycatchHereIs",          // StartFishing
+    "riskOfBycatchAvoidedStksHereIs", // StartFishing
+    "individualQuotaLeftOnAvoidedStksHereIs",   // StartFishing
+    "globalQuotaLeftOnAvoidedStksHereIs",   // StartFishing
     "otherVesselFishingHere",          // StartFishing
 
-    "FeelingForCatchingElsewhere",  // ChangeGround
-    "otherVesselFishingElsewhere",  // ChangeGround
+    "feelingForCatchingElsewhere",  // ChangeGround
+    "seeingOtherVesselFishingElsewhere",  // ChangeGround
 
     "catchVolumeIs", // StopFishing
     "fuelTankIs", // StopFishing
@@ -89,20 +99,28 @@ const char *const VariableNames::bins[][40] = {
     { "0", "1","2","3","4","5","6","7","8","9",
       "10", "11","12","13","14","15","16","17","18","19",
       "20", "21","22","23","24", "25","26", "27","28","29","30", "31","32", "33","34", "35","36", 0  },
+    { "<20% bycatch", ">20%",0 },
+    { ">10% quota left", "<10%",0 },
+    { ">10% quota left", "<10%",0 },
 
 
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
-    { "<50% bycatch", ">50%",0 },
+    { "<20% bycatch", ">20%",0 },
+    { "<20% bycatch", ">20%",0 },
+    { ">10% quota left", "<10%",0 },
+    { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
     { "no", "yes",0 },
 
     { "false", "true",0 },
     { "false", "true",0 },
     { "false", "true",0 },
-    { "<50% bycatch", ">50%",0 },
+    { "<20% bycatch", ">20%",0 },
+    { ">10% quota left", "<10%",0 },
+    { ">10% quota left", "<10%",0 },
     { "no", "yes",0 },
 
     { "after 3 h", "after 6 h",0 },

@@ -93,6 +93,7 @@ enum Dyn_Alloc {
     FMSY,
     area_closure,
     area_monthly_closure,
+    closed_to_others_as_well,
     fuelprice_plus20percent,
     reduced_speed_10percent,
     reduced_speed_20percent,

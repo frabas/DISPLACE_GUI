@@ -191,6 +191,9 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     for(int i = 0; i < nbpops; i++)
     {
         individual_tac_per_pop.push_back(0);
+        individual_tac_per_pop_at_year_start.push_back(0);
+        prop_remaining_individual_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
+        prop_remaining_global_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
     }
 
     // init at 0 the matrix of catches
@@ -288,6 +291,31 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselTodayIsStateEvaluator);
         mStateEvaluators[dtree::monthIs] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselMonthIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksNowIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksNowIsStateEvaluator);
+        mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksNowIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksNowIsStateEvaluator);
+        mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksNowIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksNowIsStateEvaluator);
+
+        // StartFishing (on this ground)
+        mStateEvaluators[dtree::suitableBottomTypeIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselsuitableBottomTypeIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksHereIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksHereIsStateEvaluator);
+        mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksHereIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksHereIsStateEvaluator);
+        mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksHereIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksHereIsStateEvaluator);
+
+
+        // ChangeGround
+        mStateEvaluators[dtree::feelingForCatchingElsewhere] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselFeelingForCatchingElsewhereStateEvaluator);
+        mStateEvaluators[dtree::seeingOtherVesselFishingElsewhere] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselSeeingOtherVesselFishingElsewhereStateEvaluator);
+
+
 
         // StopFishing
         mStateEvaluators[dtree::fuelTankIs] =
@@ -309,8 +337,14 @@ void Vessel::init()
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselNotThatFarStateEvaluator);
         mStateEvaluators[dtree::knowledgeOfThisGround] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselKnowledgeOfThisGroundStateEvaluator);
-        mStateEvaluators[dtree::riskOfBycatchIs] =
-                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAllStksThisGroundIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAllStksIsStateEvaluator);
+        mStateEvaluators[dtree::riskOfBycatchAvoidedStksThisGroundIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselRiskOfBycatchAvoidedStksIsStateEvaluator);
+        mStateEvaluators[dtree::individualQuotaLeftOnAvoidedStksIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselindividualQuotaLeftOnAvoidedStksIsStateEvaluator);
+        mStateEvaluators[dtree::globalQuotaLeftOnAvoidedStksIs] =
+                std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselglobalQuotaLeftOnAvoidedStksIsStateEvaluator);
         mStateEvaluators[dtree::isInAreaClosure] =
                 std::shared_ptr<dtree::StateEvaluator> (new dtree::vessels::VesselIsInAreaClosureEvaluator);
 
@@ -460,6 +494,11 @@ const vector<double> &Vessel::get_cumdiscard_fgrounds() const
 const vector<double> &Vessel::get_experienced_bycatch_prop_on_fgrounds () const
 {
     return(experienced_bycatch_prop_on_fgrounds);
+}
+
+const vector<double> &Vessel::get_experienced_avoided_stks_bycatch_prop_on_fgrounds () const
+{
+    return(experienced_avoided_stks_bycatch_prop_on_fgrounds);
 }
 
 
@@ -760,6 +799,71 @@ int Vessel::get_individual_tac (int sp) const
     return(individual_tac_per_pop.at(sp));
 }
 
+int Vessel::get_individual_tac_per_pop_at_year_start (int sp) const
+{
+    return(individual_tac_per_pop_at_year_start.at(sp));
+}
+
+double Vessel::get_prop_remaining_individual_quotas (int sp) const
+{
+    return(prop_remaining_individual_quotas.at(sp));
+}
+
+double Vessel::get_prop_remaining_global_quotas (int sp) const
+{
+    return(prop_remaining_global_quotas.at(sp));
+}
+
+double Vessel::get_min_prop_remaining_individual_quotas_on_avoided_stks ()
+{
+    vector<int> avoided_stocks=this->get_metier()->get_is_avoided_stocks();
+
+    // for looking for the min prop of quota left but only within the avoided_stocks subset...
+    vector<double> prop_remaining_individual_quotas_for_avoided_stks;
+    for (int stk=0; stk<prop_remaining_individual_quotas.size();++stk){
+          if(avoided_stocks.at(stk)) prop_remaining_individual_quotas_for_avoided_stks.push_back(prop_remaining_individual_quotas.at(stk));
+    }
+
+    if(prop_remaining_individual_quotas_for_avoided_stks.size()==0) return(1.0);
+
+    return( *min_element(prop_remaining_individual_quotas_for_avoided_stks.begin(),
+                         prop_remaining_individual_quotas_for_avoided_stks.end()) );
+}
+
+double Vessel::get_min_prop_remaining_individual_quotas ()
+{
+
+    return( *min_element(prop_remaining_individual_quotas.begin(),
+                         prop_remaining_individual_quotas.end()) );
+}
+
+
+double Vessel::get_min_prop_remaining_global_quotas_on_avoided_stks ()
+{
+    vector<int> avoided_stocks=this->get_metier()->get_is_avoided_stocks();
+
+
+
+    // for looking for the min prop of quota left but only within the avoided_stocks subset...
+    vector<double> prop_remaining_global_quotas_for_avoided_stks;
+    for (int stk=0; stk<prop_remaining_global_quotas.size();++stk){
+//cout << "prop_remaining_global_quotas.at(stk) is " << prop_remaining_global_quotas.at(stk) << " and avoided_stocks.at(stk) " << avoided_stocks.at(stk) << endl;
+          if(avoided_stocks.at(stk)) prop_remaining_global_quotas_for_avoided_stks.push_back(prop_remaining_global_quotas.at(stk));
+    }
+
+    if(prop_remaining_global_quotas_for_avoided_stks.size()==0) return(1.0);
+
+    return( *min_element(prop_remaining_global_quotas_for_avoided_stks.begin(),
+                         prop_remaining_global_quotas_for_avoided_stks.end()) );
+ }
+
+double Vessel::get_min_prop_remaining_global_quotas ()
+{
+
+    return( *min_element(prop_remaining_global_quotas.begin(),
+                         prop_remaining_global_quotas.end()) );
+}
+
 
 int Vessel::get_targeting_non_tac_pop_only () const
 {
@@ -1055,6 +1159,10 @@ void Vessel::set_spe_experienced_bycatch_prop_on_fgrounds (const vector<double> 
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
 }
 
+void Vessel::set_spe_experienced_avoided_stks_bycatch_prop_on_fgrounds (const vector<double> &_experienced_avoided_stks_bycatch_prop_on_fgrounds)
+{
+    experienced_avoided_stks_bycatch_prop_on_fgrounds=_experienced_avoided_stks_bycatch_prop_on_fgrounds;
+}
 
 
 void Vessel::set_spe_cumeffort_fgrounds (const vector<double> &_cumeffort_fgrounds)
@@ -1212,6 +1320,10 @@ void Vessel::set_experienced_bycatch_prop_on_fgrounds (const vector<double>  &_e
     experienced_bycatch_prop_on_fgrounds=_experienced_bycatch_prop_on_fgrounds;
 }
 
+void Vessel::set_experienced_avoided_stks_bycatch_prop_on_fgrounds (const vector<double>  &_experienced_avoided_stks_bycatch_prop_on_fgrounds)
+{
+    experienced_avoided_stks_bycatch_prop_on_fgrounds=_experienced_avoided_stks_bycatch_prop_on_fgrounds;
+}
 
 
 
@@ -1392,6 +1504,8 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
                 percent_simulated_tac_this_pop/100 *
                 percent_tac_per_pop.at(pop)/100 *
                 relative_key[this->get_nationality()]/100;
+        individual_tac_per_pop_at_year_start.at(pop)=individual_tac_per_pop.at(pop);
+
         dout(cout << "this vessel: individual TAC set to " << individual_tac_per_pop.at(pop) <<
              " for this pop " << pop <<
              " from global tac " << global_tac_this_pop <<
@@ -1420,6 +1534,7 @@ void Vessel::set_individual_tac_this_pop(ofstream& export_individual_tacs, int t
         if(a_tac!=0.0)
         {
             individual_tac_per_pop.at(pop) =a_tac;
+            prop_remaining_individual_quotas.at(pop) =  a_tac/individual_tac_per_pop_at_year_start.at(pop);
             // the new tac is likely to be the initial tac decreased by the vessel catches so far.
         }
         else
@@ -2089,7 +2204,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
     // VARIABLES VALID FOR THIS FISHING EVENT ONLY
     double totLandThisEvent=1;
+    double totAvoiStksLandThisEvent=1;
     double totDiscThisEvent=0.0001;
+    double totAvoiStksDiscThisEvent=0.0001;
 
     // TARIFFS ON THE NODE
     vector<double> cumulcatches = this->get_loc()->get_cumcatches_per_pop();
@@ -2700,9 +2817,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             // 4. compare in tons (AT THE GLOBAL SCALE)
                             if( (so_far/1000) > (global_quotas.at(pop)))
                             {
-                                dout (cout << "used " <<
-                                      (so_far/1000) / (global_quotas.at(pop))*100  <<
-                                      " % global quota of " << global_quotas.at(pop) << " this pop: overshoot..." << endl);
+                                prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
+
+                                dout (cout << "prop used " <<
+                                      prop_remaining_global_quotas.at(pop)  <<
+                                      "  global quota of " << global_quotas.at(pop) << " this pop: overshoot..." << endl);
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
@@ -2754,7 +2873,11 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
-
+                    if(this->get_metier()->get_is_avoided_stocks(pop)==1)
+                    {
+                        totAvoiStksLandThisEvent+= totLandThisEvent;
+                        totAvoiStksDiscThisEvent+= totDiscThisEvent;
+                    }
 
 
                     // check
@@ -2964,8 +3087,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
     // compute the proportion of discard of this event on that ground
-    // (of all explicit species) to potentially influence future decision-making (see ChooseGround dtree)
+    // (of all explicit species AND on selected stocks i.e. the avoided ones) to potentially influence future decision-making (see ChooseGround dtree)
     experienced_bycatch_prop_on_fgrounds.at(idx_node_r)= totDiscThisEvent/(totLandThisEvent+totDiscThisEvent);
+    experienced_avoided_stks_bycatch_prop_on_fgrounds.at(idx_node_r)= totAvoiStksDiscThisEvent/(totAvoiStksLandThisEvent+totAvoiStksDiscThisEvent);
 
 
     // contribute to accumulated catches on this node
@@ -4745,6 +4869,11 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
+
+//  TO DO: MAKE THE ORDER OF RELEVANT NODES (smartCatch notThatFar etc.) FLEXIBLE!!!
+
+
+
     int idx=0; // idx of the relevant ground
 
     // keep tracks relevant nodes to evaluate
@@ -4754,27 +4883,11 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     types::NodeId notThatFarGround = types::special::InvalidNodeId;
     types::NodeId knowledgeOfThisGround;
 
-
     // 1. grounds of that vessel
     auto grds= this->get_fgrounds();
+    vector <double> freq_grds = this->get_freq_fgrounds();
 
-    // 2. Pre-computing of the variable all grds together
-    // (if the variable in the tree, and if this variable need computing from all grounds altogether)
-    // e.g. for smartCatch or highPotentialCatch
-
-    // by default:
-    auto  grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the IsInAreaClosure tree evaluation
-
-    // check
-    /*
-           cout << this->get_name() << " has ground in closure ? " << endl;
-          for (unsigned int i=0; i<grds_in_closure.size();++i)
-             {
-             cout << grds_in_closure.at(i) << " ";
-             }
-          cout << endl;
-         */
-
+    vector<double>  freq_grds_in_closure(0);
     if(dyn_alloc_sce.option(Options::area_monthly_closure))
     {
         // fill in in list of closed fgrounds
@@ -4785,6 +4898,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                     nodes.at(grds.at(i).toIndex())->isVsizeBanned(this->get_length_class())
                     )
             {
+                freq_grds_in_closure.push_back(freq_grds.at(i));
                 grds_in_closure.push_back(grds.at(i));
             }
 
@@ -4807,8 +4921,34 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
               */
 
         }
-        this->set_fgrounds_in_closed_areas(grds_in_closure); // for the IsInAreaClosure tree evaluation
+        this->set_fgrounds_in_closed_areas(grds_in_closure);
     }
+
+
+
+    // 1. test for closure and keep a node within if any
+    auto grds_in_closure = this->get_fgrounds_in_closed_areas();  // for the isInAreaClosure tree evaluation
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::isInAreaClosure) == true &&
+            grds_in_closure.size()>0)
+    {
+        auto theground = do_sample(1, grds_in_closure.size(), grds_in_closure, freq_grds_in_closure);
+        types::NodeId a_random_ground_inside_closed_area= types::NodeId(theground[0]);
+        relevant_grounds_to_evaluate.push_back(a_random_ground_inside_closed_area); // the first tested ground
+        // for the isInAreaClosure tree evaluation, knowing that isInAreaClosure should be the first tree node
+    }
+
+
+    // 2. search in the tree for the other relevant grounds
+    // (the trick is to avoid screening the ChooseGround tree with all the grounds randomly)
+    // check
+    /*
+           cout << this->get_name() << " has ground in closure ? " << endl;
+          for (unsigned int i=0; i<grds_in_closure.size();++i)
+             {
+             cout << grds_in_closure.at(i) << " ";
+             }
+          cout << endl;
+         */
 
 
 
@@ -4862,6 +5002,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                 this->set_spe_fgrounds(grounds_from_harbours); // CHANGED
                 this->set_spe_freq_fgrounds(freq_grounds_from_harbours); // CHANGED
                 this->set_experienced_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
+                this->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumdiscard_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
@@ -4956,6 +5097,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out2;
         vector <double> past_freq_cpue_grds_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
         if(grds_in_closure.size()>0)
         {
             for (unsigned int i=0; i<grds.size();++i)
@@ -4996,6 +5138,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out4;
         vector <double> freq_grounds_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
         if(grds_in_closure.size()>0)
         {
             for (unsigned int i=0; i<grds.size();++i)
@@ -5040,6 +5183,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         // keep only the grds out the closed areas...
         vector <types::NodeId> grds_out3;
         vector <double> distance_to_grounds_out;
+        grds_in_closure = this->get_fgrounds_in_closed_areas();
         if(grds_in_closure.size()>0)
         {
             for (unsigned int i=0; i<grds.size();++i)
@@ -5074,7 +5218,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
 
 
-    // 3. traverseDTree for each possible ground (??: is this realistic??)
+    // 3. traverseDTree for each possible relevant grounds
     types::NodeId ground= types::special::InvalidNodeId;
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
     for (size_t it=0; it < relevant_grounds_to_evaluate.size(); ++it){
@@ -5092,7 +5236,10 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //"highPotentialCatch",          // ChooseGround     => find if that ground is where the highest experienced CPUE (all species) occurred
         //"notThatFar",          // ChooseGround             => find if that ground is the closest one
         //"knowledgeOfThisGround",          // ChooseGround  => look at the historic proba of visiting the grounds and pick up the most frequented ground
-        //"riskOfBycatchIs",          // ChooseGround        => find proportion on sites of juveniles or other non-targeted species and pick up the lowest
+        //"riskOfBycatchAvoidedStksThisGroundIs"  // ChooseGround related to experienced_avoided_stks_bycatch_prop_on_fgrounds
+        //"riskOfBycatchAllStksThisGroundIs"    // ChooseGround related to experienced_bycatch_prop_on_fgrounds
+        //"individualQuotaLeftOnAvoidedStksIs"    // ChooseGround
+        //"globalQuotaLeftOnAvoidedStksIs"    // ChooseGround
         //"saveFuel"                 // ChooseGround         => TO DO: find the highest expected profit among the XX closests
         //"isInAreaClosure"      // ChooseGround             => find if that ground is lying inside the closed polygons
         //=> TO DO: add the corresponding dtree evaluators...
@@ -5107,37 +5254,81 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
             return(ground);
         }
         //  else // CONTINUE SEARCHING AMONG RELEVANT GROUNDS
-
     }
 
-    // if here, then no ground has actually been found
+    // if here, then no ground has actually been found within
+    // smartCatch or highPotentialCatch or knowledgeOfThisGround or notThatFar.....
+    // so we will rely on freq_grds to choose the ground.
+    // i.e. MIXED APPROACH
+
     // (because of 1- a *non-complete* tree;
     // or 2- the node present into two or more relevant nodes at the mean time e.g smartCatch is also notThatFar)
+    // or (e.g. 3- when all nodes are in closed areas)
     dout(cout << "no one among relevant grounds for " << this->get_name() << " last ground evaluated was... "<< ground.toIndex() << endl);
-    if(relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)
-        return (types::special::InvalidNodeId); // do_nothing
 
-    // ultimately, use the freq_fgrounds...(e.g. when all nodes are in closed areas)
-    vector <double> freq_grds = this->get_freq_fgrounds();
+    //for the last node....caution. Check if rand>last_value if yes then go to freq_fgrounds use...otherwise do nothing
+
+    double last_value = traverseDtree(0, tree.get()); // traverse up to the last value, assuming node 0 is no meaning for the vessel...
+    // if 1 found in the very last leaf of the tree then we´ll go for sure for sampling into freq_grds..
+    // if less than 1 then it is tested to know if the vessel do nothing or if the vessel will proceed further.
+
+
+    if(unif_rand()>last_value || (relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)){
+         unlock();
+        return (types::special::InvalidNodeId); // do_nothing, likely because all grounds in closed areas and last leaf at 0
+    }
+
+
+
+    // but first we need to check for special cases e.g. reaction to potential for bycatch:
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::riskOfBycatchAllStksThisGroundIs) == true)
+    {
+       freq_grds= this->get_experienced_bycatch_prop_on_fgrounds();
+       freq_grds= scale_a_vector_to_1(freq_grds);
+       for(unsigned int it = 0; it < freq_grds.size(); it++)
+       {
+           freq_grds.at(it)= 1 - freq_grds.at(it);
+       }
+
+    }
+    if(dtree::DecisionTreeManager::manager()->hasTreeVariable(dtree::DecisionTreeManager::ChooseGround, dtree::riskOfBycatchAvoidedStksThisGroundIs) == true)
+    {
+       freq_grds= this->get_experienced_avoided_stks_bycatch_prop_on_fgrounds();
+       freq_grds= scale_a_vector_to_1(freq_grds);
+       for(unsigned int it = 0; it < freq_grds.size(); it++)
+       {
+           freq_grds.at(it)= 1 - freq_grds.at(it);
+       }
+    }
+
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
+    //cout << "grds.size() is" << grds.size() << endl;
+    //cout << "freq_grds.size() is" << freq_grds.size() << endl;
+    grds_in_closure = this->get_fgrounds_in_closed_areas();
     for(unsigned int n=0; n<grds.size(); n++)
     {
         if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
         {
-            freq_grds.at(n)=0.00000000000001; // to avoid removing if nb of grounds outside is 0
+            //cout << " allo " << endl;
+            freq_grds.at(n)=1e-8; // to avoid removing if nb of grounds outside is 0
+            // but potential non-compliance if all grounds are in the closed areas....
+            // therefore put 0.0 in the last leaf if this is not the wished behaviour...
         }
         cumul += freq_grds.at(n);
     }
+
     // then re-scale to 1
     for(unsigned int n=0; n<grds.size(); n++)
     {
         freq_grds.at(n)= freq_grds.at(n)/cumul;
     }
+
     // then sample...
-    //cout << "do_sample 7" << endl;
     auto grounds = do_sample(1, grds.size(), grds, freq_grds);
-    ground=grounds[0];
+    ground= types::NodeId(grounds[0]);
+
+    //cout << "ground is " << ground.toIndex() << endl;
 
     unlock();
     return(ground);
@@ -5145,51 +5336,102 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 }
 
 
-int Vessel::should_i_start_fishing(map<string,int>& external_states, bool use_the_tree)
-{
-    UNUSED(external_states);
-
-    if(use_the_tree)
-    {
-        // TO DO
-    }
-    else
-    {
-
-        // DEFAULT-------------------------
-    }
-
-    return 0;
-}
-
 
 int Vessel::should_i_change_ground(map<string,int>& external_states, bool use_the_tree)
 {
     UNUSED(external_states);
 
-    if(use_the_tree)
+    bool shall_I_change_to_another_ground_because_of_StartFishing_dtree = false;
+    bool shall_I_change_to_another_ground_because_of_ChangeGround_dtree = false;
+    bool shall_I_change_to_another_ground = false;
+
+    // StartFishing
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StartFishing))
     {
-        return -1;
-    }
-    else
-    {
+
         lock();
 
-        // DEFAULT-------------------------
+        std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::StartFishing);
+
+        auto from = this->get_loc()->get_idx_node();
+        dout(cout  << "current node: " << from.toIndex() << endl);
+
+        double the_value = traverseDtree(from.toIndex(), tree.get());
+
+       //SHALL I START FISHING FROM THE CURRENT GROUND?
+        if(unif_rand()<the_value) {
+            shall_I_change_to_another_ground_because_of_StartFishing_dtree=false;
+        }
+        else
+        {
+            shall_I_change_to_another_ground_because_of_StartFishing_dtree=true &&
+                    this->get_fgrounds().size()>2 &&
+                    this->get_nbfpingspertrip() > 1 &&
+                    this->get_loc()->get_code_area()!=10;
+
+        }
+
+        unlock();
+
+    }
+
+    // ChangeGround
+    if(use_the_tree && dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChangeGround))
+    {
+
+        lock();
+
+        std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChangeGround);
+
+        auto from = this->get_loc()->get_idx_node();
+        dout(cout  << "current node: " << from.toIndex() << endl);
+
+        double the_value = traverseDtree(from.toIndex(), tree.get());
+
+       //SHALL I CHANGE GROUND ?
+        if(unif_rand()<the_value) {
+
+            shall_I_change_to_another_ground_because_of_ChangeGround_dtree=true &&  // yes...
+                    this->get_fgrounds().size()>2 &&  //...unless...
+                    this->get_nbfpingspertrip() > 1 &&
+                    this->get_loc()->get_code_area()!=10;
+
+        }
+        else
+        {
+            shall_I_change_to_another_ground_because_of_ChangeGround_dtree=false;
+        }
+
+        unlock();
+
+    }
+
+
+    // DEFAULT-------------------------
+    if(!use_the_tree || (use_the_tree && ! (dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::StartFishing)||
+                          (dtree::DecisionTreeManager::manager()->hasTree(dtree::DecisionTreeManager::ChangeGround)))))
+    {
+    lock();
+
         vector <bool> a_vect;
         a_vect.push_back(true);
         a_vect.push_back(false);
         a_vect.push_back(false);
         a_vect.push_back(false);
         random_shuffle(a_vect.begin(),a_vect.end());
-        bool another_ground = a_vect[0] &&
+        shall_I_change_to_another_ground = a_vect[0] &&
                 this->get_fgrounds().size()>2 &&
                 this->get_nbfpingspertrip() > 1 &&
                 this->get_loc()->get_code_area()!=10; // do not change if outside the area of interest (where the nodes are likely to be spaced by large distance!) (see R code for code 10)
 
-        unlock();
-        return(another_ground);
-    }
+     unlock();
+     }
+
+
+return(shall_I_change_to_another_ground_because_of_StartFishing_dtree ||
+           shall_I_change_to_another_ground_because_of_ChangeGround_dtree ||
+           shall_I_change_to_another_ground);
+
 }
 
 

@@ -5,6 +5,7 @@
 #include "tables/vesselslogliketable.h"
 #include "tables/popnodestable.h"
 #include "tables/poptable.h"
+#include "tables/vesselvmsliketable.h"
 
 using namespace sqlite;
 
@@ -13,6 +14,7 @@ struct SQLiteOutputStorage::Impl {
 
     std::shared_ptr<VesselDefTable> mVesselDefTable;
     std::shared_ptr<VesselsLoglikeTable> mVesselLoglikeTable;
+    std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<PopNodesTable> mPopNodesTable;
     std::shared_ptr<PopTable> mPopTable;
 };
@@ -44,6 +46,7 @@ void SQLiteOutputStorage::createAllTables()
 {
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
+    p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mPopNodesTable = std::make_shared<PopNodesTable>(p->db, "PopNodes");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
 }
@@ -56,6 +59,11 @@ std::shared_ptr<VesselDefTable> SQLiteOutputStorage::getVesselDefTable() const
 std::shared_ptr<VesselsLoglikeTable> SQLiteOutputStorage::getVesselLoglikeTable() const
 {
     return p->mVesselLoglikeTable;
+}
+
+std::shared_ptr<VesselVmsLikeTable> SQLiteOutputStorage::getVesselVmsLikeTable() const
+{
+    return p->mVesselVmslikeTable;
 }
 
 std::shared_ptr<PopNodesTable> SQLiteOutputStorage::getPopNodesTable() const

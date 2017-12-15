@@ -43,6 +43,9 @@ public:
 private:
     void exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
     void exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+
+    void exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel);
+    void exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel);
 };
 
 #endif // OUTPUTEXPORTER_H

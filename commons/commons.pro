@@ -63,7 +63,8 @@ SOURCES= \
     storage/sqliteoutputstorage.cpp \
     storage/tables/vesselslogliketable.cpp \
     storage/tables/popnodestable.cpp \
-    storage/tables/poptable.cpp
+    storage/tables/poptable.cpp \
+    storage/tables/vesselvmsliketable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -113,7 +114,8 @@ HEADERS= \
     storage/tables/vesselslogliketable.h \
     storage/tables/popnodestable.h \
     storage/tables/poptable.h \
-    ../mSqliteCpp/include/msqlitecpp.h
+    ../mSqliteCpp/include/msqlitecpp.h \
+    storage/tables/vesselvmsliketable.h
 
 ### mSQLiteCpp dependency
 

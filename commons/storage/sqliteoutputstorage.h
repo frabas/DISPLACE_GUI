@@ -8,6 +8,7 @@
 
 class VesselDefTable;
 class VesselsLoglikeTable;
+class VesselVmsLikeTable;
 class PopNodesTable;
 class PopTable;
 
@@ -29,6 +30,7 @@ public:
     void createAllTables();
     std::shared_ptr<VesselDefTable> getVesselDefTable() const;
     std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;
+    std::shared_ptr<VesselVmsLikeTable> getVesselVmsLikeTable() const;
     std::shared_ptr<PopNodesTable> getPopNodesTable() const;
     std::shared_ptr<PopTable> getPopTable() const;
 

@@ -2,6 +2,7 @@
 
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesselslogliketable.h"
+#include "storage/tables/vesselvmsliketable.h"
 
 #include <mutex>
 #include <Vessel.h>
@@ -31,6 +32,14 @@ OutputExporter::OutputExporter(const string &basepath, const string &namesimu)
 
 void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
 {
+    if (useSql)
+        exportVmsLikeSQLite(tstep, vessel);
+    if (usePlainText)
+        exportVmsLikePlaintext(tstep, vessel);
+}
+
+void OutputExporter::exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel)
+{
     std::unique_lock<std::mutex> locker(glob_mutex);
 
     mVmsLike << tstep << " "
@@ -44,6 +53,21 @@ void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
                 //<< vessels[ index_v ]->get_inharbour() << " "
              << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
              << vessel->get_state() << " " <<  endl;
+}
+
+void OutputExporter::exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel)
+{
+    VesselVmsLikeTable::Log log;
+    log.tstep = tstep;
+    log.id = vessel->get_idx();
+    log.tstep_dep = vessel->get_tstep_dep();
+    log.p_long = vessel->get_x();
+    log.p_lat = vessel->get_y();
+    log.p_course = vessel->get_course();
+    log.cum_fuel = vessel->get_cumfuelcons();
+    log.state = vessel->get_state();
+
+    mSqlDb->getVesselVmsLikeTable()->insertLog(log);
 }
 
 void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,  const std::vector<Population *> &populations, vector<int> &implicit_pops)

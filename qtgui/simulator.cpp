@@ -153,7 +153,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     connect(mSimulation, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
     connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
-    qInfo() << "Running: " << executable << "from" << folder << " with arguments: " << arguments;
+    qInfo() << "Running: " << executable << "from" << folder << " with arguments: " << arguments.join(" ");
     mSimulation->setWorkingDirectory(folder);
 
     mSimulation->start(executable, arguments);

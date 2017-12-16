@@ -11,6 +11,7 @@ class VesselsLoglikeTable;
 class VesselVmsLikeTable;
 class PopNodesTable;
 class PopTable;
+class Fishfarm;
 
 namespace sqlite {
 class SQLiteStorage;
@@ -35,6 +36,8 @@ public:
     std::shared_ptr<PopTable> getPopTable() const;
 
     std::shared_ptr<sqlite::SQLiteStorage> getDb() const;
+
+    void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
 };
 
 #endif // SQLITEOUTPUTSTORAGE_H

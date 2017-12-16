@@ -6,6 +6,7 @@
 #include "tables/popnodestable.h"
 #include "tables/poptable.h"
 #include "tables/vesselvmsliketable.h"
+#include "tables/fishfarmstable.h"
 
 using namespace sqlite;
 
@@ -17,6 +18,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<PopNodesTable> mPopNodesTable;
     std::shared_ptr<PopTable> mPopTable;
+    std::shared_ptr<FishfarmsTable> mFishfarmsTable;
 };
 
 SQLiteOutputStorage::SQLiteOutputStorage(std::string path)
@@ -42,6 +44,11 @@ std::shared_ptr<SQLiteStorage> SQLiteOutputStorage::getDb() const
     return p->db;
 }
 
+void SQLiteOutputStorage::exportFishfarmLog(Fishfarm *fishfarm, int tstep)
+{
+    p->mFishfarmsTable->exportFishfarmLog(fishfarm, tstep);
+}
+
 void SQLiteOutputStorage::createAllTables()
 {
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
@@ -49,6 +56,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mPopNodesTable = std::make_shared<PopNodesTable>(p->db, "PopNodes");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
+    p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
 }
 
 std::shared_ptr<VesselDefTable> SQLiteOutputStorage::getVesselDefTable() const

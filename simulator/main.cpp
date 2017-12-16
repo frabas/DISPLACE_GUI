@@ -5082,6 +5082,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   fishfarms.at(i)->compute_profit_in_farm(); // discrete event
                   //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
                   fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
+
+                  if (enable_sqlite_out)
+                      outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+
                   //...and reset
                   fishfarms.at(i)->set_is_running(0);
                   fishfarms.at(i)->set_sim_individual_mean_kg(0.0);

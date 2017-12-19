@@ -15,7 +15,7 @@ class Fishfarm;
 
 namespace sqlite {
 class SQLiteStorage;
-};
+}
 
 class COMMONSSHARED_EXPORT SQLiteOutputStorage
 {

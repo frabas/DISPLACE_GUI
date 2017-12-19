@@ -192,6 +192,7 @@ bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
 bool enable_sqlite_out = true;
+std::string outSqlitePath;
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
@@ -808,31 +809,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         srand ( 117 );			 // set always the same seed
     }
-    if(namesimu=="simu18")
-    {
-        srand ( 118 );			 // set always the same seed
-    }
-    if(namesimu=="simu19")
-    {
-        srand ( 119 );			 // set always the same seed
-    }
-    if(namesimu=="simu20")
-    {
-        srand ( 120 );			 // set always the same seed
-    }
-    if(namesimu=="simu21")
-    {
-        srand ( 121 );			 // set always the same seed
-    }
-    if(namesimu=="simu22")
-    {
-        srand ( 122 );			 // set always the same seed
-    }
-    if(namesimu=="simu23")
-    {
-        srand ( 123 );			 // set always the same seed
-    }
-    if(namesimu=="simu24")
     {
         srand ( 124 );			 // set always the same seed
     }
@@ -1011,7 +987,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             outSqlite->open();
             outSqlite->createAllTables();
 
-            OutputExporter::instance().setSQLiteDb(outSqlite);
+            OutputExporter::instance().setSQLiteDb(outSqlite);            
+            guiSendOutputInfo(sqliteOutputPath);
         }
     } catch (SQLiteException &x) {
         std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";

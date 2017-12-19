@@ -61,6 +61,15 @@ void guiSendTerminalMessage(const string &ss)
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss)));
 }
 
+void guiSendOutputInfo(std::string sqlPath)
+{
+    if (use_gui) {
+        ostringstream ss;
+        ss << "=Osql:" << sqlPath << endl;
+        mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
+    }
+}
+
 void finalizeIpcQueue()
 {
     mOutQueue.finish();

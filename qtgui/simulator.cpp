@@ -314,6 +314,10 @@ bool Simulator::processCodedLine(QString line)
         parseDebug(args);
         break;
 
+    case 'O':
+        parseOutputSpecs(line.mid(2));
+        break;
+
     default:
         return false;
     }
@@ -344,6 +348,19 @@ void Simulator::parseDebug(QStringList fields)
             mCapture = false;
         }
         break;
+    }
+}
+
+void Simulator::parseOutputSpecs(QString details)
+{
+    auto d = details.left(4);
+    auto str = details.mid(4);
+
+    if (d == "sql:") {
+        emit sqliteStorageOpened(str);
+    } else {
+        // just print on the console
+        qDebug() << "Output Specs: " << d << " => " << str;
     }
 }
 

@@ -35,6 +35,8 @@
 #include <QtAlgorithms>
 #include <QtDebug>
 
+#include "storage/sqliteoutputstorage.h"
+
 const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
 const char *FLD_EDGEID="edgeid";
@@ -382,6 +384,12 @@ void DisplaceModel::simulationEnded()
         mDb->flushBuffers();
         mDb->createIndexes();
     }
+}
+
+void DisplaceModel::setSimulationSqlStorage(const QString &path)
+{
+    mOutSqlite = std::make_shared<SQLiteOutputStorage>(path.toStdString());
+    mOutSqlite->open();
 }
 
 int DisplaceModel::getBenthosIdx(int benthosId) const

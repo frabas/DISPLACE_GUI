@@ -65,6 +65,7 @@ class DbHelper;
 class MapObjectsController;
 class Calendar;
 
+class SQLiteOutputStorage;
 
 class DisplaceModel : public QObject
 {
@@ -123,6 +124,7 @@ public:
     void setOutputName(const QString &name) { mOutputName = name; }
     QString simulationName() const { return mSimuName; }
     void setSimulationName(const QString &name) { mSimuName = name; }
+    void setSimulationSqlStorage(const QString &path);
 
     QString linkedDatabase() const { return mLinkedDbName; }
     bool isModelLoaded() const { return !mInputName.isEmpty(); }
@@ -539,6 +541,7 @@ private:
 
     ModelType mModelType;
     DbHelper *mDb;
+    std::shared_ptr<SQLiteOutputStorage> mOutSqlite;
     std::shared_ptr<Calendar> mCalendar;
     QString mFullPath;
     QString mInputName;

@@ -108,6 +108,7 @@ private slots:
     void showMessage(const QString &);
     void abortMouseMode ();
     void completeMouseMode();
+    void simulatorSqlStorageChanged(QString path);
 
     void showWarningMessageBox(QString,QString);
     void edgeSelectionsChanged(int);

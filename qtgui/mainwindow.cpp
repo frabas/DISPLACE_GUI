@@ -192,6 +192,7 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(shipMoved(int,int,float,float,float)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
+    connect (mSimulation, SIGNAL(sqliteStorageOpened(QString)), this, SLOT(simulatorSqlStorageChanged(QString)));
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
     connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 
@@ -1298,6 +1299,12 @@ void MainWindow::abortMouseMode()
 void MainWindow::completeMouseMode()
 {
     endMouseMode(true);
+}
+
+void MainWindow::simulatorSqlStorageChanged(QString path)
+{
+    if (currentModel)
+        currentModel->setSimulationSqlStorage(path);
 }
 
 void MainWindow::showWarningMessageBox(QString title, QString message)

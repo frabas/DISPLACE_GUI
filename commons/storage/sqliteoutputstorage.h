@@ -28,6 +28,9 @@ public:
     void open();
     void close();
 
+    void startDayLoop();
+    void endDayLoop();
+
     void createAllTables();
     std::shared_ptr<VesselDefTable> getVesselDefTable() const;
     std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;

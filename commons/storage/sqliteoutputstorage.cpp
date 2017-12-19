@@ -8,6 +8,8 @@
 #include "tables/vesselvmsliketable.h"
 #include "tables/fishfarmstable.h"
 
+#include <cassert>
+
 using namespace sqlite;
 
 struct SQLiteOutputStorage::Impl {
@@ -37,6 +39,16 @@ void SQLiteOutputStorage::open()
 void SQLiteOutputStorage::close()
 {
     p->db->close();
+}
+
+void SQLiteOutputStorage::startDayLoop()
+{
+    assert(p->db->startTransaction());
+}
+
+void SQLiteOutputStorage::endDayLoop()
+{
+    assert(p->db->commitTransaction());
 }
 
 std::shared_ptr<SQLiteStorage> SQLiteOutputStorage::getDb() const

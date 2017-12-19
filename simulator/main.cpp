@@ -3648,6 +3648,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     for (tstep =0; tstep < nbsteps; ++tstep)
     {
+        if (enable_sqlite_out)
+            outSqlite->startDayLoop();
+
 #ifdef PROFILE
         mLoopProfile.start();
 #endif
@@ -5227,6 +5230,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         }
 #endif
+
+        if (enable_sqlite_out)
+            outSqlite->endDayLoop();
 
 #ifdef PROFILE
         mLoopProfile.elapsed_ms();

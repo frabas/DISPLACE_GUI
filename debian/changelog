@@ -1,3 +1,9 @@
+displace (0.9.10) xenial; urgency=medium
+
+  * Updated dtrees
+
+ -- Federico Fuga <fuga@studiofuga.com>  Tue, 19 Dec 2017 11:58:57 +0100
+
 displace (0.9.9) xenial; urgency=medium
 
   * Aquaculture module

@@ -80,9 +80,21 @@ Population::Population(int a_name,
 
 	// init...
     dout(cout << "init..." << name << endl);
+
+    // a quick check
+    if(init_tot_N_at_szgroup.empty() || init_tot_N_at_szgroup.size()==0)
+     {
+        cout << "No N_at_szgroup found!! Check init_pops_per_szgroup. dat input file, correct and re-run..." << endl;
+        int aa;
+        cin >> aa;
+     }
+
     for(unsigned int sz=0; sz<init_tot_N_at_szgroup.size(); sz++)
 	{
-		tot_N_at_szgroup.push_back(0);
+
+
+
+        tot_N_at_szgroup.push_back(0);
         true_tot_N_at_szgroup.push_back(0);
         prop_migrants_in_N_at_szgroup.push_back(0);
         tot_N_at_szgroup_just_after_redistribution.push_back(0);
@@ -170,8 +182,8 @@ Population::Population(int a_name,
 
     dout(cout << "calib the weight at szgroup..." << name << endl);
     for(unsigned int i=0; i < init_weight_at_szgroup.size(); i++)
-	{
-		init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
+    {
+        init_weight_at_szgroup.at(i)=init_weight_at_szgroup.at(i)*a_calib_weight_at_szgroup;
 	}
 
 	this->set_weight_at_szgroup(init_weight_at_szgroup);

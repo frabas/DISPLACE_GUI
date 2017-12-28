@@ -2,6 +2,8 @@
 
 
 #include <displacemodel.h>
+#include <storage/sqliteoutputstorage.h>
+#include <storage/tables/windfarmstable.h>
 
 #include <qcustomplot.h>
 
@@ -21,6 +23,12 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 {
     mPlot->clearGraphs();
     double val;
+
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return;
+
+    auto table = db->getWindfarmTable();
 
     QList<int>  interWindfarmsIDsList= model->getInterestingWindfarms();
 
@@ -98,26 +106,54 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
             group = QString("Type %1").arg(grp);
         }
 
-        switch (graphList[igraph] / 1000) {
-        case 4:
-            graph->setName(QString(QObject::tr("farm id %1 Max")).arg(group));
+        WindfarmsTable::StatType statType = WindfarmsTable::StatType::Kwh;
+        WindfarmsTable::Aggreg aggregType = WindfarmsTable::Aggreg::None;
+
+        switch (stat) {
+        case WindfarmsStat::WF_kWh:
+            statType = WindfarmsTable::StatType::Kwh;
             break;
-        case 3:
-            graph->setName(QString(QObject::tr("farm id %1 Min")).arg(group));
-            break;
-        case 2:
-            graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(group));
-            break;
-        case 1:
-            graph->setName(QString(QObject::tr("farm id %1 Total")).arg(group));
+        case WindfarmsStat::WF_kWProduction:
+            statType = WindfarmsTable::StatType::KwhProduction;
             break;
         }
 
+        WindfarmsTable::StatData data;
+
+        switch (graphList[igraph] / 1000) {
+        case 4:
+            graph->setName(QString(QObject::tr("farm id %1 Max")).arg(group));
+            aggregType = WindfarmsTable::Aggreg::Max;
+            break;
+        case 3:
+            graph->setName(QString(QObject::tr("farm id %1 Min")).arg(group));
+            aggregType = WindfarmsTable::Aggreg::Min;
+            break;
+        case 2:
+            graph->setName(QString(QObject::tr("farm id %1 Avg")).arg(group));
+            aggregType = WindfarmsTable::Aggreg::Avg;
+            break;
+        case 1:
+            graph->setName(QString(QObject::tr("farm id %1 Total")).arg(group));
+            aggregType = WindfarmsTable::Aggreg::Sum;
+            break;
+        }
+
+        // normal data
+        if (grp == 999)
+            data = table->getStatData(statType, aggregType);
+        else
+            data = table->getStatData(statType, aggregType, grp);
+
         graphs.push_back(graph);
-        keyData.push_back(QVector<double>());
-        valueData.push_back(QVector<double>());
+        graphs[igraph]->setData(QVector<double>::fromStdVector(data.t), QVector<double>::fromStdVector(data.v));
+//        keyData.push_back(QVector<double>());
+//        valueData.push_back(QVector<double>());
+
+        ///
     }
 
+#if 0
     int nsteps = model->getWindfarmsStatistics().getUniqueValuesCount();
 
    //qDebug() << "**** Plotting Windmill " << nsteps << interWindfarmsTypesList << interWindfarmsIDsList;
@@ -190,6 +226,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
     for (int i = 0; i < graphs.size(); ++i) {
         graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
+#endif
 
     switch (stat) {
     case WindfarmsStat::WF_kWh:

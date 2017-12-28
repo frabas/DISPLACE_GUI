@@ -112,5 +112,10 @@ std::shared_ptr<PopTable> SQLiteOutputStorage::getPopTable() const
     return p->mPopTable;
 }
 
+std::shared_ptr<WindfarmsTable> SQLiteOutputStorage::getWindfarmTable() const
+{
+    return p->mWindmillsTable;
+}
+
 
 

@@ -28,6 +28,17 @@ public:
     void dropAndCreate();
 
     void exportWindmillData(Windmill *windmill, int tstep);
+
+    struct StatData {
+        std::vector<double> t;
+        std::vector<double> v;
+    };
+
+    enum class StatType { Kwh, KwhProduction };
+    enum class Aggreg { None, Sum, Min, Max, Avg };
+
+    StatData getStatData(StatType, Aggreg, int wfType);
+    StatData getStatData(StatType, Aggreg);
 };
 
 #endif // WINDFARMSTABLE_H

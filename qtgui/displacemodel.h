@@ -505,6 +505,7 @@ public:
     void setBenthosNumberFromFeature(OGRGeometry *geometry, double nb);
     void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
 
+    std::shared_ptr<SQLiteOutputStorage> getOutputStorage() const { return mOutSqlite; }
 protected:
     bool loadNodes();
     bool loadVessels();

@@ -13,6 +13,7 @@ class PopNodesTable;
 class PopTable;
 class Fishfarm;
 class Windmill;
+class WindfarmsTable;
 
 namespace sqlite {
 class SQLiteStorage;
@@ -38,6 +39,7 @@ public:
     std::shared_ptr<VesselVmsLikeTable> getVesselVmsLikeTable() const;
     std::shared_ptr<PopNodesTable> getPopNodesTable() const;
     std::shared_ptr<PopTable> getPopTable() const;
+    std::shared_ptr<WindfarmsTable> getWindfarmTable() const;
 
     std::shared_ptr<sqlite::SQLiteStorage> getDb() const;
 

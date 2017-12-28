@@ -336,6 +336,17 @@ HEADERS += \
     objects/wfarmtypesentity.h \
     objects/shiptypesentity.h
 
+### mSQLiteCpp dependency
+
+DEFINES += BUILD_MSQLITECPP
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+SOURCES += $$top_srcdir/mSqliteCpp/src/*
+HEADERS += $$top_srcdir/mSqliteCpp/include/*
+win32: LIBS += -lsqlite3_static
+!win32: LIBS += -lsqlite3
+
+### End mSqliteCpp Depedency
+
 RESOURCES += \
     qtgui.qrc
 

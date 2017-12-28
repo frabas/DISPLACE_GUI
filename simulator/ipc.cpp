@@ -65,7 +65,7 @@ void guiSendOutputInfo(std::string sqlPath)
 {
     if (use_gui) {
         ostringstream ss;
-        ss << "=Osql:" << sqlPath << endl;
+        ss << "=Osql:" << sqlPath;
         mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new GenericConsoleStringOutputMessage(ss.str())));
     }
 }

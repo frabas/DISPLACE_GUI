@@ -43,18 +43,22 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
 
     std::ostringstream ss;
     ss << "SELECT TStep,SUM(" << dtt << ") FROM " << name() << " GROUP BY TStep";
+    std::cout << "Windmill Statement: " << ss.str() << "\n";
 
     sqlite::SQLiteStatement smt (db(), ss.str());
 
     WindfarmsTable::StatData d;
-    smt.execute([&d, &smt]() {
+
+    while (smt.execute([&d, &smt]() {
         auto tstep = smt.getIntValue(1);
         auto v = smt.getDoubleValue(2);
         d.t.push_back(tstep);
         d.v.push_back(v);
 
         return true;
-    });
+    }));
+
+    std::cout << "Statement returned " << d.t.size() << " values\n";
 
     return d;
 }
@@ -71,6 +75,8 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
 
     std::ostringstream ss;
     ss << "SELECT TStep,SUM(" << dtt << ") FROM " << name() << " WHERE " << fldWindfarmType.name() << " = ? GROUP BY TStep";
+
+    std::cout << "Windmill Statement: " << ss.str() << "\n";
 
     sqlite::SQLiteStatement smt (db(), ss.str());
     smt.bind(1, wfType);

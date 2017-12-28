@@ -45,6 +45,8 @@
 #include <cstddef>
 #include <pathshop.h>
 
+#include <numeric>
+
 using namespace std;
 
 //---------------------------------------//
@@ -83,7 +85,7 @@ vector<size_t> sort_indexes_ascending(const vector<T> &v) {
 
   // initialize original index locations
   vector<size_t> idx(v.size());
-  ::iota(idx.begin(), idx.end(), 0);
+  iota(idx.begin(), idx.end(), 0);
 
   // sort indexes based on comparing values in v
   sort(idx.begin(), idx.end(),

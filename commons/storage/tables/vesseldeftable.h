@@ -33,8 +33,7 @@ private:
 
 public:
     VesselDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
-
-    // SQLiteTable interface
+    void dropAndCreate();
 
     void feedVesselsDefTable(const std::vector<std::string> &vesselids,
                              const std::vector<double> &speeds,

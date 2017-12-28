@@ -5,8 +5,12 @@
 PopTable::PopTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
 {
-    if (db->tableExists(name))
-        db->dropTable(name);
+}
+
+void PopTable::dropAndCreate()
+{
+    if (db()->tableExists(name()))
+        db()->dropTable(name());
 
     create(std::make_tuple(fldNodeId,
                            fldTStep,

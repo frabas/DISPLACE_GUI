@@ -7,6 +7,7 @@
 #include "tables/poptable.h"
 #include "tables/vesselvmsliketable.h"
 #include "tables/fishfarmstable.h"
+#include "tables/windfarmstable.h"
 
 #include <cassert>
 
@@ -21,6 +22,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<PopNodesTable> mPopNodesTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
+    std::shared_ptr<WindfarmsTable> mWindmillsTable;
 };
 
 SQLiteOutputStorage::SQLiteOutputStorage(std::string path)
@@ -34,6 +36,14 @@ SQLiteOutputStorage::~SQLiteOutputStorage() noexcept = default;
 void SQLiteOutputStorage::open()
 {
     p->db->open();
+
+    p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
+    p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
+    p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
+    p->mPopNodesTable = std::make_shared<PopNodesTable>(p->db, "PopNodes");
+    p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
+    p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
+    p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
 }
 
 void SQLiteOutputStorage::close()
@@ -61,14 +71,20 @@ void SQLiteOutputStorage::exportFishfarmLog(Fishfarm *fishfarm, int tstep)
     p->mFishfarmsTable->exportFishfarmLog(fishfarm, tstep);
 }
 
+void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
+{
+    p->mWindmillsTable->exportWindmillData(windmill, tstep);
+}
+
 void SQLiteOutputStorage::createAllTables()
 {
-    p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
-    p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
-    p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
-    p->mPopNodesTable = std::make_shared<PopNodesTable>(p->db, "PopNodes");
-    p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
-    p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
+    p->mVesselDefTable->dropAndCreate();
+    p->mVesselLoglikeTable->dropAndCreate();
+    p->mVesselVmslikeTable->dropAndCreate();
+    p->mPopNodesTable->dropAndCreate();
+    p->mPopTable->dropAndCreate();
+    p->mFishfarmsTable->dropAndCreate();
+    p->mWindmillsTable->dropAndCreate();
 }
 
 std::shared_ptr<VesselDefTable> SQLiteOutputStorage::getVesselDefTable() const

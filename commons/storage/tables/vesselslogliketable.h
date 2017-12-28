@@ -19,6 +19,7 @@ class COMMONSSHARED_EXPORT VesselsLoglikeTable : public SQLiteTable
 
 public:
     VesselsLoglikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    void dropAndCreate();
 
     struct Log {
         int id;

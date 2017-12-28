@@ -5,8 +5,12 @@
 FishfarmsTable::FishfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
 {
-    if (db->tableExists(name))
-        db->dropTable(name);
+}
+
+void FishfarmsTable::dropAndCreate()
+{
+    if (db()->tableExists(name()))
+        db()->dropTable(name());
 
     create(std::make_tuple(fldNodeId,
                            fldTStep,

@@ -24,6 +24,7 @@ class VesselVmsLikeTable : public sqlite::SQLiteTable
 
 public:
     VesselVmsLikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    void dropAndCreate();
 
     struct Log {
         int id;

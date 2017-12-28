@@ -3,8 +3,12 @@
 VesselVmsLikeTable::VesselVmsLikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
     : SQLiteTable(db, name)
 {
-    if (db->tableExists(name))
-        db->dropTable(name);
+}
+
+void VesselVmsLikeTable::dropAndCreate()
+{
+    if (db()->tableExists(name()))
+        db()->dropTable(name());
 
     auto def = std::make_tuple (
                 fldId, fldTStep, fldTStepDep,

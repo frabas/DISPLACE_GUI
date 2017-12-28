@@ -5002,6 +5002,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
                   //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
                   windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+
+                  if (enable_sqlite_out)
+                      outSqlite->exportWindmillsLog(windmills.at(i), tstep);
              }
 
         }

@@ -4,14 +4,17 @@
 
 PopNodesTable::PopNodesTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
+{    
+}
+
+void PopNodesTable::dropAndCreate()
 {
-    if (db->tableExists(name))
-        db->dropTable(name);
+    if (db()->tableExists(name()))
+        db()->dropTable(name());
 
     create(std::make_tuple(fldNodeId,
                            fldLong, fldLat
                            ));
-
 }
 
 void PopNodesTable::insert(Node *node)

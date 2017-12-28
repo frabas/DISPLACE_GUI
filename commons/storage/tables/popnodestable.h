@@ -22,6 +22,7 @@ class COMMONSSHARED_EXPORT PopNodesTable : public SQLiteTable
 
 public:
     PopNodesTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    void dropAndCreate();
 
     void insert(Node* node);
 };

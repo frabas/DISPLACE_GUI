@@ -28,6 +28,7 @@ class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable
 
 public:
     FishfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name);
+    void dropAndCreate();
 
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
 };

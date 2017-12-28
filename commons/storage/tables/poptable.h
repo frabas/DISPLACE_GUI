@@ -25,6 +25,7 @@ class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
 
 public:
     PopTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    void dropAndCreate();
 
     void insert (int tstep, Node *node, const std::multimap<int, double> &initstate);
 };

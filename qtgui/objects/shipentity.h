@@ -32,15 +32,15 @@ class ShipEntity : public ObjectTreeEntity
 public:
     ShipEntity(ObjectTreeModel *_model, int id = -1);
 
-    virtual ObjectTreeModel::Category getCategory() const {
+    virtual ObjectTreeModel::Category getCategory() const override {
         return ObjectTreeModel::Ships;
     }
 
-    virtual QModelIndex parent (const QModelIndex &parent) const;
-    virtual QModelIndex index (int row, int column, const QModelIndex &parent) const;
-    virtual int rowCount() const;
-    virtual int columnCount() const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual QModelIndex parent (const QModelIndex &parent) const override;
+    virtual QModelIndex index (int row, int column, const QModelIndex &parent) const override;
+    virtual int rowCount() const override;
+    virtual int columnCount() const override;
+    virtual QVariant data(const QModelIndex &index, int role) const override;
 
     // Specific access functions
     int getShipId() const { return mShipId; }

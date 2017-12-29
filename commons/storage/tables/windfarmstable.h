@@ -35,7 +35,7 @@ public:
     };
 
     enum class StatType { Kwh, KwhProduction };
-    enum class Aggreg { None, Sum, Min, Max, Avg };
+    enum class Aggreg { Sum, Min, Max, Avg };
 
     StatData getStatData(StatType, Aggreg, int wfType);
     StatData getStatData(StatType, Aggreg);

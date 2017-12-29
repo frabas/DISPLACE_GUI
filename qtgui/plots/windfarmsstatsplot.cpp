@@ -78,8 +78,6 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
-    QList<QVector<double> >keyData;
-    QList<QVector<double> >valueData;
 
     double t = model->getCurrentStep();
     if (mTimeline != nullptr) {
@@ -107,7 +105,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
         }
 
         WindfarmsTable::StatType statType = WindfarmsTable::StatType::Kwh;
-        WindfarmsTable::Aggreg aggregType = WindfarmsTable::Aggreg::None;
+        WindfarmsTable::Aggreg aggregType = WindfarmsTable::Aggreg::Sum;
 
         switch (stat) {
         case WindfarmsStat::WF_kWh:
@@ -147,86 +145,7 @@ void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsS
 
         graphs.push_back(graph);
         graphs[igraph]->setData(QVector<double>::fromStdVector(data.t), QVector<double>::fromStdVector(data.v));
-//        keyData.push_back(QVector<double>());
-//        valueData.push_back(QVector<double>());
-
-        ///
     }
-
-#if 0
-    int nsteps = model->getWindfarmsStatistics().getUniqueValuesCount();
-
-   //qDebug() << "**** Plotting Windmill " << nsteps << interWindfarmsTypesList << interWindfarmsIDsList;
-    auto it = model->getWindfarmsStatistics().getFirst();
-    for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterWindfarmsIDs = interWindfarmsIDsList.size();
-
-        //qDebug() << "Step: " <<istep << it.key();
-        for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-            //int gidx = iInterWindfarmsIDs * graphNum + iGraph;
-            int gidx = iGraph;
-
-            auto group = graphList[iGraph] % 1000;
-
-            //qDebug() << "Graph:" << iGraph << group;
-             // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-            for (int iInterWindfarmTypes = 0; iInterWindfarmTypes < interWindfarmsTypesList.size(); ++iInterWindfarmTypes) {
-                for (int iInterWindfarmsIDs = 0; iInterWindfarmsIDs < nInterWindfarmsIDs; ++iInterWindfarmsIDs) {
-
-                   // auto fmtype = model->getWindmillList()[interWindfarmsIDsList[iInterWindfarmsIDs] -1]->mWindmill->get_type(); // pbl if # of type>1 in ticking ids boxes
-                    auto fmtype = model->getWindmillList()[iInterWindfarmsIDs]->mWindmill->get_type();
-                    if (group != 999 && group != fmtype)
-                        continue;
-
-                    val = getStatValue(model, it.key(), interWindfarmsIDsList[iInterWindfarmsIDs], fmtype, stat);
-
-                    //qDebug() << iInterWindfarmsIDs << iInterWindfarmTypes << val;
-
-                    if (nsam == 0) {
-                        mMin = val;
-                        mMax = val;
-                        mAvg = val;
-                        mTot = val;
-                    } else {
-                        mMin = std::min (mMin, val);
-                        mMax = std::max (mMax, val);
-                        mAvg += val;
-                        mTot += val;
-                    }
-                    ++nsam;
-                }
-            }
-            if (nsam > 0)
-                mAvg /= nsam;
-
-            //qDebug() << "Res: "<< it.key() << val << mMin << mMax << mAvg << mTot;
-
-            keyData[gidx] << it.key();
-            switch (graphList[iGraph] / 1000) {
-            case 4:
-                val = mMax;
-                break;
-            case 3:
-                val = mMin;
-                break;
-            case 2:
-                val = mAvg;
-                break;
-            case 1:
-                val = mTot;
-                break;
-            }
-
-            valueData[gidx] << val;
-        }
-        ++it;
-    }
-
-    for (int i = 0; i < graphs.size(); ++i) {
-        graphs[i]->setData(keyData.at(i), valueData.at(i));
-    }
-#endif
 
     switch (stat) {
     case WindfarmsStat::WF_kWh:

@@ -31,7 +31,7 @@ void WindfarmsTable::exportWindmillData(Windmill *windmill, int tstep)
            );
 }
 
-WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType stattype, WindfarmsTable::Aggreg aggregtyp)
+WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType stattype, WindfarmsTable::Aggreg aggreg)
 {
     std::string dtt;
     switch (stattype) {
@@ -41,8 +41,24 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
         dtt = fldKwhProduction.name(); break;
     }
 
+    std::string op;
+    switch (aggreg) {
+    case WindfarmsTable::Aggreg::Sum:
+        op = "SUM";
+        break;
+    case WindfarmsTable::Aggreg::Avg:
+        op = "AVG";
+        break;
+    case WindfarmsTable::Aggreg::Min:
+        op = "MIN";
+        break;
+    case WindfarmsTable::Aggreg::Max:
+        op = "MAX";
+        break;
+    }
+
     std::ostringstream ss;
-    ss << "SELECT TStep,SUM(" << dtt << ") FROM " << name() << " GROUP BY TStep";
+    ss << "SELECT TStep," << op << "(" << dtt << ") FROM " << name() << " GROUP BY TStep";
     std::cout << "Windmill Statement: " << ss.str() << "\n";
 
     sqlite::SQLiteStatement smt (db(), ss.str());
@@ -50,11 +66,10 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
     WindfarmsTable::StatData d;
 
     while (smt.execute([&d, &smt]() {
-        auto tstep = smt.getIntValue(1);
-        auto v = smt.getDoubleValue(2);
+        auto tstep = smt.getIntValue(0);
+        auto v = smt.getDoubleValue(1);
         d.t.push_back(tstep);
         d.v.push_back(v);
-
         return true;
     }));
 
@@ -73,8 +88,24 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
         dtt = fldKwhProduction.name(); break;
     }
 
+    std::string op;
+    switch (aggreg) {
+    case WindfarmsTable::Aggreg::Sum:
+        op = "SUM";
+        break;
+    case WindfarmsTable::Aggreg::Avg:
+        op = "AVG";
+        break;
+    case WindfarmsTable::Aggreg::Min:
+        op = "MIN";
+        break;
+    case WindfarmsTable::Aggreg::Max:
+        op = "MAX";
+        break;
+    }
+
     std::ostringstream ss;
-    ss << "SELECT TStep,SUM(" << dtt << ") FROM " << name() << " WHERE " << fldWindfarmType.name() << " = ? GROUP BY TStep";
+    ss << "SELECT TStep," << op << "(" << dtt << ") FROM " << name() << " WHERE " << fldWindfarmType.name() << " = ? GROUP BY TStep";
 
     std::cout << "Windmill Statement: " << ss.str() << "\n";
 
@@ -87,7 +118,6 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
         auto v = smt.getDoubleValue(2);
         d.t.push_back(tstep);
         d.v.push_back(v);
-
         return true;
     });
 

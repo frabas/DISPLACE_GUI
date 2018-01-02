@@ -5314,6 +5314,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if (enable_sqlite_out) {
         try {
+            std::cout << "Creating database indexes...\n";
+            outSqlite->createAllIndexes();
             outSqlite->close();
         } catch (SQLiteException &x) {
             std::cerr << "An error occurred closing the SQLite db: " << x.what() << "\n";

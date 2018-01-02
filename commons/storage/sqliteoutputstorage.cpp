@@ -87,6 +87,11 @@ void SQLiteOutputStorage::createAllTables()
     p->mWindmillsTable->dropAndCreate();
 }
 
+void SQLiteOutputStorage::createAllIndexes()
+{
+    p->mVesselDefTable->createIndex();
+}
+
 std::shared_ptr<VesselDefTable> SQLiteOutputStorage::getVesselDefTable() const
 {
     return p->mVesselDefTable;
@@ -116,6 +121,4 @@ std::shared_ptr<WindfarmsTable> SQLiteOutputStorage::getWindfarmTable() const
 {
     return p->mWindmillsTable;
 }
-
-
 

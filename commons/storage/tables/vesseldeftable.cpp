@@ -14,6 +14,7 @@ void VesselDefTable::dropAndCreate()
 
     create(std::make_tuple(fldId,
                            fldVesselId,
+                           fldNationality,
                            fldSpeeds,
                            fldFuelcons,
                            fldLengths,
@@ -35,10 +36,18 @@ void VesselDefTable::feedVesselsDefTable(const std::vector<std::string> &vesseli
 {
     auto l = vesselids.size();
     for (int i = 0; i < l; ++i) {
+        std::string nat;
+        std::copy(vesselids[i].begin(), vesselids[i].begin() + 3, std::back_inserter(nat));
         insert (fldVesselId.assign(vesselids[i]),
+                fldNationality.assign(nat),
                 fldSpeeds.assign(speeds[i]),
                 fldLengths.assign(length[i]));
     }
+}
+
+void VesselDefTable::createIndex()
+{
+    SQLiteTable::createIndex("NationalityIndex", std::make_tuple(fldNationality));
 }
 
 

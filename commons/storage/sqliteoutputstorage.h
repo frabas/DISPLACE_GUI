@@ -34,6 +34,7 @@ public:
     void endDayLoop();
 
     void createAllTables();
+    void createAllIndexes();
     std::shared_ptr<VesselDefTable> getVesselDefTable() const;
     std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;
     std::shared_ptr<VesselVmsLikeTable> getVesselVmsLikeTable() const;

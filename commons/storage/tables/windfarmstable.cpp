@@ -2,6 +2,8 @@
 
 #include <Windmill.h>
 #include <sqlitestatement.h>
+#include <sqlitefieldsop.h>
+#include <sqlitestatementformatters.h>
 
 WindfarmsTable::WindfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
@@ -33,89 +35,53 @@ void WindfarmsTable::exportWindmillData(Windmill *windmill, int tstep)
 
 WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType stattype, WindfarmsTable::Aggreg aggreg)
 {
-    std::string dtt;
-    switch (stattype) {
-    case WindfarmsTable::StatType::Kwh:
-        dtt = fldKwh.name(); break;
-    case WindfarmsTable::StatType::KwhProduction:
-        dtt = fldKwhProduction.name(); break;
-    }
-
-    std::string op;
-    switch (aggreg) {
-    case WindfarmsTable::Aggreg::Sum:
-        op = "SUM";
-        break;
-    case WindfarmsTable::Aggreg::Avg:
-        op = "AVG";
-        break;
-    case WindfarmsTable::Aggreg::Min:
-        op = "MIN";
-        break;
-    case WindfarmsTable::Aggreg::Max:
-        op = "MAX";
-        break;
-    }
-
-    std::ostringstream ss;
-    ss << "SELECT TStep," << op << "(" << dtt << ") FROM " << name() << " GROUP BY TStep";
-    std::cout << "Windmill Statement: " << ss.str() << "\n";
-
-    sqlite::SQLiteStatement smt (db(), ss.str());
-
-    WindfarmsTable::StatData d;
-
-    while (smt.execute([&d, &smt]() {
-        auto tstep = smt.getIntValue(0);
-        auto v = smt.getDoubleValue(1);
-        d.t.push_back(tstep);
-        d.v.push_back(v);
-        return true;
-    }));
-
-    std::cout << "Statement returned " << d.t.size() << " values\n";
-
-    return d;
+    return getStatData(stattype, aggreg, -1);
 }
 
 WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType stattype, WindfarmsTable::Aggreg aggreg, int wfType)
 {
-    std::string dtt;
+    sqlite::FieldDef<sqlite::FieldType::Real> op = fldKwh;
+
     switch (stattype) {
     case WindfarmsTable::StatType::Kwh:
-        dtt = fldKwh.name(); break;
+        op = fldKwh; break;
     case WindfarmsTable::StatType::KwhProduction:
-        dtt = fldKwhProduction.name(); break;
+        op = fldKwhProduction; break;
     }
 
-    std::string op;
     switch (aggreg) {
     case WindfarmsTable::Aggreg::Sum:
-        op = "SUM";
+        op = sqlite::op::sum(op);
         break;
     case WindfarmsTable::Aggreg::Avg:
-        op = "AVG";
+        op = sqlite::op::avg(op);
         break;
     case WindfarmsTable::Aggreg::Min:
-        op = "MIN";
+        op = sqlite::op::min(op);
         break;
     case WindfarmsTable::Aggreg::Max:
-        op = "MAX";
+        op = sqlite::op::max(op);
         break;
     }
 
-    std::ostringstream ss;
-    ss << "SELECT TStep," << op << "(" << dtt << ") FROM " << name() << " WHERE " << fldWindfarmType.name() << " = ? GROUP BY TStep";
+    sqlite::statements::Select s(name(), fldTStep, op);
+    s.groupBy(fldTStep);
 
-    std::cout << "Windmill Statement: " << ss.str() << "\n";
+    if (wfType != -1) {
+        s.where(sqlite::op::eq(fldWindfarmType));
+    }
 
-    sqlite::SQLiteStatement smt (db(), ss.str());
-    smt.bind(1, wfType);
+    sqlite::SQLiteStatement smt (db(), s);
+
+    if (wfType != -1) {
+        smt.bind(std::make_tuple(wfType));
+    }
 
     WindfarmsTable::StatData d;
+
     smt.execute([&d, &smt]() {
-        auto tstep = smt.getIntValue(1);
-        auto v = smt.getDoubleValue(2);
+        auto tstep = smt.getIntValue(0);
+        auto v = smt.getDoubleValue(1);
         d.t.push_back(tstep);
         d.v.push_back(v);
         return true;
@@ -123,4 +89,3 @@ WindfarmsTable::StatData WindfarmsTable::getStatData(WindfarmsTable::StatType st
 
     return d;
 }
-

@@ -35,7 +35,6 @@ public:
     void update(DisplaceModel *model, displace::plot::WindfarmsStat stat);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
-    double getStatValue(DisplaceModel *model, int tstep, int windfarmid, int windfarmtype, displace::plot::WindfarmsStat stattype);
     void saveTo();
 };
 

@@ -173,15 +173,3 @@ void WindfarmsStatsPlot::saveTo()
 {
     mSaveFilename = "Windfarms.txt";
 }
-
-double WindfarmsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int windfarmid, int windfarmtype, displace::plot::WindfarmsStat stattype)
-{
-    switch (stattype) {
-    case WindfarmsStat::WF_kWh:
-        return model->getWindfarmsStatistics().getValue(tstep).kWhForWindfarmAndWindfarmGroup(windfarmid, windfarmtype);
-    case WindfarmsStat::WF_kWProduction:
-        return model->getWindfarmsStatistics().getValue(tstep).kWProductionForWindfarmAndWindfarmGroup(windfarmid, windfarmtype);
-    }
-
-    return 0;
-}

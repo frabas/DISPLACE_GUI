@@ -13,7 +13,7 @@ void VesselDefTable::dropAndCreate()
         db()->dropTable(name());
 
     create(std::make_tuple(fldId,
-                           fldVesselId,
+                           fldName,
                            fldNationality,
                            fldSpeeds,
                            fldFuelcons,
@@ -38,7 +38,7 @@ void VesselDefTable::feedVesselsDefTable(const std::vector<std::string> &vesseli
     for (int i = 0; i < l; ++i) {
         std::string nat;
         std::copy(vesselids[i].begin(), vesselids[i].begin() + 3, std::back_inserter(nat));
-        insert (fldVesselId.assign(vesselids[i]),
+        insert (fldName.assign(vesselids[i]),
                 fldNationality.assign(nat),
                 fldSpeeds.assign(speeds[i]),
                 fldLengths.assign(length[i]));

@@ -13,8 +13,8 @@ using namespace sqlite;
 class COMMONSSHARED_EXPORT VesselDefTable : public sqlite::SQLiteTable
 {
 private:
-    FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).primaryKey();
-    FieldDef<FieldType::Text> fldVesselId = makeFieldDef("VesselId",FieldType::Text()).unique().notNull();
+    FieldDef<FieldType::Integer> fldId = makeFieldDef("VesselId", FieldType::Integer()).primaryKey();
+    FieldDef<FieldType::Text> fldName = makeFieldDef("VesselName",FieldType::Text()).unique().notNull();
     FieldDef<FieldType::Text> fldNationality = makeFieldDef("Nationality",FieldType::Text());
     FieldDef<FieldType::Real> fldSpeeds = makeFieldDef("IdSpeeds",FieldType::Real());
     FieldDef<FieldType::Real> fldFuelcons = makeFieldDef("Fuelcons",FieldType::Real());

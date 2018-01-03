@@ -34,9 +34,6 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
-        QVector<double> keyData;
-        QVector<double> valueData;
-
         QCPGraph *graph = plotNations->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
@@ -48,126 +45,97 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
 
         graph->setName(QString(model->getNation(ip).getName()));
 
-        int n = model->getNationsStatsCount();
-        DisplaceModel::NationsStatsContainer::Container::const_iterator it = model->getNationsStatsFirstValue();
-        for (int i = 0; i <n; ++i) {
-            if (it.value().size() > ip) {
-                keyData << it.key();
-
-                switch (stat) {
-                case NationsStat::Catches:
-                    valueData << it.value().at(ip).mTotCatches;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
-                    break;
-                case NationsStat::Discards:
-                    valueData << it.value().at(ip).mTotDiscards;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Discards (kg)"));
-                    break;
-                case NationsStat::Earnings:
-                    valueData << it.value().at(ip).mRevenues;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
-                    break;
-                case NationsStat::ExEarnings:
-                    valueData << it.value().at(ip).mExRevenues;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
-                    break;
-                case NationsStat::TimeAtSea:
-                    valueData << it.value().at(ip).mTimeAtSea;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
-                    break;
-                case NationsStat::Gav:
-                    valueData << it.value().at(ip).mGav;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("GVA (Euro)"));
-                    break;
-                case NationsStat::Vpuf:
-                    valueData << it.value().at(ip).mVpuf;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
-                    break;
-                case NationsStat::SweptArea:
-                    valueData << it.value().at(ip).mSweptArea;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
-                    break;
-                case NationsStat::RevenuePerSweptArea:
-                    valueData << it.value().at(ip).mRevenuePerSweptArea;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
-                    break;
-                case NationsStat::GVA:
-                    valueData << it.value().at(ip).GVA;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::GVAPerRevenue:
-                    valueData << it.value().at(ip).GVAPerRevenue;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
-                    break;
-                case NationsStat::LabourSurplus:
-                    valueData << it.value().at(ip).LabourSurplus;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::GrossProfit:
-                    valueData << it.value().at(ip).GrossProfit;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::NetProfit:
-                    valueData << it.value().at(ip).NetProfit;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::NetProfitMargin:
-                    valueData << it.value().at(ip).NetProfitMargin;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("%"));
-                    break;
-                case NationsStat::GVAPerFTE:
-                    valueData << it.value().at(ip).GVAPerFTE;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::RoFTA:
-                    valueData << it.value().at(ip).RoFTA;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("%"));
-                    break;
-                case NationsStat::BER:
-                    valueData << it.value().at(ip).BER;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::CRBER:
-                    valueData << it.value().at(ip).CRBER;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Ratio"));
-                    break;
-                case NationsStat::NetPresentValue:
-                    valueData << it.value().at(ip).NetPresentValue;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NationsStat::numTrips:
-                    valueData << it.value().at(ip).numTrips;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("#"));
-                    break;
-                }
-            }
-            ++it;
-        }
-
-        graph->setData(keyData, valueData);
+        auto v = getData(model, stat, ip);
+        graph->setData(std::get<0>(v), std::get<1>(v));
 
         ++col_it;
+    }
+
+    switch (stat) {
+    case NationsStat::Catches:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
+        break;
+    case NationsStat::Discards:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Discards (kg)"));
+        break;
+    case NationsStat::Earnings:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        break;
+    case NationsStat::ExEarnings:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        break;
+    case NationsStat::TimeAtSea:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
+        break;
+    case NationsStat::Gav:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("GVA (Euro)"));
+        break;
+    case NationsStat::Vpuf:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
+        break;
+    case NationsStat::SweptArea:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        break;
+    case NationsStat::RevenuePerSweptArea:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
+        break;
+    case NationsStat::GVA:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::GVAPerRevenue:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
+        break;
+    case NationsStat::LabourSurplus:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::GrossProfit:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::NetProfit:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::NetProfitMargin:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("%"));
+        break;
+    case NationsStat::GVAPerFTE:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::RoFTA:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("%"));
+        break;
+    case NationsStat::BER:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::CRBER:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Ratio"));
+        break;
+    case NationsStat::NetPresentValue:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        break;
+    case NationsStat::numTrips:
+        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
+        plotNations->yAxis->setLabel(QObject::tr("#"));
+        break;
     }
 
     plotNations->rescaleAxes();
@@ -184,4 +152,87 @@ void NationsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation
 void NationsStatsPlot::saveTo()
 {
 
+}
+
+std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation)
+{
+    QVector<double> keyData;
+    QVector<double> valueData;
+
+    int n = model->getNationsStatsCount();
+    DisplaceModel::NationsStatsContainer::Container::const_iterator it = model->getNationsStatsFirstValue();
+    for (int i = 0; i <n; ++i) {
+        if (it.value().size() > nation) {
+            keyData << it.key();
+
+            switch (stat) {
+            case NationsStat::Catches:
+                valueData << it.value().at(nation).mTotCatches;
+                break;
+            case NationsStat::Discards:
+                valueData << it.value().at(nation).mTotDiscards;
+                break;
+            case NationsStat::Earnings:
+                valueData << it.value().at(nation).mRevenues;
+                break;
+            case NationsStat::ExEarnings:
+                valueData << it.value().at(nation).mExRevenues;
+                break;
+            case NationsStat::TimeAtSea:
+                valueData << it.value().at(nation).mTimeAtSea;
+                break;
+            case NationsStat::Gav:
+                valueData << it.value().at(nation).mGav;
+                break;
+            case NationsStat::Vpuf:
+                valueData << it.value().at(nation).mVpuf;
+                break;
+            case NationsStat::SweptArea:
+                valueData << it.value().at(nation).mSweptArea;
+                break;
+            case NationsStat::RevenuePerSweptArea:
+                valueData << it.value().at(nation).mRevenuePerSweptArea;
+                break;
+            case NationsStat::GVA:
+                valueData << it.value().at(nation).GVA;
+                break;
+            case NationsStat::GVAPerRevenue:
+                valueData << it.value().at(nation).GVAPerRevenue;
+                break;
+            case NationsStat::LabourSurplus:
+                valueData << it.value().at(nation).LabourSurplus;
+                break;
+            case NationsStat::GrossProfit:
+                valueData << it.value().at(nation).GrossProfit;
+                break;
+            case NationsStat::NetProfit:
+                valueData << it.value().at(nation).NetProfit;
+                break;
+            case NationsStat::NetProfitMargin:
+                valueData << it.value().at(nation).NetProfitMargin;
+                break;
+            case NationsStat::GVAPerFTE:
+                valueData << it.value().at(nation).GVAPerFTE;
+                break;
+            case NationsStat::RoFTA:
+                valueData << it.value().at(nation).RoFTA;
+                break;
+            case NationsStat::BER:
+                valueData << it.value().at(nation).BER;
+                break;
+            case NationsStat::CRBER:
+                valueData << it.value().at(nation).CRBER;
+                break;
+            case NationsStat::NetPresentValue:
+                valueData << it.value().at(nation).NetPresentValue;
+                break;
+            case NationsStat::numTrips:
+                valueData << it.value().at(nation).numTrips;
+                break;
+            }
+        }
+        ++it;
+    }
+
+    return std::make_tuple(keyData, valueData);
 }

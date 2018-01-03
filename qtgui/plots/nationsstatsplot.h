@@ -27,6 +27,7 @@ public:
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
     void saveTo();
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation);
 };
 
 #endif // NATIONSSTATSPLOT_H

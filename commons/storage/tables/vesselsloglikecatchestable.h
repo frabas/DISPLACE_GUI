@@ -11,6 +11,8 @@ using namespace sqlite;
 #include <vector>
 #include <string>
 
+class Population;
+
 class COMMONSSHARED_EXPORT VesselsLoglikeCatchesTable : public SQLiteTable
 {
     FieldDef<FieldType::Integer> fldLoglikeId = makeFieldDef("LoglikeId", FieldType::Integer()).notNull();
@@ -21,6 +23,7 @@ public:
     VesselsLoglikeCatchesTable(std::shared_ptr<SQLiteStorage> db, std::string name);
     void dropAndCreate();
 
+    void insertPopulation (size_t rowid, int population, const std::vector<double> &catches);
 };
 
 #endif // VESSELSLOGLIKECATCHESTABLE_H

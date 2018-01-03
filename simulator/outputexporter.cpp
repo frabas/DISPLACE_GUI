@@ -132,48 +132,19 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 
 void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
-    auto length_class =v->get_length_class();
+    std::vector<double> cumul;
 
-    VesselsLoglikeTable::Log log;
-    log.id = v->get_idx();
-    log.tstep = tstep;
-    log.tstepdep = v->get_tstep_dep();
-    log.node_id = v->get_loc()->get_idx_node();
-    log.metierId = -1;
-    log.lastHarbour = -1;
-    log.revenueAV = v->getLastTripRevenues();
-    log.revenueExAV = v->getLastTripExplicitRevenues();
-    log.timeAtSea = v->get_timeatsea();
-    log.reasonToGoBack = v->get_reason_to_go_back();
-    log.cumFuelCons = v->get_cumfuelcons();
+    const auto &a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
+    for(size_t pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    {
+        cumul.push_back(0);
+        for(size_t sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+        {
+            cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
+        }
+    }
 
-    if(log.cumFuelCons>1)
-        log.vpuf = log.revenueAV / log.cumFuelCons;
-
-    log.fuelCost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
-    log.gav = log.revenueAV-log.fuelCost;
-
-    log.sweptArea=v->get_sweptareathistrip()*1e6; // CAUTION: converted in m^2 for output file
-
-    log.revenuePerSweptArea = 0;
-    if(log.sweptArea>10) // i.e. at least 10 sqr meters
-          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea); // euro per m^2
-
-    log.GVA = v->get_GVA();
-    log.GVAPerRevenue = v->get_GVAPerRevenue();
-    log.LabourSurplus = v->get_LabourSurplus();
-
-    log.GrossProfit = v->get_GrossProfit();
-    log.NetProfit = v->get_NetProfit();
-    log.NetProfitMargin = v->get_NetProfitMargin();
-    log.RoFTA = v->get_RoFTA();
-    log.GVAPerFTE = v->get_GVAPerFTE();
-    log.BER = v->get_BER();
-    log.CRBER = v->get_CRBER();
-    log.NetPresentValue = v->get_NetPresentValue();
-    log.numTrips=v->getNumTrips();
-
-    mSqlDb->getVesselLoglikeTable()->insertLog(log);
+    mSqlDb->exportLogLike(v, cumul, tstep);
 }
 
 void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)

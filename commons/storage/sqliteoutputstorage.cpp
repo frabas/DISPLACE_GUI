@@ -6,10 +6,14 @@
 #include "tables/popnodestable.h"
 #include "tables/poptable.h"
 #include "tables/vesselvmsliketable.h"
+#include "tables/vesselsloglikecatchestable.h"
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
 
 #include <cassert>
+
+#include <Vessel.h>
+#include <Population.h>
 
 using namespace sqlite;
 
@@ -18,6 +22,7 @@ struct SQLiteOutputStorage::Impl {
 
     std::shared_ptr<VesselDefTable> mVesselDefTable;
     std::shared_ptr<VesselsLoglikeTable> mVesselLoglikeTable;
+    std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<PopNodesTable> mPopNodesTable;
     std::shared_ptr<PopTable> mPopTable;
@@ -40,6 +45,7 @@ void SQLiteOutputStorage::open()
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
+    p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
     p->mPopNodesTable = std::make_shared<PopNodesTable>(p->db, "PopNodes");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
@@ -76,6 +82,56 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
     p->mWindmillsTable->exportWindmillData(windmill, tstep);
 }
 
+void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul, unsigned int tstep)
+{
+    auto length_class =v->get_length_class();
+
+    VesselsLoglikeTable::Log log;
+    log.id = v->get_idx();
+    log.tstep = tstep;
+    log.tstepdep = v->get_tstep_dep();
+    log.node_id = v->get_loc()->get_idx_node();
+    log.metierId = -1;
+    log.lastHarbour = -1;
+    log.revenueAV = v->getLastTripRevenues();
+    log.revenueExAV = v->getLastTripExplicitRevenues();
+    log.timeAtSea = v->get_timeatsea();
+    log.reasonToGoBack = v->get_reason_to_go_back();
+    log.cumFuelCons = v->get_cumfuelcons();
+
+    if(log.cumFuelCons>1)
+        log.vpuf = log.revenueAV / log.cumFuelCons;
+
+    log.fuelCost = v->get_cumfuelcons() * v->get_loc()->get_fuelprices(length_class);
+    log.gav = log.revenueAV-log.fuelCost;
+
+    log.sweptArea=v->get_sweptareathistrip()*1e6; // CAUTION: converted in m^2 for output file
+
+    log.revenuePerSweptArea = 0;
+    if(log.sweptArea>10) // i.e. at least 10 sqr meters
+          log.revenuePerSweptArea=log.revenueAV/(log.sweptArea); // euro per m^2
+
+    log.GVA = v->get_GVA();
+    log.GVAPerRevenue = v->get_GVAPerRevenue();
+    log.LabourSurplus = v->get_LabourSurplus();
+
+    log.GrossProfit = v->get_GrossProfit();
+    log.NetProfit = v->get_NetProfit();
+    log.NetProfitMargin = v->get_NetProfitMargin();
+    log.RoFTA = v->get_RoFTA();
+    log.GVAPerFTE = v->get_GVAPerFTE();
+    log.BER = v->get_BER();
+    log.CRBER = v->get_CRBER();
+    log.NetPresentValue = v->get_NetPresentValue();
+    log.numTrips=v->getNumTrips();
+
+    auto rowid = p->mVesselLoglikeTable->insertLog(log);
+
+    for (size_t i = 0; i < cumul.size(); ++i) {
+        p->mVesselLoglikeCatchesTable->insertPopulation(rowid, i, cumul);
+    }
+}
+
 void SQLiteOutputStorage::createAllTables()
 {
     p->mVesselDefTable->dropAndCreate();
@@ -85,6 +141,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mPopTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();
+    p->mVesselLoglikeCatchesTable->dropAndCreate();
 }
 
 void SQLiteOutputStorage::createAllIndexes()

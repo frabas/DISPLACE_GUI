@@ -43,9 +43,9 @@ void VesselsLoglikeTable::dropAndCreate()
     ));
 }
 
-void VesselsLoglikeTable::insertLog(const VesselsLoglikeTable::Log &log)
+size_t VesselsLoglikeTable::insertLog(const VesselsLoglikeTable::Log &log)
 {
-    SQLiteTable::insert(
+    return SQLiteTable::insertAndGetRowId(
                 fldId.assign(log.id),
                 fldTStep.assign(log.tstep),
                 fldTStepDep.assign(log.tstepdep),

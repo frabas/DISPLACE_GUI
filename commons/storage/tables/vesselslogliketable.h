@@ -83,7 +83,7 @@ public:
         int numTrips=0;
     };
 
-    void insertLog (const Log &log);
+    size_t insertLog(const Log &log);
 };
 
 #endif // VESSELSLOGLIKETABLE_H

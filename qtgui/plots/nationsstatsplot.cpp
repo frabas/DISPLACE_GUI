@@ -17,6 +17,9 @@ NationsStatsPlot::NationsStatsPlot(QCustomPlot *plot_, QCPItemLine *timeline_)
 
 void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat stat)
 {
+    lastModel = model;
+    lastStat = stat;
+
     static const QPen pen(QColor(0,0,255,200));
     plotNations->clearGraphs();
 
@@ -151,7 +154,39 @@ void NationsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation
 
 void NationsStatsPlot::saveTo()
 {
+    if (!lastModel)
+        return;
 
+    QString fn = QFileDialog::getSaveFileName(nullptr, QObject::tr("Save plot data"), QString(), QObject::tr("Csv file (*.csv)"));
+    if (!fn.isEmpty()) {
+        QList<int> ipl = lastModel->getInterestingNations();
+
+        QFile file(fn);
+        if (!file.open(QIODevice::ReadWrite)) {
+            QMessageBox::warning(nullptr, QObject::tr("Error"), QObject::tr("Cannot save to %1: %2").arg(fn).arg(file.errorString()));
+            return;
+        }
+
+        QTextStream strm(&file);
+
+        for (auto ip : ipl) {
+            strm << QString(lastModel->getNation(ip).getName()) << "\n";
+
+            auto v = getData(lastModel, lastStat, ip);
+            auto &k = std::get<0>(v);
+            auto &d = std::get<1>(v);
+
+            strm << "t";
+            for (int i = 0; i < k.size(); ++i) {
+                strm << "," << k[i];
+            }
+            strm << "\nv";
+            for (int i = 0; i < d.size(); ++i) {
+                strm << "," << d[i];
+            }
+            strm << "\n\n";
+        }
+    }
 }
 
 std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation)

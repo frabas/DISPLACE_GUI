@@ -20,6 +20,9 @@ class NationsStatsPlot
     double timelineMax = 1e20;
     double timelineMin = -1e20;
     Palette mPalette;
+
+    DisplaceModel *lastModel;
+    displace::plot::NationsStat lastStat;
 public:
     NationsStatsPlot(QCustomPlot *plotNations, QCPItemLine *timeLine);
 

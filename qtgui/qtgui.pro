@@ -194,7 +194,8 @@ SOURCES += \
     plots/windfarmsstatsplot.cpp \
     plots/shipsstatsplot.cpp \
     objects/wfarmtypesentity.cpp \
-    objects/shiptypesentity.cpp
+    objects/shiptypesentity.cpp \
+    plots/nationsstatsplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -334,7 +335,8 @@ HEADERS += \
     plots/windfarmsstatsplot.h \
     plots/shipsstatsplot.h \
     objects/wfarmtypesentity.h \
-    objects/shiptypesentity.h
+    objects/shiptypesentity.h \
+    plots/nationsstatsplot.h
 
 ### mSQLiteCpp dependency
 

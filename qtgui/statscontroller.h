@@ -34,6 +34,7 @@ class BenthosStatsPlot;
 class FishfarmsStatsPlot;
 class WindfarmsStatsPlot;
 class ShipsStatsPlot;
+class NationsStatsPlot;
 
 class StatsController : public QObject
 {
@@ -43,12 +44,12 @@ public:
 
     void setPopulationPlot(QCustomPlot *plot);
     void setHarboursPlot(QCustomPlot *plot);
-    void setNationsPlot(QCustomPlot *plot);
     void setMetiersPlot(QCustomPlot *plot);
     void setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller);
     void setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
+    void setNationsStatsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
 
     void updateStats(DisplaceModel *model);
 
@@ -60,12 +61,8 @@ public:
     void setPopulationStat(PopulationStat stat);
     PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
-    enum NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf, SweptArea, RevenuePerSweptArea,  GVA, GVAPerRevenue,
-                       LabourSurplus, GrossProfit,NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue, numTrips
-
-  };
-    void setNationsStat(NationsStat stat);
-    NationsStat getNationsStat() const { return mSelectedNationsStat; }
+    void setNationsStat(displace::plot::NationsStat stat);
+    displace::plot::NationsStat getNationsStat() const { return mSelectedNationsStat; }
 
     enum HarboursStat { H_Catches, H_Discards, H_Earnings, H_Gav, H_Vpuf, H_SweptArea, H_RevenuePerSweptArea,
                         H_GVA, H_GVAPerRevenue, H_LabourSurplus, H_GrossProfit, H_NetProfit, H_NetProfitMargin, H_GVAPerFTE, H_RoFTA, H_BER, H_CRBER, H_NetPresentValue, H_numTrips};
@@ -102,7 +99,7 @@ protected:
     void updatePopulationStats(DisplaceModel *model, PopulationStat popStat, QCustomPlot *plotPopulations, QCPItemLine *timeline);
     double getPopStatValue (DisplaceModel *model, int tstep, int popid, int szid, PopulationStat stattype);
 
-    void updateNationStats(DisplaceModel *model, NationsStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
+    void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat);
     void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
     void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
@@ -124,9 +121,10 @@ private:
     QCPItemLine *mHarbTimeLine;
 
     /* Nations */
-    QCustomPlot *mPlotNations;
-    NationsStat mSelectedNationsStat;
+    QCustomPlot *mNationsPlot;
+    displace::plot::NationsStat mSelectedNationsStat;
     QCPItemLine *mNatTimeLine;
+    NationsStatsPlot *mNationsStatsPlotController = nullptr;
 
     /* Metiers */
     QCustomPlot *mPlotMetiers;

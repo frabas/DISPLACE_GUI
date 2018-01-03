@@ -11,6 +11,11 @@ enum class WindfarmsStat { WF_kWh, WF_kWProduction};
 enum class ShipsStat { SH_NbTransportedUnits, SH_FuelPerHour, SH_NOxEmission_gperkW, SH_SOxEmission_PercentPerFuelMass,
                        SH_GHGEmission_gperkW, SH_PMEEmission_gperkW, SH_FuelUseLitre, SH_NOxEmission, SH_SOxEmission, SH_GHGEmission, SH_PMEEmission};
 
+enum class NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav, Vpuf, SweptArea, RevenuePerSweptArea,  GVA, GVAPerRevenue,
+                   LabourSurplus, GrossProfit,NetProfit, NetProfitMargin, GVAPerFTE, RoFTA, BER, CRBER, NetPresentValue, numTrips
+
+};
+
 }
 }
 

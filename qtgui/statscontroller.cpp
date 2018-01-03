@@ -27,6 +27,7 @@
 #include <plots/fishfarmsstatsplot.h>
 #include <plots/windfarmsstatsplot.h>
 #include <plots/shipsstatsplot.h>
+#include <plots/nationsstatsplot.h>
 
 #include <functional>
 
@@ -41,8 +42,7 @@ StatsController::StatsController(QObject *parent)
       mPopTimeLine(0),
       mPlotHarbours(0),
       mHarbTimeLine(0),
-      mPlotNations(0),
-      mSelectedNationsStat(Catches),
+      mSelectedNationsStat(displace::plot::NationsStat::Catches),
       mNatTimeLine(0),
       mPlotMetiers(0),
       mSelectedMetiersStat(M_Catches),
@@ -78,18 +78,6 @@ void StatsController::setHarboursPlot(QCustomPlot *plot)
     mPlotHarbours->addItem(mHarbTimeLine);
 }
 
-void StatsController::setNationsPlot(QCustomPlot *plot)
-{
-    mPlotNations = plot;
-    mPlotNations->legend->setVisible(true);
-
-    if (mNatTimeLine != 0)
-        delete mNatTimeLine;
-
-    mNatTimeLine = new QCPItemLine(mPlotNations);
-    mPlotNations->addItem(mNatTimeLine);
-}
-
 void StatsController::setMetiersPlot(QCustomPlot *plot)
 {
     mPlotMetiers = plot;
@@ -100,10 +88,7 @@ void StatsController::setMetiersPlot(QCustomPlot *plot)
 
     mMetTimeLine = new QCPItemLine(mPlotMetiers);
     mPlotMetiers->addItem(mMetTimeLine);
-
-
 }
-
 
 void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller)
 {
@@ -196,6 +181,19 @@ void StatsController::setShipsPlot(QCustomPlot *plot, GraphInteractionController
     controller->setOnPopupMenuBuiltCallback(std::bind(&ShipsStatsPlot::createPopup, mShipsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
+void StatsController::setNationsStatsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+{
+    mNationsPlot = plot;
+    mNationsPlot->legend->setVisible(true);
+    if (mNatTimeLine != nullptr) delete mNatTimeLine;
+    if (mNationsStatsPlotController != nullptr) delete mNationsStatsPlotController;
+
+    mNatTimeLine = new QCPItemLine(mNationsPlot);
+    mNationsStatsPlotController = new NationsStatsPlot(plot, mNatTimeLine);
+    mNationsPlot->addItem(mNatTimeLine);
+    controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
+}
+
 
 void StatsController::updateStats(DisplaceModel *model)
 {
@@ -205,8 +203,8 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mPlotPopulations) {
         updatePopulationStats(model, mSelectedPopStat, mPlotPopulations, mPopTimeLine);
     }
-    if (mPlotNations) {
-        updateNationStats(model, mSelectedNationsStat, mPlotNations, mNatTimeLine);
+    if (mNationsStatsPlotController) {
+        updateNationStats(model, mSelectedNationsStat);
     }
     if (mPlotHarbours) {
         updateHarboursStats(model, mSelectedHarboursStat, mPlotHarbours, mHarbTimeLine);
@@ -227,7 +225,6 @@ void StatsController::updateStats(DisplaceModel *model)
         updateWindfarmsStats(model, mSelectedWindfarmsStat);
     }
 
-
     mLastModel = model;
 }
 
@@ -237,7 +234,7 @@ void StatsController::setPopulationStat(StatsController::PopulationStat stat)
     updateStats(mLastModel);
 }
 
-void StatsController::setNationsStat(StatsController::NationsStat stat)
+void StatsController::setNationsStat(displace::plot::NationsStat stat)
 {
     mSelectedNationsStat = stat;
     updateStats(mLastModel);
@@ -305,18 +302,16 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
     case Populations:
         updatePopulationStats(model, static_cast<PopulationStat>(subtype), plot, line);
         break;
+        /*
     case Nations:
-        updateNationStats(model, static_cast<NationsStat>(subtype), plot, line);
-        break;
+        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype), plot, line);
+        break;*/
     case Harbours:
         updateHarboursStats(model, static_cast<HarboursStat>(subtype), plot, line);
         break;
     case Metiers:
         updateMetiersStats(model, static_cast<MetiersStat>(subtype), plot, line);
         break;
-
-
-
     }
 }
 
@@ -497,165 +492,9 @@ double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int pop
     return 0;
 }
 
-void StatsController::updateNationStats(DisplaceModel *model, NationsStat nationsStat, QCustomPlot *plotNations, QCPItemLine *timeLine)
+void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat)
 {
-    static const QPen pen(QColor(0,0,255,200));
-    plotNations->clearGraphs();
-
-    QList<int> ipl = model->getInterestingNations();
-
-    double t = model->getCurrentStep();
-    if (timeLine != nullptr ) {
-        timeLine->start->setCoords(t, timelineMin);
-        timeLine->end->setCoords(t, timelineMax);
-    }
-
-    int cnt = 0;
-    Palette::Iterator col_it = mPalette.begin();
-    foreach (int ip, ipl) {
-        if (col_it == mPalette.end())
-            col_it = mPalette.begin();
-
-        QVector<double> keyData;
-        QVector<double> valueData;
-
-        QCPGraph *graph = plotNations->addGraph();
-        graph->setPen(pen);
-        graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = col_it != mPalette.end() ? *col_it : QColor();
-
-        col.setAlpha(128);
-        graph->setBrush(QBrush(col));
-        ++cnt;
-
-        graph->setName(QString(model->getNation(ip).getName()));
-
-        int n = model->getNationsStatsCount();
-        DisplaceModel::NationsStatsContainer::Container::const_iterator it = model->getNationsStatsFirstValue();
-        for (int i = 0; i <n; ++i) {
-            if (it.value().size() > ip) {
-                keyData << it.key();
-
-                switch (nationsStat) {
-                case Catches:
-                    valueData << it.value().at(ip).mTotCatches;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
-                    break;
-                case Discards:
-                    valueData << it.value().at(ip).mTotDiscards;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Discards (kg)"));
-                    break;
-                case Earnings:
-                    valueData << it.value().at(ip).mRevenues;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
-                    break;
-                case ExEarnings:
-                    valueData << it.value().at(ip).mExRevenues;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
-                    break;
-                case TimeAtSea:
-                    valueData << it.value().at(ip).mTimeAtSea;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
-                    break;
-                case Gav:
-                    valueData << it.value().at(ip).mGav;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("GVA (Euro)"));
-                    break;
-                case Vpuf:
-                    valueData << it.value().at(ip).mVpuf;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
-                    break;
-                case SweptArea:
-                    valueData << it.value().at(ip).mSweptArea;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
-                    break;
-                case RevenuePerSweptArea:
-                    valueData << it.value().at(ip).mRevenuePerSweptArea;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
-                    break;
-                case GVA:
-                    valueData << it.value().at(ip).GVA;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case GVAPerRevenue:
-                    valueData << it.value().at(ip).GVAPerRevenue;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
-                    break;
-                case LabourSurplus:
-                    valueData << it.value().at(ip).LabourSurplus;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case GrossProfit:
-                    valueData << it.value().at(ip).GrossProfit;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NetProfit:
-                    valueData << it.value().at(ip).NetProfit;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case NetProfitMargin:
-                    valueData << it.value().at(ip).NetProfitMargin;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("%"));
-                    break;
-                case GVAPerFTE:
-                    valueData << it.value().at(ip).GVAPerFTE;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case RoFTA:
-                    valueData << it.value().at(ip).RoFTA;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("%"));
-                    break;
-                case BER:
-                    valueData << it.value().at(ip).BER;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case CRBER:
-                    valueData << it.value().at(ip).CRBER;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Ratio"));
-                    break;
-                case NetPresentValue:
-                    valueData << it.value().at(ip).NetPresentValue;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("Euro"));
-                    break;
-                case numTrips:
-                    valueData << it.value().at(ip).numTrips;
-                    plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-                    plotNations->yAxis->setLabel(QObject::tr("#"));
-                    break;
-
-
-                }
-            }
-            ++it;
-        }
-
-        graph->setData(keyData, valueData);
-
-        ++col_it;
-    }
-
-    plotNations->rescaleAxes();
-    plotNations->replot();
+    mNationsStatsPlotController->update(model, nationsStat);
 }
 
 void StatsController::updateHarboursStats(DisplaceModel *model, HarboursStat stat, QCustomPlot *plot, QCPItemLine *timeline)

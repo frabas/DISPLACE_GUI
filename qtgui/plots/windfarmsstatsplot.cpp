@@ -1,6 +1,5 @@
 #include "windfarmsstatsplot.h"
 
-
 #include <displacemodel.h>
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/windfarmstable.h>

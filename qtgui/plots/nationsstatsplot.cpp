@@ -2,6 +2,8 @@
 
 #include <displacemodel.h>
 #include <storage/sqliteoutputstorage.h>
+#include <storage/tables/vesselslogliketable.h>
+#include <sqlitestatement.h>
 
 #include <qcustomplot.h>
 
@@ -17,6 +19,10 @@ NationsStatsPlot::NationsStatsPlot(QCustomPlot *plot_, QCPItemLine *timeline_)
 
 void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat stat)
 {
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return;
+
     lastModel = model;
     lastStat = stat;
 
@@ -157,6 +163,10 @@ void NationsStatsPlot::saveTo()
     if (!lastModel)
         return;
 
+    auto db = lastModel->getOutputStorage();
+    if (db == nullptr)
+        return;
+
     QString fn = QFileDialog::getSaveFileName(nullptr, QObject::tr("Save plot data"), QString(), QObject::tr("Csv file (*.csv)"));
     if (!fn.isEmpty()) {
         QList<int> ipl = lastModel->getInterestingNations();
@@ -191,9 +201,51 @@ void NationsStatsPlot::saveTo()
 
 std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation)
 {
-    QVector<double> keyData;
-    QVector<double> valueData;
+    /*
+  SELECT VesselLogLike.RowId,
+       VesselLogLike.TStep,
+       VesselLogLike.Id,
+       VesselDef.VesselId,
+       VesselDef.Nationality,
+       SUM(VesselLogLikeCatches.Catches)
+  FROM VesselLogLike
+       JOIN
+       VesselDef ON VesselLogLike.Id = VesselDef.Id
+       JOIN
+       VesselLogLikeCatches ON VesselLogLike.RowId = VesselLogLikeCatches.LoglikeId
+ WHERE VesselDef.Nationality = "DNK"
+ GROUP BY VesselLogLike.TStep
+    */
 
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        throw std::runtime_error("null db");
+
+    sqlite::SQLiteStatement stmt(db->getDb(), "SELECT "
+                                 "VesselLogLike.TStep,"
+                                 "SUM(VesselLogLikeCatches.Catches) "
+                            "FROM VesselLogLike "
+                                 "JOIN "
+                                 "VesselDef ON VesselLogLike.Id = VesselDef.VesselId "
+                                 "JOIN "
+                                 "VesselLogLikeCatches ON VesselLogLike.RowId = VesselLogLikeCatches.LoglikeId "
+                           "WHERE VesselDef.Nationality = ? "
+                           "GROUP BY VesselLogLike.TStep");
+
+    stmt.bind(std::make_tuple(model->getNation(nation).getName().toStdString()));
+
+    std::vector<double> keyData;
+    std::vector<double> valueData;
+
+    stmt.execute([&stmt, &keyData, &valueData](){
+        keyData.push_back(stmt.getIntValue(0));
+        valueData.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    QVector<double> kd = QVector<double>::fromStdVector(keyData), vd = QVector<double>::fromStdVector(valueData);
+
+#if 0
     int n = model->getNationsStatsCount();
     DisplaceModel::NationsStatsContainer::Container::const_iterator it = model->getNationsStatsFirstValue();
     for (int i = 0; i <n; ++i) {
@@ -268,6 +320,14 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
         }
         ++it;
     }
+#endif
 
-    return std::make_tuple(keyData, valueData);
+    double rc = 0;
+    // make running sum
+    for (int i = 0; i < vd.size(); ++i) {
+        rc += vd[i];
+        vd[i] = rc;
+    }
+
+    return std::make_tuple(kd, vd);
 }

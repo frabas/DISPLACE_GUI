@@ -23,6 +23,11 @@ namespace sqlite {
 class SQLiteStorage;
 }
 
+struct TimelineData {
+    std::vector<int> t;
+    std::vector<double> v;
+};
+
 class COMMONSSHARED_EXPORT SQLiteOutputStorage
 {
     struct Impl;
@@ -52,6 +57,12 @@ public:
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
     void exportWindmillsLog(Windmill *windmill, int tstep);
     void exportLogLike(Vessel *v, const std::vector<double> &populations, unsigned int tstep);
+
+    TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);
+
+private:
+    TimelineData loglikeNationAggregates(displace::plot::NationsStat statype, std::string nation);
+    TimelineData loglikeNation(displace::plot::NationsStat stattype, std::string nation);
 };
 
 #endif // SQLITEOUTPUTSTORAGE_H

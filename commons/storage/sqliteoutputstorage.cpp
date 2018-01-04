@@ -16,6 +16,7 @@
 #include <Population.h>
 
 using namespace sqlite;
+using namespace displace::plot;
 
 struct SQLiteOutputStorage::Impl {
     std::shared_ptr<SQLiteStorage> db;
@@ -130,6 +131,47 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     for (size_t i = 0; i < cumul.size(); ++i) {
         p->mVesselLoglikeCatchesTable->insertPopulation(rowid, i, cumul);
     }
+}
+
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat stattype, string nation)
+{
+    if (stattype == NationsStat::Catches || stattype == NationsStat::Discards) {
+        return loglikeNationAggregates(stattype, std::move(nation));
+    } else {
+        return loglikeNation(stattype, std::move(nation));
+    }
+}
+
+TimelineData SQLiteOutputStorage::loglikeNationAggregates(NationsStat statype, string nation)
+{
+#if 0
+    sqlite::SQLiteStatement stmt(db->getDb(), "SELECT "
+                                 "VesselLogLike.TStep,"
+                                 "SUM(VesselLogLikeCatches.Catches) "
+                            "FROM VesselLogLike "
+                                 "JOIN "
+                                 "VesselDef ON VesselLogLike.Id = VesselDef.VesselId "
+                                 "JOIN "
+                                 "VesselLogLikeCatches ON VesselLogLike.RowId = VesselLogLikeCatches.LoglikeId "
+                           "WHERE VesselDef.Nationality = ? "
+                           "GROUP BY VesselLogLike.TStep");
+
+    stmt.bind(std::make_tuple(model->getNation(nation).getName().toStdString()));
+
+    std::vector<double> keyData;
+    std::vector<double> valueData;
+
+    stmt.execute([&stmt, &keyData, &valueData](){
+        keyData.push_back(stmt.getIntValue(0));
+        valueData.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+#endif
+}
+
+TimelineData SQLiteOutputStorage::loglikeNation(NationsStat stattype, string nation)
+{
+
 }
 
 void SQLiteOutputStorage::createAllTables()

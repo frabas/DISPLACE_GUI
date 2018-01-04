@@ -325,7 +325,6 @@ HEADERS += \
     objects/bfunctionalgroupsentity.h \
     utils/interestinglistwithspecialvalues.h \
     plots/benthosstatsplot.h \
-    plots/plottypes.h \
     stats/benthosstats.h \
     stats/fishfarmsstats.h \
     plots/fishfarmsstatsplot.h \

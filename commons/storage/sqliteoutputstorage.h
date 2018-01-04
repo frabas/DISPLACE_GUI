@@ -3,6 +3,8 @@
 
 #include "commons_global.h"
 
+#include "plottypes.h"
+
 #include <memory>
 #include <string>
 

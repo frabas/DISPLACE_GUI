@@ -1,7 +1,7 @@
 #ifndef BENTHOSSTATSPLOT_H
 #define BENTHOSSTATSPLOT_H
 
-#include <plots/plottypes.h>
+#include "plottypes.h"
 #include <palettemanager.h>
 
 #include <QPen>

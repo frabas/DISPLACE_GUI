@@ -26,7 +26,7 @@
 #include <qcustomplot.h>
 #include <palettemanager.h>
 
-#include <plots/plottypes.h>
+#include "plottypes.h"
 #include <graphinteractioncontroller.h>
 
 class DisplaceModel;

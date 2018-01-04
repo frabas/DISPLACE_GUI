@@ -1,7 +1,7 @@
 #ifndef NATIONSSTATSPLOT_H
 #define NATIONSSTATSPLOT_H
 
-#include <plots/plottypes.h>
+#include "plottypes.h"
 #include <palettemanager.h>
 
 #include <QPen>

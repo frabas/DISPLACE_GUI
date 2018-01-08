@@ -3852,7 +3852,17 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
     // need to convert in array, see myRutils.cpp
 
     // check
+    assert(grds.size() > 0);
+
+    if(grds.size()==0)
+    {
+        cout << "DEBUG !! " << this->get_name() << " is likely missing vessel in fgrounds.dat " << endl;
+    }
+
+
+    // check
     //cout << "which_metier_should_i_go_for says possible grds for " << this->get_name() << " are " << endl;
+
     //for (int gr=0; gr<grds.size(); ++gr) cout << grds.at(gr) << '\t';
     //cout << endl;
 
@@ -3878,14 +3888,14 @@ void Vessel::which_metier_should_i_go_for(vector <Metier*>& metiers){
 
     // check
     //cout << "which_metier_should_i_go_for says possible metiers for " << this->get_name() << " are " << endl;
-    //for ( std::multimap< int, int, std::less< int > >::const_iterator iter =poss_met.begin();
+    //for ( std::multimap< types::NodeId, int, std::less< int > >::const_iterator iter =poss_met.begin();
     //      iter != poss_met.end(); ++iter )
     //      cout << iter->first << '\t' << iter->second << '\n';
     //cout << endl;
 
     // check
     //cout << "which_metier_should_i_go_for says freq possible metiers for " << this->get_name() << " are " << endl;
-    //for ( std::multimap< int, double, std::less< int > >::const_iterator iter =freq_poss_met.begin();
+    //for ( std::multimap< types::NodeId, double, std::less< int > >::const_iterator iter =freq_poss_met.begin();
     //      iter != freq_poss_met.end(); ++iter )
     //      cout << iter->first << '\t' << iter->second << '\n';
     //cout << endl;

@@ -17,6 +17,9 @@ macx {
     INCLUDEPATH += /usr/local/include
     LIBS += -L$$LIBDESTDIR
 }
+unix {
+    DESTDIR=$$EXEDESTDIR
+}
 
 LIBS+=-L.. -lformats -ldisplacecommons
 

@@ -2079,6 +2079,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     //    dout(cout  << endl);
     //}
 
+
     // VESSEL EFFECT
     vector<double> v_betas_per_pop  = this->get_vessel_betas_per_pop ();
     double v_kw                     = this->get_KW ();

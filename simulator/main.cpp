@@ -3156,7 +3156,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cout<<"with " << vessels_of_the_firm.size() << " vessels..." << endl;
 
         firms[i]= new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
-                           longs[i], lats[i], vessels_of_the_firm);
+                           some_longs[i], some_lats[i], vessels_of_the_firm);
         firms[i]->set_idx_firm(all_firm_ids[i]);
 
         cout<<"at (" << firms[i]->get_x() << "," << firms[i]->get_y()  << ") "   << endl;

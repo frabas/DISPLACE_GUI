@@ -1857,6 +1857,7 @@ void Vessel::find_next_point_on_the_graph_unlocked(vector<Node* >& nodes)
     if(roadmap.size()==0)
     {
         cout << "DEBUG !! " << this->get_name() << endl;
+    return;
     }
 
     assert(roadmap.size() > 0);

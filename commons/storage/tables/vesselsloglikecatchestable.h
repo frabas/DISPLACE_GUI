@@ -15,11 +15,11 @@ class Population;
 
 class COMMONSSHARED_EXPORT VesselsLoglikeCatchesTable : public SQLiteTable
 {
-    FieldDef<FieldType::Integer> fldLoglikeId = makeFieldDef("LoglikeId", FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Real> fldCatches = makeFieldDef("Catches",FieldType::Real()).notNull();
-
 public:
+    const FieldDef<FieldType::Integer> &fldLoglikeId = makeFieldDef("LoglikeId", FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> &fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Real> &fldCatches = makeFieldDef("Catches",FieldType::Real()).notNull();
+
     VesselsLoglikeCatchesTable(std::shared_ptr<SQLiteStorage> db, std::string name);
     void dropAndCreate();
 

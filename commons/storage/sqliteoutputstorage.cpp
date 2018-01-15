@@ -1,6 +1,9 @@
 #include "sqliteoutputstorage.h"
 
 #include "sqlitestorage.h"
+#include "sqlitefieldsop.h"
+#include "sqlitestatement.h"
+#include "sqlitestatementformatters.h"
 #include "tables/vesseldeftable.h"
 #include "tables/vesselslogliketable.h"
 #include "tables/popnodestable.h"
@@ -167,6 +170,28 @@ TimelineData SQLiteOutputStorage::loglikeNationAggregates(NationsStat statype, s
         return true;
     });
 #endif
+
+    auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
+                                                    p->mVesselLoglikeTable->fldTStep,
+                                                    sqlite::op::sum(p->mVesselLoglikeCatchesTable->fldCatches)
+                                                    );
+    select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
+    select.join(p->mVesselLoglikeTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
+    select.where(p->mVesselDefTable->fldNationality.name());
+    select.groupBy(p->mVesselLoglikeTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(std::make_tuple(nation));
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    return data;
 }
 
 TimelineData SQLiteOutputStorage::loglikeNation(NationsStat stattype, string nation)

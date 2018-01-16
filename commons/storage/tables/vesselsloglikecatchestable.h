@@ -19,11 +19,12 @@ public:
     const FieldDef<FieldType::Integer> fldLoglikeId = makeFieldDef("LoglikeId", FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Real> fldCatches = makeFieldDef("Catches",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> fldDiscards = makeFieldDef("Discards",FieldType::Real()).notNull();
 
     VesselsLoglikeCatchesTable(std::shared_ptr<SQLiteStorage> db, std::string name);
     void dropAndCreate();
 
-    void insertPopulation (size_t rowid, int population, const std::vector<double> &catches);
+    void insertPopulation (size_t rowid, int population, const std::vector<double> &catches, const std::vector<double> &discards);
 };
 
 #endif // VESSELSLOGLIKECATCHESTABLE_H

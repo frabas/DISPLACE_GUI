@@ -86,7 +86,7 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
     p->mWindmillsTable->exportWindmillData(windmill, tstep);
 }
 
-void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul, unsigned int tstep)
+void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul,const std::vector<double> &discards, unsigned int tstep)
 {
     auto length_class =v->get_length_class();
 
@@ -132,7 +132,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     auto rowid = p->mVesselLoglikeTable->insertLog(log);
 
     for (size_t i = 0; i < cumul.size(); ++i) {
-        p->mVesselLoglikeCatchesTable->insertPopulation(rowid, i, cumul);
+        p->mVesselLoglikeCatchesTable->insertPopulation(rowid, i, cumul, discards);
     }
 }
 
@@ -147,6 +147,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     switch (stattype) {
     case NationsStat::Catches:
         f = p->mVesselLoglikeCatchesTable->fldCatches;
+        break;
+    case NationsStat::Discards:
+        f = p->mVesselLoglikeCatchesTable->fldDiscards;
         break;
     case NationsStat::Earnings:
         f = p->mVesselLoglikeTable->fldRevenueAV;

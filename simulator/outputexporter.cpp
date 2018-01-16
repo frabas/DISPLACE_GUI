@@ -132,7 +132,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
 
 void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
-    std::vector<double> cumul;
+    std::vector<double> cumul, cumul_discards;
 
     const auto &a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
     for(size_t pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
@@ -144,7 +144,24 @@ void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const st
         }
     }
 
-    mSqlDb->exportLogLike(v, cumul, tstep);
+    const auto &a_discards_pop_at_szgroup = v->get_discards_pop_at_szgroup();
+    int count =0;
+    for(int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
+    {
+
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
+        {
+            cumul_discards.push_back(0);
+            for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
+            {
+                if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
+            }
+            count+=1;
+        }
+
+    }
+
+    mSqlDb->exportLogLike(v, cumul, cumul_discards, tstep);
 }
 
 void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)

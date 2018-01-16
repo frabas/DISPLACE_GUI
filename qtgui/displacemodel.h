@@ -73,8 +73,6 @@ class DisplaceModel : public QObject
 public:
     typedef QVector<PopulationData> PopulationStat;
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-    typedef QVector<NationStats> NationsStats;
-    typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
     typedef QVector<HarbourStats> HarboursStats;
     typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
     typedef QVector<MetierStats> MetiersStats;
@@ -225,19 +223,6 @@ public:
 
     const QList<std::shared_ptr<NationData> > &getNationsList() const { return mNations; }
     const NationData &getNation(int idx) const { return *mNations.at(idx); }
-
-    int getNationsStatsCount() const {
-        return mStatsNations.getUniqueValuesCount();
-    }
-    NationsStatsContainer::Container::const_iterator getNationsStatsFirstValue() const {
-        return mStatsNations.getFirst();
-    }
-    const NationsStats &getNationsStatAtStep(int step) const {
-        return mStatsNations.getValue(step);
-    }
-    const NationStats &getNationStatAtStep(int step, int idx) const {
-        return mStatsNations.getValue(step).at(idx);
-    }
 
     /* Access to Harbour statistics */
 
@@ -598,8 +583,6 @@ private:
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;
-    NationsStatsContainer mStatsNations;
-    NationsStats mStatsNationsCollected;
     HarboursStatsContainer mStatsHarbours;
     HarboursStats mStatsHarboursCollected;
     MetiersStatsContainer mStatsMetiers;

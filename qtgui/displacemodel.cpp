@@ -321,8 +321,6 @@ bool DisplaceModel::clearStats()
         mStatsPopulationsCollected[i].clear();
     }
 
-    mStatsNations.clear();
-    mStatsNationsCollected.clear();
     m_vessel_last_step = -1;
     mVesselsStatsDirty = false;
 
@@ -614,7 +612,6 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
     }
 
     if (mCalendar && mCalendar->isYear(tstep)) {
-        mStatsNationsCollected.clear();
         mStatsHarboursCollected.clear();
         mStatsMetiersCollected.clear();
 
@@ -1077,42 +1074,6 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         }
     }
 
-    while (mStatsNationsCollected.size() <= nat) {
-        mStatsNationsCollected.push_back(NationStats());
-    }
-
-    mStatsNationsCollected[nat].numTrips += 1; // required for applying the running average
-
-    mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
-    mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
-    mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
-    mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].cumVpuf += stats.vpuf;
-    mStatsNationsCollected[nat].mVpuf = mStatsNationsCollected[nat].cumVpuf /mStatsNationsCollected[nat].numTrips;  // running average
-    mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
-    mStatsNationsCollected[nat].cumRevenuePerSweptArea += stats.revenuePerSweptArea;
-    mStatsNationsCollected[nat].mRevenuePerSweptArea = mStatsNationsCollected[nat].cumRevenuePerSweptArea /mStatsNationsCollected[nat].numTrips;  // running average;
-
-    mStatsNationsCollected[nat].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].cumGVAPerRevenue += stats.GVAPerRevenue;
-    mStatsNationsCollected[nat].GVAPerRevenue =  mStatsNationsCollected[nat].cumGVAPerRevenue /mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].cumNetProfitMargin += stats.NetProfitMargin  ;  // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].NetProfitMargin = mStatsNationsCollected[nat].cumNetProfitMargin / mStatsNationsCollected[nat].numTrips;
-    mStatsNationsCollected[nat].cumGVAPerFTE += stats.GVAPerFTE; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].GVAPerFTE = mStatsNationsCollected[nat].cumGVAPerFTE / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].cumRoFTA += stats.RoFTA; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].RoFTA = mStatsNationsCollected[nat].cumRoFTA / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].cumBER += stats.BER ; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].BER = mStatsNationsCollected[nat].cumBER / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].cumCRBER += stats.CRBER; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].CRBER = mStatsNationsCollected[nat].cumCRBER / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
-
-
-
     // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
     int hidx = -1;
     if (stats.lastHarbour != -1) {
@@ -1190,8 +1151,6 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         if (hidx != -1)
             mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
 
-        mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
-
         if (midx != -1) {
             while (mStatsMetiersCollected[midx].mCatchesPerPop.size() < n)
                 mStatsMetiersCollected[midx].mCatchesPerPop.push_back(0.0);
@@ -1208,8 +1167,6 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         // TODO check this!
         if (hidx != -1)
             mStatsHarboursCollected[hidx].mCumDiscards += stats.mDiscards[i];
-
-        mStatsNationsCollected[nat].mTotDiscards += stats.mDiscards[i];
 
         if (midx != -1) {
             while (mStatsMetiersCollected[midx].mDiscardsPerPop.size() < n2)
@@ -1234,10 +1191,6 @@ void DisplaceModel::commitVesselsStats(int tstep)
 {
 //    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
     if (mVesselsStatsDirty) {
-        mStatsNations.insertValue(tstep, mStatsNationsCollected);
-        if (mDb)
-            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
-
         // Harbours stats are not saved on db, but loaded on the fly
         mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
         mStatsMetiers.insertValue(tstep, mStatsMetiersCollected);
@@ -3383,13 +3336,6 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     foreach (const QVector<PopulationData> &dt, dtl) {
         int tstep = steps[i];
         mStatsPopulations.insertValue(tstep, dt);
-        ++i;
-    }
-
-    i = 0;
-    foreach (const QVector<NationStats> &dt, ndl) {
-        int tstep = steps[i];
-        mStatsNations.insertValue(tstep, dt);
         ++i;
     }
 

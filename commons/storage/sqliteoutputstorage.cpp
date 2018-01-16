@@ -6,7 +6,7 @@
 #include "sqlitestatementformatters.h"
 #include "tables/vesseldeftable.h"
 #include "tables/vesselslogliketable.h"
-#include "tables/popnodestable.h"
+#include "tables/nodesdeftable.h"
 #include "tables/poptable.h"
 #include "tables/vesselvmsliketable.h"
 #include "tables/vesselsloglikecatchestable.h"
@@ -28,7 +28,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselsLoglikeTable> mVesselLoglikeTable;
     std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
-    std::shared_ptr<PopNodesTable> mPopNodesTable;
+    std::shared_ptr<NodesDefTable> mPopNodesTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
@@ -50,7 +50,7 @@ void SQLiteOutputStorage::open()
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
-    p->mPopNodesTable = std::make_shared<PopNodesTable>(p->db, "PopNodes");
+    p->mPopNodesTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
@@ -270,7 +270,7 @@ std::shared_ptr<VesselVmsLikeTable> SQLiteOutputStorage::getVesselVmsLikeTable()
     return p->mVesselVmslikeTable;
 }
 
-std::shared_ptr<PopNodesTable> SQLiteOutputStorage::getPopNodesTable() const
+std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getPopNodesTable() const
 {
     return p->mPopNodesTable;
 }

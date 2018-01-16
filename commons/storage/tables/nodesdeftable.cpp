@@ -1,13 +1,13 @@
-#include "popnodestable.h"
+#include "nodesdeftable.h"
 
 #include "Node.h"
 
-PopNodesTable::PopNodesTable(std::shared_ptr<SQLiteStorage> db, std::string name)
+NodesDefTable::NodesDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
 {    
 }
 
-void PopNodesTable::dropAndCreate()
+void NodesDefTable::dropAndCreate()
 {
     if (db()->tableExists(name()))
         db()->dropTable(name());
@@ -17,7 +17,7 @@ void PopNodesTable::dropAndCreate()
                            ));
 }
 
-void PopNodesTable::insert(Node *node)
+void NodesDefTable::insert(Node *node)
 {
     SQLiteTable::insert(fldNodeId.assign(node->get_idx_node().toIndex()),
                         fldLong.assign(node->get_x()),

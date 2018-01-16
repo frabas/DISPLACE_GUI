@@ -23,7 +23,7 @@
 #include "sqlitestorage.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
-#include "storage/tables/popnodestable.h"
+#include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
 #include "sqlitetransaction.h"
 using namespace sqlite;

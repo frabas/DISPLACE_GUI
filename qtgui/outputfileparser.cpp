@@ -93,8 +93,6 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parseFishfarmslogsStats(&file, tstep, mModel, period);
     } else if (name.startsWith("shipslogs_")) {
         parseShipsStats(&file, tstep, mModel, period);
-    } else if (name.startsWith("windmillslogs_")) {
-        parseWindfarmsStats(&file, tstep, mModel, period);
     } else { /* Don't know how to handle... */
         qDebug() << "File isn't recognized: " << path;
     }
@@ -844,44 +842,3 @@ void OutputFileParser::parseShipsStats(QFile *file, int tstep, DisplaceModel *mo
 
     model->commitShipsStats(last_step);
 }
-
-
-
-void OutputFileParser::parseWindfarmsStats(QFile *file, int tstep, DisplaceModel *model, int period)
-{
-    Q_UNUSED(period);
-    Q_UNUSED(tstep);
-
-    QTextStream strm (file);
-    bool ok;
-
-    int step, last_step = -1;
-    while (!strm.atEnd()) {
-        QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        step = fields[0].toInt();
-
-        if (last_step != -1 && last_step != step) {
-            model->commitWindfarmsStats(last_step);
-        }
-
-        int windfarmid = fields[5].toInt();
-        int windfarmtype = fields[4].toInt();
-        int nodeid = fields[1].toInt();
-
-        // tstep(0) / node(1) / long(2) / lat(3) / windfarmtype(4) / windfarmid(5) / kWh(6) / kW_production(7)
-
-        double kWh = fields[6].toDouble(&ok);
-        if (!ok) throw std::runtime_error(QString("wrong kWh %1").arg(fields[6]).toStdString());
-        model->collectWindfarmkWh (step, nodeid, windfarmid, windfarmtype, kWh);
-
-        double kWproduction = fields[7].toDouble(&ok);
-        if (!ok) throw std::runtime_error(QString("wrong kWproduction %1").arg(fields[7]).toStdString());
-        model->collectWindfarmkWproduction (step, nodeid, windfarmid,  windfarmtype, kWproduction);
-
-        last_step = step;
-    }
-
-    model->commitWindfarmsStats(last_step);
-}
-

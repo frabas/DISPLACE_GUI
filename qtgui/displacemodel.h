@@ -80,9 +80,6 @@ public:
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
     typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
     typedef HistoricalDataCollector<ShipsStats> ShipsStatsContainer;
-    typedef HistoricalDataCollector<WindfarmsStats> WindfarmsStatsContainer;
-
-
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -270,9 +267,6 @@ public:
     /* Ships Statistics */
     const ShipsStatsContainer &getShipsStatistics() { return mStatsShips; }
 
-    /* Windfarms Statistics */
-    const WindfarmsStatsContainer &getWindfarmsStatistics() { return mStatsWindfarms; }
-
     /* Scenario and configuration */
 
     Scenario scenario() const;
@@ -444,10 +438,6 @@ public:
     void collectShipPMEemission (int step, int node_idx, int shipid,  int shiptype,  double PME_emission);
     void commitShipsStats(int tstep);
 
-    void collectWindfarmkWh (int step, int node_idx, int windfarmid, int windfarmtype, double kWh);
-    void collectWindfarmkWproduction (int step, int node_idx, int windfarmid,  int windfarmtype, double kWproduction);
-    void commitWindfarmsStats(int tstep);
-
     void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
     void collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value);
@@ -548,7 +538,6 @@ private:
     int m_vessel_last_step;     // TODO: Same as above
     bool mFirmsStatsDirty;
     bool mShipsStatsDirty;
-    bool mWindmillStatsDirty;
 
     Scenario mScenario;
     Config mConfig;
@@ -593,8 +582,6 @@ private:
     FishfarmsStats mStatsFishfarmsCollected;
     ShipsStatsContainer mStatsShips;
     ShipsStats mStatsShipsCollected;
-    WindfarmsStatsContainer mStatsWindfarms;
-    WindfarmsStats mStatsWindfarmsCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<int, std::shared_ptr<Fishfarm> > mFishfarmInfo;

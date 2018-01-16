@@ -59,7 +59,6 @@ DisplaceModel::DisplaceModel()
       mVesselsStatsDirty(false),
       mFirmsStatsDirty(false),
       mShipsStatsDirty(false),
-      mWindmillStatsDirty(false),
       mScenario(),
       mConfig(),
       mInterestingPop(),
@@ -339,9 +338,6 @@ bool DisplaceModel::clearStats()
     mStatsShips.clear();
     mStatsShipsCollected.clear();
 
-    mStatsWindfarms.clear();
-    mStatsWindfarmsCollected.clear();
-
     return true;
 }
 
@@ -570,16 +566,6 @@ void DisplaceModel::commitShipsStats(int tstep)
     }
 }
 
-void DisplaceModel::commitWindfarmsStats(int tstep)
-{
-    if (mStatsWindfarmsCollected.dirty()) {
-        // Fishfarm stats are not saved on db, but loaded on the fly
-        mStatsWindfarms.insertValue(tstep, mStatsWindfarmsCollected);
-        mStatsWindfarmsCollected.clear();
-    }
-}
-
-
 void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 {
     if (mDb)
@@ -600,15 +586,6 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 
     if (mShipsStatsDirty || force) {
         mShipsStatsDirty = false;
-    }
-
-    if (mWindmillStatsDirty || force) {
-        //if (mDb)
-        //    mDb->addWindmillStats (mLastStats, mStatsWindmillCollected);
-
-        // Fishfarm stats are not saved on db, but loaded on the fly
-       // mStatsWindmills.insertValue(tstep, mStatsWindmillCollected);
-       // mWindmillStatsDirty = false;
     }
 
     if (mCalendar && mCalendar->isYear(tstep)) {
@@ -975,24 +952,6 @@ void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, i
                                                  shiptype,
                                                  PME_emission);
 }
-
-void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, int windfarmtype, double kWh)
-{
-    mStatsWindfarmsCollected.collectkWh(step,
-                                                 windfarmid,
-                                                 windfarmtype,
-                                                 kWh);
-}
-
-void DisplaceModel::collectWindfarmkWproduction(int step, int node_idx, int windfarmid, int windfarmtype, double kWproduction)
-{
-    mStatsWindfarmsCollected.collectkWproduction(step,
-                                                 windfarmid,
-                                                 windfarmtype,
-                                                 kWproduction);
-}
-
-
 
 void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
 {

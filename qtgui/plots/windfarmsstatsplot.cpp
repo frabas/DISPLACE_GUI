@@ -21,7 +21,6 @@ WindfarmsStatsPlot::WindfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
 void WindfarmsStatsPlot::update(DisplaceModel *model, displace::plot::WindfarmsStat stat)
 {
     mPlot->clearGraphs();
-    double val;
 
     auto db = model->getOutputStorage();
     if (db == nullptr)

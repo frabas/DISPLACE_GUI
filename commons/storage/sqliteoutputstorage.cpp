@@ -148,15 +148,12 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     case NationsStat::Catches:
         f = p->mVesselLoglikeCatchesTable->fldCatches;
         break;
-        /*
-        case NationsStat::Earnings:
-            f = p->mVesselLoglikeTable->
-            valueData << it.value().at(nation).mRevenues;
-            break;
-        case NationsStat::ExEarnings:
-            valueData << it.value().at(nation).mExRevenues;
-            break;
-            */
+    case NationsStat::Earnings:
+        f = p->mVesselLoglikeTable->fldRevenueAV;
+        break;
+    case NationsStat::ExEarnings:
+        f = p->mVesselLoglikeTable->revenueExAV;
+        break;
     case NationsStat::TimeAtSea:
         f = p->mVesselLoglikeTable->timeAtSea;
         break;
@@ -205,10 +202,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     case NationsStat::NetPresentValue:
         f = p->mVesselLoglikeTable->NetPresentValue;
         break;
-        /*
     case NationsStat::numTrips:
-        f = p->mVesselLoglikeTable->numTrips;
-        break;*/
+        f = sqlite::cast<sqlite::FieldType::Real>(p->mVesselLoglikeTable->numTrips);
+        break;
     default:
         throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
     }

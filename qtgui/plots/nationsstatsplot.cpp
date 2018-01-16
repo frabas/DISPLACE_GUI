@@ -201,126 +201,13 @@ void NationsStatsPlot::saveTo()
 
 std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation)
 {
-    /*
-  SELECT VesselLogLike.RowId,
-       VesselLogLike.TStep,
-       VesselLogLike.Id,
-       VesselDef.VesselId,
-       VesselDef.Nationality,
-       SUM(VesselLogLikeCatches.Catches)
-  FROM VesselLogLike
-       JOIN
-       VesselDef ON VesselLogLike.Id = VesselDef.Id
-       JOIN
-       VesselLogLikeCatches ON VesselLogLike.RowId = VesselLogLikeCatches.LoglikeId
- WHERE VesselDef.Nationality = "DNK"
- GROUP BY VesselLogLike.TStep
-    */
-
     auto db = model->getOutputStorage();
     if (db == nullptr)
         throw std::runtime_error("null db");
 
-    sqlite::SQLiteStatement stmt(db->getDb(), "SELECT "
-                                 "VesselLogLike.TStep,"
-                                 "SUM(VesselLogLikeCatches.Catches) "
-                            "FROM VesselLogLike "
-                                 "JOIN "
-                                 "VesselDef ON VesselLogLike.Id = VesselDef.VesselId "
-                                 "JOIN "
-                                 "VesselLogLikeCatches ON VesselLogLike.RowId = VesselLogLikeCatches.LoglikeId "
-                           "WHERE VesselDef.Nationality = ? "
-                           "GROUP BY VesselLogLike.TStep");
+    auto dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString());
 
-    stmt.bind(std::make_tuple(model->getNation(nation).getName().toStdString()));
-
-    std::vector<double> keyData;
-    std::vector<double> valueData;
-
-    stmt.execute([&stmt, &keyData, &valueData](){
-        keyData.push_back(stmt.getIntValue(0));
-        valueData.push_back(stmt.getDoubleValue(1));
-        return true;
-    });
-
-    QVector<double> kd = QVector<double>::fromStdVector(keyData), vd = QVector<double>::fromStdVector(valueData);
-
-#if 0
-    int n = model->getNationsStatsCount();
-    DisplaceModel::NationsStatsContainer::Container::const_iterator it = model->getNationsStatsFirstValue();
-    for (int i = 0; i <n; ++i) {
-        if (it.value().size() > nation) {
-            keyData << it.key();
-
-            switch (stat) {
-            case NationsStat::Catches:
-                valueData << it.value().at(nation).mTotCatches;
-                break;
-            case NationsStat::Discards:
-                valueData << it.value().at(nation).mTotDiscards;
-                break;
-            case NationsStat::Earnings:
-                valueData << it.value().at(nation).mRevenues;
-                break;
-            case NationsStat::ExEarnings:
-                valueData << it.value().at(nation).mExRevenues;
-                break;
-            case NationsStat::TimeAtSea:
-                valueData << it.value().at(nation).mTimeAtSea;
-                break;
-            case NationsStat::Gav:
-                valueData << it.value().at(nation).mGav;
-                break;
-            case NationsStat::Vpuf:
-                valueData << it.value().at(nation).mVpuf;
-                break;
-            case NationsStat::SweptArea:
-                valueData << it.value().at(nation).mSweptArea;
-                break;
-            case NationsStat::RevenuePerSweptArea:
-                valueData << it.value().at(nation).mRevenuePerSweptArea;
-                break;
-            case NationsStat::GVA:
-                valueData << it.value().at(nation).GVA;
-                break;
-            case NationsStat::GVAPerRevenue:
-                valueData << it.value().at(nation).GVAPerRevenue;
-                break;
-            case NationsStat::LabourSurplus:
-                valueData << it.value().at(nation).LabourSurplus;
-                break;
-            case NationsStat::GrossProfit:
-                valueData << it.value().at(nation).GrossProfit;
-                break;
-            case NationsStat::NetProfit:
-                valueData << it.value().at(nation).NetProfit;
-                break;
-            case NationsStat::NetProfitMargin:
-                valueData << it.value().at(nation).NetProfitMargin;
-                break;
-            case NationsStat::GVAPerFTE:
-                valueData << it.value().at(nation).GVAPerFTE;
-                break;
-            case NationsStat::RoFTA:
-                valueData << it.value().at(nation).RoFTA;
-                break;
-            case NationsStat::BER:
-                valueData << it.value().at(nation).BER;
-                break;
-            case NationsStat::CRBER:
-                valueData << it.value().at(nation).CRBER;
-                break;
-            case NationsStat::NetPresentValue:
-                valueData << it.value().at(nation).NetPresentValue;
-                break;
-            case NationsStat::numTrips:
-                valueData << it.value().at(nation).numTrips;
-                break;
-            }
-        }
-        ++it;
-    }
-#endif
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
 
     double rc = 0;
     // make running sum

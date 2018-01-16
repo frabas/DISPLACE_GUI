@@ -16,14 +16,14 @@ class Windmill;
 
 class COMMONSSHARED_EXPORT WindfarmsTable : public SQLiteTable
 {
-    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldWindfarmId = makeFieldDef("WindarmId",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldWindfarmType = makeFieldDef("WindfarmType",FieldType::Integer()).notNull();
-
-    FieldDef<FieldType::Real> fldKwh = makeFieldDef("Kwh", FieldType::Real());
-    FieldDef<FieldType::Real> fldKwhProduction = makeFieldDef("KwhProduction", FieldType::Real());
-
 public:
+    const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldWindfarmId = makeFieldDef("WindarmId",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldWindfarmType = makeFieldDef("WindfarmType",FieldType::Integer()).notNull();
+
+    const FieldDef<FieldType::Real> fldKwh = makeFieldDef("Kwh", FieldType::Real());
+    const FieldDef<FieldType::Real> fldKwhProduction = makeFieldDef("KwhProduction", FieldType::Real());
+
     WindfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name);
     void dropAndCreate();
 

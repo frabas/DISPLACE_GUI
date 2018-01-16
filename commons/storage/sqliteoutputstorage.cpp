@@ -138,46 +138,91 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
 
 TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat stattype, string nation)
 {
+    bool isAggregate = false;
     if (stattype == NationsStat::Catches || stattype == NationsStat::Discards) {
-        return loglikeNationAggregates(stattype, std::move(nation));
-    } else {
-        return loglikeNation(stattype, std::move(nation));
+        isAggregate = true;
     }
-}
 
-TimelineData SQLiteOutputStorage::loglikeNationAggregates(NationsStat statype, string nation)
-{
-#if 0
-    sqlite::SQLiteStatement stmt(db->getDb(), "SELECT "
-                                 "VesselLogLike.TStep,"
-                                 "SUM(VesselLogLikeCatches.Catches) "
-                            "FROM VesselLogLike "
-                                 "JOIN "
-                                 "VesselDef ON VesselLogLike.Id = VesselDef.VesselId "
-                                 "JOIN "
-                                 "VesselLogLikeCatches ON VesselLogLike.RowId = VesselLogLikeCatches.LoglikeId "
-                           "WHERE VesselDef.Nationality = ? "
-                           "GROUP BY VesselLogLike.TStep");
-
-    stmt.bind(std::make_tuple(model->getNation(nation).getName().toStdString()));
-
-    std::vector<double> keyData;
-    std::vector<double> valueData;
-
-    stmt.execute([&stmt, &keyData, &valueData](){
-        keyData.push_back(stmt.getIntValue(0));
-        valueData.push_back(stmt.getDoubleValue(1));
-        return true;
-    });
-#endif
+    FieldDef<FieldType::Real> f("");
+    switch (stattype) {
+    case NationsStat::Catches:
+        f = p->mVesselLoglikeCatchesTable->fldCatches;
+        break;
+        /*
+        case NationsStat::Earnings:
+            f = p->mVesselLoglikeTable->
+            valueData << it.value().at(nation).mRevenues;
+            break;
+        case NationsStat::ExEarnings:
+            valueData << it.value().at(nation).mExRevenues;
+            break;
+            */
+    case NationsStat::TimeAtSea:
+        f = p->mVesselLoglikeTable->timeAtSea;
+        break;
+    case NationsStat::Gav:
+        f = p->mVesselLoglikeTable->gav;
+        break;
+    case NationsStat::Vpuf:
+        f = p->mVesselLoglikeTable->vpuf;
+        break;
+    case NationsStat::SweptArea:
+        f = p->mVesselLoglikeTable->sweptArea;
+        break;
+    case NationsStat::RevenuePerSweptArea:
+        f = p->mVesselLoglikeTable->revenuePerSweptArea;
+        break;
+    case NationsStat::GVA:
+        f = p->mVesselLoglikeTable->GVA;
+        break;
+    case NationsStat::GVAPerRevenue:
+        f = p->mVesselLoglikeTable->GVAPerRevenue;
+        break;
+    case NationsStat::LabourSurplus:
+        f = p->mVesselLoglikeTable->LabourSurplus;
+        break;
+    case NationsStat::GrossProfit:
+        f = p->mVesselLoglikeTable->GrossProfit;
+        break;
+    case NationsStat::NetProfit:
+        f = p->mVesselLoglikeTable->NetProfit;
+        break;
+    case NationsStat::NetProfitMargin:
+        f = p->mVesselLoglikeTable->NetProfitMargin;
+        break;
+    case NationsStat::GVAPerFTE:
+        f = p->mVesselLoglikeTable->GVAPerFTE;
+        break;
+    case NationsStat::RoFTA:
+        f = p->mVesselLoglikeTable->RoFTA;
+        break;
+    case NationsStat::BER:
+        f = p->mVesselLoglikeTable->BER;
+        break;
+    case NationsStat::CRBER:
+        f = p->mVesselLoglikeTable->CRBER;
+        break;
+    case NationsStat::NetPresentValue:
+        f = p->mVesselLoglikeTable->NetPresentValue;
+        break;
+        /*
+    case NationsStat::numTrips:
+        f = p->mVesselLoglikeTable->numTrips;
+        break;*/
+    default:
+        throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
+    }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
                                                     p->mVesselLoglikeTable->fldTStep,
-                                                    sqlite::op::sum(p->mVesselLoglikeCatchesTable->fldCatches)
+                                                    sqlite::op::sum(f)
                                                     );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
-    select.join(p->mVesselLoglikeTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
-    select.where(p->mVesselDefTable->fldNationality.name());
+
+    if (isAggregate)
+        select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
+
+    select.where(op::eq(p->mVesselDefTable->fldNationality));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
     sqlite::SQLiteStatement stmt(p->db,select);
@@ -192,11 +237,6 @@ TimelineData SQLiteOutputStorage::loglikeNationAggregates(NationsStat statype, s
     });
 
     return data;
-}
-
-TimelineData SQLiteOutputStorage::loglikeNation(NationsStat stattype, string nation)
-{
-
 }
 
 void SQLiteOutputStorage::createAllTables()

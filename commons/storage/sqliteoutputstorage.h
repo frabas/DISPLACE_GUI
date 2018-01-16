@@ -25,7 +25,7 @@ class SQLiteStorage;
 }
 
 struct TimelineData {
-    std::vector<int> t;
+    std::vector<double> t;
     std::vector<double> v;
 };
 
@@ -62,8 +62,6 @@ public:
     TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);
 
 private:
-    TimelineData loglikeNationAggregates(displace::plot::NationsStat statype, std::string nation);
-    TimelineData loglikeNation(displace::plot::NationsStat stattype, std::string nation);
 };
 
 #endif // SQLITEOUTPUTSTORAGE_H

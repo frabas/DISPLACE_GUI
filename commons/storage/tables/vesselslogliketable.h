@@ -14,41 +14,41 @@ using namespace sqlite;
 class COMMONSSHARED_EXPORT VesselsLoglikeTable : public SQLiteTable
 {
 public:
-    const FieldDef<FieldType::Integer> & fldRowId = makeFieldDef("RowId", FieldType::Integer()).primaryKey();
-    const FieldDef<FieldType::Integer> & fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> & fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> & fldTStepDep = makeFieldDef("TStepDep",FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> & fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldRowId = makeFieldDef("RowId", FieldType::Integer()).primaryKey();
+    const FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldTStepDep = makeFieldDef("TStepDep",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
 
-    const FieldDef<FieldType::Integer> & fldMetierId = makeFieldDef("metierId",FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> & fldLastHarbour = makeFieldDef("lastHarbour",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldMetierId = makeFieldDef("metierId",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldLastHarbour = makeFieldDef("lastHarbour",FieldType::Integer()).notNull();
 
-    const FieldDef<FieldType::Real> & fldRevenueAV = makeFieldDef("revenueAV",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & revenueExAV = makeFieldDef("revenueExAV",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & timeAtSea = makeFieldDef("timeAtSea",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> fldRevenueAV = makeFieldDef("revenueAV",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> revenueExAV = makeFieldDef("revenueExAV",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> timeAtSea = makeFieldDef("timeAtSea",FieldType::Real()).notNull();
 
-    const FieldDef<FieldType::Integer> & reasonToGoBack = makeFieldDef("reasonToGoBack",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> reasonToGoBack = makeFieldDef("reasonToGoBack",FieldType::Integer()).notNull();
 
-    const FieldDef<FieldType::Real> & cumFuelCons = makeFieldDef("cumFuelCons",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & vpuf = makeFieldDef("vpuf",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & fuelCost = makeFieldDef("fuelCost",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & gav = makeFieldDef("gav",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & sweptArea = makeFieldDef("sweptArea",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & revenuePerSweptArea = makeFieldDef("revenuePerSweptArea",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> cumFuelCons = makeFieldDef("cumFuelCons",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> vpuf = makeFieldDef("vpuf",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> fuelCost = makeFieldDef("fuelCost",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> gav = makeFieldDef("gav",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> sweptArea = makeFieldDef("sweptArea",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> revenuePerSweptArea = makeFieldDef("revenuePerSweptArea",FieldType::Real()).notNull();
 
-    const FieldDef<FieldType::Real> & GVA = makeFieldDef("GVA",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & GVAPerRevenue = makeFieldDef("GVAPerRevenue",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & LabourSurplus = makeFieldDef("LabourSurplus",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & GrossProfit = makeFieldDef("GrossProfit",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & NetProfit = makeFieldDef("NetProfit",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & NetProfitMargin = makeFieldDef("NetProfitMargin",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & RoFTA = makeFieldDef("RoFTA",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & GVAPerFTE = makeFieldDef("GVAPerFTE",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & BER = makeFieldDef("BER",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & CRBER = makeFieldDef("CRBER",FieldType::Real()).notNull();
-    const FieldDef<FieldType::Real> & NetPresentValue = makeFieldDef("NetPresentValue",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> GVA = makeFieldDef("GVA",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> GVAPerRevenue = makeFieldDef("GVAPerRevenue",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> LabourSurplus = makeFieldDef("LabourSurplus",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> GrossProfit = makeFieldDef("GrossProfit",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> NetProfit = makeFieldDef("NetProfit",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> NetProfitMargin = makeFieldDef("NetProfitMargin",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> RoFTA = makeFieldDef("RoFTA",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> GVAPerFTE = makeFieldDef("GVAPerFTE",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> BER = makeFieldDef("BER",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> CRBER = makeFieldDef("CRBER",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> NetPresentValue = makeFieldDef("NetPresentValue",FieldType::Real()).notNull();
 
-    const FieldDef<FieldType::Integer> & numTrips = makeFieldDef("numTrips",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> numTrips = makeFieldDef("numTrips",FieldType::Integer()).notNull();
 
     VesselsLoglikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     void dropAndCreate();

@@ -239,7 +239,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
        << setprecision(0) << logbook.cumfcons << " "
        << setprecision(0) << logbook.travdist << " ";
     for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
-        ss  << setprecision(0) << *it << " " ;
+        ss  << setprecision(1) << *it << " " ;
     ss << setprecision(0)   << freq_metiers << " " << 0 << " " ;
     ss  << setprecision(0) << logbook.revenue_from_av_prices << " " ;
     ss  << setprecision(0) << logbook.revenue_explicit_from_av_prices << " " ;
@@ -250,7 +250,7 @@ void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vec
     ss  << setprecision(0) << logbook.sweptarea << " " ;
     ss  << setprecision(0) << logbook.revenuepersweptarea << " " ;
     for (std::vector<double>::iterator it2 = cumul_discards.begin(); it2 != cumul_discards.end(); ++it2)
-        ss  << setprecision(0) << *it2 << " " ;
+        ss  << setprecision(1) << *it2 << " " ;
     ss << setprecision(0) << logbook.GVA << " " ;
     ss << setprecision(3) << logbook.GVAPerRevenue << " " ;
     ss << setprecision(0) << logbook.LabourSurplus << " " ;

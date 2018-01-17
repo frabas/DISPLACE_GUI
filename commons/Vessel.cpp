@@ -2381,6 +2381,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                     all_biomass[szgroup]   =  Ns_at_szgroup_pop[szgroup]*wsz[szgroup];
                     avail_biomass[szgroup] =  all_biomass[szgroup]      *selectivity_per_stock[pop][szgroup]; // available for landings only
+
+                  //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
+                  //    cout  << "-------------------------" << endl;
+                  //    cout  << "explicit: Ns_at_szgroup_pop[szgroup] for szgroup " << szgroup << " is " << Ns_at_szgroup_pop[szgroup] << endl;
+                  //    cout  << "explicit: wsz[szgroup] for szgroup " << szgroup << " is " << wsz[szgroup] << endl;
+                  //    cout  << "explicit: selectivity_per_stock[pop][szgroup] for szgroup " << szgroup << " is " << selectivity_per_stock[pop][szgroup] << endl;
+                  //  }
+
                     // cumul
                     tot = tot+avail_biomass[szgroup];
                     tot2 = tot2+all_biomass[szgroup];
@@ -2393,6 +2401,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                     dout(cout  << "selectivity_per_stock[pop] " <<selectivity_per_stock[pop][szgroup] << endl);
                     dout(cout  << "avail_biomass[szgroup] " <<avail_biomass[szgroup] << endl);
                 }
+
+                //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
+                //    cout  << "tot biomass available on this node " << tot << endl;
+                //}
 
                 dout(cout  << "tot biomass available on this node " << tot << endl);
 
@@ -2443,7 +2455,14 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                                                 )*populations[pop]->get_cpue_multiplier() );
                                         // 'min' is there for not allowing catching more than available!
 
+                    dout(cout  << "-------------------------" << endl);
                     dout(cout  << "cpue_multiplier is " << populations[pop]->get_cpue_multiplier() << endl);
+                    dout(cout  << "tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl);
+
+                    //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
+                    //   cout  << "explicit: tot_catch_per_pop[pop] for pop " << pop << " is " << tot_catch_per_pop[pop] << endl;
+                    //   cout  << "explicit: given  that avai biomass is " << tot << endl;
+                    //}
 
                     // REMENBER THAT THE IDEAL WOULD BE DO THE THE GLM ON ABSOLUTE NUMBER OF INDIVIDUAL ON EACH NODE......
                     // BUT THIS INFO IS NOT AVAILABLE OF COURSE (WE ONLY HAVE THE N FOR THE FIRST OF JANUARY)
@@ -2672,9 +2691,10 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             vector <double>cumul_removals_at_szgroup_pop=this->get_loc()->get_removals_pops_at_szgroup(namepop);
                             removals_per_szgroup[szgroup]+=cumul_removals_at_szgroup_pop[szgroup];
 
-                            catch_pop_at_szgroup[pop][szgroup] = 0; // in weight
-                            discards_pop_at_szgroup[pop][szgroup] = 0;// in weight
-                            ping_catch_pop_at_szgroup[pop][szgroup]=0;
+                            // loglike exported variables
+                            catch_pop_at_szgroup[pop][szgroup] += 0; // in weight
+                            discards_pop_at_szgroup[pop][szgroup] += 0;// in weight
+                            ping_catch_pop_at_szgroup[pop][szgroup] = 0;
 
 
                         }
@@ -2944,6 +2964,19 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
 
 
+            // CHECK
+            // what is exported in loglike file for this pop is:
+            //if(this->get_name()=="GRK_KERK57_1_51" && pop==4){
+            //   double cumul=0.0;
+            //    for(size_t sz = 0; sz < catch_pop_at_szgroup[pop].size(); sz++)
+            //    {
+            //        cumul = cumul + catch_pop_at_szgroup[pop][sz];
+            //    }
+            //cout << " actually the catches for this explicit pop "<< pop << " that would be exported if trip would end now" << cumul << endl;
+            //}
+
+
+
         }
         else  // implicit pop:
         {
@@ -3011,7 +3044,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 cpue = rgamma(a_shape, a_scale);
 
             }
-
+           dout(cout  << "implicit: cpue for pop " << pop << " is " << cpue << endl);
 
             // TAC management effect for implicit species
             if(tstep>1 && is_tacs && is_individual_vessel_quotas)
@@ -3046,6 +3079,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 catch_pop_at_szgroup[pop][0] += cpue*PING_RATE;
                 ping_catch_pop_at_szgroup[pop][0]=cpue*PING_RATE;
                 discards_pop_at_szgroup[pop][0] = 0;
+
+
+
                 // CUMUL
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
                 this->cumdiscards+= discards_pop_at_szgroup[pop][0];

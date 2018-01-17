@@ -1407,7 +1407,7 @@ void MainWindow::showPaletteDialog (PaletteRole role)
 
 void MainWindow::on_popStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setPopulationStat((StatsController::PopulationStat)index);
+    mStatsController->setPopulationStat((displace::plot::PopulationStat)index);
 }
 
 void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
@@ -2882,11 +2882,11 @@ void MainWindow::on_actionExportAllGraphics_triggered()
 
         auto r = p.getOptions();
 
-        exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, StatsController::Aggregate, r);
-        exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, StatsController::Mortality, r);
-        exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, StatsController::SSB, r);
-
 #if 0
+        exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, displace::plot::PopulationStat::Aggregate, r);
+        exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, displace::plot::PopulationStat::Mortality, r);
+        exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, displace::plot::PopulationStat::SSB, r);
+
         exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Catches, r);
         exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Discards, r);
         exportPlot (out + QString("/nations_earnings.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Earnings, r);

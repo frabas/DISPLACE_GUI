@@ -28,6 +28,7 @@
 #include <plots/windfarmsstatsplot.h>
 #include <plots/shipsstatsplot.h>
 #include <plots/nationsstatsplot.h>
+#include <plots/populationsstatplot.h>
 
 #include <functional>
 
@@ -37,9 +38,8 @@ double StatsController::timelineMin = -1e20;
 StatsController::StatsController(QObject *parent)
     : QObject(parent),
       mPalette(),
-      mPlotPopulations(0),
-      mSelectedPopStat(Aggregate),
-      mPopTimeLine(0),
+      mSelectedPopStat(displace::plot::PopulationStat::Aggregate),
+      mPopPlot(0),
       mPlotHarbours(0),
       mHarbTimeLine(0),
       mSelectedNationsStat(displace::plot::NationsStat::Catches),
@@ -56,14 +56,11 @@ StatsController::StatsController(QObject *parent)
 
 void StatsController::setPopulationPlot(QCustomPlot *plot)
 {
-    mPlotPopulations = plot;
-    mPlotPopulations->legend->setVisible(true);
+    if (mPopPlot != nullptr)
+        delete mPopPlot;
 
-    if (mPopTimeLine != 0)
-        delete mPopTimeLine;
-
-    mPopTimeLine = new QCPItemLine(mPlotPopulations);
-    mPlotPopulations->addItem(mPopTimeLine);
+    plot->legend->setVisible(true);
+    mPopPlot = new PopulationsStatPlot(plot);
 }
 
 void StatsController::setHarboursPlot(QCustomPlot *plot)
@@ -200,9 +197,7 @@ void StatsController::updateStats(DisplaceModel *model)
     if (!model)
         return;
 
-    if (mPlotPopulations) {
-        updatePopulationStats(model, mSelectedPopStat, mPlotPopulations, mPopTimeLine);
-    }
+    updatePopulationStats(model, mSelectedPopStat);
     if (mNationsStatsPlotController) {
         updateNationStats(model, mSelectedNationsStat);
     }
@@ -228,7 +223,7 @@ void StatsController::updateStats(DisplaceModel *model)
     mLastModel = model;
 }
 
-void StatsController::setPopulationStat(StatsController::PopulationStat stat)
+void StatsController::setPopulationStat(displace::plot::PopulationStat stat)
 {
     mSelectedPopStat = stat;
     updateStats(mLastModel);
@@ -276,17 +271,9 @@ void StatsController::setShipsStat(displace::plot::ShipsStat stat)
     updateStats(mLastModel);
 }
 
-void StatsController::initPlots()
-{
-    if (mPlotPopulations) {
-
-    }
-}
-
 void StatsController::setCurrentTimeStep(double t)
 {
-    mPopTimeLine->start->setCoords(t, timelineMin);
-    mPopTimeLine->end->setCoords(t, timelineMax);
+    mPopPlot->setCurrentTimeStep(t);
 
     mHarbTimeLine->start->setCoords(t, timelineMin);
     mHarbTimeLine->end->setCoords(t, timelineMax);
@@ -300,7 +287,7 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
 {
     switch (st) {
     case Populations:
-        updatePopulationStats(model, static_cast<PopulationStat>(subtype), plot, line);
+        updatePopulationStats(model, static_cast<displace::plot::PopulationStat>(subtype));
         break;
         /*
     case Nations:
@@ -315,181 +302,12 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
     }
 }
 
-void StatsController::updatePopulationStats(DisplaceModel *model, PopulationStat popStat, QCustomPlot *plotPopulations, QCPItemLine *timeline)
+void StatsController::updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat)
 {
-    static const QPen pen(QColor(0,0,255,200));
-    plotPopulations->clearGraphs();
-    double val;
+    if (!mPopPlot)
+        return;
 
-    QList<int> interPopList = model->getInterestingPops();
-    QList<int> interSizeList = model->getInterestingSizes();
-    QList<int> graphList;
-    bool showtotal = model->isInterestingSizeTotal();
-    bool showavg =  model->isInterestingSizeAvg();
-    bool showmin =  model->isInterestingSizeMin();
-    bool showmax =  model->isInterestingSizeMax();
-
-    if (showmax)
-        graphList.push_front(-4);
-    if (showmin)
-        graphList.push_front(-3);
-    if (showavg)
-        graphList.push_front(-2);
-    if (showtotal)
-        graphList.push_front(-1);
-
-    if (graphList.size() == 0)
-        graphList.append(interSizeList);
-
-    /* If no size is selected, but aggregate is selected, select all sizes */
-    if (interSizeList.size() == 0 && graphList.size() != 0) {
-        for(int i = 0; i < model->getSzGrupsCount(); ++i)
-            interSizeList.push_back(i);
-    }
-
-    int szNum = interSizeList.size();
-    int graphNum = graphList.size();
-
-    QList<QCPGraph *>graphs;
-    QList<QVector<double> >keyData;
-    QList<QVector<double> >valueData;
-
-    double t = model->getCurrentStep();
-    if (timeline != nullptr) {
-        timeline->start->setCoords(t, timelineMin);
-        timeline->end->setCoords(t, timelineMax);
-    }
-
-    foreach (int ipop, interPopList) {
-        for (int igraph = 0; igraph < graphNum; ++igraph) {
-            // Creates graph. Index in list are: ip * nsz + isz
-            QCPGraph *graph = plotPopulations->addGraph();
-            QColor col = mPalette.colorByIndex(ipop);
-
-            graph->setLineStyle(QCPGraph::lsLine);
-            graph->setPen(QPen(QBrush(col),2));
-
-            col.setAlpha(128);
-            graph->setBrush(QBrush(col));
-
-            switch (graphList[igraph]) {
-            case -4:
-                graph->setName(QString(QObject::tr("Pop %1 Max")).arg(ipop));
-                break;
-            case -3:
-                graph->setName(QString(QObject::tr("Pop %1 Min")).arg(ipop));
-                break;
-            case -2:
-                graph->setName(QString(QObject::tr("Pop %1 Avg")).arg(ipop));
-                break;
-            case -1:
-                graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ipop));
-                break;
-            default:
-                graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ipop).arg(graphList[igraph]+1));
-            }
-
-            graphs.push_back(graph);
-            keyData.push_back(QVector<double>());
-            valueData.push_back(QVector<double>());
-        }
-    }
-
-    int nsteps = model->getPopulationsValuesCount();
-
-    DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
-    for (int istep = 0; istep <nsteps; ++istep) {
-        int ninterPop = interPopList.size();
-        for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
-
-            // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
-                val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], popStat);
-                if (iInterSize == 0) {
-                    mMin = val;
-                    mMax = val;
-                } else {
-                    if (mMin > val)
-                        mMin = val;
-                    if (mMax < val)
-                        mMax = val;
-                }
-                mAvg += val;
-                mTot += val;
-            }
-            if (szNum > 0)
-                mAvg /= szNum;
-
-            for (int isz = 0; isz < graphNum; ++isz) {
-                int gidx = iinterpPop * graphNum + isz;
-
-                keyData[gidx] << it.key();
-                switch (graphList[isz]) {
-                case -4:
-                    val = mMax;
-                    break;
-                case -3:
-                    val = mMin;
-                    break;
-                case -2:
-                    val = mAvg;
-                    break;
-                case -1:
-                    val = mTot;
-                    break;
-                default:
-                    val = getPopStatValue(model, it.key(), interPopList[iinterpPop], graphList[isz], popStat);
-                    break;
-                }
-
-                valueData[gidx] << val;
-            }
-        }
-        ++it;
-    }
-
-    for (int i = 0; i < graphs.size(); ++i) {
-        graphs[i]->setData(keyData.at(i), valueData.at(i));
-    }
-
-
-    switch (popStat) {
-    case Aggregate:
-        plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotPopulations->yAxis->setLabel(QObject::tr("Numbers ('000)"));
-        break;
-    case Mortality:
-        plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotPopulations->yAxis->setLabel(QObject::tr("F"));
-        break;
-    case SSB:
-        plotPopulations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotPopulations->yAxis->setLabel(QObject::tr("SSB (kg)"));
-        break;
-    }
-
-
-    plotPopulations->rescaleAxes();
-    plotPopulations->replot();
-}
-
-double StatsController::getPopStatValue(DisplaceModel *model, int tstep, int popid, int szid, StatsController::PopulationStat stattype)
-{
-    switch (stattype) {
-    case Aggregate:
-        return model->getPopulationsAtStep(tstep, popid).getAggregateAt(szid);
-    case Mortality:
-        return model->getPopulationsAtStep(tstep, popid).getMortalityAt(szid);
-    case SSB: {
-        auto &x = model->getPopulationsAtStep(tstep, popid).getSSB();
-        if (szid < x.size())
-            return x.at(szid);
-        return 0;
-        }
-    }
-
-    return 0;
+    mPopPlot->update(model, popStat);
 }
 
 void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat)

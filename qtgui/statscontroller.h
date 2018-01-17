@@ -35,6 +35,7 @@ class FishfarmsStatsPlot;
 class WindfarmsStatsPlot;
 class ShipsStatsPlot;
 class NationsStatsPlot;
+class PopulationsStatPlot;
 
 class StatsController : public QObject
 {
@@ -57,9 +58,8 @@ public:
         Populations, Nations, Harbours, Metiers
     };
 
-    enum PopulationStat { Aggregate, Mortality, SSB };
-    void setPopulationStat(PopulationStat stat);
-    PopulationStat getPopulationStat() const { return mSelectedPopStat; }
+    void setPopulationStat(displace::plot::PopulationStat stat);
+    displace::plot::PopulationStat getPopulationStat() const { return mSelectedPopStat; }
 
     void setNationsStat(displace::plot::NationsStat stat);
     displace::plot::NationsStat getNationsStat() const { return mSelectedNationsStat; }
@@ -89,16 +89,12 @@ public:
 
     /* == */
 
-    void initPlots();
-
     void setCurrentTimeStep(double t);
 
     void plotGraph (DisplaceModel *model, StatType st, int subtype, QCustomPlot *plot, QCPItemLine *line);
 
 protected:
-    void updatePopulationStats(DisplaceModel *model, PopulationStat popStat, QCustomPlot *plotPopulations, QCPItemLine *timeline);
-    double getPopStatValue (DisplaceModel *model, int tstep, int popid, int szid, PopulationStat stattype);
-
+    void updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat);
     void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat);
     void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
     void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
@@ -111,9 +107,8 @@ private:
     Palette mPalette;
 
     /* Populations stuff */
-    QCustomPlot *mPlotPopulations;
-    PopulationStat mSelectedPopStat;
-    QCPItemLine *mPopTimeLine;
+    displace::plot::PopulationStat mSelectedPopStat;
+    PopulationsStatPlot *mPopPlot;
 
     /* Harbour stuff */
     QCustomPlot *mPlotHarbours;

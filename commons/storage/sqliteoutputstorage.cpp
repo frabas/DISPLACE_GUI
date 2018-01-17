@@ -104,7 +104,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     log.tstepdep = v->get_tstep_dep();
     log.node_id = v->get_loc()->get_idx_node();
     log.metierId = -1;
-    log.lastHarbour = -1;
+    log.lastHarbour = v->get_loc()->get_idx_node().toIndex();
     log.revenueAV = v->getLastTripRevenues();
     log.revenueExAV = v->getLastTripExplicitRevenues();
     log.timeAtSea = v->get_timeatsea();

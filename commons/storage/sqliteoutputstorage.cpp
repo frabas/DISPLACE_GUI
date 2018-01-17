@@ -8,6 +8,7 @@
 #include "tables/vesselslogliketable.h"
 #include "tables/nodesdeftable.h"
 #include "tables/poptable.h"
+#include "tables/popstattable.h"
 #include "tables/vesselvmsliketable.h"
 #include "tables/vesselsloglikecatchestable.h"
 #include "tables/fishfarmstable.h"
@@ -29,6 +30,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<NodesDefTable> mPopNodesTable;
+    std::shared_ptr<PopStatTable> mPopStatTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
@@ -51,6 +53,7 @@ void SQLiteOutputStorage::open()
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
     p->mPopNodesTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
+    p->mPopStatTable = std::make_shared<PopStatTable>(p->db, "NodesStat");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
@@ -84,6 +87,11 @@ void SQLiteOutputStorage::exportFishfarmLog(Fishfarm *fishfarm, int tstep)
 void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
 {
     p->mWindmillsTable->exportWindmillData(windmill, tstep);
+}
+
+void SQLiteOutputStorage::exportPopNodes(int tstep, Node *node)
+{
+    p->mPopStatTable->insert(tstep, node);
 }
 
 void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul,const std::vector<double> &discards, unsigned int tstep)
@@ -244,6 +252,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselLoglikeTable->dropAndCreate();
     p->mVesselVmslikeTable->dropAndCreate();
     p->mPopNodesTable->dropAndCreate();
+    p->mPopStatTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();

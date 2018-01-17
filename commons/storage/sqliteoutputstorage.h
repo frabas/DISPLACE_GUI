@@ -19,6 +19,7 @@ class Windmill;
 class WindfarmsTable;
 class Vessel;
 class Population;
+class Node;
 
 namespace sqlite {
 class SQLiteStorage;
@@ -57,6 +58,7 @@ public:
 
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
     void exportWindmillsLog(Windmill *windmill, int tstep);
+    void exportPopNodes(int tstep, Node *node);
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);
 
     TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);

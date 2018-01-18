@@ -16,9 +16,10 @@ class Node;
 
 class COMMONSSHARED_EXPORT NodesDefTable : public SQLiteTable
 {
-    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> fldLat = makeFieldDef("Lat",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Text> fldNodeName = makeFieldDef("NodeName",FieldType::Text());
+    const FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();
+    const FieldDef<FieldType::Real> fldLat = makeFieldDef("Lat",FieldType::Real()).notNull();
 
 public:
     NodesDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);

@@ -36,6 +36,7 @@ class WindfarmsStatsPlot;
 class ShipsStatsPlot;
 class NationsStatsPlot;
 class PopulationsStatPlot;
+class HarboursStatPlot;
 
 class StatsController : public QObject
 {
@@ -64,11 +65,8 @@ public:
     void setNationsStat(displace::plot::NationsStat stat);
     displace::plot::NationsStat getNationsStat() const { return mSelectedNationsStat; }
 
-    enum HarboursStat { H_Catches, H_Discards, H_Earnings, H_Gav, H_Vpuf, H_SweptArea, H_RevenuePerSweptArea,
-                        H_GVA, H_GVAPerRevenue, H_LabourSurplus, H_GrossProfit, H_NetProfit, H_NetProfitMargin, H_GVAPerFTE, H_RoFTA, H_BER, H_CRBER, H_NetPresentValue, H_numTrips};
-
-    void setHarbourStat(HarboursStat stat);
-    HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
+    void setHarbourStat(displace::plot::HarboursStat stat);
+    displace::plot::HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
 
     enum MetiersStat { M_Catches, M_Discards, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea,
                        M_GVA, M_GVAPerRevenue, M_LabourSurplus, M_GrossProfit, M_NetProfit, M_NetProfitMargin, M_GVAPerFTE, M_RoFTA, M_BER, M_CRBER, M_NetPresentValue, M_numTrips};
@@ -96,7 +94,7 @@ public:
 protected:
     void updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat);
     void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat);
-    void updateHarboursStats (DisplaceModel *model, HarboursStat mSelectedNationsStat, QCustomPlot *mPlotNations, QCPItemLine *timeLine);
+    void updateHarboursStats (DisplaceModel *model);
     void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
     void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
@@ -111,9 +109,8 @@ private:
     PopulationsStatPlot *mPopPlot;
 
     /* Harbour stuff */
-    QCustomPlot *mPlotHarbours;
-    HarboursStat mSelectedHarboursStat;
-    QCPItemLine *mHarbTimeLine;
+    displace::plot::HarboursStat mSelectedHarboursStat;
+    HarboursStatPlot *mPlotHarbours;
 
     /* Nations */
     QCustomPlot *mNationsPlot;

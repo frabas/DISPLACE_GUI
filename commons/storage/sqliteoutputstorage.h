@@ -62,6 +62,7 @@ public:
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);
 
     TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);
+    TimelineData getVesselLoglikeDataByHarbour(displace::plot::HarboursStat stattype, int harbourid);
 
 private:
 };

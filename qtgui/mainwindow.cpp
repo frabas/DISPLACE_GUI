@@ -1417,7 +1417,7 @@ void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
 
 void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setHarbourStat((StatsController::HarboursStat)index);
+    mStatsController->setHarbourStat((displace::plot::HarboursStat)index);
 }
 
 void MainWindow::on_metierStatSelector_currentIndexChanged(int index)
@@ -2908,7 +2908,6 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::CRBER, r);
         exportPlot (out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::NetPresentValue, r);
         exportPlot (out + QString("/nations_numTrips.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::numTrips, r);
-#endif
 
         exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, StatsController::H_Catches, r);
         exportPlot (out + QString("/harbours_discards.%1").arg(r.format), StatsController::Harbours, StatsController::H_Discards, r);
@@ -2929,6 +2928,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/harbours_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::H_CRBER, r);
         exportPlot (out + QString("/harbours_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::H_NetPresentValue, r);
         exportPlot (out + QString("/harbours_numTrips.%1").arg(r.format), StatsController::Nations, StatsController::H_numTrips, r);
+#endif
 
         exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, StatsController::M_Catches, r);
         exportPlot (out + QString("/metiers_discards.%1").arg(r.format), StatsController::Metiers, StatsController::M_Discards, r);

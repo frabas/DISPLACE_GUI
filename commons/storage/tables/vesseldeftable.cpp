@@ -35,7 +35,7 @@ void VesselDefTable::dropAndCreate()
 void VesselDefTable::feedVesselsDefTable(const std::vector<std::string> &vesselids, const std::vector<double> &speeds, const std::vector<double> &length)
 {
     auto l = vesselids.size();
-    for (int i = 0; i < l; ++i) {
+    for (size_t i = 0; i < l; ++i) {
         std::string nat;
         std::copy(vesselids[i].begin(), vesselids[i].begin() + 3, std::back_inserter(nat));
         insert (fldName.assign(vesselids[i]),

@@ -19,6 +19,8 @@
 #include <Vessel.h>
 #include <Population.h>
 
+#include <QDebug>
+
 using namespace sqlite;
 using namespace displace::plot;
 
@@ -242,6 +244,104 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         data.v.push_back(stmt.getDoubleValue(1));
         return true;
     });
+
+    return data;
+}
+
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat stattype, int harbourid)
+{
+    bool isAggregate = false;
+    if (stattype == HarboursStat::H_Catches || stattype == HarboursStat::H_Discards) {
+        isAggregate = true;
+    }
+
+    FieldDef<FieldType::Real> f("");
+    switch (stattype) {
+    case HarboursStat::H_Catches:
+        f = p->mVesselLoglikeCatchesTable->fldCatches;
+        break;
+    case HarboursStat::H_Discards:
+        f = p->mVesselLoglikeCatchesTable->fldDiscards;
+        break;
+    case HarboursStat::H_Earnings:
+        f = p->mVesselLoglikeTable->fldRevenueAV;
+        break;
+    case HarboursStat::H_Gav:
+        f = p->mVesselLoglikeTable->gav;
+        break;
+    case HarboursStat::H_Vpuf:
+        f = p->mVesselLoglikeTable->vpuf;
+        break;
+    case HarboursStat::H_SweptArea:
+        f = p->mVesselLoglikeTable->sweptArea;
+        break;
+    case HarboursStat::H_RevenuePerSweptArea:
+        f = p->mVesselLoglikeTable->revenuePerSweptArea;
+        break;
+    case HarboursStat::H_GVA:
+        f = p->mVesselLoglikeTable->GVA;
+        break;
+    case HarboursStat::H_GVAPerRevenue:
+        f = p->mVesselLoglikeTable->GVAPerRevenue;
+        break;
+    case HarboursStat::H_LabourSurplus:
+        f = p->mVesselLoglikeTable->LabourSurplus;
+        break;
+    case HarboursStat::H_GrossProfit:
+        f = p->mVesselLoglikeTable->GrossProfit;
+        break;
+    case HarboursStat::H_NetProfit:
+        f = p->mVesselLoglikeTable->NetProfit;
+        break;
+    case HarboursStat::H_NetProfitMargin:
+        f = p->mVesselLoglikeTable->NetProfitMargin;
+        break;
+    case HarboursStat::H_GVAPerFTE:
+        f = p->mVesselLoglikeTable->GVAPerFTE;
+        break;
+    case HarboursStat::H_RoFTA:
+        f = p->mVesselLoglikeTable->RoFTA;
+        break;
+    case HarboursStat::H_BER:
+        f = p->mVesselLoglikeTable->BER;
+        break;
+    case HarboursStat::H_CRBER:
+        f = p->mVesselLoglikeTable->CRBER;
+        break;
+    case HarboursStat::H_NetPresentValue:
+        f = p->mVesselLoglikeTable->NetPresentValue;
+        break;
+    case HarboursStat::H_numTrips:
+        f = sqlite::cast<sqlite::FieldType::Real>(p->mVesselLoglikeTable->numTrips);
+        break;
+    default:
+        throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
+    }
+
+    auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
+                                                    p->mVesselLoglikeTable->fldTStep,
+                                                    sqlite::op::sum(f)
+                                                    );
+    select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
+
+    if (isAggregate)
+        select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
+
+    select.where(op::eq(p->mVesselLoglikeTable->fldLastHarbour));
+    select.groupBy(p->mVesselLoglikeTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(std::make_tuple(harbourid));
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    qDebug() << "Harb Select: " << QString::fromStdString(select.string()) << " (" << harbourid << ")";
 
     return data;
 }

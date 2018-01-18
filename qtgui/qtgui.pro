@@ -197,7 +197,8 @@ SOURCES += \
     objects/shiptypesentity.cpp \
     plots/nationsstatsplot.cpp \
     plots/populationsstatplot.cpp \
-    plots/harboursstatplot.cpp
+    plots/harboursstatplot.cpp \
+    plots/metiersstatsplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -339,7 +340,8 @@ HEADERS += \
     objects/shiptypesentity.h \
     plots/nationsstatsplot.h \
     plots/populationsstatplot.h \
-    plots/harboursstatplot.h
+    plots/harboursstatplot.h \
+    plots/metiersstatsplot.h
 
 ### mSQLiteCpp dependency
 

@@ -37,6 +37,7 @@ class ShipsStatsPlot;
 class NationsStatsPlot;
 class PopulationsStatPlot;
 class HarboursStatPlot;
+class MetiersStatsPlot;
 
 class StatsController : public QObject
 {
@@ -68,10 +69,8 @@ public:
     void setHarbourStat(displace::plot::HarboursStat stat);
     displace::plot::HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
 
-    enum MetiersStat { M_Catches, M_Discards, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea,
-                       M_GVA, M_GVAPerRevenue, M_LabourSurplus, M_GrossProfit, M_NetProfit, M_NetProfitMargin, M_GVAPerFTE, M_RoFTA, M_BER, M_CRBER, M_NetPresentValue, M_numTrips};
-    void setMetiersStat(MetiersStat stat);
-    MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
+    void setMetiersStat(displace::plot::MetiersStat stat);
+    displace::plot::MetiersStat getMetiersStat() const { return mSelectedMetiersStat; }
 
     void setBenthosStat(displace::plot::BenthosStat stat);
     displace::plot::BenthosStat getBenthosStat() const { return mSelectedBenthosStat; }
@@ -95,7 +94,7 @@ protected:
     void updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat);
     void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat);
     void updateHarboursStats (DisplaceModel *model);
-    void updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine);
+    void updateMetiersStats(DisplaceModel *model);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
     void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     void updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat);
@@ -119,9 +118,8 @@ private:
     NationsStatsPlot *mNationsStatsPlotController = nullptr;
 
     /* Metiers */
-    QCustomPlot *mPlotMetiers;
-    MetiersStat mSelectedMetiersStat = M_Catches;
-    QCPItemLine *mMetTimeLine;
+    displace::plot::MetiersStat mSelectedMetiersStat = displace::plot::MetiersStat::M_Catches;
+    MetiersStatsPlot *mPlotMetiers;
 
     /* Benthos Functional Groups */
     QCustomPlot *mBenthosFuncGroupsPlot = nullptr;

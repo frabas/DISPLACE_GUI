@@ -1422,7 +1422,7 @@ void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
 
 void MainWindow::on_metierStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setMetiersStat(static_cast<StatsController::MetiersStat>(index));
+    mStatsController->setMetiersStat(static_cast<displace::plot::MetiersStat>(index));
 }
 
 void MainWindow::on_play_params_clicked()
@@ -2928,7 +2928,6 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/harbours_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::H_CRBER, r);
         exportPlot (out + QString("/harbours_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::H_NetPresentValue, r);
         exportPlot (out + QString("/harbours_numTrips.%1").arg(r.format), StatsController::Nations, StatsController::H_numTrips, r);
-#endif
 
         exportPlot (out + QString("/metiers_catches.%1").arg(r.format), StatsController::Metiers, StatsController::M_Catches, r);
         exportPlot (out + QString("/metiers_discards.%1").arg(r.format), StatsController::Metiers, StatsController::M_Discards, r);
@@ -2947,6 +2946,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/metiers_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::M_CRBER, r);
         exportPlot (out + QString("/metiers_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::M_NetPresentValue, r);
         exportPlot (out + QString("/metiers_numTrips.%1").arg(r.format), StatsController::Nations, StatsController::M_numTrips, r);
+#endif
 
         s.setValue("allplots_out", out);
     }

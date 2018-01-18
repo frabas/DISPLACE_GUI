@@ -30,6 +30,7 @@
 #include <plots/nationsstatsplot.h>
 #include <plots/populationsstatplot.h>
 #include <plots/harboursstatplot.h>
+#include <plots/metiersstatsplot.h>
 
 #include <functional>
 
@@ -46,8 +47,7 @@ StatsController::StatsController(QObject *parent)
       mSelectedNationsStat(displace::plot::NationsStat::Catches),
       mNatTimeLine(0),
       mPlotMetiers(0),
-      mSelectedMetiersStat(M_Catches),
-      mMetTimeLine(0),
+      mSelectedMetiersStat(displace::plot::MetiersStat::M_Catches),
       mLastModel(0)
 {
     mPalette = PaletteManager::instance()->palette(PopulationRole);
@@ -73,14 +73,9 @@ void StatsController::setHarboursPlot(QCustomPlot *plot)
 
 void StatsController::setMetiersPlot(QCustomPlot *plot)
 {
-    mPlotMetiers = plot;
-    mPlotMetiers->legend->setVisible(true);
-
-    if (mMetTimeLine != 0)
-        delete mMetTimeLine;
-
-    mMetTimeLine = new QCPItemLine(mPlotMetiers);
-    mPlotMetiers->addItem(mMetTimeLine);
+    if (mPlotMetiers != nullptr)
+        delete mPlotMetiers;
+    mPlotMetiers = new MetiersStatsPlot(plot);
 }
 
 void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller)
@@ -197,10 +192,10 @@ void StatsController::updateStats(DisplaceModel *model)
     if (mNationsStatsPlotController) {
         updateNationStats(model, mSelectedNationsStat);
     }
+
     updateHarboursStats(model);
-    if (mPlotMetiers) {
-        updateMetiersStats(model, mSelectedMetiersStat, mPlotMetiers, mMetTimeLine);
-    }
+    updateMetiersStats(model);
+
     if (mBenthosFuncGroupsPlot) {
         updateBenthosStats(model, mSelectedBenthosStat);
     }
@@ -235,7 +230,7 @@ void StatsController::setHarbourStat(displace::plot::HarboursStat stat)
     updateStats(mLastModel);
 }
 
-void StatsController::setMetiersStat(StatsController::MetiersStat stat)
+void StatsController::setMetiersStat(displace::plot::MetiersStat stat)
 {
     mSelectedMetiersStat = stat;
     updateStats(mLastModel);
@@ -269,6 +264,7 @@ void StatsController::setCurrentTimeStep(double t)
 {
     mPopPlot->setCurrentTimeStep(t);
     mPlotHarbours->setCurrentTimeStep(t);
+    mPlotMetiers->setCurrentTimeStep(t);
 
     mNatTimeLine->start->setCoords(t, timelineMin);
     mNatTimeLine->end->setCoords(t, timelineMax);
@@ -289,9 +285,10 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
     case Harbours:
         updateHarboursStats(model);
         break;*/
+        /*
     case Metiers:
         updateMetiersStats(model, static_cast<MetiersStat>(subtype), plot, line);
-        break;
+        break;*/
     }
 }
 
@@ -316,219 +313,12 @@ void StatsController::updateHarboursStats(DisplaceModel *model)
     }
 }
 
-void StatsController::updateMetiersStats(DisplaceModel *model, MetiersStat metStat, QCustomPlot *plotMetiers, QCPItemLine *metTimeLine)
+void StatsController::updateMetiersStats(DisplaceModel *model)
 {
-    static const QPen pen(QColor(0,0,255,200));
-    plotMetiers->clearGraphs();
-
-    auto &dl = model->getMetiersList();
-
-    double t = model->getCurrentStep();
-    if (metTimeLine != nullptr) {
-        metTimeLine->start->setCoords(t, timelineMin);
-        metTimeLine->end->setCoords(t, timelineMax);
+    if (mPlotMetiers) {
+        mPlotMetiers->setStat (mSelectedMetiersStat);
+        mPlotMetiers->update(model);
     }
-
-    int cnt = 0;
-    Palette::Iterator col_it = mPalette.begin();
-
-    switch (metStat) {
-    case M_Catches:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Landings (kg)"));
-        break;
-    case M_Discards:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Discards (kg)"));
-        break;
-    case M_Revenues:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
-        break;
-    case M_Gav:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("GAV (Euro)"));
-        break;
-    case M_Vpuf:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("VPUF (Euro per Litre)"));
-        break;
-    case M_SweptArea:
-       plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
-        break;
-    case M_RevenuesPerSweptArea:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (euro/m^2)"));
-        break;
-    case M_GVA:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("euro"));
-        break;
-    case M_GVAPerRevenue:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
-        break;
-    case M_LabourSurplus:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_GrossProfit:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_NetProfit:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_NetProfitMargin:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("%"));
-        break;
-    case M_GVAPerFTE:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_RoFTA:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_BER:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_CRBER:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Ratio"));
-        break;
-    case M_NetPresentValue:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("Euro"));
-        break;
-    case M_numTrips:
-        plotMetiers->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotMetiers->yAxis->setLabel(QObject::tr("#"));
-        break;
-
-    }
-
-    foreach (auto  d, dl) {
-        if (!d->ticked)
-            continue;
-
-        if (col_it == mPalette.end())
-            col_it = mPalette.begin();
-
-        QVector<double> keyData;
-        QVector<double> valueData;
-
-        QCPGraph *graph = plotMetiers->addGraph();
-        graph->setPen(pen);
-        graph->setLineStyle(QCPGraph::lsLine);
-        QColor col = col_it != mPalette.end() ? *col_it : QColor();
-
-        col.setAlpha(128);
-        graph->setBrush(QBrush(col));
-        ++cnt;
-
-        graph->setName(d->description());
-
-        int n = model->getMetiersStatsCount();
-        auto it = model->getMetiersStatsFirstValue();
-
-        int ip = d->metierId;
-
-        for (int i = 0; i <n; ++i) {
-            if (it.value().size() > ip) {
-                keyData << it.key();
-
-                switch (metStat) {
-                case M_Catches:
-                    if (d->populationId == -1)
-                        valueData << it.value().at(ip).mTotCatches;
-                    else {
-                        if (it.value().at(ip).mCatchesPerPop.size() > d->populationId)
-                            valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
-                        else
-                            valueData << 0;
-                    }
-                    break;
-                case M_Discards:
-                    if (d->populationId == -1)
-                        valueData << it.value().at(ip).mTotDiscards;
-                    else {
-                        if (it.value().at(ip).mDiscardsPerPop.size() > d->populationId)
-                            valueData << it.value().at(ip).mDiscardsPerPop[d->populationId];
-                        else
-                            valueData << 0;
-                    }
-                    break;
-                case M_Revenues:
-                    valueData << it.value().at(ip).revenueAV;
-                    break;
-                case M_Gav:
-                    valueData << it.value().at(ip).gav;
-                    break;
-                case M_Vpuf:
-                    valueData << it.value().at(ip).vpuf;
-                    break;
-                case M_SweptArea:
-                    valueData << it.value().at(ip).mSweptArea;
-                    break;
-                case M_RevenuesPerSweptArea:
-                    valueData << it.value().at(ip).mRevenuePerSweptArea;
-                    break;                   
-                case M_GVA:
-                    valueData << it.value().at(ip).GVA;
-                    break;
-                case M_GVAPerRevenue:
-                    valueData << it.value().at(ip).GVAPerRevenue;
-                    break;
-                case M_LabourSurplus:
-                    valueData << it.value().at(ip).LabourSurplus;
-                    break;
-                case M_GrossProfit:
-                    valueData << it.value().at(ip).GrossProfit;
-                    break;
-                case M_NetProfit:
-                    valueData << it.value().at(ip).NetProfit;
-                    break;
-                case M_NetProfitMargin:
-                    valueData << it.value().at(ip).NetProfitMargin;
-                    break;
-                case M_GVAPerFTE:
-                    valueData << it.value().at(ip).GVAPerFTE;
-                    break;
-                case M_RoFTA:
-                    valueData << it.value().at(ip).RoFTA;
-                    break;
-                case M_BER:
-                    valueData << it.value().at(ip).BER;
-                    break;
-                case M_CRBER:
-                    valueData << it.value().at(ip).CRBER;
-                    break;
-                case M_NetPresentValue:
-                    valueData << it.value().at(ip).NetPresentValue;
-                    break;
-                case M_numTrips:
-                    valueData << it.value().at(ip).numTrips;
-                    break;
-
-
-
-                }
-            }
-            ++it;
-        }
-
-        graph->setData(keyData, valueData);
-
-        ++col_it;
-    }
-
-    plotMetiers->rescaleAxes();
-    plotMetiers->replot();
 }
 
 void StatsController::updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat)

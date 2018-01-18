@@ -19,6 +19,9 @@ enum class NationsStat { Catches, Discards, Earnings, ExEarnings,TimeAtSea, Gav,
 enum class HarboursStat { H_Catches, H_Discards, H_Earnings, H_Gav, H_Vpuf, H_SweptArea, H_RevenuePerSweptArea,
                  H_GVA, H_GVAPerRevenue, H_LabourSurplus, H_GrossProfit, H_NetProfit, H_NetProfitMargin, H_GVAPerFTE, H_RoFTA, H_BER, H_CRBER, H_NetPresentValue, H_numTrips };
 
+enum class MetiersStat { M_Catches, M_Discards, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea,
+                   M_GVA, M_GVAPerRevenue, M_LabourSurplus, M_GrossProfit, M_NetProfit, M_NetProfitMargin, M_GVAPerFTE, M_RoFTA, M_BER, M_CRBER, M_NetPresentValue, M_numTrips};
+
 }
 }
 

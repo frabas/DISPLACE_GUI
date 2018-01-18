@@ -13,6 +13,7 @@ void NodesDefTable::dropAndCreate()
         db()->dropTable(name());
 
     create(std::make_tuple(fldNodeId,
+                           fldNodeName,
                            fldLong, fldLat
                            ));
 }
@@ -20,6 +21,7 @@ void NodesDefTable::dropAndCreate()
 void NodesDefTable::insert(Node *node)
 {
     SQLiteTable::insert(fldNodeId.assign(node->get_idx_node().toIndex()),
+                        fldNodeName.assign(node->get_name()),
                         fldLong.assign(node->get_x()),
                         fldLat.assign(node->get_y())
             );

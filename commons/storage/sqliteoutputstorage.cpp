@@ -17,6 +17,7 @@
 #include <cassert>
 
 #include <Vessel.h>
+#include <Metier.h>
 #include <Population.h>
 
 #include <QDebug>
@@ -105,7 +106,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     log.tstep = tstep;
     log.tstepdep = v->get_tstep_dep();
     log.node_id = v->get_loc()->get_idx_node();
-    log.metierId = -1;
+    log.metierId = v->get_metier()->get_name();
     log.lastHarbour = v->get_loc()->get_idx_node().toIndex();
     log.revenueAV = v->getLastTripRevenues();
     log.revenueExAV = v->getLastTripExplicitRevenues();
@@ -341,7 +342,103 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         return true;
     });
 
-    qDebug() << "Harb Select: " << QString::fromStdString(select.string()) << " (" << harbourid << ")";
+    return data;
+}
+
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat stattype, int metierid)
+{
+    bool isAggregate = false;
+    if (stattype == MetiersStat::M_Catches || stattype == MetiersStat::M_Discards) {
+        isAggregate = true;
+    }
+
+    FieldDef<FieldType::Real> f("");
+    switch (stattype) {
+    case MetiersStat::M_Catches:
+        f = p->mVesselLoglikeCatchesTable->fldCatches;
+        break;
+    case MetiersStat::M_Discards:
+        f = p->mVesselLoglikeCatchesTable->fldDiscards;
+        break;
+    case MetiersStat::M_Revenues:
+        f = p->mVesselLoglikeTable->fldRevenueAV;
+        break;
+    case MetiersStat::M_Gav:
+        f = p->mVesselLoglikeTable->gav;
+        break;
+    case MetiersStat::M_Vpuf:
+        f = p->mVesselLoglikeTable->vpuf;
+        break;
+    case MetiersStat::M_SweptArea:
+        f = p->mVesselLoglikeTable->sweptArea;
+        break;
+    case MetiersStat::M_RevenuesPerSweptArea:
+        f = p->mVesselLoglikeTable->revenuePerSweptArea;
+        break;
+    case MetiersStat::M_GVA:
+        f = p->mVesselLoglikeTable->GVA;
+        break;
+    case MetiersStat::M_GVAPerRevenue:
+        f = p->mVesselLoglikeTable->GVAPerRevenue;
+        break;
+    case MetiersStat::M_LabourSurplus:
+        f = p->mVesselLoglikeTable->LabourSurplus;
+        break;
+    case MetiersStat::M_GrossProfit:
+        f = p->mVesselLoglikeTable->GrossProfit;
+        break;
+    case MetiersStat::M_NetProfit:
+        f = p->mVesselLoglikeTable->NetProfit;
+        break;
+    case MetiersStat::M_NetProfitMargin:
+        f = p->mVesselLoglikeTable->NetProfitMargin;
+        break;
+    case MetiersStat::M_GVAPerFTE:
+        f = p->mVesselLoglikeTable->GVAPerFTE;
+        break;
+    case MetiersStat::M_RoFTA:
+        f = p->mVesselLoglikeTable->RoFTA;
+        break;
+    case MetiersStat::M_BER:
+        f = p->mVesselLoglikeTable->BER;
+        break;
+    case MetiersStat::M_CRBER:
+        f = p->mVesselLoglikeTable->CRBER;
+        break;
+    case MetiersStat::M_NetPresentValue:
+        f = p->mVesselLoglikeTable->NetPresentValue;
+        break;
+    case MetiersStat::M_numTrips:
+        f = sqlite::cast<sqlite::FieldType::Real>(p->mVesselLoglikeTable->numTrips);
+        break;
+    default:
+        throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
+    }
+
+    auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
+                                                    p->mVesselLoglikeTable->fldTStep,
+                                                    sqlite::op::sum(f)
+                                                    );
+    select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
+
+    if (isAggregate)
+        select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
+
+    select.where(op::eq(p->mVesselLoglikeTable->fldMetierId));
+    select.groupBy(p->mVesselLoglikeTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(std::make_tuple(metierid));
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    qDebug() << "Metier Select: " << QString::fromStdString(select.string()) << " (" << metierid << ")";
 
     return data;
 }

@@ -117,9 +117,6 @@ void MetiersStatsPlot::update(DisplaceModel *model)
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
-        QVector<double> keyData;
-        QVector<double> valueData;
-
         QCPGraph *graph = plot->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
@@ -131,101 +128,14 @@ void MetiersStatsPlot::update(DisplaceModel *model)
 
         graph->setName(d->description());
 
-        int n = model->getMetiersStatsCount();
-        auto it = model->getMetiersStatsFirstValue();
-
-        int ip = d->metierId;
-
-        for (int i = 0; i <n; ++i) {
-            if (it.value().size() > ip) {
-                keyData << it.key();
-
-                switch (metStat) {
-                case MetiersStat::M_Catches:
-                    if (d->populationId == -1)
-                        valueData << it.value().at(ip).mTotCatches;
-                    else {
-                        if (it.value().at(ip).mCatchesPerPop.size() > d->populationId)
-                            valueData << it.value().at(ip).mCatchesPerPop[d->populationId];
-                        else
-                            valueData << 0;
-                    }
-                    break;
-                case MetiersStat::M_Discards:
-                    if (d->populationId == -1)
-                        valueData << it.value().at(ip).mTotDiscards;
-                    else {
-                        if (it.value().at(ip).mDiscardsPerPop.size() > d->populationId)
-                            valueData << it.value().at(ip).mDiscardsPerPop[d->populationId];
-                        else
-                            valueData << 0;
-                    }
-                    break;
-                case MetiersStat::M_Revenues:
-                    valueData << it.value().at(ip).revenueAV;
-                    break;
-                case MetiersStat::M_Gav:
-                    valueData << it.value().at(ip).gav;
-                    break;
-                case MetiersStat::M_Vpuf:
-                    valueData << it.value().at(ip).vpuf;
-                    break;
-                case MetiersStat::M_SweptArea:
-                    valueData << it.value().at(ip).mSweptArea;
-                    break;
-                case MetiersStat::M_RevenuesPerSweptArea:
-                    valueData << it.value().at(ip).mRevenuePerSweptArea;
-                    break;
-                case MetiersStat::M_GVA:
-                    valueData << it.value().at(ip).GVA;
-                    break;
-                case MetiersStat::M_GVAPerRevenue:
-                    valueData << it.value().at(ip).GVAPerRevenue;
-                    break;
-                case MetiersStat::M_LabourSurplus:
-                    valueData << it.value().at(ip).LabourSurplus;
-                    break;
-                case MetiersStat::M_GrossProfit:
-                    valueData << it.value().at(ip).GrossProfit;
-                    break;
-                case MetiersStat::M_NetProfit:
-                    valueData << it.value().at(ip).NetProfit;
-                    break;
-                case MetiersStat::M_NetProfitMargin:
-                    valueData << it.value().at(ip).NetProfitMargin;
-                    break;
-                case MetiersStat::M_GVAPerFTE:
-                    valueData << it.value().at(ip).GVAPerFTE;
-                    break;
-                case MetiersStat::M_RoFTA:
-                    valueData << it.value().at(ip).RoFTA;
-                    break;
-                case MetiersStat::M_BER:
-                    valueData << it.value().at(ip).BER;
-                    break;
-                case MetiersStat::M_CRBER:
-                    valueData << it.value().at(ip).CRBER;
-                    break;
-                case MetiersStat::M_NetPresentValue:
-                    valueData << it.value().at(ip).NetPresentValue;
-                    break;
-                case MetiersStat::M_numTrips:
-                    valueData << it.value().at(ip).numTrips;
-                    break;
-
-
-
-                }
-            }
-            ++it;
-        }
-
-        graph->setData(keyData, valueData);
+        auto v = getData(model, metStat,  d->metierId);
+        graph->setData(std::get<0>(v), std::get<1>(v));
 
         ++col_it;
-        plot->rescaleAxes();
-        plot->replot();
     }
+
+    plot->rescaleAxes();
+    plot->replot();
 }
 
 void MetiersStatsPlot::setCurrentTimeStep(double t)
@@ -234,5 +144,25 @@ void MetiersStatsPlot::setCurrentTimeStep(double t)
         timeline->start->setCoords(t, timelineMin);
         timeline->end->setCoords(t, timelineMax);
     }
+}
+
+std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(DisplaceModel *model, MetiersStat stat, int metier)
+{
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        throw std::runtime_error("null db");
+
+    auto dt = db->getVesselLoglikeDataByMetier(stat, metier);
+
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+
+    double rc = 0;
+    // make running sum
+    for (int i = 0; i < vd.size(); ++i) {
+        rc += vd[i];
+        vd[i] = rc;
+    }
+
+    return std::make_tuple(kd, vd);
 }
 

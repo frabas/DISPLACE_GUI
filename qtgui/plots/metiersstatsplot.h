@@ -33,7 +33,7 @@ public:
     void setStat(displace::plot::MetiersStat stat) { metStat = stat; }
 private:
     void saveTo();
-    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::MetiersStat stat, int harbour);
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::MetiersStat stat, int metier);
 };
 
 #endif // METIERSSTATSPLOT_H

@@ -73,10 +73,6 @@ class DisplaceModel : public QObject
 public:
     typedef QVector<PopulationData> PopulationStat;
     typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-    typedef QVector<HarbourStats> HarboursStats;
-    typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
-    typedef QVector<MetierStats> MetiersStats;
-    typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
     typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
     typedef HistoricalDataCollector<ShipsStats> ShipsStatsContainer;
@@ -226,40 +222,11 @@ public:
     const QList<std::shared_ptr<HarbourData> > &getHarbourList() const { return mHarbours; }
     const HarbourData &getHarbourData(int idx) const { return *mHarbours.at(idx); }
 
-    int getHarboursStatsCount() const {
-        return mStatsHarbours.getUniqueValuesCount();
-    }
-    HarboursStatsContainer::Container::const_iterator getHarboursStatsFirstValue() const {
-        return mStatsHarbours.getFirst();
-    }
-    const HarboursStats &getHarboursStatAtStep(int step) const {
-        return mStatsHarbours.getValue(step);
-    }
-    const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
-        return mStatsHarbours.getValue(step).at(idx);
-    }
     /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
     HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
 
-    /* Access Metier Statistics */
-
-    int getMetiersStatsCount() const {
-        return mStatsMetiers.getUniqueValuesCount();
-    }
-    MetiersStatsContainer::Container::const_iterator getMetiersStatsFirstValue() const {
-        return mStatsMetiers.getFirst();
-    }
-    /*
-    const MetiersStatsContainer &getMetiersStatAtStep(int step) const {
-        return mStatsMetiers.getValue(step);
-    }
-    const MetiersStatsContainer &getMetiersStatAtStep(int step, int idx) const {
-        return mStatsMetiers.getValue(step).at(idx);
-    }*/
-
     /* Benthos Statistics */
     const BenthosStatsContainer &getBenthosStatistics() { return mStatsBenthos; }
-
 
     /* Fishfarms Statistics */
     const FishfarmsStatsContainer &getFishfarmsStatistics() { return mStatsFishfarms; }
@@ -572,10 +539,6 @@ private:
 
     PopulationStatContainer mStatsPopulations;
     PopulationStat mStatsPopulationsCollected;
-    HarboursStatsContainer mStatsHarbours;
-    HarboursStats mStatsHarboursCollected;
-    MetiersStatsContainer mStatsMetiers;
-    MetiersStats mStatsMetiersCollected;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
     FishfarmsStatsContainer mStatsFishfarms;

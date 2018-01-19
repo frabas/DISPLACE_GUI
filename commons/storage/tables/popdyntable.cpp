@@ -18,6 +18,7 @@ void PopDynTable::dropAndCreate()
     create(std::make_tuple(fldNodeId,
                            fldTStep,
                            fldPopId,
+                           fldGroup,
                            fldN,
                            fldF,
                            fldSSB
@@ -29,4 +30,6 @@ void PopDynTable::insert(int tstep, Population *pop)
     const auto &N = pop->get_tot_N_at_szgroup();
     const auto &F = pop->get_tot_F_at_age();
     const auto &SSB = pop->get_SSB_at_szgroup();
+
+
 }

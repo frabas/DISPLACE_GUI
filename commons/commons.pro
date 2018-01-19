@@ -68,7 +68,8 @@ SOURCES= \
     storage/tables/windfarmstable.cpp \
     storage/tables/vesselsloglikecatchestable.cpp \
     storage/tables/nodesdeftable.cpp \
-    storage/tables/popstattable.cpp
+    storage/tables/popstattable.cpp \
+    storage/tables/popdyntable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -123,7 +124,8 @@ HEADERS= \
     storage/tables/windfarmstable.h \
     storage/tables/vesselsloglikecatchestable.h \
     storage/tables/nodesdeftable.h \
-    storage/tables/popstattable.h
+    storage/tables/popstattable.h \
+    storage/tables/popdyntable.h
 
 ### mSQLiteCpp dependency
 

@@ -95,70 +95,11 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
                 graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ipop).arg(graphList[igraph]+1));
             }
 
+            auto v = getData(model, stat, ipop, graphList[igraph]+1);
+            graph->setData(std::get<0>(v), std::get<1>(v));
             graphs.push_back(graph);
-            keyData.push_back(QVector<double>());
-            valueData.push_back(QVector<double>());
         }
     }
-
-    int nsteps = model->getPopulationsValuesCount();
-
-    DisplaceModel::PopulationStatContainer::Container::const_iterator it = model->getPopulationsFirstValue();
-    for (int istep = 0; istep <nsteps; ++istep) {
-        int ninterPop = interPopList.size();
-        for (int iinterpPop = 0; iinterpPop < ninterPop; ++iinterpPop) {
-
-            // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0;
-            for (int iInterSize = 0; iInterSize < interSizeList.size(); ++iInterSize) {
-                val = getPopStatValue(model, it.key(), interPopList[iinterpPop], interSizeList[iInterSize], stat);
-                if (iInterSize == 0) {
-                    mMin = val;
-                    mMax = val;
-                } else {
-                    if (mMin > val)
-                        mMin = val;
-                    if (mMax < val)
-                        mMax = val;
-                }
-                mAvg += val;
-                mTot += val;
-            }
-            if (szNum > 0)
-                mAvg /= szNum;
-
-            for (int isz = 0; isz < graphNum; ++isz) {
-                int gidx = iinterpPop * graphNum + isz;
-
-                keyData[gidx] << it.key();
-                switch (graphList[isz]) {
-                case -4:
-                    val = mMax;
-                    break;
-                case -3:
-                    val = mMin;
-                    break;
-                case -2:
-                    val = mAvg;
-                    break;
-                case -1:
-                    val = mTot;
-                    break;
-                default:
-                    val = getPopStatValue(model, it.key(), interPopList[iinterpPop], graphList[isz], stat);
-                    break;
-                }
-
-                valueData[gidx] << val;
-            }
-        }
-        ++it;
-    }
-
-    for (int i = 0; i < graphs.size(); ++i) {
-        graphs[i]->setData(keyData.at(i), valueData.at(i));
-    }
-
 
     switch (stat) {
     case PopulationStat::Aggregate:
@@ -186,21 +127,23 @@ void PopulationsStatPlot::setCurrentTimeStep(double t)
     timeline->end->setCoords(t, timelineMax);
 }
 
-double PopulationsStatPlot::getPopStatValue(DisplaceModel *model, int tstep, int popid, int szid, displace::plot::PopulationStat stattype)
+std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model, displace::plot::PopulationStat stattype, int popid, int grpid)
 {
-    switch (stattype) {
-    case displace::plot::PopulationStat::Aggregate:
-        return model->getPopulationsAtStep(tstep, popid).getAggregateAt(szid);
-    case displace::plot::PopulationStat::Mortality:
-        return model->getPopulationsAtStep(tstep, popid).getMortalityAt(szid);
-    case displace::plot::PopulationStat::SSB: {
-        auto &x = model->getPopulationsAtStep(tstep, popid).getSSB();
-        if (szid < x.size())
-            return x.at(szid);
-        return 0;
-        }
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        throw std::runtime_error("null db");
+
+    auto dt = db->getPopulationStatData(stattype, popid, grpid);
+
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+
+    double rc = 0;
+    // make running sum
+    for (int i = 0; i < vd.size(); ++i) {
+        rc += vd[i];
+        vd[i] = rc;
     }
 
-    return 0;
+    return std::make_tuple(kd, vd);
 }
 

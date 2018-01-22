@@ -34,7 +34,7 @@ public:
     void setCurrentTimeStep(double t);
 private:
     void saveTo();
-    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::NationsStat stat, int nation);
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::PopulationStat stattype, int popid, int grpid);
 
     double getPopStatValue(DisplaceModel *model, int tstep, int popid, int szid, displace::plot::PopulationStat stattype);
 };

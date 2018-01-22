@@ -446,7 +446,53 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         return true;
     });
 
-    qDebug() << "Metier Select: " << QString::fromStdString(select.string()) << " (" << metierid << ")";
+    return data;
+}
+
+TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, int popid, int grpid)
+{
+    FieldDef<FieldType::Real> f("");
+    switch (stat) {
+    case displace::plot::PopulationStat::Aggregate:
+        f = p->mPopDynTable->fldN;
+        break;
+    case displace::plot::PopulationStat::Mortality:
+        f = p->mPopDynTable->fldF;
+        break;
+    case displace::plot::PopulationStat::SSB:
+        f = p->mPopDynTable->fldSSB;
+        break;
+    }
+
+    auto select = sqlite::statements::Select(p->mPopDynTable->name(),
+                                                    p->mPopDynTable->fldTStep,
+                                                    f
+                                                    );
+
+    if (grpid >= 0) {
+        select.where(op::and_(op::eq(p->mPopDynTable->fldPopId), op::eq(p->mPopDynTable->fldGroup)));
+    } else {
+        select.where(op::eq(p->mPopDynTable->fldPopId));
+    }
+
+    select.groupBy(p->mPopDynTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(std::make_tuple(popid));
+    if (grpid >= 0) {
+        stmt.bind(std::make_tuple(grpid));
+    }
+
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    qDebug() << "PopDyn Select: " << QString::fromStdString(select.string()) << " (" << popid << "," << grpid << ")";
 
     return data;
 }

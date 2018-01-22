@@ -297,6 +297,9 @@ if(tstep==0)
     // EXPORT POPSTATS FILE
         for (unsigned int sp=0; sp<populations.size(); sp++)
         {
+            if (enable_sqlite_out)
+                outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+
             outc(cout << "...pop " << sp << endl;)
             if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
             {
@@ -1011,6 +1014,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // EXPORT POPSTATS FILE
             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
+                if (enable_sqlite_out)
+                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
 
                      popstats << setprecision(6) << fixed;
 

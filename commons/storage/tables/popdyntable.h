@@ -28,7 +28,7 @@ public:
     PopDynTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
 
     void dropAndCreate();
-    void insert (int tstep, Population *pop);
+    void insert (int tstep, int popid, Population *pop);
 };
 
 #endif // POPDYNTABLE_H

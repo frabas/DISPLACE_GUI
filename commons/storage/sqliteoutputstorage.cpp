@@ -8,6 +8,7 @@
 #include "tables/vesselslogliketable.h"
 #include "tables/nodesdeftable.h"
 #include "tables/poptable.h"
+#include "tables/popdyntable.h"
 #include "tables/popstattable.h"
 #include "tables/vesselvmsliketable.h"
 #include "tables/vesselsloglikecatchestable.h"
@@ -34,6 +35,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<NodesDefTable> mPopNodesTable;
     std::shared_ptr<PopStatTable> mPopStatTable;
+    std::shared_ptr<PopDynTable> mPopDynTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
@@ -57,6 +59,7 @@ void SQLiteOutputStorage::open()
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
     p->mPopNodesTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
     p->mPopStatTable = std::make_shared<PopStatTable>(p->db, "NodesStat");
+    p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
@@ -95,6 +98,11 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
 void SQLiteOutputStorage::exportPopNodes(int tstep, Node *node)
 {
     p->mPopStatTable->insert(tstep, node);
+}
+
+void SQLiteOutputStorage::exportPopStat(Population *pop, int popid, int tstep)
+{
+    p->mPopDynTable->insert(tstep, popid, pop);
 }
 
 void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul,const std::vector<double> &discards, unsigned int tstep)
@@ -450,6 +458,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselVmslikeTable->dropAndCreate();
     p->mPopNodesTable->dropAndCreate();
     p->mPopStatTable->dropAndCreate();
+    p->mPopDynTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();

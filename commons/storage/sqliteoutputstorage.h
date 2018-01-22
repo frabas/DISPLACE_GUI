@@ -59,6 +59,7 @@ public:
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
     void exportWindmillsLog(Windmill *windmill, int tstep);
     void exportPopNodes(int tstep, Node *node);
+    void exportPopStat(Population *pop, int popid, int tstep);
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);
 
     TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);

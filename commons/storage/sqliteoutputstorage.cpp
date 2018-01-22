@@ -449,7 +449,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, int popid, int grpid)
+TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid, int grpid)
 {
     FieldDef<FieldType::Real> f("");
     switch (stat) {
@@ -461,6 +461,19 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, int
         break;
     case displace::plot::PopulationStat::SSB:
         f = p->mPopDynTable->fldSSB;
+        break;
+    }
+
+    switch (aggtype) {
+    case displace::plot::AggregationType::Avg:
+        f = op::avg(f); break;
+    case displace::plot::AggregationType::Min:
+        f = op::min(f); break;
+    case displace::plot::AggregationType::Max:
+        f = op::max(f); break;
+    case displace::plot::AggregationType::Sum:
+        f = op::sum(f); break;
+    case displace::plot::AggregationType::None:
         break;
     }
 

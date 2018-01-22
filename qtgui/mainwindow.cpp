@@ -239,7 +239,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mStatsController = new StatsController(this);
     cout << "for Pop " << endl;
-    mStatsController->setPopulationPlot(ui->plotPopulations);
+    mStatsController->setPopulationPlot(ui->plotPopulations, new GraphInteractionController(ui->plotPopulations, this));
     cout << "for Pop...ok " << endl;
     cout << "for Harbour " << endl;
     mStatsController->setHarboursPlot(ui->plotHarbours);

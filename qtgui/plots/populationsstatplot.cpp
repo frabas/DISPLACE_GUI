@@ -23,9 +23,7 @@ PopulationsStatPlot::PopulationsStatPlot(QCustomPlot *plt)
 
 void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::PopulationStat stat)
 {
-    static const QPen pen(QColor(0,0,255,200));
     plot->clearGraphs();
-    double val;
 
     QList<int> interPopList = model->getInterestingPops();
     QList<int> interSizeList = model->getInterestingSizes();
@@ -53,12 +51,9 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
             interSizeList.push_back(i);
     }
 
-    int szNum = interSizeList.size();
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
-    QList<QVector<double> >keyData;
-    QList<QVector<double> >valueData;
 
     double t = model->getCurrentStep();
     if (timeline != nullptr) {
@@ -78,24 +73,32 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
             col.setAlpha(128);
             graph->setBrush(QBrush(col));
 
+            AggregationType aggtype = AggregationType::None;
+
             switch (graphList[igraph]) {
             case -4:
                 graph->setName(QString(QObject::tr("Pop %1 Max")).arg(ipop));
+                aggtype = AggregationType::Max;
                 break;
             case -3:
                 graph->setName(QString(QObject::tr("Pop %1 Min")).arg(ipop));
+                aggtype = AggregationType::Min;
                 break;
             case -2:
                 graph->setName(QString(QObject::tr("Pop %1 Avg")).arg(ipop));
+                aggtype = AggregationType::Avg;
                 break;
             case -1:
                 graph->setName(QString(QObject::tr("Pop %1 Total")).arg(ipop));
+                aggtype = AggregationType::Sum;
                 break;
             default:
                 graph->setName(QString(QObject::tr("Pop %1 Group %2")).arg(ipop).arg(graphList[igraph]+1));
+                aggtype = AggregationType::None;
+                break;
             }
 
-            auto v = getData(model, stat, ipop, graphList[igraph]+1);
+            auto v = getData(model, stat, aggtype, ipop, graphList[igraph]);
             graph->setData(std::get<0>(v), std::get<1>(v));
             graphs.push_back(graph);
         }
@@ -127,13 +130,14 @@ void PopulationsStatPlot::setCurrentTimeStep(double t)
     timeline->end->setCoords(t, timelineMax);
 }
 
-std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model, displace::plot::PopulationStat stattype, int popid, int grpid)
+std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model, displace::plot::PopulationStat stattype, displace::plot::AggregationType aggtype,
+                                                                           int popid, int grpid)
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
         throw std::runtime_error("null db");
 
-    auto dt = db->getPopulationStatData(stattype, popid, grpid);
+    auto dt = db->getPopulationStatData(stattype, aggtype, popid, grpid);
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
 
@@ -147,3 +151,57 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
     return std::make_tuple(kd, vd);
 }
 
+
+void PopulationsStatPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
+{
+    if (location == GraphInteractionController::PopupMenuLocation::Plot) {
+        menu->addAction(QObject::tr("Save Data"), std::bind(&PopulationsStatPlot::saveTo, this));
+    }
+}
+
+void PopulationsStatPlot::saveTo()
+{
+    if (!lastModel)
+        return;
+
+    auto db = lastModel->getOutputStorage();
+    if (db == nullptr)
+        return;
+
+    QString fn = QFileDialog::getSaveFileName(nullptr, QObject::tr("Save plot data"), QString(), QObject::tr("Csv file (*.csv)"));
+    if (!fn.isEmpty()) {
+        QFile file(fn);
+        if (!file.open(QIODevice::ReadWrite)) {
+            QMessageBox::warning(nullptr, QObject::tr("Error"), QObject::tr("Cannot save to %1: %2").arg(fn).arg(file.errorString()));
+            return;
+        }
+
+        QTextStream strm(&file);
+
+
+        QList<int> interPopList = lastModel->getInterestingPops();
+        QList<int> interSizeList = lastModel->getInterestingSizes();
+
+        for (auto ip : interPopList) {
+            for (auto is : interSizeList) {
+                AggregationType aggtype = AggregationType::None;
+
+                strm << "Pop," << ip << ",Size," << is << "\n";
+
+                auto v = getData(lastModel, lastStat, aggtype, ip, is);
+                auto &k = std::get<0>(v);
+                auto &d = std::get<1>(v);
+
+                strm << "t";
+                for (int i = 0; i < k.size(); ++i) {
+                    strm << "," << k[i];
+                }
+                strm << "\nv";
+                for (int i = 0; i < d.size(); ++i) {
+                    strm << "," << d[i];
+                }
+                strm << "\n\n";
+            }
+        }
+    }
+}

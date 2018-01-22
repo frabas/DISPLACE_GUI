@@ -22,6 +22,8 @@ enum class HarboursStat { H_Catches, H_Discards, H_Earnings, H_Gav, H_Vpuf, H_Sw
 enum class MetiersStat { M_Catches, M_Discards, M_Revenues, M_Gav, M_Vpuf, M_SweptArea, M_RevenuesPerSweptArea,
                    M_GVA, M_GVAPerRevenue, M_LabourSurplus, M_GrossProfit, M_NetProfit, M_NetProfitMargin, M_GVAPerFTE, M_RoFTA, M_BER, M_CRBER, M_NetPresentValue, M_numTrips};
 
+enum class AggregationType { None, Min, Max, Avg, Sum };
+
 }
 }
 

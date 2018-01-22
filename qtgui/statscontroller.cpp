@@ -55,13 +55,15 @@ StatsController::StatsController(QObject *parent)
     cout << "Stats controller is created" << endl;
 }
 
-void StatsController::setPopulationPlot(QCustomPlot *plot)
+void StatsController::setPopulationPlot(QCustomPlot *plot, GraphInteractionController *controller)
 {
     if (mPopPlot != nullptr)
         delete mPopPlot;
 
     plot->legend->setVisible(true);
     mPopPlot = new PopulationsStatPlot(plot);
+
+    controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
 void StatsController::setHarboursPlot(QCustomPlot *plot)

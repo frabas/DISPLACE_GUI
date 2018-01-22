@@ -65,7 +65,7 @@ public:
     TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);
     TimelineData getVesselLoglikeDataByHarbour(displace::plot::HarboursStat stattype, int harbourid);
     TimelineData getVesselLoglikeDataByMetier(displace::plot::MetiersStat stattype, int metierid);
-    TimelineData getPopulationStatData(displace::plot::PopulationStat stat, int popid, int grpid);
+    TimelineData getPopulationStatData(displace::plot::PopulationStat stat, displace::plot::AggregationType aggtype, int popid, int grpid);
 private:
 };
 

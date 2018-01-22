@@ -77,16 +77,6 @@ void OutputFileParser::parse(QString path, int tstep, int period)
         parsePopBenthosStats(&file, tstep, mModel, period);
     } else if (name.startsWith("benthosnodes_tot_numbers_")) {
         parsePopBenthosStats(&file, tstep, mModel, period);
-#if 0
-    } else if (name.startsWith("popdyn_F_")) {
-        parsePopdynF(&file, tstep, mModel, period);
-    } else if (name.startsWith("popdyn_SSB_")) {
-        parsePopdynSSB(&file, tstep, mModel, period);
-    } else if (name.startsWith("popdyn_")) {
-        parsePopdyn(&file, tstep, mModel, period);
-#endif
-    } else if (name.startsWith("popstats_")) {
-        parsePopStats(&file, tstep, mModel, period);
     } else if (name.startsWith("loglike_")) {
         parseVessels(&file, tstep, mModel, period);
     } else if (name.startsWith("fishfarmslogs_")) {
@@ -504,42 +494,6 @@ void OutputFileParser::parseFishfarmslogsStats(QFile *file, int tstep, DisplaceM
     model->commitFishfarmsStats(last_step);
 }
 
-
-void OutputFileParser::parsePopdynF(QFile *file, int tstep, DisplaceModel *model, int period)
-{
-    QTextStream strm (file);
-
-    int step, last_period = -1;
-    while (!strm.atEnd()) {
-        QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        step = fields[0].toInt();
-
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-         //           model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-            QVector<double> pop(model->getSzGrupsCount());
-            int id = fields[1].toInt();
-
-            double tot = 0;
-            for (int i = 2; i < fields.size(); ++i) {
-                double v = fields[i].toDouble();
-                tot += v;
-                pop[i-2] = v;
-            }
-            model->collectPopdynF(step, id, pop, tot);
-        }
-    }
-
-    //if (tstep == -1)
-    //    model->commitNodesStatsFromSimu(step);
-}
-
 void OutputFileParser::parsePopStats(QFile *file, int tstep, DisplaceModel *model, int period)
 {
     QTextStream strm (file);
@@ -553,116 +507,9 @@ void OutputFileParser::parsePopStats(QFile *file, int tstep, DisplaceModel *mode
         if (laststep != -1 && step != laststep)
             model->commitNodesStatsFromSimu(laststep);
         laststep = tstep;
-
-        int id = fields[1].toInt();
-
-        // N
-        const auto npopN = 14; // model->getSzGrupsCount();
-        QVector<double> popN(npopN);
-        double totN = 0;
-        for (int i = 0; i < npopN; ++i) {
-            double v = fields[2 + i].toDouble();
-            totN += v;
-            popN[i] = v;
-        }
-        model->collectPopdynN(step, id, popN, totN);
-
-        // F
-        const auto npopF = 11; // model->getSzGrupsCount();
-        QVector<double> popF(npopF);
-        double totF = 0;
-        for (int i = 0; i < npopF; ++i) {
-            double v = fields[2 + npopN + i].toDouble();
-            totF += v;
-            popF[i] = v;
-        }
-        model->collectPopdynF(step, id, popF, totF);
-
-        // SSB
-        const auto npopS = 14; // model->getSzGrupsCount();
-        QVector<double> popS(npopS);
-        double totS = 0;
-        for (int i = 0; i < npopS; ++i) {
-            double v = fields[2 + npopN + npopF + i].toDouble();
-            totS += v;
-            popS[i] = v;
-        }
-        model->collectPopdynSSB(step, id, popS, totS);
     }
 
     model->commitNodesStatsFromSimu(laststep);
-}
-
-void OutputFileParser::parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period)
-{
-    QTextStream strm (file);
-
-    int step, last_period = -1;
-    while (!strm.atEnd()) {
-        QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        step = fields[0].toInt();
-
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-            QVector<double> pop(model->getSzGrupsCount());
-            int id = fields[1].toInt();
-
-            double tot = 0;
-            for (int i = 2; i < fields.size(); ++i) {
-                double v = fields[i].toDouble();
-                tot += v;
-                pop[i-2] = v;
-            }
-            model->collectPopdynSSB(step, id, pop, tot);
-        }
-    }
-
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step);
-}
-
-
-void OutputFileParser::parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period)
-{
-    QTextStream strm (file);
-
-    int step, last_period = -1;
-    while (!strm.atEnd()) {
-        QString line = strm.readLine();
-        QStringList fields = line.split(" ", QString::SkipEmptyParts);
-        step = fields[0].toInt();
-
-        if (step == tstep || tstep == -1) {
-            if (period != -1) {
-                int p = (step / period);
-                if (last_period < p) {
-                    model->commitNodesStatsFromSimu(step, true);
-                    last_period = p;
-                }
-            }
-
-            QVector<double> pop(model->getSzGrupsCount());
-            int id = fields[1].toInt();
-
-            double tot = 0;
-            for (int i = 2; i < fields.size() && (i-2) < pop.size(); ++i) {
-                double v = fields[i].toDouble();
-                tot += v;
-                pop[i-2] = v;
-            }
-            model->collectPopdynN(step, id, pop, tot);
-        }
-    }
-
-    if (tstep == -1)
-        model->commitNodesStatsFromSimu(step, true);
 }
 
 void OutputFileParser::parseVessels(QFile *file, int tstep, DisplaceModel *model, int period)

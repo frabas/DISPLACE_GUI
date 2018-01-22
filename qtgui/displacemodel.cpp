@@ -55,7 +55,6 @@ DisplaceModel::DisplaceModel()
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
-      mPopStatsDirty(false),
       mVesselsStatsDirty(false),
       mFirmsStatsDirty(false),
       mShipsStatsDirty(false),
@@ -315,11 +314,6 @@ bool DisplaceModel::prepareDatabaseForSimulation()
 
 bool DisplaceModel::clearStats()
 {
-    mStatsPopulations.clear();
-    for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
-        mStatsPopulationsCollected[i].clear();
-    }
-
     m_vessel_last_step = -1;
     mVesselsStatsDirty = false;
 
@@ -569,13 +563,6 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         if (mDb)
             mDb->addNodesStats(mLastStats, mNodes);
         mNodesStatsDirty = false;
-    }
-
-    if (mPopStatsDirty || force) {
-        mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
-        if (mDb)
-            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
-        mPopStatsDirty = false;
     }
 
     if (mShipsStatsDirty || force) {
@@ -933,30 +920,6 @@ void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, i
                                                  shipid,
                                                  shiptype,
                                                  PME_emission);
-}
-
-void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
-{
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setAggregate(pops);
-    mStatsPopulationsCollected[popid].setAggregateTot(value);
-    mPopStatsDirty = true;
-}
-
-void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
-{
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setMortality(pops);
-    mStatsPopulationsCollected[popid].setMortalityTot(value);
-    mPopStatsDirty = true;
-}
-
-void DisplaceModel::collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value)
-{
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setSSB(pops);
-    mStatsPopulationsCollected[popid].setSSBTot(value);
-    mPopStatsDirty = true;
 }
 
 void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
@@ -3087,12 +3050,6 @@ bool DisplaceModel::initPopulations()
 {
     cout<<"init pop" << endl;
 
-
-    mStatsPopulationsCollected.clear();
-    for (int i = 0; i < getPopulationsCount(); ++i) {
-        mStatsPopulationsCollected.push_back(PopulationData(i));
-    }
-
     QList<int> imp = mConfig.implicit_pops();
     qSort(imp);
 
@@ -3180,11 +3137,5 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
 
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
 
-    int i = 0;
-    foreach (const QVector<PopulationData> &dt, dtl) {
-        int tstep = steps[i];
-        mStatsPopulations.insertValue(tstep, dt);
-        ++i;
-    }
     return true;
 }

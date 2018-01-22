@@ -71,8 +71,6 @@ class DisplaceModel : public QObject
 {
     Q_OBJECT
 public:
-    typedef QVector<PopulationData> PopulationStat;
-    typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
     typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
     typedef HistoricalDataCollector<ShipsStats> ShipsStatsContainer;
@@ -196,21 +194,6 @@ public:
     /* Access to Population statistics */
     int getPopulationsCount() const;
     int getBenthosPopulationsCount() const;
-    const PopulationData &getPopulationsAtStep (int step, int idx) const {
-        if (idx >= mStatsPopulations.getValue(step).size()) {
-            qDebug() << step << idx << mStatsPopulations.getValue(step).size();
-            Q_ASSERT(false);
-        }
-        return mStatsPopulations.getValue(step).at(idx);
-    }
-    int getPopulationsValuesCount() const {
-        return mStatsPopulations.getUniqueValuesCount();
-    }
-    PopulationStatContainer::Container::const_iterator getPopulationsFirstValue() const {
-        return mStatsPopulations.getFirst();
-    }
-
-    const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
     /* Access to Nations statistics */
 
@@ -405,10 +388,6 @@ public:
     void collectShipPMEemission (int step, int node_idx, int shipid,  int shiptype,  double PME_emission);
     void commitShipsStats(int tstep);
 
-    void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
-    void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
-    void collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value);
-
     void collectVesselStats (int step, const VesselStats &stats);
     void commitVesselsStats(int tstep);
 
@@ -500,7 +479,6 @@ private:
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;
-    bool mPopStatsDirty;
     bool mVesselsStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
     int m_vessel_last_step;     // TODO: Same as above
     bool mFirmsStatsDirty;
@@ -537,8 +515,6 @@ private:
     QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
     QList<std::shared_ptr<NationData> > mNations;
 
-    PopulationStatContainer mStatsPopulations;
-    PopulationStat mStatsPopulationsCollected;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
     FishfarmsStatsContainer mStatsFishfarms;

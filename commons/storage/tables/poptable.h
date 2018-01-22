@@ -28,6 +28,8 @@ public:
     void dropAndCreate();
 
     void insert (int tstep, Node *node, const std::multimap<int, double> &initstate);
+
+    size_t getNbPops();
 };
 
 #endif // POPTABLE_H

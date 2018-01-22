@@ -1,6 +1,10 @@
 #include "poptable.h"
 
 #include "Node.h"
+#include "sqlitestatement.h"
+#include "sqlitestatementformatters.h"
+#include "sqlitefieldsop.h"
+
 
 PopTable::PopTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name)
@@ -49,4 +53,18 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
                     );
     }
 
+}
+
+size_t PopTable::getNbPops()
+{
+    sqlite::statements::Select select(name(), sqlite::op::count(sqlite::op::distinct(fldPopId)));
+    sqlite::SQLiteStatement stmt(db(),select);
+
+    size_t v;
+    stmt.execute([&stmt, &v](){
+        v = stmt.getIntValue(0);
+        return true;
+    });
+
+    return v;
 }

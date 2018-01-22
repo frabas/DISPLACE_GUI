@@ -66,6 +66,8 @@ public:
     TimelineData getVesselLoglikeDataByHarbour(displace::plot::HarboursStat stattype, int harbourid);
     TimelineData getVesselLoglikeDataByMetier(displace::plot::MetiersStat stattype, int metierid);
     TimelineData getPopulationStatData(displace::plot::PopulationStat stat, displace::plot::AggregationType aggtype, int popid, int grpid);
+
+    size_t getNbPops();
 private:
 };
 

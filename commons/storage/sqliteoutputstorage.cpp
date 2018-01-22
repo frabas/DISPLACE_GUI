@@ -510,6 +510,11 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
     return data;
 }
 
+size_t SQLiteOutputStorage::getNbPops()
+{
+    return p->mPopTable->getNbPops();
+}
+
 void SQLiteOutputStorage::createAllTables()
 {
     p->mVesselDefTable->dropAndCreate();

@@ -232,6 +232,10 @@ bool DisplaceModel::loadDatabase(QString path)
         return false;
 
     setSimulationSqlStorage(path);
+
+    mConfig.setNbpops(mOutSqlite->getNbPops());
+
+    qDebug() << "Pops: " << mConfig.getNbpops();
     return true;
 }
 

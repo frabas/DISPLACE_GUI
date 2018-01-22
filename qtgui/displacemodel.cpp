@@ -228,29 +228,10 @@ bool DisplaceModel::parse(const QString &path, QString *basepath, QString *input
 
 bool DisplaceModel::loadDatabase(QString path)
 {
-    if (mModelType != EmptyModelType || mDb != 0)
+    if (mModelType != EmptyModelType)
         return false;
 
-    mDb = new DbHelper;
-    if (!mDb->attachDb(path))
-        return false;
-
-    mInputName = mDb->getMetadata("name");
-    mBasePath = mDb->getMetadata("basepath");
-    mOutputName = mDb->getMetadata("output");
-
-    mDb->loadConfig(mConfig);
-    mDb->loadScenario(mScenario);
-    loadNodesFromDb();
-    loadVesselsFromDb();
-    loadHistoricalStatsFromDb();
-    initPopulations();
-    initNations();
-
-    mLastStep = mDb->getLastKnownStep();
-    setCurrentStep(0);
-
-    mModelType = OfflineModelType;
+    setSimulationSqlStorage(path);
     return true;
 }
 

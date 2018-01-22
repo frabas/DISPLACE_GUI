@@ -1023,120 +1023,12 @@ void MainWindow::on_cmdSetup_clicked()
 
 void MainWindow::on_action_Link_database_triggered()
 {
-    if (models[0] == 0) {
-        QMessageBox::warning(this, tr("Link database"), tr("Please load a simulation before linking a database."));
-        return;
-    }
-
-    if (mSimulation->isRunning()) {
-        QMessageBox::warning(this, tr("Link database"), tr("Cannot link database while a simulation is running."));
-        return;
-    }
-
-    QSettings sets;
-    QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
-                                         sets.value(dbLastDirKey).toString(), dbFilter,0);
-
-    if (!dbname.isEmpty()) {
-        QFileInfo info (dbname);
-        if (info.suffix().isEmpty()) {
-            dbname += dbSuffix;
-            info = QFileInfo(dbname);
-        }
-
-        if (info.exists()) {
-            QFile f(dbname);
-            f.remove();
-        }
-
-        if (!models[0]->linkDatabase(dbname)) {
-            QMessageBox::warning(this, tr("Link database failed"),
-                                 QString(tr("Cannot link database file %1: %2"))
-                                 .arg(dbname).arg(models[0]->getLastError()));
-            return;
-        }
-
-        sets.setValue(dbLastDirKey, info.absolutePath());
-    }
+    QMessageBox::warning(this, tr("Unsupported"), tr("This function isn't supported anymore."));
 }
 
 void MainWindow::on_actionImport_results_triggered()
 {
-    if (currentModelIdx == 0 || currentModel == 0 || currentModel->modelType() != DisplaceModel::OfflineModelType) {
-        QMessageBox::warning(this, tr("Offline results import"),
-                             tr("To import results, an offline Model slot must be selected (slots [1]-[3]) and a"
-                                " config file must be loaded."));
-        return;
-    }
-
-    QSettings sets;
-    QString name =  QFileDialog::getExistingDirectory(this, tr("Import result data from directory"),
-                                         sets.value("import_last").toString());
-
-    if (!name.isEmpty()) {
-        QFileInfo info (name);
-
-        QRegExp r(R"%(.*simu(\d+)\.dat)%");
-        QSet<QString> simus;
-        QDir dr(name);
-        auto files = dr.entryInfoList();
-        for (auto file : files) {
-            if (r.indexIn(file.fileName()) != -1) {
-                simus.insert(QString("simu%1").arg(r.cap(1)));
-            }
-        }
-
-        if (simus.size() == 0) {
-            QMessageBox::warning(this, tr("Import offline data"),
-                                 tr("No relevant simulation files found. Please check the selected folder"));
-            return;
-        }
-        QString selected;
-        if (simus.size() > 1) {
-            QStringList ls(simus.toList());
-
-            ls.sort();
-            selected = QInputDialog::getItem(this, tr("Import offline data"),
-                                             tr("Please select a simulation id"), ls, 0, false);
-            if (selected.isEmpty())
-                return;
-        } else {
-            selected = *simus.begin();
-        }
-
-        // now try to import some relevant file.
-
-        QStringList filesToLoad {
-            "popnodes_start_%1.dat",
-            "popnodes_cumftime_%1.dat", "popnodes_cumsweptarea_%1.dat",
-            "popnodes_cumcatches_%1.dat", "popnodes_cumcatches_with_threshold_%1.dat",
-            "popnodes_cumdiscards.dat", "popnodes_tariffs_%1.dat",
-            "popnodes_impact_%1.dat", "popnodes_cumulcatches_per_pop_%1.dat",
-            "benthosnodes_tot_biomasses_%1.dat",
-            "benthosnodes_tot_numbers_%1.dat",
-            "popdyn_%1.dat", "popdyn_F_%1.dat", "popdyn_SSB_%1.dat",
-            "loglike_%1.dat"
-        };
-        QStringList missing;
-
-        OutputFileParser out(currentModel.get());
-        for (auto patternToLoad : filesToLoad) {
-            QString fileToLoad = QString(patternToLoad).arg(selected);
-            QFile tf(QString("%1/%2").arg(name).arg(fileToLoad));
-            if (!tf.exists()) {
-                missing << fileToLoad;
-                continue;
-            }
-            out.parse(tf.fileName(), -1, (24*30));
-        }
-
-        if (!missing.isEmpty()) {
-            QMessageBox::information(this, tr("Import offline data"),
-                                     tr("Data imported, but some file couldn't be loaded. %1").arg(missing.join(", ")));
-        }
-
-        sets.setValue("import_last", info.absolutePath());
-    }
+    QMessageBox::warning(this, tr("Unsupported"), tr("This function isn't supported anymore."));
 }
 
 void MainWindow::on_actionLoad_results_triggered()

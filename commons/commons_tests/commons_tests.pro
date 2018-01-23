@@ -43,7 +43,8 @@ SOURCES= main.cpp \
     inputfiles_simusspe.cpp \
     inputfiles_windmillsspe.cpp \
     test_pathshop.cpp \
-    sqlitestorage.cpp
+    sqlitestorage.cpp \
+    sqlite_tables.cpp
 
 HEADERS=
 

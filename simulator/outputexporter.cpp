@@ -148,17 +148,12 @@ void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const st
     int count =0;
     for(int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
     {
-
-        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
+        cumul_discards.push_back(0);
+        for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
         {
-            cumul_discards.push_back(0);
-            for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
-            {
-                if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
-            }
-            count+=1;
+            if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
         }
-
+        count+=1;
     }
 
     mSqlDb->exportLogLike(v, cumul, cumul_discards, tstep);

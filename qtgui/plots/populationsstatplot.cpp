@@ -135,7 +135,7 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
-        throw std::runtime_error("null db");
+        return std::tuple<QVector<double>, QVector<double>>();
 
     auto dt = db->getPopulationStatData(stattype, aggtype, popid, grpid);
 

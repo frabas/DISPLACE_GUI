@@ -203,7 +203,7 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
-        throw std::runtime_error("null db");
+        return std::tuple<QVector<double>, QVector<double>>();
 
     auto dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString());
 

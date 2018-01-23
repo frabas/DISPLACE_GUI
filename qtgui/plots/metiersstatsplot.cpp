@@ -150,7 +150,7 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
-        throw std::runtime_error("null db");
+        return std::tuple<QVector<double>, QVector<double>>();
 
     auto dt = db->getVesselLoglikeDataByMetier(stat, metier);
 

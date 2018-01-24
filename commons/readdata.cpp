@@ -28,6 +28,8 @@
 #include <utils/vectorsdata.h>
 #include <boost/algorithm/string.hpp>
 
+#include <numeric> // iota()
+
 #include <legacy/binarygraphfilereader.h>
 
 using namespace displace::formats;

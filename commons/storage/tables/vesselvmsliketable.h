@@ -1,6 +1,7 @@
 #ifndef VESSELVMSLIKETABLE_H
 #define VESSELVMSLIKETABLE_H
 
+#include "commons_global.h"
 #include "idtypes.h"
 
 #include "sqlitefielddef.h"
@@ -11,7 +12,7 @@
 
 using namespace sqlite;
 
-class VesselVmsLikeTable : public sqlite::SQLiteTable
+class COMMONSSHARED_EXPORT VesselVmsLikeTable : public sqlite::SQLiteTable
 {
     const FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();

@@ -92,6 +92,8 @@
 
 #include <legacy/binarygraphfilewriter.h>
 
+#include <sqlitestorage.h>
+
 #include <QBoxLayout>
 #include <QTextEdit>
 #include <QSettings>
@@ -517,8 +519,12 @@ void MainWindow::updateOutputFile(QString path, int n)
 
 void MainWindow::outputUpdated()
 {
+    try {
     mMapController->updateNodes(0);
     mStatsController->updateStats(models[0].get());
+    } catch (sqlite::SQLiteException &xcp) {
+        qWarning() << "Error updating output: " << xcp.what();
+    }
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)

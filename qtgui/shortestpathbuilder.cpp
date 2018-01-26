@@ -26,6 +26,10 @@
 #include <memory>
 
 #include <QList>
+
+#include <vector>
+#include <algorithm>    // std::find
+
 #include <QFile>
 #include <QTextStream>
 
@@ -52,14 +56,32 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
     strm_prev << " key  value" << endl;
     strm_min << " key  value" << endl;
 
+    vector<int> mem(2, 0);
+
+    vector <int> relevant_nodes;
+    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+       relevant_nodes.push_back(n->get_idx_node().toIndex());
+    }
+
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
-                strm_prev << nd << " " << mPredecessors[nd] << endl;
-                strm_min << nd << " " << mDistances[nd] << endl;
-            }
+                std::vector<int>::iterator it;
+                it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
+                if (it != relevant_nodes.end()) mem.at(0)=nd;
+
+                it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
+                if (it != relevant_nodes.end())  mem.at(1)=mPredecessors[nd];
+
+                if(mem.at(0)!=0 && mem.at(1)!=0){
+                   strm_prev << nd << " " << mPredecessors[nd] << endl;
+                   strm_min << nd << " " << mDistances[nd] << endl;
+                   mem.at(0)=0;
+                   mem.at(1)=0;
+                  }
+              }
 
             mGraph[nd].flag = true;
             nd = mPredecessors[nd];

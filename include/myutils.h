@@ -68,20 +68,7 @@ double simpson(double a, double b, int n, double S1, double S2){
     return (sum + 2*summid)*h/3.0;
 }
 
-/*
-#if (__cplusplus < 201103L)
-// for C++ sorting and keeping track of indexes:
-template <class ForwardIterator, class T>
-  void iota (ForwardIterator first, ForwardIterator last, T val)
-{
-  while (first!=last) {
-    *first = val;
-    ++first;
-    ++val;
-  }
-}
-#endif
-*/
+
 
 template <typename T>
 vector<size_t> sort_indexes_ascending(const vector<T> &v) {

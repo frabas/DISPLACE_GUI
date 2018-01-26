@@ -51,7 +51,13 @@ VesselLogbookOutputMessage::VesselLogbookOutputMessage(unsigned int _tstep, Vess
        {
        cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
        }
+
+    //if(v->get_name()=="GRK_KERK57_1_51" && pop==4){
+    //    cout << " The trip end NOW: the kg catches for this  pop "<< pop << "  is " << cumul.at(pop) << endl;
+     //}
+
     }
+
 
 
     // inform frequencies of metiers by counting nb of time a metier has been used during the trip
@@ -150,7 +156,7 @@ bool VesselLogbookOutputMessage::send(std::ostream &)
         << logbook.cumfcons << " "
         << logbook.travdist << " ";
     for (std::vector<double>::iterator it = cumul.begin(); it != cumul.end(); ++it)
-        ss  << *it << " " ;
+        ss  << setprecision(1) << *it << " " ;
     ss  << freq_metiers << " " << 0 << " " ;
     ss  << logbook.revenue_from_av_prices << " " ;
     ss  << logbook.fuelcost << " " ;

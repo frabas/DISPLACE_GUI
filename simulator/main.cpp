@@ -3164,7 +3164,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cout<<"with " << vessels_of_the_firm.size() << " vessels..." << endl;
 
         firms[i]= new Firm(i, all_firm_ids[i], firm_names[i], nb_vessels_per_firm[i],
-                           longs[i], lats[i], vessels_of_the_firm);
+                           some_longs[i], some_lats[i], vessels_of_the_firm);
         firms[i]->set_idx_firm(all_firm_ids[i]);
 
         cout<<"at (" << firms[i]->get_x() << "," << firms[i]->get_y()  << ") "   << endl;
@@ -3663,7 +3663,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        int biocheck = applyBiologicalModule(tstep,
+ /*       int biocheck = applyBiologicalModule(tstep,
                                              namesimu,
                                              namefolderinput,
                                              namefolderoutput,
@@ -3726,12 +3726,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              dyn_pop_sce,
                                              dyn_alloc_sce);
 
-/*
+*/
         int biocheck = applyBiologicalModule2(tstep,
                                              namesimu,
                                              namefolderinput,
                                              namefolderoutput,
                                              pathoutput,
+                                             popstats,
                                              popdyn_N,
                                              popdyn_F,
                                              popdyn_SSB,
@@ -3751,6 +3752,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              benthosnumbernodes,
                                              nbbenthospops,
                                              use_gui,
+                                             popstats_filename,
                                              popdyn_N_filename,
                                              popdyn_F_filename,
                                              popdyn_SSB_filename,
@@ -3784,7 +3786,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              dyn_pop_sce,
                                              dyn_alloc_sce);
 
-*/
+
 
         if(dyn_pop_sce.option(Options::diffuseN) && binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {

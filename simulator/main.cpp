@@ -5233,12 +5233,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             guiSendMemoryInfo(memInfo);
         }
 
-        /*
         if ((mLoopProfile.runs() % 500) == 0) {
             lock();
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
             unlock();
-        }*/
+        }
 #endif
     }							 // end FOR LOOP OVER TIME
 
@@ -5264,8 +5263,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     memInfo.update();
     ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
-    guiSendTerminalMessage(ss.str());
-    guiSendCapture(false);
+    if (use_gui) {
+        guiSendTerminalMessage(ss.str());
+        guiSendCapture(false);
+    } else {
+        cout << ss.str() << "\n";
+    }
 #endif
 
     finalizeIpcQueue();

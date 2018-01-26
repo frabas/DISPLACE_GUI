@@ -14,7 +14,7 @@ class Env(object):
         self.builddir = os.path.join(self.cwd, "build")
         self.installdir = os.path.join(self.cwd, "install", "msvc")
         self.statedir = os.path.join(self.builddir, "state")
-        self.datadir = os.path.join(self.cwd, "data")
+        self.datadir = os.path.join(self.cwd, "tools", "BuildMsVC", "data")
 
     def getRootDir(self):
         return self.cwd

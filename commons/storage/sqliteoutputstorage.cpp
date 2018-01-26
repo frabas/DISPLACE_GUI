@@ -63,6 +63,13 @@ void SQLiteOutputStorage::open()
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
+
+    try {
+        SQLiteStatement wal(p->db, "PRAGMA journal_mode=WAL");
+        wal.execute();
+    } catch (SQLiteException &x) {
+        //
+    }
 }
 
 void SQLiteOutputStorage::close()

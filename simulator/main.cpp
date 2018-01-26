@@ -501,6 +501,8 @@ int main(int argc, char* argv[])
             num_threads = atoi(argv[optind]);
         } else if (sw == "--disable-crash-handler" || sw == "--debug") {
             crash_handler_enabled = false;
+        } else if (sw == "--disable-sqlite") {
+            enable_sqlite_out = false;
         } else {
             dout (cout << "Unknown switch: " << argv[optind] << endl);
         }

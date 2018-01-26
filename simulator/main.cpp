@@ -3598,7 +3598,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
-        SQLiteTransaction transaction (outSqlite->getDb());
+        if (enable_sqlite_out) {
+            outSqlite->startDayLoop();
+        }
+
         for (unsigned int n=0; n<nodes.size(); n++) {
             nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
             if (enable_sqlite_out) {
@@ -3606,7 +3609,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 outSqlite->getPopTable()->insert(0, nodes[n], init_weight_per_szgroup);
             }
         }
-        transaction.commit();
+
+        if (enable_sqlite_out) {
+            outSqlite->endDayLoop();
+        }
+
         popnodes_start.flush();
         // signals the gui that the filename has been updated.
         guiSendUpdateCommand(popnodes_start_filename, 0);
@@ -3638,7 +3645,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         guiSendCurrentStep(tstep);
 
-        tout(cout << "tstep: " << tstep << endl);
+        if (!use_gui) {
+            cout << "tstep: " << tstep << endl;
+        }
         ostringstream os;
         os << "tstep " << tstep << endl;
         guiSendTerminalMessage(os.str());

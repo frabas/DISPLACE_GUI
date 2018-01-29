@@ -501,6 +501,8 @@ int main(int argc, char* argv[])
             num_threads = atoi(argv[optind]);
         } else if (sw == "--disable-crash-handler" || sw == "--debug") {
             crash_handler_enabled = false;
+        } else if (sw == "--disable-sqlite") {
+            enable_sqlite_out = false;
         } else {
             dout (cout << "Unknown switch: " << argv[optind] << endl);
         }
@@ -3598,7 +3600,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
-        SQLiteTransaction transaction (outSqlite->getDb());
+        if (enable_sqlite_out) {
+            outSqlite->startDayLoop();
+        }
+
         for (unsigned int n=0; n<nodes.size(); n++) {
             nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
             if (enable_sqlite_out) {
@@ -3606,7 +3611,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 outSqlite->getPopTable()->insert(0, nodes[n], init_weight_per_szgroup);
             }
         }
-        transaction.commit();
+
+        if (enable_sqlite_out) {
+            outSqlite->endDayLoop();
+        }
+
         popnodes_start.flush();
         // signals the gui that the filename has been updated.
         guiSendUpdateCommand(popnodes_start_filename, 0);
@@ -3638,7 +3647,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         guiSendCurrentStep(tstep);
 
-        tout(cout << "tstep: " << tstep << endl);
+        if (!use_gui) {
+            cout << "tstep: " << tstep << endl;
+        }
         ostringstream os;
         os << "tstep " << tstep << endl;
         guiSendTerminalMessage(os.str());
@@ -5224,12 +5235,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             guiSendMemoryInfo(memInfo);
         }
 
-        /*
         if ((mLoopProfile.runs() % 500) == 0) {
             lock();
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
             unlock();
-        }*/
+        }
 #endif
     }							 // end FOR LOOP OVER TIME
 
@@ -5255,8 +5265,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     memInfo.update();
     ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
-    guiSendTerminalMessage(ss.str());
-    guiSendCapture(false);
+    if (use_gui) {
+        guiSendTerminalMessage(ss.str());
+        guiSendCapture(false);
+    } else {
+        cout << ss.str() << "\n";
+    }
 #endif
 
     finalizeIpcQueue();

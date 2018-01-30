@@ -90,7 +90,7 @@ class ShortestPathBuilder
     std::vector<double> mDistances;
 
 private:
-    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<double> &relevantInterNodesIdx);
+    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx);
     void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
 
 public:
@@ -101,7 +101,7 @@ public:
     };
 
     void create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<double> &relevantInterNodesIdx, Format format = Binary);
+                const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, Format format = Binary);
 };
 
 #endif // SHORTESTPATHBUILDER_H

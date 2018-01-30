@@ -26,7 +26,7 @@ void ShortestPathBuilderWorker::setRelevantNodes(const QList<std::shared_ptr<Nod
     }
 }
 
-void ShortestPathBuilderWorker::setRelevantInterNodes(const QVector<double> & _relevantInterNodesIdx)
+void ShortestPathBuilderWorker::setRelevantInterNodes(const QVector<int> & _relevantInterNodesIdx)
 {
     relevantInterNodesIdx = _relevantInterNodesIdx;
 

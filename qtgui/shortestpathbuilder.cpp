@@ -42,7 +42,7 @@
  * http://www.boost.org/doc/libs/1_57_0/libs/graph/example/dijkstra-example.cpp
  * */
 
-void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<double> &relevantInterNodesIdx)
+void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx)
 {
     QFile mindist_file(mindist);
     QFile prev_file (prev);
@@ -146,7 +146,7 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
 }
 
 void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                                 const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<double> &relevantInterNodesIdx, Format format)
+                                 const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, Format format)
 {
     Q_UNUSED(simplify);
 

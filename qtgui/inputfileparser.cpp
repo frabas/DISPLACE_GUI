@@ -259,6 +259,13 @@ bool InputFileParser::pathParseRelevantNodes(const QString &refpath, QString &fn
 
 }
 
+bool InputFileParser::pathParseRelevantInterNodes(const QString &refpath, QString &fnodePath, QString &harbPath)
+{
+
+    return true;
+
+}
+
 bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
 {
     QFile infile (file);
@@ -293,6 +300,42 @@ bool InputFileParser::parseRelevantNodes(const QString &file, QSet<int> &nodes)
     infile.close();
     return true;
 }
+
+bool InputFileParser::parseRelevantInterNodes(const QString &file, QVector<int> &nodeids)
+{
+    QFile infile (file);
+    if (!infile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Can't read" << file <<": " << infile.errorString();
+        return false;
+    }
+
+    QTextStream stream(&infile);
+    QString line;
+
+    line = stream.readLine();  // ignore the first line
+
+    bool ok;
+    int linenum = 1;
+    while (!(line = stream.readLine()).isNull()) {
+        QStringList fields = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        if (fields.size() < 2) {
+            qDebug() << "Cannot read relevant nodes. " << file << "at line " << linenum;
+            return false;
+        }
+
+        int nd = fields[1].toInt(&ok);
+        if (!ok) {
+            qWarning() << "Error parsing file" << file << " at line " << linenum;
+        } else {
+            nodeids.push_back(nd);
+        }
+        ++linenum;
+    }
+
+    infile.close();
+    return true;
+}
+
 
 bool InputFileParser::parseStockNamesFile(const QString &path, QMap<QString, int> &names)
 {

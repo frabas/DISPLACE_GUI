@@ -66,7 +66,9 @@ public:
     bool parseGraph(const QString &graphpath, const QString &coordsPath, QList<GraphBuilder::Node> &nodes, QString *error);
 
     bool pathParseRelevantNodes (const QString &refpath, QString &fnodePath, QString &harbPath);
+    bool pathParseRelevantInterNodes (const QString &refpath, QString &fnodePath, QString &harbPath);
     bool parseRelevantNodes (const QString &file, QSet<int> &nodes);
+    bool parseRelevantInterNodes (const QString &file, QVector<int> &nodeids);
 
     bool parseStockNamesFile (const QString &path, QMap<QString,int> &names);
 };

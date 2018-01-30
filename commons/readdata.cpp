@@ -3013,7 +3013,13 @@ PathShop read_graph_details(types::NodeId source, string namesimu,  string input
     string source_s2 = out2.str();
     string filename_weight= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s2+".bin";
 
-    return PathShop::readFromFiles(filename_previous, filename_weight);
+    try{
+    PathShop a_shop=    PathShop::readFromFiles(filename_previous, filename_weight);
+        return a_shop;
+    } catch (std::exception &x) {
+        cout << " for node " << source_s1 << "," << endl;
+        cerr << " Error in reading .bin files : " << x.what() << endl;
+    }
 }
 
 multimap<int, int> read_nodes_in_polygons(string a_quarter, string a_graph, string folder_name_parameterization, string inputfolder)

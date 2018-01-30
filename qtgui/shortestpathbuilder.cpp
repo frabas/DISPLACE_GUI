@@ -75,6 +75,10 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
                 it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
                 if (it != relevant_nodes.end())  mem.at(1)=mPredecessors[nd];
 
+                // keep the node onboard if it is a significant intermediate
+                int idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
+                if (idx != -1)  mem.at(1)=mPredecessors[nd];
+
                 if(mem.at(0)!=0 && mem.at(1)!=0){
                    strm_prev << nd << " " << mPredecessors[nd] << endl;
                    strm_min << nd << " " << mDistances[nd] << endl;

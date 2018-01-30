@@ -1822,7 +1822,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         qDebug() << "nodes :" << nodes.size();
 
         bool ok2;
-        QString in2= p3.arg(0);
+        QString in2= dlg.getRelevantInterNodesFolder();
         QVector<int> nodeids;
         ok2 = parser2.parseRelevantInterNodes(in2, nodeids);
 

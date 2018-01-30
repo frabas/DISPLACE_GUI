@@ -3018,7 +3018,7 @@ PathShop read_graph_details(types::NodeId source, string namesimu,  string input
         return a_shop;
     } catch (std::exception &x) {
         cout << " for node " << source_s1 << "," << endl;
-        cerr << " Error in reading .bin files : " << x.what() << endl;
+        cerr << " Error in reading graphsspe\shortPaths_ .bin files : " << x.what() << endl;
     }
 }
 

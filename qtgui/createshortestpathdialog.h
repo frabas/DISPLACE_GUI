@@ -59,6 +59,8 @@ public:
     QString getShortestPathFolder() const;
     void setRelevantNodesFolder(QString);
     QString getRelevantNodesFolder() const;
+    void setRelevantInterNodesFolder(QString);
+    QString getRelevantInterNodesFolder() const;
     bool isAllNodesAreRelevantChecked() const;
     QString getOutputFolder() const;
     void setOutputFolder (const QString &folder);
@@ -71,6 +73,7 @@ public:
 private slots:
     void on_browseShortestFolder_clicked();
     void on_browseRelevantFolder_clicked();
+    void on_browseRelevantInterFolder_clicked();
     void on_ok_clicked();
     void on_browseOutFolder_clicked();
     void on_graphName_textChanged(const QString &);

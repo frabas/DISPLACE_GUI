@@ -61,6 +61,17 @@ QString CreateShortestPathDialog::getRelevantNodesFolder() const
     return ui->relevantFolder->text();
 }
 
+void CreateShortestPathDialog::setRelevantInterNodesFolder(QString path)
+{
+    ui->relevantInterFolder->setText(path);
+}
+
+QString CreateShortestPathDialog::getRelevantInterNodesFolder() const
+{
+    return ui->relevantInterFolder->text();
+}
+
+
 bool CreateShortestPathDialog::isAllNodesAreRelevantChecked() const
 {
     return ui->checkAllRelevantNodes->isChecked();
@@ -106,6 +117,18 @@ void CreateShortestPathDialog::on_browseRelevantFolder_clicked()
     QString path = QFileDialog::getOpenFileName(this, tr("Select Relevant nodes input file") , lastpath, tr("*.dat"));
     if (!path.isEmpty()) {
         setRelevantNodesFolder(path);
+        sets.setValue("last_relpath", path);
+    }
+}
+
+void CreateShortestPathDialog::on_browseRelevantInterFolder_clicked()
+{
+    QSettings sets;
+    QString lastpath = sets.value("last_relpath", QDir::homePath()).toString();
+
+    QString path = QFileDialog::getOpenFileName(this, tr("Select Relevant intermediate nodes input file") , lastpath, tr("*.dat"));
+    if (!path.isEmpty()) {
+        setRelevantInterNodesFolder(path);
         sets.setValue("last_relpath", path);
     }
 }

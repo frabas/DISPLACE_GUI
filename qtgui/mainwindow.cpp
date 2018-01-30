@@ -1786,6 +1786,8 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
     if (dlg.isAllNodesAreRelevantChecked()) {
         builder->setRelevantNodes(currentModel->getNodesList());
+        QVector<double> a_vect(1,0);
+        builder->setRelevantInterNodes(a_vect);
     } else {
         InputFileParser parser;
         QString p1, p2;
@@ -1817,6 +1819,8 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
             l.push_back(currentModel->getNodesList()[i]);
         }
         builder->setRelevantNodes(l);
+        QVector<double> a_vect(1,0);
+        builder->setRelevantInterNodes(a_vect);
     }
 
     builder->run(this,SLOT(end_ShortestPathCreated(bool)) );

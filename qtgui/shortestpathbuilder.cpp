@@ -42,7 +42,7 @@
  * http://www.boost.org/doc/libs/1_57_0/libs/graph/example/dijkstra-example.cpp
  * */
 
-void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
+void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<double> &relevantInterNodesIdx)
 {
     QFile mindist_file(mindist);
     QFile prev_file (prev);
@@ -146,7 +146,7 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
 }
 
 void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                                 const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format)
+                                 const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<double> &relevantInterNodesIdx, Format format)
 {
     Q_UNUSED(simplify);
 
@@ -169,7 +169,7 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
         createBinary(prev, mindist, relevantNodes);
         break;
     case Text:
-        createText(prev,mindist, relevantNodes);
+        createText(prev,mindist, relevantNodes, relevantInterNodesIdx);
         break;
     default:
         throw std::runtime_error("Unhandled case");

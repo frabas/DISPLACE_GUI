@@ -125,7 +125,15 @@ HEADERS= \
     storage/tables/vesselsloglikecatchestable.h \
     storage/tables/nodesdeftable.h \
     storage/tables/popstattable.h \
-    storage/tables/popdyntable.h
+    storage/tables/popdyntable.h \
+    ../mSqliteCpp/include/msqlitecpp.h \
+    ../mSqliteCpp/include/sqlitefielddef.h \
+    ../mSqliteCpp/include/sqlitefieldsop.h \
+    ../mSqliteCpp/include/sqlitestatement.h \
+    ../mSqliteCpp/include/sqlitestatementformatters.h \
+    ../mSqliteCpp/include/sqlitestorage.h \
+    ../mSqliteCpp/include/sqlitetable.h \
+    ../mSqliteCpp/include/sqlitetransaction.h
 
 ### mSQLiteCpp dependency
 

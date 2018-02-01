@@ -42,7 +42,7 @@
  * http://www.boost.org/doc/libs/1_57_0/libs/graph/example/dijkstra-example.cpp
  * */
 
-void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx)
+void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out)
 {
     QFile mindist_file(mindist);
     QFile prev_file (prev);
@@ -70,22 +70,30 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
             if (!mGraph[nd].flag) {
                 std::vector<int>::iterator it;
                 it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
-                if (it != relevant_nodes.end()) mem.at(0)=nd;
+                if (it != relevant_nodes.end() && mem.at(0)==0) mem.at(0)=nd;
 
                 it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
-                if (it != relevant_nodes.end())  mem.at(1)=mPredecessors[nd];
+                if (it != relevant_nodes.end() && mem.at(1)==0)  mem.at(1)=mPredecessors[nd];
 
                 // keep the node onboard if it is a significant intermediate
-                int idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
-                if (idx != -1)  mem.at(1)=mPredecessors[nd];
+                int idx=relevantInterNodesIdx.indexOf(nd);
+                if (idx != -1  && mem.at(0)==0)  mem.at(0)=nd;
+
+                idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
+                if (idx != -1  && mem.at(1)==0) mem.at(1)=mPredecessors[nd];
+
+                if(flag_out) cout << nd << "--" << mPredecessors[nd] << endl;
 
                 if(mem.at(0)!=0 && mem.at(1)!=0){
-                   strm_prev << nd << " " << mPredecessors[nd] << endl;
-                   strm_min << nd << " " << mDistances[nd] << endl;
+                   if(flag_out) cout << "accept-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
+                   strm_prev << mem.at(0) << " " << mPredecessors[nd] << endl;
+                   strm_min << mem.at(0) << " " << mDistances[nd] << endl;
                    mem.at(0)=0;
                    mem.at(1)=0;
                   }
-              }
+
+             }
+
 
             mGraph[nd].flag = true;
             nd = mPredecessors[nd];
@@ -168,12 +176,15 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
     QString mindist = QString("%1/min_distance_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
     QString prev = QString("%1/previous_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
 
+    int flag_out=0;
+    if(node->get_idx_node().toIndex() ==91) flag_out= 1;
+
     switch (format) {
     case Binary:
         createBinary(prev, mindist, relevantNodes);
         break;
     case Text:
-        createText(prev,mindist, relevantNodes, relevantInterNodesIdx);
+        createText(prev,mindist, relevantNodes, relevantInterNodesIdx, flag_out);
         break;
     default:
         throw std::runtime_error("Unhandled case");

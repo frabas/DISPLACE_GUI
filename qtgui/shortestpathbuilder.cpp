@@ -65,6 +65,11 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
 
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
+        vertex_descriptor initial_node_idx =n->get_idx_node().toIndex();
+
+        mem.at(0)=0;
+        mem.at(1)=0;
+       if(flag_out) cout << "trace the path back from nd " << nd << endl;
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
@@ -85,7 +90,7 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
                 if(flag_out) cout << nd << "--" << mPredecessors[nd] << endl;
 
                 if(mem.at(0)!=0 && mem.at(1)!=0){
-                   if(flag_out) cout << "accept-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
+                   if(flag_out) cout << "export-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
                    strm_prev << mem.at(0) << " " << mPredecessors[nd] << endl;
                    strm_min << mem.at(0) << " " << mDistances[nd] << endl;
                    mem.at(0)=0;
@@ -96,6 +101,7 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
 
 
             mGraph[nd].flag = true;
+            if(flag_out && initial_node_idx==6651)  cout << "here nd is "<< nd << " and the mPredecessors[nd] is " << mPredecessors[nd] << endl;
             nd = mPredecessors[nd];
         }
 

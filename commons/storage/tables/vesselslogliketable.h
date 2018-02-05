@@ -13,6 +13,10 @@ using namespace sqlite;
 
 class COMMONSSHARED_EXPORT VesselsLoglikeTable : public SQLiteTable
 {
+private:
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
 public:
     const FieldDef<FieldType::Integer> fldRowId = makeFieldDef("RowId", FieldType::Integer()).primaryKey();
     const FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
@@ -51,6 +55,8 @@ public:
     const FieldDef<FieldType::Integer> numTrips = makeFieldDef("numTrips",FieldType::Integer()).notNull();
 
     VesselsLoglikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~VesselsLoglikeTable() noexcept;
+
     void dropAndCreate();
 
     struct Log {

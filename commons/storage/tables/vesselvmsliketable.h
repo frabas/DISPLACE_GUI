@@ -14,6 +14,11 @@ using namespace sqlite;
 
 class COMMONSSHARED_EXPORT VesselVmsLikeTable : public sqlite::SQLiteTable
 {
+private:
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
+public:
     const FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldTStepDep = makeFieldDef("TStepDep",FieldType::Integer()).notNull();
@@ -25,6 +30,8 @@ class COMMONSSHARED_EXPORT VesselVmsLikeTable : public sqlite::SQLiteTable
 
 public:
     VesselVmsLikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~VesselVmsLikeTable() noexcept;
+
     void dropAndCreate();
 
     struct Log {

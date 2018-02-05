@@ -1,9 +1,27 @@
 #include "vesselvmsliketable.h"
 
+struct VesselVmsLikeTable::Impl
+{
+    std::mutex mutex;
+    bool init = false;
+
+    PreparedInsert<FieldDef<FieldType::Integer>,
+                    FieldDef<FieldType::Integer> ,
+                    FieldDef<FieldType::Integer> ,
+                    FieldDef<FieldType::Real>,
+                    FieldDef<FieldType::Real>,
+                    FieldDef<FieldType::Real>,
+                    FieldDef<FieldType::Real>,
+                    FieldDef<FieldType::Integer>
+    > statement;
+};
+
 VesselVmsLikeTable::VesselVmsLikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
-    : SQLiteTable(db, name)
+    : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
 }
+
+VesselVmsLikeTable::~VesselVmsLikeTable() noexcept = default;
 
 void VesselVmsLikeTable::dropAndCreate()
 {
@@ -23,13 +41,23 @@ void VesselVmsLikeTable::dropAndCreate()
 
 void VesselVmsLikeTable::insertLog(const VesselVmsLikeTable::Log &log)
 {
-    SQLiteTable::insert(fldId.assign(log.id),
-                        fldTStep.assign(log.tstep),
-                        fldTStepDep.assign(log.tstep_dep),
-                        fldPosLong.assign(log.p_long),
-                        fldPosLat.assign(log.p_lat),
-                        fldCourse.assign(log.p_course),
-                        fldCumFuel.assign(log.cum_fuel),
-                        fldState.assign(log.state)
+    std::unique_lock<std::mutex> m(p->mutex);
+    if (!p->init) {
+        p->init = true;
+
+        p->statement = prepareInsert(std::make_tuple(fldId, fldTStep, fldTStepDep,
+                                     fldPosLong, fldPosLat, fldCourse,
+                                     fldCumFuel,
+                                     fldState));
+    }
+
+    SQLiteTable::insert(p->statement, std::make_tuple(log.id,
+                        log.tstep,
+                        log.tstep_dep,
+                        log.p_long,
+                        log.p_lat,
+                        log.p_course,
+                        log.cum_fuel,
+                        log.state)
                         );
 }

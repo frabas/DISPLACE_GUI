@@ -16,6 +16,9 @@ class Fishfarm;
 
 class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable
 {
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldFarmId = makeFieldDef("FarmId",FieldType::Integer()).notNull();
@@ -28,6 +31,7 @@ class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable
 
 public:
     FishfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name);
+    ~FishfarmsTable() noexcept;
     void dropAndCreate();
 
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);

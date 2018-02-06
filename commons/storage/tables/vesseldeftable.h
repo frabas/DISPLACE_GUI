@@ -12,6 +12,9 @@ using namespace sqlite;
 
 class COMMONSSHARED_EXPORT VesselDefTable : public sqlite::SQLiteTable
 {
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
 public:
     const FieldDef<FieldType::Integer> fldId = makeFieldDef("VesselId", FieldType::Integer()).primaryKey();
     const FieldDef<FieldType::Text> fldName = makeFieldDef("VesselName",FieldType::Text()).unique().notNull();
@@ -33,6 +36,7 @@ public:
     const FieldDef<FieldType::Integer> fldFirm_ids = makeFieldDef("Firm",FieldType::Integer());
 
     VesselDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~VesselDefTable() noexcept;
     void dropAndCreate();
 
     void feedVesselsDefTable(const std::vector<std::string> &vesselids,

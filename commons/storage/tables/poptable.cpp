@@ -5,11 +5,20 @@
 #include "sqlitestatementformatters.h"
 #include "sqlitefieldsop.h"
 
+struct PopTable::Impl {
+    std::mutex mutex;
+    bool init = false;
+
+    PreparedInsert<FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,
+        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+};
 
 PopTable::PopTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name)
+    : SQLiteTable(db,name), p(std::make_unique<Impl>())
 {
 }
+
+PopTable::~PopTable() noexcept = default;
 
 void PopTable::dropAndCreate()
 {
@@ -26,6 +35,16 @@ void PopTable::dropAndCreate()
 
 void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &weight_at_szgroup)
 {
+    std::unique_lock<std::mutex> m(p->mutex);
+    if (!p->init) {
+        p->init = true;
+        p->statement = prepareInsert(std::make_tuple(fldNodeId,
+                                                     fldTStep,
+                                                     fldPopId,
+                                                     fldTotNId,
+                                                     fldTotWId));
+    }
+
     double totN_this_pop, totW_this_pop;
 
     for(unsigned int name_pop = 0; name_pop < node->get_Ns_pops_at_szgroup().size(); name_pop++) {
@@ -44,12 +63,12 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
             totW_this_pop+= ns[sz] * w.at(sz);
         }
 
-        SQLiteTable::insert (
-                    fldNodeId.assign(node->get_idx_node().toIndex()),
-                    fldTStep.assign(tstep),
-                    fldPopId.assign(name_pop),
-                    fldTotNId.assign(totN_this_pop),
-                    fldTotWId.assign(totW_this_pop)
+        SQLiteTable::insert (p->statement, std::make_tuple(
+                    (int)node->get_idx_node().toIndex(),
+                    tstep,
+                    (int)name_pop,
+                    totN_this_pop,
+                    totW_this_pop)
                     );
     }
 

@@ -16,6 +16,10 @@ class Node;
 
 class COMMONSSHARED_EXPORT NodesDefTable : public SQLiteTable
 {
+private:
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
     const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Text> fldNodeName = makeFieldDef("NodeName",FieldType::Text());
     const FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();
@@ -23,6 +27,8 @@ class COMMONSSHARED_EXPORT NodesDefTable : public SQLiteTable
 
 public:
     NodesDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~NodesDefTable() noexcept;
+
     void dropAndCreate();
 
     void insert(Node* node);

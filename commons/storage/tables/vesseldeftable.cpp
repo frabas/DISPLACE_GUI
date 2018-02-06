@@ -4,10 +4,20 @@
 
 using namespace sqlite;
 
+struct VesselDefTable::Impl {
+    std::mutex mutex;
+    bool init = false;
+
+    PreparedInsert<FieldDef<FieldType::Text>,FieldDef<FieldType::Text>,
+        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+};
+
 VesselDefTable::VesselDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db, name)
+    : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
 }
+
+VesselDefTable::~VesselDefTable() noexcept = default;
 
 void VesselDefTable::dropAndCreate()
 {
@@ -36,14 +46,22 @@ void VesselDefTable::dropAndCreate()
 
 void VesselDefTable::feedVesselsDefTable(const std::vector<std::string> &vesselids, const std::vector<double> &speeds, const std::vector<double> &length)
 {
+    std::unique_lock<std::mutex> m(p->mutex);
+    if (!p->init) {
+        p->init = true;
+        p->statement = prepareInsert(std::make_tuple(fldName,
+                                                     fldNationality,
+                                                     fldSpeeds,
+                                                     fldLengths
+                                                     ));
+    }
+
     auto l = vesselids.size();
     for (size_t i = 0; i < l; ++i) {
         std::string nat;
         std::copy(vesselids[i].begin(), vesselids[i].begin() + 3, std::back_inserter(nat));
-        insert (fldName.assign(vesselids[i]),
-                fldNationality.assign(nat),
-                fldSpeeds.assign(speeds[i]),
-                fldLengths.assign(length[i]));
+        insert (p->statement, std::make_tuple(vesselids[i],
+                nat, speeds[i],length[i]));
     }
 }
 

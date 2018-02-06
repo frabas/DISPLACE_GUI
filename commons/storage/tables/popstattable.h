@@ -16,6 +16,11 @@ class Node;
 
 class COMMONSSHARED_EXPORT PopStatTable : public SQLiteTable
 {
+private:
+    struct Impl;
+
+    std::unique_ptr<Impl> p;
+
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
 
@@ -26,6 +31,7 @@ class COMMONSSHARED_EXPORT PopStatTable : public SQLiteTable
 
 public:
     PopStatTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~PopStatTable() noexcept;
     void dropAndCreate();
 
     void insert (int tstep, Node *node);

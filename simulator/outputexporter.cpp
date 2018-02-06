@@ -57,6 +57,8 @@ void OutputExporter::exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel)
 
 void OutputExporter::exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel)
 {
+    std::unique_lock<std::mutex> locker(glob_mutex);
+
     VesselVmsLikeTable::Log log;
     log.tstep = tstep;
     log.id = vessel->get_idx();

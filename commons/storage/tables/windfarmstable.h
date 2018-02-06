@@ -16,6 +16,9 @@ class Windmill;
 
 class COMMONSSHARED_EXPORT WindfarmsTable : public SQLiteTable
 {
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
 public:
     const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldWindfarmId = makeFieldDef("WindarmId",FieldType::Integer()).notNull();
@@ -25,6 +28,7 @@ public:
     const FieldDef<FieldType::Real> fldKwhProduction = makeFieldDef("KwhProduction", FieldType::Real());
 
     WindfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name);
+    ~WindfarmsTable() noexcept;
     void dropAndCreate();
 
     void exportWindmillData(Windmill *windmill, int tstep);

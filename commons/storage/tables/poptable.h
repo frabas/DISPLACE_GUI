@@ -16,6 +16,9 @@ class Node;
 
 class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
 {
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
@@ -25,6 +28,7 @@ class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
 
 public:
     PopTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~PopTable() noexcept;
     void dropAndCreate();
 
     void insert (int tstep, Node *node, const std::multimap<int, double> &initstate);

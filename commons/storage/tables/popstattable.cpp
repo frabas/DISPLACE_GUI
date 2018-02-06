@@ -2,10 +2,20 @@
 
 #include <Node.h>
 
+struct PopStatTable::Impl {
+    std::mutex mutex;
+    bool init = false;
+
+    PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
+};
+
 PopStatTable::PopStatTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name)
+    : SQLiteTable(db,name), p(std::make_unique<Impl>())
 {
 }
+
+PopStatTable::~PopStatTable() noexcept = default;
 
 void PopStatTable::dropAndCreate()
 {
@@ -23,11 +33,25 @@ void PopStatTable::dropAndCreate()
 
 void PopStatTable::insert(int tstep, Node *node)
 {
-    SQLiteTable::insert(fldTStep.assign(tstep),
-                        fldNodeId.assign(node->get_idx_node().toIndex()),
-                        cumFTime.assign(node->get_cumftime()),
-                        cumSwA.assign(node->get_cumsweptarea()),
-                        cumCatches.assign(node->get_cumcatches()),
-                        cumDisc.assign(node->get_cumdiscards())
+    std::unique_lock<std::mutex> m(p->mutex);
+
+    if (!p->init) {
+        p->init = true;
+
+        p->insertStatement = prepareInsert(std::make_tuple(fldTStep,
+                                                           fldNodeId,
+                                                           cumFTime,
+                                                           cumSwA,
+                                                           cumCatches,
+                                                           cumDisc));
+    }
+
+    SQLiteTable::insert(p->insertStatement,
+                        std::make_tuple(tstep,
+                            (int)node->get_idx_node().toIndex(),
+                            node->get_cumftime(),
+                            node->get_cumsweptarea(),
+                            node->get_cumcatches(),
+                            node->get_cumdiscards())
                         );
 }

@@ -54,6 +54,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="recipes\recipe.py" />
+    <Compile Include="recipes\sqlite.py" />
     <Compile Include="recipes\zlib.py" />
     <Compile Include="recipes\__init__.py" />
     <Compile Include="__init__.py" />

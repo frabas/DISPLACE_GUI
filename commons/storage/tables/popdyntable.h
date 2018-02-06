@@ -16,6 +16,9 @@ class Population;
 
 class COMMONSSHARED_EXPORT PopDynTable : public SQLiteTable
 {
+private:
+    struct Impl;
+    std::unique_ptr<Impl> p;
 public:
     const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId",FieldType::Integer()).notNull();
@@ -26,6 +29,7 @@ public:
     const FieldDef<FieldType::Real> fldSSB = makeFieldDef("SSB",FieldType::Real());
 
     PopDynTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~PopDynTable() noexcept;
 
     void dropAndCreate();
     void insert (int tstep, int popid, Population *pop);

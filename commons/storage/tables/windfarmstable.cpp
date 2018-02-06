@@ -5,10 +5,21 @@
 #include <sqlitefieldsop.h>
 #include <sqlitestatementformatters.h>
 
+struct WindfarmsTable::Impl {
+    std::mutex mutex;
+    bool init = false;
+
+    PreparedInsert<FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,
+        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+};
+
+
 WindfarmsTable::WindfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name)
-    : SQLiteTable(db,name)
+    : SQLiteTable(db,name), p(std::make_unique<Impl>())
 {
 }
+
+WindfarmsTable::~WindfarmsTable() noexcept = default;
 
 void WindfarmsTable::dropAndCreate()
 {
@@ -25,11 +36,20 @@ void WindfarmsTable::dropAndCreate()
 
 void WindfarmsTable::exportWindmillData(Windmill *windmill, int tstep)
 {
-    insert(fldTStep.assign(tstep),
-           fldWindfarmId.assign(windmill->get_idx()),
-           fldWindfarmType.assign(windmill->get_type()),
-           fldKwh.assign(windmill->get_kWh()),
-           fldKwhProduction.assign(windmill->get_kW_production())
+    std::unique_lock<std::mutex> m(p->mutex);
+    if (!p->init) {
+        p->init = true;
+        p->statement = prepareInsert(std::make_tuple(fldTStep,
+                                                     fldWindfarmId,
+                                                     fldWindfarmType,
+                                                     fldKwh,fldKwhProduction));
+    }
+
+    insert(p->statement, std::make_tuple(tstep,
+           windmill->get_idx(),
+           windmill->get_type(),
+           windmill->get_kWh(),
+           windmill->get_kW_production())
            );
 }
 

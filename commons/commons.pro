@@ -14,7 +14,7 @@ LIBS += -L.. -lformats
 win32 {
     # No crash handler support for Windows
     DEFINES += NO_CRASHHANDLER
-    DEFINES += BUILD_MSQLITECPP
+    DEFINES += EMBED_MSQLITECPP
 
     # For GetProcessMemoryInfo()
     LIBS += -lpsapi

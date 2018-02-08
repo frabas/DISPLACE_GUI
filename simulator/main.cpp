@@ -3598,6 +3598,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
+#if 0
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
         if (enable_sqlite_out) {
@@ -3620,6 +3621,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // signals the gui that the filename has been updated.
         guiSendUpdateCommand(popnodes_start_filename, 0);
     }
+#endif
 
     //----------------------//
     //----------------------//

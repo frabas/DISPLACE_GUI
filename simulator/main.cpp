@@ -243,6 +243,8 @@ vector <PathShop> pathshops;
 ofstream fishfarmslogs;
 ofstream windmillslogs;
 ofstream shipslogs;
+
+std::mutex listVesselMutex;
 vector<int> listVesselIdForVmsLikeToExport;
 vector<int> listVesselIdForVmsLikeFPingsOnlyToExport;
 vector<int> listVesselIdForLogLikeToExport;
@@ -5191,34 +5193,37 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
        // export
-        for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
         {
-        //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
-              OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+            std::unique_lock<std::mutex> m(listVesselMutex);
+            for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
+            {
+            //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
+                  OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+            }
+            listVesselIdForVmsLikeToExport.clear();
+
+            for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
+            {
+                  OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
+            }
+            listVesselIdForVmsLikeFPingsOnlyToExport.clear();
+
+
+            for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
+            {
+                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                 OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
+                 vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
+            }
+            listVesselIdForLogLikeToExport.clear();
+
+            for (unsigned int idx =0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++)
+            {
+                 OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(idx)], populations, implicit_pops);
+            }
+            listVesselIdForTripCatchPopPerSzgroupExport.clear();
+
         }
-        listVesselIdForVmsLikeToExport.clear();
-
-        for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
-        {
-              OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
-        }
-        listVesselIdForVmsLikeFPingsOnlyToExport.clear();
-
-
-        for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
-        {
-            //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
-             OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
-             vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
-        }
-        listVesselIdForLogLikeToExport.clear();
-
-        for (unsigned int idx =0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++)
-        {
-             OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(idx)], populations, implicit_pops);
-        }
-        listVesselIdForTripCatchPopPerSzgroupExport.clear();
-
 
 
         // EXPORT: vessel_loglike - disabled

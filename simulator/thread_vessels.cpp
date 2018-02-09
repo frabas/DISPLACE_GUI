@@ -148,6 +148,8 @@ extern vector<PathShop> pathshops;
 extern ofstream fishfarmslogs;
 extern ofstream windfarmslogs;
 extern ofstream shipslogs;
+
+extern std::mutex listVesselMutex;
 extern vector<int> listVesselIdForVmsLikeFPingsOnlyToExport;
 extern vector<int> listVesselIdForVmsLikeToExport;
 extern vector<int> listVesselIdForLogLikeToExport;
@@ -219,6 +221,7 @@ static void manage_vessel(int idx_v,
                     vessels[index_v]->updateTripsStatistics(populations, implicit_pops, tstep);
                     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(tstep, vessels[index_v], populations, implicit_pops)));
 
+                    std::unique_lock<std::mutex> m(listVesselMutex);
                     listVesselIdForLogLikeToExport.push_back(index_v);
                     //cout << "tstep: "<< tstep << "we should have exported loglike for " << index_v << endl;
                     //OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
@@ -472,10 +475,12 @@ static void manage_vessel(int idx_v,
 
     if( vessels[ index_v ]->get_state()!=3) {
        if(export_vmslike && tstep<8641) {
+           std::unique_lock<std::mutex> m(listVesselMutex);
            listVesselIdForVmsLikeToExport.push_back(index_v);
            //OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
         }
        if( vessels[ index_v ]->get_state()==1 && vessels[ index_v ]->get_vid_is_part_of_ref_fleet()) { // fishing state
+           std::unique_lock<std::mutex> m(listVesselMutex);
            listVesselIdForVmsLikeFPingsOnlyToExport.push_back(index_v);
            // OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[index_v],  populations, implicit_pops);
         }

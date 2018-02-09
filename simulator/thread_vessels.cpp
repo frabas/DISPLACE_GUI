@@ -148,6 +148,11 @@ extern vector<PathShop> pathshops;
 extern ofstream fishfarmslogs;
 extern ofstream windfarmslogs;
 extern ofstream shipslogs;
+extern vector<int> listVesselIdForVmsLikeFPingsOnlyToExport;
+extern vector<int> listVesselIdForVmsLikeToExport;
+extern vector<int> listVesselIdForLogLikeToExport;
+extern vector<int> listVesselIdForTripCatchPopPerSzgroupExport;
+
 
 extern void guiSendVesselLogbook(const std::string &line);
 
@@ -171,7 +176,11 @@ static void manage_ship(int idx_v)
 
 
 
-static void manage_vessel(int idx_v)
+static void manage_vessel(int idx_v,
+                          vector<int> &listVesselIdForVmsLikeToExport,
+                          vector<int> &listVesselIdForVmsLikeFPingsOnlyToExport,
+                          vector<int> &listVesselIdForLogLikeToExport,
+                          vector<int> &listVesselIdForTripCatchPopPerSzgroupExport)
 {
     vector <double> dist_to_ports;
 
@@ -209,13 +218,15 @@ static void manage_vessel(int idx_v)
                     outc(cout  << "...just arrived!" << endl);
                     vessels[index_v]->updateTripsStatistics(populations, implicit_pops, tstep);
                     mOutQueue.enqueue(std::shared_ptr<OutputMessage>(new VesselLogbookOutputMessage(tstep, vessels[index_v], populations, implicit_pops)));
-                    OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
 
+                    listVesselIdForLogLikeToExport.push_back(index_v);
+                    //cout << "tstep: "<< tstep << "we should have exported loglike for " << index_v << endl;
+                    //OutputExporter::instance().exportLogLike(tstep, vessels[index_v], populations, implicit_pops);
 
                     if(vessels[index_v]->get_vid_is_part_of_ref_fleet()){
-                        OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[index_v], populations, implicit_pops);
+                        listVesselIdForTripCatchPopPerSzgroupExport.push_back(index_v);
+                        //OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[index_v], populations, implicit_pops);
                     }
-
 
 #if 0
                     std::ostringstream ss;
@@ -225,9 +236,10 @@ static void manage_vessel(int idx_v)
                     guiSendVesselLogbook(ss.str());
 #endif
                     //vessels[ index_v ]->export_loglike_prop_met (loglike_prop_met, tstep, nbpops);
-                    vessels[index_v]->lock();
-                    vessels[ index_v ]->reinit_after_a_trip();
-                    vessels[index_v]->unlock();
+
+                    //vessels[index_v]->lock();
+                    //vessels[ index_v ]->reinit_after_a_trip();
+                    //vessels[index_v]->unlock();
                 }
                 // ***************make a probable decision*************************
                 vessels[ index_v ]->which_metier_should_i_go_for(metiers);
@@ -460,10 +472,12 @@ static void manage_vessel(int idx_v)
 
     if( vessels[ index_v ]->get_state()!=3) {
        if(export_vmslike && tstep<8641) {
-            OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
+           listVesselIdForVmsLikeToExport.push_back(index_v);
+           //OutputExporter::instance().exportVmsLike(tstep, vessels[index_v]);
         }
        if( vessels[ index_v ]->get_state()==1 && vessels[ index_v ]->get_vid_is_part_of_ref_fleet()) { // fishing state
-            OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[index_v],  populations, implicit_pops);
+           listVesselIdForVmsLikeFPingsOnlyToExport.push_back(index_v);
+           // OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[index_v],  populations, implicit_pops);
         }
     }
 
@@ -508,7 +522,11 @@ static void *thread_manage_func()
 
         if(nextidx<5000) // caution: assuming no more 5000 fishing vessels
         {
-            manage_vessel(nextidx);
+            manage_vessel(nextidx,
+                           listVesselIdForVmsLikeToExport,
+                           listVesselIdForVmsLikeFPingsOnlyToExport,
+                           listVesselIdForLogLikeToExport,
+                           listVesselIdForTripCatchPopPerSzgroupExport);
         }
         else
         {

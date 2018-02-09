@@ -26,7 +26,9 @@ unix:!macx{
 unix {
     LIBS+=-lboost_unit_test_framework
 }
+
 win32 {
+    DEFINES += EMBED_MSQLITECPP
     LIBS += -lboost_unit_test_framework-vc140-mt-1_63
 }
 
@@ -42,9 +44,7 @@ SOURCES= main.cpp \
     inputfiles_fishfarmsspe.cpp \
     inputfiles_simusspe.cpp \
     inputfiles_windmillsspe.cpp \
-    test_pathshop.cpp \
-    sqlitestorage.cpp \
-    sqlite_tables.cpp
+    test_pathshop.cpp
 
 HEADERS=
 

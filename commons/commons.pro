@@ -14,6 +14,7 @@ LIBS += -L.. -lformats
 win32 {
     # No crash handler support for Windows
     DEFINES += NO_CRASHHANDLER
+    DEFINES += EMBED_MSQLITECPP
 
     # For GetProcessMemoryInfo()
     LIBS += -lpsapi
@@ -125,16 +126,30 @@ HEADERS= \
     storage/tables/vesselsloglikecatchestable.h \
     storage/tables/nodesdeftable.h \
     storage/tables/popstattable.h \
-    storage/tables/popdyntable.h
+    storage/tables/popdyntable.h \
+    ../mSqliteCpp/include/msqlitecpp.h \
+    ../mSqliteCpp/include/sqlitefielddef.h \
+    ../mSqliteCpp/include/sqlitefieldsop.h \
+    ../mSqliteCpp/include/sqlitestatement.h \
+    ../mSqliteCpp/include/sqlitestatementformatters.h \
+    ../mSqliteCpp/include/sqlitestorage.h \
+    ../mSqliteCpp/include/sqlitetable.h \
+    ../mSqliteCpp/include/sqlitetransaction.h
 
 ### mSQLiteCpp dependency
 
-DEFINES += BUILD_MSQLITECPP
+!win32 {
+    DEFINES += BUILD_MSQLITECPP
+}
+
 INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
 SOURCES += $$top_srcdir/mSqliteCpp/src/*
 HEADERS += $$top_srcdir/mSqliteCpp/include/*
-win32: LIBS += -lsqlite3_static
 !win32: LIBS += -lsqlite3
+
+win32 {
+    SOURCES += storage/sqlite3.c
+}
 
 ### End mSqliteCpp Depedency
 

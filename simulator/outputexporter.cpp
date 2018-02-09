@@ -32,8 +32,8 @@ OutputExporter::OutputExporter(const string &basepath, const string &namesimu)
 
 void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
 {
-    if (useSql)
-        exportVmsLikeSQLite(tstep, vessel);
+    //if (useSql)
+    //    exportVmsLikeSQLite(tstep, vessel);
     if (usePlainText)
         exportVmsLikePlaintext(tstep, vessel);
 }
@@ -126,8 +126,8 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
-    if (useSql)
-        exportLogLikeSQLite(tstep, v, populations, implicit_pops);
+    //if (useSql)
+    //    exportLogLikeSQLite(tstep, v, populations, implicit_pops);
     if (usePlainText)
         exportLogLikePlaintext(tstep, v, populations, implicit_pops);
 }

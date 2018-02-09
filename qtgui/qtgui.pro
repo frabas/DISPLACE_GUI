@@ -349,8 +349,12 @@ DEFINES += BUILD_MSQLITECPP
 INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
 SOURCES += $$top_srcdir/mSqliteCpp/src/*
 HEADERS += $$top_srcdir/mSqliteCpp/include/*
-win32: LIBS += -lsqlite3_static
 !win32: LIBS += -lsqlite3
+
+win32 {
+    DEFINES += EMBED_MSQLITECPP
+    SOURCES += ../commons/storage/sqlite3.c
+}
 
 ### End mSqliteCpp Depedency
 

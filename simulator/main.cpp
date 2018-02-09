@@ -25,7 +25,6 @@
 #include "storage/tables/vesseldeftable.h"
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
-#include "sqlitetransaction.h"
 using namespace sqlite;
 
 #include <helpers.h>
@@ -3598,6 +3597,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
+#if 0
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
         if (enable_sqlite_out) {
@@ -3620,6 +3620,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // signals the gui that the filename has been updated.
         guiSendUpdateCommand(popnodes_start_filename, 0);
     }
+#endif
 
     //----------------------//
     //----------------------//
@@ -3634,8 +3635,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     for (tstep =0; tstep < nbsteps; ++tstep)
     {
-        if (enable_sqlite_out)
+        if (enable_sqlite_out && (tstep % 100) == 0) {
+            std::cout << "Start Transaction " << tstep << "\n";
             outSqlite->startDayLoop();
+        }
 
 #ifdef PROFILE
         mLoopProfile.start();
@@ -5016,8 +5019,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
                   windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
 
-                  if (enable_sqlite_out)
+                  if (enable_sqlite_out) {
                       outSqlite->exportWindmillsLog(windmills.at(i), tstep);
+                  }
              }
 
         }
@@ -5224,9 +5228,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 #endif
 
-        if (enable_sqlite_out)
-            outSqlite->endDayLoop();
 
+
+        if (enable_sqlite_out && (tstep % 100) == 99) {
+            std::cout << "End Transaction " << tstep << "\n";
+            outSqlite->endDayLoop();
+        }
 #ifdef PROFILE
         mLoopProfile.elapsed_ms();
 

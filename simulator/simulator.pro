@@ -18,7 +18,6 @@ CONFIG += c++14
 
 LIBS+= -L.. -ldisplacecommons -lformats
 
-win32: -lsqlite3_static
 !win32: -lsqlite3
 
 macx {

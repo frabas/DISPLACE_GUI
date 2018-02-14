@@ -1878,6 +1878,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // input data, read proportion of natural mortality from other species when spatial co-occurences on node
+    cout << "Do the species_interactions_mortality_proportion_matrix creation  need a check?" << endl;
     vector< vector<double> > species_interactions_mortality_proportion_matrix= read_species_interactions_mortality_proportion_matrix(nbpops, folder_name_parameterization, inputfolder, biolsce);
 
 
@@ -2298,11 +2299,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     cout << "check whether all metiers informed in the following parameters files... " << endl;
     cout << "read metier betas parameters....ok? " << endl;
     multimap<int, double> metiers_betas = read_metiers_betas(a_semester, folder_name_parameterization, inputfolder);
-    cout << "read mls cat parameters....ok? " << endl;
-    multimap<int, double> discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
     cout << "read discardratio_limits parameters....ok? " << endl;
-    multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
+    multimap<int, double> discards_rate_limits = read_discardratio_limits(a_semester, folder_name_parameterization, inputfolder);
     cout << "read is_avoided_stocks parameters....ok? " << endl;
+    multimap<int, int> is_avoided_stockss = read_is_avoided_stocks(a_semester, folder_name_parameterization, inputfolder);
+    cout << "read mls cat parameters....ok? " << endl;
     multimap<int, int>    metiers_mls_cat = read_metiers_mls_cat(a_semester, folder_name_parameterization, inputfolder);
     cout << "read metiers types parameters....ok? " << endl;
     map<int, int>         metiers_types = read_metiers_types(folder_name_parameterization, inputfolder);
@@ -2310,11 +2311,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     map<int, double>      percent_revenue_completenesses = read_percent_revenue_completenesses(folder_name_parameterization, inputfolder);
     cout << "read fspeed parameters....ok? " << endl;
     map<int, double>      metiers_fspeed = read_metiers_fspeed(folder_name_parameterization, inputfolder);
-    cout << "read gear width a parameters....ok? " << endl;
+    cout << "read metier gear width a parameters....ok? " << endl;
     map<int, double>      metiers_gear_widths_param_a = read_gear_widths_param_a(folder_name_parameterization, inputfolder);
-    cout << "read gear width b parameters....ok? " << endl;
+    cout << "read metier gear width b parameters....ok? " << endl;
     map<int, double>      metiers_gear_widths_param_b = read_gear_widths_param_b(folder_name_parameterization, inputfolder);
-    cout << "read gear width model type parameters....ok? " << endl;
+    cout << "read metier gear width model type parameters....ok? " << endl;
     map<int, string>      metiers_gear_widths_model_type = read_gear_widths_model_type(folder_name_parameterization, inputfolder);
 
 

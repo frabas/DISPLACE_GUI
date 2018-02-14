@@ -79,12 +79,12 @@ void SQLiteOutputStorage::close()
 
 void SQLiteOutputStorage::startDayLoop()
 {
-    assert(p->db->startTransaction());
+    p->db->startTransaction();
 }
 
 void SQLiteOutputStorage::endDayLoop()
 {
-    assert(p->db->commitTransaction());
+    p->db->commitTransaction();
 }
 
 std::shared_ptr<SQLiteStorage> SQLiteOutputStorage::getDb() const

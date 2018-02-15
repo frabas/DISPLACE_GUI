@@ -255,6 +255,7 @@ vector<int> listVesselIdForTripCatchPopPerSzgroupExport;
 #include <messages/noipc.h>
 #endif
 
+static size_t numStepTransactions = 100;
 
 //vector <double> dist_to_ports;
 
@@ -3642,7 +3643,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     for (tstep =0; tstep < nbsteps; ++tstep)
     {
-        if (enable_sqlite_out && (tstep % 100) == 0) {
+        if (enable_sqlite_out && (tstep % numStepTransactions) == 0) {
             std::cout << "Start Transaction " << tstep << "\n";
             outSqlite->startDayLoop();
         }
@@ -5272,7 +5273,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-        if (enable_sqlite_out && (tstep % 100) == 99) {
+        if (enable_sqlite_out && (tstep % numStepTransactions) == (numStepTransactions-1)) {
             std::cout << "End Transaction " << tstep << "\n";
             outSqlite->endDayLoop();
         }

@@ -70,7 +70,8 @@ SOURCES= \
     storage/tables/vesselsloglikecatchestable.cpp \
     storage/tables/nodesdeftable.cpp \
     storage/tables/popstattable.cpp \
-    storage/tables/popdyntable.cpp
+    storage/tables/popdyntable.cpp \
+    storage/tables/metadatatable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -134,7 +135,8 @@ HEADERS= \
     ../mSqliteCpp/include/sqlitestatementformatters.h \
     ../mSqliteCpp/include/sqlitestorage.h \
     ../mSqliteCpp/include/sqlitetable.h \
-    ../mSqliteCpp/include/sqlitetransaction.h
+    ../mSqliteCpp/include/sqlitetransaction.h \
+    storage/tables/metadatatable.h
 
 ### mSQLiteCpp dependency
 
@@ -143,8 +145,8 @@ HEADERS= \
 }
 
 INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
-SOURCES += $$top_srcdir/mSqliteCpp/src/*
-HEADERS += $$top_srcdir/mSqliteCpp/include/*
+SOURCES += $$top_srcdir/mSqliteCpp/src/*.cpp
+HEADERS += $$top_srcdir/mSqliteCpp/include/*.h
 !win32: LIBS += -lsqlite3
 
 win32 {

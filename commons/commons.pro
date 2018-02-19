@@ -71,7 +71,8 @@ SOURCES= \
     storage/tables/nodesdeftable.cpp \
     storage/tables/popstattable.cpp \
     storage/tables/popdyntable.cpp \
-    storage/tables/metadatatable.cpp
+    storage/tables/metadatatable.cpp \
+    storage/modelmetadataaccessor.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -136,7 +137,9 @@ HEADERS= \
     ../mSqliteCpp/include/sqlitestorage.h \
     ../mSqliteCpp/include/sqlitetable.h \
     ../mSqliteCpp/include/sqlitetransaction.h \
-    storage/tables/metadatatable.h
+    storage/tables/metadatatable.h \
+    storage/modelconfig.h \
+    storage/modelmetadataaccessor.h
 
 ### mSQLiteCpp dependency
 

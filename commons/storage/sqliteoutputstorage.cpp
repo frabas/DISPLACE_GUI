@@ -14,6 +14,7 @@
 #include "tables/vesselsloglikecatchestable.h"
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
+#include "tables/metadatatable.h"
 
 #include <cassert>
 
@@ -39,6 +40,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
+    std::shared_ptr<MetadataTable> mMetadata;
 };
 
 SQLiteOutputStorage::SQLiteOutputStorage(std::string path)
@@ -63,6 +65,7 @@ void SQLiteOutputStorage::open()
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
+    p->mMetadata = std::make_shared<MetadataTable> (p->db, "Metadata");
 
     try {
         SQLiteStatement wal(p->db, "PRAGMA journal_mode=WAL");
@@ -534,6 +537,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();
     p->mVesselLoglikeCatchesTable->dropAndCreate();
+    p->mMetadata->dropAndCreate();
 }
 
 void SQLiteOutputStorage::createAllIndexes()
@@ -571,3 +575,7 @@ std::shared_ptr<WindfarmsTable> SQLiteOutputStorage::getWindfarmTable() const
     return p->mWindmillsTable;
 }
 
+std::shared_ptr<MetadataTable> SQLiteOutputStorage::metadata() const
+{
+    return p->mMetadata;
+}

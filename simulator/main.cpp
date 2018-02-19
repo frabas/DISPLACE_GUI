@@ -25,6 +25,7 @@
 #include "storage/tables/vesseldeftable.h"
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
+#include "storage/modelmetadataaccessor.h"
 using namespace sqlite;
 
 #include <helpers.h>
@@ -987,6 +988,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
+    std::shared_ptr<ModelMetadataAccessor> metadata = nullptr;
     OutputExporter::instance().setUseSqlite(enable_sqlite_out);
 
     std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
@@ -998,6 +1000,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             OutputExporter::instance().setSQLiteDb(outSqlite);            
             guiSendOutputInfo(sqliteOutputPath);
+
+            metadata = std::make_shared<ModelMetadataAccessor>(outSqlite->metadata());
         }
     } catch (SQLiteException &x) {
         std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
@@ -5269,7 +5273,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 #endif
 
-
+        if (metadata)
+            metadata->setLastTStep(tstep);
 
         if (enable_sqlite_out && (tstep % numStepTransactions) == (numStepTransactions-1)) {
             std::cout << "End Transaction " << tstep << "\n";

@@ -20,6 +20,7 @@ class WindfarmsTable;
 class Vessel;
 class Population;
 class Node;
+class MetadataTable;
 
 namespace sqlite {
 class SQLiteStorage;
@@ -53,6 +54,7 @@ public:
     std::shared_ptr<NodesDefTable> getPopNodesTable() const;
     std::shared_ptr<PopTable> getPopTable() const;
     std::shared_ptr<WindfarmsTable> getWindfarmTable() const;
+    std::shared_ptr<MetadataTable> metadata() const;
 
     std::shared_ptr<sqlite::SQLiteStorage> getDb() const;
 

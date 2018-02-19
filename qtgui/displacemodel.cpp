@@ -23,6 +23,7 @@
 #include <dbhelper.h>
 #include <calendar.h>
 #include <modelobjects/metierdata.h>
+#include "storage/modelmetadataaccessor.h"
 
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
@@ -233,7 +234,9 @@ bool DisplaceModel::loadDatabase(QString path)
 
     setSimulationSqlStorage(path);
 
+    ModelMetadataAccessor accessor (mOutSqlite->metadata());
     mConfig.setNbpops(mOutSqlite->getNbPops());
+    setCurrentStep(accessor.lastTStep());
 
     qDebug() << "Pops: " << mConfig.getNbpops();
     return true;

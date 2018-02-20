@@ -27,7 +27,7 @@
 #include <options.h>
 #include <readdata.h>
 #include <helpers.h>
-
+#include <storage/sqliteoutputstorage.h>
 
 #ifndef NO_IPC
 #include <ipc.h>
@@ -58,6 +58,9 @@ extern AverageProfiler mPopExportProfile;
 #endif
 
 extern std::mutex glob_mutex;
+
+extern bool enable_sqlite_out;
+extern std::shared_ptr<SQLiteOutputStorage> outSqlite;
 
 // todo: remove this, better use a unique_lock<> instead
 static void lock()
@@ -139,10 +142,12 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
     // export initial POPSTATS
     if(tstep==0)
     {
-
         // EXPORT POPSTATS FILE
             for (unsigned int sp=0; sp<populations.size(); sp++)
             {
+                if (enable_sqlite_out)
+                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+
                 outc(cout << "...pop " << sp << endl;)
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
@@ -605,6 +610,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // EXPORT POPSTATS FILE
             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
+                if (enable_sqlite_out)
+                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
 
                      popstats << setprecision(6) << fixed;
 

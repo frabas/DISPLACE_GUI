@@ -28,6 +28,7 @@
 #include <readdata.h>
 #include <helpers.h>
 #include <storage/sqliteoutputstorage.h>
+#include "storage/tables/poptable.h"
 
 #ifndef NO_IPC
 #include <ipc.h>
@@ -775,6 +776,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             for (unsigned int n=0; n<nodes.size(); n++)
             {
                 nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
+                if (enable_sqlite_out) {
+                    outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+                }
             }
             if (use_gui) {
                 popnodes_end.flush();
@@ -798,6 +802,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         nodes.at(n)->export_popnodes_cumdiscards(popnodes_cumdiscards, tstep);
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
+
+        if (enable_sqlite_out) {
+            outSqlite->exportPopNodes(tstep, nodes.at(n));
+            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+        }
     }
 
     // to get the list of nodes making xx% of the total...

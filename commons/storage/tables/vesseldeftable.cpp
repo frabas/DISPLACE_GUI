@@ -1,5 +1,8 @@
 #include "vesseldeftable.h"
 
+#include <sqlitestatement.h>
+#include <sqlitestatementformatters.h>
+
 #include <iterator>
 
 using namespace sqlite;
@@ -63,6 +66,21 @@ void VesselDefTable::feedVesselsDefTable(const std::vector<std::string> &vesseli
         insert (p->statement, std::make_tuple(vesselids[i],
                 nat, speeds[i],length[i]));
     }
+}
+
+std::vector<std::string> VesselDefTable::getNationsList()
+{
+    auto select = sqlite::statements::Select(name(), fldNationality).distinct();
+
+    sqlite::SQLiteStatement stmt(db(),select);
+
+    std::vector<std::string> data;
+    stmt.execute([&stmt, &data](){
+        data.push_back(stmt.getStringValue(0));
+        return true;
+    });
+
+    return data;
 }
 
 void VesselDefTable::createIndex()

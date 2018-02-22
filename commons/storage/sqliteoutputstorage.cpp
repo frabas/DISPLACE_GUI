@@ -264,6 +264,8 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         return true;
     });
 
+    qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation) << " => "  << data.v.size();
+
     return data;
 }
 
@@ -359,6 +361,8 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         data.v.push_back(stmt.getDoubleValue(1));
         return true;
     });
+
+    qDebug() << "HarbourStat: " << QString::fromStdString(select.string()) << " : " << harbourid << " => "  << data.v.size();
 
     return data;
 }
@@ -456,6 +460,8 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         return true;
     });
 
+    qDebug() << "MetierStat: " << QString::fromStdString(select.string()) << " : " << metierid << " => "  << data.v.size();
+
     return data;
 }
 
@@ -523,6 +529,11 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
 size_t SQLiteOutputStorage::getNbPops()
 {
     return p->mPopTable->getNbPops();
+}
+
+std::vector<std::string> SQLiteOutputStorage::getNationsList()
+{
+    return p->mVesselDefTable->getNationsList();
 }
 
 void SQLiteOutputStorage::createAllTables()

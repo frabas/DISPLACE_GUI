@@ -70,6 +70,8 @@ public:
     TimelineData getPopulationStatData(displace::plot::PopulationStat stat, displace::plot::AggregationType aggtype, int popid, int grpid);
 
     size_t getNbPops();
+
+    std::vector<std::string> getNationsList();
 private:
 };
 

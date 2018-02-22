@@ -43,6 +43,8 @@ public:
                              const std::vector<double> &speeds,
                              const std::vector<double> &length);    // TODO fill all the rest
 
+    std::vector<std::string> getNationsList();
+
     void createIndex();
 protected:
 };

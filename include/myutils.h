@@ -26,6 +26,7 @@
 
 #include <vesselcalendar.h>
 #include <idtypes.h>
+#include <utils/MultifieldReader.h>
 
 #include<vector>
 #include<deque>
@@ -395,6 +396,24 @@ bool COMMONSSHARED_EXPORT fill_from_nodes_in_polygons (istream& in, multimap<int
 
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_s_i(istream& in, multimap<string, int>& infos);
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_s_d(istream& in, multimap<string, double>& infos);
+
+
+template <typename K, typename V>
+bool fill_multimap_from_specifications (istream& in, multimap<K, V>& infos)
+{
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<K,V>>(in, " ", [&infos](std::tuple<K, V> v) {
+                                                           infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
+}
+
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_i_s(istream& in, multimap<int, string>& infos);
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_i_d(istream& in, multimap<int, double>& infos);
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_i_i(istream& in, multimap<int, int>& infos);

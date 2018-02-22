@@ -7,7 +7,7 @@ CONFIG += c++14
 DESTDIR = ../
 
 DEFINES=
-INCLUDEPATH+=../include ../commons ../sparsepp
+INCLUDEPATH+=../include ../commons ../sparsepp ../formats
 
 macx {
     DESTDIR=$$EXEDESTDIR

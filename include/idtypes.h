@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdint>
 
+#include <boost/lexical_cast.hpp>
+
 namespace types {
 
 template <typename C, typename Type>
@@ -67,6 +69,11 @@ bool inline isIdInvalid(const NodeId &t) {
     return t == special::InvalidNodeId;
 }
 
+} // ns types
+
+namespace boost {
+    template<>
+    inline types::NodeId lexical_cast(const std::string& arg) { return types::NodeId(boost::lexical_cast<uint16_t>(arg)); }
 }
 
 #endif // IDTYPES_H

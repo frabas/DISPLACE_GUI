@@ -1444,18 +1444,7 @@ fill in the avai attributes into a multimap
 */
 bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<types::NodeId, double>& avai)
 {
-
-    string line;
-    while(!getline(in, line).eof())
-    {
-        int key;
-        in >> key;
-        double val;
-        in >> val;
-        avai.insert(make_pair(types::NodeId(key),val));
-    }
-    dout(cout  << "read the availability at szgroup " << endl << flush);
-    return true;
+    return fill_multimap_from_specifications<types::NodeId, double>(in, avai);
 }
 
 /**

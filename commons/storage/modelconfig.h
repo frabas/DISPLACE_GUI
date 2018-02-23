@@ -1,9 +1,11 @@
 #ifndef MODELCONFIG_H
 #define MODELCONFIG_H
 
+#include "commons_global.h"
+
 #include <vector>
 
-struct ModelConfig {
+struct COMMONSSHARED_EXPORT ModelConfig {
     int nbpops;
     int nbbenthospops;
     int szGroups;

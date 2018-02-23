@@ -29,6 +29,7 @@ class NationData
     QString mName;
 public:
     NationData();
+    explicit NationData(QString n) : mName(n) {}
 
     QString getName() const;
     void setName(const QString &value);

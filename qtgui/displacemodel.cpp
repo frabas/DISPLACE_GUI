@@ -236,13 +236,14 @@ bool DisplaceModel::loadDatabase(QString path)
 
     ModelMetadataAccessor accessor (mOutSqlite->metadata());
     mConfig.setNbpops(mOutSqlite->getNbPops());
-    setCurrentStep(accessor.lastTStep());
+    mLastStep = accessor.lastTStep();
+    setCurrentStep(mLastStep);
     auto nl = mOutSqlite->getNationsList();
     mNations.clear();
     for (auto n : nl)
         mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
 
-    qDebug() << "Pops: " << mConfig.getNbpops();
+    mModelType = ModelType::OfflineModelType;
     return true;
 }
 

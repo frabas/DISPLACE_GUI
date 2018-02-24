@@ -1,6 +1,8 @@
 #include "nodesdeftable.h"
 
 #include "Node.h"
+#include <sqlitestatementformatters.h>
+#include <sqlitestatement.h>
 
 struct NodesDefTable::Impl {
     std::mutex mutex;
@@ -42,5 +44,21 @@ void NodesDefTable::insert(Node *node)
                         node->get_name(),
                         node->get_x(),
                         node->get_y())
-            );
+                        );
+}
+
+void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>)> operation)
+{
+    sqlite::statements::Select s(name(), fldNodeId, fldNodeName, fldLong, fldLat);
+    sqlite::SQLiteStatement stmt (db(), s);
+
+    stmt.execute([&operation,&stmt]() {
+        auto n = std::make_shared<Node>();
+        n->set_idx_node(types::NodeId(stmt.getIntValue(0)));
+        // TODO: Load the name, the setter function is missing?
+        n->set_xy(stmt.getDoubleValue(2), stmt.getDoubleValue(3));
+
+        operation(n);
+        return true;
+    });
 }

@@ -32,6 +32,7 @@ public:
     void dropAndCreate();
 
     void insert(Node* node);
+    void queryAllNodes(std::function<void (std::shared_ptr<Node>)> operation);
 };
 
 #endif // POPNODESTABLE_H

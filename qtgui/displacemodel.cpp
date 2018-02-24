@@ -244,6 +244,13 @@ bool DisplaceModel::loadDatabase(QString path)
         mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
 
     mModelType = ModelType::OfflineModelType;
+
+    mDb = new DbHelper;
+    mDb->attachDb(mOutSqlite);
+
+    loadNodesFromDb();
+    loadVesselsFromDb();
+
     return true;
 }
 
@@ -255,6 +262,7 @@ bool DisplaceModel::loadDatabase(QString path)
  */
 bool DisplaceModel::linkDatabase(QString path)
 {
+#if 0
     if (mModelType != LiveModelType) {
         mLastError = tr("Model is not a live simulation");
         return false;
@@ -267,8 +275,9 @@ bool DisplaceModel::linkDatabase(QString path)
     }
 
     mLinkedDbName = path;
-
     return true;
+#endif
+    throw UnimplementedException(__FUNCTION__);
 }
 
 bool DisplaceModel::prepareDatabaseForSimulation()

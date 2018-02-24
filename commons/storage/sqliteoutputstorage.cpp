@@ -34,7 +34,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselsLoglikeTable> mVesselLoglikeTable;
     std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
-    std::shared_ptr<NodesDefTable> mPopNodesTable;
+    std::shared_ptr<NodesDefTable> mNodesDefTable;
     std::shared_ptr<PopStatTable> mPopStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
     std::shared_ptr<PopTable> mPopTable;
@@ -59,7 +59,7 @@ void SQLiteOutputStorage::open()
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
-    p->mPopNodesTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
+    p->mNodesDefTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
     p->mPopStatTable = std::make_shared<PopStatTable>(p->db, "NodesStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
@@ -541,7 +541,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselDefTable->dropAndCreate();
     p->mVesselLoglikeTable->dropAndCreate();
     p->mVesselVmslikeTable->dropAndCreate();
-    p->mPopNodesTable->dropAndCreate();
+    p->mNodesDefTable->dropAndCreate();
     p->mPopStatTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
@@ -571,9 +571,9 @@ std::shared_ptr<VesselVmsLikeTable> SQLiteOutputStorage::getVesselVmsLikeTable()
     return p->mVesselVmslikeTable;
 }
 
-std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getPopNodesTable() const
+std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getNodesDefTable() const
 {
-    return p->mPopNodesTable;
+    return p->mNodesDefTable;
 }
 
 std::shared_ptr<PopTable> SQLiteOutputStorage::getPopTable() const

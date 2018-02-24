@@ -3618,7 +3618,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         for (unsigned int n=0; n<nodes.size(); n++) {
             nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
             if (enable_sqlite_out) {
-                outSqlite->getPopNodesTable()->insert(nodes[n]);
+                outSqlite->getNodesDefTable()->insert(nodes[n]);
                 outSqlite->getPopTable()->insert(0, nodes[n], init_weight_per_szgroup);
             }
         }

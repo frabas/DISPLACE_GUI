@@ -355,13 +355,13 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Invisible);
     }
 
-    int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     currentModelIdx = ui->modelSelector->itemData(index).toInt();
     if (currentModelIdx >= 0)
         currentModel = models[currentModelIdx];
     else
         currentModel = 0;
 
+    int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     treemodel->setCurrentModel(currentModelIdx, currentModel.get());
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);

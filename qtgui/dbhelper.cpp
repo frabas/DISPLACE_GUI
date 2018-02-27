@@ -36,6 +36,7 @@
 #include <storage/tables/nodesdeftable.h>
 #include <storage/tables/metadatatable.h>
 #include <storage/tables/vesseldeftable.h>
+#include <storage/tables/vesselvmsliketable.h>
 #include <sqlitestorage.h>
 #include <storage/modelmetadataaccessor.h>
 
@@ -341,8 +342,6 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
 
 bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels)
 {
-    Q_UNUSED(nodes); Q_UNUSED(vessels);
-
     auto vtab = p->db->getVesselDefTable();
     vtab->queryAllVessels(
                 [&nodes](int id) {
@@ -379,9 +378,24 @@ bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList
     return true;
 }
 
-bool DbHelper::updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels)
+bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> > &vessels)
 {
-    Q_UNUSED(steps); Q_UNUSED(vessels);
+    auto vtab = p->db->getVesselVmsLikeTable();
+    vtab->queryAllVesselsAtStep (tstep, [&vessels](const VesselVmsLikeTable::Log & log){
+        if (log.id < vessels.size()) {
+            std::shared_ptr<VesselData> v (vessels.at(log.id));
+            v->mVessel->set_xy(log.p_long,log.p_lat);
+            v->mVessel->set_fuelcons(log.cum_fuel);
+            v->mVessel->set_state(log.state);
+            //v->mVessel->set_cumcatches(...);
+            //v->mVessel->set_timeatsea(...);
+            //v->mVessel->set_reason_to_go_back(..);
+            v->mVessel->set_course(log.p_course);
+        }
+
+        return true;
+    });
+
 
 #if 0
     QSqlQuery q(mDb);

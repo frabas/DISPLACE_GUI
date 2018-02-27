@@ -18,6 +18,7 @@ private:
     struct Impl;
     std::unique_ptr<Impl> p;
 
+    void init();
 public:
     const FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
@@ -42,6 +43,7 @@ public:
     };
 
     void insertLog (const Log &log);
+    void queryAllVesselsAtStep (int tstep, std::function<bool(const Log &)>);
 };
 
 #endif // VESSELVMSLIKETABLE_H

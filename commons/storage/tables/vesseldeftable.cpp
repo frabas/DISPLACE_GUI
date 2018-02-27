@@ -16,7 +16,8 @@ struct VesselDefTable::Impl {
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Text>,
+    PreparedInsert<FieldDef<FieldType::Integer>,
+        FieldDef<FieldType::Text>,
         FieldDef<FieldType::Integer>,
         FieldDef<FieldType::Text>,
         FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
@@ -60,7 +61,8 @@ void VesselDefTable::feedVesselsDefTable(Vessel *vessel)
     std::unique_lock<std::mutex> m(p->mutex);
     if (!p->init) {
         p->init = true;
-        p->statement = prepareInsert(std::make_tuple(fldName,
+        p->statement = prepareInsert(std::make_tuple(fldId,
+                                                     fldName,
                                                      fldNode,
                                                      fldNationality,
                                                      fldSpeeds,
@@ -71,6 +73,7 @@ void VesselDefTable::feedVesselsDefTable(Vessel *vessel)
 
     std::string nat = vessel->get_name().substr(0, 3);
     insert (p->statement, std::make_tuple(
+                vessel->get_idx(),
                 vessel->get_name(),
                 int(vessel->get_loc()->get_idx_node().toIndex()),
                 nat,

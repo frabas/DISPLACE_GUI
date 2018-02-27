@@ -341,7 +341,11 @@ bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList
         return nodes[id]->mNode.get();
     },
                 [&vessels](std::shared_ptr<Vessel>v) {
-        vessels.push_back(std::make_shared<VesselData>(v));
+        auto idx = v->get_idx();
+        while (vessels.size() < idx+1)
+            vessels.push_back(0);
+
+        vessels[idx] = std::make_shared<VesselData>(v);
         return true;
     });
 

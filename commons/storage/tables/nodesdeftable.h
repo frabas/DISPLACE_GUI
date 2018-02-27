@@ -13,6 +13,7 @@ using namespace sqlite;
 #include <map>
 
 class Node;
+class Harbour;
 
 class COMMONSSHARED_EXPORT NodesDefTable : public SQLiteTable
 {
@@ -20,7 +21,8 @@ private:
     struct Impl;
     std::unique_ptr<Impl> p;
 
-    const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
+    const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).primaryKey();
+    const FieldDef<FieldType::Integer> fldHarbourId = makeFieldDef("HarbourId",FieldType::Integer());
     const FieldDef<FieldType::Text> fldNodeName = makeFieldDef("NodeName",FieldType::Text());
     const FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();
     const FieldDef<FieldType::Real> fldLat = makeFieldDef("Lat",FieldType::Real()).notNull();
@@ -32,7 +34,7 @@ public:
     void dropAndCreate();
 
     void insert(Node* node);
-    void queryAllNodes(std::function<void (std::shared_ptr<Node>)> operation);
+    void queryAllNodes(std::function<void (std::shared_ptr<Node>, std::shared_ptr<Harbour>)> operation);
 };
 
 #endif // POPNODESTABLE_H

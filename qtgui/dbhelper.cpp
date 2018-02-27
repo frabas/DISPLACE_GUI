@@ -266,9 +266,17 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
 {
     auto nodesTab = p->db->getNodesDefTable();
 
-    nodesTab->queryAllNodes([&nodes, &model](std::shared_ptr<Node> nodeData) {
+    nodesTab->queryAllNodes([&nodes, &model, &harbours](std::shared_ptr<Node> nodeData, std::shared_ptr<Harbour> harbour) {
         auto n = std::make_shared<NodeData>(nodeData, model);
-        nodes.push_back(n);
+
+        auto idx = n->get_idx_node().toIndex();
+        while (nodes.size() < idx+1)
+            nodes.push_back(0);
+        nodes[idx] = n;
+
+        if (nodeData->get_is_harbour() && harbour != nullptr) {
+            harbours.push_back(std::make_shared<HarbourData>(harbour));
+        }
     });
 
 #if 0

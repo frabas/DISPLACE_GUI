@@ -29,6 +29,7 @@ class NationData
     QString mName;
 public:
     NationData();
+    explicit NationData(QString n) : mName(n) {}
 
     QString getName() const;
     void setName(const QString &value);
@@ -37,35 +38,11 @@ public:
 class NationStats {
 public:
     NationStats()
-        : numTrips(0),
-          mTotCatches(0.0),
-          mTotDiscards(0.0),
-          mRevenues(0.0),
-          mExRevenues(0.0),
-          mTimeAtSea(0), mGav(0), mVpuf(0), mSweptArea(0), mRevenuePerSweptArea(0), cumVpuf(0), cumRevenuePerSweptArea(0),
-          GVA(0),
-          cumGVAPerRevenue(0),
-          GVAPerRevenue(0),
-          LabourSurplus(0),
-          GrossProfit(0),
-          cumNetProfitMargin(0),
-          NetProfit (0),
-          NetProfitMargin(0),
-          cumGVAPerFTE(0),
-          GVAPerFTE(0),
-          cumRoFTA(0),
-          RoFTA(0),
-          cumBER(0),
-          BER(0),
-          cumCRBER(0),
-          CRBER(0),
-          NetPresentValue(0),
-
-          szGroups()
+        : szGroups()
     {
     }
 
-    int numTrips =1;
+    int numTrips = 0;
     double mTotCatches = 0.0;
     double mTotDiscards = 0.0;
     double mRevenues = 0.0;

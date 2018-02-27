@@ -3,7 +3,7 @@ include ("$$top_srcdir/localconfig.pri")
 TEMPLATE = app
 QT+= core
 TARGET=vmsmerger
-CONFIG += console c++11
+CONFIG += console c++14
 
 DESTDIR = ../
 

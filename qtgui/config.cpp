@@ -209,7 +209,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
     std::vector <double> calib_weight_at_szgroup;
     std::vector <double> calib_cpue_multiplier;
 
-    if (read_config_file (
+    if (!read_config_file (
         path.toStdString(),
         modelname.toStdString(),
         config.nbpops,
@@ -221,7 +221,7 @@ Config Config::readFromFile(QString path, QString modelname, QString outputname)
         calib_weight_at_szgroup,
         calib_cpue_multiplier,
         implicit_harbours
-        ) <0 )
+        ))
 
         throw DisplaceException(QString(QObject::tr("Cannot load configuration file: %1"))
                                 .arg(::getLastErrorMessage().c_str()));

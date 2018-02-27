@@ -48,9 +48,7 @@
 
 #include <memory>
 
-QT_BEGIN_NAMESPACE
-class QSqlQuery;
-QT_END_NAMESPACE
+class SQLiteOutputStorage;
 
 class DisplaceModel;
 class NodeData;
@@ -64,6 +62,7 @@ class DbHelper;
 class Config;
 class Scenario;
 
+#if 0
 class VesselPositionInserter : public QObject {
     Q_OBJECT
 
@@ -83,39 +82,44 @@ public slots:
     void addVesselPosition (int step, int idx , double x, double y, double course, double fuel, int state);
     void flush();
 };
+#endif
 
 class DbHelper : public QObject
 {
+    struct Impl;
+    std::unique_ptr<Impl> p;
+
     Q_OBJECT
 
+#if 0
     friend class VesselPositionInserter;
+#endif
 
-    QSqlDatabase mDb;
 public:
     DbHelper();
-    ~DbHelper();
+    ~DbHelper() noexcept;
 
-    bool attachDb(QString file);
+    bool attachDb(std::shared_ptr<SQLiteOutputStorage> storage);
     QString lastDbError() const;
 
-    void addNodesDetails(int idx, std::shared_ptr<NodeData> node);
-    void removeAllNodesDetails();
+    void Q_DECL_DEPRECATED addNodesDetails(int idx, std::shared_ptr<NodeData> node);
+    void Q_DECL_DEPRECATED removeAllNodesDetails();
 
-    void addNodesStats (int tstep, const QList<std::shared_ptr<NodeData> > &nodes);
-    void addPopStats(int tstep, const QVector<PopulationData> &pops);
-    void addNationsStats(int tstep, const QVector<NationStats> &nats);
-    void addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats);
+    void Q_DECL_DEPRECATED addNodesStats (int tstep, const QList<std::shared_ptr<NodeData> > &nodes);
+    void Q_DECL_DEPRECATED addPopStats(int tstep, const QVector<PopulationData> &pops);
+    void Q_DECL_DEPRECATED addNationsStats(int tstep, const QVector<NationStats> &nats);
+    void Q_DECL_DEPRECATED addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats);
 
-    void addVesselPosition (int step, int idx, std::shared_ptr<VesselData> vessel);
-    void removeAllVesselsDetails();
-    void addVesselDetails (int idx, std::shared_ptr<VesselData> vessel);
+    void Q_DECL_DEPRECATED addVesselPosition (int step, int idx, std::shared_ptr<VesselData> vessel);
+    void Q_DECL_DEPRECATED removeAllVesselsDetails();
+    void Q_DECL_DEPRECATED addVesselDetails (int idx, std::shared_ptr<VesselData> vessel);
 
-    void removeAllStatsData();
+    void Q_DECL_DEPRECATED removeAllStatsData();
 
-    bool loadConfig(Config &);
-    bool saveConfig (const Config &);
-    bool loadScenario (Scenario &);
-    bool saveScenario (const Scenario &);
+    bool Q_DECL_DEPRECATED loadConfig(Config &);
+    bool Q_DECL_DEPRECATED saveConfig (const Config &);
+    bool Q_DECL_DEPRECATED loadScenario (Scenario &);
+    bool Q_DECL_DEPRECATED saveScenario (const Scenario &);
 
     bool loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model);
     bool loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels);
@@ -128,13 +132,13 @@ public:
 
     HarbourStats getHarbourStatsAtStep(int idx, int step);
 
-    void beginTransaction();
-    void endTransaction();
-    void forceEndTransaction();
-    void flushBuffers();
+    void Q_DECL_DEPRECATED beginTransaction();
+    void Q_DECL_DEPRECATED endTransaction();
+    void Q_DECL_DEPRECATED forceEndTransaction();
+    void Q_DECL_DEPRECATED flushBuffers();
 
     /* Creates all indexes on db - to be called at the end of simulation */
-    void createIndexes();
+    void Q_DECL_DEPRECATED createIndexes();
 
     /* Metadata */
 
@@ -143,42 +147,16 @@ public:
 
     int getLastKnownStep();
 signals:
-    void postVesselInsertion (int step, int idx , double x, double y, double course, double fuel, int state);
-    void flush();
+    void Q_DECL_DEPRECATED postVesselInsertion (int step, int idx , double x, double y, double course, double fuel, int state);
+    void Q_DECL_DEPRECATED flush();
 
 protected:
-    bool checkMetadataTable();
-    bool checkNodesTable(int version);
-    bool checkNodesStats(int version);
-    bool checkVesselsTable(int version);
-    bool checkVesselsPosTable(int version);
-    bool checkStatsTable (int version);
-
-    void createIndexOnTstepForTable(QString table);
+    void Q_DECL_DEPRECATED createIndexOnTstepForTable(QString table);
 
 private:
-    int mOngoingTransactionsCount;
-
     QMutex mMutex;
-    VesselPositionInserter *mInserter;
-    QThread *mInsertThread;
-    int mVersion;
-
-    static const int VERSION;
-
-    static const QString TBL_META;
-    static const QString TBL_NODES;
-    static const QString TBL_NODES_STATS;
-    static const QString TBL_POPNODES_STATS;
-    static const QString TBL_BENTHOSPOPNODES_STATS;
-    static const QString TBL_POP_STATS;
-    static const QString TBL_POPSZ_STATS;
-    static const QString TBL_VESSELS;
-    static const QString TBL_VESSELS_POS;
-    static const QString TBL_VESSELS_STATS_TM;
-    static const QString TBL_VESSELS_STATS_TMSZ;
-
-    static const QString META_VERSION;
+//    VesselPositionInserter *mInserter;
+//    QThread *mInsertThread;
 };
 
 #endif // DBHELPER_H

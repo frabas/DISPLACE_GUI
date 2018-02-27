@@ -2,12 +2,12 @@ include ("$$top_srcdir/localconfig.pri")
 
 QT=core
 TARGET=unittest
-CONFIG += c++11
+CONFIG += c++14
 
 DESTDIR = ../
 
 DEFINES=
-INCLUDEPATH+=../include ../commons ../sparsepp
+INCLUDEPATH+=../include ../commons ../sparsepp ../formats
 
 macx {
     DESTDIR=$$EXEDESTDIR

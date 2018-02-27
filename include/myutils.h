@@ -26,6 +26,7 @@
 
 #include <vesselcalendar.h>
 #include <idtypes.h>
+#include <utils/MultifieldReader.h>
 
 #include<vector>
 #include<deque>
@@ -39,11 +40,14 @@
 #include <fstream>
 
 #include <algorithm>
+#include <numeric>
 #include <cmath>
 #include <math.h>
 
 #include <cstddef>
 #include <pathshop.h>
+
+#include <numeric>
 
 using namespace std;
 
@@ -65,25 +69,14 @@ double simpson(double a, double b, int n, double S1, double S2){
     return (sum + 2*summid)*h/3.0;
 }
 
-#if (__cplusplus < 201103L)
-// for C++ sorting and keeping track of indexes:
-template <class ForwardIterator, class T>
-  void iota (ForwardIterator first, ForwardIterator last, T val)
-{
-  while (first!=last) {
-    *first = val;
-    ++first;
-    ++val;
-  }
-}
-#endif
+
 
 template <typename T>
 vector<size_t> sort_indexes_ascending(const vector<T> &v) {
 
   // initialize original index locations
   vector<size_t> idx(v.size());
-  ::iota(idx.begin(), idx.end(), 0);
+  iota(idx.begin(), idx.end(), 0);
 
   // sort indexes based on comparing values in v
   sort(idx.begin(), idx.end(),
@@ -403,6 +396,24 @@ bool COMMONSSHARED_EXPORT fill_from_nodes_in_polygons (istream& in, multimap<int
 
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_s_i(istream& in, multimap<string, int>& infos);
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_s_d(istream& in, multimap<string, double>& infos);
+
+
+template <typename K, typename V>
+bool fill_multimap_from_specifications (istream& in, multimap<K, V>& infos)
+{
+    std::string dummystring;
+    getline (in, dummystring); // eat the heading
+
+    displace::formats::helpers::MultifieldReader reader;
+    try {
+        return reader.importFromStream<std::tuple<K,V>>(in, " ", [&infos](std::tuple<K, V> v) {
+                                                           infos.insert(std::make_pair(std::get<0>(v), std::get<1>(v)));
+        });
+    } catch (runtime_error &) {
+        return false;
+    }
+}
+
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_i_s(istream& in, multimap<int, string>& infos);
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_i_d(istream& in, multimap<int, double>& infos);
 bool COMMONSSHARED_EXPORT fill_multimap_from_specifications_i_i(istream& in, multimap<int, int>& infos);

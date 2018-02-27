@@ -1,5 +1,9 @@
 #include "outputexporter.h"
 
+#include "storage/sqliteoutputstorage.h"
+#include "storage/tables/vesselslogliketable.h"
+#include "storage/tables/vesselvmsliketable.h"
+
 #include <mutex>
 #include <Vessel.h>
 #include <Metier.h>
@@ -28,6 +32,14 @@ OutputExporter::OutputExporter(const string &basepath, const string &namesimu)
 
 void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
 {
+    if (useSql)
+        exportVmsLikeSQLite(tstep, vessel);
+    if (usePlainText)
+        exportVmsLikePlaintext(tstep, vessel);
+}
+
+void OutputExporter::exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel)
+{
     std::unique_lock<std::mutex> locker(glob_mutex);
 
     mVmsLike << tstep << " "
@@ -41,6 +53,23 @@ void OutputExporter::exportVmsLike(unsigned int tstep, Vessel *vessel)
                 //<< vessels[ index_v ]->get_inharbour() << " "
              << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
              << vessel->get_state() << " " <<  endl;
+}
+
+void OutputExporter::exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel)
+{
+    std::unique_lock<std::mutex> locker(glob_mutex);
+
+    VesselVmsLikeTable::Log log;
+    log.tstep = tstep;
+    log.id = vessel->get_idx();
+    log.tstep_dep = vessel->get_tstep_dep();
+    log.p_long = vessel->get_x();
+    log.p_lat = vessel->get_y();
+    log.p_course = vessel->get_course();
+    log.cum_fuel = vessel->get_cumfuelcons();
+    log.state = vessel->get_state();
+
+    mSqlDb->getVesselVmsLikeTable()->insertLog(log);
 }
 
 void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,  const std::vector<Population *> &populations, vector<int> &implicit_pops)
@@ -96,6 +125,43 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
 }
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+    if (useSql)
+        exportLogLikeSQLite(tstep, v, populations, implicit_pops);
+    if (usePlainText)
+        exportLogLikePlaintext(tstep, v, populations, implicit_pops);
+}
+
+void OutputExporter::exportLogLikeSQLite(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+    std::vector<double> cumul, cumul_discards;
+
+    const auto &a_catch_pop_at_szgroup = v->get_catch_pop_at_szgroup();
+    for(size_t pop = 0; pop < a_catch_pop_at_szgroup.size(); pop++)
+    {
+        cumul.push_back(0);
+        for(size_t sz = 0; sz < a_catch_pop_at_szgroup[pop].size(); sz++)
+        {
+            cumul.at(pop) = cumul.at(pop)+ a_catch_pop_at_szgroup[pop][sz];
+        }
+    }
+
+    const auto &a_discards_pop_at_szgroup = v->get_discards_pop_at_szgroup();
+    int count =0;
+    for(int pop = 0; pop < a_discards_pop_at_szgroup.size(); pop++)
+    {
+        cumul_discards.push_back(0);
+        for(int sz = 0; sz < a_discards_pop_at_szgroup[pop].size(); sz++)
+        {
+            if(isfinite(a_discards_pop_at_szgroup[pop][sz])) cumul_discards.at(count) +=  a_discards_pop_at_szgroup[pop][sz];
+        }
+        count+=1;
+    }
+
+    mSqlDb->exportLogLike(v, cumul, cumul_discards, tstep);
+}
+
+void OutputExporter::exportLogLikePlaintext(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
     std::string name, freq_metiers= "M";
     int length_class;

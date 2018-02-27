@@ -503,6 +503,9 @@ double COMMONSSHARED_EXPORT norm_rand(void)
 //a=>shape
 double COMMONSSHARED_EXPORT rgamma(double a, double scale)
 {
+    static std::mutex mtx;
+    std::unique_lock<std::mutex> lck(mtx);
+
     /* Constants : */
     const static double sqrt32 = 5.656854;
     /* exp(-1) = 1/e */

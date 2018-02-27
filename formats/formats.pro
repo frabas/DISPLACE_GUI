@@ -1,7 +1,7 @@
 TEMPLATE= lib
 TARGET=formats
 DESTDIR=../
-CONFIG += c++11
+CONFIG += c++14
 
 include ("$$top_srcdir/localconfig.pri")
 macx:DESTDIR=$$LIBDESTDIR

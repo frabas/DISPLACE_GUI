@@ -78,14 +78,9 @@ protected:
     void parsePopCumcatchesPerPop(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopBenthosStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parseFishfarmslogsStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
-    void parsePopdynF(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parsePopStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
-    void parsePopdynSSB(QFile *file, int tstep, DisplaceModel *model, int period = -1);
-    void parsePopdyn(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parseVessels(QFile *file, int tstep, DisplaceModel *model, int period = -1);
     void parseShipsStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
-    void parseWindfarmsStats(QFile *file, int tstep, DisplaceModel *model, int period = -1);
-
 
     static int toInt(const QString x) {
         bool b;

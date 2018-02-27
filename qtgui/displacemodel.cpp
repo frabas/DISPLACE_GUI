@@ -23,6 +23,7 @@
 #include <dbhelper.h>
 #include <calendar.h>
 #include <modelobjects/metierdata.h>
+#include "storage/modelmetadataaccessor.h"
 
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
@@ -34,6 +35,8 @@
 #include <qdebug.h>
 #include <QtAlgorithms>
 #include <QtDebug>
+
+#include "storage/sqliteoutputstorage.h"
 
 const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
@@ -53,11 +56,9 @@ DisplaceModel::DisplaceModel()
       mCurrentStep(0), mLastStep(0),
       mLastStats(-1),
       mNodesStatsDirty(false),
-      mPopStatsDirty(false),
       mVesselsStatsDirty(false),
       mFirmsStatsDirty(false),
       mShipsStatsDirty(false),
-      mWindmillStatsDirty(false),
       mScenario(),
       mConfig(),
       mInterestingPop(),
@@ -228,29 +229,28 @@ bool DisplaceModel::parse(const QString &path, QString *basepath, QString *input
 
 bool DisplaceModel::loadDatabase(QString path)
 {
-    if (mModelType != EmptyModelType || mDb != 0)
+    if (mModelType != EmptyModelType)
         return false;
+
+    setSimulationSqlStorage(path);
+
+    ModelMetadataAccessor accessor (mOutSqlite->metadata());
+    mConfig.setNbpops(mOutSqlite->getNbPops());
+    mLastStep = accessor.lastTStep();
+    setCurrentStep(mLastStep);
+    auto nl = mOutSqlite->getNationsList();
+    mNations.clear();
+    for (auto n : nl)
+        mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
+
+    mModelType = ModelType::OfflineModelType;
 
     mDb = new DbHelper;
-    if (!mDb->attachDb(path))
-        return false;
+    mDb->attachDb(mOutSqlite);
 
-    mInputName = mDb->getMetadata("name");
-    mBasePath = mDb->getMetadata("basepath");
-    mOutputName = mDb->getMetadata("output");
-
-    mDb->loadConfig(mConfig);
-    mDb->loadScenario(mScenario);
     loadNodesFromDb();
     loadVesselsFromDb();
-    loadHistoricalStatsFromDb();
-    initPopulations();
-    initNations();
 
-    mLastStep = mDb->getLastKnownStep();
-    setCurrentStep(0);
-
-    mModelType = OfflineModelType;
     return true;
 }
 
@@ -262,6 +262,7 @@ bool DisplaceModel::loadDatabase(QString path)
  */
 bool DisplaceModel::linkDatabase(QString path)
 {
+#if 0
     if (mModelType != LiveModelType) {
         mLastError = tr("Model is not a live simulation");
         return false;
@@ -274,8 +275,9 @@ bool DisplaceModel::linkDatabase(QString path)
     }
 
     mLinkedDbName = path;
-
     return true;
+#endif
+    throw UnimplementedException(__FUNCTION__);
 }
 
 bool DisplaceModel::prepareDatabaseForSimulation()
@@ -314,21 +316,8 @@ bool DisplaceModel::prepareDatabaseForSimulation()
 
 bool DisplaceModel::clearStats()
 {
-    mStatsPopulations.clear();
-    for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
-        mStatsPopulationsCollected[i].clear();
-    }
-
-    mStatsNations.clear();
-    mStatsNationsCollected.clear();
     m_vessel_last_step = -1;
     mVesselsStatsDirty = false;
-
-    mStatsHarbours.clear();
-    mStatsHarboursCollected.clear();
-
-    mStatsMetiers.clear();
-    mStatsMetiersCollected.clear();
 
     mStatsBenthos.clear();
     mStatsBenthosCollected.clear();
@@ -338,9 +327,6 @@ bool DisplaceModel::clearStats()
 
     mStatsShips.clear();
     mStatsShipsCollected.clear();
-
-    mStatsWindfarms.clear();
-    mStatsWindfarmsCollected.clear();
 
     return true;
 }
@@ -382,6 +368,12 @@ void DisplaceModel::simulationEnded()
         mDb->flushBuffers();
         mDb->createIndexes();
     }
+}
+
+void DisplaceModel::setSimulationSqlStorage(const QString &path)
+{
+    mOutSqlite = std::make_shared<SQLiteOutputStorage>(path.toStdString());
+    mOutSqlite->open();
 }
 
 int DisplaceModel::getBenthosIdx(int benthosId) const
@@ -564,16 +556,6 @@ void DisplaceModel::commitShipsStats(int tstep)
     }
 }
 
-void DisplaceModel::commitWindfarmsStats(int tstep)
-{
-    if (mStatsWindfarmsCollected.dirty()) {
-        // Fishfarm stats are not saved on db, but loaded on the fly
-        mStatsWindfarms.insertValue(tstep, mStatsWindfarmsCollected);
-        mStatsWindfarmsCollected.clear();
-    }
-}
-
-
 void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 {
     if (mDb)
@@ -585,38 +567,9 @@ void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
         mNodesStatsDirty = false;
     }
 
-    if (mPopStatsDirty || force) {
-        mStatsPopulations.insertValue(tstep, mStatsPopulationsCollected);
-        if (mDb)
-            mDb->addPopStats(mLastStats, mStatsPopulationsCollected);
-        mPopStatsDirty = false;
-    }
-
     if (mShipsStatsDirty || force) {
         mShipsStatsDirty = false;
     }
-
-    if (mWindmillStatsDirty || force) {
-        //if (mDb)
-        //    mDb->addWindmillStats (mLastStats, mStatsWindmillCollected);
-
-        // Fishfarm stats are not saved on db, but loaded on the fly
-       // mStatsWindmills.insertValue(tstep, mStatsWindmillCollected);
-       // mWindmillStatsDirty = false;
-    }
-
-    if (mCalendar && mCalendar->isYear(tstep)) {
-        mStatsNationsCollected.clear();
-        mStatsHarboursCollected.clear();
-        mStatsMetiersCollected.clear();
-
-#if 0       // Not sure if this is needed. Disabling it for now.
-        for (int i = 0; i < mStatsPopulationsCollected.size(); ++i) {
-            mStatsPopulationsCollected[i].clear();
-        }
-#endif
-    }
-
 
     if (mDb)
         mDb->endTransaction();
@@ -971,48 +924,6 @@ void DisplaceModel::collectShipPMEemission(int step, int node_idx, int shipid, i
                                                  PME_emission);
 }
 
-void DisplaceModel::collectWindfarmkWh(int step, int node_idx, int windfarmid, int windfarmtype, double kWh)
-{
-    mStatsWindfarmsCollected.collectkWh(step,
-                                                 windfarmid,
-                                                 windfarmtype,
-                                                 kWh);
-}
-
-void DisplaceModel::collectWindfarmkWproduction(int step, int node_idx, int windfarmid, int windfarmtype, double kWproduction)
-{
-    mStatsWindfarmsCollected.collectkWproduction(step,
-                                                 windfarmid,
-                                                 windfarmtype,
-                                                 kWproduction);
-}
-
-
-
-void DisplaceModel::collectPopdynN(int step, int popid, const QVector<double> &pops, double value)
-{
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setAggregate(pops);
-    mStatsPopulationsCollected[popid].setAggregateTot(value);
-    mPopStatsDirty = true;
-}
-
-void DisplaceModel::collectPopdynF(int step, int popid, const QVector<double> &pops, double value)
-{
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setMortality(pops);
-    mStatsPopulationsCollected[popid].setMortalityTot(value);
-    mPopStatsDirty = true;
-}
-
-void DisplaceModel::collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value)
-{
-    checkStatsCollection(step);
-    mStatsPopulationsCollected[popid].setSSB(pops);
-    mStatsPopulationsCollected[popid].setSSBTot(value);
-    mPopStatsDirty = true;
-}
-
 void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
 {
     if (m_vessel_last_step != -1 && tstep != m_vessel_last_step) {
@@ -1069,146 +980,16 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
         }
     }
 
-    while (mStatsNationsCollected.size() <= nat) {
-        mStatsNationsCollected.push_back(NationStats());
-    }
-
-    mStatsNationsCollected[nat].numTrips += 1; // required for applying the running average
-
-    mStatsNationsCollected[nat].mRevenues += stats.revenueAV;
-    mStatsNationsCollected[nat].mExRevenues += stats.revenueExAV;
-    mStatsNationsCollected[nat].mTimeAtSea += stats.timeAtSea;
-    mStatsNationsCollected[nat].mGav += stats.gav;
-    mStatsNationsCollected[nat].cumVpuf += stats.vpuf;
-    mStatsNationsCollected[nat].mVpuf = mStatsNationsCollected[nat].cumVpuf /mStatsNationsCollected[nat].numTrips;  // running average
-    mStatsNationsCollected[nat].mSweptArea += stats.sweptArea;
-    mStatsNationsCollected[nat].cumRevenuePerSweptArea += stats.revenuePerSweptArea;
-    mStatsNationsCollected[nat].mRevenuePerSweptArea = mStatsNationsCollected[nat].cumRevenuePerSweptArea /mStatsNationsCollected[nat].numTrips;  // running average;
-
-    mStatsNationsCollected[nat].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].cumGVAPerRevenue += stats.GVAPerRevenue;
-    mStatsNationsCollected[nat].GVAPerRevenue =  mStatsNationsCollected[nat].cumGVAPerRevenue /mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-    mStatsNationsCollected[nat].cumNetProfitMargin += stats.NetProfitMargin  ;  // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].NetProfitMargin = mStatsNationsCollected[nat].cumNetProfitMargin / mStatsNationsCollected[nat].numTrips;
-    mStatsNationsCollected[nat].cumGVAPerFTE += stats.GVAPerFTE; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].GVAPerFTE = mStatsNationsCollected[nat].cumGVAPerFTE / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].cumRoFTA += stats.RoFTA; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].RoFTA = mStatsNationsCollected[nat].cumRoFTA / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].cumBER += stats.BER ; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].BER = mStatsNationsCollected[nat].cumBER / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-    mStatsNationsCollected[nat].cumCRBER += stats.CRBER; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].CRBER = mStatsNationsCollected[nat].cumCRBER / mStatsNationsCollected[nat].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-    mStatsNationsCollected[nat].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
-
-
-
-    // TODO: Check, how can I deduce lastHarbour => mStatsHarbours?
-    int hidx = -1;
-    if (stats.lastHarbour != -1) {
-        hidx = mNodes[stats.lastHarbour]->getHarbourId();
-        while (mStatsHarboursCollected.size() <= hidx)
-            mStatsHarboursCollected.push_back(HarbourStats());
-
-        mStatsHarboursCollected[hidx].numTrips += 1;
-
-        mStatsHarboursCollected[hidx].mCumProfit += stats.revenueAV;
-        mStatsHarboursCollected[hidx].mGav += stats.gav;
-        mStatsHarboursCollected[hidx].mVpuf = stats.vpuf / mStatsHarboursCollected[hidx].numTrips;  // running average
-        mStatsHarboursCollected[hidx].mSweptArea += stats.sweptArea;
-        mStatsHarboursCollected[hidx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
-
-        mStatsHarboursCollected[hidx].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-        mStatsHarboursCollected[hidx].cumGVAPerRevenue += stats.GVAPerRevenue;
-        mStatsHarboursCollected[hidx].GVAPerRevenue =  mStatsHarboursCollected[hidx].cumGVAPerRevenue /mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
-        mStatsHarboursCollected[hidx].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
-        mStatsHarboursCollected[hidx].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-        mStatsHarboursCollected[hidx].cumNetProfitMargin += stats.NetProfitMargin  ;  // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].NetProfitMargin = mStatsHarboursCollected[hidx].cumNetProfitMargin / mStatsHarboursCollected[hidx].numTrips;
-        mStatsHarboursCollected[hidx].cumGVAPerFTE += stats.GVAPerFTE; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsHarboursCollected[hidx].GVAPerFTE = mStatsHarboursCollected[hidx].cumGVAPerFTE / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsHarboursCollected[hidx].cumRoFTA += stats.RoFTA; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].RoFTA = mStatsHarboursCollected[hidx].cumRoFTA / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].cumBER += stats.BER ; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].BER = mStatsHarboursCollected[hidx].cumBER / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsHarboursCollected[hidx].cumCRBER += stats.CRBER; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsHarboursCollected[hidx].CRBER = mStatsHarboursCollected[hidx].cumCRBER / mStatsHarboursCollected[hidx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsHarboursCollected[hidx].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
-         }
-
-    int midx = stats.metierId;
-    if (midx != -1) {
-        while (mStatsMetiersCollected.size() <= midx) {
-            MetierStats m;
-            mStatsMetiersCollected.push_back(m);
-        }
-
-        mStatsMetiersCollected[midx].numTrips += 1;
-
-        mStatsMetiersCollected[midx].revenueAV += stats.revenueAV;
-        mStatsMetiersCollected[midx].gav += stats.gav;
-        mStatsMetiersCollected[midx].vpuf = stats.vpuf / mStatsMetiersCollected[midx].numTrips;  // running average
-        mStatsMetiersCollected[midx].mSweptArea += stats.sweptArea;
-        mStatsMetiersCollected[midx].mRevenuePerSweptArea = stats.revenuePerSweptArea;
-
-        mStatsMetiersCollected[midx].GVA += stats.GVA; // an accumulation over trips that accumulates over vessels
-        mStatsMetiersCollected[midx].cumGVAPerRevenue += stats.GVAPerRevenue;
-        mStatsMetiersCollected[midx].GVAPerRevenue =  mStatsMetiersCollected[midx].cumGVAPerRevenue /mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].LabourSurplus += stats.LabourSurplus; // a share of an accumulation over trips that accumulates over vessels
-        mStatsMetiersCollected[midx].GrossProfit += stats.GrossProfit; // an accumulation over trips that accumulates over vessels
-        mStatsMetiersCollected[midx].NetProfit += stats.NetProfit; // an accumulation over trips that accumulates over vessels
-        mStatsMetiersCollected[midx].cumNetProfitMargin += stats.NetProfitMargin  ;  // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].NetProfitMargin = mStatsMetiersCollected[midx].cumNetProfitMargin / mStatsMetiersCollected[midx].numTrips;
-        mStatsMetiersCollected[midx].cumGVAPerFTE += stats.GVAPerFTE; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsMetiersCollected[midx].GVAPerFTE = mStatsMetiersCollected[midx].cumGVAPerFTE / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsMetiersCollected[midx].cumRoFTA += stats.RoFTA; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].RoFTA = mStatsMetiersCollected[midx].cumRoFTA / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].cumBER += stats.BER ; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].BER = mStatsMetiersCollected[midx].cumBER / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips that requires running average over vessels
-        mStatsMetiersCollected[midx].cumCRBER += stats.CRBER; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsMetiersCollected[midx].CRBER = mStatsMetiersCollected[midx].cumCRBER / mStatsMetiersCollected[midx].numTrips; // a ratio of an accumulation over trips tthat requires running average over vessels
-        mStatsMetiersCollected[midx].NetPresentValue += stats.NetPresentValue; // an accumulation over trips that accumulates over vessels
-           }
-
     int n = stats.mCatches.size();
     for (int i = 0; i < n; ++i) {
         if (vessel)
             vessel->addCatch(i, stats.mCatches[i]);
-
-        // TODO check this!
-        if (hidx != -1)
-            mStatsHarboursCollected[hidx].mCumCatches += stats.mCatches[i];
-
-        mStatsNationsCollected[nat].mTotCatches += stats.mCatches[i];
-
-        if (midx != -1) {
-            while (mStatsMetiersCollected[midx].mCatchesPerPop.size() < n)
-                mStatsMetiersCollected[midx].mCatchesPerPop.push_back(0.0);
-            mStatsMetiersCollected[midx].mCatchesPerPop[i] += stats.mCatches[i];
-            mStatsMetiersCollected[midx].mTotCatches += stats.mCatches[i];
-        }
     }
 
     int n2 = stats.mDiscards.size();
     for (int i = 0; i < n2; ++i) {
         if (vessel)
             vessel->addDiscard(i, stats.mDiscards[i]);
-
-        // TODO check this!
-        if (hidx != -1)
-            mStatsHarboursCollected[hidx].mCumDiscards += stats.mDiscards[i];
-
-        mStatsNationsCollected[nat].mTotDiscards += stats.mDiscards[i];
-
-        if (midx != -1) {
-            while (mStatsMetiersCollected[midx].mDiscardsPerPop.size() < n2)
-                mStatsMetiersCollected[midx].mDiscardsPerPop.push_back(0.0);
-            mStatsMetiersCollected[midx].mDiscardsPerPop[i] += stats.mDiscards[i];
-            mStatsMetiersCollected[midx].mTotDiscards += stats.mDiscards[i];
-        }
     }
 
 
@@ -1226,13 +1007,6 @@ void DisplaceModel::commitVesselsStats(int tstep)
 {
 //    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
     if (mVesselsStatsDirty) {
-        mStatsNations.insertValue(tstep, mStatsNationsCollected);
-        if (mDb)
-            mDb->addNationsStats (mLastStats, mStatsNationsCollected);
-
-        // Harbours stats are not saved on db, but loaded on the fly
-        mStatsHarbours.insertValue(tstep, mStatsHarboursCollected);
-        mStatsMetiers.insertValue(tstep, mStatsMetiersCollected);
         mVesselsStatsDirty = false;
     }
 }
@@ -3278,12 +3052,6 @@ bool DisplaceModel::initPopulations()
 {
     cout<<"init pop" << endl;
 
-
-    mStatsPopulationsCollected.clear();
-    for (int i = 0; i < getPopulationsCount(); ++i) {
-        mStatsPopulationsCollected.push_back(PopulationData(i));
-    }
-
     QList<int> imp = mConfig.implicit_pops();
     qSort(imp);
 
@@ -3370,27 +3138,6 @@ bool DisplaceModel::loadHistoricalStatsFromDb()
     mDb->loadHistoricalStatsForVessels(steps, mVessels, mNodes, ndl, hdl);
 
     qDebug() << Q_FUNC_INFO << dtl.size() << steps;
-
-    int i = 0;
-    foreach (const QVector<PopulationData> &dt, dtl) {
-        int tstep = steps[i];
-        mStatsPopulations.insertValue(tstep, dt);
-        ++i;
-    }
-
-    i = 0;
-    foreach (const QVector<NationStats> &dt, ndl) {
-        int tstep = steps[i];
-        mStatsNations.insertValue(tstep, dt);
-        ++i;
-    }
-
-    i = 0;
-    foreach(const QVector<HarbourStats> &dt, hdl) {
-        int tstep = steps[i];
-        mStatsHarbours.insertValue(tstep, dt);
-        ++i;
-    }
 
     return true;
 }

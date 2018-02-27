@@ -1,3 +1,6 @@
 [submodule "sparsepp"]
 	path = sparsepp
 	url = https://github.com/greg7mdp/sparsepp.git
+[submodule "mSqliteCpp"]
+	path = mSqliteCpp
+	url = https://github.com/studiofuga/mSqliteCpp.git

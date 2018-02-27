@@ -78,7 +78,7 @@ HEADERS= \
 DEFINES=-DNO_IPC
 
 LIBS=-L../formats -lformats -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -O2 -std=c++11 -fpermissive ${DEFINES} -I../include -I../commons -I../formats -I. -I../sparsepp/ -fpic
+CPPFLAGS=${CPPDEBUG} -O2 -std=c++14 -fpermissive ${DEFINES} -I../include -I../commons -I../formats -I. -I../sparsepp/ -fpic
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

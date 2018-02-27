@@ -1,7 +1,7 @@
 #ifndef FISHFARMSSTATSPLOT_H
 #define FISHFARMSSTATSPLOT_H
 
-#include <plots/plottypes.h>
+#include "plottypes.h"
 #include <palettemanager.h>
 
 #include <QPen>

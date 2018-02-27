@@ -91,6 +91,7 @@ signals:
     void nodesStatsUpdate(QString);
     void debugMemoryStats(long rss, long peak);
     void debugCapture(QString);
+    void sqliteStorageOpened(QString);
 
 private slots:
     void error(QProcess::ProcessError);
@@ -124,6 +125,7 @@ private:
     void parseUpdateShip(QStringList fields);
     void parseUpdateVesselStats(QStringList fields);
     void parseDebug(QStringList fields);
+    void parseOutputSpecs(QString details);
 
 public:
     static QString SET_NUMTHREADS;

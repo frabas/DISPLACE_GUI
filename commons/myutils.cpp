@@ -351,8 +351,10 @@ bool fill_from_coord(istream& in, vector<double>& graph_coord_x,
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on fill_from_coord file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -394,8 +396,10 @@ bool fill_from_graph(istream& in, vector<int>& graph_idx_dep,
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on fill_from_graph file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -427,8 +431,10 @@ bool fill_from_code_area(istream& in, vector<int>& graph_point_code_area, int nr
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on fill_from_code_area file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -458,8 +464,10 @@ bool fill_from_code_marine_landscape(istream& in, vector<int>& graph_point_code_
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on graph_point_code_landscape file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -488,8 +496,10 @@ bool fill_from_wind(istream& in, vector<double>& graph_point_wind, int nrow)
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on graph_point_wind file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -518,8 +528,10 @@ bool fill_from_sst(istream& in, vector<double>& graph_point_sst, int nrow)
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on graph_point_sst file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -548,8 +560,10 @@ bool fill_from_salinity(istream& in, vector<double>& graph_point_salinity, int n
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on fill_from_salinity file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -580,8 +594,10 @@ bool fill_from_benthos_biomass(istream& in, vector<double>& graph_point_benthos_
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on fill_from_benthos_biomass file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -610,8 +626,10 @@ bool fill_from_benthos_number(istream& in, vector<double>& graph_point_benthos_n
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on graph_point_benthos_number file line " << linenum <<
                 " : " << ex.what() << "\n";
+#endif
         return false;
     }
 
@@ -1426,18 +1444,7 @@ fill in the avai attributes into a multimap
 */
 bool fill_from_avai_szgroup_nodes_with_pop(istream& in, multimap<types::NodeId, double>& avai)
 {
-
-    string line;
-    while(!getline(in, line).eof())
-    {
-        int key;
-        in >> key;
-        double val;
-        in >> val;
-        avai.insert(make_pair(types::NodeId(key),val));
-    }
-    dout(cout  << "read the availability at szgroup " << endl << flush);
-    return true;
+    return fill_multimap_from_specifications<types::NodeId, double>(in, avai);
 }
 
 /**

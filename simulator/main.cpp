@@ -20,6 +20,14 @@
 
 #include <idtypes.h>
 
+#include "sqlitestorage.h"
+#include "storage/sqliteoutputstorage.h"
+#include "storage/tables/vesseldeftable.h"
+#include "storage/tables/nodesdeftable.h"
+#include "storage/tables/poptable.h"
+#include "storage/modelmetadataaccessor.h"
+using namespace sqlite;
+
 #include <helpers.h>
 #include <assert.h>
 
@@ -183,6 +191,11 @@ bool is_fishing_credits;
 bool is_discard_ban;
 bool is_grouped_tacs;
 bool is_impact_benthos_N; // otherwise the impact is on biomass by default
+bool enable_sqlite_out = true;
+std::string outSqlitePath;
+
+std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
+
 int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
@@ -232,10 +245,18 @@ ofstream fishfarmslogs;
 ofstream windmillslogs;
 ofstream shipslogs;
 
+std::mutex listVesselMutex;
+vector<int> listVesselIdForVmsLikeToExport;
+vector<int> listVesselIdForVmsLikeFPingsOnlyToExport;
+vector<int> listVesselIdForLogLikeToExport;
+vector<int> listVesselIdForTripCatchPopPerSzgroupExport;
+
+
 #ifdef NO_IPC
 #include <messages/noipc.h>
 #endif
 
+static size_t numStepTransactions = 100;
 
 //vector <double> dist_to_ports;
 
@@ -488,6 +509,8 @@ int main(int argc, char* argv[])
             num_threads = atoi(argv[optind]);
         } else if (sw == "--disable-crash-handler" || sw == "--debug") {
             crash_handler_enabled = false;
+        } else if (sw == "--disable-sqlite") {
+            enable_sqlite_out = false;
         } else {
             dout (cout << "Unknown switch: " << argv[optind] << endl);
         }
@@ -585,9 +608,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #else
     char *path = 0;
 #endif
-
-
-
 
     // get the name of the input directory for this simu
     string folder_name_parameterization= namefolderinput;
@@ -799,31 +819,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     {
         srand ( 117 );			 // set always the same seed
     }
-    if(namesimu=="simu18")
-    {
-        srand ( 118 );			 // set always the same seed
-    }
-    if(namesimu=="simu19")
-    {
-        srand ( 119 );			 // set always the same seed
-    }
-    if(namesimu=="simu20")
-    {
-        srand ( 120 );			 // set always the same seed
-    }
-    if(namesimu=="simu21")
-    {
-        srand ( 121 );			 // set always the same seed
-    }
-    if(namesimu=="simu22")
-    {
-        srand ( 122 );			 // set always the same seed
-    }
-    if(namesimu=="simu23")
-    {
-        srand ( 123 );			 // set always the same seed
-    }
-    if(namesimu=="simu24")
     {
         srand ( 124 );			 // set always the same seed
     }
@@ -991,6 +986,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         std::cerr << "Cannot open output files." << std::endl;
         exit (1);
     }
+
+
+    std::shared_ptr<ModelMetadataAccessor> metadata = nullptr;
+    OutputExporter::instance().setUseSqlite(enable_sqlite_out);
+
+    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
+    outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
+    try {
+        if (enable_sqlite_out) {
+            outSqlite->open();
+            outSqlite->createAllTables();
+
+            OutputExporter::instance().setSQLiteDb(outSqlite);            
+            guiSendOutputInfo(sqliteOutputPath);
+
+            metadata = std::make_shared<ModelMetadataAccessor>(outSqlite->metadata());
+        }
+    } catch (SQLiteException &x) {
+        std::cerr << "Cannot open output sqlite file: " << x.what() << "\n";
+        exit(1);
+    }
+
+
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
     export_individual_tacs.open(filename.c_str());
@@ -2582,7 +2600,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        }
 
 
-
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
     auto fgrounds = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
@@ -3062,6 +3079,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //   outc(cout  << " " << a_ogive[i] << " " );
         //}
         //out(cout << endl); // well...nothing there because a metier is still not assigned at this stage...
+
+        if (enable_sqlite_out) {
+            outSqlite->getVesselDefTable()->feedVesselsDefTable(vessels[i]);
+        }
     }
 
     //check vessel specifications
@@ -3591,9 +3612,22 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     //AT THE VERY START: export biomass pop on nodes for mapping e.g. in GIS
     if (export_vmslike) {
+        if (enable_sqlite_out) {
+            outSqlite->startDayLoop();
+        }
+
         for (unsigned int n=0; n<nodes.size(); n++) {
             nodes[n]->export_popnodes(popnodes_start, init_weight_per_szgroup, 0);
+            if (enable_sqlite_out) {
+                outSqlite->getNodesDefTable()->insert(nodes[n]);
+                outSqlite->getPopTable()->insert(0, nodes[n], init_weight_per_szgroup);
+            }
         }
+
+        if (enable_sqlite_out) {
+            outSqlite->endDayLoop();
+        }
+
         popnodes_start.flush();
         // signals the gui that the filename has been updated.
         guiSendUpdateCommand(popnodes_start_filename, 0);
@@ -3612,6 +3646,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     for (tstep =0; tstep < nbsteps; ++tstep)
     {
+        if (enable_sqlite_out && (tstep % numStepTransactions) == 0) {
+            std::cout << "Start Transaction " << tstep << "\n";
+            outSqlite->startDayLoop();
+        }
+
 #ifdef PROFILE
         mLoopProfile.start();
 #endif
@@ -3622,7 +3661,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         guiSendCurrentStep(tstep);
 
-        tout(cout << "tstep: " << tstep << endl);
+        if (!use_gui) {
+            cout << "tstep: " << tstep << endl;
+        }
         ostringstream os;
         os << "tstep " << tstep << endl;
         guiSendTerminalMessage(os.str());
@@ -4988,6 +5029,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   windmills.at(i)->compute_kWproduction_in_farm(); // discrete event
                   //cout << "kW production in farm " << i << " is " << windmills.at(i)->get_kWproduction_in_farm() << endl;
                   windmills.at(i)->export_windmills_indicators(windmillslogs, tstep); // export event to file...
+
+                  if (enable_sqlite_out) {
+                      outSqlite->exportWindmillsLog(windmills.at(i), tstep);
+                  }
              }
 
         }
@@ -5048,6 +5093,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   fishfarms.at(i)->compute_profit_in_farm(); // discrete event
                   //cout << "profit in farm " << i << " is " << fishfarms.at(i)->get_sim_annual_profit() << endl;
                   fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file...
+
+                  if (enable_sqlite_out)
+                      outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+
                   //...and reset
                   fishfarms.at(i)->set_is_running(0);
                   fishfarms.at(i)->set_sim_individual_mean_kg(0.0);
@@ -5146,6 +5195,41 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         mVesselLoopProfile.elapsed_ms();
 #endif
 
+
+       // export
+        {
+            std::unique_lock<std::mutex> m(listVesselMutex);
+            for (unsigned int idx =0; idx < listVesselIdForVmsLikeToExport.size(); idx++)
+            {
+            //cout << "tstep: "<< tstep << "export vmslike for " << listVesselIdForVmsLikeToExport.at(idx)<< endl;
+                  OutputExporter::instance().exportVmsLike(tstep, vessels[listVesselIdForVmsLikeToExport.at(idx)]);
+            }
+            listVesselIdForVmsLikeToExport.clear();
+
+            for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
+            {
+                  OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
+            }
+            listVesselIdForVmsLikeFPingsOnlyToExport.clear();
+
+
+            for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
+            {
+                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                 OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
+                 vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
+            }
+            listVesselIdForLogLikeToExport.clear();
+
+            for (unsigned int idx =0; idx < listVesselIdForTripCatchPopPerSzgroupExport.size(); idx++)
+            {
+                 OutputExporter::instance().exportTripCatchPopPerSzgroup(tstep, vessels[listVesselIdForTripCatchPopPerSzgroupExport.at(idx)], populations, implicit_pops);
+            }
+            listVesselIdForTripCatchPopPerSzgroupExport.clear();
+
+        }
+
+
         // EXPORT: vessel_loglike - disabled
         /*
         if (use_gui) {
@@ -5190,6 +5274,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         }
 #endif
 
+        if (metadata)
+            metadata->setLastTStep(tstep);
+
+        if (enable_sqlite_out && (tstep % numStepTransactions) == (numStepTransactions-1)) {
+            std::cout << "End Transaction " << tstep << "\n";
+            outSqlite->endDayLoop();
+        }
 #ifdef PROFILE
         mLoopProfile.elapsed_ms();
 
@@ -5198,12 +5289,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             guiSendMemoryInfo(memInfo);
         }
 
-        /*
         if ((mLoopProfile.runs() % 500) == 0) {
             lock();
             cout << "Average loop performance after " << mLoopProfile.runs() << "runs: " << (mLoopProfile.avg() * 1000.0) << "ms total: " << mLoopProfile.total() << "s\n";
             unlock();
-        }*/
+        }
 #endif
     }							 // end FOR LOOP OVER TIME
 
@@ -5229,8 +5319,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     memInfo.update();
     ss << "*** Memory Info: RSS: " << memInfo.rss()/1024 << "Mb - Peak: " << memInfo.peakRss()/1024 << "Mb" << endl;
 
-    guiSendTerminalMessage(ss.str());
-    guiSendCapture(false);
+    if (use_gui) {
+        guiSendTerminalMessage(ss.str());
+        guiSendCapture(false);
+    } else {
+        cout << ss.str() << "\n";
+    }
 #endif
 
     finalizeIpcQueue();
@@ -5287,6 +5381,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popdyn_test2.close();
     popnodes_start.close();
     popnodes_end.close();
+
+    if (enable_sqlite_out) {
+        try {
+            std::cout << "Creating database indexes...\n";
+            outSqlite->createAllIndexes();
+            outSqlite->close();
+        } catch (SQLiteException &x) {
+            std::cerr << "An error occurred closing the SQLite db: " << x.what() << "\n";
+        }
+    }
 
     // disable gnuplot
 #if 0

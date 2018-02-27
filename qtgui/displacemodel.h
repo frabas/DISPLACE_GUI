@@ -65,25 +65,15 @@ class DbHelper;
 class MapObjectsController;
 class Calendar;
 
+class SQLiteOutputStorage;
 
 class DisplaceModel : public QObject
 {
     Q_OBJECT
 public:
-    typedef QVector<PopulationData> PopulationStat;
-    typedef HistoricalDataCollector<PopulationStat> PopulationStatContainer;
-    typedef QVector<NationStats> NationsStats;
-    typedef HistoricalDataCollector<NationsStats> NationsStatsContainer;
-    typedef QVector<HarbourStats> HarboursStats;
-    typedef HistoricalDataCollector<HarboursStats> HarboursStatsContainer;
-    typedef QVector<MetierStats> MetiersStats;
-    typedef HistoricalDataCollector<MetiersStats> MetiersStatsContainer;
     typedef HistoricalDataCollector<BenthosStats> BenthosStatsContainer;
     typedef HistoricalDataCollector<FishfarmsStats> FishfarmsStatsContainer;
     typedef HistoricalDataCollector<ShipsStats> ShipsStatsContainer;
-    typedef HistoricalDataCollector<WindfarmsStats> WindfarmsStatsContainer;
-
-
 
     enum ModelType {
         LiveModelType, EditorModelType, OfflineModelType,
@@ -103,7 +93,7 @@ public:
 
     bool load (QString path, ModelType type);
     bool loadDatabase (QString path);
-    bool linkDatabase (QString path);
+    bool Q_DECL_DEPRECATED linkDatabase (QString path);
     bool prepareDatabaseForSimulation ();
     bool clearStats();
     bool saveScenarioAs(const QString &path);
@@ -123,6 +113,7 @@ public:
     void setOutputName(const QString &name) { mOutputName = name; }
     QString simulationName() const { return mSimuName; }
     void setSimulationName(const QString &name) { mSimuName = name; }
+    void setSimulationSqlStorage(const QString &path);
 
     QString linkedDatabase() const { return mLinkedDbName; }
     bool isModelLoaded() const { return !mInputName.isEmpty(); }
@@ -203,88 +194,28 @@ public:
     /* Access to Population statistics */
     int getPopulationsCount() const;
     int getBenthosPopulationsCount() const;
-    const PopulationData &getPopulationsAtStep (int step, int idx) const {
-        if (idx >= mStatsPopulations.getValue(step).size()) {
-            qDebug() << step << idx << mStatsPopulations.getValue(step).size();
-            Q_ASSERT(false);
-        }
-        return mStatsPopulations.getValue(step).at(idx);
-    }
-    int getPopulationsValuesCount() const {
-        return mStatsPopulations.getUniqueValuesCount();
-    }
-    PopulationStatContainer::Container::const_iterator getPopulationsFirstValue() const {
-        return mStatsPopulations.getFirst();
-    }
-
-    const PopulationData &getPopulations(int idx) const { return getPopulationsAtStep(mCurrentStep,idx); }
 
     /* Access to Nations statistics */
 
     const QList<std::shared_ptr<NationData> > &getNationsList() const { return mNations; }
     const NationData &getNation(int idx) const { return *mNations.at(idx); }
 
-    int getNationsStatsCount() const {
-        return mStatsNations.getUniqueValuesCount();
-    }
-    NationsStatsContainer::Container::const_iterator getNationsStatsFirstValue() const {
-        return mStatsNations.getFirst();
-    }
-    const NationsStats &getNationsStatAtStep(int step) const {
-        return mStatsNations.getValue(step);
-    }
-    const NationStats &getNationStatAtStep(int step, int idx) const {
-        return mStatsNations.getValue(step).at(idx);
-    }
-
     /* Access to Harbour statistics */
 
     const QList<std::shared_ptr<HarbourData> > &getHarbourList() const { return mHarbours; }
     const HarbourData &getHarbourData(int idx) const { return *mHarbours.at(idx); }
 
-    int getHarboursStatsCount() const {
-        return mStatsHarbours.getUniqueValuesCount();
-    }
-    HarboursStatsContainer::Container::const_iterator getHarboursStatsFirstValue() const {
-        return mStatsHarbours.getFirst();
-    }
-    const HarboursStats &getHarboursStatAtStep(int step) const {
-        return mStatsHarbours.getValue(step);
-    }
-    const HarbourStats &getHarboursStatAtStep(int step, int idx) const {
-        return mStatsHarbours.getValue(step).at(idx);
-    }
     /** Retrieve the statistics for a specific Harbour from the DB, or the latest available if it's a live simulation */
     HarbourStats retrieveHarbourIdxStatAtStep (int idx, int step);
 
-    /* Access Metier Statistics */
-
-    int getMetiersStatsCount() const {
-        return mStatsMetiers.getUniqueValuesCount();
-    }
-    MetiersStatsContainer::Container::const_iterator getMetiersStatsFirstValue() const {
-        return mStatsMetiers.getFirst();
-    }
-    /*
-    const MetiersStatsContainer &getMetiersStatAtStep(int step) const {
-        return mStatsMetiers.getValue(step);
-    }
-    const MetiersStatsContainer &getMetiersStatAtStep(int step, int idx) const {
-        return mStatsMetiers.getValue(step).at(idx);
-    }*/
-
     /* Benthos Statistics */
     const BenthosStatsContainer &getBenthosStatistics() { return mStatsBenthos; }
-
 
     /* Fishfarms Statistics */
     const FishfarmsStatsContainer &getFishfarmsStatistics() { return mStatsFishfarms; }
 
     /* Ships Statistics */
     const ShipsStatsContainer &getShipsStatistics() { return mStatsShips; }
-
-    /* Windfarms Statistics */
-    const WindfarmsStatsContainer &getWindfarmsStatistics() { return mStatsWindfarms; }
 
     /* Scenario and configuration */
 
@@ -457,14 +388,6 @@ public:
     void collectShipPMEemission (int step, int node_idx, int shipid,  int shiptype,  double PME_emission);
     void commitShipsStats(int tstep);
 
-    void collectWindfarmkWh (int step, int node_idx, int windfarmid, int windfarmtype, double kWh);
-    void collectWindfarmkWproduction (int step, int node_idx, int windfarmid,  int windfarmtype, double kWproduction);
-    void commitWindfarmsStats(int tstep);
-
-    void collectPopdynN(int step, int popid, const QVector<double> &pops, double value);
-    void collectPopdynF(int step, int popid, const QVector<double> &pops, double value);
-    void collectPopdynSSB(int step, int popid, const QVector<double> &pops, double value);
-
     void collectVesselStats (int step, const VesselStats &stats);
     void commitVesselsStats(int tstep);
 
@@ -503,6 +426,7 @@ public:
     void setBenthosNumberFromFeature(OGRGeometry *geometry, double nb);
     void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
 
+    std::shared_ptr<SQLiteOutputStorage> getOutputStorage() const { return mOutSqlite; }
 protected:
     bool loadNodes();
     bool loadVessels();
@@ -539,6 +463,7 @@ private:
 
     ModelType mModelType;
     DbHelper *mDb;
+    std::shared_ptr<SQLiteOutputStorage> mOutSqlite;
     std::shared_ptr<Calendar> mCalendar;
     QString mFullPath;
     QString mInputName;
@@ -554,12 +479,10 @@ private:
     int mCurrentStep, mLastStep;
     int mLastStats;
     bool mNodesStatsDirty;
-    bool mPopStatsDirty;
     bool mVesselsStatsDirty;     // TODO: refactor this using an opaque class as for FishFarms
     int m_vessel_last_step;     // TODO: Same as above
     bool mFirmsStatsDirty;
     bool mShipsStatsDirty;
-    bool mWindmillStatsDirty;
 
     Scenario mScenario;
     Config mConfig;
@@ -592,22 +515,12 @@ private:
     QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
     QList<std::shared_ptr<NationData> > mNations;
 
-    PopulationStatContainer mStatsPopulations;
-    PopulationStat mStatsPopulationsCollected;
-    NationsStatsContainer mStatsNations;
-    NationsStats mStatsNationsCollected;
-    HarboursStatsContainer mStatsHarbours;
-    HarboursStats mStatsHarboursCollected;
-    MetiersStatsContainer mStatsMetiers;
-    MetiersStats mStatsMetiersCollected;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
     FishfarmsStatsContainer mStatsFishfarms;
     FishfarmsStats mStatsFishfarmsCollected;
     ShipsStatsContainer mStatsShips;
     ShipsStats mStatsShipsCollected;
-    WindfarmsStatsContainer mStatsWindfarms;
-    WindfarmsStats mStatsWindfarmsCollected;
 
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<int, std::shared_ptr<Fishfarm> > mFishfarmInfo;

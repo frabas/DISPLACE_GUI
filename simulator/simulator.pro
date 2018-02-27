@@ -14,9 +14,11 @@ macx {
 }
 
 QMAKE_CXXFLAGS += -fpermissive
-CONFIG += c++11
+CONFIG += c++14
 
 LIBS+= -L.. -ldisplacecommons -lformats
+
+!win32: -lsqlite3
 
 macx {
     LIBS += -L/Library/Frameworks/GDAL.framework/unix/lib/
@@ -68,7 +70,6 @@ HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
-    ../include/biomodule.h \
     ../include/Fishfarm.h \
     ../include/Node.h \
     ../include/Tac.h \
@@ -117,6 +118,16 @@ unix:!macx {
         messages/genericconsolestringoutputmessage.h \
         messages/moveshipoutputmessage.h
 }
+
+### mSQLiteCpp dependency
+
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+#SOURCES += $$top_srcdir/mSqliteCpp/src/*
+HEADERS += $$top_srcdir/mSqliteCpp/include/*
+LIBS +=
+
+### End mSqliteCpp Depedency
+
 
 OTHER_FILES += \
     Makefile.hpc

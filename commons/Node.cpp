@@ -537,7 +537,7 @@ const vector <double> &Node::get_tariffs() const
     return(tariffs);
 }
 
-vector <vector <double> > Node::get_Ns_pops_at_szgroup() const
+const vector<vector<double> > &Node::get_Ns_pops_at_szgroup() const
 {
 
 	return(Ns_pops_at_szgroup);

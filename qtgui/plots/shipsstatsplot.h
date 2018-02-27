@@ -1,7 +1,7 @@
 #ifndef SHIPSSTATSPLOT_H
 #define SHIPSSTATSPLOT_H
 
-#include <plots/plottypes.h>
+#include "plottypes.h"
 #include <palettemanager.h>
 
 #include <QPen>

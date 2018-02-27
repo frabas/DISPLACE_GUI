@@ -2,12 +2,12 @@ include ("$$top_srcdir/localconfig.pri")
 
 QT=core
 TARGET=commons_tests
-CONFIG += c++11
+CONFIG += c++14
 
 DESTDIR = ../bin/test
 
 DEFINES=
-INCLUDEPATH+=../../include .. ../../sparsepp
+INCLUDEPATH+=../../include .. ../../sparsepp ../../formats
 
 macx {
     DESTDIR=$$EXEDESTDIR
@@ -26,7 +26,9 @@ unix:!macx{
 unix {
     LIBS+=-lboost_unit_test_framework
 }
+
 win32 {
+    DEFINES += EMBED_MSQLITECPP
     LIBS += -lboost_unit_test_framework-vc140-mt-1_63
 }
 
@@ -45,5 +47,15 @@ SOURCES= main.cpp \
     test_pathshop.cpp
 
 HEADERS=
+
+
+### mSQLiteCpp dependency
+
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+#SOURCES += $$top_srcdir/mSqliteCpp/src/*
+HEADERS += $$top_srcdir/mSqliteCpp/include/*
+LIBS +=
+
+### End mSqliteCpp Depedency
 
 OTHER_FILES +=

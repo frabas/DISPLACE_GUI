@@ -92,6 +92,8 @@
 
 #include <legacy/binarygraphfilewriter.h>
 
+#include <sqlitestorage.h>
+
 #include <QBoxLayout>
 #include <QTextEdit>
 #include <QSettings>
@@ -192,6 +194,7 @@ MainWindow::MainWindow(QWidget *parent) :
              this, SLOT(shipMoved(int,int,float,float,float)));
     connect (mSimulation, SIGNAL(nodesStatsUpdate(QString)), this, SLOT(simulatorNodeStatsUpdate(QString)));
     connect (mSimulation, SIGNAL(outputFileUpdated(QString,int)), this, SLOT(updateOutputFile(QString,int)));
+    connect (mSimulation, SIGNAL(sqliteStorageOpened(QString)), this, SLOT(simulatorSqlStorageChanged(QString)));
     connect (mSimulation, SIGNAL(debugMemoryStats(long,long)), this, SLOT(simulatorDebugMemoryStats(long,long)));
     connect (mSimulation, SIGNAL(debugCapture(QString)), this, SLOT(simulatorCaptureLine(QString)));
 
@@ -209,6 +212,7 @@ MainWindow::MainWindow(QWidget *parent) :
     auto benthosPlotController = new GraphInteractionController(ui->plotBenthos, this);
     auto windfarmPlotController = new GraphInteractionController(ui->plotWindfarms, this);
     auto shipPlotController = new GraphInteractionController(ui->plotShips, this);
+    auto nationsStatsPlotController = new GraphInteractionController(ui->plotNations, this);
     new GraphInteractionController(ui->plotMetiers, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
@@ -237,13 +241,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mStatsController = new StatsController(this);
     cout << "for Pop " << endl;
-    mStatsController->setPopulationPlot(ui->plotPopulations);
+    mStatsController->setPopulationPlot(ui->plotPopulations, new GraphInteractionController(ui->plotPopulations, this));
     cout << "for Pop...ok " << endl;
     cout << "for Harbour " << endl;
     mStatsController->setHarboursPlot(ui->plotHarbours);
     cout << "for Harbour...ok " << endl;
     cout << "for Nations " << endl;
-    mStatsController->setNationsPlot(ui->plotNations);
+    mStatsController->setNationsStatsPlot(ui->plotNations, nationsStatsPlotController);
     cout << "for Nations...ok " << endl;
     cout << "for Metiers " << endl;
     mStatsController->setMetiersPlot(ui->plotMetiers);
@@ -351,13 +355,13 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
         mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Invisible);
     }
 
-    int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     currentModelIdx = ui->modelSelector->itemData(index).toInt();
     if (currentModelIdx >= 0)
         currentModel = models[currentModelIdx];
     else
         currentModel = 0;
 
+    int currentStep = currentModel ? currentModel->getCurrentStep() : 0;
     treemodel->setCurrentModel(currentModelIdx, currentModel.get());
 
     mMapController->setModelVisibility(currentModelIdx, MapObjectsController::Visible);
@@ -515,8 +519,12 @@ void MainWindow::updateOutputFile(QString path, int n)
 
 void MainWindow::outputUpdated()
 {
+    try {
     mMapController->updateNodes(0);
     mStatsController->updateStats(models[0].get());
+    } catch (sqlite::SQLiteException &xcp) {
+        qWarning() << "Error updating output: " << xcp.what();
+    }
 }
 
 void MainWindow::mapFocusPointChanged(qmapcontrol::PointWorldCoord pos)
@@ -1021,120 +1029,12 @@ void MainWindow::on_cmdSetup_clicked()
 
 void MainWindow::on_action_Link_database_triggered()
 {
-    if (models[0] == 0) {
-        QMessageBox::warning(this, tr("Link database"), tr("Please load a simulation before linking a database."));
-        return;
-    }
-
-    if (mSimulation->isRunning()) {
-        QMessageBox::warning(this, tr("Link database"), tr("Cannot link database while a simulation is running."));
-        return;
-    }
-
-    QSettings sets;
-    QString dbname =  QFileDialog::getSaveFileName(this, tr("Link database"),
-                                         sets.value(dbLastDirKey).toString(), dbFilter,0);
-
-    if (!dbname.isEmpty()) {
-        QFileInfo info (dbname);
-        if (info.suffix().isEmpty()) {
-            dbname += dbSuffix;
-            info = QFileInfo(dbname);
-        }
-
-        if (info.exists()) {
-            QFile f(dbname);
-            f.remove();
-        }
-
-        if (!models[0]->linkDatabase(dbname)) {
-            QMessageBox::warning(this, tr("Link database failed"),
-                                 QString(tr("Cannot link database file %1: %2"))
-                                 .arg(dbname).arg(models[0]->getLastError()));
-            return;
-        }
-
-        sets.setValue(dbLastDirKey, info.absolutePath());
-    }
+    QMessageBox::warning(this, tr("Unsupported"), tr("This function isn't supported anymore."));
 }
 
 void MainWindow::on_actionImport_results_triggered()
 {
-    if (currentModelIdx == 0 || currentModel == 0 || currentModel->modelType() != DisplaceModel::OfflineModelType) {
-        QMessageBox::warning(this, tr("Offline results import"),
-                             tr("To import results, an offline Model slot must be selected (slots [1]-[3]) and a"
-                                " config file must be loaded."));
-        return;
-    }
-
-    QSettings sets;
-    QString name =  QFileDialog::getExistingDirectory(this, tr("Import result data from directory"),
-                                         sets.value("import_last").toString());
-
-    if (!name.isEmpty()) {
-        QFileInfo info (name);
-
-        QRegExp r(R"%(.*simu(\d+)\.dat)%");
-        QSet<QString> simus;
-        QDir dr(name);
-        auto files = dr.entryInfoList();
-        for (auto file : files) {
-            if (r.indexIn(file.fileName()) != -1) {
-                simus.insert(QString("simu%1").arg(r.cap(1)));
-            }
-        }
-
-        if (simus.size() == 0) {
-            QMessageBox::warning(this, tr("Import offline data"),
-                                 tr("No relevant simulation files found. Please check the selected folder"));
-            return;
-        }
-        QString selected;
-        if (simus.size() > 1) {
-            QStringList ls(simus.toList());
-
-            ls.sort();
-            selected = QInputDialog::getItem(this, tr("Import offline data"),
-                                             tr("Please select a simulation id"), ls, 0, false);
-            if (selected.isEmpty())
-                return;
-        } else {
-            selected = *simus.begin();
-        }
-
-        // now try to import some relevant file.
-
-        QStringList filesToLoad {
-            "popnodes_start_%1.dat",
-            "popnodes_cumftime_%1.dat", "popnodes_cumsweptarea_%1.dat",
-            "popnodes_cumcatches_%1.dat", "popnodes_cumcatches_with_threshold_%1.dat",
-            "popnodes_cumdiscards.dat", "popnodes_tariffs_%1.dat",
-            "popnodes_impact_%1.dat", "popnodes_cumulcatches_per_pop_%1.dat",
-            "benthosnodes_tot_biomasses_%1.dat",
-            "benthosnodes_tot_numbers_%1.dat",
-            "popdyn_%1.dat", "popdyn_F_%1.dat", "popdyn_SSB_%1.dat",
-            "loglike_%1.dat"
-        };
-        QStringList missing;
-
-        OutputFileParser out(currentModel.get());
-        for (auto patternToLoad : filesToLoad) {
-            QString fileToLoad = QString(patternToLoad).arg(selected);
-            QFile tf(QString("%1/%2").arg(name).arg(fileToLoad));
-            if (!tf.exists()) {
-                missing << fileToLoad;
-                continue;
-            }
-            out.parse(tf.fileName(), -1, (24*30));
-        }
-
-        if (!missing.isEmpty()) {
-            QMessageBox::information(this, tr("Import offline data"),
-                                     tr("Data imported, but some file couldn't be loaded. %1").arg(missing.join(", ")));
-        }
-
-        sets.setValue("import_last", info.absolutePath());
-    }
+    QMessageBox::warning(this, tr("Unsupported"), tr("This function isn't supported anymore."));
 }
 
 void MainWindow::on_actionLoad_results_triggered()
@@ -1300,6 +1200,12 @@ void MainWindow::completeMouseMode()
     endMouseMode(true);
 }
 
+void MainWindow::simulatorSqlStorageChanged(QString path)
+{
+    if (currentModel)
+        currentModel->setSimulationSqlStorage(path);
+}
+
 void MainWindow::showWarningMessageBox(QString title, QString message)
 {
     QMessageBox::warning(this, title, message);
@@ -1399,22 +1305,22 @@ void MainWindow::showPaletteDialog (PaletteRole role)
 
 void MainWindow::on_popStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setPopulationStat((StatsController::PopulationStat)index);
+    mStatsController->setPopulationStat((displace::plot::PopulationStat)index);
 }
 
 void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
 {
-    mStatsController->setNationsStat((StatsController::NationsStat)index);
+    mStatsController->setNationsStat((displace::plot::NationsStat)index);
 }
 
 void MainWindow::on_harbStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setHarbourStat((StatsController::HarboursStat)index);
+    mStatsController->setHarbourStat((displace::plot::HarboursStat)index);
 }
 
 void MainWindow::on_metierStatSelector_currentIndexChanged(int index)
 {
-    mStatsController->setMetiersStat(static_cast<StatsController::MetiersStat>(index));
+    mStatsController->setMetiersStat(static_cast<displace::plot::MetiersStat>(index));
 }
 
 void MainWindow::on_play_params_clicked()
@@ -2889,31 +2795,32 @@ void MainWindow::on_actionExportAllGraphics_triggered()
 
         auto r = p.getOptions();
 
-        exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, StatsController::Aggregate, r);
-        exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, StatsController::Mortality, r);
-        exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, StatsController::SSB, r);
+#if 0
+        exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, displace::plot::PopulationStat::Aggregate, r);
+        exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, displace::plot::PopulationStat::Mortality, r);
+        exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, displace::plot::PopulationStat::SSB, r);
 
-        exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, StatsController::Catches, r);
-        exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, StatsController::Discards, r);
-        exportPlot (out + QString("/nations_earnings.%1").arg(r.format), StatsController::Nations, StatsController::Earnings, r);
-        exportPlot (out + QString("/nations_exearnings.%1").arg(r.format), StatsController::Nations, StatsController::ExEarnings, r);
-        exportPlot (out + QString("/nations_timeatsea.%1").arg(r.format), StatsController::Nations, StatsController::TimeAtSea, r);
-        exportPlot (out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations, StatsController::Gav, r);
-        exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, StatsController::Vpuf, r);
-        exportPlot (out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations, StatsController::SweptArea, r);
-        exportPlot (out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations, StatsController::RevenuePerSweptArea, r);
-        exportPlot (out + QString("/nations_GVA.%1").arg(r.format), StatsController::Nations, StatsController::GVA, r);
-        exportPlot (out + QString("/nations_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, StatsController::GVAPerRevenue, r);
-        exportPlot (out + QString("/nations_LabourSurplus.%1").arg(r.format), StatsController::Nations, StatsController::LabourSurplus, r);
-        exportPlot (out + QString("/nations_GrossProfit.%1").arg(r.format), StatsController::Nations, StatsController::GrossProfit, r);
-        exportPlot (out + QString("/nations_NetProfit.%1").arg(r.format), StatsController::Nations, StatsController::NetProfit, r);
-        exportPlot (out + QString("/nations_NetProfitMargin.%1").arg(r.format), StatsController::Nations, StatsController::NetProfitMargin, r);
-        exportPlot (out + QString("/nations_GVAPerFTE.%1").arg(r.format), StatsController::Nations, StatsController::GVAPerFTE, r);
-        exportPlot (out + QString("/nations_RoFTA.%1").arg(r.format), StatsController::Nations, StatsController::RoFTA, r);
-        exportPlot (out + QString("/nations_BER.%1").arg(r.format), StatsController::Nations, StatsController::BER, r);
-        exportPlot (out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::CRBER, r);
-        exportPlot (out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::NetPresentValue, r);
-        exportPlot (out + QString("/nations_numTrips.%1").arg(r.format), StatsController::Nations, StatsController::numTrips, r);
+        exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Catches, r);
+        exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Discards, r);
+        exportPlot (out + QString("/nations_earnings.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Earnings, r);
+        exportPlot (out + QString("/nations_exearnings.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::ExEarnings, r);
+        exportPlot (out + QString("/nations_timeatsea.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::TimeAtSea, r);
+        exportPlot (out + QString("/nations_gav.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Gav, r);
+        exportPlot (out + QString("/nations_vpuf.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::Vpuf, r);
+        exportPlot (out + QString("/nations_sweptarea.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::SweptArea, r);
+        exportPlot (out + QString("/nations_revenuepersweptarea.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::RevenuePerSweptArea, r);
+        exportPlot (out + QString("/nations_GVA.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::GVA, r);
+        exportPlot (out + QString("/nations_GVAPerRevenue.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::GVAPerRevenue, r);
+        exportPlot (out + QString("/nations_LabourSurplus.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::LabourSurplus, r);
+        exportPlot (out + QString("/nations_GrossProfit.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::GrossProfit, r);
+        exportPlot (out + QString("/nations_NetProfit.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::NetProfit, r);
+        exportPlot (out + QString("/nations_NetProfitMargin.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::NetProfitMargin, r);
+        exportPlot (out + QString("/nations_GVAPerFTE.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::GVAPerFTE, r);
+        exportPlot (out + QString("/nations_RoFTA.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::RoFTA, r);
+        exportPlot (out + QString("/nations_BER.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::BER, r);
+        exportPlot (out + QString("/nations_CRBER.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::CRBER, r);
+        exportPlot (out + QString("/nations_NetPresentValue.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::NetPresentValue, r);
+        exportPlot (out + QString("/nations_numTrips.%1").arg(r.format), StatsController::Nations, displace::plot::NationsStat::numTrips, r);
 
         exportPlot (out + QString("/harbours_catches.%1").arg(r.format), StatsController::Harbours, StatsController::H_Catches, r);
         exportPlot (out + QString("/harbours_discards.%1").arg(r.format), StatsController::Harbours, StatsController::H_Discards, r);
@@ -2952,6 +2859,7 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/metiers_CRBER.%1").arg(r.format), StatsController::Nations, StatsController::M_CRBER, r);
         exportPlot (out + QString("/metiers_NetPresentValue.%1").arg(r.format), StatsController::Nations, StatsController::M_NetPresentValue, r);
         exportPlot (out + QString("/metiers_numTrips.%1").arg(r.format), StatsController::Nations, StatsController::M_numTrips, r);
+#endif
 
         s.setValue("allplots_out", out);
     }

@@ -318,7 +318,7 @@ Scenario Scenario::readFromFile(QString path, QString modelname, QString outputn
                 path.toStdString(),
                 modelname.toStdString(),
                 outputname.toStdString(),
-                scenario) < 0)
+                scenario))
         throw DisplaceException(QString(QObject::tr("Cannot load scenario file: %1 - %2"))
                                 .arg(::getLastErrorMessage().c_str())
                                 .arg(strerror(errno)));

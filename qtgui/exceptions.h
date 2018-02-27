@@ -51,4 +51,9 @@ public:
     }
 };
 
+class UnimplementedException : public DisplaceException {
+public:
+    using DisplaceException::DisplaceException;
+};
+
 #endif // EXCEPTIONS_H

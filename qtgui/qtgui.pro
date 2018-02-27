@@ -1,6 +1,6 @@
 TEMPLATE=app
 QT += core gui network sql xml printsupport concurrent
-CONFIG += c++11
+CONFIG += c++14
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -194,7 +194,11 @@ SOURCES += \
     plots/windfarmsstatsplot.cpp \
     plots/shipsstatsplot.cpp \
     objects/wfarmtypesentity.cpp \
-    objects/shiptypesentity.cpp
+    objects/shiptypesentity.cpp \
+    plots/nationsstatsplot.cpp \
+    plots/populationsstatplot.cpp \
+    plots/harboursstatplot.cpp \
+    plots/metiersstatsplot.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -324,7 +328,6 @@ HEADERS += \
     objects/bfunctionalgroupsentity.h \
     utils/interestinglistwithspecialvalues.h \
     plots/benthosstatsplot.h \
-    plots/plottypes.h \
     stats/benthosstats.h \
     stats/fishfarmsstats.h \
     plots/fishfarmsstatsplot.h \
@@ -334,7 +337,26 @@ HEADERS += \
     plots/windfarmsstatsplot.h \
     plots/shipsstatsplot.h \
     objects/wfarmtypesentity.h \
-    objects/shiptypesentity.h
+    objects/shiptypesentity.h \
+    plots/nationsstatsplot.h \
+    plots/populationsstatplot.h \
+    plots/harboursstatplot.h \
+    plots/metiersstatsplot.h
+
+### mSQLiteCpp dependency
+
+DEFINES += BUILD_MSQLITECPP
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+SOURCES += $$top_srcdir/mSqliteCpp/src/*.cpp
+HEADERS += $$top_srcdir/mSqliteCpp/include/*.h
+!win32: LIBS += -lsqlite3
+
+win32 {
+    DEFINES += EMBED_MSQLITECPP
+    SOURCES += ../commons/storage/sqlite3.c
+}
+
+### End mSqliteCpp Depedency
 
 RESOURCES += \
     qtgui.qrc

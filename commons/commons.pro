@@ -1,7 +1,7 @@
 TEMPLATE= lib
 TARGET=displacecommons
 DESTDIR=../
-CONFIG += c++11 dll
+CONFIG += c++14 dll
 
 
 include ("$$top_srcdir/localconfig.pri")
@@ -14,6 +14,7 @@ LIBS += -L.. -lformats
 win32 {
     # No crash handler support for Windows
     DEFINES += NO_CRASHHANDLER
+    DEFINES += EMBED_MSQLITECPP
 
     # For GetProcessMemoryInfo()
     LIBS += -lpsapi
@@ -58,14 +59,25 @@ SOURCES= \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
-    pathshop.cpp
-
+    pathshop.cpp \
+    storage/tables/vesseldeftable.cpp \
+    storage/sqliteoutputstorage.cpp \
+    storage/tables/vesselslogliketable.cpp \
+    storage/tables/poptable.cpp \
+    storage/tables/vesselvmsliketable.cpp \
+    storage/tables/fishfarmstable.cpp \
+    storage/tables/windfarmstable.cpp \
+    storage/tables/vesselsloglikecatchestable.cpp \
+    storage/tables/nodesdeftable.cpp \
+    storage/tables/popstattable.cpp \
+    storage/tables/popdyntable.cpp \
+    storage/tables/metadatatable.cpp \
+    storage/modelmetadataaccessor.cpp
 
 HEADERS= \
     ../include/readdata.h \
     ../include/myutils.h \
     ../include/Population.h \
-    ../include/biomodule.h \
     ../include/Fishfarm.h \
     ../include/Windmill.h \
     ../include/Node.h \
@@ -104,8 +116,47 @@ HEADERS= \
     utils/CrashHandler.h \
     dtree/vesselsevaluators.h \
     commons_global.h \
-    pathshop.h
+    pathshop.h \
+    storage/table/vesseldeftable.h \
+    storage/sqliteoutputstorage.h \
+    storage/tables/vesselslogliketable.h \
+    storage/tables/poptable.h \
+    ../mSqliteCpp/include/msqlitecpp.h \
+    storage/tables/vesselvmsliketable.h \
+    storage/tables/fishfarmstable.h \
+    storage/tables/windfarmstable.h \
+    storage/tables/vesselsloglikecatchestable.h \
+    storage/tables/nodesdeftable.h \
+    storage/tables/popstattable.h \
+    storage/tables/popdyntable.h \
+    ../mSqliteCpp/include/msqlitecpp.h \
+    ../mSqliteCpp/include/sqlitefielddef.h \
+    ../mSqliteCpp/include/sqlitefieldsop.h \
+    ../mSqliteCpp/include/sqlitestatement.h \
+    ../mSqliteCpp/include/sqlitestatementformatters.h \
+    ../mSqliteCpp/include/sqlitestorage.h \
+    ../mSqliteCpp/include/sqlitetable.h \
+    ../mSqliteCpp/include/sqlitetransaction.h \
+    storage/tables/metadatatable.h \
+    storage/modelconfig.h \
+    storage/modelmetadataaccessor.h
 
+### mSQLiteCpp dependency
+
+!win32 {
+    DEFINES += BUILD_MSQLITECPP
+}
+
+INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
+SOURCES += $$top_srcdir/mSqliteCpp/src/*.cpp
+HEADERS += $$top_srcdir/mSqliteCpp/include/*.h
+!win32: LIBS += -lsqlite3
+
+win32 {
+    SOURCES += storage/sqlite3.c
+}
+
+### End mSqliteCpp Depedency
 
 ## Do not add this if you don't support IPC queues
 

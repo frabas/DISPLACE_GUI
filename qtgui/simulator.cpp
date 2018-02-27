@@ -153,7 +153,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     connect(mSimulation, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
     connect(mSimulation, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(subprocessStateChanged(QProcess::ProcessState)));
 
-    qInfo() << "Running: " << executable << "from" << folder << " with arguments: " << arguments;
+    qInfo() << "Running: " << executable << "from" << folder << " with arguments: " << arguments.join(" ");
     mSimulation->setWorkingDirectory(folder);
 
     mSimulation->start(executable, arguments);
@@ -314,6 +314,10 @@ bool Simulator::processCodedLine(QString line)
         parseDebug(args);
         break;
 
+    case 'O':
+        parseOutputSpecs(line.mid(2));
+        break;
+
     default:
         return false;
     }
@@ -344,6 +348,19 @@ void Simulator::parseDebug(QStringList fields)
             mCapture = false;
         }
         break;
+    }
+}
+
+void Simulator::parseOutputSpecs(QString details)
+{
+    auto d = details.left(4);
+    auto str = details.mid(4);
+
+    if (d == "sql:") {
+        emit sqliteStorageOpened(str);
+    } else {
+        // just print on the console
+        qDebug() << "Output Specs: " << d << " => " << str;
     }
 }
 

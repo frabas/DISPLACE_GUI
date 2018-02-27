@@ -3,12 +3,17 @@
 
 #include "commons_global.h"
 
+#include "idtypes.h"
+
 #include "sqlitefielddef.h"
 #include "sqlitetable.h"
 using namespace sqlite;
 
 #include <vector>
 #include <string>
+
+class Vessel;
+class Node;
 
 class COMMONSSHARED_EXPORT VesselDefTable : public sqlite::SQLiteTable
 {
@@ -17,6 +22,7 @@ class COMMONSSHARED_EXPORT VesselDefTable : public sqlite::SQLiteTable
 
 public:
     const FieldDef<FieldType::Integer> fldId = makeFieldDef("VesselId", FieldType::Integer()).primaryKey();
+    const FieldDef<FieldType::Integer> fldNode = makeFieldDef("VesselInitialNodeId", FieldType::Integer()).notNull();
     const FieldDef<FieldType::Text> fldName = makeFieldDef("VesselName",FieldType::Text()).unique().notNull();
     const FieldDef<FieldType::Text> fldNationality = makeFieldDef("Nationality",FieldType::Text());
     const FieldDef<FieldType::Real> fldSpeeds = makeFieldDef("IdSpeeds",FieldType::Real());
@@ -39,11 +45,20 @@ public:
     ~VesselDefTable() noexcept;
     void dropAndCreate();
 
-    void feedVesselsDefTable(const std::vector<std::string> &vesselids,
-                             const std::vector<double> &speeds,
-                             const std::vector<double> &length);    // TODO fill all the rest
+    void feedVesselsDefTable(Vessel *vessel);    // TODO fill all the rest
 
     std::vector<std::string> getNationsList();
+
+    /** \brief Returns a list of all loaded vessel
+     * We use two functors here:
+     * - getnode to retrieve the node from the id, and
+     * - op to use the data just loaded
+     * This is a Hack because the client code (displacemodel) uses a different structure definition
+     * to keep the Nodes data (struct NodeData) that is on another library that depends on this library.
+     * */
+    void queryAllVessels(
+            std::function<Node *(int id)> getnode,
+            std::function<bool(std::shared_ptr<Vessel>)> op);
 
     void createIndex();
 protected:

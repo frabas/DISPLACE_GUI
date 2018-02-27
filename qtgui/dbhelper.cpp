@@ -35,6 +35,7 @@
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/nodesdeftable.h>
 #include <storage/tables/metadatatable.h>
+#include <storage/tables/vesseldeftable.h>
 #include <sqlitestorage.h>
 #include <storage/modelmetadataaccessor.h>
 
@@ -333,6 +334,16 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
 bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels)
 {
     Q_UNUSED(nodes); Q_UNUSED(vessels);
+
+    auto vtab = p->db->getVesselDefTable();
+    vtab->queryAllVessels(
+                [&nodes](int id) {
+        return nodes[id]->mNode.get();
+    },
+                [&vessels](std::shared_ptr<Vessel>v) {
+        vessels.push_back(std::make_shared<VesselData>(v));
+        return true;
+    });
 
 #if 0
     QSqlQuery q("SELECT _id,name,node FROM " + TBL_VESSELS + " ORDER BY _id", mDb);
@@ -759,6 +770,8 @@ QString DbHelper::getMetadata(QString key)
     } catch (sqlite::SQLiteException &x) {
         p->catchException(x);
     }
+
+    return QString();
 }
 
 int DbHelper::getLastKnownStep()

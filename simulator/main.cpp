@@ -2598,10 +2598,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            return -1;
        }
 
-    if (enable_sqlite_out) {
-        outSqlite->getVesselDefTable()->feedVesselsDefTable(vesselids, speeds, lengths);  // TODO: insert all the rest!
-    }
-
 
     // read the more complex objects (i.e. when several info for a same vessel)...
     // also quarter specific but semester specific for the betas because of the survey design they are comning from...
@@ -3082,6 +3078,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         //   outc(cout  << " " << a_ogive[i] << " " );
         //}
         //out(cout << endl); // well...nothing there because a metier is still not assigned at this stage...
+
+        if (enable_sqlite_out) {
+            outSqlite->getVesselDefTable()->feedVesselsDefTable(vessels[i]);
+        }
     }
 
     //check vessel specifications

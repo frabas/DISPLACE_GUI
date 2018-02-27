@@ -325,9 +325,9 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
             harbours.push_back(hdt);
         }
     }
+#endif
 
     return true;
-#endif
 }
 
 bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels)
@@ -709,6 +709,8 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
 
     return curHarbourData;
 #endif
+
+    return HarbourStats();
 }
 
 void DbHelper::beginTransaction()

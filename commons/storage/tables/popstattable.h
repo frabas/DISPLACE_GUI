@@ -14,7 +14,7 @@ using namespace sqlite;
 
 class Node;
 
-class COMMONSSHARED_EXPORT PopStatTable : public SQLiteTable
+class COMMONSSHARED_EXPORT NodesStatTable : public SQLiteTable
 {
 private:
     struct Impl;
@@ -29,12 +29,23 @@ private:
     FieldDef<FieldType::Real> cumCatches = makeFieldDef("CumCatches",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> cumDisc = makeFieldDef("CumDiscards",FieldType::Real()).notNull();
 
+    inline void init();
 public:
-    PopStatTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
-    ~PopStatTable() noexcept;
+    NodesStatTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
+    ~NodesStatTable() noexcept;
     void dropAndCreate();
 
     void insert (int tstep, Node *node);
+
+    struct NodeStat {
+        types::NodeId nodeId;
+        int tstep;
+        double cumftime;
+        double cumswa;
+        double cumcatches;
+        double cumdisc;
+    };
+    void queryAllNodesAtStep(int tstep, std::function<bool(NodeStat stat)>);
 };
 
 #endif // POPSTATTABLE_H

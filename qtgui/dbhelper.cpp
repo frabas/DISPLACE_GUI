@@ -34,6 +34,7 @@
 
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/nodesdeftable.h>
+#include <storage/tables/popstattable.h>
 #include <storage/tables/metadatatable.h>
 #include <storage/tables/vesseldeftable.h>
 #include <storage/tables/vesselvmsliketable.h>
@@ -121,6 +122,8 @@ void DbHelper::removeAllVesselsDetails()
 
 void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
 {
+    Q_UNUSED(idx);
+    Q_UNUSED(node);
     throw UnimplementedException(__FUNCTION__);
 }
 
@@ -280,63 +283,6 @@ bool DbHelper::loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::sh
         }
     });
 
-#if 0
-    QSqlQuery q("SELECT _id,x,y,harbour,areacode,landscape, wind, sst, salinity, benthosbiomass,benthosnumber,benthosmeanweight, benthosbiomassoverK, benthosnumberoverK, name FROM " + TBL_NODES + " ORDER BY _id", mDb);
-    bool res = q.exec();
-
-    DB_ASSERT(res,q);
-
-    while (q.next()) {
-        int idx = q.value(0).toInt();
-        double x = q.value(1).toDouble();
-        double y = q.value(2).toDouble();
-        int harbour = q.value(3).toInt();
-        int areacode = q.value(4).toInt();
-        int landscape = q.value(5).toInt();
-        int wind = q.value(6).toInt();
-        int sst = q.value(7).toInt();
-        int salinity = q.value(8).toInt();
-        int benthosbiomass = q.value(9).toInt();
-        int benthosnumber = q.value(10).toInt();
-        double benthosmeanweight = q.value(11).toDouble();
-        double benthosbiomassoverK = q.value(12).toDouble();
-        double benthosnumberoverK = q.value(13).toDouble();
-
-        int nbpops = model->getNBPops();
-        int nbbenthospops = model->getNBBenthosPops();
-        int szgroup = model->getSzGrupsCount();
-        QString name = q.value(14).toString();
-
-        /* TODO: a,b,c,d */
-        multimap<int,double> a;
-        map<int,double> b;
-        vector<types::NodeId> c;
-        vector<double> d;
-
-        std::shared_ptr<Node> nd;
-        std::shared_ptr<Harbour> h;
-        if (harbour) {
-            nd = h = std::shared_ptr<Harbour> (new Harbour(types::NodeId(idx), x, y, harbour,areacode,landscape, wind, sst, salinity,
-                                                            benthosbiomass, benthosnumber,benthosmeanweight, benthosbiomassoverK, benthosnumberoverK,
-                                                           nbpops, nbbenthospops, szgroup, name.toStdString(),a,b,c,d));
-        } else {
-            nd = std::shared_ptr<Node>(new Node(types::NodeId(idx), x, y, harbour, areacode, landscape,  wind, sst, salinity,
-                                                benthosbiomass, benthosnumber,benthosmeanweight, benthosbiomassoverK, benthosnumberoverK, nbpops, nbbenthospops,  szgroup));
-        }
-        std::shared_ptr<NodeData> n(new NodeData(nd, model));
-
-        while (nodes.size() < idx+1)
-            nodes.push_back(0);
-
-        nodes[idx] = n;
-        if (n->get_harbour()) {
-            n->setHarbourId(harbours.size());
-            std::shared_ptr<HarbourData> hdt (new HarbourData(h));
-            harbours.push_back(hdt);
-        }
-    }
-#endif
-
     return true;
 }
 
@@ -356,25 +302,6 @@ bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList
         return true;
     });
 
-#if 0
-    QSqlQuery q("SELECT _id,name,node FROM " + TBL_VESSELS + " ORDER BY _id", mDb);
-    if (!q.exec()) {
-        return false;
-    }
-
-    while (q.next()) {
-        int idx = q.value(0).toInt();
-        int nidx = q.value(2).toInt();
-
-        std::shared_ptr<Vessel> vsl (new Vessel(nodes.at(nidx)->mNode.get(), idx, q.value(1).toString().toStdString()));
-        std::shared_ptr<VesselData> v(new VesselData(vsl));
-
-        while (vessels.size() < idx+1)
-            vessels.push_back(0);
-
-        vessels[idx] = v;
-    }
-#endif
     return true;
 }
 
@@ -396,44 +323,28 @@ bool DbHelper::updateVesselsToStep(int tstep, QList<std::shared_ptr<VesselData> 
         return true;
     });
 
-
-#if 0
-    QSqlQuery q(mDb);
-    q.prepare("SELECT vesselid,x,y,fuel,state,cumcatches,timeatsea,reason_to_go_back,course FROM " + TBL_VESSELS_POS
-              + " WHERE tstep=?");
-    q.addBindValue(steps);
-
-    q.exec();
-
-    while (q.next()) {
-        int idx = q.value(0).toInt();
-        double x = q.value(1).toDouble();
-        double y = q.value(2).toDouble();
-        double fuel = q.value(3).toInt();
-        int state = q.value(4).toDouble();
-        double cum = q.value(5).toDouble();
-        double tim = q.value(6).toDouble();
-        int r = q.value(7).toInt();
-        double course = q.value(8).toDouble();
-
-        if (idx < vessels.size()) {
-            std::shared_ptr<VesselData> v (vessels.at(idx));
-            v->mVessel->set_xy(x,y);
-            v->mVessel->set_fuelcons(fuel);
-            v->mVessel->set_state(state);
-            v->mVessel->set_cumcatches(cum);
-            v->mVessel->set_timeatsea(tim);
-            v->mVessel->set_reason_to_go_back(r);
-            v->mVessel->set_course(course);
-        }
-    }
-#endif
     return true;
 }
 
 bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes)
 {
-    Q_UNUSED(step); Q_UNUSED(nodes);
+    auto ntab = p->db->getNodesStatTable();
+
+    ntab->queryAllNodesAtStep (step, [&nodes](const NodesStatTable::NodeStat &stat){
+        auto nid = stat.nodeId.toIndex();
+        auto &node = nodes.at(nid);
+        node->set_cumftime(stat.cumftime);
+        node->set_cumsweptarea(stat.cumswa);
+        node->set_cumcatches(stat.cumcatches);
+        node->set_cumdiscards(stat.cumdisc);
+        //nodes.at(nid)->setPopTot(tot);
+        //nodes.at(nid)->setPopWTot(totw);
+        //nodes.at(nid)->set_tariffs(tariffs);
+        return true;
+    });
+
+    return true;
+
 #if 0
     QSqlQuery q(mDb);
     bool res = q.prepare("SELECT nodeid,cumftime,cumsweptarea,cumcatches,totpop,totpopw,tariffs FROM " + TBL_NODES_STATS + " WHERE tstep<=? GROUP BY nodeid");

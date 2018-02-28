@@ -35,7 +35,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<NodesDefTable> mNodesDefTable;
-    std::shared_ptr<PopStatTable> mPopStatTable;
+    std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
@@ -60,7 +60,7 @@ void SQLiteOutputStorage::open()
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
     p->mNodesDefTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
-    p->mPopStatTable = std::make_shared<PopStatTable>(p->db, "NodesStat");
+    p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
@@ -107,7 +107,7 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
 
 void SQLiteOutputStorage::exportPopNodes(int tstep, Node *node)
 {
-    p->mPopStatTable->insert(tstep, node);
+    p->mNodesStatTable->insert(tstep, node);
 }
 
 void SQLiteOutputStorage::exportPopStat(Population *pop, int popid, int tstep)
@@ -542,7 +542,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselLoglikeTable->dropAndCreate();
     p->mVesselVmslikeTable->dropAndCreate();
     p->mNodesDefTable->dropAndCreate();
-    p->mPopStatTable->dropAndCreate();
+    p->mNodesStatTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
@@ -574,6 +574,11 @@ std::shared_ptr<VesselVmsLikeTable> SQLiteOutputStorage::getVesselVmsLikeTable()
 std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getNodesDefTable() const
 {
     return p->mNodesDefTable;
+}
+
+std::shared_ptr<NodesStatTable> SQLiteOutputStorage::getNodesStatTable() const
+{
+    return p->mNodesStatTable;
 }
 
 std::shared_ptr<PopTable> SQLiteOutputStorage::getPopTable() const

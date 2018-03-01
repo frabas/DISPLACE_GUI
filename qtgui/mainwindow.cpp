@@ -2960,12 +2960,12 @@ void MainWindow::on_actionSet_Node_Symbol_Size_triggered()
     bool ok;
     int sz = QInputDialog::getInt(this, tr("Set Node Symbol size"),
                                   tr("Symbol size, in pixels:"),
-                                  NodeGraphics::pieh(), 0, 100, 1, &ok);
+                                  NodeGraphics::pieh(), 1, 1000, 1, &ok);
 
     if (ok) {
         NodeGraphics::setPieSize(sz, sz);
         QMessageBox::information(this, tr("Node Symbol Size"),
-                                 tr("Nodes symbol size has changed, restart / reload the current model"));
+                                 tr("Nodes symbol size has changed, refresh the layers on the map"));
     }
 }
 

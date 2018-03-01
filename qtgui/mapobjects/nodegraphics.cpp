@@ -73,12 +73,12 @@ void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &
 
 int NodeGraphics::piew()
 {
-    return settings.value("piew", 10).toInt();
+    return settings.value("piew", 100).toInt();
 }
 
 int NodeGraphics::pieh()
 {
-    return settings.value("pieh", 10).toInt();
+    return settings.value("pieh", 100).toInt();
 }
 
 void NodeGraphics::setPieSize(int w, int h)
@@ -100,7 +100,7 @@ void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::R
         tot += getValueForPop(ilist[i]);
     }
 
-    int RADIUS = mGrid.width() / LastType * (LastType - mType);
+    int RADIUS = piew() / LastType * (LastType - mType);
 
     if (ilist.size() > 1) {
         if (tot > 1e-3) {
@@ -196,7 +196,7 @@ void NodeWithCumFTimeGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumftime()));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 
@@ -205,7 +205,7 @@ void NodeWithCumSweptAreaGraphics::drawShape(QPainter &painter, const qmapcontro
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumsweptarea()));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 void NodeWithCumSubsurfaceSweptAreaGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
@@ -213,7 +213,7 @@ void NodeWithCumSubsurfaceSweptAreaGraphics::drawShape(QPainter &painter, const 
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumsubsurfacesweptarea()));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 void NodeWithCumCatchesGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
@@ -221,7 +221,7 @@ void NodeWithCumCatchesGraphics::drawShape(QPainter &painter, const qmapcontrol:
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumcatches()));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 void NodeWithCumCatchesWithThresholdGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
@@ -229,7 +229,7 @@ void NodeWithCumCatchesWithThresholdGraphics::drawShape(QPainter &painter, const
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumcatches_with_threshold()));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 void NodeWithCumDiscardsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
@@ -237,7 +237,7 @@ void NodeWithCumDiscardsGraphics::drawShape(QPainter &painter, const qmapcontrol
     Q_UNUSED(rect);
 
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_cumdiscards()));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 
@@ -248,5 +248,5 @@ void NodeWithTariffsGraphics::drawShape(QPainter &painter, const qmapcontrol::Re
 
     vector<double>  tariffs =mNode->get_tariffs();
     painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(0) ));
-    painter.drawRect(-mGrid.width() / 2 , -mGrid.height() / 2, mGrid.width() , mGrid.height());
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }

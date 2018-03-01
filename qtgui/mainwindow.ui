@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -66,9 +66,7 @@
     </property>
     <addaction name="action_Load"/>
     <addaction name="actionLoad_results"/>
-    <addaction name="actionImport_results"/>
     <addaction name="actionImport_Shapefile"/>
-    <addaction name="action_Link_database"/>
     <addaction name="separator"/>
     <addaction name="actionAbout_displace"/>
     <addaction name="separator"/>
@@ -1466,8 +1464,6 @@ L3</string>
    </attribute>
    <addaction name="action_Load"/>
    <addaction name="actionLoad_results"/>
-   <addaction name="actionImport_results"/>
-   <addaction name="action_Link_database"/>
    <addaction name="actionImport_Shapefile"/>
    <addaction name="separator"/>
    <addaction name="actionGraph"/>
@@ -1485,7 +1481,7 @@ L3</string>
      <normaloff>:/icons/loadsim.png</normaloff>:/icons/loadsim.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Load...</string>
+    <string>&amp;Load Model...</string>
    </property>
   </action>
   <action name="actionScenario">
@@ -1522,24 +1518,6 @@ L3</string>
    </property>
    <property name="text">
     <string>Load results...</string>
-   </property>
-  </action>
-  <action name="actionImport_results">
-   <property name="icon">
-    <iconset resource="qtgui.qrc">
-     <normaloff>:/icons/database.png</normaloff>:/icons/database.png</iconset>
-   </property>
-   <property name="text">
-    <string>Import results...</string>
-   </property>
-  </action>
-  <action name="action_Link_database">
-   <property name="icon">
-    <iconset resource="qtgui.qrc">
-     <normaloff>:/icons/link.png</normaloff>:/icons/link.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Link database...</string>
    </property>
   </action>
   <action name="actionConfiguration">

@@ -36,3 +36,4 @@ docs/html
 docs/latex
 *.autosave
 build-*
+run.sh

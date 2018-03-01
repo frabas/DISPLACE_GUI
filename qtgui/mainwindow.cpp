@@ -1027,16 +1027,6 @@ void MainWindow::on_cmdSetup_clicked()
     }
 }
 
-void MainWindow::on_action_Link_database_triggered()
-{
-    QMessageBox::warning(this, tr("Unsupported"), tr("This function isn't supported anymore."));
-}
-
-void MainWindow::on_actionImport_results_triggered()
-{
-    QMessageBox::warning(this, tr("Unsupported"), tr("This function isn't supported anymore."));
-}
-
 void MainWindow::on_actionLoad_results_triggered()
 {
     QSettings sets;

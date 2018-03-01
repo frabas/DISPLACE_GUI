@@ -5300,6 +5300,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     CALLGRIND_STOP_INSTRUMENTATION;
     CALLGRIND_DUMP_STATS;
 
+    if (enable_sqlite_out) {
+        std::cout << "End Transaction " << tstep << "\n";
+        outSqlite->endDayLoop();
+    }
+
     thread_vessel_signal_exit();
 
 #ifdef PROFILE

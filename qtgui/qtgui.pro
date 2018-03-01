@@ -341,7 +341,8 @@ HEADERS += \
     plots/nationsstatsplot.h \
     plots/populationsstatplot.h \
     plots/harboursstatplot.h \
-    plots/metiersstatsplot.h
+    plots/metiersstatsplot.h \
+    stats/statsutils.h
 
 ### mSQLiteCpp dependency
 

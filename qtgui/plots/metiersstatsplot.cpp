@@ -1,6 +1,7 @@
 #include "metiersstatsplot.h"
 
 #include <displacemodel.h>
+#include <stats/statsutils.h>
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/vesselslogliketable.h>
 #include <sqlitestatement.h>
@@ -154,15 +155,33 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
 
     auto dt = db->getVesselLoglikeDataByMetier(stat, metier);
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    using MS = displace::plot::MetiersStat;
+    switch (stat) {
+    case MS::M_Catches:
+    case MS::M_Discards:
+    case MS::M_Gav:
+    case MS::M_SweptArea:
+    case MS::M_GVA:
+    case MS::M_LabourSurplus:
+    case MS::M_GrossProfit:
+    case MS::M_NetProfit:
+    case MS::M_NetPresentValue:
+    case MS::M_numTrips:
+        stats::runningSum(dt.v);
+        break;
 
-    double rc = 0;
-    // make running sum
-    for (int i = 0; i < vd.size(); ++i) {
-        rc += vd[i];
-        vd[i] = rc;
+    case MS::M_Vpuf:
+    case MS::M_GVAPerRevenue:
+    case MS::M_NetProfitMargin:
+    case MS::M_GVAPerFTE:
+    case MS::M_RoFTA:
+    case MS::M_BER:
+    case MS::M_CRBER:
+        stats::runningAvg(dt.v);
+        break;
     }
 
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
 }
 

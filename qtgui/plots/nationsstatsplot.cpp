@@ -1,6 +1,7 @@
 #include "nationsstatsplot.h"
 
 #include <displacemodel.h>
+#include "stats/statsutils.h"
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/vesselslogliketable.h>
 #include <sqlitestatement.h>
@@ -207,14 +208,36 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
 
     auto dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString());
 
-    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    using NS = displace::plot::NationsStat;
+    switch (stat) {
+    case NS::Catches:
+    case NS::Discards:
+    case NS::Earnings:
+    case NS::ExEarnings:
+    case NS::TimeAtSea:
+    case NS::Gav:
+    case NS::SweptArea:
+    case NS::GVA:
+    case NS::LabourSurplus:
+    case NS::GrossProfit:
+    case NS::NetProfit:
+    case NS::NetPresentValue:
+    case NS::numTrips:
+        stats::runningSum(dt.v);
+        break;
 
-    double rc = 0;
-    // make running sum
-    for (int i = 0; i < vd.size(); ++i) {
-        rc += vd[i];
-        vd[i] = rc;
+    case NS::Vpuf:
+    case NS::RevenuePerSweptArea:
+    case NS::GVAPerRevenue:
+    case NS::NetProfitMargin:
+    case NS::GVAPerFTE:
+    case NS::RoFTA:
+    case NS::BER:
+    case NS::CRBER:
+        stats::runningAvg(dt.v);
+        break;
     }
 
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
 }

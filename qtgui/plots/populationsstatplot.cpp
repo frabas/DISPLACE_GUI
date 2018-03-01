@@ -140,14 +140,6 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
     auto dt = db->getPopulationStatData(stattype, aggtype, popid, grpid);
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
-
-    double rc = 0;
-    // make running sum
-    for (int i = 0; i < vd.size(); ++i) {
-        rc += vd[i];
-        vd[i] = rc;
-    }
-
     return std::make_tuple(kd, vd);
 }
 

@@ -468,27 +468,28 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
 TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid, int grpid)
 {
     FieldDef<FieldType::Real> f("");
+    FieldDef<FieldType::Real> fld("");
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
-        f = p->mPopDynTable->fldN;
+        fld = p->mPopDynTable->fldN;
         break;
     case displace::plot::PopulationStat::Mortality:
-        f = p->mPopDynTable->fldF;
+        fld = p->mPopDynTable->fldF;
         break;
     case displace::plot::PopulationStat::SSB:
-        f = p->mPopDynTable->fldSSB;
+        fld = p->mPopDynTable->fldSSB;
         break;
     }
 
     switch (aggtype) {
     case displace::plot::AggregationType::Avg:
-        f = op::avg(f); break;
+        f = op::avg(fld); break;
     case displace::plot::AggregationType::Min:
-        f = op::min(f); break;
+        f = op::min(fld); break;
     case displace::plot::AggregationType::Max:
-        f = op::max(f); break;
+        f = op::max(fld); break;
     case displace::plot::AggregationType::Sum:
-        f = op::sum(f); break;
+        f = op::sum(fld); break;
     case displace::plot::AggregationType::None:
         break;
     }
@@ -499,9 +500,9 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
                                                     );
 
     if (grpid >= 0) {
-        select.where(op::and_(op::eq(p->mPopDynTable->fldPopId), op::eq(p->mPopDynTable->fldGroup)));
+        select.where(op::and_(op::and_(op::eq(p->mPopDynTable->fldPopId), op::eq(p->mPopDynTable->fldGroup)), op::ne(fld)));
     } else {
-        select.where(op::eq(p->mPopDynTable->fldPopId));
+        select.where(op::and_(op::eq(p->mPopDynTable->fldPopId), op::ne(fld)));
     }
 
     select.groupBy(p->mPopDynTable->fldTStep);
@@ -510,9 +511,9 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
 
     TimelineData data;
 
-    stmt.bind(std::make_tuple(popid));
+    stmt.bind(std::make_tuple(popid, -1));
     if (grpid >= 0) {
-        stmt.bind(std::make_tuple(grpid));
+        stmt.bind(std::make_tuple(popid, grpid, -1));
     }
 
     stmt.execute([&stmt, &data](){

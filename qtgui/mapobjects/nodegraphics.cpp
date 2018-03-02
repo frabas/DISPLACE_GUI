@@ -26,7 +26,7 @@
 #include <palettemanager.h>
 #include <QMapControl/Projection.h>
 
-QSettings NodeGraphics::settings;
+QSettings *NodeGraphics::settings = nullptr;
 
 NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int indx)
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(piew(), pieh()), 11, 7, 17),
@@ -73,18 +73,21 @@ void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &
 
 int NodeGraphics::piew()
 {
-    return settings.value("piew", 100).toInt();
+    if (!settings) settings = new QSettings();
+    return settings->value("piew", 100).toInt();
 }
 
 int NodeGraphics::pieh()
 {
-    return settings.value("pieh", 100).toInt();
+    if (!settings) settings = new QSettings();
+    return settings->value("pieh", 100).toInt();
 }
 
 void NodeGraphics::setPieSize(int w, int h)
 {
-    settings.setValue("piew", w);
-    settings.setValue("pieh", h);
+    if (!settings) settings = new QSettings();
+    settings->setValue("piew", w);
+    settings->setValue("pieh", h);
 }
 
 

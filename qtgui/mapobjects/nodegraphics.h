@@ -49,7 +49,7 @@ public:
     static void setPieSize(int w, int h);
 
 private:
-    static QSettings settings;
+    static QSettings *settings;
 };
 
 class NodeWithPopStatsGraphics : public NodeGraphics {

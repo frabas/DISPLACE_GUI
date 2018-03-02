@@ -4,6 +4,8 @@
 #include <sqlitestatement.h>
 #include <sqlitefieldsop.h>
 
+#include <QDebug>
+
 namespace {
     FieldDef<FieldType::Integer> fTStep("tstep");
     FieldDef<FieldType::Integer> fVId("vesselId");
@@ -124,7 +126,9 @@ void VesselVmsLikeTable::createAllIndexes(int max_tstep)
     p->missingStepIndexTable = std::make_shared<SQLiteTable>(db(), p->missingStepTableName);
     p->missingStepIndexTable->create(std::make_tuple(fTStep, fVId, fLUpdated));
 
-    std::string stmt {"insert into vesselVmsLikeExtra select id,refTStep from ( "
+    qDebug() << "Updating vessel indexes..";
+    db()->startTransaction();
+    std::string stmt {"insert into vesselVmsLikeExtra select ? as tstep, id as vesselId,refTStep as lastUpdated from ( "
                       "select id,max(tstep) as refTStep from VesselVmsLike where tstep <= ? group by (id)) "
                       "where refTStep != ?; " };
 
@@ -132,6 +136,10 @@ void VesselVmsLikeTable::createAllIndexes(int max_tstep)
     for (int i = 0; i < max_tstep; ++i) {
         s.bind(1, i);
         s.bind(2, i);
+        s.bind(3, i);
         s.execute();
     }
+    db()->commitTransaction();
+
+    qDebug() << "Done.";
 }

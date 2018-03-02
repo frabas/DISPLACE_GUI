@@ -15,6 +15,15 @@ public:
 
     void setLastTStep(size_t tstep);
     size_t lastTStep() const;
+
+    void setNbPops(int n);
+    int nbPops() const;
+
+    void setNbSizes(int n);
+    int nbSize() const;
+
+    void setNbBenthos(int n);
+    int nbBenthos();
 };
 
 #endif // MODELMETADATAACCESSOR_H

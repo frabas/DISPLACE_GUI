@@ -236,6 +236,8 @@ bool DisplaceModel::loadDatabase(QString path)
 
     ModelMetadataAccessor accessor (mOutSqlite->metadata());
     mConfig.setNbpops(mOutSqlite->getNbPops());
+    mConfig.setSzGroups(accessor.nbSize());
+    mConfig.setNbbenthospops(accessor.nbBenthos());
     mLastStep = accessor.lastTStep();
     setCurrentStep(mLastStep);
     auto nl = mOutSqlite->getNationsList();

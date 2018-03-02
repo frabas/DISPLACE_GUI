@@ -1008,7 +1008,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         exit(1);
     }
 
-
+    if (metadata) {
+        metadata->setNbPops(nbpops);
+        metadata->setNbBenthos(nbbenthospops);
+        metadata->setNbSizes(NBSZGROUP);
+    }
 
     filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
     export_individual_tacs.open(filename.c_str());

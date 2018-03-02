@@ -63,7 +63,7 @@ void StatsController::setPopulationPlot(QCustomPlot *plot, GraphInteractionContr
     plot->legend->setVisible(true);
     mPopPlot = new PopulationsStatPlot(plot);
 
-    controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
+    controller->setOnPopupMenuBuiltCallback(std::bind(&PopulationsStatPlot::createPopup, mPopPlot, std::placeholders::_1, std::placeholders::_2));
 }
 
 void StatsController::setHarboursPlot(QCustomPlot *plot)

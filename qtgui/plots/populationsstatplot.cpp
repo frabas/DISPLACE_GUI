@@ -25,6 +25,9 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
 {
     plot->clearGraphs();
 
+    lastModel = model;
+    lastStat = stat;
+
     QList<int> interPopList = model->getInterestingPops();
     QList<int> interSizeList = model->getInterestingSizes();
     QList<int> graphList;

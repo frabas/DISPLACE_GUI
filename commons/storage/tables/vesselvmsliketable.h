@@ -44,8 +44,6 @@ public:
 
     void insertLog (const Log &log);
     void queryAllVesselsAtStep (int tstep, std::function<bool(const Log &)>);
-
-    void createAllIndexes(int max_tstep);
 };
 
 #endif // VESSELVMSLIKETABLE_H

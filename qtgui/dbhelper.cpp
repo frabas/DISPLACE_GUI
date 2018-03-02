@@ -71,8 +71,6 @@ bool DbHelper::attachDb(std::shared_ptr<SQLiteOutputStorage> storage)
     p->db = storage;
     p->accessor = utils::make_unique<ModelMetadataAccessor>(p->db->metadata());
 
-    p->db->getVesselVmsLikeTable()->createAllIndexes(8162);
-
     return true;
 }
 

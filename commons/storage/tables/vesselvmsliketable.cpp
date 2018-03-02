@@ -4,14 +4,6 @@
 #include <sqlitestatement.h>
 #include <sqlitefieldsop.h>
 
-#include <QDebug>
-
-namespace {
-    FieldDef<FieldType::Integer> fTStep("tstep");
-    FieldDef<FieldType::Integer> fVId("vesselId");
-    FieldDef<FieldType::Integer> fLUpdated("lastUpdated");
-}
-
 struct VesselVmsLikeTable::Impl
 {
     std::mutex mutex;
@@ -28,9 +20,6 @@ struct VesselVmsLikeTable::Impl
     > statement;
 
     sqlite::SQLiteStatement vesselTStepSelect;
-
-    std::shared_ptr<SQLiteTable> missingStepIndexTable;
-    const std::string missingStepTableName = "vesselVmsLikeExtra";
 };
 
 VesselVmsLikeTable::VesselVmsLikeTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
@@ -116,30 +105,4 @@ void VesselVmsLikeTable::queryAllVesselsAtStep(int tstep, std::function<bool (co
             return op(l);
         return false;
     });
-}
-
-void VesselVmsLikeTable::createAllIndexes(int max_tstep)
-{
-    if (db()->tableExists(p->missingStepTableName))
-        db()->dropTable(p->missingStepTableName);
-
-    p->missingStepIndexTable = std::make_shared<SQLiteTable>(db(), p->missingStepTableName);
-    p->missingStepIndexTable->create(std::make_tuple(fTStep, fVId, fLUpdated));
-
-    qDebug() << "Updating vessel indexes..";
-    db()->startTransaction();
-    std::string stmt {"insert into vesselVmsLikeExtra select ? as tstep, id as vesselId,refTStep as lastUpdated from ( "
-                      "select id,max(tstep) as refTStep from VesselVmsLike where tstep <= ? group by (id)) "
-                      "where refTStep != ?; " };
-
-    SQLiteStatement s(db(), stmt);
-    for (int i = 0; i < max_tstep; ++i) {
-        s.bind(1, i);
-        s.bind(2, i);
-        s.bind(3, i);
-        s.execute();
-    }
-    db()->commitTransaction();
-
-    qDebug() << "Done.";
 }

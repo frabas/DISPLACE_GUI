@@ -153,12 +153,13 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
-    auto dt = db->getVesselLoglikeDataByMetier(stat, metier);
+    TimelineData dt;
 
     using MS = displace::plot::MetiersStat;
     switch (stat) {
     case MS::M_Catches:
     case MS::M_Discards:
+    case MS::M_Revenues:
     case MS::M_Gav:
     case MS::M_SweptArea:
     case MS::M_GVA:
@@ -167,16 +168,21 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
     case MS::M_NetProfit:
     case MS::M_NetPresentValue:
     case MS::M_numTrips:
+        dt = db->getVesselLoglikeDataByMetier(stat, metier,
+                                              SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
 
     case MS::M_Vpuf:
+    case MS::M_RevenuesPerSweptArea:
     case MS::M_GVAPerRevenue:
     case MS::M_NetProfitMargin:
     case MS::M_GVAPerFTE:
     case MS::M_RoFTA:
     case MS::M_BER:
     case MS::M_CRBER:
+        dt = db->getVesselLoglikeDataByMetier(stat, metier,
+                                              SQLiteOutputStorage::Operation::Average);
         stats::runningAvg(dt.v);
         break;
     }

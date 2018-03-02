@@ -278,7 +278,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat stattype, int harbourid)
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat stattype, int harbourid, Operation op)
 {
     bool isAggregate = false;
     if (stattype == HarboursStat::H_Catches || stattype == HarboursStat::H_Discards) {
@@ -348,9 +348,17 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
     }
 
+    switch (op) {
+    case Operation::Sum:
+        f = sqlite::op::sum(f);
+        break;
+    case Operation::Average:
+        f = sqlite::op::avg(f);
+    }
+
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
                                                     p->mVesselLoglikeTable->fldTStep,
-                                                    sqlite::op::sum(f)
+                                                    f
                                                     );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 
@@ -376,7 +384,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat stattype, int metierid)
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat stattype, int metierid, Operation op)
 {
     bool isAggregate = false;
     if (stattype == MetiersStat::M_Catches || stattype == MetiersStat::M_Discards) {
@@ -446,9 +454,17 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
     }
 
+    switch (op) {
+    case Operation::Sum:
+        f = sqlite::op::sum(f);
+        break;
+    case Operation::Average:
+        f = sqlite::op::avg(f);
+    }
+
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
                                                     p->mVesselLoglikeTable->fldTStep,
-                                                    sqlite::op::sum(f)
+                                                    f
                                                     );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 

@@ -208,7 +208,7 @@ std::tuple<QVector<double>, QVector<double> > HarboursStatPlot::getData(Displace
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
-    auto dt = db->getVesselLoglikeDataByHarbour(stat, harbour);
+    TimelineData dt;
 
     using HS = displace::plot::HarboursStat;
     switch (stat) {
@@ -223,6 +223,8 @@ std::tuple<QVector<double>, QVector<double> > HarboursStatPlot::getData(Displace
     case HS::H_NetProfit:
     case HS::H_NetPresentValue:
     case HS::H_numTrips:
+        dt = db->getVesselLoglikeDataByHarbour(stat, harbour,
+                                               SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
 
@@ -234,6 +236,8 @@ std::tuple<QVector<double>, QVector<double> > HarboursStatPlot::getData(Displace
     case HS::H_RoFTA:
     case HS::H_BER:
     case HS::H_CRBER:
+        dt = db->getVesselLoglikeDataByHarbour(stat, harbour,
+                                               SQLiteOutputStorage::Operation::Average);
         stats::runningAvg(dt.v);
         break;
     }

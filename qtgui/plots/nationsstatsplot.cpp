@@ -228,7 +228,8 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
         break;
     case NS::numTrips:
         dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
-                                              SQLiteOutputStorage::Operation::Sum);
+                                              SQLiteOutputStorage::Operation::Count);
+        stats::runningSum(dt.v);
         break;
     case NS::Vpuf:
     case NS::RevenuePerSweptArea:

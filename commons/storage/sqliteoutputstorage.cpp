@@ -235,7 +235,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         f = p->mVesselLoglikeTable->NetPresentValue;
         break;
     case NationsStat::numTrips:
-        f = sqlite::cast<sqlite::FieldType::Real>(p->mVesselLoglikeTable->numTrips);
+        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
         break;
     default:
         throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
@@ -247,6 +247,10 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         break;
     case Operation::Average:
         f = sqlite::op::avg(f);
+        break;
+    case Operation::Count:
+        f = sqlite::op::count(f);
+        break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
@@ -342,7 +346,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         f = p->mVesselLoglikeTable->NetPresentValue;
         break;
     case HarboursStat::H_numTrips:
-        f = sqlite::cast<sqlite::FieldType::Real>(p->mVesselLoglikeTable->numTrips);
+        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
         break;
     default:
         throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
@@ -354,6 +358,10 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         break;
     case Operation::Average:
         f = sqlite::op::avg(f);
+        break;
+    case Operation::Count:
+        f = sqlite::op::count(f);
+        break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
@@ -448,7 +456,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         f = p->mVesselLoglikeTable->NetPresentValue;
         break;
     case MetiersStat::M_numTrips:
-        f = sqlite::cast<sqlite::FieldType::Real>(p->mVesselLoglikeTable->numTrips);
+        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
         break;
     default:
         throw std::runtime_error("getVesselLoglikeDataByHarbour case not handled.");
@@ -460,6 +468,10 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         break;
     case Operation::Average:
         f = sqlite::op::avg(f);
+        break;
+    case Operation::Count:
+        f = sqlite::op::count(f);
+        break;
     }
 
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),

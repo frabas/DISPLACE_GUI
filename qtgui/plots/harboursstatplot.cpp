@@ -228,7 +228,8 @@ std::tuple<QVector<double>, QVector<double> > HarboursStatPlot::getData(Displace
         break;
     case HS::H_numTrips:
         dt = db->getVesselLoglikeDataByHarbour(stat, harbour,
-                                               SQLiteOutputStorage::Operation::Sum);
+                                               SQLiteOutputStorage::Operation::Count);
+        stats::runningSum(dt.v);
         break;
     case HS::H_Vpuf:
     case HS::H_RevenuePerSweptArea:

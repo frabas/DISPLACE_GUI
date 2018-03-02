@@ -528,6 +528,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
     case displace::plot::AggregationType::Sum:
         f = op::sum(fld); break;
     case displace::plot::AggregationType::None:
+        f = fld;
         break;
     }
 

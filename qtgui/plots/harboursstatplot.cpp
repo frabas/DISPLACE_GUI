@@ -222,12 +222,14 @@ std::tuple<QVector<double>, QVector<double> > HarboursStatPlot::getData(Displace
     case HS::H_GrossProfit:
     case HS::H_NetProfit:
     case HS::H_NetPresentValue:
-    case HS::H_numTrips:
         dt = db->getVesselLoglikeDataByHarbour(stat, harbour,
                                                SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
-
+    case HS::H_numTrips:
+        dt = db->getVesselLoglikeDataByHarbour(stat, harbour,
+                                               SQLiteOutputStorage::Operation::Sum);
+        break;
     case HS::H_Vpuf:
     case HS::H_RevenuePerSweptArea:
     case HS::H_GVAPerRevenue:

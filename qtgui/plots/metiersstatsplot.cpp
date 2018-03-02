@@ -167,12 +167,14 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
     case MS::M_GrossProfit:
     case MS::M_NetProfit:
     case MS::M_NetPresentValue:
-    case MS::M_numTrips:
         dt = db->getVesselLoglikeDataByMetier(stat, metier,
                                               SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
-
+    case MS::M_numTrips:
+        dt = db->getVesselLoglikeDataByMetier(stat, metier,
+                                              SQLiteOutputStorage::Operation::Sum);
+        break;
     case MS::M_Vpuf:
     case MS::M_RevenuesPerSweptArea:
     case MS::M_GVAPerRevenue:

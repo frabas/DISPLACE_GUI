@@ -222,12 +222,14 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
     case NS::GrossProfit:
     case NS::NetProfit:
     case NS::NetPresentValue:
-    case NS::numTrips:
         dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
                                               SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
-
+    case NS::numTrips:
+        dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
+                                              SQLiteOutputStorage::Operation::Sum);
+        break;
     case NS::Vpuf:
     case NS::RevenuePerSweptArea:
     case NS::GVAPerRevenue:

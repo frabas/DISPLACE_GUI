@@ -206,7 +206,7 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
-    auto dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString());
+    TimelineData dt;
 
     using NS = displace::plot::NationsStat;
     switch (stat) {
@@ -223,6 +223,8 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
     case NS::NetProfit:
     case NS::NetPresentValue:
     case NS::numTrips:
+        dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
+                                              SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
 
@@ -234,6 +236,8 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
     case NS::RoFTA:
     case NS::BER:
     case NS::CRBER:
+        dt = db->getVesselLoglikeDataByNation(stat, model->getNation(nation).getName().toStdString(),
+                                              SQLiteOutputStorage::Operation::Average);
         stats::runningAvg(dt.v);
         break;
     }

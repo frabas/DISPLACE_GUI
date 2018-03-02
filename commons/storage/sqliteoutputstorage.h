@@ -66,7 +66,8 @@ public:
     void exportPopStat(Population *pop, int popid, int tstep);
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);
 
-    TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation);
+    enum Operation { Sum, Average };
+    TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation, Operation op);
     TimelineData getVesselLoglikeDataByHarbour(displace::plot::HarboursStat stattype, int harbourid);
     TimelineData getVesselLoglikeDataByMetier(displace::plot::MetiersStat stattype, int metierid);
     TimelineData getPopulationStatData(displace::plot::PopulationStat stat, displace::plot::AggregationType aggtype, int popid, int grpid);

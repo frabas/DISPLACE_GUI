@@ -165,7 +165,7 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     }
 }
 
-TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat stattype, string nation)
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat stattype, string nation, Operation op)
 {
     bool isAggregate = false;
     if (stattype == NationsStat::Catches || stattype == NationsStat::Discards) {
@@ -241,9 +241,17 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         throw std::runtime_error("getVesselLoglikeDataByNation case not handled.");
     }
 
+    switch (op) {
+    case Operation::Sum:
+        f = sqlite::op::sum(f);
+        break;
+    case Operation::Average:
+        f = sqlite::op::avg(f);
+    }
+
     auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
                                                     p->mVesselLoglikeTable->fldTStep,
-                                                    sqlite::op::sum(f)
+                                                    f
                                                     );
     select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
 
@@ -252,6 +260,8 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
 
     select.where(op::eq(p->mVesselDefTable->fldNationality));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
+
+    qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
@@ -264,7 +274,6 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
         return true;
     });
 
-    qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation) << " => "  << data.v.size();
 
     return data;
 }

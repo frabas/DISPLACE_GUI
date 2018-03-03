@@ -121,9 +121,9 @@ unix:!macx {
 
 ### mSQLiteCpp dependency
 
-INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
-#SOURCES += $$top_srcdir/mSqliteCpp/src/*
-HEADERS += $$top_srcdir/mSqliteCpp/include/*
+INCLUDEPATH += ../mSqliteCpp/include
+#SOURCES += ../mSqliteCpp/src/*
+HEADERS += ../mSqliteCpp/include/*
 LIBS +=
 
 ### End mSqliteCpp Depedency

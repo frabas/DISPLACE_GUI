@@ -147,9 +147,9 @@ HEADERS= \
     DEFINES += BUILD_MSQLITECPP
 }
 
-INCLUDEPATH += $$top_srcdir/mSqliteCpp/include
-SOURCES += $$top_srcdir/mSqliteCpp/src/*.cpp
-HEADERS += $$top_srcdir/mSqliteCpp/include/*.h
+INCLUDEPATH += ../mSqliteCpp/include
+SOURCES += ../mSqliteCpp/src/*.cpp
+HEADERS += ../mSqliteCpp/include/*.h
 !win32: LIBS += -lsqlite3
 
 win32 {

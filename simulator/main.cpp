@@ -991,7 +991,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     std::shared_ptr<ModelMetadataAccessor> metadata = nullptr;
     OutputExporter::instance().setUseSqlite(enable_sqlite_out);
 
-    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_out.db";
+    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_" +namesimu+"_out.db";
     outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
     try {
         if (enable_sqlite_out) {

@@ -1,3 +1,10 @@
+displace (0.9.11) xenial; urgency=medium
+
+  * New data engine for output data/playback/stats calculation using SQLite
+  * Many fixes
+
+ -- Federico Fuga <fuga@studiofuga.com>  Sat, 03 Mar 2018 22:31:23 +0100
+
 displace (0.9.10) xenial; urgency=medium
 
   * Updated dtrees

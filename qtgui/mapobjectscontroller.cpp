@@ -164,6 +164,18 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerSalinity[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Salinity")).arg(model_n).toStdString()));
     addEnvLayer(model_n, EnvLayerSalinity, mStatsLayerSalinity[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
+    mStatsLayerNitrogen[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Nitrogen")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerNitrogen, mStatsLayerNitrogen[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerPhosphorus[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Phosphorus")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerPhosphorus, mStatsLayerPhosphorus[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerOxygen[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Oxygen")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerOxygen, mStatsLayerOxygen[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
+    mStatsLayerDissolvedCarbon[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#DissolvedCarbon")).arg(model_n).toStdString()));
+    addEnvLayer(model_n, EnvLayerDissolvedCarbon, mStatsLayerDissolvedCarbon[model_n], type != DisplaceModel::LiveModelType ? false : false);
+
     mStatsLayerTariffAll[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariff all")).arg(model_n).toStdString()));
     addTariffLayer(model_n, TariffLayerTariffAll, mStatsLayerTariffAll[model_n], type != DisplaceModel::LiveModelType ? false : false);
 

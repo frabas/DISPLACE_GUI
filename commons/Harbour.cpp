@@ -30,6 +30,10 @@ int _code_landscape,
 double _wind,
 double _sst,
 double _salinity,
+double _Nitrogen,
+double _Phosphorus,
+double _Oxygen,
+double _DissolvedCarbon,
 double _benthos_biomass,
 double _benthos_number,
 double _benthos_meanweight,
@@ -45,6 +49,7 @@ map<int, double> _fuelprice,
 vector<types::NodeId> _usual_fgrounds,
 vector<double> _freq_usual_fgrounds)
 : Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, _wind,_sst,_salinity,
+       _Nitrogen, _Phosphorus, _Oxygen, _DissolvedCarbon,
        _benthos_biomass, _benthos_number,_benthos_meanweight, _benthos_biomass_K, _benthos_number_K, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
@@ -69,7 +74,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(types::NodeId idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 {
 
 }

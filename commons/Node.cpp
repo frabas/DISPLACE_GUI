@@ -40,6 +40,7 @@ const multimap<int,double> Node::mFreqUsualMetiers;
 
 Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code_area,
            int _marine_landscape, double _wind, double _sst, double _salinity,
+           double _Nitrogen, double _Phosphorus, double _Oxygen, double _DissolvedCarbon,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            double _benthos_biomass_K, double _benthos_number_K,
            int nbpops, int nbbenthospops, int nbszgroups)
@@ -59,6 +60,10 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     wind=_wind;
     sst=_sst;
     salinity=_salinity;
+    Nitrogen=_Nitrogen;
+    Phosphorus=_Phosphorus;
+    Oxygen=_Oxygen;
+    DissolvedCarbon=_DissolvedCarbon;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;
@@ -226,6 +231,27 @@ double Node::get_salinity() const
 {
     return(salinity);
 }
+
+double Node::get_Nitrogen() const
+{
+    return(Nitrogen);
+}
+
+double Node::get_Phosphorus() const
+{
+    return(Phosphorus);
+}
+
+double Node::get_Oxygen() const
+{
+    return(Oxygen);
+}
+
+double Node::get_DissolvedCarbon() const
+{
+    return(DissolvedCarbon);
+}
+
 
 double Node::get_init_benthos_biomass() const
 {

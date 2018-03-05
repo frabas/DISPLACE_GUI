@@ -43,6 +43,10 @@ public:
     QString getWindFilename() const;
     QString getSSTFilename() const;
     QString getSalinityFilename() const;
+    QString getNitrogenFilename() const;
+    QString getPhosphorusFilename() const;
+    QString getOxygenFilename() const;
+    QString getDissolvedCarbonFilename() const;
     QString getBenthosFilename() const;
     QString getBenthosNbFilename() const;
     QString getAreacodesFilename() const;

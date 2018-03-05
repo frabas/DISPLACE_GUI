@@ -1153,7 +1153,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     // check the class Node
-    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0, nbpops, nbbenthospops, 5);
+    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
           << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
     node.set_xy(2,2);
@@ -1173,6 +1173,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_wind_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_wind.dat";
     string filename_sst_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_sst.dat";
     string filename_salinity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_salinity.dat";
+    string filename_Nitrogen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_Nitrogen.dat";
+    string filename_Phosphorus_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_Phosphorus.dat";
+    string filename_Oxygen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_Oxygen.dat";
+    string filename_DissolvedCarbon_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_DissolvedCarbon.dat";
     string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
     string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
 
@@ -1258,6 +1262,59 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector<double> graph_point_salinity;
     if (!fill_from_salinity(salinity_graph, graph_point_salinity, nrow_coord)) {
         std::cerr << "Cannot parse " << filename_salinity_graph << " Bad format\n";
+        return 1;
+    }
+
+
+    ifstream Nitrogen_graph;
+    Nitrogen_graph.open(filename_Nitrogen_graph.c_str());
+    if(Nitrogen_graph.fail())
+    {
+        open_file_error(filename_Nitrogen_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_Nitrogen;
+    if (!fill_from_Nitrogen(Nitrogen_graph, graph_point_Nitrogen, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_Nitrogen_graph << " Bad format\n";
+        return 1;
+    }
+
+    ifstream Phosphorus_graph;
+    Phosphorus_graph.open(filename_Phosphorus_graph.c_str());
+    if(Phosphorus_graph.fail())
+    {
+        open_file_error(filename_Phosphorus_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_Phosphorus;
+    if (!fill_from_Phosphorus(Phosphorus_graph, graph_point_Phosphorus, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_Phosphorus_graph << " Bad format\n";
+        return 1;
+    }
+
+    ifstream Oxygen_graph;
+    Oxygen_graph.open(filename_Oxygen_graph.c_str());
+    if(Oxygen_graph.fail())
+    {
+        open_file_error(filename_Oxygen_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_Oxygen;
+    if (!fill_from_Oxygen(Oxygen_graph, graph_point_Oxygen, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_Oxygen_graph << " Bad format\n";
+        return 1;
+    }
+
+    ifstream DissolvedCarbon_graph;
+    DissolvedCarbon_graph.open(filename_DissolvedCarbon_graph.c_str());
+    if(DissolvedCarbon_graph.fail())
+    {
+        open_file_error(filename_DissolvedCarbon_graph.c_str());
+        return 1;
+    }
+    vector<double> graph_point_DissolvedCarbon;
+    if (!fill_from_DissolvedCarbon(DissolvedCarbon_graph, graph_point_DissolvedCarbon, nrow_coord)) {
+        std::cerr << "Cannot parse " << filename_DissolvedCarbon_graph << " Bad format\n";
         return 1;
     }
 
@@ -1386,6 +1443,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                        graph_point_wind[i],
                                        graph_point_sst[i],
                                        graph_point_salinity[i],
+                                       graph_point_Nitrogen[i],
+                                       graph_point_Phosphorus[i],
+                                       graph_point_Oxygen[i],
+                                       graph_point_DissolvedCarbon[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // meanweight not set from a GIS layer....
@@ -1416,6 +1477,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     graph_point_wind[i],
                                     graph_point_sst[i],
                                     graph_point_salinity[i],
+                                    graph_point_Nitrogen[i],
+                                    graph_point_Phosphorus[i],
+                                    graph_point_Oxygen[i],
+                                    graph_point_DissolvedCarbon[i],
                                     graph_point_benthos_biomass[i],
                                     graph_point_benthos_number[i],
                                     0, // meanweight not set from a GIS layer....

@@ -36,6 +36,10 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
     ui->optWind->setChecked(true);
     ui->optSST->setChecked(true);
     ui->optSalinity->setChecked(true);
+    ui->optNitrogen->setChecked(true);
+    ui->optPhosphorus->setChecked(true);
+    ui->optOxygen->setChecked(true);
+    ui->optDissolvedCarbon->setChecked(true);
     ui->optBenthosBio->setChecked(true);
     ui->optBenthosNb->setChecked(true);
     ui->optClosedPoly->setChecked(true);
@@ -97,6 +101,35 @@ QString SaveGraphDialog::getSalinityFilename() const
     return QString();
 }
 
+QString SaveGraphDialog::getNitrogenFilename() const
+{
+    if (ui->optNitrogen->isChecked())
+        return ui->outputFolder->text() + "/" + ui->NitrogenFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getPhosphorusFilename() const
+{
+    if (ui->optPhosphorus->isChecked())
+        return ui->outputFolder->text() + "/" + ui->PhosphorusFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getOxygenFilename() const
+{
+    if (ui->optOxygen->isChecked())
+        return ui->outputFolder->text() + "/" + ui->OxygenFileName->text();
+    return QString();
+}
+
+QString SaveGraphDialog::getDissolvedCarbonFilename() const
+{
+    if (ui->optDissolvedCarbon->isChecked())
+        return ui->outputFolder->text() + "/" + ui->DissolvedCarbonFileName->text();
+    return QString();
+}
+
+
 QString SaveGraphDialog::getBenthosFilename() const
 {
     if (ui->optBenthosBio->isChecked())
@@ -148,6 +181,10 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
     ui->windFileName->setEnabled(checked);
     ui->sstFileName->setEnabled(checked);
     ui->salinityFileName->setEnabled(checked);
+    ui->NitrogenFileName->setEnabled(checked);
+    ui->PhosphorusFileName->setEnabled(checked);
+    ui->OxygenFileName->setEnabled(checked);
+    ui->DissolvedCarbonFileName->setEnabled(checked);
     ui->benthosFileName->setEnabled(checked);
     ui->benthosNbFileName->setEnabled(checked);
     ui->closedPolyFilename->setEnabled(checked);
@@ -164,6 +201,10 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->windFileName->setText(QString("coord%1_with_wind.dat").arg(gn));
     ui->sstFileName->setText(QString("coord%1_with_sst.dat").arg(gn));
     ui->salinityFileName->setText(QString("coord%1_with_salinity.dat").arg(gn));
+    ui->NitrogenFileName->setText(QString("coord%1_with_Nitrogen.dat").arg(gn));
+    ui->PhosphorusFileName->setText(QString("coord%1_with_Phosphorus.dat").arg(gn));
+    ui->OxygenFileName->setText(QString("coord%1_with_Oxygen.dat").arg(gn));
+    ui->DissolvedCarbonFileName->setText(QString("coord%1_with_DissolvedCarbon.dat").arg(gn));
     ui->benthosFileName->setText(QString("coord%1_with_benthos_total_biomass.dat").arg(gn));
     ui->benthosNbFileName->setText(QString("coord%1_with_benthos_total_number.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));

@@ -44,7 +44,7 @@ class COMMONSSHARED_EXPORT Node
 		Node ();
         Node (types::NodeId idx_node, double xval, double yval, int _harbour, int _code_area,
               int _marine_landscape,
-              double _wind, double _sst, double _salinity,
+              double _wind, double _sst, double _salinity, double _Nitrogen, double _Phosporus, double _Oxygen, double _DissolvedCarbon,
               double _benthos_biomass, double _benthos_number, double _benthos_meanweight, double _benthos_biomass_K, double _benthos_number_K,
               int nbpops, int nbbenthospops,  int nbszgroups);
         /*
@@ -106,6 +106,27 @@ class COMMONSSHARED_EXPORT Node
         void setSalinity(double s) {
             salinity = s;
         }
+
+        double get_Nitrogen() const;
+        void setNitrogen(double N) {
+            Nitrogen = N;
+        }
+
+        double get_Phosphorus() const;
+        void setPhosphorus(double P) {
+            Phosphorus = P;
+        }
+
+        double get_Oxygen() const;
+        void setOxygen(double O) {
+            Oxygen = O;
+        }
+
+        double get_DissolvedCarbon() const;
+        void setDissolvedCarbon(double dissC) {
+            DissolvedCarbon = dissC;
+        }
+
 
         // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 		virtual string get_name() const;
@@ -273,6 +294,10 @@ private:
         double wind;
         double sst;
         double salinity;
+        double Nitrogen;
+        double Phosphorus;
+        double Oxygen;
+        double DissolvedCarbon;
         int benthos_id;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file

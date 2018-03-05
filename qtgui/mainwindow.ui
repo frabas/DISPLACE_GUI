@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -120,6 +120,10 @@
     <addaction name="actionAssign_Wind"/>
     <addaction name="actionAssign_SST"/>
     <addaction name="actionAssign_Salinity"/>
+    <addaction name="actionAssign_Nitrogen"/>
+    <addaction name="actionAssign_Phosphorus"/>
+    <addaction name="actionAssign_Oxygen"/>
+    <addaction name="actionAssign_DissolvedCarbon"/>
     <addaction name="separator"/>
     <addaction name="actionMergeWeights"/>
     <addaction name="actionMergePings"/>
@@ -1885,6 +1889,26 @@ L3</string>
   <action name="actionAssign_Salinity">
    <property name="text">
     <string>Assign Salinity...</string>
+   </property>
+  </action>
+  <action name="actionAssign_Nitrogen">
+   <property name="text">
+    <string>Assign Nitrogen...</string>
+   </property>
+  </action>
+  <action name="actionAssign_Phosphorus">
+   <property name="text">
+    <string>Assign Phosphorus...</string>
+   </property>
+  </action>
+  <action name="actionAssign_Oxygen">
+   <property name="text">
+    <string>Assign Oxygen...</string>
+   </property>
+  </action>
+  <action name="actionAssign_DissolvedCarbon">
+   <property name="text">
+    <string>Assign DissolvedCarbon...</string>
    </property>
   </action>
  </widget>

@@ -257,6 +257,15 @@ bool COMMONSSHARED_EXPORT fill_from_sst (istream& in, vector<double>& graph_poin
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_from_salinity (istream& in, vector<double>& graph_point_salinity,
                                       int nrow);
+bool COMMONSSHARED_EXPORT fill_from_Nitrogen (istream& in, vector<double>& graph_point_Nitrogen,
+                                      int nrow);
+bool COMMONSSHARED_EXPORT fill_from_Phosphorus (istream& in, vector<double>& graph_point_Phosphorus,
+                                      int nrow);
+bool COMMONSSHARED_EXPORT fill_from_Oxygen (istream& in, vector<double>& graph_point_Oxygen,
+                                      int nrow);
+bool COMMONSSHARED_EXPORT fill_from_DissolvedCarbon (istream& in, vector<double>& graph_point_DissolvedCarbon,
+                                      int nrow);
+
 bool COMMONSSHARED_EXPORT fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_from_benthos_number (istream& in, vector<double>& graph_point_benthos_number,

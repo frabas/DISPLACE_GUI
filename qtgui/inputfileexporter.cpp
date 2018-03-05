@@ -30,6 +30,7 @@ InputFileExporter::InputFileExporter()
 
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath,  QString windpath, QString sstpath, QString salinitypath,
+                                    QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
@@ -96,6 +97,58 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         }
         salinitystream.setDevice(&salinityfile);
     }
+
+    QFile Nitrogenfile(Nitrogenpath);
+    QTextStream Nitrogenstream;
+    if (!Nitrogenpath.isEmpty()) {
+        if (!Nitrogenfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open Nitrogen file %1: %2"))
+                    .arg(Nitrogenpath).arg(Nitrogenfile.errorString());
+            return false;
+        }
+        Nitrogenstream.setDevice(&Nitrogenfile);
+    }
+
+    QFile Phosphorusfile(Phosphoruspath);
+    QTextStream Phosphorusstream;
+    if (!Phosphoruspath.isEmpty()) {
+        if (!Phosphorusfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open Phosphorus file %1: %2"))
+                    .arg(Phosphoruspath).arg(Phosphorusfile.errorString());
+            return false;
+        }
+        Phosphorusstream.setDevice(&Phosphorusfile);
+    }
+
+    QFile Oxygenfile(Oxygenpath);
+    QTextStream Oxygenstream;
+    if (!Oxygenpath.isEmpty()) {
+        if (!Oxygenfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open Oxygen file %1: %2"))
+                    .arg(Oxygenpath).arg(Oxygenfile.errorString());
+            return false;
+        }
+        Oxygenstream.setDevice(&Oxygenfile);
+    }
+
+    QFile DissolvedCarbonfile(DissolvedCarbonpath);
+    QTextStream DissolvedCarbonstream;
+    if (!DissolvedCarbonpath.isEmpty()) {
+        if (!DissolvedCarbonfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open DissolvedCarbon file %1: %2"))
+                    .arg(DissolvedCarbonpath).arg(DissolvedCarbonfile.errorString());
+            return false;
+        }
+        DissolvedCarbonstream.setDevice(&DissolvedCarbonfile);
+    }
+
+
+
+
 
     QFile bfile(benthospath);
     QTextStream bstream;
@@ -167,6 +220,16 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 sststream << nd->get_sst() << endl;
             if (salinityfile.isOpen())
                 salinitystream << nd->get_salinity() << endl;
+            if (Nitrogenfile.isOpen())
+                Nitrogenstream << nd->get_Nitrogen() << endl;
+            if (Phosphorusfile.isOpen())
+                Phosphorusstream << nd->get_Phosphorus() << endl;
+            if (Oxygenfile.isOpen())
+                Oxygenstream << nd->get_Oxygen() << endl;
+            if (salinityfile.isOpen())
+                DissolvedCarbonstream << nd->get_DissolvedCarbon() << endl;
+
+
         }
     }
     for (int i = 0; i < n; ++i) {
@@ -193,6 +256,10 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     windfile.close();
     sstfile.close();
     salinityfile.close();
+    Nitrogenfile.close();
+    Phosphorusfile.close();
+    Oxygenfile.close();
+    DissolvedCarbonfile.close();
     bfile.close();
     bnbfile.close();
 

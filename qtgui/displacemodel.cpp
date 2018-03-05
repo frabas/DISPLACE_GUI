@@ -1058,7 +1058,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1254,6 +1254,36 @@ void DisplaceModel::setSalinityFromFeature (OGRGeometry *geometry, double psu)
     });
 }
 
+void DisplaceModel::setNitrogenFromFeature (OGRGeometry *geometry, double nitro)
+{
+    setNitroFromFeature(geometry, nitro, [&](std::shared_ptr<NodeData> nd, double ni) {
+        nd->setNitrogen(ni);
+    });
+}
+
+void DisplaceModel::setPhosphorusFromFeature (OGRGeometry *geometry, double phos)
+{
+    setPhosFromFeature(geometry, phos, [&](std::shared_ptr<NodeData> nd, double ph) {
+        nd->setPhosphorus(ph);
+    });
+}
+
+void DisplaceModel::setOxygenFromFeature (OGRGeometry *geometry, double oxygen)
+{
+    setOxyFromFeature(geometry, oxygen, [&](std::shared_ptr<NodeData> nd, double ox) {
+        nd->setOxygen(ox);
+    });
+}
+
+void DisplaceModel::setDissolvedCarbonFromFeature (OGRGeometry *geometry, double dissc)
+{
+    setDissoFromFeature(geometry, dissc, [&](std::shared_ptr<NodeData> nd, double dc) {
+        nd->setDissolvedCarbon(dc);
+    });
+}
+
+
+
 void DisplaceModel::setBenthosBiomassFromFeature (OGRGeometry *geometry, double bio)
 {
     setBenthosBioFromFeature(geometry, bio, [&](std::shared_ptr<NodeData> nd, double b) {
@@ -1334,6 +1364,70 @@ void DisplaceModel::setSalFromFeature (OGRGeometry *geometry, double sal, std::f
             int id = ftr->GetFieldAsInteger(FLD_NODEID);
             std::shared_ptr<NodeData> nd = mNodes[id];
             func(nd,sal);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setNitroFromFeature (OGRGeometry *geometry, double nitro, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,nitro);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setPhosFromFeature (OGRGeometry *geometry, double phos, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,phos);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setOxyFromFeature (OGRGeometry *geometry, double oxy, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,oxy);
+            break;
+        }
+    }
+}
+
+void DisplaceModel::setDissoFromFeature (OGRGeometry *geometry, double disso, std::function<void(std::shared_ptr<NodeData>,int)> func)
+{
+    mNodesLayer->ResetReading();
+    mNodesLayer->SetSpatialFilter(geometry);
+    OGRFeature *ftr;
+    while (( ftr = mNodesLayer->GetNextFeature())) {
+        switch (ftr->GetFieldAsInteger(FLD_TYPE)) {
+        case OgrTypeNode:
+            int id = ftr->GetFieldAsInteger(FLD_NODEID);
+            std::shared_ptr<NodeData> nd = mNodes[id];
+            func(nd,disso);
             break;
         }
     }
@@ -1796,6 +1890,19 @@ bool DisplaceModel::loadNodes()
     string filename_salinity_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_salinity.dat";
 
+    string filename_Nitrogen_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_Nitrogen.dat";
+
+    string filename_Phosphorus_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_Phosphorus.dat";
+
+    string filename_Oxygen_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_Oxygen.dat";
+
+    string filename_DissolvedCarbon_graph = mBasePath.toStdString() +
+            "/graphsspe/coord" + a_graph_s + "_with_DissolvedCarbon.dat";
+
+
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +
             "/graphsspe/coord" + a_graph_s + "_with_benthos_total_biomass.dat";
 
@@ -1886,6 +1993,64 @@ bool DisplaceModel::loadNodes()
     if (!fill_from_salinity(salinity_graph, graph_point_salinity, nrow_coord))
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_salinity_graph.c_str()));
+
+
+    // input data, for the Nitrogen for each point of the graph
+    ifstream Nitrogen_graph;
+    Nitrogen_graph.open(filename_Nitrogen_graph.c_str());
+    if(Nitrogen_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_Nitrogen_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_Nitrogen;
+    if (!fill_from_Nitrogen(Nitrogen_graph, graph_point_Nitrogen, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_Nitrogen_graph.c_str()));
+
+    // input data, for the Phosporus for each point of the graph
+    ifstream Phosphorus_graph;
+    Phosphorus_graph.open(filename_Phosphorus_graph.c_str());
+    if(Phosphorus_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_Phosphorus_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_Phosphorus;
+    if (!fill_from_Phosphorus(Phosphorus_graph, graph_point_Phosphorus, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_Phosphorus_graph.c_str()));
+
+    // input data, for the Oxygen for each point of the graph
+    ifstream Oxygen_graph;
+    Oxygen_graph.open(filename_Oxygen_graph.c_str());
+    if(Oxygen_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_Oxygen_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_Oxygen;
+    if (!fill_from_Oxygen(Oxygen_graph, graph_point_Oxygen, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_Oxygen_graph.c_str()));
+
+    // input data, for the DissolvedCarbon for each point of the graph
+    ifstream DissolvedCarbon_graph;
+    DissolvedCarbon_graph.open(filename_DissolvedCarbon_graph.c_str());
+    if(DissolvedCarbon_graph.fail())
+    {
+        throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
+                                .arg(filename_DissolvedCarbon_graph.c_str())
+                                .arg(strerror(errno)));
+    }
+    vector<double> graph_point_DissolvedCarbon;
+    if (!fill_from_DissolvedCarbon(DissolvedCarbon_graph, graph_point_DissolvedCarbon, nrow_coord))
+        throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
+                                .arg(filename_DissolvedCarbon_graph.c_str()));
+
 
 
     // input data, for the benthos biomass for each point of the graph
@@ -2011,6 +2176,10 @@ bool DisplaceModel::loadNodes()
                                        graph_point_wind[i],
                                        graph_point_sst[i],
                                        graph_point_salinity[i],
+                                       graph_point_Nitrogen[i],
+                                       graph_point_Phosphorus[i],
+                                       graph_point_Oxygen[i],
+                                       graph_point_DissolvedCarbon[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // because benthos mean weight is not informed by GIS layer
@@ -2045,6 +2214,10 @@ bool DisplaceModel::loadNodes()
                                  graph_point_wind[i],
                                  graph_point_sst[i],
                                  graph_point_salinity[i],
+                                 graph_point_Nitrogen[i],
+                                 graph_point_Phosphorus[i],
+                                 graph_point_Oxygen[i],
+                                 graph_point_DissolvedCarbon[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0,// because benthos mean weight is not informed by GIS layer

@@ -428,6 +428,10 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
     ui->actionAssign_Wind->setEnabled(e);
     ui->actionAssign_SST->setEnabled(e);
     ui->actionAssign_Salinity->setEnabled(e);
+    ui->actionAssign_Nitrogen->setEnabled(e);
+    ui->actionAssign_Phosphorus->setEnabled(e);
+    ui->actionAssign_Oxygen->setEnabled(e);
+    ui->actionAssign_DissolvedCarbon->setEnabled(e);
     ui->actionMergeWeights->setEnabled(e);
     ui->actionMergePings->setEnabled(e);
     ui->actionCalcPopDistribution->setEnabled(e);
@@ -1662,6 +1666,10 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString windpath = savedlg.getWindFilename();
         QString sstpath = savedlg.getSSTFilename();
         QString salinitypath = savedlg.getSalinityFilename();
+        QString Nitrogenpath = savedlg.getNitrogenFilename();
+        QString Phosphoruspath = savedlg.getPhosphorusFilename();
+        QString Oxygenpath = savedlg.getOxygenFilename();
+        QString DissolvedCarbonpath = savedlg.getDissolvedCarbonFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -1671,7 +1679,9 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath, benthospath, benthosnbpath, acpath, polypath, polypathMomths,
+        if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
+                                 Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
+                                 benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {
@@ -1967,6 +1977,217 @@ void MainWindow::assignSalinityFromShapefileGen (QString title, QString shp, con
 
 }
 
+
+void MainWindow::assignNitrogenFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+void MainWindow::assignPhosphorusFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+
+void MainWindow::assignOxygenFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+void MainWindow::assignDissolvedCarbonFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
+{
+    std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
+    if (ds.get() == nullptr) {
+        // not opened. get a new
+
+        ds = std::shared_ptr<OGRDataSource>(OGRSFDriverRegistrar::Open(shp.toStdString().c_str(), FALSE));
+    }
+
+    if (ds.get() == nullptr) {
+        QMessageBox::warning(this, tr("Failed opening file"),
+                             tr("Cannot open/get the selected shapefile. The file may be not readable."));
+        return;
+    }
+
+    int nftr = 0;
+    int n_nofield = 0;
+    int n = ds->GetLayerCount();
+    for (int i = 0; i < n ;  ++i) {
+        OGRLayer *lr = ds->GetLayer(i);
+        lr->SetSpatialFilter(0);
+        lr->ResetReading();
+
+        OGRFeature *feature;
+        while ((feature = lr->GetNextFeature())) {
+            int fld = feature->GetFieldIndex(fieldname);
+
+            if (fld != -1) {
+                int code = feature->GetFieldAsInteger(fld);
+                func(feature->GetGeometryRef(), code);
+            } else {
+                ++n_nofield;
+            }
+
+            ++nftr;
+        }
+    }
+
+    mMapController->redraw();
+
+    if (n_nofield > 0) {
+        QMessageBox::warning(this, title,
+                             QString("%1 features in the shapefile didn't contain the proper field named '%2'.")
+                             .arg(n_nofield).arg(fieldname));
+    } else {
+        QMessageBox::information(this, title,
+                                 QString("%1 features were correctly processed.")
+                                 .arg(nftr));
+    }
+
+}
+
+
 void MainWindow::assignWindFromShapefileGen (QString title, QString shp, const char *const fieldname, std::function<void(OGRGeometry*,int)> func)
 {
     std::shared_ptr<OGRDataSource> ds = mMapController->cloneShapefileDatasource(currentModelIdx, shp);
@@ -2210,6 +2431,87 @@ void MainWindow::on_actionAssign_Salinity_triggered()
     }
 }
 
+void MainWindow::on_actionAssign_Nitrogen_triggered()
+{
+    QString title = tr("Set Nitrogen ('Nitrogen' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "Nitrogen";
+        QString shp = dlg.selectedShapefile();
+
+        assignNitrogenFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setNitrogenFromFeature(geom, code); } );
+    }
+}
+
+void MainWindow::on_actionAssign_Phosphorus_triggered()
+{
+    QString title = tr("Set Phosphorus ('Phosphorus' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "Phosphorus";
+        QString shp = dlg.selectedShapefile();
+
+        assignPhosphorusFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setPhosphorusFromFeature(geom, code); } );
+    }
+}
+
+
+void MainWindow::on_actionAssign_Oxygen_triggered()
+{
+    QString title = tr("Set Oxygen ('Oxygen' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "Oxygen";
+        QString shp = dlg.selectedShapefile();
+
+        assignOxygenFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setOxygenFromFeature(geom, code); } );
+    }
+}
+
+void MainWindow::on_actionAssign_DissolvedCarbon_triggered()
+{
+    QString title = tr("Set DissolvedCarbon ('DissCarbon' field required)");
+
+    if (!currentModel || currentModel->modelType() != DisplaceModel::EditorModelType)
+        return;
+
+    ShapefileOperationDialog dlg(this);
+    dlg.setWindowTitle(title);
+    dlg.setShapefileList(mMapController->getShapefilesList(currentModelIdx));
+
+    if (dlg.exec() == QDialog::Accepted) {
+        const char * fieldname = "DissCarbon";
+        QString shp = dlg.selectedShapefile();
+
+        assignDissolvedCarbonFromShapefileGen(title, shp, fieldname, [&](OGRGeometry *geom, int code) {
+            currentModel->setDissolvedCarbonFromFeature(geom, code); } );
+    }
+}
+
 
 void MainWindow::on_actionAssign_Total_benthos_biomass_triggered()
 {
@@ -2349,6 +2651,10 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString windpath = dlg.getWindFilename();
         QString sstpath = dlg.getSSTFilename();
         QString salinitypath = dlg.getSalinityFilename();
+        QString Nitrogenpath = dlg.getNitrogenFilename();
+        QString Phosphoruspath = dlg.getPhosphorusFilename();
+        QString Oxygenpath = dlg.getOxygenFilename();
+        QString DissolvedCarbonpath = dlg.getDissolvedCarbonFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2358,7 +2664,9 @@ void MainWindow::on_actionSave_Graph_triggered()
 
         QString error;
         InputFileExporter exporter;
-        if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath, benthospath, benthosnbpath, acpath, polypath,polypathMomths,
+        if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
+                                 Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
+                                 benthospath, benthosnbpath, acpath, polypath,polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
         } else {

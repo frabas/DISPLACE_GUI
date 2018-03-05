@@ -571,6 +571,139 @@ bool fill_from_salinity(istream& in, vector<double>& graph_point_salinity, int n
 }
 
 
+bool fill_from_Nitrogen(istream& in, vector<double>& graph_point_Nitrogen, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<int>(line);
+                graph_point_Nitrogen.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_Nitrogen file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+
+bool fill_from_Phosphorus(istream& in, vector<double>& graph_point_Phosphorus, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<int>(line);
+                graph_point_Phosphorus.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_Phosphorus file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+
+bool fill_from_Oxygen(istream& in, vector<double>& graph_point_Oxygen, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<int>(line);
+                graph_point_Oxygen.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_Oxygen file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+
+bool fill_from_DissolvedCarbon(istream& in, vector<double>& graph_point_DissolvedCarbon, int nrow)
+{
+    int linenum = 0;
+
+    try {
+        while (in) {
+            std::string line;
+            std::getline(in, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            if (linenum < nrow) {
+                double val = boost::lexical_cast<int>(line);
+                graph_point_DissolvedCarbon.push_back(val);
+            } else {
+                break;  // finish.
+            }
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on fill_from_DissolvedCarbon file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+
+
 
 bool fill_from_benthos_biomass(istream& in, vector<double>& graph_point_benthos_biomass, int nrow)
 {

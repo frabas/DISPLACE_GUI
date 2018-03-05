@@ -185,6 +185,10 @@ private slots:
     void on_actionAssign_Wind_triggered();
     void on_actionAssign_SST_triggered();
     void on_actionAssign_Salinity_triggered();
+    void on_actionAssign_Nitrogen_triggered();
+    void on_actionAssign_Phosphorus_triggered();
+    void on_actionAssign_Oxygen_triggered();
+    void on_actionAssign_DissolvedCarbon_triggered();
     void on_actionAssign_Total_benthos_biomass_triggered();
     void on_actionAssign_Total_benthos_number_triggered();
     void on_actionAssign_Area_codes_triggered();
@@ -266,6 +270,10 @@ protected:
     void assignWindFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignSSTFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignSalinityFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignNitrogenFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignPhosphorusFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignOxygenFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
+    void assignDissolvedCarbonFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignBenthosBiomassFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
     void assignBenthosNumberFromShapefileGen(QString title, QString shp, const char * const fieldname, std::function<void(OGRGeometry *, int)> func);
 

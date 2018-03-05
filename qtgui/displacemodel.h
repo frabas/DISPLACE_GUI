@@ -422,6 +422,10 @@ public:
     void setWindFromFeature(OGRGeometry *geometry, double wind);
     void setSSTFromFeature(OGRGeometry *geometry, double sst);
     void setSalinityFromFeature(OGRGeometry *geometry, double psu);
+    void setNitrogenFromFeature(OGRGeometry *geometry, double nit);
+    void setPhosphorusFromFeature(OGRGeometry *geometry, double phos);
+    void setOxygenFromFeature(OGRGeometry *geometry, double oxygen);
+    void setDissolvedCarbonFromFeature(OGRGeometry *geometry, double dissc);
     void setBenthosBiomassFromFeature(OGRGeometry *geometry, double bio);
     void setBenthosNumberFromFeature(OGRGeometry *geometry, double nb);
     void setAreaCodesFromFeature(OGRGeometry *geometry, int code);
@@ -450,6 +454,10 @@ protected:
     void setWdFromFeature(OGRGeometry *geometry, double wd, std::function<void (std::shared_ptr<NodeData>, int)> func);
     void setTFromFeature(OGRGeometry *geometry, double t, std::function<void (std::shared_ptr<NodeData>, int)> func);
     void setSalFromFeature(OGRGeometry *geometry, double sal, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setNitroFromFeature(OGRGeometry *geometry, double sal, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setPhosFromFeature(OGRGeometry *geometry, double sal, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setOxyFromFeature(OGRGeometry *geometry, double sal, std::function<void (std::shared_ptr<NodeData>, int)> func);
+    void setDissoFromFeature(OGRGeometry *geometry, double sal, std::function<void (std::shared_ptr<NodeData>, int)> func);
     void setBenthosBioFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
     void setBenthosNbFromFeature(OGRGeometry *geometry, double bio, std::function<void (std::shared_ptr<NodeData>, double)> func);
 

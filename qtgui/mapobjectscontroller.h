@@ -232,6 +232,10 @@ public:
         EnvLayerWind,
         EnvLayerSST,
         EnvLayerSalinity,
+        EnvLayerNitrogen,
+        EnvLayerPhosphorus,
+        EnvLayerOxygen,
+        EnvLayerDissolvedCarbon,
 
      EnvLayerMax
     };
@@ -392,6 +396,10 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerWind[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSST[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerSalinity[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerNitrogen[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerPhosphorus[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerOxygen[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerDissolvedCarbon[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 

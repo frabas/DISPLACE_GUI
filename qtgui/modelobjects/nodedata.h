@@ -64,6 +64,10 @@ public:
     double get_wind() const { return mNode->get_wind(); }
     double get_sst() const { return mNode->get_sst(); }
     double get_salinity() const { return mNode->get_salinity(); }
+    double get_Nitrogen() const { return mNode->get_Nitrogen(); }
+    double get_Phosphorus() const { return mNode->get_Phosphorus(); }
+    double get_Oxygen() const { return mNode->get_Oxygen(); }
+    double get_DissolvedCarbon() const { return mNode->get_DissolvedCarbon(); }
     double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }
@@ -74,6 +78,10 @@ public:
     void setWind(double w) { mNode->setWind(w); }
     void setSST(double t) { mNode->setSST(t); }
     void setSalinity(double s) { mNode->setSalinity(s); }
+    void setNitrogen(double s) { mNode->setNitrogen(s); }
+    void setPhosphorus(double s) { mNode->setPhosphorus(s); }
+    void setOxygen(double s) { mNode->setOxygen(s); }
+    void setDissolvedCarbon(double s) { mNode->setDissolvedCarbon(s); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
     void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }

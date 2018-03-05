@@ -689,8 +689,17 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                }
 
 
-                               if(dyn_alloc_sce.option(Options::LTMP)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
-                               if(dyn_alloc_sce.option(Options::FMSY)) populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+                               if(dyn_alloc_sce.option(Options::LTMP)){
+
+                                   populations.at(sp)->compute_TAC(multiOnTACconstraint, 1);
+                               } else{
+                                   if(dyn_alloc_sce.option(Options::FMSY)){
+
+                                       populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
+                                    } else{
+                                          populations.at(sp)->compute_TAC(multiOnTACconstraint, 3); // statuquo is default
+                                    }
+                               }
 
                                outc(cout<< "initialize individual vessel TAC for this coming year" << endl);
                                    // initialise the individual quota from global_TAC*percent_in_simu*percent_this_vessel
@@ -704,6 +713,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                    double TAC_y_plus_1    = ts_tac.at(ts_tac.size()-1);
                                    double TAC_y           = ts_tac.at(ts_tac.size()-2);
                                    populations.at(sp)->set_oth_land_multiplier (TAC_y_plus_1 / TAC_y);
+                                   outc(cout<< "compute the multiplier for oth_land in consequence of the TAC change...ok" << endl);
                                    if(populations.at(sp)->get_oth_land_multiplier()!=
                                      // i.e. a trick to check if nan
                                     populations.at(sp)->get_oth_land_multiplier())

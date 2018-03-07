@@ -269,7 +269,15 @@ class COMMONSSHARED_EXPORT Node
             mBannedVsizes[vsize] = true;
         }
 
-        bool isMetierBanned(int metier) const {
+      void setNbOfDaysClosedPerMonth (int metier, double NbOfDaysClosedPerMonth) {
+          while (mNbDaysClosedForBannedMetiers.size() <= (size_t)metier)
+              mNbDaysClosedForBannedMetiers.push_back(0.0);
+          mNbDaysClosedForBannedMetiers[metier] = NbOfDaysClosedPerMonth;
+      }
+
+
+
+       bool isMetierBanned(int metier) const {
             if ((size_t)metier < mBannedMetiers.size())
                 return mBannedMetiers[metier];
             return false;
@@ -335,6 +343,7 @@ private:
 
         vector<bool> mBannedMetiers;
         vector<bool> mBannedVsizes;
+        vector<double> mNbDaysClosedForBannedMetiers;
 
         static const vector<types::NodeId> mUsualFGrounds;
         static const vector<double> mFreqUsualFGrounds;

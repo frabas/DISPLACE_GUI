@@ -251,6 +251,8 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     opportunity_interest_rate= _opportunity_interest_rate;
     annual_discount_rate= _annual_discount_rate;
 
+    for(int met =0; met < _possible_metiers.size(); ++met)
+              daysSpentInRestrictedAreaThisMonth.push_back(0.0);
 
     dout(cout <<"vessel creator...OK" << endl);
     init();
@@ -1015,12 +1017,27 @@ double Vessel::get_annual_discount_rate() const
     return(annual_discount_rate);
 }
 
+double Vessel::getDaysSpentInRestrictedAreaThisMonth(int met_idx)
+{
+    return(daysSpentInRestrictedAreaThisMonth.at(met_idx));
+}
+
 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 // setters...
 //------------------------------------------------------------//
 //------------------------------------------------------------//
+
+void Vessel::addADayPortionToDaysSpentInRestrictedAreaThisMonth(int idx_met, double a_portion)
+{
+    daysSpentInRestrictedAreaThisMonth.at(idx_met)+=a_portion;
+}
+
+void Vessel::reinitDaysSpentInRestrictedAreaThisMonthtoZero(int idx_met)
+{
+    daysSpentInRestrictedAreaThisMonth.at(idx_met)=0.0;
+}
 
 void Vessel::set_previous_harbour_idx(types::NodeId _previous_harbour_idx)
 {
@@ -4087,11 +4104,21 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
-                if (nodes.at(a_grd.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
-                        nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class()))
+                int met_idx= this->get_metier()->get_name();
+                if (nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) &&
+                        nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class())
+                        )
+
                 {
+                    double nbDays = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
+                    this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(met_idx, 24/24);
+                    if (nbDays>31) this->reinitDaysSpentInRestrictedAreaThisMonthtoZero(met_idx);
+
                     // if(this->get_name()=="DNK000038349") cout << "this ground is closed for this metier during this month!" << endl;
-                    set_spe_freq_fground(i, 1e-8);
+                  if(this->getDaysSpentInRestrictedAreaThisMonth(met_idx) >= (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx)))
+                    {
+                      set_spe_freq_fground(i, 1e-8);
+                    }
                 }
 
                 // check for myfish graph1
@@ -4336,9 +4363,17 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
             //	if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), from.toIndex()))
             // if(nodes.at(from)->evaluateAreaType()==1) // area closed?
             if (nodes.at(from.toIndex())->isMetierBanned(this->get_metier()->get_name()))
-            {
-                dout(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
-                double dist_to_this_node = dist( nodes.at(from.toIndex())->get_x(),
+                  {
+                  int idx_met= this->get_metier()->get_name();
+                  this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(idx_met, 1/24); // because ping_rate is one hour
+
+                  if(this->getDaysSpentInRestrictedAreaThisMonth(idx_met) >=
+                      (31- nodes.at(from.toIndex())->getNbOfDaysClosed(idx_met)))
+                     {
+
+
+                      dout(cout  << "gosh... I am fishing in a closed area there! " << from.toIndex() <<  endl);
+                      double dist_to_this_node = dist( nodes.at(from.toIndex())->get_x(),
                                                  nodes.at(from.toIndex())->get_y(),
                                                  nodes.at(vx.toIndex())->get_x(),
                                                  nodes.at(vx.toIndex())->get_y()
@@ -4362,6 +4397,12 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
                 }
 
+             }
+             else
+             {
+                    dist_to_others.push_back(distance_fgrounds[i]);
+
+             }
             }
             else
             {

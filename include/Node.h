@@ -289,6 +289,12 @@ class COMMONSSHARED_EXPORT Node
             return false;
         }
 
+        double getNbOfDaysClosed(int metier) const {
+            if ((size_t)metier < mNbDaysClosedForBannedMetiers.size())
+                return mNbDaysClosedForBannedMetiers[metier];
+            return 31.0;
+        }
+
 protected:
         void reinit(vector<double> &vec, unsigned int sz);
         void reinit(vector<vector<double> > &vec, unsigned int sz, unsigned int subsz);

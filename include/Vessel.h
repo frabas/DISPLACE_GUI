@@ -150,6 +150,8 @@ private:
         double CRBER=0; //updated
         double NetPresentValue=0; //updated
 
+        std::vector <double> daysSpentInRestrictedAreaThisMonth;
+
                                          // dynamic
 		bool inharbour, inactive, natio;
         std::vector < std::vector<double> > catch_pop_at_szgroup;
@@ -302,6 +304,7 @@ public:
         double get_annual_depreciation_rate() const;
         double get_opportunity_interest_rate() const;
         double get_annual_discount_rate() const;
+        double getDaysSpentInRestrictedAreaThisMonth(int idx_met);
         types::NodeId get_smartcatch() const;
         types::NodeId get_highpotentialcatch() const;
         types::NodeId get_notthatfar() const;
@@ -334,6 +337,8 @@ public:
         double get_CRBER() const;
         double get_NetPresentValue() const;
         int get_numTrips()const;
+        void addADayPortionToDaysSpentInRestrictedAreaThisMonth(int idx_met, double a_portion);
+        void reinitDaysSpentInRestrictedAreaThisMonthtoZero(int idx_met);
         void set_firm_id (int val);
         void set_vid_is_active (int val);
         void set_vid_is_part_of_ref_fleet(int val);

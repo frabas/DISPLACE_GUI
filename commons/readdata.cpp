@@ -3128,7 +3128,7 @@ bool read_metier_monthly_closures (vector <Node*> &nodes, string a_month, string
 bool read_metier_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes)
 {
     // Format:
-    // PolyId NodeId Metier [Metier[ Metier...]]
+    // PolyId nbOfDaysClosed NodeId Metier [Metier[ Metier...]]
 
     int linenum = 0;
     try {
@@ -3145,7 +3145,7 @@ bool read_metier_closures(istream &stream, const std::string &separator, vector<
 
             NodeBanningInfo info;
             info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[1]));
-            for (size_t i = 2; i < sr.size(); ++i) {
+            for (size_t i = 3; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
                 info.banned.push_back(m);
             }
@@ -3198,7 +3198,7 @@ bool read_vsize_monthly_closures (vector <Node*> &nodes, string a_month, string 
 bool read_vsize_closures(istream &stream, const std::string &separator, vector<NodeBanningInfo> &nodes)
 {
     // Format:
-    // PolyId NodeId Vessel Size [Vessel Size[ Vessel Size...]]
+    // PolyId nbOfDaysClosed NodeId Vessel Size [Vessel Size[ Vessel Size...]]
 
     int linenum = 0;
     try {
@@ -3215,7 +3215,7 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
 
             NodeBanningInfo info;
             info.nodeId = types::NodeId(boost::lexical_cast<int>(sr[1]));
-            for (size_t i = 2; i < sr.size(); ++i) {
+            for (size_t i = 3; i < sr.size(); ++i) {
                 int m = boost::lexical_cast<int>(sr[i]);
                 info.banned.push_back(m);
             }

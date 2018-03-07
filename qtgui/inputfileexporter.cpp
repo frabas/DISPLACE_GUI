@@ -314,8 +314,8 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 clsstream.setDevice(&clsfile[q]);
                 auto &pl = currentModel->getPenaltyCollection();
                 for (auto p : pl) {
-                    if (p.closed && p.q[q]) {
-                        clsstream << p.polyId << " " << p.nodeId;
+                    if (p.nbOfDaysClosed>0 && p.q[q]) {
+                        clsstream << p.polyId << " " << p.nbOfDaysClosed << " " << p.nodeId;
                         for (auto m : p.metiers)
                             clsstream << " " << m;
                         clsstream << "\n";
@@ -329,10 +329,10 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
         for (int month = 0; month < 12; ++month) {
             QString fn = closedpath_month.arg(month+1);
 
-            auto monthSelectorFunc = [month](const displace::NodePenalty &penalty) { return penalty.closed && penalty.months[month]; };
+            auto monthSelectorFunc = [month](const displace::NodePenalty &penalty) { return penalty.nbOfDaysClosed>0 && penalty.months[month]; };
             auto outputMetierFunc = [](const displace::NodePenalty &penalty) { return penalty.metiers; };
 
-            bool r = outputClosedPolyFile(fn, currentModel, monthSelectorFunc, outputMetierFunc, error);
+            bool r = outputClosedPolyFile(fn, currentModel,  monthSelectorFunc, outputMetierFunc, error);
             if (!r)
                 return false;
 
@@ -342,7 +342,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 return penalty.vesSizes;
             };
 
-            r = outputClosedPolyFile(fn, currentModel, monthSelectorFunc, outputVesSizeFunc, error);
+            r = outputClosedPolyFile(fn, currentModel,  monthSelectorFunc, outputVesSizeFunc, error);
             if (!r)
                 return false;
         }
@@ -370,7 +370,7 @@ bool InputFileExporter::outputClosedPolyFile(QString filename, DisplaceModel *cu
     auto &pl = currentModel->getPenaltyCollection();
     for (auto p : pl) {
         if (selector(p)) {
-            clsstream << p.polyId << " " << p.nodeId;
+            clsstream << p.polyId << " " << p.nbOfDaysClosed << " " << p.nodeId;
             for (auto &m : dataGetter(p))
                 clsstream << " " << m;
             clsstream << "\n";

@@ -64,7 +64,7 @@ public:
     void setShapefileList(QStringList files);
     void setMetierNumber(int num);
     QStringList selectedShapefile() const;
-    bool isClosedForFishing();
+    double nbOfDaysClosedPerMonth() const;
     bool isPenaltyQ1();
     bool isPenaltyQ2();
     bool isPenaltyQ3();

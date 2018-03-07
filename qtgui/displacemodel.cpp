@@ -1206,7 +1206,7 @@ bool DisplaceModel::importHarbours(QList<std::shared_ptr<HarbourData> > &list)
     return true;
 }
 
-void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, bool closed_for_fishing,
+void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth,
                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes,
                                                  vector<int> bannedMetiers)
 {
@@ -1220,7 +1220,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, dou
     OGRPolygon *gpoly = (OGRPolygon *)OGRGeometryFactory::createGeometry(wkbPolygon);
     gpoly->addRing(gring);
 
-    addPenaltyToNodesByAddWeight(gpoly, weight, closed_for_fishing,
+    addPenaltyToNodesByAddWeight(gpoly, weight, nbOfDaysClosedPerMonth,
                                   onQ1, onQ2, onQ3, onQ4, checkedMonths, checkedVesSizes, bannedMetiers);
 
     delete gpoly;
@@ -1465,7 +1465,7 @@ void DisplaceModel::setBenthosNbFromFeature (OGRGeometry *geometry, double nb, s
     }
 }
 
-void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, bool closed_for_fishing,
+void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,
                                                  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths,
                                                  const vector<int> &checkedVesSizes,
                                                  vector<int> bannedMetiers)
@@ -1505,7 +1505,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         }
     }
 
-    if (closed_for_fishing && penaltyNodes.size() > 0) {
+    if (nbOfDaysClosedPerMonth>0.0 && penaltyNodes.size() > 0) {
         displace::NodePenalty pen;
 
         pen.q[0] = onQ1;
@@ -1513,7 +1513,7 @@ void DisplaceModel::addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double w
         pen.q[2] = onQ3;
         pen.q[3] = onQ4;
         pen.months = checkedMonths;
-        pen.closed = closed_for_fishing;
+        pen.nbOfDaysClosed = nbOfDaysClosedPerMonth;
         pen.vesSizes = checkedVesSizes;
         pen.polyId = 0;
         pen.metiers = bannedMetiers;

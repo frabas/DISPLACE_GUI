@@ -9,7 +9,7 @@ class NodePenalty {
 public:
     int nodeId;
 
-    bool closed;
+    double nbOfDaysClosed;
     std::vector<int> metiers;
     std::vector<bool> months;
     std::vector<int> vesSizes;

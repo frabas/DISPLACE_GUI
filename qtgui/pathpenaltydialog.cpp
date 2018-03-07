@@ -108,10 +108,6 @@ QStringList PathPenaltyDialog::selectedShapefile() const
     return l;
 }
 
-bool PathPenaltyDialog::isClosedForFishing()
-{
-    return ui->optClosedForFishing->isChecked();
-}
 
 bool PathPenaltyDialog::isPenaltyQ1()
 {
@@ -136,6 +132,11 @@ bool PathPenaltyDialog::isPenaltyQ4()
 double PathPenaltyDialog::weight() const
 {
     return ui->weight->value();
+}
+
+double PathPenaltyDialog::nbOfDaysClosedPerMonth() const
+{
+    return ui->nbOfDaysClosedPerMonth->value();
 }
 
 std::vector<bool> PathPenaltyDialog::getCheckedMonths() const

@@ -1505,7 +1505,7 @@ void MainWindow::addPenaltyPolygon(const QList<QPointF> &points)
             ss << b << ",";
         qDebug() << "Banned Metiers: " << QString::fromStdString(ss.str());
 
-        currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.isClosedForFishing(),
+        currentModel->addPenaltyToNodesByAddWeight(points, dlg.weight(), dlg.nbOfDaysClosedPerMonth(),
                                                    dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
                                                    checkedVesSizes,
                                                    bannedMetiers);
@@ -1785,6 +1785,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
     if (dlg.exec() == QDialog::Accepted) {
         double weight = dlg.weight();
+        double nbOfDaysClosedPerMonth=dlg.nbOfDaysClosedPerMonth();
         QStringList shp = dlg.selectedShapefile();
         auto bannedMetiers = dlg.getBannedMetiers();
         auto checkedMonths = dlg.getCheckedMonths();
@@ -1803,7 +1804,7 @@ void MainWindow::on_actionAdd_Penalty_from_File_triggered()
 
                 OGRFeature *feature;
                 while ((feature = lr->GetNextFeature())) {
-                    currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, dlg.isClosedForFishing(),
+                    currentModel->addPenaltyToNodesByAddWeight(feature->GetGeometryRef(), weight, nbOfDaysClosedPerMonth,
                                                                dlg.isPenaltyQ1(), dlg.isPenaltyQ2(), dlg.isPenaltyQ3(), dlg.isPenaltyQ4(), checkedMonths,
                                                                checkedVesSizes,
                                                                bannedMetiers);

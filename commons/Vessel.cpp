@@ -4101,23 +4101,35 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         {
             const auto &grds = this->get_fgrounds();
             outc(cout << " alloc accounting for monthly area closures" << endl);
+
+            int new_month=1; // TO DO!
+            int met_idx= this->get_metier()->get_name();
+            if (new_month) {
+                this->reinitDaysSpentInRestrictedAreaThisMonthtoZero(met_idx);
+            }
+            vector<double> init_freq = this->get_freq_fgrounds_init();
+
+
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
-                int met_idx= this->get_metier()->get_name();
                 if (nodes.at(a_grd.toIndex())->isMetierBanned(met_idx) &&
                         nodes.at(a_grd.toIndex())->isVsizeBanned(this->get_length_class())
                         )
 
                 {
-                    double nbDays = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
+                    double nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
                     this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(met_idx, 24/24);
-                    if (nbDays>31) this->reinitDaysSpentInRestrictedAreaThisMonthtoZero(met_idx);
+                    double nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
 
                     // if(this->get_name()=="DNK000038349") cout << "this ground is closed for this metier during this month!" << endl;
-                  if(this->getDaysSpentInRestrictedAreaThisMonth(met_idx) >= (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx)))
+                  if(nbDaysSpent >= nbOpenedDays)
                     {
                       set_spe_freq_fground(i, 1e-8);
+                    }
+                  else
+                    {
+                      set_spe_freq_fground(i, init_freq.at(i));
                     }
                 }
 

@@ -4487,7 +4487,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
 
             //if(binary_search (polygon_nodes.begin(), polygon_nodes.end(), next_ground))
             //if(nodes.at(next_ground)->evaluateAreaType()!=1)
-            if (!nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
+            if (nodes.at(next_ground.toIndex())->isMetierBanned(this->get_metier()->get_name()))
             {
                 dout(cout  << "this NEXT node " << next_ground.toIndex() << " is actually within a closed area!!!" << endl);
                 finally_I_should_go_for_the_closest = true;

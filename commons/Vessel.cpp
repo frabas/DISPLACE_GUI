@@ -4102,13 +4102,9 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
             const auto &grds = this->get_fgrounds();
             outc(cout << " alloc accounting for monthly area closures" << endl);
 
-            int new_month=1; // TO DO!
-            int met_idx= this->get_metier()->get_name();
-            if (new_month) {
-                this->reinitDaysSpentInRestrictedAreaThisMonthtoZero(met_idx);
-            }
             vector<double> init_freq = this->get_freq_fgrounds_init();
 
+            int met_idx = this->get_metier()->get_name();
 
             for (int i=0; i<grds.size();++i)
             {

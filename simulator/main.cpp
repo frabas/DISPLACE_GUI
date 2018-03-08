@@ -3979,6 +3979,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     double sum_probas=0.0;
                     for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
                     // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
+
+                    // deal with partial closure
+                   for (int met_idx=0; met_idx<vessels.at(v)->get_possible_metiers().size(); ++met_idx)
+                            vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero(met_idx);
                 }
 
                 // update the monthly closures
@@ -3993,7 +3997,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // cout << " isMetierBanned   "  << nodes.at(13)->isMetierBanned(vessels.at(v)->get_metier()->get_name()) << endl;
                 // cout << " isVsizeBanned   " << nodes.at(13)->isVsizeBanned(vessels.at(v)->get_length_class()) << endl;
 
-           cout << "re-read area closure setting this month....OK" << endl;
+
+                cout << "re-read area closure setting this month....OK" << endl;
             }
 
 

@@ -4106,6 +4106,9 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
             int met_idx = this->get_metier()->get_name();
 
+            double nbDaysSpent=0.0;
+            double nbOpenedDays=0.0;
+            nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
@@ -4114,13 +4117,13 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                         )
 
                 {
-                    double nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
-                    this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(met_idx, 24/24);
-                    double nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
+                    nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
 
-                    // if(this->get_name()=="DNK000038349") cout << "this ground is closed for this metier during this month!" << endl;
+                    //cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl;
+
                   if(nbDaysSpent >= nbOpenedDays)
                     {
+                      //cout << this->get_name() << " CANNOT FISH HERE! " << endl;
                       set_spe_freq_fground(i, 1e-8);
                     }
                   else
@@ -4162,6 +4165,19 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
     }
 
+
+    // count nb of days spent in restricted areas
+    if (dyn_alloc_sce.option(Options::area_monthly_closure))
+    {
+        int met_idx = this->get_metier()->get_name();
+        if (nodes.at(ground.toIndex())->isMetierBanned(met_idx) &&
+                nodes.at(ground.toIndex())->isVsizeBanned(this->get_length_class()) )
+        {
+        this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(met_idx, 24/24);
+        //cout << "ADDING 1 DAY HERE" << endl;
+        //cout << this->get_name() << " SO HERE nbDaysSpent: " << this->getDaysSpentInRestrictedAreaThisMonth(met_idx) << endl;
+        }
+    }
 
 
     //random_shuffle(grds.begin(),grds.end()); // random permutation i.e. equal frequency of occurence
@@ -4374,6 +4390,7 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
                   {
                   int idx_met= this->get_metier()->get_name();
                   this->addADayPortionToDaysSpentInRestrictedAreaThisMonth(idx_met, 1/24); // because ping_rate is one hour
+                  //cout << "ADDING 1/24 DAY HERE" << endl;
 
                   if(this->getDaysSpentInRestrictedAreaThisMonth(idx_met) >=
                       (31- nodes.at(from.toIndex())->getNbOfDaysClosed(idx_met)))

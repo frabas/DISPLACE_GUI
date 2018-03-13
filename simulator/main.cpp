@@ -4444,8 +4444,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        // the system command line
                        #if defined(_WIN32)
                        if(dyn_pop_sce.option(Options::avai_updater_on)){
+                           //system("dir");
                            // caution with HPC, annoying lower cases in file names and paths required!
+                           cout << "if ERR here: did you put the Rscript.exe in the same folder than the app? Did you set the envirnmental variables with the R path and restart the compiler env?" << endl;
                            a_command_for_R = "Rscript .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
+                           //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
                            cout << "look after " << a_command_for_R << endl;
                            cout << "This supposes StockId " << a_pop << " is informed in displace_input_for_data_merger.csv input file" << endl;
                            system(a_command_for_R.c_str());

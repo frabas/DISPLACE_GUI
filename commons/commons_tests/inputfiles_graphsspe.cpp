@@ -182,9 +182,10 @@ BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
     std::vector<int> nd2 {5,6,7};
     std::vector<int> nd3 {100};
     std::vector<NodeBanningInfo> ban;
+    double nbOfDaysClosedPerMonth=31;
     bool r;
 
-    r = read_metier_closures(is1, " ", ban);
+    r = read_metier_closures(is1, " ", ban, nbOfDaysClosedPerMonth);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(types::NodeId(1), ban[0].nodeId);
     BOOST_CHECK_EQUAL_COLLECTIONS(nd1.begin(), nd1.end(), ban[0].banned.begin(), ban[0].banned.end());
@@ -196,7 +197,7 @@ BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
     std::istringstream is2;
     std::vector<NodeBanningInfo> ban2;
 
-    r = read_metier_closures(is2, " ", ban2);
+    r = read_metier_closures(is2, " ", ban2, nbOfDaysClosedPerMonth);
     BOOST_CHECK(r);
     BOOST_CHECK_EQUAL(0, ban2.size());
 
@@ -204,7 +205,7 @@ BOOST_AUTO_TEST_CASE (test_metier_closure_a_graph_quarter_dat )
                           "4 2 y 6 7 \n"
                           "1001 3 100 \r\n" // three infos
                             );
-    r = read_metier_closures(is3, " ", ban2);
+    r = read_metier_closures(is3, " ", ban2, nbOfDaysClosedPerMonth);
     BOOST_CHECK(!r);
 }
 

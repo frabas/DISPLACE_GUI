@@ -1914,8 +1914,7 @@ bool DisplaceModel::loadNodes()
         throw DisplaceException(QString(QObject::tr("Cannot load %1: %2"))
                                 .arg(filename_graph.c_str())
                                 .arg(strerror(errno)));
-    }
-
+    }   
     vector<double> graph_coord_x;
     vector<double> graph_coord_y;
     vector<int> graph_coord_harbour;

@@ -347,9 +347,9 @@ HEADERS += \
 ### mSQLiteCpp dependency
 
 DEFINES += BUILD_MSQLITECPP
-INCLUDEPATH += ../mSqliteCpp/include
-SOURCES += ../mSqliteCpp/src/*.cpp
-HEADERS += ../mSqliteCpp/include/*.h
+INCLUDEPATH += $$SRCROOT/mSqliteCpp/include
+SOURCES += $$SRCROOT/mSqliteCpp/src/*.cpp
+HEADERS += $$SRCROOT/mSqliteCpp/include/*.h
 !win32: LIBS += -lsqlite3
 
 win32 {

@@ -10,6 +10,8 @@ macx {
     APPTARGET=displace
 }
 
+SRCROOT=$$top_srcdir
+
 CONFIG(profile) {
     message("Profiling enabled")
 

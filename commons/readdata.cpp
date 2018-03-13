@@ -1980,6 +1980,8 @@ multimap<int, double> read_shiplanes_lat(string folder_name_parameterization, st
     file_shipsspe_lanes_lat.open(filename.c_str());
     if(file_shipsspe_lanes_lat.fail())
     {
+        cout << "Unfortunately the /shipsspe_lanes_lat.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         //return 1;
     }
@@ -2001,6 +2003,8 @@ multimap<int, double> read_shiplanes_lon(string folder_name_parameterization, st
     file_shipsspe_lanes_lon.open(filename.c_str());
     if(file_shipsspe_lanes_lon.fail())
     {
+        cout << "Unfortunately the /shipsspe_lanes_lon.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         //return 1;
     }
@@ -2026,6 +2030,8 @@ multimap<int, double> read_avai_betas(string a_semester, string szgroup, string 
     avai_betas_file.open(filename.c_str());
     if(avai_betas_file.fail())
     {
+        cout << "Unfortunately the /avaiXX_betas_semesterXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         //return 1;
     }
@@ -2048,6 +2054,8 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
     file_init_pops_per_szgroup.open(filename.c_str());
     if(file_init_pops_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_pops_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2084,6 +2092,8 @@ multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_nam
     file_init_prop_migrants_pops_per_szgroup.open(filename.c_str());
     if(file_init_prop_migrants_pops_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_prop_migrants_pops_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2124,6 +2134,8 @@ multimap<int, double> read_init_maturity_per_szgroup(string folder_name_paramete
     file_init_maturity_per_szgroup.open(filename.c_str());
     if(file_init_maturity_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_maturity_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2157,6 +2169,8 @@ multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_paramet
     file_init_fecundity_per_szgroup.open(filename.c_str());
     if(file_init_fecundity_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_fecundity_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2190,6 +2204,8 @@ multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameteri
     file_init_weight_per_szgroup.open(filename.c_str());
     if(file_init_weight_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_weight_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2223,6 +2239,8 @@ multimap<int, int> read_init_comcat_per_szgroup(string folder_name_parameterizat
     file_comcat_per_szgroup.open(filename.c_str());
     if(file_comcat_per_szgroup.fail())
     {
+        cout << "Unfortunately the comcat_per_szgroup_done_by_hand.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2256,6 +2274,8 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
     file_init_M_per_szgroup.open(filename.c_str());
     if(file_init_M_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_M_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2289,6 +2309,8 @@ multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_paramet
     file_init_proprecru_per_szgroup.open(filename.c_str());
     if(file_init_proprecru_per_szgroup.fail())
     {
+        cout << "Unfortunately the init_proprecru_per_szgroup_biolsceXX.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2331,6 +2353,8 @@ multimap<int, types::NodeId> read_lst_idx_nodes_per_pop(string a_semester, strin
     file_lst_idx_nodes_per_pop.open(filename.c_str());
     if(file_lst_idx_nodes_per_pop.fail())
     {
+        cout << "Unfortunately the lst_idx_nodes_per_pop_.dat vector is not informed  "<< endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2367,6 +2391,8 @@ multimap<int, int> read_selected_szgroups_per_pop(string folder_name_parameteriz
     file_the_selected_szgroups.open(filename.c_str());
     if(file_the_selected_szgroups.fail())
     {
+        cout << "Unfortunately the the_selected_szgroups.dat vector is not informed " << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2399,6 +2425,8 @@ map<int, int> read_tac_percent_simulated(string folder_name_parameterization, st
     file_tac_percent_simulated.open(filename.c_str());
     if(file_tac_percent_simulated.fail())
     {
+        cout << "Unfortunately the percent_landings_from_simulated_vessels.dat vector is not informed" << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2426,6 +2454,8 @@ map<int, double> read_hyperstability_param(string folder_name_parameterization, 
     file_hyperstability_param.open(filename.c_str());
     if(file_hyperstability_param.fail())
     {
+        cout << "Unfortunately the hyperstability_param.dat vector is not informed "<< endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2465,6 +2495,8 @@ map<types::NodeId, double> read_oth_land_nodes_with_pop(string a_semester, strin
     file_oth_land.open(filename.c_str());
     if(file_oth_land.fail())
     {
+        cout << "Unfortunately the spe_stecf_oth_land_per_month_per_node_ vector is not informed for stock "<< a_pop_s << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename);
         //return 1;
     }
@@ -2503,6 +2535,8 @@ multimap<int, double> read_overall_migration_fluxes(string a_semester, int a_pop
     file_overall_migration_fluxes.open(filename.c_str());
     if(file_overall_migration_fluxes.fail())
     {
+        cout << "Unfortunately the overall_migration_fluxes_ vector is not informed for stock "<< a_pop_s << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename);
         //return 1;
     }
@@ -2600,6 +2634,9 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     file_avai_szgroup_nodes_with_pop.open(filename.c_str());
     if(file_avai_szgroup_nodes_with_pop.fail())
     {
+        cout << "Unfortunately the availability vector is not informed for stock "<< a_pop_s << endl;
+        cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
+        cout << "This could happen if the stock is missing in the displace_input_for_data_merger_xx.dat along the avai_updater_on Option" << endl;
         open_file_error(filename);
         //return 1;
     }

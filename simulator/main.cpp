@@ -4443,7 +4443,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                            //system("dir");
                            // caution with HPC, annoying lower cases in file names and paths required!
                            cout << "if ERR here: Did you set the environmental variables with the Rscript path and restart the compiler env?" << endl;
-                           a_command_for_R = "Rscript .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu;
+                           a_command_for_R = "Rscript .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                            //a_command_for_R = "R CMD BATCH .\\interactiverscripts\\input2avaiupdater.r "+a_pop+" "+atstep;
                            cout << "look after " << a_command_for_R << endl;
                            cout << "This supposes StockId " << a_pop << " is informed in displace_input_for_data_merger.csv input file" << endl;
@@ -4462,7 +4462,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        if(dyn_pop_sce.option(Options::avai_updater_on) && tstep>744){
                            type_of_avai_field_to_read="_updated";
                            // caution with HPC, annoying lower cases in file names and paths required!
-                           a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu;
+                           a_command_for_R = "Rscript "+inputfolder+"/interactiverscripts/input2avaiupdater.r "+a_pop+" "+atstep+" "+namefolderoutput+" "+namesimu+" "+a_graph_s;
                            system(a_command_for_R.c_str());
                            a_command = inputfolder+"/avaifieldupdatertool -tstep " +atstep+" -f "+namefolderinput+ " -a " +inputfolder+ " -s "+a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
                            system(a_command.c_str());

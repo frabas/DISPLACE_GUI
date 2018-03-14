@@ -5285,6 +5285,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
             {
                   OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
+                  vessels[ listVesselIdForVmsLikeFPingsOnlyToExport.at(idx) ]->clear_ping_catch_pop_at_szgroup();
             }
             listVesselIdForVmsLikeFPingsOnlyToExport.clear();
 

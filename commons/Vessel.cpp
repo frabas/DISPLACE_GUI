@@ -2298,6 +2298,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     // declare with length nbpops
     vector<double> tot_catch_per_pop(  catch_pop_at_szgroup.size() );
 
+    //this->clear_catch_pop_at_szgroup();
 
     // for loop over pop
     for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)

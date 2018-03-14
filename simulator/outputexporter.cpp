@@ -95,8 +95,8 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
                          << vessel->get_name() << " "
                             // can be used as a trip identifier
                          << vessel->get_tstep_dep() << " "
-                         << setprecision(3) << fixed << vessel->get_x() << " "
-                         << setprecision(3) << fixed << vessel->get_y() << " "
+                         << setprecision(3) << fixed << vessel->get_loc()->get_x() << " "
+                         << setprecision(3) << fixed << vessel->get_loc()->get_y() << " "
                          << setprecision(0) << fixed << vessel->get_course() << " "
                             //<< vessels[ index_v ]->get_inharbour() << " "
                          << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "

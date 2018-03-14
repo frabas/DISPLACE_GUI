@@ -83,7 +83,13 @@ tstep / node / long / lat /  tariffs
 
 * tripcatchesperszgroup_*.dat
 --------------------
-tstep / vessel name / departure tstep / popid / catches (landings only; unless discard ban)
+tstep / vessel name / departure tstep / popid / catches (landings only; unless discard ban) szgroup 0 /  szgroup 1 /... / 13
+
+
+* vmslikefpingsonly_*.dat
+--------------------
+tstep / vessel name /  start trip tstep / lon / lat/ course / state / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
+ ...note that combining vessel_name and start_trip_tstep will give a trip id.
 
 
 * export_individual_tac_*.dat

@@ -2618,6 +2618,8 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
     out << a_pop;
     string a_pop_s = out.str();
 
+    //cout << "type_of_avai_field_to_read is " << type_of_avai_field_to_read << endl;
+
     string filename;
     if(str_rand_avai_file=="baseline")
     {

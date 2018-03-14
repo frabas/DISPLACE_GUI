@@ -338,7 +338,7 @@ int main(int argc, char* argv[])
         shoot_x = ShootLons.at(pt);
         coord_y = graph_coord_y.at(n);
         shoot_y = ShootLats.at(pt);
-           if(abs(coord_x-shoot_x)<1 && abs(coord_y-shoot_y)<1){ // filtering to save time...
+           if(abs(coord_x-shoot_x)<0.5 && abs(coord_y-shoot_y)<0.5){ // filtering to save time...
 
               a_dist = greatcircledistance(coord_x, coord_y, shoot_x, shoot_y);
               //cout  << "a_dist... " << a_dist << endl;
@@ -389,10 +389,11 @@ for(int i=0; i<listStockIds.size(); i++){
        for (int pt=0; pt<ShootLons.size(); pt++) {
          //cout <<" process line "<< pt << endl;
            int st=StockIds.at(pt);
-          for (int n=0; n<idx_n_in_range.at(st).size(); n++) {
+           if(sum_weights.at(pt).at(st)>1e-5){
+             for (int n=0; n<idx_n_in_range.at(st).size(); n++) {
                int n2=idx_n_in_range.at(st).at(n);
+               if(weights.at(n2).at(pt)>1e-5){
                //cout  << "for line " << pt << "sum_weights  this node " << n2 << " is... " <<  sum_weights.at(n2) << endl;
-                  if(sum_weights.at(pt).at(st)>1e-5){
                       //cout  << "st is " << st << "given size of idw0.at(n2) " << idw0.at(n2).size() << endl;
                       idw0.at(n2).at(st) += (nb_indiv0s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
                       idw1.at(n2).at(st) += (nb_indiv1s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
@@ -408,8 +409,9 @@ for(int i=0; i<listStockIds.size(); i++){
                       idw11.at(n2).at(st) += (nb_indiv11s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
                       idw12.at(n2).at(st) += (nb_indiv12s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
                       idw13.at(n2).at(st) += (nb_indiv13s.at(pt) *  weights.at(n2).at(pt)) / sum_weights.at(pt).at(st) ; // inverse-distance weighting average
-                 }
-         }
+               }
+              }
+             }
 
        }
 

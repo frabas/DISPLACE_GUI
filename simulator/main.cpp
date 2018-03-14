@@ -4448,7 +4448,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                            cout << "look after " << a_command_for_R << endl;
                            cout << "This supposes StockId " << a_pop << " is informed in displace_input_for_data_merger.csv input file" << endl;
                            system(a_command_for_R.c_str());
-                            a_command = "avaifieldupdater.exe -tstep " +atstep+" -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 30 -shepard_p 0.5";
+                            a_command = "avaifieldupdater.exe -tstep " +atstep+" -f " +namefolderinput+ " -a " +inputfolder+ " -s " +a_semester+ " -graph " +graphnum.str()+ " -nr "+a_nrow_coord+ " -dist 15 -shepard_p 0.5";
                             cout << "look after " << a_command << endl; // right now look into the data input folder, so need to have the exe here...TODO look into the displace.exe folder instead!!
                             system(a_command.c_str());
                        }

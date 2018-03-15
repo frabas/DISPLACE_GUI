@@ -76,7 +76,7 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
 {
     std::unique_lock<std::mutex> locker(glob_mutex);
 
-    // tstep / vessel name /  start trip tstep / lon / lat/ course / state / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
+    // tstep / vessel name /  start trip tstep / lon / lat/ nodeid / course / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
     // note that combining vessel_name and start_trip_tstep will give a trip id.
 
     std::ostringstream ss;
@@ -97,10 +97,9 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
                          << vessel->get_tstep_dep() << " "
                          << setprecision(3) << fixed << vessel->get_loc()->get_x() << " "
                          << setprecision(3) << fixed << vessel->get_loc()->get_y() << " "
+                         << setprecision(0) << fixed << vessel->get_loc()->get_idx_node() << " "
                          << setprecision(0) << fixed << vessel->get_course() << " "
-                            //<< vessels[ index_v ]->get_inharbour() << " "
-                         << setprecision(0) << fixed << vessel->get_cumfuelcons() << " "
-                         << vessel->get_state() << " " ;
+                         << vessel->get_fuelcons() << " " ;
 
                 ss << pop << " ";
 

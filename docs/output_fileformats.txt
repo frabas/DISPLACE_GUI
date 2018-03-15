@@ -88,7 +88,7 @@ tstep / vessel name / departure tstep / popid / catches (landings only; unless d
 
 * vmslikefpingsonly_*.dat
 --------------------
-tstep / vessel name /  start trip tstep / lon / lat/ course / state / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
+tstep / vessel name /  start trip tstep / lon / lat/nodeid / course / cumfuelcons/ pop / catches (i.e. landings+ discards, in weight) szgroup 0 /  szgroup 1 /... / 13
  ...note that combining vessel_name and start_trip_tstep will give a trip id.
 
 

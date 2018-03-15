@@ -73,7 +73,8 @@ SOURCES= \
     storage/tables/popdyntable.cpp \
     storage/tables/metadatatable.cpp \
     storage/modelmetadataaccessor.cpp \
-    storage/tables/vesselvmslikefpingsonlytable.cpp
+    storage/tables/vesselvmslikefpingsonlytable.cpp \
+    storage/tables/funcgroupstable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -141,7 +142,8 @@ HEADERS= \
     storage/tables/metadatatable.h \
     storage/modelconfig.h \
     storage/modelmetadataaccessor.h \
-    storage/tables/vesselvmslikefpingsonlytable.h
+    storage/tables/vesselvmslikefpingsonlytable.h \
+    storage/tables/funcgroupstable.h
 
 ### mSQLiteCpp dependency
 

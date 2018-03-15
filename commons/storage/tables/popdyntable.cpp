@@ -3,8 +3,6 @@
 #include <Population.h>
 #include "utils/make_unique.h"
 
-#include <assert.h>
-
 struct PopDynTable::Impl {
     bool init = false;
     std::mutex mutex;

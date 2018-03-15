@@ -10,6 +10,7 @@
 #include "tables/poptable.h"
 #include "tables/popdyntable.h"
 #include "tables/popstattable.h"
+#include "tables/funcgroupstable.h"
 #include "tables/vesselvmsliketable.h"
 #include "tables/vesselvmslikefpingsonlytable.h"
 #include "tables/vesselsloglikecatchestable.h"
@@ -40,6 +41,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
     std::shared_ptr<PopTable> mPopTable;
+    std::shared_ptr<FuncGroupsTable> mFuncGroupsTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
     std::shared_ptr<MetadataTable> mMetadata;
@@ -66,6 +68,7 @@ void SQLiteOutputStorage::open()
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
+    p->mFuncGroupsTable = std::make_shared<FuncGroupsTable>(p->db, "FuncGroups");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
     p->mMetadata = std::make_shared<MetadataTable> (p->db, "Metadata");
@@ -588,6 +591,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mNodesStatTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
+    p->mFuncGroupsTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();
     p->mVesselLoglikeCatchesTable->dropAndCreate();
@@ -632,6 +636,11 @@ std::shared_ptr<NodesStatTable> SQLiteOutputStorage::getNodesStatTable() const
 std::shared_ptr<PopTable> SQLiteOutputStorage::getPopTable() const
 {
     return p->mPopTable;
+}
+
+std::shared_ptr<FuncGroupsTable> SQLiteOutputStorage::getFuncGroupsTable() const
+{
+    return p->mFuncGroupsTable;
 }
 
 std::shared_ptr<WindfarmsTable> SQLiteOutputStorage::getWindfarmTable() const

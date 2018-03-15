@@ -29,6 +29,7 @@
 #include <helpers.h>
 #include <storage/sqliteoutputstorage.h>
 #include "storage/tables/poptable.h"
+#include "storage/tables/funcgroupstable.h"
 
 #ifndef NO_IPC
 #include <ipc.h>
@@ -853,6 +854,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
           for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
              {
                    nodes.at(n)->export_benthos_tot_number_per_funcgroup(benthosnumbernodes, tstep, funcgroup);
+                   if (outSqlite)
+                       outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup);
              }
           }
 
@@ -870,6 +873,8 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             for(unsigned int funcgroup=0;funcgroup< (unsigned int)nbbenthospops; funcgroup++)
             {
                        nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
+                       if (outSqlite)
+                           outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup);
             }
         }
 

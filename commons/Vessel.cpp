@@ -251,8 +251,17 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     opportunity_interest_rate= _opportunity_interest_rate;
     annual_discount_rate= _annual_discount_rate;
 
-    for(int met =0; met < _possible_metiers.size(); ++met)
-              daysSpentInRestrictedAreaThisMonth.push_back(0.0);
+
+    // find max idx metier among possible metiers this vessel is having
+    auto max_idx_possible_metiers = std::max_element(_possible_metiers.begin(), _possible_metiers.end(),
+        [](const pair<types::NodeId, int>& p1, const pair<types::NodeId, int>& p2) {
+            return p1.second < p2.second; });
+
+    // then fill in with 0 up to this idx
+    while (daysSpentInRestrictedAreaThisMonth.size() <= max_idx_possible_metiers->second)
+        daysSpentInRestrictedAreaThisMonth.push_back(0.0);
+
+
 
     dout(cout <<"vessel creator...OK" << endl);
     init();
@@ -4107,9 +4116,12 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
 
             int met_idx = this->get_metier()->get_name();
 
+            outc(cout << "for "<< this->get_name() << ", metier " << met_idx << endl);
+
             double nbDaysSpent=0.0;
             double nbOpenedDays=0.0;
             nbDaysSpent = this->getDaysSpentInRestrictedAreaThisMonth(met_idx);
+            outc(cout << "for "<< this->get_name() << ", metier " << met_idx << " nbDaysSpent: " << nbDaysSpent << endl);
             for (int i=0; i<grds.size();++i)
             {
                 auto a_grd = grds.at(i);
@@ -4120,7 +4132,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                 {
                     nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
 
-                    //cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl;
+                    cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl;
 
                   if(nbDaysSpent >= nbOpenedDays)
                     {

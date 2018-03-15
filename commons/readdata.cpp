@@ -2639,6 +2639,7 @@ multimap<types::NodeId, double> read_avai_szgroup_nodes_with_pop(string a_semest
         cout << "Unfortunately the availability vector is not informed for stock "<< a_pop_s << endl;
         cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         cout << "This could happen if the stock is missing in the displace_input_for_data_merger_xx.dat along the avai_updater_on Option" << endl;
+        cout << "this might also result from an attempt to use an empty vmslikefpingsonly.dat file (empty if no ref. vessels defined)" << endl;
         open_file_error(filename);
         //return 1;
     }

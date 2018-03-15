@@ -46,6 +46,10 @@ private:
 
     void exportVmsLikePlaintext(unsigned int tstep, Vessel *vessel);
     void exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel);
+
+    void exportVmsLikeFPingsOnlyPlaintext(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+    void exportVmsLikeFPingsOnlySQLite(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, std::vector<int> &implicit_pops);
+
 };
 
 #endif // OUTPUTEXPORTER_H

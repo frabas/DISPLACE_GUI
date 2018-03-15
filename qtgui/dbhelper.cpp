@@ -38,6 +38,7 @@
 #include <storage/tables/metadatatable.h>
 #include <storage/tables/vesseldeftable.h>
 #include <storage/tables/vesselvmsliketable.h>
+#include <storage/tables/vesselvmslikefpingsonlytable.h>
 #include <sqlitestorage.h>
 #include <storage/modelmetadataaccessor.h>
 

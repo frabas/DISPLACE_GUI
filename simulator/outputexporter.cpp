@@ -3,6 +3,7 @@
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesselslogliketable.h"
 #include "storage/tables/vesselvmsliketable.h"
+#include "storage/tables/vesselvmslikefpingsonlytable.h"
 
 #include <mutex>
 #include <Vessel.h>
@@ -72,7 +73,18 @@ void OutputExporter::exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel)
     mSqlDb->getVesselVmsLikeTable()->insertLog(log);
 }
 
+
+
 void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,  const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+   // if (useSql)
+   //     exportVmsLikeFPingsOnlySQLite(tstep, vessel, populations, implicit_pops);
+    if (usePlainText)
+        exportVmsLikeFPingsOnlyPlaintext(tstep, vessel, populations, implicit_pops);
+}
+
+
+void OutputExporter::exportVmsLikeFPingsOnlyPlaintext(unsigned int tstep, Vessel *vessel,  const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
     std::unique_lock<std::mutex> locker(glob_mutex);
 
@@ -122,6 +134,49 @@ void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,
 
 
 }
+
+
+void OutputExporter::exportVmsLikeFPingsOnlySQLite(unsigned int tstep, Vessel *vessel, const std::vector<Population *> &populations, vector<int> &implicit_pops)
+{
+    std::unique_lock<std::mutex> locker(glob_mutex);
+
+
+    int NBSZGROUP=14;
+    vector< vector<double> > a_ping_catch_pop_at_szgroup(populations.size(), vector<double>(NBSZGROUP));
+
+    for(int pop = 0; pop < a_ping_catch_pop_at_szgroup.size(); pop++)
+        {
+        if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ))
+           {
+
+            VesselVmsLikeFPingsOnlyTable::Log log;
+            log.tstep = tstep;
+            log.id = vessel->get_idx();
+            log.tstep_dep = vessel->get_tstep_dep();
+            //log.p_long = vessel->get_loc()->get_x();
+            //log.p_lat = vessel->get_loc()->get_y();
+            //log.p_course = vessel->get_course();
+            //log.cum_fuel = vessel->get_cumfuelcons();
+            log.nodeid = vessel->get_loc()->get_idx_node().toIndex();
+            log.popid = pop;
+
+
+            //a_ping_catch_pop_at_szgroup = vessel->get_ping_catch_pop_at_szgroup();
+            //for(int sz = 0; sz < a_ping_catch_pop_at_szgroup[pop].size(); sz++)
+            //        {
+            //            log.catch_szgroup[sz]= a_ping_catch_pop_at_szgroup[pop][sz];
+            //        }
+
+            mSqlDb->getVesselVmsLikeFPingsOnlyTable()->insertLog(log);
+
+            }
+        }
+
+
+}
+
+
+
 
 void OutputExporter::exportLogLike(unsigned int tstep, Vessel *v, const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {

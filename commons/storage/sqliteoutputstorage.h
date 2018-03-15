@@ -12,6 +12,7 @@
 class VesselDefTable;
 class VesselsLoglikeTable;
 class VesselVmsLikeTable;
+class VesselVmsLikeFPingsOnlyTable;
 class NodesDefTable;
 class NodesStatTable;
 class PopTable;
@@ -52,6 +53,7 @@ public:
     std::shared_ptr<VesselDefTable> getVesselDefTable() const;
     std::shared_ptr<VesselsLoglikeTable> getVesselLoglikeTable() const;
     std::shared_ptr<VesselVmsLikeTable> getVesselVmsLikeTable() const;
+    std::shared_ptr<VesselVmsLikeFPingsOnlyTable> getVesselVmsLikeFPingsOnlyTable() const;
     std::shared_ptr<NodesDefTable> getNodesDefTable() const;
     std::shared_ptr<NodesStatTable> getNodesStatTable() const;
     std::shared_ptr<PopTable> getPopTable() const;

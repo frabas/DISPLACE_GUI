@@ -11,6 +11,7 @@
 #include "tables/popdyntable.h"
 #include "tables/popstattable.h"
 #include "tables/vesselvmsliketable.h"
+#include "tables/vesselvmslikefpingsonlytable.h"
 #include "tables/vesselsloglikecatchestable.h"
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
@@ -34,6 +35,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselsLoglikeTable> mVesselLoglikeTable;
     std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
+    std::shared_ptr<VesselVmsLikeFPingsOnlyTable> mVesselVmslikeFPingsOnlyTable;
     std::shared_ptr<NodesDefTable> mNodesDefTable;
     std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
@@ -58,6 +60,7 @@ void SQLiteOutputStorage::open()
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
+    p->mVesselVmslikeFPingsOnlyTable = std::make_shared<VesselVmsLikeFPingsOnlyTable>(p->db, "VesselVmsFPingsOnlyLike");
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
     p->mNodesDefTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
@@ -580,6 +583,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselDefTable->dropAndCreate();
     p->mVesselLoglikeTable->dropAndCreate();
     p->mVesselVmslikeTable->dropAndCreate();
+    p->mVesselVmslikeFPingsOnlyTable->dropAndCreate();
     p->mNodesDefTable->dropAndCreate();
     p->mNodesStatTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
@@ -608,6 +612,11 @@ std::shared_ptr<VesselsLoglikeTable> SQLiteOutputStorage::getVesselLoglikeTable(
 std::shared_ptr<VesselVmsLikeTable> SQLiteOutputStorage::getVesselVmsLikeTable() const
 {
     return p->mVesselVmslikeTable;
+}
+
+std::shared_ptr<VesselVmsLikeFPingsOnlyTable> SQLiteOutputStorage::getVesselVmsLikeFPingsOnlyTable() const
+{
+    return p->mVesselVmslikeFPingsOnlyTable;
 }
 
 std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getNodesDefTable() const

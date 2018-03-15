@@ -3981,10 +3981,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
 
                     // deal with partial closure
-                   for (int met_idx=0; met_idx<vessels.at(v)->get_possible_metiers().size(); ++met_idx)
-                            vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero(met_idx);
+                    vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
-
                 // update the monthly closures
                 if (!read_metier_monthly_closures(nodes, a_month, a_graph_name, folder_name_parameterization, inputfolder)) {
                     exit(1);

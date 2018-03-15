@@ -338,7 +338,7 @@ public:
         double get_NetPresentValue() const;
         int get_numTrips()const;
         void addADayPortionToDaysSpentInRestrictedAreaThisMonth(int idx_met, double a_portion);
-        void reinitDaysSpentInRestrictedAreaThisMonthtoZero(int idx_met);
+        void reinitDaysSpentInRestrictedAreaThisMonthtoZero();
         void set_firm_id (int val);
         void set_vid_is_active (int val);
         void set_vid_is_part_of_ref_fleet(int val);

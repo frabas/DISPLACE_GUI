@@ -102,7 +102,7 @@ void FuncGroupsTable::insert (int tstep, Node *node, int funcgr)
                               benthosnumber, benthos_tot_biomass.at(funcgr),benthos_tot_meanweight.at(funcgr),
                               benthosbiomassoverK, benthosnumberoverK, benthos_tot_biomass_K.at(funcgr),
                               benthos_tot_number.at(funcgr), benthosbiomass, benthos_tot_meanweight.at(funcgr),
-                              benthosbiomassoverK, benthosnumberoverK, benthos_tot_number_K.at(funcgr)
+                              benthos_tot_number_K.at(funcgr)
                               );
 #if 0
 

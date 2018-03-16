@@ -252,16 +252,6 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
     annual_discount_rate= _annual_discount_rate;
 
 
-    // find max idx metier among possible metiers this vessel is having
-    auto max_idx_possible_metiers = std::max_element(_possible_metiers.begin(), _possible_metiers.end(),
-        [](const pair<types::NodeId, int>& p1, const pair<types::NodeId, int>& p2) {
-            return p1.second < p2.second; });
-
-    // then fill in with 0 up to this idx
-    while (daysSpentInRestrictedAreaThisMonth.size() <= max_idx_possible_metiers->second)
-        daysSpentInRestrictedAreaThisMonth.push_back(0.0);
-
-
 
     dout(cout <<"vessel creator...OK" << endl);
     init();
@@ -1227,6 +1217,8 @@ void Vessel::set_spe_possible_metiers (const multimap<types::NodeId, int> &_poss
 {
     possible_metiers=_possible_metiers;
 
+    if(_possible_metiers.size()>0){
+
     // find max idx metier among possible metiers this vessel is having
     auto max_idx_possible_metiers = std::max_element(_possible_metiers.begin(), _possible_metiers.end(),
         [](const pair<types::NodeId, int>& p1, const pair<types::NodeId, int>& p2) {
@@ -1235,6 +1227,11 @@ void Vessel::set_spe_possible_metiers (const multimap<types::NodeId, int> &_poss
     // then fill in with 0 up to this idx
     while (daysSpentInRestrictedAreaThisMonth.size() <= max_idx_possible_metiers->second)
         daysSpentInRestrictedAreaThisMonth.push_back(0.0);
+   }
+   else
+    {
+     daysSpentInRestrictedAreaThisMonth.push_back(0.0);
+    }
 
 }
 

@@ -2766,6 +2766,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         gshape_cpue_per_stk_on_nodes = read_gshape_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
         gscale_cpue_per_stk_on_nodes = read_gscale_cpue_per_stk_on_nodes(a_quarter, vesselids[i], folder_name_parameterization, inputfolder);
 
+
+
         // debug
         if(possible_metiers.size() != freq_possible_metiers.size())
         {
@@ -2777,6 +2779,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             int tmp;
             cin >> tmp;			 // pause
         }
+
+
+        // debug
+        //if(possible_metiers.size()==0)
+        //{
+        //    possible_metiers.insert(std::pair<int,int>(0, 0));
+        //    freq_possible_metiers.insert(std::pair<int,double>(0, 1.0));
+        //}
 
         // read the even more complex objects (i.e. when several info for a same vessel and a same ground)...
         // for creating the vessel object, search into the multimaps

@@ -395,7 +395,7 @@ string type_of_avai_field_to_read=""; // by default, use the initial input
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
 /**---------------------------------------------------------------**/
-int main(int argc, char* argv[])
+int app_main(int argc, char* argv[])
 {
     bool crash_handler_enabled  = true;
     // default
@@ -5489,6 +5489,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
     //delete[] nodes;
     //delete[] vessels;
+
+    return 0;
+}
+
+
+int main(int argc, char* argv[])
+{
+    try {
+        return app_main(argc, argv);
+    } catch (std::exception &x) {
+        std::cerr << "Unhandled exception : " << x.what() << "\n\n";
+        throw;
+    }
 
     return 0;
 }

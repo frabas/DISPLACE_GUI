@@ -201,10 +201,10 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->windFileName->setText(QString("coord%1_with_wind.dat").arg(gn));
     ui->sstFileName->setText(QString("coord%1_with_sst.dat").arg(gn));
     ui->salinityFileName->setText(QString("coord%1_with_salinity.dat").arg(gn));
-    ui->NitrogenFileName->setText(QString("coord%1_with_Nitrogen.dat").arg(gn));
-    ui->PhosphorusFileName->setText(QString("coord%1_with_Phosphorus.dat").arg(gn));
-    ui->OxygenFileName->setText(QString("coord%1_with_Oxygen.dat").arg(gn));
-    ui->DissolvedCarbonFileName->setText(QString("coord%1_with_DissolvedCarbon.dat").arg(gn));
+    ui->NitrogenFileName->setText(QString("coord%1_with_nitrogen.dat").arg(gn));
+    ui->PhosphorusFileName->setText(QString("coord%1_with_phosphorus.dat").arg(gn));
+    ui->OxygenFileName->setText(QString("coord%1_with_oxygen.dat").arg(gn));
+    ui->DissolvedCarbonFileName->setText(QString("coord%1_with_dissolvedcarbon.dat").arg(gn));
     ui->benthosFileName->setText(QString("coord%1_with_benthos_total_biomass.dat").arg(gn));
     ui->benthosNbFileName->setText(QString("coord%1_with_benthos_total_number.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));

@@ -1891,16 +1891,16 @@ bool DisplaceModel::loadNodes()
             "/graphsspe/coord" + a_graph_s + "_with_salinity.dat";
 
     string filename_Nitrogen_graph = mBasePath.toStdString() +
-            "/graphsspe/coord" + a_graph_s + "_with_Nitrogen.dat";
+            "/graphsspe/coord" + a_graph_s + "_with_nitrogen.dat";
 
     string filename_Phosphorus_graph = mBasePath.toStdString() +
-            "/graphsspe/coord" + a_graph_s + "_with_Phosphorus.dat";
+            "/graphsspe/coord" + a_graph_s + "_with_phosphorus.dat";
 
     string filename_Oxygen_graph = mBasePath.toStdString() +
-            "/graphsspe/coord" + a_graph_s + "_with_Oxygen.dat";
+            "/graphsspe/coord" + a_graph_s + "_with_oxygen.dat";
 
     string filename_DissolvedCarbon_graph = mBasePath.toStdString() +
-            "/graphsspe/coord" + a_graph_s + "_with_DissolvedCarbon.dat";
+            "/graphsspe/coord" + a_graph_s + "_with_dissolvedcarbon.dat";
 
 
     string filename_code_benthos_biomass_graph = mBasePath.toStdString() +

@@ -1173,10 +1173,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     string filename_wind_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_wind.dat";
     string filename_sst_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_sst.dat";
     string filename_salinity_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_salinity.dat";
-    string filename_Nitrogen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_Nitrogen.dat";
-    string filename_Phosphorus_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_Phosphorus.dat";
-    string filename_Oxygen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_Oxygen.dat";
-    string filename_DissolvedCarbon_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_DissolvedCarbon.dat";
+    string filename_Nitrogen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_nitrogen.dat";
+    string filename_Phosphorus_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_phosphorus.dat";
+    string filename_Oxygen_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_oxygen.dat";
+    string filename_DissolvedCarbon_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_dissolvedcarbon.dat";
     string filename_code_benthos_biomass_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_biomass.dat";
     string filename_code_benthos_number_graph=inputfolder+"/graphsspe/coord"+a_graph_s+"_with_benthos_total_number.dat";
 

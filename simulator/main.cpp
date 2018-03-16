@@ -3980,6 +3980,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
                     // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
 
+                    //cout << "Check " << vessels.at(v)->get_name() << endl;
+
                     // deal with partial closure
                     vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }

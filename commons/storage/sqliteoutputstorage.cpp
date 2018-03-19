@@ -571,6 +571,79 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
     return data;
 }
 
+TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, AggregationType aggtype, int grpid, const std::vector<int> &btype)
+{
+    FieldDef<FieldType::Real> f("");
+    FieldDef<FieldType::Real> fld("");
+    switch (stat) {
+    case displace::plot::BenthosStat::B_MeanWeight:
+        fld = p->mFuncGroupsTable->benthosBioMean;
+        break;
+    case displace::plot::BenthosStat::B_Number:
+        fld = p->mFuncGroupsTable->benthosNum;
+        break;
+    case displace::plot::BenthosStat::B_NumberOverK:
+        fld = p->mFuncGroupsTable->benthosNumK;
+        break;
+    case displace::plot::BenthosStat::B_TotBiomass:
+        fld = p->mFuncGroupsTable->benthosBioTot;
+        break;
+    case displace::plot::BenthosStat::B_TotBiomassOverK:
+        fld = p->mFuncGroupsTable->benthosBioTotK;
+        break;
+    }
+
+    switch (aggtype) {
+    case displace::plot::AggregationType::Avg:
+        f = op::avg(fld); break;
+    case displace::plot::AggregationType::Min:
+        f = op::min(fld); break;
+    case displace::plot::AggregationType::Max:
+        f = op::max(fld); break;
+    case displace::plot::AggregationType::Sum:
+        f = op::sum(fld); break;
+    case displace::plot::AggregationType::None:
+        f = fld;
+        break;
+    }
+
+    auto select = sqlite::statements::Select(p->mFuncGroupsTable->name(),
+                                                    p->mFuncGroupsTable->fldTStep,
+                                                    f
+                                                    );
+
+    if (btype.size() > 0) {
+        std::ostringstream ss;
+        ss << p->mFuncGroupsTable->fldFGroup.name() << " == ? AND " << p->mFuncGroupsTable->fldNodeId.name() << " IN (?";
+        for (int i = 1; i < btype.size() ; ++i)
+            ss << ",?";
+        ss << ")";
+        select.where(ss.str());
+    } else {
+        select.where(op::eq(p->mFuncGroupsTable->fldFGroup));
+    }
+
+    select.groupBy(p->mFuncGroupsTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(1, grpid);
+    for (int i = 0; i < btype.size(); ++i)
+        stmt.bind(1+i, btype[i]);
+
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << ")";
+
+    return data;
+}
+
 size_t SQLiteOutputStorage::getNbPops()
 {
     return p->mPopTable->getNbPops();

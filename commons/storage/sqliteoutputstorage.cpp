@@ -573,6 +573,8 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
 
 TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, AggregationType aggtype, int grpid, const std::vector<int> &btype)
 {
+    bool filterGrpId = (grpid >= 0 && grpid != 999);
+
     FieldDef<FieldType::Real> f("");
     FieldDef<FieldType::Real> fld("");
     switch (stat) {
@@ -614,13 +616,16 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
 
     if (btype.size() > 0) {
         std::ostringstream ss;
-        ss << p->mFuncGroupsTable->fldFGroup.name() << " == ? AND " << p->mFuncGroupsTable->fldBType.name() << " IN (?";
+        if (filterGrpId)
+            ss << p->mFuncGroupsTable->fldFGroup.name() << " == ? AND ";
+        ss << p->mFuncGroupsTable->fldBType.name() << " IN (?";
         for (size_t i = 1; i < btype.size() ; ++i)
             ss << ",?";
         ss << ")";
         select.where(ss.str());
     } else {
-        select.where(op::eq(p->mFuncGroupsTable->fldFGroup));
+        if (filterGrpId)
+            select.where(op::eq(p->mFuncGroupsTable->fldFGroup));
     }
 
     select.groupBy(p->mFuncGroupsTable->fldTStep);
@@ -629,9 +634,11 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
 
     TimelineData data;
 
-    stmt.bind(1, grpid);
+    int n = 1;
+    if (filterGrpId)
+        stmt.bind(n++, grpid);
     for (size_t i = 0; i < btype.size(); ++i)
-        stmt.bind(2+i, btype[i]);
+        stmt.bind(n+i, btype[i]);
 
     stmt.execute([&stmt, &data](){
         data.t.push_back(stmt.getIntValue(0));

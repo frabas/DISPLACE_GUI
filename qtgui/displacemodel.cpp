@@ -285,35 +285,6 @@ bool DisplaceModel::linkDatabase(QString path)
 
 bool DisplaceModel::prepareDatabaseForSimulation()
 {
-    if (mDb) {
-        /* start a transaction to speedup insertion */
-        mDb->beginTransaction();
-
-        mDb->setMetadata("name", mInputName);
-        mDb->setMetadata("basepath", mBasePath);
-        mDb->setMetadata("output", mOutputName);
-
-        mDb->saveConfig(mConfig);
-        mDb->saveScenario(mScenario);
-
-        mDb->removeAllStatsData();
-
-        /* load nodes */
-        mDb->removeAllNodesDetails();
-        for (int i = 0; i < mNodes.size(); ++i) {
-            mDb->addNodesDetails(i, mNodes.at(i));
-        }
-
-        /* load vessels */
-        mDb->removeAllVesselsDetails();
-        for (int i = 0; i< mVessels.size(); ++i) {
-            mDb->addVesselDetails(i, mVessels.at(i));
-        }
-
-        /* end: commit transaction */
-        mDb->endTransaction();
-    }
-
     return true;
 }
 
@@ -367,10 +338,6 @@ bool DisplaceModel::saveConfig()
 
 void DisplaceModel::simulationEnded()
 {
-    if (mDb) {
-        mDb->flushBuffers();
-        mDb->createIndexes();
-    }
 }
 
 void DisplaceModel::setSimulationSqlStorage(const QString &path)
@@ -561,33 +528,21 @@ void DisplaceModel::commitShipsStats(int tstep)
 
 void DisplaceModel::commitNodesStatsFromSimu(int tstep, bool force)
 {
-    if (mDb)
-        mDb->beginTransaction();
-
     if (mNodesStatsDirty || force) {
-        if (mDb)
-            mDb->addNodesStats(mLastStats, mNodes);
         mNodesStatsDirty = false;
     }
 
     if (mShipsStatsDirty || force) {
         mShipsStatsDirty = false;
     }
-
-    if (mDb)
-        mDb->endTransaction();
 }
 
 void DisplaceModel::startCollectingStats()
 {
-    if (mDb)
-        mDb->beginTransaction();
 }
 
 void DisplaceModel::endCollectingStats()
 {
-    if (mDb)
-        mDb->endTransaction();
 }
 
 void DisplaceModel::collectNodePopStats(int tstep, int node_idx, const QList<double> &stats, const QList<double> &stats_w, double tot, double wtot)
@@ -995,20 +950,12 @@ void DisplaceModel::collectVesselStats(int tstep, const VesselStats &stats)
             vessel->addDiscard(i, stats.mDiscards[i]);
     }
 
-
-    if (mDb) {
-        // TODO Not sure
-        if (vessel)
-            mDb->addVesselStats(tstep,*vessel, stats);
-    }
-
     mVesselsStatsDirty = true;
     m_vessel_last_step = tstep;
 }
 
 void DisplaceModel::commitVesselsStats(int tstep)
 {
-//    qDebug() << "Commit Vessels: " << tstep << mVesselsStatsDirty << mStatsNations.getUniqueValuesCount();
     if (mVesselsStatsDirty) {
         mVesselsStatsDirty = false;
     }
@@ -1578,10 +1525,6 @@ void DisplaceModel::updateVessel(int tstep, int idx, float x, float y, float cou
     v->mVessel->set_course(course);
     v->mVessel->set_cumfuelcons(fuel);
     v->mVessel->set_state(state);
-
-    if (mDb) {
-        mDb->addVesselPosition(tstep, idx, v);
-    }
 }
 
 
@@ -1602,10 +1545,6 @@ void DisplaceModel::updateShip(int tstep, int idx, float x, float y, float cours
     std::shared_ptr<ShipData> sh(mShips.at(idx));
     sh->mShip->set_xy(x,y);
     sh->mShip->set_course(course);
-
-    if (mDb) {
-    //    mDb->addShipPosition(tstep, idx, sh);
-    }
 }
 
 

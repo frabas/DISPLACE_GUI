@@ -94,7 +94,7 @@ public:
     bool load (QString path, ModelType type);
     bool loadDatabase (QString path);
     bool Q_DECL_DEPRECATED linkDatabase (QString path);
-    bool prepareDatabaseForSimulation ();
+    bool Q_DECL_DEPRECATED prepareDatabaseForSimulation ();
     bool clearStats();
     bool saveScenarioAs(const QString &path);
     bool saveScenario();
@@ -103,7 +103,7 @@ public:
     std::shared_ptr<Calendar> calendar() const { return mCalendar; }
 
     /** \brief Signals the simulation has ended. Flush all buffers */
-    void simulationEnded();
+    void Q_DECL_DEPRECATED simulationEnded();
 
     // Getter
     QString fullpath() const { return mFullPath; }

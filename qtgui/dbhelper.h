@@ -62,28 +62,6 @@ class DbHelper;
 class Config;
 class Scenario;
 
-#if 0
-class VesselPositionInserter : public QObject {
-    Q_OBJECT
-
-    friend class DbHelper;
-
-    DbHelper *mHelper;
-    QSqlDatabase *mDb;
-    QSqlQuery *mVesselInsertionQuery;
-
-    int mFlushCount;
-    int mCounter;
-    int mLastStep;
-public:
-    explicit VesselPositionInserter(DbHelper *helper, QSqlDatabase *db);
-
-public slots:
-    void addVesselPosition (int step, int idx , double x, double y, double course, double fuel, int state);
-    void flush();
-};
-#endif
-
 class DbHelper : public QObject
 {
     struct Impl;
@@ -91,30 +69,12 @@ class DbHelper : public QObject
 
     Q_OBJECT
 
-#if 0
-    friend class VesselPositionInserter;
-#endif
-
 public:
     DbHelper();
     ~DbHelper() noexcept;
 
     bool attachDb(std::shared_ptr<SQLiteOutputStorage> storage);
     QString lastDbError() const;
-
-    void Q_DECL_DEPRECATED addNodesDetails(int idx, std::shared_ptr<NodeData> node);
-    void Q_DECL_DEPRECATED removeAllNodesDetails();
-
-    void Q_DECL_DEPRECATED addNodesStats (int tstep, const QList<std::shared_ptr<NodeData> > &nodes);
-    void Q_DECL_DEPRECATED addPopStats(int tstep, const QVector<PopulationData> &pops);
-    void Q_DECL_DEPRECATED addNationsStats(int tstep, const QVector<NationStats> &nats);
-    void Q_DECL_DEPRECATED addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats);
-
-    void Q_DECL_DEPRECATED addVesselPosition (int step, int idx, std::shared_ptr<VesselData> vessel);
-    void Q_DECL_DEPRECATED removeAllVesselsDetails();
-    void Q_DECL_DEPRECATED addVesselDetails (int idx, std::shared_ptr<VesselData> vessel);
-
-    void Q_DECL_DEPRECATED removeAllStatsData();
 
     bool Q_DECL_DEPRECATED loadConfig(Config &);
     bool Q_DECL_DEPRECATED saveConfig (const Config &);
@@ -132,31 +92,15 @@ public:
 
     HarbourStats getHarbourStatsAtStep(int idx, int step);
 
-    void Q_DECL_DEPRECATED beginTransaction();
-    void Q_DECL_DEPRECATED endTransaction();
-    void Q_DECL_DEPRECATED forceEndTransaction();
-    void Q_DECL_DEPRECATED flushBuffers();
-
-    /* Creates all indexes on db - to be called at the end of simulation */
-    void Q_DECL_DEPRECATED createIndexes();
-
     /* Metadata */
 
     void setMetadata (QString key, QString value);
     QString getMetadata (QString key);
 
     int getLastKnownStep();
-signals:
-    void Q_DECL_DEPRECATED postVesselInsertion (int step, int idx , double x, double y, double course, double fuel, int state);
-    void Q_DECL_DEPRECATED flush();
-
-protected:
-    void Q_DECL_DEPRECATED createIndexOnTstepForTable(QString table);
 
 private:
     QMutex mMutex;
-//    VesselPositionInserter *mInserter;
-//    QThread *mInsertThread;
 };
 
 #endif // DBHELPER_H

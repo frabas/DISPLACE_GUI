@@ -80,66 +80,6 @@ QString DbHelper::lastDbError() const
     return p->lastError;
 }
 
-void DbHelper::addVesselPosition(int step, int idx, std::shared_ptr<VesselData> vessel)
-{
-    Q_UNUSED(step); Q_UNUSED(idx); Q_UNUSED(vessel);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::removeAllNodesDetails()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::addNodesStats(int tstep, const QList<std::shared_ptr<NodeData> > &nodes)
-{
-    Q_UNUSED(nodes); Q_UNUSED(tstep);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::addPopStats(int tstep, const QVector<PopulationData > &pops)
-{
-    Q_UNUSED(tstep); Q_UNUSED(pops);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::addNationsStats(int tstep, const QVector<NationStats> &nats)
-{
-    Q_UNUSED(tstep);
-    Q_UNUSED(nats);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::addVesselStats(int tstep, const VesselData &vessel, const VesselStats &stats)
-{
-    Q_UNUSED(tstep); Q_UNUSED(vessel); Q_UNUSED(stats);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::removeAllVesselsDetails()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::addNodesDetails(int idx, std::shared_ptr<NodeData> node)
-{
-    Q_UNUSED(idx);
-    Q_UNUSED(node);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::addVesselDetails(int idx, std::shared_ptr<VesselData> vessel)
-{
-    Q_UNUSED(idx); Q_UNUSED(vessel);
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::removeAllStatsData()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-
 bool DbHelper::loadConfig(Config &cfg)
 {
     cfg.setNbpops(getMetadata("config::nbpops").toInt());
@@ -662,36 +602,6 @@ HarbourStats DbHelper::getHarbourStatsAtStep(int idx, int step)
     return HarbourStats();
 }
 
-void DbHelper::beginTransaction()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::endTransaction()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::forceEndTransaction()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::flushBuffers()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::createIndexes()
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
-void DbHelper::createIndexOnTstepForTable(QString table)
-{
-    throw UnimplementedException(__FUNCTION__);
-}
-
 void DbHelper::setMetadata(QString key, QString value)
 {
     try {
@@ -716,58 +626,3 @@ int DbHelper::getLastKnownStep()
 {
     return p->accessor->lastTStep();
 }
-
-#if 0
-VesselPositionInserter::VesselPositionInserter(DbHelper *helper, QSqlDatabase *db)
-    : QObject(),
-      mHelper(helper),
-      mDb(db),
-      mVesselInsertionQuery(0),
-      mFlushCount(10000),
-      mCounter(0),
-      mLastStep(-1)
-{
-    mVesselInsertionQuery = new QSqlQuery(*mDb);
-    mVesselInsertionQuery->prepare(
-                "INSERT INTO " + DbHelper::TBL_VESSELS_POS
-                + "(vesselid,tstep,x,y,course,fuel,state) VALUES (?,?,?,?,?,?,?)"
-                );
-}
-
-void VesselPositionInserter::addVesselPosition(int step, int idx, double x, double y, double course,double fuel, int state)
-{
-    if (mCounter >= mFlushCount) {
-        mHelper->endTransaction();
-        mHelper->beginTransaction();
-        mCounter = 0;
-    }
-
-    /* if there's no transaction ongoing, start it */
-    if (mCounter == 0)
-        mHelper->beginTransaction();
-
-    /* if it's a new step, commits the insertion and restart */
-    ++mCounter;
-
-    mLastStep = step;
-
-    mVesselInsertionQuery->addBindValue(idx);
-    mVesselInsertionQuery->addBindValue(step);
-    mVesselInsertionQuery->addBindValue(x);
-    mVesselInsertionQuery->addBindValue(y);
-    mVesselInsertionQuery->addBindValue(course);
-    mVesselInsertionQuery->addBindValue(fuel);
-    mVesselInsertionQuery->addBindValue(state);
-
-    bool r = mVesselInsertionQuery->exec();
-    DB_ASSERT(r,*mVesselInsertionQuery);
-}
-
-void VesselPositionInserter::flush()
-{
-    mHelper->forceEndTransaction();
-    mCounter = 0;
-}
-
-#endif
-

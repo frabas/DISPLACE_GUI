@@ -75,14 +75,14 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
             if (!mGraph[nd].flag) {
                 std::vector<int>::iterator it;
                 it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
-                if (it != relevant_nodes.end() && mem.at(0)==0) mem.at(0)=nd;
+                if (it != relevant_nodes.end() ) mem.at(0)=nd;
 
                 it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
                 if (it != relevant_nodes.end() && mem.at(1)==0)  mem.at(1)=mPredecessors[nd];
 
                 // keep the node onboard if it is a significant intermediate
                 int idx=relevantInterNodesIdx.indexOf(nd);
-                if (idx != -1  && mem.at(0)==0)  mem.at(0)=nd;
+                if (idx != -1)  mem.at(0)=nd;
 
                 idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
                 if (idx != -1  && mem.at(1)==0) mem.at(1)=mPredecessors[nd];
@@ -93,7 +93,6 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
                    if(flag_out) cout << "export-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
                    strm_prev << mem.at(0) << " " << mPredecessors[nd] << endl;
                    strm_min << mem.at(0) << " " << mDistances[nd] << endl;
-                   mem.at(0)=0;
                    mem.at(1)=0;
                   }
 

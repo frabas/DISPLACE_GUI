@@ -10,7 +10,8 @@ struct NodesDefTable::Impl {
     bool init = false;
 
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Text>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> statement;
+        FieldDef<FieldType::Text>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+        FieldDef<FieldType::Integer>> statement;
 };
 
 NodesDefTable::NodesDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
@@ -28,7 +29,8 @@ void NodesDefTable::dropAndCreate()
     create(std::make_tuple(fldNodeId,
                            fldHarbourId,
                            fldNodeName,
-                           fldLong, fldLat
+                           fldLong, fldLat,
+                           marineLandscape
                            ));
 }
 
@@ -39,20 +41,20 @@ void NodesDefTable::insert(Node *node)
         p->init = true;
         p->statement = prepareInsert(std::make_tuple(fldNodeId, fldHarbourId,
                                                      fldNodeName,
-                                                     fldLong, fldLat));
+                                                     fldLong, fldLat, marineLandscape));
     }
 
     SQLiteTable::insert(p->statement, std::make_tuple((int)node->get_idx_node().toIndex(),
                                                       node->get_harbour(),
                                                       node->get_name(),
                                                       node->get_x(),
-                                                      node->get_y())
+                                                      node->get_y(), node->get_marine_landscape())
                         );
 }
 
 void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>, std::shared_ptr<Harbour>)> operation)
 {
-    sqlite::statements::Select s(name(), fldNodeId, fldHarbourId, fldNodeName, fldLong, fldLat);
+    sqlite::statements::Select s(name(), fldNodeId, fldHarbourId, fldNodeName, fldLong, fldLat, marineLandscape);
     sqlite::SQLiteStatement stmt (db(), s);
 
     stmt.execute([&operation,&stmt]() {
@@ -70,6 +72,7 @@ void NodesDefTable::queryAllNodes(std::function<void(std::shared_ptr<Node>, std:
         n->set_is_harbour(hid);
         n->set_idx_node(types::NodeId(stmt.getIntValue(0)));
         n->set_xy(stmt.getDoubleValue(3), stmt.getDoubleValue(4));
+        n->setMarineLandscape(stmt.getIntValue(5));
 
         operation(n,h);
         return true;

@@ -252,6 +252,7 @@ bool DisplaceModel::loadDatabase(QString path)
 
     loadNodesFromDb();
     loadVesselsFromDb();
+    initBenthos();
 
     return true;
 }

@@ -1,6 +1,7 @@
 #include "benthosstatsplot.h"
 
 #include <displacemodel.h>
+#include "storage/sqliteoutputstorage.h"
 
 #include <qcustomplot.h>
 
@@ -19,12 +20,12 @@ BenthosStatsPlot::BenthosStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
 void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat stat)
 {
     mPlot->clearGraphs();
-    double val;
 
     QList<int>  interBenthosIDsList= model->getInterestingBenthos();
 
     auto benthosTypeGroups = model->getFunctionalGroupsList();
     QList<int> interBenthosTypesList = benthosTypeGroups->list();
+    auto btype = interBenthosTypesList.toVector().toStdVector();
 
     QList<int> graphList;
     bool showtotal = benthosTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
@@ -69,8 +70,6 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
-    QList<QVector<double> >keyData;
-    QList<QVector<double> >valueData;
 
     double t = model->getCurrentStep();
     if (mTimeline != nullptr) {
@@ -89,6 +88,8 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         col.setAlpha(128);
         graph->setBrush(QBrush(col));
 
+        AggregationType aggtype = AggregationType::None;
+
         QString group;
         auto grp = graphList[igraph] % 1000;
         if (grp == 999) {
@@ -100,160 +101,25 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
         switch (graphList[igraph] / 1000) {
         case 4:
             graph->setName(QString(QObject::tr("benthos id %1 Max")).arg(group));
+            aggtype = AggregationType::Max;
             break;
         case 3:
             graph->setName(QString(QObject::tr("benthos id %1 Min")).arg(group));
+            aggtype = AggregationType::Min;
             break;
         case 2:
             graph->setName(QString(QObject::tr("benthos id %1 Avg")).arg(group));
+            aggtype = AggregationType::Avg;
             break;
         case 1:
             graph->setName(QString(QObject::tr("benthos id %1 Total")).arg(group));
+            aggtype = AggregationType::Sum;
             break;
         }
 
+        auto v = getData(model, stat, aggtype, grp, btype);
+        graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
-        keyData.push_back(QVector<double>());
-        valueData.push_back(QVector<double>());
-    }
-
-    int nsteps = model->getBenthosStatistics().getUniqueValuesCount();
-
-    //qDebug() << "**** Plotting " << nsteps << interFishfarmsTypesList.size();
-    auto it = model->getBenthosStatistics().getFirst();
-    for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterBenthosIDs = interBenthosIDsList.size();
-
-        //qDebug() << "Step: " <<istep << it.key();
-        for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-            //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
-            int gidx = iGraph;
-
-            auto group = graphList[iGraph] % 1000;
-
-            //qDebug() << "Graph:" << iGraph << group;
-             // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-            for (int iInterBenthosTypes = 0; iInterBenthosTypes < interBenthosTypesList.size(); ++iInterBenthosTypes) {
-                for (int iInterBenthosIDs = 0; iInterBenthosIDs < nInterBenthosIDs; ++iInterBenthosIDs) {
-
-                    /* TODO: filter on functional groups
-                    auto fmtype = model->getBenthosList()[iInterBenthosIDs];
-                    if (group != 999 && group != fmtype)
-                        continue;
-                        */
-
-                    val = getStatValue(model, it.key(), interBenthosIDsList[iInterBenthosIDs], interBenthosTypesList[iInterBenthosTypes], stat);
-
-                    //qDebug() << iInterFishfarmsIDs << iInterFishfarmTypes << val;
-
-                    if (nsam == 0) {
-                        mMin = val;
-                        mMax = val;
-                        mAvg = val;
-                        mTot = val;
-                    } else {
-                        mMin = std::min (mMin, val);
-                        mMax = std::max (mMax, val);
-                        mAvg += val;
-                        mTot += val;
-                    }
-                    ++nsam;
-                }
-            }
-            if (nsam > 0)
-                mAvg /= nsam;
-
-            //qDebug() << "Res: " << mMin << mMax << mAvg << mTot;
-
-            keyData[gidx] << it.key();
-            switch (graphList[iGraph] / 1000) {
-            case 4:
-                val = mMax;
-                break;
-            case 3:
-                val = mMin;
-                break;
-            case 2:
-                val = mAvg;
-                break;
-            case 1:
-                val = mTot;
-                break;
-            }
-
-            valueData[gidx] << val;
-        }
-        ++it;
-    }
-
-//#if 0
-    if (!mSaveFilename.isEmpty()) {
-        QFile f(mSaveFilename);
-        if (f.open(QIODevice::WriteOnly)) {
-            QTextStream strm(&f);
-
-
-            strm << "interBenthosIDsList: ";
-            for (auto x : interBenthosIDsList)
-                strm << x << " ";
-            strm << "\n\n";
-
-            for (int i = 0; i < graphs.size(); ++i) {
-                strm << "Dt " << i << " (" <<graphs.at(i)->name() << ") ";
-
-                auto const& k = keyData.at(i);
-                auto const& v = valueData.at(i);
-                for (int j = 0; j < k.size(); ++j) {
-                    strm << "," << k.at(j) << "," << v.at(j);
-                }
-                strm << "\n";
-            }
-
-            strm << "\n------\n\n";
-
-            it = model->getBenthosStatistics().getFirst();
-            for (int istep = 0; istep <nsteps; ++istep) {
-                int nInterBenthosIDs = interBenthosIDsList.size();
-
-                //qDebug() << "Step: " <<istep << it.key();
-                for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-                    //int gidx = iInterFishfarmsIDs * graphNum + iGraph;
-                    int gidx = iGraph;
-
-                    auto group = graphList[iGraph] % 1000;
-
-                    //qDebug() << "Graph:" << iGraph << group;
-                     // calculate transversal values...
-                    double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-                    for (int iInterBenthosTypes = 0; iInterBenthosTypes < interBenthosTypesList.size(); ++iInterBenthosTypes) {
-                        for (int iInterBenthosIDs = 0; iInterBenthosIDs < nInterBenthosIDs; ++iInterBenthosIDs) {
-
-                            // TODO Filter out.. as in main code.
-                            /*
-                            auto fmtype = model->getFishfarmList()[iInterBenthosIDs]->mFishfarm->get_farmtype();
-                            if (group != 999 && iInterBenthosTypes != fmtype)
-                                continue;
-                                */
-
-                            val = getStatValue(model, it.key(), interBenthosIDsList[iInterBenthosIDs], interBenthosTypesList[iInterBenthosTypes], stat);
-
-                            strm << it.key() << ", " << iInterBenthosIDs << ", " << iInterBenthosTypes << ", " << group
-                                 << ", " << static_cast<int>(stat) << " ==> " << val << "\n";
-                        }
-                    }
-                }
-                ++it;
-            }
-            f.close();
-        }
-
-        mSaveFilename.clear();
-    }
-//#endif
-
-    for (int i = 0; i < graphs.size(); ++i) {
-        graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
 
     switch (stat) { // stat is the index in the selecting combo box
@@ -286,32 +152,19 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 void BenthosStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
 {
     if (location == GraphInteractionController::PopupMenuLocation::Plot) {
-        menu->addAction(QObject::tr("Save Data"), std::bind(&BenthosStatsPlot::saveTo, this));
+        // TODO add a menu action
+        //menu->addAction(QObject::tr("Save Data"), std::bind(&BenthosStatsPlot::saveTo, this));
     }
 }
 
-void BenthosStatsPlot::saveTo()
+std::tuple<QVector<double>, QVector<double> > BenthosStatsPlot::getData(DisplaceModel *model, BenthosStat stattype, AggregationType aggtype, int grpid, const std::vector<int> &btype)
 {
-    mSaveFilename = "benthos.txt";
-}
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return std::tuple<QVector<double>, QVector<double>>();
 
-double BenthosStatsPlot::getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::BenthosStat stattype)
-{
-    switch (stattype) {
-    case BenthosStat::B_TotBiomass:
-        return model->getBenthosStatistics().getValue(tstep).biomassForBenthosAndFuncGroup(funcgroup, benthos);
-    case BenthosStat::B_Number:
-        return model->getBenthosStatistics().getValue(tstep).numberForBenthosAndFuncGroup(funcgroup, benthos);
-    case BenthosStat::B_MeanWeight:
-        return model->getBenthosStatistics().getValue(tstep).meanweightForBenthosAndFuncGroup(funcgroup, benthos);
-    case BenthosStat::B_TotBiomassOverK:
-        return model->getBenthosStatistics().getValue(tstep).biomassOverKForBenthosAndFuncGroup(funcgroup, benthos);
-    case BenthosStat::B_NumberOverK:
-        return model->getBenthosStatistics().getValue(tstep).numberOverKForBenthosAndFuncGroup(funcgroup, benthos);
+    auto dt = db->getBenthosStatData(stattype, aggtype, grpid, btype);
 
-
-
-    }
-
-    return 0;
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    return std::make_tuple(kd, vd);
 }

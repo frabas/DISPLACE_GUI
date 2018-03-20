@@ -26,7 +26,7 @@ private:
     const FieldDef<FieldType::Text> fldNodeName = makeFieldDef("NodeName",FieldType::Text());
     const FieldDef<FieldType::Real> fldLong = makeFieldDef("Long",FieldType::Real()).notNull();
     const FieldDef<FieldType::Real> fldLat = makeFieldDef("Lat",FieldType::Real()).notNull();
-
+    const FieldDef<FieldType::Integer> marineLandscape = makeFieldDef("marineLandscape",FieldType::Integer()).notNull();
 public:
     NodesDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~NodesDefTable() noexcept;

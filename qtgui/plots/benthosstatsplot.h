@@ -36,9 +36,7 @@ public:
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 
 private:
-    double getStatValue(DisplaceModel *model, int tstep, int benthos, int funcgroup, displace::plot::BenthosStat stattype);
-    void saveTo();
-
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::BenthosStat stattype, displace::plot::AggregationType aggtype, int grpid, const std::vector<int> &btype);
 };
 
 #endif // BENTHOSSTATSPLOT_H

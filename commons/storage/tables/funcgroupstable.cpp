@@ -11,11 +11,10 @@ struct FuncGroupsTable::Impl
     std::mutex mutex;
 
     sqlite::InsertStatement<
-        FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
+        FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>,
+        FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,
         FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
-        FieldDef<FieldType::Real> > insertStatement;
+        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> insertStatement;
 };
 
 
@@ -25,18 +24,14 @@ FuncGroupsTable::FuncGroupsTable(std::shared_ptr<sqlite::SQLiteStorage> db, std:
     if (!db->tableExists(name))
         create();
     p->insertStatement = sqlite::makeInsertStatement(fldTStep,
-                                                      fldFGroup ,
-                                                      fldNodeId ,
-                                                      benthosNum ,
-                                                      benthosBioTot ,
-                                                      benthosMeanWTot ,
-                                                      benthosBioK ,
-                                                      benthosNumK,
-                                                      benthosBioTotK ,
-                                                      benthosNumTot ,
-                                                      benthosBio ,
-                                                      benthosBioMean ,
-                                                      benthosNumTotK);
+                                                     fldFGroup ,
+                                                     fldNodeId,
+                                                     fldBType,
+                                                     benthosNumTot ,
+                                                     benthosBio ,
+                                                     benthosBioMean,
+                                                     benthosBioK ,
+                                                     benthosNumK);
 
     p->insertStatement.attach(db, name);
 }
@@ -53,18 +48,14 @@ void FuncGroupsTable::dropAndCreate()
 void FuncGroupsTable::create()
 {
     SQLiteTable::create(std::make_tuple(fldTStep,
-                           fldFGroup ,
-                           fldNodeId ,
-                           benthosNum ,
-                           benthosBioTot ,
-                           benthosMeanWTot ,
-                           benthosBioK ,
-                           benthosNumK,
-                           benthosBioTotK ,
-                           benthosNumTot ,
-                           benthosBio ,
-                           benthosBioMean ,
-                           benthosNumTotK
+                                        fldFGroup,
+                                        fldNodeId,
+                                        fldBType,
+                                        benthosNumTot,
+                                        benthosBio ,
+                                        benthosBioMean ,
+                                        benthosBioK ,
+                                        benthosNumK
                            ));
 }
 
@@ -90,34 +81,14 @@ void FuncGroupsTable::insert (int tstep, Node *node, int funcgr)
 
     double benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr); // #2
 
-    //double benthosnumberoverK=0;
     if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)
         benthosnumberoverK = benthos_tot_number.at(funcgr)/benthos_tot_number_K.at(funcgr); // #4
 
-    //double benthosbiomassoverK=0;
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)
         benthosbiomassoverK = benthosbiomass/benthos_tot_biomass_K.at(funcgr); // #5
 
-   //p->insertStatement.insert(tstep, funcgr, node->get_idx_node().toIndex(),
-   //                           benthosnumber, benthos_tot_biomass.at(funcgr),benthos_tot_meanweight.at(funcgr),
-   //                           benthosbiomassoverK, benthosnumberoverK, benthos_tot_biomass_K.at(funcgr),
-   //                           benthos_tot_number.at(funcgr), benthosbiomass, benthos_tot_meanweight.at(funcgr),
-   //                           benthos_tot_number_K.at(funcgr)
-                              );
     p->insertStatement.insert(tstep, funcgr, node->get_idx_node().toIndex(),  node->get_marine_landscape(),
                               benthosnumber, benthosbiomass, benthos_tot_meanweight.at(funcgr),
                               benthosbiomassoverK, benthosnumberoverK
                               );
-
-#if 0
-
-    // pop/ tstep / node / long / lat / number func group id /biomass func group id/ mean weight func group id / benthosbiomassoverK / benthosnumberoverK /benthos_tot_biomass_K.at(funcgr)
-    if(benthos_tot_biomass.at(funcgr)>1e-6)
-        benthosbiomassnodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " << benthosnumber << " " << benthos_tot_biomass.at(funcgr) << " "  <<
-                           benthos_tot_meanweight.at(funcgr) << " " << benthosbiomassoverK  << " " << benthosnumberoverK <<  " " <<  benthos_tot_biomass_K.at(funcgr) << endl;
-    if(benthos_tot_number.at(funcgr)>1e-6) benthosnumbernodes << funcgr << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
-        " " << this->get_x() << " " << this->get_y() << " " << benthos_tot_number.at(funcgr) << " " << benthosbiomass << " "  <<
-                       benthos_tot_meanweight.at(funcgr) <<  " " << benthosbiomassoverK  << " " << benthosnumberoverK << " " << benthos_tot_number_K.at(funcgr) << endl;
-#endif
 }

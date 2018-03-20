@@ -23,18 +23,13 @@ public:
     const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldFGroup = makeFieldDef("FuncGroup",FieldType::Integer()).notNull();
     const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
-
-    const FieldDef<FieldType::Real> benthosNum = makeFieldDef("bN",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosBioTot = makeFieldDef("bBTot",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosMeanWTot = makeFieldDef("bMWTot",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosBioK = makeFieldDef("bBK",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosNumK= makeFieldDef("bNK",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosBioTotK = makeFieldDef("bBTotK",FieldType::Real());
+    const FieldDef<FieldType::Integer> fldBType = makeFieldDef("BenthosType",FieldType::Integer()).notNull();
 
     const FieldDef<FieldType::Real> benthosNumTot = makeFieldDef("bNTot",FieldType::Real());
     const FieldDef<FieldType::Real> benthosBio = makeFieldDef("bB",FieldType::Real());
     const FieldDef<FieldType::Real> benthosBioMean = makeFieldDef("bBMean",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosNumTotK = makeFieldDef("bNTotK",FieldType::Real());
+    const FieldDef<FieldType::Real> benthosBioK = makeFieldDef("bBK",FieldType::Real());
+    const FieldDef<FieldType::Real> benthosNumK= makeFieldDef("bNK",FieldType::Real());
 
     FuncGroupsTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~FuncGroupsTable() noexcept;

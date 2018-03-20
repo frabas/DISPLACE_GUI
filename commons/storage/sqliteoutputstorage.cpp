@@ -580,16 +580,16 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
         fld = p->mFuncGroupsTable->benthosBioMean;
         break;
     case displace::plot::BenthosStat::B_Number:
-        fld = p->mFuncGroupsTable->benthosNum;
+        fld = p->mFuncGroupsTable->benthosNumTot;
         break;
     case displace::plot::BenthosStat::B_NumberOverK:
         fld = p->mFuncGroupsTable->benthosNumK;
         break;
     case displace::plot::BenthosStat::B_TotBiomass:
-        fld = p->mFuncGroupsTable->benthosBioTot;
+        fld = p->mFuncGroupsTable->benthosBio;
         break;
     case displace::plot::BenthosStat::B_TotBiomassOverK:
-        fld = p->mFuncGroupsTable->benthosBioTotK;
+        fld = p->mFuncGroupsTable->benthosBioK;
         break;
     }
 
@@ -614,8 +614,8 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
 
     if (btype.size() > 0) {
         std::ostringstream ss;
-        ss << p->mFuncGroupsTable->fldFGroup.name() << " == ? AND " << p->mFuncGroupsTable->fldNodeId.name() << " IN (?";
-        for (int i = 1; i < btype.size() ; ++i)
+        ss << p->mFuncGroupsTable->fldFGroup.name() << " == ? AND " << p->mFuncGroupsTable->fldBType.name() << " IN (?";
+        for (size_t i = 1; i < btype.size() ; ++i)
             ss << ",?";
         ss << ")";
         select.where(ss.str());
@@ -630,8 +630,8 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
     TimelineData data;
 
     stmt.bind(1, grpid);
-    for (int i = 0; i < btype.size(); ++i)
-        stmt.bind(1+i, btype[i]);
+    for (size_t i = 0; i < btype.size(); ++i)
+        stmt.bind(2+i, btype[i]);
 
     stmt.execute([&stmt, &data](){
         data.t.push_back(stmt.getIntValue(0));
@@ -639,7 +639,7 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
         return true;
     });
 
-    qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << ")";
+    qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
 
     return data;
 }

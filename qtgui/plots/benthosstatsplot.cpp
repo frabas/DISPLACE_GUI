@@ -25,7 +25,11 @@ void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat 
 
     auto benthosTypeGroups = model->getFunctionalGroupsList();
     QList<int> interBenthosTypesList = benthosTypeGroups->list();
-    auto btype = interBenthosTypesList.toVector().toStdVector();
+
+    std::vector<int> btype;
+    for (auto i : interBenthosIDsList) {
+        btype.push_back(model->getBenthosList()[i]->getId());
+    }
 
     QList<int> graphList;
     bool showtotal = benthosTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);

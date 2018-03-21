@@ -1009,12 +1009,84 @@ void Node::apply_natural_mortality_at_node(int name_pop, const vector<double>& M
 		//this is assuming that the M is uniformly applied to the pop
 		// e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
 		// (the pble with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)
-	}
+    }
 
 	set_Ns_pops_at_szgroup(name_pop, a_Ns_at_szgroup);
 
     //dout(cout  << "END: apply_natural_mortality_at_node()" << endl);
 }
+
+
+void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_pop,
+                                                                      const vector<vector<double> > & Ws_at_szgroup,
+                                                                      const vector<vector<vector<vector<double> > > > & predKernel,
+                                                                      const vector<vector<double> > & searchVolMat)
+{
+    //dout(cout  << "BEGIN: apply_natural_mortality_at_node()" << endl);
+
+    vector<int> spp_on_this_node = this->get_pop_names_on_node();
+
+    vector <double> Np = get_Ns_pops_at_szgroup(name_pop); // the prey
+
+
+    vector<double> M2_on_node(Np.size(), 0.0);
+    vector<double> dwpred(Np.size(), 0.0);
+
+    vector<vector<double> >  predRate(spp_on_this_node.size(), vector<double>(NBSZGROUP));
+
+
+    for (unsigned int j=0; j<spp_on_this_node.size(); j++) // loop over predator
+        {
+            vector <double> Npred = get_Ns_pops_at_szgroup(spp_on_this_node.at(j));
+            vector <double> Wpred = Ws_at_szgroup.at(spp_on_this_node.at(j));
+
+            for (unsigned int kprey=0; kprey<NBSZGROUP; kprey++)  // loop over prey sizes
+            {
+
+                        dwpred.at(0) = (Wpred[0]-0)/2;
+                        for (unsigned int sz=1; sz<Wpred.size(); sz++) dwpred[sz] = (Wpred[sz] + Wpred[sz-1])/2;
+                        for (unsigned int sz=Wpred.size(); sz>1; sz--)  dwpred[sz] = dwpred[sz] - dwpred[sz-1];
+
+
+                        for (unsigned int k=0; k<NBSZGROUP; k++)  // loop over PREDATOR sizes
+                        {
+                           predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
+                                               predKernel.at(j).at(kprey).at(k).at(name_pop)* (1- 0.6)* searchVolMat.at(j).at(k) * 1* Npred.at(k)*dwpred.at(k);
+                           // assuming feeding level at 0.6
+                           // assuming interactionMatrixThetas[prey,j] at 1 because we know the two stocks are overlapping
+                        }
+
+
+            }
+        }
+
+
+        // so...getting the M2 mortality per size group
+        for (unsigned int kprey=0; kprey<NBSZGROUP; kprey++)  // loop over prey sizes
+        {
+           for (unsigned int j=0; j<spp_on_this_node.size(); j++) // loop over predator
+                {
+                     M2_on_node.at(kprey) =  M2_on_node.at(kprey) + predRate.at(j).at(kprey);
+                }
+        }
+
+
+
+        for(unsigned int i=0; i<Np.size(); i++)
+        {
+           // divide according to tstep (month in this case)
+           Np[i] =  Np[i]  *exp(-M2_on_node[i]/12);
+           //this is assuming that the M is uniformly applied to the pop
+           // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
+           // (the pble with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)
+        }
+
+
+     set_Ns_pops_at_szgroup(name_pop, Np);
+
+    //dout(cout  << "END: apply_natural_mortality_at_node()" << endl);
+}
+
 
 
 void Node::apply_oth_land(int name_pop, double &oth_land_this_pop_this_node,

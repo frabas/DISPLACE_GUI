@@ -1447,7 +1447,7 @@ void Node::export_benthos_tot_biomass_per_funcgroup(ofstream& benthosbiomassnode
     if(benthos_tot_meanweight.at(funcgr)!=0)  benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr);
 
     double benthosnumberoverK=0;
-    if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)  benthosnumberoverK = benthosnumber/benthos_tot_meanweight.at(funcgr);
+    if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)  benthosnumberoverK = benthosnumber/benthos_tot_number_K.at(funcgr);
 
     double benthosbiomassoverK=0;
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)  benthosbiomassoverK = benthos_tot_biomass.at(funcgr)/benthos_tot_biomass_K.at(funcgr);

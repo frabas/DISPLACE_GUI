@@ -67,27 +67,31 @@ void FuncGroupsTable::insert (int tstep, Node *node, int funcgr)
     const auto &benthos_tot_meanweight = node->get_benthos_meanweight_per_funcgr(); // #3
     const auto &benthos_tot_biomass_K = node->get_benthos_tot_biomass_K();
 
+
+
+
     double benthosnumber=0;
-    if(benthos_tot_meanweight.at(funcgr)!=0)
+    double benthosbiomass =0;
+    if(benthos_tot_meanweight.at(funcgr)!=0 && benthos_tot_biomass.at(funcgr)!=0){
         benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr); // #1
+        benthosbiomass = benthos_tot_biomass.at(funcgr); // #2
+    }
+
+    if(benthos_tot_meanweight.at(funcgr)!=0 && benthos_tot_number.at(funcgr)!=0){
+        benthosnumber = benthos_tot_number.at(funcgr); // #1
+        benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr); // #2
+    }
 
     double benthosnumberoverK=0;
     if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)
-        benthosnumberoverK = benthosnumber/benthos_tot_meanweight.at(funcgr);
+        benthosnumberoverK = benthosnumber/benthos_tot_number_K.at(funcgr);
 
     double benthosbiomassoverK=0;
     if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)
-        benthosbiomassoverK = benthos_tot_biomass.at(funcgr)/benthos_tot_biomass_K.at(funcgr);
+        benthosbiomassoverK = benthosbiomass/benthos_tot_biomass_K.at(funcgr);
 
-    double benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr); // #2
 
-    if(!benthos_tot_number_K.empty() && benthos_tot_number_K.at(funcgr)!=0)
-        benthosnumberoverK = benthos_tot_number.at(funcgr)/benthos_tot_number_K.at(funcgr); // #4
-
-    if(!benthos_tot_biomass_K.empty() && benthos_tot_biomass_K.at(funcgr)!=0)
-        benthosbiomassoverK = benthosbiomass/benthos_tot_biomass_K.at(funcgr); // #5
-
-    p->insertStatement.insert(tstep, funcgr, node->get_idx_node().toIndex(),  node->get_marine_landscape(),
+     if(benthosbiomass>1e-6) p->insertStatement.insert(tstep, funcgr, node->get_idx_node().toIndex(),  node->get_marine_landscape(),
                               benthosnumber, benthosbiomass, benthos_tot_meanweight.at(funcgr),
                               benthosbiomassoverK, benthosnumberoverK
                               );

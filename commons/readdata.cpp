@@ -3287,10 +3287,18 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
 
 
 
-bool read_sizespectra_params(istream &stream, const std::string &separator, vector < tuple<int, double, double> > & sizespectra_params)
+bool read_biological_traits_params(istream &stream, const std::string &separator, vector <std::tuple< string, double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double> > & biological_traits_params)
 {
     // Format:
-    // PopId Winf k
+    // Stock Winf k  Linf K t0 a b L50 alpha beta r_age tac_tons fbar_age_min fbar_age_max F_target F_percent TAC_percent B_trigger FMSY"
+    // fbar_assessment ssb_assessment mls_cat mls
+
+    // TODO: FOR NOW, ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
 
     int linenum = 0;
     try {
@@ -3305,17 +3313,24 @@ bool read_sizespectra_params(istream &stream, const std::string &separator, vect
             std::vector<std::string> sr;
             boost::split(sr, line, boost::is_any_of(separator));
 
-            tuple<int, double, double> a_tuple;
+            std::tuple< string, double, double, double, double,
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, double, double, double,
+                                               double, double, double > a_tuple;
+
             std::get<0>(a_tuple)=boost::lexical_cast<double>(sr[0]);
             std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
             std::get<2>(a_tuple)=boost::lexical_cast<double>(sr[2]);
-            sizespectra_params.push_back(a_tuple);
+            // TO DO: other params...
+            biological_traits_params.push_back(a_tuple);
 
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
 #ifdef VERBOSE_ERRORS
-        cerr << "Bad Conversion on read_sizespectra_params file line " << linenum <<
+        cerr << "Bad Conversion on biological_traits_params file line " << linenum <<
                 " : " << ex.what() << "\n";
 #endif
         return false;

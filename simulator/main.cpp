@@ -2454,9 +2454,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
   double lambda= 2+q-n;
 
-  const string separator=" ";
+  const string separator=",";
 
-  string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/sizespectra_params.dat";
+  string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/Stock_biological_traits.csv"; // file location is an issue....
 
   ifstream is;
   is.open(filename.c_str());
@@ -2466,8 +2466,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
       return false;
   }
 
-  std::vector <std::tuple<int, double, double> > sizespectra_params;
-  bool r = read_sizespectra_params (is, separator, sizespectra_params);
+  std::vector <std::tuple< string, double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double, double,
+                                   double, double, double> > biological_traits_params;
+  bool r = read_biological_traits_params (is, separator, biological_traits_params);
 
   for (unsigned int prey=0; prey<nbpops; ++prey)
   {  // loop over prey
@@ -2478,8 +2483,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
      {  // loop over predators
          for (unsigned int k=0; k<NBSZGROUP; ++k)
          {  // loop over predator sizes
-            double Wk = get<2>(sizespectra_params.at(j));
-            double Winf = get<1>(sizespectra_params.at(j));
+            double Wk = get<2>(biological_traits_params.at(j));
+            double Winf = get<1>(biological_traits_params.at(j));
             double h               = 3*Wk/(0.6*   pow(Winf,(-1/3))   ); // Calculate h from K
             double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
             searchVolMat.at(j).at(k)       = gamma *  pow(searchVolMat.at(j).at(k), q);  // V_i(w) = gamma_i*w^q

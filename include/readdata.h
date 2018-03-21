@@ -313,6 +313,9 @@ bool COMMONSSHARED_EXPORT read_vsize_monthly_closures (vector <Node*> &nodes, st
 bool COMMONSSHARED_EXPORT read_metier_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes, double& nbOfDaysClosedPerMonth);
 bool COMMONSSHARED_EXPORT read_vsize_closures (std::istream &stream, const string &separator, vector <NodeBanningInfo> &nodes, double& nbOfDaysClosedPerMonth);
 
+bool COMMONSSHARED_EXPORT read_sizespectra_params(istream &stream, const std::string &separator, vector < tuple<int, double, double> > & sizespectra_params);
+
+
 // SMS
 void COMMONSSHARED_EXPORT write_SMS_OP_N_in_file(ofstream& SMS_N_in, vector<Population* >& populations, vector<int> stock_numbers, vector<int> a_unit, vector<int> a_number_of_ages);
 void COMMONSSHARED_EXPORT write_SMS_OP_F_in_file(ofstream& SMS_F_in, vector<Population* >& populations, vector<int> stock_numbers);

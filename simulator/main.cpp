@@ -2373,6 +2373,124 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << " SIZE-SPECTRA STUFFS       " << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+
+    vector<vector<double> > Ws_at_szgroup(nbpops, vector<double> (NBSZGROUP));
+    vector<vector<vector<vector<double> > > > predKernel (nbpops,
+                                                                vector<vector<vector<double>>>(NBSZGROUP,
+                                                                               vector<vector<double> >(NBSZGROUP,
+                                                                                              vector<double> (nbpops, 0.0)
+                                                                                              )
+                                                                               )
+                                                                );
+    vector<vector<double> > searchVolMat(nbpops, vector<double> (NBSZGROUP));
+
+
+    if(dyn_pop_sce.option(Options::sizeSpectra))
+    {
+
+     // compute a predKernel and a searchVol
+        // predKernel.at(j).at(kprey).at(k).at(name_pop)
+
+
+        for (unsigned int j=0; j<nbpops; ++j)
+        {  // loop over predators
+            vector <double> W_this_pop=populations.at(j)->get_weight_at_szgroup();
+            for (unsigned int k=0; j<NBSZGROUP; ++j)
+            {  // loop over predator sizes
+              Ws_at_szgroup.at(j).at(k)= W_this_pop.at(k);
+            }
+        }
+
+        for (unsigned int prey=0; prey<nbpops; ++prey)
+        {  // loop over prey
+           for (unsigned int j=0; j<nbpops; ++j)
+           {  // loop over predators
+               for (unsigned int k=0; k<NBSZGROUP; ++k)
+               {  // loop over predator sizes
+                  for (unsigned int kprey=0; kprey<NBSZGROUP; ++kprey)
+                  {  // loop over prey sizes
+                     predKernel.at(j).at(kprey).at(k).at(prey)= Ws_at_szgroup.at(j).at(k); // init
+                  }
+               }
+           }
+        }
+
+        vector<double> sigma (nbpops, 1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
+        vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
+        for (unsigned int prey=0; prey<nbpops; ++prey)
+        {  // loop over prey
+           for (unsigned int j=0; j<nbpops; ++j)
+           {  // loop over predators
+               for (unsigned int k=0; k<NBSZGROUP; ++k)
+               {  // loop over predator sizes
+                  for (unsigned int kprey=0; kprey<NBSZGROUP; ++kprey)
+                  {  // loop over prey sizes
+                     if(Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey))
+                     {
+                         predKernel.at(j).at(kprey).at(k).at(prey)=
+                                 exp(-log((beta.at(prey)*Ws_at_szgroup.at(prey).at(kprey))/ pow(Ws_at_szgroup.at(j).at(kprey),2)) / (pow(2*sigma.at(prey),2)));                                        ;
+                     }
+                     else
+                     {
+                         predKernel.at(j).at(kprey).at(k).at(prey)= 0.0;
+                     }
+                  }
+               }
+           }
+        }
+
+
+
+  // parameters to compute the search volume (volumetric search rate)
+  auto param = std::make_tuple (2e8, 0.8, 3/4,  0.6);
+  double kappa  = std::get<0>(param);
+  double q      = std::get<1>(param);     // Scaling of search volume
+  double n      = std::get<2>(param);
+  double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
+  double lambda= 2+q-n;
+
+  const string separator=" ";
+
+  string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/sizespectra_params.dat";
+
+  ifstream is;
+  is.open(filename.c_str());
+  if(is.fail())
+  {
+      open_file_error(filename);
+      return false;
+  }
+
+  std::vector <std::tuple<int, double, double> > sizespectra_params;
+  bool r = read_sizespectra_params (is, separator, sizespectra_params);
+
+  for (unsigned int prey=0; prey<nbpops; ++prey)
+  {  // loop over prey
+     double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
+
+
+     for (unsigned int j=0; j<nbpops; ++j)
+     {  // loop over predators
+         for (unsigned int k=0; k<NBSZGROUP; ++k)
+         {  // loop over predator sizes
+            double Wk = get<2>(sizespectra_params.at(j));
+            double Winf = get<1>(sizespectra_params.at(j));
+            double h               = 3*Wk/(0.6*   pow(Winf,(-1/3))   ); // Calculate h from K
+            double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            searchVolMat.at(j).at(k)       = gamma *  pow(searchVolMat.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
+         }
+     }
+   }
+
+
+
+
+    }
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);

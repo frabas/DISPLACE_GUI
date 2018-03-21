@@ -3286,6 +3286,46 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
 }
 
 
+
+bool read_sizespectra_params(istream &stream, const std::string &separator, vector < tuple<int, double, double> > & sizespectra_params)
+{
+    // Format:
+    // PopId Winf k
+
+    int linenum = 0;
+    try {
+        while (stream) {
+            std::string line;
+            std::getline(stream, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            std::vector<std::string> sr;
+            boost::split(sr, line, boost::is_any_of(separator));
+
+            tuple<int, double, double> a_tuple;
+            std::get<0>(a_tuple)=boost::lexical_cast<double>(sr[0]);
+            std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
+            std::get<2>(a_tuple)=boost::lexical_cast<double>(sr[2]);
+            sizespectra_params.push_back(a_tuple);
+
+            ++linenum;
+        }
+    } catch (boost::bad_lexical_cast &ex) {
+#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on read_sizespectra_params file line " << linenum <<
+                " : " << ex.what() << "\n";
+#endif
+        return false;
+    }
+
+    return true;
+}
+
+
+
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
                             vector<Population* >& populations,
                             vector<int> stock_numbers,

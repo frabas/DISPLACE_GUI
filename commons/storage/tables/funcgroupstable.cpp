@@ -59,7 +59,7 @@ void FuncGroupsTable::create()
                            ));
 }
 
-void FuncGroupsTable::insert (int tstep, Node *node, int funcgr)
+void FuncGroupsTable::insert (int tstep, Node *node, int funcgr, int isN)
 {
     const auto &benthos_tot_number_K = node->get_benthos_tot_number_K();
     const auto &benthos_tot_number = node->get_benthos_tot_number();
@@ -72,12 +72,12 @@ void FuncGroupsTable::insert (int tstep, Node *node, int funcgr)
 
     double benthosnumber=0;
     double benthosbiomass =0;
-    if(benthos_tot_meanweight.at(funcgr)!=0 && benthos_tot_biomass.at(funcgr)!=0){
+    if(!isN && benthos_tot_meanweight.at(funcgr)!=0 ){
         benthosnumber = benthos_tot_biomass.at(funcgr)/benthos_tot_meanweight.at(funcgr); // #1
         benthosbiomass = benthos_tot_biomass.at(funcgr); // #2
     }
 
-    if(benthos_tot_meanweight.at(funcgr)!=0 && benthos_tot_number.at(funcgr)!=0){
+    if(isN && benthos_tot_meanweight.at(funcgr)!=0){
         benthosnumber = benthos_tot_number.at(funcgr); // #1
         benthosbiomass = benthos_tot_number.at(funcgr)*benthos_tot_meanweight.at(funcgr); // #2
     }

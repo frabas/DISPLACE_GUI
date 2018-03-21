@@ -36,7 +36,7 @@ public:
 
     void create();
     void dropAndCreate();
-    void insert (int tstep, Node *node, int funcgr);
+    void insert (int tstep, Node *node, int funcgr, int isN);
 };
 
 #endif // FUNCGROUPSTABLE_H

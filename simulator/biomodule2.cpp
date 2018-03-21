@@ -855,7 +855,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
              {
                    nodes.at(n)->export_benthos_tot_number_per_funcgroup(benthosnumbernodes, tstep, funcgroup);
                    if (outSqlite)
-                       outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup);
+                       outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup, 1);
              }
           }
 
@@ -874,7 +874,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                        nodes.at(n)->export_benthos_tot_biomass_per_funcgroup(benthosbiomassnodes, tstep, funcgroup);
                        if (outSqlite)
-                           outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup);
+                           outSqlite->getFuncGroupsTable()->insert(tstep, nodes.at(n), funcgroup, 0);
             }
         }
 

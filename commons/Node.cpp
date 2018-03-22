@@ -1072,10 +1072,11 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
 
 
-        for(unsigned int i=0; i<Np.size(); i++)
+        for(unsigned int sz=0; sz<Np.size(); sz++)
         {
            // divide according to tstep (month in this case)
-           Np[i] =  Np[i]  *exp(-M2_on_node[i]/12);
+           cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
+           Np.at(sz) =  Np.at(sz)  *exp(-M2_on_node.at(sz)/12);
            //this is assuming that the M is uniformly applied to the pop
            // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)
            // (the pble with spatial scale is that we cannot do e.g. 225*exp(-0.1)+ 775*exp(-0.3) because = 1000*exp(-x) and need to solve for x)

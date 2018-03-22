@@ -2130,9 +2130,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         double hyperstability_param_this_pop= hyperstability_param.at(sp);
 
         // input data, read migration fluxes in proportion per size group (if any)
-        cout << "read overall migration..." << endl;
+        dout(cout << "read overall migration..." << endl);
         multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
-        cout << "overall migration has been read correctly" << endl;
+        dout(cout << "overall migration has been read correctly" << endl);
 
         double landings_so_far=0;
 
@@ -2406,9 +2406,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         for (unsigned int j=0; j<nbpops; ++j)
         {  // loop over predators
             vector <double> W_this_pop=populations.at(j)->get_weight_at_szgroup();
-            for (unsigned int k=0; j<NBSZGROUP; ++j)
+            for (unsigned int k=0; k<NBSZGROUP; ++k)
             {  // loop over predator sizes
               Ws_at_szgroup.at(j).at(k)= W_this_pop.at(k);
+              cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
             }
         }
 
@@ -2439,7 +2440,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         {
             int a;
             cout << "1: nan detected" << endl;
-            cout << "1: nan detected in predKernel...Pause: type a number to continue";
+            cout << "1: nan detected in initial predKernel...Pause: type a number to continue";
             cin >> a;
         }
 
@@ -2475,6 +2476,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
         cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
 
+        if(predKernel.at(0).at(1).at(0).at(0)!=predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
+        {
+            int a;
+            cout << "1: nan detected" << endl;
+            cout << "1: nan detected in predKernel...Pause: type a number to continue";
+            cin >> a;
+        }
 
   // parameters to compute the search volume (volumetric search rate)
   cout << "read few parameters ..." << endl;

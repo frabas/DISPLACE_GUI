@@ -1985,7 +1985,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     }
     cout << "nb pops: " << name_pops.size() << endl;
-    outc(cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl);
+    cout << "if you have a problem of overflow here then check if you forgot a blank at the end of N_at_szgroup.dat! "  << endl;
 
     // FOR-LOOP OVER POP
     for (unsigned int sp=0; sp<populations.size(); sp++)
@@ -2125,11 +2125,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         // input data, initial tac
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
-        double tac_percent_simulated_this_pop= tac_percent_simulated[sp];
-        double hyperstability_param_this_pop= hyperstability_param[sp];
+        cout << "initial tac has been read correctly" << endl;
+        double tac_percent_simulated_this_pop= tac_percent_simulated.at(sp);
+        double hyperstability_param_this_pop= hyperstability_param.at(sp);
 
         // input data, read migration fluxes in proportion per size group (if any)
+        cout << "read overall migration..." << endl;
         multimap<int, double> overall_migration_fluxes= read_overall_migration_fluxes(a_semester, sp, folder_name_parameterization, inputfolder, biolsce);
+        cout << "overall migration has been read correctly" << endl;
 
         double landings_so_far=0;
 
@@ -2138,10 +2141,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         vector< vector<double> > preferences_for_species_matrix;
-        if (dyn_pop_sce.option(Options::sizeSpectra))
-        {
-            preferences_for_species_matrix= read_preferences_for_species_matrix(sp, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
-        }
+        //if (dyn_pop_sce.option(Options::sizeSpectra))
+        //{
+        //    preferences_for_species_matrix= read_preferences_for_species_matrix(sp, nbpops, NBSZGROUP, folder_name_parameterization, inputfolder, biolsce);
+        //}
 
         cout << " create pop... "  << endl;
         populations[sp] =   ( new Population(sp,
@@ -2379,6 +2382,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
 
+    cout << "initiate size-spectra-related objects..." << endl;
     vector<vector<double> > Ws_at_szgroup(nbpops, vector<double> (NBSZGROUP));
     vector<vector<vector<vector<double> > > > predKernel (nbpops,
                                                                 vector<vector<vector<double>>>(NBSZGROUP,
@@ -2392,11 +2396,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     if(dyn_pop_sce.option(Options::sizeSpectra))
     {
+       cout << "sizeSpectra option is on..." << endl;
 
-     // compute a predKernel and a searchVol
+        // compute a predKernel and a searchVol
         // predKernel.at(j).at(kprey).at(k).at(name_pop)
 
 
+       cout << "compute Ws_at_szgroup..." << endl;
         for (unsigned int j=0; j<nbpops; ++j)
         {  // loop over predators
             vector <double> W_this_pop=populations.at(j)->get_weight_at_szgroup();
@@ -2406,6 +2412,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             }
         }
 
+        cout << "initialize PredKernel..." << endl;
         for (unsigned int prey=0; prey<nbpops; ++prey)
         {  // loop over prey
            for (unsigned int j=0; j<nbpops; ++j)
@@ -2415,11 +2422,28 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   for (unsigned int kprey=0; kprey<NBSZGROUP; ++kprey)
                   {  // loop over prey sizes
                      predKernel.at(j).at(kprey).at(k).at(prey)= Ws_at_szgroup.at(j).at(k); // init
+                     cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                   }
                }
            }
         }
 
+        // check:
+              cout << "check some initial values of PredKernel..." << endl;
+              cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
+              cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
+              cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
+              cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
+
+        if(predKernel.at(0).at(1).at(0).at(0)!=predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
+        {
+            int a;
+            cout << "1: nan detected" << endl;
+            cout << "1: nan detected in predKernel...Pause: type a number to continue";
+            cin >> a;
+        }
+
+        cout << "compute PredKernel..." << endl;
         vector<double> sigma (nbpops, 1.3); // prey size selection parameter # see Mizer params@species_params // Width of size preference
         vector<double> beta (nbpops, 100);   // prey size selection parameter # see Mizer params@species_params  // Predation/prey mass ratio
         for (unsigned int prey=0; prey<nbpops; ++prey)
@@ -2444,9 +2468,16 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            }
         }
 
+  // check:
+        cout << "check some values of PredKernel..." << endl;
+        cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
+        cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
+        cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
+        cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
 
 
   // parameters to compute the search volume (volumetric search rate)
+  cout << "read few parameters ..." << endl;
   auto param = std::make_tuple (2e8, 0.8, 3/4,  0.6);
   double kappa  = std::get<0>(param);
   double q      = std::get<1>(param);     // Scaling of search volume
@@ -2462,10 +2493,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   is.open(filename.c_str());
   if(is.fail())
   {
+      cout << "Fail to open the file "<< filename << endl;
       open_file_error(filename);
       return false;
   }
 
+  cout << "import a few parameters ..." << endl;
   std::vector <std::tuple< string, double, double, double, double,
                                    double, double, double, double,
                                    double, double, double, double,
@@ -2474,6 +2507,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                    double, double, double> > biological_traits_params;
   bool r = read_biological_traits_params (is, separator, biological_traits_params);
 
+  cout << "compute the searchVolMat..." << endl;
   for (unsigned int prey=0; prey<nbpops; ++prey)
   {  // loop over prey
      double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
@@ -2487,13 +2521,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             double Winf = get<1>(biological_traits_params.at(j));
             double h               = 3*Wk/(0.6*   pow(Winf,(-1/3))   ); // Calculate h from K
             double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
+            //cout << "j: " << j << " k: " << k << endl;
+            //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
+            //cout << "h: " << h << " gamma: " << gamma << endl;
             searchVolMat.at(j).at(k)       = gamma *  pow(searchVolMat.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
+            //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << endl;
          }
      }
-   }
+
+
+  // because it is a simplified version we do not compute phiprey, encounteredfood and feedinglevel
+  // we will instead assume feeding level at 0.6
+  // this is why this loop over prey seems useless for now
+
+  }
 
 
 
+    cout << "Initial objects for sizeSpectra option...ok" << endl;
 
     }
 
@@ -3951,7 +3996,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              vessels,
                                              benthoss,
                                              dyn_pop_sce,
-                                             dyn_alloc_sce);
+                                             dyn_alloc_sce,
+                                             Ws_at_szgroup,
+                                             predKernel,
+                                             searchVolMat);
 
 */
         int biocheck = applyBiologicalModule2(tstep,
@@ -4011,7 +4059,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              vessels,
                                              benthoss,
                                              dyn_pop_sce,
-                                             dyn_alloc_sce);
+                                             dyn_alloc_sce,
+                                             Ws_at_szgroup,
+                                             predKernel,
+                                             searchVolMat
+                                           );
 
 
 

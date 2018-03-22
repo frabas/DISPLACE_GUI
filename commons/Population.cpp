@@ -868,13 +868,15 @@ void Population::distribute_N()
         for(unsigned int i=0; i<tot_N_at_szgroup.size(); i++)
 			N_at_szgroup.push_back( tot_N_at_szgroup.at(i)*avai_this_node.at(i) );
 
-        dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl);
-		//for(int i=0; i<N_at_szgroup.size(); i++)
-		//   dout << N_at_szgroup[i] << " ";
-        dout(cout << endl);
+        dout(cout << "N at szgroup on the node "<< idx_node<< ":" << endl;
+        for(int i=0; i<N_at_szgroup.size(); i++)
+           cout << N_at_szgroup[i] << " ";
+           cout << endl
+         );
 
 		// set the new Ns for this specific pop in the multimap of this node
-		list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
+        dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << endl);
+        list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
 
 	}
     dout(cout<< "END distribute_N()"<< endl);

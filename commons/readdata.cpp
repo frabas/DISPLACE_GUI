@@ -2980,6 +2980,7 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
         throw std::runtime_error("bad file format while executing: fill_in_fbar_ages_min_max");
     file_fbar_ages_min_max.close();
 
+
     return(fbar_ages_min_max);
 }
 
@@ -3202,10 +3203,10 @@ bool read_metier_closures(istream &stream, const std::string &separator, vector<
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
-#ifdef VERBOSE_ERRORS
-        cerr << "Bad Conversion on read_closure file line " << linenum <<
+//#ifdef VERBOSE_ERRORS
+        cerr << "Bad Conversion on read_metier_closures file line " << linenum <<
                 " : " << ex.what() << "\n";
-#endif
+//#endif
         return false;
     }
 
@@ -3275,10 +3276,10 @@ bool read_vsize_closures(istream &stream, const std::string &separator, vector<N
             ++linenum;
         }
     } catch (boost::bad_lexical_cast &ex) {
-#ifdef VERBOSE_ERRORS
+//#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on read_vsize_closure file line " << linenum <<
                 " : " << ex.what() << "\n";
-#endif
+//#endif
         return false;
     }
 
@@ -3300,6 +3301,11 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
 
     // TODO: FOR NOW, ONLY Winf k ARE USED....BUT THINK ABOUT REPLACING INPUTS FOR OTHER PARAMS FROM HERE.
 
+    cout << "Reading biological_traits_params..." << endl;
+
+    std::string dummystring;
+    getline (stream, dummystring); // eat the heading
+
     int linenum = 0;
     try {
         while (stream) {
@@ -3320,19 +3326,26 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
                                                double, double, double, double,
                                                double, double, double > a_tuple;
 
-            std::get<0>(a_tuple)=boost::lexical_cast<double>(sr[0]);
+            std::get<0>(a_tuple)=boost::lexical_cast<string>(sr[0]);
             std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
             std::get<2>(a_tuple)=boost::lexical_cast<double>(sr[2]);
+
+            // check
+            //cout << "0: " << std::get<0>(a_tuple) << endl;
+            //cout << "1: " << std::get<1>(a_tuple) << endl;
+            //cout << "2: " << std::get<2>(a_tuple) << endl;
+
             // TO DO: other params...
             biological_traits_params.push_back(a_tuple);
 
+
             ++linenum;
         }
+        cout << "Reading biological_traits_params...ok" << endl;
+
     } catch (boost::bad_lexical_cast &ex) {
-#ifdef VERBOSE_ERRORS
         cerr << "Bad Conversion on biological_traits_params file line " << linenum <<
                 " : " << ex.what() << "\n";
-#endif
         return false;
     }
 

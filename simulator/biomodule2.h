@@ -92,7 +92,11 @@ int applyBiologicalModule2(int tstep, const string &namesimu,
                           vector<Vessel* >& vessels,
                           vector<Benthos* >& benthos,
                           const PopSceOptions &dyn_pop_sce,
-                          const DynAllocOptions &dyn_alloc_sce);
+                          const DynAllocOptions &dyn_alloc_sce,
+                          vector<vector<double> > &Ws_at_szgroup,
+                          vector<vector<vector<vector<double> > > > &predKernel,
+                          vector<vector<double> > &searchVolMat
+                           );
 
 
 #endif // BIOMODULE2_H

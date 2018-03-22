@@ -133,7 +133,11 @@ int applyBiologicalModule(int tstep, const string & namesimu,
                           vector<Vessel* >& vessels,
                           vector<Benthos* >& benthoss,
                           const PopSceOptions &dyn_pop_sce,
-                          const DynAllocOptions &dyn_alloc_sce)
+                          const DynAllocOptions &dyn_alloc_sce,
+                          vector<vector<double> > &Ws_at_szgroup,
+                          vector<vector<vector<vector<double> > > > &predKernel,
+                          vector<vector<double> > &searchVolMat
+                          )
 {
 
 
@@ -825,8 +829,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         }
                     }
                     a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
-                    // if (dyn_pop_sce.option(Options::sizeSpectra))
-                    //    a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, a_prop_M, predKernel, searchVolMat);
+                    if (dyn_pop_sce.option(Options::sizeSpectra))
+                    {
+                       a_list_nodes.at(n)->apply_natural_mortality_at_node_from_size_spectra_approach(sp, Ws_at_szgroup, predKernel, searchVolMat);
+                    }
+                    else
+                    {
+                        a_list_nodes.at(n)->apply_natural_mortality_at_node(sp, M_at_szgroup, a_prop_M);
+                    }
                 }
                 // then re-aggregate by summing up the N over node and overwrite tot_N_at_szgroup....
                 populations.at(sp)->aggregate_N();

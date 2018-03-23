@@ -2126,6 +2126,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         // input data, initial tac
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
         cout << "initial tac has been read correctly" << endl;
+
+        if(dyn_alloc_sce.option(Options::TACs) && tac_this_pop.at(0)==0)
+        {
+             cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp << "and potentially other pops..." << endl;
+             cout << "a fake, non binding value is filled in for now" << endl;
+             tac_this_pop.at(0) =100000; // tons
+        }
+
         double tac_percent_simulated_this_pop= tac_percent_simulated.at(sp);
         double hyperstability_param_this_pop= hyperstability_param.at(sp);
 

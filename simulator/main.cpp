@@ -2488,12 +2488,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
   // parameters to compute the search volume (volumetric search rate)
   cout << "read few parameters ..." << endl;
-  auto param = std::make_tuple (2e8, 0.8, 3/4,  0.6);
+  auto param = std::make_tuple (2e8, 0.8, 0.75,  0.6);
   double kappa  = std::get<0>(param);
   double q      = std::get<1>(param);     // Scaling of search volume
   double n      = std::get<2>(param);
   double f0est  = std::get<3>(param);     // equilibrium feeding level, for which h-bar was estimated
   double lambda= 2+q-n;
+  cout << " reading kappa is " << kappa << endl;
+  cout << " reading q is " << q << endl;
+  cout << " reading n is " << n << endl;
+  cout << " reading f0est is " << f0est << endl;
+  cout << " reading lambda is " << lambda << endl;
 
   const string separator=",";
 
@@ -2522,6 +2527,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
   {  // loop over prey
      double alphae  = sqrt(2*PI)*sigma.at(prey)*  pow(beta.at(prey),(lambda-2)) * exp(pow(lambda-2,2)* pow(sigma.at(prey),2) /2);
 
+     //cout << " this prey " << prey << " alphae is " << alphae << endl;
+     //cout << " given sigma.at(prey) is " << sigma.at(prey) << " beta.at(prey) is " << beta.at(prey) << " lambda is " << lambda << endl;
 
      for (unsigned int j=0; j<nbpops; ++j)
      {  // loop over predators
@@ -2529,12 +2536,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
          {  // loop over predator sizes
             double Wk = get<2>(biological_traits_params.at(j));
             double Winf = get<1>(biological_traits_params.at(j));
-            double h               = 3*Wk/(0.6*   pow(Winf,(-1/3))   ); // Calculate h from K
+            double h               = 3*Wk/(0.6*   pow(Winf,(-0.333333333))   ); // Calculate h from K
             double gamma           = 1000*(f0est*h / (alphae*kappa*(1-f0est)));
             //cout << "j: " << j << " k: " << k << endl;
             //cout << "Wk: " << Wk << " Winf: " << Winf << endl;
             //cout << "h: " << h << " gamma: " << gamma << endl;
-            searchVolMat.at(j).at(k)       = gamma *  pow(searchVolMat.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
+            //cout << "q: " << q  << " f0est:" << f0est << endl;
+            //cout << "pow(Winf,(-1/3)): " << pow(Winf,(-0.333333333))  << endl;
+            searchVolMat.at(j).at(k)       = gamma *  pow(Ws_at_szgroup.at(j).at(k), q);  // V_i(w) = gamma_i*w^q
             //cout << "searchVolMat.at(j).at(k): " << searchVolMat.at(j).at(k)  << endl;
          }
      }

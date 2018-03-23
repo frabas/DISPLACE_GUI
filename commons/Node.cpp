@@ -1026,6 +1026,13 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
 
     vector<int> spp_on_this_node = this->get_pop_names_on_node();
 
+    if(this->get_idx_node().toIndex()==40)
+    {
+        cout << "spp_on_this_node is" << endl;
+        for (int i=0; i<spp_on_this_node.size();++i) cout << spp_on_this_node.at(i) << " ";
+        cout  << endl;
+    }
+
     vector <double> Np = get_Ns_pops_at_szgroup(name_pop); // the prey
 
 
@@ -1048,6 +1055,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                         for (unsigned int sz=Wpred.size(); sz>1; sz--)  dwpred[sz] = dwpred[sz] - dwpred[sz-1];
 
 
+
                         for (unsigned int k=0; k<NBSZGROUP; k++)  // loop over PREDATOR sizes
                         {
                            predRate.at(j).at(kprey)  = predRate.at(j).at(kprey) +
@@ -1055,6 +1063,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
                            // assuming feeding level at 0.6
                            // assuming interactionMatrixThetas[prey,j] at 1 because we know the two stocks are overlapping
                         }
+                        if(this->get_idx_node().toIndex()==40) cout << "on node" <<  this->get_idx_node().toIndex() << " on pop" << name_pop <<", predRate.at("<<j<<").at("<<kprey<<")  is "<< predRate.at(j).at(kprey)  << endl;
 
 
             }
@@ -1075,7 +1084,7 @@ void Node::apply_natural_mortality_at_node_from_size_spectra_approach(int name_p
         for(unsigned int sz=0; sz<Np.size(); sz++)
         {
            // divide according to tstep (month in this case)
-           cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
+           if(this->get_idx_node().toIndex()==40) cout << "on node" << this->get_idx_node() << " and sz " << sz << ", M2_on_node.at(sz) is "<< M2_on_node.at(sz) << endl;
            Np.at(sz) =  Np.at(sz)  *exp(-M2_on_node.at(sz)/12);
            //this is assuming that the M is uniformly applied to the pop
            // e.g. 1000*exp(-0.2) = 225*exp(-0.2)+ 775*exp(-0.2)

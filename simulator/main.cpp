@@ -2409,7 +2409,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (unsigned int k=0; k<NBSZGROUP; ++k)
             {  // loop over predator sizes
               Ws_at_szgroup.at(j).at(k)= W_this_pop.at(k);
-              cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
+              //cout <<  "Ws_at_szgroup.at("<<j<<").at("<<k<<") is " << Ws_at_szgroup.at(j).at(k) << endl;
             }
         }
 
@@ -2423,18 +2423,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   for (unsigned int kprey=0; kprey<NBSZGROUP; ++kprey)
                   {  // loop over prey sizes
                      predKernel.at(j).at(kprey).at(k).at(prey)= Ws_at_szgroup.at(j).at(k); // init
-                     cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
+                     //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                   }
                }
            }
         }
 
         // check:
-              cout << "check some initial values of PredKernel..." << endl;
-              cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
-              cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
-              cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
-              cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
+            //  cout << "check some initial values of PredKernel..." << endl;
+            //  cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
+            //  cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
+            //  cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
+            //  cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
 
         if(predKernel.at(0).at(1).at(0).at(0)!=predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
         {
@@ -2458,23 +2458,25 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                      if(Ws_at_szgroup.at(prey).at(kprey) < predKernel.at(j).at(kprey).at(k).at(prey))
                      {
                          predKernel.at(j).at(kprey).at(k).at(prey)=
-                                 exp(-log((beta.at(prey)*Ws_at_szgroup.at(prey).at(kprey))/ pow(Ws_at_szgroup.at(j).at(kprey),2)) / (pow(2*sigma.at(prey),2)));                                        ;
+                                 exp(-pow(log((beta.at(prey)*Ws_at_szgroup.at(prey).at(kprey))/ Ws_at_szgroup.at(j).at(kprey)),2) / (pow(2*sigma.at(prey),2)));                                        ;
+                         //cout <<  "predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                      }
                      else
                      {
                          predKernel.at(j).at(kprey).at(k).at(prey)= 0.0;
+                         //cout <<  "put 0 in predKernel.at("<<j<<").at("<<kprey<<").at("<<k<<").at("<<prey<<") is " << predKernel.at(j).at(kprey).at(k).at(prey) << endl;
                      }
                   }
                }
            }
         }
 
-  // check:
-        cout << "check some values of PredKernel..." << endl;
-        cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
-        cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
-        cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
-        cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
+       // check:
+        // cout << "check some values of PredKernel..." << endl;
+        // cout <<  "predKernel.at(0).at(0).at(0).at(0) is " << predKernel.at(0).at(0).at(0).at(0) << endl;
+        // cout <<  "predKernel.at(0).at(1).at(0).at(0) is " << predKernel.at(0).at(1).at(0).at(0) << endl;
+        // cout <<  "predKernel.at(0).at(2).at(0).at(0) is " << predKernel.at(0).at(2).at(0).at(0) << endl;
+        // cout <<  "predKernel.at(1).at(0).at(0).at(0) is " << predKernel.at(1).at(0).at(0).at(0) << endl;
 
         if(predKernel.at(0).at(1).at(0).at(0)!=predKernel.at(0).at(1).at(0).at(0))  // c++ trick for like testing for is.nan
         {

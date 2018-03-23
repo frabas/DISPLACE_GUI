@@ -4903,6 +4903,17 @@ int Vessel::should_i_go_fishing(int tstep,
                 {
                     still_some_quotas=1;
                     dout(cout  << "this vessel " << this->get_name() << " have (still) quota for pop " << pop << ": " << indiv_quota << endl);
+                     // => by default, continue if not all stks quotas are exhausted.....
+                }
+                if(dyn_alloc_sce.option(Options::stopOnFirstStock))
+                {
+                    vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
+                    for(unsigned int i=0; i<trgts.size(); ++i)
+                        {
+                            if(pop==trgts.at(i) && indiv_quota==0)  still_some_quotas=0;
+                             // => will stay on quayside because exhausted tac on at least one targeted stock
+                        }
+
                 }
             }
         }

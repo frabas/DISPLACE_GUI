@@ -54,3 +54,25 @@ int ModelMetadataAccessor::nbBenthos()
 {
     return meta->getMetadataAs<size_t>("nbBenthos");
 }
+
+std::vector<int> ModelMetadataAccessor::getVectorOfInt(std::string key)
+{
+    auto stringvector = meta->getMetadata(key);
+
+    std::stringstream iss( stringvector );
+
+    int number;
+    std::vector<int> results;
+    while ( iss >> number )
+      results.push_back( number );
+
+    return results;
+}
+
+void ModelMetadataAccessor::setVectorOfInt(std::string key, const std::vector<int> &vector)
+{
+    std::stringstream result;
+    std::copy(vector.begin(), vector.end(), std::ostream_iterator<int>(result, " "));
+
+    meta->setMetadata(key, result.str());
+}

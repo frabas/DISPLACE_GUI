@@ -238,6 +238,8 @@ bool DisplaceModel::loadDatabase(QString path)
     mConfig.setNbpops(mOutSqlite->getNbPops());
     mConfig.setSzGroups(accessor.nbSize());
     mConfig.setNbbenthospops(accessor.nbBenthos());
+    mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));
+
     mLastStep = accessor.lastTStep();
     setCurrentStep(mLastStep);
     auto nl = mOutSqlite->getNationsList();

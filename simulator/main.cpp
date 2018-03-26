@@ -3841,6 +3841,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     vector <int> tsteps_semesters = read_tsteps_semesters( folder_name_parameterization, inputfolder);
     vector <int> tsteps_years     = read_tsteps_years( folder_name_parameterization,inputfolder);
     vector <int> tsteps_months    = read_tsteps_months( folder_name_parameterization, inputfolder);
+
+    if (enable_sqlite_out) {
+        outSqlite->exportCalendar (tsteps_months, tsteps_quarters, tsteps_semesters, tsteps_years);
+    }
+
     int count_quarters=1;
     int count_months=1;
     double a_year=1.0;

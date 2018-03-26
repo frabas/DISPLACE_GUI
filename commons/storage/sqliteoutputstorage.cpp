@@ -17,6 +17,7 @@
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
 #include "tables/metadatatable.h"
+#include "modelmetadataaccessor.h"
 
 #include <cassert>
 
@@ -169,6 +170,26 @@ void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cu
     for (size_t i = 0; i < cumul.size(); ++i) {
         p->mVesselLoglikeCatchesTable->insertPopulation(rowid, i, cumul, discards);
     }
+}
+
+void SQLiteOutputStorage::exportCalendar(const std::vector<int> &tsteps_months, const std::vector<int> &tsteps_quarters, const std::vector<int> &tsteps_semesters, const std::vector<int> &tsteps_years)
+{
+    ModelMetadataAccessor a(metadata());
+
+    a.setVectorOfInt("months", tsteps_months);
+    a.setVectorOfInt("quarters", tsteps_quarters);
+    a.setVectorOfInt("semesters", tsteps_semesters);
+    a.setVectorOfInt("years", tsteps_years);
+}
+
+void SQLiteOutputStorage::importCalendar(std::vector<int> &tsteps_months, std::vector<int> &tsteps_quarters, std::vector<int> &tsteps_semesters, std::vector<int> &tsteps_years)
+{
+    ModelMetadataAccessor a(metadata());
+
+    tsteps_months = a.getVectorOfInt("months");
+    tsteps_quarters = a.getVectorOfInt("quarters");
+    tsteps_semesters = a.getVectorOfInt("semesters");
+    tsteps_years = a.getVectorOfInt("years");
 }
 
 TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat stattype, string nation, Operation op)

@@ -21,6 +21,7 @@
 #include "calendar.h"
 
 #include <readdata.h>
+#include <storage/sqliteoutputstorage.h>
 #include <QDebug>
 
 const QString Calendar::days[] = {
@@ -61,6 +62,28 @@ Calendar *Calendar::load(QString basepath, QString name)
     Q_ASSERT(calendar->mQuarters.size() > 0);
     Q_ASSERT(calendar->mSemesters.size() > 0);
     Q_ASSERT(calendar->mYears.size() > 0);
+
+    return calendar;
+}
+
+Calendar *Calendar::build(std::shared_ptr<SQLiteOutputStorage> db)
+{
+    Calendar *calendar = new Calendar();
+
+    std::vector<int> months, yrs,quarters,sems;
+    db->importCalendar(months, quarters, sems, yrs);
+
+    for(size_t i = 0; i < months.size(); ++i)
+        calendar->mMonths.insert(months[i], i);
+
+    for(size_t i = 0; i < quarters.size(); ++i)
+        calendar->mQuarters.insert(quarters[i], i);
+
+    for(size_t i = 0; i < sems.size(); ++i)
+        calendar->mSemesters.insert(sems[i], i);
+
+    for(size_t i = 0; i < yrs.size(); ++i)
+        calendar->mYears.insert(yrs[i], i);
 
     return calendar;
 }

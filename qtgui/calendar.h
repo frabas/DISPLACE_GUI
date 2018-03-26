@@ -44,6 +44,8 @@
 #include <QString>
 #include <QMap>
 
+class SQLiteOutputStorage;
+
 class Calendar
 {
 public:
@@ -78,6 +80,7 @@ public:
     }
 
     static Calendar *load(QString basepath, QString name);
+    static Calendar *build (std::shared_ptr<SQLiteOutputStorage> db);
     static QString dayToString (int day) {
         if (day < 0 || day > 6)
             return "?";

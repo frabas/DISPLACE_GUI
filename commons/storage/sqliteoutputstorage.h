@@ -69,6 +69,10 @@ public:
     void exportPopNodes(int tstep, Node *node);
     void exportPopStat(Population *pop, int popid, int tstep);
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);
+    void exportCalendar (const std::vector<int> &tsteps_months, const std::vector<int> &tsteps_quarters,
+                         const std::vector<int> &tsteps_semesters, const std::vector<int> &tsteps_years);
+    void importCalendar (std::vector<int> &tsteps_months, std::vector<int> &tsteps_quarters,
+                         std::vector<int> &tsteps_semesters, std::vector<int> &tsteps_years);
 
     enum Operation { Sum, Average, Count };
     TimelineData getVesselLoglikeDataByNation(displace::plot::NationsStat stattype, std::string nation, Operation op);

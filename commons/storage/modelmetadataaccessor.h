@@ -24,6 +24,9 @@ public:
 
     void setNbBenthos(int n);
     int nbBenthos();
+
+    std::vector<int> getVectorOfInt (std::string key);
+    void setVectorOfInt(std::string key, const std::vector<int> &vector);
 };
 
 #endif // MODELMETADATAACCESSOR_H

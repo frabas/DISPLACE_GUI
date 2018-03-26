@@ -37,6 +37,15 @@ public:
     void create();
     void dropAndCreate();
     void insert (int tstep, Node *node, int funcgr, int isN);
+
+    struct Stat {
+        int tstep;
+        types::NodeId nodeId;
+        int funcId;
+
+        double numTot, bio, bioMean, bioK, numK;
+    };
+    void queryAllNodesAtStep(int tstep, std::function<bool (Stat)> op);
 };
 
 #endif // FUNCGROUPSTABLE_H

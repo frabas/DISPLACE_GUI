@@ -40,6 +40,7 @@
 #include <storage/tables/vesselvmsliketable.h>
 #include <storage/tables/vesselvmslikefpingsonlytable.h>
 #include <storage/tables/poptable.h>
+#include <storage/tables/funcgroupstable.h>
 #include <sqlitestorage.h>
 #include <storage/modelmetadataaccessor.h>
 
@@ -295,6 +296,19 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
             nodes.at(nid)->setCumcatchesPerPop(stat.popId, stat.cumC);
             //TODO: Set Discards!
             //nodes.at(nid)->set_cumdiscards(stat.popId, stat.cumD);
+        }
+        return true;
+    });
+
+    auto ftab = p->db->getFuncGroupsTable();
+    ftab->queryAllNodesAtStep(step, [&nodes](const FuncGroupsTable::Stat &stat) {
+        int nid = stat.nodeId.toIndex();
+        if (nid < nodes.size()) {
+            nodes.at(nid)->setBenthosBiomass(stat.funcId,stat.bio);
+            nodes.at(nid)->setBenthosNumber(stat.funcId,stat.numTot);
+            nodes.at(nid)->setBenthosMeanweight(stat.funcId,stat.bioMean);
+            nodes.at(nid)->setBenthosBiomassOverK(stat.funcId, stat.bioK);
+            nodes.at(nid)->setBenthosNumberOverK(stat.funcId, stat.numK);
         }
         return true;
     });

@@ -26,6 +26,7 @@ class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
     FieldDef<FieldType::Real> fldTotNId = makeFieldDef("TotalN",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> fldTotWId = makeFieldDef("TotalW",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> fldCumCatches = makeFieldDef("CumCatches",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldCumDiscards = makeFieldDef("CumDiscards",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> fldImpact = makeFieldDef("Impact",FieldType::Real()).notNull();
 
 public:

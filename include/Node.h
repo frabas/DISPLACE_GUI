@@ -195,6 +195,7 @@ class COMMONSSHARED_EXPORT Node
         void set_avai_pops_at_selected_szgroup(int name_pop, const vector<double>& val);
 		void set_impact_on_pops(int name_pop, double val);
         void set_cumcatches_per_pop(int name_pop, double val);
+        void set_cumdiscards_per_pop(int name_pop, double val);
         void set_vid(int val);
         void set_cumftime(int tot);
         void set_cumsweptarea(double tot);

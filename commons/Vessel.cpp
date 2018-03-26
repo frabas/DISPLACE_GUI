@@ -2927,7 +2927,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                         totDiscThisEvent += discards_per_szgroup[sz];
                     }
                     this->cumdiscards+= totDiscThisEvent;
-                    //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
+                    this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + totDiscThisEvent);
                     cumdiscard_fgrounds.at(idx_node_r) += totDiscThisEvent;
 
 
@@ -3122,7 +3122,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 this->cumcatches+= catch_pop_at_szgroup[pop][0];
                 this->cumdiscards+= discards_pop_at_szgroup[pop][0];
                 this->get_loc()->set_cumcatches_per_pop(namepop, cumulcatches.at(pop) + catch_pop_at_szgroup[pop][0]);
-                //this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + 0);
+                this->get_loc()->set_cumdiscards_per_pop(namepop, cumuldiscards.at(pop) + 0);
                 /*
                 if(pop==21 && (this->get_name())=="DNK000012028"){
                     dout(cout << "cpue " <<cpue << endl);
@@ -3139,7 +3139,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                 cumdiscard_fgrounds.at(idx_node_r) += 0;
                 // catches per pop
                 cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop) += cpue*PING_RATE;
-                //cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop) += 0;
+                cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop) += 0;
                 // effort
                 cumeffort_fgrounds.at(idx_node_r) += PING_RATE;
 
@@ -3155,7 +3155,7 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
         // contribute to accumulated catches on this node
         this->get_loc()->add_to_cumcatches_per_pop(cumcatch_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
-        //this->get_loc()->add_to_cumdiscards_per_pop(cumdiscards_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
+        this->get_loc()->add_to_cumdiscards_per_pop(cumdiscard_fgrounds_per_pop.at(idx_node_r).at(pop), pop);
 
     } // end pop
 
@@ -3341,7 +3341,7 @@ void Vessel::clear_cumcatch_and_cumeffort()
         {
             //clear
             cumcatch_fgrounds_per_pop.at(n).at(pop) =0;
-            //cumdiscard_fgrounds_per_pop.at(n).at(pop) =0;
+            cumdiscard_fgrounds_per_pop.at(n).at(pop) =0;
         }
         //clear
         cumcatch_fgrounds.at(n) =0;
@@ -5153,7 +5153,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                 this->set_cumcatch_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumdiscard_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
-                //this->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
+                this->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
                 this->set_cumeffort_fgrounds(freq_grounds_from_harbours);// re-dimensioned
                 this->set_experiencedcpue_fgrounds(freq_grounds_from_harbours); // re-dimensioned
                 this->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned

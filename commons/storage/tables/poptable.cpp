@@ -10,7 +10,8 @@ struct PopTable::Impl {
     bool init = false;
 
     PreparedInsert<FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,
+         FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
 };
 
 PopTable::PopTable(std::shared_ptr<SQLiteStorage> db, std::string name)
@@ -31,6 +32,7 @@ void PopTable::dropAndCreate()
                            fldTotNId,
                            fldTotWId,
                            fldCumCatches,
+                           fldCumDiscards,
                            fldImpact
                            ));
 }
@@ -46,6 +48,7 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
                                                      fldTotNId,
                                                      fldTotWId,
                                                      fldCumCatches,
+                                                     fldCumDiscards,
                                                      fldImpact
                                                    ));
     }
@@ -64,6 +67,7 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
         auto const &ns =node->get_Ns_pops_at_szgroup(name_pop);
         auto const &cumulcatches_per_pop =node->get_cumcatches_per_pop().at(name_pop);
         auto const &impact_per_pop =node->get_impact_on_pops().at(name_pop);
+        auto const &cumuldiscards_per_pop=node->get_cumdiscards_per_pop().at(name_pop);
         for(unsigned int sz = 0; sz < ns.size(); sz++)
         {
             totN_this_pop+= ns[sz];
@@ -77,8 +81,9 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
                     totN_this_pop,
                     totW_this_pop,
                     cumulcatches_per_pop,
-                    impact_per_pop)
-                    );
+                    cumuldiscards_per_pop,
+                    impact_per_pop
+                    ));
     }
 
 }

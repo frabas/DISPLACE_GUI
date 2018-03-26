@@ -3280,7 +3280,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double > experiencedcpue_fgrounds= init_for_fgrounds;
         vector<double > freq_experiencedcpue_fgrounds= init_for_fgrounds;
         vector<vector<double> > cumcatch_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
-        //vector<vector<double> > cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
+        vector<vector<double> > cumdiscard_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         vector<vector<double> > freq_experiencedcpue_fgrounds_per_pop (fgrounds.size(), vector<double>(nbpops));
         for(unsigned int f = 0; f < fgrounds.size(); f++)
@@ -3305,7 +3305,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
                 // init
                 cumcatch_fgrounds_per_pop[f][pop] = 0;
-                //cumdiscard_fgrounds_per_pop[f][pop] = 0;
+                cumdiscard_fgrounds_per_pop[f][pop] = 0;
                 experiencedcpue_fgrounds_per_pop[f][pop] = freq_fgrounds[f] * expected_cpue_this_pop.at(pop);
             }
         }
@@ -3321,7 +3321,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vessels.at(i)->compute_experiencedcpue_fgrounds();
         // ...or per pop
         vessels.at(i)->set_cumcatch_fgrounds_per_pop(cumcatch_fgrounds_per_pop);
-        //vessels.at(i)->set_cumdiscard_fgrounds_per_pop(cumdiscard_fgrounds_per_pop);
+        vessels.at(i)->set_cumdiscard_fgrounds_per_pop(cumdiscard_fgrounds_per_pop);
         vessels.at(i)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);
         vessels.at(i)->set_freq_experiencedcpue_fgrounds_per_pop(freq_experiencedcpue_fgrounds_per_pop);
         // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...
@@ -4523,7 +4523,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 vessels.at(v)->compute_experiencedcpue_fgrounds();
                 // ...or per pop
                 vessels.at(v)->set_cumcatch_fgrounds_per_pop(a_cumcatch_fgrounds_per_pop);
-                //vessels.at(v)->set_cumdiscard_fgrounds_per_pop(a_cumdiscard_fgrounds_per_pop);
+                vessels.at(v)->set_cumdiscard_fgrounds_per_pop(a_cumdiscard_fgrounds_per_pop);
                 vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(a_experiencedcpue_fgrounds_per_pop);
                 vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(a_freq_experiencedcpue_fgrounds_per_pop);
                 // compute for the first time, to get freq_experiencedcpue_fgrounds_per_pop...

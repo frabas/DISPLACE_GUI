@@ -755,6 +755,7 @@ void Node::init_Ns_pops_at_szgroup(int nbpops, int nbszgroups)
     reinit (pressure_pops_at_szgroup, nbpops, nbszgroups);
     reinit (impact_on_pops, nbpops);
     reinit (cumcatches_per_pop, nbpops);
+    reinit (cumdiscards_per_pop, nbpops);
 
 #if 0
 	// init at 0 the matrix of Ns
@@ -867,6 +868,14 @@ void Node::set_cumcatches_per_pop(int name_pop, double newval)
     cumcatches_per_pop.at(name_pop)=newval;
 
 }
+
+void Node::set_cumdiscards_per_pop(int name_pop, double newval)
+{
+
+    cumdiscards_per_pop.at(name_pop)=newval;
+
+}
+
 
 void Node::set_pop_names_on_node(int name_pop)
 {

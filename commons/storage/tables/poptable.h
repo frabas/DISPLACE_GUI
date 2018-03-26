@@ -29,12 +29,22 @@ class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
     FieldDef<FieldType::Real> fldCumDiscards = makeFieldDef("CumDiscards",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> fldImpact = makeFieldDef("Impact",FieldType::Real()).notNull();
 
+    void init();
 public:
     PopTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~PopTable() noexcept;
     void dropAndCreate();
 
     void insert (int tstep, Node *node, const std::multimap<int, double> &initstate);
+
+    struct Stat {
+        int tstep;
+        types::NodeId nodeId;
+        int popId;
+
+        double totNid, totWid, cumC, cumD, impact;
+    };
+    void queryAllNodesAtStep(int tstep, std::function<bool (Stat)> op);
 
     size_t getNbPops();
 };

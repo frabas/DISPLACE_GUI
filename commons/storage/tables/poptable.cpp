@@ -10,7 +10,7 @@ struct PopTable::Impl {
     bool init = false;
 
     PreparedInsert<FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,FieldDef<FieldType::Integer>,
-        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
+        FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>,FieldDef<FieldType::Real>> statement;
 };
 
 PopTable::PopTable(std::shared_ptr<SQLiteStorage> db, std::string name)
@@ -29,7 +29,9 @@ void PopTable::dropAndCreate()
                            fldTStep,
                            fldPopId,
                            fldTotNId,
-                           fldTotWId
+                           fldTotWId,
+                           fldCumCatches,
+                           fldImpact
                            ));
 }
 
@@ -42,7 +44,10 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
                                                      fldTStep,
                                                      fldPopId,
                                                      fldTotNId,
-                                                     fldTotWId));
+                                                     fldTotWId,
+                                                     fldCumCatches,
+                                                     fldImpact
+                                                   ));
     }
 
     double totN_this_pop, totW_this_pop;
@@ -57,6 +62,8 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
             w.push_back(pos->second);
 
         auto const &ns =node->get_Ns_pops_at_szgroup(name_pop);
+        auto const &cumulcatches_per_pop =node->get_cumcatches_per_pop().at(name_pop);
+        auto const &impact_per_pop =node->get_impact_on_pops().at(name_pop);
         for(unsigned int sz = 0; sz < ns.size(); sz++)
         {
             totN_this_pop+= ns[sz];
@@ -68,7 +75,9 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
                     tstep,
                     (int)name_pop,
                     totN_this_pop,
-                    totW_this_pop)
+                    totW_this_pop,
+                    cumulcatches_per_pop,
+                    impact_per_pop)
                     );
     }
 

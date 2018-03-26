@@ -25,6 +25,8 @@ class COMMONSSHARED_EXPORT PopTable : public SQLiteTable
 
     FieldDef<FieldType::Real> fldTotNId = makeFieldDef("TotalN",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> fldTotWId = makeFieldDef("TotalW",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldCumCatches = makeFieldDef("CumCatches",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> fldImpact = makeFieldDef("Impact",FieldType::Real()).notNull();
 
 public:
     PopTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);

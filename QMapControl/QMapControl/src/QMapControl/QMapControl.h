@@ -738,6 +738,8 @@ namespace qmapcontrol
         /// Progress indicator to alert user to redrawing progress.
         QProgressIndicator m_progress_indicator;
 
+        QAtomicInt mAborted = false;
+
         // Viewport management.
         /*!
          * Set the viewport size in pixels.

@@ -991,15 +991,18 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     std::shared_ptr<ModelMetadataAccessor> metadata = nullptr;
     OutputExporter::instance().setUseSqlite(enable_sqlite_out);
 
-    std::string sqliteOutputPath = namefolder + "/" + namefolderinput + "_" +namesimu+"_out.db";
-    outSqlite = std::make_shared<SQLiteOutputStorage>(sqliteOutputPath);
     try {
         if (enable_sqlite_out) {
+            outSqlitePath = namefolder + "/" + namefolderinput + "_" +namesimu+"_out.db";
+
+            unlink(outSqlitePath.c_str());
+
+            outSqlite = std::make_shared<SQLiteOutputStorage>(outSqlitePath);
             outSqlite->open();
             outSqlite->createAllTables();
 
             OutputExporter::instance().setSQLiteDb(outSqlite);            
-            guiSendOutputInfo(sqliteOutputPath);
+            guiSendOutputInfo(outSqlitePath);
 
             metadata = std::make_shared<ModelMetadataAccessor>(outSqlite->metadata());
         }

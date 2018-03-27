@@ -4,6 +4,7 @@
 #include "commons_global.h"
 
 #include <memory>
+#include <vector>
 
 class MetadataTable;
 

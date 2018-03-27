@@ -3572,7 +3572,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
     else
     {
-        outc(cout << "reading pre-existing path shop or compute them....");
+        cout << "reading pre-existing paths shop....wait" << endl;
 
         // for-loop over potential departure node
         // TO FILL IN THE PATH_SHOP and IDX_PATH_SHOP
@@ -3627,6 +3627,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         mLoadGraphProfileResult = mLoadProfile.elapsed_ms();
 #endif
 
+        cout << "reading pre-existing paths shop....ok" << endl;
 
 
 

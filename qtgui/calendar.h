@@ -43,6 +43,8 @@
 
 #include <QString>
 #include <QMap>
+#include <memory>
+
 
 class SQLiteOutputStorage;
 

@@ -74,7 +74,8 @@ SOURCES= \
     storage/tables/metadatatable.cpp \
     storage/modelmetadataaccessor.cpp \
     storage/tables/vesselvmslikefpingsonlytable.cpp \
-    storage/tables/funcgroupstable.cpp
+    storage/tables/funcgroupstable.cpp \
+    diffusion.cpp
 
 HEADERS= \
     ../include/readdata.h \

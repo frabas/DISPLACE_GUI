@@ -4141,7 +4141,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                 {
                     nbOpenedDays = (31- nodes.at(a_grd.toIndex())->getNbOfDaysClosed(met_idx));
 
-                    cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl;
+                    dout(cout << this->get_name() << " nbDaysSpent: " << nbDaysSpent << "; nbOpenedDays here: " << nbOpenedDays << endl);
 
                   if(nbDaysSpent >= nbOpenedDays)
                     {
@@ -4461,9 +4461,20 @@ void Vessel::choose_another_ground_and_go_fishing(int tstep,
         }
         else
         {
-
-            dist_to_others.push_back(distance_fgrounds[i]);
-
+            // this time, check for closure for the potential dest vx
+            if(
+                    (dyn_alloc_sce.option(Options::area_closure) && nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name()))
+                    || (dyn_alloc_sce.option(Options::area_monthly_closure)  && nodes.at(vx.toIndex())->isMetierBanned(this->get_metier()->get_name()) &&
+                        nodes.at(vx.toIndex())->isVsizeBanned(this->get_length_class()))
+              )
+            {
+               dout(cout  << "this other ground is also part of the closed area!!!" << endl);
+               dist_to_others.push_back(950);
+            }
+            else
+            {
+               dist_to_others.push_back(distance_fgrounds[i]);
+            }
         }
 
     }

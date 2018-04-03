@@ -233,6 +233,8 @@ bool DisplaceModel::loadDatabase(QString path)
         return false;
 
     setSimulationSqlStorage(path);
+    if (mOutSqlite->isOutdated())
+        return false;
 
     ModelMetadataAccessor accessor (mOutSqlite->metadata());
     mConfig.setNbpops(mOutSqlite->getNbPops());

@@ -28,6 +28,8 @@
 
 #include <QDebug>
 
+const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 1;
+
 using namespace sqlite;
 using namespace displace::plot;
 
@@ -61,6 +63,9 @@ SQLiteOutputStorage::~SQLiteOutputStorage() noexcept = default;
 void SQLiteOutputStorage::open()
 {
     p->db->open();
+    p->mMetadata = std::make_shared<MetadataTable> (p->db, "Metadata");
+    if (isOutdated())
+        return;
 
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
@@ -75,7 +80,6 @@ void SQLiteOutputStorage::open()
     p->mFuncGroupsTable = std::make_shared<FuncGroupsTable>(p->db, "FuncGroups");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
-    p->mMetadata = std::make_shared<MetadataTable> (p->db, "Metadata");
 
     try {
         SQLiteStatement wal(p->db, "PRAGMA journal_mode=WAL");
@@ -88,6 +92,20 @@ void SQLiteOutputStorage::open()
 void SQLiteOutputStorage::close()
 {
     p->db->close();
+}
+
+int SQLiteOutputStorage::versionNumber()
+{
+    try {
+        return p->mMetadata->getMetadataAs<int>("dbVersion");
+    } catch (boost::bad_lexical_cast &) {
+        return 0;
+    }
+}
+
+int SQLiteOutputStorage::currentSchemaNumber()
+{
+    return CURRENT_DB_SCHEMA_VERSION;
 }
 
 void SQLiteOutputStorage::startDayLoop()
@@ -705,7 +723,11 @@ void SQLiteOutputStorage::createAllTables()
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();
     p->mVesselLoglikeCatchesTable->dropAndCreate();
+
     p->mMetadata->dropAndCreate();
+    std::ostringstream ss;
+    ss << CURRENT_DB_SCHEMA_VERSION;
+    p->mMetadata->setMetadata("dbVersion", ss.str());
 }
 
 void SQLiteOutputStorage::createAllIndexes()

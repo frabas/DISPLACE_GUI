@@ -14,6 +14,8 @@ class COMMONSSHARED_EXPORT ShipsTable : public sqlite::SQLiteTable
 {
     struct Impl;
     std::unique_ptr<Impl> p;
+
+    void init();
 public:
     ShipsTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~ShipsTable() noexcept;

@@ -39,12 +39,22 @@ class COMMONSSHARED_EXPORT SQLiteOutputStorage
 {
     struct Impl;
     std::unique_ptr<Impl> p;
+
+    static const int CURRENT_DB_SCHEMA_VERSION;
 public:
     SQLiteOutputStorage(std::string path);
     ~SQLiteOutputStorage() noexcept;
 
     void open();
     void close();
+
+    ///< Get the current db version number from the metadata table
+    int versionNumber();
+
+    ///< Get the current supported db version number schema
+    int currentSchemaNumber();
+
+    bool isOutdated() { return versionNumber() < currentSchemaNumber(); }
 
     void startDayLoop();
     void endDayLoop();

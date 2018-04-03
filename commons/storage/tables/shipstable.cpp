@@ -9,12 +9,14 @@ using namespace sqlite;
 
 struct ShipsTable::Impl
 {
-    const FieldDef<FieldType::Integer> fTStep;
-    const FieldDef<FieldType::Real> fFueluse;
-    const FieldDef<FieldType::Real> fNOxEmission_gperKWh;
-    const FieldDef<FieldType::Real> fSOxEmission_percentpertotalfuelmass;
-    const FieldDef<FieldType::Real> fGHGEmission_gperKWh;
-    const FieldDef<FieldType::Real> fPMEEmission_gperKWh;
+    bool initialized = false;
+
+    FieldDef<FieldType::Integer> fTStep;
+    FieldDef<FieldType::Real> fFueluse;
+    FieldDef<FieldType::Real> fNOxEmission_gperKWh;
+    FieldDef<FieldType::Real> fSOxEmission_percentpertotalfuelmass;
+    FieldDef<FieldType::Real> fGHGEmission_gperKWh;
+    FieldDef<FieldType::Real> fPMEEmission_gperKWh;
 
     InsertStatement<
         decltype(fTStep),
@@ -29,7 +31,9 @@ struct ShipsTable::Impl
           fSOxEmission_percentpertotalfuelmass("SOx"),
           fGHGEmission_gperKWh("GHG"),
           fPMEEmission_gperKWh("PME"),
-          insertStatement()
+          insertStatement(fTStep, fFueluse, fNOxEmission_gperKWh,
+                          fSOxEmission_percentpertotalfuelmass,
+                          fGHGEmission_gperKWh, fPMEEmission_gperKWh)
     {
 
     }
@@ -40,16 +44,26 @@ struct ShipsTable::Impl
     }
 };
 
+void ShipsTable::init()
+{
+    if (p->initialized)
+        return;
+
+    p->insertStatement.attach(db(), name());
+
+    p->initialized = true;
+}
+
 ShipsTable::ShipsTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
-    p->insertStatement.attach(db, name);
 }
 
 ShipsTable::~ShipsTable() noexcept = default;
 
 void ShipsTable::dropAndCreate()
 {
+    init();
     if (db()->tableExists(name()))
         db()->dropTable(name());
 
@@ -58,6 +72,7 @@ void ShipsTable::dropAndCreate()
 
 void ShipsTable::exportShipsIndivators(int tstep, Ship *ship)
 {
+    init();
     p->insertStatement.insert(
                 tstep, ship->get_fueluse(),
                 ship->get_NOxEmission_gperKWh(), ship->get_SOxEmission_percentpertotalfuelmass(),

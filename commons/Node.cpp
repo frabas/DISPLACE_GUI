@@ -1602,3 +1602,4 @@ int Node::evaluateAreaType()
 {
     return area_type;
 }
+

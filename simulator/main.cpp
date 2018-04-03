@@ -5357,6 +5357,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                   //cout << "Emission in ships " << i << " is " << ships.at(i)->get_NOxEmission() << endl;
                   ships.at(i)->export_ships_indicators(shipslogs, tstep); // export event to file...
 
+                  if (enable_sqlite_out)
+                      outSqlite->exportShip(tstep, ships.at(i));
             }
 
         }

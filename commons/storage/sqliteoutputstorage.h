@@ -20,6 +20,7 @@ class Fishfarm;
 class Windmill;
 class WindfarmsTable;
 class Vessel;
+class Ship;
 class Population;
 class Node;
 class MetadataTable;
@@ -71,6 +72,7 @@ public:
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);
     void exportCalendar (const std::vector<int> &tsteps_months, const std::vector<int> &tsteps_quarters,
                          const std::vector<int> &tsteps_semesters, const std::vector<int> &tsteps_years);
+    void exportShip (int tstep, Ship *ship);
     void importCalendar (std::vector<int> &tsteps_months, std::vector<int> &tsteps_quarters,
                          std::vector<int> &tsteps_semesters, std::vector<int> &tsteps_years);
 

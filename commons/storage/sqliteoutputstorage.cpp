@@ -14,6 +14,7 @@
 #include "tables/vesselvmsliketable.h"
 #include "tables/vesselvmslikefpingsonlytable.h"
 #include "tables/vesselsloglikecatchestable.h"
+#include "tables/shipstable.h"
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
 #include "tables/metadatatable.h"
@@ -38,6 +39,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselsLoglikeCatchesTable> mVesselLoglikeCatchesTable;
     std::shared_ptr<VesselVmsLikeTable> mVesselVmslikeTable;
     std::shared_ptr<VesselVmsLikeFPingsOnlyTable> mVesselVmslikeFPingsOnlyTable;
+    std::shared_ptr<ShipsTable> mShipsTable;
     std::shared_ptr<NodesDefTable> mNodesDefTable;
     std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
@@ -65,6 +67,7 @@ void SQLiteOutputStorage::open()
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");
     p->mVesselVmslikeFPingsOnlyTable = std::make_shared<VesselVmsLikeFPingsOnlyTable>(p->db, "VesselVmsFPingsOnlyLike");
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
+    p->mShipsTable = std::make_shared<ShipsTable> (p->db, "Ships");
     p->mNodesDefTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
@@ -180,6 +183,11 @@ void SQLiteOutputStorage::exportCalendar(const std::vector<int> &tsteps_months, 
     a.setVectorOfInt("quarters", tsteps_quarters);
     a.setVectorOfInt("semesters", tsteps_semesters);
     a.setVectorOfInt("years", tsteps_years);
+}
+
+void SQLiteOutputStorage::exportShip(int tstep, Ship *ship)
+{
+    p->mShipsTable->exportShipsIndivators(tstep, ship);
 }
 
 void SQLiteOutputStorage::importCalendar(std::vector<int> &tsteps_months, std::vector<int> &tsteps_quarters, std::vector<int> &tsteps_semesters, std::vector<int> &tsteps_years)
@@ -690,6 +698,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselVmslikeFPingsOnlyTable->dropAndCreate();
     p->mNodesDefTable->dropAndCreate();
     p->mNodesStatTable->dropAndCreate();
+    p->mShipsTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFuncGroupsTable->dropAndCreate();

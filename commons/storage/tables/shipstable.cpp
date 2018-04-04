@@ -97,4 +97,11 @@ void ShipsTable::exportShipsIndivators(int tstep, Ship *ship)
                 );
 }
 
+TimelineData ShipsTable::getShipsStatData(displace::plot::ShipsStat stattype)
+{
+    TimelineData tl;
+
+    return tl;
+}
+
 

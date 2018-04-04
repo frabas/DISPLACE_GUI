@@ -2,6 +2,7 @@
 #define SQLITEOUTPUTSTORAGE_H
 
 #include "commons_global.h"
+#include "dbtypes.h"
 
 #include "plottypes.h"
 
@@ -29,11 +30,6 @@ class FuncGroupsTable;
 namespace sqlite {
 class SQLiteStorage;
 }
-
-struct TimelineData {
-    std::vector<double> t;
-    std::vector<double> v;
-};
 
 class COMMONSSHARED_EXPORT SQLiteOutputStorage
 {
@@ -92,6 +88,7 @@ public:
     TimelineData getVesselLoglikeDataByMetier(displace::plot::MetiersStat stattype, int metierid, Operation op);
     TimelineData getPopulationStatData(displace::plot::PopulationStat stat, displace::plot::AggregationType aggtype, int popid, int grpid);
     TimelineData getBenthosStatData(displace::plot::BenthosStat stattype, displace::plot::AggregationType aggtype, int grpid, const std::vector<int> &btype);
+    TimelineData getShipsStatData(displace::plot::ShipsStat stattype);
 
     size_t getNbPops();
 

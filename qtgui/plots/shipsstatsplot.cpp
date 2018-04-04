@@ -2,7 +2,7 @@
 
 
 #include <displacemodel.h>
-
+#include "storage/sqliteoutputstorage.h"
 #include <qcustomplot.h>
 
 #include <QPen>
@@ -113,141 +113,9 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
             break;
         }
 
+        auto v = getData(model, stat);
+        graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
-        keyData.push_back(QVector<double>());
-        valueData.push_back(QVector<double>());
-    }
-
-    int nsteps = model->getShipsStatistics().getUniqueValuesCount();
-
-    //qDebug() << "**** Plotting " << nsteps << interShipsTypesList.size();
-    auto it = model->getShipsStatistics().getFirst();
-    for (int istep = 0; istep <nsteps; ++istep) {
-        int nInterShipsIDs = interShipsIDsList.size();
-
-        //qDebug() << "Step: " <<istep << it.key();
-        for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-            //int gidx = iInterShipsIDs * graphNum + iGraph;
-            int gidx = iGraph;
-
-            auto group = graphList[iGraph] % 1000;
-
-            //qDebug() << "Graph:" << iGraph << group;
-             // calculate transversal values...
-            double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-            for (int iInterShipTypes = 0; iInterShipTypes < interShipsTypesList.size(); ++iInterShipTypes) {
-                for (int iInterShipsIDs = 0; iInterShipsIDs < nInterShipsIDs; ++iInterShipsIDs) {
-
-                    auto shtype = model->getShipList()[interShipsIDsList[iInterShipsIDs] -1]->mShip->get_typecode();
-                    if (group != 999 && group != shtype)
-                        continue;
-
-                    val = getStatValue(model, it.key(), interShipsIDsList[iInterShipsIDs], shtype, stat);
-
-                    //qDebug() << iInterShipsIDs << iInterShipTypes << val;
-
-                    if (nsam == 0) {
-                        mMin = val;
-                        mMax = val;
-                        mAvg = val;
-                        mTot = val;
-                    } else {
-                        mMin = std::min (mMin, val);
-                        mMax = std::max (mMax, val);
-                        mAvg += val;
-                        mTot += val;
-                    }
-                    ++nsam;
-                }
-            }
-            if (nsam > 0)
-                mAvg /= nsam;
-
-            //qDebug() << "Res: " << mMin << mMax << mAvg << mTot;
-
-            keyData[gidx] << it.key();
-            switch (graphList[iGraph] / 1000) {
-            case 4:
-                val = mMax;
-                break;
-            case 3:
-                val = mMin;
-                break;
-            case 2:
-                val = mAvg;
-                break;
-            case 1:
-                val = mTot;
-                break;
-            }
-
-            valueData[gidx] << val;
-        }
-        ++it;
-    }
-
-    if (!mSaveFilename.isEmpty()) {
-        QFile f(mSaveFilename);
-        if (f.open(QIODevice::WriteOnly)) {
-            QTextStream strm(&f);
-
-
-            strm << "interShipsIDsList: ";
-            for (auto x : interShipsIDsList)
-                strm << x << " ";
-            strm << "\n\n";
-
-            for (int i = 0; i < graphs.size(); ++i) {
-                strm << "Dt " << i << " (" <<graphs.at(i)->name() << ") ";
-
-                auto const& k = keyData.at(i);
-                auto const& v = valueData.at(i);
-                for (int j = 0; j < k.size(); ++j) {
-                    strm << "," << k.at(j) << "," << v.at(j);
-                }
-                strm << "\n";
-            }
-
-            strm << "\n------\n\n";
-
-            it = model->getShipsStatistics().getFirst();
-            for (int istep = 0; istep <nsteps; ++istep) {
-                int nInterShipsIDs = interShipsIDsList.size();
-
-                //qDebug() << "Step: " <<istep << it.key();
-                for (int iGraph = 0; iGraph < graphNum; ++iGraph) {
-                    //int gidx = iInterShipsIDs * graphNum + iGraph;
-                    int gidx = iGraph;
-
-                    auto group = graphList[iGraph] % 1000;
-
-                    //qDebug() << "Graph:" << iGraph << group;
-                     // calculate transversal values...
-                    double mMin = 0.0,mMax = 0.0,mAvg = 0.0,mTot = 0.0, nsam = 0;
-                    for (int iInterShipTypes = 0; iInterShipTypes < interShipsTypesList.size(); ++iInterShipTypes) {
-                        for (int iInterShipsIDs = 0; iInterShipsIDs < nInterShipsIDs; ++iInterShipsIDs) {
-
-                            auto fmtype = model->getShipList()[iInterShipsIDs]->mShip->get_typecode();
-                            if (group != 999 && iInterShipTypes != fmtype)
-                                continue;
-
-                            val = getStatValue(model, it.key(), interShipsIDsList[iInterShipsIDs], interShipsTypesList[iInterShipTypes], stat);
-
-                            strm << it.key() << ", " << iInterShipsIDs << ", " << iInterShipTypes << ", " << group
-                                 << ", " << static_cast<int>(stat) << " ==> " << val << "\n";
-                        }
-                    }
-                }
-                ++it;
-            }
-            f.close();
-        }
-
-        mSaveFilename.clear();
-    }
-
-    for (int i = 0; i < graphs.size(); ++i) {
-        graphs[i]->setData(keyData.at(i), valueData.at(i));
     }
 
     switch (stat) {
@@ -334,6 +202,20 @@ void ShipsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation l
 void ShipsStatsPlot::saveTo()
 {
     mSaveFilename = "Ships.txt";
+}
+
+std::tuple<QVector<double>, QVector<double> > ShipsStatsPlot::getData(DisplaceModel *model, ShipsStat stat)
+{
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return std::tuple<QVector<double>, QVector<double>>();
+
+    TimelineData dt;
+    dt = db->getShipsStatData(stat);
+    //stats::runningSum(dt.v);
+
+    QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
+    return std::make_tuple(kd, vd);
 }
 
 double ShipsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int shipid, int shiptypeid, displace::plot::ShipsStat stattype)

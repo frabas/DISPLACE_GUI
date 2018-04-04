@@ -36,6 +36,7 @@ public:
 private:
     double getStatValue(DisplaceModel *model, int tstep, int shipid, int shiptypeid, displace::plot::ShipsStat stattype);
     void saveTo();
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::ShipsStat stat);
 };
 
 

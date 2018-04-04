@@ -3,6 +3,8 @@
 
 #include "commons_global.h"
 #include "idtypes.h"
+#include "dbtypes.h"
+#include "plottypes.h"
 
 #include "sqlitetable.h"
 
@@ -22,6 +24,8 @@ public:
 
     void dropAndCreate();
     void exportShipsIndivators(int tstep, Ship* ship);
+
+    TimelineData getShipsStatData(displace::plot::ShipsStat stattype);
 };
 
 #endif // SHIPSTABLE_H

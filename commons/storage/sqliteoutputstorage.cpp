@@ -64,9 +64,6 @@ void SQLiteOutputStorage::open()
 {
     p->db->open();
     p->mMetadata = std::make_shared<MetadataTable> (p->db, "Metadata");
-    if (isOutdated())
-        return;
-
     p->mVesselDefTable = std::make_shared<VesselDefTable>(p->db, "VesselDef");
     p->mVesselLoglikeTable = std::make_shared<VesselsLoglikeTable>(p->db, "VesselLogLike");
     p->mVesselVmslikeTable = std::make_shared<VesselVmsLikeTable>(p->db, "VesselVmsLike");

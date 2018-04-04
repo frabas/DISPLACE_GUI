@@ -63,11 +63,11 @@ ShipsTable::~ShipsTable() noexcept = default;
 
 void ShipsTable::dropAndCreate()
 {
-    init();
     if (db()->tableExists(name()))
         db()->dropTable(name());
 
     p->create(this);
+    init();
 }
 
 void ShipsTable::exportShipsIndivators(int tstep, Ship *ship)

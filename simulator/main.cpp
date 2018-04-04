@@ -5462,6 +5462,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 cout << vessels[ i ]->get_name() << " departure from an harbour? " << is_harbour
                      <<  " idx node: " << vessels[ i ]->get_loc()->get_idx_node() << endl;
 
+
+                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                OutputExporter::instance().exportVmsLike(tstep, vessels[i]); // at tstep=0
+
+
             }
 
         }

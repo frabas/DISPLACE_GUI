@@ -47,6 +47,8 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,shared_harbour_knowledge);
     O(mMap,twoFoldTACconstr);
     O(mMap,fishing_credits);
+    O(mMap,envt_variables_diffusion);
+
 
     for (int i = 0; i < n(); ++i)
         mOptions[i] = false;

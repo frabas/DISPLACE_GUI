@@ -3636,6 +3636,46 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
     }
 
+
+
+
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "GRAPH ENVT FORCING VARIABLES" << endl);
+    dout(cout  << "---------------------------" << endl);
+    dout(cout  << "---------------------------" << endl);
+
+    if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    {
+    cout << "import environmental variables..." << endl;
+
+
+    const string separator=",";
+
+    string filename = inputfolder+"/graphsspe/environment_on_coord.dat";
+
+    ifstream is;
+    is.open(filename.c_str());
+    if(is.fail())
+    {
+        cout << "Fail to open the file "<< filename << endl;
+        open_file_error(filename);
+        return false;
+    }
+
+    std::vector <std::tuple< double, double, int, int,
+                                     int, double, double, double,
+                                     double, double, double, double,
+                                     double, double, double, double,
+                                     double, double, double, double,
+                                     double, double, double, double> > environment_on_coord;
+    bool r = read_environment_on_coord (is, separator, environment_on_coord);
+    }
+
+
+
+
+
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);
     dout(cout  << " SETTING UP GNUPLOT        " << endl);

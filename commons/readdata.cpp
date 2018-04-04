@@ -3353,6 +3353,106 @@ bool read_biological_traits_params(istream &stream, const std::string &separator
 }
 
 
+bool read_environment_on_coord(istream &stream, const std::string &separator,   std::vector <std::tuple< double, double, int,
+                               int, int,
+                               int, double, double,
+                               double, double, double,
+                               double, double, double,
+                               double, double, double,
+                               double, double, double,
+                               double, double, double,
+                               double, double, double,
+                               double, double, double> > & environment_on_coord)
+{
+    // Format:
+    //"x"                     "y"                     "harb"                  "pt_graph"              "code_area"             "landscapes_code"       "landscape_norm"
+    //"landscape_alpha"       "sst"                   "sst_norm"              "sst_alpha"             "salinity"              "salinity_norm"         "salinity_alpha"        "nitrogen"
+    //"nitrogen_norm"         "nitrogen_alpha"        "phosphorus"            "phosphorus_norm"       "phosphorus_alpha"      "oxygen"                "oxygen_norm"
+    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha"
+
+    cout << "Reading environment_on_coord..." << endl;
+
+    std::string dummystring;
+    getline (stream, dummystring); // eat the heading
+
+    int linenum = 0;
+    try {
+        while (stream) {
+            std::string line;
+            std::getline(stream, line);
+
+            boost::trim(line);
+            if (line.empty())
+                continue;
+
+            std::vector<std::string> sr;
+            boost::split(sr, line, boost::is_any_of(separator));
+
+            std::tuple< double, double, int,
+                    int, int,
+                    int, double, double,
+                    double, double, double,
+                    double, double, double,
+                    double, double, double,
+                    double, double, double,
+                    double, double, double,
+                    double, double, double,
+                    double, double, double> a_tuple;
+
+            std::get<0>(a_tuple)=boost::lexical_cast<double>(sr[0]);
+            std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
+            std::get<2>(a_tuple)=boost::lexical_cast<int>(sr[2]);
+            std::get<3>(a_tuple)=boost::lexical_cast<int>(sr[3]);
+            std::get<4>(a_tuple)=boost::lexical_cast<int>(sr[4]);
+            std::get<5>(a_tuple)=boost::lexical_cast<int>(sr[5]);
+            std::get<6>(a_tuple)=boost::lexical_cast<double>(sr[6]);
+            std::get<7>(a_tuple)=boost::lexical_cast<double>(sr[7]);
+            std::get<8>(a_tuple)=boost::lexical_cast<double>(sr[8]);
+            std::get<9>(a_tuple)=boost::lexical_cast<double>(sr[9]);
+            std::get<10>(a_tuple)=boost::lexical_cast<double>(sr[10]);
+            std::get<11>(a_tuple)=boost::lexical_cast<double>(sr[11]);
+            std::get<12>(a_tuple)=boost::lexical_cast<double>(sr[12]);
+            std::get<13>(a_tuple)=boost::lexical_cast<double>(sr[13]);
+            std::get<14>(a_tuple)=boost::lexical_cast<double>(sr[14]);
+            std::get<15>(a_tuple)=boost::lexical_cast<double>(sr[15]);
+            std::get<16>(a_tuple)=boost::lexical_cast<double>(sr[16]);
+            std::get<17>(a_tuple)=boost::lexical_cast<double>(sr[17]);
+            std::get<18>(a_tuple)=boost::lexical_cast<double>(sr[18]);
+            std::get<19>(a_tuple)=boost::lexical_cast<double>(sr[19]);
+            std::get<20>(a_tuple)=boost::lexical_cast<double>(sr[20]);
+            std::get<21>(a_tuple)=boost::lexical_cast<double>(sr[21]);
+            std::get<22>(a_tuple)=boost::lexical_cast<double>(sr[22]);
+            std::get<23>(a_tuple)=boost::lexical_cast<double>(sr[23]);
+            std::get<24>(a_tuple)=boost::lexical_cast<double>(sr[24]);
+            std::get<25>(a_tuple)=boost::lexical_cast<double>(sr[25]);
+            std::get<26>(a_tuple)=boost::lexical_cast<double>(sr[26]);
+            std::get<27>(a_tuple)=boost::lexical_cast<double>(sr[27]);
+            std::get<28>(a_tuple)=boost::lexical_cast<double>(sr[28]);
+
+            // check
+            //cout << "reading  environment_on_coord: " << endl;
+            //cout << "0: " << std::get<0>(a_tuple) << endl;
+            //cout << "1: " << std::get<1>(a_tuple) << endl;
+            //cout << "2: " << std::get<2>(a_tuple) << endl;
+
+            // TO DO: other params...
+            environment_on_coord.push_back(a_tuple);
+
+
+            ++linenum;
+        }
+        cout << "Reading environment_on_coord...ok" << endl;
+
+    } catch (boost::bad_lexical_cast &ex) {
+        cerr << "Bad Conversion on environment_on_coord file line " << linenum <<
+                " : " << ex.what() << "\n";
+        return false;
+    }
+
+    return true;
+}
+
+
 
 void write_SMS_OP_N_in_file(ofstream& SMS_N_in,
                             vector<Population* >& populations,

@@ -1350,6 +1350,94 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     }
 
 
+
+
+    // overwriting for GRAPH ENVT FORCING VARIABLES
+    if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    {
+       cout << "import environmental variables in one shoot..." << endl;
+
+
+       const string separator=",";
+
+       string filename = inputfolder+"/graphsspe/environment_on_coord.dat";
+
+       ifstream is;
+       is.open(filename.c_str());
+       if(is.fail())
+       {
+           cout << "Fail to open the file "<< filename << endl;
+           open_file_error(filename);
+           return false;
+       }
+
+       std::vector <std::tuple< double, double, int,
+                                     int, int,
+                                     int, double, double,
+                                     double, double, double,
+                                     double, double, double,
+                                     double, double, double,
+                                     double, double, double,
+                                     double, double, double,
+                                     double, double, double,
+                                     double, double, double> > environment_on_coord;
+       bool r = read_environment_on_coord (is, separator, environment_on_coord);
+
+       //"x" 0                    "y" 1                    "harb" 2
+       //"pt_graph" 3             "code_area" 4
+       //"landscapes_code" 5      "landscape_norm" 6       "landscape_alpha" 7
+       //"wind" 8                 "wind_norm" 9            "wind_alpha" 10
+       //"sst" 11                 "sst_norm" 12            "sst_alpha" 13
+       //"salinity" 14            "salinity_norm" 15       "salinity_alpha"  16
+       //"nitrogen" 17            "nitrogen_norm"   18     "nitrogen_alpha" 19
+       //"phosphorus" 20          "phosphorus_norm" 21     "phosphorus_alpha" 22
+       //"oxygen" 23              "oxygen_norm" 24         "oxygen_alpha" 25
+       //"dissolvedcarbon" 26      "dissolvedcarbon_norm" 27  "dissolvedcarbon_alpha" 28
+
+
+       cout << "environment_on_coord.size() "<< environment_on_coord.size() << endl;
+       for (unsigned int n=0; n<environment_on_coord.size(); n++)
+       {
+          graph_coord_x.at(n)=(get<0>(environment_on_coord.at(n))); // #0
+          graph_coord_y.at(n)=(get<1>(environment_on_coord.at(n))); // #1
+          graph_coord_harbour.at(n)=(get<2>(environment_on_coord.at(n))); // #2
+          graph_point_code_area.at(n)=(get<4>(environment_on_coord.at(n))); // #4
+          graph_point_code_landscape.at(n)=(get<5>(environment_on_coord.at(n))); // #5
+          graph_point_wind.at(n)=(get<8>(environment_on_coord.at(n))); // #8
+          graph_point_sst.at(n)=(get<11>(environment_on_coord.at(n)));  // #11
+          graph_point_salinity.at(n)=(get<14>(environment_on_coord.at(n)));  // #14
+          graph_point_Nitrogen.at(n)=(get<17>(environment_on_coord.at(n)));  // #17
+          graph_point_Phosphorus.at(n)=(get<20>(environment_on_coord.at(n)));  // #20
+          graph_point_Oxygen.at(n)=(get<23>(environment_on_coord.at(n)));  // #23
+          graph_point_DissolvedCarbon.at(n)=(get<26>(environment_on_coord.at(n)));  // #26
+       }
+
+       //check
+       cout << "prior check of environment_on_coord:" << endl;
+       cout << get<0>(environment_on_coord.at(0)) << " " << get<1>(environment_on_coord.at(0))  << " " <<
+              get<2>(environment_on_coord.at(0)) << " " << get<4>(environment_on_coord.at(0)) << " " <<
+              get<5>(environment_on_coord.at(0)) << " " << get<8>(environment_on_coord.at(0)) << " " <<
+              get<8>(environment_on_coord.at(0)) << " " << get<11>(environment_on_coord.at(0)) << " " <<
+              get<14>(environment_on_coord.at(0)) << " " << get<17>(environment_on_coord.at(0)) << " " <<
+              get<17>(environment_on_coord.at(0)) << " " << get<20>(environment_on_coord.at(0)) << " " <<
+              get<23>(environment_on_coord.at(0)) << " " << get<26>(environment_on_coord.at(0)) << endl;
+
+
+       cout << "posterior check of environment_on_coord:" << endl;
+       cout << graph_coord_x.at(0) << " " << graph_coord_y.at(0) << " " << graph_coord_harbour.at(0) << " " <<
+                graph_point_code_area.at(0) << " " << graph_point_code_landscape.at(0)  <<" " << graph_point_wind.at(0) << " " <<
+                graph_point_sst.at(0) << " " << graph_point_salinity.at(0)  <<" " << graph_point_Nitrogen.at(0) << " " <<
+                graph_point_Phosphorus.at(0) << " " << graph_point_Oxygen.at(0)  <<" " << graph_point_DissolvedCarbon.at(0) << " "<<
+               endl;
+
+
+
+    }
+
+
+
+
+
     // check inputs
     for (unsigned int i=0; i<graph_coord_harbour.size(); i++)
     {
@@ -3635,6 +3723,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     }
+
+
+
+
 
     dout(cout  << "---------------------------" << endl);
     dout(cout  << "---------------------------" << endl);

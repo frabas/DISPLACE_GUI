@@ -105,6 +105,7 @@ enum Dyn_Alloc {
     shared_harbour_knowledge,
     twoFoldTACconstr,
     fishing_credits,
+    envt_variables_diffusion,
 
     Dyn_Alloc_last
 };

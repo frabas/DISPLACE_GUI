@@ -319,6 +319,17 @@ bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const s
                                                         double, double, double, double,
                                                         double, double, double, double,
                                                         double, double, double> > & biological_traits_params);
+bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::string &separator,   std::vector <std::tuple< double, double, int,
+                                                    int, int,
+                                                    int, double, double,
+                                                    double, double, double,
+                                                    double, double, double,
+                                                    double, double, double,
+                                                    double, double, double,
+                                                    double, double, double,
+                                                    double, double, double,
+                                                    double, double, double> > & environment_on_coord);
+
 
 
 // SMS

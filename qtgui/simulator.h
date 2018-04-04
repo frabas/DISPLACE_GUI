@@ -59,6 +59,7 @@ class Simulator : public QObject
     Q_OBJECT
 public:
     Simulator();
+    ~Simulator();
 
     void linkModel (std::shared_ptr<DisplaceModel> model);
     bool start(QString name, QString folder, QString simul_name);

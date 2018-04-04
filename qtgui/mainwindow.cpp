@@ -1094,7 +1094,7 @@ int MainWindow::newEditorModel(QString name)
     return i;
 }
 
-void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *waitdialog, QObject *receiver, const char *onEndSlot)
+void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *waitdialog)
 {
     QThread *thread = new QThread(this);
 
@@ -1115,8 +1115,10 @@ void MainWindow::startBackgroundOperation(BackgroundWorker *work, WaitDialog *wa
     connect (work, SIGNAL(workEnded()), this, SLOT(waitEnd()));
     connect (work, SIGNAL(progress(int)), mWaitDialog, SLOT(setProgression(int)));
     connect (work, SIGNAL(warning(QString,QString)), this, SLOT(showWarningMessageBox(QString,QString)));
-    if (onEndSlot)
-        connect (work, SIGNAL(completed(bool)), receiver, onEndSlot);
+
+    connect (work, &BackgroundWorker::completed, [thread]() {
+        thread->quit();
+    });
 
     thread->start();
 }

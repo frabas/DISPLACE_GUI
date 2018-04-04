@@ -254,7 +254,7 @@ protected:
 
     int newEditorModel(QString name);
 
-    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog, QObject *receiver = 0, const char *onEndSlot = 0);
+    void startBackgroundOperation (BackgroundWorker *work, WaitDialog *waitdialog);
     void startBackgroundOperation (BackgroundWorkerWithWaitDialog *work);
     QProcess *prepareAppExecutableStart(QString exename);
     void startMouseMode (MouseMode *);

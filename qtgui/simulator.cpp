@@ -55,7 +55,17 @@ Simulator::Simulator()
       mProcessState(QProcess::NotRunning),
       mCapture(false),
       mVerbosity(0)
- {
+{
+}
+
+Simulator::~Simulator()
+{
+    mIpcQueue->forceExit();
+    while (mIpcThread->isRunning()) {
+        qDebug() << "ipc still running";
+        mIpcThread->terminate();
+        mIpcThread->wait(3000);
+    }
 }
 
 void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)

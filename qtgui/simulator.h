@@ -108,7 +108,6 @@ private:
     QThread *mIpcThread;
     SimulatorIpcManager *mIpcQueue;
     std::shared_ptr<DisplaceModel> mModel;
-    std::shared_ptr<OutputFileParser> mOutFileParser;
     int mSimSteps;
     int useStaticPaths;
     int preexistingPathsShop;

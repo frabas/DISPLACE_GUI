@@ -44,7 +44,6 @@ Simulator::Simulator()
       mIpcThread(0),
       mIpcQueue(0),
       mModel(),
-      mOutFileParser(),
       mSimSteps(8762),
       useStaticPaths(1),
       preexistingPathsShop(1),
@@ -62,7 +61,6 @@ Simulator::Simulator()
 void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
 {
     mModel= model;
-    mOutFileParser = std::make_shared<OutputFileParser>(mModel.get());
 }
 
 // -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
@@ -327,8 +325,8 @@ bool Simulator::processCodedLine(QString line)
 
 void Simulator::vesselLogbookReceived(VesselStats v)
 {
-    if (mModel)
-        mModel->collectVesselStats(v.tstep, v);
+    Q_UNUSED(v);
+    //TODO remove this function
 }
 
 void Simulator::parseDebug(QStringList fields)
@@ -378,9 +376,8 @@ void Simulator::parseUpdateVessel(QStringList fields)
 
 void Simulator::parseUpdateVesselStats(QStringList fields)
 {
-    VesselStats v = mOutFileParser->parseVesselStatLine(fields);
-
-    vesselLogbookReceived(v);
+    //TODO Remove this function
+    Q_UNUSED(fields);
 }
 
 void Simulator::parseUpdateShip(QStringList fields)

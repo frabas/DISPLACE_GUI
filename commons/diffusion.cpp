@@ -35,7 +35,7 @@
 // (so the pseudo code would be: compute first the dest in continuous space, then assign back to the closest node.)
 
 
-void diffuse_Nitrogen(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
+void diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
 {
 
    cout << "start diffusion for Nitrogen...." << endl;

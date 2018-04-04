@@ -72,8 +72,6 @@ DisplaceModel::DisplaceModel()
       mFishfarmsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mWindfarmsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
       mShipsTypes(std::make_shared<InterestingListWithSpecialValues<int>>()),
-      mOutputFileParser(new OutputFileParser(this)),
-      mParserThread(new QThread(this)),
       mShortestPathFolder()
 {
     OGRRegisterAll();
@@ -89,13 +87,6 @@ DisplaceModel::DisplaceModel()
     mSpatialRef->SetWellKnownGeogCS("WGS84");
 
     createFeaturesLayer();
-
-    mOutputFileParser->moveToThread(mParserThread);
-    mParserThread->start();
-
-    connect(this, SIGNAL(parseOutput(QString,int)), mOutputFileParser, SLOT(parse(QString,int)));
-    connect (mOutputFileParser, SIGNAL(error(QString)), SIGNAL(errorParsingStatsFile(QString)));
-    connect (mOutputFileParser, SIGNAL(parseCompleted()), SIGNAL(outputParsed()));
 
     mFuncGroups->setValuesFormatString(tr("Functional Group #%1"));
     mFuncGroups->addSpecialValue(tr("Total"));
@@ -1794,7 +1785,9 @@ bool DisplaceModel::isInterestingHarb(types::NodeId n)
 
 void DisplaceModel::parseOutputStatsFile(QString file, int tstep)
 {
-    emit parseOutput(file, tstep);
+    Q_UNUSED(file);
+    Q_UNUSED(tstep);
+    emit outputParsed();
 }
 
 /* Warn: copy and pasted from simulator's main.cpp */

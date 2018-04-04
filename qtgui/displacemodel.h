@@ -536,9 +536,6 @@ private:
 
     // --- Working objects
 
-    OutputFileParser *mOutputFileParser;
-    QThread *mParserThread;
-
     QString mLastError;
 
     /* Editor stuff */

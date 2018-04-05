@@ -697,7 +697,7 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
 
 TimelineData SQLiteOutputStorage::getShipsStatData(ShipsStat stattype)
 {
-    p->mShipsTable->getShipsStatData (stattype);
+    return p->mShipsTable->getShipsStatData (stattype);
 }
 
 size_t SQLiteOutputStorage::getNbPops()

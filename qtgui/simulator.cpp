@@ -22,7 +22,6 @@
 
 #include <displacemodel.h>
 #include <modelobjects/vesseldata.h>
-#include <outputfileparser.h>
 
 #include <QApplication>
 #include <QSettings>

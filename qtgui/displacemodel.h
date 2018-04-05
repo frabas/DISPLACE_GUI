@@ -84,6 +84,7 @@ public:
                           LastSpecialGroup };
 
     DisplaceModel();
+    ~DisplaceModel();
 
     ModelType modelType() const { return mModelType; }
 

@@ -122,6 +122,14 @@ DisplaceModel::DisplaceModel()
     mShipsTypes->addSpecialValue(tr("Max"));
 }
 
+DisplaceModel::~DisplaceModel()
+{
+    if (mParserThread->isRunning()) {
+        mParserThread->quit();
+        mParserThread->wait(2000);
+    }
+}
+
 void DisplaceModel::createFeaturesLayer()
 {
     mNodesLayerIndex = mDataSource->GetLayerCount();

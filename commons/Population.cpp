@@ -946,11 +946,12 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
     vector<Node*> list_of_nodes = this->get_list_nodes();
     vector<types::NodeId> list_of_nodes_idx;
+    random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
        }
-    random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
+
     for (int n=0; n<list_of_nodes.size(); ++n)
        {
         auto idx_node=list_of_nodes.at(n)->get_idx_node();
@@ -981,7 +982,7 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
 
         std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
 
-        // check if neighbouring nodes belong to the spatial extend of this pop
+        // check if neighbouring nodes belong to the spatial extent of this pop
         // (no diffusion outside....caution: possible border effects because of this assumption e.g. accumulation at the border)
         vector<int> neighbour_nodes_on_spatial_extent;
         for (int nei=0; nei<neighbour_nodes.size(); ++nei)
@@ -989,7 +990,8 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
            auto it =find(list_of_nodes_idx.begin(),list_of_nodes_idx.end(), neighbour_nodes.at(nei));
            if(it != list_of_nodes_idx.end())
              {
-             neighbour_nodes_on_spatial_extent.push_back(nei);
+             auto pos = distance(list_of_nodes_idx.begin(), it);
+             neighbour_nodes_on_spatial_extent.push_back(pos);
              }
            }
         int count = neighbour_nodes_on_spatial_extent.size();
@@ -1000,14 +1002,14 @@ void Population::diffuse_N_from_field(adjacency_map_t& adjacency_map)
                vector <double> depN=departure_N;
                for (int nei=0; nei<count; ++nei)
                   {
-                   vector <double> arrival_N = list_of_nodes.at(nei)->get_Ns_pops_at_szgroup( this->get_name() );
+                   vector <double> arrival_N = list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->get_Ns_pops_at_szgroup( this->get_name() );
                    for (int sz=0; sz<arrival_N.size(); ++sz)
                       {
                       double exchanged       = ((coeff.at(sz)*depN.at(sz))/count);
                       arrival_N.at(sz)       = arrival_N.at(sz) + exchanged;
                       departure_N.at(sz)     = departure_N.at(sz) - exchanged;
                      }
-                   list_of_nodes.at(nei)->set_Ns_pops_at_szgroup( this->get_name(), arrival_N );//update arrival
+                   list_of_nodes.at(neighbour_nodes_on_spatial_extent.at(nei))->set_Ns_pops_at_szgroup( this->get_name(), arrival_N );//update arrival
                    }
                list_of_nodes.at(n)->set_Ns_pops_at_szgroup( this->get_name(), departure_N ); //update departure
 

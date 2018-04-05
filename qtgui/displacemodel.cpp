@@ -234,7 +234,6 @@ bool DisplaceModel::loadDatabase(QString path)
     mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));
 
     mLastStep = accessor.lastTStep();
-    setCurrentStep(mLastStep);
     auto nl = mOutSqlite->getNationsList();
     mNations.clear();
     for (auto n : nl)
@@ -242,13 +241,11 @@ bool DisplaceModel::loadDatabase(QString path)
 
     mModelType = ModelType::OfflineModelType;
 
-    mDb = new DbHelper;
-    mDb->attachDb(mOutSqlite);
-
     loadNodesFromDb();
     loadVesselsFromDb();
     initBenthos();
 
+    setCurrentStep(mLastStep);
     return true;
 }
 
@@ -339,6 +336,9 @@ void DisplaceModel::setSimulationSqlStorage(const QString &path)
 {
     mOutSqlite = std::make_shared<SQLiteOutputStorage>(path.toStdString());
     mOutSqlite->open();
+    if (mDb) delete mDb;
+    mDb = new DbHelper;
+    mDb->attachDb(mOutSqlite);
 }
 
 int DisplaceModel::getBenthosIdx(int benthosId) const

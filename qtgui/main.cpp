@@ -67,11 +67,5 @@ int main (int argc, char *argv[])
     QDir cachepath(path);
     qmapcontrol::ImageManager::get().enablePersistentCache(std::chrono::minutes(24*60), cachepath);
 
-    try {
-        return app.exec();
-    } catch (std::exception &x) {
-        QMessageBox::critical(nullptr, QObject::tr("Uncatched Exception"),
-                              QString("Uncatched exception: %1").arg(QString::fromStdString(x.what())));
-        return -1;
-    }
+    return app.exec();
 }

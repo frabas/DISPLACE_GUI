@@ -27,13 +27,29 @@ double yval,
 int _harbour,
 int _code_area,
 int _code_landscape,
+double _landscape_norm,
+double _landscape_alpha,
 double _wind,
+double _wind_norm,
+double _wind_alpha,
 double _sst,
+double _sst_norm,
+double _sst_alpha,
 double _salinity,
+double _salinity_norm,
+double _salinity_alpha,
 double _Nitrogen,
+double _Nitrogen_norm,
+double _Nitrogen_alpha,
 double _Phosphorus,
+double _Phosphorus_norm,
+double _Phosphorus_alpha,
 double _Oxygen,
+double _Oxygen_norm,
+double _Oxygen_alpha,
 double _DissolvedCarbon,
+double _DissolvedCarbon_norm,
+double _DissolvedCarbon_alpha,
 double _benthos_biomass,
 double _benthos_number,
 double _benthos_meanweight,
@@ -48,8 +64,15 @@ multimap<int, double> _mean_fish_price_per_pop_per_cat,
 map<int, double> _fuelprice,
 vector<types::NodeId> _usual_fgrounds,
 vector<double> _freq_usual_fgrounds)
-: Node(idx, xval, yval,  _harbour, _code_area, _code_landscape, _wind,_sst,_salinity,
-       _Nitrogen, _Phosphorus, _Oxygen, _DissolvedCarbon,
+: Node(idx, xval, yval,  _harbour, _code_area,
+        _code_landscape, _landscape_norm, _landscape_alpha,
+        _wind,  _wind_norm,  _wind_alpha,
+        _sst,  _sst_norm,  _sst_alpha,
+        _salinity,  _salinity_norm,  _salinity_alpha,
+        _Nitrogen,  _Nitrogen_norm,  _Nitrogen_alpha,
+        _Phosphorus, _Phosphorus_norm,  _Phosphorus_alpha,
+        _Oxygen,  _Oxygen_norm,  _Oxygen_alpha,
+        _DissolvedCarbon,  _DissolvedCarbon_norm,  _DissolvedCarbon_alpha,
        _benthos_biomass, _benthos_number,_benthos_meanweight, _benthos_biomass_K, _benthos_number_K, nbpops, nbbenthospops, nbszgroups)
 {
 	name=_name;
@@ -74,7 +97,7 @@ Harbour::Harbour()
 }
 
 Harbour::Harbour(types::NodeId idx, double xval, double yval, int _harbour)
-    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    : Node(idx, xval, yval,  _harbour, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 {
 
 }

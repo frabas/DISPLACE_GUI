@@ -1001,7 +1001,7 @@ bool DisplaceModel::addGraph(const QList<GraphBuilder::Node> &nodes, MapObjectsC
                 mHarbours.push_back(hd);
                 newharbours.push_back(hd);
             } else {
-                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+                nd = std::shared_ptr<Node>(new Node(types::NodeId(nodeidx + cntr), node.point.x(), node.point.y(),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
             }
 
             std::shared_ptr<NodeData> nodedata (new NodeData(nd, this));
@@ -1987,6 +1987,23 @@ bool DisplaceModel::loadNodes()
         throw DisplaceException(QString(QObject::tr("Cannot parse %1: %2"))
                                 .arg(filename_DissolvedCarbon_graph.c_str()));
 
+    vector<double> graph_point_landscape_norm(nrow_coord, 0);
+    vector<double> graph_point_landscape_alpha(nrow_coord, 0);
+    vector<double> graph_point_wind_norm(nrow_coord, 0);
+    vector<double> graph_point_wind_alpha(nrow_coord, 0);
+    vector<double> graph_point_sst_norm(nrow_coord, 0);
+    vector<double> graph_point_sst_alpha(nrow_coord, 0);
+    vector<double> graph_point_salinity_norm(nrow_coord, 0);
+    vector<double> graph_point_salinity_alpha(nrow_coord, 0);
+    vector<double> graph_point_Nitrogen_norm(nrow_coord, 0);
+    vector<double> graph_point_Nitrogen_alpha(nrow_coord, 0);
+    vector<double> graph_point_Phosphorus_norm(nrow_coord, 0);
+    vector<double> graph_point_Phosphorus_alpha(nrow_coord, 0);
+    vector<double> graph_point_Oxygen_norm(nrow_coord, 0);
+    vector<double> graph_point_Oxygen_alpha(nrow_coord, 0);
+    vector<double> graph_point_DissolvedCarbon_norm(nrow_coord, 0);
+    vector<double> graph_point_DissolvedCarbon_alpha(nrow_coord, 0);
+
 
 
     // input data, for the benthos biomass for each point of the graph
@@ -2109,13 +2126,29 @@ bool DisplaceModel::loadNodes()
                                        graph_coord_harbour[i],
                                        graph_point_code_area[i],
                                        graph_point_code_landscape[i],
+                                       graph_point_landscape_norm[i],
+                                       graph_point_landscape_alpha[i],
                                        graph_point_wind[i],
+                                       graph_point_wind_norm[i],
+                                       graph_point_wind_alpha[i],
                                        graph_point_sst[i],
+                                       graph_point_sst_norm[i],
+                                       graph_point_sst_alpha[i],
                                        graph_point_salinity[i],
+                                       graph_point_salinity_norm[i],
+                                       graph_point_salinity_alpha[i],
                                        graph_point_Nitrogen[i],
+                                       graph_point_Nitrogen_norm[i],
+                                       graph_point_Nitrogen_alpha[i],
                                        graph_point_Phosphorus[i],
+                                       graph_point_Phosphorus_norm[i],
+                                       graph_point_Phosphorus_alpha[i],
                                        graph_point_Oxygen[i],
+                                       graph_point_Oxygen_norm[i],
+                                       graph_point_Oxygen_alpha[i],
                                        graph_point_DissolvedCarbon[i],
+                                       graph_point_DissolvedCarbon_norm[i],
+                                       graph_point_DissolvedCarbon_alpha[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // because benthos mean weight is not informed by GIS layer
@@ -2147,13 +2180,29 @@ bool DisplaceModel::loadNodes()
                                  graph_coord_harbour[i],
                                  graph_point_code_area[i],
                                  graph_point_code_landscape[i],
+                                 graph_point_landscape_norm[i],
+                                 graph_point_landscape_alpha[i],
                                  graph_point_wind[i],
+                                 graph_point_wind_norm[i],
+                                 graph_point_wind_alpha[i],
                                  graph_point_sst[i],
+                                 graph_point_sst_norm[i],
+                                 graph_point_sst_alpha[i],
                                  graph_point_salinity[i],
+                                 graph_point_salinity_norm[i],
+                                 graph_point_salinity_alpha[i],
                                  graph_point_Nitrogen[i],
+                                 graph_point_Nitrogen_norm[i],
+                                 graph_point_Nitrogen_alpha[i],
                                  graph_point_Phosphorus[i],
+                                 graph_point_Phosphorus_norm[i],
+                                 graph_point_Phosphorus_alpha[i],
                                  graph_point_Oxygen[i],
+                                 graph_point_Oxygen_norm[i],
+                                 graph_point_Oxygen_alpha[i],
                                  graph_point_DissolvedCarbon[i],
+                                 graph_point_DissolvedCarbon_norm[i],
+                                 graph_point_DissolvedCarbon_alpha[i],
                                  graph_point_benthos_biomass[i],
                                  graph_point_benthos_number[i],
                                  0,// because benthos mean weight is not informed by GIS layer

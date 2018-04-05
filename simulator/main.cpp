@@ -1156,7 +1156,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
     // check the class Node
-    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
+    Node node (types::NodeId(1), 1.0, 1.0, 0,0,0,0, 0, 0,0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, nbpops, nbbenthospops, 5);
     dout (cout << "is the node at 1,1? "
           << node.get_x() << " " << node.get_y() << " " << node.get_is_harbour() << endl);
     node.set_xy(2,2);
@@ -1321,6 +1321,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         return 1;
     }
 
+    vector<double> graph_point_landscape_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_landscape_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_wind_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_wind_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_sst_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_sst_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_salinity_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_salinity_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_Nitrogen_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_Nitrogen_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_Phosphorus_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_Phosphorus_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_Oxygen_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_Oxygen_alpha(graph_coord_x.size(), 0);
+    vector<double> graph_point_DissolvedCarbon_norm(graph_coord_x.size(), 0);
+    vector<double> graph_point_DissolvedCarbon_alpha(graph_coord_x.size(), 0);
+
+
     // input data, for the benthos total BIOMASS for each point of the graph
     ifstream benthos_biomass_graph;
     benthos_biomass_graph.open(filename_code_benthos_biomass_graph.c_str());
@@ -1406,13 +1424,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
           graph_coord_harbour.at(n)=(get<2>(environment_on_coord.at(n))); // #2
           graph_point_code_area.at(n)=(get<4>(environment_on_coord.at(n))); // #4
           graph_point_code_landscape.at(n)=(get<5>(environment_on_coord.at(n))); // #5
+          graph_point_landscape_norm.at(n)=(get<6>(environment_on_coord.at(n)));
+          graph_point_landscape_alpha.at(n)=(get<7>(environment_on_coord.at(n)));
           graph_point_wind.at(n)=(get<8>(environment_on_coord.at(n))); // #8
+          graph_point_wind_norm.at(n)=(get<9>(environment_on_coord.at(n)));
+          graph_point_wind_alpha.at(n)=(get<10>(environment_on_coord.at(n)));
           graph_point_sst.at(n)=(get<11>(environment_on_coord.at(n)));  // #11
+          graph_point_sst_norm.at(n)=(get<12>(environment_on_coord.at(n)));
+          graph_point_sst_alpha.at(n)=(get<13>(environment_on_coord.at(n)));
           graph_point_salinity.at(n)=(get<14>(environment_on_coord.at(n)));  // #14
+          graph_point_salinity_norm.at(n)=(get<15>(environment_on_coord.at(n)));
+          graph_point_salinity_alpha.at(n)=(get<16>(environment_on_coord.at(n)));
           graph_point_Nitrogen.at(n)=(get<17>(environment_on_coord.at(n)));  // #17
+          graph_point_Nitrogen_norm.at(n)=(get<18>(environment_on_coord.at(n)));
+          graph_point_Nitrogen_alpha.at(n)=(get<19>(environment_on_coord.at(n)));
           graph_point_Phosphorus.at(n)=(get<20>(environment_on_coord.at(n)));  // #20
+          graph_point_Phosphorus_norm.at(n)=(get<21>(environment_on_coord.at(n)));
+          graph_point_Phosphorus_alpha.at(n)=(get<22>(environment_on_coord.at(n)));
           graph_point_Oxygen.at(n)=(get<23>(environment_on_coord.at(n)));  // #23
+          graph_point_Oxygen_norm.at(n)=(get<24>(environment_on_coord.at(n)));
+          graph_point_Oxygen_alpha.at(n)=(get<25>(environment_on_coord.at(n)));
           graph_point_DissolvedCarbon.at(n)=(get<26>(environment_on_coord.at(n)));  // #26
+          graph_point_DissolvedCarbon_norm.at(n)=(get<27>(environment_on_coord.at(n)));
+          graph_point_DissolvedCarbon_alpha.at(n)=(get<28>(environment_on_coord.at(n)));
        }
 
        //check
@@ -1534,13 +1568,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                        graph_coord_harbour[i],
                                        graph_point_code_area[i],
                                        graph_point_code_landscape[i],
+                                       graph_point_landscape_norm[i],
+                                       graph_point_landscape_alpha[i],
                                        graph_point_wind[i],
+                                       graph_point_wind_norm[i],
+                                       graph_point_wind_alpha[i],
                                        graph_point_sst[i],
+                                       graph_point_sst_norm[i],
+                                       graph_point_sst_alpha[i],
                                        graph_point_salinity[i],
+                                       graph_point_salinity_norm[i],
+                                       graph_point_salinity_alpha[i],
                                        graph_point_Nitrogen[i],
+                                       graph_point_Nitrogen_norm[i],
+                                       graph_point_Nitrogen_alpha[i],
                                        graph_point_Phosphorus[i],
+                                       graph_point_Phosphorus_norm[i],
+                                       graph_point_Phosphorus_alpha[i],
                                        graph_point_Oxygen[i],
+                                       graph_point_Oxygen_norm[i],
+                                       graph_point_Oxygen_alpha[i],
                                        graph_point_DissolvedCarbon[i],
+                                       graph_point_DissolvedCarbon_norm[i],
+                                       graph_point_DissolvedCarbon_alpha[i],
                                        graph_point_benthos_biomass[i],
                                        graph_point_benthos_number[i],
                                        0, // meanweight not set from a GIS layer....
@@ -1568,13 +1618,29 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                     graph_coord_harbour[i],
                                     graph_point_code_area[i],
                                     graph_point_code_landscape[i],
+                                    graph_point_landscape_norm[i],
+                                    graph_point_landscape_alpha[i],
                                     graph_point_wind[i],
+                                    graph_point_wind_norm[i],
+                                    graph_point_wind_alpha[i],
                                     graph_point_sst[i],
+                                    graph_point_sst_norm[i],
+                                    graph_point_sst_alpha[i],
                                     graph_point_salinity[i],
+                                    graph_point_salinity_norm[i],
+                                    graph_point_salinity_alpha[i],
                                     graph_point_Nitrogen[i],
+                                    graph_point_Nitrogen_norm[i],
+                                    graph_point_Nitrogen_alpha[i],
                                     graph_point_Phosphorus[i],
+                                    graph_point_Phosphorus_norm[i],
+                                    graph_point_Phosphorus_alpha[i],
                                     graph_point_Oxygen[i],
+                                    graph_point_Oxygen_norm[i],
+                                    graph_point_Oxygen_alpha[i],
                                     graph_point_DissolvedCarbon[i],
+                                    graph_point_DissolvedCarbon_norm[i],
+                                    graph_point_DissolvedCarbon_alpha[i],
                                     graph_point_benthos_biomass[i],
                                     graph_point_benthos_number[i],
                                     0, // meanweight not set from a GIS layer....

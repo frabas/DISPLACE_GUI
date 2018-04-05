@@ -146,7 +146,8 @@ HEADERS= \
     storage/modelmetadataaccessor.h \
     storage/tables/vesselvmslikefpingsonlytable.h \
     storage/tables/funcgroupstable.h \
-    storage/tables/shipstable.h
+    storage/tables/shipstable.h \
+    ../include/diffusion.h
 
 ### mSQLiteCpp dependency
 

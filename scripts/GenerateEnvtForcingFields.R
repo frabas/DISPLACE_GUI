@@ -12,8 +12,8 @@
      if(.Platform$OS.type == "windows") {
        general$application           <- "testexample" # ...or myfish
        general$main_path_gis         <- file.path("C:","Users","fbas","Documents","GitHub","DISPLACE_input_gis", general$application)
-       general$application           <- "myfish" # ...or myfish
-       general$main_path_gis         <- file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_gis_", general$application, sep=""))
+       #general$application           <- "myfish" # ...or myfish
+       #general$main_path_gis         <- file.path("C:","Users","fbas","Documents","GitHub",paste("DISPLACE_input_gis_", general$application, sep=""))
        general$main.path.ibm         <- file.path("C:","Users","fbas","Documents","GitHub", paste("DISPLACE_input_", general$application, sep=''))
        general$igraph                <- 56  # caution: should be consistent with existing objects already built upon a given graph
        do_plot                       <- TRUE
@@ -203,7 +203,7 @@
 
       # export
      write.table(coord, 
-       file=file.path(general$main.path.ibm, "graphsspe", 'environment_on_coord.dat'),
+       file=file.path(general$main.path.ibm, "graphsspe", paste0('environment_on_coord',general$igraph,'.dat')),
                  row.names=FALSE, col.names=TRUE, sep= ",", quote=FALSE)
 
 

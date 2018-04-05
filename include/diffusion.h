@@ -18,27 +18,18 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-
-#ifndef MEMORYINFO_H
-#define MEMORYINFO_H
-
 #include <commons_global.h>
-#include <stddef.h>
 
-class MemoryInfoImpl;
+#include <stdio.h>
+#include <stdlib.h>
+#include <helpers.h>
 
-class COMMONSSHARED_EXPORT MemoryInfo
-{
-public:
-    MemoryInfo();
+#include <string>
+#include <vector>
 
-    size_t rss() const { return mRss_kb; }
-    size_t peakRss() const { return mPeakRss_kb; }
+#include <Node.h>
 
-    bool update();
-protected:
-    size_t mRss_kb;
-    size_t mPeakRss_kb;
-};
 
-#endif // MEMORYINFO_H
+bool COMMONSSHARED_EXPORT diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, double coeff);
+bool COMMONSSHARED_EXPORT diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map);
+

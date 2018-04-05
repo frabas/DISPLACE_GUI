@@ -18,24 +18,27 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <helpers.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <helpers.h>
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <Node.h>
+//#include <Node.h>
 
-// NAIVE DIFFUSION FOR NOW i.e. DIFFUSION IN EVERY DIRECTION....
-// TODO: import each Env Forcing info as
-// a tuple for 1-value on node 2-gradient on node param norm 3-gradient param alpha
-// then diffuse from dep node toward the dest node according to the gradient info,
-// caution: the dest node not expected to be always part of the neighbour nodes because norm can be > dist in-between node...
-// (so the pseudo code would be: compute first the dest in continuous space, then assign back to the closest node.)
+#include <diffusion.h>
 
 
-void diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
+bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
+{
+    // TODO
+
+    return 0;
+}
+
+
+bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, double coeff)
 {
 
    cout << "start diffusion for Nitrogen...." << endl;
@@ -45,10 +48,10 @@ void diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
        {
        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
        }
-    random_shuffle (list_of_nodes.begin(), list_of_nodes.end() );
-    for (int n=0; n<list_of_nodes.size(); ++n)
+    random_shuffle (list_of_nodes_idx.begin(), list_of_nodes_idx.end() );
+    for (int n=0; n<list_of_nodes_idx.size(); ++n)
        {
-        auto idx_node=list_of_nodes.at(n)->get_idx_node();
+        auto idx_node=list_of_nodes_idx.at(n);
 
 
         // get the N for this pop on this node
@@ -56,37 +59,59 @@ void diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
 
 
         // get the list of neighbouring nodes
-        vector<types::NodeId> neighbour_nodes;
-        vertex_t u = idx_node.toIndex();
+        //vector<types::NodeId> neighbour_nodes;
+        vector<int> neighbour_nodes;
+                vertex_t u = idx_node.toIndex();
         // Visit each edge exiting u
         for (std::list<edge>::iterator edge_iter = adjacency_map[u].begin();
              edge_iter != adjacency_map[u].end();
              edge_iter++)
         {
-            neighbour_nodes.push_back(types::NodeId(edge_iter->target));
+            //neighbour_nodes.push_back(types::NodeId(edge_iter->target));
+            neighbour_nodes.push_back(edge_iter->target);
         }
 
-        std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
 
-        double coeff= 0.4; // HARDCODED
+        // apply unique
+        std::sort(neighbour_nodes.begin(), neighbour_nodes.end());
+        std::vector<int>::iterator last=std::unique(neighbour_nodes.begin(), neighbour_nodes.end());
+        neighbour_nodes.erase(last, neighbour_nodes.end());
+
 
         // displace a proportion of N from departure node to neighbours nodes
         int count = neighbour_nodes.size();
-               double depN=departure_Nitrogen;
+
+
+         double depN=departure_Nitrogen;
+
+         //if(idx_node.toIndex()==9006){
+         //    cout << "on this node " <<  idx_node.toIndex() << " BEFORE departure_Nitrogen is "<< departure_Nitrogen << endl;
+         //    for(int i=0; i< neighbour_nodes.size();i++) cout <<  neighbour_nodes.at(i) << " ";
+         //    cout << endl;
+         //}
                for (int nei=0; nei<count; ++nei)
                   {
-                      double arrival_Nitrogen = list_of_nodes.at(nei)->get_Nitrogen();
+                      double arrival_Nitrogen = list_of_nodes.at(neighbour_nodes.at(nei))->get_Nitrogen();
                       double exchanged       = ((coeff*depN)/count);
+                      //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " BEFORE arrival_Nitrogen is "<< arrival_Nitrogen << endl;
                       arrival_Nitrogen       = arrival_Nitrogen + exchanged;
+                      //if(idx_node.toIndex()==9006) cout << "on this node " <<  neighbour_nodes.at(nei) << " AFTER arrival_Nitrogen is "<< arrival_Nitrogen << endl;
                       departure_Nitrogen     = departure_Nitrogen - exchanged;
-                      list_of_nodes.at(nei)->setNitrogen(arrival_Nitrogen);//update arrival
+                      list_of_nodes.at(neighbour_nodes.at(nei))->setNitrogen(arrival_Nitrogen);//update arrival
                    }
-               list_of_nodes.at(n)->setNitrogen(departure_Nitrogen ); //update departure
+               list_of_nodes.at(idx_node.toIndex())->setNitrogen(departure_Nitrogen ); //update departure
 
+
+          //if(idx_node.toIndex()==9006){
+          //     cout << "on this node " <<  idx_node.toIndex() << " AFTER departure_Nitrogen is "<< departure_Nitrogen << endl;
+          //     cout << endl;
+          //}
 
       } // node by node
 
   cout << "stop diffusion Nitrogen for this node...." << endl;
+
+  return 0;
 }
 
 

@@ -107,8 +107,8 @@ using namespace sqlite;
 #include "Population.h"
 #include "Fishfarm.h"
 #include "Windmill.h"
-
 #include "Harbour.h"
+#include "diffusion.h"
 
 #include <outputexporter.h>
 
@@ -1360,7 +1360,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
        const string separator=",";
 
-       string filename = inputfolder+"/graphsspe/environment_on_coord.dat";
+       stringstream out;
+       out << a_graph;
+       string a_graph_s = out.str();
+       string filename = inputfolder+"/graphsspe/environment_on_coord"+a_graph_s+".dat";
 
        ifstream is;
        is.open(filename.c_str());
@@ -5592,6 +5595,35 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #endif
 
 
+
+        ///------------------------------///
+        ///------------------------------///
+        ///  THE DIFFUSIVE ENVT          ///
+        ///------------------------------///
+        ///------------------------------///
+        if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+        {
+            int numStepDiffusions = 100; // e.g. diffuse every 100 tsteps
+            if((tstep % numStepDiffusions) == (numStepDiffusions-1))
+            {
+
+               // naive diffusion
+               double coeff_diffusion =0.4;
+               bool r= diffuse_Nitrogen_in_every_directions(nodes, adjacency_map, coeff_diffusion);
+
+               // gradient diffusion
+               //bool r=  diffuse_Nitrogen_with_gradients(nodes, adjacency_map);
+            }
+
+        }
+
+
+
+        ///------------------------------///
+        ///------------------------------///
+        ///  EXPORTING TO DB             ///
+        ///------------------------------///
+        ///------------------------------///
        // export
         {
             std::unique_lock<std::mutex> m(listVesselMutex);

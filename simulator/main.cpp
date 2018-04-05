@@ -256,7 +256,7 @@ vector<int> listVesselIdForTripCatchPopPerSzgroupExport;
 #include <messages/noipc.h>
 #endif
 
-static size_t numStepTransactions = 100;
+static size_t numStepTransactions = 200;
 
 //vector <double> dist_to_ports;
 

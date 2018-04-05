@@ -37,6 +37,7 @@
 #include <modelobjects/nationdata.h>
 #include <modelobjects/harbourdata.h>
 #include <historicaldatacollector.h>
+#include <outputfileparser.h>
 #include <graphbuilder_shp.h>
 #include <objects/metiersentity.h>
 #include <utils/interestinglist.h>

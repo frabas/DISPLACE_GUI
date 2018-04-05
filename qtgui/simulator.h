@@ -49,6 +49,7 @@
 #include <memory>
 
 class DisplaceModel;
+class OutputFileParser;
 
 /** \brief An ongoing simulation process
  *

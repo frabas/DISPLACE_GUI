@@ -22,6 +22,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <outputfileparser.h>
 #include <statscontroller.h>
 
 #include <memoryinfo.h>

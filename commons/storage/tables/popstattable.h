@@ -26,6 +26,7 @@ private:
 
     FieldDef<FieldType::Real> cumFTime = makeFieldDef("CumFTime",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> cumSwA = makeFieldDef("CumSwA",FieldType::Real()).notNull();
+    FieldDef<FieldType::Real> cumSubSurfSwA = makeFieldDef("CumSubSurfSwA",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> cumCatches = makeFieldDef("CumCatches",FieldType::Real()).notNull();
     FieldDef<FieldType::Real> cumDisc = makeFieldDef("CumDiscards",FieldType::Real()).notNull();
 
@@ -42,6 +43,7 @@ public:
         int tstep;
         double cumftime;
         double cumswa;
+        double cumsubsurfswa;
         double cumcatches;
         double cumdisc;
     };

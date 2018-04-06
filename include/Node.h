@@ -94,43 +94,107 @@ class COMMONSSHARED_EXPORT Node
         }
 
         int get_marine_landscape() const;
+        double get_marine_landscape_norm() const;
+        double get_marine_landscape_alpha() const;
         void setMarineLandscape(int id) {
             marine_landscape = id;
         }
+        void setMarineLandscapeNorm(double ml_n) {
+            marine_landscape_norm = ml_n;
+        }
+        void setMarineLandscapeAlpha(double ml_a) {
+            marine_landscape_alpha = ml_a;
+        }
 
         double get_wind() const;
+        double get_wind_norm() const;
+        double get_wind_alpha() const;
         void setWind(double w) {
             wind = w;
         }
+        void setWindNorm(double w_n) {
+            wind_norm = w_n;
+        }
+        void setWindAlpha(double w_a) {
+            wind_alpha = w_a;
+        }
 
         double get_sst() const;
+        double get_sst_norm() const;
+        double get_sst_alpha() const;
         void setSST(double t) {
             sst = t;
         }
+        void setSSTNorm(double t_n) {
+            sst_norm = t_n;
+        }
+        void setSSTAlpha(double t_a) {
+            sst_alpha = t_a;
+        }
 
         double get_salinity() const;
+        double get_salinity_norm() const;
+        double get_salinity_alpha() const;
         void setSalinity(double s) {
             salinity = s;
         }
+        void setSalinityNorm(double s_n) {
+            salinity_norm = s_n;
+        }
+        void setSalinityAlpha(double s_a) {
+            salinity_alpha = s_a;
+        }
 
         double get_Nitrogen() const;
+        double get_Nitrogen_norm() const;
+        double get_Nitrogen_alpha() const;
         void setNitrogen(double N) {
             Nitrogen = N;
         }
+        void setNitrogenNorm(double N_n) {
+            Nitrogen_norm = N_n;
+        }
+        void setNitrogenAlpha(double N_a) {
+            Nitrogen_alpha = N_a;
+        }
 
         double get_Phosphorus() const;
+        double get_Phosphorus_norm() const;
+        double get_Phosphorus_alpha() const;
         void setPhosphorus(double P) {
             Phosphorus = P;
         }
+        void setPhosphorusNorm(double P_n) {
+            Phosphorus_norm = P_n;
+        }
+        void setPhosphorusAlpha(double P_a) {
+            Phosphorus_alpha = P_a;
+        }
 
         double get_Oxygen() const;
+        double get_Oxygen_norm() const;
+        double get_Oxygen_alpha() const;
         void setOxygen(double O) {
             Oxygen = O;
         }
+        void setOxygenNorm(double O_n) {
+            Oxygen_norm = O_n;
+        }
+        void setOxygenAlpha(double O_a) {
+            Oxygen_alpha = O_a;
+        }
 
         double get_DissolvedCarbon() const;
+        double get_DissolvedCarbon_norm() const;
+        double get_DissolvedCarbon_alpha() const;
         void setDissolvedCarbon(double dissC) {
             DissolvedCarbon = dissC;
+        }
+        void setDissolvedCarbonNorm(double dissC_n) {
+            DissolvedCarbon_norm = dissC_n;
+        }
+        void setDissolvedCarbonAlpha(double dissC_a) {
+            DissolvedCarbon_alpha = dissC_a;
         }
 
 
@@ -313,13 +377,14 @@ private:
 		int harbour;
 		int code_area;
 		int marine_landscape;
-        double wind;
-        double sst;
-        double salinity;
-        double Nitrogen;
-        double Phosphorus;
-        double Oxygen;
-        double DissolvedCarbon;
+        double  marine_landscape_norm,  marine_landscape_alpha;
+        double wind, wind_norm, wind_alpha;
+        double sst, sst_norm, sst_alpha;
+        double salinity, salinity_norm, salinity_alpha;
+        double Nitrogen, Nitrogen_norm, Nitrogen_alpha;
+        double Phosphorus, Phosphorus_norm, Phosphorus_alpha;
+        double Oxygen, Oxygen_norm, Oxygen_alpha;
+        double DissolvedCarbon, DissolvedCarbon_norm, DissolvedCarbon_alpha;
         int benthos_id;
         double benthos_biomass;  // total bio on node from the GIS graph file
         double benthos_number;  // total bio on node from the GIS graph file

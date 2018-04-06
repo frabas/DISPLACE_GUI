@@ -32,7 +32,38 @@
 
 bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
 {
-    // TODO
+    cout << "start diffusion for Nitrogen along gradients...." << endl;
+
+     vector<types::NodeId> list_of_nodes_idx;
+     for (int n=0; n<list_of_nodes.size(); ++n)
+        {
+        list_of_nodes_idx.push_back(list_of_nodes.at(n)->get_idx_node());
+        }
+     random_shuffle (list_of_nodes_idx.begin(), list_of_nodes_idx.end() );
+     for (int n=0; n<list_of_nodes_idx.size(); ++n)
+        {
+         auto idx_node=list_of_nodes_idx.at(n);
+
+
+         // get the value on this node
+         double departure_Nitrogen = list_of_nodes.at(n)->get_Nitrogen();
+
+         // get the gradient value on this node
+         double departure_Nitrogen_norm = list_of_nodes.at(n)->get_Nitrogen_norm();
+         double departure_Nitrogen_alpha = list_of_nodes.at(n)->get_Nitrogen_alpha();
+
+
+
+         // TODO....
+
+
+
+
+
+
+         }
+
+
 
     return 0;
 }
@@ -54,7 +85,7 @@ bool diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency
         auto idx_node=list_of_nodes_idx.at(n);
 
 
-        // get the N for this pop on this node
+        // get value on this node
         double departure_Nitrogen = list_of_nodes.at(n)->get_Nitrogen();
 
 

@@ -41,7 +41,7 @@ const multimap<int,double> Node::mFreqUsualMetiers;
 Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code_area,
            int _marine_landscape, double _marine_landscape_norm, double _marine_landscape_alpha,
            double _wind, double _wind_norm, double _wind_alpha,
-           double _sst, double sst_norm, double sst_alpha,
+           double _sst, double _sst_norm, double _sst_alpha,
            double _salinity, double _salinity_norm, double _salinity_alpha,
            double _Nitrogen, double _Nitrogen_norm, double _Nitrogen_alpha,
            double _Phosphorus,double _Phosphorus_norm, double _Phosphorus_alpha,
@@ -63,13 +63,29 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
+    marine_landscape_norm=_marine_landscape_norm;
+    marine_landscape_alpha=_marine_landscape_alpha;
     wind=_wind;
+    wind_norm=_wind_norm;
+    wind_alpha=_wind_alpha;
     sst=_sst;
+    sst_norm=_sst_norm;
+    sst_alpha=_sst_alpha;
     salinity=_salinity;
+    salinity_norm=_salinity_norm;
+    salinity_alpha=_salinity_alpha;
     Nitrogen=_Nitrogen;
+    Nitrogen_norm=_Nitrogen_norm;
+    Nitrogen_alpha=_Nitrogen_alpha;
     Phosphorus=_Phosphorus;
+    Phosphorus_norm=_Phosphorus_norm;
+    Phosphorus_alpha=_Phosphorus_alpha;
     Oxygen=_Oxygen;
+    Oxygen_norm=_Oxygen_norm;
+    Oxygen_alpha=_Oxygen_alpha;
     DissolvedCarbon=_DissolvedCarbon;
+    DissolvedCarbon_norm=_DissolvedCarbon_norm;
+    DissolvedCarbon_alpha=_DissolvedCarbon_alpha;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;
@@ -223,9 +239,29 @@ int Node::get_marine_landscape() const
     return(marine_landscape);
 }
 
+double Node::get_marine_landscape_norm() const
+{
+    return(marine_landscape_norm);
+}
+
+double Node::get_marine_landscape_alpha() const
+{
+    return(marine_landscape_alpha);
+}
+
 double Node::get_wind() const
 {
     return(wind);
+}
+
+double Node::get_wind_norm() const
+{
+    return(wind_norm);
+}
+
+double Node::get_wind_alpha() const
+{
+    return(wind_alpha);
 }
 
 double Node::get_sst() const
@@ -233,9 +269,29 @@ double Node::get_sst() const
     return(sst);
 }
 
+double Node::get_sst_norm() const
+{
+    return(sst_norm);
+}
+
+double Node::get_sst_alpha() const
+{
+    return(sst_alpha);
+}
+
 double Node::get_salinity() const
 {
     return(salinity);
+}
+
+double Node::get_salinity_norm() const
+{
+    return(salinity_norm);
+}
+
+double Node::get_salinity_alpha() const
+{
+    return(salinity_alpha);
 }
 
 double Node::get_Nitrogen() const
@@ -243,9 +299,29 @@ double Node::get_Nitrogen() const
     return(Nitrogen);
 }
 
+double Node::get_Nitrogen_norm() const
+{
+    return(Nitrogen_norm);
+}
+
+double Node::get_Nitrogen_alpha() const
+{
+    return(Nitrogen_alpha);
+}
+
 double Node::get_Phosphorus() const
 {
     return(Phosphorus);
+}
+
+double Node::get_Phosphorus_norm() const
+{
+    return(Phosphorus_norm);
+}
+
+double Node::get_Phosphorus_alpha() const
+{
+    return(Phosphorus_alpha);
 }
 
 double Node::get_Oxygen() const
@@ -253,11 +329,30 @@ double Node::get_Oxygen() const
     return(Oxygen);
 }
 
+double Node::get_Oxygen_norm() const
+{
+    return(Oxygen_norm);
+}
+
+double Node::get_Oxygen_alpha() const
+{
+    return(Oxygen_alpha);
+}
+
 double Node::get_DissolvedCarbon() const
 {
     return(DissolvedCarbon);
 }
 
+double Node::get_DissolvedCarbon_norm() const
+{
+    return(DissolvedCarbon_norm);
+}
+
+double Node::get_DissolvedCarbon_alpha() const
+{
+    return(DissolvedCarbon_alpha);
+}
 
 double Node::get_init_benthos_biomass() const
 {
@@ -685,6 +780,7 @@ void Node::set_xy(double xval, double yval)
 	x = xval;
 	y = yval;
 }
+
 
 
 void Node::add_to_cumftime(int delta_time)

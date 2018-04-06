@@ -13,7 +13,6 @@ struct NodesStatTable::Impl {
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>> insertStatement;
-
     sqlite::SQLiteStatement allNodesQueryStatement;
 };
 

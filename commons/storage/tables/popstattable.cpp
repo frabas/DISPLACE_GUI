@@ -11,8 +11,12 @@ struct NodesStatTable::Impl {
     bool init = false;
 
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
+<<<<<<< HEAD
     FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
     FieldDef<FieldType::Real>> insertStatement;
+=======
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
+>>>>>>> 8794e9d0fa20cfd316b88941c9c6774ecd97b6e2
 
     sqlite::SQLiteStatement allNodesQueryStatement;
 };
@@ -56,7 +60,11 @@ void NodesStatTable::init()
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
                                                       fldNodeId,
+<<<<<<< HEAD
                                                       cumFTime, cumSwA, cumSubSurfSwA, cumCatches, cumCatchesThrshld, cumDisc,
+=======
+                                                      cumFTime, cumSwA, cumSubSurfSwA, cumCatches, cumDisc,
+>>>>>>> 8794e9d0fa20cfd316b88941c9c6774ecd97b6e2
                                                       sqlite::op::max(fldTStep)
                                                       )
                 .where (sqlite::op::le(fldTStep))
@@ -96,9 +104,14 @@ void NodesStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesSta
         s.cumswa = st.getDoubleValue(2);
         s.cumsubsurfswa = st.getDoubleValue(3);
         s.cumcatches = st.getDoubleValue(4);
+<<<<<<< HEAD
         s.cumcatchesthrshld= st.getDoubleValue(5);
         s.cumdisc = st.getDoubleValue(6);
         s.tstep = st.getIntValue(7);
+=======
+        s.cumdisc = st.getDoubleValue(5);
+        s.tstep = st.getIntValue(6);
+>>>>>>> 8794e9d0fa20cfd316b88941c9c6774ecd97b6e2
         if (op)
             return op(s);
         return false;

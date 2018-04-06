@@ -18,21 +18,16 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <helpers.h>
-
-//#include <string>
-//#include <vector>
-
-//#include <Node.h>
 
 #include <diffusion.h>
+
+#include <GeographicLib/Geodesic.hpp>
 
 
 bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
 {
     cout << "start diffusion for Nitrogen along gradients...." << endl;
+
 
      vector<types::NodeId> list_of_nodes_idx;
      for (int n=0; n<list_of_nodes.size(); ++n)
@@ -54,12 +49,56 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_
 
 
 
-         // TODO....
+         // compute pos in polar space
+         double lon = list_of_nodes.at(n)->get_x() + departure_Nitrogen_norm*cos((departure_Nitrogen_alpha*M_PI/180));
+         double lat = list_of_nodes.at(n)->get_y() + departure_Nitrogen_norm*sin((departure_Nitrogen_alpha*M_PI/180));
+
+/*
+#if GEOGRAPHICLIB_VERSION_MINOR > 25
+        const GeographicLib::Geodesic& geodesic = GeographicLib::Geodesic::WGS84();
+#else
+        const GeographicLib::Geodesic& geodesic = GeographicLib::Geodesic::WGS84;
+#endif
 
 
+         // restrict the search to a bounding box
+         //double dist_km=100.0;
+         //double mx, my, Mx, My, d;
+         //double y = list_of_nodes.at(n)->get_y();
+         //double x = list_of_nodes.at(n)->get_x();
+
+         //geodesic.Direct(y,x, 0, dist_km * 1000, My, d);
+         //geodesic.Direct(y,x, 90, dist_km * 1000, d, Mx);
+         //geodesic.Direct(y,x, 180, dist_km * 1000, my, d);
+         //geodesic.Direct(y,x, 270, dist_km * 1000, d, mx);
 
 
+         // find the nearest node idx
+         double mindist = 1e90;
+         double dist;
+         int nearest_node_idx;
+         for (int i=0; i<list_of_nodes_idx.size(); ++i) {
+             double a_y = list_of_nodes.at(i)->get_y();
+             double a_x = list_of_nodes.at(i)->get_x();
+             geodesic.Inverse(a_y, a_x, lat, lon, dist);
+             if (dist < mindist) {
+                 nearest_node_idx = i;
+                 mindist = dist;
+             }
+         }
 
+
+        // exchange the amount between dep and arr given a fixed coeff.
+        double coeff =0.4; // HARDCODED
+        double arrival_Nitrogen = list_of_nodes.at(nearest_node_idx)->get_Nitrogen();
+        double exchanged       = coeff*departure_Nitrogen;
+        arrival_Nitrogen       = arrival_Nitrogen + exchanged;
+        departure_Nitrogen     = departure_Nitrogen - exchanged;
+        list_of_nodes.at(nearest_node_idx)->setNitrogen(arrival_Nitrogen);//update arrival
+        list_of_nodes.at(idx_node.toIndex())->setNitrogen(departure_Nitrogen ); //update departure
+
+
+*/
 
          }
 

@@ -871,8 +871,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         for (unsigned int n=0; n<nodes.size(); n++)
          {
             outSqlite->exportPopNodes(tstep, nodes.at(n));
-            bool r=outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
-         }
+            if(dyn_alloc_sce.option(Options::fishing_credits)) outSqlite->exportTariffNodes(tstep, nodes.at(n));
+            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+          }
      }
 
 

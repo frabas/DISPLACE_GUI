@@ -10,6 +10,7 @@
 #include "tables/poptable.h"
 #include "tables/popdyntable.h"
 #include "tables/popstattable.h"
+#include "tables/poptariffstattable.h"
 #include "tables/funcgroupstable.h"
 #include "tables/vesselvmsliketable.h"
 #include "tables/vesselvmslikefpingsonlytable.h"
@@ -44,6 +45,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<ShipsTable> mShipsTable;
     std::shared_ptr<NodesDefTable> mNodesDefTable;
     std::shared_ptr<NodesStatTable> mNodesStatTable;
+    std::shared_ptr<NodesTariffStatTable> mNodesTariffStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FuncGroupsTable> mFuncGroupsTable;
@@ -72,6 +74,7 @@ void SQLiteOutputStorage::open()
     p->mShipsTable = std::make_shared<ShipsTable> (p->db, "Ships");
     p->mNodesDefTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
+    p->mNodesTariffStatTable = std::make_shared<NodesTariffStatTable>(p->db, "NodesTariffStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFuncGroupsTable = std::make_shared<FuncGroupsTable>(p->db, "FuncGroups");
@@ -133,6 +136,11 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
 void SQLiteOutputStorage::exportPopNodes(int tstep, Node *node)
 {
     bool r=p->mNodesStatTable->insert(tstep, node);
+}
+
+void SQLiteOutputStorage::exportTariffNodes(int tstep, Node *node)
+{
+    bool r=p->mNodesTariffStatTable->insert(tstep, node);
 }
 
 void SQLiteOutputStorage::exportPopStat(Population *pop, int popid, int tstep)
@@ -716,8 +724,9 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselLoglikeTable->dropAndCreate();
     p->mVesselVmslikeTable->dropAndCreate();
     p->mVesselVmslikeFPingsOnlyTable->dropAndCreate();
-    p->mNodesDefTable->dropAndCreate();
+    p->mNodesDefTable->dropAndCreate(); 
     p->mNodesStatTable->dropAndCreate();
+    p->mNodesTariffStatTable->dropAndCreate();
     p->mShipsTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
@@ -765,6 +774,11 @@ std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getNodesDefTable() const
 std::shared_ptr<NodesStatTable> SQLiteOutputStorage::getNodesStatTable() const
 {
     return p->mNodesStatTable;
+}
+
+std::shared_ptr<NodesTariffStatTable> SQLiteOutputStorage::getNodesTariffStatTable() const
+{
+    return p->mNodesTariffStatTable;
 }
 
 std::shared_ptr<PopTable> SQLiteOutputStorage::getPopTable() const

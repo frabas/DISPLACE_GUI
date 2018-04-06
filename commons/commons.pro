@@ -76,7 +76,8 @@ SOURCES= \
     storage/tables/vesselvmslikefpingsonlytable.cpp \
     storage/tables/funcgroupstable.cpp \
     storage/tables/shipstable.cpp \
-    diffusion.cpp
+    diffusion.cpp \
+    storage/tables/poptariffstattable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -147,7 +148,8 @@ HEADERS= \
     storage/tables/vesselvmslikefpingsonlytable.h \
     storage/tables/funcgroupstable.h \
     storage/tables/shipstable.h \
-    ../include/diffusion.h
+    ../include/diffusion.h \
+    storage/tables/poptariffstattable.h
 
 ### mSQLiteCpp dependency
 

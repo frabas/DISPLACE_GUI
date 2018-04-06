@@ -27,7 +27,7 @@ public:
 
     const FieldDef<FieldType::Real> benthosNumTot = makeFieldDef("bNTot",FieldType::Real());
     const FieldDef<FieldType::Real> benthosBio = makeFieldDef("bB",FieldType::Real());
-    const FieldDef<FieldType::Real> benthosBioMean = makeFieldDef("bBMean",FieldType::Real());
+    const FieldDef<FieldType::Real> benthosMeanW = makeFieldDef("bMeanW",FieldType::Real());
     const FieldDef<FieldType::Real> benthosBioK = makeFieldDef("bBK",FieldType::Real());
     const FieldDef<FieldType::Real> benthosNumK= makeFieldDef("bNK",FieldType::Real());
 
@@ -43,7 +43,7 @@ public:
         types::NodeId nodeId;
         int funcId;
 
-        double numTot, bio, bioMean, bioK, numK;
+        double numTot, bio, bioMeanW, bioK, numK;
     };
     void queryAllNodesAtStep(int tstep, std::function<bool (Stat)> op);
 };

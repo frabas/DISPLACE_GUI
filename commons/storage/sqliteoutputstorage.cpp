@@ -623,7 +623,7 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
     FieldDef<FieldType::Real> fld("");
     switch (stat) {
     case displace::plot::BenthosStat::B_MeanWeight:
-        fld = p->mFuncGroupsTable->benthosBioMean;
+        fld = p->mFuncGroupsTable->benthosMeanW;
         break;
     case displace::plot::BenthosStat::B_Number:
         fld = p->mFuncGroupsTable->benthosNumTot;

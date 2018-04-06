@@ -307,7 +307,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         if (nid < nodes.size()) {
             nodes.at(nid)->setBenthosBiomass(stat.funcId,stat.bio);
             nodes.at(nid)->setBenthosNumber(stat.funcId,stat.numTot);
-            nodes.at(nid)->setBenthosMeanweight(stat.funcId,stat.bioMean);
+            nodes.at(nid)->setBenthosMeanweight(stat.funcId,stat.bioMeanW);
             nodes.at(nid)->setBenthosBiomassOverK(stat.funcId, stat.bioK);
             nodes.at(nid)->setBenthosNumberOverK(stat.funcId, stat.numK);
         }

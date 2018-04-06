@@ -125,13 +125,13 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerCumcatchesPerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches Per Pop (PopValues CumCatches)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopCumcatches, mStatsLayerCumcatchesPerPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerBenthosBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Biomass")).arg(model_n).toStdString()));
+    mStatsLayerBenthosBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Biomass (FuncGroups bNTot)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosBiomass, mStatsLayerBenthosBiomass[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerBenthosNumber[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Number")).arg(model_n).toStdString()));
+    mStatsLayerBenthosNumber[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Number (FuncGroups bB)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosNumber, mStatsLayerBenthosNumber[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerBenthosMeanweight[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Mean Weight")).arg(model_n).toStdString()));
+    mStatsLayerBenthosMeanweight[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Mean Weight (FuncGroups bMeanW)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosMeanweight, mStatsLayerBenthosMeanweight[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     // mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));

@@ -113,16 +113,16 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     addStandardLayer(model_n, LayerEdges, mEdgesLayer[model_n]->layer(), false);
     addStandardLayer(model_n, LayerGraph, mGraphLayer[model_n], false);
 
-    mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Abundance")).arg(model_n).toStdString()));
+    mStatsLayerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Abundance (PopValues TotalN)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopStats, mStatsLayerPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Biomass")).arg(model_n).toStdString()));
+    mStatsLayerBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Biomass (PopValues TotalW)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBiomass, mStatsLayerBiomass[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Impact")).arg(model_n).toStdString()));
+    mStatsLayerImpact[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Impact ((PopValues Impact)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopImpact, mStatsLayerImpact[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerCumcatchesPerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches Per Pop")).arg(model_n).toStdString()));
+    mStatsLayerCumcatchesPerPop[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches Per Pop (PopValues CumCatches)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerPopCumcatches, mStatsLayerCumcatchesPerPop[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerBenthosBiomass[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Biomass")).arg(model_n).toStdString()));
@@ -137,22 +137,22 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     // mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
    // addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
 
-    mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort")).arg(model_n).toStdString()));
+    mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort (NodesStat CumFTime)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerCumsweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Swept Area")).arg(model_n).toStdString()));
+    mStatsLayerCumsweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Swept Area (NodesStat CumSwA)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumSweptArea, mStatsLayerCumsweptarea[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerCumsubsurfacesweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Subsurface Swept Area")).arg(model_n).toStdString()));
+    mStatsLayerCumsubsurfacesweptarea[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Subsurface Swept Area (NodesStat CumSubSurfSwA)")).arg(model_n).toStdString()));
     addOutputLayer(model_n,OutLayerCumSubsurfaceSweptArea, mStatsLayerCumsubsurfacesweptarea[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches")).arg(model_n).toStdString()));
+    mStatsLayerCumcatches[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches (NodesStat CumCatches)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatches, mStatsLayerCumcatches[model_n],type != DisplaceModel::LiveModelType ? false : true);
 
-    mStatsLayerCumcatchesWithThreshold[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches With 70\% Threshold")).arg(model_n).toStdString()));
+    mStatsLayerCumcatchesWithThreshold[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Catches With 70\% Threshold (NodesStat CumCathesThrshld)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumCatchesWithThreshold, mStatsLayerCumcatchesWithThreshold[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
-    mStatsLayerCumdiscards[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Discards")).arg(model_n).toStdString()));
+    mStatsLayerCumdiscards[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Discards (NodesStat CumDiscards)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumdiscards, mStatsLayerCumdiscards[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
     mStatsLayerWind[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Wind")).arg(model_n).toStdString()));

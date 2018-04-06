@@ -1025,10 +1025,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // EXPORT POPSTATS FILE
             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
-                if (enable_sqlite_out)
-                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
 
-                     popstats << setprecision(6) << fixed;
+
+                 // exporting popstats in txt
+                 popstats << setprecision(6) << fixed;
 
                         dout(cout  << "write down the N...");
                         // get total N from summing up N over nodes
@@ -1072,8 +1072,15 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                      popstats << " " <<  endl;
-            }
 
+
+
+                     // exporting in sqlite db
+                     if (enable_sqlite_out)
+                         outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+
+
+            }
 
 
 
@@ -1256,12 +1263,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         // ...think about increasing the rate of updating when e.g. avaishuffler on less than  month is on?
         // this would be useful to track the changes in abundance on the displace widget map but will be both time and memory consuming...
 
-        if (enable_sqlite_out) {
-            outSqlite->exportPopNodes(tstep, nodes.at(n));
-            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
-        }
     }
 
+
+    // about cumcatches with a threshld:
     // to get the list of nodes making xx% of the total...
     int athreshold =70; // TO DO: put as arg...
     vector <double> allcumcatches;
@@ -1272,12 +1277,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
        allcumcatches.push_back (acum);
        sumallcumcatches+=acum;
     }
-    // a check
-    //for (auto i: sort_indexes_descending(allcumcatches))
-    //{
-    //  cout << allcumcatches[i] << endl;
-    //}
-    //...hereafter:
+
     int it=0;
     vector<size_t> sorted_ids = sort_indexes_descending(allcumcatches);
     double runningsum=0;
@@ -1285,11 +1285,24 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
      do
      {
         if(it>=sorted_ids.size()) break;
-         runningsum+=allcumcatches.at(static_cast<int>(sorted_ids.at(it)));
-        nodes.at(static_cast<int>((sorted_ids.at(it))))->export_popnodes_cumcatches_with_threshold(popnodes_cumcatches_with_threshold, tstep, athreshold);
+        int a_idx=static_cast<int>((sorted_ids.at(it)));
+        runningsum+=allcumcatches.at(a_idx);
+        nodes.at(a_idx)->export_popnodes_cumcatches_with_threshold(popnodes_cumcatches_with_threshold, tstep, athreshold);
         it+=1;
+        nodes.at(a_idx)->set_cumcatches_with_threshold( nodes.at(a_idx)->get_cumcatches() );
      } while(runningsum < amount_at_threshold);
 
+
+
+     // export in db
+     if (enable_sqlite_out)
+     {
+        for (unsigned int n=0; n<nodes.size(); n++)
+         {
+            outSqlite->exportPopNodes(tstep, nodes.at(n));
+            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+         }
+     }
 
 
 

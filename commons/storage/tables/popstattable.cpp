@@ -11,7 +11,8 @@ struct NodesStatTable::Impl {
     bool init = false;
 
     PreparedInsert<FieldDef<FieldType::Integer>, FieldDef<FieldType::Integer>, FieldDef<FieldType::Real>,
-    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>> insertStatement;
+    FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>, FieldDef<FieldType::Real>,
+    FieldDef<FieldType::Real>> insertStatement;
 
     sqlite::SQLiteStatement allNodesQueryStatement;
 };
@@ -32,7 +33,9 @@ void NodesStatTable::dropAndCreate()
                            fldTStep,
                            cumFTime,
                            cumSwA,
+                           cumSubSurfSwA,
                            cumCatches,
+                           cumCatchesThrshld,
                            cumDisc
                            ));
 }
@@ -46,12 +49,14 @@ void NodesStatTable::init()
                                                            fldNodeId,
                                                            cumFTime,
                                                            cumSwA,
+                                                           cumSubSurfSwA,
                                                            cumCatches,
+                                                           cumCatchesThrshld,
                                                            cumDisc));
 
         auto sqlAllQuery = sqlite::statements::Select(name(),
                                                       fldNodeId,
-                                                      cumFTime, cumSwA, cumCatches, cumDisc,
+                                                      cumFTime, cumSwA, cumSubSurfSwA, cumCatches, cumCatchesThrshld, cumDisc,
                                                       sqlite::op::max(fldTStep)
                                                       )
                 .where (sqlite::op::le(fldTStep))
@@ -71,7 +76,9 @@ void NodesStatTable::insert(int tstep, Node *node)
                             (int)node->get_idx_node().toIndex(),
                             node->get_cumftime(),
                             node->get_cumsweptarea(),
+                            node->get_cumsubsurfacesweptarea(),
                             node->get_cumcatches(),
+                            node->get_cumcatches_with_threshold(),
                             node->get_cumdiscards())
                         );
 }
@@ -87,9 +94,11 @@ void NodesStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesSta
         s.nodeId = types::NodeId(st.getIntValue(0));
         s.cumftime = st.getDoubleValue(1);
         s.cumswa = st.getDoubleValue(2);
-        s.cumcatches = st.getDoubleValue(3);
-        s.cumdisc = st.getDoubleValue(4);
-        s.tstep = st.getIntValue(5);
+        s.cumsubsurfswa = st.getDoubleValue(3);
+        s.cumcatches = st.getDoubleValue(4);
+        s.cumcatchesthrshld= st.getDoubleValue(5);
+        s.cumdisc = st.getDoubleValue(6);
+        s.tstep = st.getIntValue(7);
         if (op)
             return op(s);
         return false;

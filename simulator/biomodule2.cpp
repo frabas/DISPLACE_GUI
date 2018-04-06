@@ -623,10 +623,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             // EXPORT POPSTATS FILE
             if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
-                if (enable_sqlite_out)
-                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
 
-                     popstats << setprecision(6) << fixed;
+
+                 // exporting popstats in txt
+                 popstats << setprecision(6) << fixed;
 
                         dout(cout  << "write down the N...");
                         // get total N from summing up N over nodes
@@ -670,6 +670,14 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
 
                      popstats << " " <<  endl;
+
+
+
+                     // exporting in sqlite db
+                     if (enable_sqlite_out)
+                         outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+
+
             }
 
             //----------------------------------------//
@@ -825,12 +833,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         if(dyn_alloc_sce.option(Options::fishing_credits)) nodes.at(n)->export_popnodes_tariffs(popnodes_tariffs, tstep);
         if(export_vmslike && tstep < 8761) nodes.at(n)->export_popnodes(popnodes_inc, init_weight_per_szgroup, tstep); // large size output disabled if -e at 0
 
-        if (enable_sqlite_out) {
-            outSqlite->exportPopNodes(tstep, nodes.at(n));
-            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
-        }
-    }
+     }
 
+
+    // about cumcatches with a threshld:
     // to get the list of nodes making xx% of the total...
     int athreshold =70; // TO DO: put as arg...
     vector <double> allcumcatches;
@@ -849,12 +855,25 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
      do
      {
         if(it>=sorted_ids.size()) break;
-        runningsum+=allcumcatches.at(static_cast<int>(sorted_ids.at(it)));
-        nodes.at(static_cast<int>((sorted_ids.at(it))))->export_popnodes_cumcatches_with_threshold(popnodes_cumcatches_with_threshold, tstep, athreshold);
+        int a_idx=static_cast<int>((sorted_ids.at(it)));
+        runningsum+=allcumcatches.at(a_idx);
+        nodes.at(a_idx)->export_popnodes_cumcatches_with_threshold(popnodes_cumcatches_with_threshold, tstep, athreshold);
         it+=1;
+        nodes.at(a_idx)->set_cumcatches_with_threshold( nodes.at(a_idx)->get_cumcatches() );
      } while(runningsum < amount_at_threshold);
 
 
+
+
+     // export in db
+     if (enable_sqlite_out)
+     {
+        for (unsigned int n=0; n<nodes.size(); n++)
+         {
+            outSqlite->exportPopNodes(tstep, nodes.at(n));
+            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+         }
+     }
 
 
     if(dyn_pop_sce.option(Options::impact_benthos_N))

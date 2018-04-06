@@ -278,6 +278,7 @@ bool DbHelper::updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeDat
         auto &node = nodes.at(nid);
         node->set_cumftime(stat.cumftime);
         node->set_cumsweptarea(stat.cumswa);
+        node->set_cumsubsurfacesweptarea(stat.cumsubsurfswa);
         node->set_cumcatches(stat.cumcatches);
         node->set_cumdiscards(stat.cumdisc);
         //nodes.at(nid)->setPopTot(tot);

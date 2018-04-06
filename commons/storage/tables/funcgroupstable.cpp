@@ -32,7 +32,7 @@ FuncGroupsTable::FuncGroupsTable(std::shared_ptr<sqlite::SQLiteStorage> db, std:
                                                      fldBType,
                                                      benthosNumTot ,
                                                      benthosBio ,
-                                                     benthosBioMean,
+                                                     benthosMeanW,
                                                      benthosBioK ,
                                                      benthosNumK);
 
@@ -40,7 +40,7 @@ FuncGroupsTable::FuncGroupsTable(std::shared_ptr<sqlite::SQLiteStorage> db, std:
 
     auto sqlAllQuery = sqlite::statements::Select(name,
                                                   fldNodeId, fldFGroup,
-                                                  benthosNumTot, benthosBio, benthosBioMean, benthosBioK,
+                                                  benthosNumTot, benthosBio, benthosMeanW, benthosBioK,
                                                   benthosNumK,
                                                   sqlite::op::max(fldTStep)
                                                   )
@@ -67,7 +67,7 @@ void FuncGroupsTable::create()
                                         fldBType,
                                         benthosNumTot,
                                         benthosBio ,
-                                        benthosBioMean ,
+                                        benthosMeanW ,
                                         benthosBioK ,
                                         benthosNumK
                            ));
@@ -123,7 +123,7 @@ void FuncGroupsTable::queryAllNodesAtStep(int tstep, std::function<bool (FuncGro
         s.funcId = st.getIntValue(1);
         s.numTot = st.getDoubleValue(2);
         s.bio = st.getDoubleValue(3);
-        s.bioMean = st.getDoubleValue(4);
+        s.benthosMeanW = st.getDoubleValue(4);
         s.bioK = st.getDoubleValue(5);
         s.numK = st.getDoubleValue(6);
         if (op)

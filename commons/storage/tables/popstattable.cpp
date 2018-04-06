@@ -98,6 +98,9 @@ void NodesStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesSta
         s.cumcatchesthrshld= st.getDoubleValue(5);
         s.cumdisc = st.getDoubleValue(6);
         s.tstep = st.getIntValue(7);
+        s.cumcatchesthrshld= st.getDoubleValue(5);
+        s.cumdisc = st.getDoubleValue(6);
+        s.tstep = st.getIntValue(7);
         if (op)
             return op(s);
         return false;

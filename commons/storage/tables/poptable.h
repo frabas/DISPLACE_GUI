@@ -35,7 +35,7 @@ public:
     ~PopTable() noexcept;
     void dropAndCreate();
 
-    void insert (int tstep, Node *node, const std::multimap<int, double> &initstate);
+    bool insert(int tstep, Node *node, const std::multimap<int, double> &initstate);
 
     struct Stat {
         int tstep;

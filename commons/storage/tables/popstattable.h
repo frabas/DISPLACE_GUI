@@ -37,7 +37,7 @@ public:
     ~NodesStatTable() noexcept;
     void dropAndCreate();
 
-    void insert (int tstep, Node *node);
+    bool insert (int tstep, Node *node);
 
     struct NodeStat {
         types::NodeId nodeId;

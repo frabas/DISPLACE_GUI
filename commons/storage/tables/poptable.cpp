@@ -39,7 +39,7 @@ void PopTable::dropAndCreate()
                            ));
 }
 
-void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &weight_at_szgroup)
+bool PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &weight_at_szgroup)
 {
     std::unique_lock<std::mutex> m(p->mutex);
     init();
@@ -65,6 +65,8 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
             totW_this_pop+= ns[sz] * w.at(sz);
         }
 
+        if(totN_this_pop==0) return 1;
+
         SQLiteTable::insert (p->statement, std::make_tuple(
                     (int)node->get_idx_node().toIndex(),
                     tstep,
@@ -77,6 +79,7 @@ void PopTable::insert(int tstep, Node *node, const std::multimap<int, double> &w
                     ));
     }
 
+return 0;
 }
 
 void PopTable::init()

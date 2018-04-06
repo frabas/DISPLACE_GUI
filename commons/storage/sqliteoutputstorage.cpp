@@ -132,7 +132,7 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
 
 void SQLiteOutputStorage::exportPopNodes(int tstep, Node *node)
 {
-    p->mNodesStatTable->insert(tstep, node);
+    bool r=p->mNodesStatTable->insert(tstep, node);
 }
 
 void SQLiteOutputStorage::exportPopStat(Population *pop, int popid, int tstep)

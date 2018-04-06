@@ -65,8 +65,11 @@ void NodesStatTable::init()
     }
 }
 
-void NodesStatTable::insert(int tstep, Node *node)
+bool NodesStatTable::insert(int tstep, Node *node)
 {
+
+    if(node->get_cumftime()==0) return 1;
+
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
@@ -80,6 +83,7 @@ void NodesStatTable::insert(int tstep, Node *node)
                             node->get_cumcatches_with_threshold(),
                             node->get_cumdiscards())
                         );
+return 0;
 }
 
 void NodesStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesStatTable::NodeStat)> op)

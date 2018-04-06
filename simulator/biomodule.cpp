@@ -1232,7 +1232,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
             {
                 nodes[n]->export_popnodes(popnodes_end, init_weight_per_szgroup, tstep);
                 if (enable_sqlite_out) {
-                    outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+                    bool r=outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
                 }
             }
             if (use_gui) {
@@ -1300,7 +1300,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         for (unsigned int n=0; n<nodes.size(); n++)
          {
             outSqlite->exportPopNodes(tstep, nodes.at(n));
-            outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
+            bool r=outSqlite->getPopTable()->insert(tstep, nodes[n], init_weight_per_szgroup);
          }
      }
 

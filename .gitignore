@@ -37,3 +37,6 @@ docs/latex
 *.autosave
 build-*
 run.sh
+
+mSqliteCpp/
+sparsepp/

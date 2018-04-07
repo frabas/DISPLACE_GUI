@@ -17,19 +17,6 @@ class COMMONSSHARED_EXPORT VesselVmsLikeFPingsOnlyTable : public sqlite::SQLiteT
 private:
     struct Impl;
     std::unique_ptr<Impl> p;
-
-    void init();
-public:
-    const FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> fldTStepDep = makeFieldDef("TStepDep",FieldType::Integer()).notNull();
-    //const FieldDef<FieldType::Real> fldPosLong = makeFieldDef("Long", FieldType::Real()).notNull();
-    //const FieldDef<FieldType::Real> fldPosLat = makeFieldDef("Lat", FieldType::Real()).notNull();
-    //const FieldDef<FieldType::Real> fldCourse = makeFieldDef("Course", FieldType::Real()).notNull();
-    //const FieldDef<FieldType::Real> fldCumFuel = makeFieldDef("CumFuel", FieldType::Real()).notNull();
-    const FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId", FieldType::Integer()).notNull();
-    const FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId", FieldType::Integer()).notNull();
-
 public:
     VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~VesselVmsLikeFPingsOnlyTable() noexcept;

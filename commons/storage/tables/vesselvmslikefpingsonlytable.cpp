@@ -1,31 +1,58 @@
 #include "vesselvmslikefpingsonlytable.h"
 
-#include <sqlitestatementformatters.h>
-#include <sqlitestatement.h>
+#include "insertstatement.h"
+#include "selectstatement.h"
+#include "clauses.h"
 #include <sqlitefieldsop.h>
 
 struct VesselVmsLikeFPingsOnlyTable::Impl
 {
+    FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldTStepDep = makeFieldDef("TStepDep",FieldType::Integer()).notNull();
+    //const FieldDef<FieldType::Real> fldPosLong = makeFieldDef("Long", FieldType::Real()).notNull();
+    //const FieldDef<FieldType::Real> fldPosLat = makeFieldDef("Lat", FieldType::Real()).notNull();
+    //const FieldDef<FieldType::Real> fldCourse = makeFieldDef("Course", FieldType::Real()).notNull();
+    //const FieldDef<FieldType::Real> fldCumFuel = makeFieldDef("CumFuel", FieldType::Real()).notNull();
+    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId", FieldType::Integer()).notNull();
+    FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId", FieldType::Integer()).notNull();
+
     std::mutex mutex;
     bool init = false;
 
-    PreparedInsert<FieldDef<FieldType::Integer>,
-                    FieldDef<FieldType::Integer> ,
-                    FieldDef<FieldType::Integer> ,
-                    //FieldDef<FieldType::Real>,
-                    //FieldDef<FieldType::Real>,
-                    //FieldDef<FieldType::Real>,
-                    //FieldDef<FieldType::Real>,
-                    FieldDef<FieldType::Integer>,
-                    FieldDef<FieldType::Integer>
-    > statement;
+    InsertStatement<decltype(fldId),
+                decltype(fldTStep),
+                decltype(fldTStepDep),
+                decltype(fldNodeId),
+                decltype(fldPopId)> insertStatement;
+    SelectStatement<decltype(fldId),
+                decltype(fldTStep),
+                decltype(fldTStepDep),
+                decltype(fldNodeId),
+                decltype(fldPopId),
+                decltype(fldTStep)>
+        selectStatement;
+    Where<decltype(fldTStep)> where;
 
-    sqlite::SQLiteStatement vesselTStepSelect;
+
+    Impl()
+        : insertStatement(fldId, fldTStep, fldTStepDep,
+                          fldNodeId, fldPopId),
+          selectStatement(fldId, fldTStep, fldTStepDep,
+                          fldNodeId, fldPopId, op::max(fldTStep))
+    {
+
+    }
 };
 
 VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
     : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
+    p->insertStatement.attach(db,name);
+    p->selectStatement.attach(db,name);
+    p->where.attach(p->selectStatement.getStatement(), op::eq(p->fldId));
+
+    p->selectStatement.prepare();
 }
 
 VesselVmsLikeFPingsOnlyTable::~VesselVmsLikeFPingsOnlyTable() noexcept = default;
@@ -36,77 +63,42 @@ void VesselVmsLikeFPingsOnlyTable::dropAndCreate()
         db()->dropTable(name());
 
     auto def = std::make_tuple (
-                fldId, fldTStep, fldTStepDep,
+                p->fldId, p->fldTStep, p->fldTStepDep,
                 //fldPosLong, fldPosLat, fldCourse,
                 //fldCumFuel,
-                fldNodeId,
-                fldPopId
+                p->fldNodeId,
+                p->fldPopId
                 );
 
     create(def);
 }
 
-void VesselVmsLikeFPingsOnlyTable::init()
-{
-    if (!p->init) {
-        p->init = true;
-
-        p->statement = prepareInsert(std::make_tuple(fldId, fldTStep, fldTStepDep,
-                                     //fldPosLong, fldPosLat, fldCourse,
-                                     //fldCumFuel,
-                                     fldNodeId,
-                                     fldPopId));
-
-
-        auto select = sqlite::statements::Select(name(),
-                                                 fldId, fldTStep, fldTStepDep,
-                                                 //fldPosLong, fldPosLat, fldCourse,
-                                                 //fldCumFuel,
-                                                 fldNodeId,
-                                                 fldPopId,
-                                                 op::max(fldTStep))
-                .where(op::le(fldTStep))
-                .groupBy(fldId);
-        p->vesselTStepSelect = std::move(sqlite::SQLiteStatement(db(), select));
-    }
-}
-
 void VesselVmsLikeFPingsOnlyTable::insertLog(const VesselVmsLikeFPingsOnlyTable::Log &log)
 {
     std::unique_lock<std::mutex> m(p->mutex);
-    init();
 
-    SQLiteTable::insert(p->statement, std::make_tuple(log.id,
-                        log.tstep,
-                        log.tstep_dep,
-                        //log.p_long,
-                        //log.p_lat,
-                        //log.p_course,
-                        //log.cum_fuel,
-                        log.nodeid,
-                        log.popid)
-                        );
+    p->insertStatement.insert(log.id,
+                              log.tstep,
+                              log.tstep_dep,
+                              //log.p_long,
+                              //log.p_lat,
+                              //log.p_course,
+                              //log.cum_fuel,
+                              log.nodeid,
+                              log.popid);
 }
 
 void VesselVmsLikeFPingsOnlyTable::queryAllVesselsAtStep(int tstep, std::function<bool (const VesselVmsLikeFPingsOnlyTable::Log &)> op)
 {
     std::unique_lock<std::mutex> m(p->mutex);
-    init();
 
-    p->vesselTStepSelect.bind(1, tstep);
-
-    p->vesselTStepSelect.execute([this, &op] {
-        auto &stmt = p->vesselTStepSelect;
+    p->where.bind(tstep);
+    p->selectStatement.exec([&op] (int id, int tstep, int tstepdep, int nodeid, int popid, int tstepmax){
         Log l;
-        l.id = stmt.getIntValue(0);
-        l.tstep = stmt.getIntValue(1);
-        //l.p_long = stmt.getDoubleValue(3);
-        //l.p_lat = stmt.getDoubleValue(4);
-        //l.p_course = stmt.getDoubleValue(5);
-        //l.cum_fuel = stmt.getDoubleValue(6);
-        l.nodeid = stmt.getIntValue(7);
-        l.popid = stmt.getIntValue(8);
-
+        l.id = id;
+        l.tstep = tstep;
+        l.nodeid = nodeid;
+        l.popid = popid;
         if (op)
             return op(l);
         return false;

@@ -17,6 +17,8 @@ class COMMONSSHARED_EXPORT VesselVmsLikeFPingsOnlyTable : public sqlite::SQLiteT
 private:
     struct Impl;
     std::unique_ptr<Impl> p;
+
+    void create();
 public:
     VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~VesselVmsLikeFPingsOnlyTable() noexcept;

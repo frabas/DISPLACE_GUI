@@ -48,6 +48,7 @@ struct VesselVmsLikeFPingsOnlyTable::Impl
 VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
     : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
+    create();
     p->insertStatement.attach(db,name);
     p->selectStatement.attach(db,name);
     p->where.attach(p->selectStatement.getStatement(), op::eq(p->fldId));
@@ -61,16 +62,22 @@ void VesselVmsLikeFPingsOnlyTable::dropAndCreate()
 {
     if (db()->tableExists(name()))
         db()->dropTable(name());
+    create();
+}
 
-    auto def = std::make_tuple (
-                p->fldId, p->fldTStep, p->fldTStepDep,
-                //fldPosLong, fldPosLat, fldCourse,
-                //fldCumFuel,
-                p->fldNodeId,
-                p->fldPopId
-                );
+void VesselVmsLikeFPingsOnlyTable::create()
+{
+    if (!db()->tableExists(name())) {
+        auto def = std::make_tuple (
+                    p->fldId, p->fldTStep, p->fldTStepDep,
+                    //fldPosLong, fldPosLat, fldCourse,
+                    //fldCumFuel,
+                    p->fldNodeId,
+                    p->fldPopId
+                    );
 
-    create(def);
+        SQLiteTable::create(def);
+    }
 }
 
 void VesselVmsLikeFPingsOnlyTable::insertLog(const VesselVmsLikeFPingsOnlyTable::Log &log)

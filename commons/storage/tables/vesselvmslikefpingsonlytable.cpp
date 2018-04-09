@@ -49,6 +49,7 @@ VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlit
     : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
     create();
+    p->insertStatement.doReplace();
     p->insertStatement.attach(db,name);
     p->selectStatement.attach(db,name);
     p->where.attach(p->selectStatement.getStatement(), op::eq(p->fldId));
@@ -68,6 +69,7 @@ void VesselVmsLikeFPingsOnlyTable::dropAndCreate()
 void VesselVmsLikeFPingsOnlyTable::create()
 {
     if (!db()->tableExists(name())) {
+        /*
         auto def = std::make_tuple (
                     p->fldId, p->fldTStep, p->fldTStepDep,
                     //fldPosLong, fldPosLat, fldCourse,
@@ -76,7 +78,17 @@ void VesselVmsLikeFPingsOnlyTable::create()
                     p->fldPopId
                     );
 
-        SQLiteTable::create(def);
+        SQLiteTable::create(def);*/
+        SQLiteStatement stmt (db(),
+                              "CREATE TABLE VesselVmsFPingsOnlyLike ("
+                                "Id       INTEGER NOT NULL,"
+                                "TStep    INTEGER NOT NULL,"
+                                "TStepDep INTEGER NOT NULL,"
+                                "NodeId   INTEGER NOT NULL,"
+                                "PopId    INTEGER NOT NULL,"
+                                "CONSTRAINT keyIdStep PRIMARY KEY (Id,TStep,PopId) "
+                               ");");
+        stmt.execute();
     }
 }
 

@@ -62,6 +62,7 @@ void NodesTariffStatTable::init()
 bool NodesTariffStatTable::insert(int tstep, Node *node)
 {
 
+    if(node->get_tariffs().at(0)==0) return 1; // avoid exporting full of 0s lines
 
     std::unique_lock<std::mutex> m(p->mutex);
     init();

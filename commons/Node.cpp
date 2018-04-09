@@ -1593,7 +1593,7 @@ void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
 void Node::export_popnodes_tariffs(ofstream& popnodes, int tstep)
 {
 
-    dout(cout  << "export tariffs on nodes for use in e.g. a GIS engine" << endl);
+    dout(cout  << "export tariffs on nodes...." << endl);
     // note that this file will also be used by the ui for displaying the statistics on node
 
     popnodes << setprecision(8) << fixed;

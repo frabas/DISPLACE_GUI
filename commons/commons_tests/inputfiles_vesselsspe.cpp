@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE( test_fuel_price_per_vessel_size_dat )
 
 BOOST_AUTO_TEST_CASE( test_initial_fishing_credits_per_vid_dat )
 {
-    BOOST_CHECK(true); // fill_multimap_from_specifications_s_s
+    BOOST_CHECK(true); // fill_multimap_from_specifications_s_d
 }
 
 BOOST_AUTO_TEST_CASE( test_vesselsspe_betas_semester_dat )

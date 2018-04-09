@@ -2527,6 +2527,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             for (auto pos=lower_init_cr; pos != upper_init_cr; pos++)
                 init_tariffs.push_back(pos->second);
 
+
+            // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
+            while (init_tariffs.size() <= 3) init_tariffs.push_back(0);
+
+
             if(initial_tariffs_on_nodes.count(idx_node)==0) init_tariffs.push_back(0); // put 0 if this node is not informed
 
             nodes.at(a_idx)->set_tariffs(init_tariffs); // type 0
@@ -3157,11 +3162,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(dyn_alloc_sce.option(Options::fishing_credits))
         {
+            cout << "Read in fishing credits for this vessel " << vesselids[i] << endl;
             spe_fishing_credits = find_entries_s_d(fishing_credits, vesselids[i]);
             for (int icr=0; icr <spe_fishing_credits.size();++icr)
             {
                 spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* total_amount_credited;
             }
+            cout << "Fishing credits 0 for this vessel " << vesselids[i]  << " is " << spe_fishing_credits.at(0) << endl;
 
         }
 

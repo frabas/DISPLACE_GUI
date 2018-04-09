@@ -3168,6 +3168,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
                 spe_fishing_credits.at(icr)= spe_fishing_credits.at(icr)* total_amount_credited;
             }
+
+            // complete to 3 values for tariff per node because we expect tariff all, tariff pop, and tariff benthos
+            while (spe_fishing_credits.size() <= 3) spe_fishing_credits.push_back(0);
+
+
+
             cout << "Fishing credits 0 for this vessel " << vesselids[i]  << " is " << spe_fishing_credits.at(0) << endl;
 
         }

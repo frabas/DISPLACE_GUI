@@ -19,6 +19,7 @@
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
 #include "tables/metadatatable.h"
+#include "tables/nodesenvttable.h"
 #include "modelmetadataaccessor.h"
 
 #include <cassert>
@@ -44,6 +45,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<VesselVmsLikeFPingsOnlyTable> mVesselVmslikeFPingsOnlyTable;
     std::shared_ptr<ShipsTable> mShipsTable;
     std::shared_ptr<NodesDefTable> mNodesDefTable;
+    std::shared_ptr<NodesEnvtTable> mNodesEnvtTable;
     std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<NodesTariffStatTable> mNodesTariffStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
@@ -73,6 +75,7 @@ void SQLiteOutputStorage::open()
     p->mVesselLoglikeCatchesTable = std::make_shared<VesselsLoglikeCatchesTable> (p->db, "VesselLogLikeCatches");
     p->mShipsTable = std::make_shared<ShipsTable> (p->db, "Ships");
     p->mNodesDefTable = std::make_shared<NodesDefTable>(p->db, "NodesDef");
+    p->mNodesEnvtTable = std::make_shared<NodesEnvtTable>(p->db, "NodesEnvt");
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
     p->mNodesTariffStatTable = std::make_shared<NodesTariffStatTable>(p->db, "NodesTariffStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
@@ -132,6 +135,12 @@ void SQLiteOutputStorage::exportWindmillsLog(Windmill *windmill, int tstep)
 {
     p->mWindmillsTable->exportWindmillData(windmill, tstep);
 }
+
+void SQLiteOutputStorage::exportEnvtNodes(int tstep, Node *node)
+{
+    bool r=p->mNodesEnvtTable->insert(tstep, node);
+}
+
 
 void SQLiteOutputStorage::exportPopNodes(int tstep, Node *node)
 {
@@ -725,6 +734,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mVesselVmslikeTable->dropAndCreate();
     p->mVesselVmslikeFPingsOnlyTable->dropAndCreate();
     p->mNodesDefTable->dropAndCreate(); 
+    p->mNodesEnvtTable->dropAndCreate();
     p->mNodesStatTable->dropAndCreate();
     p->mNodesTariffStatTable->dropAndCreate();
     p->mShipsTable->dropAndCreate();
@@ -769,6 +779,11 @@ std::shared_ptr<VesselVmsLikeFPingsOnlyTable> SQLiteOutputStorage::getVesselVmsL
 std::shared_ptr<NodesDefTable> SQLiteOutputStorage::getNodesDefTable() const
 {
     return p->mNodesDefTable;
+}
+
+std::shared_ptr<NodesEnvtTable> SQLiteOutputStorage::getNodesEnvtTable() const
+{
+    return p->mNodesEnvtTable;
 }
 
 std::shared_ptr<NodesStatTable> SQLiteOutputStorage::getNodesStatTable() const

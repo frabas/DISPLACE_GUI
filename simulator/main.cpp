@@ -5710,6 +5710,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                // gradient diffusion
                // using the rtree
                 bool r=  diffuse_Nitrogen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+
+
+                //loop over node and outSqlite->exportEnvtNodes(tstep, nodes.at(n));
             }
 
         }

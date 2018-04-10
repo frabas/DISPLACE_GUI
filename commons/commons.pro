@@ -77,7 +77,8 @@ SOURCES= \
     storage/tables/funcgroupstable.cpp \
     storage/tables/shipstable.cpp \
     diffusion.cpp \
-    storage/tables/poptariffstattable.cpp
+    storage/tables/poptariffstattable.cpp \
+    storage/tables/nodesenvttable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -149,7 +150,8 @@ HEADERS= \
     storage/tables/funcgroupstable.h \
     storage/tables/shipstable.h \
     ../include/diffusion.h \
-    storage/tables/poptariffstattable.h
+    storage/tables/poptariffstattable.h \
+    storage/tables/nodesenvttable.h
 
 ### mSQLiteCpp dependency
 

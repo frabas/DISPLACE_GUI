@@ -1,3 +1,5 @@
+
+
 #include "nodesdeftable.h"
 
 #include "Node.h"
@@ -16,7 +18,7 @@ struct NodesDefTable::Impl {
 
 NodesDefTable::NodesDefTable(std::shared_ptr<SQLiteStorage> db, std::string name)
     : SQLiteTable(db,name), p(std::make_unique<Impl>())
-{    
+{
 }
 
 NodesDefTable::~NodesDefTable() noexcept = default;

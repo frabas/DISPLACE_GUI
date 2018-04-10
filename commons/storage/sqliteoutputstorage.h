@@ -15,6 +15,7 @@ class VesselsLoglikeTable;
 class VesselVmsLikeTable;
 class VesselVmsLikeFPingsOnlyTable;
 class NodesDefTable;
+class NodesEnvtTable;
 class NodesStatTable;
 class NodesTariffStatTable;
 class PopTable;
@@ -64,6 +65,7 @@ public:
     std::shared_ptr<VesselVmsLikeTable> getVesselVmsLikeTable() const;
     std::shared_ptr<VesselVmsLikeFPingsOnlyTable> getVesselVmsLikeFPingsOnlyTable() const;
     std::shared_ptr<NodesDefTable> getNodesDefTable() const;
+    std::shared_ptr<NodesEnvtTable> getNodesEnvtTable() const;
     std::shared_ptr<NodesStatTable> getNodesStatTable() const;
     std::shared_ptr<NodesTariffStatTable> getNodesTariffStatTable() const;
     std::shared_ptr<PopTable> getPopTable() const;
@@ -76,6 +78,7 @@ public:
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
     void exportWindmillsLog(Windmill *windmill, int tstep);
     void exportPopNodes(int tstep, Node *node);
+    void exportEnvtNodes(int tstep, Node *node);
     void exportTariffNodes(int tstep, Node *node);
     void exportPopStat(Population *pop, int popid, int tstep);
     void exportLogLike(Vessel *v, const std::vector<double> &populations, const std::vector<double> &discards, unsigned int tstep);

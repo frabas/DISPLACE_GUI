@@ -12,6 +12,7 @@ struct ShipsTable::Impl
     bool initialized = false;
 
     FieldDef<FieldType::Integer> fTStep;
+    FieldDef<FieldType::Integer> fShipId;
     FieldDef<FieldType::Real> fFueluse_litreperh;
     FieldDef<FieldType::Real> fNOxEmission_gperKWh;
     FieldDef<FieldType::Real> fSOxEmission_percentpertotalfuelmass;
@@ -25,7 +26,7 @@ struct ShipsTable::Impl
 
 
     InsertStatement<
-        decltype(fTStep),
+        decltype(fTStep), decltype(fShipId),
         decltype(fFueluse_litreperh),
         decltype(fNOxEmission_gperKWh), decltype(fSOxEmission_percentpertotalfuelmass),
         decltype(fGHGEmission_gperKWh), decltype(fPMEEmission_gperKWh),
@@ -33,8 +34,9 @@ struct ShipsTable::Impl
         decltype(fNOxEmission), decltype(fSOxEmission), decltype(fGHGEmission), decltype(fPMEEmission)
         >insertStatement;
 
+    // TODO: Add a constrain on the table, to make tstep and ShipId unique.
     Impl()
-        : fTStep("tstep"), fFueluse_litreperh("FuelUsePerH"),
+        : fTStep("tstep"), fShipId("ShipId"), fFueluse_litreperh("FuelUsePerH"),
           fNOxEmission_gperKWh("NOxPerKWh"),
           fSOxEmission_percentpertotalfuelmass("SOxPercent"),
           fGHGEmission_gperKWh("GHGPerKWh"),
@@ -44,7 +46,7 @@ struct ShipsTable::Impl
           fSOxEmission("SOx"),
           fGHGEmission("GHG"),
           fPMEEmission("PME"),
-          insertStatement(fTStep, fFueluse_litreperh, fNOxEmission_gperKWh,
+          insertStatement(fTStep, fShipId, fFueluse_litreperh, fNOxEmission_gperKWh,
                           fSOxEmission_percentpertotalfuelmass,
                           fGHGEmission_gperKWh, fPMEEmission_gperKWh,
                           fFueluse, fNOxEmission, fSOxEmission, fGHGEmission, fPMEEmission)
@@ -53,7 +55,7 @@ struct ShipsTable::Impl
     }
 
     void create(SQLiteTable *t) {
-        t->create(fTStep, fFueluse_litreperh,
+        t->create(fTStep, fShipId, fFueluse_litreperh,
                   fNOxEmission_gperKWh, fSOxEmission_percentpertotalfuelmass, fGHGEmission_gperKWh, fPMEEmission_gperKWh,
                   fFueluse, fNOxEmission, fSOxEmission, fGHGEmission, fPMEEmission
                   );
@@ -90,7 +92,7 @@ void ShipsTable::exportShipsIndivators(int tstep, Ship *ship)
 {
     init();
     p->insertStatement.insert(
-                tstep, ship->get_fueluse(),
+                tstep, ship->get_idx(), ship->get_fueluse(),
                 ship->get_NOxEmission_gperKWh(), ship->get_SOxEmission_percentpertotalfuelmass(),
                 ship->get_GHGEmission_gperKWh(), ship->get_PMEEmission_gperKWh(),
                 ship->get_fuel_use_litre(), ship->get_NOxEmission(), ship->get_SOxEmission(), ship->get_GHGEmission(), ship->get_PMEEmission()

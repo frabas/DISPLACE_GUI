@@ -187,6 +187,7 @@ void NodeData::setImpact(int pop, double impact)
     mImpact[pop] = impact;
 }
 
+
 void NodeData::setCumcatchesPerPop(int pop, double cumcatchesperpop)
 {
     mCumcatchesPerPop[pop] = cumcatchesperpop;

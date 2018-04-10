@@ -102,7 +102,7 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
 
 
          // find 1 nearest value to a point
-         cout << "nearest: ";
+         //cout << "nearest: ";
          std::vector< std::pair<point, int> > nearest;
          rtree.query(bgi::nearest(point(lon, lat), 1), std::back_inserter(nearest));
          //for(const auto &r: nearest){

@@ -134,9 +134,6 @@ void MapObjectsController::createMapObjectsFromModel(int model_n, DisplaceModel 
     mStatsLayerBenthosMeanweight[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Benthos Mean Weight (FuncGroups bMeanW)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerBenthosMeanweight, mStatsLayerBenthosMeanweight[model_n], type != DisplaceModel::LiveModelType ? false : false);
 
-    // mStatsLayerTariffs[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Tariffs")).arg(model_n).toStdString()));
-   // addOutputLayer(model_n, OutLayerTariffs, mStatsLayerTariffs[model_n], type != DisplaceModel::LiveModelType ? false : true);
-
     mStatsLayerCumftime[model_n] = std::shared_ptr<qmapcontrol::LayerGeometry>(new qmapcontrol::LayerGeometry(QString(tr("#%1#Fishing Effort (NodesStat CumFTime)")).arg(model_n).toStdString()));
     addOutputLayer(model_n, OutLayerCumFTime, mStatsLayerCumftime[model_n],type != DisplaceModel::LiveModelType ? false : false);
 
@@ -489,11 +486,17 @@ void MapObjectsController::clearAllNodes(int model_n)
     mStatsLayerBenthosBiomass[model_n]->clearGeometries();
     mStatsLayerBenthosNumber[model_n]->clearGeometries();
     mStatsLayerBenthosMeanweight[model_n]->clearGeometries();
-    //mStatsLayerTariffs[model_n]->clearGeometries();
     mStatsLayerPop[model_n]->clearGeometries();
     mStatsLayerTariffAll[model_n]->clearGeometries();
     mStatsLayerTariffPop[model_n]->clearGeometries();
     mStatsLayerTariffBenthos[model_n]->clearGeometries();
+    mStatsLayerSalinity[model_n]->clearGeometries();
+    mStatsLayerSST[model_n]->clearGeometries();
+    mStatsLayerWind[model_n]->clearGeometries();
+    mStatsLayerNitrogen[model_n]->clearGeometries();
+    mStatsLayerPhosphorus[model_n]->clearGeometries();
+    mStatsLayerOxygen[model_n]->clearGeometries();
+    mStatsLayerDissolvedCarbon[model_n]->clearGeometries();
     mEdgesLayer[model_n]->clear();
     mEntityLayer[model_n]->clearGeometries();
 
@@ -596,26 +599,50 @@ void MapObjectsController::addNode(int model_n, std::shared_ptr<NodeData> nd, bo
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBenthosMeanweight[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
 
-    //obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);
-    //mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    //mStatsLayerTariffs[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
-
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd); // TO DO: change input data for GraphNodeWithTariffsAll
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffAll[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
-
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd); // TO DO: change input data for GraphNodeWithTariffsPop
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
-
-    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs, nd);  // TO DO: change input data for GraphNodeWithTariffsBenthos
-    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
-    mStatsLayerTariffBenthos[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
-
-
     obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithBiomass, nd);
     mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
     mStatsLayerBiomass[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs0, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerTariffAll[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs1, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerTariffPop[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithTariffs2, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerTariffBenthos[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSalinity, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerSalinity[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithSST, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerSST[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithWind, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerWind[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithNitrogen, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerNitrogen[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithPhosphorus, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerPhosphorus[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithOxygen, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerOxygen[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
+    obj = new NodeMapObject(this, model_n,NodeMapObject::GraphNodeWithDissolvedCarbon, nd);
+    mNodeObjects[model_n].add(nd->get_idx_node(), obj, obj->getRole());
+    mStatsLayerDissolvedCarbon[model_n]->addGeometry(obj->getGeometryEntity(), disable_redraw);
+
 
     for (int i = 0; i < nd->getAdiacencyCount(); ++i) {
         addEdge(model_n,nd->getAdiacencyByIdx(i), disable_redraw);

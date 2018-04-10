@@ -506,16 +506,15 @@ void DisplaceModel::updateNodesStatFromSimu(QString data)
         }
         mNodesStatsDirty = true;
     }
-    if (fields[0] == "tariffs") {
-        for (int i = 0; i < num; ++i) {
-            vector<double> tariffs;
-            tariffs.push_back(fields[4+i].toDouble());   // type 0
-            tariffs.push_back(0);                        // type 1
-            mNodes.at(start + i)->set_tariffs(tariffs);
 
+    if (fields[0] == "salinity") {
+        for (int i = 0; i < num; ++i) {
+            mNodes.at(start + i)->setSalinity(fields[4+i].toDouble());
         }
         mNodesStatsDirty = true;
     }
+
+
 
 
 }

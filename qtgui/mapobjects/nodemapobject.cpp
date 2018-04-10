@@ -81,11 +81,6 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithPopStatsGraphics(NodeWithPopStatsGraphics::BenthosMeanweight, mNode.get(), mController, indx));
         break;
 
-    case GraphNodeWithTariffs:
-        mGeometry = std::shared_ptr<NodeGraphics>(
-                    new NodeWithTariffsGraphics(mNode.get(), mController, indx));
-        break;
-
     case GraphNodeWithCumFTimeRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumFTimeGraphics(mNode.get(), mController, indx));
@@ -113,6 +108,56 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
     case GraphNodeWithCumDiscardsRole:
         mGeometry = std::shared_ptr<NodeGraphics>(
                     new NodeWithCumDiscardsGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithTariffs0:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithTariffs0Graphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithTariffs1:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithTariffs1Graphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithTariffs2:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithTariffs2Graphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithSalinity:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithSalinityGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithSST:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithSSTGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithWind:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithWindGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithNitrogen:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithNitrogenGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithPhosphorus:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithPhosphorusGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithOxygen:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithOxygenGraphics(mNode.get(), mController, indx));
+        break;
+
+    case GraphNodeWithDissolvedCarbon:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithDissolvedCarbonGraphics(mNode.get(), mController, indx));
         break;
 
     default:
@@ -216,10 +261,56 @@ void NodeMapObject::updateProperties()
         text += updateStatText("Benthos Mean Weight");
         break;
 
-    case GraphNodeWithTariffs:
-        text += QString("<br/><b>Tariffs (type 0):</b> %1<br/>")
+    case GraphNodeWithTariffs0:
+        text += QString("<br/><b>Tariffs (type All):</b> %1<br/>")
                 .arg(tariffs.at(0));
         break;
+
+    case GraphNodeWithTariffs1:
+        text += QString("<br/><b>Tariffs (type Pop):</b> %1<br/>")
+                .arg(tariffs.at(1));
+        break;
+
+    case GraphNodeWithTariffs2:
+        text += QString("<br/><b>Tariffs (type Benthos):</b> %1<br/>")
+                .arg(tariffs.at(2));
+        break;
+
+    case GraphNodeWithSalinity:
+        text += QString("<br/><b>Salinity:</b> %1<br/>")
+                .arg(mNode->get_salinity());
+        break;
+
+    case GraphNodeWithSST:
+        text += QString("<br/><b>SST:</b> %1<br/>")
+                .arg(mNode->get_sst());
+        break;
+
+    case GraphNodeWithWind:
+        text += QString("<br/><b>Wind:</b> %1<br/>")
+                .arg(mNode->get_wind());
+        break;
+
+    case GraphNodeWithNitrogen:
+        text += QString("<br/><b>Nitrogen:</b> %1<br/>")
+                .arg(mNode->get_Nitrogen());
+        break;
+
+    case GraphNodeWithPhosphorus:
+        text += QString("<br/><b>Phosphorus:</b> %1<br/>")
+                .arg(mNode->get_Phosphorus());
+        break;
+
+    case GraphNodeWithOxygen:
+        text += QString("<br/><b>Oxygen:</b> %1<br/>")
+                .arg(mNode->get_Oxygen());
+        break;
+
+    case GraphNodeWithDissolvedCarbon:
+        text += QString("<br/><b>Dissolved Carbon:</b> %1<br/>")
+                .arg(mNode->get_DissolvedCarbon());
+        break;
+
 
     case GraphNodeWithCumFTimeRole:
         text += QString("<br/><b>Fishing Effort (hours):</b> %1<br/>")

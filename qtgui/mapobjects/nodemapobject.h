@@ -60,7 +60,16 @@ public:
         GraphNodeWithBenthosBiomass,
         GraphNodeWithBenthosNumber,
         GraphNodeWithBenthosMeanweight,
-        GraphNodeWithTariffs
+        GraphNodeWithTariffs0,
+        GraphNodeWithTariffs1,
+        GraphNodeWithTariffs2,
+        GraphNodeWithSalinity,
+        GraphNodeWithSST,
+        GraphNodeWithWind,
+        GraphNodeWithNitrogen,
+        GraphNodeWithPhosphorus,
+        GraphNodeWithOxygen,
+        GraphNodeWithDissolvedCarbon
     };
 
     NodeMapObject(MapObjectsController *controller, int indx, Role role, std::shared_ptr<NodeData> node);

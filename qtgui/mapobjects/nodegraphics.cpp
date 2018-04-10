@@ -245,7 +245,7 @@ void NodeWithCumDiscardsGraphics::drawShape(QPainter &painter, const qmapcontrol
 
 
 
-void NodeWithTariffsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+void NodeWithTariffs0Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);
 
@@ -253,3 +253,86 @@ void NodeWithTariffsGraphics::drawShape(QPainter &painter, const qmapcontrol::Re
     painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(0) ));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
+
+
+void NodeWithTariffs1Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    vector<double>  tariffs =mNode->get_tariffs();
+    painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(1) ));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithTariffs2Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    vector<double>  tariffs =mNode->get_tariffs();
+    painter.setBrush(mController->getPalette(mModelIndex,TariffsRole).color((float)tariffs.at(2) ));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithSalinityGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_salinity()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithSSTGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_sst()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithWindGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_wind()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithNitrogenGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_Nitrogen()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithPhosphorusGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_Phosphorus()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithOxygenGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_Oxygen()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+void NodeWithDissolvedCarbonGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_DissolvedCarbon()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
+
+
+
+
+
+
+

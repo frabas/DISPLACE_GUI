@@ -208,7 +208,6 @@ public:
         OutLayerBenthosBiomass,
         OutLayerBenthosNumber,
         OutLayerBenthosMeanweight,
-        //OutLayerTariffs,
         OutLayerCumFTime,
         OutLayerCumSweptArea,
         OutLayerCumSubsurfaceSweptArea,

@@ -130,9 +130,94 @@ protected:
 };
 
 
-class NodeWithTariffsGraphics : public NodeGraphics {
+class NodeWithTariffs0Graphics : public NodeGraphics {
 public:
-    NodeWithTariffsGraphics(NodeData *node, MapObjectsController *controller, int indx)
+    NodeWithTariffs0Graphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
+class NodeWithTariffs1Graphics : public NodeGraphics {
+public:
+    NodeWithTariffs1Graphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+class NodeWithTariffs2Graphics : public NodeGraphics {
+public:
+    NodeWithTariffs2Graphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+class NodeWithSalinityGraphics : public NodeGraphics {
+public:
+    NodeWithSalinityGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
+class NodeWithSSTGraphics : public NodeGraphics {
+public:
+    NodeWithSSTGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+class NodeWithWindGraphics : public NodeGraphics {
+public:
+    NodeWithWindGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
+class NodeWithNitrogenGraphics : public NodeGraphics {
+public:
+    NodeWithNitrogenGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+
+class NodeWithPhosphorusGraphics : public NodeGraphics {
+public:
+    NodeWithPhosphorusGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+class NodeWithOxygenGraphics : public NodeGraphics {
+public:
+    NodeWithOxygenGraphics(NodeData *node, MapObjectsController *controller, int indx)
+        : NodeGraphics(node, controller, indx) {}
+
+protected:
+    virtual void drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect);
+};
+
+class NodeWithDissolvedCarbonGraphics : public NodeGraphics {
+public:
+    NodeWithDissolvedCarbonGraphics(NodeData *node, MapObjectsController *controller, int indx)
         : NodeGraphics(node, controller, indx) {}
 
 protected:

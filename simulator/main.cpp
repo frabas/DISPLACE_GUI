@@ -130,7 +130,7 @@ using namespace sqlite;
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
-typedef bg::model::point<float, 2, bg::cs::cartesian> point;
+typedef bg::model::point<double, 2, bg::cs::cartesian> point;
 typedef bg::model::box<point> box;
 typedef std::pair<box, unsigned> value;
 
@@ -1673,7 +1673,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // CREATE A RTREE INDEXING THE NODES TO EASILY PERFORM SPATIAL QUERIES
     // https://www.boost.org/doc/libs/1_66_0/libs/geometry/doc/html/geometry/spatial_indexes/rtree_quickstart.html
     // first, create the rtree using e.g. default constructor
-    bgi::rtree< value, bgi::quadratic<16> > rtree;
+    bgi::rtree< std::pair<point, int>, bgi::quadratic<16> > rtree;
     createRTreeFromNodes(nodes, rtree);
 
 
@@ -5704,12 +5704,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
 
                // naive diffusion
-               //double coeff_diffusion =0.4;
+               double coeff_diffusion =0.4;
                //bool r= diffuse_Nitrogen_in_every_directions(nodes, adjacency_map, coeff_diffusion);
 
                // gradient diffusion
                // using the rtree
-                bool r=  diffuse_Nitrogen_with_gradients(nodes, adjacency_map, rtree);
+                bool r=  diffuse_Nitrogen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
             }
 
         }

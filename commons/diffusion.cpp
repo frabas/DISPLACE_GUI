@@ -25,25 +25,52 @@
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
-typedef bg::model::point<float, 2, bg::cs::cartesian> point;
+typedef bg::model::point<double, 2, bg::cs::cartesian> point;
 typedef bg::model::box<point> box;
 typedef std::pair<box, unsigned> value;
 
 
-void createRTreeFromNodes(vector<Node*>& nodes, bgi::rtree< value, bgi::quadratic<16> >& rtree){
+void createRTreeFromNodes(vector<Node*>& nodes, bgi::rtree< std::pair<point, int>, bgi::quadratic<16> >& rtree){
 
     // create some values
-    for ( unsigned i = 0 ; i < 10 ; ++i )
+   // double dx=(xtoprightcorner-xbottomleftcorner)/bdx;
+   // double dy=(ytoprightcorner-ybottomleftcorner)/bdy;
+
+   // for ( unsigned row = 0 ; row< bdx ; ++row )
+   // {
+   //    for ( unsigned col = 0 ; col< bdy ; ++col )
+   //    {
+
+            // create a box
+  //         box b(point(xbottomleftcorner+ (col*dx), ybottomleftcorner + (row*dy)),
+  //               point(xbottomleftcorner+ ((col+1)*dx), ybottomleftcorner + ((row+1)*dy)));
+  //      }
+  //  }
+
+
+    std::vector<std::pair<point, int>> pts;
+    for (int n=0; n<nodes.size();++n)
     {
-        // create a box
-        box b(point(i + 0.0f, i + 0.0f), point(i + 0.5f, i + 0.5f));
-        // insert new value
-        rtree.insert(std::make_pair(b, i));
+      pts.emplace_back(std::make_pair(point (nodes.at(n)->get_x(),nodes.at(n)->get_y()), nodes.at(n)->get_idx_node().toIndex()));
     }
+    rtree.insert(pts.begin(), pts.end());
+
+    // check with a query
+    double lon = 15;
+    double lat = 55;
+    double delta=1;
+    std::vector< std::pair<point, int> > queryresult;
+    box query_box(point {lon - delta, lat - delta}, point {lon + delta, lat + delta});
+    rtree.query(bgi::intersects(query_box), std::back_inserter(queryresult));
+
+
 
 }
 
-bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, bgi::rtree< value, bgi::quadratic<16> >& rtree)
+bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
+                                     adjacency_map_t& adjacency_map,
+                                     bgi::rtree<  std::pair<point, int>, bgi::quadratic<16> >& rtree,
+                                     double coeff)
 {
     cout << "start diffusion for Nitrogen along gradients...." << endl;
 
@@ -74,18 +101,32 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_
 
 
 
-         // find 5 nearest values to a point
-         std::vector<value> result_n;
-         rtree.query(bgi::nearest(point(0, 0), 5), std::back_inserter(result_n));
+         // find 3 nearest values to a point
+         cout << "nearest: ";
+         std::vector< std::pair<point, int> > result_n;
+         rtree.query(bgi::nearest(point(lon, lat), 3), std::back_inserter(result_n));
+         for(const auto &r: result_n){
+             std::cout << r.second << ' ' ;
+         }
+         cout << endl;
 
-         std::cout << "knn query result:" << std::endl;
-         BOOST_FOREACH(value const& v, result_n)
-             std::cout << bg::wkt<box>(v.first) << " - " << v.second << std::endl;
+
+         // or:
+         /*
+         cout << "in box: ";
+         box box1(point(lon-0.5,lat-0.5),point(lon+0.5,lat+0.5));
+         std::vector<std::pair<point, int>> result;
+         rtree.query(bgi::covered_by(box1), std::back_inserter(result));
+         for(const auto &r: result){
+             std::cout << r.second << ' ' ;
+         }
+         cout << endl;
+         */
+
 
 /*
 
         // exchange the amount between dep and arr given a fixed coeff.
-        double coeff =0.4; // HARDCODED
         double arrival_Nitrogen = list_of_nodes.at(nearest_node_idx)->get_Nitrogen();
         double exchanged       = coeff*departure_Nitrogen;
         arrival_Nitrogen       = arrival_Nitrogen + exchanged;

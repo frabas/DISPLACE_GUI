@@ -30,7 +30,7 @@
 
 #include <QDebug>
 
-const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 1;
+const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 2;
 
 using namespace sqlite;
 using namespace displace::plot;

@@ -21,10 +21,29 @@
 
 #include <diffusion.h>
 
-#include <GeographicLib/Geodesic.hpp>
+
+namespace bg = boost::geometry;
+namespace bgi = boost::geometry::index;
+
+typedef bg::model::point<float, 2, bg::cs::cartesian> point;
+typedef bg::model::box<point> box;
+typedef std::pair<box, unsigned> value;
 
 
-bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map)
+void createRTreeFromNodes(vector<Node*>& nodes, bgi::rtree< value, bgi::quadratic<16> >& rtree){
+
+    // create some values
+    for ( unsigned i = 0 ; i < 10 ; ++i )
+    {
+        // create a box
+        box b(point(i + 0.0f, i + 0.0f), point(i + 0.5f, i + 0.5f));
+        // insert new value
+        rtree.insert(std::make_pair(b, i));
+    }
+
+}
+
+bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, bgi::rtree< value, bgi::quadratic<16> >& rtree)
 {
     cout << "start diffusion for Nitrogen along gradients...." << endl;
 
@@ -53,40 +72,17 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_
          double lon = list_of_nodes.at(n)->get_x() + departure_Nitrogen_norm*cos((departure_Nitrogen_alpha*M_PI/180));
          double lat = list_of_nodes.at(n)->get_y() + departure_Nitrogen_norm*sin((departure_Nitrogen_alpha*M_PI/180));
 
+
+
+         // find 5 nearest values to a point
+         std::vector<value> result_n;
+         rtree.query(bgi::nearest(point(0, 0), 5), std::back_inserter(result_n));
+
+         std::cout << "knn query result:" << std::endl;
+         BOOST_FOREACH(value const& v, result_n)
+             std::cout << bg::wkt<box>(v.first) << " - " << v.second << std::endl;
+
 /*
-#if GEOGRAPHICLIB_VERSION_MINOR > 25
-        const GeographicLib::Geodesic& geodesic = GeographicLib::Geodesic::WGS84();
-#else
-        const GeographicLib::Geodesic& geodesic = GeographicLib::Geodesic::WGS84;
-#endif
-
-
-         // restrict the search to a bounding box
-         //double dist_km=100.0;
-         //double mx, my, Mx, My, d;
-         //double y = list_of_nodes.at(n)->get_y();
-         //double x = list_of_nodes.at(n)->get_x();
-
-         //geodesic.Direct(y,x, 0, dist_km * 1000, My, d);
-         //geodesic.Direct(y,x, 90, dist_km * 1000, d, Mx);
-         //geodesic.Direct(y,x, 180, dist_km * 1000, my, d);
-         //geodesic.Direct(y,x, 270, dist_km * 1000, d, mx);
-
-
-         // find the nearest node idx
-         double mindist = 1e90;
-         double dist;
-         int nearest_node_idx;
-         for (int i=0; i<list_of_nodes_idx.size(); ++i) {
-             double a_y = list_of_nodes.at(i)->get_y();
-             double a_x = list_of_nodes.at(i)->get_x();
-             geodesic.Inverse(a_y, a_x, lat, lon, dist);
-             if (dist < mindist) {
-                 nearest_node_idx = i;
-                 mindist = dist;
-             }
-         }
-
 
         // exchange the amount between dep and arr given a fixed coeff.
         double coeff =0.4; // HARDCODED

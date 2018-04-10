@@ -29,7 +29,23 @@
 
 #include <Node.h>
 
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point.hpp>
+#include <boost/geometry/geometries/box.hpp>
+#include <boost/geometry/index/rtree.hpp>
+
+#include <boost/foreach.hpp>
+
+namespace bg = boost::geometry;
+namespace bgi = boost::geometry::index;
+
+typedef bg::model::point<float, 2, bg::cs::cartesian> point;
+typedef bg::model::box<point> box;
+typedef std::pair<box, unsigned> value;
+
+
 
 bool COMMONSSHARED_EXPORT diffuse_Nitrogen_in_every_directions(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, double coeff);
-bool COMMONSSHARED_EXPORT diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map);
+bool COMMONSSHARED_EXPORT diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes, adjacency_map_t& adjacency_map, bgi::rtree< value, bgi::quadratic<16> >& rtree);
+void COMMONSSHARED_EXPORT createRTreeFromNodes(vector<Node*>& nodes, bgi::rtree< value, bgi::quadratic<16> >& rtree);
 

@@ -48,6 +48,7 @@ static const char *dyn_alloc_options[] = {
     "LTMP",
     "FMSY",
     "fishing_credits",
+    "envt_variables_diffusion",
 };
 
 static const char *dyn_pop_options[] = {

@@ -101,14 +101,14 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
 
 
 
-         // find 3 nearest values to a point
+         // find 1 nearest value to a point
          cout << "nearest: ";
-         std::vector< std::pair<point, int> > result_n;
-         rtree.query(bgi::nearest(point(lon, lat), 3), std::back_inserter(result_n));
-         for(const auto &r: result_n){
-             std::cout << r.second << ' ' ;
-         }
-         cout << endl;
+         std::vector< std::pair<point, int> > nearest;
+         rtree.query(bgi::nearest(point(lon, lat), 1), std::back_inserter(nearest));
+         //for(const auto &r: nearest){
+         //    std::cout << r.second << ' ' ;
+         //}
+         //cout << endl;
 
 
          // or:
@@ -124,18 +124,16 @@ bool diffuse_Nitrogen_with_gradients(vector<Node*>&list_of_nodes,
          */
 
 
-/*
-
         // exchange the amount between dep and arr given a fixed coeff.
-        double arrival_Nitrogen = list_of_nodes.at(nearest_node_idx)->get_Nitrogen();
+        double arrival_Nitrogen = list_of_nodes.at(nearest.at(0).second)->get_Nitrogen();
         double exchanged       = coeff*departure_Nitrogen;
         arrival_Nitrogen       = arrival_Nitrogen + exchanged;
         departure_Nitrogen     = departure_Nitrogen - exchanged;
-        list_of_nodes.at(nearest_node_idx)->setNitrogen(arrival_Nitrogen);//update arrival
+        list_of_nodes.at(nearest.at(0).second)->setNitrogen(arrival_Nitrogen);//update arrival
         list_of_nodes.at(idx_node.toIndex())->setNitrogen(departure_Nitrogen ); //update departure
 
 
-*/
+
 
          }
 

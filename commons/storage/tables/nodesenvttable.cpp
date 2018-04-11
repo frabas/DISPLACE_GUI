@@ -125,7 +125,6 @@ void NodesEnvtTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesEnv
         s.phosphorus= st.getDoubleValue(6);
         s.oxygen = st.getDoubleValue(7);
         s.dissolvedcarbon = st.getDoubleValue(8);
-        s.tstep = st.getIntValue(9);
         if (op)
             return op(s);
         return false;

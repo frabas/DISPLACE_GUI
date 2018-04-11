@@ -623,13 +623,16 @@ void Fishfarm::compute_discharge_on_farm(int tstep)
     // write away
     this->set_sim_net_discharge_N(N_discharge);
     this->set_sim_cumul_net_discharge_N(N_discharge + this->get_sim_cumul_net_discharge_N());
-   // this->node->add_to_Nitrogen(N_discharge); // TO DO
+
     this->set_sim_net_discharge_P(P_discharge);
     this->set_sim_cumul_net_discharge_P(P_discharge + this->get_sim_cumul_net_discharge_P());
-    // this->node->add_to_Phosporous(P_discharge); // TO DO
 
-// TO DO: add accumulated discharge over time, export in file, and plot in stat window....
+    // adding up the discharge to update on node
+    double Nitrogen_on_loc = this->get_loc_ff()->get_Nitrogen();
+    this->get_loc_ff()->setNitrogen(Nitrogen_on_loc + N_discharge);
 
+    double Phosphorus_on_loc = this->get_loc_ff()->get_Phosphorus();
+    this->get_loc_ff()->setPhosphorus(Phosphorus_on_loc + P_discharge);
 
 
 

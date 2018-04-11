@@ -319,17 +319,39 @@ bool COMMONSSHARED_EXPORT read_biological_traits_params(istream &stream, const s
                                                         double, double, double, double,
                                                         double, double, double, double,
                                                         double, double, double> > & biological_traits_params);
-bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::string &separator,   std::vector <std::tuple< double, double, int,
-                                                    int, int,
-                                                    int, double, double,
-                                                    double, double, double,
-                                                    double, double, double,
-                                                    double, double, double,
-                                                    double, double, double,
-                                                    double, double, double,
-                                                    double, double, double,
-                                                    double, double, double,
-                                                    double> > & environment_on_coord);
+
+struct EnvironmentDataRecord {
+    double x;
+    double y;
+    int harb;
+    int pt_graph;
+    int code_area;
+    int landscapes_code;
+    double landscape_norm;
+    double landscape_alpha;
+    double wind, wind_norm, wind_alpha;
+    double sst;
+    double sst_norm;
+    double sst_alpha;
+    double salinity;
+    double salinity_norm;
+    double salinity_alpha;
+    double nitrogen;
+    double nitrogen_norm;
+    double nitrogen_alpha;
+    double phosphorus;
+    double phosphorus_norm;
+    double phosphorus_alpha;
+    double oxygen;
+    double oxygen_norm;
+    double oxygen_alpha;
+    double dissolvedcarbon;
+    double dissolvedcarbon_norm;
+    double dissolvedcarbon_alpha;
+    double bathymetry;
+};
+
+bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::string &separator, std::vector <EnvironmentDataRecord> & environment_on_coord);
 
 
 

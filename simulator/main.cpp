@@ -1416,17 +1416,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
            return false;
        }
 
-       std::vector <std::tuple< double, double, int,
-                                     int, int,
-                                     int, double, double,
-                                     double, double, double,
-                                     double, double, double,
-                                     double, double, double,
-                                     double, double, double,
-                                     double, double, double,
-                                     double, double, double,
-                                     double, double, double,
-                                     double> > environment_on_coord;
+       std::vector <EnvironmentDataRecord> environment_on_coord;
        bool r = read_environment_on_coord (is, separator, environment_on_coord);
 
        //"x" 0                    "y" 1                    "harb" 2
@@ -1444,46 +1434,45 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        cout << "environment_on_coord.size() "<< environment_on_coord.size() << endl;
        for (unsigned int n=0; n<environment_on_coord.size(); n++)
        {
-          graph_coord_x.at(n)=(get<0>(environment_on_coord.at(n))); // #0
-          graph_coord_y.at(n)=(get<1>(environment_on_coord.at(n))); // #1
-          graph_coord_harbour.at(n)=(get<2>(environment_on_coord.at(n))); // #2
-          graph_point_code_area.at(n)=(get<4>(environment_on_coord.at(n))); // #4
-          graph_point_code_landscape.at(n)=(get<5>(environment_on_coord.at(n))); // #5
-          graph_point_landscape_norm.at(n)=(get<6>(environment_on_coord.at(n)));
-          graph_point_landscape_alpha.at(n)=(get<7>(environment_on_coord.at(n)));
-          graph_point_wind.at(n)=(get<8>(environment_on_coord.at(n))); // #8
-          graph_point_wind_norm.at(n)=(get<9>(environment_on_coord.at(n)));
-          graph_point_wind_alpha.at(n)=(get<10>(environment_on_coord.at(n)));
-          graph_point_sst.at(n)=(get<11>(environment_on_coord.at(n)));  // #11
-          graph_point_sst_norm.at(n)=(get<12>(environment_on_coord.at(n)));
-          graph_point_sst_alpha.at(n)=(get<13>(environment_on_coord.at(n)));
-          graph_point_salinity.at(n)=(get<14>(environment_on_coord.at(n)));  // #14
-          graph_point_salinity_norm.at(n)=(get<15>(environment_on_coord.at(n)));
-          graph_point_salinity_alpha.at(n)=(get<16>(environment_on_coord.at(n)));
-          graph_point_Nitrogen.at(n)=(get<17>(environment_on_coord.at(n)));  // #17
-          graph_point_Nitrogen_norm.at(n)=(get<18>(environment_on_coord.at(n)));
-          graph_point_Nitrogen_alpha.at(n)=(get<19>(environment_on_coord.at(n)));
-          graph_point_Phosphorus.at(n)=(get<20>(environment_on_coord.at(n)));  // #20
-          graph_point_Phosphorus_norm.at(n)=(get<21>(environment_on_coord.at(n)));
-          graph_point_Phosphorus_alpha.at(n)=(get<22>(environment_on_coord.at(n)));
-          graph_point_Oxygen.at(n)=(get<23>(environment_on_coord.at(n)));  // #23
-          graph_point_Oxygen_norm.at(n)=(get<24>(environment_on_coord.at(n)));
-          graph_point_Oxygen_alpha.at(n)=(get<25>(environment_on_coord.at(n)));
-          graph_point_DissolvedCarbon.at(n)=(get<26>(environment_on_coord.at(n)));  // #26
-          graph_point_DissolvedCarbon_norm.at(n)=(get<27>(environment_on_coord.at(n)));
-          graph_point_DissolvedCarbon_alpha.at(n)=(get<28>(environment_on_coord.at(n)));
-          graph_point_bathymetry.at(n)=(get<29>(environment_on_coord.at(n))); // 29
+          graph_coord_x.at(n)=environment_on_coord.at(n).x; // #0
+          graph_coord_y.at(n)=environment_on_coord.at(n).y; // #1
+          graph_coord_harbour.at(n)=environment_on_coord.at(n).harb; // #2
+          graph_point_code_area.at(n)=environment_on_coord.at(n).code_area; // #4
+          graph_point_code_landscape.at(n)=environment_on_coord.at(n).landscapes_code; // #5
+          graph_point_landscape_norm.at(n)=environment_on_coord.at(n).landscape_norm;
+          graph_point_landscape_alpha.at(n)=environment_on_coord.at(n).landscape_alpha;
+          graph_point_wind.at(n)=environment_on_coord.at(n).wind; // #8
+          graph_point_wind_norm.at(n)=environment_on_coord.at(n).wind_norm;
+          graph_point_wind_alpha.at(n)=environment_on_coord.at(n).wind_alpha;
+          graph_point_sst.at(n)=environment_on_coord.at(n).sst;  // #11
+          graph_point_sst_norm.at(n)=environment_on_coord.at(n).sst_norm;
+          graph_point_sst_alpha.at(n)=environment_on_coord.at(n).sst_alpha;
+          graph_point_salinity.at(n)=environment_on_coord.at(n).salinity;  // #14
+          graph_point_salinity_norm.at(n)=environment_on_coord.at(n).salinity_norm;
+          graph_point_salinity_alpha.at(n)=environment_on_coord.at(n).salinity_alpha;
+          graph_point_Nitrogen.at(n)=environment_on_coord.at(n).nitrogen;  // #17
+          graph_point_Nitrogen_norm.at(n)=environment_on_coord.at(n).nitrogen_norm;
+          graph_point_Nitrogen_alpha.at(n)=environment_on_coord.at(n).nitrogen_alpha;
+          graph_point_Phosphorus.at(n)=environment_on_coord.at(n).phosphorus;  // #20
+          graph_point_Phosphorus_norm.at(n)=environment_on_coord.at(n).phosphorus_norm;
+          graph_point_Phosphorus_alpha.at(n)=environment_on_coord.at(n).phosphorus_alpha;
+          graph_point_Oxygen.at(n)=environment_on_coord.at(n).oxygen;  // #23
+          graph_point_Oxygen_norm.at(n)=environment_on_coord.at(n).oxygen_norm;
+          graph_point_Oxygen_alpha.at(n)=environment_on_coord.at(n).oxygen_alpha;
+          graph_point_DissolvedCarbon.at(n)=environment_on_coord.at(n).dissolvedcarbon;  // #26
+          graph_point_DissolvedCarbon_norm.at(n)=environment_on_coord.at(n).dissolvedcarbon_norm;
+          graph_point_DissolvedCarbon_alpha.at(n)=environment_on_coord.at(n).dissolvedcarbon_alpha;
+          graph_point_bathymetry.at(n)=environment_on_coord.at(n).bathymetry; // 29
        }
 
        //check
        cout << "prior check of environment_on_coord:" << endl;
-       cout << get<0>(environment_on_coord.at(0)) << " " << get<1>(environment_on_coord.at(0))  << " " <<
-              get<2>(environment_on_coord.at(0)) << " " << get<4>(environment_on_coord.at(0)) << " " <<
-              get<5>(environment_on_coord.at(0)) << " " << get<8>(environment_on_coord.at(0)) << " " <<
-              get<8>(environment_on_coord.at(0)) << " " << get<11>(environment_on_coord.at(0)) << " " <<
-              get<14>(environment_on_coord.at(0)) << " " << get<17>(environment_on_coord.at(0)) << " " <<
-              get<17>(environment_on_coord.at(0)) << " " << get<20>(environment_on_coord.at(0)) << " " <<
-              get<23>(environment_on_coord.at(0)) << " " << get<26>(environment_on_coord.at(0)) << endl;
+       cout << environment_on_coord.at(0).x << " " << environment_on_coord.at(0).y  << " " <<
+              environment_on_coord.at(0).harb << " " << environment_on_coord.at(0).code_area << " " <<
+              environment_on_coord.at(0).landscapes_code << " " << environment_on_coord.at(0).wind << " " <<
+              environment_on_coord.at(0).sst << " " << environment_on_coord.at(0).salinity << " " <<
+              environment_on_coord.at(0).nitrogen << " " << environment_on_coord.at(0).phosphorus << " " <<
+              environment_on_coord.at(0).oxygen << " " << environment_on_coord.at(0).dissolvedcarbon << " " << endl;
 
 
        cout << "posterior check of environment_on_coord:" << endl;

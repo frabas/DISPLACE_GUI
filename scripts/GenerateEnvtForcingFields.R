@@ -92,6 +92,47 @@
      coord <- cbind(coord,  landscapes_code=dd)  # look at “Towards a representative MPA network in the Baltic Sea”.
     } # end FALSE
      
+    if(TRUE){
+     #------------------
+     # RASTER-----------
+     #------------------
+     extractNodesOnRaster <- function (coord=coord,
+                                       general=general,
+                                       filename=file.path("Input_of_nutrients_Total_nitrogen", "Total nitrogen1.tif"),
+                                       namefield="nitrogen"){
+        library(maptools)
+        library(raster)
+        polPath              <- file.path(general$main_path_gis, "HABITATS")
+        anf                  <- function(x) as.numeric(as.character(x))
+        #sh_coastlines        <- readShapePoly(file.path(polPath,"francois_EU"))
+        ## use point-raster overlay.......
+        library(raster)
+        raster_var       <- raster(file.path(polPath, filename))    # probably need an update of rgdal here....
+        coord           <- cbind(x=anf(coord[,'x']), y=anf(coord[,'y']))
+        # convert to UTM
+        library(sp)
+        library(rgdal)
+        SP <- SpatialPoints(cbind(as.numeric(as.character(coord[,'x'])), as.numeric(as.character(coord[,'y']))),
+                       proj4string=CRS("+proj=longlat +datum=WGS84"))
+        coord <- cbind.data.frame(coord,
+                 spTransform(SP, 
+                  CRS(paste(attributes(raster_var)$crs)))) 
+        dd <- extract (raster_var, coord[,3:4]) # get the landscape on the coord points!
+        coord <- cbind(coord,  raster_var=dd)  # look at “Towards a representative MPA network in the Baltic Sea”.
+        colnames(coord)[ncol(coord)] <- namefield
+    
+    return(coord)
+    }
+    
+    # calls
+    filename <- file.path("Input_of_nutrients_Total_nitrogen", "Total nitrogen1.tif")    # HELCOM HOLAS II Total nitrogen as µmol / l
+    dd <- extractNodesOnRaster (coord=coord, general=general, filename=filename, namefield="nitrogen")
+    nitrogen <- dd [,"nitrogen"]
+    filename <- file.path("Input_of_nutrients_Total_phosphorus", "Total phosphorus1.tif")  # HELCOM HOLAS II Total phosphorus as µmol / l
+    dd <- extractNodesOnRaster (coord=coord, general=general, filename=filename, namefield="phosphorus")
+    phosphorus  <- dd [,"phosphorus"])
+    
+    } # end FALSE
                     
   if(TRUE){
   ## FROM A SHAPE FILE 
@@ -168,7 +209,7 @@
      coord <- cbind(coord,  salinity_alpha=salinity_alpha)
 
      ## Nitrogen
-     nitrogen              <- 1 # TODO: use input data to overlay a spatialPoints on a polygon shape
+     #nitrogen              <- 1 # TODO: use input data to overlay a spatialPoints on a polygon shape
      nitrogen_norm         <- rlnorm(nrow(coord), meanlog=log(0.05),sdlog=log(1.5))  
      nitrogen_alpha        <- rnorm(nrow(coord),90,sd=40) # TODO: use input data to overlay a spatialPoints on a polygon shape
      coord <- cbind(coord,  nitrogen=nitrogen)
@@ -176,7 +217,7 @@
      coord <- cbind(coord,  nitrogen_alpha=nitrogen_alpha)
 
      ## Phosphorus
-     phosphorus              <- 1 # TODO: use input data to overlay a spatialPoints on a polygon shape
+     #phosphorus              <- 1 # TODO: use input data to overlay a spatialPoints on a polygon shape
      phosphorus_norm         <- rlnorm(nrow(coord), meanlog=log(0.05),sdlog=log(1.5))
      phosphorus_alpha        <- rnorm(nrow(coord),90,sd=40) # TODO: use input data to overlay a spatialPoints on a polygon shape
      coord <- cbind(coord,  phosphorus=phosphorus)
@@ -199,6 +240,9 @@
      coord <- cbind(coord,  dissolvedcarbon_norm=dissolvedcarbon_norm)
      coord <- cbind(coord,  dissolvedcarbon_alpha=dissolvedcarbon_alpha)
 
+     ## DissolvedCarbon
+     bathymetry              <- 1 # TODO: use input data to overlay a spatialPoints on a polygon shape
+     coord <- cbind(coord,  bathymetry=bathymetry)
 
 
       # export

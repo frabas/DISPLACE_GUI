@@ -265,6 +265,8 @@ bool COMMONSSHARED_EXPORT fill_from_Oxygen (istream& in, vector<double>& graph_p
                                       int nrow);
 bool COMMONSSHARED_EXPORT fill_from_DissolvedCarbon (istream& in, vector<double>& graph_point_DissolvedCarbon,
                                       int nrow);
+bool COMMONSSHARED_EXPORT fill_from_bathymetry (istream& in, vector<double>& graph_point_bathymetry,
+                                      int nrow);
 
 bool COMMONSSHARED_EXPORT fill_from_benthos_biomass (istream& in, vector<double>& graph_point_benthos_biomass,
                                       int nrow);

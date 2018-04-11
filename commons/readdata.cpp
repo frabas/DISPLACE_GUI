@@ -3362,13 +3362,14 @@ bool read_environment_on_coord(istream &stream, const std::string &separator,   
                                double, double, double,
                                double, double, double,
                                double, double, double,
-                               double, double, double> > & environment_on_coord)
+                               double, double, double,
+                               double> > & environment_on_coord)
 {
     // Format:
     //"x"                     "y"                     "harb"                  "pt_graph"              "code_area"             "landscapes_code"       "landscape_norm"
     //"landscape_alpha"       "sst"                   "sst_norm"              "sst_alpha"             "salinity"              "salinity_norm"         "salinity_alpha"        "nitrogen"
     //"nitrogen_norm"         "nitrogen_alpha"        "phosphorus"            "phosphorus_norm"       "phosphorus_alpha"      "oxygen"                "oxygen_norm"
-    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha"
+    //"oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm"  "dissolvedcarbon_alpha" "bathymetry"
 
     cout << "Reading environment_on_coord..." << endl;
 
@@ -3397,7 +3398,8 @@ bool read_environment_on_coord(istream &stream, const std::string &separator,   
                     double, double, double,
                     double, double, double,
                     double, double, double,
-                    double, double, double> a_tuple;
+                    double, double, double,
+                    double> a_tuple;
 
             std::get<0>(a_tuple)=boost::lexical_cast<double>(sr[0]);
             std::get<1>(a_tuple)=boost::lexical_cast<double>(sr[1]);
@@ -3428,6 +3430,7 @@ bool read_environment_on_coord(istream &stream, const std::string &separator,   
             std::get<26>(a_tuple)=boost::lexical_cast<double>(sr[26]);
             std::get<27>(a_tuple)=boost::lexical_cast<double>(sr[27]);
             std::get<28>(a_tuple)=boost::lexical_cast<double>(sr[28]);
+            std::get<29>(a_tuple)=boost::lexical_cast<double>(sr[29]);
 
             // check
             //cout << "reading  environment_on_coord: " << endl;

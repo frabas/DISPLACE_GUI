@@ -328,7 +328,8 @@ bool COMMONSSHARED_EXPORT read_environment_on_coord(istream &stream, const std::
                                                     double, double, double,
                                                     double, double, double,
                                                     double, double, double,
-                                                    double, double, double> > & environment_on_coord);
+                                                    double, double, double,
+                                                    double> > & environment_on_coord);
 
 
 

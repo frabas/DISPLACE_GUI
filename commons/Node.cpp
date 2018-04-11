@@ -47,6 +47,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
            double _Phosphorus,double _Phosphorus_norm, double _Phosphorus_alpha,
            double _Oxygen, double _Oxygen_norm, double _Oxygen_alpha,
            double _DissolvedCarbon, double _DissolvedCarbon_norm, double _DissolvedCarbon_alpha,
+           double _bathymetry,
            double _benthos_biomass, double _benthos_number, double _benthos_meanweight,
            double _benthos_biomass_K, double _benthos_number_K,
            int nbpops, int nbbenthospops, int nbszgroups)
@@ -86,6 +87,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     DissolvedCarbon=_DissolvedCarbon;
     DissolvedCarbon_norm=_DissolvedCarbon_norm;
     DissolvedCarbon_alpha=_DissolvedCarbon_alpha;
+    bathymetry=_bathymetry;
     benthos_biomass=_benthos_biomass;
     benthos_number=_benthos_number;
     benthos_meanweight=_benthos_meanweight;
@@ -175,6 +177,7 @@ Node::Node()
       Phosphorus(0),
       Oxygen(0),
       DissolvedCarbon(0),
+      bathymetry(0),
       benthos_biomass(1),
       benthos_number(1),
       is_harbour(false),

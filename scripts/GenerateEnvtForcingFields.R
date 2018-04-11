@@ -128,9 +128,13 @@
     filename <- file.path("Input_of_nutrients_Total_nitrogen", "Total nitrogen1.tif")    # HELCOM HOLAS II Total nitrogen as µmol / l
     dd <- extractNodesOnRaster (coord=coord, general=general, filename=filename, namefield="nitrogen")
     nitrogen <- dd [,"nitrogen"]
+    nitrogen <- replace(nitrogen, is.na(nitrogen), 0)
+    
     filename <- file.path("Input_of_nutrients_Total_phosphorus", "Total phosphorus1.tif")  # HELCOM HOLAS II Total phosphorus as µmol / l
     dd <- extractNodesOnRaster (coord=coord, general=general, filename=filename, namefield="phosphorus")
-    phosphorus  <- dd [,"phosphorus"])
+    phosphorus  <- dd [,"phosphorus"]
+    phosphorus <- replace(phosphorus, is.na(phosphorus), 0)
+    
     
     } # end FALSE
                     
@@ -245,6 +249,15 @@
      coord <- cbind(coord,  bathymetry=bathymetry)
 
 
+     if(ncol(coord) !=30) stop("check to get 30 fields!")
+     # colnames(coord)
+     #[1] "x"                     "y"                     "harb"                  "pt_graph"              "code_area"             "landscapes_code"       "landscape_norm"       
+     #[8] "landscape_alpha"       "wind"                  "wind_norm"             "wind_alpha"            "sst"                   "sst_norm"              "sst_alpha"            
+     #[15] "salinity"              "salinity_norm"         "salinity_alpha"        "nitrogen"              "nitrogen_norm"         "nitrogen_alpha"        "phosphorus"           
+     #[22] "phosphorus_norm"       "phosphorus_alpha"      "oxygen"                "oxygen_norm"           "oxygen_alpha"          "dissolvedcarbon"       "dissolvedcarbon_norm" 
+     #[29] "dissolvedcarbon_alpha" "bathymetry"           
+
+     
       # export
      write.table(coord, 
        file=file.path(general$main.path.ibm, "graphsspe", paste0('environment_on_coord',general$igraph,'.dat')),

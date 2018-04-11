@@ -160,6 +160,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
                     new NodeWithDissolvedCarbonGraphics(mNode.get(), mController, indx));
         break;
 
+    case GraphNodeWithBathymetry:
+        mGeometry = std::shared_ptr<NodeGraphics>(
+                    new NodeWithBathymetryGraphics(mNode.get(), mController, indx));
+        break;
+
     default:
         Q_ASSERT(false);        /* Disallow creating "unknown" nodes */
         break;
@@ -311,6 +316,10 @@ void NodeMapObject::updateProperties()
                 .arg(mNode->get_DissolvedCarbon());
         break;
 
+    case GraphNodeWithBathymetry:
+        text += QString("<br/><b>Bathymetry:</b> %1<br/>")
+                .arg(mNode->get_bathymetry());
+        break;
 
     case GraphNodeWithCumFTimeRole:
         text += QString("<br/><b>Fishing Effort (hours):</b> %1<br/>")

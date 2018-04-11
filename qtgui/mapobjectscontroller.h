@@ -235,6 +235,7 @@ public:
         EnvLayerPhosphorus,
         EnvLayerOxygen,
         EnvLayerDissolvedCarbon,
+        EnvLayerBathymetry,
 
      EnvLayerMax
     };
@@ -399,6 +400,7 @@ private:
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerPhosphorus[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerOxygen[MainWindow::MAX_MODELS];
     std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerDissolvedCarbon[MainWindow::MAX_MODELS];
+    std::shared_ptr<qmapcontrol::LayerGeometry> mStatsLayerBathymetry[MainWindow::MAX_MODELS];
 
     QVector<bool> mModelVisibility;
 

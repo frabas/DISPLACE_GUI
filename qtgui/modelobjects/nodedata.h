@@ -79,10 +79,11 @@ public:
     void setWind(double w) { mNode->setWind(w); }
     void setSST(double t) { mNode->setSST(t); }
     void setSalinity(double s) { mNode->setSalinity(s); }
-    void setNitrogen(double s) { mNode->setNitrogen(s); }
-    void setPhosphorus(double s) { mNode->setPhosphorus(s); }
-    void setOxygen(double s) { mNode->setOxygen(s); }
-    void setDissolvedCarbon(double s) { mNode->setDissolvedCarbon(s); }
+    void setNitrogen(double n) { mNode->setNitrogen(n); }
+    void setPhosphorus(double p) { mNode->setPhosphorus(p); }
+    void setOxygen(double o) { mNode->setOxygen(o); }
+    void setDissolvedCarbon(double dc) { mNode->setDissolvedCarbon(dc); }
+    void setBathymetry(double b) { mNode->setBathymetry(b); }
     void setBenthosBiomass(double val) { mNode->setBenthosBiomass(val); }
     void setBenthosNumber(double val) { mNode->setBenthosNumber(val); }
     void setBenthosMeanweight(double val) { mNode->setBenthosMeanweight(val); }

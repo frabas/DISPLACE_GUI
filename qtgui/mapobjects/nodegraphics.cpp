@@ -330,6 +330,14 @@ void NodeWithDissolvedCarbonGraphics::drawShape(QPainter &painter, const qmapcon
 }
 
 
+void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_bathymetry()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
+
 
 
 

@@ -68,6 +68,7 @@ public:
     double get_Phosphorus() const { return mNode->get_Phosphorus(); }
     double get_Oxygen() const { return mNode->get_Oxygen(); }
     double get_DissolvedCarbon() const { return mNode->get_DissolvedCarbon(); }
+    double get_bathymetry() const { return mNode->get_bathymetry(); }
     double get_init_benthos_biomass() const { return mNode->get_init_benthos_biomass(); }
     vector<double> get_benthos_biomass_per_funcgr() const { return mNode->get_benthos_biomass_per_funcgr(); }
     double get_init_benthos_number() const { return mNode->get_init_benthos_number(); }

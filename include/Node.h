@@ -198,6 +198,10 @@ class COMMONSSHARED_EXPORT Node
             DissolvedCarbon_alpha = dissC_a;
         }
 
+        double get_bathymetry() const;
+        void setBathymetry(double depth) {
+            bathymetry = depth;
+        }
 
         // declare virtual to enable dynamic binding for chlidren classes e.g. Harbour
 		virtual string get_name() const;

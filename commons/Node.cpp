@@ -361,6 +361,12 @@ double Node::get_DissolvedCarbon_alpha() const
     return(DissolvedCarbon_alpha);
 }
 
+double Node::get_bathymetry() const
+{
+    return(bathymetry);
+}
+
+
 double Node::get_init_benthos_biomass() const
 {
     return(benthos_biomass);

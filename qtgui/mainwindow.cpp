@@ -1672,6 +1672,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         QString Phosphoruspath = savedlg.getPhosphorusFilename();
         QString Oxygenpath = savedlg.getOxygenFilename();
         QString DissolvedCarbonpath = savedlg.getDissolvedCarbonFilename();
+        QString bathymetrypath = savedlg.getBathymetryFilename();
         QString benthospath = savedlg.getBenthosFilename();
         QString benthosnbpath = savedlg.getBenthosNbFilename();
         QString acpath = savedlg.getAreacodesFilename();
@@ -1683,6 +1684,7 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
+                                 bathymetrypath,
                                  benthospath, benthosnbpath, acpath, polypath, polypathMomths,
                                  savedlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {
@@ -2658,6 +2660,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         QString Phosphoruspath = dlg.getPhosphorusFilename();
         QString Oxygenpath = dlg.getOxygenFilename();
         QString DissolvedCarbonpath = dlg.getDissolvedCarbonFilename();
+        QString bathymetrypath = dlg.getBathymetryFilename();
         QString benthospath = dlg.getBenthosFilename();
         QString benthosnbpath = dlg.getBenthosNbFilename();
         QString acpath = dlg.getAreacodesFilename();
@@ -2669,6 +2672,7 @@ void MainWindow::on_actionSave_Graph_triggered()
         InputFileExporter exporter;
         if (exporter.exportGraph(graphpath, coordspath, landpath, windpath, sstpath, salinitypath,
                                  Nitrogenpath, Phosphoruspath, Oxygenpath, DissolvedCarbonpath,
+                                 bathymetrypath,
                                  benthospath, benthosnbpath, acpath, polypath,polypathMomths,
                                  dlg.getClosedPolygonFilenameVesSize(),
                                  export_poly, currentModel.get(), &error)) {

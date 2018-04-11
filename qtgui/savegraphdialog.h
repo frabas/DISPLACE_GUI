@@ -47,6 +47,7 @@ public:
     QString getPhosphorusFilename() const;
     QString getOxygenFilename() const;
     QString getDissolvedCarbonFilename() const;
+    QString getBathymetryFilename() const;
     QString getBenthosFilename() const;
     QString getBenthosNbFilename() const;
     QString getAreacodesFilename() const;

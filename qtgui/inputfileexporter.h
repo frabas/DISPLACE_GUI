@@ -62,7 +62,7 @@ public:
     InputFileExporter();
 
     bool exportGraph(QString graphpath, QString coordspath, QString landpath,  QString windpath, QString sstpath, QString salinitypath,
-                     QString Nitrogenpath, QString Phosporuspath, QString Oxygenpath, QString DissolvedCarbonpath,
+                     QString Nitrogenpath, QString Phosporuspath, QString Oxygenpath, QString DissolvedCarbonpath, QString bathymetrypath,
                      QString benthospath, QString benthosnbpath, QString areacodepath,
                      QString closedpath, QString closedpath_month, QString closedpath_vessz, bool export_closedpoly, DisplaceModel *currentModel, QString *error);
 protected:

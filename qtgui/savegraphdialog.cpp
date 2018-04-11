@@ -40,9 +40,10 @@ SaveGraphDialog::SaveGraphDialog(QWidget *parent) :
     ui->optPhosphorus->setChecked(true);
     ui->optOxygen->setChecked(true);
     ui->optDissolvedCarbon->setChecked(true);
+    ui->optBathymetry->setChecked(true);
     ui->optBenthosBio->setChecked(true);
     ui->optBenthosNb->setChecked(true);
-    ui->optClosedPoly->setChecked(true);
+    ui->optClosed->setChecked(true);
     ui->optCustomize->setChecked(true); // force updating
     ui->optCustomize->setChecked(false);
     ui->graphName->setText("0");
@@ -129,6 +130,13 @@ QString SaveGraphDialog::getDissolvedCarbonFilename() const
     return QString();
 }
 
+QString SaveGraphDialog::getBathymetryFilename() const
+{
+    if (ui->optBathymetry->isChecked())
+        return ui->outputFolder->text() + "/" + ui->bathymetryFileName->text();
+    return QString();
+}
+
 
 QString SaveGraphDialog::getBenthosFilename() const
 {
@@ -169,7 +177,7 @@ QString SaveGraphDialog::getClosedPolygonFilenameVesSize() const
 
 bool SaveGraphDialog::isClosedPolygonExportChecked() const
 {
-    return ui->optClosedPoly->isChecked();
+    return ui->optClosed->isChecked();
 }
 
 void SaveGraphDialog::on_optCustomize_toggled(bool checked)
@@ -185,6 +193,7 @@ void SaveGraphDialog::on_optCustomize_toggled(bool checked)
     ui->PhosphorusFileName->setEnabled(checked);
     ui->OxygenFileName->setEnabled(checked);
     ui->DissolvedCarbonFileName->setEnabled(checked);
+    ui->bathymetryFileName->setEnabled(checked);
     ui->benthosFileName->setEnabled(checked);
     ui->benthosNbFileName->setEnabled(checked);
     ui->closedPolyFilename->setEnabled(checked);
@@ -205,6 +214,7 @@ void SaveGraphDialog::on_graphName_textChanged(const QString &gn)
     ui->PhosphorusFileName->setText(QString("coord%1_with_phosphorus.dat").arg(gn));
     ui->OxygenFileName->setText(QString("coord%1_with_oxygen.dat").arg(gn));
     ui->DissolvedCarbonFileName->setText(QString("coord%1_with_dissolvedcarbon.dat").arg(gn));
+    ui->bathymetryFileName->setText(QString("coord%1_with_bathymetry.dat").arg(gn));
     ui->benthosFileName->setText(QString("coord%1_with_benthos_total_biomass.dat").arg(gn));
     ui->benthosNbFileName->setText(QString("coord%1_with_benthos_total_number.dat").arg(gn));
     ui->closedPolyFilename->setText(QString("metier_closure_a_graph%1_quarter?.dat").arg(gn));

@@ -31,6 +31,7 @@ InputFileExporter::InputFileExporter()
 bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                                     QString landpath,  QString windpath, QString sstpath, QString salinitypath,
                                     QString Nitrogenpath, QString Phosphoruspath, QString Oxygenpath, QString DissolvedCarbonpath,
+                                    QString bathymetrypath,
                                     QString benthospath, QString benthosnbpath, QString areacodepath, QString closedpath,
                                     QString closedpath_month, QString closedpath_vessz,
                                     bool export_closedpoly,
@@ -147,6 +148,18 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     }
 
 
+    QFile bathymetryfile(bathymetrypath);
+    QTextStream bathymetrystream;
+    if (!bathymetrypath.isEmpty()) {
+        if (!bathymetryfile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            if (error)
+                *error = QString(QObject::tr("Cannot open bathymetry file %1: %2"))
+                    .arg(bathymetrypath).arg(bathymetryfile.errorString());
+            return false;
+        }
+        bathymetrystream.setDevice(&bathymetryfile);
+    }
+
 
 
 
@@ -226,8 +239,10 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
                 Phosphorusstream << nd->get_Phosphorus() << endl;
             if (Oxygenfile.isOpen())
                 Oxygenstream << nd->get_Oxygen() << endl;
-            if (salinityfile.isOpen())
+            if (DissolvedCarbonfile.isOpen())
                 DissolvedCarbonstream << nd->get_DissolvedCarbon() << endl;
+            if (bathymetryfile.isOpen())
+                bathymetrystream << nd->get_bathymetry() << endl;
 
 
         }
@@ -260,6 +275,7 @@ bool InputFileExporter::exportGraph(QString graphpath, QString coordspath,
     Phosphorusfile.close();
     Oxygenfile.close();
     DissolvedCarbonfile.close();
+    bathymetryfile.close();
     bfile.close();
     bnbfile.close();
 

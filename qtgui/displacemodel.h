@@ -94,8 +94,6 @@ public:
 
     bool load (QString path, ModelType type);
     bool loadDatabase (QString path);
-    bool Q_DECL_DEPRECATED linkDatabase (QString path);
-    bool Q_DECL_DEPRECATED prepareDatabaseForSimulation ();
     bool clearStats();
     bool saveScenarioAs(const QString &path);
     bool saveScenario();

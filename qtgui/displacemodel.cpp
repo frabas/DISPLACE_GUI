@@ -266,37 +266,6 @@ bool DisplaceModel::loadDatabase(QString path)
     return true;
 }
 
-/** Link a database to a opened "live" simulation
- *
- * Note: when this is called, the live simulation has been already loaded so
- * Vessel names, harbours and other objects are still known.
- *
- */
-bool DisplaceModel::linkDatabase(QString path)
-{
-#if 0
-    if (mModelType != LiveModelType) {
-        mLastError = tr("Model is not a live simulation");
-        return false;
-    }
-
-    mDb = new DbHelper;
-    if (!mDb->attachDb(path)) {
-        mLastError = mDb->lastDbError();
-        return false;
-    }
-
-    mLinkedDbName = path;
-    return true;
-#endif
-    throw UnimplementedException(__FUNCTION__);
-}
-
-bool DisplaceModel::prepareDatabaseForSimulation()
-{
-    return true;
-}
-
 bool DisplaceModel::clearStats()
 {
     m_vessel_last_step = -1;
@@ -1667,8 +1636,6 @@ Scenario DisplaceModel::scenario() const
 void DisplaceModel::setScenario(const Scenario &scenario)
 {
     mScenario = scenario;
-    if (mDb)
-        mDb->saveScenario(mScenario);
 }
 
 Config DisplaceModel::config() const
@@ -1679,9 +1646,6 @@ Config DisplaceModel::config() const
 void DisplaceModel::setConfig(const Config &config)
 {
     mConfig = config;
-    if (mDb)
-        mDb->saveConfig(mConfig);
-
     mInterestingHarb = mConfig.m_interesting_harbours;
 }
 

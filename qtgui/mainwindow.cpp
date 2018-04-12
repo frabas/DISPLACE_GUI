@@ -456,8 +456,6 @@ void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, Q
             simulatorProcessStepChanged(-1);
 
         if (oldstate == QProcess::Running && newstate == QProcess::NotRunning) { // simulation has completed
-            models[0]->simulationEnded();
-            cout << "there is a model..." <<  endl;
         }
     } else {
         cout << "there is no model yet..." <<  endl;
@@ -822,7 +820,6 @@ void MainWindow::on_cmdStart_clicked()
         ui->profilingOutput->clear();
         mLastRunSimulationName = models[0]->simulationName();
         mLastRunDatabase = models[0]->linkedDatabase();
-        models[0]->prepareDatabaseForSimulation();
         models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
         mSimulation->setUseStaticPaths(models[0]->getUseStaticPaths());

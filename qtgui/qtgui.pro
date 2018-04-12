@@ -198,7 +198,8 @@ SOURCES += \
     plots/nationsstatsplot.cpp \
     plots/populationsstatplot.cpp \
     plots/harboursstatplot.cpp \
-    plots/metiersstatsplot.cpp
+    plots/metiersstatsplot.cpp \
+    mapsdataprovider.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -342,7 +343,9 @@ HEADERS += \
     plots/populationsstatplot.h \
     plots/harboursstatplot.h \
     plots/metiersstatsplot.h \
-    stats/statsutils.h
+    stats/statsutils.h \
+    mapsdataprovider.h \
+    mapsdatastructures.h
 
 ### mSQLiteCpp dependency
 

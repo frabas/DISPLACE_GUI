@@ -88,8 +88,6 @@ void NodesEnvtTable::init()
 
 bool NodesEnvtTable::insert(int tstep, Node *node)
 {
-
-
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
@@ -105,7 +103,7 @@ bool NodesEnvtTable::insert(int tstep, Node *node)
                                         node->get_Oxygen(),
                                         node->get_DissolvedCarbon())
                         );
-return 0;
+    return 0;
 }
 
 void NodesEnvtTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesEnvtTable::NodeEnvt)> op)
@@ -113,10 +111,11 @@ void NodesEnvtTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesEnv
     init();
 
     p->allNodesQueryStatement.bind(1, tstep);
-    p->allNodesQueryStatement.execute([this, &op](){
+    p->allNodesQueryStatement.execute([this, &op, tstep](){
         auto &st = p->allNodesQueryStatement;
         NodeEnvt s;
         s.nodeId = types::NodeId(st.getIntValue(0));
+        s.tstep = types::tstep_t(tstep);
         s.marineLandscape = st.getIntValue(1);
         s.salinity = st.getDoubleValue(2);
         s.sst = st.getDoubleValue(3);

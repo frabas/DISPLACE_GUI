@@ -151,7 +151,8 @@ HEADERS= \
     ../include/diffusion.h \
     storage/tables/nodesenvttable.h \
     storage/tables/nodesstattable.h \
-    storage/tables/nodestariffstattable.h
+    storage/tables/nodestariffstattable.h \
+    ../include/StrongType.h
 
 ### mSQLiteCpp dependency
 

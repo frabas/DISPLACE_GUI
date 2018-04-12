@@ -3,6 +3,7 @@
 
 #include "commons_global.h"
 #include "idtypes.h"
+#include "modeltypes.h"
 
 #include "sqlitefielddef.h"
 #include "sqlitetable.h"
@@ -41,18 +42,7 @@ public:
 
     bool insert (int tstep, Node *node);
 
-    struct NodeEnvt {
-        types::NodeId nodeId;
-        int tstep;
-        int marineLandscape;
-        double salinity;
-        double sst;
-        double wind;
-        double nitrogen;
-        double phosphorus;
-        double oxygen;
-        double dissolvedcarbon;
-    };
+    using NodeEnvt = types::EnvironmentData;
     void queryAllNodesAtStep(int tstep, std::function<bool(NodeEnvt stat)>);
 };
 

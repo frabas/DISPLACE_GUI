@@ -38,5 +38,5 @@ docs/latex
 build-*
 run.sh
 
-mSqliteCpp/
+mSqliteCpp
 sparsepp/

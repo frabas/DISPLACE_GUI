@@ -451,7 +451,6 @@ protected:
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
-    bool loadHistoricalStatsFromDb();
 
     void checkStatsCollection(int tstep);
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);

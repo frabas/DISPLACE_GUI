@@ -3318,18 +3318,3 @@ bool DisplaceModel::loadVesselsFromDb()
 
     return true;
 }
-
-bool DisplaceModel::loadHistoricalStatsFromDb()
-{
-    QList<QVector<PopulationData> > dtl;
-    QList<QVector<NationStats> > ndl;
-    QList<QVector<HarbourStats> > hdl;
-
-    QList<int> steps;
-    mDb->loadHistoricalStatsForPops(steps,dtl);
-    mDb->loadHistoricalStatsForVessels(steps, mVessels, mNodes, ndl, hdl);
-
-    qDebug() << Q_FUNC_INFO << dtl.size() << steps;
-
-    return true;
-}

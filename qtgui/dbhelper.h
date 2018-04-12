@@ -87,8 +87,6 @@ public:
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels);
     bool updateStatsForNodesToStep(int step, QList<std::shared_ptr<NodeData> > &nodes);
-    bool loadHistoricalStatsForPops(QList<int> &steps, QList<QVector<PopulationData> > &population);
-    bool loadHistoricalStatsForVessels(const QList<int> &steps, const QList<std::shared_ptr<VesselData> > &vessels, const QList<std::shared_ptr<NodeData> > &nodes, QList<QVector<NationStats> > &nations, QList<QVector<HarbourStats> > &harbour) ;
 
     HarbourStats getHarbourStatsAtStep(int idx, int step);
 

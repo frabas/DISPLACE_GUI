@@ -135,8 +135,19 @@
     phosphorus  <- dd [,"phosphorus"]
     phosphorus <- replace(phosphorus, is.na(phosphorus), 0)
     
+    filename <- file.path("Bathy_GEBCO_1_min", "GRIDONE_1D.nc")  # GRIDONE_1D
+    dd <- extractNodesOnRaster (coord=coord, general=general, filename=filename, namefield="bathymetry")
+    bathymetry  <- dd [,"bathymetry"]
+    bathymetry <- replace(bathymetry, is.na(bathymetry), 0)
     
+    # check
+    plot(coord[,c(1,2)], col=cut(bathymetry, breaks=c(-10000,-1000, -200, -100, -50, -20, 10000)))
+
+
     } # end FALSE
+     
+     
+      
                     
   if(TRUE){
   ## FROM A SHAPE FILE 
@@ -245,7 +256,7 @@
      coord <- cbind(coord,  dissolvedcarbon_alpha=dissolvedcarbon_alpha)
 
      ## DissolvedCarbon
-     bathymetry              <- 1 # TODO: use input data to overlay a spatialPoints on a polygon shape
+     bathymetry              <- bathymetry #  using input data to overlay a spatialPoints on a raster
      coord <- cbind(coord,  bathymetry=bathymetry)
 
 

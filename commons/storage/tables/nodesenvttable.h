@@ -22,18 +22,6 @@ private:
 
     std::unique_ptr<Impl> p;
 
-    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
-
-    FieldDef<FieldType::Integer> marineLandscape = makeFieldDef("marineLandscape",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Real> salinity = makeFieldDef("salinity",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> sst = makeFieldDef("sst",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> wind = makeFieldDef("wind",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> nitrogen = makeFieldDef("nitrogen",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> phosphorus = makeFieldDef("phosphorus",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> oxygen = makeFieldDef("oxygen",FieldType::Real()).notNull();
-    FieldDef<FieldType::Real> dissolvedcarbon = makeFieldDef("dissolvedcarbon",FieldType::Real()).notNull();
-
     inline void init();
 public:
     NodesEnvtTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
@@ -44,6 +32,7 @@ public:
 
     using NodeEnvt = types::EnvironmentData;
     void queryAllNodesAtStep(int tstep, std::function<bool(NodeEnvt stat)>);
+    void queryNodeAtStep (types::NodeId nodeId, types::tstep_t tstep, std::function<bool(NodeEnvt stat)>);
 };
 
 #endif // NODESENVTTABLE_H

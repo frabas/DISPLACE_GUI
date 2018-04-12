@@ -34,7 +34,7 @@
 
 #include <storage/sqliteoutputstorage.h>
 #include <storage/tables/nodesdeftable.h>
-#include <storage/tables/popstattable.h>
+#include <storage/tables/nodesstattable.h>
 #include <storage/tables/metadatatable.h>
 #include <storage/tables/vesseldeftable.h>
 #include <storage/tables/vesselvmsliketable.h>

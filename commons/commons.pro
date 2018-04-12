@@ -69,7 +69,6 @@ SOURCES= \
     storage/tables/windfarmstable.cpp \
     storage/tables/vesselsloglikecatchestable.cpp \
     storage/tables/nodesdeftable.cpp \
-    storage/tables/popstattable.cpp \
     storage/tables/popdyntable.cpp \
     storage/tables/metadatatable.cpp \
     storage/modelmetadataaccessor.cpp \
@@ -77,8 +76,9 @@ SOURCES= \
     storage/tables/funcgroupstable.cpp \
     storage/tables/shipstable.cpp \
     diffusion.cpp \
-    storage/tables/poptariffstattable.cpp \
-    storage/tables/nodesenvttable.cpp
+    storage/tables/nodesenvttable.cpp \
+    storage/tables/nodesstattable.cpp \
+    storage/tables/nodestariffstattable.cpp
 
 HEADERS= \
     ../include/readdata.h \
@@ -123,7 +123,7 @@ HEADERS= \
     dtree/vesselsevaluators.h \
     commons_global.h \
     pathshop.h \
-    storage/table/vesseldeftable.h \
+    storage/tables/vesseldeftable.h \
     storage/sqliteoutputstorage.h \
     storage/tables/vesselslogliketable.h \
     storage/tables/poptable.h \
@@ -133,7 +133,6 @@ HEADERS= \
     storage/tables/windfarmstable.h \
     storage/tables/vesselsloglikecatchestable.h \
     storage/tables/nodesdeftable.h \
-    storage/tables/popstattable.h \
     storage/tables/popdyntable.h \
     ../mSqliteCpp/include/msqlitecpp.h \
     ../mSqliteCpp/include/sqlitefielddef.h \
@@ -150,8 +149,9 @@ HEADERS= \
     storage/tables/funcgroupstable.h \
     storage/tables/shipstable.h \
     ../include/diffusion.h \
-    storage/tables/poptariffstattable.h \
-    storage/tables/nodesenvttable.h
+    storage/tables/nodesenvttable.h \
+    storage/tables/nodesstattable.h \
+    storage/tables/nodestariffstattable.h
 
 ### mSQLiteCpp dependency
 

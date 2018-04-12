@@ -1,4 +1,4 @@
-#include "poptariffstattable.h"
+#include "nodestariffstattable.h"
 
 #include <Node.h>
 

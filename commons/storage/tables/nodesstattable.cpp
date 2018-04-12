@@ -1,4 +1,4 @@
-#include "popstattable.h"
+#include "nodesstattable.h"
 
 #include <Node.h>
 

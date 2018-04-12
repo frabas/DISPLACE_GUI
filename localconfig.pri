@@ -41,7 +41,7 @@ win32 {
     QMC_GDAL_LIB = $$SDK/lib
 
     INCLUDEPATH += $$SDK/include/ $$SDK/include
-    LIBS += -L$$SDK/lib
+    LIBS += -L$$SDK/lib #-lboost_filesystem -lboost_system
     
     CONFIG += boost_test_included
 }

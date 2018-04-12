@@ -125,6 +125,8 @@ using namespace sqlite;
 
 #include "boost/bind.hpp"
 
+//#include <boost/filesystem.hpp>
+
 
 // for rtree
 namespace bg = boost::geometry;
@@ -566,9 +568,29 @@ int app_main(int argc, char* argv[])
     string namefolder;
 
 #ifdef _WIN32
-    pathoutput="C:";			 // windows
+
+    pathoutput="D:";			 // windows
     an_output_folder= pathoutput+"/DISPLACE_outputs";
-    mkdir(an_output_folder.c_str());
+//    const char* mypath = an_output_folder.c_str();
+//    boost::filesystem::path dir(mypath);
+//    if(boost::filesystem::create_directory(dir))
+//    {
+//        std::cerr<< "Directory Created: "<<an_output_folder<<std::endl;
+
+//    }
+//    else
+//    {
+
+        pathoutput="C:";			 // windows
+        an_output_folder= pathoutput+"/DISPLACE_outputs";
+        mkdir(an_output_folder.c_str());
+
+//    }
+
+    //pathoutput="C:";			 // windows
+    //an_output_folder= pathoutput+"/DISPLACE_outputs";
+    //mkdir(an_output_folder.c_str());
+
     a_basic_output_folder= pathoutput+"/DISPLACE_outputs/"+namefolderinput;
     mkdir(a_basic_output_folder.c_str());
     // create a specific output directory for this simu

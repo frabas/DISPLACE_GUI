@@ -125,7 +125,7 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
     arguments.push_back("-f");
     arguments.push_back(name);
 
-    arguments.push_back("-f2");
+    arguments.push_back("--f2");
     arguments.push_back(mOutputName);
     arguments.push_back("-s");
     arguments.push_back(simul_name);
@@ -139,7 +139,6 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
     arguments.push_back("1"); // Changeme       // export vmslike
     arguments.push_back("-v");
     arguments.push_back("0"); // Changeme
-    arguments.push_back("--without-gnuplot");
     arguments.push_back("--use-gui");
     arguments.push_back("-V");
     arguments.push_back(QString::number(mVerbosity));
@@ -147,7 +146,7 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
     if (!mMoveVesselOption)
         arguments.push_back("--no-gui-move-vessels");
 
-    arguments.push_back("-rate");
+    arguments.push_back("--rate");
     arguments.push_back(QString::number(mVesselMoveDisplayUpdateRate));
 
     arguments.push_back("--num_threads");

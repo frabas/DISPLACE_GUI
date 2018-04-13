@@ -62,7 +62,7 @@ public:
     ~Simulator();
 
     void linkModel (std::shared_ptr<DisplaceModel> model);
-    bool start(QString name, QString folder, QString simul_name);
+    bool start(QString outdir, QString name, QString folder, QString simul_name);
     bool isRunning();
     bool forceStop();
     QProcess::ProcessState processState() const;
@@ -78,6 +78,7 @@ public:
     int getVesselMoveDisplayUpdateRate() const;
     void setVesselMoveDisplayUpdateRate(int value);
 
+    void setOutDir(const QString &value);
     void setOutputName(const QString &value);
 
     bool wasSimulationStarted() const;
@@ -113,6 +114,7 @@ private:
     int useStaticPaths;
     int preexistingPathsShop;
     int mLastStep;
+    QString mOutDir;
     QString mOutputName;
     QString mSimuName;
     bool mMoveVesselOption;

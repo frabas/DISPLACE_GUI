@@ -46,8 +46,8 @@ DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
       mDb(0),
       mCalendar(),
-      mInputName(),mBasePath(),mOutputName(),
-      mSimuName("simu2"),
+      mOutDir("C:"), mInputName(),mBasePath(),mOutputName(),
+      mSimuName("simu1"),
       mLinkedDbName(),
       mIndex(-1),
       mSimulSteps(8762),
@@ -403,6 +403,12 @@ int DisplaceModel::getSimulationSteps() const
 {
     return mSimulSteps;
 }
+
+QString DisplaceModel::getOutDir() const
+{
+    return mOutDir;
+}
+
 
 void DisplaceModel::setSimulationSteps(int value)
 {

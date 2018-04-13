@@ -411,6 +411,16 @@ int app_main(int argc, char* argv[])
 {
     bool crash_handler_enabled  = true;
     // default
+#ifdef _WIN32
+    string outdir="C:";
+#else
+    bool DTU_HPC_SCRATCH = false;
+    string home;
+    if(DTU_HPC_SCRATCH) home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
+    else home=getenv("HOME");
+    outdir=home+"/ibm_vessels";
+   #endif
+
     string namefolderinput="fake";
     string namefolderoutput="baseline";
     string inputfolder=".";
@@ -451,13 +461,21 @@ int app_main(int argc, char* argv[])
     while ((optind < argc) && (argv[optind][0]=='-'))
     {
         string sw = argv[optind];
-        if (sw=="--with-gnuplot")
+
+        if (sw=="--outdir")
+        {
+            optind++;
+            outdir=argv[optind];
+        }
+        else if (sw=="--with-gnuplot")
         {
             use_gnuplot=true;
         }
-        else if (sw == "-a") {
+        else if (sw == "-a")
+        {
             inputfolder = argv[++optind];
-        } else if (sw=="--use-gui")
+        }
+        else if (sw=="--use-gui")
         {
             use_gui = true;
         }
@@ -562,50 +580,25 @@ int app_main(int argc, char* argv[])
     int a_semester_i =1;
 
     // create a specific output directory for the ibm outcomes
-    string pathoutput;
     string an_output_folder;
     string a_basic_output_folder;
     string namefolder;
 
 #ifdef _WIN32
+    an_output_folder= outdir+"/DISPLACE_outputs";
+    mkdir(an_output_folder.c_str());
 
-    pathoutput="D:";			 // windows
-    an_output_folder= pathoutput+"/DISPLACE_outputs";
-//    const char* mypath = an_output_folder.c_str();
-//    boost::filesystem::path dir(mypath);
-//    if(boost::filesystem::create_directory(dir))
-//    {
-//        std::cerr<< "Directory Created: "<<an_output_folder<<std::endl;
 
-//    }
-//    else
-//    {
-
-        pathoutput="C:";			 // windows
-        an_output_folder= pathoutput+"/DISPLACE_outputs";
-        mkdir(an_output_folder.c_str());
-
-//    }
-
-    //pathoutput="C:";			 // windows
-    //an_output_folder= pathoutput+"/DISPLACE_outputs";
-    //mkdir(an_output_folder.c_str());
-
-    a_basic_output_folder= pathoutput+"/DISPLACE_outputs/"+namefolderinput;
+    a_basic_output_folder= outdir+"/DISPLACE_outputs/"+namefolderinput;
     mkdir(a_basic_output_folder.c_str());
     // create a specific output directory for this simu
-    namefolder= pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
+    namefolder= outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
     mkdir(namefolder.c_str());
 #else
 
     // not Windows eg Linux on HPC DTU
     int status;
-    bool DTU_HPC_SCRATCH = false;
-    string home;
-    if(DTU_HPC_SCRATCH) home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
-    else home=getenv("HOME");
-    pathoutput=home+"/ibm_vessels";
-    an_output_folder= pathoutput+"/DISPLACE_outputs";
+    an_output_folder= outdir+"/DISPLACE_outputs";
 
     status = mkpath(an_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if(status < 0) 	{
@@ -613,7 +606,7 @@ int app_main(int argc, char* argv[])
         return -1;
     }
 
-    a_basic_output_folder= pathoutput+"/DISPLACE_outputs/"+namefolderinput;
+    a_basic_output_folder= outdir+"/DISPLACE_outputs/"+namefolderinput;
     status = mkpath(a_basic_output_folder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
     if(status < 0)
@@ -1014,7 +1007,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
-    if (!OutputExporter::instantiate(pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
+    if (!OutputExporter::instantiate(outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput, namesimu)) {
         std::cerr << "Cannot open output files." << std::endl;
         exit (1);
     }
@@ -1049,7 +1042,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         metadata->setNbSizes(NBSZGROUP);
     }
 
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/export_individual_tac_"+namesimu+".dat";
     export_individual_tacs.open(filename.c_str());
 
     dout(cout  << "---------------------------" << endl);
@@ -3930,133 +3923,133 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //    std::string loglike_filename = filename;
 
     ofstream loglike_prop_met;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/loglike_prop_met_"+namesimu+".dat";
     loglike_prop_met.open(filename.c_str());
 
     ofstream popstats;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popstats_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popstats_"+namesimu+".dat";
     popstats.open(filename.c_str());
     std::string popstats_filename = filename;
 
     ofstream popdyn_N;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
     popdyn_N.open(filename.c_str());
     std::string popdyn_N_filename = filename;
 
     ofstream popdyn_F;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_F_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_F_"+namesimu+".dat";
     popdyn_F.open(filename.c_str());
     std::string popdyn_F_filename = filename;
 
     ofstream popdyn_SSB;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_SSB_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_SSB_"+namesimu+".dat";
     popdyn_SSB.open(filename.c_str());
     std::string popdyn_SSB_filename = filename;
 
     ofstream popdyn_annual_indic;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_annual_indic_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_annual_indic_"+namesimu+".dat";
     popdyn_annual_indic.open(filename.c_str());
 
     ofstream popdyn_test;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_test"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_test"+namesimu+".dat";
     popdyn_test.open(filename.c_str());
 
     ofstream popdyn_test2;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_test2"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_test2"+namesimu+".dat";
     popdyn_test2.open(filename.c_str());
 
     ofstream popnodes_start;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_start_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_start_"+namesimu+".dat";
     popnodes_start.open(filename.c_str());
     std::string popnodes_start_filename = filename;
 
     ofstream popnodes_inc;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_inc_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_inc_"+namesimu+".dat";
     popnodes_inc.open(filename.c_str());
     std::string popnodes_inc_filename = filename;
 
     lock();
     ofstream popnodes_end;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_end_"+namesimu+".dat";
     popnodes_end.open(filename.c_str());
     std::string popnodes_end_filename = filename;
     unlock();
 
     ofstream popnodes_impact;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_"+namesimu+".dat";
     popnodes_impact.open(filename.c_str());
     std::string popnodes_impact_filename = filename;
 
     ofstream popnodes_cumulcatches_per_pop;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumulcatches_per_pop_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumulcatches_per_pop_"+namesimu+".dat";
     popnodes_cumulcatches_per_pop.open(filename.c_str());
     std::string popnodes_cumulcatches_per_pop_filename = filename;
 
     ofstream popnodes_impact_per_szgroup;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
     popnodes_impact_per_szgroup.open(filename.c_str());
 
     ofstream popnodes_cumftime;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumftime_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumftime_"+namesimu+".dat";
     popnodes_cumftime.open(filename.c_str());
     std::string popnodes_cumftime_filename = filename;
 
     ofstream popnodes_cumsweptarea;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumsweptarea_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumsweptarea_"+namesimu+".dat";
     popnodes_cumsweptarea.open(filename.c_str());
     std::string popnodes_cumsweptarea_filename = filename;
 
     ofstream popnodes_cumcatches;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_"+namesimu+".dat";
     popnodes_cumcatches.open(filename.c_str());
     std::string popnodes_cumcatches_filename = filename;
 
     ofstream popnodes_cumcatches_with_threshold;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_with_threshold_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumcatches_with_threshold_"+namesimu+".dat";
     popnodes_cumcatches_with_threshold.open(filename.c_str());
     std::string popnodes_cumcatches_with_threshold_filename = filename;
 
     ofstream popnodes_cumdiscards;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscards_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscards_"+namesimu+".dat";
     popnodes_cumdiscards.open(filename.c_str());
     std::string popnodes_cumdiscards_filename = filename;
 
     ofstream popnodes_tariffs;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
     popnodes_tariffs.open(filename.c_str());
     std::string popnodes_tariffs_filename = filename;
 
     ofstream benthosbiomassnodes;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_biomasses_"+namesimu+".dat";
     benthosbiomassnodes.open(filename.c_str());
     std::string popnodes_benthos_biomass_filename = filename;
 
     ofstream benthosnumbernodes;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_numbers_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/benthosnodes_tot_numbers_"+namesimu+".dat";
     benthosnumbernodes.open(filename.c_str());
     std::string popnodes_benthos_number_filename = filename;
 
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_cpue"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_cpue"+namesimu+".dat";
     freq_cpue.open(filename.c_str());
 
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_profit"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_profit"+namesimu+".dat";
     freq_profit.open(filename.c_str());
 
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_distance"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/freq_distance"+namesimu+".dat";
     freq_distance.open(filename.c_str());
 
     ofstream fishfarmslogs;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/fishfarmslogs_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/fishfarmslogs_"+namesimu+".dat";
     fishfarmslogs.open(filename.c_str());
     std::string fishfarmslogs_filename = filename;
 
     ofstream windmillslogs;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/windmillslogs_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/windmillslogs_"+namesimu+".dat";
     windmillslogs.open(filename.c_str());
     std::string windmillslogs_filename = filename;
 
     ofstream shipslogs;
-    filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/shipslogs_"+namesimu+".dat";
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/shipslogs_"+namesimu+".dat";
     shipslogs.open(filename.c_str());
     std::string shipslogs_filename = filename;
 
@@ -4175,10 +4168,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         if(use_gnuplot)
         {
-            filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat";
+            filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat";
             vmslike2.open(filename.c_str());
 
-            filename=pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat";
+            filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat";
             vmslike3.open(filename.c_str());
         }
 
@@ -4262,7 +4255,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              namesimu,
                                              namefolderinput,
                                              namefolderoutput,
-                                             pathoutput,
+                                             outdir,
                                              popstats,
                                              popdyn_N,
                                              popdyn_F,
@@ -5830,7 +5823,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             Sleep( 50 );		 // used when sometimes the simulation is too quick to be captured by gnuplot
             // note that possible warning messages from gnuplot are harmless...these messages are just
             // related to the fact that gnuplot actually try to open the vmslike2.dat while this is too late...
-            string command1 = "plot 'map.dat' with lines lt 3 , '"+pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat' using 1:2,  '"+pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat' using 1:2 with points pt 1\n";
+            string command1 = "plot 'map.dat' with lines lt 3 , '"+outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike2_"+namesimu+".dat' using 1:2,  '"+outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/vmslike3_"+namesimu+".dat' using 1:2 with points pt 1\n";
             // polygons
             string command2 = "set object 1 polygon from 1,55 to 2,54 to 5,56 to 1,55";
             string command3 = "set object 1 fc rgb 'cyan' border lt 1";
@@ -5905,7 +5898,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     {
-        string memstat = pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/memstats_"+namesimu+".dat";
+        string memstat = outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/memstats_"+namesimu+".dat";
 
 
         std::ofstream stats (memstat);

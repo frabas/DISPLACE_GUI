@@ -106,9 +106,11 @@ public:
 
     // Getter
     QString fullpath() const { return mFullPath; }
+    QString outDir() const { return mOutDir; }
     QString inputName() const { return mInputName; }
     QString basepath() const { return mBasePath; }
     QString outputName() const { return mOutputName; }
+    void setOutDir(const QString &name) { mOutDir = name; }
     void setOutputName(const QString &name) { mOutputName = name; }
     QString simulationName() const { return mSimuName; }
     void setSimulationName(const QString &name) { mSimuName = name; }
@@ -128,6 +130,7 @@ public:
     }
     int getBenthosIdx(int benthosId) const;
 
+    QString getOutDir() const;
     int getSimulationSteps() const;
     void setSimulationSteps(int value);
     int getUseStaticPaths() const;
@@ -475,6 +478,7 @@ private:
     DbHelper *mDb;
     std::shared_ptr<SQLiteOutputStorage> mOutSqlite;
     std::shared_ptr<Calendar> mCalendar;
+    QString mOutDir;
     QString mFullPath;
     QString mInputName;
     QString mBasePath;

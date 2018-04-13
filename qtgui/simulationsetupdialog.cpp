@@ -44,9 +44,21 @@ void SimulationSetupDialog::setSimulationSteps(int steps)
     ui->simSteps->setValue(steps);
 }
 
+
 int SimulationSetupDialog::getSimulationSteps() const
 {
     return ui->simSteps->value();
+}
+
+void SimulationSetupDialog::setOutDir(QString outdir)
+{
+    ui->outDir->setText(outdir);
+}
+
+
+QString SimulationSetupDialog::getOutDir() const
+{
+    return ui->outDir->text();
 }
 
 void SimulationSetupDialog::setUseStaticPaths(int yesno)

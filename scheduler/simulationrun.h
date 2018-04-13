@@ -7,6 +7,7 @@
 
 class SimulationRun
 {
+    QString mOutDir;
     QString mPath;
     QString mName;
     QString mOutName;
@@ -15,31 +16,36 @@ class SimulationRun
     int nThreads = 0;
 
 public:
-    using DataAsTuple = std::tuple<std::string,
+    using DataAsTuple = std::tuple<std::string, std::string,
         std::string, std::string, std::string,
         int, int>;
 
     SimulationRun();
 
     explicit SimulationRun(DataAsTuple &&tuple)
-        : mPath(QString::fromStdString(std::get<0>(tuple))),
-          mName(QString::fromStdString(std::get<1>(tuple))),
-          mOutName(QString::fromStdString(std::get<2>(tuple))),
-          mSimName(QString::fromStdString(std::get<3>(tuple))),
-          nSteps(std::get<4>(tuple)),
-          nThreads(std::get<5>(tuple))
+        : mOutDir(QString::fromStdString(std::get<0>(tuple))),
+          mPath(QString::fromStdString(std::get<1>(tuple))),
+          mName(QString::fromStdString(std::get<2>(tuple))),
+          mOutName(QString::fromStdString(std::get<3>(tuple))),
+          mSimName(QString::fromStdString(std::get<4>(tuple))),
+          nSteps(std::get<5>(tuple)),
+          nThreads(std::get<6>(tuple))
     {
     }
 
     explicit SimulationRun(const DataAsTuple &tuple)
-        : mPath(QString::fromStdString(std::get<0>(tuple))),
-          mName(QString::fromStdString(std::get<1>(tuple))),
-          mOutName(QString::fromStdString(std::get<2>(tuple))),
-          mSimName(QString::fromStdString(std::get<3>(tuple))),
-          nSteps(std::get<4>(tuple)),
-          nThreads(std::get<5>(tuple))
+        : mOutDir(QString::fromStdString(std::get<0>(tuple))),
+          mPath(QString::fromStdString(std::get<1>(tuple))),
+          mName(QString::fromStdString(std::get<2>(tuple))),
+          mOutName(QString::fromStdString(std::get<3>(tuple))),
+          mSimName(QString::fromStdString(std::get<4>(tuple))),
+          nSteps(std::get<5>(tuple)),
+          nThreads(std::get<6>(tuple))
     {
     }
+
+    QString getOutDir() const;
+    void setOutDir(const QString &path);
 
     QString getPath() const;
     void setPath(const QString &path);
@@ -60,7 +66,7 @@ public:
     void setNumThreads(int n);
 
     DataAsTuple dataAsTuple() const {
-        return std::make_tuple(mPath.toStdString(),
+        return std::make_tuple(mOutDir.toStdString(), mPath.toStdString(),
                         mName.toStdString(),
                         mOutName.toStdString(),
                         mSimName.toStdString(),

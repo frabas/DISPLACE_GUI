@@ -48,8 +48,9 @@ Simulator::Simulator()
       useStaticPaths(1),
       preexistingPathsShop(1),
       mLastStep(-1),
+      mOutDir("C:"),
       mOutputName("baseline"),
-      mSimuName("simu2"),
+      mSimuName("simu1"),
       mMoveVesselOption(true),
       mVesselMoveDisplayUpdateRate(1),
       mProcessState(QProcess::NotRunning),
@@ -73,8 +74,8 @@ void Simulator::linkModel(std::shared_ptr<DisplaceModel> model)
     mModel= model;
 }
 
-// -f "balticonly" -f2 "baseline" -s "simu2" -i 8761 -p 1 -o 1 -e 0 -v 0 --without-gnuplot
-bool Simulator::start(QString name, QString folder, QString simul_name)
+// -f "myfish" -f2 "baseline" -s "simu2" -i 8762 -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 0 --num_threads 8 --outdir "D:"
+bool Simulator::start(QString outdir, QString name, QString folder, QString simul_name)
 {
     if (mSimulation != 0) {
         delete mSimulation;
@@ -104,6 +105,7 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
 
     mIpcThread->start();
 
+    mOutDir = outdir;
     mSimuName = simul_name;
     mSimulation = new QProcess();
 
@@ -118,6 +120,8 @@ bool Simulator::start(QString name, QString folder, QString simul_name)
     arguments.push_back(QApplication::applicationDirPath() + "/displace");
 #endif
 
+    arguments.push_back("--outdir");
+    arguments.push_back(outdir);
     arguments.push_back("-f");
     arguments.push_back(name);
 
@@ -242,6 +246,11 @@ void Simulator::subprocessStateChanged(QProcess::ProcessState state)
 bool Simulator::wasSimulationStarted() const
 {
     return mSimulation != 0;
+}
+
+void Simulator::setOutDir(const QString &value)
+{
+    mOutDir = value;
 }
 
 void Simulator::setOutputName(const QString &value)

@@ -55,6 +55,9 @@ public:
     explicit SimulationSetupDialog(QWidget *parent = 0);
     ~SimulationSetupDialog();
 
+    void setOutDir(QString outdir);
+    QString getOutDir() const;
+
     void setSimulationSteps(int steps);
     void setUseStaticPaths(int yesno);
     void setPreexistingPathsShop(int yesno);

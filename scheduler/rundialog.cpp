@@ -81,6 +81,7 @@ void RunDialog::on_cmdBatchCreate_clicked()
 
 void RunDialog::on_RunDialog_accepted()
 {
+    mData.setOutDir(ui->outDir->text());
     mData.setPath(ui->path->text());
     mData.setName(ui->modName->text());
     mData.setSimulationOutputName(ui->outName->text());

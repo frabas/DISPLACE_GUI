@@ -822,10 +822,11 @@ void MainWindow::on_cmdStart_clicked()
         mLastRunDatabase = models[0]->linkedDatabase();
         models[0]->clearStats();
         mSimulation->setSimSteps(models[0]->getSimulationSteps());
+        mSimulation->setOutDir(models[0]->getOutDir());
         mSimulation->setUseStaticPaths(models[0]->getUseStaticPaths());
         mSimulation->setPreexistingPathsShop(models[0]->getPreexistingPathsShop());
         mSimulation->setOutputName(models[0]->outputName());
-        mSimulation->start(models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
+        mSimulation->start(models[0]->outDir(), models[0]->inputName(), models[0]->basepath(), models[0]->simulationName());
     }
 }
 
@@ -998,6 +999,7 @@ void MainWindow::on_cmdSetup_clicked()
 
     SimulationSetupDialog dlg(this);
 
+    dlg.setOutDir(models[0]->getOutDir());
     dlg.setSimulationSteps(models[0]->getSimulationSteps());
     dlg.setUseStaticPaths(models[0]->getUseStaticPaths());
     dlg.setPreexistingPathsShop(models[0]->getPreexistingPathsShop());
@@ -1010,6 +1012,7 @@ void MainWindow::on_cmdSetup_clicked()
    
 
     if (dlg.exec() == QDialog::Accepted) {
+        models[0]->setOutDir(dlg.getOutDir());
         models[0]->setSimulationSteps(dlg.getSimulationSteps());
         models[0]->setUseStaticPaths(dlg.getUseStaticPaths());
         models[0]->setPreexistingPathsShop(dlg.getPreexistingPathsShop());

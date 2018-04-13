@@ -105,7 +105,8 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
 
     mIpcThread->start();
 
-    mOutDir = outdir;
+    if (!outdir.isEmpty())
+        mOutDir = outdir;
     mSimuName = simul_name;
     mSimulation = new QProcess();
 
@@ -120,8 +121,10 @@ bool Simulator::start(QString outdir, QString name, QString folder, QString simu
     arguments.push_back(QApplication::applicationDirPath() + "/displace");
 #endif
 
-    arguments.push_back("--outdir");
-    arguments.push_back(outdir);
+    if (!outdir.isEmpty()) {
+        arguments.push_back("--outdir");
+        arguments.push_back(outdir);
+    }
     arguments.push_back("-f");
     arguments.push_back(name);
 

@@ -46,7 +46,10 @@ DisplaceModel::DisplaceModel()
     : mModelType(EmptyModelType),
       mDb(0),
       mCalendar(),
-      mOutDir("C:"), mInputName(),mBasePath(),mOutputName(),
+#if defined (_WIN32)
+      mOutDir("C:"),
+#endif
+      mInputName(),mBasePath(),mOutputName(),
       mSimuName("simu1"),
       mLinkedDbName(),
       mIndex(-1),

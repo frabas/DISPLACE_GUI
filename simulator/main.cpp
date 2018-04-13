@@ -124,6 +124,7 @@ using namespace sqlite;
 #include <mutex>
 
 #include "boost/bind.hpp"
+#include "boost/program_options.hpp"
 
 //#include <boost/filesystem.hpp>
 
@@ -139,6 +140,7 @@ typedef std::pair<box, unsigned> value;
 
 using namespace std;
 
+namespace po = boost::program_options;
 
 // global variables
 #ifdef _WIN32
@@ -151,11 +153,6 @@ FILE *pipe4;
 
 std::string cwd;
 char buf[MAXPATH];
-bool use_gui = false;
-bool gui_move_vessels = true;
-bool use_gnuplot;
-int num_threads = 4;
-int nb_displayed_moves_out_of_twenty=1;
 
 #ifdef PROFILE
 AverageProfiler mLoopProfile;
@@ -208,7 +205,6 @@ std::string outSqlitePath;
 
 std::shared_ptr<SQLiteOutputStorage> outSqlite = nullptr;
 
-int export_vmslike;
 bool use_dtrees;
 vector <int> implicit_pops;
 vector <int> implicit_pops_level2;
@@ -224,7 +220,6 @@ PopSceOptions dyn_pop_sce;
 ClosureOptions closure_opts;
 string biolsce;
 string fleetsce;
-int create_a_path_shop;
 adjacency_map_t adjacency_map;
 vector<string> vertex_names;
 vector<types::NodeId> relevant_nodes;
@@ -393,45 +388,104 @@ bool test_not_belong_to_firm(const Vessel *v, int id)
 
 string type_of_avai_field_to_read=""; // by default, use the initial input
 
+// parameters
 
+bool crash_handler_enabled  = true;
+// default
+string outdir;
 
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-/**---------------------------------------------------------------**/
-int app_main(int argc, char* argv[])
+string namefolderinput="fake";
+string namefolderoutput="baseline";
+string inputfolder=".";
+string namesimu="sim1";
+int nbsteps=10;
+double dparam=10.0;
+int read_preexisting_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
+int selected_vessels_only=0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
+bool use_gui = false;
+bool gui_move_vessels = true;
+bool use_gnuplot = false;
+int num_threads = 4;
+int nb_displayed_moves_out_of_twenty=1;
+int create_a_path_shop = 1;
+int export_vmslike = 1;
+
+void parseCommandLine (int argc, char const *argv[])
 {
-    bool crash_handler_enabled  = true;
-    // default
+    po::options_description desc("Allowed options");
+    desc.add_options()
+            ("help,h", "produce help message")
+            (",f", po::value(&namefolderinput), "name of the input folder")
+            ("f2,F", po::value(&namefolderoutput), "name of the output folder")
+            (",a", po::value(&inputfolder), "Path of the input path")
+            ("outdir,O", po::value(&outdir), "Directory for output files")
+            (",s", po::value(&namesimu), "name of the simulation")
+            (",i", po::value(&nbsteps), "lenght of the simulation in number of steps (hours)")
+            (",V", po::value(&verbosity), "verbosity level")
+            (",p", po::value(&create_a_path_shop)->implicit_value(1), "Create a Path_shop")
+            (",o", po::value(&read_preexisting_paths)->implicit_value(1), "Read preexisitng paths")
+            (",e", po::value(&export_vmslike)->implicit_value(1), "Export VMSLike data")
+            (",v", po::value(&selected_vessels_only)->implicit_value(1), "Selected vessels only")
+            (",d", po::value(&dparam), "dparam")
+            ("use-gui", "Enable IPC channel to talk to the GUI")
+            ("no-gui-move-vessels", "Disable the movement of the vessels/ships in the GUI" )
+            ("disable-sqlite", "Disable the SQLite output")
+            ("num_threads", po::value(&num_threads), "Number of threads to use to move vessels")
+            ("rate", po::value(&nb_displayed_moves_out_of_twenty), "Nb of displayed moves of of 20")
+            ("disable-crash-handler", "Disable the crash handler")
+            ("debug", "Enable debug mode")
+            ("without-gnuplot", "Maintained for compatibility, no functions")
+            ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        exit (0);
+    }
+
+    if (vm.count("use-gui"))
+        use_gui = true;
+    if (vm.count("no-gui-move-vessels"))
+        gui_move_vessels = false;
+    if (vm.count("disable-sqlite"))
+        enable_sqlite_out = false;
+    if (vm.count("disable-crash-handler"))
+        crash_handler_enabled = false;
+    if (vm.count("debug"))
+        crash_handler_enabled = false;
+}
+
+
+
+
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+/**---------------------------------------------------------------**/
+int app_main(int argc, char const* argv[])
+{
 #ifdef _WIN32
     string outdir="C:";
 #else
     bool DTU_HPC_SCRATCH = false;
     string home;
-    if(DTU_HPC_SCRATCH) home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
-    else home=getenv("HOME");
+    if(DTU_HPC_SCRATCH)
+        home="/SCRATCH/fbas"; // => DTU SCRATCH for HPC
+    else
+        home=getenv("HOME");
     outdir=home+"/ibm_vessels";
-   #endif
-
-    string namefolderinput="fake";
-    string namefolderoutput="baseline";
-    string inputfolder=".";
-    string namesimu="sim1";
-    int nbsteps=10;
-    double dparam=10.0;
-    use_gnuplot=false;
-    create_a_path_shop=1;	 //used to speed-up the simus by calculating all the possible paths BEFORE the simu starts
-    int read_preexisting_paths=0;//used to speed-up the simus by using reduced (to minimal required) "previous" maps
-    export_vmslike=1;
-    int selected_vessels_only=0; //use all vessels. if 1, then use a subset of vessels as defined in read_vessel_features()
+#endif
 
     // example for setting up options for the command line
     // (in code::blocks, see Project>Set programs arguments in code::blocks menu)
@@ -456,98 +510,7 @@ int app_main(int argc, char* argv[])
     memInfo.update();
     guiSendMemoryInfo(memInfo);
 
-    int optind=1;
-    // decode arguments
-    while ((optind < argc) && (argv[optind][0]=='-'))
-    {
-        string sw = argv[optind];
-
-        if (sw=="--outdir")
-        {
-            optind++;
-            outdir=argv[optind];
-        }
-        else if (sw=="--with-gnuplot")
-        {
-            use_gnuplot=true;
-        }
-        else if (sw == "-a")
-        {
-            inputfolder = argv[++optind];
-        }
-        else if (sw=="--use-gui")
-        {
-            use_gui = true;
-        }
-        else if (sw == "--no-gui-move-vessels") {
-            gui_move_vessels = false;
-        }
-        else if (sw == "-rate") {
-            optind++;
-            nb_displayed_moves_out_of_twenty = atoi(argv[optind]);
-        }
-        else if (sw=="-i")
-        {
-            optind++;
-            nbsteps = atoi(argv[optind]);
-        }
-        else if (sw=="-d")
-        {
-            optind++;
-            dparam = atof(argv[optind]);
-        }
-        else if (sw=="-f")
-        {
-            optind++;
-            namefolderinput = argv[optind];
-        }
-        else if (sw=="-f2")
-        {
-            optind++;
-            namefolderoutput = argv[optind];
-        }
-        else if (sw=="-s")
-        {
-            optind++;
-            namesimu = argv[optind];
-        }
-        else if (sw=="-p")
-        {
-            optind++;
-            create_a_path_shop = atoi(argv[optind]);
-        }
-        else if (sw=="-o")
-        {
-            optind++;
-            read_preexisting_paths = atoi(argv[optind]);
-        }
-        else if (sw=="-e")
-        {
-            optind++;
-            export_vmslike = atoi(argv[optind]);
-        }
-        else if (sw=="-v")
-        {
-            optind++;
-            selected_vessels_only = atoi(argv[optind]);
-        }
-        else if (sw=="-V") {
-            optind++;
-            verbosity = atoi(argv[optind]);
-        } else if (sw == "--num_threads") {
-            optind++;
-            num_threads = atoi(argv[optind]);
-        } else if (sw == "--disable-crash-handler" || sw == "--debug") {
-            crash_handler_enabled = false;
-        } else if (sw == "--disable-sqlite") {
-            enable_sqlite_out = false;
-        } else {
-            dout (cout << "Unknown switch: " << argv[optind] << endl);
-        }
-        optind++;
-    }
-
-    UNUSED(dparam);
+    parseCommandLine(argc, argv);
 
     CrashHandler handler;
     if (crash_handler_enabled)
@@ -616,7 +579,7 @@ int app_main(int argc, char* argv[])
     }
 
     // create a specific output directory for this simu
-    namefolder= pathoutput+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
+    namefolder= outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput;
     status = mkpath(namefolder.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if(status < 0)
     {
@@ -5979,7 +5942,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 }
 
 
-int main(int argc, char* argv[])
+int main(int argc, char const* argv[])
 {
     try {
         return app_main(argc, argv);

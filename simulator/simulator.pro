@@ -16,7 +16,7 @@ macx {
 QMAKE_CXXFLAGS += -fpermissive
 CONFIG += c++14
 
-LIBS+= -L.. -ldisplacecommons -lformats
+LIBS+= -L.. -ldisplacecommons -lformats -lboost_program_options
 
 !win32: -lsqlite3
 

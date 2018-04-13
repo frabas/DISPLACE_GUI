@@ -32,6 +32,7 @@ private:
     static const QString sKeyAppPath;
     static const QString sKeyAppExec;
 
+    static const QString sKeyJobOutDir;
     static const QString sKeyJobName;
     static const QString sKeyJobPath;
     static const QString sKeySimuName;

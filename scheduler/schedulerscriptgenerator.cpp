@@ -17,11 +17,12 @@ const QString SchedulerScriptGenerator::sEndFooter = "%%%End-Footer%%%";
 const QString SchedulerScriptGenerator::sKeyAppPath = "AppPath";
 const QString SchedulerScriptGenerator::sKeyAppExec = "AppExec";
 
+const QString SchedulerScriptGenerator::sKeyJobOutDir = "JobOutDir";
 const QString SchedulerScriptGenerator::sKeyJobName = "JobName";
 const QString SchedulerScriptGenerator::sKeyJobPath = "JobPath";
 const QString SchedulerScriptGenerator::sKeySimuName = "JobSimuName";
 const QString SchedulerScriptGenerator::sKeySimuOutName = "JobSimuOutName";
-const QString SchedulerScriptGenerator::sKeySimuLength = "JobLenght";
+const QString SchedulerScriptGenerator::sKeySimuLength = "JobLength";
 const QString SchedulerScriptGenerator::sKeySimuNumThreads = "JobNumThreads";
 
 SchedulerScriptGenerator::SchedulerScriptGenerator(const QString &templatename)
@@ -186,7 +187,9 @@ bool SchedulerScriptGenerator::getValue(QString key, QString &value)
 bool SchedulerScriptGenerator::getValue(QString key, const SimulationRun &job, QString &value)
 {
     QString r;
-    if (key == sKeyJobName) {
+    if (key == sKeyJobOutDir) {
+        r = job.getOutDir();
+    } else if (key == sKeyJobName) {
         r = job.getName();
     } else if (key == sKeyJobPath) {
         r = QDir::toNativeSeparators(job.getPath());

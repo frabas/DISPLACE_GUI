@@ -16,7 +16,7 @@ macx {
 QMAKE_CXXFLAGS += -fpermissive
 CONFIG += c++14
 
-LIBS+= -L.. -ldisplacecommons -lformats -lboost_program_options
+LIBS+= -L.. -ldisplacecommons -lformats
 
 !win32: -lsqlite3
 
@@ -25,11 +25,12 @@ macx {
     CONFIG -= app_bundle
 }
 
-unix:LIBS += -lpthread
+unix:LIBS += -lboost_program_options -lpthread
 
 win32 {
     # For GetProcessMemoryInfo()
-    LIBS += -lpsapi
+    DEFINES += BOOST_ALL_DYN_LINK
+    LIBS += -lpsapi -lboost_program_options-vc140-mt-1_63
 }
 
 unix:!macx {

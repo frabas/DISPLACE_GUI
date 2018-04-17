@@ -49,7 +49,7 @@ void open_file_error(string filename)
     error_msg = "error opening file " + filename;
     cout << error_msg << "\n";
 
-    exit(-1);
+    throw std::runtime_error(error_msg);
 }
 
 /**

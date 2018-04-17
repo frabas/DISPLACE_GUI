@@ -5944,12 +5944,17 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 int main(int argc, char const* argv[])
 {
+    int return_code = 0;
     try {
         return app_main(argc, argv);
     } catch (std::exception &x) {
         std::cerr << "Unhandled exception : " << x.what() << "\n\n";
-        throw;
+
+        thread_vessel_signal_exit();
+        finalizeIpcQueue();
+
+        return_code = 1;
     }
 
-    return 0;
+    return return_code;
 }

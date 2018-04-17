@@ -207,6 +207,7 @@ void Simulator::finished(int code, QProcess::ExitStatus status)
     emit log(QString("Process exited %1 with exit status %2")
              .arg(status == QProcess::NormalExit ? "normally" : "by crash")
              .arg(code));
+    emit simulationEnded(code);
 }
 
 void Simulator::readyReadStandardError()

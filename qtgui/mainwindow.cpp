@@ -185,6 +185,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mSimulation = new Simulator();
     mSimulation->setVerbosityLevel(set.value(Simulator::SET_VERBOSITY, 0).toInt());
     connect (mSimulation, SIGNAL(log(QString)), this, SLOT(simulatorLogging(QString)));
+    connect (mSimulation, SIGNAL(simulationEnded(int)), this, SLOT(simulationEnded(int)));
     connect (mSimulation, SIGNAL(processStateChanged(QProcess::ProcessState,QProcess::ProcessState)), this, SLOT(simulatorProcessStateChanged(QProcess::ProcessState,QProcess::ProcessState)));
     connect (mSimulation, SIGNAL(simulationStepChanged(int)), this, SLOT(simulatorProcessStepChanged(int)));
 
@@ -440,6 +441,13 @@ void MainWindow::on_modelSelector_currentIndexChanged(int index)
 void MainWindow::simulatorLogging(QString msg)
 {
     ui->console->appendPlainText(msg);
+}
+
+void MainWindow::simulationEnded(int exitcode)
+{
+    if (exitcode != 0) {
+        QMessageBox::warning(this, tr("Simulation ended"), tr("The simulator exited with an error code (%1). See the console for details.").arg(exitcode));
+    }
 }
 
 void MainWindow::simulatorProcessStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate)

@@ -90,6 +90,7 @@ public:
 
 private slots:
     void simulatorLogging(QString);
+    void simulationEnded(int exitcode);
     void simulatorProcessStateChanged (QProcess::ProcessState oldstate, QProcess::ProcessState newstate);
     void simulatorProcessStepChanged (int step);
     void simulatorNodeStatsUpdate(QString);

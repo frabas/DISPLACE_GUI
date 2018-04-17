@@ -85,6 +85,7 @@ public:
 
 signals:
     void log(QString);
+    void simulationEnded (int status);
     void processStateChanged(QProcess::ProcessState oldstate, QProcess::ProcessState newstate);
     void simulationStepChanged(int);
     void vesselMoved (int laststep, int idx, float x, float y, float course, float fuel, int state);

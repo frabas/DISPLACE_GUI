@@ -30,7 +30,7 @@ unix:LIBS += -lboost_program_options -lpthread
 win32 {
     # For GetProcessMemoryInfo()
     DEFINES += BOOST_ALL_DYN_LINK
-    LIBS += -lpsapi -lboost_program_options-vc140-mt-1_63
+    LIBS += -lpsapi -lboost_program_options$${BOOST_SUFFIX}
 }
 
 unix:!macx {

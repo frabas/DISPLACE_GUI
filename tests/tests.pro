@@ -27,7 +27,7 @@ unix {
     LIBS+=-lboost_unit_test_framework
 }
 win32 {
-    LIBS += -lboost_unit_test_framework-vc140-mt-1_63
+    LIBS += -lboost_unit_test_framework$${BOOST_SUFFIX}
 }
 
 SOURCES= main.cpp \

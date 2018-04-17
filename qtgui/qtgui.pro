@@ -57,7 +57,7 @@ win32 {
     RC_FILE = qtgui.rc
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
 
-    CGAL_LIBS= -lCGAL-vc140-mt-4.9 -lgmp -lboost_system-vc140-mt-1_63
+    CGAL_LIBS= -lCGAL-vc140-mt-4.9 -lgmp -lboost_system$${BOOST_SUFFIX}
     CONFIG(debug,release|debug){
         GEOGRAPHICLIB=Geographic_d
     }

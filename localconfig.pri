@@ -32,6 +32,14 @@ win32 {
     #MINGW=C:\mingw-w64\x86_64-4.9.2-posix-seh-rt_v3-rev0\mingw64
     #SDK=$$MINGW
 
+    CONFIG(debug,release|debug){
+        BOOST_SUFFIX = -vc140-mt-gd-1_63
+    }
+    CONFIG(release,release|debug){
+        BOOST_SUFFIX = -vc140-mt-1_63
+    }
+
+
     DEFINES += BOOST_ALL_NO_LIB _WINSOCKAPI_
 
     SDK=$$top_srcdir/install/msvc
@@ -41,7 +49,7 @@ win32 {
     QMC_GDAL_LIB = $$SDK/lib
 
     INCLUDEPATH += $$SDK/include/ $$SDK/include
-    LIBS += -L$$SDK/lib #-lboost_filesystem -lboost_system
+    LIBS += -L$$SDK/lib
     
     CONFIG += boost_test_included
 }

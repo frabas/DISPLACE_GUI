@@ -23,7 +23,7 @@ CONFIG(release,release|debug) {
 
 win32 {
     QMAPCONTROL_LIB=$${QMAPCONTROL_LIB}1
-    CGAL_LIBS= -lCGAL-vc140-mt-4.9 -lgmp -lboost_system-vc140-mt-1_63
+    CGAL_LIBS= -lCGAL-vc140-mt-4.9 -lgmp -lboost_system$${BOOST_SUFFIX}
 }
 
 LIBS += -L.. -l$$QMAPCONTROL_LIB $$CGAL_LIBS

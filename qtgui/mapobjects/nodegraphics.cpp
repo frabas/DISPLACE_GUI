@@ -23,6 +23,7 @@
 #include <displacemodel.h>
 #include <mapobjects/nodegraphics.h>
 #include <mapobjectscontroller.h>
+#include <mapsdataprovider.h>
 #include <palettemanager.h>
 #include <QMapControl/Projection.h>
 
@@ -277,7 +278,15 @@ void NodeWithSalinityGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_salinity()));
+    auto tstep = mController->getModel(mModelIndex).getCurrentStep();
+    auto &m = mController->getModel(mModelIndex).getMapDataProvider();
+
+    auto r = m.getEnvironmentData(mNode->get_idx_node(), types::tstep_t(tstep));
+    auto salinity = (r != nullptr ? r->salinity : 0);
+
+    qDebug() << tstep << " Node: " << mNode->get_idx_node().toIndex() << " salinity: " << salinity;
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(salinity));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 

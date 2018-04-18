@@ -55,7 +55,7 @@ struct NodesEnvtTable::Impl {
     sqlite::Where<FieldType::Integer, FieldType::Integer> nodeQueryWhere;
 
     Impl()
-        : nodeQueryStatement(fldTStep, fldNodeId, marineLandscape, salinity, sst, wind, nitrogen, phosphorus, oxygen, dissolvedcarbon) {
+        : nodeQueryStatement(op::max(fldTStep), fldNodeId, marineLandscape, salinity, sst, wind, nitrogen, phosphorus, oxygen, dissolvedcarbon) {
 
     }
 
@@ -120,8 +120,10 @@ void NodesEnvtTable::init()
         p->allNodesQueryStatement = sqlite::SQLiteStatement(db(), sqlAllQuery);
 
         p->nodeQueryStatement.attach(db(), name());
-        p->nodeQueryWhere.attach(p->nodeQueryStatement.getStatement(), sqlite::op::and_(sqlite::op::eq(p->fldNodeId), sqlite::op::eq(p->fldTStep)));
+        p->nodeQueryWhere.attach(p->nodeQueryStatement.getStatement(), sqlite::op::and_(sqlite::op::eq(p->fldNodeId), sqlite::op::le(p->fldTStep)));
         p->nodeQueryStatement.where(p->nodeQueryWhere);
+        p->nodeQueryStatement.groupBy(p->fldNodeId);
+        std::cout << "NodesEvt: " << p->nodeQueryStatement.statementString() << "\n";
         p->nodeQueryStatement.prepare();
     }
 }

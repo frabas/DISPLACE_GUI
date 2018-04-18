@@ -92,6 +92,11 @@ void MapObjectsController::setModel(int model_n, std::shared_ptr<DisplaceModel> 
     mModels[model_n] = model;
 }
 
+DisplaceModel &MapObjectsController::getModel(int model_n)
+{
+    return *mModels[model_n];
+}
+
 void MapObjectsController::removeModel(int model_n)
 {
     mModels[model_n] = std::shared_ptr<DisplaceModel>();

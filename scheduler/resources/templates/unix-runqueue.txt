@@ -10,7 +10,7 @@ echo "Running Simulation %%%JobName%%% %%%JobSimuName%%%, %%%JobLength%%% steps"
     --outdir %%%JobOutDir%%% \
     -a %%%JobPath%%% \
     -f "%%%JobName%%%" \
-    -f2 "%%%JobSimuOutName%%%" \
+    --f2 "%%%JobSimuOutName%%%" \
     -s "%%%JobSimuName%%%" \
     -i %%%JobLength%%% \
     -p 1 -o 1 -e 1 -v 0 \

@@ -4,7 +4,7 @@
 %%%End-Header%%%
 
 %%%Begin-Job%%%
-start /w %%%AppPath%%%\%%%AppExec%%% --outdir %%%JobOutDir%%% -a %%%JobPath%%% -f "%%%JobName%%%" -f2 "%%%JobSimuOutName%%%" -s "%%%JobSimuName%%%" -i %%%JobLength%%% -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 1 --num_threads %%%JobNumThreads%%% > ..\%%%JobName%%%-%%%JobSimuName%%%.txt
+start /w %%%AppPath%%%\%%%AppExec%%% --outdir %%%JobOutDir%%% -a %%%JobPath%%% -f "%%%JobName%%%" --f2 "%%%JobSimuOutName%%%" -s "%%%JobSimuName%%%" -i %%%JobLength%%% -p 1 -o 1 -e 1 -v 0 --without-gnuplot -V 1 --num_threads %%%JobNumThreads%%% > ..\%%%JobName%%%-%%%JobSimuName%%%.txt
 
 %%%End-Job%%%
 

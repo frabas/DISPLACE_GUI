@@ -64,6 +64,7 @@
 class DbHelper;
 class MapObjectsController;
 class Calendar;
+class MapsDataProvider;
 
 class SQLiteOutputStorage;
 
@@ -87,6 +88,8 @@ public:
     ~DisplaceModel();
 
     ModelType modelType() const { return mModelType; }
+
+    MapsDataProvider &getMapDataProvider();
 
     bool edit(QString modelname);
     void setIndex(int idx) { mIndex = idx; }
@@ -476,6 +479,7 @@ private:
 
     ModelType mModelType;
     DbHelper *mDb;
+    std::shared_ptr<MapsDataProvider> mMapsDataProvider;
     std::shared_ptr<SQLiteOutputStorage> mOutSqlite;
     std::shared_ptr<Calendar> mCalendar;
     QString mOutDir;

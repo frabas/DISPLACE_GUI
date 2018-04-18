@@ -80,6 +80,7 @@ class WindmillMapObject;
 class EdgeLayer;
 class EdgeMapObject;
 class HarbourData;
+class MapsDataProvider;
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -320,6 +321,8 @@ public:
 
     void clearEditorLayer();
     void addEditorLayerGeometry (std::shared_ptr<qmapcontrol::Geometry> geometry);
+
+    MapsDataProvider &getMapDataProvider(int model);
 
 protected:
     void addStandardLayer(int model, LayerIds id, std::shared_ptr<Layer> layer, bool visibility);

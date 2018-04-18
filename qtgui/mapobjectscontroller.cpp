@@ -689,6 +689,11 @@ void MapObjectsController::addEditorLayerGeometry(std::shared_ptr<Geometry> geom
     mEditorLayer->addGeometry(geometry);
 }
 
+MapsDataProvider &MapObjectsController::getMapDataProvider(int model)
+{
+    return mModels[model]->getMapDataProvider();
+}
+
 void MapObjectsController::delSelectedEdges(int model)
 {
     // TODO: Remove also the edge data from mEdgeObjects

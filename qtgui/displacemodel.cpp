@@ -24,6 +24,7 @@
 #include <calendar.h>
 #include <modelobjects/metierdata.h>
 #include "storage/modelmetadataaccessor.h"
+#include "mapsdataprovider.h"
 
 #include <mapobjects/harbourmapobject.h>
 #include <profiler.h>
@@ -85,6 +86,7 @@ DisplaceModel::DisplaceModel()
     OGRSFDriver *poDriver;
     poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(pszDriverName);
 
+    mMapsDataProvider = std::make_shared<MapsDataProvider>();
     mDataSource = poDriver->CreateDataSource("memory");
     Q_ASSERT(mDataSource);
 
@@ -131,6 +133,11 @@ DisplaceModel::~DisplaceModel()
         mParserThread->quit();
         mParserThread->wait(2000);
     }
+}
+
+MapsDataProvider &DisplaceModel::getMapDataProvider()
+{
+    return *mMapsDataProvider;
 }
 
 void DisplaceModel::createFeaturesLayer()
@@ -328,6 +335,7 @@ void DisplaceModel::setSimulationSqlStorage(const QString &path)
     if (mDb) delete mDb;
     mDb = new DbHelper;
     mDb->attachDb(mOutSqlite);
+    mMapsDataProvider->attach(mOutSqlite);
 }
 
 int DisplaceModel::getBenthosIdx(int benthosId) const

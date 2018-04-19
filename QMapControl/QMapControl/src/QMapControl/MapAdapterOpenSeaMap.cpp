@@ -1,4 +1,4 @@
-#include <MapAdapterOpenSeaMap.h>
+#include "MapAdapterOpenSeaMap.h"
 
 
 namespace qmapcontrol

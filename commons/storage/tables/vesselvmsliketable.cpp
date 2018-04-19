@@ -63,6 +63,8 @@ void VesselVmsLikeTable::init()
                                                  op::max(fldTStep))
                 .where(op::le(fldTStep))
                 .groupBy(fldId);
+
+        std::cout << "VmsLike: " << select.string() << "\n";
         p->vesselTStepSelect = std::move(sqlite::SQLiteStatement(db(), select));
     }
 }

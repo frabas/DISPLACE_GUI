@@ -284,8 +284,6 @@ void NodeWithSalinityGraphics::drawShape(QPainter &painter, const qmapcontrol::R
     auto r = m.getEnvironmentData(mNode->get_idx_node(), types::tstep_t(tstep));
     auto salinity = (r != nullptr ? r->salinity : 0);
 
-    qDebug() << tstep << " Node: " << mNode->get_idx_node().toIndex() << " salinity: " << salinity;
-
     painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(salinity));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
@@ -301,8 +299,13 @@ void NodeWithSSTGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWo
 void NodeWithWindGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);
+    auto tstep = mController->getModel(mModelIndex).getCurrentStep();
+    auto &m = mController->getModel(mModelIndex).getMapDataProvider();
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_wind()));
+    auto r = m.getEnvironmentData(mNode->get_idx_node(), types::tstep_t(tstep));
+    auto wind = (r != nullptr ? r->wind : 0);
+
+    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(wind));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 

@@ -31,7 +31,7 @@ public:
     bool insert (int tstep, Node *node);
 
     using NodeEnvt = types::EnvironmentData;
-    void queryAllNodesAtStep(int tstep, std::function<bool(NodeEnvt stat)>);
+    void queryAllNodesAtStep(types::tstep_t tstep, std::function<bool(NodeEnvt stat)>);
     void queryNodeAtStep (types::NodeId nodeId, types::tstep_t tstep, std::function<bool(NodeEnvt stat)>);
 };
 

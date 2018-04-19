@@ -148,11 +148,11 @@ bool NodesEnvtTable::insert(int tstep, Node *node)
     return 0;
 }
 
-void NodesEnvtTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesEnvtTable::NodeEnvt)> op)
+void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<bool (NodesEnvtTable::NodeEnvt)> op)
 {
     init();
 
-    p->allNodesQueryStatement.bind(1, tstep);
+    p->allNodesQueryStatement.bind(1, tstep.value());
     p->allNodesQueryStatement.execute([this, &op, tstep](){
         auto &st = p->allNodesQueryStatement;
         NodeEnvt s;

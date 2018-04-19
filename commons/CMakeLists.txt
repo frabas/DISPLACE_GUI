@@ -29,6 +29,7 @@ set(SOURCES
         options.cpp
         statics.cpp
         simulation.cpp
+        ipcqueue.cpp
         dtree/decisiontree.cpp
         dtree/variables.cpp
         dtree/dtnode.cpp
@@ -127,7 +128,8 @@ set(SOURCES
         storage/tables/nodesstattable.h
         storage/tables/nodestariffstattable.h
         ../include/StrongType.h
-
+        ../include/ipcqueue.h
+        ../include/ipcmsgtypes.h
         )
 
 if (NOT WIN32 AND NOT APPLE)

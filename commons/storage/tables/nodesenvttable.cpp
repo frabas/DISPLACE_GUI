@@ -150,6 +150,7 @@ bool NodesEnvtTable::insert(int tstep, Node *node)
 
 void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<bool (NodesEnvtTable::NodeEnvt)> op)
 {
+    std::unique_lock<std::mutex> m(p->mutex);
     init();
 
     p->allNodesQueryStatement.bind(1, tstep.value());
@@ -174,6 +175,7 @@ void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<boo
 
 void NodesEnvtTable::queryNodeAtStep(types::NodeId nodeId, types::tstep_t tstep, std::function<bool (NodesEnvtTable::NodeEnvt)> op)
 {
+    std::unique_lock<std::mutex> m(p->mutex);
     init();
 
     p->nodeQueryWhere.bind(nodeId.toIndex(), tstep.value());

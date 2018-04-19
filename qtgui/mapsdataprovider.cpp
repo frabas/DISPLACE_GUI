@@ -84,6 +84,10 @@ void MapsDataProvider::attach(std::shared_ptr<SQLiteOutputStorage> storage)
 
 std::shared_ptr<types::EnvironmentData> MapsDataProvider::getEnvironmentData(types::NodeId nodeId, types::tstep_t tstep)
 {
+    // not attached. No data.
+    if (p->db == nullptr)
+        return nullptr;
+
     auto &d = p->getEnvironmentData(nodeId);
 
     // it's clean. pass.

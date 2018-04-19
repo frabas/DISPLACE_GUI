@@ -28,7 +28,7 @@
 #include <Metier.h>
 #include <Population.h>
 
-#include <QDebug>
+//#include <QDebug>
 
 const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 2;
 
@@ -332,7 +332,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     select.where(op::eq(p->mVesselDefTable->fldNationality));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
-    qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
+    //qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
@@ -454,7 +454,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat sta
         return true;
     });
 
-    qDebug() << "HarbourStat: " << QString::fromStdString(select.string()) << " : " << harbourid << " => "  << data.v.size();
+    //qDebug() << "HarbourStat: " << QString::fromStdString(select.string()) << " : " << harbourid << " => "  << data.v.size();
 
     return data;
 }
@@ -564,7 +564,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
         return true;
     });
 
-    qDebug() << "MetierStat: " << QString::fromStdString(select.string()) << " : " << metierid << " => "  << data.v.size();
+    //qDebug() << "MetierStat: " << QString::fromStdString(select.string()) << " : " << metierid << " => "  << data.v.size();
 
     return data;
 }
@@ -627,7 +627,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         return true;
     });
 
-    qDebug() << "PopDyn Select: " << QString::fromStdString(select.string()) << " (" << popid << "," << grpid << ")";
+    //qDebug() << "PopDyn Select: " << QString::fromStdString(select.string()) << " (" << popid << "," << grpid << ")";
 
     return data;
 }
@@ -707,7 +707,7 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
         return true;
     });
 
-    qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
+    //qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
 
     return data;
 }

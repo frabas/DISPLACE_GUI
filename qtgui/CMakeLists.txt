@@ -24,9 +24,7 @@ include_directories(
 file(GLOB_RECURSE SOURCES *.cpp)
 file(GLOB_RECURSE HEADERS *.h)
 file(GLOB_RECURSE UIS *.ui)
-
-qt5_add_resources(qtgui.qrc)
-qt5_wrap_ui(${UIS})
+file(GLOB_RECURSE QRCS *.qrc)
 
 if (APPLE)
     link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
@@ -37,7 +35,9 @@ if (WIN32)
 endif(WIN32)
 
 add_executable(qtgui
-        ${SOURCES} ${HEADERS})
+        ${SOURCES} ${HEADERS}
+        ${UIS} ${QRCS}
+        )
 
 
 target_link_libraries(qtgui

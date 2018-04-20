@@ -12,11 +12,13 @@ include_directories(
 
 file(GLOB_RECURSE SOURCES *.cpp)
 file(GLOB_RECURSE HEADERS *.h)
+file(GLOB_RECURSE UIS *.ui)
+file(GLOB_RECURSE QRCS *.qrc)
 
-qt5_add_resources(qtcommons.qrc)
-
-add_library(qtcommons
-        ${SOURCES} ${HEADERS})
+add_library(qtcommons SHARED
+        ${SOURCES} ${HEADERS}
+        ${UIS} ${QRCS}
+        )
 
 
 target_link_libraries(qtcommons

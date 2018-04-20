@@ -11,6 +11,8 @@ include_directories(
 
 file(GLOB HEADERS QMapControl/src/QMapControl/*.h)
 file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
+file(GLOB_RECURSE UIS *.ui)
+file(GLOB_RECURSE QRCS *.qrc)
 
 set(GDAL_LIBRARY gdal)
 
@@ -27,7 +29,10 @@ set(LIBRARIES
         ${GDAL_LIBRARY}
         )
 
-add_library(QMapControl SHARED ${SOURCES} ${HEADERS})
+add_library(QMapControl SHARED
+        ${SOURCES} ${HEADERS}
+        ${UIS} ${QRCS}
+        )
 
 target_link_libraries(QMapControl
         ${LIBRARIES}

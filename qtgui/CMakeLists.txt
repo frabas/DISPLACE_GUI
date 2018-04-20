@@ -32,6 +32,10 @@ if (APPLE)
     link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
 endif (APPLE)
 
+if (WIN32)
+    link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
+endif(WIN32)
+
 add_executable(qtgui
         ${SOURCES} ${HEADERS})
 

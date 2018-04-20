@@ -1,12 +1,10 @@
 project(formats)
 
+add_definitions(-DFORMATS_LIBRARY)
+
 include_directories(
         ${CMAKE_CURRENT_LIST_DIR}
 )
-
-find_package(Boost REQUIRED
-        COMPONENTS regex filesystem
-        )
 
 set(SOURCES
         legacy/ConfigFileReader.cpp legacy/ConfigFileReader.h
@@ -19,11 +17,6 @@ set(SOURCES
 add_library(formats SHARED
         ${SOURCES}
         )
-
-target_link_libraries(formats
-        Boost::regex Boost::filesystem
-        )
-
 
 # Set target directory
 install(TARGETS formats DESTINATION lib)

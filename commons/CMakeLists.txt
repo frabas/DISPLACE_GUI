@@ -1,4 +1,13 @@
 
+add_definitions(-DCOMMONS_LIBRARY)
+
+if (WIN32)
+    add_definitions(
+            -DNO_CRASHHANDLER
+            -DEMBED_MSQLITECPP
+    )
+endif (WIN32)
+
 include_directories(
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_SOURCE_DIR}/mSqliteCpp/include
@@ -144,14 +153,22 @@ endif (NOT WIN32 AND NOT APPLE)
 file(GLOB MSQLITE_SOURCES ${CMAKE_SOURCE_DIR}/mSqliteCpp/src/*.cpp)
 file(GLOB MSQLITE_HEADERS ${CMAKE_SOURCE_DIR}/mSqliteCpp/include/*.h)
 
+
+if (NOT WIN32)
+    list(APPEND LIBRARIES sqlite3)
+endif (NOT WIN32)
+
+if (WIN32)
+    list(APPEND LIBRARIES psapi)
+    list(APPEND SOURCES
+            storage/sqlite3.c
+            )
+endif (WIN32)
+
 add_library(commons SHARED
         ${SOURCES}
         ${MSQLITE_SOURCES} ${MSQLITE_HEADERS}
         )
-
-if (NOT WIN32)
-    list (APPEND LIBRARIES sqlite3)
-endif (NOT WIN32)
 
 target_link_libraries(commons
         formats

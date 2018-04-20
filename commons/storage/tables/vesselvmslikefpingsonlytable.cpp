@@ -49,7 +49,7 @@ VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlit
     : SQLiteTable(db, name), p(std::make_unique<Impl>())
 {
     create();
-    p->insertStatement.doReplace();
+    p->insertStatement.replaceOnConflict();
     p->insertStatement.attach(db,name);
     p->selectStatement.attach(db,name);
     p->where.attach(p->selectStatement.getStatement(), op::eq(p->fldId));

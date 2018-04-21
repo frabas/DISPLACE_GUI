@@ -29,8 +29,8 @@
 
 
 Windmill::Windmill(int _idx, string _name, Node *_node, double _size, int _type, int _kWh, int _is_active)
-    : idx(_idx), name(_name), x(_node->get_x()), y(_node->get_y()),
-      size(_size), type(_type), kWh(_kWh), is_active(_is_active)
+    : name(_name), idx(_idx), type(_type), x(_node->get_x()), y(_node->get_y()),
+      size(_size), kWh(_kWh), is_active(_is_active)
 {
     kWProduction=0;
 }

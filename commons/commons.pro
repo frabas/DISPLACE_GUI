@@ -152,7 +152,8 @@ HEADERS= \
     storage/tables/nodesenvttable.h \
     storage/tables/nodesstattable.h \
     storage/tables/nodestariffstattable.h \
-    ../include/StrongType.h
+    ../include/StrongType.h \
+    storage/cacheddatastorage.h
 
 ### mSQLiteCpp dependency
 

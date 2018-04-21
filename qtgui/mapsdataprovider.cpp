@@ -7,8 +7,8 @@ using EnvPtr = std::shared_ptr<types::EnvironmentData>;
 
 struct CachedEnvironmentData {
     bool dirty = true;
-    types::tstep_t cachedTstep;
-    EnvPtr data;
+    types::tstep_t cachedTstep = types::tstep_t(-1);
+    EnvPtr data = nullptr;
 };
 }
 
@@ -98,6 +98,6 @@ std::shared_ptr<types::EnvironmentData> MapsDataProvider::getEnvironmentData(typ
     // the following code would be better but it's not optimal.
     //p->refreshDataForNode(nodeId, tstep);
 
-    return d.data;
+    return p->getEnvironmentData(nodeId).data;
 }
 

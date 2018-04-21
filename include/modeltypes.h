@@ -23,6 +23,12 @@ struct EnvironmentData {
     double dissolvedcarbon;
 };
 
+struct NodesStatData {
+    types::NodeId nodeId;
+    tstep_t tstep;
+    double cumftime, swarea, ssswarea, cumcat, cumcatthr, cumdis;
+};
+
 }
 
 #endif // MODELTYPES_H

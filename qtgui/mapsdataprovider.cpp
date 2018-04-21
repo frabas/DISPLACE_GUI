@@ -54,3 +54,7 @@ std::shared_ptr<types::EnvironmentData> MapsDataProvider::getEnvironmentData(typ
     return p->environmentData->getData(nodeId, step);
 }
 
+std::shared_ptr<types::NodesStatData> MapsDataProvider::getNodesStatData(types::NodeId nodeId, types::tstep_t tstep)
+{
+
+}

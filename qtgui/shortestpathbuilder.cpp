@@ -135,6 +135,10 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
                              predecessor_map(boost::make_iterator_property_map(mPredecessors.begin(), get(boost::vertex_index, mGraph))).
                              distance_map(boost::make_iterator_property_map(mDistances.begin(), get(boost::vertex_index, mGraph))));
 
+    for(auto filter : postProcessingFilter) {
+        filter(relevantNodes, mGraph, mPredecessors, mDistances);
+    }
+
     QString ext = "bin";
     if (format == Text)
         ext = "dat";
@@ -153,4 +157,9 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
         throw std::runtime_error("Unhandled case");
     }
 
+}
+
+void ShortestPathBuilder::appendPostProcessingFilter(ShortestPathBuilder::PostProcessingFilter filter)
+{
+    postProcessingFilter.push_back(filter);
 }

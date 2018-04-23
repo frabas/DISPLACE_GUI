@@ -65,6 +65,7 @@ class DisplaceModel;
 
 class ShortestPathBuilder
 {
+public:
     struct flag_t {
         typedef boost::edge_property_tag kind;
 
@@ -79,6 +80,12 @@ class ShortestPathBuilder
     typedef boost::graph_traits < graph_t >::vertex_descriptor vertex_descriptor;
     typedef std::pair<int, int> Edge;
 
+    using PostProcessingFilter = std::function<bool(const QList<std::shared_ptr<NodeData> > &relNodes,
+                                                    const graph_t &graph,
+                                                    std::vector<vertex_descriptor> &predecessors,
+                                                    std::vector<double> &dinstances)>;
+
+
     DisplaceModel *mModel;
 
     graph_t mGraph;
@@ -88,6 +95,8 @@ class ShortestPathBuilder
     boost::property_map<graph_t, boost::edge_weight_t>::type mWeightmap;
     std::vector<vertex_descriptor> mPredecessors;
     std::vector<double> mDistances;
+
+    std::list<PostProcessingFilter> postProcessingFilter;
 
 private:
     void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
@@ -101,6 +110,7 @@ public:
     };
 
     void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format = Binary);
+    void appendPostProcessingFilter(PostProcessingFilter);
 };
 
 #endif // SHORTESTPATHBUILDER_H

@@ -26,10 +26,6 @@
 #include <memory>
 
 #include <QList>
-
-#include <vector>
-#include <algorithm>    // std::find
-
 #include <QFile>
 #include <QTextStream>
 
@@ -42,7 +38,7 @@
  * http://www.boost.org/doc/libs/1_57_0/libs/graph/example/dijkstra-example.cpp
  * */
 
-void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out)
+void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
 {
     QFile mindist_file(mindist);
     QFile prev_file (prev);
@@ -56,51 +52,16 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
     strm_prev << " key  value" << endl;
     strm_min << " key  value" << endl;
 
-    vector<int> mem(2, 0);
-
-    vector <int> relevant_nodes;
-    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-       relevant_nodes.push_back(n->get_idx_node().toIndex());
-    }
-
     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
-        vertex_descriptor initial_node_idx =n->get_idx_node().toIndex();
-
-        mem.at(0)=0;
-        mem.at(1)=0;
-       if(flag_out) cout << "trace the path back from nd " << nd << endl;
 
         while (mPredecessors[nd] != nd) {
             if (!mGraph[nd].flag) {
-                std::vector<int>::iterator it;
-                it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
-                if (it != relevant_nodes.end() ) mem.at(0)=nd;
-
-                it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
-                if (it != relevant_nodes.end() && mem.at(1)==0)  mem.at(1)=mPredecessors[nd];
-
-                // keep the node onboard if it is a significant intermediate
-                int idx=relevantInterNodesIdx.indexOf(nd);
-                if (idx != -1)  mem.at(0)=nd;
-
-                idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
-                if (idx != -1  && mem.at(1)==0) mem.at(1)=mPredecessors[nd];
-
-                if(flag_out) cout << nd << "--" << mPredecessors[nd] << endl;
-
-                if(mem.at(0)!=0 && mem.at(1)!=0){
-                   if(flag_out) cout << "export-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
-                   strm_prev << mem.at(0) << " " << mPredecessors[nd] << endl;
-                   strm_min << mem.at(0) << " " << mDistances[nd] << endl;
-                   mem.at(1)=0;
-                  }
-
-             }
-
+                strm_prev << nd << " " << mPredecessors[nd] << endl;
+                strm_min << nd << " " << mDistances[nd] << endl;
+            }
 
             mGraph[nd].flag = true;
-            if(flag_out && initial_node_idx==6651)  cout << "here nd is "<< nd << " and the mPredecessors[nd] is " << mPredecessors[nd] << endl;
             nd = mPredecessors[nd];
         }
 
@@ -111,7 +72,7 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
     prev_file.close();
 }
 
-void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out)
+void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
 {
     displace::formats::legacy::BinaryGraphFileWriter<uint16_t,uint16_t> wr_prev;
     wr_prev.open(prev.toStdString());
@@ -120,9 +81,7 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
     wr_md.open(mindist.toStdString());
 
 
-    if(relevantInterNodesIdx.empty())
-    {
-     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
         while (mPredecessors[nd] != nd) {
@@ -136,60 +95,7 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
         }
 
         mGraph[nd].flag = true;
-     }
-
     }
-    else
-    {
-        vector<int> mem(2, 0);
-
-        vector <int> relevant_nodes;
-        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-           relevant_nodes.push_back(n->get_idx_node().toIndex());
-        }
-
-        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
-           vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
-
-           mem.at(0)=0;
-           mem.at(1)=0;
-           if(flag_out) cout << "trace the path back from nd " << nd << endl;
-
-           while (mPredecessors[nd] != nd) {
-               if (!mGraph[nd].flag) {
-                   std::vector<int>::iterator it;
-                   it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
-                   if (it != relevant_nodes.end() ) mem.at(0)=nd;
-
-                   it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
-                   if (it != relevant_nodes.end() && mem.at(1)==0)  mem.at(1)=mPredecessors[nd];
-
-                   // keep the node onboard if it is a significant intermediate
-                   int idx=relevantInterNodesIdx.indexOf(nd);
-                   if (idx != -1)  mem.at(0)=nd;
-
-                   idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
-                   if (idx != -1  && mem.at(1)==0) mem.at(1)=mPredecessors[nd];
-
-                   if(flag_out) cout << nd << "--" << mPredecessors[nd] << endl;
-
-                   if(mem.at(0)!=0 && mem.at(1)!=0){
-                      if(flag_out) cout << "export-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
-                      wr_prev.write(nd, mPredecessors[nd]);
-                      wr_md.write(nd, mDistances[nd]);
-                      mem.at(1)=0;
-                   }
-               }
-               mGraph[nd].flag = true;
-               nd = mPredecessors[nd];
-           }
-
-           mGraph[nd].flag = true;
-        }
-
-    }
-
-
 
     wr_md.close();
     wr_prev.close();
@@ -218,7 +124,7 @@ ShortestPathBuilder::ShortestPathBuilder(DisplaceModel *model)
 }
 
 void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                                 const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, Format format)
+                                 const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format)
 {
     Q_UNUSED(simplify);
 
@@ -236,15 +142,12 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
     QString mindist = QString("%1/min_distance_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
     QString prev = QString("%1/previous_%2.%3").arg(path).arg(node->get_idx_node().toIndex()).arg(ext);
 
-    int flag_out=0;
-    if(node->get_idx_node().toIndex() ==91) flag_out= 1;
-
     switch (format) {
     case Binary:
-        createBinary(prev, mindist, relevantNodes, relevantInterNodesIdx, flag_out);
+        createBinary(prev, mindist, relevantNodes);
         break;
     case Text:
-        createText(prev,mindist, relevantNodes, relevantInterNodesIdx, flag_out);
+        createText(prev,mindist, relevantNodes);
         break;
     default:
         throw std::runtime_error("Unhandled case");

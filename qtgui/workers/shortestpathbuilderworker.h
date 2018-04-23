@@ -24,7 +24,6 @@ public:
     void setBinaryFormat() { mTextFormat = false; }
     void setTextFormat() { mTextFormat = true; }
     void setRelevantNodes (const QList<std::shared_ptr<NodeData> > &nodes);
-    void setRelevantInterNodes (const QVector<int> &relevantInterNodesIdx);
     void run(QObject *obj, const char *slot);
 
 protected:
@@ -45,7 +44,6 @@ private:
     WaitDialog *mWaitDialog;
     DisplaceModel *mModel;
     QList<std::shared_ptr<NodeData>> mRelevantNodes;
-    QVector<int> relevantInterNodesIdx;
     QList<arg> mArgumentList;
     QFutureWatcher<void> mFutureWatcher;
 

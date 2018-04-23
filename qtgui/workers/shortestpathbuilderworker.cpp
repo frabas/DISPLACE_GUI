@@ -26,14 +26,6 @@ void ShortestPathBuilderWorker::setRelevantNodes(const QList<std::shared_ptr<Nod
     }
 }
 
-void ShortestPathBuilderWorker::setRelevantInterNodes(const QVector<int> & _relevantInterNodesIdx)
-{
-    relevantInterNodesIdx = _relevantInterNodesIdx;
-
-}
-
-
-
 void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 {
     mWaitDialog->enableAbort(true);
@@ -53,7 +45,7 @@ void ShortestPathBuilderWorker::doStep(arg a)
 {
     try {
         ShortestPathBuilder builder (a.me->mModel);
-        builder.create(a.node, a.me->mModel->linkedShortestPathFolder(), true, a.me->mRelevantNodes, a.me->relevantInterNodesIdx, a.me->mTextFormat ? ShortestPathBuilder::Text : ShortestPathBuilder::Binary);
+        builder.create(a.node, a.me->mModel->linkedShortestPathFolder(), true, a.me->mRelevantNodes, a.me->mTextFormat ? ShortestPathBuilder::Text : ShortestPathBuilder::Binary);
     } catch (std::exception &x) {
         qDebug() << "Cannot create node " << a.node->get_idx_node().toIndex() << ":" << x.what();
     }

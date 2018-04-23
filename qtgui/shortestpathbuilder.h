@@ -90,8 +90,8 @@ class ShortestPathBuilder
     std::vector<double> mDistances;
 
 private:
-    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out);
-    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out);
+    void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
+    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
 
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);
@@ -100,8 +100,7 @@ public:
         Binary, Text
     };
 
-    void create(std::shared_ptr<NodeData> node, QString path, bool simplify,
-                const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, Format format = Binary);
+    void create(std::shared_ptr<NodeData> node, QString path, bool simplify, const QList<std::shared_ptr<NodeData> > &relevantNodes, Format format = Binary);
 };
 
 #endif // SHORTESTPATHBUILDER_H

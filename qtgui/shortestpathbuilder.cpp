@@ -122,7 +122,6 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
 
     if(relevantInterNodesIdx.empty())
     {
-
      foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
@@ -142,16 +141,45 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
     }
     else
     {
+        vector<int> mem(2, 0);
+
+        vector <int> relevant_nodes;
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+           relevant_nodes.push_back(n->get_idx_node().toIndex());
+        }
 
         foreach (std::shared_ptr<NodeData> n, relevantNodes) {
            vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
+           mem.at(0)=0;
+           mem.at(1)=0;
+           if(flag_out) cout << "trace the path back from nd " << nd << endl;
+
            while (mPredecessors[nd] != nd) {
                if (!mGraph[nd].flag) {
-                   wr_prev.write(nd, mPredecessors[nd]);
-                   wr_md.write(nd, mDistances[nd]);
-               }
+                   std::vector<int>::iterator it;
+                   it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
+                   if (it != relevant_nodes.end() ) mem.at(0)=nd;
 
+                   it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
+                   if (it != relevant_nodes.end() && mem.at(1)==0)  mem.at(1)=mPredecessors[nd];
+
+                   // keep the node onboard if it is a significant intermediate
+                   int idx=relevantInterNodesIdx.indexOf(nd);
+                   if (idx != -1)  mem.at(0)=nd;
+
+                   idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
+                   if (idx != -1  && mem.at(1)==0) mem.at(1)=mPredecessors[nd];
+
+                   if(flag_out) cout << nd << "--" << mPredecessors[nd] << endl;
+
+                   if(mem.at(0)!=0 && mem.at(1)!=0){
+                      if(flag_out) cout << "export-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
+                      wr_prev.write(nd, mPredecessors[nd]);
+                      wr_md.write(nd, mDistances[nd]);
+                      mem.at(1)=0;
+                   }
+               }
                mGraph[nd].flag = true;
                nd = mPredecessors[nd];
            }

@@ -27,6 +27,11 @@ void ShortestPathBuilderWorker::setRelevantNodes(const QList<std::shared_ptr<Nod
     }
 }
 
+void ShortestPathBuilderWorker::setRelevantInterNodes(const QVector<int> &nodes)
+{
+    mRelevantInternNodes = nodes;
+}
+
 void ShortestPathBuilderWorker::run(QObject *obj, const char *slot)
 {
     mWaitDialog->enableAbort(true);
@@ -47,8 +52,9 @@ void ShortestPathBuilderWorker::doStep(arg a)
     try {
         ShortestPathBuilder builder (a.me->mModel);
         SimpleNonInterestingNodesGraphSimplifier simplifier;
+        simplifier.setRelevantInterNodes(a.me->mRelevantInternNodes);
         builder.appendPostProcessingFilter([&simplifier](const QList<std::shared_ptr<NodeData> > &relNodes,
-                                           const ShortestPathBuilder::graph_t &graph,
+                                           ShortestPathBuilder::graph_t &graph,
                                            std::vector<ShortestPathBuilder::vertex_descriptor> &predecessors,
                                            std::vector<double> &distances) {
             return simplifier(relNodes, graph, predecessors, distances);

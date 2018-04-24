@@ -82,7 +82,7 @@ public:
     typedef std::pair<int, int> Edge;
 
     using PostProcessingFilter = std::function<bool(const QList<std::shared_ptr<NodeData> > &relNodes,
-                                                    const graph_t &graph,
+                                                    graph_t &graph,
                                                     std::vector<vertex_descriptor> &predecessors,
                                                     std::vector<double> &dinstances)>;
 

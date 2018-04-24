@@ -1706,10 +1706,17 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
         builder->setRelevantNodes(currentModel->getNodesList());
     } else {
         InputFileParser parser;
+        InputFileParser parser2;
         QString p1, p2;
         if (!parser.pathParseRelevantNodes(dlg.getRelevantNodesFolder(), p1, p2)) {
             QMessageBox::warning(this, tr("Cannot parse selected file name."),
                                  tr("Cannot parse the selected file name into relevant nodes pattern. it must be: /.../vesselsspe_xxx_quartery.dat"));
+            return;
+        }
+        QString p3, p4;
+        if (!parser2.pathParseRelevantInterNodes(dlg.getRelevantNodesFolder(), p3, p4)) {
+            QMessageBox::warning(this, tr("Cannot parse selected file name."),
+                                 tr("Cannot parse the selected file name into relevant intermediate nodes pattern. it must be: /.../idx_additional_relevant_nodes_in_building_shortPaths.dat"));
             return;
         }
 
@@ -1730,11 +1737,17 @@ void MainWindow::on_actionCreate_Shortest_Path_triggered()
 
         qDebug() << "nodes :" << nodes.size();
 
+        bool ok2;
+        QString in2= dlg.getRelevantInterNodesFolder();
+        QVector<int> nodeids;
+        ok2 = parser2.parseRelevantInterNodes(in2, nodeids);
+
         QList<std::shared_ptr<NodeData> >l;
         foreach (int i, nodes) {
             l.push_back(currentModel->getNodesList()[i]);
         }
         builder->setRelevantNodes(l);
+        builder->setRelevantInterNodes(nodeids);
     }
 
     builder->run(this,SLOT(end_ShortestPathCreated(bool)) );

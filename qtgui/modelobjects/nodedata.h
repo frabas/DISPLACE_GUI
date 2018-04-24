@@ -231,9 +231,13 @@ public:
     bool isDeleted() const;
     void setDeleted(bool value = true);
 
+    void setRelevant(bool relevant = true) { mRelevant = relevant; }
+    bool isRelevant() const { return mRelevant; }
+
 private:
     DisplaceModel *mModel;
     bool mDeleted;
+    bool mRelevant;
     int mHarbourId;
     double *mPop;
     double mPopTot;

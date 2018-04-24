@@ -199,7 +199,8 @@ SOURCES += \
     plots/populationsstatplot.cpp \
     plots/harboursstatplot.cpp \
     plots/metiersstatsplot.cpp \
-    mapsdataprovider.cpp
+    mapsdataprovider.cpp \
+    simplenoninterestingnodesgraphsimplifier.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -345,7 +346,8 @@ HEADERS += \
     plots/metiersstatsplot.h \
     stats/statsutils.h \
     mapsdataprovider.h \
-    mapsdatastructures.h
+    mapsdatastructures.h \
+    simplenoninterestingnodesgraphsimplifier.h
 
 ### mSQLiteCpp dependency
 

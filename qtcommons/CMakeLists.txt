@@ -10,10 +10,14 @@ include_directories(
         ${Qt5PrintSupport_INCLUDE_DIRS}
 )
 
-file(GLOB_RECURSE SOURCES *.cpp)
-file(GLOB_RECURSE HEADERS *.h)
-file(GLOB_RECURSE UIS *.ui)
-file(GLOB_RECURSE QRCS *.qrc)
+file(GLOB SOURCES *.cpp
+        csv/*.cpp graphics/*.cpp R/*.cpp
+        )
+file(GLOB HEADERS *.h
+        csv/*.h graphics/*.h R/*.h
+        )
+
+file(GLOB QRCS *.qrc)
 
 add_library(qtcommons SHARED
         ${SOURCES} ${HEADERS}

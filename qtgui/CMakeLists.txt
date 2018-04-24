@@ -21,10 +21,38 @@ include_directories(
         ${Qt5PrintSupport_INCLUDE_DIRS}
 )
 
-file(GLOB_RECURSE SOURCES *.cpp)
-file(GLOB_RECURSE HEADERS *.h)
-file(GLOB_RECURSE UIS *.ui)
-file(GLOB_RECURSE QRCS *.qrc)
+file(GLOB SOURCES *.cpp 
+        algo/*.cpp
+        backgrounds/*.cpp
+        dialogs/*.cpp
+        mapobjects/*.cpp
+        modelobjects/*.cpp
+        mousemode/*.cpp
+        objects/*.cpp
+        plots/*.cpp
+        R/*.cpp
+        stats/*.cpp
+        utils/*.cpp
+        workers/*.cpp
+        )
+
+file(GLOB HEADERS *.h
+        algo/*.h
+        backgrounds/*.h
+        dialogs/*.h
+        mapobjects/*.h
+        modelobjects/*.h
+        mousemode/*.h
+        objects/*.h
+        plots/*.h
+        R/*.h
+        stats/*.h
+        utils/*.h
+        workers/*.h
+        )
+        
+file(GLOB UIS *.ui dialogs/*.ui R/*.ui mapobjects/*.ui )
+file(GLOB QRCS *.qrc)
 
 if (APPLE)
     link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)

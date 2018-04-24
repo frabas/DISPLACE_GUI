@@ -70,6 +70,7 @@ public:
         typedef boost::edge_property_tag kind;
 
         bool flag;
+        bool isRelevant;
 
         flag_t() : flag(false) {}
     };

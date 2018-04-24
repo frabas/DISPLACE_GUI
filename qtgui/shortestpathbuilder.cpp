@@ -128,6 +128,17 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
 {
     Q_UNUSED(simplify);
 
+    // reset relevancy of all nodes
+    for (auto e = boost::vertices(mGraph); e.first != e.second; ++e.first) {
+        mGraph[*e.first].isRelevant = false;
+    }
+
+    // set relevancy for relevant nodes
+    for (auto rnode : relevantNodes) {
+        vertex_descriptor nd = vertex(rnode->get_idx_node().toIndex(), mGraph);
+        mGraph[nd].isRelevant = true;
+    }
+
     vertex_descriptor s;
 
     s = vertex(node->get_idx_node().toIndex(), mGraph);

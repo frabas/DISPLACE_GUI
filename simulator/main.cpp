@@ -4099,13 +4099,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
     // initial export at t=0
-    if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
-    {
+    //if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    //{
 
-        for (unsigned int n=0; n<nodes.size(); n++)
+        // Flush and updates all statistics for nodes envt
+        if (use_gui)
         {
-           nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
-        }
+           nodes_envt.flush();
+           for (unsigned int n=0; n<nodes.size(); n++)
+               {
+                  nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+               }
+           guiSendUpdateCommand(nodes_envt_filename, tstep);
+         }
 
         if (enable_sqlite_out)
         {
@@ -4114,7 +4120,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                outSqlite->exportEnvtNodes(tstep, nodes.at(n));
            }
         }
-    }
+    //}
 
     //----------------------//
     //----------------------//
@@ -5739,10 +5745,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             }
+          }
 
-            // Flush and updates all statistics for nodes envt
-            if (use_gui)
-            {
+          // Flush and updates all statistics for nodes envt
+          if (use_gui)
+          {
                if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                {
                    nodes_envt.flush();
@@ -5752,9 +5759,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                    }
                    guiSendUpdateCommand(nodes_envt_filename, tstep);
                }
-            }
+          }
 
-        }
+
 
 
 

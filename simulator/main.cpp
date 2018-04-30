@@ -3948,6 +3948,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumulcatches_per_pop.open(filename.c_str());
     std::string popnodes_cumulcatches_per_pop_filename = filename;
 
+    ofstream nodes_envt;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/nodes_envt_"+namesimu+".dat";
+    nodes_envt.open(filename.c_str());
+    std::string nodes_envt_filename = filename;
+
     ofstream popnodes_impact_per_szgroup;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
     popnodes_impact_per_szgroup.open(filename.c_str());
@@ -4096,6 +4101,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     // initial export at t=0
     if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
     {
+
+        for (unsigned int n=0; n<nodes.size(); n++)
+        {
+           nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+        }
+
         if (enable_sqlite_out)
         {
            for (unsigned int n=0; n<nodes.size(); n++)
@@ -4174,6 +4185,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_inc,
                                              popnodes_impact,
                                              popnodes_cumulcatches_per_pop,
+                                             nodes_envt,
                                              popnodes_cumftime,
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
@@ -4196,6 +4208,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_end_filename,
                                              popnodes_impact_filename,
                                              popnodes_cumulcatches_per_pop_filename,
+                                             nodes_envt_filename,
                                              popnodes_cumftime_filename,
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
@@ -4240,6 +4253,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_inc,
                                              popnodes_impact,
                                              popnodes_cumulcatches_per_pop,
+                                             nodes_envt,
                                              popnodes_cumftime,
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
@@ -4260,6 +4274,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_end_filename,
                                              popnodes_impact_filename,
                                              popnodes_cumulcatches_per_pop_filename,
+                                             nodes_envt_filename,
                                              popnodes_cumftime_filename,
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
@@ -5711,6 +5726,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                // bool r=  diffuse_Phosphorus_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
                // bool r=  diffuse_Oxygen_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
                // bool r=  diffuse_Dissolvedcarbon_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
+
+                for (unsigned int n=0; n<nodes.size(); n++)
+                {
+                   nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+                }
+                guiSendUpdateCommand(nodes_envt_filename, tstep);
 
 
                 if (enable_sqlite_out)

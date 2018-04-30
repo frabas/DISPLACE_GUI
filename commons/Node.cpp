@@ -1503,11 +1503,28 @@ void Node::export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, i
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot cumcatches pop
-    if(cumcatches_per_pop.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+    if(cumcatches_per_pop.at(pop)>1e-6) popnodes << pop << " " << tstep << " " << this->get_idx_node().toIndex() <<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumcatches_per_pop.at(pop) << " " <<  endl;
 
 }
+
+void Node::export_nodes_envt(ofstream& nodes_envt, int tstep)
+{
+
+    dout(cout  << "export nodes_envt" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    nodes_envt << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot cumcatches pop
+    nodes_envt << tstep << " " << this->get_idx_node().toIndex() << " "<<
+        this->get_marine_landscape() << " " << this->get_salinity() << " " <<
+                  " " << this->get_sst() << " " << this->get_wind() << " " <<
+                  " " << this->get_Nitrogen() << " " << this->get_Phosphorus() << " " <<
+                  " " << this->get_Oxygen() << " " << this->get_DissolvedCarbon() << " " <<  endl;
+
+}
+
 
 void Node::export_popnodes_impact_per_szgroup(ofstream& popnodes, int tstep, int pop)
 {

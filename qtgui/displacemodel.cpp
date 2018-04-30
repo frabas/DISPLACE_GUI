@@ -615,6 +615,55 @@ void DisplaceModel::collectPopCumcatchesPerPop(int step, int node_idx, int popid
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectWind(int step, int node_idx,  double wind)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setWind(wind);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectSalinity(int step, int node_idx,  double salinity)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setSalinity(salinity);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectSST(int step, int node_idx,  double sst)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setSST(sst);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectNitrogen(int step, int node_idx,  double nitrogen)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setNitrogen(nitrogen);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectPhosphorus(int step, int node_idx,  double phosphorus)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setPhosphorus(phosphorus);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectOxygen (int step, int node_idx,  double oxygen)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setOxygen(oxygen);
+    mNodesStatsDirty = true;
+}
+
+void DisplaceModel::collectDissolvedCarbon (int step, int node_idx,  double dissolvedcarbon)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setDissolvedCarbon(dissolvedcarbon);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectPopBenthosBiomass(int step, int node_idx, int funcid, double benthosbiomass)
 {
     checkStatsCollection(step);

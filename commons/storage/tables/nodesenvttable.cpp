@@ -153,20 +153,20 @@ void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<boo
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
-    p->allNodesQueryStatement.bind(1, tstep.value());
+    p->allNodesQueryStatement.bind(0, tstep.value());
     p->allNodesQueryStatement.execute([this, &op, tstep](){
         auto &st = p->allNodesQueryStatement;
         NodeEnvt s;
-        s.nodeId = types::NodeId(st.getIntValue(0));
+        s.nodeId = types::NodeId(st.getIntValue(1));
         s.tstep = types::tstep_t(tstep);
-        s.marineLandscape = st.getIntValue(1);
-        s.salinity = st.getDoubleValue(2);
-        s.sst = st.getDoubleValue(3);
-        s.wind = st.getDoubleValue(4);
-        s.nitrogen = st.getDoubleValue(5);
-        s.phosphorus= st.getDoubleValue(6);
-        s.oxygen = st.getDoubleValue(7);
-        s.dissolvedcarbon = st.getDoubleValue(8);
+        s.marineLandscape = st.getIntValue(2);
+        s.salinity = st.getDoubleValue(3);
+        s.sst = st.getDoubleValue(4);
+        s.wind = st.getDoubleValue(5);
+        s.nitrogen = st.getDoubleValue(6);
+        s.phosphorus= st.getDoubleValue(7);
+        s.oxygen = st.getDoubleValue(8);
+        s.dissolvedcarbon = st.getDoubleValue(9);
         if (op)
             return op(s);
         return false;

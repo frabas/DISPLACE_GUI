@@ -4092,6 +4092,19 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         guiSendUpdateCommand(popnodes_start_filename, 0);
     }
 
+
+    // initial export at t=0
+    if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    {
+        if (enable_sqlite_out)
+        {
+           for (unsigned int n=0; n<nodes.size(); n++)
+           {
+               outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+           }
+        }
+    }
+
     //----------------------//
     //----------------------//
     //----------------------//

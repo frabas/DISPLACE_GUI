@@ -370,6 +370,7 @@ public:
     void collectPhosphorus(int step, int node_idx, double phosphorus);
     void collectOxygen(int step, int node_idx, double oxygen);
     void collectDissolvedCarbon(int step, int node_idx, double dissolvedcarbon);
+    void collectBathymetry(int step, int node_idx, double bathymetry);
 
 
 

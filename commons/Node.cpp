@@ -1521,7 +1521,8 @@ void Node::export_nodes_envt(ofstream& nodes_envt, int tstep)
         this->get_marine_landscape() << " " << this->get_salinity() << " " <<
                   " " << this->get_sst() << " " << this->get_wind() << " " <<
                   " " << this->get_Nitrogen() << " " << this->get_Phosphorus() << " " <<
-                  " " << this->get_Oxygen() << " " << this->get_DissolvedCarbon() << " " <<  endl;
+                  " " << this->get_Oxygen() << " " << this->get_DissolvedCarbon() << " " <<
+                     this->get_bathymetry()  <<  endl;
 
 }
 

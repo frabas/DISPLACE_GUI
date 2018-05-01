@@ -615,6 +615,13 @@ void DisplaceModel::collectPopCumcatchesPerPop(int step, int node_idx, int popid
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectBathymetry(int step, int node_idx,  double bathy)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->setBathymetry(bathy);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectWind(int step, int node_idx,  double wind)
 {
     checkStatsCollection(step);

@@ -417,8 +417,10 @@ void OutputFileParser::parseNodesEnvt(QFile *file, int tstep, DisplaceModel *mod
             model->collectPhosphorus (step, nodeid, phosphorus);
             double oxygen = fields[8].toDouble();
             model->collectOxygen (step, nodeid, oxygen);
-            double dissolvedcarbon = fields[8].toDouble();
+            double dissolvedcarbon = fields[9].toDouble();
             model->collectDissolvedCarbon( step, nodeid, dissolvedcarbon);
+            double bathy = fields[10].toDouble();
+            model->collectBathymetry( step, nodeid, bathy);
         }
     }
 

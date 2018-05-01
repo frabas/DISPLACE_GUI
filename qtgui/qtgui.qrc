@@ -61,5 +61,6 @@
         <file>icons/fishfarm.png</file>
         <file>icons/Windmill.png</file>
         <file>icons/container-ship.png</file>
+        <file>palettes/bathy_colors.p2c</file>
     </qresource>
 </RCC>

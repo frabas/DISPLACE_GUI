@@ -52,7 +52,7 @@
 #include <memory>
 
 enum PaletteRole {
-    ValueRole = 0, PopulationRole, TariffsRole, BenthosRole, FishfarmRole,
+    ValueRole = 0, PopulationRole, TariffsRole, BenthosRole, FishfarmRole, BathyRole,
 
     LastRole
 };

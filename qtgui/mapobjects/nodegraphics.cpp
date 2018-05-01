@@ -357,6 +357,6 @@ void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol:
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_bathymetry()));
+    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }

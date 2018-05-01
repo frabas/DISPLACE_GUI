@@ -151,6 +151,7 @@ private slots:
     void on_harbStatSelector_currentIndexChanged(int index);
     void on_actionPopulations_triggered();
     void on_actionTariffs_triggered();
+    void on_actionBathymetry_triggered();
     void on_actionConfiguration_triggered();
     void on_play_params_clicked();
     void on_actionQuit_triggered();

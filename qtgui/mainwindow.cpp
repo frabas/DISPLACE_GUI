@@ -1294,6 +1294,11 @@ void MainWindow::on_actionTariffs_triggered()
     showPaletteDialog(TariffsRole);
 }
 
+void MainWindow::on_actionBathymetry_triggered()
+{
+    showPaletteDialog(BathyRole);
+}
+
 void MainWindow::showPaletteDialog (PaletteRole role)
 {
     EditPaletteDialog dlg(this);

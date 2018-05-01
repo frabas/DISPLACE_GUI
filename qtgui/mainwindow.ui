@@ -53,6 +53,7 @@
      <addaction name="actionPalettes"/>
      <addaction name="actionPopulations"/>
      <addaction name="actionTariffs"/>
+     <addaction name="actionBathymetry"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -1909,6 +1910,15 @@ L3</string>
   <action name="actionAssign_DissolvedCarbon">
    <property name="text">
     <string>Assign DissolvedCarbon...</string>
+   </property>
+  </action>
+  <action name="actionBathymetry">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/colors.png</normaloff>icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bathymetry...</string>
    </property>
   </action>
  </widget>

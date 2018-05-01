@@ -1299,6 +1299,41 @@ void MainWindow::on_actionBathymetry_triggered()
     showPaletteDialog(BathyRole);
 }
 
+void MainWindow::on_actionSalinity_triggered()
+{
+    showPaletteDialog(SalinityRole);
+}
+
+void MainWindow::on_actionSST_triggered()
+{
+    showPaletteDialog(SSTRole);
+}
+
+void MainWindow::on_actionWind_triggered()
+{
+    showPaletteDialog(WindRole);
+}
+
+void MainWindow::on_actionNitrogen_triggered()
+{
+    showPaletteDialog(NitrogenRole);
+}
+
+void MainWindow::on_actionPhosphorus_triggered()
+{
+    showPaletteDialog(PhosphorusRole);
+}
+
+void MainWindow::on_actionOxygen_triggered()
+{
+    showPaletteDialog(OxygenRole);
+}
+
+void MainWindow::on_actionDissolvedCarbon_triggered()
+{
+    showPaletteDialog(DissolvedCarbonRole);
+}
+
 void MainWindow::showPaletteDialog (PaletteRole role)
 {
     EditPaletteDialog dlg(this);

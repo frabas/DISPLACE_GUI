@@ -54,6 +54,13 @@
      <addaction name="actionPopulations"/>
      <addaction name="actionTariffs"/>
      <addaction name="actionBathymetry"/>
+     <addaction name="actionSalinity"/>
+     <addaction name="actionSST"/>
+     <addaction name="actionWind"/>
+     <addaction name="actionNitrogen"/>
+     <addaction name="actionPhosphorus"/>
+     <addaction name="actionOxygen"/>
+     <addaction name="actionDissolvedCarbon"/>
     </widget>
     <addaction name="actionConfiguration"/>
     <addaction name="actionScenario"/>
@@ -1919,6 +1926,41 @@ L3</string>
    </property>
    <property name="text">
     <string>Bathymetry...</string>
+   </property>
+  </action>
+  <action name="actionSalinity">
+   <property name="text">
+    <string>Salinity...</string>
+   </property>
+  </action>
+  <action name="actionSST">
+   <property name="text">
+    <string>SST...</string>
+   </property>
+  </action>
+  <action name="actionWind">
+   <property name="text">
+    <string>Wind...</string>
+   </property>
+  </action>
+  <action name="actionNitrogen">
+   <property name="text">
+    <string>Nitrogen...</string>
+   </property>
+  </action>
+  <action name="actionPhosphorus">
+   <property name="text">
+    <string>Phosphorus...</string>
+   </property>
+  </action>
+  <action name="actionOxygen">
+   <property name="text">
+    <string>Oxygen...</string>
+   </property>
+  </action>
+  <action name="actionDissolvedCarbon">
+   <property name="text">
+    <string>DissolvedCarbon...</string>
    </property>
   </action>
  </widget>

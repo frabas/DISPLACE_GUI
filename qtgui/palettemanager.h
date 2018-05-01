@@ -53,6 +53,7 @@
 
 enum PaletteRole {
     ValueRole = 0, PopulationRole, TariffsRole, BenthosRole, FishfarmRole, BathyRole,
+    SalinityRole, SSTRole, WindRole, NitrogenRole, PhosphorusRole, OxygenRole, DissolvedCarbonRole,
 
     LastRole
 };

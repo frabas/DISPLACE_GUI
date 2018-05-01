@@ -152,6 +152,13 @@ private slots:
     void on_actionPopulations_triggered();
     void on_actionTariffs_triggered();
     void on_actionBathymetry_triggered();
+    void on_actionSalinity_triggered();
+    void on_actionSST_triggered();
+    void on_actionWind_triggered();
+    void on_actionNitrogen_triggered();
+    void on_actionPhosphorus_triggered();
+    void on_actionOxygen_triggered();
+    void on_actionDissolvedCarbon_triggered();
     void on_actionConfiguration_triggered();
     void on_play_params_clicked();
     void on_actionQuit_triggered();

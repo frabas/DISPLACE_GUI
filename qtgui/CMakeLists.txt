@@ -62,13 +62,13 @@ if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
 endif(WIN32)
 
-add_executable(qtgui
+add_executable(displacegui
         ${SOURCES} ${HEADERS}
         ${UIS} ${QRCS}
         )
 
 
-target_link_libraries(qtgui
+target_link_libraries(displacegui
         commons
         formats
         qtcommons

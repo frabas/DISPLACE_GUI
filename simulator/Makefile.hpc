@@ -7,7 +7,7 @@ LIBDIR?=${PREFIX}/lib
 
 SOURCES= main.cpp \
     thread_vessels.cpp \
-    biomodule.cpp \
+    biomodule2.cpp \
     outputexporter.cpp \
     getRSS.cpp \
     memstats.cpp
@@ -41,8 +41,8 @@ HEADERS= \
 
 DEFINES=-DNO_IPC
 
-LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++14 -fpermissive ${DEFINES} -I../include -I../commons -I. -I../sparsepp/
+LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt -lboost_program_options
+CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++14 -fpermissive ${DEFINES} -I../include -I../commons -I. -I../sparsepp/ -I../mSqliteCpp/include/ -I../formats
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

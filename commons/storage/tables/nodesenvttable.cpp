@@ -3,6 +3,7 @@
 #include "nodesenvttable.h"
 
 #include <Node.h>
+#include <helpers.h>
 
 #include <sqlitestatementformatters.h>
 #include <sqlitefieldsop.h>
@@ -150,8 +151,8 @@ bool NodesEnvtTable::insert(int tstep, Node *node)
 
 void NodesEnvtTable::queryAllNodesAtStep(types::tstep_t tstep, std::function<bool (NodesEnvtTable::NodeEnvt)> op)
 {
-    Q_UNUSED(tstep);
-    Q_UNUSED(op);
+    UNUSED(tstep);
+    UNUSED(op);
 #if 0
     std::unique_lock<std::mutex> m(p->mutex);
     init();

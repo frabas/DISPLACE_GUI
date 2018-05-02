@@ -139,14 +139,12 @@ set(SOURCES
         ../include/StrongType.h
         ../include/ipcqueue.h
         ../include/ipcmsgtypes.h
+        utils/CrashHandler.cpp
         )
 
-if (NOT WIN32 AND NOT APPLE)
-    list(APPEND SOURCES
-            utils/CrashHandler.h
-            utils/CrashHandler.cpp
-            )
-endif (NOT WIN32 AND NOT APPLE)
+if (WIN32 OR APPLE)
+    add_definitions(-DNO_CRASHHANDLER)
+endif (WIN32 OR APPLE)
 
 
 # Add msqlite

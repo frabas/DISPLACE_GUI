@@ -70,7 +70,6 @@ using namespace sqlite;
 #include <messages/genericconsolestringoutputmessage.h>
 #endif
 
-#include <biomodule.h>
 #include <biomodule2.h>
 
 #include <iomanip>

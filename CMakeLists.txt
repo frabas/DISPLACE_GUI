@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.3)
 project(displace)
 
+option(DISABLE_IPC "Disable the IPC support (gui/simulator channel)" OFF)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -29,3 +31,4 @@ add_subdirectory(commons)
 add_subdirectory(QMapControl)
 add_subdirectory(qtcommons)
 add_subdirectory(qtgui)
+add_subdirectory(simulator)

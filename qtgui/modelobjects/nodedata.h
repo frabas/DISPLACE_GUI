@@ -48,6 +48,7 @@ public:
         std::weak_ptr<NodeData> source;
         std::weak_ptr<NodeData> target;
         double weight;
+        bool highlighted = false;
     };
 
     typedef QVector<std::shared_ptr<Edge>> AdiacencyList;

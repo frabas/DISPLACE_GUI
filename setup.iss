@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Displace"
-#define MyAppVersion "0.9.11"
+#define MyAppVersion "0.9.12"
 #define MyAppPublisher "Displace Project"
 #define MyAppURL "http://www.displace-project.org"
 #define MyAppExeName "displacegui.exe"
@@ -16,8 +16,8 @@
 
 #define Build "release"
 #define QT_DEBUG ""
-#define QT_DIR "C:\Qt\5.10.0\msvc2017_64"
-#define QT_PLUGINS_DIR "C:\Qt\5.10.0\msvc2017_64\plugins"
+#define QT_DIR "C:\Qt\5.10.1\msvc2017_64"
+#define QT_PLUGINS_DIR "C:\Qt\5.10.1\msvc2017_64\plugins"
 #define SDK_DIR "install\msvc"
 
 [Setup]
@@ -70,6 +70,7 @@ Source: "{#SDK_DIR}\lib\mpir.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\boost_system-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "{#SDK_DIR}\lib\boost_thread-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SDK_DIR}\lib\boost_regex-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SDK_DIR}\lib\boost_program_options-vc140-mt-1_63.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#QT_DIR}\bin\Qt5Core{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QT_DIR}\bin\Qt5Concurrent{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -85,7 +86,7 @@ Source: "{#QT_DIR}\bin\Qt5Xml{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreve
 Source: "{#QT_PLUGINS_DIR}\platforms\qminimal{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\platforms\qwindows{#QT_DEBUG}.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: "{#QT_PLUGINS_DIR}\sqldrivers\qsqlite{#QT_DEBUG}.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion
-Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "install\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
@@ -95,5 +96,5 @@ Name: {group}\Decision Tree Editor; Filename: {app}\dtreeeditor.exe; Tasks: ; La
 Name: {group}\Time Series Editor; Filename: {app}\tsereditor.exe
 
 [Run]
-Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
+Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent

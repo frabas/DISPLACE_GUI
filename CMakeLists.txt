@@ -32,3 +32,9 @@ add_subdirectory(QMapControl)
 add_subdirectory(qtcommons)
 add_subdirectory(qtgui)
 add_subdirectory(simulator)
+
+## Tools
+
+add_subdirectory(avaifieldshuffler)
+add_subdirectory(avaifieldupdater)
+add_subdirectory(vmsmerger)

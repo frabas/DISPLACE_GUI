@@ -22,10 +22,10 @@ if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
 endif (WIN32)
 
-if (NOT APPLE)
+if (NOT APPLE AND NOT WIN32)
     list(APPEND SOURCES
             memstats.cpp)
-endif (NOT APPLE)
+endif (NOT APPLE AND NOT WIN32)
 
 if (NOT DISABLE_IPC)
     list(APPEND SOURCES

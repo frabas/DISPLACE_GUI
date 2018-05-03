@@ -6,8 +6,6 @@ find_package(Qt5Xml 5.6 REQUIRED)
 find_package(Qt5PrintSupport 5.6 REQUIRED)
 find_package(Qt5Network 5.6 REQUIRED)
 
-add_definitions(-DQTCOMMONS_LIBRARY -DQCUSTOMPLOT_COMPILE_LIBRARY)
-
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons
@@ -58,8 +56,27 @@ if (APPLE)
     link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
 endif (APPLE)
 
+set(EXTRA_LIBRARIES
+        )
 if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
+    if (CMAKE_BUILD_TYPE MATCHES Release)
+        list(APPEND EXTRA_LIBRARIES
+                CGAL-vc140-mt-4.9
+                Geographic
+                )
+    else(CMAKE_BUILD_TYPE MATCHES Release)
+        list(APPEND EXTRA_LIBRARIES
+                CGAL-vc140-mt-gd-4.9
+                Geographic_d
+                )
+    endif(CMAKE_BUILD_TYPE MATCHES Release)
+else(WIN32)
+    set(CGAL_LIB CGAL)
+    list(APPEND EXTRA_LIBRARIES
+            Geographic
+            sqlite3
+            )
 endif(WIN32)
 
 add_executable(displacegui
@@ -80,6 +97,5 @@ target_link_libraries(displacegui
         Qt5::PrintSupport
         Qt5::Network
 
-        Geographic
-        CGAL gmp sqlite3
+        ${EXTRA_LIBRARIES} gmp
         )

@@ -3,6 +3,11 @@ project(displace)
 
 option(DISABLE_IPC "Disable the IPC support (gui/simulator channel)" OFF)
 
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    message("Debug build")
+endif (CMAKE_BUILD_TYPE MATCHES Debug)
+
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -17,7 +22,12 @@ if (WIN32)
     if (NOT BOOST_ROOT)
         set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/install/msvc)
     endif (NOT BOOST_ROOT)
+
     add_definitions(-DBOOST_ALL_NO_LIB -D_WINSOCKAPI_)
+
+    if (CMAKE_BUILD_TYPE MATCHES Debug)
+        add_definitions(-D_HAS_ITERATOR_DEBUGGING=0 -D_SECURE_SCL=1 -DDEBUG)
+    endif (CMAKE_BUILD_TYPE MATCHES Debug)
 endif (WIN32)
 
 ## Common packages to all modules

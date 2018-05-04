@@ -4,6 +4,8 @@
 #include "commons_global.h"
 #include "idtypes.h"
 
+#include <functional>
+
 #include "sqlitefielddef.h"
 #include "sqlitetable.h"
 

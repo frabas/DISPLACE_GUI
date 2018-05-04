@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 
+#include<iterator>
+
 class MetadataTable;
 
 class COMMONSSHARED_EXPORT ModelMetadataAccessor

@@ -49,14 +49,14 @@ SOURCES= \
     storage/tables/vesselvmslikefpingsonlytable.cpp \
     storage/tables/funcgroupstable.cpp \
     storage/tables/shipstable.cpp \
-    diffusion.cpp \
     storage/tables/nodesenvttable.cpp \
     storage/tables/nodesstattable.cpp \
     storage/tables/nodestariffstattable.cpp \
     ../mSqliteCpp/src/sqlitetable.cpp \
     ../mSqliteCpp/src/sqlitestatement.cpp \
     ../mSqliteCpp/src/sqlitestorage.cpp \
-    ../mSqliteCpp/src/sqlitetransaction.cpp
+    ../mSqliteCpp/src/sqlitetransaction.cpp \
+    diffusion.cpp 
 
 HEADERS= \
     ../include/readdata.h \
@@ -83,6 +83,7 @@ HEADERS= \
     ../include/guiproto_struct.h \
     ../include/version.h \
     ../include/utils/make_unique.h \
+    ../include/diffusion.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \
@@ -100,8 +101,8 @@ HEADERS= \
 
 DEFINES=-DNO_IPC
 
-LIBS=-L../formats -lformats -lpthread -lsqlite3 -lrt
-CPPFLAGS=${CPPDEBUG} -O2 -std=c++14 -fpermissive ${DEFINES} -I../include -I../commons -I../formats -I. -I../sparsepp/ -I../mSqliteCpp/include/  -fpic
+LIBS=-L../formats -lformats -lpthread -lsqlite3 -lrt 
+CPPFLAGS=${CPPDEBUG} -O2 -std=c++14 -fpermissive ${DEFINES} -I${BOOST_INCLUDEDIR} -I../include -I../commons -I../formats -I. -I../sparsepp/ -I../mSqliteCpp/include/  -fpic
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

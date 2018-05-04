@@ -33,6 +33,7 @@ HEADERS= \
     ../include/options.h \
     ../include/profiler.h \
     ../include/version.h \
+    ../include/diffusion.h \
     thread_vessels.h \
     values.h \
     biomodule.h \
@@ -41,9 +42,9 @@ HEADERS= \
 
 DEFINES=-DNO_IPC
 
-LIBS=-L../commons -lcommons -L../formats -lformats -lpthread -lrt -lboost_program_options
-CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++14 -fpermissive ${DEFINES} -I../include -I../commons -I. -I../sparsepp/ -I../mSqliteCpp/include/ -I../formats
-LDFLAGS=
+LIBS=-L${BOOST_LIBRARYDIR} -L../commons -lcommons -L../formats -lformats -lpthread -lrt -lboost_program_options
+CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++14 -fpermissive ${DEFINES} -I${BOOST_INCLUDEDIR} -I../include -I../commons -I. -I../sparsepp/ -I../mSqliteCpp/include/ -I../formats
+LDFLAGS= 
 
 OBJS=$(SOURCES:.cpp=.o)
 

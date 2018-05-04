@@ -42,7 +42,7 @@ HEADERS= \
 
 DEFINES=-DNO_IPC
 
-LIBS=-L${BOOST_LIBRARYDIR} -L../commons -lcommons -L../formats -lformats -lpthread -lrt -lboost_program_options
+LIBS=-L${BOOST_LIBRARYDIR} -Wl,-rpath=${BOOST_LIBRARYDIR} -L../commons -lcommons -L../formats -lformats -lpthread -lrt -lboost_program_options
 CPPFLAGS=${CPPDEBUG} -Wall -O2 -std=c++14 -fpermissive ${DEFINES} -I${BOOST_INCLUDEDIR} -I../include -I../commons -I. -I../sparsepp/ -I../mSqliteCpp/include/ -I../formats
 LDFLAGS= 
 

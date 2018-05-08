@@ -30,6 +30,10 @@ if (WIN32)
     endif (CMAKE_BUILD_TYPE MATCHES Debug)
 endif (WIN32)
 
+if (APPLE)
+    link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
+endif (APPLE)
+
 ## Common packages to all modules
 find_package(Boost 1.55 REQUIRED)
 
@@ -48,3 +52,10 @@ add_subdirectory(simulator)
 add_subdirectory(avaifieldshuffler)
 add_subdirectory(avaifieldupdater)
 add_subdirectory(vmsmerger)
+
+## Gui TOOLS
+
+add_subdirectory(dteditor)
+add_subdirectory(objeditor)
+add_subdirectory(tseditor)
+add_subdirectory(scheduler)

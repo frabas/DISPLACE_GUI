@@ -52,10 +52,6 @@ file(GLOB HEADERS *.h
 file(GLOB UIS *.ui dialogs/*.ui R/*.ui mapobjects/*.ui )
 file(GLOB QRCS *.qrc)
 
-if (APPLE)
-    link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
-endif (APPLE)
-
 set(EXTRA_LIBRARIES
         )
 if (WIN32)

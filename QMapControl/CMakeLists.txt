@@ -14,10 +14,6 @@ file(GLOB SOURCES QMapControl/src/QMapControl/*.cpp)
 
 set(GDAL_LIBRARY gdal)
 
-if (APPLE)
-    link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
-endif (APPLE)
-
 if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
     set(GDAL_LIBRARY gdal_i)

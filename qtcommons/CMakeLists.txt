@@ -19,10 +19,6 @@ file(GLOB HEADERS *.h
 
 file(GLOB QRCS *.qrc)
 
-if (APPLE)
-    link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)
-endif (APPLE)
-
 add_library(qtcommons SHARED
         ${SOURCES} ${HEADERS}
         ${UIS} ${QRCS}

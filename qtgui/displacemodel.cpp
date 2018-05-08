@@ -255,7 +255,7 @@ bool DisplaceModel::loadDatabase(QString path)
         return false;
 
     ModelMetadataAccessor accessor (mOutSqlite->metadata());
-    mConfig.setNbpops(mOutSqlite->getNbPops());
+    mConfig.setNbpops(accessor.nbPops());
     mConfig.setSzGroups(accessor.nbSize());
     mConfig.setNbbenthospops(accessor.nbBenthos());
     mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));

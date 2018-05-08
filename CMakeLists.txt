@@ -59,3 +59,9 @@ add_subdirectory(dteditor)
 add_subdirectory(objeditor)
 add_subdirectory(tseditor)
 add_subdirectory(scheduler)
+
+## Test
+
+add_subdirectory(tests)
+add_subdirectory(commons/commons_tests)
+

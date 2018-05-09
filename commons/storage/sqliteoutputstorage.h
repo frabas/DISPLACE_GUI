@@ -94,7 +94,7 @@ public:
     TimelineData getVesselLoglikeDataByMetier(displace::plot::MetiersStat stattype, int metierid, Operation op);
     TimelineData getPopulationStatData(displace::plot::PopulationStat stat, displace::plot::AggregationType aggtype, int popid, int grpid);
     TimelineData getBenthosStatData(displace::plot::BenthosStat stattype, displace::plot::AggregationType aggtype, int grpid, const std::vector<int> &btype);
-    TimelineData getShipsStatData(displace::plot::ShipsStat stattype);
+    TimelineData getShipsStatData(displace::plot::ShipsStat stattype, displace::plot::AggregationType aggtype, int shipid, std::vector<int> shiptypeid);
 
     size_t getNbPops();
 

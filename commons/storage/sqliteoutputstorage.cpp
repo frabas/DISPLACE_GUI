@@ -710,9 +710,9 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getShipsStatData(ShipsStat stattype)
+TimelineData SQLiteOutputStorage::getShipsStatData(ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)
 {
-    return p->mShipsTable->getShipsStatData (stattype);
+    return p->mShipsTable->getShipsStatData (stattype,aggtype, shipid, shiptypeid);
 }
 
 size_t SQLiteOutputStorage::getNbPops()

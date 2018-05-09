@@ -34,9 +34,13 @@ public:
     void update(DisplaceModel *model, displace::plot::ShipsStat stat);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
-    double getStatValue(DisplaceModel *model, int tstep, int shipid, int shiptypeid, displace::plot::ShipsStat stattype);
+//    double getStatValue(DisplaceModel *model, displace::plot::ShipsStat stattype, displace::plot::AggregationType aggtype, int shipid, std::vector<int> shiptypeid);
     void saveTo();
-    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::ShipsStat stat);
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model,
+                                                        displace::plot::ShipsStat stattype,
+                                                        displace::plot::AggregationType aggtype,
+                                                        int shipid,
+                                                        std::vector<int> shiptypeid);
 };
 
 

@@ -86,7 +86,7 @@ void VesselVmsLikeFPingsOnlyTable::create()
                                 "TStepDep INTEGER NOT NULL,"
                                 "NodeId   INTEGER NOT NULL,"
                                 "PopId    INTEGER NOT NULL,"
-                                "CONSTRAINT keyIdStep PRIMARY KEY (Id,TStep,PopId) "
+                                "CONSTRAINT keyIdStep PRIMARY KEY (Id,NodeId,PopId) ON CONFLICT REPLACE"
                                ");");
         stmt.execute();
     }

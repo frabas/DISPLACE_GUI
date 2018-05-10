@@ -29,9 +29,13 @@ public:
 
     struct Log {
         int id;
-        int tstep, tstep_dep;
-        //double p_long, p_lat, p_course, cum_fuel;
-        int nodeid, popid;
+        int month;
+        int tstep;
+        int tstep_dep;
+        int nodeid;
+        int popid;
+        int szGroup;
+        double catches;
     };
 
     void insertLog (const Log &log);

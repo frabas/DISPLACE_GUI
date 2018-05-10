@@ -2054,6 +2054,11 @@ multimap<int, double> read_init_pops_per_szgroup(string folder_name_parameteriza
     file_init_pops_per_szgroup.open(filename.c_str());
     if(file_init_pops_per_szgroup.fail())
     {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_pops_per_szgroup_biolsce1.dat";
+        file_init_pops_per_szgroup.open(filename.c_str());
+    }
+    if(file_init_pops_per_szgroup.fail())
+    {
         cout << "Unfortunately the init_pops_per_szgroup_biolsceXX.dat vector is not informed " << endl;
         cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
@@ -2090,6 +2095,11 @@ multimap<int, double> read_init_prop_migrants_pops_per_szgroup(string folder_nam
     //input data, pop characteristics: initial prop migrants
     ifstream file_init_prop_migrants_pops_per_szgroup;
     file_init_prop_migrants_pops_per_szgroup.open(filename.c_str());
+    if(file_init_prop_migrants_pops_per_szgroup.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_prop_migrants_pops_per_szgroup_biolsce1.dat";
+        file_init_prop_migrants_pops_per_szgroup.open(filename.c_str());
+    }
     if(file_init_prop_migrants_pops_per_szgroup.fail())
     {
         cout << "Unfortunately the init_prop_migrants_pops_per_szgroup_biolsceXX.dat vector is not informed " << endl;
@@ -2134,6 +2144,11 @@ multimap<int, double> read_init_maturity_per_szgroup(string folder_name_paramete
     file_init_maturity_per_szgroup.open(filename.c_str());
     if(file_init_maturity_per_szgroup.fail())
     {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_maturity_per_szgroup_biolsce1.dat";
+        file_init_maturity_per_szgroup.open(filename.c_str());
+    }
+    if(file_init_maturity_per_szgroup.fail())
+    {
         cout << "Unfortunately the init_maturity_per_szgroup_biolsceXX.dat vector is not informed " << endl;
         cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
@@ -2169,6 +2184,11 @@ multimap<int, double> read_init_fecundity_per_szgroup(string folder_name_paramet
     file_init_fecundity_per_szgroup.open(filename.c_str());
     if(file_init_fecundity_per_szgroup.fail())
     {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_fecundity_per_szgroup_biolsce1.dat";
+        file_init_fecundity_per_szgroup.open(filename.c_str());
+    }
+    if(file_init_fecundity_per_szgroup.fail())
+    {
         cout << "Unfortunately the init_fecundity_per_szgroup_biolsceXX.dat vector is not informed " << endl;
         cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
@@ -2202,6 +2222,11 @@ multimap<int, double> read_init_weight_per_szgroup(string folder_name_parameteri
     //input data, pop characteristics: weight_at_szgroup
     ifstream file_init_weight_per_szgroup;
     file_init_weight_per_szgroup.open(filename.c_str());
+    if(file_init_weight_per_szgroup.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_weight_per_szgroup_biolsce1.dat";
+        file_init_weight_per_szgroup.open(filename.c_str());
+    }
     if(file_init_weight_per_szgroup.fail())
     {
         cout << "Unfortunately the init_weight_per_szgroup_biolsceXX.dat vector is not informed " << endl;
@@ -2274,6 +2299,11 @@ multimap<int, double> read_init_M_per_szgroup(string folder_name_parameterizatio
     file_init_M_per_szgroup.open(filename.c_str());
     if(file_init_M_per_szgroup.fail())
     {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_M_per_szgroup_biolsce1.dat";
+        file_init_M_per_szgroup.open(filename.c_str());
+    }
+    if(file_init_M_per_szgroup.fail())
+    {
         cout << "Unfortunately the init_M_per_szgroup_biolsceXX.dat vector is not informed " << endl;
         cout << "You´ll have to stop the simu, correct input and re-run. " << endl;
         open_file_error(filename.c_str());
@@ -2307,6 +2337,11 @@ multimap<int, double> read_init_proprecru_per_szgroup(string folder_name_paramet
     //input data, pop characteristics: weight_at_szgroup
     ifstream file_init_proprecru_per_szgroup;
     file_init_proprecru_per_szgroup.open(filename.c_str());
+    if(file_init_proprecru_per_szgroup.fail())
+    {
+        filename=  inputfolder+"/popsspe_"+folder_name_parameterization+"/init_proprecru_per_szgroup_biolsce1.dat";
+        file_init_proprecru_per_szgroup.open(filename.c_str());
+    }
     if(file_init_proprecru_per_szgroup.fail())
     {
         cout << "Unfortunately the init_proprecru_per_szgroup_biolsceXX.dat vector is not informed " << endl;
@@ -2533,6 +2568,12 @@ multimap<int, double> read_overall_migration_fluxes(string a_semester, int a_pop
 
     ifstream file_overall_migration_fluxes;
     file_overall_migration_fluxes.open(filename.c_str());
+    if(file_overall_migration_fluxes.fail())
+    {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/"+a_pop_s+"overall_migration_fluxes_"+a_semester+"_biolsce1.dat";
+        file_overall_migration_fluxes.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
     if(file_overall_migration_fluxes.fail())
     {
         cout << "Unfortunately the overall_migration_fluxes_ vector is not informed for stock "<< a_pop_s << endl;
@@ -2762,6 +2803,12 @@ vector< vector<double> > read_percent_szgroup_per_age_matrix(int a_pop, int nbsz
     file_percent_szgroup_per_age_matrix.open(filename.c_str());
     if(file_percent_szgroup_per_age_matrix.fail())
     {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_percent_szgroup_per_age_biolsce1.dat";
+        file_percent_szgroup_per_age_matrix.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
+    if(file_percent_szgroup_per_age_matrix.fail())
+    {
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2786,6 +2833,12 @@ vector< vector<double> > read_percent_age_per_szgroup_matrix(int a_pop, int nbsz
 
     ifstream file_percent_age_per_szgroup_matrix;
     file_percent_age_per_szgroup_matrix.open(filename.c_str());
+    if(file_percent_age_per_szgroup_matrix.fail())
+    {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_percent_age_per_szgroup_biolsce1.dat";
+        file_percent_age_per_szgroup_matrix.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
     if(file_percent_age_per_szgroup_matrix.fail())
     {
         open_file_error(filename.c_str());
@@ -2814,6 +2867,12 @@ vector< vector<double> > read_growth_transition_matrix(int a_pop, int nbszgroup,
     file_size_transition_matrix.open(filename.c_str());
     if(file_size_transition_matrix.fail())
     {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_size_transition_matrix_biolsce1.dat";
+        file_size_transition_matrix.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
+    if(file_size_transition_matrix.fail())
+    {
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2840,6 +2899,12 @@ vector< vector<double> > read_preferences_for_species_matrix(int a_pop, int nbpo
     file_preferences_for_species.open(filename.c_str());
     if(file_preferences_for_species.fail())
     {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "preferences_for_species_matrix_biolsce1.dat";
+        file_preferences_for_species.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
+    if(file_preferences_for_species.fail())
+    {
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2861,6 +2926,12 @@ vector< vector<double> > read_species_interactions_mortality_proportion_matrix(i
 
     ifstream file_species_interactions;
     file_species_interactions.open(filename.c_str());
+    if(file_species_interactions.fail())
+    {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/species_interactions_mortality_proportion_matrix_biolsce1.dat";
+        file_species_interactions.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
     if(file_species_interactions.fail())
     {
         open_file_error(filename.c_str());
@@ -2920,6 +2991,12 @@ vector<double>  read_param_sr(int a_pop,  string folder_name_parameterization, s
     file_param_sr.open(filename.c_str());
     if(file_param_sr.fail())
     {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_SSB_R_parameters_biolsce1.dat";
+        file_param_sr.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
+    }
+    if(file_param_sr.fail())
+    {
         open_file_error(filename.c_str());
         // return 1;
     }
@@ -2965,15 +3042,16 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
     out << a_pop;
     string a_pop_s = out.str();
 
-    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent"+biolsce+".dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent_biolsce"+biolsce+".dat";
 
     ifstream file_fbar_ages_min_max;
     file_fbar_ages_min_max.open(filename.c_str());
     if(file_fbar_ages_min_max.fail())
     {
         filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent.dat";
+        file_fbar_ages_min_max.open(filename.c_str());
+        cout << "biolsce ignored for " << filename  << endl;
     }
-    file_fbar_ages_min_max.open(filename.c_str());
     if(file_fbar_ages_min_max.fail())
     {
         open_file_error(filename.c_str());

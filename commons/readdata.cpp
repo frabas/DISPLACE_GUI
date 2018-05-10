@@ -2958,21 +2958,25 @@ vector<double>  read_initial_tac(int a_pop,  string folder_name_parameterization
 }
 
 
-vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name_parameterization, string inputfolder)
+vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce)
 {
     // casting a_pop into a string
     stringstream out;
     out << a_pop;
     string a_pop_s = out.str();
 
-    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent.dat";
+    string filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent"+biolsce+".dat";
 
     ifstream file_fbar_ages_min_max;
     file_fbar_ages_min_max.open(filename.c_str());
     if(file_fbar_ages_min_max.fail())
     {
+        filename = inputfolder+"/popsspe_"+folder_name_parameterization+"/" + a_pop_s + "spe_fbar_amin_amax_ftarget_Fpercent_TACpercent.dat";
+    }
+    file_fbar_ages_min_max.open(filename.c_str());
+    if(file_fbar_ages_min_max.fail())
+    {
         open_file_error(filename.c_str());
-        // return 1;
     }
     // i.e. 6 columns: F min age, F max age, LTMP ftarget, Fpercent, TACpercent, Btrigger, F-MSY value
     vector<double> fbar_ages_min_max(7);

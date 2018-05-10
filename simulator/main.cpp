@@ -2283,7 +2283,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, fbar ages
-        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder);
+        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, initial tac
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);

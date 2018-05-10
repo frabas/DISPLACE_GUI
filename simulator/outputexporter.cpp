@@ -77,8 +77,8 @@ void OutputExporter::exportVmsLikeSQLite(unsigned int tstep, Vessel *vessel)
 
 void OutputExporter::exportVmsLikeFPingsOnly(unsigned int tstep, Vessel *vessel,  const std::vector<Population *> &populations, vector<int> &implicit_pops)
 {
-   // if (useSql)
-   //     exportVmsLikeFPingsOnlySQLite(tstep, vessel, populations, implicit_pops);
+    if (useSql)
+        exportVmsLikeFPingsOnlySQLite(tstep, vessel, populations, implicit_pops);
     if (usePlainText)
         exportVmsLikeFPingsOnlyPlaintext(tstep, vessel, populations, implicit_pops);
 }

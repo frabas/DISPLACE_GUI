@@ -3,6 +3,7 @@
 #include "insertstatement.h"
 #include "selectstatement.h"
 #include "createstatement.h"
+#include "deletestatement.h"
 #include "clauses.h"
 
 #include <sqlitefieldsop.h>
@@ -47,6 +48,8 @@ struct VesselVmsLikeFPingsOnlyTable::Impl
     > selectStatement;
     Where<decltype(fldTStep)> where;
 
+    DeleteStatement deleteStatement;
+    Where<decltype(fldMonth)> deleteStatementWhere;
 
     Impl(std::shared_ptr<sqlite::SQLiteStorage> mydb, std::string myname)
         : db(mydb), name(myname),
@@ -94,6 +97,11 @@ VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlit
     p->where.attach(p->selectStatement.getStatement(), op::eq(p->fldId));
 
     p->selectStatement.prepare();
+
+    p->deleteStatementWhere.attach(p->deleteStatement.getStatement(), op::eq(p->fldMonth));
+    p->deleteStatement.attach(db, name);
+    p->deleteStatement.where(p->deleteStatementWhere);
+    p->deleteStatement.prepare();
 }
 
 VesselVmsLikeFPingsOnlyTable::~VesselVmsLikeFPingsOnlyTable() noexcept = default;
@@ -146,6 +154,12 @@ void VesselVmsLikeFPingsOnlyTable::queryAllVesselsAtStep(int tstep, std::functio
             return op(l);
         return false;
     });
+}
+
+void VesselVmsLikeFPingsOnlyTable::deleteAllVesselsBeforeMonth(int month)
+{
+    p->deleteStatementWhere.bind(month);
+    p->deleteStatement.exec();
 }
 
 

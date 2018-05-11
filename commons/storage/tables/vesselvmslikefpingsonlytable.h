@@ -40,6 +40,7 @@ public:
 
     void insertLog (const Log &log);
     void queryAllVesselsAtStep (int tstep, std::function<bool(const Log &)>);
+    void deleteAllVesselsBeforeMonth (int month);
 };
 
 #endif // VESSELVMSLIKEFPINGSONLYTABLE_H

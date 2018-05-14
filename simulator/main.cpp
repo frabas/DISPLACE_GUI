@@ -23,6 +23,7 @@
 #include "sqlitestorage.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
+#include "storage/tables/vesselvmslikefpingsonlytable.h"
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
@@ -5789,7 +5790,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 {
                    if (LastMonth < CurrentMonth)
                    {
-                       OutputExporter::instance().mSqlDb->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth (CurrentMonth);
+                       if (enable_sqlite_out) {
+                          outSqlite->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth (CurrentMonth);
+                       }
                        LastMonth = CurrentMonth;
                    }
                 }

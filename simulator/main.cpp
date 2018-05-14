@@ -4360,10 +4360,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         dout(cout  << "RE-READ DATA----------" << endl);
 
+        int LastMonth=-1;
+        int CurrentMonth=0;
 
         // RE-READ DATA FOR EVENT => change of month
         if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
+            CurrentMonth+=1;
 
             count_months+=1;
             a_month_i = count_months % 12;
@@ -5782,6 +5785,15 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
             {
+                if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+                {
+                   if (LastMonth < CurrentMonth)
+                   {
+                       OutputExporter::instance().mSqlDb->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth (CurrentMonth);
+                       LastMonth = CurrentMonth;
+                   }
+                }
+
                   OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
                   vessels[ listVesselIdForVmsLikeFPingsOnlyToExport.at(idx) ]->clear_ping_catch_pop_at_szgroup();
             }
@@ -5790,7 +5802,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
             {
-                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                  //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                  OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
                  vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
             }

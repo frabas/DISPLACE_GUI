@@ -4131,6 +4131,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //----------------------//
     //----------------------//
 
+    int LastMonth=-1;
+    int CurrentMonth=0;
+
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
 
@@ -4360,9 +4363,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
         dout(cout  << "RE-READ DATA----------" << endl);
-
-        int LastMonth=-1;
-        int CurrentMonth=0;
 
         // RE-READ DATA FOR EVENT => change of month
         if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))

@@ -98,7 +98,7 @@ VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlit
 
     p->selectStatement.prepare();
 
-    p->deleteStatementWhere.attach(p->deleteStatement.getStatement(), op::eq(p->fldMonth));
+    p->deleteStatementWhere.attach(p->deleteStatement.getStatement(), op::lt(p->fldMonth));
     p->deleteStatement.attach(db, name);
     p->deleteStatement.where(p->deleteStatementWhere);
     p->deleteStatement.prepare();

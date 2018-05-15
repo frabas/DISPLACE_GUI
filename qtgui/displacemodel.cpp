@@ -38,6 +38,7 @@
 #include <QtDebug>
 
 #include "storage/sqliteoutputstorage.h"
+#include "sqlitestorage.h"
 
 const char *FLD_TYPE ="type";
 const char *FLD_NODEID="nodeid";
@@ -249,30 +250,34 @@ bool DisplaceModel::loadDatabase(QString path)
 {
     if (mModelType != EmptyModelType)
         return false;
+    try {
+        setSimulationSqlStorage(path);
+        if (mOutSqlite->isOutdated())
+            return false;
 
-    setSimulationSqlStorage(path);
-    if (mOutSqlite->isOutdated())
+        ModelMetadataAccessor accessor (mOutSqlite->metadata());
+        mConfig.setNbpops(accessor.nbPops());
+        mConfig.setSzGroups(accessor.nbSize());
+        mConfig.setNbbenthospops(accessor.nbBenthos());
+        mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));
+
+        mLastStep = accessor.lastTStep();
+        auto nl = mOutSqlite->getNationsList();
+        mNations.clear();
+        for (auto n : nl)
+            mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
+
+        mModelType = ModelType::OfflineModelType;
+
+        loadNodesFromDb();
+        loadVesselsFromDb();
+        initBenthos();
+
+        setCurrentStep(mLastStep);
+    } catch (sqlite::SQLiteException &x) {
+        qWarning() << "Error loading db: " << x.what();
         return false;
-
-    ModelMetadataAccessor accessor (mOutSqlite->metadata());
-    mConfig.setNbpops(accessor.nbPops());
-    mConfig.setSzGroups(accessor.nbSize());
-    mConfig.setNbbenthospops(accessor.nbBenthos());
-    mCalendar = std::shared_ptr<Calendar> (Calendar::build(mOutSqlite));
-
-    mLastStep = accessor.lastTStep();
-    auto nl = mOutSqlite->getNationsList();
-    mNations.clear();
-    for (auto n : nl)
-        mNations.push_back(std::make_shared<NationData>(QString::fromStdString(n)));
-
-    mModelType = ModelType::OfflineModelType;
-
-    loadNodesFromDb();
-    loadVesselsFromDb();
-    initBenthos();
-
-    setCurrentStep(mLastStep);
+    }
     return true;
 }
 

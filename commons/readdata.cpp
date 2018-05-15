@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 // --------------------------------------------------------------------------
 
-#include"readdata.h"
+#include "readdata.h"
 #include <helpers.h>
 #include <idtypes.h>
 #include <idtypeshelpers.h>
@@ -3148,8 +3148,8 @@ PathShop read_graph_details(types::NodeId source, string namesimu,  string input
     string filename_weight= inputfolder+"/shortPaths_"+namesimu+"_"+a_graph_name+"/min_distance_"+source_s2+".bin";
 
     try{
-    PathShop a_shop=    PathShop::readFromFiles(filename_previous, filename_weight);
-        return a_shop;
+     return   PathShop::readFromFiles(filename_previous, filename_weight);
+    //    return a_shop;
     } catch (std::exception &x) {
         cout << " for node " << source_s1 << "," << endl;
         cerr << " Error in reading graphsspe\\shortPaths_ .bin files : " << x.what() << endl;

@@ -28,7 +28,7 @@
 #include <Metier.h>
 #include <Population.h>
 
-const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 2;
+const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 3;
 
 using namespace sqlite;
 using namespace displace::plot;

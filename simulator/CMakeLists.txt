@@ -2,6 +2,8 @@ find_package(Boost REQUIRED
         COMPONENTS program_options
         )
 
+add_definitions(-DBOOST_PROGRAM_OPTIONS_DYN_LINK)
+
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/commons

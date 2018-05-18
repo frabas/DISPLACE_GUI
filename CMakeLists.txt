@@ -18,17 +18,24 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+add_definitions(-DBOOST_ALL_NO_LIB)
+
 if (WIN32)
     if (NOT BOOST_ROOT)
         set(BOOST_ROOT ${CMAKE_SOURCE_DIR}/install/msvc)
     endif (NOT BOOST_ROOT)
 
-    add_definitions(-DBOOST_ALL_NO_LIB -D_WINSOCKAPI_)
+    add_definitions(-D_WINSOCKAPI_)
 
     if (CMAKE_BUILD_TYPE MATCHES Debug)
         add_definitions(-D_HAS_ITERATOR_DEBUGGING=1 -D_ITERATOR_DEBUG_LEVEL=2 -DDEBUG)
     endif (CMAKE_BUILD_TYPE MATCHES Debug)
 endif (WIN32)
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")     # Visual studio
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+endif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 
 if (APPLE)
     link_directories(/Library/Frameworks/GDAL.framework/unix/lib/)

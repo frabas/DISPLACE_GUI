@@ -375,6 +375,16 @@ OTHER_FILES += \
     ../docs/input_fileformats.txt \
     ../Doxyfile \
     palettes/tariffs_colors.p2c \
+    palettes/benthos_colors.p2c \
+    palettes/bathy_fishfarms.p2c \
+    palettes/bathy_colors.p2c \
+    palettes/nitrogen_colors.p2c \
+    palettes/phosphorus_colors.p2c \
+    palettes/oxygen_colors.p2c \
+    palettes/dissolvedcarbon_colors.p2c \
+    palettes/salinity_colors.p2c \
+    palettes/sst_colors.p2c \
+    palettes/wind_colors.p2c \
     extra/displace.desktop \
     icons/displace.icns \
     resources/Info.plist
@@ -396,4 +406,4 @@ icons.files=icons/displace.png
 INSTALLS += target icons extra
 
 DISTFILES += \
-    palettes/benthos_colors.p2c
+

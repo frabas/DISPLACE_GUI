@@ -5,6 +5,8 @@
 #include "idtypes.h"
 #include "modeltypes.h"
 
+#include <functional>
+
 #include "sqlitefielddef.h"
 #include "sqlitetable.h"
 using namespace sqlite;

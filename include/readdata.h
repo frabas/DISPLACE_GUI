@@ -277,7 +277,7 @@ vector< vector<double> > COMMONSSHARED_EXPORT read_preferences_for_species_matri
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_age_per_szgroup_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector< vector<double> > COMMONSSHARED_EXPORT read_percent_szgroup_per_age_matrix(int a_pop, int nbszgroup, int nbage, string folder_name_parameterization, string inputfolder, string biolsce);
 vector<double> COMMONSSHARED_EXPORT read_param_sr(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce);
-vector<double> COMMONSSHARED_EXPORT read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name_parameterization, string inputfolder);
+vector<double> COMMONSSHARED_EXPORT read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_name_parameterization, string inputfolder, string biolsce);
 vector<double> COMMONSSHARED_EXPORT read_initial_tac(int a_pop,  string folder_name_parameterization, string inputfolder);
 map<int, int> COMMONSSHARED_EXPORT read_tac_percent_simulated(string folder_name_parameterization, string inputfolder);
 map<int, double> COMMONSSHARED_EXPORT read_hyperstability_param(string folder_name_parameterization, string inputfolder);

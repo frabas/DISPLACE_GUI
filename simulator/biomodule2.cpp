@@ -87,6 +87,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           ofstream &popnodes_inc,
                           ofstream &popnodes_impact,
                           ofstream &popnodes_cumulcatches_per_pop,
+                          ofstream &nodes_envt,
                           ofstream &popnodes_cumftime,
                           ofstream &popnodes_cumsweptarea,
                           ofstream &popnodes_cumcatches,
@@ -107,6 +108,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
                           const string & popnodes_end_filename,
                           const string & popnodes_impact_filename,
                           const string & popnodes_cumulcatches_per_pop_filename,
+                          const string & nodes_envt_filename,
                           const string & popnodes_cumftime_filename,
                           const string & popnodes_cumsweptarea_filename,
                           const string & popnodes_cumcatches_filename,
@@ -939,6 +941,10 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
         popnodes_cumulcatches_per_pop.flush();
         guiSendUpdateCommand(popnodes_cumulcatches_per_pop_filename, tstep);
+
+        nodes_envt.flush();
+        guiSendUpdateCommand(nodes_envt_filename, tstep);
+
 
         benthosbiomassnodes.flush();
         guiSendUpdateCommand(popnodes_benthos_biomass_filename, tstep);

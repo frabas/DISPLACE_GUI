@@ -20,12 +20,16 @@ ShipsStatsPlot::ShipsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
 void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat)
 {
     mPlot->clearGraphs();
-    double val;
 
     QList<int>  interShipsIDsList= model->getInterestingShips();
 
     auto shipsTypeGroups = model->getShipsTypesList();
     QList<int> interShipsTypesList = shipsTypeGroups->list();
+
+    std::vector<int> shptype;
+    for (auto i : interShipsIDsList) {
+        shptype.push_back(model->getShipsTypesList()->list()[i]);
+    }
 
     QList<int> graphList;
     bool showtotal = shipsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Total);
@@ -98,22 +102,28 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
             group = QString("Type %1").arg(grp);
         }
 
+        AggregationType aggtype = AggregationType::None;
+
         switch (graphList[igraph] / 1000) {
         case 4:
             graph->setName(QString(QObject::tr("ship id %1 Max")).arg(group));
+            aggtype = AggregationType::Max;
             break;
         case 3:
             graph->setName(QString(QObject::tr("ship id %1 Min")).arg(group));
+            aggtype = AggregationType::Min;
             break;
         case 2:
             graph->setName(QString(QObject::tr("ship id %1 Avg")).arg(group));
+            aggtype = AggregationType::Avg;
             break;
         case 1:
             graph->setName(QString(QObject::tr("ship id %1 Total")).arg(group));
+            aggtype = AggregationType::Sum;
             break;
         }
 
-        auto v = getData(model, stat);
+        auto v = getData(model, stat,aggtype, grp, shptype);
         graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
     }
@@ -204,22 +214,31 @@ void ShipsStatsPlot::saveTo()
     mSaveFilename = "Ships.txt";
 }
 
-std::tuple<QVector<double>, QVector<double> > ShipsStatsPlot::getData(DisplaceModel *model, ShipsStat stat)
+std::tuple<QVector<double>, QVector<double> > ShipsStatsPlot::getData(DisplaceModel *model, displace::plot::ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
     TimelineData dt;
-    dt = db->getShipsStatData(stat);
+    dt = db->getShipsStatData(stattype, aggtype, shipid, shiptypeid);
     //stats::runningSum(dt.v);
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
 }
 
-double ShipsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int shipid, int shiptypeid, displace::plot::ShipsStat stattype)
+#if 0
+double ShipsStatsPlot::getStatValue(DisplaceModel *model, displace::plot::ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)
 {
+    auto db = model->getOutputStorage();
+    if (db == nullptr)
+        return std::tuple<QVector<double>, QVector<double>>();
+
+    TimelineData dt;
+
+    db->getShipsStatData(tstep, shipid, shiptypeid), stattype;
+
     switch (stattype) {
     case ShipsStat::SH_NbTransportedUnits:
         return model->getShipsStatistics().getValue(tstep).NbTransportedUnitsForShipAndShipGroup(shipid, shiptypeid);
@@ -247,3 +266,4 @@ double ShipsStatsPlot::getStatValue(DisplaceModel *model, int tstep, int shipid,
 
     return 0;
 }
+#endif

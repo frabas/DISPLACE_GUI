@@ -2,52 +2,94 @@
 
 #include "insertstatement.h"
 #include "selectstatement.h"
+#include "createstatement.h"
+#include "deletestatement.h"
 #include "clauses.h"
+
 #include <sqlitefieldsop.h>
 
 struct VesselVmsLikeFPingsOnlyTable::Impl
 {
-    FieldDef<FieldType::Integer> fldId = makeFieldDef("Id", FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldTStepDep = makeFieldDef("TStepDep",FieldType::Integer()).notNull();
-    //const FieldDef<FieldType::Real> fldPosLong = makeFieldDef("Long", FieldType::Real()).notNull();
-    //const FieldDef<FieldType::Real> fldPosLat = makeFieldDef("Lat", FieldType::Real()).notNull();
-    //const FieldDef<FieldType::Real> fldCourse = makeFieldDef("Course", FieldType::Real()).notNull();
-    //const FieldDef<FieldType::Real> fldCumFuel = makeFieldDef("CumFuel", FieldType::Real()).notNull();
-    FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId", FieldType::Integer()).notNull();
-    FieldDef<FieldType::Integer> fldPopId = makeFieldDef("PopId", FieldType::Integer()).notNull();
+    std::shared_ptr<sqlite::SQLiteStorage> db;
+    std::string name;
+
+    FieldDef<FieldType::Integer> fldId {"VesselId", NotNull };
+    FieldDef<FieldType::Integer> fldTStep { "TStep", NotNull };
+    FieldDef<FieldType::Integer> fldMonth {"Month", NotNull };
+    FieldDef<FieldType::Integer> fldTStepDep { "TStepDep", NotNull };
+    FieldDef<FieldType::Integer> fldNodeId { "NodeId", NotNull };
+    FieldDef<FieldType::Integer> fldPopId { "PopId", NotNull };
+    FieldDef<FieldType::Integer> fldSzGroupId { "SzGrpId", NotNull };
+    FieldDef<FieldType::Real> fldCatches { "Catches", NotNull };
 
     std::mutex mutex;
     bool init = false;
 
-    InsertStatement<decltype(fldId),
+    InsertStatement<
+                decltype(fldId),
                 decltype(fldTStep),
-                decltype(fldTStepDep),
-                decltype(fldNodeId),
-                decltype(fldPopId)> insertStatement;
-    SelectStatement<decltype(fldId),
-                decltype(fldTStep),
+                decltype(fldMonth),
                 decltype(fldTStepDep),
                 decltype(fldNodeId),
                 decltype(fldPopId),
-                decltype(fldTStep)>
-        selectStatement;
+                decltype(fldSzGroupId),
+                decltype(fldCatches)
+    > insertStatement;
+    SelectStatement<
+                decltype(fldId),
+                decltype(fldTStep),
+                decltype(fldMonth),
+                decltype(fldTStepDep),
+                decltype(fldNodeId),
+                decltype(fldPopId),
+                decltype(fldSzGroupId),
+                decltype(fldCatches),
+                decltype(fldTStep)
+    > selectStatement;
     Where<decltype(fldTStep)> where;
 
+    DeleteStatement deleteStatement;
+    Where<decltype(fldMonth)> deleteStatementWhere;
 
-    Impl()
-        : insertStatement(fldId, fldTStep, fldTStepDep,
-                          fldNodeId, fldPopId),
-          selectStatement(fldId, fldTStep, fldTStepDep,
-                          fldNodeId, fldPopId, op::max(fldTStep))
+    Impl(std::shared_ptr<sqlite::SQLiteStorage> mydb, std::string myname)
+        : db(mydb), name(myname),
+          insertStatement(fldId, fldTStep, fldMonth, fldTStepDep,
+                          fldNodeId, fldPopId, fldSzGroupId, fldCatches),
+          selectStatement(fldId, fldTStep, fldMonth, fldTStepDep,
+                          fldNodeId, fldPopId, fldSzGroupId,fldCatches, op::max(fldTStep))
     {
 
+    }
+
+    Impl &create () {
+        std::cout << " REAL CREATE\n";
+        CreateTableStatement<
+                decltype(fldId),
+                decltype(fldTStep),
+                decltype(fldMonth),
+                decltype(fldTStepDep),
+                decltype(fldNodeId),
+                decltype(fldPopId),
+                decltype(fldSzGroupId),
+                decltype(fldCatches)
+           > create (fldId, fldTStep, fldMonth, fldTStepDep,
+                     fldNodeId, fldPopId, fldSzGroupId, fldCatches);
+
+        create.attach(db, name);
+
+        statements::CreateTable::TableConstraint::PrimaryKey primaryKey(
+                    "unpk", fldId, fldNodeId, fldPopId, fldSzGroupId);
+        create.setTableConstraint(primaryKey.toString() + " ON CONFLICT REPLACE");
+        create.execute();
+
+        return *this;
     }
 };
 
 VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
-    : SQLiteTable(db, name), p(std::make_unique<Impl>())
+    : SQLiteTable(db, name), p(std::make_unique<Impl>(db,name))
 {
+    std::cout << " ---- Create constructor\n";
     create();
     p->insertStatement.replaceOnConflict();
     p->insertStatement.attach(db,name);
@@ -55,6 +97,11 @@ VesselVmsLikeFPingsOnlyTable::VesselVmsLikeFPingsOnlyTable(std::shared_ptr<sqlit
     p->where.attach(p->selectStatement.getStatement(), op::eq(p->fldId));
 
     p->selectStatement.prepare();
+
+    p->deleteStatementWhere.attach(p->deleteStatement.getStatement(), op::lt(p->fldMonth));
+    p->deleteStatement.attach(db, name);
+    p->deleteStatement.where(p->deleteStatementWhere);
+    p->deleteStatement.prepare();
 }
 
 VesselVmsLikeFPingsOnlyTable::~VesselVmsLikeFPingsOnlyTable() noexcept = default;
@@ -69,26 +116,7 @@ void VesselVmsLikeFPingsOnlyTable::dropAndCreate()
 void VesselVmsLikeFPingsOnlyTable::create()
 {
     if (!db()->tableExists(name())) {
-        /*
-        auto def = std::make_tuple (
-                    p->fldId, p->fldTStep, p->fldTStepDep,
-                    //fldPosLong, fldPosLat, fldCourse,
-                    //fldCumFuel,
-                    p->fldNodeId,
-                    p->fldPopId
-                    );
-
-        SQLiteTable::create(def);*/
-        SQLiteStatement stmt (db(),
-                              "CREATE TABLE VesselVmsFPingsOnlyLike ("
-                                "Id       INTEGER NOT NULL,"
-                                "TStep    INTEGER NOT NULL,"
-                                "TStepDep INTEGER NOT NULL,"
-                                "NodeId   INTEGER NOT NULL,"
-                                "PopId    INTEGER NOT NULL,"
-                                "CONSTRAINT keyIdStep PRIMARY KEY (Id,TStep,PopId) "
-                               ");");
-        stmt.execute();
+        p->create();
     }
 }
 
@@ -98,13 +126,13 @@ void VesselVmsLikeFPingsOnlyTable::insertLog(const VesselVmsLikeFPingsOnlyTable:
 
     p->insertStatement.insert(log.id,
                               log.tstep,
+                              log.tstep / 745,
                               log.tstep_dep,
-                              //log.p_long,
-                              //log.p_lat,
-                              //log.p_course,
-                              //log.cum_fuel,
                               log.nodeid,
-                              log.popid);
+                              log.popid,
+                              log.szGroup,
+                              log.catches
+                              );
 }
 
 void VesselVmsLikeFPingsOnlyTable::queryAllVesselsAtStep(int tstep, std::function<bool (const VesselVmsLikeFPingsOnlyTable::Log &)> op)
@@ -112,14 +140,26 @@ void VesselVmsLikeFPingsOnlyTable::queryAllVesselsAtStep(int tstep, std::functio
     std::unique_lock<std::mutex> m(p->mutex);
 
     p->where.bind(tstep);
-    p->selectStatement.exec([&op] (int id, int tstep, int tstepdep, int nodeid, int popid, int tstepmax){
+    p->selectStatement.exec([&op] (int id, int tstep, int month, int tstepdep, int nodeid, int popid, int szGroup, double catches, int tstepmax){
         Log l;
         l.id = id;
         l.tstep = tstep;
+        l.month = month;
+        l.tstep_dep = tstepdep;
         l.nodeid = nodeid;
         l.popid = popid;
+        l.szGroup = szGroup;
+        l.catches = catches;
         if (op)
             return op(l);
         return false;
     });
 }
+
+void VesselVmsLikeFPingsOnlyTable::deleteAllVesselsBeforeMonth(int month)
+{
+    p->deleteStatementWhere.bind(month);
+    p->deleteStatement.exec();
+}
+
+

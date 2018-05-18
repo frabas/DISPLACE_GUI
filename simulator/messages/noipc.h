@@ -65,5 +65,8 @@ void inline guiSendTerminalMessage(const string &ss)
 {
 }
 
+void inline guiSendOutputInfo(std::string)
+{
+}
 
 #endif // NOIPC_H

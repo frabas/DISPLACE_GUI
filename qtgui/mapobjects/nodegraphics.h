@@ -23,6 +23,7 @@
 
 #include <QMapControl/GeometryPointShapeScaled.h>
 #include <modelobjects/nodedata.h>
+#include <modeltypes.h>
 
 #include <QBrush>
 #include <QSettings>
@@ -37,6 +38,8 @@ protected:
     MapObjectsController *mController;
     int mModelIndex;
     QSizeF mGrid;
+
+    std::shared_ptr<types::EnvironmentData> getEnvtData();
 public:
     NodeGraphics (NodeData *node, MapObjectsController *controller, int indx);
 

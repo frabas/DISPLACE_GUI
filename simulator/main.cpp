@@ -23,6 +23,7 @@
 #include "sqlitestorage.h"
 #include "storage/sqliteoutputstorage.h"
 #include "storage/tables/vesseldeftable.h"
+#include "storage/tables/vesselvmslikefpingsonlytable.h"
 #include "storage/tables/nodesdeftable.h"
 #include "storage/tables/poptable.h"
 #include "storage/modelmetadataaccessor.h"
@@ -2282,7 +2283,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double> param_sr= read_param_sr(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, fbar ages
-        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder);
+        vector<double> fbar_ages_min_max_and_ftarget_this_pop=read_fbar_ages_min_max_and_ftarget(sp, folder_name_parameterization, inputfolder, biolsce);
 
         // input data, initial tac
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
@@ -3947,6 +3948,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumulcatches_per_pop.open(filename.c_str());
     std::string popnodes_cumulcatches_per_pop_filename = filename;
 
+    ofstream nodes_envt;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/nodes_envt_"+namesimu+".dat";
+    nodes_envt.open(filename.c_str());
+    std::string nodes_envt_filename = filename;
+
     ofstream popnodes_impact_per_szgroup;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_impact_per_szgroup_"+namesimu+".dat";
     popnodes_impact_per_szgroup.open(filename.c_str());
@@ -4091,6 +4097,31 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         guiSendUpdateCommand(popnodes_start_filename, 0);
     }
 
+
+    // initial export at t=0
+    //if(dyn_alloc_sce.option(Options::envt_variables_diffusion))
+    //{
+
+        // Flush and updates all statistics for nodes envt
+        if (use_gui)
+        {
+           nodes_envt.flush();
+           for (unsigned int n=0; n<nodes.size(); n++)
+               {
+                  nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+               }
+           guiSendUpdateCommand(nodes_envt_filename, tstep);
+         }
+
+        if (enable_sqlite_out)
+        {
+           for (unsigned int n=0; n<nodes.size(); n++)
+           {
+               outSqlite->exportEnvtNodes(tstep, nodes.at(n));
+           }
+        }
+    //}
+
     //----------------------//
     //----------------------//
     //----------------------//
@@ -4098,6 +4129,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     //----------------------//
     //----------------------//
     //----------------------//
+
+    int LastMonth=-1;
+    int CurrentMonth=0;
 
     /* CALLGRING -- Instrument */
     CALLGRIND_START_INSTRUMENTATION;
@@ -4160,6 +4194,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_inc,
                                              popnodes_impact,
                                              popnodes_cumulcatches_per_pop,
+                                             nodes_envt,
                                              popnodes_cumftime,
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
@@ -4182,6 +4217,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_end_filename,
                                              popnodes_impact_filename,
                                              popnodes_cumulcatches_per_pop_filename,
+                                             nodes_envt_filename,
                                              popnodes_cumftime_filename,
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
@@ -4226,6 +4262,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_inc,
                                              popnodes_impact,
                                              popnodes_cumulcatches_per_pop,
+                                             nodes_envt,
                                              popnodes_cumftime,
                                              popnodes_cumsweptarea,
                                              popnodes_cumcatches,
@@ -4246,6 +4283,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_end_filename,
                                              popnodes_impact_filename,
                                              popnodes_cumulcatches_per_pop_filename,
+                                             nodes_envt_filename,
                                              popnodes_cumftime_filename,
                                              popnodes_cumsweptarea_filename,
                                              popnodes_cumcatches_filename,
@@ -4325,10 +4363,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
         dout(cout  << "RE-READ DATA----------" << endl);
 
-
         // RE-READ DATA FOR EVENT => change of month
         if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
         {
+            CurrentMonth+=1;
 
             count_months+=1;
             a_month_i = count_months % 12;
@@ -5699,6 +5737,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                // bool r=  diffuse_Dissolvedcarbon_with_gradients(nodes, adjacency_map, rtree, coeff_diffusion);
 
 
+
                 if (enable_sqlite_out)
                 {
                    for (unsigned int n=0; n<nodes.size(); n++)
@@ -5709,8 +5748,23 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
             }
+          }
 
-        }
+          // Flush and updates all statistics for nodes envt
+          if (use_gui)
+          {
+               if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
+               {
+                   nodes_envt.flush();
+                   for (unsigned int n=0; n<nodes.size(); n++)
+                   {
+                      nodes.at(n)->export_nodes_envt(nodes_envt, tstep);
+                   }
+                   guiSendUpdateCommand(nodes_envt_filename, tstep);
+               }
+          }
+
+
 
 
 
@@ -5731,6 +5785,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             for (unsigned int idx =0; idx < listVesselIdForVmsLikeFPingsOnlyToExport.size(); idx++)
             {
+               if (LastMonth < CurrentMonth)
+                   {
+                       if (enable_sqlite_out) {
+                          outSqlite->getVesselVmsLikeFPingsOnlyTable()->deleteAllVesselsBeforeMonth (CurrentMonth);
+                       }
+                       LastMonth = CurrentMonth;
+                   }
+
                   OutputExporter::instance().exportVmsLikeFPingsOnly(tstep, vessels[listVesselIdForVmsLikeFPingsOnlyToExport.at(idx)],  populations, implicit_pops);
                   vessels[ listVesselIdForVmsLikeFPingsOnlyToExport.at(idx) ]->clear_ping_catch_pop_at_szgroup();
             }
@@ -5739,7 +5801,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
             for (unsigned int idx =0; idx < listVesselIdForLogLikeToExport.size(); idx++)
             {
-                //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
+                  //cout << "tstep: "<< tstep << "export loglike for " << listVesselIdForLogLikeToExport.at(idx)<< endl;
                  OutputExporter::instance().exportLogLike(tstep, vessels[listVesselIdForLogLikeToExport.at(idx)], populations, implicit_pops);
                  vessels[ listVesselIdForLogLikeToExport.at(idx) ]->reinit_after_a_trip();
             }

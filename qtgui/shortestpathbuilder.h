@@ -91,7 +91,7 @@ class ShortestPathBuilder
 
 private:
     void createText (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out);
-    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes);
+    void createBinary (QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out);
 
 public:
     explicit ShortestPathBuilder(DisplaceModel *model);

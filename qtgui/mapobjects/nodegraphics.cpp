@@ -29,6 +29,7 @@
 
 QSettings *NodeGraphics::settings = nullptr;
 
+
 NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int indx)
     : qmapcontrol::GeometryPointShapeScaled(qmapcontrol::PointWorldCoord(node->mNode->get_x(), node->mNode->get_y()), QSizeF(piew(), pieh()), 11, 7, 17),
       mNode(node),
@@ -57,6 +58,14 @@ NodeGraphics::NodeGraphics(NodeData *node, MapObjectsController *controller, int
     mGrid.setWidth(c2.x() - c1.x() );
 
     setSizePx(mGrid);
+}
+
+std::shared_ptr<types::EnvironmentData> NodeGraphics::getEnvtData()
+{
+    auto tstep = mController->getModel(mModelIndex).getCurrentStep();
+    auto &m = mController->getModel(mModelIndex).getMapDataProvider();
+
+    return m.getEnvironmentData(mNode->get_idx_node(), types::tstep_t(tstep));
 }
 
 void NodeGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
@@ -90,8 +99,6 @@ void NodeGraphics::setPieSize(int w, int h)
     settings->setValue("piew", w);
     settings->setValue("pieh", h);
 }
-
-
 
 void NodeWithPopStatsGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
@@ -278,13 +285,10 @@ void NodeWithSalinityGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    auto tstep = mController->getModel(mModelIndex).getCurrentStep();
-    auto &m = mController->getModel(mModelIndex).getMapDataProvider();
-
-    auto r = m.getEnvironmentData(mNode->get_idx_node(), types::tstep_t(tstep));
-    auto salinity = (r != nullptr ? r->salinity : 0);
-
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(salinity));
+    double  salinity =mNode->get_salinity(); // collected
+   // auto r = getEnvtData();
+   // auto salinity = (r != nullptr ? r->salinity : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,SalinityRole).color(salinity));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -292,20 +296,19 @@ void NodeWithSSTGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWo
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_sst()));
+    auto r = getEnvtData();
+    auto sst = (r != nullptr ? r->sst : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,SSTRole).color(sst));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
 void NodeWithWindGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);
-    auto tstep = mController->getModel(mModelIndex).getCurrentStep();
-    auto &m = mController->getModel(mModelIndex).getMapDataProvider();
 
-    auto r = m.getEnvironmentData(mNode->get_idx_node(), types::tstep_t(tstep));
+    auto r = getEnvtData();
     auto wind = (r != nullptr ? r->wind : 0);
-
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color(wind));
+    painter.setBrush(mController->getPalette(mModelIndex,WindRole).color(wind));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -313,7 +316,10 @@ void NodeWithNitrogenGraphics::drawShape(QPainter &painter, const qmapcontrol::R
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_Nitrogen()));
+    double  ni =mNode->get_Nitrogen(); // collected
+   // auto r = getEnvtData();
+   // auto ni = (r != nullptr ? r->nitrogen : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,NitrogenRole).color(ni));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -321,7 +327,9 @@ void NodeWithPhosphorusGraphics::drawShape(QPainter &painter, const qmapcontrol:
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_Phosphorus()));
+    auto r = getEnvtData();
+    auto p = (r != nullptr ? r->phosphorus : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,PhosphorusRole).color(p));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -329,7 +337,9 @@ void NodeWithOxygenGraphics::drawShape(QPainter &painter, const qmapcontrol::Rec
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_Oxygen()));
+    auto r = getEnvtData();
+    auto o2 = (r != nullptr ? r->oxygen : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,OxygenRole).color(o2));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
@@ -337,22 +347,16 @@ void NodeWithDissolvedCarbonGraphics::drawShape(QPainter &painter, const qmapcon
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_DissolvedCarbon()));
+    auto r = getEnvtData();
+    auto ca = (r != nullptr ? r->dissolvedcarbon : 0);
+    painter.setBrush(mController->getPalette(mModelIndex,DissolvedCarbonRole).color(ca));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
-
 
 void NodeWithBathymetryGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,ValueRole).color((float)mNode->get_bathymetry()));
+    painter.setBrush(mController->getPalette(mModelIndex,BathyRole).color((float)mNode->get_bathymetry()));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
-
-
-
-
-
-
-

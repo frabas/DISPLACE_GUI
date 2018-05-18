@@ -33,7 +33,30 @@ SOURCES= \
     tseries/timeseries.cpp \
     tseries/timeseriesmanager.cpp \
     utils/CrashHandler.cpp \
-    pathshop.cpp
+    pathshop.cpp \
+    storage/tables/vesseldeftable.cpp \
+    storage/sqliteoutputstorage.cpp \
+    storage/tables/vesselslogliketable.cpp \
+    storage/tables/poptable.cpp \
+    storage/tables/vesselvmsliketable.cpp \
+    storage/tables/fishfarmstable.cpp \
+    storage/tables/windfarmstable.cpp \
+    storage/tables/vesselsloglikecatchestable.cpp \
+    storage/tables/nodesdeftable.cpp \
+    storage/tables/popdyntable.cpp \
+    storage/tables/metadatatable.cpp \
+    storage/modelmetadataaccessor.cpp \
+    storage/tables/vesselvmslikefpingsonlytable.cpp \
+    storage/tables/funcgroupstable.cpp \
+    storage/tables/shipstable.cpp \
+    storage/tables/nodesenvttable.cpp \
+    storage/tables/nodesstattable.cpp \
+    storage/tables/nodestariffstattable.cpp \
+    ../mSqliteCpp/src/sqlitetable.cpp \
+    ../mSqliteCpp/src/sqlitestatement.cpp \
+    ../mSqliteCpp/src/sqlitestorage.cpp \
+    ../mSqliteCpp/src/sqlitetransaction.cpp \
+    diffusion.cpp 
 
 HEADERS= \
     ../include/readdata.h \
@@ -60,6 +83,7 @@ HEADERS= \
     ../include/guiproto_struct.h \
     ../include/version.h \
     ../include/utils/make_unique.h \
+    ../include/diffusion.h \
     simulation.h \
     dtree/decisiontree.h \
     dtree/variables.h \
@@ -77,8 +101,8 @@ HEADERS= \
 
 DEFINES=-DNO_IPC
 
-LIBS=-L../formats -lformats -lpthread -lrt
-CPPFLAGS=${CPPDEBUG} -O2 -std=c++14 -fpermissive ${DEFINES} -I../include -I../commons -I../formats -I. -I../sparsepp/ -fpic
+LIBS=-L../formats -lformats -lpthread -lsqlite3 -lrt 
+CPPFLAGS=${CPPDEBUG} -O2 -std=c++14 -fpermissive ${DEFINES} -I${BOOST_INCLUDEDIR} -I../include -I../commons -I../formats -I. -I../sparsepp/ -I../mSqliteCpp/include/  -fpic
 LDFLAGS=
 
 OBJS=$(SOURCES:.cpp=.o)

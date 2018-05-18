@@ -111,7 +111,7 @@ void ShortestPathBuilder::createText(QString prev, QString mindist, const QList<
     prev_file.close();
 }
 
-void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes)
+void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QList<std::shared_ptr<NodeData> > &relevantNodes, const QVector<int> &relevantInterNodesIdx, int flag_out)
 {
     displace::formats::legacy::BinaryGraphFileWriter<uint16_t,uint16_t> wr_prev;
     wr_prev.open(prev.toStdString());
@@ -120,7 +120,9 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
     wr_md.open(mindist.toStdString());
 
 
-    foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+    if(relevantInterNodesIdx.empty())
+    {
+     foreach (std::shared_ptr<NodeData> n, relevantNodes) {
         vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
 
         while (mPredecessors[nd] != nd) {
@@ -134,7 +136,60 @@ void ShortestPathBuilder::createBinary(QString prev, QString mindist, const QLis
         }
 
         mGraph[nd].flag = true;
+     }
+
     }
+    else
+    {
+        vector<int> mem(2, 0);
+
+        vector <int> relevant_nodes;
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+           relevant_nodes.push_back(n->get_idx_node().toIndex());
+        }
+
+        foreach (std::shared_ptr<NodeData> n, relevantNodes) {
+           vertex_descriptor nd = vertex(n->get_idx_node().toIndex(), mGraph);
+
+           mem.at(0)=0;
+           mem.at(1)=0;
+           if(flag_out) cout << "trace the path back from nd " << nd << endl;
+
+           while (mPredecessors[nd] != nd) {
+               if (!mGraph[nd].flag) {
+                   std::vector<int>::iterator it;
+                   it = std::find (relevant_nodes.begin(), relevant_nodes.end(), nd);
+                   if (it != relevant_nodes.end() ) mem.at(0)=nd;
+
+                   it = find (relevant_nodes.begin(), relevant_nodes.end(), mPredecessors[nd]);
+                   if (it != relevant_nodes.end() && mem.at(1)==0)  mem.at(1)=mPredecessors[nd];
+
+                   // keep the node onboard if it is a significant intermediate
+                   int idx=relevantInterNodesIdx.indexOf(nd);
+                   if (idx != -1)  mem.at(0)=nd;
+
+                   idx=relevantInterNodesIdx.indexOf(mPredecessors[nd]);
+                   if (idx != -1  && mem.at(1)==0) mem.at(1)=mPredecessors[nd];
+
+                   if(flag_out) cout << nd << "--" << mPredecessors[nd] << endl;
+
+                   if(mem.at(0)!=0 && mem.at(1)!=0){
+                      if(flag_out) cout << "export-->> " << mem.at(0) << "--" << mPredecessors[nd] << endl;
+                      wr_prev.write(nd, mPredecessors[nd]);
+                      wr_md.write(nd, mDistances[nd]);
+                      mem.at(1)=0;
+                   }
+               }
+               mGraph[nd].flag = true;
+               nd = mPredecessors[nd];
+           }
+
+           mGraph[nd].flag = true;
+        }
+
+    }
+
+
 
     wr_md.close();
     wr_prev.close();
@@ -186,7 +241,7 @@ void ShortestPathBuilder::create(std::shared_ptr<NodeData> node, QString path, b
 
     switch (format) {
     case Binary:
-        createBinary(prev, mindist, relevantNodes);
+        createBinary(prev, mindist, relevantNodes, relevantInterNodesIdx, flag_out);
         break;
     case Text:
         createText(prev,mindist, relevantNodes, relevantInterNodesIdx, flag_out);

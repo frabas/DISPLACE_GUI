@@ -363,7 +363,14 @@ public:
     void collectPopImpact(int step, int node_idx, int popid, double impact);
     void collectPopCumcatchesPerPop(int step, int node_idx, int popid, double cumcatchesperpop);
 
-    void collectSalinity(int step, int node_idx, int popid, double salinity);
+    void collectSalinity(int step, int node_idx, double salinity);
+    void collectWind(int step, int node_idx, double wind);
+    void collectSST(int step, int node_idx, double sst);
+    void collectNitrogen(int step, int node_idx, double nitrogen);
+    void collectPhosphorus(int step, int node_idx, double phosphorus);
+    void collectOxygen(int step, int node_idx, double oxygen);
+    void collectDissolvedCarbon(int step, int node_idx, double dissolvedcarbon);
+    void collectBathymetry(int step, int node_idx, double bathymetry);
 
 
 

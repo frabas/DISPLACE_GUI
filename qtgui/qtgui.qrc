@@ -61,5 +61,13 @@
         <file>icons/fishfarm.png</file>
         <file>icons/Windmill.png</file>
         <file>icons/container-ship.png</file>
+        <file>palettes/bathy_colors.p2c</file>
+        <file>palettes/nitrogen_colors.p2c</file>
+        <file>palettes/phosphorus_colors.p2c</file>
+        <file>palettes/oxygen_colors.p2c</file>
+        <file>palettes/dissolvedcarbon_colors.p2c</file>
+        <file>palettes/salinity_colors.p2c</file>
+        <file>palettes/wind_colors.p2c</file>
+        <file>palettes/sst_colors.p2c</file>
     </qresource>
 </RCC>

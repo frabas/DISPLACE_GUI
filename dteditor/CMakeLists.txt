@@ -23,9 +23,13 @@ file(GLOB QRCS *.qrc)
 
 add_executable(dteditor
         ${SOURCES} ${HEADERS}
+        dteditor.rc
         ${UIS} ${QRCS}
         )
 
+if (WIN32)
+    set_property(TARGET dteditor PROPERTY WIN32_EXECUTABLE yes)
+endif (WIN32)
 
 target_link_libraries(dteditor
         commons

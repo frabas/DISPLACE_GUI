@@ -21,8 +21,13 @@ file(GLOB QRCS *.qrc)
 
 add_executable(scheduler
         ${SOURCES} ${HEADERS}
+        scheduler.rc
         ${UIS} ${QRCS}
         )
+
+if (WIN32)
+    set_property(TARGET scheduler PROPERTY WIN32_EXECUTABLE yes)
+endif (WIN32)
 
 
 target_link_libraries(scheduler

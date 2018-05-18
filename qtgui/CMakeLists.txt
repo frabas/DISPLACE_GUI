@@ -77,9 +77,13 @@ endif(WIN32)
 
 add_executable(displacegui
         ${SOURCES} ${HEADERS}
+        qtgui.rc
         ${UIS} ${QRCS}
         )
 
+if (WIN32)
+    set_property(TARGET displacegui PROPERTY WIN32_EXECUTABLE yes)
+endif (WIN32)
 
 target_link_libraries(displacegui
         commons

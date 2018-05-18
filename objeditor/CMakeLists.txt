@@ -22,8 +22,13 @@ file(GLOB QRCS *.qrc)
 
 add_executable(objeditor
         ${SOURCES} ${HEADERS}
+        objeditor.rc
         ${UIS} ${QRCS}
         )
+
+if (WIN32)
+    set_property(TARGET objeditor PROPERTY WIN32_EXECUTABLE yes)
+endif (WIN32)
 
 
 target_link_libraries(objeditor

@@ -22,6 +22,8 @@ set(SOURCES
 
 if (WIN32)
     link_directories(${CMAKE_SOURCE_DIR}/install/msvc/lib)
+else(WIN32)
+    list (APPEND LIBRARIES sqlite3)
 endif (WIN32)
 
 if (NOT APPLE AND NOT WIN32)
@@ -49,6 +51,6 @@ add_executable(displace
 target_link_libraries(displace
         commons
         formats
-        sqlite3
+        ${LIBRARIES}
         Boost::program_options
         )

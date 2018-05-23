@@ -4391,6 +4391,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             a_quarter= "quarter" + strg1.str();
             a_semester= "semester" + strg2.str();
 
+               // vector <double> a_tot_N_at_szgroup_here = populations.at(1)->get_tot_N_at_szgroup();
+               // for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+               //  cout << "BEFORE RE-READ DATA: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
 
             // this month, re-read for vessel-related data
             if(dyn_alloc_sce.option(Options::area_monthly_closure))
@@ -4839,8 +4842,24 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 // aggregate from nodes (caution: do it before changing of list_nodes)
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
                 {
+
+                    /*
+                    if(sp==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout << "BEFORE AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    }
+                    */
                     // get total N from summing up N over nodes
                     populations.at(sp)->aggregate_N();
+
+                    /*
+                    if(sp==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout << "AFTER AGGREGATE IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    }
+                    */
 
                 }
             }
@@ -4965,6 +4984,14 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
                     // add the current Ns to the vectors of vectors of the concerned nodes
                     vector <double> tot_N_at_szgroup =populations.at(i)->get_tot_N_at_szgroup();
+
+                    if( populations.at(i)->get_name()==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    }
+
+
                     for(unsigned int n=0; n<list_nodes.size(); n++)
                     {
                         list_nodes[n]->set_Ns_pops_at_szgroup(i, tot_N_at_szgroup);
@@ -4976,6 +5003,12 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // i.e. update the vectors of vectors Ns_pops_at_szgroup of the nodes as usual
                     // divide on nodes according to avai
                     populations.at(i)->distribute_N();
+
+                    if(populations.at(i)->get_name()==1){
+                        vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                         cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    }
 
                     //...and compute the Ns on nodes at the start of this month!
                     for (unsigned int n=0; n<nodes.size(); n++)

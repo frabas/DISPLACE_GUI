@@ -827,9 +827,11 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                      // i.e. a trick to check if nan
                                     populations.at(sp)->get_oth_land_multiplier())
                                       {
-                                      cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
-                                       int ff;
-                                       cin >>ff;
+                                      // likely because the TAC is nan because the stock is collapsed....
+                                       populations.at(sp)->set_oth_land_multiplier (0.0);
+                                      //cout << "stop: check the c++ code for oth_land_multiplier"<< endl;
+                                      // int ff;
+                                      // cin >>ff;
 
                                 }
                                } else{ // if no TAC regime

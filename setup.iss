@@ -47,16 +47,16 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "build\{#Build}\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\dtreeeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\tsereditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\qmapcontrol{#QT_DEBUG}1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\displacecommons.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build\{#Build}\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\displacegui.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\dteditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\tseditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\objeditor.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\displace.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\scheduler.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\qmapcontrol{#QT_DEBUG}.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\commons.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\formats.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "cmake-build-{#Build}\bin\qtcommons.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "scripts\gen_ts.R"; DestDir: "{app}\scripts"; Flags: ignoreversion
 

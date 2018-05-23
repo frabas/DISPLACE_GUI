@@ -27,7 +27,7 @@
 
 // Local includes.
 #include "Projection.h"
-#include <LayerGeometry.h>
+#include "LayerGeometry.h"
 
 namespace qmapcontrol
 {

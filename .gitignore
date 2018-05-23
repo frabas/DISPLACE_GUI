@@ -40,3 +40,6 @@ run.sh
 
 mSqliteCpp
 sparsepp/
+cmake-build-*
+.idea/shelf
+.idea

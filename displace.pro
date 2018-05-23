@@ -36,6 +36,7 @@ avaifieldshuffler.depends=commons
 }
 
 OTHER_FILES += \
+    CMakeLists.txt \
     Readme.txt \
     Makefile.hpc \
     Building.win Building.unix Building.MacOSX \

@@ -71,7 +71,6 @@ using namespace sqlite;
 #include <messages/genericconsolestringoutputmessage.h>
 #endif
 
-#include <biomodule.h>
 #include <biomodule2.h>
 
 #include <iomanip>
@@ -428,6 +427,7 @@ void parseCommandLine (int argc, char const *argv[])
             (",e", po::value(&export_vmslike), "Export VMSLike data")
             (",v", po::value(&selected_vessels_only), "Selected vessels only")
             (",d", po::value(&dparam), "dparam")
+            ("commit-rate", po::value(&numStepTransactions), "Modify the number of loops before committing to sqlite db")
             ("use-gui", "Enable IPC channel to talk to the GUI")
             ("no-gui-move-vessels", "Disable the movement of the vessels/ships in the GUI" )
             ("disable-sqlite", "Disable the SQLite output")

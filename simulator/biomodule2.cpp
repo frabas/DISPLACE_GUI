@@ -618,7 +618,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                    outc(cout<<"tstep " << tstep << "DO GROWTH TRANSITION: caution, the matrix is time-specific in the parameterisation" << endl);
                     populations[sp]->do_growth();
 
-                    if(sp==1){
+                  /*  if(sp==1){
                         vector <double> a_tot_N_at_szgroup_here = populations.at(sp)->get_tot_N_at_szgroup();
                         for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
                          cout <<"tstep " << tstep << "AFTER GROWTH: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
@@ -627,6 +627,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         for(int sz=0; sz < a_tot_N_at_szgroup_minus1_here.size(); sz++)
                          cout <<"tstep " << tstep << "AFTER GROWTH: a_tot_N_at_szgroup_minus1_here[" << sz << "] is "<< a_tot_N_at_szgroup_minus1_here[sz]  << endl;
                     }
+                  */
 
                }
 

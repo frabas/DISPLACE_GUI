@@ -832,6 +832,7 @@ void Population::distribute_N()
 
     dout (cout<< endl);
     dout(cout<< "BEGIN distribute_N(): distribute on nodes for the pop " << name << endl);
+    //vector<double> all_N_at_szgroup(14,0);
 
 	// save for later use i.e. in the erosion of the avai after each catch event
 	this->set_tot_N_at_szgroup_just_after_redistribution(tot_N_at_szgroup);
@@ -878,7 +879,14 @@ void Population::distribute_N()
         dout(cout << "set the new Ns for this specific pop "<< idx_node<< ":" << endl);
         list_nodes[idx]->set_Ns_pops_at_szgroup(name, N_at_szgroup);
 
-	}
+       // if(this->get_name()==1) for(int i=0; i<N_at_szgroup.size(); i++)
+       //    all_N_at_szgroup[i]+=N_at_szgroup[i];
+
+    }
+
+     //if(this->get_name()==1)  for(int i=0; i<all_N_at_szgroup.size(); i++)
+     //    cout << "in distribute_N: all_N_at_szgroup["<< i <<"] is " << all_N_at_szgroup[i];
+
     dout(cout<< "END distribute_N()"<< endl);
     dout(cout<< endl);
 
@@ -1169,6 +1177,7 @@ void Population::add_recruits_from_SR()
 
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
+    dout(cout << "pop is " << this->get_name()  << " " << endl );
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 
@@ -1392,7 +1401,8 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
             tot_N_at_age_minus_1[a] +=  percent_szgroup_per_age_matrix[sz][a] * a_tot_N_at_szgroup_month_minus_1[sz] ;
         }
 
-	}
+
+    }
 
 	// apply a weighted mean for weight-at-age and mortality-at-age
     for(int a = 0; a < nbages; a++)
@@ -1445,6 +1455,12 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
         dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);
         dout(cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl);
         dout(cout << "tot_M_at_age[a]  is "<< tot_M_at_age[a]  << endl);
+
+        if(this->get_name()==1){
+            cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl;
+            cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl;
+            cout << "tot_F_at_age[a]  is "<< tot_F_at_age[a]  << endl;
+        }
 
 	}
 
@@ -1503,6 +1519,7 @@ vector<double> Population::compute_SSB()
     vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
 
     vector <double> SSB_per_szgroup (a_tot_N_at_szgroup.size());
+    cout << "pop is " << this->get_name()  << " " << endl;
     for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
     {
 

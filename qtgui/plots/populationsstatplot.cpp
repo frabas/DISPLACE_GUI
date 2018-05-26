@@ -54,6 +54,10 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
             interSizeList.push_back(i);
     }
 
+    std::vector<int> stype;
+    for (auto i : interSizeList)
+        stype.push_back(i);
+
     int graphNum = graphList.size();
 
     QList<QCPGraph *>graphs;
@@ -101,7 +105,7 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
                 break;
             }
 
-            auto v = getData(model, stat, aggtype, ipop, graphList[igraph]);
+            auto v = getData(model, stat, aggtype, ipop, stype);
             graph->setData(std::get<0>(v), std::get<1>(v));
             graphs.push_back(graph);
         }
@@ -133,14 +137,16 @@ void PopulationsStatPlot::setCurrentTimeStep(double t)
     timeline->end->setCoords(t, timelineMax);
 }
 
-std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model, displace::plot::PopulationStat stattype, displace::plot::AggregationType aggtype,
-                                                                           int popid, int grpid)
+std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(DisplaceModel *model,
+                                                                           displace::plot::PopulationStat stattype,
+                                                                           displace::plot::AggregationType aggtype,
+                                                                           int popid, vector<int> szid)
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return std::tuple<QVector<double>, QVector<double>>();
 
-    auto dt = db->getPopulationStatData(stattype, aggtype, popid, grpid);
+    auto dt = db->getPopulationStatData(stattype, aggtype, popid, szid);
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
@@ -150,12 +156,15 @@ std::tuple<QVector<double>, QVector<double> > PopulationsStatPlot::getData(Displ
 void PopulationsStatPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)
 {
     if (location == GraphInteractionController::PopupMenuLocation::Plot) {
-        menu->addAction(QObject::tr("Save Data"), std::bind(&PopulationsStatPlot::saveTo, this));
+        // TODO enable this when saveTo() will be implemented
+        menu->addAction(QObject::tr("Save Data"), std::bind(&PopulationsStatPlot::saveTo, this))->setEnabled(false);
     }
 }
 
 void PopulationsStatPlot::saveTo()
 {
+    // TODO enable saveTo(), disabled because query has changed
+#if 0
     if (!lastModel)
         return;
 
@@ -199,4 +208,5 @@ void PopulationsStatPlot::saveTo()
             }
         }
     }
+#endif
 }

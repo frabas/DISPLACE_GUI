@@ -567,8 +567,11 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
     return data;
 }
 
-TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid, int grpid)
+TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid,
+                                                        vector<int> szid)
 {
+    bool filterGrpId = (popid >= 0 && popid != 999);
+
     FieldDef<FieldType::Real> f("");
     FieldDef<FieldType::Real> fld("");
     switch (stat) {
@@ -602,22 +605,37 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
                                                     f
                                                     );
 
-    if (grpid >= 0) {
+    if (szid.size() > 0) {
+        std::ostringstream ss;
+        if (filterGrpId)
+            ss << p->mPopDynTable->fldPopId.name() << " == ? AND ";
+        ss << p->mPopDynTable->fldGroup.name() << " IN (?";
+        for (size_t i = 1; i < szid.size() ; ++i)
+            ss << ",?";
+        ss << ")";
+        select.where(ss.str());
+    } else {
+        if (filterGrpId)
+            select.where(op::eq(p->mPopDynTable->fldPopId));
+    }
+/*
+    if (szid >= 0) {
         select.where(op::and_(op::and_(op::eq(p->mPopDynTable->fldPopId), op::eq(p->mPopDynTable->fldGroup)), op::ne(fld)));
     } else {
         select.where(op::and_(op::eq(p->mPopDynTable->fldPopId), op::ne(fld)));
     }
-
+*/
     select.groupBy(p->mPopDynTable->fldTStep);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
     TimelineData data;
 
-    stmt.bind(std::make_tuple(popid, -1));
-    if (grpid >= 0) {
-        stmt.bind(std::make_tuple(popid, grpid, -1));
-    }
+    int n = 1;
+    if (filterGrpId)
+        stmt.bind(n++, popid);
+    for (size_t i = 0; i < szid.size(); ++i)
+        stmt.bind(n+i, szid[i]);
 
     stmt.execute([&stmt, &data](){
         data.t.push_back(stmt.getIntValue(0));

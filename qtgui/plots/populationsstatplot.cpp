@@ -16,8 +16,6 @@ PopulationsStatPlot::PopulationsStatPlot(QCustomPlot *plt)
     plot = plt;
     timeline = new QCPItemLine(plot);
 
-    plot->addItem(timeline);
-
     mPalette = PaletteManager::instance()->palette(PopulationRole);
 }
 

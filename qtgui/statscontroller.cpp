@@ -94,8 +94,6 @@ void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionControll
     mBenthosTimeLine = new QCPItemLine(mBenthosFuncGroupsPlot);
     mBenthosPlotController = new BenthosStatsPlot(plot, mBenthosTimeLine);
 
-    mBenthosFuncGroupsPlot->addItem(mBenthosTimeLine);
-
     controller->setOnPopupMenuBuiltCallback(std::bind(&BenthosStatsPlot::createPopup, mBenthosPlotController, std::placeholders::_1, std::placeholders::_2));
 
 }
@@ -115,8 +113,6 @@ void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionContro
 
     mFishfarmsTimeLine = new QCPItemLine(mfarmTypeGroupsPlot);
     mFishfarmsPlotController = new FishfarmsStatsPlot(plot, mFishfarmsTimeLine);
-
-    mfarmTypeGroupsPlot->addItem(mFishfarmsTimeLine);
 
     cout << "Set fishfarm plot...ok" << endl;
 
@@ -140,8 +136,6 @@ void StatsController::setWindfarmsPlot(QCustomPlot *plot, GraphInteractionContro
     mWindfarmsTimeLine = new QCPItemLine(mWindfarmTypeGroupsPlot);
     mWindfarmsPlotController = new WindfarmsStatsPlot(plot, mWindfarmsTimeLine);
 
-    mWindfarmTypeGroupsPlot->addItem(mWindfarmsTimeLine);
-
     cout << "Set windfarm plot...ok" << endl;
 
     controller->setOnPopupMenuBuiltCallback(std::bind(&WindfarmsStatsPlot::createPopup, mWindfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
@@ -164,8 +158,6 @@ void StatsController::setShipsPlot(QCustomPlot *plot, GraphInteractionController
     mShipsTimeLine = new QCPItemLine(mShipTypeGroupsPlot);
     mShipsPlotController = new ShipsStatsPlot(plot, mShipsTimeLine);
 
-    mShipTypeGroupsPlot->addItem(mShipsTimeLine);
-
     cout << "Set windfarm plot...ok" << endl;
 
     controller->setOnPopupMenuBuiltCallback(std::bind(&ShipsStatsPlot::createPopup, mShipsPlotController, std::placeholders::_1, std::placeholders::_2));
@@ -180,7 +172,6 @@ void StatsController::setNationsStatsPlot(QCustomPlot *plot, GraphInteractionCon
 
     mNatTimeLine = new QCPItemLine(mNationsPlot);
     mNationsStatsPlotController = new NationsStatsPlot(plot, mNatTimeLine);
-    mNationsPlot->addItem(mNatTimeLine);
     controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 

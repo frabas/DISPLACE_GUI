@@ -29,8 +29,6 @@ void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsS
         textLabel->setText(QString("Error: %1").arg(x.what()));
         textLabel->setFont(QFont(mPlot->font().family(), 16)); // make font a bit larger
         textLabel->setPen(QPen(Qt::black)); // show black border around text
-
-        mPlot->addItem(textLabel);
     }
 }
 

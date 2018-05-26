@@ -35,6 +35,7 @@ public:
     void update(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
+    void displayPlot(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     std::tuple<QVector<double>, QVector<double> > getData(DisplaceModel *model,
                                                                               displace::plot::FishfarmsStat stattype,
                                                                               displace::plot::AggregationType aggtype,

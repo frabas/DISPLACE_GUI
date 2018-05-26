@@ -17,7 +17,25 @@ FishfarmsStatsPlot::FishfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
 
 void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsStat stat)
 {
-    mPlot->clearGraphs();
+    try {
+        mPlot->clearGraphs();
+        displayPlot(model, stat);
+    } catch (std::exception &x ) {
+        // add the text label at the top:
+        QCPItemText *textLabel = new QCPItemText(mPlot);
+        textLabel->setPositionAlignment(Qt::AlignTop|Qt::AlignHCenter);
+        textLabel->position->setType(QCPItemPosition::ptAxisRectRatio);
+        textLabel->position->setCoords(0.5, 0.5); // place position at center/top of axis rect
+        textLabel->setText(QString("Error: %1").arg(x.what()));
+        textLabel->setFont(QFont(mPlot->font().family(), 16)); // make font a bit larger
+        textLabel->setPen(QPen(Qt::black)); // show black border around text
+
+        mPlot->addItem(textLabel);
+    }
+}
+
+void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::FishfarmsStat stat)
+{
     double val;
 
     QList<int>  interFishfarmsIDsList= model->getInterestingFishfarms();

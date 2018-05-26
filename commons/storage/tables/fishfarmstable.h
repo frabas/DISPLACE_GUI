@@ -18,7 +18,7 @@ class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable
 {
     struct Impl;
     std::unique_ptr<Impl> p;
-
+public:
     FieldDef<FieldType::Integer> fldTStep = makeFieldDef("TStep",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldNodeId = makeFieldDef("NodeId",FieldType::Integer()).notNull();
     FieldDef<FieldType::Integer> fldFarmId = makeFieldDef("FarmId",FieldType::Integer()).notNull();
@@ -29,7 +29,6 @@ class COMMONSSHARED_EXPORT FishfarmsTable : public SQLiteTable
     FieldDef<FieldType::Real> fldEggs = makeFieldDef("Eggs", FieldType::Real());
     FieldDef<FieldType::Real> fldProfit = makeFieldDef("Profit", FieldType::Real());
 
-public:
     FishfarmsTable(std::shared_ptr<SQLiteStorage> db, std::string name);
     ~FishfarmsTable() noexcept;
     void dropAndCreate();

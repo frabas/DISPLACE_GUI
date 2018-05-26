@@ -728,6 +728,88 @@ TimelineData SQLiteOutputStorage::getBenthosStatData(BenthosStat stat, Aggregati
     return data;
 }
 
+TimelineData SQLiteOutputStorage::getFishFarmStatData(displace::plot::FishfarmsStat stattype,
+                                                      displace::plot::AggregationType aggtype, int ffid,
+                                                      std::vector<int> ftypes)
+{
+    bool filterGrpId = (ffid >= 0 && ffid != 999);
+
+    FieldDef<FieldType::Real> f("");
+    FieldDef<FieldType::Real> fld("");
+    switch (stattype) {
+        case displace::plot::FishfarmsStat::FF_FishHarvestedKg:
+            fld = p->mFishfarmsTable->fldFish;
+            break;
+        case displace::plot::FishfarmsStat::FF_EggsHarvestedKg:
+            fld = p->mFishfarmsTable->fldEggs;
+            break;
+        case displace::plot::FishfarmsStat::FF_AnnualProfit:
+            fld = p->mFishfarmsTable->fldProfit;
+            break;
+        case displace::plot::FishfarmsStat::FF_FishMeanWeight:
+        case displace::plot::FishfarmsStat::FF_NetDischargeN:
+        case displace::plot::FishfarmsStat::FF_NetDischargeP:
+        case displace::plot::FishfarmsStat::FF_CumulNetDischargeN:
+        case displace::plot::FishfarmsStat::FF_CumulNetDischargeP:
+            throw std::logic_error("Unhandled case - Unimplemented");
+    }
+
+    switch (aggtype) {
+        case displace::plot::AggregationType::Avg:
+            f = op::avg(fld); break;
+        case displace::plot::AggregationType::Min:
+            f = op::min(fld); break;
+        case displace::plot::AggregationType::Max:
+            f = op::max(fld); break;
+        case displace::plot::AggregationType::Sum:
+            f = op::sum(fld); break;
+        case displace::plot::AggregationType::None:
+            f = fld;
+            break;
+    }
+
+    auto select = sqlite::statements::Select(p->mFishfarmsTable->name(),
+                                             p->mFishfarmsTable->fldTStep,
+                                             f
+    );
+
+    if (ftypes.size() > 0) {
+        std::ostringstream ss;
+        if (filterGrpId)
+            ss << p->mFishfarmsTable->fldFarmId.name() << " == ? AND ";
+        ss << p->mFishfarmsTable->fldFarmType.name() << " IN (?";
+        for (size_t i = 1; i < ftypes.size() ; ++i)
+            ss << ",?";
+        ss << ")";
+        select.where(ss.str());
+    } else {
+        if (filterGrpId)
+            select.where(op::eq(p->mFishfarmsTable->fldFarmId));
+    }
+
+    select.groupBy(p->mFishfarmsTable->fldTStep);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    int n = 1;
+    if (filterGrpId)
+        stmt.bind(n++, ffid);
+    for (size_t i = 0; i < ftypes.size(); ++i)
+        stmt.bind(n+i, ftypes[i]);
+
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+    //qDebug() << "FunGroup Select: " << QString::fromStdString(select.string()) << " (" << grpid << "," << btype << "): " << data.t.size();
+
+    return data;
+}
+
 TimelineData SQLiteOutputStorage::getShipsStatData(ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)
 {
     return p->mShipsTable->getShipsStatData (stattype,aggtype, shipid, shiptypeid);

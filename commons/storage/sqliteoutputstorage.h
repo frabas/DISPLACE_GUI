@@ -96,6 +96,7 @@ public:
                                        int popid, std::vector<int> szid);
     TimelineData getBenthosStatData(displace::plot::BenthosStat stattype, displace::plot::AggregationType aggtype, int grpid, const std::vector<int> &btype);
     TimelineData getShipsStatData(displace::plot::ShipsStat stattype, displace::plot::AggregationType aggtype, int shipid, std::vector<int> shiptypeid);
+    TimelineData getFishFarmStatData(displace::plot::FishfarmsStat stattype, displace::plot::AggregationType aggtype, int ffid, std::vector<int> ftypes);
 
     size_t getNbPops();
 

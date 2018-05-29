@@ -270,18 +270,15 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
     case Populations:
         updatePopulationStats(model, static_cast<displace::plot::PopulationStat>(subtype));
         break;
-        /*
     case Nations:
-        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype), plot, line);
-        break;*/
-        /*
+        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype));
+        break;
     case Harbours:
         updateHarboursStats(model);
-        break;*/
-        /*
+        break;
     case Metiers:
-        updateMetiersStats(model, static_cast<MetiersStat>(subtype), plot, line);
-        break;*/
+        updateMetiersStats(model);
+        break;
     }
 }
 

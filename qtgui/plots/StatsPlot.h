@@ -10,6 +10,7 @@ class QCustomPlot;
 
 class StatsPlot {
     bool needsUpdate = true;
+    bool mVisible = false;
 public:
     virtual ~StatsPlot() noexcept = default;
 
@@ -23,6 +24,10 @@ public:
     void invalidate() {
         needsUpdate = true;
     }
+    void setVisible (bool visible) {
+        mVisible = visible;
+    }
+    bool isVisible() const { return mVisible; }
 protected:
     virtual void doUpdate () = 0;
 };

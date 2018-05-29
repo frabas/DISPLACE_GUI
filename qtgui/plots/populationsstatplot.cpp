@@ -31,6 +31,8 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
             lastStat = stat;
             invalidate();
         }
+        if (isVisible())
+            update(nullptr);
     }
 }
 

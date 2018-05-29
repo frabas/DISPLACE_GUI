@@ -42,6 +42,8 @@ void HarboursStatPlot::update(DisplaceModel *model, QCustomPlot *theplot)
             lastModel = model;
             invalidate();
         }
+        if (isVisible())
+            doUpdate();
     }
 }
 

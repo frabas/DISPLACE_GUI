@@ -30,6 +30,8 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
             lastStat = stat;
             invalidate();
         }
+        if (isVisible())
+            update(nullptr);
     }
 }
 

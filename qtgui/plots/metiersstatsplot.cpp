@@ -32,6 +32,8 @@ void MetiersStatsPlot::update(DisplaceModel *model, QCustomPlot *theplot)
             lastModel = model;
             invalidate();
         }
+        if (isVisible())
+            update((QCustomPlot *)nullptr);
     }
 }
 

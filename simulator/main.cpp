@@ -209,6 +209,7 @@ bool use_dtrees;
 vector <int> implicit_pops;
 vector <int> implicit_pops_level2;
 vector <int> grouped_tacs;
+vector <double> global_quotas_uptake;
 vector <int> explicit_pops;
 vector <double> calib_oth_landings;
 vector <double> calib_weight_at_szgroup;
@@ -2290,6 +2291,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
         vector<double> tac_this_pop=read_initial_tac(sp, folder_name_parameterization, inputfolder);
         cout << "initial tac has been read correctly" << endl;
 
+        global_quotas_uptake.push_back(0.0);
+
         if(dyn_alloc_sce.option(Options::TACs) && tac_this_pop.at(0)==0)
         {
              cout << "WARNING: TACs Option is active: Consider informing a initial TAC value for pop" << sp << "and potentially other pops..." << endl;
@@ -3895,6 +3898,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popstats.open(filename.c_str());
     std::string popstats_filename = filename;
 
+    ofstream quotasuptake;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/quotasuptake_"+namesimu+".dat";
+    quotasuptake.open(filename.c_str());
+    std::string quotasuptake_filename = filename;
+
     ofstream popdyn_N;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popdyn_"+namesimu+".dat";
     popdyn_N.open(filename.c_str());
@@ -4334,6 +4342,10 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 }
             }
         }
+
+
+
+
 
 
 
@@ -5745,6 +5757,35 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 #ifdef PROFILE
         mVesselLoopProfile.elapsed_ms();
 #endif
+
+        ///------------------------------///
+        ///------------------------------///
+        ///  THE QUOTA UPTAKES           ///
+        ///------------------------------///
+        ///------------------------------///
+
+        if(dyn_alloc_sce.option(Options::TACs))
+        {
+
+            for (unsigned int pop=0; pop<populations.size(); pop++)
+            {
+
+                outc(cout << "...pop " << pop << endl;)
+                if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  pop  ) )
+                {
+
+                   double so_far = populations.at(pop)->get_landings_so_far();
+                   global_quotas_uptake.at(pop) =  (so_far/1000) / (populations.at(pop)->get_tac()->get_current_tac());
+
+                   //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
+
+                   // export in file
+                   quotasuptake << setprecision(6) << fixed;
+                   quotasuptake << tstep << " " <<pop << " " << global_quotas_uptake.at(pop) << endl;
+
+                }
+           }
+        }
 
 
 

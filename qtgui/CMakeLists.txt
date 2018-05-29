@@ -75,6 +75,10 @@ else(WIN32)
             )
 endif(WIN32)
 
+if (NOT APPLE AND NOT WIN32)
+    list(APPEND EXTRA_LIBRARIES rt)
+endif (NOT APPLE AND NOT WIN32)
+
 add_executable(displacegui
         ${SOURCES} ${HEADERS}
         qtgui.rc

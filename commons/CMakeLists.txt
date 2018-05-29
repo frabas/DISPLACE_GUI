@@ -163,6 +163,10 @@ if (WIN32)
             )
 endif (WIN32)
 
+if (NOT APPLE AND NOT WIN32)
+    list(APPEND LIBRARIES rt)
+endif (NOT APPLE AND NOT WIN32)
+
 add_library(commons SHARED
         ${SOURCES}
         ${MSQLITE_SOURCES} ${MSQLITE_HEADERS}

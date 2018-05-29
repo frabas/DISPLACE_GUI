@@ -29,6 +29,7 @@ endif (WIN32)
 if (NOT APPLE AND NOT WIN32)
     list(APPEND SOURCES
             memstats.cpp)
+    list(APPEND LIBRARIES pthread rt)
 endif (NOT APPLE AND NOT WIN32)
 
 if (NOT DISABLE_IPC)

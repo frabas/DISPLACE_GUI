@@ -18,17 +18,34 @@ NationsStatsPlot::NationsStatsPlot(QCustomPlot *plot_, QCPItemLine *timeline_)
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
-void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat stat, QCustomPlot *plot)
+void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat stat, QCustomPlot *theplot)
 {
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel || stat != lastStat) {
+            // need to properly update
+            lastModel = model;
+            lastStat = stat;
+            invalidate();
+        }
+    }
+}
+
+void NationsStatsPlot::update(QCustomPlot *plot)
+{
+    auto model = lastModel;
+    auto stat = lastStat;
+
+    qDebug() << "NationsStatPlot UPDATE";
+
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return;
 
     if (plot == nullptr)
         plot = plotNations;
-
-    lastModel = model;
-    lastStat = stat;
 
     static const QPen pen(QColor(0,0,255,200));
     plot->clearGraphs();
@@ -250,4 +267,9 @@ std::tuple<QVector<double>, QVector<double> > NationsStatsPlot::getData(Displace
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
+}
+
+void NationsStatsPlot::doUpdate()
+{
+    update(nullptr);
 }

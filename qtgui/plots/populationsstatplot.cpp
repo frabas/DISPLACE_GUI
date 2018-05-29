@@ -21,13 +21,35 @@ PopulationsStatPlot::PopulationsStatPlot(QCustomPlot *plt)
 
 void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::PopulationStat stat, QCustomPlot *theplot)
 {
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel || stat != lastStat) {
+            // need to properly update
+            lastModel = model;
+            lastStat = stat;
+            invalidate();
+        }
+    }
+}
+
+void PopulationsStatPlot::doUpdate()
+{
+    update(nullptr);
+}
+
+void PopulationsStatPlot::update(QCustomPlot *theplot)
+{
+    qDebug() << "PopulationsStatPlot UPDATE";
+
     if (!theplot) {
         theplot = plot;
     }
     theplot->clearGraphs();
 
-    lastModel = model;
-    lastStat = stat;
+    auto model = lastModel;
+    auto stat = lastStat;
 
     QList<int> interPopList = model->getInterestingPops();
     QList<int> interSizeList = model->getInterestingSizes();

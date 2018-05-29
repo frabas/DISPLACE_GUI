@@ -23,6 +23,7 @@
 #include <QVector>
 #include <QtAlgorithms>
 
+#include "PlotWidget.h"
 #include <plots/benthosstatsplot.h>
 #include <plots/fishfarmsstatsplot.h>
 #include <plots/windfarmsstatsplot.h>
@@ -55,13 +56,14 @@ StatsController::StatsController(QObject *parent)
     cout << "Stats controller is created" << endl;
 }
 
-void StatsController::setPopulationPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setPopulationPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
     if (mPopPlot != nullptr)
         delete mPopPlot;
 
-    plot->legend->setVisible(true);
     mPopPlot = new PopulationsStatPlot(plot);
+    plot->setStatsPlot(mPopPlot);
+    plot->legend->setVisible(true);
 
     controller->setOnPopupMenuBuiltCallback(std::bind(&PopulationsStatPlot::createPopup, mPopPlot, std::placeholders::_1, std::placeholders::_2));
 }
@@ -163,7 +165,7 @@ void StatsController::setShipsPlot(QCustomPlot *plot, GraphInteractionController
     controller->setOnPopupMenuBuiltCallback(std::bind(&ShipsStatsPlot::createPopup, mShipsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StatsController::setNationsStatsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setNationsStatsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
     mNationsPlot = plot;
     mNationsPlot->legend->setVisible(true);
@@ -172,6 +174,7 @@ void StatsController::setNationsStatsPlot(QCustomPlot *plot, GraphInteractionCon
 
     mNatTimeLine = new QCPItemLine(mNationsPlot);
     mNationsStatsPlotController = new NationsStatsPlot(plot, mNatTimeLine);
+    plot->setStatsPlot(mNationsStatsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 

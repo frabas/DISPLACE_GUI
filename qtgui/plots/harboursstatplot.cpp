@@ -23,7 +23,8 @@ HarboursStatPlot::HarboursStatPlot(QCustomPlot *plot_)
 
 void HarboursStatPlot::update(DisplaceModel *model, QCustomPlot *theplot)
 {
-    
+    qDebug() << "HarboursStatPlot UPDATE";
+
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return;

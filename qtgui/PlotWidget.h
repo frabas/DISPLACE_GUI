@@ -1,0 +1,28 @@
+//
+// Created by Federico Fuga on 29/05/18.
+//
+
+#ifndef DISPLACE_PLOTWIDGET_H
+#define DISPLACE_PLOTWIDGET_H
+
+#include "qcustomplot.h"
+
+class StatsPlot;
+
+class PlotWidget : public QCustomPlot {
+Q_OBJECT
+    StatsPlot *plot = nullptr;
+public:
+    explicit PlotWidget (QWidget *widget = nullptr)
+            : QCustomPlot(widget) {
+
+    }
+
+    void setStatsPlot (StatsPlot *plt) { plot = plt; }
+
+protected:
+    void showEvent(QShowEvent *event) override;
+};
+
+
+#endif //DISPLACE_PLOTWIDGET_H

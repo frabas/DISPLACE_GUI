@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>962</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -419,7 +419,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotPopulations" native="true"/>
+             <widget class="PlotWidget" name="plotPopulations" native="true"/>
             </item>
            </layout>
           </widget>
@@ -580,7 +580,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotNations" native="true"/>
+             <widget class="PlotWidget" name="plotNations" native="true"/>
             </item>
            </layout>
           </widget>
@@ -1975,6 +1975,12 @@ L3</string>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
    <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QWidget</extends>
+   <header>PlotWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

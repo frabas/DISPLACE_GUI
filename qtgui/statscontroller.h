@@ -38,6 +38,7 @@ class NationsStatsPlot;
 class PopulationsStatPlot;
 class HarboursStatPlot;
 class MetiersStatsPlot;
+class PlotWidget;
 
 class StatsController : public QObject
 {
@@ -45,14 +46,14 @@ class StatsController : public QObject
 public:
     explicit StatsController(QObject *parent = 0);
 
-    void setPopulationPlot(QCustomPlot *plot, GraphInteractionController *controller);
+    void setPopulationPlot(PlotWidget *plot, GraphInteractionController *controller);
     void setHarboursPlot(QCustomPlot *plot);
     void setMetiersPlot(QCustomPlot *plot);
     void setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller);
     void setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
-    void setNationsStatsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
+    void setNationsStatsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
 
     void updateStats(DisplaceModel *model);
 

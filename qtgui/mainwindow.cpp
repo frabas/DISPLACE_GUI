@@ -59,6 +59,8 @@
 #include <workers/shortestpathbuilderworker.h>
 #include <workers/datamerger.h>
 
+#include "PlotWidget.h"
+
 #include <mousemode.h>
 #include <mousemode/drawpenaltypolygon.h>
 #include <mousemode/movefilteringmousemodedecorator.h>

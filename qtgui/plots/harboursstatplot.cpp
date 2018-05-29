@@ -21,8 +21,35 @@ HarboursStatPlot::HarboursStatPlot(QCustomPlot *plot_)
     plot->legend->setVisible(true);
 }
 
+void HarboursStatPlot::update()
+{
+    update(plot);
+}
+
+void HarboursStatPlot::doUpdate()
+{
+    update((QCustomPlot *)nullptr);
+}
+
 void HarboursStatPlot::update(DisplaceModel *model, QCustomPlot *theplot)
 {
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel) {
+            // need to properly update
+            lastModel = model;
+            invalidate();
+        }
+    }
+}
+
+void HarboursStatPlot::update(QCustomPlot *theplot)
+{
+    auto model = lastModel;
+    auto stat = lastStat;
+
     qDebug() << "HarboursStatPlot UPDATE";
 
     auto db = model->getOutputStorage();

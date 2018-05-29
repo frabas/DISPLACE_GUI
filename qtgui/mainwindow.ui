@@ -350,7 +350,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -731,7 +731,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotHarbours" native="true"/>
+             <widget class="PlotWidget" name="plotHarbours" native="true"/>
             </item>
            </layout>
           </widget>
@@ -882,7 +882,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QCustomPlot" name="plotMetiers" native="true"/>
+             <widget class="PlotWidget" name="plotMetiers" native="true"/>
             </item>
            </layout>
           </widget>

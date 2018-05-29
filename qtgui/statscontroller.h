@@ -47,8 +47,8 @@ public:
     explicit StatsController(QObject *parent = 0);
 
     void setPopulationPlot(PlotWidget *plot, GraphInteractionController *controller);
-    void setHarboursPlot(QCustomPlot *plot);
-    void setMetiersPlot(QCustomPlot *plot);
+    void setHarboursPlot(PlotWidget *plot);
+    void setMetiersPlot(PlotWidget *plot);
     void setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller);
     void setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);

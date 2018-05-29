@@ -68,18 +68,20 @@ void StatsController::setPopulationPlot(PlotWidget *plot, GraphInteractionContro
     controller->setOnPopupMenuBuiltCallback(std::bind(&PopulationsStatPlot::createPopup, mPopPlot, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StatsController::setHarboursPlot(QCustomPlot *plot)
+void StatsController::setHarboursPlot(PlotWidget *plot)
 {
     if (mPlotHarbours != nullptr)
         delete mPlotHarbours;
     mPlotHarbours = new HarboursStatPlot(plot);
+    plot->setStatsPlot(mPlotHarbours);
 }
 
-void StatsController::setMetiersPlot(QCustomPlot *plot)
+void StatsController::setMetiersPlot(PlotWidget *plot)
 {
     if (mPlotMetiers != nullptr)
         delete mPlotMetiers;
-    mPlotMetiers = new MetiersStatsPlot(plot);
+        mPlotMetiers = new MetiersStatsPlot(plot);
+    plot->setStatsPlot(mPlotMetiers);
 }
 
 void StatsController::setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller)

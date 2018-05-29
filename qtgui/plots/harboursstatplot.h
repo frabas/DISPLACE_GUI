@@ -1,6 +1,8 @@
 #ifndef HARBOURSSTATPLOT_H
 #define HARBOURSSTATPLOT_H
 
+#include "StatsPlot.h"
+
 #include "plottypes.h"
 #include <palettemanager.h>
 
@@ -13,7 +15,7 @@ class DisplaceModel;
 class QCustomPlot;
 class QCPItemLine;
 
-class HarboursStatPlot
+class HarboursStatPlot : public StatsPlot
 {
     QCustomPlot *plot;
     QCPItemLine *timeline;
@@ -30,7 +32,14 @@ public:
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 
     void setCurrentTimeStep(double t);
-    void setStat(displace::plot::HarboursStat stat) { lastStat = stat; }
+    void setStat(displace::plot::HarboursStat stat) { lastStat = stat; invalidate(); }
+
+    void update() override;
+
+protected:
+    void update (QCustomPlot *);
+    void doUpdate() override;
+
 private:
     void saveTo();
     std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::HarboursStat stat, int harbour);

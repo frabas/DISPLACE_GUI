@@ -23,6 +23,22 @@ MetiersStatsPlot::MetiersStatsPlot(QCustomPlot *plot_)
 
 void MetiersStatsPlot::update(DisplaceModel *model, QCustomPlot *theplot)
 {
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel) {
+            // need to properly update
+            lastModel = model;
+            invalidate();
+        }
+    }
+}
+
+void MetiersStatsPlot::update(QCustomPlot *theplot)
+{
+    auto model = lastModel;
+
     if (theplot == nullptr)
         theplot = plot;
     
@@ -197,3 +213,7 @@ std::tuple<QVector<double>, QVector<double> > MetiersStatsPlot::getData(Displace
     return std::make_tuple(kd, vd);
 }
 
+void MetiersStatsPlot::doUpdate()
+{
+    update((QCustomPlot *)nullptr);
+}

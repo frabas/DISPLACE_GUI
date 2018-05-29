@@ -18,17 +18,20 @@ NationsStatsPlot::NationsStatsPlot(QCustomPlot *plot_, QCPItemLine *timeline_)
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
-void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat stat)
+void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat stat, QCustomPlot *plot)
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
         return;
 
+    if (plot == nullptr)
+        plot = plotNations;
+
     lastModel = model;
     lastStat = stat;
 
     static const QPen pen(QColor(0,0,255,200));
-    plotNations->clearGraphs();
+    plot->clearGraphs();
 
     QList<int> ipl = model->getInterestingNations();
 
@@ -44,7 +47,7 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
         if (col_it == mPalette.end())
             col_it = mPalette.begin();
 
-        QCPGraph *graph = plotNations->addGraph();
+        QCPGraph *graph = plot->addGraph();
         graph->setPen(pen);
         graph->setLineStyle(QCPGraph::lsLine);
         QColor col = col_it != mPalette.end() ? *col_it : QColor();
@@ -63,93 +66,93 @@ void NationsStatsPlot::update(DisplaceModel *model, displace::plot::NationsStat 
 
     switch (stat) {
     case NationsStat::Catches:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Landings (kg)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Landings (kg)"));
         break;
     case NationsStat::Discards:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Discards (kg)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Discards (kg)"));
         break;
     case NationsStat::Earnings:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
         break;
     case NationsStat::ExEarnings:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue (Euro)"));
         break;
     case NationsStat::TimeAtSea:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Time at sea (h)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Time at sea (h)"));
         break;
     case NationsStat::Gav:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("GVA (Euro)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("GVA (Euro)"));
         break;
     case NationsStat::Vpuf:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("VPUF (Euro per litre)"));
         break;
     case NationsStat::SweptArea:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Swept Area (km^2)"));
         break;
     case NationsStat::RevenuePerSweptArea:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Revenue Per Swept Area (Euro/metre^2)"));
         break;
     case NationsStat::GVA:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::GVAPerRevenue:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("GVA to Revenue Ratio"));
         break;
     case NationsStat::LabourSurplus:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::GrossProfit:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::NetProfit:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::NetProfitMargin:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("%"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("%"));
         break;
     case NationsStat::GVAPerFTE:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::RoFTA:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("%"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("%"));
         break;
     case NationsStat::BER:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::CRBER:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Ratio"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Ratio"));
         break;
     case NationsStat::NetPresentValue:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("Euro"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Euro"));
         break;
     case NationsStat::numTrips:
-        plotNations->xAxis->setLabel(QObject::tr("Time (h)"));
-        plotNations->yAxis->setLabel(QObject::tr("#"));
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("#"));
         break;
     }
 
-    plotNations->rescaleAxes();
-    plotNations->replot();
+    plot->rescaleAxes();
+    plot->replot();
 }
 
 void NationsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)

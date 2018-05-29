@@ -181,13 +181,13 @@ void StatsController::updateStats(DisplaceModel *model)
     if (!model)
         return;
 
-    updatePopulationStats(model, mSelectedPopStat);
+    updatePopulationStats(model, mSelectedPopStat, nullptr);
     if (mNationsStatsPlotController) {
-        updateNationStats(model, mSelectedNationsStat);
+        updateNationStats(model, mSelectedNationsStat, nullptr);
     }
 
-    updateHarboursStats(model);
-    updateMetiersStats(model);
+    updateHarboursStats(model, nullptr);
+    updateMetiersStats(model, nullptr);
 
     if (mBenthosFuncGroupsPlot) {
         updateBenthosStats(model, mSelectedBenthosStat);
@@ -264,50 +264,50 @@ void StatsController::setCurrentTimeStep(double t)
 
 }
 
-void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType st, int subtype, QCustomPlot *plot, QCPItemLine *line)
+void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType st, int subtype, QCustomPlot *plot)
 {
     switch (st) {
     case Populations:
-        updatePopulationStats(model, static_cast<displace::plot::PopulationStat>(subtype));
+        updatePopulationStats(model, static_cast<displace::plot::PopulationStat>(subtype), plot);
         break;
     case Nations:
-        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype));
+        updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype), plot);
         break;
     case Harbours:
-        updateHarboursStats(model);
+        updateHarboursStats(model,plot);
         break;
     case Metiers:
-        updateMetiersStats(model);
+        updateMetiersStats(model,plot);
         break;
     }
 }
 
-void StatsController::updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat)
+void StatsController::updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat, QCustomPlot *plot)
 {
     if (!mPopPlot)
         return;
 
-    mPopPlot->update(model, popStat);
+    mPopPlot->update(model, popStat, plot);
 }
 
-void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat)
+void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat, QCustomPlot *plot)
 {
-    mNationsStatsPlotController->update(model, nationsStat);
+    mNationsStatsPlotController->update(model, nationsStat, plot);
 }
 
-void StatsController::updateHarboursStats(DisplaceModel *model)
+void StatsController::updateHarboursStats(DisplaceModel *model, QCustomPlot *plot)
 {
     if (mPlotHarbours) {
         mPlotHarbours->setStat(mSelectedHarboursStat);
-        mPlotHarbours->update(model);
+        mPlotHarbours->update(model, plot);
     }
 }
 
-void StatsController::updateMetiersStats(DisplaceModel *model)
+void StatsController::updateMetiersStats(DisplaceModel *model, QCustomPlot *plot)
 {
     if (mPlotMetiers) {
         mPlotMetiers->setStat (mSelectedMetiersStat);
-        mPlotMetiers->update(model);
+        mPlotMetiers->update(model,plot);
     }
 }
 

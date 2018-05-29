@@ -26,7 +26,7 @@ class NationsStatsPlot
 public:
     NationsStatsPlot(QCustomPlot *plotNations, QCPItemLine *timeLine);
 
-    void update(DisplaceModel *model, displace::plot::NationsStat stat);
+    void update(DisplaceModel *model, displace::plot::NationsStat stat, QCustomPlot *theplot = nullptr);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 private:
     void saveTo();

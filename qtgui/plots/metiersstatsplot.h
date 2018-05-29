@@ -26,7 +26,7 @@ class MetiersStatsPlot
 public:
     MetiersStatsPlot(QCustomPlot *plot_);
 
-    void update(DisplaceModel *model);
+    void update(DisplaceModel *model, QCustomPlot *theplot = nullptr);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 
     void setCurrentTimeStep(double t);

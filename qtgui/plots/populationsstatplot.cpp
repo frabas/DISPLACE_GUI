@@ -19,9 +19,12 @@ PopulationsStatPlot::PopulationsStatPlot(QCustomPlot *plt)
     mPalette = PaletteManager::instance()->palette(PopulationRole);
 }
 
-void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::PopulationStat stat)
+void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::PopulationStat stat, QCustomPlot *theplot)
 {
-    plot->clearGraphs();
+    if (!theplot) {
+        theplot = plot;
+    }
+    theplot->clearGraphs();
 
     lastModel = model;
     lastStat = stat;
@@ -69,7 +72,7 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
     foreach (int ipop, interPopList) {
         for (int igraph = 0; igraph < graphNum; ++igraph) {
             // Creates graph. Index in list are: ip * nsz + isz
-            QCPGraph *graph = plot->addGraph();
+            QCPGraph *graph = theplot->addGraph();
             QColor col = mPalette.colorByIndex(ipop);
 
             graph->setLineStyle(QCPGraph::lsLine);
@@ -111,22 +114,22 @@ void PopulationsStatPlot::update(DisplaceModel *model, displace::plot::Populatio
 
     switch (stat) {
     case PopulationStat::Aggregate:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Numbers ('000)"));
         break;
     case PopulationStat::Mortality:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("F"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("F"));
         break;
     case PopulationStat::SSB:
-        plot->xAxis->setLabel(QObject::tr("Time (h)"));
-        plot->yAxis->setLabel(QObject::tr("SSB (kg)"));
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("SSB (kg)"));
         break;
     }
 
 
-    plot->rescaleAxes();
-    plot->replot();
+    theplot->rescaleAxes();
+    theplot->replot();
 }
 
 void PopulationsStatPlot::setCurrentTimeStep(double t)

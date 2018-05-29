@@ -88,13 +88,14 @@ public:
 
     void setCurrentTimeStep(double t);
 
-    void plotGraph (DisplaceModel *model, StatType st, int subtype, QCustomPlot *plot, QCPItemLine *line);
+    void plotGraph (DisplaceModel *model, StatType st, int subtype, QCustomPlot *plot = nullptr);
 
 protected:
-    void updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat);
-    void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat);
-    void updateHarboursStats (DisplaceModel *model);
-    void updateMetiersStats(DisplaceModel *model);
+    void updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat, QCustomPlot *plot);
+    void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat,
+                               QCustomPlot *plot);
+    void updateHarboursStats (DisplaceModel *model, QCustomPlot *plot);
+    void updateMetiersStats(DisplaceModel *model, QCustomPlot *plot);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
     void updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     void updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat);

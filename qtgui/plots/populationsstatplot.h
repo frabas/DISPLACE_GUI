@@ -28,7 +28,7 @@ class PopulationsStatPlot
 public:
     explicit PopulationsStatPlot(QCustomPlot *plot);
 
-    void update(DisplaceModel *model, displace::plot::PopulationStat stat);
+    void update(DisplaceModel *model, displace::plot::PopulationStat stat, QCustomPlot *plot = nullptr);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
 
     void setCurrentTimeStep(double t);

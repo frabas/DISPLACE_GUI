@@ -277,6 +277,9 @@ Population::Population(int a_name,
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
 	oth_land_multiplier=1.0;
 
+    quota =init_tac[0];
+    quota_uptake=0.0;
+
 	// init related to F
 	fbar_ages_min_max=_fbar_ages_min_max;
 
@@ -546,6 +549,25 @@ Tac* Population::get_tac() const
 	return(tac);
 }
 
+double Population::get_quota() const
+{
+    return(quota);
+}
+
+double Population::get_quota_uptake() const
+{
+    return(quota_uptake);
+}
+
+void Population::set_quota(double _quota)
+{
+    quota=_quota;
+}
+
+void Population::set_quota_uptake(double _quota_uptake)
+{
+    quota_uptake=_quota_uptake;
+}
 
 void Population::set_selected_szgroups(vector<int> _selected_szgroups)
 {
@@ -1450,6 +1472,10 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
             perceived_tot_F_at_age.at(a)+= 0;
             tot_F_at_age.at(a)+= 0;
         }
+
+        // prevent negative Fs in few cases where more N at t+1 than at t e.g. from growth and class change in the older ages...
+        if(tot_F_at_age.at(a)<0) tot_F_at_age.at(a)  =0.0;
+
 		// => cumul over months
         dout(cout << "tot_N_at_age_minus_1[a]  is "<< tot_N_at_age_minus_1[a]  << endl);
         dout(cout << "tot_N_at_age[a]  is "<< tot_N_at_age[a]  << endl);

@@ -114,8 +114,12 @@ class COMMONSSHARED_EXPORT Population
         double get_hyperstability_param() const;
         double get_oth_land_multiplier() const;
         Tac* get_tac() const;
-		double get_landings_so_far() const;
-		void set_selected_szgroups(vector<int> selected_szgroups);
+        double get_quota() const;
+        double get_quota_uptake() const;
+        double get_landings_so_far() const;
+        void set_quota(double _quota);
+        void set_quota_uptake(double _quota_uptake);
+        void set_selected_szgroups(vector<int> selected_szgroups);
 		void set_avai0_beta(double _avai0_beta);
 		void set_avai2_beta(double _avai2_beta);
 		void set_avai3_beta(double _avai3_beta);
@@ -246,6 +250,8 @@ class COMMONSSHARED_EXPORT Population
         double hyperstability_param;	 // power curve shape param for cpue~abundance relationship
         vector<double> fbar_ages_min_max;
 		Tac *tac;
+        double quota;
+        double quota_uptake;
 		double landings_so_far;	 // global landings, reinit each start of the year...
 								 // init at 1. Will change according to the next TAC.
 		double oth_land_multiplier;

@@ -9,6 +9,7 @@
 #include "tables/nodesdeftable.h"
 #include "tables/poptable.h"
 #include "tables/popdyntable.h"
+#include "tables/popquotastable.h"
 #include "tables/nodesstattable.h"
 #include "tables/nodestariffstattable.h"
 #include "tables/funcgroupstable.h"
@@ -47,6 +48,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<NodesStatTable> mNodesStatTable;
     std::shared_ptr<NodesTariffStatTable> mNodesTariffStatTable;
     std::shared_ptr<PopDynTable> mPopDynTable;
+    std::shared_ptr<PopQuotasTable> mPopQuotasTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FuncGroupsTable> mFuncGroupsTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
@@ -77,6 +79,7 @@ void SQLiteOutputStorage::open()
     p->mNodesStatTable = std::make_shared<NodesStatTable>(p->db, "NodesStat");
     p->mNodesTariffStatTable = std::make_shared<NodesTariffStatTable>(p->db, "NodesTariffStat");
     p->mPopDynTable = std::make_shared<PopDynTable>(p->db, "PopDyn");
+    p->mPopQuotasTable = std::make_shared<PopQuotasTable>(p->db, "PopQuotas");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFuncGroupsTable = std::make_shared<FuncGroupsTable>(p->db, "FuncGroups");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
@@ -153,6 +156,11 @@ void SQLiteOutputStorage::exportTariffNodes(int tstep, Node *node)
 void SQLiteOutputStorage::exportPopStat(Population *pop, int popid, int tstep)
 {
     p->mPopDynTable->insert(tstep, popid, pop);
+}
+
+void SQLiteOutputStorage::exportPopQuotas(Population *pop, int popid, int tstep)
+{
+    p->mPopQuotasTable->insert(tstep, popid, pop);
 }
 
 void SQLiteOutputStorage::exportLogLike(Vessel *v, const std::vector<double> &cumul,const std::vector<double> &discards, unsigned int tstep)
@@ -574,15 +582,47 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
 
     FieldDef<FieldType::Real> f("");
     FieldDef<FieldType::Real> fld("");
+    string name;
+    FieldDef<FieldType::Integer> fldTStep("");
+    FieldDef<FieldType::Integer> fldPopId("");
+    FieldDef<FieldType::Integer> fldGroup("");
+
+
     switch (stat) {
     case displace::plot::PopulationStat::Aggregate:
         fld = p->mPopDynTable->fldN;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
         break;
     case displace::plot::PopulationStat::Mortality:
         fld = p->mPopDynTable->fldF;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
         break;
     case displace::plot::PopulationStat::SSB:
         fld = p->mPopDynTable->fldSSB;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::QuotasUptake:
+        fld = p->mPopQuotasTable->fldQuotasUptake;
+        name= p->mPopQuotasTable->name();
+        fldTStep = p->mPopQuotasTable->fldTStep;
+        fldPopId = p->mPopQuotasTable->fldPopId;
+        fldGroup = p->mPopQuotasTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::Quotas:
+        fld = p->mPopQuotasTable->fldQuotas;
+        name= p->mPopQuotasTable->name();
+        fldTStep = p->mPopQuotasTable->fldTStep;
+        fldPopId = p->mPopQuotasTable->fldPopId;
+        fldGroup = p->mPopQuotasTable->fldGroup;
         break;
     }
 
@@ -600,23 +640,23 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         break;
     }
 
-    auto select = sqlite::statements::Select(p->mPopDynTable->name(),
-                                                    p->mPopDynTable->fldTStep,
+    auto select = sqlite::statements::Select(name,
+                                                    fldTStep,
                                                     f
                                                     );
 
     if (szid.size() > 0) {
         std::ostringstream ss;
         if (filterGrpId)
-            ss << p->mPopDynTable->fldPopId.name() << " == ? AND ";
-        ss << p->mPopDynTable->fldGroup.name() << " IN (?";
+            ss << fldPopId.name() << " == ? AND ";
+        ss << fldGroup.name() << " IN (?";
         for (size_t i = 1; i < szid.size() ; ++i)
             ss << ",?";
         ss << ")";
         select.where(ss.str());
     } else {
         if (filterGrpId)
-            select.where(op::eq(p->mPopDynTable->fldPopId));
+            select.where(op::eq(fldPopId));
     }
 /*
     if (szid >= 0) {
@@ -625,7 +665,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         select.where(op::and_(op::eq(p->mPopDynTable->fldPopId), op::ne(fld)));
     }
 */
-    select.groupBy(p->mPopDynTable->fldTStep);
+    select.groupBy(fldTStep);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
@@ -837,6 +877,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mNodesTariffStatTable->dropAndCreate();
     p->mShipsTable->dropAndCreate();
     p->mPopDynTable->dropAndCreate();
+    p->mPopQuotasTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFuncGroupsTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();

@@ -149,6 +149,14 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("SSB (kg)"));
         break;
+    case PopulationStat::QuotasUptake:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Quota Uptake"));
+        break;
+    case PopulationStat::Quotas:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Quota (kg)"));
+        break;
     }
 
 

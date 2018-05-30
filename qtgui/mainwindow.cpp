@@ -3153,6 +3153,8 @@ void MainWindow::on_actionExportAllGraphics_triggered()
         exportPlot (out + QString("/pop_aggregate.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Aggregate), r);
         exportPlot (out + QString("/pop_mortality.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Mortality), r);
         exportPlot (out + QString("/pop_ssb.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::SSB), r);
+        exportPlot (out + QString("/pop_quotasuptake.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::QuotasUptake), r);
+        exportPlot (out + QString("/pop_quotas.%1").arg(r.format), StatsController::Populations, static_cast<int>(displace::plot::PopulationStat::Quotas), r);
 
         exportPlot (out + QString("/nations_catches.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Catches), r);
         exportPlot (out + QString("/nations_discards.%1").arg(r.format), StatsController::Nations, static_cast<int>(displace::plot::NationsStat::Discards), r);

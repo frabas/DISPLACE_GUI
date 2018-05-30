@@ -5,10 +5,12 @@
 #ifndef DISPLACE_STATSPLOT_H
 #define DISPLACE_STATSPLOT_H
 
+#include <qtcommons_global.h>
+
 class DisplaceModel;
 class QCustomPlot;
 
-class StatsPlot {
+class QTCOMMONSSHARED_EXPORT StatsPlot {
     bool needsUpdate = true;
     bool mVisible = false;
 public:

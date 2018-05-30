@@ -4,7 +4,7 @@
 
 #include "PlotWidget.h"
 
-#include "plots/StatsPlot.h"
+#include "StatsPlot.h"
 
 void PlotWidget::showEvent(QShowEvent *event)
 {

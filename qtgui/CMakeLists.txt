@@ -83,7 +83,7 @@ add_executable(displacegui
         ${SOURCES} ${HEADERS}
         qtgui.rc
         ${UIS} ${QRCS}
-        PlotWidget.cpp PlotWidget.h plots/StatsPlot.h)
+        ../qtcommons/PlotWidget.cpp ../qtcommons/PlotWidget.h ../qtcommons/StatsPlot.h)
 
 if (WIN32)
     set_property(TARGET displacegui PROPERTY WIN32_EXECUTABLE yes)

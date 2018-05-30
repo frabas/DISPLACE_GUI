@@ -6,11 +6,11 @@
 #define DISPLACE_PLOTWIDGET_H
 
 #include "qcustomplot.h"
+#include <qtcommons_global.h>
 
 class StatsPlot;
 
-class PlotWidget : public QCustomPlot {
-Q_OBJECT
+class QTCOMMONSSHARED_EXPORT PlotWidget : public QCustomPlot {
     StatsPlot *plot = nullptr;
 public:
     explicit PlotWidget (QWidget *widget = nullptr)

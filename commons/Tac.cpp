@@ -83,8 +83,9 @@ double Tac:: get_current_tac() const
 
 void Tac:: add_tac_y_plus_1(double a_tac)
 {
-	current_tac=ts_tac.at(ts_tac.size()-1);
-	ts_tac.push_back(a_tac);
+    //current_tac=ts_tac.at(ts_tac.size()-1);
+    current_tac=a_tac;
+    ts_tac.push_back(a_tac);
     dout(cout << "the TAC for y+1 is added to the TAC time series for this pop" << endl);
     for(unsigned int i=0; i<ts_tac.size(); i++)
 	{

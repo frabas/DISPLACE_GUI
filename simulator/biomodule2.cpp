@@ -329,17 +329,33 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             }
                             */
 
-                            a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+                            if(dyn_alloc_sce.option(Options::TACs))
+                            {
+                                // prevent TAC overshoot from other_landings
+                                if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) oth_land_this_pop_this_node=0.0;
+                            }
+
+                            if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+
+
 
                         }
 
                     }
                     else
                     {
+                        if(dyn_alloc_sce.option(Options::TACs))
+                        {
+                            // prevent TAC overshoot from other_landings
+                            if(((populations.at(name_pop)->get_landings_so_far()/1000) +
+                                    oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) oth_land_this_pop_this_node=0.0;
+
+                        }
 
                         // needed to impact the availability
                         vector <double> totN = populations.at(name_pop)->get_tot_N_at_szgroup();
-                        a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
+                        if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
                         dout(cout  << "oth_land this pop this node, check after potential correction (when total depletion): "<<  oth_land_this_pop_this_node << endl);
 
                     }

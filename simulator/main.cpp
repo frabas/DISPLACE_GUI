@@ -4998,11 +4998,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // add the current Ns to the vectors of vectors of the concerned nodes
                     vector <double> tot_N_at_szgroup =populations.at(i)->get_tot_N_at_szgroup();
 
-                    if( populations.at(i)->get_name()==1){
+                    /*if( populations.at(i)->get_name()==1){
                         vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
                         for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                         cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-                    }
+                           cout << "CHECK IN MAIN: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    */
 
 
                     for(unsigned int n=0; n<list_nodes.size(); n++)
@@ -5017,11 +5017,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                     // divide on nodes according to avai
                     populations.at(i)->distribute_N();
 
-                    if(populations.at(i)->get_name()==1){
-                        vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
-                        for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
-                         cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
-                    }
+                    //if(populations.at(i)->get_name()==1){
+                    //    vector <double> a_tot_N_at_szgroup_here = populations.at(i)->get_tot_N_at_szgroup();
+                    //    for(int sz=0; sz < a_tot_N_at_szgroup_here.size(); sz++)
+                    //      cout << "CHECK IN MAIN2: a_tot_N_at_szgroup[" << sz << "] is "<< a_tot_N_at_szgroup_here[sz]  << endl;
+                    //}
 
                     //...and compute the Ns on nodes at the start of this month!
                     for (unsigned int n=0; n<nodes.size(); n++)
@@ -5783,11 +5783,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                    if (enable_sqlite_out)
                        outSqlite->exportPopQuotas(populations.at(pop),pop,  tstep);
 
-                   cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
+                   //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
 
                    // export in file
                    quotasuptake << setprecision(6) << fixed;
-                   quotasuptake << tstep << " " <<pop << " " << global_quotas_uptake.at(pop) << endl;
+                   quotasuptake << tstep << " " <<pop << " " <<
+                                   global_quotas_uptake.at(pop) << " " <<
+                                     populations.at(pop)->get_tac()->get_current_tac() << endl;
 
                 }
            }

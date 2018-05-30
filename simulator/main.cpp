@@ -5777,7 +5777,13 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                    double so_far = populations.at(pop)->get_landings_so_far();
                    global_quotas_uptake.at(pop) =  (so_far/1000) / (populations.at(pop)->get_tac()->get_current_tac());
 
-                   //cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
+                   populations.at(pop)->set_quota_uptake(global_quotas_uptake.at(pop));
+                   populations.at(pop)->set_quota(populations.at(pop)->get_tac()->get_current_tac());
+
+                   if (enable_sqlite_out)
+                       outSqlite->exportPopQuotas(populations.at(pop),pop,  tstep);
+
+                   cout <<"pop "<< pop << ": global_quotas_uptake is " << global_quotas_uptake.at(pop) << endl;
 
                    // export in file
                    quotasuptake << setprecision(6) << fixed;

@@ -277,6 +277,9 @@ Population::Population(int a_name,
 	tac = new Tac(init_tac[0], tac_percent_simulated, relative_stability_key);
 	oth_land_multiplier=1.0;
 
+    quota =0.0;
+    quota_uptake=0.0;
+
 	// init related to F
 	fbar_ages_min_max=_fbar_ages_min_max;
 
@@ -546,6 +549,25 @@ Tac* Population::get_tac() const
 	return(tac);
 }
 
+double Population::get_quota() const
+{
+    return(quota);
+}
+
+double Population::get_quota_uptake() const
+{
+    return(quota_uptake);
+}
+
+void Population::set_quota(double _quota)
+{
+    quota=_quota;
+}
+
+void Population::set_quota_uptake(double _quota_uptake)
+{
+    quota_uptake=_quota_uptake;
+}
 
 void Population::set_selected_szgroups(vector<int> _selected_szgroups)
 {

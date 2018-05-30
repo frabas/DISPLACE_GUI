@@ -57,6 +57,7 @@ set(SOURCES
         storage/tables/vesselsloglikecatchestable.cpp
         storage/tables/nodesdeftable.cpp
         storage/tables/popdyntable.cpp
+        storage/tables/popquotastable.cpp
         storage/tables/metadatatable.cpp
         storage/modelmetadataaccessor.cpp
         storage/tables/vesselvmslikefpingsonlytable.cpp
@@ -118,6 +119,7 @@ set(SOURCES
         storage/tables/vesselsloglikecatchestable.h
         storage/tables/nodesdeftable.h
         storage/tables/popdyntable.h
+        storage/tables/popquotastable.h
         ../mSqliteCpp/include/msqlitecpp.h
         ../mSqliteCpp/include/sqlitefielddef.h
         ../mSqliteCpp/include/sqlitefieldsop.h

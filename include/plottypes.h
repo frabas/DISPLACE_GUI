@@ -4,7 +4,7 @@
 namespace displace {
 namespace plot {
 
-enum class PopulationStat { Aggregate, Mortality, SSB };
+enum class PopulationStat { Aggregate, Mortality, SSB, QuotasUptake, Quotas };
 
 enum class BenthosStat { B_TotBiomass, B_Number, B_MeanWeight, B_TotBiomassOverK, B_NumberOverK};
 enum class FishfarmsStat { FF_FishMeanWeight, FF_FishHarvestedKg, FF_EggsHarvestedKg, FF_AnnualProfit,

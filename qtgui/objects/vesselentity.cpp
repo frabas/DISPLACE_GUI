@@ -69,10 +69,14 @@ QVariant VesselEntity::data(const QModelIndex &index, int role) const
             std::shared_ptr<VesselData> v = model->getModel()->getVesselList()[mVesselId];
             return QString("%1 %2").arg(v->mVessel->get_y()).arg(v->mVessel->get_x());
         }
+        if (role == Qt::CheckStateRole)
+            return QVariant(model->getModel()->isInterestingVessels(index.row()) ? Qt::Checked : Qt::Unchecked);
+
     }
 
     return QVariant();
 }
+
 
 
 Qt::ItemFlags VesselEntity::flags(Qt::ItemFlags defFlags, const QModelIndex &index) const

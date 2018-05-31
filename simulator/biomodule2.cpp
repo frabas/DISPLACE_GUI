@@ -954,7 +954,7 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
     // to get the list of nodes making xx% of the total...
     int athreshold =70; // TO DO: put as arg...
     vector <double> allcumcatches;
-    double sumallcumcatches;
+    double sumallcumcatches=0.0;
     for (unsigned int n=0; n<nodes.size(); n++)
     {
        double acum= nodes.at(n)->get_cumcatches();

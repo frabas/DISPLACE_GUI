@@ -653,6 +653,7 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         for (size_t i = 1; i < szid.size() ; ++i)
             ss << ",?";
         ss << ")";
+        ss << " AND " << fld.name() << " <> -1";
         select.where(ss.str());
     } else {
         if (filterGrpId)

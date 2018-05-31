@@ -25,6 +25,16 @@ VesselData::VesselData(std::shared_ptr<Vessel> vessel)
 {
 }
 
+QString VesselData::getName() const
+{
+    return mName;
+}
+
+void VesselData::setName(const QString &value)
+{
+    mName = value;
+}
+
 int VesselData::getNationality() const
 {
     return mNationality;

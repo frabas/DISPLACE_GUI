@@ -210,12 +210,14 @@ MainWindow::MainWindow(QWidget *parent) :
     new GraphInteractionController(ui->plotHarbours, this);
     new GraphInteractionController(ui->plotPopulations, this);
     new GraphInteractionController(ui->plotNations, this);
+    new GraphInteractionController(ui->plotVessels, this);
     //new GraphInteractionController(ui->plotBenthos, this);
     auto fishfarmPlotController = new GraphInteractionController(ui->plotFishfarms, this);
     auto benthosPlotController = new GraphInteractionController(ui->plotBenthos, this);
     auto windfarmPlotController = new GraphInteractionController(ui->plotWindfarms, this);
     auto shipPlotController = new GraphInteractionController(ui->plotShips, this);
     auto nationsStatsPlotController = new GraphInteractionController(ui->plotNations, this);
+    auto vesselsStatsPlotController = new GraphInteractionController(ui->plotVessels, this);
     new GraphInteractionController(ui->plotMetiers, this);
 
     simulatorProcessStateChanged(QProcess::NotRunning, QProcess::NotRunning);
@@ -252,6 +254,9 @@ MainWindow::MainWindow(QWidget *parent) :
     cout << "for Nations " << endl;
     mStatsController->setNationsStatsPlot(ui->plotNations, nationsStatsPlotController);
     cout << "for Nations...ok " << endl;
+    cout << "for Vessels " << endl;
+    mStatsController->setVesselsStatsPlot(ui->plotVessels, vesselsStatsPlotController);
+    cout << "for Vessels...ok " << endl;
     cout << "for Metiers " << endl;
     mStatsController->setMetiersPlot(ui->plotMetiers);
     cout << "for Metiers...ok " << endl;
@@ -1357,6 +1362,11 @@ void MainWindow::on_popStatSelector_currentIndexChanged(int index)
 void MainWindow::on_nationsStatsSelector_currentIndexChanged(int index)
 {
     mStatsController->setNationsStat((displace::plot::NationsStat)index);
+}
+
+void MainWindow::on_vesselsStatsSelector_currentIndexChanged(int index)
+{
+    mStatsController->setVesselsStat((displace::plot::VesselsStat)index);
 }
 
 void MainWindow::on_harbStatSelector_currentIndexChanged(int index)

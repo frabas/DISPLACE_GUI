@@ -35,6 +35,7 @@ class FishfarmsStatsPlot;
 class WindfarmsStatsPlot;
 class ShipsStatsPlot;
 class NationsStatsPlot;
+class VesselsStatsPlot;
 class PopulationsStatPlot;
 class HarboursStatPlot;
 class MetiersStatsPlot;
@@ -54,11 +55,12 @@ public:
     void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setNationsStatsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
+    void setVesselsStatsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
 
     void updateStats(DisplaceModel *model);
 
     enum StatType {
-        Populations, Nations, Harbours, Metiers
+        Populations, Nations, Vessels, Harbours, Metiers
     };
 
     void setPopulationStat(displace::plot::PopulationStat stat);
@@ -66,6 +68,9 @@ public:
 
     void setNationsStat(displace::plot::NationsStat stat);
     displace::plot::NationsStat getNationsStat() const { return mSelectedNationsStat; }
+
+    void setVesselsStat(displace::plot::VesselsStat stat);
+    displace::plot::VesselsStat getVesselsStat() const { return mSelectedVesselsStat; }
 
     void setHarbourStat(displace::plot::HarboursStat stat);
     displace::plot::HarboursStat getHarboursStat() const { return mSelectedHarboursStat; }
@@ -95,6 +100,8 @@ protected:
     void updatePopulationStats(DisplaceModel *model, displace::plot::PopulationStat popStat, QCustomPlot *plot);
     void updateNationStats(DisplaceModel *model, displace::plot::NationsStat mSelectedNationsStat,
                                QCustomPlot *plot);
+    void updateVesselStats(DisplaceModel *model, displace::plot::VesselsStat mSelectedVesselsStat,
+                               QCustomPlot *plot);
     void updateHarboursStats (DisplaceModel *model, QCustomPlot *plot);
     void updateMetiersStats(DisplaceModel *model, QCustomPlot *plot);
     void updateBenthosStats(DisplaceModel *model, displace::plot::BenthosStat stat);
@@ -118,6 +125,12 @@ private:
     displace::plot::NationsStat mSelectedNationsStat;
     QCPItemLine *mNatTimeLine;
     NationsStatsPlot *mNationsStatsPlotController = nullptr;
+
+    /* Vessels */
+    QCustomPlot *mVesselsPlot;
+    displace::plot::VesselsStat mSelectedVesselsStat;
+    QCPItemLine *mVesTimeLine;
+    VesselsStatsPlot *mVesselsStatsPlotController = nullptr;
 
     /* Metiers */
     displace::plot::MetiersStat mSelectedMetiersStat = displace::plot::MetiersStat::M_Catches;

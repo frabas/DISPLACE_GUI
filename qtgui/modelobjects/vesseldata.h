@@ -30,6 +30,8 @@ class VesselStats;
 
 class VesselData
 {
+     QString mName;
+
 public:
     std::shared_ptr<Vessel> mVessel; /* This is crap too. */
 
@@ -114,6 +116,8 @@ public:
     double getGav() const;
     void setGav(double value);
 
+    QString getName() const;
+    void setName(const QString &value);
 
 private:
     int mNationality;

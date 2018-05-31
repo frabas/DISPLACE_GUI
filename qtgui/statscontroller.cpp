@@ -29,6 +29,7 @@
 #include <plots/windfarmsstatsplot.h>
 #include <plots/shipsstatsplot.h>
 #include <plots/nationsstatsplot.h>
+#include <plots/vesselsstatsplot.h>
 #include <plots/populationsstatplot.h>
 #include <plots/harboursstatplot.h>
 #include <plots/metiersstatsplot.h>
@@ -46,7 +47,9 @@ StatsController::StatsController(QObject *parent)
       mSelectedHarboursStat(displace::plot::HarboursStat::H_Catches),
       mPlotHarbours(0),
       mSelectedNationsStat(displace::plot::NationsStat::Catches),
+      mSelectedVesselsStat(displace::plot::VesselsStat::Catches),
       mNatTimeLine(0),
+      mVesTimeLine(0),
       mPlotMetiers(0),
       mSelectedMetiersStat(displace::plot::MetiersStat::M_Catches),
       mLastModel(0)
@@ -180,6 +183,19 @@ void StatsController::setNationsStatsPlot(PlotWidget *plot, GraphInteractionCont
     controller->setOnPopupMenuBuiltCallback(std::bind(&NationsStatsPlot::createPopup, mNationsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
+void StatsController::setVesselsStatsPlot(PlotWidget *plot, GraphInteractionController *controller)
+{
+    mVesselsPlot = plot;
+    mVesselsPlot->legend->setVisible(true);
+    if (mVesTimeLine != nullptr) delete mVesTimeLine;
+    if (mVesselsStatsPlotController != nullptr) delete mVesselsStatsPlotController;
+
+    mVesTimeLine = new QCPItemLine(mVesselsPlot);
+    mVesselsStatsPlotController = new VesselsStatsPlot(plot, mNatTimeLine);
+    plot->setStatsPlot(mVesselsStatsPlotController);
+    controller->setOnPopupMenuBuiltCallback(std::bind(&VesselsStatsPlot::createPopup, mVesselsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
+}
+
 
 void StatsController::updateStats(DisplaceModel *model)
 {
@@ -189,6 +205,9 @@ void StatsController::updateStats(DisplaceModel *model)
     updatePopulationStats(model, mSelectedPopStat, nullptr);
     if (mNationsStatsPlotController) {
         updateNationStats(model, mSelectedNationsStat, nullptr);
+    }
+    if (mVesselsStatsPlotController) {
+        updateVesselStats(model, mSelectedVesselsStat, nullptr);
     }
 
     updateHarboursStats(model, nullptr);
@@ -219,6 +238,12 @@ void StatsController::setPopulationStat(displace::plot::PopulationStat stat)
 void StatsController::setNationsStat(displace::plot::NationsStat stat)
 {
     mSelectedNationsStat = stat;
+    updateStats(mLastModel);
+}
+
+void StatsController::setVesselsStat(displace::plot::VesselsStat stat)
+{
+    mSelectedVesselsStat = stat;
     updateStats(mLastModel);
 }
 
@@ -267,6 +292,9 @@ void StatsController::setCurrentTimeStep(double t)
     mNatTimeLine->start->setCoords(t, timelineMin);
     mNatTimeLine->end->setCoords(t, timelineMax);
 
+    mVesTimeLine->start->setCoords(t, timelineMin);
+    mVesTimeLine->end->setCoords(t, timelineMax);
+
 }
 
 void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType st, int subtype, QCustomPlot *plot)
@@ -277,6 +305,9 @@ void StatsController::plotGraph(DisplaceModel *model, StatsController::StatType 
         break;
     case Nations:
         updateNationStats(model, static_cast<displace::plot::NationsStat>(subtype), plot);
+        break;
+    case Vessels:
+        updateVesselStats(model, static_cast<displace::plot::VesselsStat>(subtype), plot);
         break;
     case Harbours:
         updateHarboursStats(model,plot);
@@ -298,6 +329,11 @@ void StatsController::updatePopulationStats(DisplaceModel *model, displace::plot
 void StatsController::updateNationStats(DisplaceModel *model, displace::plot::NationsStat nationsStat, QCustomPlot *plot)
 {
     mNationsStatsPlotController->update(model, nationsStat, plot);
+}
+
+void StatsController::updateVesselStats(DisplaceModel *model, displace::plot::VesselsStat vesselsStat, QCustomPlot *plot)
+{
+    mVesselsStatsPlotController->update(model, vesselsStat, plot);
 }
 
 void StatsController::updateHarboursStats(DisplaceModel *model, QCustomPlot *plot)

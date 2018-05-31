@@ -355,6 +355,124 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     return data;
 }
 
+TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat stattype, string vessel, Operation op)
+{
+    bool isAggregate = false;
+    if (stattype == VesselsStat::Catches || stattype == VesselsStat::Discards) {
+        isAggregate = true;
+    }
+
+    FieldDef<FieldType::Real> f("");
+    switch (stattype) {
+    case VesselsStat::Catches:
+        f = p->mVesselLoglikeCatchesTable->fldCatches;
+        break;
+    case VesselsStat::Discards:
+        f = p->mVesselLoglikeCatchesTable->fldDiscards;
+        break;
+    case VesselsStat::Earnings:
+        f = p->mVesselLoglikeTable->fldRevenueAV;
+        break;
+    case VesselsStat::ExEarnings:
+        f = p->mVesselLoglikeTable->revenueExAV;
+        break;
+    case VesselsStat::TimeAtSea:
+        f = p->mVesselLoglikeTable->timeAtSea;
+        break;
+    case VesselsStat::Gav:
+        f = p->mVesselLoglikeTable->gav;
+        break;
+    case VesselsStat::Vpuf:
+        f = p->mVesselLoglikeTable->vpuf;
+        break;
+    case VesselsStat::SweptArea:
+        f = p->mVesselLoglikeTable->sweptArea;
+        break;
+    case VesselsStat::RevenuePerSweptArea:
+        f = p->mVesselLoglikeTable->revenuePerSweptArea;
+        break;
+    case VesselsStat::GVA:
+        f = p->mVesselLoglikeTable->GVA;
+        break;
+    case VesselsStat::GVAPerRevenue:
+        f = p->mVesselLoglikeTable->GVAPerRevenue;
+        break;
+    case VesselsStat::LabourSurplus:
+        f = p->mVesselLoglikeTable->LabourSurplus;
+        break;
+    case VesselsStat::GrossProfit:
+        f = p->mVesselLoglikeTable->GrossProfit;
+        break;
+    case VesselsStat::NetProfit:
+        f = p->mVesselLoglikeTable->NetProfit;
+        break;
+    case VesselsStat::NetProfitMargin:
+        f = p->mVesselLoglikeTable->NetProfitMargin;
+        break;
+    case VesselsStat::GVAPerFTE:
+        f = p->mVesselLoglikeTable->GVAPerFTE;
+        break;
+    case VesselsStat::RoFTA:
+        f = p->mVesselLoglikeTable->RoFTA;
+        break;
+    case VesselsStat::BER:
+        f = p->mVesselLoglikeTable->BER;
+        break;
+    case VesselsStat::CRBER:
+        f = p->mVesselLoglikeTable->CRBER;
+        break;
+    case VesselsStat::NetPresentValue:
+        f = p->mVesselLoglikeTable->NetPresentValue;
+        break;
+    case VesselsStat::numTrips:
+        f = sqlite::FieldDef<sqlite::FieldType::Real>("rowId");
+        break;
+    default:
+        throw std::runtime_error("getVesselLoglikeDataByVessel case not handled.");
+    }
+
+    switch (op) {
+    case Operation::Sum:
+        f = sqlite::op::sum(f);
+        break;
+    case Operation::Average:
+        f = sqlite::op::avg(f);
+        break;
+    case Operation::Count:
+        f = sqlite::op::count(f);
+        break;
+    }
+
+    auto select = sqlite::statements::Select(p->mVesselLoglikeTable->name(),
+                                                    p->mVesselLoglikeTable->fldTStep,
+                                                    f
+                                                    );
+    select.join(p->mVesselDefTable->name(), p->mVesselLoglikeTable->fldId, p->mVesselDefTable->fldId);
+
+    if (isAggregate)
+        select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
+
+    //select.where(op::eq(p->mVesselDefTable->fldNationality));
+    select.groupBy(p->mVesselLoglikeTable->fldTStep);
+
+    //qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
+
+    sqlite::SQLiteStatement stmt(p->db,select);
+
+    TimelineData data;
+
+    stmt.bind(std::make_tuple(vessel));
+    stmt.execute([&stmt, &data](){
+        data.t.push_back(stmt.getIntValue(0));
+        data.v.push_back(stmt.getDoubleValue(1));
+        return true;
+    });
+
+
+    return data;
+}
+
+
 TimelineData SQLiteOutputStorage::getVesselLoglikeDataByHarbour(HarboursStat stattype, int harbourid, Operation op)
 {
     bool isAggregate = false;
@@ -574,6 +692,9 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByMetier(MetiersStat statt
 
     return data;
 }
+
+
+
 
 TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, AggregationType aggtype, int popid,
                                                         vector<int> szid)

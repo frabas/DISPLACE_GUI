@@ -349,8 +349,14 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QTabWidget" name="statsTab">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="whatsThis">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -591,6 +597,160 @@
             </item>
             <item>
              <widget class="PlotWidget" name="plotNations" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabStatsVessels">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="accessibleName">
+            <string/>
+           </property>
+           <property name="accessibleDescription">
+            <string/>
+           </property>
+           <attribute name="icon">
+            <iconset resource="qtgui.qrc">
+             <normaloff>:/icons/displace.png</normaloff>:/icons/displace.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>Vessels</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="vesselsStatsSelector">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <item>
+               <property name="text">
+                <string>Cum. Catches</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Discards</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Revenues - All</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Revenues - Explicit pops</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Time At Sea</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Gross Value Added - Energy costs only</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Fuel Efficiency (Trip Value Per Unit Fuel)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cum. Seabed Swept Area</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Revenues Per Swept Area</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Gross Value Added (GVA)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>GVA to Revenue Ratio</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Labour Surplus</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Gross Profit</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Net Profit (Loss)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Net Profit Margin</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>GVA Per FTE</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Rate of Return on Fixed Tangible Assests (RoFTA)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Break-Even Revenue (BER)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Revenue to Break Even Revenue Ratio (CR/BER)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Net Present Value</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Number of Trips</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>293</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="PlotWidget" name="plotVessels" native="true"/>
             </item>
            </layout>
           </widget>

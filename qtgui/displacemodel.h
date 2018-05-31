@@ -205,6 +205,11 @@ public:
     const QList<std::shared_ptr<NationData> > &getNationsList() const { return mNations; }
     const NationData &getNation(int idx) const { return *mNations.at(idx); }
 
+    /* Access to Vessels statistics */
+
+    const QList<std::shared_ptr<VesselData> > &getVesselsList() const { return mVessels; }
+    const VesselData &getVessel(int idx) const { return *mVessels.at(idx); }
+
     /* Access to Harbour statistics */
 
     const QList<std::shared_ptr<HarbourData> > &getHarbourList() const { return mHarbours; }
@@ -326,6 +331,7 @@ public:
     /* Interesting Nations */
     const QList<int> &getInterestingNations() const { return mInterestingNations; }
 
+
     /** \brief insert the pop into the list of interest for pops */
     void setInterestingNations(int n) {
         if (!mInterestingNations.contains(n))
@@ -340,6 +346,26 @@ public:
     bool isInterestingNations(int n) {
         return mInterestingNations.contains(n);
     }
+
+
+    /* Interesting Vessels */
+    const QList<int> &getInterestingVessels() const { return mInterestingVessels; }
+
+    void setInterestingVessels(int n) {
+        if (!mInterestingVessels.contains(n))
+            mInterestingVessels.append(n);
+            qSort(mInterestingVessels);
+    }
+
+    /** \brief remove the pop from the list of interest for pops */
+    void remInterestingVessels(int n) {
+        mInterestingVessels.removeAll(n);
+    }
+    bool isInterestingVessels(int n) {
+        return mInterestingVessels.contains(n);
+    }
+
+
 
     //
 
@@ -518,7 +544,8 @@ private:
     QList<int> mInterestingSizes;
     QList<types::NodeId> mInterestingHarb;
     QList<int> mInterestingNations;
-    InterestingList<int> mInterestingBenthos;  
+    QList<int> mInterestingVessels;
+    InterestingList<int> mInterestingBenthos;
     InterestingList<int> mInterestingFishfarms;
     InterestingList<int> mInterestingWindfarms;
     InterestingList<int> mInterestingShips;

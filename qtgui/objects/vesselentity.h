@@ -41,6 +41,8 @@ public:
     virtual int rowCount() const;
     virtual int columnCount() const;
     virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual Qt::ItemFlags flags(Qt::ItemFlags defflags, const QModelIndex &index) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
     // Specific access functions
     int getVesselId() const { return mVesselId; }

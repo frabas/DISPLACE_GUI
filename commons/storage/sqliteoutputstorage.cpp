@@ -29,6 +29,8 @@
 #include <Metier.h>
 #include <Population.h>
 
+
+
 const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 3;
 
 using namespace sqlite;
@@ -338,7 +340,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByNation(NationsStat statt
     select.where(op::eq(p->mVesselDefTable->fldNationality));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
-    //qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
+    //qDebug() << "VesselStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
 
     sqlite::SQLiteStatement stmt(p->db,select);
 
@@ -452,10 +454,10 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat statt
     if (isAggregate)
         select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
 
-    //select.where(op::eq(p->mVesselDefTable->fldNationality));
+    select.where(op::eq(p->mVesselDefTable->fldId));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
-    //qDebug() << "NationStat: " << QString::fromStdString(select.string()) << " : " << QString::fromStdString(nation);
+    std::cout << "VesselStat: " << select.string() << " : " << vessel;
 
     sqlite::SQLiteStatement stmt(p->db,select);
 

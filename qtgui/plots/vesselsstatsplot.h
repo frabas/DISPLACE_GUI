@@ -32,7 +32,8 @@ public:
 private:
     void update (QCustomPlot *);
     void saveTo();
-    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::VesselsStat stat, int vessel);
+    std::tuple<QVector<double>,QVector<double>> getData(DisplaceModel *model, displace::plot::VesselsStat stat,
+                                                        std::string vesselId);
 
 protected:
     void doUpdate() override;

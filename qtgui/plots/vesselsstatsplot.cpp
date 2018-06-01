@@ -75,9 +75,10 @@ void VesselsStatsPlot::update(QCustomPlot *plot)
         graph->setBrush(QBrush(col));
         ++cnt;
 
-        graph->setName(QString(model->getVessel(ip).getName()));
+        auto name = model->getVesselId(ip);
+        graph->setName(name);
 
-        auto v = getData(model, stat, ip);
+        auto v = getData(model, stat, name.toStdString());
         graph->setData(std::get<0>(v), std::get<1>(v));
 
         ++col_it;
@@ -203,9 +204,10 @@ void VesselsStatsPlot::saveTo()
         QTextStream strm(&file);
 
         for (auto ip : ipl) {
-            strm << QString(lastModel->getVessel(ip).getName()) << "\n";
+            auto name = lastModel->getVesselId(ip);
+            strm << name << "\n";
 
-            auto v = getData(lastModel, lastStat, ip);
+            auto v = getData(lastModel, lastStat, name.toStdString());
             auto &k = std::get<0>(v);
             auto &d = std::get<1>(v);
 
@@ -222,7 +224,9 @@ void VesselsStatsPlot::saveTo()
     }
 }
 
-std::tuple<QVector<double>, QVector<double> > VesselsStatsPlot::getData(DisplaceModel *model, displace::plot::VesselsStat stat, int vessel)
+std::tuple<QVector<double>, QVector<double> > VesselsStatsPlot::getData(DisplaceModel *model,
+                                                                        displace::plot::VesselsStat stat,
+                                                                        string vesselId)
 {
     auto db = model->getOutputStorage();
     if (db == nullptr)
@@ -244,12 +248,12 @@ std::tuple<QVector<double>, QVector<double> > VesselsStatsPlot::getData(Displace
     case NS::GrossProfit:
     case NS::NetProfit:
     case NS::NetPresentValue:
-        dt = db->getVesselLoglikeDataByVessel(stat, model->getVessel(vessel).getName().toStdString(),
+        dt = db->getVesselLoglikeDataByVessel(stat, vesselId,
                                               SQLiteOutputStorage::Operation::Sum);
         stats::runningSum(dt.v);
         break;
     case NS::numTrips:
-        dt = db->getVesselLoglikeDataByVessel(stat, model->getVessel(vessel).getName().toStdString(),
+        dt = db->getVesselLoglikeDataByVessel(stat, vesselId,
                                               SQLiteOutputStorage::Operation::Count);
         stats::runningSum(dt.v);
         break;
@@ -261,7 +265,7 @@ std::tuple<QVector<double>, QVector<double> > VesselsStatsPlot::getData(Displace
     case NS::RoFTA:
     case NS::BER:
     case NS::CRBER:
-        dt = db->getVesselLoglikeDataByVessel(stat, model->getVessel(vessel).getName().toStdString(),
+        dt = db->getVesselLoglikeDataByVessel(stat, vesselId,
                                               SQLiteOutputStorage::Operation::Average);
         stats::runningAvg(dt.v);
         break;

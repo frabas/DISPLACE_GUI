@@ -191,7 +191,7 @@ void StatsController::setVesselsStatsPlot(PlotWidget *plot, GraphInteractionCont
     if (mVesselsStatsPlotController != nullptr) delete mVesselsStatsPlotController;
 
     mVesTimeLine = new QCPItemLine(mVesselsPlot);
-    mVesselsStatsPlotController = new VesselsStatsPlot(plot, mNatTimeLine);
+    mVesselsStatsPlotController = new VesselsStatsPlot(plot, mVesTimeLine);
     plot->setStatsPlot(mVesselsStatsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&VesselsStatsPlot::createPopup, mVesselsStatsPlotController, std::placeholders::_1, std::placeholders::_2));
 }

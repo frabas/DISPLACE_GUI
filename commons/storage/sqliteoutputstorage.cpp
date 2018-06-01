@@ -454,7 +454,7 @@ TimelineData SQLiteOutputStorage::getVesselLoglikeDataByVessel(VesselsStat statt
     if (isAggregate)
         select.join(p->mVesselLoglikeCatchesTable->name(), p->mVesselLoglikeTable->fldRowId, p->mVesselLoglikeCatchesTable->fldLoglikeId);
 
-    select.where(op::eq(p->mVesselDefTable->fldId));
+    select.where(op::eq(p->mVesselDefTable->fldName));
     select.groupBy(p->mVesselLoglikeTable->fldTStep);
 
     std::cout << "VesselStat: " << select.string() << " : " << vessel;

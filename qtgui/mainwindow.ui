@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>962</width>
+    <width>1002</width>
     <height>692</height>
    </rect>
   </property>
@@ -38,8 +38,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>962</width>
-     <height>21</height>
+     <width>1002</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -356,7 +356,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -621,6 +621,21 @@
             <string>Vessels</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_6">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
              <widget class="QComboBox" name="vesselsStatsSelector">
               <property name="sizePolicy">

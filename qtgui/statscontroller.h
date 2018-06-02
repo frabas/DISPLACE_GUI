@@ -54,7 +54,7 @@ public:
     void setBenthosPlot(PlotWidget *plot, GraphInteractionController *controller);
     void setFishfarmsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
     void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
-    void setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
+    void setShipsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
     void setNationsStatsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
     void setVesselsStatsPlot(PlotWidget *plot, GraphInteractionController *controller = nullptr);
 

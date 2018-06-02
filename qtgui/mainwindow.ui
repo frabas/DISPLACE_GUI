@@ -356,7 +356,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>6</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -1335,7 +1335,7 @@
              </spacer>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QCustomPlot" name="plotShips" native="true"/>
+             <widget class="PlotWidget" name="plotShips" native="true"/>
             </item>
            </layout>
           </widget>

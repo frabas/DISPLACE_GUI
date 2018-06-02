@@ -17,18 +17,35 @@ ShipsStatsPlot::ShipsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
-void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat)
+void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat, QCustomPlot *plot)
 {
-    mPlot->clearGraphs();
+    checkUpdate(plot,
+                [&, model, stat]() {
+                    return (model != lastModel || stat != lastStat);
+                },
+                [&, model, stat]() {
+                    lastModel = model;
+                    lastStat = stat;
+                });
 
-    QList<int>  interShipsIDsList= model->getInterestingShips();
+}
 
-    auto shipsTypeGroups = model->getShipsTypesList();
+void ShipsStatsPlot::update(QCustomPlot *plot)
+{
+    qDebug() << "ShipsStat UPDATE";
+    if (plot == nullptr)
+        plot = mPlot;
+    
+    plot->clearGraphs();
+
+    QList<int>  interShipsIDsList= lastModel->getInterestingShips();
+
+    auto shipsTypeGroups = lastModel->getShipsTypesList();
     QList<int> interShipsTypesList = shipsTypeGroups->list();
 
     std::vector<int> shptype;
     for (auto i : interShipsIDsList) {
-        shptype.push_back(model->getShipsTypesList()->list()[i]);
+        shptype.push_back(lastModel->getShipsTypesList()->list()[i]);
     }
 
     QList<int> graphList;
@@ -39,7 +56,7 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
 
     /* If no farm type is selected, but aggregate is selected, select all farms */
     if (interShipsTypesList.size() != 0) {
-        for(int i = 0; i < model->getNumShipsTypes(); ++i) {
+        for(int i = 0; i < lastModel->getNumShipsTypes(); ++i) {
             if (!shipsTypeGroups->has(i))
                 continue;
 
@@ -66,7 +83,7 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
 
     /* If no Ships is selected, select all Ships type */
     if (interShipsIDsList.size() == 0) {
-        for (int i = 0; i < model->getShipsCount(); ++i) {
+        for (int i = 0; i < lastModel->getShipsCount(); ++i) {
             interShipsIDsList.push_back(i+1);
         }
     }
@@ -77,7 +94,7 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
     QList<QVector<double> >keyData;
     QList<QVector<double> >valueData;
 
-    double t = model->getCurrentStep();
+    double t = lastModel->getCurrentStep();
     if (mTimeline != nullptr) {
         mTimeline->start->setCoords(t, timelineMin);
         mTimeline->end->setCoords(t, timelineMax);
@@ -85,7 +102,7 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
 
     for (int igraph = 0; igraph < graphNum; ++igraph) {
         // Creates graph. Index in list are: ip * nsz + isz
-        QCPGraph *graph = mPlot->addGraph();
+        QCPGraph *graph = plot->addGraph();
         QColor col = mPalette.colorByIndex(igraph);
 
         graph->setLineStyle(QCPGraph::lsLine);
@@ -123,79 +140,79 @@ void ShipsStatsPlot::update(DisplaceModel *model, displace::plot::ShipsStat stat
             break;
         }
 
-        auto v = getData(model, stat,aggtype, grp, shptype);
+        auto v = getData(lastModel, lastStat,aggtype, grp, shptype);
         graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
     }
 
-    switch (stat) {
+    switch (lastStat) {
     case ShipsStat::SH_NbTransportedUnits:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("Nb. Transported Units"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Nb. Transported Units"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     case ShipsStat::SH_FuelPerHour:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("Fuel Per Hour"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Fuel Per Hour"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     case ShipsStat::SH_NOxEmission_gperkW:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("NOx Emission Factor (g per kW)"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("NOx Emission Factor (g per kW)"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     case ShipsStat::SH_SOxEmission_PercentPerFuelMass:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("SOx Emission Factor (g per kW)"));
-        mPlot->rescaleAxes();   // funny enough it does not rescale right so that values are visible, unless a plot with setRange is selected before....
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("SOx Emission Factor (g per kW)"));
+        plot->rescaleAxes();   // funny enough it does not rescale right so that values are visible, unless a plot with setRange is selected before....
+        plot->replot();
         break;
     case ShipsStat::SH_GHGEmission_gperkW:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("GHG Emission Factor (g per kW)"));
-        mPlot->rescaleAxes();
-        mPlot->yAxis->setRange(0, 1);
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("GHG Emission Factor (g per kW)"));
+        plot->rescaleAxes();
+        plot->yAxis->setRange(0, 1);
+        plot->replot();
         break;
     case ShipsStat::SH_PMEEmission_gperkW:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("PME Emission Factor (g per kW)"));
-        mPlot->rescaleAxes();
-        mPlot->yAxis->setRange(0, 1);
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("PME Emission Factor (g per kW)"));
+        plot->rescaleAxes();
+        plot->yAxis->setRange(0, 1);
+        plot->replot();
         break;
     case ShipsStat::SH_FuelUseLitre:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("Fule Use (litre)"));
-        mPlot->rescaleAxes();
-         mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("Fule Use (litre)"));
+        plot->rescaleAxes();
+         plot->replot();
         break;
     case ShipsStat::SH_NOxEmission:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("NOx Emission (g)"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("NOx Emission (g)"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     case ShipsStat::SH_SOxEmission:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("SOx Emission (g)"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("SOx Emission (g)"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     case ShipsStat::SH_GHGEmission:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("GHG Emission (g)"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("GHG Emission (g)"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     case ShipsStat::SH_PMEEmission:
-        mPlot->xAxis->setLabel(QObject::tr("Time (h)"));
-        mPlot->yAxis->setLabel(QObject::tr("PME Emission (g)"));
-        mPlot->rescaleAxes();
-        mPlot->replot();
+        plot->xAxis->setLabel(QObject::tr("Time (h)"));
+        plot->yAxis->setLabel(QObject::tr("PME Emission (g)"));
+        plot->rescaleAxes();
+        plot->replot();
         break;
     }
 
@@ -227,6 +244,7 @@ std::tuple<QVector<double>, QVector<double> > ShipsStatsPlot::getData(DisplaceMo
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
 }
+
 
 #if 0
 double ShipsStatsPlot::getStatValue(DisplaceModel *model, displace::plot::ShipsStat stattype, AggregationType aggtype, int shipid, std::vector<int> shiptypeid)

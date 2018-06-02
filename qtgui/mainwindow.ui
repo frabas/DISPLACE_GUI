@@ -1348,6 +1348,21 @@
             <string>Windfarms</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
              <widget class="QComboBox" name="windfarmsStatSelector">
               <property name="sizePolicy">
@@ -1385,7 +1400,7 @@
              </spacer>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QCustomPlot" name="plotWindfarms" native="true"/>
+             <widget class="PlotWidget" name="plotWindfarms" native="true"/>
             </item>
            </layout>
           </widget>
@@ -2154,12 +2169,6 @@ L3</string>
    <class>qmapcontrol::QMapControl</class>
    <extends>QWidget</extends>
    <header>QMapControl/QMapControl.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

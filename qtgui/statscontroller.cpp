@@ -125,10 +125,8 @@ void StatsController::setFishfarmsPlot(PlotWidget *plot, GraphInteractionControl
 }
 
 
-void StatsController::setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setWindfarmsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
-   cout << "Set windfarm plot" << endl;
-
     mWindfarmTypeGroupsPlot = plot;
     mWindfarmTypeGroupsPlot->legend->setVisible(true);
 
@@ -141,8 +139,7 @@ void StatsController::setWindfarmsPlot(QCustomPlot *plot, GraphInteractionContro
     mWindfarmsTimeLine = new QCPItemLine(mWindfarmTypeGroupsPlot);
     mWindfarmsPlotController = new WindfarmsStatsPlot(plot, mWindfarmsTimeLine);
 
-    cout << "Set windfarm plot...ok" << endl;
-
+    plot->setStatsPlot(mWindfarmsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&WindfarmsStatsPlot::createPopup, mWindfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -359,7 +356,7 @@ void StatsController::updateFishfarmsStats(DisplaceModel *model, displace::plot:
 
 void StatsController::updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat)
 {
-    mWindfarmsPlotController->update(model, stat);
+    mWindfarmsPlotController->update(model, stat, nullptr);
 }
 
 void StatsController::updateShipsStats(DisplaceModel *model, displace::plot::ShipsStat stat)

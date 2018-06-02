@@ -15,11 +15,27 @@ FishfarmsStatsPlot::FishfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
-void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsStat stat)
+void FishfarmsStatsPlot::update(DisplaceModel *model, displace::plot::FishfarmsStat stat, QCustomPlot *theplot)
+{
+    checkUpdate(theplot,
+    [&, model, stat]() {
+        return (model != lastModel || stat != lastStat);
+    },
+    [&, model, stat]() {
+        lastModel = model;
+        lastStat = stat;
+    });
+}
+
+void FishfarmsStatsPlot::update(QCustomPlot *plot)
 {
     try {
-        mPlot->clearGraphs();
-        displayPlot(model, stat);
+        if (plot == nullptr)
+            plot = mPlot;
+
+        qDebug() << "Fishfarm plot UPDATE";
+        plot->clearGraphs();
+        displayPlot(lastModel, lastStat);
     } catch (std::exception &x ) {
         // add the text label at the top:
         QCPItemText *textLabel = new QCPItemText(mPlot);
@@ -231,3 +247,4 @@ std::tuple<QVector<double>, QVector<double> > FishfarmsStatsPlot::getData(Displa
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
 }
+

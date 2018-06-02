@@ -1,6 +1,7 @@
 #ifndef FISHFARMSSTATSPLOT_H
 #define FISHFARMSSTATSPLOT_H
 
+#include "BaseStatsPlotImpl.h"
 #include "plottypes.h"
 #include <palettemanager.h>
 #include <graphinteractioncontroller.h>
@@ -14,7 +15,7 @@ class DisplaceModel;
 class QCustomPlot;
 class QCPItemLine;
 
-class FishfarmsStatsPlot
+class FishfarmsStatsPlot : public BaseStatsPlotImpl
 {
     QCustomPlot *mPlot;
     QCPItemLine *mTimeline;
@@ -22,6 +23,9 @@ class FishfarmsStatsPlot
     double timelineMax = 1e20;
     double timelineMin = -1e20;
     Palette mPalette;
+
+    DisplaceModel *lastModel;
+    displace::plot::FishfarmsStat lastStat;
 
     QString mSaveFilename;
 public:
@@ -32,8 +36,12 @@ public:
         timelineMax = max;
     }
 
-    void update(DisplaceModel *model, displace::plot::FishfarmsStat stat);
+    void update(DisplaceModel *model, displace::plot::FishfarmsStat stat, QCustomPlot *plot);
     void createPopup (GraphInteractionController::PopupMenuLocation location, QMenu *menu);
+
+protected:
+    void update(QCustomPlot *plot) override;
+
 private:
     void displayPlot(DisplaceModel *model, displace::plot::FishfarmsStat stat);
     std::tuple<QVector<double>, QVector<double> > getData(DisplaceModel *model,

@@ -106,10 +106,8 @@ void StatsController::setBenthosPlot(PlotWidget *plot, GraphInteractionControlle
 
 }
 
-void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller)
+void StatsController::setFishfarmsPlot(PlotWidget *plot, GraphInteractionController *controller)
 {
-   cout << "Set fishfarm plot" << endl;
-
     mfarmTypeGroupsPlot = plot;
     mfarmTypeGroupsPlot->legend->setVisible(true);
 
@@ -122,8 +120,7 @@ void StatsController::setFishfarmsPlot(QCustomPlot *plot, GraphInteractionContro
     mFishfarmsTimeLine = new QCPItemLine(mfarmTypeGroupsPlot);
     mFishfarmsPlotController = new FishfarmsStatsPlot(plot, mFishfarmsTimeLine);
 
-    cout << "Set fishfarm plot...ok" << endl;
-
+    plot->setStatsPlot(mFishfarmsPlotController);
     controller->setOnPopupMenuBuiltCallback(std::bind(&FishfarmsStatsPlot::createPopup, mFishfarmsPlotController, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -360,7 +357,7 @@ void StatsController::updateBenthosStats(DisplaceModel *model, displace::plot::B
 
 void StatsController::updateFishfarmsStats(DisplaceModel *model, displace::plot::FishfarmsStat stat)
 {
-    mFishfarmsPlotController->update(model, stat);
+    mFishfarmsPlotController->update(model, stat, nullptr);
 }
 
 void StatsController::updateWindfarmsStats(DisplaceModel *model, displace::plot::WindfarmsStat stat)

@@ -6,6 +6,7 @@
 #include <qcustomplot.h>
 
 #include <QPen>
+#include <QDebug>
 
 using namespace displace::plot;
 
@@ -17,8 +18,30 @@ BenthosStatsPlot::BenthosStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
     mPalette = PaletteManager::instance()->palette(BenthosRole);
 }
 
-void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat stat)
+void BenthosStatsPlot::update(DisplaceModel *model, displace::plot::BenthosStat stat, QCustomPlot *theplot)
 {
+    if (theplot != nullptr) {
+        // do not cache
+        update(theplot);
+    } else {
+        if (model != lastModel || stat != lastStat) {
+            // need to properly update
+            lastModel = model;
+            lastStat = stat;
+            invalidate();
+        }
+        if (isVisible())
+            update(nullptr);
+    }
+}
+
+void BenthosStatsPlot::update(QCustomPlot *theplot)
+{
+    auto model = lastModel;
+    auto stat = lastStat;
+
+    qDebug() << "BenthosStat UPDATE";
+
     mPlot->clearGraphs();
 
     QList<int>  interBenthosIDsList= model->getInterestingBenthos();
@@ -171,4 +194,9 @@ std::tuple<QVector<double>, QVector<double> > BenthosStatsPlot::getData(Displace
 
     QVector<double> kd = QVector<double>::fromStdVector(dt.t), vd = QVector<double>::fromStdVector(dt.v);
     return std::make_tuple(kd, vd);
+}
+
+void BenthosStatsPlot::doUpdate()
+{
+    update(nullptr);
 }

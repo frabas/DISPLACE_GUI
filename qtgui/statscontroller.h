@@ -28,6 +28,7 @@
 
 #include "plottypes.h"
 #include <graphinteractioncontroller.h>
+#include <StatsPlot.h>
 
 class DisplaceModel;
 class BenthosStatsPlot;
@@ -50,7 +51,7 @@ public:
     void setPopulationPlot(PlotWidget *plot, GraphInteractionController *controller);
     void setHarboursPlot(PlotWidget *plot);
     void setMetiersPlot(PlotWidget *plot);
-    void setBenthosPlot(QCustomPlot *plot, GraphInteractionController *controller);
+    void setBenthosPlot(PlotWidget *plot, GraphInteractionController *controller);
     void setFishfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setWindfarmsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);
     void setShipsPlot(QCustomPlot *plot, GraphInteractionController *controller = nullptr);

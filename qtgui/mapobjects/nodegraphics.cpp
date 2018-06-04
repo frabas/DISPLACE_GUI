@@ -255,7 +255,7 @@ void NodeWithCumDiscardsRatioGraphics::drawShape(QPainter &painter, const qmapco
 {
     Q_UNUSED(rect);
 
-    painter.setBrush(mController->getPalette(mModelIndex,Value0to1Role).color((float)mNode->get_cumdiscardsratio()));
+    painter.setBrush(mController->getPalette(mModelIndex,Value0to1Role).color((double)mNode->get_cumdiscardsratio()));
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 

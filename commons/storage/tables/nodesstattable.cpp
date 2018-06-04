@@ -45,6 +45,8 @@ void NodesStatTable::init()
     if (!p->init) {
         p->init = true;
 
+
+
         p->insertStatement = prepareInsert(std::make_tuple(fldTStep,
                                                            fldNodeId,
                                                            cumFTime,
@@ -75,6 +77,9 @@ bool NodesStatTable::insert(int tstep, Node *node)
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
+    double discratio =node->get_cumdiscardsratio();
+    if(node->get_cumdiscards()<1.0) discratio =0.0; // filter out the neglectible discard
+
 
     SQLiteTable::insert(p->insertStatement,
                         std::make_tuple(tstep,
@@ -85,7 +90,7 @@ bool NodesStatTable::insert(int tstep, Node *node)
                             node->get_cumcatches(),
                             node->get_cumcatches_with_threshold(),
                             node->get_cumdiscards(),
-                            node->get_cumdiscardsratio())
+                            discratio)
                         );
 return 0;
 }

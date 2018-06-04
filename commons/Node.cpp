@@ -1639,7 +1639,7 @@ void Node::export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep)
 
     popnodes << setprecision(8) << fixed;
     // tstep / node / long / lat /  tot impact pop
-   if(this->get_cumdiscardsratio()>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+   if(this->get_cumdiscardsratio()>1e-6 && this->get_cumdiscards()>1) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         this->get_cumdiscardsratio() << " "  << endl;
 

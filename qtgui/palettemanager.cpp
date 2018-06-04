@@ -28,6 +28,7 @@ PaletteManager *PaletteManager::mInstance = 0;
 
 const QString PaletteManager::defaultPaletteFileNames[] = {
     ":/palettes/heat_colors_12.p2c",
+    ":/palettes/heat_colors_12_0_to_1.p2c",
     ":/palettes/pop_colors.p2c",
     ":/palettes/tariffs_colors.p2c",
     ":/palettes/benthos_colors.p2c",

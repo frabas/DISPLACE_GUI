@@ -3169,6 +3169,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
     // contribute to accumulated catches on this node
     this->get_loc()->add_to_cumcatches(cumcatch_fgrounds.at(idx_node_r));
     this->get_loc()->add_to_cumdiscards(cumdiscard_fgrounds.at(idx_node_r));
+    double discratio =  this->get_loc()->get_cumdiscards() / (this->get_loc()->get_cumdiscards()+this->get_loc()->get_cumcatches());
+    discratio = discratio>0 ? discratio : 0.0;
+    this->get_loc()->set_cumdiscardsratio(discratio);
 
 
     // check the matrix of catches

@@ -61,6 +61,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     cumcatches=0;
     cumcatches_with_threshold=0;
     cumdiscards=0;
+    cumdiscardsratio=0;
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
@@ -186,6 +187,7 @@ Node::Node()
       cumsubsurfacesweptarea(0),
       cumcatches(0),
       cumdiscards(0),
+      cumdiscardsratio(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
@@ -723,6 +725,10 @@ double Node::get_cumdiscards() const
     return(cumdiscards);
 }
 
+double Node::get_cumdiscardsratio() const
+{
+    return(cumdiscardsratio);
+}
 
 vector<int> Node::get_pop_names_on_node ()
 {
@@ -787,6 +793,10 @@ void Node::set_cumdiscards(double tot)
    cumdiscards = tot;
 }
 
+void Node::set_cumdiscardsratio(double rat)
+{
+   cumdiscardsratio = rat;
+}
 
 void Node::set_xy(double xval, double yval)
 {
@@ -830,6 +840,7 @@ void Node::add_to_cumdiscards(double discards)
     cumdiscards+=discards;
     unlock();
 }
+
 
 void Node::add_to_cumcatches_per_pop(double catches, int pop)
 {
@@ -1617,6 +1628,20 @@ void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
    if(cumdiscards>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumdiscards << " "  << endl;
+
+}
+
+void Node::export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot impact pop
+   if(this->get_cumdiscardsratio()>1e-6 && this->get_cumdiscards()>1) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        this->get_cumdiscardsratio() << " "  << endl;
 
 }
 

@@ -1291,6 +1291,11 @@ void MainWindow::on_actionPalettes_triggered()
     showPaletteDialog(ValueRole);
 }
 
+void MainWindow::on_actionPalettes0to1_triggered()
+{
+    showPaletteDialog(Value0to1Role);
+}
+
 void MainWindow::on_actionPopulations_triggered()
 {
     showPaletteDialog(PopulationRole);

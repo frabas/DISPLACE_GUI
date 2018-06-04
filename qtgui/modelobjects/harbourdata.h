@@ -51,6 +51,7 @@ public:
     double numTrips;
     double mCumCatches;
     double mCumDiscards;
+    double mCumDiscardsRatio;
     double mCumProfit;
     double mGav;
     double mVpuf;

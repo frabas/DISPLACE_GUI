@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<palette role="9" type="displace" name="WIND_COLORS">
+<palette role="10" type="displace" name="WIND_COLORS">
 <color value="0" rgb="0,255,255"/>
 <color value="5" rgb="247,251,255"/>
 <color value="10" rgb="222,235,247"/>

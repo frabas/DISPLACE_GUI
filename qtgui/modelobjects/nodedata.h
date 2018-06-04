@@ -106,9 +106,11 @@ public:
     double get_cumcatches() const { return mNode->get_cumcatches(); }
     double get_cumcatches_with_threshold() const { return mNode->get_cumcatches_with_threshold(); }
     double get_cumdiscards() const { return mNode->get_cumdiscards(); }
-    void set_cumcatches(int i) { mNode->set_cumcatches(i); }
-    void set_cumcatches_with_threshold(int i) { mNode->set_cumcatches_with_threshold(i); }
-    void set_cumdiscards(int i) { mNode->set_cumdiscards(i); }
+    double get_cumdiscardsratio() const { return mNode->get_cumdiscardsratio(); }
+    void set_cumcatches(double v) { mNode->set_cumcatches(v); }
+    void set_cumcatches_with_threshold(int v) { mNode->set_cumcatches_with_threshold(v); }
+    void set_cumdiscards(double v) { mNode->set_cumdiscards(v); }
+    void set_cumdiscardsratio(double v) { mNode->set_cumdiscardsratio(v); }
     vector<double> get_tariffs() const { return mNode->get_tariffs(); }
     void set_tariffs(vector<double> tariffs) { mNode->set_tariffs(tariffs); }
     const vector<types::NodeId> &get_usual_fgrounds() { return mNode->get_usual_fgrounds(); }

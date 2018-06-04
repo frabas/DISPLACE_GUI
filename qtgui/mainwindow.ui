@@ -55,7 +55,7 @@
        <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
      </property>
      <addaction name="actionPalettes"/>
-     <addaction name="actionValues0to1"/>
+     <addaction name="actionPalettes0to1"/>
      <addaction name="actionPopulations"/>
      <addaction name="actionTariffs"/>
      <addaction name="actionBathymetry"/>
@@ -2111,8 +2111,8 @@ L3</string>
   </action>
   <action name="actionBathymetry">
    <property name="icon">
-    <iconset>
-     <normaloff>icons/colors.png</normaloff>icons/colors.png</iconset>
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
    </property>
    <property name="text">
     <string>Bathymetry...</string>
@@ -2181,7 +2181,7 @@ L3</string>
     <string>DissolvedCarbon...</string>
    </property>
   </action>
-  <action name="actionValues0to1">
+  <action name="actionPalettes0to1">
    <property name="icon">
     <iconset resource="qtgui.qrc">
      <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>

@@ -318,6 +318,7 @@ class COMMONSSHARED_EXPORT Node
         void export_popnodes_cumcatches(ofstream& popnodes, int tstep);
         void export_popnodes_cumcatches_with_threshold(ofstream& popnodes, int tstep, int threshold);
         void export_popnodes_cumdiscards(ofstream& popnodes, int tstep);
+        void export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep);
         void export_popnodes_cumulcatches_per_pop(ofstream& popnodes, int tstep, int pop);
         void export_nodes_envt(ofstream& nodes_event, int tstep);
         void export_popnodes_tariffs(ofstream& popnodes, int tstep);

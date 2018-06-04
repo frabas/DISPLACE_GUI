@@ -61,6 +61,7 @@ Node::Node(types::NodeId idx, double xval, double yval,  int _harbour, int _code
     cumcatches=0;
     cumcatches_with_threshold=0;
     cumdiscards=0;
+    cumdiscardsratio=0;
     harbour=_harbour;
 	code_area=_code_area;
 	marine_landscape=_marine_landscape;
@@ -1627,6 +1628,20 @@ void Node::export_popnodes_cumdiscards(ofstream& popnodes, int tstep)
    if(cumdiscards>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
         " " << this->get_x() << " " << this->get_y() << " " <<
         cumdiscards << " "  << endl;
+
+}
+
+void Node::export_popnodes_cumdiscardsratio(ofstream& popnodes, int tstep)
+{
+
+    dout(cout  << "export impact on nodes for use in e.g. a GIS engine" << endl);
+    // note that this file will also be used by the ui for displaying the statistics on node
+
+    popnodes << setprecision(8) << fixed;
+    // tstep / node / long / lat /  tot impact pop
+   if(this->get_cumdiscardsratio()>1e-6) popnodes << " " << tstep << " " << this->get_idx_node().toIndex() << " "<<
+        " " << this->get_x() << " " << this->get_y() << " " <<
+        this->get_cumdiscardsratio() << " "  << endl;
 
 }
 

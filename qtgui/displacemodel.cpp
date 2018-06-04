@@ -598,6 +598,13 @@ void DisplaceModel::collectPopCumdiscards(int step, int node_idx, double cumdisc
     mNodesStatsDirty = true;
 }
 
+void DisplaceModel::collectPopCumdiscardsratio(int step, int node_idx, double cumdiscardsratio)
+{
+    checkStatsCollection(step);
+    mNodes.at(node_idx)->set_cumdiscardsratio(cumdiscardsratio);
+    mNodesStatsDirty = true;
+}
+
 void DisplaceModel::collectPopTariffs(int step, int node_idx, vector<double> tariffs)
 {
     checkStatsCollection(step);

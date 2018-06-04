@@ -3991,6 +3991,11 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
     popnodes_cumdiscards.open(filename.c_str());
     std::string popnodes_cumdiscards_filename = filename;
 
+    ofstream popnodes_cumdiscardsratio;
+    filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_cumdiscardsratio_"+namesimu+".dat";
+    popnodes_cumdiscardsratio.open(filename.c_str());
+    std::string popnodes_cumdiscardsratio_filename = filename;
+
     ofstream popnodes_tariffs;
     filename=outdir+"/DISPLACE_outputs/"+namefolderinput+"/"+namefolderoutput+"/popnodes_tariffs_"+namesimu+".dat";
     popnodes_tariffs.open(filename.c_str());
@@ -4189,75 +4194,6 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
 
 
 
- /*       int biocheck = applyBiologicalModule(tstep,
-                                             namesimu,
-                                             namefolderinput,
-                                             namefolderoutput,
-                                             pathoutput,
-                                             popstats,
-                                             popdyn_N,
-                                             popdyn_F,
-                                             popdyn_SSB,
-                                             popdyn_annual_indic,
-                                             popdyn_test2,
-                                             popnodes_inc,
-                                             popnodes_impact,
-                                             popnodes_cumulcatches_per_pop,
-                                             nodes_envt,
-                                             popnodes_cumftime,
-                                             popnodes_cumsweptarea,
-                                             popnodes_cumcatches,
-                                             popnodes_cumcatches_with_threshold,
-                                             popnodes_cumdiscards,
-                                             popnodes_tariffs,
-                                             export_individual_tacs,
-                                             popnodes_end,
-                                             benthosbiomassnodes,
-                                             benthosnumbernodes,
-                                             nbbenthospops,
-                                             path,
-                                             use_gnuplot,
-                                             use_gui,
-                                             popstats_filename,
-                                             popdyn_N_filename,
-                                             popdyn_F_filename,
-                                             popdyn_SSB_filename,
-                                             popnodes_inc_filename,
-                                             popnodes_end_filename,
-                                             popnodes_impact_filename,
-                                             popnodes_cumulcatches_per_pop_filename,
-                                             nodes_envt_filename,
-                                             popnodes_cumftime_filename,
-                                             popnodes_cumsweptarea_filename,
-                                             popnodes_cumcatches_filename,
-                                             popnodes_cumcatches_with_threshold_filename,
-                                             popnodes_cumdiscards_filename,
-                                             popnodes_tariffs_filename,
-                                             popnodes_benthos_biomass_filename,
-                                             popnodes_benthos_number_filename,
-                                             tsteps_quarters,
-                                             tsteps_semesters,
-                                             tsteps_years,
-                                             tsteps_months,
-                                             implicit_pops,
-                                             calib_oth_landings,
-                                             nodes_in_polygons,
-                                             is_tacs,
-                                             export_vmslike,
-                                             freq_do_growth,
-                                             init_weight_per_szgroup,
-                                             species_interactions_mortality_proportion_matrix,
-                                             populations,
-                                             nodes,
-                                             vessels,
-                                             benthoss,
-                                             dyn_pop_sce,
-                                             dyn_alloc_sce,
-                                             Ws_at_szgroup,
-                                             predKernel,
-                                             searchVolMat);
-
-*/
         int biocheck = applyBiologicalModule2(tstep,
                                              namesimu,
                                              namefolderinput,
@@ -4277,6 +4213,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumcatches,
                                              popnodes_cumcatches_with_threshold,
                                              popnodes_cumdiscards,
+                                             popnodes_cumdiscardsratio,
                                              popnodes_tariffs,
                                              export_individual_tacs,
                                              popnodes_end,
@@ -4298,6 +4235,7 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                                              popnodes_cumcatches_filename,
                                              popnodes_cumcatches_with_threshold_filename,
                                              popnodes_cumdiscards_filename,
+                                             popnodes_cumdiscardsratio_filename,
                                              popnodes_tariffs_filename,
                                              popnodes_benthos_biomass_filename,
                                              popnodes_benthos_number_filename,

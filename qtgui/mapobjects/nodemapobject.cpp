@@ -181,14 +181,11 @@ NodeMapObject::NodeMapObject(MapObjectsController *controller, int indx, Role ro
 
 bool NodeMapObject::showProperties()
 {
-    if (!mWidget) {
-        mWidget = new NodeDetailsWidget(mController->mapWidget());
-        connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
-    }
+    mWidget = new NodeDetailsWidget(mController->mapWidget());
+    connect (mWidget, SIGNAL(destroyed()), this, SLOT(widgetClosed()));
 
     updateProperties();
     mController->showDetailsWidget(mGeometry->coord(),mWidget);
-
     return true;
 }
 

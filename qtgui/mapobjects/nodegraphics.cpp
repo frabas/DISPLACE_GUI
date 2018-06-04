@@ -251,6 +251,13 @@ void NodeWithCumDiscardsGraphics::drawShape(QPainter &painter, const qmapcontrol
     painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
 }
 
+void NodeWithCumDiscardsRatioGraphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)
+{
+    Q_UNUSED(rect);
+
+    painter.setBrush(mController->getPalette(mModelIndex,Value0to1Role).color((float)mNode->get_cumdiscardsratio()));
+    painter.drawRect(-piew() / 2 , -pieh() / 2, piew() , pieh());
+}
 
 
 void NodeWithTariffs0Graphics::drawShape(QPainter &painter, const qmapcontrol::RectWorldPx &rect)

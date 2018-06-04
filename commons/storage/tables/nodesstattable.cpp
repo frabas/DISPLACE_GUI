@@ -75,7 +75,6 @@ bool NodesStatTable::insert(int tstep, Node *node)
     std::unique_lock<std::mutex> m(p->mutex);
     init();
 
-    double discratio= ((node->get_cumcatches()+node->get_cumdiscards())>0) ? node->get_cumdiscards()/(node->get_cumcatches()+node->get_cumdiscards()) :  0;
 
     SQLiteTable::insert(p->insertStatement,
                         std::make_tuple(tstep,
@@ -86,7 +85,7 @@ bool NodesStatTable::insert(int tstep, Node *node)
                             node->get_cumcatches(),
                             node->get_cumcatches_with_threshold(),
                             node->get_cumdiscards(),
-                            discratio)
+                            node->get_cumdiscardsratio())
                         );
 return 0;
 }
@@ -104,9 +103,6 @@ void NodesStatTable::queryAllNodesAtStep(int tstep, std::function<bool (NodesSta
         s.cumswa = st.getDoubleValue(2);
         s.cumsubsurfswa = st.getDoubleValue(3);
         s.cumcatches = st.getDoubleValue(4);
-        s.cumcatchesthrshld= st.getDoubleValue(5);
-        s.cumdisc = st.getDoubleValue(6);
-        s.tstep = st.getIntValue(7);
         s.cumcatchesthrshld= st.getDoubleValue(5);
         s.cumdisc = st.getDoubleValue(6);
         s.cumdiscratio = st.getDoubleValue(7);

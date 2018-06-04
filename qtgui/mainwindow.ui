@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Model">
@@ -50,7 +50,12 @@
      <property name="title">
       <string>Palettes</string>
      </property>
+     <property name="icon">
+      <iconset resource="qtgui.qrc">
+       <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+     </property>
      <addaction name="actionPalettes"/>
+     <addaction name="actionValues0to1"/>
      <addaction name="actionPopulations"/>
      <addaction name="actionTariffs"/>
      <addaction name="actionBathymetry"/>
@@ -356,7 +361,7 @@
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vessels&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabStatsPopulations">
            <attribute name="icon">
@@ -2114,38 +2119,75 @@ L3</string>
    </property>
   </action>
   <action name="actionSalinity">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Salinity...</string>
    </property>
   </action>
   <action name="actionSST">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>SST...</string>
    </property>
   </action>
   <action name="actionWind">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Wind...</string>
    </property>
   </action>
   <action name="actionNitrogen">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Nitrogen...</string>
    </property>
   </action>
   <action name="actionPhosphorus">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Phosphorus...</string>
    </property>
   </action>
   <action name="actionOxygen">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>Oxygen...</string>
    </property>
   </action>
   <action name="actionDissolvedCarbon">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
    <property name="text">
     <string>DissolvedCarbon...</string>
+   </property>
+  </action>
+  <action name="actionValues0to1">
+   <property name="icon">
+    <iconset resource="qtgui.qrc">
+     <normaloff>:/icons/colors.png</normaloff>:/icons/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Values 0 to 1</string>
    </property>
   </action>
  </widget>

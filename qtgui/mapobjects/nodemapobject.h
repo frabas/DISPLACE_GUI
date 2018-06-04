@@ -55,6 +55,7 @@ public:
         GraphNodeWithCumCatchesRole,
         GraphNodeWithCumCatchesWithThresholdRole,
         GraphNodeWithCumDiscardsRole,
+        GraphNodeWithCumDiscardsRatioRole,
         GraphNodeWithPopImpact,
         GraphNodeWithPopCumcatches,
         GraphNodeWithBenthosBiomass,

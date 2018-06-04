@@ -186,6 +186,7 @@ Node::Node()
       cumsubsurfacesweptarea(0),
       cumcatches(0),
       cumdiscards(0),
+      cumdiscardsratio(0),
       Ns_pops_at_szgroup(),
       Ns_pops_at_szgroup_at_month_start(),
       removals_pops_at_szgroup(),
@@ -723,6 +724,10 @@ double Node::get_cumdiscards() const
     return(cumdiscards);
 }
 
+double Node::get_cumdiscardsratio() const
+{
+    return(cumdiscardsratio);
+}
 
 vector<int> Node::get_pop_names_on_node ()
 {
@@ -787,6 +792,10 @@ void Node::set_cumdiscards(double tot)
    cumdiscards = tot;
 }
 
+void Node::set_cumdiscardsratio(double rat)
+{
+   cumdiscardsratio = rat;
+}
 
 void Node::set_xy(double xval, double yval)
 {
@@ -830,6 +839,7 @@ void Node::add_to_cumdiscards(double discards)
     cumdiscards+=discards;
     unlock();
 }
+
 
 void Node::add_to_cumcatches_per_pop(double catches, int pop)
 {

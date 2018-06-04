@@ -146,6 +146,7 @@ private slots:
     void on_play_last_clicked();
     void on_play_auto_clicked();
     void on_actionPalettes_triggered();
+    void on_actionPalettes0to1_triggered();
     void on_popStatSelector_currentIndexChanged(int index);
     void on_nationsStatsSelector_currentIndexChanged(int index);
     void on_vesselsStatsSelector_currentIndexChanged(int index);

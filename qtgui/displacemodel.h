@@ -489,6 +489,7 @@ protected:
 
     bool loadNodesFromDb();
     bool loadVesselsFromDb();
+    bool loadFishfarmsFromDb();
 
     void checkStatsCollection(int tstep);
     bool parse(const QString &path, QString *basepath, QString *inputname, QString *outputname);
@@ -553,10 +554,10 @@ private:
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFuncGroups;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mFishfarmsTypes;
     std::shared_ptr<InterestingListWithSpecialValues<int>> mWindfarmsTypes;
+
     std::shared_ptr<InterestingListWithSpecialValues<int>> mShipsTypes;
 
     QList<displace::NodePenalty> mPenaltyNodes;
-
     QList<std::shared_ptr<HarbourData>> mHarbours;
     QList<std::shared_ptr<NodeData> > mNodes;
     QList<std::shared_ptr<VesselData> > mVessels;
@@ -566,35 +567,36 @@ private:
     QList<std::shared_ptr<ShipData> > mShips;
     QList<std::shared_ptr<Benthos> > mBenthos;
     QList<std::shared_ptr<objecttree::MetiersInterest>> mMetiers;
-    QList<std::shared_ptr<NationData> > mNations;
 
+    QList<std::shared_ptr<NationData> > mNations;
     BenthosStatsContainer mStatsBenthos;
     BenthosStats mStatsBenthosCollected;
     FishfarmsStatsContainer mStatsFishfarms;
     FishfarmsStats mStatsFishfarmsCollected;
     ShipsStatsContainer mStatsShips;
-    ShipsStats mStatsShipsCollected;
 
+    ShipsStats mStatsShipsCollected;
     QMap<int, std::shared_ptr<Benthos> > mBenthosInfo;
     QMap<int, std::shared_ptr<Fishfarm> > mFishfarmInfo;
+
     QMap<QString, int> mStockNames;
 
     // --- Working objects
-
     OutputFileParser *mOutputFileParser;
+
     QThread *mParserThread;
 
     QString mLastError;
-
     /* Editor stuff */
     enum OgrType { OgrTypeNode = 0, OgrTypeEdge = 1 };
     OGRDataSource *mDataSource;
     OGRLayer *mNodesLayer;
+
     int mNodesLayerIndex;
 
     OGRSpatialReference *mSpatialRef;
-
     QString mShortestPathFolder;
+
     QString mGraphFolder;
 };
 

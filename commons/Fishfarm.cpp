@@ -32,6 +32,12 @@
 //#include <exprtk.hpp> // too large for the use we want
 
 
+Fishfarm::Fishfarm(Node *_node, int id, string _name, int _farmtype)
+: name (id), stringname(_name), p_location_ff(_node), farmtype(_farmtype)
+{
+
+}
+
 Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _farmtype, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                    double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                    double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor,
@@ -91,13 +97,13 @@ Fishfarm::Fishfarm(int _name, string _stringname, Node *_node, int _farmtype, in
 
 }
 
+
+
+
 Fishfarm::~Fishfarm()
 {
     //dtor
 }
-
-
-
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * GETTERS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -134,11 +140,11 @@ int Fishfarm::get_is_running() const
     return(is_running);
 }
 
+
 double Fishfarm::get_size() const
 {
     return(size);
 }
-
 
 double Fishfarm::get_farm_original_long() const
 {
@@ -155,11 +161,11 @@ double Fishfarm::get_x() const
     return(x);
 }
 
+
 double Fishfarm::get_y() const
 {
     return(y);
 }
-
 
 double Fishfarm::get_meanw_at_start() const
 {
@@ -231,11 +237,11 @@ double Fishfarm::get_sim_net_discharge_C() const
     return(sim_net_discharge_C);
 }
 
+
 double Fishfarm::get_sim_net_discharge_medecine() const
 {
     return(sim_net_discharge_medecine);
 }
-
 
 double Fishfarm::get_sim_cumul_net_discharge_N() const
 {
@@ -292,11 +298,11 @@ double Fishfarm::get_nb_fish_at_start() const
     return(nb_fish_at_start);
 }
 
+
 double Fishfarm::get_price_per_kg_at_start() const
 {
     return(price_per_kg_at_start);
 }
-
 
 double Fishfarm::get_operating_cost_per_day() const
 {
@@ -378,11 +384,11 @@ double Fishfarm::get_prop_P_in_feed() const
     return(prop_P_in_feed);
 }
 
+
 double Fishfarm::get_prop_P_in_feed_vet() const
 {
     return(prop_P_in_feed_vet);
 }
-
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * SETTERS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -405,17 +411,17 @@ void Fishfarm::set_is_active(int _is_active)
     is_active= _is_active;
 }
 
+
 void Fishfarm::set_is_running(int _is_running)
 {
     is_running= _is_running;
 }
-
-
 void Fishfarm::set_sim_individual_mean_kg(double _value)
 {
     sim_previous_individual_mean_kg=get_sim_individual_mean_kg();
     sim_individual_mean_kg= _value;
 }
+
 void Fishfarm::set_sim_kg_harvested(double _value)
 {
     sim_kg_harvested= _value;
@@ -466,10 +472,14 @@ void Fishfarm::set_sim_cumul_net_discharge_C(double _value)
     sim_cumul_net_discharge_C= _value;
 }
 
+
 void Fishfarm::set_sim_cumul_net_discharge_medecine(double _value)
 {
     sim_cumul_net_discharge_medecine= _value;
 }
+
+
+
 
 
 void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep, double a_year)
@@ -568,8 +578,6 @@ void Fishfarm::compute_current_sim_individual_mean_kg_in_farm(int tstep, double 
 
 
 
-
-
 void Fishfarm::compute_profit_in_farm()
 {
    double harvested_fish_kg = this->get_sim_individual_mean_kg()*this->get_prop_harvest_kg_sold()*this->get_nb_fish_at_harvest();
@@ -587,7 +595,6 @@ void Fishfarm::compute_profit_in_farm()
 
    this->set_sim_annual_profit(revenue-cost);
 }
-
 
 
 void Fishfarm::compute_discharge_on_farm(int tstep)
@@ -637,7 +644,6 @@ void Fishfarm::compute_discharge_on_farm(int tstep)
 
 
 }
-
 
 void Fishfarm::export_fishfarms_indicators(ofstream& fishfarmlogs, int tstep)
 {

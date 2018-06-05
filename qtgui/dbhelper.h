@@ -61,6 +61,7 @@ class HarbourStats;
 class DbHelper;
 class Config;
 class Scenario;
+class FishfarmData;
 
 class DbHelper : public QObject
 {
@@ -83,6 +84,7 @@ public:
 
     bool loadNodes(QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<HarbourData> > &harbours, DisplaceModel *model);
     bool loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList<std::shared_ptr<VesselData> > &vessels);
+    bool loadFishFarms (const QList<std::shared_ptr<NodeData> > &nodes,QList<std::shared_ptr<FishfarmData>> &fishfarms);
 
     /* Update datas for step */
     bool updateVesselsToStep(int steps, QList<std::shared_ptr<VesselData> > &vessels);

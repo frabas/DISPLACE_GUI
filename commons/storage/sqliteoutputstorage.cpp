@@ -1087,3 +1087,8 @@ void SQLiteOutputStorage::exportFishfarmDef(const Fishfarm &fishfarm)
 {
     p->mFishFarmsDefTable->insertDef(fishfarm);
 }
+
+std::shared_ptr<FishFarmsDefTable> SQLiteOutputStorage::getFishfarmDefTable() const
+{
+    return p->mFishFarmsDefTable;
+}

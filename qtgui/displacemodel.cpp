@@ -271,6 +271,7 @@ bool DisplaceModel::loadDatabase(QString path)
 
         loadNodesFromDb();
         loadVesselsFromDb();
+        loadFishfarmsFromDb();
         initBenthos();
 
         setCurrentStep(mLastStep);
@@ -3365,5 +3366,13 @@ bool DisplaceModel::loadVesselsFromDb()
         return false;
     initNations();
 
+    return true;
+}
+
+bool DisplaceModel::loadFishfarmsFromDb()
+{
+    mFishfarms.clear();
+    if (!mDb->loadFishFarms(mNodes, mFishfarms))
+        return false;
     return true;
 }

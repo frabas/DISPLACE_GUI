@@ -28,6 +28,7 @@ class Population;
 class Node;
 class MetadataTable;
 class FuncGroupsTable;
+class FishFarmsDefTable;
 
 namespace sqlite {
 class SQLiteStorage;
@@ -71,6 +72,7 @@ public:
     std::shared_ptr<PopTable> getPopTable() const;
     std::shared_ptr<FuncGroupsTable> getFuncGroupsTable() const;
     std::shared_ptr<WindfarmsTable> getWindfarmTable() const;
+    std::shared_ptr<FishFarmsDefTable> getFishfarmDefTable() const;
     std::shared_ptr<MetadataTable> metadata() const;
 
     std::shared_ptr<sqlite::SQLiteStorage> getDb() const;

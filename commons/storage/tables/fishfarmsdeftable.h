@@ -24,6 +24,9 @@ public:
 
     void dropAndCreate();
     void insertDef (const Fishfarm &fishfarm);
+
+    using FishfarmSelectFunc = std::function<bool(int nodeid, std::shared_ptr<Fishfarm>)>;
+    void getAllFishfarms (FishfarmSelectFunc func);
 };
 
 

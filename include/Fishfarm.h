@@ -33,6 +33,8 @@
 class COMMONSSHARED_EXPORT Fishfarm
 {
     public:
+        Fishfarm(Node *node, int id, string name, int farmtype);
+
         Fishfarm(int _name, string _stringname, Node *_node, int farmtype, int _is_active, double _size, double _farm_original_long, double _farm_original_lat,
                  double _mean_SST, double _mean_salinity, double _mean_windspeed, double _mean_currentspeed, double _max_depth, double _diss_O2_mg_per_l,
                  double _Linf_mm, double _K_y, double _t0_y, double _fulton_condition_factor, string _meanw_growth_model_type,

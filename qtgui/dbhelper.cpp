@@ -41,6 +41,7 @@
 #include <storage/tables/vesselvmslikefpingsonlytable.h>
 #include <storage/tables/poptable.h>
 #include <storage/tables/funcgroupstable.h>
+#include <storage/tables/fishfarmsdeftable.h>
 #include <sqlitestorage.h>
 #include <storage/modelmetadataaccessor.h>
 
@@ -245,6 +246,17 @@ bool DbHelper::loadVessels(const QList<std::shared_ptr<NodeData> > &nodes, QList
         return true;
     });
 
+    return true;
+}
+
+bool DbHelper::loadFishFarms(const QList<std::shared_ptr<NodeData> > &nodes,QList<std::shared_ptr<FishfarmData>> &fishfarms)
+{
+    auto tab = p->db->getFishfarmDefTable();
+    tab->getAllFishfarms([&fishfarms, &nodes](int nodeId, std::shared_ptr<Fishfarm> fishfarm){
+        auto ffdata = std::make_shared<FishfarmData>(fishfarm);
+        fishfarms.push_back(ffdata);
+        return true;
+    });
     return true;
 }
 

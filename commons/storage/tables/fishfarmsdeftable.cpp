@@ -2,9 +2,11 @@
 // Created by Federico Fuga on 05/06/18.
 //
 
+#include "fishfarmsdeftable.h"
+#include "Fishfarm.h"
+
 #include <insertstatement.h>
 #include <createstatement.h>
-#include "fishfarmsdeftable.h"
 
 using namespace sqlite;
 
@@ -31,6 +33,7 @@ struct FishFarmsDefTable::Impl {
               insertStatement(fId, fName, fType, fX, fY)
     {
         create();
+        initStatements();
     }
 
     void drop() {
@@ -54,6 +57,21 @@ struct FishFarmsDefTable::Impl {
         createTableStatement.attach(db, tableName);
         createTableStatement.execute();
     }
+
+    void initStatements() {
+        insertStatement.replaceOnConflict();
+        insertStatement.attach(db, tableName);
+    };
+
+    void insert(const Fishfarm &fishfarm) {
+        insertStatement.insert(
+                fishfarm.get_name(),
+                fishfarm.get_stringname(),
+                fishfarm.get_farmtype(),
+                fishfarm.get_x(),
+                fishfarm.get_y()
+                );
+    }
 };
 
 FishFarmsDefTable::FishFarmsDefTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name)
@@ -68,4 +86,9 @@ void FishFarmsDefTable::dropAndCreate()
 {
     p->drop();
     p->create();
+}
+
+void FishFarmsDefTable::insertDef(const Fishfarm &fishfarm)
+{
+    p->insert(fishfarm);
 }

@@ -1082,3 +1082,8 @@ std::shared_ptr<MetadataTable> SQLiteOutputStorage::metadata() const
 {
     return p->mMetadata;
 }
+
+void SQLiteOutputStorage::exportFishfarmDef(const Fishfarm &fishfarm)
+{
+    p->mFishFarmsDefTable->insertDef(fishfarm);
+}

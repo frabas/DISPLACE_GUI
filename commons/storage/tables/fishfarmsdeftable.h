@@ -13,6 +13,8 @@
 
 #include <memory>
 
+class Fishfarm;
+
 class FishFarmsDefTable {
     struct Impl;
     std::unique_ptr<Impl> p;
@@ -21,7 +23,7 @@ public:
     ~FishFarmsDefTable() noexcept ;
 
     void dropAndCreate();
-
+    void insertDef (const Fishfarm &fishfarm);
 };
 
 

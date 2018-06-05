@@ -2030,6 +2030,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
        cout <<"at (" << fishfarms[i]->get_x() << "," << fishfarms[i]->get_y()  << ") "   << endl;
        cout <<"end for harvest at " << end_day_harvests.at(i) << " given " << fishfarms[i]->get_end_day_harvest()    << endl;
 
+       if (outSqlite)
+           outSqlite->exportFishfarmDef(*fishfarms[i]);
     }
 
     cout << "all fishfarms created...." << endl;

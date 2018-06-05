@@ -75,6 +75,7 @@ public:
 
     std::shared_ptr<sqlite::SQLiteStorage> getDb() const;
 
+    void exportFishfarmDef(const Fishfarm &fishfarm);
     void exportFishfarmLog(Fishfarm *fishfarm, int tstep);
     void exportWindmillsLog(Windmill *windmill, int tstep);
     void exportPopNodes(int tstep, Node *node);

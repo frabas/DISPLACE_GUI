@@ -40,7 +40,7 @@ class COMMONSSHARED_EXPORT SQLiteOutputStorage
 
     static const int CURRENT_DB_SCHEMA_VERSION;
 public:
-    SQLiteOutputStorage(std::string path);
+    explicit SQLiteOutputStorage(std::string path);
     ~SQLiteOutputStorage() noexcept;
 
     void open();

@@ -142,7 +142,7 @@ set(SOURCES
         ../include/ipcqueue.h
         ../include/ipcmsgtypes.h
         utils/CrashHandler.cpp
-        )
+        storage/tables/fishfarmsdeftable.cpp storage/tables/fishfarmsdeftable.h)
 
 if (WIN32 OR APPLE)
     add_definitions(-DNO_CRASHHANDLER)

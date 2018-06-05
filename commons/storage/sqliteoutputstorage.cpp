@@ -17,6 +17,7 @@
 #include "tables/vesselvmslikefpingsonlytable.h"
 #include "tables/vesselsloglikecatchestable.h"
 #include "tables/shipstable.h"
+#include "tables/fishfarmsdeftable.h"
 #include "tables/fishfarmstable.h"
 #include "tables/windfarmstable.h"
 #include "tables/metadatatable.h"
@@ -31,7 +32,7 @@
 
 
 
-const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 3;
+const int SQLiteOutputStorage::CURRENT_DB_SCHEMA_VERSION = 4;
 
 using namespace sqlite;
 using namespace displace::plot;
@@ -53,6 +54,7 @@ struct SQLiteOutputStorage::Impl {
     std::shared_ptr<PopQuotasTable> mPopQuotasTable;
     std::shared_ptr<PopTable> mPopTable;
     std::shared_ptr<FuncGroupsTable> mFuncGroupsTable;
+    std::shared_ptr<FishFarmsDefTable> mFishFarmsDefTable;
     std::shared_ptr<FishfarmsTable> mFishfarmsTable;
     std::shared_ptr<WindfarmsTable> mWindmillsTable;
     std::shared_ptr<MetadataTable> mMetadata;
@@ -84,6 +86,7 @@ void SQLiteOutputStorage::open()
     p->mPopQuotasTable = std::make_shared<PopQuotasTable>(p->db, "PopQuotas");
     p->mPopTable = std::make_shared<PopTable>(p->db, "PopValues");
     p->mFuncGroupsTable = std::make_shared<FuncGroupsTable>(p->db, "FuncGroups");
+    p->mFishFarmsDefTable = std::make_shared<FishFarmsDefTable>(p->db, "FishFarmsDef");
     p->mFishfarmsTable = std::make_shared<FishfarmsTable>(p->db, "Fishfarms");
     p->mWindmillsTable = std::make_shared<WindfarmsTable>(p->db, "Windmills");
 
@@ -1004,6 +1007,7 @@ void SQLiteOutputStorage::createAllTables()
     p->mPopQuotasTable->dropAndCreate();
     p->mPopTable->dropAndCreate();
     p->mFuncGroupsTable->dropAndCreate();
+    p->mFishFarmsDefTable->dropAndCreate();
     p->mFishfarmsTable->dropAndCreate();
     p->mWindmillsTable->dropAndCreate();
     p->mVesselLoglikeCatchesTable->dropAndCreate();

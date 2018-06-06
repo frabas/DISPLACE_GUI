@@ -446,11 +446,6 @@ public:
     void addPenaltyToNodesByAddWeight(const QList<QPointF> &poly, double weight, double nbOfDaysClosedPerMonth, bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, vector<int> bannedMetiers);
     void addPenaltyToNodesByAddWeight(OGRGeometry *geometry, double weight, double nbOfDaysClosedPerMonth,  bool onQ1, bool onQ2, bool onQ3, bool onQ4, vector<bool> checkedMonths, const vector<int> &checkedVesSizes, vector<int> bannedMetiers);
 
-#if 0 // TODO remove me
-    int countPenaltyPolygons(int quarter) const;
-    const QList<int> getPenaltyPolygonsAt (int quarter, int ndx) const ;
-#endif
-
     const QList<displace::NodePenalty> getPenaltyCollection() const { return mPenaltyNodes; }
 
     bool isShortestPathFolderLinked() const { return !mShortestPathFolder.isEmpty(); }

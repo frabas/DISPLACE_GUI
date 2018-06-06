@@ -2845,6 +2845,7 @@ bool DisplaceModel::loadVessels()
             cumcatch_fgrounds[f] = 0;
             cumdiscard_fgrounds[f] = 0;
             experienced_bycatch_prop_on_fgrounds[f] = 0;
+            experienced_avoided_stks_bycatch_prop_on_fgrounds[f] =0;
             cumeffort_fgrounds[f] = 0;
             experiencedcpue_fgrounds[f] = freq_fgrounds[f] * expected_cpue;
             // this should be init so that it constitutes a good qualified guess to be a prior in the bayesian formula...

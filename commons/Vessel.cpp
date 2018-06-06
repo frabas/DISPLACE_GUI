@@ -1758,21 +1758,21 @@ double Vessel::traverseDtree(int tstep, dtree::DecisionTree *tree)
     std::shared_ptr<dtree::Node> node = tree->root();
     while (node.get()) {
         if (node->getChildrenCount() == 0) { // is a leaf node
-            //            std::cout << "Node Value= " << node->value() << std::endl;
+                       // std::cout << "Node Value= " << node->value() << std::endl;
             return node->value();
         }
 
         value = 0.0;
         if (mStateEvaluators[static_cast<int>(node->variable())] != 0) {
             value = mStateEvaluators[static_cast<int>(node->variable())]->evaluate(tstep, this);
-            //cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
+           // cout << "vessel " << this->get_name() << " evaluation gets back " << value << endl;
         } else {
             throw std::runtime_error("Unsupported variable evaulation requested.");
         }
 
         bin = static_cast<int>(std::floor(value*node->getChildrenCount() + 0.5));
 
-        //std::cout << "value=" << value << " bin=" << bin << std::endl;
+       // std::cout << "value=" << value << " bin=" << bin << std::endl;
         if (bin < 0) bin = 0;
         if (bin > node->getChildrenCount()-1)
             bin = node->getChildrenCount()-1;
@@ -4042,9 +4042,11 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
                                                  pathshops,
                                                  dyn_alloc_sce
                                                  ); // use ChooseGround dtree along all possible grounds to define the next ground
+
         if(ground==types::special::InvalidNodeId)
         {
             dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << endl);
+            cout << "do_nothing i.e. stay on quayside for ..." << this->get_name() << endl;
             return (1); // do_nothing i.e. stay on quayside
         }
     } else{
@@ -5028,6 +5030,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 {
     lock();
 
+
     std::shared_ptr<dtree::DecisionTree> tree = dtree::DecisionTreeManager::manager()->tree(dtree::DecisionTreeManager::ChooseGround);
 
 
@@ -5176,6 +5179,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
                 this->set_fgrounds_in_closed_areas(vector <types::NodeId> ()); // TO DO
                 this->set_spe_possible_metiers(possible_metiers_from_harbours); // CREATED
                 this->set_spe_freq_possible_metiers(freq_possible_metiers_from_harbours); // CREATED
+
             }
             else
             {
@@ -5187,6 +5191,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
             // ...and caution, need for redefining grds.
             grds= this->get_fgrounds();
+            freq_grds= this->get_freq_fgrounds();
             grds_in_closure = this->get_fgrounds_in_closed_areas();
 
         }
@@ -5412,10 +5417,12 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
         //CHOOSE THAT GROUND!
         if(unif_rand()<the_value) {
             unlock();
+            //cout << "END1 should_i_choose_this_ground for ..." << this->get_name() << endl;
             return(ground);
         }
         //  else // CONTINUE SEARCHING AMONG RELEVANT GROUNDS
     }
+
 
     // if here, then no ground has actually been found within
     // smartCatch or highPotentialCatch or knowledgeOfThisGround or notThatFar.....
@@ -5436,6 +5443,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
 
     if(unif_rand()>last_value || (relevant_grounds_to_evaluate.size()>0 && ground==types::special::InvalidNodeId)){
          unlock();
+         //cout << "END2 should_i_choose_this_ground for ..." << this->get_name() << endl;
         return (types::special::InvalidNodeId); // do_nothing, likely because all grounds in closed areas and last leaf at 0
     }
 
@@ -5460,7 +5468,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
        {
            freq_grds.at(it)= 1 - freq_grds.at(it);
        }
-    }
+   }
 
     // need to convert in array, see myRutils.cpp
     double cumul=0.0;
@@ -5471,7 +5479,7 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     {
         if (binary_search (grds_in_closure.begin(), grds_in_closure.end(), grds.at(n)))
         {
-            //cout << " allo " << endl;
+           // cout << " allo " << endl;
             freq_grds.at(n)=1e-8; // to avoid removing if nb of grounds outside is 0
             // but potential non-compliance if all grounds are in the closed areas....
             // therefore put 0.0 in the last leaf if this is not the wished behaviour...
@@ -5486,12 +5494,14 @@ types::NodeId Vessel::should_i_choose_this_ground(int tstep,
     }
 
     // then sample...
-    auto grounds = do_sample(1, grds.size(), grds, freq_grds);
+    dout(cout << "Possible crash here if grounds.size() " << grds.size() << " is different from freq_grds.size() " << freq_grds.size() << endl);
+    auto grounds = do_sample(1, grds.size(), grds, freq_grds); // caution: will return empty vector if something wrong in input....then make a crash
     ground= types::NodeId(grounds[0]);
 
     //cout << "ground is " << ground.toIndex() << endl;
 
     unlock();
+    // cout << "END3 should_i_choose_this_ground for ..." << this->get_name() << endl;
     return(ground);
 
 }

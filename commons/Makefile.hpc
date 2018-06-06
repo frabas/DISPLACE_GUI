@@ -40,10 +40,12 @@ SOURCES= \
     storage/tables/poptable.cpp \
     storage/tables/vesselvmsliketable.cpp \
     storage/tables/fishfarmstable.cpp \
+    storage/tables/fishfarmsdeftable.cpp \
     storage/tables/windfarmstable.cpp \
     storage/tables/vesselsloglikecatchestable.cpp \
     storage/tables/nodesdeftable.cpp \
     storage/tables/popdyntable.cpp \
+    storage/tables/popquotastable.cpp \
     storage/tables/metadatatable.cpp \
     storage/modelmetadataaccessor.cpp \
     storage/tables/vesselvmslikefpingsonlytable.cpp \

@@ -10,8 +10,11 @@ using namespace displace::plot;
 FishfarmsStatsPlot::FishfarmsStatsPlot(QCustomPlot *plot, QCPItemLine *timeline)
     : mPlot(plot),
       mTimeline(timeline),
-      pen(QColor(0,0,255,200))
+      pen(QColor(0,0,255,200)),
+      textLabel(new QCPItemText(mPlot))
+
 {
+    textLabel->setVisible(false);
     mPalette = PaletteManager::instance()->palette(FishfarmRole);
 }
 
@@ -34,11 +37,12 @@ void FishfarmsStatsPlot::update(QCustomPlot *plot)
             plot = mPlot;
 
         qDebug() << "Fishfarm plot UPDATE";
+        textLabel->setVisible(false);
         plot->clearGraphs();
         displayPlot(lastModel, lastStat);
     } catch (std::exception &x ) {
+        textLabel->setVisible(true);
         // add the text label at the top:
-        QCPItemText *textLabel = new QCPItemText(mPlot);
         textLabel->setPositionAlignment(Qt::AlignTop|Qt::AlignHCenter);
         textLabel->position->setType(QCPItemPosition::ptAxisRectRatio);
         textLabel->position->setCoords(0.5, 0.5); // place position at center/top of axis rect
@@ -46,6 +50,8 @@ void FishfarmsStatsPlot::update(QCustomPlot *plot)
         textLabel->setFont(QFont(mPlot->font().family(), 16)); // make font a bit larger
         textLabel->setPen(QPen(Qt::black)); // show black border around text
     }
+    plot->rescaleAxes();
+    plot->replot();
 }
 
 void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::FishfarmsStat stat)
@@ -64,8 +70,8 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
     bool showmax =  farmsTypeGroups->isSpecialValueSelected(DisplaceModel::SpecialGroups::Max);
 
     /* If no farm type is selected, but aggregate is selected, select all farms */
-    if (interFishfarmsTypesList.size() != 0) {
-        for(int i = 0; i < model->getNumFishfarmsTypes(); ++i) {
+    if (interFishfarmsIDsList.size() != 0) {
+        for(int i = 0; i < model->getFishfarmList().size(); ++i) {
             if (!farmsTypeGroups->has(i))
                 continue;
 
@@ -79,7 +85,7 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
                 graphList.push_back(1000 + i);
         }
     } else {
-        interFishfarmsTypesList.push_back(999);
+        interFishfarmsIDsList.push_back(999);
         if (showmax)
             graphList.push_back(4999);
         if (showmin)
@@ -90,10 +96,10 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
             graphList.push_back(1999);
     }
 
-    /* If no fishfarms is selected, select all fishfarms type */
-    if (interFishfarmsIDsList.size() == 0) {
-        for (int i = 0; i < model->getFishfarmsCount(); ++i) {
-            interFishfarmsIDsList.push_back(i+1);
+    /* If no fishfarmsTypes is selected, select all fishfarms type */
+    if (interFishfarmsTypesList.size() == 0) {
+        for (int i = 0; i < model->getFishfarmsTypesList()->count(); ++i) {
+            interFishfarmsTypesList.push_back(i+1);
         }
     }
 
@@ -153,7 +159,11 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
             break;
         }
 
+        qDebug() << "FishId = " << grp;
+        qDebug() << "FishfarmsTypes = " << ftypes;
         auto v = getData(model, stat, aggtype, grp, ftypes);
+
+        qDebug() << "Fishfarm Data: " << std::get<0>(v).size();
         graph->setData(std::get<0>(v), std::get<1>(v));
         graphs.push_back(graph);
     }
@@ -192,9 +202,6 @@ void FishfarmsStatsPlot::displayPlot(DisplaceModel *model, displace::plot::Fishf
         mPlot->yAxis->setLabel(QObject::tr("Acc. Net discharge P (kg)"));
         break;
     }
-
-    mPlot->rescaleAxes();
-    mPlot->replot();
 }
 
 void FishfarmsStatsPlot::createPopup(GraphInteractionController::PopupMenuLocation location, QMenu *menu)

@@ -4353,37 +4353,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             {
                 cout << "a_month: " << a_month <<", a_quarter: " << a_quarter << ", a_semester:" << a_semester << endl;
 
-                // first of all restore initial freq_fgrounds
-               // fgrounds      = read_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
-               // freq_fgrounds = read_freq_fgrounds(a_quarter, folder_name_parameterization, inputfolder);
                 for (unsigned int v=0; v<vessels.size(); v++)
                 {
-                 //   spe_fgrounds      = find_entries(fgrounds, vessels.at(v)->get_name());
-                 //   spe_freq_fgrounds = find_entries(freq_fgrounds, vessels.at(v)->get_name());
-                 //   vessels.at(v)->set_spe_fgrounds(spe_fgrounds);
-                 //   vessels.at(v)->set_spe_freq_fgrounds(spe_freq_fgrounds);
-                 //   int nbpops         = nodes.at(a_node.toIndex())->get_nbpops();
-                 //   vector<vector<double> > experiencedcpue_fgrounds_per_pop (spe_fgrounds.size(), vector<double>(nbpops));
-                 //   vessels.at(v)->set_experienced_avoided_stks_bycatch_prop_on_fgrounds(spe_freq_fgrounds);// re-dimensioned
-                 //   vessels.at(v)->set_cumcatch_fgrounds(spe_freq_fgrounds);// re-dimensioned
-                 //   vessels.at(v)->set_cumdiscard_fgrounds(spe_freq_fgrounds);// re-dimensioned
-                 //   vessels.at(v)->set_cumcatch_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
-                 //   vessels.at(v)->set_cumdiscard_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop);// re-dimensioned
-                 //   vessels.at(v)->set_cumeffort_fgrounds(spe_freq_fgrounds);// re-dimensioned
-                 //   vessels.at(v)->set_experiencedcpue_fgrounds(spe_freq_fgrounds); // re-dimensioned
-                 //   vessels.at(v)->set_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
-                 //   vessels.at(v)->set_freq_experiencedcpue_fgrounds(spe_freq_fgrounds); // re-dimensioned
-                 //   vessels.at(v)->set_freq_experiencedcpue_fgrounds_per_pop(experiencedcpue_fgrounds_per_pop); // re-dimensioned
-
-                    // (caution: always read and set spe_fgrounds and spe_freq_fgrounds both each time....)
-
-                    //double sum_probas=0.0;
-                    //for (int i=0; i<spe_freq_fgrounds.size(); ++i) sum_probas+=spe_freq_fgrounds.at(i);
-                    // if( vessels.at(v)->get_name()=="DNK000038349") cout <<"for " << vessels.at(v)->get_name() << " sum_probas is " << sum_probas << endl;
-
-                    //cout << "Check " << vessels.at(v)->get_name() << endl;
-
-                    // deal with partial closure
                     vessels.at(v)->reinitDaysSpentInRestrictedAreaThisMonthtoZero();
                 }
                 // update the monthly closures

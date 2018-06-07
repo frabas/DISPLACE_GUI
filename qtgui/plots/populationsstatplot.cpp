@@ -157,6 +157,14 @@ void PopulationsStatPlot::update(QCustomPlot *theplot)
         theplot->xAxis->setLabel(QObject::tr("Time (h)"));
         theplot->yAxis->setLabel(QObject::tr("Quota (kg)"));
         break;
+    case PopulationStat::FFmsy:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("F/Fmsy"));
+        break;
+    case PopulationStat::PropMature:
+        theplot->xAxis->setLabel(QObject::tr("Time (h)"));
+        theplot->yAxis->setLabel(QObject::tr("Proportion mature fish"));
+        break;
     }
 
 

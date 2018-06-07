@@ -750,6 +750,20 @@ TimelineData SQLiteOutputStorage::getPopulationStatData(PopulationStat stat, Agg
         fldPopId = p->mPopQuotasTable->fldPopId;
         fldGroup = p->mPopQuotasTable->fldGroup;
         break;
+    case displace::plot::PopulationStat::FFmsy:
+        fld = p->mPopDynTable->fldFFmsy;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
+    case displace::plot::PopulationStat::PropMature:
+        fld = p->mPopDynTable->fldPropMature;
+        name= p->mPopDynTable->name();
+        fldTStep = p->mPopDynTable->fldTStep;
+        fldPopId = p->mPopDynTable->fldPopId;
+        fldGroup = p->mPopDynTable->fldGroup;
+        break;
     }
 
     switch (aggtype) {

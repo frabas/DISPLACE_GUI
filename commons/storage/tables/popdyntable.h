@@ -27,6 +27,8 @@ public:
     const FieldDef<FieldType::Real> fldN = makeFieldDef("N",FieldType::Real());
     const FieldDef<FieldType::Real> fldF = makeFieldDef("F",FieldType::Real());
     const FieldDef<FieldType::Real> fldSSB = makeFieldDef("SSB",FieldType::Real());
+    const FieldDef<FieldType::Real> fldFFmsy = makeFieldDef("FFmsy",FieldType::Real());
+    const FieldDef<FieldType::Real> fldPropMature = makeFieldDef("PropMature",FieldType::Real());
 
     PopDynTable(std::shared_ptr<sqlite::SQLiteStorage> db, std::string name);
     ~PopDynTable() noexcept;

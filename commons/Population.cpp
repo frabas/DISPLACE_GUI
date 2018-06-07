@@ -282,6 +282,10 @@ Population::Population(int a_name,
 
 	// init related to F
 	fbar_ages_min_max=_fbar_ages_min_max;
+    FFmsy=1.0;
+
+    // other MSFD D3
+    proportion_mature_fish=1.0;
 
     // hyperstability
     this->set_hyperstability_param(hyperstability_param);
@@ -393,6 +397,7 @@ const vector<double>& Population::get_tot_F_at_age() const
 	return(tot_F_at_age);
 }
 
+
 const vector<double>& Population::get_perceived_tot_F_at_age() const
 {
     return(perceived_tot_F_at_age);
@@ -478,6 +483,15 @@ double Population::get_SSB() const
 	return(SSB);
 }
 
+double Population::get_FFmsy() const
+{
+    return(FFmsy);
+}
+
+double Population::get_proportion_mature_fish() const
+{
+    return(proportion_mature_fish);
+}
 
 double Population::get_landings_so_far() const
 {
@@ -796,6 +810,15 @@ void Population::set_SSB(double _SSB)
 	SSB=_SSB;
 }
 
+void Population::set_FFmsy(double _FFmsy)
+{
+    FFmsy=_FFmsy;
+}
+
+void Population::set_proportion_mature_fish(double _proportion_mature_fish)
+{
+    proportion_mature_fish=_proportion_mature_fish;
+}
 
 void Population::set_landings_so_far(double _landings_so_far)
 {
@@ -1221,7 +1244,6 @@ void Population::add_recruits_from_SR()
 	{
 		SSB +=  SSB_per_szgroup.at(i);
 	}
-    //SSB= SSB/1000/2;			 // convert in tons for the SSB-R // divide by 2 when assuming sex ratio 50:50
     SSB= SSB/1000;			 //
     cout << "SSB is " << SSB  << " tons" << endl ;
     //dout(cout << "SSB is " << SSB  << " tons" << endl );

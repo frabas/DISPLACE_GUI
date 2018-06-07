@@ -1594,6 +1594,25 @@ vector<double> Population::compute_SSB()
 }
 
 
+double Population::compute_proportion_mature_fish()
+{
+    // first of all, get the N
+    vector <double> a_tot_N_at_szgroup=this->get_tot_N_at_szgroup();
+    vector <double> a_maturity_at_szgroup=this->get_maturity_at_szgroup();
+
+    double totN_mature_fish=0.0;
+    double totN=0.0;
+    for(unsigned int i = 0; i < a_tot_N_at_szgroup.size(); i++)
+    {
+       totN_mature_fish+=a_tot_N_at_szgroup.at(i)*a_maturity_at_szgroup.at(i);
+       totN+=a_tot_N_at_szgroup.at(i);
+    }
+
+  return((totN>0) ? totN_mature_fish/totN : 0.0);
+}
+
+
+
 void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 {
     dout(cout<< "COMPUTE TAC for HCR (based on F) for this coming year" << endl);

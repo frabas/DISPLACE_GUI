@@ -65,7 +65,7 @@ void PopDynTable::insert(int tstep, int popid, Population *pop)
                             (i < N.size() ? N.at(i) : -1),
                             (i < F.size() ? F.at(i) : -1),
                             (i < SSB.size() ? SSB.at(i) : -1),
-                            FFmsy,
+                            (i < FFmsy.size() ? FFmsy.at(i) : -1),
                             PropMature
                             )
                     );

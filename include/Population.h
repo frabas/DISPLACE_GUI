@@ -104,7 +104,7 @@ class COMMONSSHARED_EXPORT Population
         const vector<double>& get_SSB_at_szgroup() const;
         double get_SSB() const;
         double get_proportion_mature_fish() const;
-        double get_FFmsy() const;
+        const vector<double> &get_FFmsy() const;
         const vector<double>& get_param_sr() const;
 		vector< vector <double> >get_growth_transition_matrix() const;
 		vector< vector <double> >get_percent_szgroup_per_age_matrix() const;
@@ -152,7 +152,7 @@ class COMMONSSHARED_EXPORT Population
         void set_proprecru_at_szgroup(const vector<double>& _proprecru_at_szgroup);
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
-        void set_FFmsy(double _FFmsy);
+        void set_FFmsy(const vector<double>& _FFmsy);
         void set_proportion_mature_fish(double _proportion_mature_fish);
                                  // in weight...
 		void set_landings_so_far(double _landings_so_far);
@@ -240,7 +240,7 @@ class COMMONSSHARED_EXPORT Population
 		vector<double> proprecru_at_szgroup;
         vector<double> SSB_at_szgroup;
         double SSB;				 //
-        double FFmsy;				 //
+        vector<double>  FFmsy;				 //
         double proportion_mature_fish;				 //
         vector<double> param_sr; //
 								 // area distribution

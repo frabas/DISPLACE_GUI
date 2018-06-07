@@ -112,7 +112,8 @@ Population::Population(int a_name,
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
 	{
 		tot_F_at_age.push_back(0);
-	}
+        FFmsy.push_back(0);
+    }
 	for(unsigned int a=0; a<percent_szgroup_per_age_matrix[0].size(); a++)
 	{
 		tot_F_at_age_last_quarter.push_back(0);
@@ -282,7 +283,6 @@ Population::Population(int a_name,
 
 	// init related to F
 	fbar_ages_min_max=_fbar_ages_min_max;
-    FFmsy=1.0;
 
     // other MSFD D3
     proportion_mature_fish=1.0;
@@ -483,7 +483,7 @@ double Population::get_SSB() const
 	return(SSB);
 }
 
-double Population::get_FFmsy() const
+const vector<double>& Population::get_FFmsy() const
 {
     return(FFmsy);
 }
@@ -810,7 +810,7 @@ void Population::set_SSB(double _SSB)
 	SSB=_SSB;
 }
 
-void Population::set_FFmsy(double _FFmsy)
+void Population::set_FFmsy(const vector<double> &_FFmsy)
 {
     FFmsy=_FFmsy;
 }
@@ -1382,6 +1382,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
     dout(cout << "BEGIN compute_tot_N_and_F_and_M_and_W_at_age() "  << endl );
 
 	vector <double> tot_F_at_age = get_tot_F_at_age();
+    vector <double> FFmsy (tot_F_at_age.size());
     vector <double> perceived_tot_F_at_age = get_tot_F_at_age();
                                  // init
 	vector <double> tot_M_at_age (tot_F_at_age.size());
@@ -1482,20 +1483,27 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 
 	// then, compute F from the formula N(t+1)=N(t)*exp(-M-F) => F=-M-ln(N(t+1)/N(t))
 	// with M=0 here because apply_natural_mortality() actually is applied just AFTER this function
-	for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
+
+    vector <double> fbar_ages_min_max = this->get_fbar_ages_min_max();
+    double FMSY = fbar_ages_min_max.at(6);
+
+    for(unsigned int a = 0; a < tot_F_at_age.size(); a++)
 	{
         if(tot_N_at_age_minus_1.at(a) >0 && tot_N_at_age.at(a)>0)
 		{
             perceived_tot_F_at_age.at(a)+= -log(perceived_tot_N_at_age.at(a)/perceived_tot_N_at_age_minus_1.at(a)); // used for perceived stock in the management procedure
             tot_F_at_age.at(a)+= -log(tot_N_at_age.at(a)/tot_N_at_age_minus_1.at(a));  // used for outcomes
+            FFmsy.at(a)=tot_F_at_age.at(a)/ FMSY;
         }
 		else
 		{
             perceived_tot_F_at_age.at(a)+= 0;
             tot_F_at_age.at(a)+= 0;
+            FFmsy.at(a)=0;
         }
 
         // prevent negative Fs in few cases where more N at t+1 than at t e.g. from growth and class change in the older ages...
+        // should not happen if the growth timing is right.
         if(tot_F_at_age.at(a)<0) tot_F_at_age.at(a)  =0.0;
 
 		// => cumul over months
@@ -1515,6 +1523,7 @@ void Population::compute_tot_N_and_F_and_M_and_W_at_age()
 	// set the tot N and F at age
 	this->set_tot_N_at_age(tot_N_at_age);
     this->set_perceived_tot_N_at_age(perceived_tot_N_at_age);
+    this->set_FFmsy(FFmsy);
     this->set_tot_F_at_age(tot_F_at_age);
     this->set_perceived_tot_F_at_age(perceived_tot_F_at_age);
     this->set_tot_M_at_age(tot_M_at_age);

@@ -155,8 +155,7 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
         // EXPORT POPSTATS FILE
             for (unsigned int sp=0; sp<populations.size(); sp++)
             {
-                if (enable_sqlite_out)
-                    outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
+
 
                 outc(cout << "...pop " << sp << endl;)
                 if (!binary_search (implicit_pops.begin(), implicit_pops.end(),  sp  ) )
@@ -187,26 +186,25 @@ int applyBiologicalModule2(int tstep, const string & namesimu,
 
                     // ... / SSB_per_szgroup
                     dout(cout  << "write down the SSB...");
-                    vector <double> SSB_per_szgroup ( populations.at(sp)->get_tot_N_at_szgroup().size());
-                    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
-                    {
-
+                    populations.at(sp)->set_SSB_at_szgroup( populations.at(sp)->compute_SSB() ); // here in kilos
+                    vector <double> SSB_per_szgroup= populations.at(sp)->get_SSB_at_szgroup();
                     // reminder: tot_N_at_szgroup are in thousand in input file
                     //  but in absolute numbers here because have been multiplied by 1000 when importing
-                    SSB_per_szgroup.at(i) =  populations.at(sp)->get_weight_at_szgroup().at(i) *
-                                     populations.at(sp)->get_tot_N_at_szgroup().at(i) *
-                                     populations.at(sp)->get_maturity_at_szgroup().at(i);
-                    cout << "szgroup is " << i  << " " << endl ;
-                    cout << "tot_N_at_szgroup is " << populations.at(sp)->get_tot_N_at_szgroup().at(i)  << " " << endl ;
-                    cout << "maturity_at_szgroup is " << populations.at(sp)->get_maturity_at_szgroup().at(i)  << " " << endl ;
-                    cout << "weight_at_szgroup is " << populations.at(sp)->get_weight_at_szgroup().at(i)  << " kg" << endl ;
-
-                    popstats  << SSB_per_szgroup.at(i)  << " " ;
+                    for(unsigned int i = 0; i < SSB_per_szgroup.size(); i++)
+                    {
+                       popstats  << SSB_per_szgroup.at(i)  << " " ;
                     }
 
 
                  popstats << " " <<  endl;
+
+                 // to db
+                 if (enable_sqlite_out)
+                         outSqlite->exportPopStat(populations.at(sp),sp,  tstep);
                 }
+
+
+
             }
 
     }

@@ -5602,6 +5602,9 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                        if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                        {
 
+                           if (enable_sqlite_out)
+                               outSqlite->exportFishfarmLog(fishfarms.at(i), tstep);
+
                            fishfarms.at(i)->export_fishfarms_indicators(fishfarmslogs, tstep); // export event to file
                        }
                    }

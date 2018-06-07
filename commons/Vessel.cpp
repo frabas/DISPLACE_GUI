@@ -4046,7 +4046,7 @@ bool Vessel::choose_a_ground_and_go_fishing(int tstep, const displace::commons::
         if(ground==types::special::InvalidNodeId)
         {
             dout(cout << "Bad probabilities defined in the ChooseGround dtree...need a revision, unless all grounds are actually closed for this vessel" << endl);
-            cout << "do_nothing i.e. stay on quayside for ..." << this->get_name() << endl;
+            //cout << "do_nothing i.e. stay on quayside for ..." << this->get_name() << endl;
             return (1); // do_nothing i.e. stay on quayside
         }
     } else{

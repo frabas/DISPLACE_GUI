@@ -70,6 +70,7 @@ void FishfarmsTable::exportFishfarmLog(Fishfarm *fishfarm, int tstep)
            fishfarm->get_sim_annual_profit(),
            fishfarm->get_sim_net_discharge_N(),
            fishfarm->get_sim_net_discharge_P(),
+           fishfarm->get_sim_net_discharge_C(),
            fishfarm->get_sim_cumul_net_discharge_N(),
            fishfarm->get_sim_cumul_net_discharge_P(),
            fishfarm->get_sim_cumul_net_discharge_C(),

@@ -918,7 +918,10 @@ TimelineData SQLiteOutputStorage::getFishFarmStatData(displace::plot::FishfarmsS
         case displace::plot::FishfarmsStat::FF_NetDischargeP:
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeN:
         case displace::plot::FishfarmsStat::FF_CumulNetDischargeP:
-            throw std::logic_error("Unhandled case - Unimplemented");
+            std::ostringstream ss;
+            ss << "Unhandled case " << static_cast<int>(stattype) << ": Unimplemented";
+            std::cerr << ss.str() << "\n";
+            throw std::logic_error(ss.str());
     }
 
     switch (aggtype) {
@@ -957,6 +960,8 @@ TimelineData SQLiteOutputStorage::getFishFarmStatData(displace::plot::FishfarmsS
     select.groupBy(p->mFishfarmsTable->fldTStep);
 
     sqlite::SQLiteStatement stmt(p->db,select);
+
+    std::cout << "FishFarm: " << select.string() << "\n";
 
     TimelineData data;
 

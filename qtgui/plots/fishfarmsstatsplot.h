@@ -17,14 +17,15 @@ class QCPItemLine;
 
 class FishfarmsStatsPlot : public BaseStatsPlotImpl
 {
-    QCustomPlot *mPlot;
-    QCPItemLine *mTimeline;
+    QCustomPlot *mPlot = nullptr;
+    QCPItemLine *mTimeline = nullptr;
+    QCPItemText *textLabel = nullptr;
     QPen pen;
     double timelineMax = 1e20;
     double timelineMin = -1e20;
     Palette mPalette;
 
-    DisplaceModel *lastModel;
+    DisplaceModel *lastModel = nullptr;
     displace::plot::FishfarmsStat lastStat;
 
     QString mSaveFilename;

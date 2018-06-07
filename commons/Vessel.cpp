@@ -4928,6 +4928,7 @@ int Vessel::should_i_go_fishing(int tstep,
                         {
                             if(pop==trgts.at(i) && indiv_quota==0)  still_some_quotas=0;
                              // => will stay on quayside because exhausted tac on at least one targeted stock
+                            //this->get_metier()->set_is_choked(i); //TODO
                         }
 
                 }

@@ -34,6 +34,7 @@ DynAllocOptions::DynAllocOptions()
     O(mMap,discard_ban);
     O(mMap,LTMP);
     O(mMap,FMSY);
+    O(mMap,FMSYrange);
     M(mMap,"area_closure", area_closure);
     M(mMap,"area_monthly_closure", area_monthly_closure);
     M(mMap,"closed_to_others_as_well", closed_to_others_as_well);

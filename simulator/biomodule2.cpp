@@ -824,8 +824,12 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
 
                                        populations.at(sp)->compute_TAC(multiOnTACconstraint, 2);
                                     } else{
-                                          populations.at(sp)->compute_TAC(multiOnTACconstraint, 3); // statuquo is default
-                                    }
+                                       if(dyn_alloc_sce.option(Options::FMSYrange)){
+                                           populations.at(sp)->compute_TAC(multiOnTACconstraint, 3);
+                                       } else{
+                                         populations.at(sp)->compute_TAC(multiOnTACconstraint, 4); // statuquo is default
+                                       }
+                                   }
                                }
 
                                outc(cout<< "initialize individual vessel TAC for this coming year" << endl);

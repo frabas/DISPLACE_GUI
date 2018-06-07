@@ -3056,8 +3056,8 @@ vector<double>  read_fbar_ages_min_max_and_ftarget(int a_pop,  string folder_nam
     {
         open_file_error(filename.c_str());
     }
-    // i.e. 6 columns: F min age, F max age, LTMP ftarget, Fpercent, TACpercent, Btrigger, F-MSY value
-    vector<double> fbar_ages_min_max(7);
+    // i.e. 8 columns: F min age, F max age, LTMP ftarget, Fpercent, TACpercent, Btrigger, F-MSY value, F-MSY-low, F-MSY-up
+    vector<double> fbar_ages_min_max(9);
     if (!fill_in_fbar_ages_min_max(file_fbar_ages_min_max, fbar_ages_min_max))
         throw std::runtime_error("bad file format while executing: fill_in_fbar_ages_min_max");
     file_fbar_ages_min_max.close();

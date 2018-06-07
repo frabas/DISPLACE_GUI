@@ -92,6 +92,7 @@ enum Dyn_Alloc {
     stopOnFirstStock,
     LTMP,
     FMSY,
+    FMSYrange,
     area_closure,
     area_monthly_closure,
     closed_to_others_as_well,

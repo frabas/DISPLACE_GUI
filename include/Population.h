@@ -118,6 +118,7 @@ class COMMONSSHARED_EXPORT Population
         Tac* get_tac() const;
         double get_quota() const;
         double get_quota_uptake() const;
+        int get_is_choking_fisheries() const;
         double get_landings_so_far() const;
         void set_quota(double _quota);
         void set_quota_uptake(double _quota_uptake);
@@ -153,6 +154,7 @@ class COMMONSSHARED_EXPORT Population
         void set_SSB_at_szgroup(const vector<double>& _SSB_at_szgroup);
         void set_SSB(double _SSB);
         void set_FFmsy(const vector<double>& _FFmsy);
+        void set_is_choking_fisheries(int is_choking_fisheries);
         void set_proportion_mature_fish(double _proportion_mature_fish);
                                  // in weight...
 		void set_landings_so_far(double _landings_so_far);
@@ -243,6 +245,7 @@ class COMMONSSHARED_EXPORT Population
         double SSB;				 //
         vector<double>  FFmsy;				 //
         double proportion_mature_fish;				 //
+        int is_choking_fisheries;
         vector<double> param_sr; //
 								 // area distribution
 		vector<Node* > list_nodes;

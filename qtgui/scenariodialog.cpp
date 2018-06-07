@@ -47,6 +47,7 @@ static const char *dyn_alloc_options[] = {
     "stopOnFirstStock",
     "LTMP",
     "FMSY",
+    "FMSYrange",
     "fishing_credits",
     "envt_variables_diffusion",
 };

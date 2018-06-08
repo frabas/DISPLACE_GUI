@@ -334,7 +334,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                             {
                                 // prevent TAC overshoot from other_landings
                                 if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) oth_land_this_pop_this_node=0.0;
+                                        oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) {
+                                             oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                                }
                             }
 
                             if(oth_land_this_pop_this_node>0) a_list_nodes.at(n)->apply_oth_land(name_pop, oth_land_this_pop_this_node, weight_at_szgroup, totN);
@@ -350,7 +352,9 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                         {
                             // prevent TAC overshoot from other_landings
                             if(((populations.at(name_pop)->get_landings_so_far()/1000) +
-                                    oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()) oth_land_this_pop_this_node=0.0;
+                                    oth_land_this_pop_this_node) > populations.at(name_pop)->get_quota()){
+                                oth_land_this_pop_this_node=populations.at(name_pop)->get_quota() - (populations.at(name_pop)->get_landings_so_far()/1000);
+                            }
 
                         }
 

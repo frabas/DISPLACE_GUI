@@ -816,6 +816,12 @@ double Vessel::get_prop_remaining_global_quotas (int sp) const
     return(prop_remaining_global_quotas.at(sp));
 }
 
+vector<double> Vessel::get_is_choked () const
+{
+    return(is_choked);
+}
+
+
 double Vessel::get_min_prop_remaining_individual_quotas_on_avoided_stks ()
 {
     vector<int> avoided_stocks=this->get_metier()->get_is_avoided_stocks();

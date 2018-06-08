@@ -805,6 +805,13 @@ if(binary_search (tsteps_months.begin(), tsteps_months.end(), tstep))
                                // compute a TAC for y+1 from a short-term forecast (STF)
                                // and a long-term management plan (LTMP)
 
+                                // if more than x% of vessels cheoked then declare this stock as choking fisheries
+                                int nbchoked=0;
+                                for (unsigned int v=0; v<vessels.size(); v++)
+                                {
+                                    nbchoked+=vessels.at(v)->get_is_choked().at(sp);
+                                }
+                                if(nbchoked>ceil(0.5*vessels.size())) populations.at(sp)->set_is_choking_fisheries(1);
 
 
                                double multiOnTACconstraint;

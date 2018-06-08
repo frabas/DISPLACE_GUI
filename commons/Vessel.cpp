@@ -2301,9 +2301,9 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
             }
         }
-
          // global TACs
-        if(tstep>8761  && !is_individual_vessel_quotas)
+        //if(tstep>8761  && !is_individual_vessel_quotas)
+        if(!is_individual_vessel_quotas)
         {
             for (unsigned int pop=0; pop<catch_pop_at_szgroup.size(); pop++)
             {
@@ -2881,12 +2881,15 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
                             }
                         }
 
-                        // because the first year is the calibration year.
-                        if(tstep>8761  && !is_individual_vessel_quotas)
+                        if(!is_individual_vessel_quotas)
+                        // because the first year is the calibration year:
+                        //if(tstep>8761  && !is_individual_vessel_quotas)
                         {
                             // 4. compare in tons (AT THE GLOBAL SCALE)
                             if( (so_far/1000) > (global_quotas.at(pop)))
                             {
+                                populations.at(pop)->get_tac()->set_is_tac_exhausted(1);
+
                                 prop_remaining_global_quotas.at(pop) =  (so_far/1000) / (global_quotas.at(pop));
 
                                 dout (cout << "prop used " <<
@@ -4892,7 +4895,7 @@ void Vessel::export_loglike_prop_met(ofstream& loglike_prop_met, int tstep, int 
 //------------------------------------------------------------//
 //------------------------------------------------------------//
 
-int Vessel::should_i_go_fishing(int tstep,
+int Vessel::should_i_go_fishing(int tstep, std::vector<Population* >& populations,
                                 bool use_the_tree, const DynAllocOptions& dyn_alloc_sce, vector<int>& implicit_pops,
                                 int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing)
 {
@@ -4935,7 +4938,7 @@ int Vessel::should_i_go_fishing(int tstep,
                     dout(cout  << "this vessel " << this->get_name() << " have (still) quota for pop " << pop << ": " << indiv_quota << endl);
                      // => by default, continue if not all stks quotas are exhausted.....
                 }
-                if(dyn_alloc_sce.option(Options::stopOnFirstStock))
+                if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
                 {
                     vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
                     for(unsigned int tg=0; tg<trgts.size(); ++tg)
@@ -4960,9 +4963,19 @@ int Vessel::should_i_go_fishing(int tstep,
     }
     else
     {
-        still_some_quotas=1; // init
-    }
-
+         still_some_quotas=1;
+        if(dyn_alloc_sce.option(Options::stopGoingFishingOnFirstChokedStock))
+         {
+             for (int pop=0; pop < populations.size(); pop++)
+             {
+              if (populations.at(pop)->get_tac()->get_is_tac_exhausted())  still_some_quotas=0;
+             }
+         }
+         else
+         {
+            still_some_quotas=1; // init
+         }
+   }
 
     dout(cout << "still_some_quotas is" <<still_some_quotas << endl);
 

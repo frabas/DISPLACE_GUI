@@ -492,7 +492,7 @@ public:
             );
         void which_metier_should_i_go_for(std::vector <Metier*>& metiers);
                                  //yes:1; no=0
-        int should_i_go_fishing(int tstep, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
+        int should_i_go_fishing(int tstep, std::vector<Population* >& populations, bool use_the_tree, const DynAllocOptions &dyn_alloc_sce,
                                 std::vector<int> &implicit_pops, int is_individual_vessel_quotas, int check_all_stocks_before_going_fishing);
         types::NodeId should_i_choose_this_ground(int tstep,
                                         std::vector<Node*>& nodes,

@@ -40,7 +40,9 @@ class COMMONSSHARED_EXPORT Tac
 		map<string,double>  get_relative_stability_key() const;
 		vector<double> get_ts_tac() const;
 		double get_current_tac() const;
-		void add_tac_y_plus_1(double a_tac);
+        int get_is_tac_exhausted() const;
+        void add_tac_y_plus_1(double a_tac);
+        void set_is_tac_exhausted(int val);
 
 	protected:
 	private:
@@ -49,6 +51,7 @@ class COMMONSSHARED_EXPORT Tac
 		map<string,double>  relative_stability_key;
 		vector<double> ts_tac;	 // time series per year
 		double current_tac;
+        int is_tac_exhausted;
 
 		// serialization in xml with boost
 		/*

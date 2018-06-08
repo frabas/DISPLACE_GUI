@@ -89,7 +89,7 @@ enum Dyn_Alloc {
     TACs,
     discard_ban,
     groupedTACs,
-    stopOnFirstStock,
+    stopGoingFishingOnFirstChokedStock,
     LTMP,
     FMSY,
     FMSYrange,

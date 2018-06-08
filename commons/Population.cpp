@@ -2123,6 +2123,7 @@ void Population::compute_TAC(double multiOnTACconstraint, int HCR)
 
 
     this->set_is_choking_fisheries(0); // reinit
+    this->get_tac()->set_is_tac_exhausted(0); // reinit
 }
 
 

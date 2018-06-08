@@ -194,6 +194,7 @@ Vessel::Vessel(Node* p_location,  int a_idx_vessel, string a_name,  int nbpops, 
         individual_tac_per_pop_at_year_start.push_back(0);
         prop_remaining_individual_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
         prop_remaining_global_quotas.push_back(1); // caution: with start with 1 for all even if no quota as it is a decrease that will be detected when choosing the min prop....
+        is_choked.push_back(0); // inform when the quota is exhausted by stock
     }
 
     // init at 0 the matrix of catches
@@ -1596,6 +1597,11 @@ void Vessel::set_targeting_non_tac_pop_only(int _targeting_non_tac_pop_only)
     targeting_non_tac_pop_only=_targeting_non_tac_pop_only;
 }
 
+void Vessel::set_is_choked(int pop, int val)
+{
+    is_choked.at(pop)=val;
+}
+
 void Vessel::updateTripsStatistics(const std::vector<Population* >& populations, vector<int>& implicit_pops, int tstep)
 {
 
@@ -2883,6 +2889,8 @@ void Vessel::do_catch(ofstream& export_individual_tacs, vector<Population* >& po
 
                                 // reaction
                                 dout(cout  << "Global TAC reached...then discard all for this pop " << pop << "!!! " << endl);
+                                dout(cout  << "...and declare you are choked by " << pop << "!!! " << endl);
+                                this->set_is_choked(pop, 1);
                                 populations.at(pop)->set_landings_so_far(so_far -a_cumul_weight_this_pop_this_vessel);
                                 // => back correction (disable if you want to know the discarded part in annual_indic.
                                 // ...i.e. discarded = so_far - current_tac)
@@ -4924,11 +4932,11 @@ int Vessel::should_i_go_fishing(int tstep,
                 if(dyn_alloc_sce.option(Options::stopOnFirstStock))
                 {
                     vector<int>  trgts =this->get_metier()->get_metier_target_stocks();
-                    for(unsigned int i=0; i<trgts.size(); ++i)
+                    for(unsigned int tg=0; tg<trgts.size(); ++tg)
                         {
-                            if(pop==trgts.at(i) && indiv_quota==0)  still_some_quotas=0;
+                            if(pop==trgts.at(tg) && indiv_quota==0)  still_some_quotas=0;
                              // => will stay on quayside because exhausted tac on at least one targeted stock
-                            //this->get_metier()->set_is_choked(i); //TODO
+                            this->set_is_choked(pop, 1);
                         }
 
                 }

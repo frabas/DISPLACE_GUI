@@ -4401,6 +4401,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
             // RE-read general vessel features: do not forget to clear the vectors!
             // not-quarter specific, clear anyway...
             // actually those variables do not change from a quarter to the next (see IBM_param_step4_vessels)
+
+
             vesselids.clear();
             vid_is_actives.clear();
             vid_is_part_of_ref_fleets.clear();
@@ -4462,6 +4464,8 @@ const char *const path = "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot\"";
                 {
                     double new_vessel_value = vessels.at(v)->get_vessel_value() * (100- vessels.at(v)->get_annual_depreciation_rate())/100;
                     vessels.at(v)->set_vessel_value(new_vessel_value); // capital depreciation
+
+                    for (unsigned int pop=0; pop<nbpops; ++pop) vessels.at(v)->set_is_choked(pop, 0); // reinit at year start
                 }
                 possible_metiers = read_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);
                 freq_possible_metiers = read_freq_possible_metiers(a_quarter, vesselids.at(v), folder_name_parameterization, inputfolder);

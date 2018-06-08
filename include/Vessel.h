@@ -164,6 +164,8 @@ private:
         std::vector<double> fishing_credits;
 		int targeting_non_tac_pop_only;
 
+        std::vector<double> is_choked;
+
         VesselCalendar calendar;
 
         types::NodeId smartcatch;
@@ -317,6 +319,7 @@ public:
         int read_message() const;
         types::NodeId get_previous_harbour_idx() const;
 		int get_individual_tac (int sp) const;
+        vector<double> get_is_choked () const;
         int get_individual_tac_per_pop_at_year_start (int sp) const;
         double get_prop_remaining_individual_quotas (int sp) const;
         double get_prop_remaining_global_quotas (int sp) const;
@@ -420,6 +423,7 @@ public:
 		void move_to(double nx, double ny);
 		void move_to(Node* next_node);
 		void set_metier(Metier* new_metier);
+        void set_is_choked(int pop, int val);
         void find_next_point_on_the_graph(std::vector<Node* >& nodes);
         void do_catch(std::ofstream& export_individual_tacs, std::vector<Population* >& populations,
                       std::vector<Node* >& nodes, vector<Benthos* >& benthoshabs,

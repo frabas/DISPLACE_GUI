@@ -110,5 +110,6 @@ Name: {group}\Decision Tree Editor; Filename: {app}\dtreeeditor.exe; Tasks: ; La
 Name: {group}\Time Series Editor; Filename: {app}\tsereditor.exe
 
 [Run]
-Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
+;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}
+Filename: {tmp}\vc_redist.x64.exe; Parameters: /quiet; WorkingDir: {tmp}
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent

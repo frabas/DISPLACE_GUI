@@ -3103,7 +3103,7 @@ void MainWindow::on_actionLoadStockNames_triggered()
 
 void MainWindow::on_actionDecision_Trees_Editor_triggered()
 {
-    auto ed = prepareAppExecutableStart("dtreeeditor");
+    auto ed = prepareAppExecutableStart("dteditor");
     ed->start();
 }
 
@@ -3133,7 +3133,7 @@ void MainWindow::on_actionR_Console_triggered()
 
 void MainWindow::on_actionTime_Series_Editor_triggered()
 {
-    auto ed = prepareAppExecutableStart("tsereditor");
+    auto ed = prepareAppExecutableStart("tseditor");
     ed->start();
 }
 

@@ -13,3 +13,10 @@ export DH_OPTIONS
 
 %:
 	dh $@ --parallel
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_PREFIX_PATH=/opt/qt56/lib/cmake
+
+override_dh_shlibdeps:
+	dh_shlibdeps -l/opt/qt56/lib
+

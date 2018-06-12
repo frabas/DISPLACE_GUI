@@ -55,3 +55,7 @@ target_link_libraries(displace
         ${LIBRARIES}
         Boost::program_options
         )
+
+
+# Set target directory
+install(TARGETS displace DESTINATION bin)

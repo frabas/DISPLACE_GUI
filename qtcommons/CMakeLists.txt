@@ -30,3 +30,6 @@ target_link_libraries(qtcommons
         Qt5::Widgets
         Qt5::PrintSupport
         )
+
+# Set target directory
+install(TARGETS qtcommons DESTINATION lib)

@@ -178,3 +178,6 @@ target_link_libraries(commons
         formats
         ${LIBRARIES}
         )
+
+# Set target directory
+install(TARGETS commons DESTINATION lib)

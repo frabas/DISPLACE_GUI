@@ -43,3 +43,6 @@ target_link_libraries(tseditor
         Qt5::Widgets
         Qt5::Concurrent
         )
+
+# Set target directory
+install(TARGETS tseditor DESTINATION bin)

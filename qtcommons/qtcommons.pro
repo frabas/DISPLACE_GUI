@@ -28,6 +28,7 @@ SOURCES += qcustomplot.cpp \
     R/defaults.cpp \
     R/settings.cpp \
     appsettings.cpp \
+    PlotWidget.cpp \
     graphics/fishfarmgraphics.cpp \
     graphics/harbourgraphics.cpp \
     graphics/shiplanesgraphics.cpp \
@@ -45,6 +46,7 @@ HEADERS +=\
     R/defaults.h \
     R/settings.h \
     appsettings.h \
+    PlotWidget.h \
     graphics/fishfarmgraphics.h \
     graphics/harbourgraphics.h \
     graphics/shiplanesgraphics.h \

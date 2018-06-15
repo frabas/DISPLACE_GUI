@@ -106,8 +106,8 @@ Source: "install\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Name: {group}\{#MyAppName}; Filename: {app}\displacegui.exe; Tasks: ; Languages: 
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon
-Name: {group}\Decision Tree Editor; Filename: {app}\dtreeeditor.exe; Tasks: ; Languages: 
-Name: {group}\Time Series Editor; Filename: {app}\tsereditor.exe
+Name: {group}\Decision Tree Editor; Filename: {app}\dteditor.exe; Tasks: ; Languages: 
+Name: {group}\Time Series Editor; Filename: {app}\tseditor.exe
 
 [Run]
 ;Filename: {tmp}\vcredist_x64.exe; Parameters: /quiet; WorkingDir: {tmp}

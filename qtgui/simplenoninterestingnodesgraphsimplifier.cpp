@@ -15,16 +15,22 @@ bool SimpleNonInterestingNodesGraphSimplifier::operator()(const QList<std::share
     std::vector<ShortestPathBuilder::vertex_descriptor> npred;
     std::vector<double> ndist;
 
+    QList<int> relNodesIndexes;
+    for (auto r : relNodes) {
+        relNodesIndexes.push_back(r->get_idx_node().toIndex());
+    }
+
     // set relevancy for relevant nodes
     for (auto rnode : mRelevantInternNodes) {
         auto nd = vertex(rnode, graph);
+        relNodesIndexes.push_back(nd);
         graph[nd].isRelevant = true;
     }
 
-    for (auto relNode : relNodes) {
+    for (auto relNode : relNodesIndexes) {
         double d = 0;
 
-        ShortestPathBuilder::vertex_descriptor nd = vertex(relNode->get_idx_node().toIndex(), graph);
+        ShortestPathBuilder::vertex_descriptor nd = vertex(relNode, graph);
         auto v = nd;
         ShortestPathBuilder::vertex_descriptor npd = predecessors[nd];
         d = dinstances[nd];

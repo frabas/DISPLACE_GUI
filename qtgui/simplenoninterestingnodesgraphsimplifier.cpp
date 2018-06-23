@@ -27,6 +27,8 @@ bool SimpleNonInterestingNodesGraphSimplifier::operator()(const QList<std::share
         ShortestPathBuilder::vertex_descriptor nd = vertex(relNode->get_idx_node().toIndex(), graph);
         auto v = nd;
         ShortestPathBuilder::vertex_descriptor npd = predecessors[nd];
+        d = dinstances[nd];
+
         while (npd != nd) {
             if (graph[npd].isRelevant)
                 break;
